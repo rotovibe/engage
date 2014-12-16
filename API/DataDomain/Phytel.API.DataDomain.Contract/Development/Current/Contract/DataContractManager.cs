@@ -6,7 +6,7 @@ using Phytel.API.Interface;
 using MongoDB.Bson;
 using System.Configuration;
 
-namespace Phytel.API.DataDomain.Contract
+namespace Phytel.API.DataDomain.Contract.Repository
 {
     public class ContractDataManager : IContractDataManager
     {

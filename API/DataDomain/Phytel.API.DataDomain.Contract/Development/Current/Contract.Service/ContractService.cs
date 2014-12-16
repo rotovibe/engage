@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Net;
-using Phytel.API.DataDomain.Contract;
+using Phytel.API.DataDomain.Contract.Repository;
 using Phytel.API.DataDomain.Contract.DTO;
 using Phytel.API.Common.Format;
 using System.Configuration;

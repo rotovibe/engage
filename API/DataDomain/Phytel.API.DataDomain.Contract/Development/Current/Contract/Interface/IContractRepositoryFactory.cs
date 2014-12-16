@@ -1,6 +1,6 @@
 ﻿using Phytel.API.Interface;
 using System;
-namespace Phytel.API.DataDomain.Contract
+namespace Phytel.API.DataDomain.Contract.Repository
 {
     public interface IContractRepositoryFactory
     {

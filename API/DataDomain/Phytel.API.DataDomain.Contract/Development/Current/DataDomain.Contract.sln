@@ -11,7 +11,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{CDA842
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Contract", "Contract\DataDomain.Contract.csproj", "{16143EA0-7971-4959-8B3B-EAC8584279C2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Contract.Repository", "Contract\DataDomain.Contract.Repository.csproj", "{16143EA0-7971-4959-8B3B-EAC8584279C2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Contract.DTO", "Contract.DTO\DataDomain.Contract.DTO.csproj", "{0B6E0ED8-ABE5-4A1D-8E10-0AC54F06D9C4}"
 EndProject
@@ -21,9 +21,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Contract.Test", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Contract.Service.Test", "DataDomain.Contract.Service.Test\DataDomain.Contract.Service.Test.csproj", "{C187D467-A28E-4570-B970-EA28B837B737}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Contract.Data", "DataDomain.Contract.Repository\DataDomain.Contract.Data.csproj", "{A5F1ECC0-EAA5-4C6A-8161-14E1D3F4F643}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 6
+		SccNumberOfProjects = 7
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://hillstfs2013:8080/tfs/phytel
 		SccLocalPath0 = .
@@ -33,15 +35,18 @@ Global
 		SccProjectUniqueName2 = Contract.DTO\\DataDomain.Contract.DTO.csproj
 		SccProjectName2 = Contract.DTO
 		SccLocalPath2 = Contract.DTO
-		SccProjectUniqueName3 = Contract\\DataDomain.Contract.csproj
-		SccProjectName3 = Contract
-		SccLocalPath3 = Contract
-		SccProjectUniqueName4 = DataDomain.Contract.Test\\DataDomain.Contract.Test.csproj
-		SccProjectName4 = DataDomain.Contract.Test
-		SccLocalPath4 = DataDomain.Contract.Test
-		SccProjectUniqueName5 = DataDomain.Contract.Service.Test\\DataDomain.Contract.Service.Test.csproj
-		SccProjectName5 = DataDomain.Contract.Service.Test
-		SccLocalPath5 = DataDomain.Contract.Service.Test
+		SccProjectUniqueName3 = DataDomain.Contract.Test\\DataDomain.Contract.Test.csproj
+		SccProjectName3 = DataDomain.Contract.Test
+		SccLocalPath3 = DataDomain.Contract.Test
+		SccProjectUniqueName4 = DataDomain.Contract.Service.Test\\DataDomain.Contract.Service.Test.csproj
+		SccProjectName4 = DataDomain.Contract.Service.Test
+		SccLocalPath4 = DataDomain.Contract.Service.Test
+		SccProjectUniqueName5 = DataDomain.Contract.Repository\\DataDomain.Contract.Data.csproj
+		SccProjectName5 = DataDomain.Contract.Repository
+		SccLocalPath5 = DataDomain.Contract.Repository
+		SccProjectUniqueName6 = Contract\\DataDomain.Contract.Repository.csproj
+		SccProjectName6 = Contract
+		SccLocalPath6 = Contract
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -90,6 +95,14 @@ Global
 		{C187D467-A28E-4570-B970-EA28B837B737}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C187D467-A28E-4570-B970-EA28B837B737}.Test|Any CPU.ActiveCfg = Release|Any CPU
 		{C187D467-A28E-4570-B970-EA28B837B737}.Test|Any CPU.Build.0 = Release|Any CPU
+		{A5F1ECC0-EAA5-4C6A-8161-14E1D3F4F643}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A5F1ECC0-EAA5-4C6A-8161-14E1D3F4F643}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A5F1ECC0-EAA5-4C6A-8161-14E1D3F4F643}.Model|Any CPU.ActiveCfg = Release|Any CPU
+		{A5F1ECC0-EAA5-4C6A-8161-14E1D3F4F643}.Model|Any CPU.Build.0 = Release|Any CPU
+		{A5F1ECC0-EAA5-4C6A-8161-14E1D3F4F643}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A5F1ECC0-EAA5-4C6A-8161-14E1D3F4F643}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A5F1ECC0-EAA5-4C6A-8161-14E1D3F4F643}.Test|Any CPU.ActiveCfg = Release|Any CPU
+		{A5F1ECC0-EAA5-4C6A-8161-14E1D3F4F643}.Test|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

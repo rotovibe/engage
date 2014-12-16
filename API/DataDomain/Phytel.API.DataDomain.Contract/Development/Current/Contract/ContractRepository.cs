@@ -4,77 +4,31 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Phytel.API.DataDomain.Contract.DTO;
-using Phytel.API.Interface;
 using MongoDB.Driver;
 using MB = MongoDB.Driver.Builders;
 using MongoDB.Bson;
-using Phytel.API.DataDomain.Contract;
 using MongoDB.Driver.Builders;
-using Phytel.API.Common;
-using Phytel.API.DataAudit;
-using Phytel.API.Common.Audit;
 using ServiceStack.Common;
 using ServiceStack.WebHost.Endpoints;
 using System.Configuration;
 
-namespace Phytel.API.DataDomain.Contract
+namespace Phytel.API.DataDomain.Contract.Repository
 {
-    public class MongoContractRepository : IContractRepository
+    public class ContractRepository : IContractRepository
     {
         private string _dbName = string.Empty;
         private int _expireDays = Convert.ToInt32(ConfigurationManager.AppSettings["ExpireDays"]);
-        public IAuditHelpers AuditHelpers { get; set; }
+        //public IAuditHelpers AuditHelpers { get; set; }
 
-        static MongoContractRepository()
+        static ContractRepository()
         {
 
             #region Register ClassMap
-            try
-            {
-                if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(MEContract)) == false)
-                    MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<MEContract>();
-            }
-            catch { }
-
-            try
-            {
-                if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(Address)) == false)
-                    MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<Address>();
-            }
-            catch { }
-
-            try
-            {
-                if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(CommMode)) == false)
-                    MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<CommMode>();
-            }
-            catch { }
-
-            try
-            {
-                if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(Email)) == false)
-                    MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<Email>();
-            }
-            catch { }
-
-            try
-            {
-                if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(Language)) == false)
-                    MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<Language>();
-            }
-            catch { }
-
-            try
-            {
-                if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(Phone)) == false)
-                    MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<Phone>();
-            }
-            catch { }
 
             #endregion
         }
 
-        public MongoContractRepository(string dbname)
+        public ContractRepository(string dbname)
         {
             _dbName = dbname;
             AppHostBase.Instance.Container.AutoWire(this);

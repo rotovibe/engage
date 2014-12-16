@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Phytel.API.Interface;
 using Phytel.API.DataAudit;
 
-namespace Phytel.API.DataDomain.Contract
+namespace Phytel.API.DataDomain.Contract.Repository
 {
     public class ContractRepositoryFactory : IContractRepositoryFactory
     {
@@ -18,7 +18,7 @@ namespace Phytel.API.DataDomain.Contract
             {
                 case RepositoryType.Contract:
                     {
-                        repo = new MongoContractRepository(request.ContractNumber) as IContractRepository;
+                        repo = new ContractRepository(request.ContractNumber) as IContractRepository;
                         break;
                     }
             }
