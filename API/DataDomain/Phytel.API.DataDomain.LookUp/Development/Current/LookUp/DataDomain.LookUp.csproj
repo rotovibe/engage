@@ -107,6 +107,7 @@
     <Compile Include="MongoDB\DTO\MedSupp\MedSuppType.cs" />
     <Compile Include="MongoDB\DTO\MedSupp\FreqHowOften.cs" />
     <Compile Include="MongoDB\DTO\MedSupp\FreqWhen.cs" />
+    <Compile Include="MongoDB\DTO\Note\NoteType.cs" />
     <Compile Include="MongoDB\DTO\ObservationType.cs" />
     <Compile Include="MongoDB\DTO\Goal\InterventionCategory.cs" />
     <Compile Include="MongoDB\DTO\Goal\BarrierCategory.cs" />

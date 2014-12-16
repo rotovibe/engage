@@ -36,6 +36,7 @@ namespace Phytel.API.DataDomain.LookUp.DTO
         AllergySource = 26,
         MedSuppType = 27,
         FreqHowOften = 28,
-        FreqWhen = 29
+        FreqWhen = 29,
+        NoteType = 30
     }
 }
