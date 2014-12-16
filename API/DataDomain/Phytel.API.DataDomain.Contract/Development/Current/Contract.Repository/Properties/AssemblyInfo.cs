@@ -1,16 +1,16 @@
-﻿using System.Reflection;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("DataDomain.Contract.Repository")]
+[assembly: AssemblyTitle("Phytel.API.DataDomain.Contract")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Phytel Inc.")]
-[assembly: AssemblyProduct("DataDomain.Contract.Repository")]
-[assembly: AssemblyCopyright("Copyright © Phytel Inc. 2014")]
+[assembly: AssemblyProduct("Phytel.API.DataDomain.Contract")]
+[assembly: AssemblyCopyright("Copyright © Phytel Inc. 2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("76d0e6e6-ce0d-4eb7-9b6f-4da80781a4d1")]
+[assembly: Guid("532c87b9-c9fe-4a5b-9e55-a195fb4059eb")]
 
 // Version information for an assembly consists of the following four values:
 //

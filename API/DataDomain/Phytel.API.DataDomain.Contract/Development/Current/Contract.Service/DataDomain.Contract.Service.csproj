@@ -172,7 +172,7 @@
       <Project>{0b6e0ed8-abe5-4a1d-8e10-0ac54f06d9c4}</Project>
       <Name>DataDomain.Contract.DTO</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Contract\DataDomain.Contract.Repository.csproj">
+    <ProjectReference Include="..\Contract.Repository\DataDomain.Contract.Repository.csproj">
       <Project>{16143ea0-7971-4959-8b3b-eac8584279c2}</Project>
       <Name>DataDomain.Contract.Repository</Name>
     </ProjectReference>
