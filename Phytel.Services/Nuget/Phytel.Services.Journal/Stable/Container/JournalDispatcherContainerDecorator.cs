@@ -11,8 +11,8 @@ namespace Phytel.Services.Journal
 {
     public class JournalDispatcherContainerDecorator : ContainerDecorator
     {
-        public const string AppSettingKeyPublishKey = "Ase.PublishKey.JournalEntryAdd";
-        public const string PublishKey = "journalentryadd";
+        public const string AppSettingKeyPublishKey = "Ase.PublishKey.Journal.PostEntries";
+        public const string PublishKey = "journalpostentries";
 
         protected readonly string _appSettingKeyPublishKey;
         protected readonly string _publishKey;
@@ -27,8 +27,8 @@ namespace Phytel.Services.Journal
         protected override void OnBuild(Funq.Container container)
         {
             container.Register<IMappingEngine>(Mapper.Engine);
-            
-            if(container.TryResolve<IAppSettingsProvider>() == null)
+
+            if (container.TryResolve<IAppSettingsProvider>() == null)
             {
                 container.Register<IAppSettingsProvider>(new AppSettingsProvider());
             }
@@ -44,7 +44,7 @@ namespace Phytel.Services.Journal
             container.Register<IJournalDispatcher>(c =>
                 new JournalDispatcher(
                     new AseBusDispatcher(
-                        OnBuildGetPublishKey(c, _appSettingKeyPublishKey, _publishKey),
+                        c.Resolve<IAppSettingsProvider>().Get(_appSettingKeyPublishKey, _publishKey, PublishKey),
                         new SerializerJson()
                         ),
                         c.Resolve<IActionIdProvider>(),
@@ -53,23 +53,6 @@ namespace Phytel.Services.Journal
                         c.Resolve<IMappingEngine>()
                     )
                 );
-        }
-
-        protected virtual string OnBuildGetPublishKey(Funq.Container container, string appSettingKeyPublishKey, string publishKey)
-        {
-            string rvalue = PublishKey;
-
-            if (string.IsNullOrEmpty(publishKey))
-            {
-                IAppSettingsProvider appSettingsProvider = container.Resolve<IAppSettingsProvider>();
-                string appSettingValue = appSettingsProvider.Get(appSettingKeyPublishKey);
-                if (!string.IsNullOrEmpty(appSettingValue))
-                {
-                    rvalue = appSettingValue;
-                }
-            }
-
-            return rvalue;
         }
     }
 }
