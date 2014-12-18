@@ -61,7 +61,7 @@ namespace Phytel.API.DataDomain.PatientNote.DTO
 
         [BsonElement(NoteTypeProperty)]
         [BsonIgnoreIfNull(true)]
-        public NoteType Type { get; set; }
+        public ObjectId Type { get; set; }
 
         [BsonElement(MethodIdProperty)]
         [BsonIgnoreIfNull(true)]

@@ -58,13 +58,10 @@ namespace Phytel.API.DataDomain.PatientNote
                         ProgramIds = Helper.ConvertToObjectIdList(noteData.ProgramIds),
                         ValidatedIdentity = noteData.ValidatedIdentity,
                         ContactedOn = noteData.ContactedOn,
+                        Type = ObjectId.Parse(noteData.TypeId),
                         DeleteFlag = false
                     };
 
-                    if(noteData.TypeId != null && noteData.TypeId != 0)
-                    {
-                        meN.Type = (NoteType)noteData.TypeId;
-                    }
                     if(!string.IsNullOrEmpty(noteData.MethodId))
                     {
                         meN.MethodId = ObjectId.Parse(noteData.MethodId);
@@ -174,7 +171,7 @@ namespace Phytel.API.DataDomain.PatientNote
                             ProgramIds = Helper.ConvertToStringList(meN.ProgramIds),
                             CreatedOn = meN.RecordCreatedOn,
                             CreatedById = meN.RecordCreatedBy.ToString(),
-                            TypeId = (meN.Type == 0) ? 0 : (int)meN.Type,
+                            TypeId = meN.Type.ToString(),
                             MethodId = (meN.MethodId == null) ? null :  meN.MethodId.ToString(),
                             OutcomeId = (meN.OutcomeId == null) ? null : meN.OutcomeId.ToString(),
                             WhoId = (meN.WhoId == null) ? null : meN.WhoId.ToString(),
@@ -263,7 +260,7 @@ namespace Phytel.API.DataDomain.PatientNote
                                 ProgramIds = Helper.ConvertToStringList(meN.ProgramIds),
                                 CreatedOn = meN.RecordCreatedOn,
                                 CreatedById = meN.RecordCreatedBy.ToString(),
-                                TypeId = (meN.Type == 0) ? 0 : (int)meN.Type,
+                                TypeId = meN.Type.ToString(),
                                 MethodId = (meN.MethodId == null) ? null : meN.MethodId.ToString(),
                                 OutcomeId = (meN.OutcomeId == null) ? null : meN.OutcomeId.ToString(),
                                 WhoId = (meN.WhoId == null) ? null : meN.WhoId.ToString(),

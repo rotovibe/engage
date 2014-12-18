@@ -13,5 +13,7 @@ namespace Phytel.API.AppDomain.NG
         public const string PCM = "PCM";
         // Allergy
         public const string SystemName = "Engage";
+        // Note
+        public const string GeneralNoteTypeId = "54909992d43323251c0a1dfd";
     }
 }
