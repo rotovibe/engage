@@ -37,8 +37,8 @@ namespace Phytel.API.DataDomain.Contract.Repository
                                      StatusCode = c.StatusCode,
                                      CreateDate = c.CreateDate
                                  }).ToList();
-                //SQL version of ef query
 
+                //SQL version of ef query
                 //SELECT 
                 //[Extent1].[ContractID] AS [ContractID], 
                 //[Extent1].[ContractNumber] AS [ContractNumber], 

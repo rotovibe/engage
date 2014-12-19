@@ -9,11 +9,13 @@ namespace Phytel.API.DataDomain.Contract.Data
         static ContractDbContext()
         {
             Database.SetInitializer<ContractDbContext>(null);
+            var ensureDLLIsCopied = System.Data.Entity.SqlServer.SqlProviderServices.Instance;
         }
 
         public ContractDbContext(string connectionString) : base(connectionString)
         {
             this.Configuration.LazyLoadingEnabled = false;
+            //var ensureDLLIsCopied = System.Data.Entity.SqlServer.SqlProviderServices.Instance;
         }
 
         public DbSet<Contract> Contracts { get; set; }
