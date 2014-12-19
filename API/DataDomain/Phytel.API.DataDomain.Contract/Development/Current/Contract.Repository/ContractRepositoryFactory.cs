@@ -18,7 +18,7 @@ namespace Phytel.API.DataDomain.Contract.Repository
             {
                 case RepositoryType.Contract:
                     {
-                        repo = new ContractRepository(request.ContractNumber) as IContractRepository;
+                        repo = new ContractRepository() as IContractRepository;
                         break;
                     }
             }

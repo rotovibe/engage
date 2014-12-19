@@ -53,6 +53,18 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Phytel.ASE.2.2.5.01\lib\ASECore.dll</HintPath>
     </Reference>
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.6.1.1\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.BulkInsert">
+      <HintPath>..\packages\EntityFramework.BulkInsert-ef6.6.0.2.8\lib\Net45\EntityFramework.BulkInsert.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.MappingAPI">
+      <HintPath>..\packages\EntityFramework.MappingAPI.6.0.0.7\lib\net45\EntityFramework.MappingAPI.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\packages\EntityFramework.6.1.1\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="MongoDB.Bson, Version=1.9.2.235, Culture=neutral, PublicKeyToken=f686731cfb9cc103, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\mongocsharpdriver.1.9.2\lib\net35\MongoDB.Bson.dll</HintPath>
@@ -73,6 +85,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Phytel.Services.API.Interface.1.3.1.01\lib\net451\Phytel.API.Interface.dll</HintPath>
     </Reference>
+    <Reference Include="Phytel.Services.IOC">
+      <HintPath>..\packages\Phytel.Services.IOC.1.3.0.05\lib\net451\Phytel.Services.IOC.dll</HintPath>
+    </Reference>
     <Reference Include="Phytel.Services.Mongo">
       <HintPath>..\packages\Phytel.Services.Mongo.1.3.2.04\lib\net451\Phytel.Services.Mongo.dll</HintPath>
     </Reference>
@@ -88,6 +103,9 @@
     </Reference>
     <Reference Include="Phytel.Services.SQLServer">
       <HintPath>..\packages\Phytel.Services.SQLServer.1.3.0.08\lib\net451\Phytel.Services.SQLServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Phytel.Services.SQLServer.Repository">
+      <HintPath>..\packages\Phytel.Services.SQLServer.Repository.1.3.0.06\lib\net451\Phytel.Services.SQLServer.Repository.dll</HintPath>
     </Reference>
     <Reference Include="Phytel.Services.Utility">
       <HintPath>..\packages\Phytel.Services.Utility.1.3.0.05\lib\net451\Phytel.Services.Utility.dll</HintPath>
@@ -122,6 +140,7 @@
       <HintPath>..\packages\Phytel.ASE.2.2.5.01\lib\ServiceStack.Text.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -132,7 +151,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ContractRepositoryFactory.cs" />
-    <Compile Include="DataContractManager.cs" />
+    <Compile Include="ContractManager.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="Interface\IContractDataManager.cs" />
     <Compile Include="Interface\IContractRepository.cs" />
@@ -141,12 +160,17 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Contract.Data\DataDomain.Contract.Data.csproj">
+      <Project>{a5f1ecc0-eaa5-4c6a-8161-14e1d3f4f643}</Project>
+      <Name>DataDomain.Contract.Data</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Contract.DTO\DataDomain.Contract.DTO.csproj">
       <Project>{0b6e0ed8-abe5-4a1d-8e10-0ac54f06d9c4}</Project>
       <Name>DataDomain.Contract.DTO</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />

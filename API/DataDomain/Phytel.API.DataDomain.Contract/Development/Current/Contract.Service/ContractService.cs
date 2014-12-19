@@ -15,16 +15,16 @@ namespace Phytel.API.DataDomain.Contract.Service
         //public IHelpers Helpers { get; set; }
         //public ICommonFormatterUtil CommonFormat { get; set; }
 
-        public GetContractsDataResponse Get(GetContractsDataRequest request)
+        public GetAllContractsDataResponse Get(GetAllContractsDataRequest request)
         {
-            GetContractsDataResponse response = new GetContractsDataResponse();
+            GetAllContractsDataResponse response = new GetAllContractsDataResponse();
             response.Version = request.Version;
             try
             {
                 //if (string.IsNullOrEmpty(request.UserId))
                 //    throw new UnauthorizedAccessException("ContractDD:Get()::Unauthorized Access");
 
-                response.Contract = Manager.GetContracts(request);
+                response.Contracts = Manager.GetAllContracts(request);
             }
             catch (Exception ex)
             {

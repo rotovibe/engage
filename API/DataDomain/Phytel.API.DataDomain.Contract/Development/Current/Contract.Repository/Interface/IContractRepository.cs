@@ -12,6 +12,6 @@ namespace Phytel.API.DataDomain.Contract.Repository
 {
     public interface IContractRepository : IRepository
     {
-        object FindContracts(GetContractsDataRequest request);
+        List<ContractData> GetAllContracts(GetAllContractsDataRequest request);
     }
 }

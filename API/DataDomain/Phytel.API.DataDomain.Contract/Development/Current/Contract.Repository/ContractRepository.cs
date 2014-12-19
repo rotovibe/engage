@@ -4,40 +4,49 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Phytel.API.DataDomain.Contract.DTO;
-using MongoDB.Driver;
-using MB = MongoDB.Driver.Builders;
-using MongoDB.Bson;
-using MongoDB.Driver.Builders;
 using ServiceStack.Common;
 using ServiceStack.WebHost.Endpoints;
 using System.Configuration;
+using Phytel.Services.SQLServer;
+using Phytel.Services.SQLServer.Repository;
+using Phytel.API.DataDomain.Contract.Data;
 
 namespace Phytel.API.DataDomain.Contract.Repository
 {
     public class ContractRepository : IContractRepository
     {
-        private string _dbName = string.Empty;
-        private int _expireDays = Convert.ToInt32(ConfigurationManager.AppSettings["ExpireDays"]);
-        //public IAuditHelpers AuditHelpers { get; set; }
+        public ContractRepository() 
+        {}
 
-        static ContractRepository()
+        public List<ContractData> GetAllContracts(GetAllContractsDataRequest request)
         {
+            List<ContractData> contracts = null;
+            string phytelMasterConnString = SQLDataService.Instance.GetConnectionString("PhytelMaster", false);
 
-            #region Register ClassMap
+            DateTime date = DateTime.Now.AddMonths(-1);
 
-            #endregion
-        }
+            //get active contracts and inactive contracts created within last month
+            using (var context = new ContractDbContext(phytelMasterConnString))
+            {
+                contracts = (from c in context.Contracts
+                             select new ContractData()
+                                 {
+                                     ContractNumber = c.ContractNumber,
+                                     ContractId = c.ContractID,
+                                     ContractName = c.ContractName,
+                                     StatusCode = c.StatusCode,
+                                     CreateDate = c.CreateDate
+                                 }).ToList();
+                //SQL version of ef query
 
-        public ContractRepository(string dbname)
-        {
-            _dbName = dbname;
-            AppHostBase.Instance.Container.AutoWire(this);
-        }
+                //SELECT 
+                //[Extent1].[ContractID] AS [ContractID], 
+                //[Extent1].[ContractNumber] AS [ContractNumber], 
+                //[Extent1].[ContractName] AS [ContractName]
+                //FROM [dbo].[Contracts] AS [Extent1]
+            }
 
-
-        public object FindContracts(GetContractsDataRequest request)
-        {
-            return new Object();
+            return contracts;
         }
 
 
