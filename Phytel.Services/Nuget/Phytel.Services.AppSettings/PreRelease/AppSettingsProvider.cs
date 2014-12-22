@@ -29,6 +29,42 @@ namespace Phytel.Services.AppSettings
             return rvalue;
         }
 
+        public int GetAsInt(string key)
+        {
+            int rvalue = default(int);
+
+            string rvalueAsString = Get(key);
+
+            if(!string.IsNullOrEmpty(rvalueAsString))
+            {
+                int.TryParse(rvalueAsString, out rvalue);
+            }
+
+            return rvalue;
+        }
+
+        public int GetAsInt(string key, int defaultValue)
+        {
+            int rvalue = defaultValue;
+
+            string rvalueAsString = Get(key, defaultValue.ToString());
+            if(!string.IsNullOrEmpty(rvalueAsString))
+            {
+                bool isInt = int.TryParse(rvalueAsString, out rvalue);
+                if(!isInt)
+                {
+                    rvalue = defaultValue;
+                }
+            }
+
+            return rvalue;
+        }
+
+        public string Get(string key, string defaultValue)
+        {
+            return Get(key, null, defaultValue);
+        }
+
         public string Get(string key, string value, string defaultValue)
         {
             string rvalue = defaultValue;
