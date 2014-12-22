@@ -1,44 +1,64 @@
-﻿using System.Collections.Specialized;
-using System.Configuration;
+﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Phytel.Services.AppSettings
 {
     public class AppSettingsProvider : IAppSettingsProvider
     {
-        protected readonly NameValueCollection _appSettings;
+        protected readonly IDictionary<string, string> _appSettings;
 
-        public AppSettingsProvider()
-            : this(ConfigurationManager.AppSettings)
-        {
-        }
-
-        public AppSettingsProvider(NameValueCollection appSettings)
+        public AppSettingsProvider(IDictionary<string, string> appSettings)
         {
             _appSettings = appSettings;
         }
 
         public string Get(string key)
         {
-            string rvalue = string.Empty;
+            return Get(key, string.Empty);
+        }
 
-            if (_appSettings.HasKeys())
+        public string Get(string key, string defaultValue)
+        {
+            return Get(key, null, defaultValue);
+        }
+
+        public virtual string Get(string key, string value, string defaultValue)
+        {
+            string rvalue = value;
+
+            if (string.IsNullOrEmpty(rvalue))
             {
-                rvalue = _appSettings[key];
+                rvalue = defaultValue;
+
+                if (_appSettings.Any() && _appSettings.ContainsKey(key))
+                {
+                    string valueFromAppSettings = _appSettings[key];
+                    if (!string.IsNullOrEmpty(valueFromAppSettings))
+                    {
+                        rvalue = valueFromAppSettings;
+                    }
+                }
             }
 
             return rvalue;
         }
 
-        public string Get(string key, string value, string defaultValue)
+        public int GetAsInt(string key)
         {
-            string rvalue = defaultValue;
+            return GetAsInt(key, default(int));
+        }
 
-            if(string.IsNullOrEmpty(value))
+        public virtual int GetAsInt(string key, int defaultValue)
+        {
+            int rvalue = defaultValue;
+
+            string rvalueAsString = Get(key, defaultValue.ToString());
+            if (!string.IsNullOrEmpty(rvalueAsString))
             {
-                string valueFromAppSetting = Get(key);
-                if(!string.IsNullOrEmpty(valueFromAppSetting))
+                bool isInt = int.TryParse(rvalueAsString, out rvalue);
+                if (!isInt)
                 {
-                    rvalue = valueFromAppSetting;
+                    rvalue = defaultValue;
                 }
             }
 
