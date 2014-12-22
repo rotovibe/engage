@@ -28,6 +28,11 @@ Scenario: Returns 0 when setting not defined as int and gettting as int
 	When I get the setting "timeout" as int
 	Then the result should be 0
 
+Scenario: Returns provided default value when setting not defined as int and default value provided and gettting as int
+	Given setting "timeout" is defined as "foo"
+	When I provide default value 1440 and get the setting "timeout" as int
+	Then the result should be 1440
+
 Scenario: Returns defined setting value when setting defined and default value provided
 	Given setting "timeout" is defined as "100"
 	When I provide default value "50" and get the setting "timeout"

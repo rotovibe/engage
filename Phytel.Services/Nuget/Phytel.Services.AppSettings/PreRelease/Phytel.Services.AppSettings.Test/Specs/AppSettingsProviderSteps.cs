@@ -70,5 +70,14 @@ namespace Phytel.Services.AppSettings.Test.Specs
         {
             Assert.AreEqual(resultAsIntExpected, _resultAsIntActual);
         }
+
+        [When(@"I provide default value (.*) and get the setting ""(.*)"" as int")]
+        public void WhenIProvideDefaultValueAndGetTheSettingAsInt(int defaultValue, string key)
+        {
+            _appSettingsProvider = new AppSettingsProvider(_appSettings);
+
+            _resultAsIntActual = _appSettingsProvider.GetAsInt(key, defaultValue);
+        }
+
     }
 }

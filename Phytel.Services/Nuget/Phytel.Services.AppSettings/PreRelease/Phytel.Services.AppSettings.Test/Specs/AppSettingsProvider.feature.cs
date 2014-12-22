@@ -151,17 +151,36 @@ this.ScenarioSetup(scenarioInfo);
         }
         
         [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Returns provided default value when setting not defined as int and default value " +
+            "provided and gettting as int")]
+        public virtual void ReturnsProvidedDefaultValueWhenSettingNotDefinedAsIntAndDefaultValueProvidedAndGetttingAsInt()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Returns provided default value when setting not defined as int and default value " +
+                    "provided and gettting as int", ((string[])(null)));
+#line 31
+this.ScenarioSetup(scenarioInfo);
+#line 32
+ testRunner.Given("setting \"timeout\" is defined as \"foo\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line 33
+ testRunner.When("I provide default value 1440 and get the setting \"timeout\" as int", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 34
+ testRunner.Then("the result should be 1440", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("Returns defined setting value when setting defined and default value provided")]
         public virtual void ReturnsDefinedSettingValueWhenSettingDefinedAndDefaultValueProvided()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Returns defined setting value when setting defined and default value provided", ((string[])(null)));
-#line 31
+#line 36
 this.ScenarioSetup(scenarioInfo);
-#line 32
+#line 37
  testRunner.Given("setting \"timeout\" is defined as \"100\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 33
+#line 38
  testRunner.When("I provide default value \"50\" and get the setting \"timeout\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 34
+#line 39
  testRunner.Then("the result should be \"100\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
@@ -174,13 +193,13 @@ this.ScenarioSetup(scenarioInfo);
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Returns provided default value when setting not defined and default value provide" +
                     "d", ((string[])(null)));
-#line 36
+#line 41
 this.ScenarioSetup(scenarioInfo);
-#line 37
+#line 42
  testRunner.Given("setting \"timeout\" is not defined", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
-#line 38
+#line 43
  testRunner.When("I provide default value \"50\" and get the setting \"timeout\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 39
+#line 44
  testRunner.Then("the result should be \"50\"", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
