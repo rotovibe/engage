@@ -15,6 +15,8 @@ namespace Phytel.Services.Mongo.Repository
 
         T First<T, TKey>(Expression<Func<T, bool>> predicate) where T : class, IMongoEntity<TKey>;
 
+        T FindAndModify<T, TKey>(IMongoQuery query, IMongoSortBy sort, IMongoUpdate update) where T : class, IMongoEntity<TKey>;
+
         void Insert<T, TKey>(T entity) where T : IMongoEntity<TKey>;
 
         void InsertBatch<T, TKey>(IEnumerable<T> entities) where T : IMongoEntity<TKey>;
