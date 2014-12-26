@@ -79,7 +79,6 @@
     <Compile Include="Utility\QueryableExtend.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
     <None Include="packages.config" />
     <None Include="Phytel.Services.Mongo.Repository.nuspec">
       <SubType>Designer</SubType>
