@@ -2,10 +2,13 @@
 using System.Configuration;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
+using DataDomain.Allergy.Repo;
+using DataDomain.Medication.Repo;
 using FastMember;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
+using Phytel.API.DataDomain.Allergy.DTO;
 using Phytel.API.DataDomain.Contact;
 using Phytel.API.DataDomain.Contact.DTO;
 using Phytel.API.DataDomain.LookUp;
@@ -16,6 +19,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Phytel.API.DataDomain.CareMember;
 using Phytel.API.DataDomain.CareMember.DTO;
+using Phytel.API.DataDomain.Medication.DTO;
 using Phytel.API.DataDomain.Patient;
 using Phytel.API.DataDomain.Patient.DTO;
 using Phytel.API.DataDomain.PatientGoal;
@@ -41,6 +45,7 @@ using TimeZone = Phytel.API.DataDomain.LookUp.DTO.TimeZone;
 using System.Windows.Forms;
 using Logging;
 using Phytel.Data.ETL.BulkCopy;
+using Category = Phytel.API.DataDomain.LookUp.DTO.Category;
 
 
 namespace Phytel.Data.ETL
@@ -106,6 +111,10 @@ namespace Phytel.Data.ETL
                 LoadPatientBarriers(contract);
                 LoadPatientInterventions(contract);
                 LoadPatientTasks(contract);
+
+                LoadAllergies(contract);
+                LoadPatientAllergies(contract);
+                LoadPatientMedSups(contract);
 
                 LoadPatientPrograms(contract);
                 LoadPatientProgramResponses(contract);
@@ -929,6 +938,34 @@ namespace Phytel.Data.ETL
                             case LookUpType.NoteDuration:
                                 LoadLookUp(lookup, "spPhy_RPT_SaveNoteDurationLookUp");
                                 break;
+                            // AllergyType
+                            case LookUpType.AllergyType:
+                                LoadAllergyType(lookup);
+                                break;
+                            // AllergySource
+                            case LookUpType.AllergySource:
+                                LoadAllergySource(lookup);
+                                break;
+                            // Severity
+                            case LookUpType.Severity:
+                                LoadSeverity(lookup);
+                                break;
+                            // Reaction
+                            case LookUpType.Reaction:
+                                LoadReaction(lookup);
+                                break;
+                            // MedSuppType
+                            case LookUpType.MedSuppType:
+                                LoadMedSupType(lookup);
+                                break;
+                            // FreqHowOften
+                            case LookUpType.FreqHowOften:
+                                LoadFreqHowOften(lookup);
+                                break;
+                            // FreqWhen
+                            case LookUpType.FreqWhen:
+                                LoadFreqWhen(lookup);
+                                break;
                             default:
                                 break;
                         }
@@ -957,9 +994,9 @@ namespace Phytel.Data.ETL
 
                 ParameterCollection parms = new ParameterCollection();
 
-                parms.Add(new Parameter("@LookUpType", lookup.Type.ToString(), SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
+                parms.Add(new Parameter("@LookUpType", lookup.Type.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 200));
                 parms.Add(new Parameter("@MongoID", bc.DataId, SqlDbType.VarChar, ParameterDirection.Input, 50));
-                parms.Add(new Parameter("@Name", bc.Name, SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
+                parms.Add(new Parameter("@Name", bc.Name, SqlDbType.VarChar, ParameterDirection.Input, 300));
 
                 SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveBarrierCategoryLookUp", parms);
             }
@@ -974,9 +1011,9 @@ namespace Phytel.Data.ETL
 
                 ParameterCollection parms = new ParameterCollection();
 
-                parms.Add(new Parameter("@LookUpType", lookup.Type.ToString(), SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
+                parms.Add(new Parameter("@LookUpType", lookup.Type.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 200));
                 parms.Add(new Parameter("@MongoID", cmt.DataId, SqlDbType.VarChar, ParameterDirection.Input, 50));
-                parms.Add(new Parameter("@Name", cmt.Name, SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
+                parms.Add(new Parameter("@Name", cmt.Name, SqlDbType.VarChar, ParameterDirection.Input, 300));
 
                 SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveCareMemberTypeLookUp", parms);
             }
@@ -990,9 +1027,9 @@ namespace Phytel.Data.ETL
 
                 ParameterCollection parms = new ParameterCollection();
 
-                parms.Add(new Parameter("@LookUpType", lookup.Type.ToString(), SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
+                parms.Add(new Parameter("@LookUpType", lookup.Type.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 200));
                 parms.Add(new Parameter("@MongoID", cat.DataId, SqlDbType.VarChar, ParameterDirection.Input, 50));
-                parms.Add(new Parameter("@Name", cat.Name, SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
+                parms.Add(new Parameter("@Name", cat.Name, SqlDbType.VarChar, ParameterDirection.Input, 300));
 
                 SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveCategoryLookUp", parms);
             }
@@ -1006,9 +1043,9 @@ namespace Phytel.Data.ETL
 
                 ParameterCollection parms = new ParameterCollection();
 
-                parms.Add(new Parameter("@LookUpType", lookup.Type.ToString(), SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
+                parms.Add(new Parameter("@LookUpType", lookup.Type.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 200));
                 parms.Add(new Parameter("@MongoID", cs.DataId, SqlDbType.VarChar, ParameterDirection.Input, 50));
-                parms.Add(new Parameter("@Name", cs.Name, SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
+                parms.Add(new Parameter("@Name", cs.Name, SqlDbType.VarChar, ParameterDirection.Input, 300));
 
                 SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveCodingSystemLookUp", parms);
             }
@@ -1022,9 +1059,9 @@ namespace Phytel.Data.ETL
 
                 ParameterCollection parms = new ParameterCollection();
 
-                parms.Add(new Parameter("@LookUpType", lookup.Type.ToString(), SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
+                parms.Add(new Parameter("@LookUpType", lookup.Type.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 200));
                 parms.Add(new Parameter("@MongoID", cmm.DataId, SqlDbType.VarChar, ParameterDirection.Input, 50));
-                parms.Add(new Parameter("@Name", cmm.Name, SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
+                parms.Add(new Parameter("@Name", cmm.Name, SqlDbType.VarChar, ParameterDirection.Input, 300));
 
                 SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveCommModeLookUp", parms);
             }
@@ -1038,9 +1075,9 @@ namespace Phytel.Data.ETL
 
                 ParameterCollection parms = new ParameterCollection();
 
-                parms.Add(new Parameter("@LookUpType", lookup.Type.ToString(), SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
+                parms.Add(new Parameter("@LookUpType", lookup.Type.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 200));
                 parms.Add(new Parameter("@MongoID", cmt.DataId, SqlDbType.VarChar, ParameterDirection.Input, 50));
-                parms.Add(new Parameter("@Name", cmt.Name, SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
+                parms.Add(new Parameter("@Name", cmt.Name, SqlDbType.VarChar, ParameterDirection.Input, 300));
 
                 SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveCommTypeLookUp", parms);
              }
@@ -1054,9 +1091,9 @@ namespace Phytel.Data.ETL
 
                 ParameterCollection parms = new ParameterCollection();
 
-                parms.Add(new Parameter("@LookUpType", lookup.Type.ToString(), SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
+                parms.Add(new Parameter("@LookUpType", lookup.Type.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 200));
                 parms.Add(new Parameter("@MongoID", fa.DataId, SqlDbType.VarChar, ParameterDirection.Input, 50));
-                parms.Add(new Parameter("@Name", fa.Name, SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
+                parms.Add(new Parameter("@Name", fa.Name, SqlDbType.VarChar, ParameterDirection.Input, 300));
 
                 SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveFocusAreaLookUp", parms);
             }
@@ -1070,9 +1107,9 @@ namespace Phytel.Data.ETL
 
                 ParameterCollection parms = new ParameterCollection();
 
-                parms.Add(new Parameter("@LookUpType", lookup.Type.ToString(), SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
+                parms.Add(new Parameter("@LookUpType", lookup.Type.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 200));
                 parms.Add(new Parameter("@MongoID", ic.DataId, SqlDbType.VarChar, ParameterDirection.Input, 50));
-                parms.Add(new Parameter("@Name", ic.Name, SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
+                parms.Add(new Parameter("@Name", ic.Name, SqlDbType.VarChar, ParameterDirection.Input, 300));
 
                 SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveInterventionCategoryLookUp", parms);
             }
@@ -1086,9 +1123,9 @@ namespace Phytel.Data.ETL
 
                 ParameterCollection parms = new ParameterCollection();
 
-                parms.Add(new Parameter("@LookUpType", lookup.Type.ToString(), SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
+                parms.Add(new Parameter("@LookUpType", lookup.Type.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 200));
                 parms.Add(new Parameter("@MongoID", la.DataId, SqlDbType.VarChar, ParameterDirection.Input, 50));
-                parms.Add(new Parameter("@Name", la.Name, SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
+                parms.Add(new Parameter("@Name", la.Name, SqlDbType.VarChar, ParameterDirection.Input, 300));
                 parms.Add(new Parameter("@Code", la.Code, SqlDbType.VarChar, ParameterDirection.Input, 50));
                 parms.Add(new Parameter("@Active", la.Active, SqlDbType.VarChar, ParameterDirection.Input, 50));
 
@@ -1104,9 +1141,9 @@ namespace Phytel.Data.ETL
 
                 ParameterCollection parms = new ParameterCollection();
 
-                parms.Add(new Parameter("@LookUpType", lookup.Type.ToString(), SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
+                parms.Add(new Parameter("@LookUpType", lookup.Type.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 200));
                 parms.Add(new Parameter("@MongoID", o.DataId, SqlDbType.VarChar, ParameterDirection.Input, 50));
-                parms.Add(new Parameter("@Name", o.Name, SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
+                parms.Add(new Parameter("@Name", o.Name, SqlDbType.VarChar, ParameterDirection.Input, 300));
                 parms.Add(new Parameter("@Description", o.Description, SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
 
                 SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveObjectiveLookUp", parms);
@@ -1121,9 +1158,9 @@ namespace Phytel.Data.ETL
 
                 ParameterCollection parms = new ParameterCollection();
 
-                parms.Add(new Parameter("@LookUpType", lookup.Type.ToString(), SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
+                parms.Add(new Parameter("@LookUpType", lookup.Type.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 200));
                 parms.Add(new Parameter("@MongoID", ot.DataId, SqlDbType.VarChar, ParameterDirection.Input, 50));
-                parms.Add(new Parameter("@Name", ot.Name, SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
+                parms.Add(new Parameter("@Name", ot.Name, SqlDbType.VarChar, ParameterDirection.Input, 300));
 
                 SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveObservationTypeLookUp", parms);
             }
@@ -1137,9 +1174,9 @@ namespace Phytel.Data.ETL
 
                 ParameterCollection parms = new ParameterCollection();
 
-                parms.Add(new Parameter("@LookUpType", lookup.Type.ToString(), SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
+                parms.Add(new Parameter("@LookUpType", lookup.Type.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 200));
                 parms.Add(new Parameter("@MongoID", prb.DataId, SqlDbType.VarChar, ParameterDirection.Input, 50));
-                parms.Add(new Parameter("@Name", prb.Name, SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
+                parms.Add(new Parameter("@Name", prb.Name, SqlDbType.VarChar, ParameterDirection.Input, 300));
                 parms.Add(new Parameter("@Type", (string.IsNullOrEmpty(prb.Type) ? string.Empty : prb.Type), SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
                 parms.Add(new Parameter("@CodeSystem", (string.IsNullOrEmpty(prb.CodeSystem) ? string.Empty : prb.CodeSystem), SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
                 parms.Add(new Parameter("@Code", (string.IsNullOrEmpty(prb.Code) ? string.Empty : prb.Code), SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
@@ -1151,6 +1188,130 @@ namespace Phytel.Data.ETL
             }
         }
 
+        // LoadFreqWhen
+        private void LoadFreqWhen(MELookup lookup)
+        {
+            foreach (LookUpBase lbase in lookup.Data)
+            {
+                var prb = (FreqWhen)lbase;
+
+                ParameterCollection parms = new ParameterCollection();
+
+                parms.Add(new Parameter("@LookUpType", lookup.Type.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 200));
+                parms.Add(new Parameter("@MongoID", prb.DataId, SqlDbType.VarChar, ParameterDirection.Input, 50));
+                parms.Add(new Parameter("@Name", prb.Name, SqlDbType.VarChar, ParameterDirection.Input, 300));
+
+                SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveFreqWhenLookUp", parms);
+            }
+        }
+
+        // LoadFreqHowOften
+        private void LoadFreqHowOften(MELookup lookup)
+        {
+            foreach (LookUpBase lbase in lookup.Data)
+            {
+                var prb = (FreqHowOften)lbase;
+
+                ParameterCollection parms = new ParameterCollection();
+
+                parms.Add(new Parameter("@LookUpType", lookup.Type.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 200));
+                parms.Add(new Parameter("@MongoID", prb.DataId, SqlDbType.VarChar, ParameterDirection.Input, 50));
+                parms.Add(new Parameter("@Name", prb.Name, SqlDbType.VarChar, ParameterDirection.Input, 300));
+
+                SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveFreqHowOftenLookUp", parms);
+            }
+        }
+
+        // LoadMedSupType
+        private void LoadMedSupType(MELookup lookup)
+        {
+            foreach (LookUpBase lbase in lookup.Data)
+            {
+                var prb = (MedSuppType)lbase;
+
+                ParameterCollection parms = new ParameterCollection();
+
+                parms.Add(new Parameter("@LookUpType", lookup.Type.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 200));
+                parms.Add(new Parameter("@MongoID", prb.DataId, SqlDbType.VarChar, ParameterDirection.Input, 50));
+                parms.Add(new Parameter("@Name", prb.Name, SqlDbType.VarChar, ParameterDirection.Input, 300));
+
+                SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveMedSupTypeLookUp", parms);
+            }
+        }
+
+        private void LoadReaction(MELookup lookup)
+        {
+            foreach (LookUpBase lbase in lookup.Data)
+            {
+                var prb = (Reaction)lbase;
+
+                ParameterCollection parms = new ParameterCollection();
+
+                parms.Add(new Parameter("@LookUpType", lookup.Type.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 200));
+                parms.Add(new Parameter("@MongoID", prb.DataId, SqlDbType.VarChar, ParameterDirection.Input, 50));
+                parms.Add(new Parameter("@Name", prb.Name, SqlDbType.VarChar, ParameterDirection.Input, 300));
+                parms.Add(new Parameter("@CodeSystem", (string.IsNullOrEmpty(prb.CodingSystemId.ToString()) ? string.Empty : prb.CodingSystemId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
+                parms.Add(new Parameter("@Code", (string.IsNullOrEmpty(prb.CodingSystemCode) ? string.Empty : prb.CodingSystemCode), SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
+
+                SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveReactionLookUp", parms);
+            }
+        }
+
+        private void LoadSeverity(MELookup lookup)
+        {
+            foreach (LookUpBase lbase in lookup.Data)
+            {
+                var prb = (Severity)lbase;
+
+                ParameterCollection parms = new ParameterCollection();
+
+                parms.Add(new Parameter("@LookUpType", lookup.Type.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 200));
+                parms.Add(new Parameter("@MongoID", prb.DataId, SqlDbType.VarChar, ParameterDirection.Input, 50));
+                parms.Add(new Parameter("@Name", prb.Name, SqlDbType.VarChar, ParameterDirection.Input, 300));
+                parms.Add(new Parameter("@CodeSystem", (string.IsNullOrEmpty(prb.CodingSystemId.ToString()) ? string.Empty : prb.CodingSystemId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
+                parms.Add(new Parameter("@Code", (string.IsNullOrEmpty(prb.CodingSystemCode) ? string.Empty : prb.CodingSystemCode), SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
+
+                SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveSeverityLookUp", parms);
+            }
+        }
+        
+        //LoadAllergySource
+        private void LoadAllergySource(MELookup lookup)
+        {
+            foreach (LookUpBase lbase in lookup.Data)
+            {
+                var prb = (AllergySource)lbase;
+
+                ParameterCollection parms = new ParameterCollection();
+
+                parms.Add(new Parameter("@LookUpType", lookup.Type.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 200));
+                parms.Add(new Parameter("@MongoID", prb.DataId, SqlDbType.VarChar, ParameterDirection.Input, 50));
+                parms.Add(new Parameter("@Name", prb.Name, SqlDbType.VarChar, ParameterDirection.Input, 300));
+                parms.Add(new Parameter("@Active", prb.Active, SqlDbType.VarChar, ParameterDirection.Input, 50));
+                parms.Add(new Parameter("@Default", prb.Default, SqlDbType.VarChar, ParameterDirection.Input, 50));
+
+                SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveAllergySourceLookUp", parms);
+            }
+        }
+
+        private void LoadAllergyType(MELookup lookup)
+        {
+            foreach (LookUpBase lbase in lookup.Data)
+            {
+                var prb = (AllergyType)lbase;
+
+                ParameterCollection parms = new ParameterCollection();
+
+                parms.Add(new Parameter("@LookUpType", lookup.Type.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 200));
+                parms.Add(new Parameter("@MongoID", prb.DataId, SqlDbType.VarChar, ParameterDirection.Input, 50));
+                parms.Add(new Parameter("@Name", prb.Name, SqlDbType.VarChar, ParameterDirection.Input, 300));
+                parms.Add(new Parameter("@CodeSystem", (string.IsNullOrEmpty(prb.CodingSystemId.ToString()) ? string.Empty : prb.CodingSystemId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
+                parms.Add(new Parameter("@Code", (string.IsNullOrEmpty(prb.CodingSystemCode) ? string.Empty : prb.CodingSystemCode), SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
+
+                SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveAllergyTypeLookUp", parms);
+            }
+        }
+
         private void LoadSources(MELookup lookup)
         {
             foreach (LookUpBase lbase in lookup.Data)
@@ -1159,7 +1320,7 @@ namespace Phytel.Data.ETL
 
                 ParameterCollection parms = new ParameterCollection();
 
-                parms.Add(new Parameter("@LookUpType", lookup.Type.ToString(), SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
+                parms.Add(new Parameter("@LookUpType", lookup.Type.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 200));
                 parms.Add(new Parameter("@MongoID", src.DataId, SqlDbType.VarChar, ParameterDirection.Input, 50));
                 parms.Add(new Parameter("@Name", src.Name, SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
 
@@ -1175,7 +1336,7 @@ namespace Phytel.Data.ETL
 
                 ParameterCollection parms = new ParameterCollection();
 
-                parms.Add(new Parameter("@LookUpType", lookup.Type.ToString(), SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
+                parms.Add(new Parameter("@LookUpType", lookup.Type.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 200));
                 parms.Add(new Parameter("@MongoID", st.DataId, SqlDbType.VarChar, ParameterDirection.Input, 50));
                 parms.Add(new Parameter("@Name", st.Name, SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
                 parms.Add(new Parameter("@Code", st.Code, SqlDbType.VarChar, ParameterDirection.Input, 50));
@@ -1192,7 +1353,7 @@ namespace Phytel.Data.ETL
 
                 ParameterCollection parms = new ParameterCollection();
 
-                parms.Add(new Parameter("@LookUpType", lookup.Type.ToString(), SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
+                parms.Add(new Parameter("@LookUpType", lookup.Type.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 200));
                 parms.Add(new Parameter("@MongoID", tod.DataId, SqlDbType.VarChar, ParameterDirection.Input, 50));
                 parms.Add(new Parameter("@Name", tod.Name, SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
 
@@ -1208,7 +1369,7 @@ namespace Phytel.Data.ETL
 
                 ParameterCollection parms = new ParameterCollection();
 
-                parms.Add(new Parameter("@LookUpType", lookup.Type.ToString(), SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
+                parms.Add(new Parameter("@LookUpType", lookup.Type.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 200));
                 parms.Add(new Parameter("@MongoID", tz.DataId, SqlDbType.VarChar, ParameterDirection.Input, 50));
                 parms.Add(new Parameter("@Name", tz.Name, SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
                 parms.Add(new Parameter("@Default", tz.Default, SqlDbType.VarChar, ParameterDirection.Input, 50));
@@ -1244,7 +1405,7 @@ namespace Phytel.Data.ETL
 
                 ParameterCollection parms = new ParameterCollection();
 
-                parms.Add(new Parameter("@LookUpType", lookup.Type.ToString(), SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
+                parms.Add(new Parameter("@LookUpType", lookup.Type.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 200));
                 parms.Add(new Parameter("@MongoID", tz.DataId, SqlDbType.VarChar, ParameterDirection.Input, 50));
                 parms.Add(new Parameter("@Name", tz.Name, SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
 
@@ -1481,7 +1642,7 @@ namespace Phytel.Data.ETL
                             parms.Add(new Parameter("@Description", goal.Description == null ? string.Empty : goal.Description, SqlDbType.VarChar, ParameterDirection.Input, 50));
                             parms.Add(new Parameter("@StartDate", goal.StartDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
                             parms.Add(new Parameter("@EndDate", goal.EndDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@Status", (string.IsNullOrEmpty(goal.Status.ToString()) ? string.Empty : goal.Status.ToString()), SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
+                            parms.Add(new Parameter("@Status", (string.IsNullOrEmpty(goal.Status.ToString()) ? string.Empty : goal.Status.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
                             parms.Add(new Parameter("@StatusDate", goal.StatusDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
                             parms.Add(new Parameter("@Source", (string.IsNullOrEmpty(goal.SourceId.ToString()) ? string.Empty : goal.SourceId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
                             parms.Add(new Parameter("@Type", (string.IsNullOrEmpty(goal.Type.ToString()) ? string.Empty : goal.Type.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
@@ -1495,9 +1656,11 @@ namespace Phytel.Data.ETL
                             parms.Add(new Parameter("@Delete", goal.DeleteFlag.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
                             parms.Add(new Parameter("@TimeToLive", goal.TTLDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
                             if (goal.ExtraElements != null)
-                                parms.Add(new Parameter("@ExtraElements", goal.ExtraElements.ToString(), SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
+                                parms.Add(new Parameter("@ExtraElements", goal.ExtraElements.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 5000));
                             else
-                                parms.Add(new Parameter("@ExtraElements", string.Empty, SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
+                                parms.Add(new Parameter("@ExtraElements", string.Empty, SqlDbType.VarChar, ParameterDirection.Input, 5000));
+
+                            parms.Add(new Parameter("@TemplateId", (string.IsNullOrEmpty(goal.TemplateId.ToString()) ? string.Empty : goal.TemplateId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
 
                             SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_RPT_SavePatientGoal", parms);
 
@@ -1619,12 +1782,16 @@ namespace Phytel.Data.ETL
                                 parms.Add(new Parameter("@Status", (string.IsNullOrEmpty(intervention.Status.ToString()) ? string.Empty : intervention.Status.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
                                 parms.Add(new Parameter("@StatusDate", intervention.StatusDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
                                 parms.Add(new Parameter("@StartDate", intervention.StartDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
-                                parms.Add(new Parameter("@Description", (string.IsNullOrEmpty(intervention.Description) ? string.Empty : intervention.Description), SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
+                                parms.Add(new Parameter("@Description", (string.IsNullOrEmpty(intervention.Description) ? string.Empty : intervention.Description), SqlDbType.VarChar, ParameterDirection.Input, 5000));
                                 parms.Add(new Parameter("@Name", (string.IsNullOrEmpty(intervention.Name) ? string.Empty : intervention.Name), SqlDbType.VarChar, ParameterDirection.Input, 100));
                                 if (intervention.ExtraElements != null)
-                                    parms.Add(new Parameter("@ExtraElements", intervention.ExtraElements.ToString(), SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
+                                    parms.Add(new Parameter("@ExtraElements", intervention.ExtraElements.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 5000));
                                 else
-                                    parms.Add(new Parameter("@ExtraElements", string.Empty, SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
+                                    parms.Add(new Parameter("@ExtraElements", string.Empty, SqlDbType.VarChar, ParameterDirection.Input, 5000));
+
+                                // new fields
+                                parms.Add(new Parameter("@ClosedDate", intervention.ClosedDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                                parms.Add(new Parameter("@TemplateId", (string.IsNullOrEmpty(intervention.TemplateId.ToString()) ? string.Empty : intervention.TemplateId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
 
                                 SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_RPT_SavePatientIntervention", parms);
                             
@@ -2614,9 +2781,9 @@ namespace Phytel.Data.ETL
                             parms.Add(new Parameter("@MongoId", (string.IsNullOrEmpty(task.Id.ToString()) ? string.Empty : task.Id.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
                             parms.Add(new Parameter("@MongoPatientGoalId", (string.IsNullOrEmpty(task.PatientGoalId.ToString()) ? string.Empty : task.PatientGoalId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
                             parms.Add(new Parameter("@Name", task.Name == null ? string.Empty : task.Name, SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@Description", task.Description == null ? string.Empty : task.Description, SqlDbType.VarChar, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@Description", task.Description == null ? string.Empty : task.Description, SqlDbType.VarChar, ParameterDirection.Input, 5000));
                             parms.Add(new Parameter("@StartDate", task.StartDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@Status", (string.IsNullOrEmpty(task.Status.ToString()) ? string.Empty : task.Status.ToString()), SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
+                            parms.Add(new Parameter("@Status", (string.IsNullOrEmpty(task.Status.ToString()) ? string.Empty : task.Status.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
                             parms.Add(new Parameter("@StatusDate", task.StatusDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
                             parms.Add(new Parameter("@TargetDate", task.TargetDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
                             parms.Add(new Parameter("@TargetValue", task.TargetValue == null ? string.Empty : task.TargetValue, SqlDbType.VarChar, ParameterDirection.Input, 50));
@@ -2628,9 +2795,13 @@ namespace Phytel.Data.ETL
                             parms.Add(new Parameter("@Delete", (string.IsNullOrEmpty(task.DeleteFlag.ToString()) ? string.Empty : task.DeleteFlag.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
                             parms.Add(new Parameter("@TimeToLive", task.TTLDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
                             if (task.ExtraElements != null)
-                                parms.Add(new Parameter("@ExtraElements", task.ExtraElements.ToString(), SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
+                                parms.Add(new Parameter("@ExtraElements", task.ExtraElements.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 5000));
                             else
-                                parms.Add(new Parameter("@ExtraElements", string.Empty, SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
+                                parms.Add(new Parameter("@ExtraElements", string.Empty, SqlDbType.VarChar, ParameterDirection.Input, 5000));
+                            
+                            // ENG-763, 848, 849 new fields
+                            parms.Add(new Parameter("@ClosedDate", task.ClosedDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@TemplateId", (string.IsNullOrEmpty(task.TemplateId.ToString()) ? string.Empty : task.TemplateId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
 
                             SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_RPT_SavePatientTask", parms);
 
@@ -2676,11 +2847,11 @@ namespace Phytel.Data.ETL
                                     parms.Clear();
                                     parms.Add(new Parameter("@PatientBarrierMongoId", (string.IsNullOrEmpty(bar.ToString()) ? string.Empty : bar.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
                                     parms.Add(new Parameter("@PatientTaskMongoID", (string.IsNullOrEmpty(task.Id.ToString()) ? string.Empty : task.Id.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@MongoUpdatedBy", task.UpdatedBy == null ? string.Empty : task.UpdatedBy.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@LastUpdatedOn", task.LastUpdatedOn ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@MongoRecordCreatedBy", (string.IsNullOrEmpty(task.RecordCreatedBy.ToString()) ? string.Empty : task.RecordCreatedBy.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@RecordCreatedOn", task.RecordCreatedOn, SqlDbType.DateTime, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@Version", task.Version, SqlDbType.Float, ParameterDirection.Input, 50));                            
+                                    parms.Add(new Parameter("@MongoUpdatedBy", task.UpdatedBy == null ? string.Empty : task.UpdatedBy.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                                    parms.Add(new Parameter("@LastUpdatedOn", task.LastUpdatedOn ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                                    parms.Add(new Parameter("@MongoRecordCreatedBy", (string.IsNullOrEmpty(task.RecordCreatedBy.ToString()) ? string.Empty : task.RecordCreatedBy.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                                    parms.Add(new Parameter("@RecordCreatedOn", task.RecordCreatedOn, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                                    parms.Add(new Parameter("@Version", task.Version, SqlDbType.Float, ParameterDirection.Input, 50));                            
 
                                     SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_RPT_SavePatientTaskBarrier", parms);
                                 }
@@ -2695,6 +2866,224 @@ namespace Phytel.Data.ETL
             catch (Exception ex)
             {
                 throw ex; //SimpleLog.Log(new ArgumentException("LoadPatientTasks()", ex));
+            }
+        }
+
+        private void LoadAllergies(string ctr)
+        {
+            try
+            {
+                OnEtlEvent(new ETLEventArgs { Message = "Loading allergies.", IsError = false });
+
+                ConcurrentBag<MEAllergy> pts;
+                using (AllergyMongoContext pctx = new AllergyMongoContext(ctr))
+                {
+                    pts = new ConcurrentBag<MEAllergy>(pctx.Allergies.Collection.FindAllAs<MEAllergy>().ToList());
+                }
+
+                //Parallel.ForEach(pts, pa =>
+                foreach (MEAllergy a in pts.Where(t => !t.DeleteFlag))
+                {
+                    try
+                    {
+                        ParameterCollection parms = new ParameterCollection();
+
+                        parms.Add(new Parameter("@MongoId", (string.IsNullOrEmpty(a.Id.ToString()) ? string.Empty : a.Id.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                        parms.Add(new Parameter("@Name", (string.IsNullOrEmpty(a.Name) ? string.Empty : a.Name), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                        parms.Add(new Parameter("@CodingSystem", (string.IsNullOrEmpty(a.CodingSystem.ToString()) ? string.Empty : a.CodingSystem.ToString()), SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
+                        parms.Add(new Parameter("@CodingSystemCode", (string.IsNullOrEmpty(a.CodingSystemCode) ? string.Empty : a.CodingSystemCode), SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
+                        parms.Add(new Parameter("@Version", a.Version, SqlDbType.Float, ParameterDirection.Input, 32));
+                        parms.Add(new Parameter("@MongoUpdatedBy", (string.IsNullOrEmpty(a.UpdatedBy.ToString()) ? string.Empty : a.UpdatedBy.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                        parms.Add(new Parameter("@LastUpdatedOn", a.LastUpdatedOn ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                        parms.Add(new Parameter("@MongoRecordCreatedBy", (string.IsNullOrEmpty(a.RecordCreatedBy.ToString()) ? string.Empty : a.RecordCreatedBy.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                        parms.Add(new Parameter("@RecordCreatedOn", a.RecordCreatedOn, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                        parms.Add(new Parameter("@TTLDate", a.TTLDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                        parms.Add(new Parameter("@Delete", (string.IsNullOrEmpty(a.DeleteFlag.ToString()) ? string.Empty : a.DeleteFlag.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
+
+                        SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_RPT_SaveAllergy", parms);
+
+                        if (a.TypeIds != null)
+                        {
+                            foreach (ObjectId rec in a.TypeIds)
+                            {
+                                parms.Clear();
+
+                                parms.Add(new Parameter("@MongoAllergyId", (string.IsNullOrEmpty(a.Id.ToString()) ? string.Empty : a.Id.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                                parms.Add(new Parameter("@MongoTypeId", (string.IsNullOrEmpty(rec.ToString()) ? string.Empty : rec.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                                parms.Add(new Parameter("@MongoUpdatedBy", a.UpdatedBy == null ? string.Empty : a.UpdatedBy.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                                parms.Add(new Parameter("@LastUpdatedOn", a.LastUpdatedOn ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                                parms.Add(new Parameter("@MongoRecordCreatedBy", (string.IsNullOrEmpty(a.RecordCreatedBy.ToString()) ? string.Empty : a.RecordCreatedBy.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                                parms.Add(new Parameter("@RecordCreatedOn", a.RecordCreatedOn, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                                parms.Add(new Parameter("@Version", a.Version, SqlDbType.Float, ParameterDirection.Input, 50));
+
+                                SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_RPT_SaveAllergyType", parms);
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace, IsError = true });
+                    }
+                }//);
+            }
+            catch (Exception ex)
+            {
+                throw ex; //SimpleLog.Log(new ArgumentException("LoadPatientUsers()", ex));
+            }
+        }
+
+        private void LoadPatientAllergies(string ctr)
+        {
+            try
+            {
+                OnEtlEvent(new ETLEventArgs { Message = "Loading patient allergies.", IsError = false });
+
+                ConcurrentBag<MEPatientAllergy> pts;
+                using (AllergyMongoContext pctx = new AllergyMongoContext(ctr))
+                {
+                    pts = new ConcurrentBag<MEPatientAllergy>(pctx.PatientAllergies.Collection.FindAllAs<MEPatientAllergy>().ToList());
+                }
+
+                //Parallel.ForEach(pts, pa =>
+                foreach (MEPatientAllergy pa in pts.Where(t => !t.DeleteFlag))
+                {
+                    try
+                    {
+                        ParameterCollection parms = new ParameterCollection();
+
+                        parms.Add(new Parameter("@MongoId", (string.IsNullOrEmpty(pa.Id.ToString()) ? string.Empty : pa.Id.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                        parms.Add(new Parameter("@MongoAllergyId", (string.IsNullOrEmpty(pa.AllergyId.ToString()) ? string.Empty : pa.AllergyId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                        parms.Add(new Parameter("@MongoPatientId", (string.IsNullOrEmpty(pa.PatientId.ToString()) ? string.Empty : pa.PatientId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                        parms.Add(new Parameter("@MongoSeverityId", (string.IsNullOrEmpty(pa.SeverityId.ToString()) ? string.Empty : pa.SeverityId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                        parms.Add(new Parameter("@StatusId", (string.IsNullOrEmpty(pa.StatusId.ToString()) ? string.Empty : pa.StatusId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 100));
+                        parms.Add(new Parameter("@SourceId", (string.IsNullOrEmpty(pa.SourceId.ToString()) ? string.Empty : pa.SourceId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                        parms.Add(new Parameter("@StartDate", pa.StartDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                        parms.Add(new Parameter("@EndDate", pa.EndDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                        parms.Add(new Parameter("@Notes", pa.Notes ?? string.Empty, SqlDbType.VarChar, ParameterDirection.Input, 5000));
+                        parms.Add(new Parameter("@SystemName", (string.IsNullOrEmpty(pa.SystemName) ? string.Empty : pa.SystemName), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                        parms.Add(new Parameter("@MongoUpdatedBy", (string.IsNullOrEmpty(pa.UpdatedBy.ToString()) ? string.Empty : pa.UpdatedBy.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                        parms.Add(new Parameter("@LastUpdatedOn", pa.LastUpdatedOn ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                        parms.Add(new Parameter("@MongoRecordCreatedBy", (string.IsNullOrEmpty(pa.RecordCreatedBy.ToString()) ? string.Empty : pa.RecordCreatedBy.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                        parms.Add(new Parameter("@RecordCreatedOn", pa.RecordCreatedOn, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                        parms.Add(new Parameter("@Version", pa.Version, SqlDbType.Float, ParameterDirection.Input, 32));
+                        parms.Add(new Parameter("@TTLDate", pa.TTLDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                        parms.Add(new Parameter("@Delete", (string.IsNullOrEmpty(pa.DeleteFlag.ToString()) ? string.Empty : pa.DeleteFlag.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
+
+                        SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_RPT_SavePatientAllergy", parms);
+
+                        if (pa.ReactionIds != null)
+                        {
+                            foreach (ObjectId rec in pa.ReactionIds)
+                            {
+                                parms.Clear();
+                                parms.Add(new Parameter("@MongoPatientAllergyId", (string.IsNullOrEmpty(pa.Id.ToString()) ? string.Empty : pa.Id.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                                parms.Add(new Parameter("@MongoReactionId", (string.IsNullOrEmpty(rec.ToString()) ? string.Empty : rec.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                                parms.Add(new Parameter("@MongoUpdatedBy", pa.UpdatedBy == null ? string.Empty : pa.UpdatedBy.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                                parms.Add(new Parameter("@LastUpdatedOn", pa.LastUpdatedOn ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                                parms.Add(new Parameter("@MongoRecordCreatedBy", (string.IsNullOrEmpty(pa.RecordCreatedBy.ToString()) ? string.Empty : pa.RecordCreatedBy.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                                parms.Add(new Parameter("@RecordCreatedOn", pa.RecordCreatedOn, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                                parms.Add(new Parameter("@Version", pa.Version, SqlDbType.Float, ParameterDirection.Input, 50));
+
+                                SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_RPT_SavePatientAllergyReaction", parms);
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace, IsError = true });
+                    }
+                }//);
+            }
+            catch (Exception ex)
+            {
+                throw ex; //SimpleLog.Log(new ArgumentException("LoadPatientUsers()", ex));
+            }
+        }
+
+        private void LoadPatientMedSups(string ctr)
+        {
+            try
+            {
+                OnEtlEvent(new ETLEventArgs { Message = "Loading patient MedSupp.", IsError = false });
+
+                ConcurrentBag<MEPatientMedSupp> pts;
+                using (MedicationMongoContext pctx = new MedicationMongoContext(ctr))
+                {
+                    pts = new ConcurrentBag<MEPatientMedSupp>(pctx.PatientMedSupps.Collection.FindAllAs<MEPatientMedSupp>().ToList());
+                }
+
+                //Parallel.ForEach(pts, pa =>
+                foreach (MEPatientMedSupp pm in pts.Where(t => !t.DeleteFlag))
+                {
+                    try
+                    {
+                        ParameterCollection parms = new ParameterCollection();
+
+                        parms.Add(new Parameter("@MongoId", (string.IsNullOrEmpty(pm.Id.ToString()) ? string.Empty : pm.Id.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                        parms.Add(new Parameter("@MongoPatientId", (string.IsNullOrEmpty(pm.PatientId.ToString()) ? string.Empty : pm.PatientId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                        parms.Add(new Parameter("@Name", (string.IsNullOrEmpty(pm.Name) ? string.Empty : pm.Name), SqlDbType.VarChar, ParameterDirection.Input, 200));
+                        parms.Add(new Parameter("@Category", (string.IsNullOrEmpty(pm.CategoryId.ToString()) ? string.Empty : pm.CategoryId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 200));
+                        parms.Add(new Parameter("@MongoTypeId", (string.IsNullOrEmpty(pm.TypeId.ToString()) ? string.Empty : pm.TypeId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                        parms.Add(new Parameter("@Status", (string.IsNullOrEmpty(pm.StatusId.ToString()) ? string.Empty : pm.StatusId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 200));
+                        parms.Add(new Parameter("@Dosage", (string.IsNullOrEmpty(pm.Dosage) ? string.Empty : pm.Dosage), SqlDbType.VarChar, ParameterDirection.Input, 500));
+                        parms.Add(new Parameter("@Strength", (string.IsNullOrEmpty(pm.Strength) ? string.Empty : pm.Strength), SqlDbType.VarChar, ParameterDirection.Input, 200));
+                        parms.Add(new Parameter("@Route", (string.IsNullOrEmpty(pm.Route) ? string.Empty : pm.Route), SqlDbType.VarChar, ParameterDirection.Input, 200));
+                        parms.Add(new Parameter("@Form", (string.IsNullOrEmpty(pm.Form) ? string.Empty : pm.Form), SqlDbType.VarChar, ParameterDirection.Input, 200));
+                        parms.Add(new Parameter("@FreqQuantity", (string.IsNullOrEmpty(pm.FreqQuantity) ? string.Empty : pm.FreqQuantity), SqlDbType.VarChar, ParameterDirection.Input, 200));
+                        parms.Add(new Parameter("@MongoFreqHowOftenId", (string.IsNullOrEmpty(pm.FreqHowOftenId.ToString()) ? string.Empty : pm.FreqHowOftenId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                        parms.Add(new Parameter("@MongoFreqWhenId", (string.IsNullOrEmpty(pm.FreqWhenId.ToString()) ? string.Empty : pm.FreqWhenId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                        parms.Add(new Parameter("@MongoSourceId", (string.IsNullOrEmpty(pm.SourceId.ToString()) ? string.Empty : pm.SourceId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                        parms.Add(new Parameter("@StartDate", pm.StartDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                        parms.Add(new Parameter("@EndDate", pm.EndDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                        parms.Add(new Parameter("@Reason", pm.Reason ?? string.Empty, SqlDbType.VarChar, ParameterDirection.Input, 5000));
+                        parms.Add(new Parameter("@Notes", pm.Notes ?? string.Empty, SqlDbType.VarChar, ParameterDirection.Input, 5000));
+                        parms.Add(new Parameter("@PrescribedBy", (string.IsNullOrEmpty(pm.PrescribedBy) ? string.Empty : pm.PrescribedBy), SqlDbType.VarChar, ParameterDirection.Input, 500));
+                        parms.Add(new Parameter("@SystemName", (string.IsNullOrEmpty(pm.SystemName) ? string.Empty : pm.SystemName), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                        parms.Add(new Parameter("@MongoUpdatedBy", (string.IsNullOrEmpty(pm.UpdatedBy.ToString()) ? string.Empty : pm.UpdatedBy.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                        parms.Add(new Parameter("@LastUpdatedOn", pm.LastUpdatedOn ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                        parms.Add(new Parameter("@MongoRecordCreatedBy", (string.IsNullOrEmpty(pm.RecordCreatedBy.ToString()) ? string.Empty : pm.RecordCreatedBy.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                        parms.Add(new Parameter("@RecordCreatedOn", pm.RecordCreatedOn, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                        parms.Add(new Parameter("@Version", pm.Version, SqlDbType.Float, ParameterDirection.Input, 32));
+                        parms.Add(new Parameter("@TTLDate", pm.TTLDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                        parms.Add(new Parameter("@Delete", (string.IsNullOrEmpty(pm.DeleteFlag.ToString()) ? string.Empty : pm.DeleteFlag.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
+
+                        SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_RPT_SavePatientMedSupp", parms);
+
+                        if (pm.NDCs != null)
+                        {
+                            foreach (var rec in pm.NDCs)
+                            {
+                                parms.Clear();
+                                parms.Add(new Parameter("@MongoPatientMedSuppId", (string.IsNullOrEmpty(pm.Id.ToString()) ? string.Empty : pm.Id.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                                parms.Add(new Parameter("@NDC", (string.IsNullOrEmpty(rec) ? string.Empty : rec), SqlDbType.VarChar, ParameterDirection.Input, 200));
+
+
+                                SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_RPT_PatientMedSuppNDC", parms);
+                            }
+                        }
+
+                        if (pm.PharmClasses != null)
+                        {
+                            foreach (var rec in pm.PharmClasses)
+                            {
+                                parms.Clear();
+                                parms.Add(new Parameter("@MongoPatientMedSuppId", (string.IsNullOrEmpty(pm.Id.ToString()) ? string.Empty : pm.Id.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                                parms.Add(new Parameter("@PharmClass", (string.IsNullOrEmpty(rec) ? string.Empty : rec), SqlDbType.VarChar, ParameterDirection.Input, 2000));
+
+
+                                SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_RPT_PatientMedSuppPhClass", parms);
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace, IsError = true });
+                    }
+                }//);
+            }
+            catch (Exception ex)
+            {
+                throw ex; //SimpleLog.Log(new ArgumentException("LoadPatientUsers()", ex));
             }
         }
 

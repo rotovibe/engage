@@ -92,6 +92,14 @@
       <Project>{f1a478d1-dca1-4be6-ae83-e0acdd4fdffd}</Project>
       <Name>DataDomain.Action</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\DataDomain\Phytel.API.DataDomain.Allergy\Development\Current\Allergy.DTO\DataDomain.Allergy.DTO.csproj">
+      <Project>{404ff84f-c52a-45b1-9966-2f79b52ee03d}</Project>
+      <Name>DataDomain.Allergy.DTO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\DataDomain\Phytel.API.DataDomain.Allergy\Development\Current\DataDomain.Allergy.Repo\DataDomain.Allergy.Repo.csproj">
+      <Project>{3102572c-54bf-4004-8453-077790779157}</Project>
+      <Name>DataDomain.Allergy.Repo</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\DataDomain\Phytel.API.DataDomain.CareMember\Development\Current\CareMember.DTO\DataDomain.CareMember.DTO.csproj">
       <Project>{b65577e7-60a6-4553-b1b9-38d6074ac560}</Project>
       <Name>DataDomain.CareMember.DTO</Name>
@@ -123,6 +131,14 @@
     <ProjectReference Include="..\..\DataDomain\Phytel.API.DataDomain.LookUp\Development\Current\LookUp\DataDomain.LookUp.csproj">
       <Project>{f0a3623a-6d1d-46de-a00e-794ebc856eb5}</Project>
       <Name>DataDomain.LookUp</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\DataDomain\Phytel.API.DataDomain.Medication\Development\Current\DataDomain.Medication.Repo\DataDomain.Medication.Repo.csproj">
+      <Project>{60c6a9f6-d668-4053-8997-8cfe661628dd}</Project>
+      <Name>DataDomain.Medication.Repo</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\DataDomain\Phytel.API.DataDomain.Medication\Development\Current\Medication.DTO\DataDomain.Medication.DTO.csproj">
+      <Project>{006555ba-c927-4ce0-bc5a-7a6a7053d0d5}</Project>
+      <Name>DataDomain.Medication.DTO</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\DataDomain\Phytel.API.DataDomain.Module\Development\Current\Module.DTO\DataDomain.Module.DTO.csproj">
       <Project>{6862b598-6967-430d-803a-bbe00fe98050}</Project>
