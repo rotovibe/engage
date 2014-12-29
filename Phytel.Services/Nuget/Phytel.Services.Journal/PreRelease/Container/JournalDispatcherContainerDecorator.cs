@@ -30,7 +30,7 @@ namespace Phytel.Services.Journal
 
             if (container.TryResolve<IAppSettingsProvider>() == null)
             {
-                container.Register<IAppSettingsProvider>(new AppSettingsProvider());
+                container.Register<IAppSettingsProvider>(new ConfigAppSettingsProvider());
             }
             if (container.TryResolve<IActionIdProvider>() == null)
             {
