@@ -9,6 +9,7 @@ namespace Phytel.Services.Mongo.Repository
 {
     public static class QueryableExtend
     {
+        [Obsolete("Use ToListWithRetry from Phytel.Services.Utility nuget package instead.")]
         public static List<T> ToListWithRetry<T>(this IQueryable<T> queryable)
         {
             return RetryHelper.DoWithRetry<List<T>>(() => 
