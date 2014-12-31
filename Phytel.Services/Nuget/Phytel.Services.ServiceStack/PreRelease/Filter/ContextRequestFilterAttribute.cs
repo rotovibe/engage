@@ -19,6 +19,11 @@ namespace Phytel.Services.ServiceStack.Filter
             ValidContextCodes = validContextCodes;
         }
 
+        public ContextRequestFilterAttribute(params ContextCodes[] validContextCodes)
+        {
+            ValidContextCodes = validContextCodes.Select(x => x.ToString()).ToArray();
+        }
+
         public IHostContextProxy HostContextProxy { get; set; }
 
         public override void Execute(IHttpRequest req, IHttpResponse res, object requestDto)
@@ -34,7 +39,7 @@ namespace Phytel.Services.ServiceStack.Filter
                 }
             }
 
-            if(string.IsNullOrEmpty(contextCode) || ValidContextCodes.All(x => x != contextCode))
+            if(string.IsNullOrEmpty(contextCode) || ValidContextCodes.All(x => x.ToLower() != contextCode))
             {
                 string validCodesAsJoinedString = string.Empty;
                 foreach(string validContextCode in ValidContextCodes)
