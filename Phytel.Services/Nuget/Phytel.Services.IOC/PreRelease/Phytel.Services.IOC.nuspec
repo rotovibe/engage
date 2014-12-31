@@ -10,11 +10,11 @@
     <description>Generic repositories for entity framework, mongo, and rest services</description>
     <dependencies>
       <group targetFramework=".NETFramework4.5.1">
-        <dependency id="ServiceStack" version="3.9.70" />
-        <dependency id="ServiceStack.Common" version="3.9.71" />
+        <dependency id="ServiceStack.Text" version="3.9.70" />
         <dependency id="ServiceStack.OrmLite.SqlServer" version="3.9.70" />
         <dependency id="ServiceStack.Redis" version="3.9.70" />
-        <dependency id="ServiceStack.Text" version="3.9.70" />
+        <dependency id="ServiceStack.Common" version="3.9.71" />
+        <dependency id="ServiceStack" version="3.9.70" />        
       </group>
     </dependencies>
   </metadata>
