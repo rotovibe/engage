@@ -14,6 +14,10 @@ namespace Phytel.Services.ServiceStack.Filter
     {
         public string[] ValidContextCodes { get; set; }
 
+        public ContextRequestFilterAttribute()
+        {
+        }
+
         public ContextRequestFilterAttribute(params string[] validContextCodes)
         {
             ValidContextCodes = validContextCodes;
@@ -39,7 +43,7 @@ namespace Phytel.Services.ServiceStack.Filter
                 }
             }
 
-            if(string.IsNullOrEmpty(contextCode) || ValidContextCodes.All(x => x.ToLower() != contextCode))
+            if (ValidContextCodes != null && ValidContextCodes.Any() && (string.IsNullOrEmpty(contextCode) || ValidContextCodes.All(x => x.ToLower() != contextCode)))
             {
                 string validCodesAsJoinedString = string.Empty;
                 foreach(string validContextCode in ValidContextCodes)
@@ -53,7 +57,7 @@ namespace Phytel.Services.ServiceStack.Filter
                         validCodesAsJoinedString = validCodesAsJoinedString + ", " + validContextCode;
                     }
                 }
-                throw new Exception("Context code was either not provided or did not match one of the valid context codes for this request. Valid codes are " + validCodesAsJoinedString + ".");
+                throw new Exception("Invalid context code provided. Valid codes are " + validCodesAsJoinedString + ".");
             }
             else
             {

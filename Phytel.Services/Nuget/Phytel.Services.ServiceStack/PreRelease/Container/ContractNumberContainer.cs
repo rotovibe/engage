@@ -14,12 +14,12 @@ namespace Phytel.Services.ServiceStack
 
         protected override void OnBuild(Funq.Container container)
         {
-            _container.Register<HostContext>(c => HostContext.Instance).ReusedWithin(Funq.ReuseScope.Request);
-            _container.RegisterAutoWiredAs<HostContextProxy, IHostContextProxy>().ReusedWithin(Funq.ReuseScope.Request);
+            container.Register<HostContext>(c => HostContext.Instance).ReusedWithin(Funq.ReuseScope.Request);
+            container.RegisterAutoWiredAs<HostContextProxy, IHostContextProxy>().ReusedWithin(Funq.ReuseScope.Request);
 
-            _container.RegisterAutoWiredAs<ContractNumberProvider, IContractNumberProvider>().ReusedWithin(Funq.ReuseScope.Request);
+            container.Register<IContractNumberProvider>(new ContractNumberProvider());
 
-            _container.Register<string>(Constants.NamedStringContractNumber, c =>
+            container.Register<string>(Constants.NamedStringContractNumber, c =>
             {
                 IHostContextProxy hostContextProxy = c.Resolve<IHostContextProxy>();
                 return hostContextProxy.GetItemAsString(Constants.HostContextKeyContractNumber);
