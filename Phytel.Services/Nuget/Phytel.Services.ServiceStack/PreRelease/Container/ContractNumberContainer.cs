@@ -14,10 +14,10 @@ namespace Phytel.Services.ServiceStack
 
         protected override void OnBuild(Funq.Container container)
         {
-            _container.RegisterIfNotAlready<HostContext>(c => HostContext.Instance, Funq.ReuseScope.Request);
-            _container.RegisterAutoWiredAsIfNotAlready<HostContextProxy, IHostContextProxy>(Funq.ReuseScope.Request);
+            _container.Register<HostContext>(c => HostContext.Instance).ReusedWithin(Funq.ReuseScope.Request);
+            _container.RegisterAutoWiredAs<HostContextProxy, IHostContextProxy>().ReusedWithin(Funq.ReuseScope.Request);
 
-            _container.RegisterAutoWiredAsIfNotAlready<ContractNumberProvider, IContractNumberProvider>(Funq.ReuseScope.Request);
+            _container.RegisterAutoWiredAs<ContractNumberProvider, IContractNumberProvider>().ReusedWithin(Funq.ReuseScope.Request);
 
             _container.Register<string>(Constants.NamedStringContractNumber, c =>
             {

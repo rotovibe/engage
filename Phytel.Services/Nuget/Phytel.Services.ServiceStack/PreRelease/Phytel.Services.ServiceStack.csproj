@@ -99,7 +99,6 @@
     <Compile Include="DTO\Interface\IContextRequest.cs" />
     <Compile Include="DTO\Interface\IContractRequest.cs" />
     <Compile Include="DTO\Interface\IEffectiveDateRequest.cs" />
-    <Compile Include="Enums.cs" />
     <Compile Include="Filter\EffectiveDateTimeRequestFilterAttribute.cs" />
     <Compile Include="Filter\EffectiveDateRequestFilterAttribute.cs" />
     <Compile Include="Filter\ContextRequestFilterAttribute.cs" />

@@ -19,11 +19,6 @@ namespace Phytel.Services.ServiceStack.Filter
             ValidContextCodes = validContextCodes;
         }
 
-        public ContextRequestFilterAttribute(params ContextCodes[] validContextCodes)
-        {
-            ValidContextCodes = validContextCodes.Select(x => x.ToString()).ToArray();
-        }
-
         public IHostContextProxy HostContextProxy { get; set; }
 
         public override void Execute(IHttpRequest req, IHttpResponse res, object requestDto)
