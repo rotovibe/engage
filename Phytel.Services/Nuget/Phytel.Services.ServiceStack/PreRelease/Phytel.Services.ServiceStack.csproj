@@ -98,9 +98,6 @@
     <Compile Include="DTO\ContractRequest.cs" />
     <Compile Include="DTO\Interface\IContextRequest.cs" />
     <Compile Include="DTO\Interface\IContractRequest.cs" />
-    <Compile Include="DTO\Interface\IEffectiveDateRequest.cs" />
-    <Compile Include="Filter\EffectiveDateTimeRequestFilterAttribute.cs" />
-    <Compile Include="Filter\EffectiveDateRequestFilterAttribute.cs" />
     <Compile Include="Filter\ContextRequestFilterAttribute.cs" />
     <Compile Include="Filter\ContractRequestFilterAttribute.cs" />
     <Compile Include="Client\Interface\IRepositoryHttp.cs" />
