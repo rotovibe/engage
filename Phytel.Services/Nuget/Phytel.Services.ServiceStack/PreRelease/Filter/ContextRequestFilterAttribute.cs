@@ -25,6 +25,11 @@ namespace Phytel.Services.ServiceStack.Filter
         {
             string contextCode = string.Empty;
 
+            if (HostContextProxy == null)
+            {
+                throw new Exception("IHostContextProxy was not initialized. Make sure IHostContextProxy has been registered with the IoC container.");
+            }
+
             if (requestDto is IContextRequest)
             {
                 IContextRequest contextRequest = requestDto as IContextRequest;
