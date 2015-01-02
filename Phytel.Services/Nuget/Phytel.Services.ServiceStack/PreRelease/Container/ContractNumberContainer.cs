@@ -22,7 +22,7 @@ namespace Phytel.Services.ServiceStack
             _container.Register<string>(Constants.NamedStringContractNumber, c =>
             {
                 IHostContextProxy hostContextProxy = c.Resolve<IHostContextProxy>();
-                return hostContextProxy.ContractNumber;
+                return hostContextProxy.GetItemAsString(Constants.HostContextKeyContractNumber);
             }).ReusedWithin(Funq.ReuseScope.Request);
         }
     }

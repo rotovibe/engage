@@ -2,6 +2,7 @@
 {
     public enum ContextCodes
     {
+        any,
         insight
     }
 }

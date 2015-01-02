@@ -1,5 +1,6 @@
 ﻿using Phytel.Services.ServiceStack.DTO;
 using ServiceStack.Common;
+using System;
 
 namespace Phytel.Services.ServiceStack.Proxy
 {
@@ -17,6 +18,7 @@ namespace Phytel.Services.ServiceStack.Proxy
             _hostContext = hostContext;
         }
 
+        [Obsolete("Use GetItem<string>(Constants.HostContextKeyContractNumber) and SetItem(Constants.HostContextKeyContractNumber, object value) instead", true)]
         public string ContractNumber
         {
             get
@@ -76,12 +78,12 @@ namespace Phytel.Services.ServiceStack.Proxy
 
         protected virtual string OnGetContractNumber()
         {
-            return GetItemAsString(ContractRequest.HostContextKeyContractNumber);
+            return GetItemAsString(Constants.HostContextKeyContractNumber);
         }
 
         protected virtual void OnSetContractNumber(string contractNumber)
         {
-            SetItem(ContractRequest.HostContextKeyContractNumber, contractNumber);
+            SetItem(Constants.HostContextKeyContractNumber, contractNumber);
         }
     }
 }
