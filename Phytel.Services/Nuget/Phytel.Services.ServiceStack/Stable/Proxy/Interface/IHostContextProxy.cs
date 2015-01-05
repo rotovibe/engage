@@ -1,7 +1,9 @@
-﻿namespace Phytel.Services.ServiceStack.Proxy
+﻿using System;
+namespace Phytel.Services.ServiceStack.Proxy
 {
     public interface IHostContextProxy
     {
+        [Obsolete("Use GetItem<string>(Constants.HostContextKeyContractNumber) and SetItem(Constants.HostContextKeyContractNumber, object value) instead", true)]
         string ContractNumber { get; set; }
 
         T GetItem<T>(string key) where T : class;
