@@ -54,7 +54,7 @@ namespace Phytel.API.DataDomain.Medication.Test
                 FreqQuantity = "Twice",
                 FreqWhenId = "545be126d433232248966643",
                 Id = "",
-                Name = "Exilir",
+                MedSuppName = "Exilir",
                 //NDCs = ,
                 Notes = "This is my note",
                 PatientId = "5325d9e9d6a4850adcbba4b1",

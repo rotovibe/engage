@@ -25,10 +25,7 @@ namespace Phytel.API.DataDomain.Allergy
 
                 return result;
             }
-            catch (Exception ex)
-            {
-                throw new Exception("AllergyDD:GetAllergyList()::" + ex.Message, ex.InnerException);
-            }
+            catch (Exception ex) { throw ex; }
         }
 
         public AllergyData InitializeAllergy(PutInitializeAllergyDataRequest request)
@@ -38,10 +35,7 @@ namespace Phytel.API.DataDomain.Allergy
                 var repo = AllergyRepositoryFactory.GetAllergyRepository(request, RepositoryType.Allergy);
                 return (AllergyData)repo.Initialize(request);
             }
-            catch (Exception ex)
-            {
-                throw new Exception("AllergyDD:InitializeAllergy()::" + ex.Message, ex.InnerException);
-            }
+            catch (Exception ex) { throw ex; }
         }
 
 
@@ -62,10 +56,7 @@ namespace Phytel.API.DataDomain.Allergy
                 }
                 return result;
             }
-            catch (Exception ex)
-            {
-                throw new Exception("AllergyDD:UpdateAllergy()::" + ex.Message, ex.InnerException);
-            }
+            catch (Exception ex) { throw ex; }
         }
 
     }

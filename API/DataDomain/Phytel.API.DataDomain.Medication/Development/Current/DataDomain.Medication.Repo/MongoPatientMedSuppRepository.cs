@@ -51,7 +51,7 @@ namespace DataDomain.Medication.Repo
                     MEPatientMedSupp mePMS = new MEPatientMedSupp(this.UserId)
                     {
                         PatientId = ObjectId.Parse(data.PatientId),
-                        Name = data.Name,
+                        Name = data.MedSuppName,
                         CategoryId = (Category)data.CategoryId,
                         TypeId  = ObjectId.Parse(data.TypeId),
                         StatusId = (Status)data.StatusId,
@@ -59,7 +59,7 @@ namespace DataDomain.Medication.Repo
                         Strength = data.Strength,
                         Route = data.Route,
                         Form = data.Form,
-                        PharmClasses = getPharmClassses(ctx, data.Name),
+                        PharmClasses = getPharmClassses(ctx, data.MedSuppName),
                         NDCs = data.NDCs,
                         FreqQuantity = data.FreqQuantity,
                         FreqHowOftenId = string.IsNullOrEmpty(data.FreqHowOftenId) ? (ObjectId?)null : ObjectId.Parse(data.FreqHowOftenId),
@@ -172,9 +172,9 @@ namespace DataDomain.Medication.Repo
                     uv.Add(MB.Update.Set(MEPatientMedSupp.VersionProperty, request.Version));
                     uv.Add(MB.Update.Set(MEPatientMedSupp.LastUpdatedOnProperty, System.DateTime.UtcNow));
                     if (data.PatientId != null) uv.Add(MB.Update.Set(MEPatientMedSupp.PatientIdProperty, ObjectId.Parse(data.PatientId)));
-                    if (!string.IsNullOrEmpty(data.Name))
+                    if (!string.IsNullOrEmpty(data.MedSuppName))
                     {
-                        uv.Add(MB.Update.Set(MEPatientMedSupp.NameProperty, data.Name));
+                        uv.Add(MB.Update.Set(MEPatientMedSupp.NameProperty, data.MedSuppName));
                     }
                     else
                     {
@@ -410,6 +410,55 @@ namespace DataDomain.Medication.Repo
         public object FindNDCCodes(object request)
         {
             throw new NotImplementedException();
+        }
+
+        public object Initialize(object newEntity)
+        {
+            PutInitializePatientMedSuppDataRequest request = (PutInitializePatientMedSuppDataRequest)newEntity;
+            PatientMedSuppData data = null;
+            try
+            {
+                MEPatientMedSupp meMS = new MEPatientMedSupp(this.UserId)
+                {
+                    PatientId = ObjectId.Parse(request.PatientId),
+                    MedSuppId = ObjectId.Parse(request.MedSuppId),
+                    TTLDate = System.DateTime.UtcNow.AddDays(_initializeDays),
+                    SystemName = request.SystemName,
+                    DeleteFlag = false
+                };
+
+                using (MedicationMongoContext ctx = new MedicationMongoContext(ContractDBName))
+                {
+                    ctx.PatientMedSupps.Collection.Insert(meMS);
+
+                    AuditHelper.LogDataAudit(this.UserId,
+                                            MongoCollectionName.PatientMedSupp.ToString(),
+                                            meMS.Id.ToString(),
+                                            DataAuditType.Insert,
+                                            request.ContractNumber);
+
+                    data = new PatientMedSuppData
+                    {
+                        Id = meMS.Id.ToString(),
+                        PatientId = meMS.PatientId.ToString(),
+                        MedSuppId = meMS.MedSuppId.ToString(),
+                        SystemName = meMS.SystemName
+                    };
+                    // get corresponding Medication/Supplement name.
+                    getMedicationDetails(data, ctx, meMS.MedSuppId);
+                }
+                return data;
+            }
+            catch (Exception) { throw; }
+        }
+
+        private static void getMedicationDetails(PatientMedSuppData data, MedicationMongoContext ctx, ObjectId msid)
+        {
+            MEMedication meM = ctx.Medications.Collection.Find(Query.EQ(MEMedication.IdProperty, msid)).FirstOrDefault();
+            if (meM != null)
+            {
+                data.MedSuppName = meM.FullName.ToUpper();
+            }
         }
     }
 }

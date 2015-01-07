@@ -34,6 +34,17 @@ namespace Phytel.API.DataDomain.Medication
             catch (Exception ex) { throw ex; }
         }
 
+        public PatientMedSuppData InitializePatientMedSupp(PutInitializePatientMedSuppDataRequest request)
+        {
+            try
+            {
+                //PatientAllergyRepository.UserId = request.UserId;
+                var repo = MedicationRepositoryFactory.GetMedicationRepository(request, RepositoryType.PatientMedSupp);
+                return (PatientMedSuppData)repo.Initialize(request);
+            }
+            catch (Exception ex) { throw ex; }
+        }
+
         public PatientMedSuppData SavePatientMedSupps(PutPatientMedSuppDataRequest request)
         {
             try

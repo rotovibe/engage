@@ -60,5 +60,41 @@ namespace Phytel.API.DataDomain.Medication.Service
             }
             return response;
         }
+
+        #region Initialize
+        public PutInitializeMedSuppDataResponse Put(PutInitializeMedSuppDataRequest request)
+        {
+            PutInitializeMedSuppDataResponse response = new PutInitializeMedSuppDataResponse { Version = request.Version };
+
+            try
+            {
+                RequireUserId(request);
+                response.MedicationData = Manager.InitializeMedication(request);
+            }
+            catch (Exception ex)
+            {
+                RaiseException(response, ex);
+            }
+            return response;
+        }
+        #endregion
+
+        #region Puts
+        public PutMedicationDataResponse Put(PutMedicationDataRequest request)
+        {
+            PutMedicationDataResponse response = new PutMedicationDataResponse { Version = request.Version };
+
+            try
+            {
+                RequireUserId(request);
+                response.MedicationData = Manager.UpdateMedication(request);
+            }
+            catch (Exception ex)
+            {
+                RaiseException(response, ex);
+            }
+            return response;
+        }
+        #endregion
     }
 }

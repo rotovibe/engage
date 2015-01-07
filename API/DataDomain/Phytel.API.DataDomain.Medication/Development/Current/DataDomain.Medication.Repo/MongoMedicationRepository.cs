@@ -1,19 +1,25 @@
 
+using System;
+using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using AutoMapper;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.Builders;
-using System;
-using System.Collections.Generic;
-using DTO = Phytel.API.DataDomain.Medication.DTO;
-using Phytel.API.DataDomain.Medication.DTO;
 using Phytel.API.Common;
+using Phytel.API.DataAudit;
+using Phytel.API.DataDomain.Medication.DTO;
+using DTO = Phytel.API.DataDomain.Medication.DTO;
+using MB = MongoDB.Driver.Builders;
 
 namespace DataDomain.Medication.Repo
 {
     public class MongoMedicationRepository<TContext> : IMongoMedicationRepository where TContext : MedicationMongoContext
     {
+        private int _expireDays = Convert.ToInt32(ConfigurationManager.AppSettings["ExpireDays"]);
+        private int _initializeDays = Convert.ToInt32(ConfigurationManager.AppSettings["InitializeDays"]);
+        
         protected readonly TContext Context;
         public string ContractDBName { get; set; }
         public string UserId { get; set; }
@@ -144,7 +150,44 @@ namespace DataDomain.Medication.Repo
 
         public object Update(object entity)
         {
-            throw new NotImplementedException();
+            bool result = false;
+            PutMedicationDataRequest pa = (PutMedicationDataRequest)entity;
+            MedicationData pt = pa.MedicationData;
+            try
+            {
+                using (MedicationMongoContext ctx = new MedicationMongoContext(ContractDBName))
+                {
+                    var q = MB.Query<MEMedication>.EQ(b => b.Id, ObjectId.Parse(pt.Id));
+                    var uv = new List<MB.UpdateBuilder>();
+                    uv.Add(MB.Update.Set(MEMedication.UpdatedByProperty, ObjectId.Parse(this.UserId)));
+                    uv.Add(MB.Update.Set(MEMedication.VersionProperty, pa.Version));
+                    uv.Add(MB.Update.Set(MEMedication.LastUpdatedOnProperty, System.DateTime.UtcNow));
+                    uv.Add(MB.Update.Set(MEMedication.DeleteFlagProperty, pt.DeleteFlag));
+                    DataAuditType type;
+                    if (pt.DeleteFlag)
+                    {
+                        uv.Add(MB.Update.Set(MEMedication.TTLDateProperty, System.DateTime.UtcNow.AddDays(_expireDays)));
+                        type = DataAuditType.Delete;
+                    }
+                    else
+                    {
+                        uv.Add(MB.Update.Set(MEMedication.TTLDateProperty, BsonNull.Value));
+                        type = DataAuditType.Update;
+                    }
+                    IMongoUpdate update = MB.Update.Combine(uv);
+                    ctx.Medications.Collection.Update(q, update);
+
+                    AuditHelper.LogDataAudit(this.UserId,
+                                            MongoCollectionName.Medication.ToString(),
+                                            pt.Id,
+                                            type,
+                                            pa.ContractNumber);
+
+                    result = true;
+                }
+                return result as object;
+            }
+            catch (Exception) { throw; }
         }
 
         public void CacheByID(List<string> entityIDs)
@@ -161,6 +204,42 @@ namespace DataDomain.Medication.Repo
         public object FindByPatientId(object request)
         {
             throw new NotImplementedException();
+        }
+
+        public object Initialize(object newEntity)
+        {
+            PutInitializeMedSuppDataRequest request = (PutInitializeMedSuppDataRequest)newEntity;
+            MedicationData data = null;
+            try
+            {
+                MEMedication meM = new MEMedication(this.UserId)
+                {
+                    ProprietaryName = request.MedSuppName,
+                    FullName = request.MedSuppName,
+                    TTLDate = System.DateTime.UtcNow.AddDays(_initializeDays),
+                    DeleteFlag = false
+                };
+
+                using (MedicationMongoContext ctx = new MedicationMongoContext(ContractDBName))
+                {
+                    ctx.Medications.Collection.Insert(meM);
+
+                    AuditHelper.LogDataAudit(this.UserId,
+                                            MongoCollectionName.Medication.ToString(),
+                                            meM.Id.ToString(),
+                                            DataAuditType.Insert,
+                                            request.ContractNumber);
+
+                    data = new MedicationData
+                    {
+                        Id = meM.Id.ToString(),
+                        FullName = meM.FullName.ToUpper(),
+                        ProprietaryName = meM.ProprietaryName.ToUpper()
+                    };
+                }
+                return data;
+            }
+            catch (Exception) { throw; }
         }
 
         /// <summary>

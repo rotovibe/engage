@@ -79,6 +79,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Data\MongoData_Medication_Test.cs" />
     <Compile Include="Data\MongoData_PatientMedication_Test.cs" />
     <Compile Include="MedicationDataManagerTests.cs" />
     <Compile Include="MedicationTest.cs" />

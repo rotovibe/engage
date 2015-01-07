@@ -90,6 +90,8 @@
     <Compile Include="GetPatientMedSuppsDataRequest.cs" />
     <Compile Include="GetPatientMedSuppsDataResponse.cs" />
     <Compile Include="PatientMedSuppData.cs" />
+    <Compile Include="PutMedicationDataRequest.cs" />
+    <Compile Include="PutMedicationDataResponse.cs" />
     <Compile Include="PutBulkInsertMedicationsRequest.cs" />
     <Compile Include="GetAllMedicationsRequest.cs" />
     <Compile Include="PutBulkInsertMedicationsResponse.cs" />
@@ -97,7 +99,11 @@
     <Compile Include="GetAllMedicationsResponse.cs" />
     <Compile Include="GetMedicationResponse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Medication.cs" />
+    <Compile Include="MedicationData.cs" />
+    <Compile Include="PutInitializeMedSuppDataRequest.cs" />
+    <Compile Include="PutInitializeMedSuppDataResponse.cs" />
+    <Compile Include="PutInitializePatientMedSuppDataRequest.cs" />
+    <Compile Include="PutInitializePatientMedSuppDataResponse.cs" />
     <Compile Include="PutPatientMedSuppDataRequest.cs" />
     <Compile Include="PutPatientMedSuppDataResponse.cs" />
     <Compile Include="UndoDeletePatientMedSuppsDataRequest.cs" />

@@ -13,6 +13,24 @@ namespace Phytel.API.DataDomain.Medication.Service
         //    Manager = mgr;
         //}
 
+        #region Initialize
+        public PutInitializePatientMedSuppDataResponse Put(PutInitializePatientMedSuppDataRequest request)
+        {
+            PutInitializePatientMedSuppDataResponse response = new PutInitializePatientMedSuppDataResponse { Version = request.Version };
+
+            try
+            {
+                RequireUserId(request);
+                response.PatientMedSuppData = Manager.InitializePatientMedSupp(request);
+            }
+            catch (Exception ex)
+            {
+                RaiseException(response, ex);
+            }
+            return response;
+        }
+        #endregion
+
         #region Posts
         public GetPatientMedSuppsDataResponse Post(GetPatientMedSuppsDataRequest request)
         {

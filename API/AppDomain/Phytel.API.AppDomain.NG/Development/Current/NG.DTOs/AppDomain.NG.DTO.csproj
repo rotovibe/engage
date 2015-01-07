@@ -137,6 +137,10 @@
     <Compile Include="Meds\GetPatientMedSuppsResponse.cs" />
     <Compile Include="Meds\Medication.cs" />
     <Compile Include="Meds\PatientMedSupp.cs" />
+    <Compile Include="Meds\PostInitializeMedSuppRequest.cs" />
+    <Compile Include="Meds\PostInitializeMedSuppResponse.cs" />
+    <Compile Include="Meds\PostInitializePatientMedSuppRequest.cs" />
+    <Compile Include="Meds\PostInitializePatientMedSuppResponse.cs" />
     <Compile Include="Meds\PostPatientMedSuppRequest.cs" />
     <Compile Include="Meds\PostPatientMedSuppResponse.cs" />
     <Compile Include="Observation\GetHistoricalPatientObservationsRequest.cs" />

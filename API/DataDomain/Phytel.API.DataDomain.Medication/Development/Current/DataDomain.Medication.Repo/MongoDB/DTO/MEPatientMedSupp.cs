@@ -28,6 +28,11 @@ namespace Phytel.API.DataDomain.Medication.DTO
         [BsonIgnoreIfNull(true)]
         public ObjectId PatientId { get; set; }
 
+        public const string MedSuppIdIdProperty = "msid";
+        [BsonElement(MedSuppIdIdProperty)]
+        [BsonIgnoreIfNull(true)]
+        public ObjectId MedSuppId { get; set; }
+
         public const string NameProperty = "nm";
         [BsonElement(NameProperty)]
         [BsonIgnoreIfNull(true)]

@@ -44,7 +44,7 @@ namespace Phytel.API.DataDomain.Medication
             try
             {
                 GetMedicationNDCsDataResponse result = new GetMedicationNDCsDataResponse();
-                var repo = MedicationRepositoryFactory.GetMedicationRepository(request, RepositoryType.Medication)    ;
+                var repo = MedicationRepositoryFactory.GetMedicationRepository(request, RepositoryType.Medication);
                 List<MEMedication> meMeds = repo.FindNDCCodes(request) as List<MEMedication>;
                 if (meMeds != null && meMeds.Count > 0)
                 {
@@ -58,6 +58,36 @@ namespace Phytel.API.DataDomain.Medication
                         }
                     });
                     result.NDCcodes = ndcs;
+                }
+                return result;
+            }
+            catch (Exception ex) { throw ex; }
+        }
+
+        public MedicationData InitializeMedication(PutInitializeMedSuppDataRequest request)
+        {
+            try
+            {
+                var repo = MedicationRepositoryFactory.GetMedicationRepository(request, RepositoryType.Medication);
+                return (MedicationData)repo.Initialize(request);
+            }
+            catch (Exception ex) { throw ex; }
+        }
+
+        public MedicationData UpdateMedication(PutMedicationDataRequest request)
+        {
+            try
+            {
+                MedicationData result = null;
+                var repo = MedicationRepositoryFactory.GetMedicationRepository(request, RepositoryType.Medication);
+
+                if (request.MedicationData != null)
+                {
+                    bool status = (bool)repo.Update(request);
+                    if (status)
+                    {
+                        result = (MedicationData)repo.FindByID(request.MedicationData.Id);
+                    }
                 }
                 return result;
             }
