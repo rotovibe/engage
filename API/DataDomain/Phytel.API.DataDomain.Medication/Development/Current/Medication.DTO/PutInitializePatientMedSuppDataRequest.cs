@@ -15,6 +15,12 @@ namespace Phytel.API.DataDomain.Medication.DTO
         [ApiMember(Name = "SystemName", Description = "SystemName", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string SystemName { get; set; }
 
+        [ApiMember(Name = "CategoryId", Description = "CategoryId", ParameterType = "property", DataType = "int", IsRequired = true)]
+        public int CategoryId { get; set; }
+
+        [ApiMember(Name = "TypeId", Description = "TypeId", ParameterType = "property", DataType = "string", IsRequired = true)]
+        public string TypeId { get; set; }
+
         [ApiMember(Name = "UserId", Description = "UserId of the logged in user", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string UserId { get; set; }
 

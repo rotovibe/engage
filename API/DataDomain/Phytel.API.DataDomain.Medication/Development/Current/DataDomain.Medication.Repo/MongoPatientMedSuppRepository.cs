@@ -424,6 +424,8 @@ namespace DataDomain.Medication.Repo
                     MedSuppId = ObjectId.Parse(request.MedSuppId),
                     TTLDate = System.DateTime.UtcNow.AddDays(_initializeDays),
                     SystemName = request.SystemName,
+                    CategoryId = (Category)request.CategoryId,
+                    TypeId = ObjectId.Parse(request.TypeId),
                     DeleteFlag = false
                 };
 

@@ -88,6 +88,26 @@ namespace Phytel.API.DataDomain.Medication.Test
             Assert.IsNotNull(response);
         }
 
+        [TestMethod]
+        public void InitializePatientMedSupp_Test()
+        {
+            PutInitializePatientMedSuppDataRequest request = new PutInitializePatientMedSuppDataRequest
+            {
+                MedSuppId = "54adb4ecd4332324dc0c77a3",
+                Context = context,
+                ContractNumber = contractNumber,
+                PatientId = "54ac72bd84ac051530b5fa3b",
+                UserId = userId,
+                Version = version,
+                SystemName = "Engage"
+            };
+            // [Route("/{Context}/{Version}/{ContractNumber}/PatientAllergy/{PatientId}/Initialize", "PUT")]
+            PutInitializePatientMedSuppDataResponse response = client.Put<PutInitializePatientMedSuppDataResponse>(
+    string.Format("{0}/{1}/{2}/{3}/PatientMedSupp/Initialize", url, context, version, contractNumber), request);
+
+            Assert.IsNotNull(response);
+        }
+
         //[TestMethod]
         //public void DeletePatientAllergies_Test()
         //{
