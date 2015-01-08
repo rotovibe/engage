@@ -58,7 +58,7 @@ namespace Phytel.API.DataDomain.Medication.DTO
 
         public const string SubstanceNameProperty = "sbsnm";
         [BsonElement(SubstanceNameProperty)]
-        public List<string> SubstanceName { get; set; }
+        public string SubstanceName { get; set; }
 
         public const string PharmClassProperty = "phcls";
         [BsonElement(PharmClassProperty)]
@@ -66,7 +66,7 @@ namespace Phytel.API.DataDomain.Medication.DTO
 
         public const string RouteProperty = "route";
         [BsonElement(RouteProperty)]
-        public List<string> Route { get; set; }
+        public string Route { get; set; }
 
         public const string FormProperty = "frm";
         [BsonElement(FormProperty)]
@@ -74,11 +74,11 @@ namespace Phytel.API.DataDomain.Medication.DTO
 
         public const string UnitProperty = "unit";
         [BsonElement(UnitProperty)]
-        public List<string> Unit { get; set; }
+        public string Unit { get; set; }
 
         public const string StrengthProperty = "str";
         [BsonElement(StrengthProperty)]
-        public List<string> Strength { get; set; }
+        public string Strength { get; set; }
 
         #region Base elements
         public const string VersionProperty = "v";

@@ -81,12 +81,12 @@ namespace Phytel.API.AppDomain.NG.Search.LuceneStrategy
                 }
                 else
                 {
-                    var parser = new MultiFieldQueryParser(Lucene.Net.Util.Version.LUCENE_30, new[] { "CompositeName", "SubstanceName" }, analyzer);
+                    var fields = new[] {"CompositeName", "SubstanceName"};
+                    var parser = new MultiFieldQueryParser(Lucene.Net.Util.Version.LUCENE_30, fields, analyzer);
                     parser.AllowLeadingWildcard = true;
                     parser.PhraseSlop = 0;
-                    var query = ParseWholeQueryWc(searchQuery, parser);
-                    var hits = searcher.Search
-                    (query, null, hits_limit, Sort.RELEVANCE).ScoreDocs;
+                    var query = ParseWholeQueryWc(searchQuery, fields, parser);
+                    var hits = searcher.Search(query, null, hits_limit, Sort.RELEVANCE).ScoreDocs;
                     var results = MapLuceneToDataList(hits, searcher);
                     analyzer.Close();
                     searcher.Dispose();

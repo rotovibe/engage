@@ -192,6 +192,10 @@ namespace Phytel.API.AppDomain.NG.Service
                     .ForMember(d => d.Strength, opt => opt.MapFrom(src => src.Get("Strength")))
                     .ForMember(d => d.Unit, opt => opt.MapFrom(src => src.Get("Unit")));
 
+                Mapper.CreateMap<DTO.Medication, MedNameSearchDoc>()
+                    .ForMember(d => d.ProductNDC, opt => opt.MapFrom(src => src.NDC))
+                    .ForMember(d => d.CompositeName, opt => opt.MapFrom(src => src.ProprietaryName + " " + src.ProprietaryNameSuffix));
+
                 Mapper.CreateMap<DTO.Allergy, IdNamePair>().ForMember(d => d.Name, opt => opt.MapFrom(src => src.Name.Trim().ToUpper().Replace("\"", "").Replace(",", "")));
 
                 Mapper.CreateMap<PatientMedSuppData, PatientMedSupp>();

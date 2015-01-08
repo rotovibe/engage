@@ -112,12 +112,34 @@ namespace Phytel.API.AppDomain.NG.Search.LuceneStrategy
             return query;
         }
 
-        public Query ParseWholeQueryWc(string searchQuery, QueryParser parser)
+        public Query ParseWholeQueryWc(string searchQuery, string[] fields, QueryParser parser)
         {
             Query query = new PhraseQuery();
+            Query q = new BooleanQuery();
             try
             {
-                query = parser.Parse(searchQuery.Trim() + "*");
+
+                //((BooleanQuery)q).Add( parser.Parse("\"" + searchQuery.Trim() + "\""), Occur.MUST);
+
+                //var trmW = searchQuery.Trim().Split(null);
+                //var bld = new System.Text.StringBuilder();
+
+                //for (int i = 0; i < trmW.Length; i++)
+                //{
+                //    if (i == trmW.Length - 1)
+                //        bld.Append(trmW[i]+"*");
+                //    else
+                //    {
+                //        bld.Append(trmW[i] + "* ");
+                //    }
+                //}
+
+                //query = parser.Parse("\"" + bld.ToString() + "\"");
+
+                //((BooleanQuery)q).Add(parser.Parse("\"" + bld.ToString() + "\""), Occur.SHOULD);
+
+                //query = parser.Parse("\"" + searchQuery.Trim() + "*" +"\"");
+                query = parser.Parse("\"" + searchQuery.Trim() +"\"");
             }
             catch (ParseException)
             {
