@@ -464,7 +464,7 @@ namespace DataDomain.Medication.Repo
         private static string getMedSuppName(MedicationMongoContext ctx, ObjectId msid)
         {
             string name = null;
-            MEMedication meM = ctx.Medications.Collection.Find(Query.EQ(MEMedication.IdProperty, msid)).FirstOrDefault();
+            MEMedication meM = ctx.Medications.Collection.Find(Query.EQ(MEMedication.IdProperty, msid)).SetFields(MEMedication.FullNameProperty).FirstOrDefault();
             if (meM != null)
             {
                 name = meM.FullName.ToUpper();
