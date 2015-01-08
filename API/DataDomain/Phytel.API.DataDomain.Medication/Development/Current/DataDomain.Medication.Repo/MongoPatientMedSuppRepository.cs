@@ -418,19 +418,22 @@ namespace DataDomain.Medication.Repo
             PatientMedSuppData data = null;
             try
             {
-                MEPatientMedSupp meMS = new MEPatientMedSupp(this.UserId)
-                {
-                    PatientId = ObjectId.Parse(request.PatientId),
-                    MedSuppId = ObjectId.Parse(request.MedSuppId),
-                    TTLDate = System.DateTime.UtcNow.AddDays(_initializeDays),
-                    SystemName = request.SystemName,
-                    CategoryId = (Category)request.CategoryId,
-                    TypeId = ObjectId.Parse(request.TypeId),
-                    DeleteFlag = false
-                };
-
                 using (MedicationMongoContext ctx = new MedicationMongoContext(ContractDBName))
                 {
+                    string medSuppName = getMedSuppName(ctx, ObjectId.Parse(request.MedSuppId));
+                
+                    MEPatientMedSupp meMS = new MEPatientMedSupp(this.UserId)
+                    {
+                        PatientId = ObjectId.Parse(request.PatientId),
+                        MedSuppId = ObjectId.Parse(request.MedSuppId),
+                        TTLDate = System.DateTime.UtcNow.AddDays(_initializeDays),
+                        SystemName = request.SystemName,
+                        CategoryId = (Category)request.CategoryId,
+                        TypeId = ObjectId.Parse(request.TypeId),
+                        PharmClasses = getPharmClassses(ctx, medSuppName),
+                        DeleteFlag = false
+                    };
+
                     ctx.PatientMedSupps.Collection.Insert(meMS);
 
                     AuditHelper.LogDataAudit(this.UserId,
@@ -444,23 +447,29 @@ namespace DataDomain.Medication.Repo
                         Id = meMS.Id.ToString(),
                         PatientId = meMS.PatientId.ToString(),
                         MedSuppId = meMS.MedSuppId.ToString(),
-                        SystemName = meMS.SystemName
+                        SystemName = meMS.SystemName,
+                        CategoryId = (int)meMS.CategoryId,
+                        TypeId = meMS.TypeId.ToString(),
+                        PharmClasses = meMS.PharmClasses,
+                        MedSuppName = medSuppName
                     };
                     // get corresponding Medication/Supplement name.
-                    getMedicationDetails(data, ctx, meMS.MedSuppId);
+                    getMedSuppName(ctx, meMS.MedSuppId);
                 }
                 return data;
             }
             catch (Exception) { throw; }
         }
 
-        private static void getMedicationDetails(PatientMedSuppData data, MedicationMongoContext ctx, ObjectId msid)
+        private static string getMedSuppName(MedicationMongoContext ctx, ObjectId msid)
         {
+            string name = null;
             MEMedication meM = ctx.Medications.Collection.Find(Query.EQ(MEMedication.IdProperty, msid)).FirstOrDefault();
             if (meM != null)
             {
-                data.MedSuppName = meM.FullName.ToUpper();
+                name = meM.FullName.ToUpper();
             }
+            return name;
         }
     }
 }

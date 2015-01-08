@@ -1,17 +1,13 @@
-﻿using System.Collections.Generic;
-using Phytel.API.Interface;
+﻿using Phytel.API.Interface;
 using ServiceStack.ServiceHost;
 
 namespace Phytel.API.AppDomain.NG.DTO
 {
-    [Route("/{Version}/{ContractNumber}/PatientMedSupp/Update", "POST")]
-    public class PostPatientMedSuppRequest : IAppDomainRequest
+    [Route("/{Version}/{ContractNumber}/Medication/Update", "POST")]
+    public class PostMedicationRequest : IAppDomainRequest
     {
-        [ApiMember(Name = "PatientMedSupp", Description = "PatientMedSupp details that need to be upserted.", ParameterType = "property", DataType = "PatientMedSupp", IsRequired = true)]
-        public PatientMedSupp PatientMedSupp { get; set; }
-
-        [ApiMember(Name = "RecalculateNDC", Description = "Indicates if NDC code should be recalculated in Edit mode.", ParameterType = "path", DataType = "boolean", IsRequired = true)]
-        public bool RecalculateNDC { get; set; }
+        [ApiMember(Name = "Medication", Description = "Medication details that need to be updated.", ParameterType = "property", DataType = "Medication", IsRequired = true)]
+        public Medication Medication { get; set; }
 
         [ApiMember(Name = "Token", Description = "Token parameter", ParameterType = "path", DataType = "string", IsRequired = true)]
         public string Token { get; set; }
@@ -25,6 +21,6 @@ namespace Phytel.API.AppDomain.NG.DTO
         [ApiMember(Name = "UserID", Description = "ID of the user making the request (Internally used ONLY)", ParameterType = "property", DataType = "string", IsRequired = false)]
         public string UserId { get; set; }
 
-        public PostPatientMedSuppRequest() { }
+        public PostMedicationRequest() { }
     }
 }

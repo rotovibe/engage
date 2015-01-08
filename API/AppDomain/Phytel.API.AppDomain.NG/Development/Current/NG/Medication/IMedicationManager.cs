@@ -9,6 +9,8 @@ namespace Phytel.API.AppDomain.NG.Medication
     {
         void LogException(Exception ex);
         List<PatientMedSupp> GetPatientMedSupps(GetPatientMedSuppsRequest request);
-        PatientMedSupp SavePatientMedSupp(PostPatientMedSuppRequest request);
+        PatientMedSupp UpdatePatientMedSupp(PostPatientMedSuppRequest request);
+        PatientMedSupp InitializePatientMedSupp(PostInitializePatientMedSuppRequest request);
+        DTO.Medication InitializeMedSupp(PostInitializeMedSuppRequest request);
     }
 }

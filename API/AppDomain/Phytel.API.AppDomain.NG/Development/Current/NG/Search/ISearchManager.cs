@@ -12,7 +12,7 @@ namespace Phytel.API.AppDomain.NG
         List<TextValuePair> GetSearchMedNameResults(GetMedNamesRequest request);
         MedFieldsLists GetSearchMedFieldsResults(GetMedFieldsRequest request);
         void LogException(Exception ex);
-        void RegisterDocumentInSearchIndex(DTO.Allergy allergy, string contractNumber);
+        void RegisterAllergyDocumentInSearchIndex(DTO.Allergy allergy, string contractNumber);
         void RegisterMedDocumentInSearchIndex(DTO.Medication med, string contractNumber);
     }
 }

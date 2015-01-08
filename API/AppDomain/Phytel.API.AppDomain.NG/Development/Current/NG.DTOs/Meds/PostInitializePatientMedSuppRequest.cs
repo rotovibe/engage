@@ -13,6 +13,12 @@ namespace Phytel.API.AppDomain.NG.DTO
         [ApiMember(Name = "MedSuppId", Description = "Id of the medication/supplement which is getting associted to a patient.", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string MedSuppId { get; set; }
 
+        [ApiMember(Name = "CategoryId", Description = "Determines if it is a supplement or a medication", ParameterType = "property", DataType = "int", IsRequired = true)]
+        public int CategoryId { get; set; }
+
+        [ApiMember(Name = "TypeId", Description = "Determines if it is an OTC or a prescription", ParameterType = "property", DataType = "string", IsRequired = true)]
+        public string TypeId { get; set; }
+
         [ApiMember(Name = "UserID", Description = "ID of the user making the request (Internally used ONLY)", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string UserId { get; set; }
 

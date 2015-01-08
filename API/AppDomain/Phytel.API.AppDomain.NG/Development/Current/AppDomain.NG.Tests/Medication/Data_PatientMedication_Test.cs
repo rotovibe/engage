@@ -79,7 +79,6 @@ namespace Phytel.API.AppDomain.NG.Test
             {
                 ContractNumber = contractNumber,
                 PatientMedSupp = pms,
-                Insert = true,
                 RecalculateNDC = true,
                 UserId = userId,
                 Version = version

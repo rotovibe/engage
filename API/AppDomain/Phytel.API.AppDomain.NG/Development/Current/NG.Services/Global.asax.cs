@@ -66,16 +66,20 @@ namespace Phytel.API.AppDomain.NG.Service
                 container.RegisterAutoWiredAs<SearchManager, ISearchManager>().ReusedWithin(Funq.ReuseScope.Request);
                 container.RegisterAutoWiredAs<SearchUtil, ISearchUtil>().ReusedWithin(Funq.ReuseScope.Request);
 
-                // automapper configuration
+                #region Automapper Configuration
+                #region Allergy & PatientAllergy
                 Mapper.CreateMap<AllergyData, DTO.Allergy>();
                 Mapper.CreateMap<DTO.Allergy, AllergyData>();
                 Mapper.CreateMap<PatientAllergyData, PatientAllergy>();
                 Mapper.CreateMap<PatientAllergy, PatientAllergyData>();
+                Mapper.CreateMap<DTO.Allergy, IdNamePair>().ForMember(d => d.Name, opt => opt.MapFrom(src => src.Name.Trim().ToUpper().Replace("\"", "").Replace(",", "")));
+                #endregion
                 
+                #region Goal, Task, Intervention, PatientGoal, PatientTask and PatientIntervention
                 Mapper.CreateMap<GoalData, Goal>()
                     .ForMember(d => d.CustomAttributes,
                         opt => opt.MapFrom(src => src.CustomAttributes.ConvertAll(
-                            c => new CustomAttribute {Id = c.Id, Values = c.Values})));
+                    c => new CustomAttribute { Id = c.Id, Values = c.Values })));
 
                 Mapper.CreateMap<TaskData, Task>()
                     .ForMember(d => d.CustomAttributes,
@@ -105,7 +109,7 @@ namespace Phytel.API.AppDomain.NG.Service
                 Mapper.CreateMap<PatientGoalData, PatientGoal>()
                     .ForMember(d => d.CustomAttributes,
                         opt => opt.MapFrom(src => src.CustomAttributes.ConvertAll(
-                            c => new CustomAttribute {Id = c.Id, Values = c.Values})))
+                            c => new CustomAttribute { Id = c.Id, Values = c.Values })))
                     .ForMember(d => d.Barriers,
                         opt => opt.MapFrom(src => src.BarriersData.ConvertAll(
                             c =>
@@ -140,7 +144,7 @@ namespace Phytel.API.AppDomain.NG.Service
                                                     Required = ca.Required,
                                                     Type = ca.Type,
                                                     Values = ca.Values,
-                                                    Options = NGUtils.FormatOptions( ca.Options)
+                                                    Options = NGUtils.FormatOptions(ca.Options)
                                                 }),
                                     DeleteFlag = c.DeleteFlag,
                                     Description = c.Description,
@@ -172,6 +176,7 @@ namespace Phytel.API.AppDomain.NG.Service
                                     StatusDate = c.StatusDate,
                                     StatusId = c.StatusId
                                 })));
+                #endregion
 
                 Mapper.CreateMap<Document, IdNamePair>()
                     .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Get("Id")))
@@ -196,10 +201,13 @@ namespace Phytel.API.AppDomain.NG.Service
                     .ForMember(d => d.ProductNDC, opt => opt.MapFrom(src => src.NDC))
                     .ForMember(d => d.CompositeName, opt => opt.MapFrom(src => src.ProprietaryName + " " + src.ProprietaryNameSuffix));
 
-                Mapper.CreateMap<DTO.Allergy, IdNamePair>().ForMember(d => d.Name, opt => opt.MapFrom(src => src.Name.Trim().ToUpper().Replace("\"", "").Replace(",", "")));
-
+                #region Medication & PatientMedSupp
+                Mapper.CreateMap<MedicationData, DTO.Medication>();
+                Mapper.CreateMap<DTO.Medication, MedicationData>();
                 Mapper.CreateMap<PatientMedSuppData, PatientMedSupp>();
                 Mapper.CreateMap<PatientMedSupp, PatientMedSuppData>();
+                #endregion
+                #endregion
 
                 Plugins.Add(new RequestLogsFeature() { RequiredRoles = new string[] { } });
 

@@ -14,7 +14,7 @@ namespace Phytel.API.AppDomain.NG.Allergy
     {
         public ISearchUtil SearchUtil { get; set; }
 
-        public void RegisterDocumentInSearchIndex(DTO.Allergy allergy,string contractNumber)
+        public void RegisterAllergyDocumentInSearchIndex(DTO.Allergy allergy,string contractNumber)
         {
             try
             {
@@ -23,7 +23,7 @@ namespace Phytel.API.AppDomain.NG.Allergy
             }
             catch (Exception ex)
             {
-                throw new WebServiceException("AD:RegisterDocumentInSearchIndex()::" + ex.Message, ex.InnerException);
+                throw new WebServiceException("AD:RegisterAllergyDocumentInSearchIndex()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -38,7 +38,7 @@ namespace Phytel.API.AppDomain.NG.Allergy
             }
             catch (Exception ex)
             {
-                throw new WebServiceException("AD:RegisterDocumentInSearchIndex()::" + ex.Message, ex.InnerException);
+                throw new WebServiceException("AD:RegisterMedDocumentInSearchIndex()::" + ex.Message, ex.InnerException);
             }
         }
 

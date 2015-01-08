@@ -163,6 +163,14 @@ namespace DataDomain.Medication.Repo
                     uv.Add(MB.Update.Set(MEMedication.VersionProperty, pa.Version));
                     uv.Add(MB.Update.Set(MEMedication.LastUpdatedOnProperty, System.DateTime.UtcNow));
                     uv.Add(MB.Update.Set(MEMedication.DeleteFlagProperty, pt.DeleteFlag));
+                    uv.Add(MB.Update.Set(MEMedication.NDCProperty, pt.NDC));
+                    uv.Add(MB.Update.Set(MEMedication.ProductIdProperty, pt.ProductId));
+                    uv.Add(MB.Update.Set(MEMedication.ProprietaryNameProperty, pt.ProprietaryName));
+                    uv.Add(MB.Update.Set(MEMedication.ProprietaryNameSuffixProperty, pt.ProprietaryNameSuffix));
+                    uv.Add(MB.Update.Set(MEMedication.SubstanceNameProperty, pt.SubstanceName));
+                    uv.Add(MB.Update.Set(MEMedication.RouteProperty, pt.Route));
+                    uv.Add(MB.Update.Set(MEMedication.FormProperty, pt.Form));
+                    uv.Add(MB.Update.Set(MEMedication.StrengthProperty, pt.Strength));
                     DataAuditType type;
                     if (pt.DeleteFlag)
                     {

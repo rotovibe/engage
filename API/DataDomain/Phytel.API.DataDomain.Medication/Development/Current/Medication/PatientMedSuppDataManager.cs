@@ -54,17 +54,10 @@ namespace Phytel.API.DataDomain.Medication
 
                 if (request.PatientMedSuppData != null)
                 {
-                    if (request.Insert)
+                    bool status = (bool)repo.Update(request);
+                    if (status)
                     {
-                        result = (PatientMedSuppData)repo.Insert(request);
-                    }
-                    else
-                    {
-                        bool status = (bool)repo.Update(request);
-                        if (status)
-                        {
-                            result = (PatientMedSuppData)repo.FindByID(request.PatientMedSuppData.Id);
-                        }
+                        result = (PatientMedSuppData)repo.FindByID(request.PatientMedSuppData.Id);
                     }
                 }
                 return result;

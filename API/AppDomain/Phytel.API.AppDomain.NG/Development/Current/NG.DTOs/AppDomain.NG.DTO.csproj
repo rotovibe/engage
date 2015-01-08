@@ -137,6 +137,8 @@
     <Compile Include="Meds\GetPatientMedSuppsResponse.cs" />
     <Compile Include="Meds\Medication.cs" />
     <Compile Include="Meds\PatientMedSupp.cs" />
+    <Compile Include="Meds\PostMedicationRequest.cs" />
+    <Compile Include="Meds\PostMedicationResponse.cs" />
     <Compile Include="Meds\PostInitializeMedSuppRequest.cs" />
     <Compile Include="Meds\PostInitializeMedSuppResponse.cs" />
     <Compile Include="Meds\PostInitializePatientMedSuppRequest.cs" />

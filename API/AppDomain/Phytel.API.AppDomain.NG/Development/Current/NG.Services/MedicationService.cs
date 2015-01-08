@@ -25,7 +25,87 @@ namespace Phytel.API.AppDomain.NG.Service
         private const string unknownBrowserType = "Unknown browser";
         private const string unknownUserHostAddress = "Unknown IP";
 
+        #region Medication - Posts
+        public PostInitializeMedSuppResponse Post(PostInitializeMedSuppRequest request)
+        {
+            PostInitializeMedSuppResponse response = new PostInitializeMedSuppResponse();
+            ValidateTokenResponse result = null;
+
+            try
+            {
+                if (base.Request != null)
+                {
+                    request.Token = base.Request.Headers["Token"] as string;
+                }
+                result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                if (result.UserId.Trim() != string.Empty)
+                {
+                    request.UserId = result.UserId;
+                    response.MedSupp = MedicationManager.InitializeMedSupp(request);
+                }
+                else
+                    throw new UnauthorizedAccessException();
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                if ((ex is WebServiceException) == false)
+                    MedicationManager.LogException(ex);
+            }
+            finally
+            {
+                if (result != null)
+                {
+                    string browser = (base.Request != null) ? base.Request.UserAgent : unknownBrowserType;
+                    string hostAddress = (base.Request != null) ? base.Request.UserHostAddress : unknownUserHostAddress;
+                    AuditUtil.LogAuditData(request, result.SQLUserId, null, browser, hostAddress, request.GetType().Name);
+                }
+            }
+            return response;
+        }
+        #endregion
+
         #region PatientMedSupps - Posts
+        public PostInitializePatientMedSuppResponse Post(PostInitializePatientMedSuppRequest request)
+        {
+            PostInitializePatientMedSuppResponse response = new PostInitializePatientMedSuppResponse();
+            ValidateTokenResponse result = null;
+
+            try
+            {
+                if (base.Request != null)
+                {
+                    request.Token = base.Request.Headers["Token"] as string;
+                }
+                result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                if (result.UserId.Trim() != string.Empty)
+                {
+                    request.UserId = result.UserId;
+                    response.PatientMedSupp = MedicationManager.InitializePatientMedSupp(request);
+                }
+                else
+                    throw new UnauthorizedAccessException();
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                if ((ex is WebServiceException) == false)
+                    MedicationManager.LogException(ex);
+            }
+            finally
+            {
+                List<string> patientIds = new List<string>();
+                patientIds.Add(request.PatientId);
+                if (result != null)
+                {
+                    string browser = (base.Request != null) ? base.Request.UserAgent : unknownBrowserType;
+                    string hostAddress = (base.Request != null) ? base.Request.UserHostAddress : unknownUserHostAddress;
+                    AuditUtil.LogAuditData(request, result.SQLUserId, patientIds, browser, hostAddress, request.GetType().Name);
+                }
+            }
+            return response;
+        }
+
         public GetPatientMedSuppsResponse Post(GetPatientMedSuppsRequest request)
         {
             GetPatientMedSuppsResponse response = new GetPatientMedSuppsResponse();
@@ -81,7 +161,7 @@ namespace Phytel.API.AppDomain.NG.Service
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
-                    response.PatientMedSupp = MedicationManager.SavePatientMedSupp(request);
+                    response.PatientMedSupp = MedicationManager.UpdatePatientMedSupp(request);
                 }
                 else
                     throw new UnauthorizedAccessException();

@@ -1,21 +1,7 @@
-﻿using AutoMapper;
-using Lucene.Net.Analysis;
-using Lucene.Net.Analysis.Standard;
-using Lucene.Net.Index;
-using Lucene.Net.Store;
-using Phytel.API.AppDomain.NG.DTO;
-using Phytel.API.AppDomain.NG.DTO;
-using Phytel.API.AppDomain.NG.DTO.Search;
-using Phytel.API.AppDomain.NG.Search;
-using Phytel.API.AppDomain.NG.Search.LuceneStrategy;
-using Phytel.API.Common.CustomObject;
-using Phytel.API.DataDomain.Allergy.DTO;
-using ServiceStack.Service;
-using ServiceStack.ServiceClient.Web;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
-using Phytel.API.Common;
+using AutoMapper;
+using Phytel.API.AppDomain.NG.DTO;
 using Phytel.API.DataDomain.Medication.DTO;
 
 namespace Phytel.API.AppDomain.NG.Medication
@@ -25,7 +11,42 @@ namespace Phytel.API.AppDomain.NG.Medication
         public IMedicationEndpointUtil EndpointUtil { get; set; }
         public ISearchManager SearchManager { get; set; }
 
+
+        #region Medication - Posts
+        public DTO.Medication InitializeMedSupp(PostInitializeMedSuppRequest request)
+        {
+            DTO.Medication medication = null;
+            try
+            {
+
+                MedicationData data = EndpointUtil.InitializeMedSupp(request);
+                if (data != null)
+                {
+                    medication = Mapper.Map<DTO.Medication>(data);
+                }
+                return medication;
+            }
+            catch (Exception ex) { throw ex; }
+        }
+        #endregion
+
         #region PatientMedSupp - Posts
+        public PatientMedSupp InitializePatientMedSupp(PostInitializePatientMedSuppRequest request)
+        {
+            PatientMedSupp patientMedSupp = null;
+            try
+            {
+
+                PatientMedSuppData data = EndpointUtil.InitializePatientMedSupp(request);
+                if (data != null)
+                {
+                    patientMedSupp = Mapper.Map<PatientMedSupp>(data);
+                }
+                return patientMedSupp;
+            }
+            catch (Exception ex) { throw ex; }
+        } 
+
         public List<PatientMedSupp> GetPatientMedSupps(GetPatientMedSuppsRequest request)
         {
             List<PatientMedSupp> patientMedSupps = null;
@@ -39,38 +60,49 @@ namespace Phytel.API.AppDomain.NG.Medication
                 }
                 return patientMedSupps;
             }
-            catch (WebServiceException ex)
-            {
-                throw new WebServiceException("AD:GetPatientMedSupps()::" + ex.Message, ex.InnerException);
-            }
+            catch (Exception ex) { throw ex; }
         }
 
-        public PatientMedSupp SavePatientMedSupp(PostPatientMedSuppRequest request)
+        public PatientMedSupp UpdatePatientMedSupp(PostPatientMedSuppRequest request)
         {
             PatientMedSupp patientMedSupp = null;
             try
             {
                 if (request.PatientMedSupp != null)
                 {
-                    // Populate calculated NDC codes and Pharm classes in the request object before save.
-                    bool calculateNDCAndPharm = false;
-                    if (request.Insert)
+                    //Update Medication collection to add any newly initialized medication and then register in search index.
+                    if (request.PatientMedSupp.IsNewAllergy)
                     {
-                        calculateNDCAndPharm = true;
-                    }
-                    else
-                    {
-                        // On update, check for ReCalculateNDC flag.
-                        if (request.RecalculateNDC)
+                        PostMedicationRequest req = new DTO.PostMedicationRequest
                         {
-                            calculateNDCAndPharm = true;
-                        }
+                            Medication = new DTO.Medication {
+                                Id = request.PatientMedSupp.MedSuppId,
+                                NDC = string.Empty,
+                                ProductId = string.Empty,
+                                ProprietaryName = string.Empty,
+                                ProprietaryNameSuffix = string.Empty,
+                                SubstanceName = string.Empty,
+                                RouteName = string.Empty,
+                                DosageFormName = string.Empty,
+                                Strength = string.Empty
+                            },
+                            ContractNumber = request.ContractNumber,
+                            UserId = request.UserId,
+                            Version = request.Version
+                        };
+                        MedicationData medData = EndpointUtil.UpdateMedication(req);
+                        DTO.Medication newMed = Mapper.Map<DTO.Medication>(medData);
+                        // Register newly initialized medication in search index.
+                        SearchManager.RegisterMedDocumentInSearchIndex(newMed, req.ContractNumber);
+                        // For newly initialized medication, calculate NDC codes.
+                        request.RecalculateNDC = true;
                     }
-                    if (calculateNDCAndPharm)
+                    // Populate calculated NDC codes and Pharm classes in the request object before save.
+                    if (request.RecalculateNDC)
                     {
                         request.PatientMedSupp.NDCs = EndpointUtil.GetMedicationNDCs(request);
                     }
-                    PatientMedSuppData data = EndpointUtil.SavePatientMedSupp(request);
+                    PatientMedSuppData data = EndpointUtil.UpdatePatientMedSupp(request);
                     if (data != null)
                     {
                         patientMedSupp = Mapper.Map<PatientMedSupp>(data);
@@ -78,10 +110,7 @@ namespace Phytel.API.AppDomain.NG.Medication
                 }
                 return patientMedSupp;
             }
-            catch (WebServiceException ex)
-            {
-                throw new WebServiceException("AD:SavePatientMedSupp()::" + ex.Message, ex.InnerException);
-            }
+            catch (Exception ex) { throw ex; }
         }
         #endregion
     }

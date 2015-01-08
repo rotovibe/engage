@@ -54,10 +54,7 @@ namespace Phytel.API.AppDomain.NG.Allergy
                 }
                 return allergy;
             }
-            catch (WebServiceException ex)
-            {
-                throw new WebServiceException("AD:InitializeAllergy()::" + ex.Message, ex.InnerException);
-            }
+            catch (Exception ex) { throw ex; }
         }
         #endregion
 
@@ -89,10 +86,7 @@ namespace Phytel.API.AppDomain.NG.Allergy
                 }
                 return patientAllergies;
             }
-            catch (WebServiceException ex)
-            {
-                throw new WebServiceException("AD:GetPatientAllergies()::" + ex.Message, ex.InnerException);
-            }
+            catch (Exception ex) { throw ex; }
         }
         #endregion
 
@@ -110,10 +104,7 @@ namespace Phytel.API.AppDomain.NG.Allergy
                 }
                 return patientAllergy;
             }
-            catch (WebServiceException ex)
-            {
-                throw new WebServiceException("AD:InitializePatientAllergy()::" + ex.Message, ex.InnerException);
-            }
+            catch (Exception ex) { throw ex; }
         } 
 
         public List<PatientAllergy> UpdatePatientAllergies(PostPatientAllergiesRequest request)
@@ -138,7 +129,7 @@ namespace Phytel.API.AppDomain.NG.Allergy
                             AllergyData allergyData = EndpointUtil.UpdateAllergy(req);
                             DTO.Allergy newAllergy = Mapper.Map<DTO.Allergy>(allergyData);
                             // Register newly initialized allergies in search index.
-                            SearchManager.RegisterDocumentInSearchIndex(newAllergy, req.ContractNumber);
+                            SearchManager.RegisterAllergyDocumentInSearchIndex(newAllergy, req.ContractNumber);
                         }
                     });
                 }
@@ -150,10 +141,7 @@ namespace Phytel.API.AppDomain.NG.Allergy
                 }
                 return patientAllergies;
             }
-            catch (WebServiceException ex)
-            {
-                throw new WebServiceException("AD:UpdatePatientAllergies()::" + ex.Message, ex.InnerException);
-            }
+            catch (Exception ex) { throw ex; }
         }
         #endregion
     }
