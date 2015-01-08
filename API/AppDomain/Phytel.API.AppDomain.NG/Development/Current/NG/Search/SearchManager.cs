@@ -6,6 +6,7 @@ using Phytel.API.Common.CustomObject;
 using ServiceStack.ServiceClient.Web;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace Phytel.API.AppDomain.NG.Allergy
 {
@@ -26,12 +27,14 @@ namespace Phytel.API.AppDomain.NG.Allergy
             }
         }
 
-        public void RegisterMedDocumentInSearchIndex(DTO.Allergy allergy)
+        public void RegisterMedDocumentInSearchIndex(DTO.Medication med, string contractNumber)
         {
             try
             {
-                //var np = AutoMapper.Mapper.Map<IdNamePair>(allergy);
-                //new MedFieldsLuceneStrategy<Medication>().AddUpdateLuceneIndex(np);
+                var np = AutoMapper.Mapper.Map<MedFieldsSearchDoc>(med);
+                var nfp = AutoMapper.Mapper.Map<MedNameSearchDoc>(med);
+                new MedFieldsLuceneStrategy<MedFieldsSearchDoc, MedFieldsSearchDoc>{ Contract = contractNumber}.AddUpdateLuceneIndex(np);
+                new MedNameLuceneStrategy<MedNameSearchDoc, TextValuePair>{Contract = contractNumber}.AddUpdateLuceneIndex(nfp);
             }
             catch (Exception ex)
             {
@@ -142,17 +145,47 @@ namespace Phytel.API.AppDomain.NG.Allergy
                 matches.ForEach(
                     m =>
                     {
+                        var val = FormatStrengthDisplay(m.Strength, m.Unit);
                         var pair = new TextValuePair
                         {
-                            Text = m.Strength + " " + m.Unit,
-                            Value = m.Strength
+                            Text = val,
+                            Value = val
                         };
 
-                        var rec = vals.Find(f => f.Text == m.Strength + " " + m.Unit);
+                        var rec = vals.Find(f => f.Text == val);
                         if (rec == null)
                             vals.Add(pair);
                     });
                 return vals;
+            }
+            catch (WebServiceException ex)
+            {
+                throw new WebServiceException("AD:GetStrengthSelections()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        private string FormatStrengthDisplay(string strength, string unit)
+        {
+            try
+            {
+                var val = new StringBuilder();
+
+                string[] strengthS = strength.Split(';');
+                string[] unitS = unit.Split(';');
+
+                for (int i = 0; i < strengthS.Length; i++)
+                {
+                    if (i == strengthS.Length -1)
+                    {
+                        val.Append(strengthS[i] + " " + unitS[i]);
+                    }
+                    else
+                    {
+                        val.Append(strengthS[i] + " " + unitS[i] + ";");
+                    }
+                }
+
+                return val.ToString();
             }
             catch (WebServiceException ex)
             {
