@@ -61,6 +61,12 @@ namespace Phytel.Data.ETL
         private List<SpawnElementHash> _spawnElementDict = new List<SpawnElementHash>();
         private SqlConnection _sqlConnection;
         private string connString;
+        
+        // 
+        private List<MEPatientProgram> programs;
+        private List<Module> modules;
+        private List<Action> actions;
+        private List<Step> steps;
 
         protected virtual void OnEtlEvent(ETLEventArgs e)
         {
@@ -79,6 +85,10 @@ namespace Phytel.Data.ETL
                     ConfigurationManager.AppSettings["PhytelServicesConnName"], contract, true, "REPORT");
 
             _sqlConnection = new SqlConnection(connString);
+
+            // initialize lists
+            programs = new List<MEPatientProgram>();
+            modules = new List<Module>();
         }
 
         public void Rebuild()
@@ -94,38 +104,57 @@ namespace Phytel.Data.ETL
                 RegisterClasses();
                 LoadUsers(contract);
                 LoadLookUps(contract);
-                LoadGoalAttributes(contract);
-                LoadObservations(contract);
+                //LoadGoalAttributes(contract);
+                //LoadObservations(contract);
                 LoadPatients(contract);
-                LoadPatientSystems(contract);
+                //LoadPatientSystems(contract);
 
-                LoadPatientNotes(contract);
-                //LoadPatientProblems(contract); depricated
-                LoadPatientObservations(contract);
-                LoadContacts(contract);
+                //LoadPatientNotes(contract);
+                ////LoadPatientProblems(contract); depricated
+                //LoadPatientObservations(contract);
+                //LoadContacts(contract);
 
                 LoadCareMembers(contract);
                 LoadPatientUsers(contract);
 
-                LoadPatientGoals(contract);
-                LoadPatientBarriers(contract);
-                LoadPatientInterventions(contract);
-                LoadPatientTasks(contract);
+                //LoadPatientGoals(contract);
+                //LoadPatientBarriers(contract);
+                //LoadPatientInterventions(contract);
+                //LoadPatientTasks(contract);
 
-                LoadAllergies(contract);
-                LoadPatientAllergies(contract);
-                LoadPatientMedSups(contract);
+                //LoadAllergies(contract);
+                //LoadPatientAllergies(contract);
+                //LoadPatientMedSups(contract);
 
                 LoadPatientPrograms(contract);
+                LoadPatientProgramModules(contract);
+                LoadPatientProgramActions(contract);
+                LoadPatientProgramSteps(contract);
                 LoadPatientProgramResponses(contract);
                 LoadPatientProgramAttributes(contract);
+                
                 ProcessSpawnElements();
                 LoadToDos(contract);
+
+                FlattenReportSprocs();
                 OnEtlEvent(new ETLEventArgs {Message = "*** ETL PROCESS COMPLETED ***", IsError = false});
             }
             catch (Exception ex)
             {
                 throw ex; //SimpleLog.Log(new ArgumentException("Rebuild()", ex));
+            }
+        }
+
+        private void FlattenReportSprocs()
+        {
+            try
+            {
+                //[spPhy_RPT_Flat_BSHSI_HW2]
+                SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_RPT_Flat_BSHSI_HW2", new ParameterCollection());
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
 
@@ -418,6 +447,18 @@ namespace Phytel.Data.ETL
                     if (BsonClassMap.IsClassMapRegistered(typeof (NoteDuration)) == false)
                     {
                         BsonClassMap.RegisterClassMap<NoteDuration>();
+                    }
+                }
+                catch
+                {
+                    throw;
+                }
+
+                try
+                {
+                    if (BsonClassMap.IsClassMapRegistered(typeof(NoteType)) == false)
+                    {
+                        BsonClassMap.RegisterClassMap<NoteType>();
                     }
                 }
                 catch
@@ -2146,137 +2187,12 @@ namespace Phytel.Data.ETL
             }
         }
 
-        private void LoadPatientPrograms(string ctr)
+        private void LoadPlanElementLists()
         {
-            try
-            {
-                OnEtlEvent(new ETLEventArgs {Message = "Loading patient programs.", IsError = false});
-
-                ConcurrentBag<MEPatientProgram> programs;
-                using (ProgramMongoContext pctx = new ProgramMongoContext(ctr))
-                {
-                    programs = new ConcurrentBag<MEPatientProgram>(Utils.GetMongoCollectionList(pctx.PatientPrograms.Collection, 50));
-                }
-
-                    _sqlConnection.Open();
-                    Parallel.ForEach(programs, prog =>
-                        //foreach (MEPatientProgram prog in programs.Where(prog => !prog.DeleteFlag))
-                    {
-                        try
-                        {
-                            //if(!prog.DeleteFlag)
-                            //{
-                            ParameterCollection parms = new ParameterCollection();
-                            parms.Add(new Parameter("@MongoID", prog.Id.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@MongoPatientId", prog.PatientId.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@MongoAssignedBy", prog.AssignedBy == null ? string.Empty : prog.AssignedBy.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@AssignedOn", prog.AssignedOn ?? (object) DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@MongoAssignedToId", prog.AssignedTo == null ? string.Empty : prog.AssignedTo.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@AttributeEndDate", prog.AttributeEndDate ?? (object) DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@AttributeStartDate", prog.AttributeStartDate ?? (object) DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@Completed", prog.Completed.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@ContractProgramId", prog.ContractProgramId.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@Description", prog.Description ?? string.Empty, SqlDbType.VarChar, ParameterDirection.Input, -1));
-                            parms.Add(new Parameter("@EligibilityReason", "", SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@EligibilityStartDate", prog.EligibilityStartDate ?? (object) DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@Eligible", "", SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@EndDate", prog.EndDate ?? (object) DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@Name", prog.Name ?? null, SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@Order", prog.Order.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@ShortName", prog.ShortName ?? string.Empty, SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@SourceId", prog.SourceId.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@StartDate", prog.StartDate ?? (object) DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@State", prog.State.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@Status", prog.Status.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@Enabled", prog.Enabled.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@StateUpdatedOn", prog.StateUpdatedOn ?? (object) DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@MongoCompletedBy", prog.CompletedBy == null ? string.Empty : prog.CompletedBy, SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@DateCompleted", prog.DateCompleted ?? (object) DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@EligibilityRequirements", prog.EligibilityRequirements ?? string.Empty, SqlDbType.VarChar, ParameterDirection.Input, -1));
-                            parms.Add(new Parameter("@EligibilityEndDate", prog.EligibilityEndDate ?? (object) DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@Version", prog.Version.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@MongoUpdatedBy", prog.UpdatedBy == null ? string.Empty : prog.UpdatedBy.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@LastUpdatedOn", prog.LastUpdatedOn ?? (object) DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@MongoRecordCreatedBy", prog.RecordCreatedBy.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@RecordCreatedOn", prog.RecordCreatedOn, SqlDbType.DateTime, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@TTLDate", prog.TTLDate ?? (object) DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@Delete", prog.DeleteFlag.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            //
-                            //parms.Add(new Parameter("@BackGround", (string.IsNullOrEmpty(prog.Background) ? string.Empty : prog.Background), SqlDbType.VarChar, ParameterDirection.Input, 50));
-
-
-                            var patientProgramId = ExecuteScalarSproc(parms, _sqlConnection, "spPhy_RPT_SavePatientProgram");
-
-                            #region -- archived 
-                            // original call
-                            //patientProgramId = SQLDataService.Instance.ExecuteScalar("InHealth001", true,
-                            //    "REPORT",
-                            //    "spPhy_RPT_SavePatientProgram", parms);
-
-                            //var times = 0;
-                            //try
-                            //{
-                            //    ExecuteScalarSproc(parms, out patientProgramId);
-                            //}
-                            //catch (Exception ex)
-                            //{
-                            //    if (ex != null && ex is SqlException)
-                            //    {
-                            //        foreach (SqlError error in (ex as SqlException).Errors)
-                            //        {
-                            //            switch (error.Number)
-                            //            {
-                            //                case 1205:
-                            //                {
-                            //                    System.Diagnostics.Debug.WriteLine(
-                            //                        "SQL Error: Deadlock condition. Retrying...");
-                            //                    //return true;
-                            //                    if (times <= 5)
-                            //                    {
-                            //                        ExecuteScalarSproc(parms, out patientProgramId);
-                            //                        times = times++;
-                            //                    }
-                            //                    break;
-                            //                }
-                            //                case -2:
-                            //                    System.Diagnostics.Debug.WriteLine(
-                            //                        "SQL Error: Timeout expired. Retrying...");
-                            //                    //return true;
-                            //                    if (times <= 5)
-                            //                    {
-                            //                        ExecuteScalarSproc(parms, out patientProgramId);
-                            //                        times = times++;
-                            //                    }
-                            //                    break;
-                            //            }
-                            //        }
-                            //    }
-                            //}
-                            #endregion
-
-                            if (patientProgramId != null && prog.Spawn != null && prog.Spawn.Count > 0)
-                            {
-                                //LoadSpawnElement(ctr, planElementId, prog.Id.ToString(), prog.Spawn);
-                                RegisterSpawnElement(prog.Spawn, prog.Id.ToString(), (int) patientProgramId);
-                            }
-
-                            LoadPatientProgramModules(ctr, patientProgramId, prog.Modules, prog);
-                            //OnEtlEvent(new ETLEventArgs {Message = "Program:" + prog.Id.ToString() + "Loaded."});
-                            //}
-                        }
-                        catch (Exception ex)
-                        {
-                            OnEtlEvent(new ETLEventArgs {Message = ex.Message + ": " + ex.StackTrace, IsError = true});
-                        }
-                    });
-                    _sqlConnection.Close();
-
-            }
-            catch (Exception ex)
-            {
-                throw new ArgumentException("LoadPatientPrograms() : ", ex.InnerException);
-                //throw ex; //SimpleLog.Log(new ArgumentException("LoadPatientPrograms()", ex));
-            }
+            //programs.ForEach(m => { modules = m.Modules.ToList(); });
+            modules = programs.SelectMany(m => m.Modules).ToList();
+            actions = programs.SelectMany(m => m.Modules).SelectMany(a => a.Actions).ToList();
+            steps = programs.SelectMany(m => m.Modules).SelectMany(a => a.Actions).SelectMany(s => s.Steps).ToList();
         }
 
         private object ExecuteScalarSproc(ParameterCollection parms, SqlConnection conn, string sproc)
@@ -2318,54 +2234,105 @@ namespace Phytel.Data.ETL
                     programAttributes = new ConcurrentBag<MEProgramAttribute>(pmctx.ProgramAttributes.Collection.FindAllAs<MEProgramAttribute>().ToList());
                 }
 
-                //foreach (MEProgramAttribute prog in programAttributes.Where(t => !t.DeleteFlag))
-                    Parallel.ForEach(programAttributes, prog =>
+                var rSeries = new ReadPlanElementsSeries().ReadEProgramAttributeSeries(programAttributes);
+
+                using (var bcc = new SqlBulkCopy(connString, SqlBulkCopyOptions.Default))
+                using (var objRdr = ObjectReader.Create(rSeries))
+                {
+                    try
                     {
-                        try
+                        bcc.BulkCopyTimeout = 580;
+                        bcc.ColumnMappings.Add("MongoId", "MongoId");
+                        bcc.ColumnMappings.Add("Completed", "Completed");
+                        bcc.ColumnMappings.Add("DidNotEnrollReason", "DidNotEnrollReason");
+                        bcc.ColumnMappings.Add("Eligibility", "Eligibility");
+                        bcc.ColumnMappings.Add("Enrollment", "Enrollment");
+                        bcc.ColumnMappings.Add("GraduatedFlag", "GraduatedFlag");
+                        bcc.ColumnMappings.Add("InelligibleReason", "InelligibleReason");
+                        bcc.ColumnMappings.Add("Lock", "Lock");
+                        bcc.ColumnMappings.Add("OptOut", "OptOut");
+                        bcc.ColumnMappings.Add("OverrideReason", "OverrideReason");
+                        bcc.ColumnMappings.Add("MongoPlanElementId", "MongoPlanElementId");
+                        bcc.ColumnMappings.Add("PlanElementId", "PlanElementId");
+                        bcc.ColumnMappings.Add("Population", "Population");
+                        bcc.ColumnMappings.Add("RemovedReason", "RemovedReason");
+                        bcc.ColumnMappings.Add("Status", "Status");
+                        bcc.ColumnMappings.Add("MongoUpdatedBy", "MongoUpdatedBy");
+                        bcc.ColumnMappings.Add("UpdatedBy", "UpdatedBy");
+                        bcc.ColumnMappings.Add("LastUpdatedOn", "LastUpdatedOn");
+                        bcc.ColumnMappings.Add("MongoRecordCreatedBy", "MongoRecordCreatedBy");
+                        bcc.ColumnMappings.Add("RecordCreatedBy", "RecordCreatedBy");
+                        bcc.ColumnMappings.Add("RecordCreatedOn", "RecordCreatedOn");
+                        bcc.ColumnMappings.Add("Version", "Version");
+                        bcc.ColumnMappings.Add("Delete", "Delete");
+                        bcc.ColumnMappings.Add("DateCompleted", "DateCompleted");
+                        bcc.ColumnMappings.Add("CompletedBy", "CompletedBy");
+                        bcc.ColumnMappings.Add("MongoCompletedBy", "MongoCompletedBy");
+                        bcc.ColumnMappings.Add("TTLDate", "TTLDate");
+                        bcc.DestinationTableName = "RPT_PatientProgramAttribute";
+                        bcc.WriteToServer(objRdr);
+                    }
+                    catch (Exception ex)
+                    {
+                        OnEtlEvent(new ETLEventArgs
                         {
-                            //if(!prog.DeleteFlag)
-                            //{
-                                ParameterCollection parms = new ParameterCollection();
-                                parms.Add(new Parameter("@MongoId", prog.Id.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                                parms.Add(new Parameter("@MongoPlanElementId", prog.PlanElementId == null ? string.Empty : prog.PlanElementId.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                            Message =
+                                "LoadPatientProgramAttributes():SqlBulkCopy process failure: " + ex.Message + " : " +
+                                ex.InnerException,
+                            IsError = true
+                        });
+                    }
+                }
 
-                                // look into
-                                parms.Add(new Parameter("@Completed", prog.Completed == null ? string.Empty : prog.Completed.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                #region old
+                ////foreach (MEProgramAttribute prog in programAttributes.Where(t => !t.DeleteFlag))
+                //    Parallel.ForEach(programAttributes, prog =>
+                //    {
+                //        try
+                //        {
+                //            //if(!prog.DeleteFlag)
+                //            //{
+                //                ParameterCollection parms = new ParameterCollection();
+                //                parms.Add(new Parameter("@MongoId", prog.Id.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                //                parms.Add(new Parameter("@MongoPlanElementId", prog.PlanElementId == null ? string.Empty : prog.PlanElementId.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
 
-                                parms.Add(new Parameter("@DidNotEnrollReason", prog.DidNotEnrollReason ?? string.Empty, SqlDbType.VarChar, ParameterDirection.Input, 50));
-                                parms.Add(new Parameter("@Eligibility", prog.Eligibility == null ? string.Empty : prog.Eligibility.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                                parms.Add(new Parameter("@Enrollment", prog.Enrollment == null ? string.Empty : prog.Enrollment.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                                parms.Add(new Parameter("@GraduatedFlag", prog.GraduatedFlag == null ? string.Empty : prog.GraduatedFlag.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                                parms.Add(new Parameter("@InelligibleReason", prog.IneligibleReason == null ? string.Empty : prog.IneligibleReason.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                                parms.Add(new Parameter("@Lock", prog.Locked == null ? string.Empty : prog.Locked.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                                parms.Add(new Parameter("@OptOut", prog.OptOut == null ? string.Empty : prog.OptOut.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                                parms.Add(new Parameter("@OverrideReason", prog.OverrideReason == null ? string.Empty : prog.OverrideReason.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                                parms.Add(new Parameter("@Population", prog.Population == null ? string.Empty : prog.Population.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                                parms.Add(new Parameter("@RemovedReason", prog.RemovedReason == null ? string.Empty : prog.RemovedReason.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                                parms.Add(new Parameter("@Status", prog.Status.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                                parms.Add(new Parameter("@MongoUpdatedBy", prog.UpdatedBy == null ? string.Empty : prog.UpdatedBy.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                                parms.Add(new Parameter("@LastUpdatedOn", prog.LastUpdatedOn ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
-                                parms.Add(new Parameter("@MongoRecordCreatedBy", prog.RecordCreatedBy.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                                parms.Add(new Parameter("@RecordCreatedOn", prog.RecordCreatedOn, SqlDbType.DateTime, ParameterDirection.Input, 50));
-                                parms.Add(new Parameter("@Version", prog.Version.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                                parms.Add(new Parameter("@Delete", prog.DeleteFlag.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                                parms.Add(new Parameter("@MongoCompletedBy", prog.CompletedBy == null ? string.Empty : prog.CompletedBy, SqlDbType.VarChar, ParameterDirection.Input, 50));
-                                parms.Add(new Parameter("@DateCompleted", prog.DateCompleted ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
-                                parms.Add(new Parameter("@TTLDate", prog.TTLDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                //                // look into
+                //                parms.Add(new Parameter("@Completed", prog.Completed == null ? string.Empty : prog.Completed.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+
+                //                parms.Add(new Parameter("@DidNotEnrollReason", prog.DidNotEnrollReason ?? string.Empty, SqlDbType.VarChar, ParameterDirection.Input, 50));
+                //                parms.Add(new Parameter("@Eligibility", prog.Eligibility == null ? string.Empty : prog.Eligibility.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                //                parms.Add(new Parameter("@Enrollment", prog.Enrollment == null ? string.Empty : prog.Enrollment.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                //                parms.Add(new Parameter("@GraduatedFlag", prog.GraduatedFlag == null ? string.Empty : prog.GraduatedFlag.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                //                parms.Add(new Parameter("@InelligibleReason", prog.IneligibleReason == null ? string.Empty : prog.IneligibleReason.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                //                parms.Add(new Parameter("@Lock", prog.Locked == null ? string.Empty : prog.Locked.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                //                parms.Add(new Parameter("@OptOut", prog.OptOut == null ? string.Empty : prog.OptOut.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                //                parms.Add(new Parameter("@OverrideReason", prog.OverrideReason == null ? string.Empty : prog.OverrideReason.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                //                parms.Add(new Parameter("@Population", prog.Population == null ? string.Empty : prog.Population.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                //                parms.Add(new Parameter("@RemovedReason", prog.RemovedReason == null ? string.Empty : prog.RemovedReason.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                //                parms.Add(new Parameter("@Status", prog.Status.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                //                parms.Add(new Parameter("@MongoUpdatedBy", prog.UpdatedBy == null ? string.Empty : prog.UpdatedBy.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                //                parms.Add(new Parameter("@LastUpdatedOn", prog.LastUpdatedOn ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                //                parms.Add(new Parameter("@MongoRecordCreatedBy", prog.RecordCreatedBy.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                //                parms.Add(new Parameter("@RecordCreatedOn", prog.RecordCreatedOn, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                //                parms.Add(new Parameter("@Version", prog.Version.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                //                parms.Add(new Parameter("@Delete", prog.DeleteFlag.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                //                parms.Add(new Parameter("@MongoCompletedBy", prog.CompletedBy == null ? string.Empty : prog.CompletedBy, SqlDbType.VarChar, ParameterDirection.Input, 50));
+                //                parms.Add(new Parameter("@DateCompleted", prog.DateCompleted ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                //                parms.Add(new Parameter("@TTLDate", prog.TTLDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
 
 
-                                var patientProgramId = SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT",
-                                    "spPhy_RPT_SavePatientProgramAttribute", parms);
+                //                var patientProgramId = SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT",
+                //                    "spPhy_RPT_SavePatientProgramAttribute", parms);
 
-                                //OnEtlEvent(new ETLEventArgs { Message = "Program attribute:" + prog.PlanElementId.ToString() + "Loaded." });
-                            //}
-                        }
-                        catch (Exception ex)
-                        {
-                            OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace, IsError = true });
-                        }
-                    });
-                
+                //                //OnEtlEvent(new ETLEventArgs { Message = "Program attribute:" + prog.PlanElementId.ToString() + "Loaded." });
+                //            //}
+                //        }
+                //        catch (Exception ex)
+                //        {
+                //            OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace, IsError = true });
+                //        }
+                //    });
+                #endregion
             }
             catch (Exception ex)
             {
@@ -2373,60 +2340,325 @@ namespace Phytel.Data.ETL
             }
         }
 
-        private void LoadPatientProgramModules(string ctr, object patientProgramId, List<Module> list, MEPatientProgram prog )
+        private void LoadPatientPrograms(string ctr)
         {
             try
             {
-                Parallel.ForEach(list, mod =>
-                    //foreach (Module mod in list)
+                OnEtlEvent(new ETLEventArgs { Message = "Loading patient programs.", IsError = false });
+
+                //ConcurrentBag<MEPatientProgram> programs;
+                using (ProgramMongoContext pctx = new ProgramMongoContext(ctr))
+                {
+                    programs = new List<MEPatientProgram>(Utils.GetMongoCollectionList(pctx.PatientPrograms.Collection, 50));
+                }
+
+                LoadPlanElementLists();
+
+                var rSeries = new ReadPlanElementsSeries().ReadEProgramSeries(programs);
+
+                using (var bcc = new SqlBulkCopy(connString, SqlBulkCopyOptions.Default))
+                using (var objRdr = ObjectReader.Create(rSeries))
+                {
+                    try
                     {
-                        try
+                        bcc.BulkCopyTimeout = 180;
+                        bcc.ColumnMappings.Add("PatientId", "PatientId");
+                        bcc.ColumnMappings.Add("MongoPatientId", "MongoPatientId");
+                        bcc.ColumnMappings.Add("MongoId", "MongoId");
+                        bcc.ColumnMappings.Add("Name", "Name");
+                        bcc.ColumnMappings.Add("ShortName", "ShortName");
+                        bcc.ColumnMappings.Add("Description", "Description");
+                        bcc.ColumnMappings.Add("AttributeStartDate", "AttributeStartDate");
+                        bcc.ColumnMappings.Add("AttributeEndDate", "AttributeEndDate");
+                        bcc.ColumnMappings.Add("SourceId", "SourceId");
+                        bcc.ColumnMappings.Add("Order", "Order");
+                        bcc.ColumnMappings.Add("Eligible", "Eligible");
+                        bcc.ColumnMappings.Add("State", "State");
+                        bcc.ColumnMappings.Add("AssignedOn", "AssignedOn");
+                        bcc.ColumnMappings.Add("MongoAssignedBy", "MongoAssignedBy");
+                        bcc.ColumnMappings.Add("AssignedBy", "AssignedBy");
+                        bcc.ColumnMappings.Add("MongoAssignedToId", "MongoAssignedToId");
+                        bcc.ColumnMappings.Add("AssignedToId", "AssignedToId");
+                        bcc.ColumnMappings.Add("Completed", "Completed");
+                        bcc.ColumnMappings.Add("EligibilityStartDate", "EligibilityStartDate");
+                        bcc.ColumnMappings.Add("EligibilityReason", "EligibilityReason");
+                        bcc.ColumnMappings.Add("StartDate", "StartDate");
+                        bcc.ColumnMappings.Add("EndDate", "EndDate");
+                        bcc.ColumnMappings.Add("Status", "Status");
+                        bcc.ColumnMappings.Add("ContractProgramId", "ContractProgramId");
+                        bcc.ColumnMappings.Add("Version", "Version");
+                        bcc.ColumnMappings.Add("MongoUpdatedBy", "MongoUpdatedBy");
+                        bcc.ColumnMappings.Add("UpdatedBy", "UpdatedBy");
+                        bcc.ColumnMappings.Add("LastUpdatedOn", "LastUpdatedOn");
+                        bcc.ColumnMappings.Add("MongoRecordCreatedBy", "MongoRecordCreatedBy");
+                        bcc.ColumnMappings.Add("RecordCreatedBy", "RecordCreatedBy");
+                        bcc.ColumnMappings.Add("RecordCreatedOn", "RecordCreatedOn");
+                        bcc.ColumnMappings.Add("Delete", "Delete");
+                        bcc.ColumnMappings.Add("Enabled", "Enabled");
+                        bcc.ColumnMappings.Add("StateUpdatedOn", "StateUpdatedOn");
+                        bcc.ColumnMappings.Add("CompletedBy", "CompletedBy");
+                        bcc.ColumnMappings.Add("MongoCompletedBy", "MongoCompletedBy");
+                        bcc.ColumnMappings.Add("DateCompleted", "DateCompleted");
+                        bcc.ColumnMappings.Add("EligibilityRequirements", "EligibilityRequirements");
+                        bcc.ColumnMappings.Add("EligibilityEndDate", "EligibilityEndDate");
+                        bcc.ColumnMappings.Add("TTLDate", "TTLDate");
+
+                        bcc.DestinationTableName = "RPT_PatientProgram";
+                        bcc.WriteToServer(objRdr);
+                    }
+                    catch (Exception ex)
+                    {
+                        OnEtlEvent(new ETLEventArgs
                         {
-                            ParameterCollection parms = new ParameterCollection();
-                            parms.Add(new Parameter("@PatientProgramId", patientProgramId, SqlDbType.Int, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@MongoProgramId", mod.ProgramId == null ? string.Empty : mod.ProgramId.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@MongoAssignedBy", mod.AssignedBy == null ? string.Empty : mod.AssignedBy.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@AssignedOn", mod.AssignedOn ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@MongoAssignedToId", mod.AssignedTo == null ? string.Empty : mod.AssignedTo.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@AttributeEndDate", mod.AttributeEndDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@AttributeStartDate", mod.AttributeStartDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@Completed", mod.Completed.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@Description", mod.Description ?? string.Empty, SqlDbType.VarChar, ParameterDirection.Input, -1));
-                            parms.Add(new Parameter("@MongoPrevious", mod.Previous == null ? string.Empty : mod.Previous.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@MongoNext", mod.Next == null ? string.Empty : mod.Next.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                            Message =
+                                "LoadPatientProgramResponses():SqlBulkCopy process failure: " + ex.Message + " : " +
+                                ex.InnerException,
+                            IsError = true
+                        });
+                    }
+                }
 
-                            parms.Add(new Parameter("@EligibilityStartDate", mod.EligibilityStartDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@Eligible", "", SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@Name", mod.Name ?? string.Empty, SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@Order", mod.Order.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@SourceId", mod.SourceId.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@State", mod.State.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@Status", mod.Status.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@Enabled", mod.Enabled.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@StateUpdatedOn", mod.StateUpdatedOn ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@MongoCompletedBy", mod.CompletedBy ?? string.Empty, SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@DateCompleted", mod.DateCompleted ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@EligibilityRequirements", mod.EligibilityRequirements ?? string.Empty, SqlDbType.VarChar, ParameterDirection.Input, -1));
-                            parms.Add(new Parameter("@EligibilityEndDate", mod.EligibilityEndDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@MongoId", mod.Id.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            //
-                            //parms.Add(new Parameter("@BackGround", (string.IsNullOrEmpty(prog.Background) ? string.Empty : prog.Background), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                #region -- Old --
 
-                            var patientProgramModuleId = SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_RPT_SavePatientProgramModule", parms);
+                //_sqlConnection.Open();
+                //    Parallel.ForEach(programs, prog =>
+                //        //foreach (MEPatientProgram prog in programs.Where(prog => !prog.DeleteFlag))
+                //    {
+                //        try
+                //        {
+                //            //if(!prog.DeleteFlag)
+                //            //{
+                //            ParameterCollection parms = new ParameterCollection();
+                //            parms.Add(new Parameter("@MongoID", prog.Id.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                //            parms.Add(new Parameter("@MongoPatientId", prog.PatientId.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                //            parms.Add(new Parameter("@MongoAssignedBy", prog.AssignedBy == null ? string.Empty : prog.AssignedBy.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                //            parms.Add(new Parameter("@AssignedOn", prog.AssignedOn ?? (object) DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                //            parms.Add(new Parameter("@MongoAssignedToId", prog.AssignedTo == null ? string.Empty : prog.AssignedTo.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                //            parms.Add(new Parameter("@AttributeEndDate", prog.AttributeEndDate ?? (object) DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                //            parms.Add(new Parameter("@AttributeStartDate", prog.AttributeStartDate ?? (object) DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                //            parms.Add(new Parameter("@Completed", prog.Completed.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                //            parms.Add(new Parameter("@ContractProgramId", prog.ContractProgramId.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                //            parms.Add(new Parameter("@Description", prog.Description ?? string.Empty, SqlDbType.VarChar, ParameterDirection.Input, -1));
+                //            parms.Add(new Parameter("@EligibilityReason", "", SqlDbType.VarChar, ParameterDirection.Input, 50));
+                //            parms.Add(new Parameter("@EligibilityStartDate", prog.EligibilityStartDate ?? (object) DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                //            parms.Add(new Parameter("@Eligible", "", SqlDbType.VarChar, ParameterDirection.Input, 50));
+                //            parms.Add(new Parameter("@EndDate", prog.EndDate ?? (object) DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                //            parms.Add(new Parameter("@Name", prog.Name ?? null, SqlDbType.VarChar, ParameterDirection.Input, 50));
+                //            parms.Add(new Parameter("@Order", prog.Order.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                //            parms.Add(new Parameter("@ShortName", prog.ShortName ?? string.Empty, SqlDbType.VarChar, ParameterDirection.Input, 50));
+                //            parms.Add(new Parameter("@SourceId", prog.SourceId.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                //            parms.Add(new Parameter("@StartDate", prog.StartDate ?? (object) DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                //            parms.Add(new Parameter("@State", prog.State.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                //            parms.Add(new Parameter("@Status", prog.Status.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                //            parms.Add(new Parameter("@Enabled", prog.Enabled.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                //            parms.Add(new Parameter("@StateUpdatedOn", prog.StateUpdatedOn ?? (object) DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                //            parms.Add(new Parameter("@MongoCompletedBy", prog.CompletedBy == null ? string.Empty : prog.CompletedBy, SqlDbType.VarChar, ParameterDirection.Input, 50));
+                //            parms.Add(new Parameter("@DateCompleted", prog.DateCompleted ?? (object) DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                //            parms.Add(new Parameter("@EligibilityRequirements", prog.EligibilityRequirements ?? string.Empty, SqlDbType.VarChar, ParameterDirection.Input, -1));
+                //            parms.Add(new Parameter("@EligibilityEndDate", prog.EligibilityEndDate ?? (object) DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                //            parms.Add(new Parameter("@Version", prog.Version.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                //            parms.Add(new Parameter("@MongoUpdatedBy", prog.UpdatedBy == null ? string.Empty : prog.UpdatedBy.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                //            parms.Add(new Parameter("@LastUpdatedOn", prog.LastUpdatedOn ?? (object) DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                //            parms.Add(new Parameter("@MongoRecordCreatedBy", prog.RecordCreatedBy.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                //            parms.Add(new Parameter("@RecordCreatedOn", prog.RecordCreatedOn, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                //            parms.Add(new Parameter("@TTLDate", prog.TTLDate ?? (object) DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                //            parms.Add(new Parameter("@Delete", prog.DeleteFlag.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                //            //
+                //            //parms.Add(new Parameter("@BackGround", (string.IsNullOrEmpty(prog.Background) ? string.Empty : prog.Background), SqlDbType.VarChar, ParameterDirection.Input, 50));
 
-                            if (patientProgramModuleId != null && mod.Spawn != null && mod.Spawn.Count > 0)
-                            {
-                                //LoadSpawnElement(ctr, patientProgramModuleId, mod.Id.ToString(), mod.Spawn);
-                                RegisterSpawnElement(mod.Spawn, mod.Id.ToString(), (int)patientProgramModuleId);
-                            }
 
-                            LoadPatientProgramActions(ctr, patientProgramModuleId, mod.Actions, prog);
-                        }
-                        catch (Exception ex)
+                //            var patientProgramId = ExecuteScalarSproc(parms, _sqlConnection, "spPhy_RPT_SavePatientProgram");
+
+                //            #region -- archived 
+                //            // original call
+                //            //patientProgramId = SQLDataService.Instance.ExecuteScalar("InHealth001", true,
+                //            //    "REPORT",
+                //            //    "spPhy_RPT_SavePatientProgram", parms);
+
+                //            //var times = 0;
+                //            //try
+                //            //{
+                //            //    ExecuteScalarSproc(parms, out patientProgramId);
+                //            //}
+                //            //catch (Exception ex)
+                //            //{
+                //            //    if (ex != null && ex is SqlException)
+                //            //    {
+                //            //        foreach (SqlError error in (ex as SqlException).Errors)
+                //            //        {
+                //            //            switch (error.Number)
+                //            //            {
+                //            //                case 1205:
+                //            //                {
+                //            //                    System.Diagnostics.Debug.WriteLine(
+                //            //                        "SQL Error: Deadlock condition. Retrying...");
+                //            //                    //return true;
+                //            //                    if (times <= 5)
+                //            //                    {
+                //            //                        ExecuteScalarSproc(parms, out patientProgramId);
+                //            //                        times = times++;
+                //            //                    }
+                //            //                    break;
+                //            //                }
+                //            //                case -2:
+                //            //                    System.Diagnostics.Debug.WriteLine(
+                //            //                        "SQL Error: Timeout expired. Retrying...");
+                //            //                    //return true;
+                //            //                    if (times <= 5)
+                //            //                    {
+                //            //                        ExecuteScalarSproc(parms, out patientProgramId);
+                //            //                        times = times++;
+                //            //                    }
+                //            //                    break;
+                //            //            }
+                //            //        }
+                //            //    }
+                //            //}
+                //            #endregion
+
+                //            if (patientProgramId != null && prog.Spawn != null && prog.Spawn.Count > 0)
+                //            {
+                //                //LoadSpawnElement(ctr, planElementId, prog.Id.ToString(), prog.Spawn);
+                //                RegisterSpawnElement(prog.Spawn, prog.Id.ToString(), (int) patientProgramId);
+                //            }
+
+                //            LoadPatientProgramModules(ctr, patientProgramId, prog.Modules, prog);
+                //            //OnEtlEvent(new ETLEventArgs {Message = "Program:" + prog.Id.ToString() + "Loaded."});
+                //            //}
+                //        }
+                //        catch (Exception ex)
+                //        {
+                //            OnEtlEvent(new ETLEventArgs {Message = ex.Message + ": " + ex.StackTrace, IsError = true});
+                //        }
+                //    });
+                //    _sqlConnection.Close();
+
+                #endregion
+
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentException("LoadPatientPrograms() : ", ex.InnerException);
+                //throw ex; //SimpleLog.Log(new ArgumentException("LoadPatientPrograms()", ex));
+            }
+        }
+
+        private void LoadPatientProgramModules(string ctr)
+        {
+            try
+            {
+                OnEtlEvent(new ETLEventArgs { Message = "Loading patient modules.", IsError = false });
+
+                var rSeries = new ReadPlanElementsSeries().ReadEModuleSeries(modules, programs);
+
+                using (var bcc = new SqlBulkCopy(connString, SqlBulkCopyOptions.Default))
+                using (var objRdr = ObjectReader.Create(rSeries))
+                {
+                    try
+                    {
+                        bcc.BulkCopyTimeout = 180;
+                        bcc.ColumnMappings.Add("PatientProgramId", "PatientProgramId");
+                        bcc.ColumnMappings.Add("MongoId", "MongoId");
+                        bcc.ColumnMappings.Add("MongoProgramId", "MongoProgramId");
+                        bcc.ColumnMappings.Add("AttributeStartDate", "AttributeStartDate");
+                        bcc.ColumnMappings.Add("AttributeEndDate", "AttributeEndDate");
+                        bcc.ColumnMappings.Add("SourceId", "SourceId");
+                        bcc.ColumnMappings.Add("Order", "Order");
+                        bcc.ColumnMappings.Add("Eligible", "Eligible");
+                        bcc.ColumnMappings.Add("State", "State");
+                        bcc.ColumnMappings.Add("AssignedOn", "AssignedOn");
+                        bcc.ColumnMappings.Add("MongoAssignedBy", "MongoAssignedBy");
+                        bcc.ColumnMappings.Add("AssignedBy", "AssignedBy");
+                        bcc.ColumnMappings.Add("MongoAssignedTo", "MongoAssignedTo");
+                        bcc.ColumnMappings.Add("AssignedTo", "AssignedTo");
+                        bcc.ColumnMappings.Add("Completed", "Completed");
+                        bcc.ColumnMappings.Add("EligibilityEndDate", "EligibilityEndDate");
+                        bcc.ColumnMappings.Add("Name", "Name");
+                        bcc.ColumnMappings.Add("Description", "Description");
+                        bcc.ColumnMappings.Add("Status", "Status");
+                        bcc.ColumnMappings.Add("StateUpdatedOn", "StateUpdatedOn");
+                        bcc.ColumnMappings.Add("Enabled", "Enabled");
+                        bcc.ColumnMappings.Add("MongoCompletedBy", "MongoCompletedBy");
+                        bcc.ColumnMappings.Add("CompletedBy", "CompletedBy");
+                        bcc.ColumnMappings.Add("DateCompleted", "DateCompleted");
+                        bcc.ColumnMappings.Add("MongoNext", "MongoNext");
+                        bcc.ColumnMappings.Add("Next", "Next");
+                        bcc.ColumnMappings.Add("MongoPrevious", "MongoPrevious");
+                        bcc.ColumnMappings.Add("Previous", "Previous");
+                        bcc.ColumnMappings.Add("EligibilityRequirements", "EligibilityRequirements");
+                        bcc.ColumnMappings.Add("EligibilityStartDate", "EligibilityStartDate");
+                        bcc.ColumnMappings.Add("LastupdatedOn", "LastupdatedOn");
+                        bcc.ColumnMappings.Add("RecordCreatedBy", "RecordCreatedBy");
+                        bcc.ColumnMappings.Add("RecordCreatedOn", "RecordCreatedOn");
+                        bcc.ColumnMappings.Add("TTLDate", "TTLDate");
+                        bcc.ColumnMappings.Add("Delete", "Delete");
+                        bcc.DestinationTableName = "RPT_PatientProgramModule";
+                        bcc.WriteToServer(objRdr);
+                    }
+                    catch (Exception ex)
+                    {
+                        OnEtlEvent(new ETLEventArgs
                         {
-                            OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace, IsError = true });
-                        }
-                    });
+                            Message =
+                                "LoadPatientProgramModules():SqlBulkCopy process failure: " + ex.Message + " : " +
+                                ex.InnerException,
+                            IsError = true
+                        });
+                    }
+                }
+
+                #region old
+                //Parallel.ForEach(list, mod =>
+                //    //foreach (Module mod in list)
+                //    {
+                //        try
+                //        {
+                //            ParameterCollection parms = new ParameterCollection();
+                //            parms.Add(new Parameter("@PatientProgramId", patientProgramId, SqlDbType.Int, ParameterDirection.Input, 50));
+                //            parms.Add(new Parameter("@MongoProgramId", mod.ProgramId == null ? string.Empty : mod.ProgramId.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                //            parms.Add(new Parameter("@MongoAssignedBy", mod.AssignedBy == null ? string.Empty : mod.AssignedBy.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                //            parms.Add(new Parameter("@AssignedOn", mod.AssignedOn ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                //            parms.Add(new Parameter("@MongoAssignedToId", mod.AssignedTo == null ? string.Empty : mod.AssignedTo.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                //            parms.Add(new Parameter("@AttributeEndDate", mod.AttributeEndDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                //            parms.Add(new Parameter("@AttributeStartDate", mod.AttributeStartDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                //            parms.Add(new Parameter("@Completed", mod.Completed.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                //            parms.Add(new Parameter("@Description", mod.Description ?? string.Empty, SqlDbType.VarChar, ParameterDirection.Input, -1));
+                //            parms.Add(new Parameter("@MongoPrevious", mod.Previous == null ? string.Empty : mod.Previous.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                //            parms.Add(new Parameter("@MongoNext", mod.Next == null ? string.Empty : mod.Next.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+
+                //            parms.Add(new Parameter("@EligibilityStartDate", mod.EligibilityStartDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                //            parms.Add(new Parameter("@Eligible", "", SqlDbType.VarChar, ParameterDirection.Input, 50));
+                //            parms.Add(new Parameter("@Name", mod.Name ?? string.Empty, SqlDbType.VarChar, ParameterDirection.Input, 50));
+                //            parms.Add(new Parameter("@Order", mod.Order.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                //            parms.Add(new Parameter("@SourceId", mod.SourceId.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                //            parms.Add(new Parameter("@State", mod.State.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                //            parms.Add(new Parameter("@Status", mod.Status.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                //            parms.Add(new Parameter("@Enabled", mod.Enabled.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                //            parms.Add(new Parameter("@StateUpdatedOn", mod.StateUpdatedOn ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                //            parms.Add(new Parameter("@MongoCompletedBy", mod.CompletedBy ?? string.Empty, SqlDbType.VarChar, ParameterDirection.Input, 50));
+                //            parms.Add(new Parameter("@DateCompleted", mod.DateCompleted ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                //            parms.Add(new Parameter("@EligibilityRequirements", mod.EligibilityRequirements ?? string.Empty, SqlDbType.VarChar, ParameterDirection.Input, -1));
+                //            parms.Add(new Parameter("@EligibilityEndDate", mod.EligibilityEndDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                //            parms.Add(new Parameter("@MongoId", mod.Id.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                //            //
+                //            //parms.Add(new Parameter("@BackGround", (string.IsNullOrEmpty(prog.Background) ? string.Empty : prog.Background), SqlDbType.VarChar, ParameterDirection.Input, 50));
+
+                //            var patientProgramModuleId = SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_RPT_SavePatientProgramModule", parms);
+
+                //            if (patientProgramModuleId != null && mod.Spawn != null && mod.Spawn.Count > 0)
+                //            {
+                //                //LoadSpawnElement(ctr, patientProgramModuleId, mod.Id.ToString(), mod.Spawn);
+                //                RegisterSpawnElement(mod.Spawn, mod.Id.ToString(), (int)patientProgramModuleId);
+                //            }
+
+                //            LoadPatientProgramActions(ctr, patientProgramModuleId, mod.Actions, prog);
+                //        }
+                //        catch (Exception ex)
+                //        {
+                //            OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace, IsError = true });
+                //        }
+                //    });
+#endregion
             }
             catch (Exception ex)
             {
@@ -2434,68 +2666,137 @@ namespace Phytel.Data.ETL
             }
         }
 
-        private void LoadPatientProgramActions(string ctr, object patientProgramModuleId, List<Action> list, MEPatientProgram prog)
+        private void LoadPatientProgramActions(string ctr)
         {
             try
             {
-                    Parallel.ForEach(list, act =>
-                    //foreach (Action act in list)
+                OnEtlEvent(new ETLEventArgs { Message = "Loading patient actions.", IsError = false });
+
+                var rSeries = new ReadPlanElementsSeries().ReadEActionSeries(actions, modules, programs);
+
+                using (var bcc = new SqlBulkCopy(connString, SqlBulkCopyOptions.Default))
+                using (var objRdr = ObjectReader.Create(rSeries))
+                {
+                    try
                     {
-                        try
+                        bcc.BulkCopyTimeout = 180;
+                        bcc.ColumnMappings.Add("PatientProgramModuleId", "PatientProgramModuleId");
+                        bcc.ColumnMappings.Add("MongoId", "MongoId");
+                        bcc.ColumnMappings.Add("MongoModuleId", "MongoModuleId");
+                        bcc.ColumnMappings.Add("SourceId", "SourceId");
+                        bcc.ColumnMappings.Add("Order", "Order");
+                        bcc.ColumnMappings.Add("Eligible", "Eligible");
+                        bcc.ColumnMappings.Add("State", "State");
+                        bcc.ColumnMappings.Add("StateUpdatedOn", "StateUpdatedOn");
+                        bcc.ColumnMappings.Add("AssignedOn", "AssignedOn");
+                        bcc.ColumnMappings.Add("MongoAssignedBy", "MongoAssignedBy");
+                        bcc.ColumnMappings.Add("AssignedBy", "AssignedBy");
+                        bcc.ColumnMappings.Add("MongoAssignedTo", "MongoAssignedTo");
+                        bcc.ColumnMappings.Add("AssignedTo", "AssignedTo");
+                        bcc.ColumnMappings.Add("MongoCompletedBy", "MongoCompletedBy");
+                        bcc.ColumnMappings.Add("CompletedBy", "CompletedBy");
+                        bcc.ColumnMappings.Add("Completed", "Completed");
+                        bcc.ColumnMappings.Add("EligibilityEndDate", "EligibilityEndDate");
+                        bcc.ColumnMappings.Add("Name", "Name");
+                        bcc.ColumnMappings.Add("Description", "Description");
+                        bcc.ColumnMappings.Add("Status", "Status");
+                        bcc.ColumnMappings.Add("AttributeEndDate", "AttributeEndDate");
+                        bcc.ColumnMappings.Add("AttributeStartDate", "AttributeStartDate");
+                        bcc.ColumnMappings.Add("Enabled", "Enabled");
+                        bcc.ColumnMappings.Add("DateCompleted", "DateCompleted");
+                        bcc.ColumnMappings.Add("MongoNext", "MongoNext");
+                        bcc.ColumnMappings.Add("Next", "Next");
+                        bcc.ColumnMappings.Add("MongoPrevious", "MongoPrevious");
+                        bcc.ColumnMappings.Add("Previous", "Previous");
+                        bcc.ColumnMappings.Add("EligibilityRequirements", "EligibilityRequirements");
+                        bcc.ColumnMappings.Add("EligibilityStartDate", "EligibilityStartDate");
+                        bcc.ColumnMappings.Add("version", "version");
+                        bcc.ColumnMappings.Add("MongoUpdatedBy", "MongoUpdatedBy");
+                        bcc.ColumnMappings.Add("UpdatedBy", "UpdatedBy");
+                        bcc.ColumnMappings.Add("LastUpdatedOn", "LastUpdatedOn");
+                        bcc.ColumnMappings.Add("MongoRecordCreatedBy", "MongoRecordCreatedBy");
+                        bcc.ColumnMappings.Add("RecordCreatedBy", "RecordCreatedBy");
+                        bcc.ColumnMappings.Add("RecordCreatedOn", "RecordCreatedOn");
+                        bcc.ColumnMappings.Add("TTLDate", "TTLDate");
+                        bcc.ColumnMappings.Add("Delete", "Delete");
+                        bcc.ColumnMappings.Add("Archived", "Archived");
+                        bcc.ColumnMappings.Add("ArchivedDate", "ArchivedDate");
+                        bcc.ColumnMappings.Add("MongoArchiveOriginId", "MongoArchiveOriginId");
+                        bcc.DestinationTableName = "RPT_PatientProgramAction";
+                        bcc.WriteToServer(objRdr);
+                    }
+                    catch (Exception ex)
+                    {
+                        OnEtlEvent(new ETLEventArgs
                         {
-                            ParameterCollection parms = new ParameterCollection();
-                            parms.Add(new Parameter("@MongoId", act.Id.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@MongoModuleId", act.ModuleId == null ? string.Empty : act.ModuleId.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@PatientProgramModuleId", patientProgramModuleId, SqlDbType.Int, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@MongoAssignedBy", act.AssignedBy == null ? string.Empty : act.AssignedBy.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@AssignedOn", act.AssignedOn ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@MongoAssignedToId", act.AssignedTo == null ? string.Empty : act.AssignedTo.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@AttributeEndDate", act.AttributeEndDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@AttributeStartDate", act.AttributeStartDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@Completed", act.Completed.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@Description", act.Description ?? string.Empty, SqlDbType.VarChar, ParameterDirection.Input, -1));
-                            parms.Add(new Parameter("@EligibilityStartDate", act.EligibilityStartDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@Eligible", "", SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@Name", act.Name ?? string.Empty, SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@Order", act.Order.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@SourceId", act.SourceId.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@State", act.State.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@Status", act.Status.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@Enabled", act.Enabled.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@StateUpdatedOn", act.StateUpdatedOn ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@MongoCompletedBy", act.CompletedBy ?? string.Empty, SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@DateCompleted", act.DateCompleted ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@EligibilityRequirements", act.EligibilityRequirements ?? string.Empty, SqlDbType.VarChar, ParameterDirection.Input, -1));
-                            parms.Add(new Parameter("@EligibilityEndDate", act.EligibilityEndDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@MongoPrevious", act.Previous == null ? string.Empty : act.Previous.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@MongoNext", act.Next == null ? string.Empty : act.Next.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@Archived", act.Archived.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@ArchivedDate", act.ArchivedDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@MongoArchiveOriginId", act.ArchiveOriginId == null ? string.Empty : act.ArchiveOriginId.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                            Message =
+                                "LoadPatientProgramActions():SqlBulkCopy process failure: " + ex.Message + " : " +
+                                ex.InnerException,
+                            IsError = true
+                        });
+                    }
+                }
 
-                            parms.Add(new Parameter("@Version", prog.Version.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@MongoUpdatedBy", prog.UpdatedBy == null ? string.Empty : prog.UpdatedBy.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@LastUpdatedOn", prog.LastUpdatedOn ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@MongoRecordCreatedBy", prog.RecordCreatedBy.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@RecordCreatedOn", prog.RecordCreatedOn, SqlDbType.DateTime, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@TTLDate", prog.TTLDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@Delete", prog.DeleteFlag.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                #region old
+                //Parallel.ForEach(list, act =>
+                    ////foreach (Action act in list)
+                    //{
+                    //    try
+                    //    {
+                    //        ParameterCollection parms = new ParameterCollection();
+                    //        parms.Add(new Parameter("@MongoId", act.Id.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                    //        parms.Add(new Parameter("@MongoModuleId", act.ModuleId == null ? string.Empty : act.ModuleId.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                    //        parms.Add(new Parameter("@PatientProgramModuleId", patientProgramModuleId, SqlDbType.Int, ParameterDirection.Input, 50));
+                    //        parms.Add(new Parameter("@MongoAssignedBy", act.AssignedBy == null ? string.Empty : act.AssignedBy.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                    //        parms.Add(new Parameter("@AssignedOn", act.AssignedOn ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                    //        parms.Add(new Parameter("@MongoAssignedToId", act.AssignedTo == null ? string.Empty : act.AssignedTo.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                    //        parms.Add(new Parameter("@AttributeEndDate", act.AttributeEndDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                    //        parms.Add(new Parameter("@AttributeStartDate", act.AttributeStartDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                    //        parms.Add(new Parameter("@Completed", act.Completed.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                    //        parms.Add(new Parameter("@Description", act.Description ?? string.Empty, SqlDbType.VarChar, ParameterDirection.Input, -1));
+                    //        parms.Add(new Parameter("@EligibilityStartDate", act.EligibilityStartDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                    //        parms.Add(new Parameter("@Eligible", "", SqlDbType.VarChar, ParameterDirection.Input, 50));
+                    //        parms.Add(new Parameter("@Name", act.Name ?? string.Empty, SqlDbType.VarChar, ParameterDirection.Input, 50));
+                    //        parms.Add(new Parameter("@Order", act.Order.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                    //        parms.Add(new Parameter("@SourceId", act.SourceId.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                    //        parms.Add(new Parameter("@State", act.State.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                    //        parms.Add(new Parameter("@Status", act.Status.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                    //        parms.Add(new Parameter("@Enabled", act.Enabled.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                    //        parms.Add(new Parameter("@StateUpdatedOn", act.StateUpdatedOn ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                    //        parms.Add(new Parameter("@MongoCompletedBy", act.CompletedBy ?? string.Empty, SqlDbType.VarChar, ParameterDirection.Input, 50));
+                    //        parms.Add(new Parameter("@DateCompleted", act.DateCompleted ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                    //        parms.Add(new Parameter("@EligibilityRequirements", act.EligibilityRequirements ?? string.Empty, SqlDbType.VarChar, ParameterDirection.Input, -1));
+                    //        parms.Add(new Parameter("@EligibilityEndDate", act.EligibilityEndDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                    //        parms.Add(new Parameter("@MongoPrevious", act.Previous == null ? string.Empty : act.Previous.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                    //        parms.Add(new Parameter("@MongoNext", act.Next == null ? string.Empty : act.Next.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                    //        parms.Add(new Parameter("@Archived", act.Archived.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                    //        parms.Add(new Parameter("@ArchivedDate", act.ArchivedDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                    //        parms.Add(new Parameter("@MongoArchiveOriginId", act.ArchiveOriginId == null ? string.Empty : act.ArchiveOriginId.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
 
-                            var patientProgramActionId = SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_RPT_SavePatientProgramModuleAction", parms);
+                    //        parms.Add(new Parameter("@Version", prog.Version.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                    //        parms.Add(new Parameter("@MongoUpdatedBy", prog.UpdatedBy == null ? string.Empty : prog.UpdatedBy.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                    //        parms.Add(new Parameter("@LastUpdatedOn", prog.LastUpdatedOn ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                    //        parms.Add(new Parameter("@MongoRecordCreatedBy", prog.RecordCreatedBy.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                    //        parms.Add(new Parameter("@RecordCreatedOn", prog.RecordCreatedOn, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                    //        parms.Add(new Parameter("@TTLDate", prog.TTLDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                    //        parms.Add(new Parameter("@Delete", prog.DeleteFlag.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
 
-                            if (patientProgramActionId != null && act.Spawn != null && act.Spawn.Count > 0)
-                            {
-                                //LoadSpawnElement(ctr, patientProgramActionId, act.Id.ToString(), act.Spawn);
-                                RegisterSpawnElement(act.Spawn, act.Id.ToString(), (int)patientProgramActionId);
-                            }
+                    //        var patientProgramActionId = SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_RPT_SavePatientProgramModuleAction", parms);
 
-                            LoadPatientProgramSteps(ctr, patientProgramActionId, act.Steps, prog);
-                        }
-                        catch (Exception ex)
-                        {
-                            OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace, IsError = true });
-                        }
-                    });
+                    //        if (patientProgramActionId != null && act.Spawn != null && act.Spawn.Count > 0)
+                    //        {
+                    //            //LoadSpawnElement(ctr, patientProgramActionId, act.Id.ToString(), act.Spawn);
+                    //            RegisterSpawnElement(act.Spawn, act.Id.ToString(), (int)patientProgramActionId);
+                    //        }
+
+                    //        LoadPatientProgramSteps(ctr, patientProgramActionId, act.Steps, prog);
+                    //    }
+                    //    catch (Exception ex)
+                    //    {
+                    //        OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace, IsError = true });
+                    //    }
+                //});
+                #endregion
             }
             catch (Exception ex)
             {
@@ -2503,70 +2804,146 @@ namespace Phytel.Data.ETL
             }
         }
 
-        private void LoadPatientProgramSteps(string ctr, object patientProgramActionId, List<Step> list, MEPatientProgram prog)
+        private void LoadPatientProgramSteps(string ctr)
         {
             try
             {
-                    Parallel.ForEach(list, step =>
-                    //foreach (Step step in list)
+
+                OnEtlEvent(new ETLEventArgs {Message = "Loading patient steps.", IsError = false});
+
+                var rSeries = new ReadPlanElementsSeries().ReadEStepSeries(steps, modules, programs);
+
+                using (var bcc = new SqlBulkCopy(connString, SqlBulkCopyOptions.Default))
+                using (var objRdr = ObjectReader.Create(rSeries))
+                {
+                    try
                     {
-                        try
+                        bcc.BulkCopyTimeout = 580;
+
+                        bcc.ColumnMappings.Add("MongoActionId", "MongoActionId");
+                        bcc.ColumnMappings.Add("ActionId", "ActionId");
+                        bcc.ColumnMappings.Add("MongoId", "MongoId");
+                        bcc.ColumnMappings.Add("AttributeEndDate", "AttributeEndDate");
+                        bcc.ColumnMappings.Add("AttributeStartDate", "AttributeStartDate");
+                        bcc.ColumnMappings.Add("SourceId", "SourceId");
+                        bcc.ColumnMappings.Add("Order", "Order");
+                        bcc.ColumnMappings.Add("Eligible", "Eligible");
+                        bcc.ColumnMappings.Add("State", "State");
+                        bcc.ColumnMappings.Add("Completed", "Completed");
+                        bcc.ColumnMappings.Add("EligibilityEndDate", "EligibilityEndDate");
+                        bcc.ColumnMappings.Add("Header", "Header");
+                        bcc.ColumnMappings.Add("SelectedResponseId", "SelectedResponseId");
+                        bcc.ColumnMappings.Add("ControlType", "ControlType");
+                        bcc.ColumnMappings.Add("SelectType", "SelectType");
+                        bcc.ColumnMappings.Add("IncludeTime", "IncludeTime");
+                        bcc.ColumnMappings.Add("Question", "Question");
+                        bcc.ColumnMappings.Add("Title", "Title");
+                        bcc.ColumnMappings.Add("Description", "Description");
+                        bcc.ColumnMappings.Add("Notes", "Notes");
+                        bcc.ColumnMappings.Add("Text", "Text");
+                        bcc.ColumnMappings.Add("Status", "Status");
+                        bcc.ColumnMappings.Add("Response", "Response");
+                        bcc.ColumnMappings.Add("StepTypeId", "StepTypeId");
+                        bcc.ColumnMappings.Add("Enabled", "Enabled");
+                        bcc.ColumnMappings.Add("StateUpdatedOn", "StateUpdatedOn");
+                        bcc.ColumnMappings.Add("MongoCompletedBy", "MongoCompletedBy");
+                        bcc.ColumnMappings.Add("CompletedBy", "CompletedBy");
+                        bcc.ColumnMappings.Add("DateCompleted", "DateCompleted");
+                        bcc.ColumnMappings.Add("MongoNext", "MongoNext");
+                        bcc.ColumnMappings.Add("Next", "Next");
+                        bcc.ColumnMappings.Add("Previous", "Previous");
+                        bcc.ColumnMappings.Add("EligibilityRequirements", "EligibilityRequirements");
+                        bcc.ColumnMappings.Add("EligibilityStartDate", "EligibilityStartDate");
+                        bcc.ColumnMappings.Add("MongoPrevious", "MongoPrevious");
+                        bcc.ColumnMappings.Add("Version", "Version");
+                        bcc.ColumnMappings.Add("MongoUpdatedBy", "MongoUpdatedBy");
+                        bcc.ColumnMappings.Add("UpdatedBy", "UpdatedBy");
+                        bcc.ColumnMappings.Add("LastUpdatedOn", "LastUpdatedOn");
+                        bcc.ColumnMappings.Add("MongoRecordCreatedBy", "MongoRecordCreatedBy");
+                        bcc.ColumnMappings.Add("RecordCreatedBy", "RecordCreatedBy");
+                        bcc.ColumnMappings.Add("RecordCreatedOn", "RecordCreatedOn");
+                        bcc.ColumnMappings.Add("TTLDate", "TTLDate");
+                        bcc.ColumnMappings.Add("Delete", "Delete");
+
+                        bcc.DestinationTableName = "RPT_PatientProgramStep";
+                        bcc.WriteToServer(objRdr);
+                    }
+                    catch (Exception ex)
+                    {
+                        OnEtlEvent(new ETLEventArgs
                         {
-                            ParameterCollection parms = new ParameterCollection();
-                            parms.Add(new Parameter("@MongoId", step.Id.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@MongoActionId", step.ActionId == null ? string.Empty : step.ActionId.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@ActionId", patientProgramActionId, SqlDbType.Int, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@StepTypeId", step.StepTypeId, SqlDbType.Int, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@Header", step.Header ?? string.Empty, SqlDbType.VarChar, ParameterDirection.Input, 100));
-                            parms.Add(new Parameter("@SelectedResponseId", step.SelectedResponseId == null ? string.Empty : step.SelectedResponseId.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@ControlType", step.ControlType.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@SelectType", step.SelectType.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@IncludeTime", step.IncludeTime.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@Question", step.Question ?? string.Empty, SqlDbType.VarChar, ParameterDirection.Input, -1));
-                            parms.Add(new Parameter("@Title", step.Title ?? string.Empty, SqlDbType.VarChar, ParameterDirection.Input, 100));
-                            parms.Add(new Parameter("@Description", step.Description ?? string.Empty, SqlDbType.VarChar, ParameterDirection.Input, -1));
-                            parms.Add(new Parameter("@Notes", step.Notes ?? string.Empty, SqlDbType.VarChar, ParameterDirection.Input, -1));
-                            parms.Add(new Parameter("@Text", step.Text ?? string.Empty, SqlDbType.VarChar, ParameterDirection.Input, -1));
-                            parms.Add(new Parameter("@Status", step.Status.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@MongoPrevious", step.Previous == null ? string.Empty : step.Previous.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@MongoNext", step.Next == null ? string.Empty : step.Next.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            // inherited fields
-                            parms.Add(new Parameter("@AttributeEndDate", step.AttributeEndDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@AttributeStartDate", step.AttributeStartDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@Completed", step.Completed.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@EligibilityStartDate", step.EligibilityStartDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@Eligible", "", SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@Order", step.Order.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@SourceId", step.SourceId.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@State", step.State.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@Enabled", step.Enabled.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@StateUpdatedOn", step.StateUpdatedOn ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@MongoCompletedBy", step.CompletedBy ?? string.Empty, SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@DateCompleted", step.DateCompleted ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@EligibilityRequirements", step.EligibilityRequirements ?? string.Empty, SqlDbType.VarChar, ParameterDirection.Input, -1));
-                            parms.Add(new Parameter("@EligibilityEndDate", step.EligibilityEndDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                            Message =
+                                "LoadPatientProgramSteps():SqlBulkCopy process failure: " + ex.Message + " : " +
+                                ex.InnerException,
+                            IsError = true
+                        });
+                    }
+                }
 
-                            parms.Add(new Parameter("@Version", prog.Version.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@MongoUpdatedBy", prog.UpdatedBy == null ? string.Empty : prog.UpdatedBy.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@LastUpdatedOn", prog.LastUpdatedOn ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@MongoRecordCreatedBy", prog.RecordCreatedBy.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@RecordCreatedOn", prog.RecordCreatedOn, SqlDbType.DateTime, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@TTLDate", prog.TTLDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@Delete", prog.DeleteFlag.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                #region old
 
-                            var StepId = SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_RPT_SavePatientProgramModuleActionStep", parms);
+                //Parallel.ForEach(list, step =>
+                ////foreach (Step step in list)
+                //{
+                //    try
+                //    {
+                //        ParameterCollection parms = new ParameterCollection();
+                //        parms.Add(new Parameter("@MongoId", step.Id.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                //        parms.Add(new Parameter("@MongoActionId", step.ActionId == null ? string.Empty : step.ActionId.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                //        parms.Add(new Parameter("@ActionId", patientProgramActionId, SqlDbType.Int, ParameterDirection.Input, 50));
+                //        parms.Add(new Parameter("@StepTypeId", step.StepTypeId, SqlDbType.Int, ParameterDirection.Input, 50));
+                //        parms.Add(new Parameter("@Header", step.Header ?? string.Empty, SqlDbType.VarChar, ParameterDirection.Input, 100));
+                //        parms.Add(new Parameter("@SelectedResponseId", step.SelectedResponseId == null ? string.Empty : step.SelectedResponseId.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                //        parms.Add(new Parameter("@ControlType", step.ControlType.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                //        parms.Add(new Parameter("@SelectType", step.SelectType.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                //        parms.Add(new Parameter("@IncludeTime", step.IncludeTime.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                //        parms.Add(new Parameter("@Question", step.Question ?? string.Empty, SqlDbType.VarChar, ParameterDirection.Input, -1));
+                //        parms.Add(new Parameter("@Title", step.Title ?? string.Empty, SqlDbType.VarChar, ParameterDirection.Input, 100));
+                //        parms.Add(new Parameter("@Description", step.Description ?? string.Empty, SqlDbType.VarChar, ParameterDirection.Input, -1));
+                //        parms.Add(new Parameter("@Notes", step.Notes ?? string.Empty, SqlDbType.VarChar, ParameterDirection.Input, -1));
+                //        parms.Add(new Parameter("@Text", step.Text ?? string.Empty, SqlDbType.VarChar, ParameterDirection.Input, -1));
+                //        parms.Add(new Parameter("@Status", step.Status.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                //        parms.Add(new Parameter("@MongoPrevious", step.Previous == null ? string.Empty : step.Previous.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                //        parms.Add(new Parameter("@MongoNext", step.Next == null ? string.Empty : step.Next.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                //        // inherited fields
+                //        parms.Add(new Parameter("@AttributeEndDate", step.AttributeEndDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                //        parms.Add(new Parameter("@AttributeStartDate", step.AttributeStartDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                //        parms.Add(new Parameter("@Completed", step.Completed.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                //        parms.Add(new Parameter("@EligibilityStartDate", step.EligibilityStartDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                //        parms.Add(new Parameter("@Eligible", "", SqlDbType.VarChar, ParameterDirection.Input, 50));
+                //        parms.Add(new Parameter("@Order", step.Order.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                //        parms.Add(new Parameter("@SourceId", step.SourceId.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                //        parms.Add(new Parameter("@State", step.State.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                //        parms.Add(new Parameter("@Enabled", step.Enabled.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                //        parms.Add(new Parameter("@StateUpdatedOn", step.StateUpdatedOn ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                //        parms.Add(new Parameter("@MongoCompletedBy", step.CompletedBy ?? string.Empty, SqlDbType.VarChar, ParameterDirection.Input, 50));
+                //        parms.Add(new Parameter("@DateCompleted", step.DateCompleted ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                //        parms.Add(new Parameter("@EligibilityRequirements", step.EligibilityRequirements ?? string.Empty, SqlDbType.VarChar, ParameterDirection.Input, -1));
+                //        parms.Add(new Parameter("@EligibilityEndDate", step.EligibilityEndDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
 
-                            if (StepId != null && step.Spawn != null && step.Spawn.Count > 0)
-                            {
-                                //LoadSpawnElement(ctr, StepId, step.Id.ToString(), step.Spawn);
-                                RegisterSpawnElement(step.Spawn, step.Id.ToString(), (int)StepId);
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace, IsError = true });
-                        }
-                    });
+                //        parms.Add(new Parameter("@Version", prog.Version.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                //        parms.Add(new Parameter("@MongoUpdatedBy", prog.UpdatedBy == null ? string.Empty : prog.UpdatedBy.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                //        parms.Add(new Parameter("@LastUpdatedOn", prog.LastUpdatedOn ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                //        parms.Add(new Parameter("@MongoRecordCreatedBy", prog.RecordCreatedBy.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                //        parms.Add(new Parameter("@RecordCreatedOn", prog.RecordCreatedOn, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                //        parms.Add(new Parameter("@TTLDate", prog.TTLDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                //        parms.Add(new Parameter("@Delete", prog.DeleteFlag.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+
+                //        var StepId = SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_RPT_SavePatientProgramModuleActionStep", parms);
+
+                //        if (StepId != null && step.Spawn != null && step.Spawn.Count > 0)
+                //        {
+                //            //LoadSpawnElement(ctr, StepId, step.Id.ToString(), step.Spawn);
+                //            RegisterSpawnElement(step.Spawn, step.Id.ToString(), (int)StepId);
+                //        }
+                //    }
+                //    catch (Exception ex)
+                //    {
+                //        OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace, IsError = true });
+                //    }
+                //});
+
+                #endregion
             }
             catch (Exception ex)
             {
@@ -2588,14 +2965,14 @@ namespace Phytel.Data.ETL
 
                 // get stepidlist
                 var stepIdList = Utils.GetStepIdList();
-                var rSeries = new ReadResponsesSeries().ReadEStepResponseSeries(responses);
+                var rSeries = new ReadPlanElementsSeries().ReadEStepResponseSeries(responses);
 
                 using (var bcc = new SqlBulkCopy(connString, SqlBulkCopyOptions.Default))
                 using (var objRdr = ObjectReader.Create(rSeries))
                 {
                     try
                     {
-                        bcc.BulkCopyTimeout = 180;
+                        bcc.BulkCopyTimeout = 580;
                         bcc.ColumnMappings.Add("MongoStepId", "MongoStepId");
                         bcc.ColumnMappings.Add("StepId", "StepId");
                         bcc.ColumnMappings.Add("MongoNextStepId", "MongoNextStepId");

@@ -36,6 +36,48 @@ namespace Phytel.Data.ETL
                 .ToDictionary(dr => dr["MongoId"].ToString(), dr => Convert.ToInt32(dr["StepId"]));
         }
 
+        internal static Dictionary<string, int> GetProgramIdList()
+        {
+            var set = SQLDataService.Instance.ExecuteSQL("InHealth001", true, "REPORT", "SELECT PatientProgramId,MongoId FROM RPT_PatientProgram");
+
+            if (set == null)
+                throw new ArgumentException("GetProgramIdList(): ProgramId was not found.");
+
+            return set.Tables[0].Rows.Cast<DataRow>()
+                .ToDictionary(dr => dr["MongoId"].ToString(), dr => Convert.ToInt32(dr["PatientProgramId"]));
+        }
+
+        internal static Dictionary<string, int> GetActionIdList()
+        {
+            var set = SQLDataService.Instance.ExecuteSQL("InHealth001", true, "REPORT", "SELECT ActionId,MongoId FROM RPT_PatientProgramAction");
+
+            if (set == null)
+                throw new ArgumentException("GetActionIdList(): ProgramId was not found.");
+
+            return set.Tables[0].Rows.Cast<DataRow>()
+                .ToDictionary(dr => dr["MongoId"].ToString(), dr => Convert.ToInt32(dr["ActionId"]));
+        }
+
+        internal static Dictionary<string, int> GetModuleIdList()
+        {
+            var set = SQLDataService.Instance.ExecuteSQL("InHealth001", true, "REPORT", "SELECT PatientProgramModuleId,MongoId FROM RPT_PatientProgramModule");
+            if (set == null)
+                throw new ArgumentException("GetModuleIdList(): ModuleId was not found.");
+
+            return set.Tables[0].Rows.Cast<DataRow>()
+                .ToDictionary(dr => dr["MongoId"].ToString(), dr => Convert.ToInt32(dr["PatientProgramModuleId"]));
+        }
+
+        internal static Dictionary<string, int> GetModuleIdBySourceIdList()
+        {
+            var set = SQLDataService.Instance.ExecuteSQL("InHealth001", true, "REPORT", "SELECT PatientProgramModuleId,SourceId FROM RPT_PatientProgramModule");
+            if (set == null)
+                throw new ArgumentException("GetModuleIdBySourceIdList(): ModuleId was not found.");
+
+            return set.Tables[0].Rows.Cast<DataRow>().GroupBy(p => p["SourceId"].ToString(), StringComparer.OrdinalIgnoreCase)
+                .ToDictionary(dr => dr.Key, dr => Convert.ToInt32( ((DataRow)dr.First()).ItemArray.GetValue(0)), StringComparer.OrdinalIgnoreCase);
+        }
+
         internal static Dictionary<string, int> GetUserIdList()
         {
             var set = SQLDataService.Instance.ExecuteSQL("InHealth001", true, "REPORT",

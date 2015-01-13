@@ -46,10 +46,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="MongoDB.Bson">
-      <HintPath>..\References\MongoDB.Bson.dll</HintPath>
+      <HintPath>..\..\..\..\..\packages\mongocsharpdriver.1.9.2\lib\net35\MongoDB.Bson.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="MongoDB.Driver">
-      <HintPath>..\References\MongoDB.Driver.dll</HintPath>
+      <HintPath>..\..\..\..\..\packages\mongocsharpdriver.1.9.2\lib\net35\MongoDB.Driver.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="ServiceStack, Version=3.9.70.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>

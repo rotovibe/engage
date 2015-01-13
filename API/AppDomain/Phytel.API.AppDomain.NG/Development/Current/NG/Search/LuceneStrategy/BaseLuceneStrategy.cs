@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using Lucene.Net.Analysis.Standard;
 using Lucene.Net.Documents;
 using Lucene.Net.Index;
@@ -115,37 +116,56 @@ namespace Phytel.API.AppDomain.NG.Search.LuceneStrategy
         public Query ParseWholeQueryWc(string searchQuery, string[] fields, QueryParser parser)
         {
             Query query = new PhraseQuery();
+            Query query2 = new PhraseQuery();
             Query q = new BooleanQuery();
+            Query mq = new BooleanQuery();
+
             try
             {
+                var bld = ParseTermWithWildcards(searchQuery);
 
-                //((BooleanQuery)q).Add( parser.Parse("\"" + searchQuery.Trim() + "\""), Occur.MUST);
+                // phrase
+                query = parser.Parse("\"" + searchQuery.Trim() + "\"");
 
-                //var trmW = searchQuery.Trim().Split(null);
-                //var bld = new System.Text.StringBuilder();
+                // or
+                //"\"" + bld.ToString() + "\""
+                //((BooleanQuery)q).Add(new BooleanClause(new TermQuery(new Term(fields[0], "\"" + bld.ToString() + "\"")), Occur.SHOULD));
+                //((BooleanQuery)q).Add(new BooleanClause(new TermQuery(new Term(fields[1], "\"" + bld.ToString() + "\"")), Occur.SHOULD));
+                query2 = parser.Parse(searchQuery + "*");
 
-                //for (int i = 0; i < trmW.Length; i++)
-                //{
-                //    if (i == trmW.Length - 1)
-                //        bld.Append(trmW[i]+"*");
-                //    else
-                //    {
-                //        bld.Append(trmW[i] + "* ");
-                //    }
-                //}
-
-                //query = parser.Parse("\"" + bld.ToString() + "\"");
-
-                //((BooleanQuery)q).Add(parser.Parse("\"" + bld.ToString() + "\""), Occur.SHOULD);
-
-                //query = parser.Parse("\"" + searchQuery.Trim() + "*" +"\"");
-                query = parser.Parse("\"" + searchQuery.Trim() +"\"");
+                // main
+                ((BooleanQuery) mq).Add(query, Occur.SHOULD);
+                ((BooleanQuery)mq).Add(query2, Occur.SHOULD);
             }
-            catch (ParseException)
+            catch (ParseException ex)
             {
-                //query = parser.Parse(QueryParser.Escape(searchQuery.Trim()));
+                throw new ArgumentException("BaseLuceneStrategy:ParseWholeQueryWc():" + ex.Message);
             }
-            return query;
+            return mq;
+        }
+
+        public StringBuilder ParseTermWithWildcards(string searchQuery)
+        {
+            try
+            {
+                var trmW = searchQuery.Trim().Split(null);
+                var bld = new System.Text.StringBuilder();
+
+                for (int i = 0; i < trmW.Length; i++)
+                {
+                    if (i == trmW.Length - 1)
+                        bld.Append(trmW[i] + "*");
+                    else
+                    {
+                        bld.Append(trmW[i] + "* ");
+                    }
+                }
+                return bld;
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentException("BaseLuceneStrategy:ParseTermWithWildcards():" + ex.Message);
+            }
         }
 
         public Query ParseWholeQuery(string searchQuery, QueryParser parser)

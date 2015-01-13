@@ -30,7 +30,8 @@ namespace Phytel.API.AppDomain.NG.Search.LuceneStrategy
             var searchQuery = new TermQuery(new Term("Id", sampleData.ProductId));
             writer.DeleteDocuments(searchQuery);
             var doc = new Document();
-            doc.Add(new Field("Id", sampleData.ProductId.Trim(), Field.Store.YES, Field.Index.NOT_ANALYZED));
+            doc.Add(new Field("MongoId", sampleData.Id.Trim(), Field.Store.YES, Field.Index.NOT_ANALYZED));
+            doc.Add(new Field("PackageId", sampleData.ProductId.Trim(), Field.Store.YES, Field.Index.NOT_ANALYZED));
             doc.Add(new Field("ProductNDC", sampleData.ProductNDC.Trim(), Field.Store.YES, Field.Index.NOT_ANALYZED));
             doc.Add(new Field("CompositeName", sampleData.CompositeName.Trim(), Field.Store.YES, Field.Index.ANALYZED));
             doc.Add(new Field("ProprietaryName", sampleData.ProprietaryName.Trim(), Field.Store.YES, Field.Index.ANALYZED));

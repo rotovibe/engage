@@ -32,7 +32,7 @@ namespace Phytel.API.AppDomain.NG.Search.LuceneStrategy
         public override void AddToLuceneIndex(T sampleData, IndexWriter writer)
         {
             var boolQuery = new BooleanQuery();
-            var sq1 = new TermQuery(new Term("Id", sampleData.ProductId));
+            var sq1 = new TermQuery(new Term("MongoId", sampleData.ProductId));
             var sq2 = new TermQuery(new Term("DosageFormname", sampleData.DosageFormname));
             var sq3 = new TermQuery(new Term("ProprietaryName", sampleData.ProprietaryName));
             var sq4 = new TermQuery(new Term("RouteName", sampleData.RouteName));
@@ -40,6 +40,7 @@ namespace Phytel.API.AppDomain.NG.Search.LuceneStrategy
             var sq6 = new TermQuery(new Term("Strength", sampleData.Strength));
             var sq7 = new TermQuery(new Term("Unit", sampleData.Unit));
             var sq8 = new TermQuery(new Term("CompositeName", sampleData.CompositeName));
+            var sq9 = new TermQuery(new Term("PackageId", sampleData.ProductId));
             boolQuery.Add(sq1, Occur.MUST);
             boolQuery.Add(sq2, Occur.MUST);
             boolQuery.Add(sq3, Occur.MUST);
@@ -48,10 +49,12 @@ namespace Phytel.API.AppDomain.NG.Search.LuceneStrategy
             boolQuery.Add(sq6, Occur.MUST);
             boolQuery.Add(sq7, Occur.MUST);
             boolQuery.Add(sq8, Occur.MUST);
+            boolQuery.Add(sq9, Occur.MUST);
             writer.DeleteDocuments(boolQuery);
 
             var doc = new Document();
-            doc.Add(new Field("Id", sampleData.ProductId, Field.Store.YES, Field.Index.NOT_ANALYZED));
+            doc.Add(new Field("MongoId", sampleData.Id.Trim(), Field.Store.YES, Field.Index.NOT_ANALYZED));
+            doc.Add(new Field("PackageId", sampleData.ProductId, Field.Store.YES, Field.Index.NOT_ANALYZED));
             doc.Add(new Field("DosageFormname", sampleData.DosageFormname.Trim(), Field.Store.YES, Field.Index.NOT_ANALYZED));
             doc.Add(new Field("CompositeName", sampleData.CompositeName.Trim(), Field.Store.YES, Field.Index.ANALYZED));
             doc.Add(new Field("ProprietaryName", sampleData.ProprietaryName.Trim(), Field.Store.YES, Field.Index.ANALYZED));

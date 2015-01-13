@@ -52,10 +52,11 @@
       <HintPath>..\..\..\..\..\packages\AutoMapper.3.2.1\lib\net40\AutoMapper.Net4.dll</HintPath>
     </Reference>
     <Reference Include="MongoDB.Bson">
-      <HintPath>..\References\MongoDB.Bson.dll</HintPath>
+      <HintPath>..\..\..\..\..\packages\mongocsharpdriver.1.9.2\lib\net35\MongoDB.Bson.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="MongoDB.Driver">
-      <HintPath>..\References\MongoDB.Driver.dll</HintPath>
+      <HintPath>..\..\..\..\..\packages\mongocsharpdriver.1.9.2\lib\net35\MongoDB.Driver.dll</HintPath>
     </Reference>
     <Reference Include="Phytel.Mongo">
       <HintPath>..\..\..\..\Phytel.API.DataDomain.PatientObservation\Development\Current\References\Phytel.Mongo.dll</HintPath>
@@ -83,11 +84,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Containers\MedicationRepositoryContainer.cs" />
+    <Compile Include="IMongoMedicationMappingRepository.cs" />
     <Compile Include="IMongoPatientMedSuppRepository.cs" />
     <Compile Include="IMongoMedicationRepository.cs" />
     <Compile Include="IUOWMongo.cs" />
     <Compile Include="MongoDB\DTO\MEMedication.cs" />
+    <Compile Include="MongoDB\DTO\MEMedicationMapping.cs" />
     <Compile Include="MongoDB\DTO\MEPatientMedSupp.cs" />
+    <Compile Include="MongoMedicationMappingRepository.cs" />
     <Compile Include="MongoPatientMedSuppRepository.cs" />
     <Compile Include="MongoMedicationRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

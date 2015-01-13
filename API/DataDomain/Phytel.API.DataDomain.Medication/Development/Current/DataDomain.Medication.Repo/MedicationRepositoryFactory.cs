@@ -8,7 +8,8 @@ namespace DataDomain.Medication.Repo
     public enum RepositoryType
     {
         Medication,
-        PatientMedSupp
+        PatientMedSupp,
+        MedicationMapping
     }
 
     public abstract class MedicationRepositoryFactory
@@ -26,6 +27,12 @@ namespace DataDomain.Medication.Repo
                     {
                         var context = new MedicationMongoContext(request.ContractNumber);
                         repo = new MongoMedicationRepository<MedicationMongoContext>(context) {UserId = request.UserId, ContractDBName = request.ContractNumber};
+                        break;
+                    }
+                    case RepositoryType.MedicationMapping:
+                    {
+                        var context = new MedicationMongoContext(request.ContractNumber);
+                        repo = new MongoMedicationMappingRepository<MedicationMongoContext>(context) { UserId = request.UserId, ContractDBName = request.ContractNumber };
                         break;
                     }
                     case RepositoryType.PatientMedSupp:

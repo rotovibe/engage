@@ -87,6 +87,7 @@
     <Compile Include="Enums.cs" />
     <Compile Include="GetMedicationNDCsDataRequest.cs" />
     <Compile Include="GetMedicationNDCsDataResponse.cs" />
+    <Compile Include="DomainRequest.cs" />
     <Compile Include="GetPatientMedSuppsDataRequest.cs" />
     <Compile Include="GetPatientMedSuppsDataResponse.cs" />
     <Compile Include="PatientMedSuppData.cs" />

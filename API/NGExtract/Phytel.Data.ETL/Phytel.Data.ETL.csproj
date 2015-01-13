@@ -49,10 +49,11 @@
       <HintPath>..\..\packages\FastMember.1.0.0.11\lib\net40\FastMember.dll</HintPath>
     </Reference>
     <Reference Include="MongoDB.Bson">
-      <HintPath>..\..\DataDomain\Phytel.API.DataDomain.PatientObservation\Development\Current\References\MongoDB.Bson.dll</HintPath>
+      <HintPath>..\..\packages\mongocsharpdriver.1.9.2\lib\net35\MongoDB.Bson.dll</HintPath>
     </Reference>
     <Reference Include="MongoDB.Driver">
-      <HintPath>..\..\Interfaces\Development\Current\References\MongoDB.Driver.dll</HintPath>
+      <HintPath>..\..\packages\mongocsharpdriver.1.9.2\lib\net35\MongoDB.Driver.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Phytel.Mongo">
       <HintPath>..\..\Interfaces\Development\Current\References\Phytel.Mongo.dll</HintPath>
@@ -71,13 +72,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BulkCopy\EProgramAttribute.cs" />
+    <Compile Include="BulkCopy\EStep.cs" />
+    <Compile Include="BulkCopy\EAction.cs" />
     <Compile Include="BulkCopy\EObservationResponse.cs" />
+    <Compile Include="BulkCopy\EModule.cs" />
+    <Compile Include="BulkCopy\EProgram.cs" />
     <Compile Include="BulkCopy\EStepResponse.cs" />
     <Compile Include="BulkCopy\ReadObservationsSeries.cs" />
-    <Compile Include="BulkCopy\ReadResponsesSeries.cs" />
+    <Compile Include="BulkCopy\ReadPlanElementsSeries.cs" />
     <Compile Include="BulkCopy\ReadSeries.cs" />
     <Compile Include="ETLEventArgs.cs" />
     <Compile Include="ETLProcessor.cs" />
+    <Compile Include="SavePatientProgram.cs" />
     <Compile Include="SpawnElementHash.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SimpleLog.cs" />

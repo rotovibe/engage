@@ -8,6 +8,7 @@ namespace Phytel.API.AppDomain.NG.DTO.Search
 {
     public class MedNameSearchDoc
     {
+        public string Id { get; set; }
         public string ProductId { get; set; }
         public string ProductNDC { get; set; }
         public string CompositeName { get; set; }
