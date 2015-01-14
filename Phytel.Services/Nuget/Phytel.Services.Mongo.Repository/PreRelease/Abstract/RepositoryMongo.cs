@@ -23,7 +23,14 @@ namespace Phytel.Services.Mongo.Repository
 
         public AggregateResult Aggregate<T, TKey>(params BsonDocument[] pipeline) where T : IMongoEntity<TKey>
         {
-            return _context.Set<T, TKey>().Collection.Aggregate(pipeline);
+            return
+                RetryHelper.DoWithRetry<AggregateResult>(() =>
+                {
+                    return _context.Set<T, TKey>().Collection.Aggregate(pipeline);
+                },
+                    RetryHelper.RETRIES,
+                    RetryHelper.RETRYDELAY
+                );
         }
 
         public BsonValue Eval(string code, params object[] args)
@@ -45,7 +52,14 @@ namespace Phytel.Services.Mongo.Repository
 
         public MongoCursor<T> Find<T, TKey>(IMongoQuery query) where T : class, IMongoEntity<TKey>
         {
-            return _context.Set<T, TKey>().Collection.Find(query);
+            return
+                RetryHelper.DoWithRetry<MongoCursor<T>>(() =>
+                {
+                    return _context.Set<T, TKey>().Collection.Find(query);
+                },
+                    RetryHelper.RETRIES,
+                    RetryHelper.RETRYDELAY
+                );
         }
 
         public T FindAndModify<T, TKey>(IMongoQuery query, IMongoSortBy sort, IMongoUpdate update) where T : class, IMongoEntity<TKey>
