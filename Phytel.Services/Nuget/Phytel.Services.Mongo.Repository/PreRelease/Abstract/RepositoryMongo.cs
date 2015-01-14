@@ -43,6 +43,11 @@ namespace Phytel.Services.Mongo.Repository
                 );
         }
 
+        public MongoCursor<T> Find<T, TKey>(IMongoQuery query) where T : class, IMongoEntity<TKey>
+        {
+            return _context.Set<T, TKey>().Collection.Find(query);
+        }
+
         public T FindAndModify<T, TKey>(IMongoQuery query, IMongoSortBy sort, IMongoUpdate update) where T : class, IMongoEntity<TKey>
         {
             return
