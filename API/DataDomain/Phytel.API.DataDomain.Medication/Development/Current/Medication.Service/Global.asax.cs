@@ -30,6 +30,21 @@ namespace Phytel.API.DataDomain.Medication.Service
                 .ForMember(dest => dest.LastUpdatedOn, opt => opt.MapFrom(src => src.LastUpdatedOn))
                 .ForMember(dest => dest.UpdatedBy, opt => opt.MapFrom(src => ObjectId.Parse(src.UpdatedBy)));
 
+
+            Mapper.CreateMap<MEMedicationMapping, DTO.MedicationMappingData>()
+                .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Id.ToString()))
+                .ForMember(dest => dest.RecordCreatedOn, opt => opt.MapFrom(src => src.RecordCreatedOn))
+                .ForMember(dest => dest.RecordCreatedBy, opt => opt.MapFrom(src => src.RecordCreatedBy.ToString()))
+                .ForMember(dest => dest.LastUpdatedOn, opt => opt.MapFrom(src => src.LastUpdatedOn))
+                .ForMember(dest => dest.UpdatedBy, opt => opt.MapFrom(src => src.UpdatedBy.ToString()));
+
+            Mapper.CreateMap<DTO.MedicationMappingData, MEMedicationMapping>()
+                .ForMember(d => d.Id, opt => opt.MapFrom(src => ObjectId.Parse(src.Id)))
+                .ForMember(dest => dest.RecordCreatedOn, opt => opt.MapFrom(src => src.RecordCreatedOn))
+                .ForMember(dest => dest.RecordCreatedBy, opt => opt.MapFrom(src => ObjectId.Parse(src.RecordCreatedBy)))
+                .ForMember(dest => dest.LastUpdatedOn, opt => opt.MapFrom(src => src.LastUpdatedOn))
+                .ForMember(dest => dest.UpdatedBy, opt => opt.MapFrom(src => ObjectId.Parse(src.UpdatedBy)));
+
             Mapper.CreateMap<MEPatientMedSupp, PatientMedSuppData>()
                 .ForMember(dest => dest.CreatedOn, opt => opt.MapFrom(src => src.RecordCreatedOn))
                 .ForMember(dest => dest.UpdatedOn, opt => opt.MapFrom(src => src.LastUpdatedOn));

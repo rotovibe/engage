@@ -73,7 +73,8 @@ namespace Phytel.API.Common
         Allergy,
         PatientAllergy,
         Medication,
-        PatientMedSupp
+        PatientMedSupp,
+        MedicationMap
 
     }
 }

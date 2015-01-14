@@ -11,6 +11,11 @@ namespace Phytel.API.DataDomain.Medication.DTO
     [MongoIndex(Keys = new string[] { TTLDateProperty }, TimeToLive = 0)]
     public class MEMedicationMapping : IMongoEntity<ObjectId>, IMEEntity
     {
+        public MEMedicationMapping()
+        {
+            Id = ObjectId.GenerateNewId();
+        }
+
         public MEMedicationMapping(string userId)
         {
             Id = ObjectId.GenerateNewId();
@@ -35,15 +40,15 @@ namespace Phytel.API.DataDomain.Medication.DTO
         [BsonIgnoreIfNull(true)]
         public string FullName { get; set; }
 
-        public const string StatusProperty = "sts";
-        [BsonElement(StatusProperty)]
+        public const string CustomProperty = "cust";
+        [BsonElement(CustomProperty)]
         [BsonIgnoreIfNull(true)]
-        public bool Status { get; set; }
+        public bool Custom { get; set; }
 
-        public const string DosageProperty = "dsg";
-        [BsonElement(DosageProperty)]
+        public const string VerifiedProperty = "vrfy";
+        [BsonElement(VerifiedProperty)]
         [BsonIgnoreIfNull(true)]
-        public string Dosage { get; set; }
+        public bool Verified { get; set; }
 
         public const string StrengthProperty = "str";
         [BsonElement(StrengthProperty)]
@@ -87,13 +92,13 @@ namespace Phytel.API.DataDomain.Medication.DTO
         public const string RecordCreatedByProperty = "rcby";
         [BsonIgnoreIfNull(true)]
         [BsonElement(RecordCreatedByProperty)]
-        public ObjectId RecordCreatedBy { get; private set; }
+        public ObjectId RecordCreatedBy { get; set; }
 
         public const string RecordCreatedOnProperty = "rcon";
         [BsonIgnoreIfNull(true)]
         [BsonElement(RecordCreatedOnProperty)]
         [BsonDateTimeOptions(Kind = System.DateTimeKind.Utc)]
-        public System.DateTime RecordCreatedOn { get; private set; }
+        public System.DateTime RecordCreatedOn { get; set; }
 
         public const string ExtraElementsProperty = "ex";
         [BsonElement(ExtraElementsProperty)]

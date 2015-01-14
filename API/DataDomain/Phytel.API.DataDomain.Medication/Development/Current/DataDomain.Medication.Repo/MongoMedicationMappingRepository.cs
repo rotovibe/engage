@@ -42,46 +42,37 @@ namespace DataDomain.Medication.Repo
 
         public object Insert(object newEntity)
         {
-            PutPatientMedSuppDataRequest request = (PutPatientMedSuppDataRequest)newEntity;
-            PatientMedSuppData data  = request.PatientMedSuppData;
             try
             {
+                var req = newEntity as PutInsertMedicationMappingRequest;
+                var mm = req.MedicationMapping;
+                // create endpoints for insert so you can use the request object.
+                var MEMedMap = new MEMedicationMapping(req.UserId)
+                {
+                    Custom = mm.Custom,
+                    FullName = mm.FullName,
+                    LastUpdatedOn = mm.LastUpdatedOn,
+                    SubstanceName = mm.SubstanceName,
+                    TTLDate = mm.TTLDate,
+                    Verified = mm.Verified,
+                    Version = mm.Version,
+                    //UpdatedBy = mm.UpdatedBy,
+                    Strength = mm.Strength,
+                    Route = mm.Route,
+                    Form = mm.Form,
+                    DeleteFlag = false
+                };
+
                 using (MedicationMongoContext ctx = new MedicationMongoContext(ContractDBName))
                 {
-                    MEPatientMedSupp mePMS = new MEPatientMedSupp(this.UserId)
-                    {
-                        PatientId = ObjectId.Parse(data.PatientId),
-                        Name = data.MedSuppName,
-                        CategoryId = (Category)data.CategoryId,
-                        TypeId  = ObjectId.Parse(data.TypeId),
-                        StatusId = (Status)data.StatusId,
-                        Dosage = data.Dosage,
-                        Strength = data.Strength,
-                        Route = data.Route,
-                        Form = data.Form,
-                        PharmClasses = getPharmClassses(ctx, data.MedSuppName),
-                        NDCs = data.NDCs,
-                        FreqQuantity = data.FreqQuantity,
-                        FreqHowOftenId = string.IsNullOrEmpty(data.FreqHowOftenId) ? (ObjectId?)null : ObjectId.Parse(data.FreqHowOftenId),
-                        FreqWhenId = string.IsNullOrEmpty(data.FreqWhenId) ? (ObjectId?)null : ObjectId.Parse(data.FreqWhenId),
-                        SourceId = ObjectId.Parse(data.SourceId),
-                        StartDate = data.StartDate == null ? (DateTime?)null : data.StartDate,
-                        EndDate = data.EndDate == null ? (DateTime?)null : data.EndDate,
-                        Reason = data.Reason,
-                        Notes = data.Notes,
-                        PrescribedBy = data.PrescribedBy,
-                        SystemName = data.SystemName,
-                        DeleteFlag = false
-                    };
-
-                    ctx.PatientMedSupps.Collection.Insert(mePMS);
+                    ctx.MedicationMap.Collection.Insert(MEMedMap);
 
                     AuditHelper.LogDataAudit(this.UserId,
-                                            MongoCollectionName.PatientMedSupp.ToString(),
-                                            mePMS.Id.ToString(),
+                                            MongoCollectionName.MedicationMap.ToString(),
+                                            MEMedMap.Id.ToString(),
                                             DataAuditType.Insert,
-                                            request.ContractNumber);
-                    return AutoMapper.Mapper.Map<PatientMedSuppData>(mePMS);
+                                            ContractDBName);
+                    return AutoMapper.Mapper.Map<MedicationMappingData>(MEMedMap);
                 }
             }
             catch (Exception) { throw; }

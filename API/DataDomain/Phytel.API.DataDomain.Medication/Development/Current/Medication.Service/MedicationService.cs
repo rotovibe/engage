@@ -8,6 +8,7 @@ namespace Phytel.API.DataDomain.Medication.Service
     {
         //protected readonly IMedicationDataManager Manager;
         public IMedicationDataManager Manager { get; set; }
+        public IMedicationMappingDataManager MedMapManager { get; set; }
 
         //public MedicationService(IMedicationDataManager mgr)
         //{
@@ -38,6 +39,22 @@ namespace Phytel.API.DataDomain.Medication.Service
                 //response.Medications = 
                     var result = Manager.BulkInsertMedications(new List<DTO.MedicationData>(), request);
                 response.Status = result;
+            }
+            catch (Exception ex)
+            {
+                RaiseException(response, ex);
+            }
+            return response;
+        }
+
+        public PutInsertMedicationMappingResponse Put(PutInsertMedicationMappingRequest request)
+        {
+            var response = new PutInsertMedicationMappingResponse { Version = request.Version };
+            try
+            {
+                RequireUserId(request);
+                var result = MedMapManager.InsertMedicationMapping(request, request.MedicationMapping);
+                response.MedMapData = result;
             }
             catch (Exception ex)
             {
