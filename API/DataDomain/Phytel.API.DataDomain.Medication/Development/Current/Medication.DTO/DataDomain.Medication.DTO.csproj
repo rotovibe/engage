@@ -90,7 +90,7 @@
     <Compile Include="DomainRequest.cs" />
     <Compile Include="GetPatientMedSuppsDataRequest.cs" />
     <Compile Include="GetPatientMedSuppsDataResponse.cs" />
-    <Compile Include="MedMappingData.cs" />
+    <Compile Include="MedicationMapData.cs" />
     <Compile Include="PatientMedSuppData.cs" />
     <Compile Include="PutInsertMedicationMappingRequest.cs" />
     <Compile Include="PutInsertMedicationMappingResponse.cs" />
