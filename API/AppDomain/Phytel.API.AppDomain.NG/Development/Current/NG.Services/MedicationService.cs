@@ -26,9 +26,9 @@ namespace Phytel.API.AppDomain.NG.Service
         private const string unknownUserHostAddress = "Unknown IP";
 
         #region Medication - Posts
-        public PostInitializeMedSuppResponse Post(PostInitializeMedSuppRequest request)
+        public PostInitializeMedicationMapResponse Post(PostInitializeMedicationMapRequest request)
         {
-            PostInitializeMedSuppResponse response = new PostInitializeMedSuppResponse();
+            PostInitializeMedicationMapResponse response = new PostInitializeMedicationMapResponse();
             ValidateTokenResponse result = null;
 
             try
@@ -41,7 +41,7 @@ namespace Phytel.API.AppDomain.NG.Service
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
-                    response.MedSupp = MedicationManager.InitializeMedSupp(request);
+                    response.MedicationMap = MedicationManager.InitializeMedicationMap(request);
                 }
                 else
                     throw new UnauthorizedAccessException();

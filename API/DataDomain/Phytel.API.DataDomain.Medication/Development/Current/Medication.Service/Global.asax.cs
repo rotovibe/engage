@@ -31,14 +31,14 @@ namespace Phytel.API.DataDomain.Medication.Service
                 .ForMember(dest => dest.UpdatedBy, opt => opt.MapFrom(src => ObjectId.Parse(src.UpdatedBy)));
 
 
-            Mapper.CreateMap<MEMedicationMapping, DTO.MedicationMappingData>()
+            Mapper.CreateMap<MEMedicationMapping, DTO.MedicationMapData>()
                 .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Id.ToString()))
                 .ForMember(dest => dest.RecordCreatedOn, opt => opt.MapFrom(src => src.RecordCreatedOn))
                 .ForMember(dest => dest.RecordCreatedBy, opt => opt.MapFrom(src => src.RecordCreatedBy.ToString()))
                 .ForMember(dest => dest.LastUpdatedOn, opt => opt.MapFrom(src => src.LastUpdatedOn))
                 .ForMember(dest => dest.UpdatedBy, opt => opt.MapFrom(src => src.UpdatedBy.ToString()));
 
-            Mapper.CreateMap<DTO.MedicationMappingData, MEMedicationMapping>()
+            Mapper.CreateMap<DTO.MedicationMapData, MEMedicationMapping>()
                 .ForMember(d => d.Id, opt => opt.MapFrom(src => ObjectId.Parse(src.Id)))
                 .ForMember(dest => dest.RecordCreatedOn, opt => opt.MapFrom(src => src.RecordCreatedOn))
                 .ForMember(dest => dest.RecordCreatedBy, opt => opt.MapFrom(src => ObjectId.Parse(src.RecordCreatedBy)))

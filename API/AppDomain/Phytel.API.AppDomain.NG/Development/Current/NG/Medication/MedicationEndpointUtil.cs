@@ -69,66 +69,66 @@ namespace Phytel.API.AppDomain.NG.Medication
             }
         }
 
-        public MedicationData InitializeMedSupp(PostInitializeMedSuppRequest request)
+        public MedicationMapData InitializeMedicationMap(PostInitializeMedicationMapRequest request)
         {
             try
             {
-                MedicationData result = null;
+                MedicationMapData result = null;
                 IRestClient client = new JsonServiceClient();
-                // [Route("/{Context}/{Version}/{ContractNumber}/MedSupp/Initialize", "PUT")]
-                var url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/MedSupp/Initialize",
+                // [Route("/{Context}/{Version}/{ContractNumber}/MedicationMap/Initialize", "PUT")]
+                var url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/MedicationMap/Initialize",
                                     DDMedicationUrl,
                                     "NG",
                                     request.Version,
                                     request.ContractNumber), request.UserId);
 
-                PutInitializeMedSuppDataResponse dataDomainResponse = client.Put<PutInitializeMedSuppDataResponse>(url, new PutInitializeMedSuppDataRequest
+                PutInitializeMedicationMapDataResponse dataDomainResponse = client.Put<PutInitializeMedicationMapDataResponse>(url, new PutInitializeMedicationMapDataRequest
                 {
                     Context = "NG",
                     ContractNumber = request.ContractNumber,
-                    MedSuppName = request.MedSuppName,
+                    Name = request.Name,
                     UserId = request.UserId,
                     Version = request.Version
                 } as object);
 
                 if (dataDomainResponse != null)
                 {
-                    result = dataDomainResponse.MedicationData;
+                    result = dataDomainResponse.MedicationMappingData;
                 }
                 return result;
             }
             catch (Exception ex) { throw ex; }
         }
 
-        public MedicationData UpdateMedication(PostMedicationRequest request)
+        public MedicationMapData UpdateMedicationMap(PostMedicationMapRequest request)
         {
             try
             {
-                MedicationData result = null;
+                MedicationMapData result = null;
                 IRestClient client = new JsonServiceClient();
-                //[Route("/{Context}/{Version}/{ContractNumber}/Medication/Update", "PUT")]
-                var url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Medication/Update",
+                //[Route("/{Context}/{Version}/{ContractNumber}/MedicationMap/Update", "PUT")]
+                var url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/MedicationMap/Update",
                                     DDMedicationUrl,
                                     "NG",
                                     request.Version,
                                     request.ContractNumber), request.UserId);
 
-                if (request.Medication != null)
+                if (request.MedicationMap != null)
                 {
-                    MedicationData data = new MedicationData();
-                    data = Mapper.Map<MedicationData>(request.Medication);
-                    PutMedicationDataResponse dataDomainResponse = client.Put<PutMedicationDataResponse>(url, new PutMedicationDataRequest
+                    MedicationMapData data = new MedicationMapData();
+                    data = Mapper.Map<MedicationMapData>(request.MedicationMap);
+                    PutMedicationMapDataResponse dataDomainResponse = client.Put<PutMedicationMapDataResponse>(url, new PutMedicationMapDataRequest
                     {
                         Context = "NG",
                         ContractNumber = request.ContractNumber,
                         UserId = request.UserId,
                         Version = request.Version,
-                        MedicationData = data
+                        MedicationMappingData = data
                     } as object);
 
                     if (dataDomainResponse != null)
                     {
-                        result = dataDomainResponse.MedicationData;
+                        result = dataDomainResponse.MedicationMappingData;
                     }
                 }
                 return result;

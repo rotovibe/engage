@@ -90,12 +90,13 @@
     <Compile Include="DomainRequest.cs" />
     <Compile Include="GetPatientMedSuppsDataRequest.cs" />
     <Compile Include="GetPatientMedSuppsDataResponse.cs" />
-    <Compile Include="MedicationMappingData.cs" />
+    <Compile Include="MedicationMapData.cs" />
+    <Compile Include="MedMappingData.cs" />
     <Compile Include="PatientMedSuppData.cs" />
     <Compile Include="PutInsertMedicationMappingRequest.cs" />
     <Compile Include="PutInsertMedicationMappingResponse.cs" />
-    <Compile Include="PutMedicationDataRequest.cs" />
-    <Compile Include="PutMedicationDataResponse.cs" />
+    <Compile Include="PutMedicationMapDataRequest.cs" />
+    <Compile Include="PutMedicationMapDataResponse.cs" />
     <Compile Include="PutBulkInsertMedicationsRequest.cs" />
     <Compile Include="GetAllMedicationsRequest.cs" />
     <Compile Include="PutBulkInsertMedicationsResponse.cs" />
@@ -104,8 +105,8 @@
     <Compile Include="GetMedicationResponse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MedicationData.cs" />
-    <Compile Include="PutInitializeMedSuppDataRequest.cs" />
-    <Compile Include="PutInitializeMedSuppDataResponse.cs" />
+    <Compile Include="PutInitializeMedicationMapDataRequest.cs" />
+    <Compile Include="PutInitializeMedicationMapDataResponse.cs" />
     <Compile Include="PutInitializePatientMedSuppDataRequest.cs" />
     <Compile Include="PutInitializePatientMedSuppDataResponse.cs" />
     <Compile Include="PutPatientMedSuppDataRequest.cs" />

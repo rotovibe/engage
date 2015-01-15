@@ -199,14 +199,14 @@ namespace DataDomain.Medication.Repo
 
         public object Initialize(object newEntity)
         {
-            PutInitializeMedSuppDataRequest request = (PutInitializeMedSuppDataRequest)newEntity;
+            PutInitializeMedicationMapDataRequest request = (PutInitializeMedicationMapDataRequest)newEntity;
             MedicationData data = null;
             try
             {
                 MEMedication meM = new MEMedication(this.UserId)
                 {
-                    ProprietaryName = request.MedSuppName,
-                    FullName = request.MedSuppName,
+                    ProprietaryName = request.Name,
+                    FullName = request.Name,
                     TTLDate = System.DateTime.UtcNow.AddDays(_initializeDays),
                     DeleteFlag = false
                 };

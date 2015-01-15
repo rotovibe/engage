@@ -4,11 +4,11 @@ using System.Runtime.Serialization;
 
 namespace Phytel.API.AppDomain.NG.DTO
 {
-    [Route("/{Version}/{ContractNumber}/MedSupp/Initialize", "POST")]
-    public class PostInitializeMedSuppRequest : IAppDomainRequest
+    [Route("/{Version}/{ContractNumber}/MedicationMap/Initialize", "POST")]
+    public class PostInitializeMedicationMapRequest : IAppDomainRequest
     {
-        [ApiMember(Name = "MedSuppName", Description = "Name of the medication/supplement which is getting initialized", ParameterType = "property", DataType = "string", IsRequired = true)]
-        public string MedSuppName { get; set; }
+        [ApiMember(Name = "Name", Description = "Name of the medication which is getting initialized", ParameterType = "property", DataType = "string", IsRequired = true)]
+        public string Name { get; set; }
 
         [ApiMember(Name = "UserID", Description = "ID of the user making the request (Internally used ONLY)", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string UserId { get; set; }
@@ -25,6 +25,6 @@ namespace Phytel.API.AppDomain.NG.DTO
         [ApiMember(Name = "Context", Description = "Product Context requesting the Program", ParameterType = "property", DataType = "string", IsRequired = false)]
         public string Context { get; set; }
 
-        public PostInitializeMedSuppRequest() { }
+        public PostInitializeMedicationMapRequest() { }
     }
 }

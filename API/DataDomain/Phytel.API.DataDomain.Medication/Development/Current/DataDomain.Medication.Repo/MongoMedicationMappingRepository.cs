@@ -72,7 +72,7 @@ namespace DataDomain.Medication.Repo
                                             MEMedMap.Id.ToString(),
                                             DataAuditType.Insert,
                                             ContractDBName);
-                    return AutoMapper.Mapper.Map<MedicationMappingData>(MEMedMap);
+                    return AutoMapper.Mapper.Map<MedicationMapData>(MEMedMap);
                 }
             }
             catch (Exception) { throw; }
@@ -82,7 +82,7 @@ namespace DataDomain.Medication.Repo
         {
             try
             {
-                var list = entities.Cast<DTO.MedicationMappingData>();
+                var list = entities.Cast<DTO.MedicationMapData>();
                 var mColl = new List<MEMedicationMapping>();
 
                 list.ToList().ForEach(mm =>
@@ -110,10 +110,10 @@ namespace DataDomain.Medication.Repo
                     object result = null;
                     ctx.MedicationMap.Collection.InsertBatch(mColl);
 
-                    var mMapsData = new List<MedicationMappingData>();
+                    var mMapsData = new List<MedicationMapData>();
                     var mMaps = ctx.MedicationMap.Collection.FindAll().ToList();
 
-                    mMaps.ForEach(mm => mMapsData.Add(Mapper.Map<MedicationMappingData>(mm)));
+                    mMaps.ForEach(mm => mMapsData.Add(Mapper.Map<MedicationMapData>(mm)));
 
                     return mMapsData;
                 }

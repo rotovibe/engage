@@ -6,7 +6,7 @@ namespace Phytel.API.DataDomain.Medication.DTO
 {
     public class PutInsertMedicationMappingResponse : DomainResponse
    {
-        public DTO.MedicationMappingData MedMapData { get; set; }
+        public DTO.MedicationMapData MedMapData { get; set; }
    }
 
 }

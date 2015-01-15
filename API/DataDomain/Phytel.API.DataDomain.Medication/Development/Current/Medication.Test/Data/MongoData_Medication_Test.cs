@@ -22,46 +22,44 @@ namespace Phytel.API.DataDomain.Allergy.Test
         IRestClient client = new JsonServiceClient();
 
         [TestMethod]
-        public void InitializeMedication_Test()
+        public void InitializeMedicationMap_Test()
         {
-            PutInitializeMedSuppDataRequest request = new PutInitializeMedSuppDataRequest {
-                MedSuppName = "TestMed",
+            PutInitializeMedicationMapDataRequest request = new PutInitializeMedicationMapDataRequest {
+                Name = "TestMed",
                 Context = context,
                 ContractNumber = contractNumber,
                 UserId = userId,
                 Version = version
             };
-            //[Route("/{Context}/{Version}/{ContractNumber}/Allergy/Initialize", "PUT")]
-            PutInitializeMedSuppDataResponse response = client.Put<PutInitializeMedSuppDataResponse>(
-    string.Format("{0}/{1}/{2}/{3}/MedSupp/Initialize", url, context, version, contractNumber), request);
+            //[Route("/{Context}/{Version}/{ContractNumber}/MedicationMap/Initialize", "PUT")]
+            PutInitializeMedicationMapDataResponse response = client.Put<PutInitializeMedicationMapDataResponse>(
+    string.Format("{0}/{1}/{2}/{3}/MedicationMap/Initialize", url, context, version, contractNumber), request);
 
             Assert.IsNotNull(response);
         }
 
 
         [TestMethod]
-        public void UpdateMedication_Test()
+        public void UpdateMedicationMap_Test()
         {
 
-            MedicationData data = new MedicationData
+            MedicationMapData data = new MedicationMapData
             {
-                DeleteFlag = false,
-                Id = "54adb4ecd4332324dc0c77a3",
-                Version = 1.0
+                Id = "54adb4ecd4332324dc0c77a3"
             };
 
-            PutMedicationDataRequest request = new PutMedicationDataRequest
+            PutMedicationMapDataRequest request = new PutMedicationMapDataRequest
             {
                 Context = context,
                 ContractNumber = contractNumber,
-                MedicationData = data,
+                MedicationMappingData = data,
                 UserId = userId,
                 Version = version
             };
 
-            //[Route("/{Context}/{Version}/{ContractNumber}/Medication/Update", "PUT")]
-            PutMedicationDataResponse response = client.Put<PutMedicationDataResponse>(
-                string.Format("{0}/{1}/{2}/{3}/Medication/Update", url, context, version, contractNumber), request);
+            //[Route("/{Context}/{Version}/{ContractNumber}/MedicationMap/Update", "PUT")]
+            PutMedicationMapDataResponse response = client.Put<PutMedicationMapDataResponse>(
+                string.Format("{0}/{1}/{2}/{3}/MedicationMap/Update", url, context, version, contractNumber), request);
             Assert.IsNotNull(response);
         }
     }

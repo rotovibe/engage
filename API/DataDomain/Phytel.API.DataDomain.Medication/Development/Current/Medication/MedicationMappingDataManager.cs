@@ -22,14 +22,14 @@ namespace Phytel.API.DataDomain.Medication
         //    catch (Exception ex) { throw ex; }
         //}
 
-        public DTO.MedicationMappingData InsertMedicationMapping(PutInsertMedicationMappingRequest request, DTO.MedicationMappingData mm)
+        public DTO.MedicationMapData InsertMedicationMapping(PutInsertMedicationMappingRequest request, DTO.MedicationMapData mm)
         {
             try
             {
-                DTO.MedicationMappingData result;
+                DTO.MedicationMapData result;
                 var repo = MedicationRepositoryFactory.GetMedicationRepository(request, RepositoryType.MedicationMapping);
 
-                result = repo.Insert(request as object) as DTO.MedicationMappingData;
+                result = repo.Insert(request as object) as DTO.MedicationMapData;
                 return result;
             }
             catch (Exception ex)

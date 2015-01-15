@@ -58,16 +58,16 @@ namespace Phytel.API.DataDomain.Medication.Test.Search
 
             var list = medGrouping.Values.SelectMany(x => x).ToList();
 
-            var req = new PutMedicationDataRequest { Context = "NG", ContractNumber = "InHealth001", UserId = "5325c81f072ef705080d347e", Version=1 };
+            var req = new PutMedicationMapDataRequest { Context = "NG", ContractNumber = "InHealth001", UserId = "5325c81f072ef705080d347e", Version=1 };
             var repo = MedicationRepositoryFactory.GetMedicationRepository(req, RepositoryType.Medication);
 
                 repo.Update(list);
 
         }
 
-        private List<MedicationMappingData> InsertMedicationMappings(List<MedicationMappingData> medmaps)
+        private List<MedicationMapData> InsertMedicationMappings(List<MedicationMapData> medmaps)
         {
-            Mapper.CreateMap<MEMedicationMapping, DTO.MedicationMappingData>()
+            Mapper.CreateMap<MEMedicationMapping, DTO.MedicationMapData>()
                 .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Id.ToString()))
                 .ForMember(dest => dest.RecordCreatedOn, opt => opt.MapFrom(src => src.RecordCreatedOn))
                 .ForMember(dest => dest.RecordCreatedBy, opt => opt.MapFrom(src => src.RecordCreatedBy.ToString()))
@@ -75,17 +75,17 @@ namespace Phytel.API.DataDomain.Medication.Test.Search
                 .ForMember(dest => dest.UpdatedBy, opt => opt.MapFrom(src => src.UpdatedBy.ToString()));
             var req = new DomainRequest {Context = "NG", ContractNumber = "InHealth001"};
             var repo = MedicationRepositoryFactory.GetMedicationRepository(req, RepositoryType.MedicationMapping);
-            var MedMp = (List<MedicationMappingData>) repo.InsertAll(medmaps.ToList<object>());
+            var MedMp = (List<MedicationMapData>) repo.InsertAll(medmaps.ToList<object>());
 
             return MedMp;
         }
 
-        private static List<MedicationMappingData> HydrateMedMappingList(Dictionary<MedicationKey, List<MedicationData>> medGrouping)
+        private static List<MedicationMapData> HydrateMedMappingList(Dictionary<MedicationKey, List<MedicationData>> medGrouping)
         {
-            var medmaps = new List<MedicationMappingData>();
+            var medmaps = new List<MedicationMapData>();
             foreach (MedicationKey key in medGrouping.Keys)
             {
-                var medmap = new MedicationMappingData
+                var medmap = new MedicationMapData
                 {
                     Custom = false,
                     DeleteFlag = false,
@@ -144,7 +144,7 @@ namespace Phytel.API.DataDomain.Medication.Test.Search
             return key;
         }
 
-        private MedicationKey CreateMedicationMappingKey(MedicationMappingData md)
+        private MedicationKey CreateMedicationMappingKey(MedicationMapData md)
         {
             var key = new MedicationKey
             {

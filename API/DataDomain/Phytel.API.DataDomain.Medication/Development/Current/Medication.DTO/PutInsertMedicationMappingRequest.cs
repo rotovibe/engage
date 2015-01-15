@@ -8,7 +8,7 @@ namespace Phytel.API.DataDomain.Medication.DTO
     public class PutInsertMedicationMappingRequest : IDataDomainRequest
     {
         [ApiMember(Name = "Medications", Description = "Medications to insert", ParameterType = "property", DataType = "List<MedicationData>", IsRequired = false)]
-        public DTO.MedicationMappingData MedicationMapping { get; set; }
+        public DTO.MedicationMapData MedicationMapping { get; set; }
 
         [ApiMember(Name = "UserId", Description = "UserId of the logged in user", ParameterType = "property", DataType = "string", IsRequired = false)]
         public string UserId { get; set; }

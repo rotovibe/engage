@@ -11,6 +11,6 @@ namespace Phytel.API.AppDomain.NG.Medication
         List<PatientMedSupp> GetPatientMedSupps(GetPatientMedSuppsRequest request);
         PatientMedSupp UpdatePatientMedSupp(PostPatientMedSuppRequest request);
         PatientMedSupp InitializePatientMedSupp(PostInitializePatientMedSuppRequest request);
-        DTO.Medication InitializeMedSupp(PostInitializeMedSuppRequest request);
+        MedicationMap InitializeMedicationMap(PostInitializeMedicationMapRequest request);
     }
 }

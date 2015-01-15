@@ -79,14 +79,14 @@ namespace Phytel.API.DataDomain.Medication.Service
         }
 
         #region Initialize
-        public PutInitializeMedSuppDataResponse Put(PutInitializeMedSuppDataRequest request)
+        public PutInitializeMedicationMapDataResponse Put(PutInitializeMedicationMapDataRequest request)
         {
-            PutInitializeMedSuppDataResponse response = new PutInitializeMedSuppDataResponse { Version = request.Version };
+            PutInitializeMedicationMapDataResponse response = new PutInitializeMedicationMapDataResponse { Version = request.Version };
 
             try
             {
                 RequireUserId(request);
-                response.MedicationData = Manager.InitializeMedication(request);
+                response.MedicationMappingData = Manager.InitializeMedicationMap(request);
             }
             catch (Exception ex)
             {
@@ -97,14 +97,14 @@ namespace Phytel.API.DataDomain.Medication.Service
         #endregion
 
         #region Puts
-        public PutMedicationDataResponse Put(PutMedicationDataRequest request)
+        public PutMedicationMapDataResponse Put(PutMedicationMapDataRequest request)
         {
-            PutMedicationDataResponse response = new PutMedicationDataResponse { Version = request.Version };
+            PutMedicationMapDataResponse response = new PutMedicationMapDataResponse { Version = request.Version };
 
             try
             {
                 RequireUserId(request);
-                response.MedicationData = Manager.UpdateMedication(request);
+                response.MedicationMappingData = Manager.UpdateMedicationMap(request);
             }
             catch (Exception ex)
             {

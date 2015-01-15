@@ -5,6 +5,6 @@ namespace Phytel.API.DataDomain.Medication
 {
     public interface IMedicationMappingDataManager
     {
-        DTO.MedicationMappingData InsertMedicationMapping(PutInsertMedicationMappingRequest request, DTO.MedicationMappingData mm);
+        DTO.MedicationMapData InsertMedicationMapping(PutInsertMedicationMappingRequest request, DTO.MedicationMapData mm);
     }
 }

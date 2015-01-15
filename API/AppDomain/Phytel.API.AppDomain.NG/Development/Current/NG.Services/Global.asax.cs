@@ -202,8 +202,8 @@ namespace Phytel.API.AppDomain.NG.Service
                     .ForMember(d => d.CompositeName, opt => opt.MapFrom(src => src.ProprietaryName + " " + src.ProprietaryNameSuffix));
 
                 #region Medication & PatientMedSupp
-                Mapper.CreateMap<MedicationData, DTO.Medication>();
-                Mapper.CreateMap<DTO.Medication, MedicationData>();
+                Mapper.CreateMap<MedicationMapData, DTO.MedicationMap>();
+                Mapper.CreateMap<DTO.MedicationMap, MedicationMapData>();
                 Mapper.CreateMap<PatientMedSuppData, PatientMedSupp>();
                 Mapper.CreateMap<PatientMedSupp, PatientMedSuppData>();
                 #endregion

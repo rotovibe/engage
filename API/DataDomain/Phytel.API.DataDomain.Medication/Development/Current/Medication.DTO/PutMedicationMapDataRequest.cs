@@ -4,11 +4,11 @@ using ServiceStack.ServiceHost;
 
 namespace Phytel.API.DataDomain.Medication.DTO
 {
-    [Route("/{Context}/{Version}/{ContractNumber}/Medication/Update", "PUT")]
-    public class PutMedicationDataRequest : IDataDomainRequest
+    [Route("/{Context}/{Version}/{ContractNumber}/MedicationMap/Update", "PUT")]
+    public class PutMedicationMapDataRequest : IDataDomainRequest
     {
-        [ApiMember(Name = "MedicationData", Description = "MedicationData that need to be updated", ParameterType = "property", DataType = "MedicationData", IsRequired = true)]
-        public MedicationData MedicationData { get; set; }
+        [ApiMember(Name = "MedicationMappingData", Description = "MedicationMappingData that need to be updated", ParameterType = "property", DataType = "MedicationMappingData", IsRequired = true)]
+        public MedicationMapData MedicationMappingData { get; set; }
 
         [ApiMember(Name = "Context", Description = "Product Context requesting the PatientSystem", ParameterType = "property", DataType = "string", IsRequired = false)]
         public string Context { get; set; }

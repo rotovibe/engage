@@ -12,19 +12,19 @@ namespace Phytel.API.AppDomain.NG.Medication
         public ISearchManager SearchManager { get; set; }
 
 
-        #region Medication - Posts
-        public DTO.Medication InitializeMedSupp(PostInitializeMedSuppRequest request)
+        #region MedicationMap - Posts
+        public DTO.MedicationMap InitializeMedicationMap(PostInitializeMedicationMapRequest request)
         {
-            DTO.Medication medication = null;
+            DTO.MedicationMap med = null;
             try
             {
 
-                MedicationData data = EndpointUtil.InitializeMedSupp(request);
+                MedicationMapData data = EndpointUtil.InitializeMedicationMap(request);
                 if (data != null)
                 {
-                    medication = Mapper.Map<DTO.Medication>(data);
+                    med = Mapper.Map<DTO.MedicationMap>(data);
                 }
-                return medication;
+                return med;
             }
             catch (Exception ex) { throw ex; }
         }
@@ -73,27 +73,27 @@ namespace Phytel.API.AppDomain.NG.Medication
                     //Update Medication collection to add any newly initialized medication and then register in search index.
                     if (request.PatientMedSupp.IsNewAllergy)
                     {
-                        PostMedicationRequest req = new DTO.PostMedicationRequest
+                        PostMedicationMapRequest req = new DTO.PostMedicationMapRequest
                         {
-                            Medication = new DTO.Medication {
+                            MedicationMap = new DTO.MedicationMap {
                                 Id = request.PatientMedSupp.MedSuppId,
-                                NDC = string.Empty,
-                                ProductId = string.Empty,
-                                ProprietaryName = string.Empty,
-                                ProprietaryNameSuffix = string.Empty,
-                                SubstanceName = string.Empty,
-                                RouteName = string.Empty,
-                                DosageFormName = string.Empty,
-                                Strength = string.Empty
+                                //NDC = string.Empty,
+                                //ProductId = string.Empty,
+                                //ProprietaryName = string.Empty,
+                                //ProprietaryNameSuffix = string.Empty,
+                                //SubstanceName = string.Empty,
+                                //RouteName = string.Empty,
+                                //DosageFormName = string.Empty,
+                                //Strength = string.Empty
                             },
                             ContractNumber = request.ContractNumber,
                             UserId = request.UserId,
                             Version = request.Version
                         };
-                        MedicationData medData = EndpointUtil.UpdateMedication(req);
-                        DTO.Medication newMed = Mapper.Map<DTO.Medication>(medData);
+                        MedicationMapData medData = EndpointUtil.UpdateMedicationMap(req);
+                        DTO.MedicationMap newMed = Mapper.Map<DTO.MedicationMap>(medData);
                         // Register newly initialized medication in search index.
-                        SearchManager.RegisterMedDocumentInSearchIndex(newMed, req.ContractNumber);
+                       // SearchManager.RegisterMedDocumentInSearchIndex(newMed, req.ContractNumber);
                         // For newly initialized medication, calculate NDC codes.
                         request.RecalculateNDC = true;
                     }

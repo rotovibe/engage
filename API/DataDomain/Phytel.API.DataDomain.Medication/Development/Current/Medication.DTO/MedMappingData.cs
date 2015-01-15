@@ -2,7 +2,7 @@
 
 namespace Phytel.API.DataDomain.Medication.DTO
 {
-    public class MedicationMappingData
+    public class MedicationMapData
     {
         public string Id { get; set; }
         public string SubstanceName { get; set; }
