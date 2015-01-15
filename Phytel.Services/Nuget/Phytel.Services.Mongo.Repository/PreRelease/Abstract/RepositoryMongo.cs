@@ -62,6 +62,18 @@ namespace Phytel.Services.Mongo.Repository
                 );
         }
 
+        public List<T> FindAsList<T, TKey>(IMongoQuery query) where T : class, IMongoEntity<TKey>
+        {
+            return
+                RetryHelper.DoWithRetry<List<T>>(() =>
+                {
+                    return Find<T, TKey>(query).ToList();
+                },
+                    RetryHelper.RETRIES,
+                    RetryHelper.RETRYDELAY
+                );
+        }
+
         public T FindAndModify<T, TKey>(IMongoQuery query, IMongoSortBy sort, IMongoUpdate update) where T : class, IMongoEntity<TKey>
         {
             return
