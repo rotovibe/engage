@@ -19,6 +19,7 @@ namespace Phytel.API.DataDomain.Medication.DTO
         public string Form { get; set; }
         public string Unit { get; set; }
         public string Strength { get; set; }
+        public string FamilyId { get; set; }
 
         public double Version { get; set; }
         public string UpdatedBy { get; set; }

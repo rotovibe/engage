@@ -80,7 +80,48 @@ namespace DataDomain.Medication.Repo
 
         public object InsertAll(List<object> entities)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var list = entities.Cast<DTO.MedicationMappingData>();
+                var mColl = new List<MEMedicationMapping>();
+
+                list.ToList().ForEach(mm =>
+                {
+                    var MEMedMap = new MEMedicationMapping("5368ff2ad4332316288f3e3e")
+                    {
+                        Custom = mm.Custom,
+                        FullName = mm.FullName,
+                        LastUpdatedOn = mm.LastUpdatedOn,
+                        SubstanceName = mm.SubstanceName,
+                        TTLDate = mm.TTLDate,
+                        Verified = mm.Verified,
+                        Version = mm.Version,
+                        //UpdatedBy = mm.UpdatedBy,
+                        Strength = mm.Strength,
+                        Route = mm.Route,
+                        Form = mm.Form,
+                        DeleteFlag = false
+                    };
+                    mColl.Add(MEMedMap);
+                });
+
+                using (MedicationMongoContext ctx = new MedicationMongoContext(ContractDBName))
+                {
+                    object result = null;
+                    ctx.MedicationMap.Collection.InsertBatch(mColl);
+
+                    var mMapsData = new List<MedicationMappingData>();
+                    var mMaps = ctx.MedicationMap.Collection.FindAll().ToList();
+
+                    mMaps.ForEach(mm => mMapsData.Add(Mapper.Map<MedicationMappingData>(mm)));
+
+                    return mMapsData;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("DD:PatientProgramRepository:FindByID()::" + ex.Message, ex.InnerException);
+            }
         }
 
         public void Delete(object entity)

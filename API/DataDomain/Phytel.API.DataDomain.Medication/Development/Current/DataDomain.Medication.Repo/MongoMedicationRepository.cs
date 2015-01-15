@@ -59,6 +59,7 @@ namespace DataDomain.Medication.Repo
                         DeleteFlag = m.DeleteFlag,
                         EndDate = m.EndDate,
                         Form = m.Form,
+                        FamilyId = m.FamilyId,
                         Version = m.Version,
                         Unit = m.Unit,
                         Strength = m.Strength,
@@ -151,51 +152,33 @@ namespace DataDomain.Medication.Repo
         public object Update(object entity)
         {
             bool result = false;
-            PutMedicationDataRequest pa = (PutMedicationDataRequest)entity;
-            MedicationData pt = pa.MedicationData;
+            var mlist = entity as List<MedicationData>;
             try
             {
                 using (MedicationMongoContext ctx = new MedicationMongoContext(ContractDBName))
                 {
-                    var q = MB.Query<MEMedication>.EQ(b => b.Id, ObjectId.Parse(pt.Id));
-                    var uv = new List<MB.UpdateBuilder>();
-                    uv.Add(MB.Update.Set(MEMedication.UpdatedByProperty, ObjectId.Parse(this.UserId)));
-                    uv.Add(MB.Update.Set(MEMedication.VersionProperty, pa.Version));
-                    uv.Add(MB.Update.Set(MEMedication.LastUpdatedOnProperty, System.DateTime.UtcNow));
-                    uv.Add(MB.Update.Set(MEMedication.DeleteFlagProperty, pt.DeleteFlag));
-                    uv.Add(MB.Update.Set(MEMedication.NDCProperty, pt.NDC));
-                    uv.Add(MB.Update.Set(MEMedication.ProductIdProperty, pt.ProductId));
-                    uv.Add(MB.Update.Set(MEMedication.ProprietaryNameProperty, pt.ProprietaryName));
-                    uv.Add(MB.Update.Set(MEMedication.ProprietaryNameSuffixProperty, pt.ProprietaryNameSuffix));
-                    uv.Add(MB.Update.Set(MEMedication.SubstanceNameProperty, pt.SubstanceName));
-                    uv.Add(MB.Update.Set(MEMedication.RouteProperty, pt.Route));
-                    uv.Add(MB.Update.Set(MEMedication.FormProperty, pt.Form));
-                    uv.Add(MB.Update.Set(MEMedication.StrengthProperty, pt.Strength));
-                    DataAuditType type;
-                    if (pt.DeleteFlag)
-                    {
-                        uv.Add(MB.Update.Set(MEMedication.TTLDateProperty, System.DateTime.UtcNow.AddDays(_expireDays)));
-                        type = DataAuditType.Delete;
-                    }
-                    else
-                    {
-                        uv.Add(MB.Update.Set(MEMedication.TTLDateProperty, BsonNull.Value));
-                        type = DataAuditType.Update;
-                    }
-                    IMongoUpdate update = MB.Update.Combine(uv);
-                    ctx.Medications.Collection.Update(q, update);
+                    var bulk = ctx.Medications.Collection.InitializeUnorderedBulkOperation();
 
-                    AuditHelper.LogDataAudit(this.UserId,
-                                            MongoCollectionName.Medication.ToString(),
-                                            pt.Id,
-                                            type,
-                                            pa.ContractNumber);
+                    foreach (MEMedication fooDoc in ctx.Medications)
+                    {
+                        var update = new UpdateDocument { { fooDoc.ToBsonDocument() } };
+                        update.Set("fmid", ObjectId.Parse(GetMedFamilyId(mlist, fooDoc.Id.ToString())));
+                        bulk.Find(Query.EQ("_id", fooDoc.Id)).Upsert().UpdateOne(update);
+                    }
+                    BulkWriteResult bwr = bulk.Execute();
 
                     result = true;
                 }
                 return result as object;
             }
             catch (Exception) { throw; }
+        }
+
+        private string GetMedFamilyId(List<MedicationData> mlist, string p)
+        {
+            var med = mlist.Find(m => m.Id == p);
+            var famid = med.FamilyId;
+            return famid;
         }
 
         public void CacheByID(List<string> entityIDs)
