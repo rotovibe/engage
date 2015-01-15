@@ -19,6 +19,8 @@ namespace Phytel.Services.Mongo.Repository
 
         MongoCursor<T> Find<T, TKey>(IMongoQuery query) where T : class, IMongoEntity<TKey>;
 
+        List<T> FindAsList<T, TKey>(IMongoQuery query) where T : class, IMongoEntity<TKey>;
+
         T FindAndModify<T, TKey>(IMongoQuery query, IMongoSortBy sort, IMongoUpdate update) where T : class, IMongoEntity<TKey>;
 
         T First<T, TKey>(Expression<Func<T, bool>> predicate) where T : class, IMongoEntity<TKey>;
