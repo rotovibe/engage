@@ -64,34 +64,5 @@ namespace Phytel.API.DataDomain.Medication
             catch (Exception ex) { throw ex; }
         }
 
-        public MedicationMapData InitializeMedicationMap(PutInitializeMedicationMapDataRequest request)
-        {
-            try
-            {
-                var repo = MedicationRepositoryFactory.GetMedicationRepository(request, RepositoryType.Medication);
-                return (MedicationMapData)repo.Initialize(request);
-            }
-            catch (Exception ex) { throw ex; }
-        }
-
-        public MedicationMapData UpdateMedicationMap(PutMedicationMapDataRequest request)
-        {
-            try
-            {
-                MedicationMapData result = null;
-                var repo = MedicationRepositoryFactory.GetMedicationRepository(request, RepositoryType.Medication);
-
-                if (request.MedicationMappingData != null)
-                {
-                    bool status = (bool)repo.Update(request);
-                    if (status)
-                    {
-                        result = (MedicationMapData)repo.FindByID(request.MedicationMappingData.Id);
-                    }
-                }
-                return result;
-            }
-            catch (Exception ex) { throw ex; }
-        }
     }
 }   

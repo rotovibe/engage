@@ -65,7 +65,7 @@ namespace DataDomain.Medication.Repo
 
                 using (MedicationMongoContext ctx = new MedicationMongoContext(ContractDBName))
                 {
-                    ctx.MedicationMap.Collection.Insert(MEMedMap);
+                    ctx.MedicationMaps.Collection.Insert(MEMedMap);
 
                     AuditHelper.LogDataAudit(this.UserId,
                                             MongoCollectionName.MedicationMap.ToString(),
@@ -108,10 +108,10 @@ namespace DataDomain.Medication.Repo
                 using (MedicationMongoContext ctx = new MedicationMongoContext(ContractDBName))
                 {
                     object result = null;
-                    ctx.MedicationMap.Collection.InsertBatch(mColl);
+                    ctx.MedicationMaps.Collection.InsertBatch(mColl);
 
                     var mMapsData = new List<MedicationMapData>();
-                    var mMaps = ctx.MedicationMap.Collection.FindAll().ToList();
+                    var mMaps = ctx.MedicationMaps.Collection.FindAll().ToList();
 
                     mMaps.ForEach(mm => mMapsData.Add(Mapper.Map<MedicationMapData>(mm)));
 
@@ -126,31 +126,7 @@ namespace DataDomain.Medication.Repo
 
         public void Delete(object entity)
         {
-            DeleteMedSuppsByPatientIdDataRequest request = (DeleteMedSuppsByPatientIdDataRequest)entity;
-            try
-            {
-                using (MedicationMongoContext ctx = new MedicationMongoContext(ContractDBName))
-                {
-                    var q = MB.Query<MEPatientMedSupp>.EQ(b => b.Id, ObjectId.Parse(request.Id));
-
-                    var uv = new List<MB.UpdateBuilder>();
-                    uv.Add(MB.Update.Set(MEPatientMedSupp.TTLDateProperty, DateTime.UtcNow.AddDays(_expireDays)));
-                    uv.Add(MB.Update.Set(MEPatientMedSupp.LastUpdatedOnProperty, DateTime.UtcNow));
-                    uv.Add(MB.Update.Set(MEPatientMedSupp.DeleteFlagProperty, true));
-                    uv.Add(MB.Update.Set(MEPatientMedSupp.UpdatedByProperty, ObjectId.Parse(this.UserId)));
-
-                    IMongoUpdate update = MB.Update.Combine(uv);
-                    ctx.PatientMedSupps.Collection.Update(q, update);
-
-                    AuditHelper.LogDataAudit(this.UserId,
-                                            MongoCollectionName.PatientMedSupp.ToString(),
-                                            request.Id.ToString(),
-                                            DataAuditType.Delete,
-                                            request.ContractNumber);
-
-                }
-            }
-            catch (Exception) { throw; }
+            throw new NotImplementedException();
         }
 
         public void DeleteAll(List<object> entities)
@@ -160,23 +136,22 @@ namespace DataDomain.Medication.Repo
 
         public object FindByID(string entityID)
         {
-            PatientMedSuppData data = null;
             try
             {
-                using (MedicationMongoContext ctx = new MedicationMongoContext(ContractDBName))
-                {
-                    List<IMongoQuery> queries = new List<IMongoQuery>();
-                    queries.Add(Query.EQ(MEPatientMedSupp.IdProperty, ObjectId.Parse(entityID)));
-                    IMongoQuery mQuery = Query.And(queries);
-                    MEPatientMedSupp mePMS = ctx.PatientMedSupps.Collection.Find(mQuery).FirstOrDefault();
-                    if (mePMS != null)
-                    {
-                        data = AutoMapper.Mapper.Map<PatientMedSuppData>(mePMS);
-                    }
-                }
-                return data;
+                object result = null;
+
+                var query = Query.And(
+                    Query<MEMedicationMapping>.EQ(b => b.Id, ObjectId.Parse(entityID)),
+                    Query<MEMedicationMapping>.EQ(b => b.DeleteFlag, false));
+
+                var meMMP = Context.MedicationMaps.Collection.Find(query).FirstOrDefault();
+
+                if (meMMP == null) return result;
+
+                result = Mapper.Map<DTO.MedicationMapData>(meMMP);
+                return result;
             }
-            catch (Exception) { throw; }
+            catch (Exception ex) { throw ex;  }
         }
 
         public Tuple<string, IEnumerable<object>> Select(Phytel.API.Interface.APIExpression expression)
@@ -192,149 +167,79 @@ namespace DataDomain.Medication.Repo
         public object Update(object entity)
         {
             bool result = false;
-            PutPatientMedSuppDataRequest request = (PutPatientMedSuppDataRequest)entity;
-            PatientMedSuppData data = request.PatientMedSuppData;
+            PutMedicationMapDataRequest pa = (PutMedicationMapDataRequest)entity;
+            MedicationMapData data = pa.MedicationMappingData;
             try
             {
                 using (MedicationMongoContext ctx = new MedicationMongoContext(ContractDBName))
                 {
-                    var q = MB.Query<MEPatientMedSupp>.EQ(b => b.Id, ObjectId.Parse(data.Id));
+                    var q = MB.Query<MEMedicationMapping>.EQ(b => b.Id, ObjectId.Parse(data.Id));
                     var uv = new List<MB.UpdateBuilder>();
-                    uv.Add(MB.Update.Set(MEPatientMedSupp.UpdatedByProperty, ObjectId.Parse(this.UserId)));
-                    uv.Add(MB.Update.Set(MEPatientMedSupp.VersionProperty, request.Version));
-                    uv.Add(MB.Update.Set(MEPatientMedSupp.LastUpdatedOnProperty, System.DateTime.UtcNow));
-                    if (data.PatientId != null) uv.Add(MB.Update.Set(MEPatientMedSupp.PatientIdProperty, ObjectId.Parse(data.PatientId)));
-                    if (!string.IsNullOrEmpty(data.MedSuppName))
+                    uv.Add(MB.Update.Set(MEMedicationMapping.UpdatedByProperty, ObjectId.Parse(this.UserId)));
+                    uv.Add(MB.Update.Set(MEMedicationMapping.VersionProperty, pa.Version));
+                    uv.Add(MB.Update.Set(MEMedicationMapping.LastUpdatedOnProperty, System.DateTime.UtcNow));
+                    if (!string.IsNullOrEmpty(data.FullName))
                     {
-                        uv.Add(MB.Update.Set(MEPatientMedSupp.NameProperty, data.MedSuppName));
+                        uv.Add(MB.Update.Set(MEMedicationMapping.FullNameProperty, data.FullName));
                     }
                     else
                     {
-                        uv.Add(MB.Update.Set(MEPatientMedSupp.NameProperty, BsonNull.Value));
+                        uv.Add(MB.Update.Set(MEMedicationMapping.FullNameProperty, BsonNull.Value));
                     }
-                    if (data.CategoryId != 0) uv.Add(MB.Update.Set(MEPatientMedSupp.CategoryProperty, data.CategoryId));
-                    if (data.TypeId != null) uv.Add(MB.Update.Set(MEPatientMedSupp.TypeIdProperty, ObjectId.Parse(data.TypeId)));
-                    if (data.StatusId != 0) uv.Add(MB.Update.Set(MEPatientMedSupp.StatusProperty, data.StatusId));
-                    if (!string.IsNullOrEmpty(data.Dosage))
+                    if (!string.IsNullOrEmpty(data.SubstanceName))
                     {
-                        uv.Add(MB.Update.Set(MEPatientMedSupp.DosageProperty, data.Dosage));
+                        uv.Add(MB.Update.Set(MEMedicationMapping.SubstanceNameProperty, data.SubstanceName));
                     }
                     else
                     {
-                        uv.Add(MB.Update.Set(MEPatientMedSupp.DosageProperty, BsonNull.Value));
+                        uv.Add(MB.Update.Set(MEMedicationMapping.SubstanceNameProperty, BsonNull.Value));
                     }
                     if (!string.IsNullOrEmpty(data.Strength))
                     {
-                        uv.Add(MB.Update.Set(MEPatientMedSupp.StrengthProperty, data.Strength));
+                        uv.Add(MB.Update.Set(MEMedicationMapping.StrengthProperty, data.Strength));
                     }
                     else
                     {
-                        uv.Add(MB.Update.Set(MEPatientMedSupp.StrengthProperty, BsonNull.Value));
+                        uv.Add(MB.Update.Set(MEMedicationMapping.StrengthProperty, BsonNull.Value));
                     }
                     if (!string.IsNullOrEmpty(data.Form))
                     {
-                        uv.Add(MB.Update.Set(MEPatientMedSupp.FormProperty, data.Form));
+                        uv.Add(MB.Update.Set(MEMedicationMapping.FormProperty, data.Form));
                     }
                     else
                     {
-                        uv.Add(MB.Update.Set(MEPatientMedSupp.FormProperty, BsonNull.Value));
+                        uv.Add(MB.Update.Set(MEMedicationMapping.FormProperty, BsonNull.Value));
                     }
                     if (!string.IsNullOrEmpty(data.Route))
                     {
-                        uv.Add(MB.Update.Set(MEPatientMedSupp.RouteProperty, data.Route));
-                    }
-                    else 
-                    {
-                        uv.Add(MB.Update.Set(MEPatientMedSupp.RouteProperty, BsonNull.Value));
-                    }
-                    uv.Add(MB.Update.SetWrapped<List<string>>(MEPatientMedSupp.PharmClassProperty, data.PharmClasses));
-                    uv.Add(MB.Update.SetWrapped<List<string>>(MEPatientMedSupp.NDCProperty, data.NDCs));
-                    if (!string.IsNullOrEmpty(data.FreqQuantity))
-                    {
-                        uv.Add(MB.Update.Set(MEPatientMedSupp.FreqQuantityProperty, data.FreqQuantity));
-                    }
-                    else 
-                    {
-                        uv.Add(MB.Update.Set(MEPatientMedSupp.FreqQuantityProperty, BsonNull.Value));
-                    }
-                    if (data.FreqHowOftenId != null)
-                    {
-                        uv.Add(MB.Update.Set(MEPatientMedSupp.FreqHowOftenIdProperty, ObjectId.Parse(data.FreqHowOftenId)));
+                        uv.Add(MB.Update.Set(MEMedicationMapping.RouteProperty, data.Route));
                     }
                     else
                     {
-                        uv.Add(MB.Update.Set(MEPatientMedSupp.FreqHowOftenIdProperty, BsonNull.Value));
+                        uv.Add(MB.Update.Set(MEMedicationMapping.RouteProperty, BsonNull.Value));
                     }
-                    if (data.FreqWhenId != null)
-                    {
-                        uv.Add(MB.Update.Set(MEPatientMedSupp.FreqWhenIdProperty, ObjectId.Parse(data.FreqWhenId)));
-                    }
-                    else
-                    {
-                        uv.Add(MB.Update.Set(MEPatientMedSupp.FreqWhenIdProperty, BsonNull.Value));
-                    }
-                    if (data.SourceId != null) { uv.Add(MB.Update.Set(MEPatientMedSupp.SourceIdProperty, ObjectId.Parse(data.SourceId))); }
-                    if (data.StartDate != null)
-                    {
-                        uv.Add(MB.Update.Set(MEPatientMedSupp.StartDateProperty, data.StartDate));
-                    }
-                    else
-                    {
-                        uv.Add(MB.Update.Set(MEPatientMedSupp.StartDateProperty, BsonNull.Value));
-                    }
-                    if (data.EndDate != null)
-                    {
-                        uv.Add(MB.Update.Set(MEPatientMedSupp.EndDateProperty, data.EndDate));
-                    }
-                    else
-                    {
-                        uv.Add(MB.Update.Set(MEPatientMedSupp.EndDateProperty, BsonNull.Value));
-                    }
-                    if (!string.IsNullOrEmpty(data.Reason))
-                    {
-                        uv.Add(MB.Update.Set(MEPatientMedSupp.ReasonProperty, data.Reason));
-                    }
-                    else 
-                    {
-                        uv.Add(MB.Update.Set(MEPatientMedSupp.ReasonProperty, BsonNull.Value));
-                    }
-                    if (!string.IsNullOrEmpty(data.Notes))
-                    {
-                        uv.Add(MB.Update.Set(MEPatientMedSupp.NotesProperty, data.Notes));
-                    }
-                    else
-                    {
-                        uv.Add(MB.Update.Set(MEPatientMedSupp.NotesProperty, BsonNull.Value));
-                    }
-                    if (!string.IsNullOrEmpty(data.PrescribedBy))
-                    {
-                        uv.Add(MB.Update.Set(MEPatientMedSupp.PrescribedByProperty, data.PrescribedBy));
-                    }
-                    else
-                    {
-                        uv.Add(MB.Update.Set(MEPatientMedSupp.PrescribedByProperty, BsonNull.Value));
-                    }
-                    uv.Add(MB.Update.Set(MEPatientMedSupp.SystemProperty, data.SystemName));
-                    uv.Add(MB.Update.Set(MEPatientMedSupp.DeleteFlagProperty, data.DeleteFlag));
+                    uv.Add(MB.Update.Set(MEMedicationMapping.CustomProperty, data.Custom));
+                    uv.Add(MB.Update.Set(MEMedicationMapping.VerifiedProperty, data.Verified));
+                    uv.Add(MB.Update.Set(MEMedicationMapping.DeleteFlagProperty, data.DeleteFlag));
                     DataAuditType type;
                     if (data.DeleteFlag)
                     {
-                        uv.Add(MB.Update.Set(MEPatientMedSupp.TTLDateProperty, System.DateTime.UtcNow.AddDays(_expireDays)));
+                        uv.Add(MB.Update.Set(MEMedicationMapping.TTLDateProperty, System.DateTime.UtcNow.AddDays(_expireDays)));
                         type = DataAuditType.Delete;
                     }
                     else
                     {
-                        uv.Add(MB.Update.Set(MEPatientMedSupp.TTLDateProperty, BsonNull.Value));
+                        uv.Add(MB.Update.Set(MEMedicationMapping.TTLDateProperty, BsonNull.Value));
                         type = DataAuditType.Update;
                     }
                     IMongoUpdate update = MB.Update.Combine(uv);
-                    ctx.PatientMedSupps.Collection.Update(q, update);
+                    ctx.MedicationMaps.Collection.Update(q, update);
 
                     AuditHelper.LogDataAudit(this.UserId,
-                                            MongoCollectionName.PatientMedSupp.ToString(),
+                                            MongoCollectionName.MedicationMap.ToString(),
                                             data.Id,
                                             type,
-                                            request.ContractNumber);
+                                            pa.ContractNumber);
 
                     result = true;
                 }
@@ -350,93 +255,12 @@ namespace DataDomain.Medication.Repo
 
         public void UndoDelete(object entity)
         {
-            UndoDeletePatientMedSuppsDataRequest request = (UndoDeletePatientMedSuppsDataRequest)entity;
-            try
-            {
-                using (MedicationMongoContext ctx = new MedicationMongoContext(ContractDBName))
-                {
-                    var q = MB.Query<MEPatientMedSupp>.EQ(b => b.Id, ObjectId.Parse(request.PatientMedSuppId));
-
-                    var uv = new List<MB.UpdateBuilder>();
-                    uv.Add(MB.Update.Set(MEPatientMedSupp.TTLDateProperty, BsonNull.Value));
-                    uv.Add(MB.Update.Set(MEPatientMedSupp.DeleteFlagProperty, false));
-                    uv.Add(MB.Update.Set(MEPatientMedSupp.LastUpdatedOnProperty, DateTime.UtcNow));
-                    uv.Add(MB.Update.Set(MEPatientMedSupp.UpdatedByProperty, ObjectId.Parse(this.UserId)));
-
-                    IMongoUpdate update = MB.Update.Combine(uv);
-                    ctx.PatientMedSupps.Collection.Update(q, update);
-
-                    AuditHelper.LogDataAudit(this.UserId,
-                                            MongoCollectionName.PatientMedSupp.ToString(),
-                                            request.PatientMedSuppId.ToString(),
-                                            DataAuditType.UndoDelete,
-                                            request.ContractNumber);
-
-                }
-            }
-            catch (Exception) { throw; }
+            throw new NotImplementedException();
         }
 
         public object FindByPatientId(object request)
         {
-            List<PatientMedSuppData> list = null;
-            GetPatientMedSuppsDataRequest dataRequest = (GetPatientMedSuppsDataRequest)request;
-            try
-            {
-                using (MedicationMongoContext ctx = new MedicationMongoContext(ContractDBName))
-                {
-                    List<IMongoQuery> queries = new List<IMongoQuery>();
-                    queries.Add(Query.EQ(MEPatientMedSupp.PatientIdProperty, ObjectId.Parse(dataRequest.PatientId)));
-                    queries.Add(Query.EQ(MEPatientMedSupp.DeleteFlagProperty, false));
-                    queries.Add(Query.EQ(MEPatientMedSupp.TTLDateProperty, BsonNull.Value));
-                    if (dataRequest.StatusIds != null && dataRequest.StatusIds.Count > 0)
-                    {
-                        queries.Add(Query.In(MEPatientMedSupp.StatusProperty, new BsonArray(dataRequest.StatusIds)));
-                    }
-                    if (dataRequest.CategoryIds != null && dataRequest.CategoryIds.Count > 0)
-                    {
-                        queries.Add(Query.In(MEPatientMedSupp.CategoryProperty, new BsonArray(dataRequest.CategoryIds)));
-                    }
-                    IMongoQuery mQuery = Query.And(queries);
-                    List<MEPatientMedSupp> mePMSs = ctx.PatientMedSupps.Collection.Find(mQuery).ToList();
-                    if (mePMSs != null && mePMSs.Count > 0)
-                    {
-                        list = new List<PatientMedSuppData>();
-                        mePMSs.ForEach(p =>
-                        {
-                            PatientMedSuppData data = AutoMapper.Mapper.Map<PatientMedSuppData>(p);
-                            list.Add(data);
-                        });
-                    }
-                }
-                return list;
-            }
-            catch (Exception) { throw; }
-        }
-
-        private List<string> getPharmClassses(MedicationMongoContext ctx, string name)
-        {
-            List<string> result = null;
-            List<MEMedication> meMs = ctx.Medications.Collection.Find(Query.EQ(MEMedication.FullNameProperty, name)).SetFields(MEMedication.PharmClassProperty).ToList();
-            if (meMs != null && meMs.Count > 0)
-            {
-                meMs.ForEach(m =>
-                {
-                    if (m.PharmClass != null && m.PharmClass.Count > 0)
-                    {
-                        result = new List<string>();
-                        m.PharmClass.ForEach(p =>
-                        {
-                            // get only unique pharm classes codes.
-                            if (!result.Contains(p))
-                            {
-                                result.Add(p);
-                            }
-                        });
-                    }
-                });
-            }
-            return result;
+            throw new NotImplementedException();
         }
 
         public object FindNDCCodes(object request)
@@ -446,62 +270,39 @@ namespace DataDomain.Medication.Repo
 
         public object Initialize(object newEntity)
         {
-            PutInitializePatientMedSuppDataRequest request = (PutInitializePatientMedSuppDataRequest)newEntity;
-            PatientMedSuppData data = null;
+            PutInitializeMedicationMapDataRequest request = (PutInitializeMedicationMapDataRequest)newEntity;
+            MedicationMapData data = null;
             try
             {
+                MEMedicationMapping meMM = new MEMedicationMapping(this.UserId)
+                {
+                    FullName = request.MedicationMapData.FullName,
+                    Custom = true,
+                    Verified = false,
+                    TTLDate = System.DateTime.UtcNow.AddDays(_initializeDays),
+                    DeleteFlag = false
+                };
+
                 using (MedicationMongoContext ctx = new MedicationMongoContext(ContractDBName))
                 {
-                    string medSuppName = getMedSuppName(ctx, ObjectId.Parse(request.MedSuppId));
-                
-                    MEPatientMedSupp meMS = new MEPatientMedSupp(this.UserId)
-                    {
-                        PatientId = ObjectId.Parse(request.PatientId),
-                        MedSuppId = ObjectId.Parse(request.MedSuppId),
-                        TTLDate = System.DateTime.UtcNow.AddDays(_initializeDays),
-                        SystemName = request.SystemName,
-                        CategoryId = (Category)request.CategoryId,
-                        TypeId = ObjectId.Parse(request.TypeId),
-                        PharmClasses = getPharmClassses(ctx, medSuppName),
-                        DeleteFlag = false
-                    };
-
-                    ctx.PatientMedSupps.Collection.Insert(meMS);
+                    ctx.MedicationMaps.Collection.Insert(meMM);
 
                     AuditHelper.LogDataAudit(this.UserId,
-                                            MongoCollectionName.PatientMedSupp.ToString(),
-                                            meMS.Id.ToString(),
+                                            MongoCollectionName.MedicationMap.ToString(),
+                                            meMM.Id.ToString(),
                                             DataAuditType.Insert,
                                             request.ContractNumber);
 
-                    data = new PatientMedSuppData
+                    data = new MedicationMapData
                     {
-                        Id = meMS.Id.ToString(),
-                        PatientId = meMS.PatientId.ToString(),
-                        MedSuppId = meMS.MedSuppId.ToString(),
-                        SystemName = meMS.SystemName,
-                        CategoryId = (int)meMS.CategoryId,
-                        TypeId = meMS.TypeId.ToString(),
-                        PharmClasses = meMS.PharmClasses,
-                        MedSuppName = medSuppName
+                        Id = meMM.Id.ToString(),
+                        FullName = meMM.FullName.ToUpper()
                     };
-                    // get corresponding Medication/Supplement name.
-                    getMedSuppName(ctx, meMS.MedSuppId);
                 }
                 return data;
             }
             catch (Exception) { throw; }
         }
 
-        private static string getMedSuppName(MedicationMongoContext ctx, ObjectId msid)
-        {
-            string name = null;
-            MEMedication meM = ctx.Medications.Collection.Find(Query.EQ(MEMedication.IdProperty, msid)).SetFields(MEMedication.FullNameProperty).FirstOrDefault();
-            if (meM != null)
-            {
-                name = meM.FullName.ToUpper();
-            }
-            return name;
-        }
     }
 }

@@ -4,11 +4,14 @@ using ServiceStack.ServiceHost;
 
 namespace Phytel.API.AppDomain.NG.DTO
 {
-    [Route("/{Version}/{ContractNumber}/PatientMedSupp/Update", "POST")]
+    [Route("/{Version}/{ContractNumber}/PatientMedSupp/Save", "POST")]
     public class PostPatientMedSuppRequest : IAppDomainRequest
     {
         [ApiMember(Name = "PatientMedSupp", Description = "PatientMedSupp details that need to be upserted.", ParameterType = "property", DataType = "PatientMedSupp", IsRequired = true)]
         public PatientMedSupp PatientMedSupp { get; set; }
+
+        [ApiMember(Name = "Insert", Description = "Indicates if the action is to create or update a patient med/supp", ParameterType = "path", DataType = "boolean", IsRequired = true)]
+        public bool Insert { get; set; }
 
         [ApiMember(Name = "RecalculateNDC", Description = "Indicates if NDC code should be recalculated in Edit mode.", ParameterType = "path", DataType = "boolean", IsRequired = true)]
         public bool RecalculateNDC { get; set; }

@@ -25,7 +25,7 @@ namespace Phytel.API.DataDomain.Allergy.Test
         public void InitializeMedicationMap_Test()
         {
             PutInitializeMedicationMapDataRequest request = new PutInitializeMedicationMapDataRequest {
-                Name = "TestMed",
+                MedicationMapData = new MedicationMapData { FullName  = "testname"},
                 Context = context,
                 ContractNumber = contractNumber,
                 UserId = userId,
@@ -42,10 +42,12 @@ namespace Phytel.API.DataDomain.Allergy.Test
         [TestMethod]
         public void UpdateMedicationMap_Test()
         {
-
             MedicationMapData data = new MedicationMapData
             {
-                Id = "54adb4ecd4332324dc0c77a3"
+                Id = "54b82870d433262acc525a17",
+                FullName = "testname123",
+                SubstanceName = "67894",
+                Verified = true
             };
 
             PutMedicationMapDataRequest request = new PutMedicationMapDataRequest

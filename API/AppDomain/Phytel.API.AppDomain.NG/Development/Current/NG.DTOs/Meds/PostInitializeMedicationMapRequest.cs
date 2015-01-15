@@ -7,8 +7,8 @@ namespace Phytel.API.AppDomain.NG.DTO
     [Route("/{Version}/{ContractNumber}/MedicationMap/Initialize", "POST")]
     public class PostInitializeMedicationMapRequest : IAppDomainRequest
     {
-        [ApiMember(Name = "Name", Description = "Name of the medication which is getting initialized", ParameterType = "property", DataType = "string", IsRequired = true)]
-        public string Name { get; set; }
+        [ApiMember(Name = "MedicationMap", Description = "MedicationMap object which is getting initialized", ParameterType = "property", DataType = "MedicationMap", IsRequired = true)]
+        public MedicationMap MedicationMap { get; set; }
 
         [ApiMember(Name = "UserID", Description = "ID of the user making the request (Internally used ONLY)", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string UserId { get; set; }

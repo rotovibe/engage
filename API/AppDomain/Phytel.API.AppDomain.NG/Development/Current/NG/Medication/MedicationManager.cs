@@ -31,22 +31,6 @@ namespace Phytel.API.AppDomain.NG.Medication
         #endregion
 
         #region PatientMedSupp - Posts
-        public PatientMedSupp InitializePatientMedSupp(PostInitializePatientMedSuppRequest request)
-        {
-            PatientMedSupp patientMedSupp = null;
-            try
-            {
-
-                PatientMedSuppData data = EndpointUtil.InitializePatientMedSupp(request);
-                if (data != null)
-                {
-                    patientMedSupp = Mapper.Map<PatientMedSupp>(data);
-                }
-                return patientMedSupp;
-            }
-            catch (Exception ex) { throw ex; }
-        } 
-
         public List<PatientMedSupp> GetPatientMedSupps(GetPatientMedSuppsRequest request)
         {
             List<PatientMedSupp> patientMedSupps = null;
@@ -63,7 +47,7 @@ namespace Phytel.API.AppDomain.NG.Medication
             catch (Exception ex) { throw ex; }
         }
 
-        public PatientMedSupp UpdatePatientMedSupp(PostPatientMedSuppRequest request)
+        public PatientMedSupp SavePatientMedSupp(PostPatientMedSuppRequest request)
         {
             PatientMedSupp patientMedSupp = null;
             try
@@ -71,20 +55,20 @@ namespace Phytel.API.AppDomain.NG.Medication
                 if (request.PatientMedSupp != null)
                 {
                     //Update Medication collection to add any newly initialized medication and then register in search index.
-                    if (request.PatientMedSupp.IsNewAllergy)
+                    if (request.PatientMedSupp.IsNew)
                     {
                         PostMedicationMapRequest req = new DTO.PostMedicationMapRequest
                         {
-                            MedicationMap = new DTO.MedicationMap {
-                                Id = request.PatientMedSupp.MedSuppId,
-                                //NDC = string.Empty,
-                                //ProductId = string.Empty,
-                                //ProprietaryName = string.Empty,
-                                //ProprietaryNameSuffix = string.Empty,
-                                //SubstanceName = string.Empty,
-                                //RouteName = string.Empty,
-                                //DosageFormName = string.Empty,
-                                //Strength = string.Empty
+                            MedicationMap = new DTO.MedicationMap
+                            {
+                                Id = request.PatientMedSupp.FamilyId,
+                                FullName  = request.PatientMedSupp.Name,
+                                SubstanceName = string.Empty,
+                                Strength = string.Empty,
+                                Route = string.Empty,
+                                Form = string.Empty,
+                                Custom = true,
+                                Verified = false
                             },
                             ContractNumber = request.ContractNumber,
                             UserId = request.UserId,
@@ -92,17 +76,30 @@ namespace Phytel.API.AppDomain.NG.Medication
                         };
                         MedicationMapData medData = EndpointUtil.UpdateMedicationMap(req);
                         DTO.MedicationMap newMed = Mapper.Map<DTO.MedicationMap>(medData);
-                        // Register newly initialized medication in search index.
-                       // SearchManager.RegisterMedDocumentInSearchIndex(newMed, req.ContractNumber);
+                        // Register newly initialized medicationMap in search index.
+                        //SearchManager.RegisterMedDocumentInSearchIndex(newMed, req.ContractNumber);
                         // For newly initialized medication, calculate NDC codes.
                         request.RecalculateNDC = true;
                     }
                     // Populate calculated NDC codes and Pharm classes in the request object before save.
-                    if (request.RecalculateNDC)
+                    bool calculateNDCAndPharm = false;
+                    if (request.Insert)
+                    {
+                        calculateNDCAndPharm = true;
+                    }
+                    else
+                    {
+                        // On update, check for ReCalculateNDC flag.
+                        if (request.RecalculateNDC)
+                        {
+                            calculateNDCAndPharm = true;
+                        }
+                    }
+                    if (calculateNDCAndPharm)
                     {
                         request.PatientMedSupp.NDCs = EndpointUtil.GetMedicationNDCs(request);
                     }
-                    PatientMedSuppData data = EndpointUtil.UpdatePatientMedSupp(request);
+                    PatientMedSuppData data = EndpointUtil.SavePatientMedSupp(request);
                     if (data != null)
                     {
                         patientMedSupp = Mapper.Map<PatientMedSupp>(data);

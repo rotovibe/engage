@@ -6,8 +6,8 @@ namespace Phytel.API.DataDomain.Medication.DTO
     [Route("/{Context}/{Version}/{ContractNumber}/MedicationMap/Initialize", "PUT")]
     public class PutInitializeMedicationMapDataRequest : IDataDomainRequest
     {
-        [ApiMember(Name = "MedSuppName", Description = "Name of the medicationmap which is getting initialized", ParameterType = "property", DataType = "string", IsRequired = true)]
-        public string Name { get; set; }
+        [ApiMember(Name = "MedicationMapData", Description = "MedicationMapData object which is getting initialized", ParameterType = "property", DataType = "MedicationMapData", IsRequired = true)]
+        public MedicationMapData MedicationMapData { get; set; }
 
         [ApiMember(Name = "UserId", Description = "UserId of the logged in user", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string UserId { get; set; }

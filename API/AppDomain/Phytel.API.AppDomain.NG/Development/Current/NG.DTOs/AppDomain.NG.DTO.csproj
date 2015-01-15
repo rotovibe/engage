@@ -142,8 +142,6 @@
     <Compile Include="Meds\PostMedicationMapResponse.cs" />
     <Compile Include="Meds\PostInitializeMedicationMapRequest.cs" />
     <Compile Include="Meds\PostInitializeMedicationMapResponse.cs" />
-    <Compile Include="Meds\PostInitializePatientMedSuppRequest.cs" />
-    <Compile Include="Meds\PostInitializePatientMedSuppResponse.cs" />
     <Compile Include="Meds\PostPatientMedSuppRequest.cs" />
     <Compile Include="Meds\PostPatientMedSuppResponse.cs" />
     <Compile Include="Observation\GetHistoricalPatientObservationsRequest.cs" />

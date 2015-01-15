@@ -5,31 +5,7 @@ namespace Phytel.API.DataDomain.Medication.Service
 {
     public class PatientMedSuppService : ServiceBase
     {
-        //protected readonly IPatientMedSuppDataManager Manager;
         public IPatientMedSuppDataManager Manager { get; set; }
-
-        //public PatientMedSuppService(IPatientMedSuppDataManager mgr)
-        //{
-        //    Manager = mgr;
-        //}
-
-        #region Initialize
-        public PutInitializePatientMedSuppDataResponse Put(PutInitializePatientMedSuppDataRequest request)
-        {
-            PutInitializePatientMedSuppDataResponse response = new PutInitializePatientMedSuppDataResponse { Version = request.Version };
-
-            try
-            {
-                RequireUserId(request);
-                response.PatientMedSuppData = Manager.InitializePatientMedSupp(request);
-            }
-            catch (Exception ex)
-            {
-                RaiseException(response, ex);
-            }
-            return response;
-        }
-        #endregion
 
         #region Posts
         public GetPatientMedSuppsDataResponse Post(GetPatientMedSuppsDataRequest request)

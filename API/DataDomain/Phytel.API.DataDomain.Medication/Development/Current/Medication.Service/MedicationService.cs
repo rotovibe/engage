@@ -6,14 +6,7 @@ namespace Phytel.API.DataDomain.Medication.Service
 {
     public class MedicationService : ServiceBase
     {
-        //protected readonly IMedicationDataManager Manager;
         public IMedicationDataManager Manager { get; set; }
-        public IMedicationMappingDataManager MedMapManager { get; set; }
-
-        //public MedicationService(IMedicationDataManager mgr)
-        //{
-        //    Manager = mgr;
-        //}
 
         public GetAllMedicationsResponse Get(GetAllMedicationsRequest request)
         {
@@ -36,25 +29,8 @@ namespace Phytel.API.DataDomain.Medication.Service
             try
             {
                 RequireUserId(request);
-                //response.Medications = 
                     var result = Manager.BulkInsertMedications(new List<DTO.MedicationData>(), request);
                 response.Status = result;
-            }
-            catch (Exception ex)
-            {
-                RaiseException(response, ex);
-            }
-            return response;
-        }
-
-        public PutInsertMedicationMappingResponse Put(PutInsertMedicationMappingRequest request)
-        {
-            var response = new PutInsertMedicationMappingResponse { Version = request.Version };
-            try
-            {
-                RequireUserId(request);
-                var result = MedMapManager.InsertMedicationMapping(request, request.MedicationMapping);
-                response.MedMapData = result;
             }
             catch (Exception ex)
             {
@@ -77,41 +53,5 @@ namespace Phytel.API.DataDomain.Medication.Service
             }
             return response;
         }
-
-        #region Initialize
-        public PutInitializeMedicationMapDataResponse Put(PutInitializeMedicationMapDataRequest request)
-        {
-            PutInitializeMedicationMapDataResponse response = new PutInitializeMedicationMapDataResponse { Version = request.Version };
-
-            try
-            {
-                RequireUserId(request);
-                response.MedicationMappingData = Manager.InitializeMedicationMap(request);
-            }
-            catch (Exception ex)
-            {
-                RaiseException(response, ex);
-            }
-            return response;
-        }
-        #endregion
-
-        #region Puts
-        public PutMedicationMapDataResponse Put(PutMedicationMapDataRequest request)
-        {
-            PutMedicationMapDataResponse response = new PutMedicationMapDataResponse { Version = request.Version };
-
-            try
-            {
-                RequireUserId(request);
-                response.MedicationMappingData = Manager.UpdateMedicationMap(request);
-            }
-            catch (Exception ex)
-            {
-                RaiseException(response, ex);
-            }
-            return response;
-        }
-        #endregion
     }
 }

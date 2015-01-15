@@ -7,9 +7,8 @@ namespace Phytel.API.AppDomain.NG.Medication
     public interface IMedicationEndpointUtil
     {
         List<PatientMedSuppData> GetPatientMedSupps(GetPatientMedSuppsRequest request);
-        PatientMedSuppData UpdatePatientMedSupp(PostPatientMedSuppRequest request);
+        PatientMedSuppData SavePatientMedSupp(PostPatientMedSuppRequest request);
         List<string> GetMedicationNDCs(PostPatientMedSuppRequest request);
-        PatientMedSuppData InitializePatientMedSupp(PostInitializePatientMedSuppRequest request);
         MedicationMapData InitializeMedicationMap(PostInitializeMedicationMapRequest request);
         MedicationMapData UpdateMedicationMap(PostMedicationMapRequest request);
     }

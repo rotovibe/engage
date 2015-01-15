@@ -13,6 +13,5 @@ namespace Phytel.API.DataDomain.Medication
         PatientMedSuppData SavePatientMedSupps(PutPatientMedSuppDataRequest request);
         DeleteMedSuppsByPatientIdDataResponse DeletePatientMedSupps(DeleteMedSuppsByPatientIdDataRequest request);
         UndoDeletePatientMedSuppsDataResponse UndoDeletePatientMedSupps(UndoDeletePatientMedSuppsDataRequest request);
-        PatientMedSuppData InitializePatientMedSupp(PutInitializePatientMedSuppDataRequest request);
     }
 }

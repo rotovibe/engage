@@ -8,7 +8,5 @@ namespace Phytel.API.DataDomain.Medication
         List<DTO.MedicationData> GetMedicationList(GetAllMedicationsRequest request);
         bool BulkInsertMedications(List<DTO.MedicationData> meds, PutBulkInsertMedicationsRequest request);
         GetMedicationNDCsDataResponse GetMedicationNDCs(GetMedicationNDCsDataRequest request);
-        MedicationMapData InitializeMedicationMap(PutInitializeMedicationMapDataRequest request);
-        MedicationMapData UpdateMedicationMap(PutMedicationMapDataRequest request);
     }
 }

@@ -199,42 +199,11 @@ namespace DataDomain.Medication.Repo
 
         public object Initialize(object newEntity)
         {
-            PutInitializeMedicationMapDataRequest request = (PutInitializeMedicationMapDataRequest)newEntity;
-            MedicationData data = null;
-            try
-            {
-                MEMedication meM = new MEMedication(this.UserId)
-                {
-                    ProprietaryName = request.Name,
-                    FullName = request.Name,
-                    TTLDate = System.DateTime.UtcNow.AddDays(_initializeDays),
-                    DeleteFlag = false
-                };
-
-                using (MedicationMongoContext ctx = new MedicationMongoContext(ContractDBName))
-                {
-                    ctx.Medications.Collection.Insert(meM);
-
-                    AuditHelper.LogDataAudit(this.UserId,
-                                            MongoCollectionName.Medication.ToString(),
-                                            meM.Id.ToString(),
-                                            DataAuditType.Insert,
-                                            request.ContractNumber);
-
-                    data = new MedicationData
-                    {
-                        Id = meM.Id.ToString(),
-                        FullName = meM.FullName.ToUpper(),
-                        ProprietaryName = meM.ProprietaryName.ToUpper()
-                    };
-                }
-                return data;
-            }
-            catch (Exception) { throw; }
+            throw new NotImplementedException();
         }
 
         /// <summary>
-        /// Find the exact match on name, strength, route, form and unit. 
+        /// Find the exact match on name, strength, route and form 
         /// If it does not yield any result, find a match for name alone.
         /// If it yields results more than 1, then find a match on name, form. 
         /// If it yields results more than 1, then find a match on name, form, strength. 
@@ -267,10 +236,6 @@ namespace DataDomain.Medication.Repo
                     if (!string.IsNullOrEmpty(dataRequest.Form))
                     {
                         query1.Add(Query.EQ(MEMedication.FormProperty, dataRequest.Form));
-                    }
-                    if (!string.IsNullOrEmpty(dataRequest.Unit))
-                    {
-                        query1.Add(Query.In(MEMedication.UnitProperty, new List<BsonValue> { BsonValue.Create(dataRequest.Unit) }));
                     }
                     IMongoQuery mQuery1 = Query.And(query1);
                     list = ctx.Medications.Collection.Find(mQuery1).SetFields(MEMedication.NDCProperty).ToList();

@@ -10,13 +10,7 @@ namespace Phytel.API.DataDomain.Medication
 {
     public class PatientMedSuppDataManager : IPatientMedSuppDataManager
     {
-        //protected readonly IMongoPatientMedSuppRepository PatientMedSuppRepository;
         public IMongoPatientMedSuppRepository PatientMedSuppRepository { get; set; }
-
-        //public PatientMedSuppDataManager(IMongoPatientMedSuppRepository repository)
-        //{
-        //    PatientMedSuppRepository = repository;
-        //}
         
         public List<PatientMedSuppData> GetPatientMedSupps(GetPatientMedSuppsDataRequest request)
         {
@@ -34,17 +28,6 @@ namespace Phytel.API.DataDomain.Medication
             catch (Exception ex) { throw ex; }
         }
 
-        public PatientMedSuppData InitializePatientMedSupp(PutInitializePatientMedSuppDataRequest request)
-        {
-            try
-            {
-                //PatientAllergyRepository.UserId = request.UserId;
-                var repo = MedicationRepositoryFactory.GetMedicationRepository(request, RepositoryType.PatientMedSupp);
-                return (PatientMedSuppData)repo.Initialize(request);
-            }
-            catch (Exception ex) { throw ex; }
-        }
-
         public PatientMedSuppData SavePatientMedSupps(PutPatientMedSuppDataRequest request)
         {
             try
@@ -54,10 +37,17 @@ namespace Phytel.API.DataDomain.Medication
 
                 if (request.PatientMedSuppData != null)
                 {
-                    bool status = (bool)repo.Update(request);
-                    if (status)
+                    if (request.Insert)
                     {
-                        result = (PatientMedSuppData)repo.FindByID(request.PatientMedSuppData.Id);
+                        result = (PatientMedSuppData)repo.Insert(request);
+                    }
+                    else
+                    {
+                        bool status = (bool)repo.Update(request);
+                        if (status)
+                        {
+                            result = (PatientMedSuppData)repo.FindByID(request.PatientMedSuppData.Id);
+                        }
                     }
                 }
                 return result;

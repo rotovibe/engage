@@ -51,7 +51,8 @@ namespace DataDomain.Medication.Repo
                     MEPatientMedSupp mePMS = new MEPatientMedSupp(this.UserId)
                     {
                         PatientId = ObjectId.Parse(data.PatientId),
-                        Name = data.MedSuppName,
+                        FamilyId = string.IsNullOrEmpty(data.FamilyId) ? (ObjectId?)null : ObjectId.Parse(data.FamilyId),
+                        Name = data.Name,
                         CategoryId = (Category)data.CategoryId,
                         TypeId  = ObjectId.Parse(data.TypeId),
                         StatusId = (Status)data.StatusId,
@@ -59,7 +60,7 @@ namespace DataDomain.Medication.Repo
                         Strength = data.Strength,
                         Route = data.Route,
                         Form = data.Form,
-                        PharmClasses = getPharmClassses(ctx, data.MedSuppName),
+                        PharmClasses = getPharmClassses(ctx, data.Name),
                         NDCs = data.NDCs,
                         FreqQuantity = data.FreqQuantity,
                         FreqHowOftenId = string.IsNullOrEmpty(data.FreqHowOftenId) ? (ObjectId?)null : ObjectId.Parse(data.FreqHowOftenId),
@@ -172,13 +173,21 @@ namespace DataDomain.Medication.Repo
                     uv.Add(MB.Update.Set(MEPatientMedSupp.VersionProperty, request.Version));
                     uv.Add(MB.Update.Set(MEPatientMedSupp.LastUpdatedOnProperty, System.DateTime.UtcNow));
                     if (data.PatientId != null) uv.Add(MB.Update.Set(MEPatientMedSupp.PatientIdProperty, ObjectId.Parse(data.PatientId)));
-                    if (!string.IsNullOrEmpty(data.MedSuppName))
+                    if (!string.IsNullOrEmpty(data.Name))
                     {
-                        uv.Add(MB.Update.Set(MEPatientMedSupp.NameProperty, data.MedSuppName));
+                        uv.Add(MB.Update.Set(MEPatientMedSupp.NameProperty, data.Name));
                     }
                     else
                     {
                         uv.Add(MB.Update.Set(MEPatientMedSupp.NameProperty, BsonNull.Value));
+                    }
+                    if (data.FamilyId != null)
+                    {
+                        uv.Add(MB.Update.Set(MEPatientMedSupp.FamilyIdProperty, ObjectId.Parse(data.FamilyId)));
+                    }
+                    else
+                    {
+                        uv.Add(MB.Update.Set(MEPatientMedSupp.FamilyIdProperty, BsonNull.Value));
                     }
                     if (data.CategoryId != 0) uv.Add(MB.Update.Set(MEPatientMedSupp.CategoryProperty, data.CategoryId));
                     if (data.TypeId != null) uv.Add(MB.Update.Set(MEPatientMedSupp.TypeIdProperty, ObjectId.Parse(data.TypeId)));
@@ -412,55 +421,6 @@ namespace DataDomain.Medication.Repo
             throw new NotImplementedException();
         }
 
-        public object Initialize(object newEntity)
-        {
-            PutInitializePatientMedSuppDataRequest request = (PutInitializePatientMedSuppDataRequest)newEntity;
-            PatientMedSuppData data = null;
-            try
-            {
-                using (MedicationMongoContext ctx = new MedicationMongoContext(ContractDBName))
-                {
-                    string medSuppName = getMedSuppName(ctx, ObjectId.Parse(request.MedSuppId));
-                
-                    MEPatientMedSupp meMS = new MEPatientMedSupp(this.UserId)
-                    {
-                        PatientId = ObjectId.Parse(request.PatientId),
-                        MedSuppId = ObjectId.Parse(request.MedSuppId),
-                        TTLDate = System.DateTime.UtcNow.AddDays(_initializeDays),
-                        SystemName = request.SystemName,
-                        CategoryId = (Category)request.CategoryId,
-                        TypeId = ObjectId.Parse(request.TypeId),
-                        PharmClasses = getPharmClassses(ctx, medSuppName),
-                        DeleteFlag = false
-                    };
-
-                    ctx.PatientMedSupps.Collection.Insert(meMS);
-
-                    AuditHelper.LogDataAudit(this.UserId,
-                                            MongoCollectionName.PatientMedSupp.ToString(),
-                                            meMS.Id.ToString(),
-                                            DataAuditType.Insert,
-                                            request.ContractNumber);
-
-                    data = new PatientMedSuppData
-                    {
-                        Id = meMS.Id.ToString(),
-                        PatientId = meMS.PatientId.ToString(),
-                        MedSuppId = meMS.MedSuppId.ToString(),
-                        SystemName = meMS.SystemName,
-                        CategoryId = (int)meMS.CategoryId,
-                        TypeId = meMS.TypeId.ToString(),
-                        PharmClasses = meMS.PharmClasses,
-                        MedSuppName = medSuppName
-                    };
-                    // get corresponding Medication/Supplement name.
-                    getMedSuppName(ctx, meMS.MedSuppId);
-                }
-                return data;
-            }
-            catch (Exception) { throw; }
-        }
-
         private static string getMedSuppName(MedicationMongoContext ctx, ObjectId msid)
         {
             string name = null;
@@ -470,6 +430,11 @@ namespace DataDomain.Medication.Repo
                 name = meM.FullName.ToUpper();
             }
             return name;
+        }
+
+        public object Initialize(object newEntity)
+        {
+            throw new NotImplementedException();
         }
     }
 }

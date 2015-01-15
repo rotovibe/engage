@@ -106,8 +106,6 @@
     <Compile Include="MedicationData.cs" />
     <Compile Include="PutInitializeMedicationMapDataRequest.cs" />
     <Compile Include="PutInitializeMedicationMapDataResponse.cs" />
-    <Compile Include="PutInitializePatientMedSuppDataRequest.cs" />
-    <Compile Include="PutInitializePatientMedSuppDataResponse.cs" />
     <Compile Include="PutPatientMedSuppDataRequest.cs" />
     <Compile Include="PutPatientMedSuppDataResponse.cs" />
     <Compile Include="UndoDeletePatientMedSuppsDataRequest.cs" />

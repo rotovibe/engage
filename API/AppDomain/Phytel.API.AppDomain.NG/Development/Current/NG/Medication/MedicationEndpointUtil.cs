@@ -29,21 +29,6 @@ namespace Phytel.API.AppDomain.NG.Medication
                                     request.Version,
                                     request.ContractNumber), request.UserId);
 
-                string strength = string.Empty;
-                string unit = string.Empty;
-                if (!string.IsNullOrEmpty(request.PatientMedSupp.Strength))
-                {
-                    string[] values = request.PatientMedSupp.Strength.Split(' ');
-                    if(values.Length > 0)
-                    { 
-                        strength = values[0];
-                        if (values.Length > 1)
-                        {
-                            unit = values[1].ToUpper();// Medication collection store all units in upper case.
-                        }
-                    }
-                }
-
                 GetMedicationNDCsDataResponse dataDomainResponse = client.Post<GetMedicationNDCsDataResponse>(url, new GetMedicationNDCsDataRequest
                 {
                     Context = "NG",
@@ -51,10 +36,9 @@ namespace Phytel.API.AppDomain.NG.Medication
                     UserId = request.UserId,
                     Version = request.Version,
                     Name = request.PatientMedSupp.Name,
-                    Strength = strength,
+                    Strength = request.PatientMedSupp.Strength,
                     Form = request.PatientMedSupp.Form,
-                    Route = request.PatientMedSupp.Route,
-                    Unit = unit
+                    Route = request.PatientMedSupp.Route
                 } as object);
 
                 if (dataDomainResponse != null)
@@ -82,11 +66,13 @@ namespace Phytel.API.AppDomain.NG.Medication
                                     request.Version,
                                     request.ContractNumber), request.UserId);
 
+                MedicationMapData data = new MedicationMapData();
+                data = Mapper.Map<MedicationMapData>(request.MedicationMap);
                 PutInitializeMedicationMapDataResponse dataDomainResponse = client.Put<PutInitializeMedicationMapDataResponse>(url, new PutInitializeMedicationMapDataRequest
                 {
                     Context = "NG",
                     ContractNumber = request.ContractNumber,
-                    Name = request.Name,
+                    MedicationMapData = data,
                     UserId = request.UserId,
                     Version = request.Version
                 } as object);
@@ -172,61 +158,31 @@ namespace Phytel.API.AppDomain.NG.Medication
             catch (Exception ex) { throw ex; }
         }
 
-        public PatientMedSuppData InitializePatientMedSupp(PostInitializePatientMedSuppRequest request)
+        public PatientMedSuppData SavePatientMedSupp(PostPatientMedSuppRequest request)
         {
             try
             {
                 PatientMedSuppData result = null;
                 IRestClient client = new JsonServiceClient();
-                //[Route("/{Context}/{Version}/{ContractNumber}/PatientMedSupp/Initialize", "PUT")]
-                var url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/PatientMedSupp/Initialize",
-                                    DDMedicationUrl,
-                                    "NG",
-                                    request.Version,
-                                    request.ContractNumber), request.UserId);
-
-                PutInitializePatientMedSuppDataResponse dataDomainResponse = client.Put<PutInitializePatientMedSuppDataResponse>(url, new PutInitializePatientMedSuppDataRequest
-                {
-                    Context = "NG",
-                    ContractNumber = request.ContractNumber,
-                    PatientId = request.PatientId,
-                    MedSuppId = request.MedSuppId,
-                    CategoryId = request.CategoryId,
-                    TypeId = request.TypeId,
-                    SystemName = Constants.SystemName,
-                    UserId = request.UserId,
-                    Version = request.Version
-                } as object);
-
-                if (dataDomainResponse != null)
-                {
-                    result = dataDomainResponse.PatientMedSuppData;
-                }
-                return result;
-            }
-            catch (Exception ex) { throw ex; }
-        }
-
-        public PatientMedSuppData UpdatePatientMedSupp(PostPatientMedSuppRequest request)
-        {
-            try
-            {
-                PatientMedSuppData result = null;
-                IRestClient client = new JsonServiceClient();
-                //[Route("/{Context}/{Version}/{ContractNumber}/PatientMedSupp/Update", "PUT")]
-                var url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/PatientMedSupp/Update",
+                //[Route("/{Context}/{Version}/{ContractNumber}/PatientMedSupp/Save", "PUT")]
+                var url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/PatientMedSupp/Save",
                                     DDMedicationUrl,
                                     "NG",
                                     request.Version,
                                     request.ContractNumber), request.UserId);
                 PatientMedSuppData data = Mapper.Map<PatientMedSuppData>(request.PatientMedSupp);
+                if (request.Insert)
+                {
+                    data.SystemName = Constants.SystemName;
+                }
                 PutPatientMedSuppDataResponse dataDomainResponse = client.Put<PutPatientMedSuppDataResponse>(url, new PutPatientMedSuppDataRequest
                 {
                     Context = "NG",
                     ContractNumber = request.ContractNumber,
                     UserId = request.UserId,
                     Version = request.Version,
-                    PatientMedSuppData = data
+                    PatientMedSuppData = data,
+                    Insert = request.Insert
                 } as object);
 
                 if (dataDomainResponse != null)
