@@ -49,17 +49,17 @@ namespace Phytel.API.AppDomain.NG.Test
         {
             PatientMedSupp pms = new PatientMedSupp
             {
-                FamilyId = "54b8490ed43328254047d754",
+                FamilyId = "54b81370fe7a5b33783701c7",
                 CategoryId  = 1,
                 DeleteFlag = false,
-                IsNew = true,
+                IsNew = false,
                // Dosage = "Two",
                 //EndDate = DateTime.UtcNow,
                 //FreqHowOftenId = "545be059d43323224896663a",
                 //FreqQuantity = "4",
              //   FreqWhenId = "545be126d433232248966643",
                 // Id = "5462991ed4332323a01ce994",
-                Name = "TestAspirin",
+                Name = "Renotox",
              //   Form = "INJECTION, SOLUTION",
                // Route = "INTRADERMAL",
               //  Strength = ".0021 g/mL",
@@ -70,9 +70,9 @@ namespace Phytel.API.AppDomain.NG.Test
             //  PrescribedBy = "Dr Basu",
                // Reason = "Reason for Acetomophine 2",
                 //SigCode = ,
-              //  SourceId = "544e9976d433231d9c0330ae",
+                SourceId = "544e9976d433231d9c0330ae",
                 StartDate = DateTime.UtcNow,
-                StatusId = 2,
+                StatusId = 1,
               //  SystemName = "Engage",
                 TypeId = "545bdfa1d433232248966638"
             };
