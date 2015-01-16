@@ -49,17 +49,17 @@ namespace Phytel.API.AppDomain.NG.Test
         {
             PatientMedSupp pms = new PatientMedSupp
             {
-                FamilyId = "54b81370fe7a5b33783701c7",
+                FamilyId = "54b96da5d433272b5c62dd67",
                 CategoryId  = 1,
                 DeleteFlag = false,
-                IsNew = false,
+                IsNew = true,
                // Dosage = "Two",
                 //EndDate = DateTime.UtcNow,
                 //FreqHowOftenId = "545be059d43323224896663a",
                 //FreqQuantity = "4",
              //   FreqWhenId = "545be126d433232248966643",
                 // Id = "5462991ed4332323a01ce994",
-                Name = "Renotox",
+                Name = "TestTylenol",
              //   Form = "INJECTION, SOLUTION",
                // Route = "INTRADERMAL",
               //  Strength = ".0021 g/mL",

@@ -25,7 +25,7 @@ namespace Phytel.API.AppDomain.NG.Test
                 ContractNumber = contractNumber,
                 UserId = userId,
                 Version = version,
-                MedicationMap = new MedicationMap { FullName = "TestAspirin" }
+                MedicationMap = new MedicationMap { FullName = "TestTylenol" }
             };
 
             JsonServiceClient.HttpWebRequestFilter = x =>
