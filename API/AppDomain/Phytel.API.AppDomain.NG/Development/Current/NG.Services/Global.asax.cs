@@ -183,7 +183,7 @@ namespace Phytel.API.AppDomain.NG.Service
                     .ForMember(d => d.Name, opt => opt.MapFrom(src => src.Get("Name")));
 
                 Mapper.CreateMap<Document, TextValuePair>()
-                                    .ForMember(d => d.Value, opt => opt.MapFrom(src => src.Get("MongoId").Trim()))
+                                    .ForMember(d => d.Value, opt => opt.MapFrom(src => src.Get("CompositeName").Trim()))
                                     .ForMember(d => d.Text,  opt => opt.MapFrom(src => src.Get("CompositeName").Trim()));
 
                 Mapper.CreateMap<Document, MedFieldsSearchDoc>()
