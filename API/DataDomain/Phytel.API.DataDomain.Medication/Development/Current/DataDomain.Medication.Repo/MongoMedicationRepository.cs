@@ -59,7 +59,7 @@ namespace DataDomain.Medication.Repo
                         DeleteFlag = m.DeleteFlag,
                         EndDate = m.EndDate,
                         Form = m.Form,
-                        FamilyId = m.FamilyId,
+                        FamilyId = ObjectId.Parse(m.FamilyId),
                         Version = m.Version,
                         Unit = m.Unit,
                         Strength = m.Strength,

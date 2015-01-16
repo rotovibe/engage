@@ -27,16 +27,16 @@ namespace Phytel.API.AppDomain.NG.Search.LuceneStrategy
 
         public override void AddToLuceneIndex(T sampleData, IndexWriter writer)
         {
-            var searchQuery = new TermQuery(new Term("Id", sampleData.ProductId));
+            var searchQuery = new TermQuery(new Term("MongoId", sampleData.ProductId));
             writer.DeleteDocuments(searchQuery);
             var doc = new Document();
-            doc.Add(new Field("MongoId", sampleData.Id.Trim(), Field.Store.YES, Field.Index.NOT_ANALYZED));
-            doc.Add(new Field("PackageId", sampleData.ProductId.Trim(), Field.Store.YES, Field.Index.NOT_ANALYZED));
-            doc.Add(new Field("ProductNDC", sampleData.ProductNDC.Trim(), Field.Store.YES, Field.Index.NOT_ANALYZED));
-            doc.Add(new Field("CompositeName", sampleData.CompositeName.Trim(), Field.Store.YES, Field.Index.ANALYZED));
-            doc.Add(new Field("ProprietaryName", sampleData.ProprietaryName.Trim(), Field.Store.YES, Field.Index.ANALYZED));
-            doc.Add(new Field("ProprietaryNameSuffix", sampleData.ProprietaryNameSuffix.Trim(), Field.Store.YES, Field.Index.ANALYZED));
-            doc.Add(new Field("SubstanceName", sampleData.SubstanceName.Trim(), Field.Store.YES, Field.Index.ANALYZED));
+            doc.Add(new Field("MongoId", sampleData.Id == null ? string.Empty : sampleData.Id.Trim(), Field.Store.YES, Field.Index.NOT_ANALYZED));
+            //doc.Add(new Field("PackageId", sampleData.ProductId.Trim(), Field.Store.YES, Field.Index.NOT_ANALYZED));
+            //doc.Add(new Field("ProductNDC", sampleData.ProductNDC.Trim(), Field.Store.YES, Field.Index.NOT_ANALYZED));
+            doc.Add(new Field("CompositeName", sampleData.CompositeName == null ? string.Empty : sampleData.CompositeName.Trim(), Field.Store.YES, Field.Index.ANALYZED));
+            //doc.Add(new Field("ProprietaryName", sampleData.ProprietaryName.Trim(), Field.Store.YES, Field.Index.ANALYZED));
+            //doc.Add(new Field("ProprietaryNameSuffix", sampleData.ProprietaryNameSuffix.Trim(), Field.Store.YES, Field.Index.ANALYZED));
+            doc.Add(new Field("SubstanceName", sampleData.SubstanceName == null ? string.Empty : sampleData.SubstanceName.Trim(), Field.Store.YES, Field.Index.ANALYZED));
 
             writer.AddDocument(doc);
         }

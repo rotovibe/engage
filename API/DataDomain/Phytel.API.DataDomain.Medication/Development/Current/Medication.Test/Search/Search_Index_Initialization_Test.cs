@@ -27,6 +27,17 @@ namespace Phytel.API.DataDomain.Medication.Test.Search
         }
 
         [TestMethod]
+        public void InitializeProductFields()
+        {
+            var listNames = new List<MedFieldsSearchDoc>();
+            //GetProductMedFieldsSql(listNames);
+            GetProductInfo(listNames);
+
+            var lucene = new MedFieldsLuceneStrategy<MedFieldsSearchDoc, MedFieldsSearchDoc>() { Contract = "InHealth001" };
+            lucene.AddUpdateLuceneIndex(listNames);
+        }
+
+        [TestMethod]
         public void InitializeMedicationMappingData()
         {
             var medlist = GetMedicationMongoList();
@@ -202,6 +213,21 @@ namespace Phytel.API.DataDomain.Medication.Test.Search
             return val.ToString();
         }
 
+        private List<MedicationMapData> GetMedicationMappingMongoList()
+        {
+            Mapper.CreateMap<MEMedicationMapping, DTO.MedicationMapData>()
+                .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Id.ToString()))
+                .ForMember(dest => dest.RecordCreatedOn, opt => opt.MapFrom(src => src.RecordCreatedOn))
+                .ForMember(dest => dest.RecordCreatedBy, opt => opt.MapFrom(src => src.RecordCreatedBy.ToString()))
+                .ForMember(dest => dest.LastUpdatedOn, opt => opt.MapFrom(src => src.LastUpdatedOn))
+                .ForMember(dest => dest.UpdatedBy, opt => opt.MapFrom(src => src.UpdatedBy.ToString()));
+
+            var req = new GetAllMedicationsRequest {Context = "NG", ContractNumber = "InHealth001"};
+            var repo = MedicationRepositoryFactory.GetMedicationRepository(req, RepositoryType.MedicationMapping);
+
+            var result = repo.SelectAll().Cast<DTO.MedicationMapData>().Where(r => r.SubstanceName != null && r.FullName != null && r.Id != null).ToList<DTO.MedicationMapData>();
+            return result;
+        }
 
         private List<MedicationData> GetMedicationMongoList()
         {
@@ -215,7 +241,7 @@ namespace Phytel.API.DataDomain.Medication.Test.Search
             var req = new GetAllMedicationsRequest {Context = "NG", ContractNumber = "InHealth001"};
             var repo = MedicationRepositoryFactory.GetMedicationRepository(req, RepositoryType.Medication);
 
-            var result = repo.SelectAll().Cast<DTO.MedicationData>().ToList<DTO.MedicationData>();
+            var result = repo.SelectAll().Cast<DTO.MedicationData>().Where(r => r.SubstanceName != null && r.FullName != null && r.Id != null).ToList<DTO.MedicationData>();
             return result;
         }
 
@@ -287,16 +313,6 @@ namespace Phytel.API.DataDomain.Medication.Test.Search
             }
         }
 
-        [TestMethod]
-        public void InitializeProductFields()
-        {
-            var listNames = new List<MedFieldsSearchDoc>();
-            //GetProductMedFieldsSql(listNames);
-            GetProductInfo(listNames);
-
-            var lucene = new MedFieldsLuceneStrategy<MedFieldsSearchDoc, MedFieldsSearchDoc>() { Contract = "InHealth001" };
-            lucene.AddUpdateLuceneIndex(listNames);
-        }
 
         private static void GetProductMedFieldsSql(List<MedFieldsSearchDoc> listNames)
         {

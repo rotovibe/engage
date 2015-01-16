@@ -161,7 +161,23 @@ namespace DataDomain.Medication.Repo
 
         public IEnumerable<object> SelectAll()
         {
-            throw new NotImplementedException();
+            using (MedicationMongoContext ctx = new MedicationMongoContext(ContractDBName))
+            {
+                List<IMongoQuery> queries = new List<IMongoQuery>();
+                queries.Add(Query.EQ(MEMedicationMapping.DeleteFlagProperty, false));
+                queries.Add(Query.EQ(MEMedicationMapping.TTLDateProperty, BsonNull.Value));
+                IMongoQuery mQuery = Query.And(queries);
+
+                List<MEMedicationMapping> meMeds = ctx.MedicationMaps.Collection.Find(mQuery).ToList();
+
+                List<MedicationMapData> medsData = null;
+                if (meMeds != null && meMeds.Count > 0)
+                {
+                    medsData = meMeds.Select(a => Mapper.Map<MedicationMapData>(a)).ToList();
+                }
+
+                return medsData;
+            }
         }
 
         public object Update(object entity)

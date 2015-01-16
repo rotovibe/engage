@@ -74,7 +74,7 @@ namespace Phytel.API.DataDomain.Medication.DTO
 
         public const string FamilyIdProperty = "fmid";
         [BsonElement(FamilyIdProperty)]
-        public string FamilyId { get; set; }
+        public ObjectId? FamilyId { get; set; }
 
         public const string UnitProperty = "unit";
         [BsonElement(UnitProperty)]
