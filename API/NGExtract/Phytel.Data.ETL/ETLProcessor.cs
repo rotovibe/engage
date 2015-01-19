@@ -104,27 +104,27 @@ namespace Phytel.Data.ETL
                 RegisterClasses();
                 LoadUsers(contract);
                 LoadLookUps(contract);
-                //LoadGoalAttributes(contract);
-                //LoadObservations(contract);
+                LoadGoalAttributes(contract);
+                LoadObservations(contract);
                 LoadPatients(contract);
-                //LoadPatientSystems(contract);
+                LoadPatientSystems(contract);
 
-                //LoadPatientNotes(contract);
-                ////LoadPatientProblems(contract); depricated
-                //LoadPatientObservations(contract);
-                //LoadContacts(contract);
+                LoadPatientNotes(contract);
+                //LoadPatientProblems(contract); depricated
+                LoadPatientObservations(contract);
+                LoadContacts(contract);
 
                 LoadCareMembers(contract);
                 LoadPatientUsers(contract);
 
-                //LoadPatientGoals(contract);
-                //LoadPatientBarriers(contract);
-                //LoadPatientInterventions(contract);
-                //LoadPatientTasks(contract);
+                LoadPatientGoals(contract);
+                LoadPatientBarriers(contract);
+                LoadPatientInterventions(contract);
+                LoadPatientTasks(contract);
 
-                //LoadAllergies(contract);
-                //LoadPatientAllergies(contract);
-                //LoadPatientMedSups(contract);
+                LoadAllergies(contract);
+                LoadPatientAllergies(contract);
+                LoadPatientMedSups(contract);
 
                 LoadPatientPrograms(contract);
                 LoadPatientProgramModules(contract);
@@ -3397,6 +3397,7 @@ namespace Phytel.Data.ETL
                         ParameterCollection parms = new ParameterCollection();
 
                         parms.Add(new Parameter("@MongoId", (string.IsNullOrEmpty(pm.Id.ToString()) ? string.Empty : pm.Id.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                        parms.Add(new Parameter("@MongoFamilyId", (string.IsNullOrEmpty(pm.FamilyId.ToString()) ? string.Empty : pm.FamilyId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
                         parms.Add(new Parameter("@MongoPatientId", (string.IsNullOrEmpty(pm.PatientId.ToString()) ? string.Empty : pm.PatientId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
                         parms.Add(new Parameter("@Name", (string.IsNullOrEmpty(pm.Name) ? string.Empty : pm.Name), SqlDbType.VarChar, ParameterDirection.Input, 200));
                         parms.Add(new Parameter("@Category", (string.IsNullOrEmpty(pm.CategoryId.ToString()) ? string.Empty : pm.CategoryId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 200));
