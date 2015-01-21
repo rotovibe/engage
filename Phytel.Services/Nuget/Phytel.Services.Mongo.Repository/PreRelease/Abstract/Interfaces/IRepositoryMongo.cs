@@ -35,6 +35,8 @@ namespace Phytel.Services.Mongo.Repository
 
         long Remove<T, TKey>(Expression<Func<T, bool>> predicate) where T : IMongoEntity<TKey>;
 
+        WriteConcernResult Remove<T, TKey>(IMongoQuery query) where T : IMongoEntity<TKey>;
+
         void Save<T, TKey>(T entity) where T : IMongoEntity<TKey>;
 
         long Update<T, TKey>(UpdateBuilder<T> update, Expression<Func<T, bool>> criteria) where T : IMongoEntity<TKey>;

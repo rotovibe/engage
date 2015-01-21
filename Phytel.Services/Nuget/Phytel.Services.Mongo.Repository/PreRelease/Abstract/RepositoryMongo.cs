@@ -132,17 +132,26 @@ namespace Phytel.Services.Mongo.Repository
 
         public long Remove<T, TKey>(Expression<Func<T, bool>> predicate) where T : IMongoEntity<TKey>
         {
-            long rvalue = default(long);
+            return
+                RetryHelper.DoWithRetry<long>(() =>
+                {
+                    return _context.Set<T, TKey>().Remove(predicate);
+                },
+                    RetryHelper.RETRIES,
+                    RetryHelper.RETRYDELAY
+                );
+        }
 
-            RetryHelper.DoWithRetry(() =>
-            {
-                rvalue = _context.Set<T, TKey>().Remove(predicate);
-            },
-                RetryHelper.RETRIES,
-                RetryHelper.RETRYDELAY
-            );
-
-            return rvalue;
+        public WriteConcernResult Remove<T, TKey>(IMongoQuery query) where T : IMongoEntity<TKey>
+        {
+            return
+                RetryHelper.DoWithRetry<WriteConcernResult>(() =>
+                {
+                    return _context.Set<T, TKey>().Collection.Remove(query);
+                },
+                    RetryHelper.RETRIES,
+                    RetryHelper.RETRYDELAY
+                );
         }
 
         public void Save<T, TKey>(T entity) where T : IMongoEntity<TKey>
