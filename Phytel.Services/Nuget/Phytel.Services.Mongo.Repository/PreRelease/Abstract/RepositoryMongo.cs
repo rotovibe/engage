@@ -62,12 +62,12 @@ namespace Phytel.Services.Mongo.Repository
                 );
         }
 
-        public List<T> FindAsList<T, TKey>(IMongoQuery query) where T : class, IMongoEntity<TKey>
+        public T FindAndModify<T, TKey>(FindAndModifyArgs args) where T : class, IMongoEntity<TKey>
         {
             return
-                RetryHelper.DoWithRetry<List<T>>(() =>
+                RetryHelper.DoWithRetry<T>(() =>
                 {
-                    return Find<T, TKey>(query).ToList();
+                    return _context.Set<T, TKey>().Collection.FindAndModify(args).GetModifiedDocumentAs<T>();
                 },
                     RetryHelper.RETRIES,
                     RetryHelper.RETRYDELAY
@@ -76,10 +76,20 @@ namespace Phytel.Services.Mongo.Repository
 
         public T FindAndModify<T, TKey>(IMongoQuery query, IMongoSortBy sort, IMongoUpdate update) where T : class, IMongoEntity<TKey>
         {
+            FindAndModifyArgs args = new FindAndModifyArgs();
+            args.Query = query;
+            args.SortBy = sort;
+            args.Update = update;
+
+            return FindAndModify<T, TKey>(args);
+        }
+
+        public List<T> FindAsList<T, TKey>(IMongoQuery query) where T : class, IMongoEntity<TKey>
+        {
             return
-                RetryHelper.DoWithRetry<T>(() =>
+                RetryHelper.DoWithRetry<List<T>>(() =>
                 {
-                    return _context.Set<T, TKey>().Collection.FindAndModify(query, sort, update).GetModifiedDocumentAs<T>();
+                    return Find<T, TKey>(query).ToList();
                 },
                     RetryHelper.RETRIES,
                     RetryHelper.RETRYDELAY
