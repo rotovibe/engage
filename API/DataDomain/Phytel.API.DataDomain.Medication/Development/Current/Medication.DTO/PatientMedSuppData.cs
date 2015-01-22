@@ -9,7 +9,7 @@ namespace Phytel.API.DataDomain.Medication.DTO
     public class PatientMedSuppData
     {
         public string Id { get; set; }
-        public string FamilyId { get; set; }
+        //public string FamilyId { get; set; }
         public string PatientId { get; set; }
         public string Name { get; set; }
         public  int CategoryId { get; set; }

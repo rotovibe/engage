@@ -79,24 +79,23 @@ namespace Phytel.API.AppDomain.NG.Medication
                         DTO.Medication newMed = new DTO.Medication { Id = medData.Id, ProprietaryName = medData.FullName};
                         // Register newly initialized medicationMap in search index.
                         SearchManager.RegisterMedDocumentInSearchIndex(newMed, req.ContractNumber);
-                        // For newly initialized medication, calculate NDC codes.
-                        request.RecalculateNDC = true;
                     }
                     // Populate calculated NDC codes and Pharm classes in the request object before save.
-                    bool calculateNDCAndPharm = false;
+                    bool calculateNDC = false;
                     if (request.Insert)
                     {
-                        calculateNDCAndPharm = true;
+                        calculateNDC = true;
+                        request.PatientMedSupp.SystemName = Constants.SystemName;
                     }
                     else
                     {
                         // On update, check for ReCalculateNDC flag.
                         if (request.RecalculateNDC)
                         {
-                            calculateNDCAndPharm = true;
+                            calculateNDC = true;
                         }
                     }
-                    if (calculateNDCAndPharm)
+                    if (calculateNDC)
                     {
                         request.PatientMedSupp.NDCs = EndpointUtil.GetMedicationNDCs(request);
                     }

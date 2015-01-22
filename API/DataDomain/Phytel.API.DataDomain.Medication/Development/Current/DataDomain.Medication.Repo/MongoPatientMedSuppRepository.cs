@@ -51,7 +51,7 @@ namespace DataDomain.Medication.Repo
                     MEPatientMedSupp mePMS = new MEPatientMedSupp(this.UserId)
                     {
                         PatientId = ObjectId.Parse(data.PatientId),
-                        FamilyId = string.IsNullOrEmpty(data.FamilyId) ? (ObjectId?)null : ObjectId.Parse(data.FamilyId),
+                        //FamilyId = string.IsNullOrEmpty(data.FamilyId) ? (ObjectId?)null : ObjectId.Parse(data.FamilyId),
                         Name = data.Name,
                         CategoryId = (Category)data.CategoryId,
                         TypeId  = ObjectId.Parse(data.TypeId),
@@ -181,14 +181,14 @@ namespace DataDomain.Medication.Repo
                     {
                         uv.Add(MB.Update.Set(MEPatientMedSupp.NameProperty, BsonNull.Value));
                     }
-                    if (data.FamilyId != null)
-                    {
-                        uv.Add(MB.Update.Set(MEPatientMedSupp.FamilyIdProperty, ObjectId.Parse(data.FamilyId)));
-                    }
-                    else
-                    {
-                        uv.Add(MB.Update.Set(MEPatientMedSupp.FamilyIdProperty, BsonNull.Value));
-                    }
+                    //if (data.FamilyId != null)
+                    //{
+                    //    uv.Add(MB.Update.Set(MEPatientMedSupp.FamilyIdProperty, ObjectId.Parse(data.FamilyId)));
+                    //}
+                    //else
+                    //{
+                    //    uv.Add(MB.Update.Set(MEPatientMedSupp.FamilyIdProperty, BsonNull.Value));
+                    //}
                     if (data.CategoryId != 0) uv.Add(MB.Update.Set(MEPatientMedSupp.CategoryProperty, data.CategoryId));
                     if (data.TypeId != null) uv.Add(MB.Update.Set(MEPatientMedSupp.TypeIdProperty, ObjectId.Parse(data.TypeId)));
                     if (data.StatusId != 0) uv.Add(MB.Update.Set(MEPatientMedSupp.StatusProperty, data.StatusId));

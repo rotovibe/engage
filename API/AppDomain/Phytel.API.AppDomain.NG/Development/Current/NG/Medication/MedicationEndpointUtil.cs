@@ -171,10 +171,6 @@ namespace Phytel.API.AppDomain.NG.Medication
                                     request.Version,
                                     request.ContractNumber), request.UserId);
                 PatientMedSuppData data = Mapper.Map<PatientMedSuppData>(request.PatientMedSupp);
-                if (request.Insert)
-                {
-                    data.SystemName = Constants.SystemName;
-                }
                 PutPatientMedSuppDataResponse dataDomainResponse = client.Put<PutPatientMedSuppDataResponse>(url, new PutPatientMedSuppDataRequest
                 {
                     Context = "NG",
