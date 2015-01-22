@@ -184,7 +184,7 @@ namespace DataDomain.Medication.Repo
         {
             bool result = false;
             PutMedicationMapDataRequest pa = (PutMedicationMapDataRequest)entity;
-            MedicationMapData data = pa.MedicationMappingData;
+            MedicationMapData data = pa.MedicationMapData;
             try
             {
                 using (MedicationMongoContext ctx = new MedicationMongoContext(ContractDBName))

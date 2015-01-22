@@ -109,7 +109,7 @@ namespace Phytel.API.AppDomain.NG.Medication
                         ContractNumber = request.ContractNumber,
                         UserId = request.UserId,
                         Version = request.Version,
-                        MedicationMappingData = data
+                        MedicationMapData = data
                     } as object);
 
                     if (dataDomainResponse != null)

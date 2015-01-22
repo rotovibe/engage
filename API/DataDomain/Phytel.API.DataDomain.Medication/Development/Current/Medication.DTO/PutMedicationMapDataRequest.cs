@@ -7,8 +7,8 @@ namespace Phytel.API.DataDomain.Medication.DTO
     [Route("/{Context}/{Version}/{ContractNumber}/MedicationMap/Update", "PUT")]
     public class PutMedicationMapDataRequest : IDataDomainRequest
     {
-        [ApiMember(Name = "MedicationMappingData", Description = "MedicationMappingData that need to be updated", ParameterType = "property", DataType = "MedicationMappingData", IsRequired = true)]
-        public MedicationMapData MedicationMappingData { get; set; }
+        [ApiMember(Name = "MedicationMapData", Description = "MedicationMapData that need to be updated", ParameterType = "property", DataType = "MedicationMapData", IsRequired = true)]
+        public MedicationMapData MedicationMapData { get; set; }
 
         [ApiMember(Name = "Context", Description = "Product Context requesting the PatientSystem", ParameterType = "property", DataType = "string", IsRequired = false)]
         public string Context { get; set; }

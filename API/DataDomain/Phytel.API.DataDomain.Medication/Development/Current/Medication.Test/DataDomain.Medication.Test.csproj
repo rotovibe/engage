@@ -106,6 +106,16 @@
     <Compile Include="MedicationTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Search\Search_Index_Initialization_Test.cs" />
+    <Compile Include="Stubs\StubMedicationMapping_Test.cs" />
+    <Compile Include="Stubs\StubMedication_Test.cs" />
+    <Compile Include="Stubs\StubPatientMedSupp_Test.cs" />
+    <Compile Include="Stubs\StubMedicationDataManager.cs" />
+    <Compile Include="Stubs\StubMedicationMappingDataManager.cs" />
+    <Compile Include="Stubs\StubPatientMedSuppDataManager.cs" />
+    <Compile Include="Stubs\StubMedicationMappingRepository.cs" />
+    <Compile Include="Stubs\StubMedicationRepository.cs" />
+    <Compile Include="Stubs\StubPatientMedSuppRepository.cs" />
+    <Compile Include="Stubs\StubRepositoryFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -137,9 +147,7 @@
       <Name>DataDomain.Medication</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Stubs\" />
-  </ItemGroup>
+  <ItemGroup />
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

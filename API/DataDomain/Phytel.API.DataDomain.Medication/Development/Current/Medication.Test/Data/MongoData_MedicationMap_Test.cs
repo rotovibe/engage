@@ -54,7 +54,7 @@ namespace Phytel.API.DataDomain.Allergy.Test
             {
                 Context = context,
                 ContractNumber = contractNumber,
-                MedicationMappingData = data,
+                MedicationMapData = data,
                 UserId = userId,
                 Version = version
             };

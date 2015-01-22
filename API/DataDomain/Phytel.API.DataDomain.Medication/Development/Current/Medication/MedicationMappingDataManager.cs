@@ -44,12 +44,12 @@ namespace Phytel.API.DataDomain.Medication
                 MedicationMapData result = null;
                 var repo = MedicationRepositoryFactory.GetMedicationRepository(request, RepositoryType.MedicationMapping);
 
-                if (request.MedicationMappingData != null)
+                if (request.MedicationMapData != null)
                 {
                     bool status = (bool)repo.Update(request);
                     if (status)
                     {
-                        result = (MedicationMapData)repo.FindByID(request.MedicationMappingData.Id);
+                        result = (MedicationMapData)repo.FindByID(request.MedicationMapData.Id);
                     }
                 }
                 return result;
