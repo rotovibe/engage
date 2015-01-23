@@ -26,51 +26,17 @@ namespace Phytel.API.DataDomain.Medication
 
         public DeleteMedSuppsByPatientIdDataResponse DeletePatientMedSupps(DeleteMedSuppsByPatientIdDataRequest request)
         {
-            DeleteMedSuppsByPatientIdDataResponse response = null;
-            try
-            {
-                response = new DeleteMedSuppsByPatientIdDataResponse();
-
-                var repo = StubRepositoryFactory.GetMedicationRepository(request, RepositoryType.PatientMedSupp);
-                GetPatientMedSuppsDataRequest getAllPatientMedSuppsDataRequest = new GetPatientMedSuppsDataRequest
-                {
-                    Context = request.Context,
-                    ContractNumber = request.ContractNumber,
-                    PatientId = request.PatientId,
-                    UserId = request.UserId,
-                    Version = request.Version
-                };
-                List<PatientMedSuppData> patientMedSupps = repo.FindByPatientId(getAllPatientMedSuppsDataRequest) as List<PatientMedSuppData>;
-                List<string> deletedIds = null;
-                if (patientMedSupps != null)
-                {
-                    deletedIds = new List<string>();
-                    patientMedSupps.ForEach(u =>
-                    {
-                        DeleteMedSuppsByPatientIdDataRequest deletePMSDataRequest = new DeleteMedSuppsByPatientIdDataRequest
-                        {
-                            Context = request.Context,
-                            ContractNumber = request.ContractNumber,
-                            Id = u.Id,
-                            PatientId = request.PatientId,
-                            UserId = request.UserId,
-                            Version = request.Version
-                        };
-                        repo.Delete(deletePMSDataRequest);
-                        deletedIds.Add(deletePMSDataRequest.Id);
-                    });
-                    response.DeletedIds = deletedIds;
-                }
-                response.Success = true;
-                return response;
-            }
-            catch (Exception ex) { throw ex; }
+            DeleteMedSuppsByPatientIdDataResponse response = new DeleteMedSuppsByPatientIdDataResponse();
+            var repo = StubRepositoryFactory.GetMedicationRepository(request, RepositoryType.PatientMedSupp);
+            repo.Delete(request);
+            response.DeletedIds = new List<string> { request.Id};
+            response.Success = true;
+            return response;
         }
 
         public UndoDeletePatientMedSuppsDataResponse UndoDeletePatientMedSupps(UndoDeletePatientMedSuppsDataRequest request)
         {
             UndoDeletePatientMedSuppsDataResponse response = new UndoDeletePatientMedSuppsDataResponse();
-
             var repo = StubRepositoryFactory.GetMedicationRepository(request, RepositoryType.PatientMedSupp);
             if (request.Ids != null && request.Ids.Count > 0)
             {

@@ -69,7 +69,7 @@ namespace Phytel.API.DataDomain.Medication.Test
 
         public void Delete(object entity)
         {
-            throw new NotImplementedException();
+            // return nothing.
         }
 
         public void DeleteAll(List<object> entities)
@@ -120,7 +120,7 @@ namespace Phytel.API.DataDomain.Medication.Test
 
         public void UndoDelete(object entity)
         {
-            throw new NotImplementedException();
+            // return nothing.
         }
     }
 }

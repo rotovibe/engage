@@ -74,10 +74,11 @@ namespace Phytel.API.DataDomain.Medication.Test.Stubs
                 ContractNumber = contractNumber,
                 UserId = userId,
                 Version = version,
-                PatientId = "54bdde96fe7a5b27384a9b76"
+                PatientId = "54bdde96fe7a5b27384a9b76",
+                Id = "54c2bd30d433271e40fb9f11"
             };
             DeleteMedSuppsByPatientIdDataResponse response = cm.DeletePatientMedSupps(request);
-            Assert.IsTrue(response.DeletedIds.Count == 2);
+            Assert.IsTrue(response.DeletedIds.Count == 1);
         }
 
         [TestMethod]
@@ -89,7 +90,7 @@ namespace Phytel.API.DataDomain.Medication.Test.Stubs
                 ContractNumber = contractNumber,
                 UserId = userId,
                 Version = version,
-                Ids = new List<string> { "", ""}
+                Ids = new List<string> { "54c2bd30d433271e40fb9f11"}
             };
             UndoDeletePatientMedSuppsDataResponse response = cm.UndoDeletePatientMedSupps(request);
             Assert.IsTrue(response.Success);
