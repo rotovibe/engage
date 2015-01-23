@@ -293,8 +293,9 @@ namespace DataDomain.Medication.Repo
                 MEMedicationMapping meMM = new MEMedicationMapping(this.UserId)
                 {
                     FullName = request.MedicationMapData.FullName,
-                    Custom = true,
-                    Verified = false,
+                    Strength = request.MedicationMapData.Strength,
+                    Form = request.MedicationMapData.Form,
+                    Route = request.MedicationMapData.Route, 
                     TTLDate = System.DateTime.UtcNow.AddDays(_initializeDays),
                     DeleteFlag = false
                 };

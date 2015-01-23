@@ -18,8 +18,7 @@ namespace Phytel.API.AppDomain.NG.Medication
             DTO.MedicationMap med = null;
             try
             {
-
-                MedicationMapData data = EndpointUtil.InitializeMedicationMap(request);
+               MedicationMapData data = EndpointUtil.InitializeMedicationMap(request);
                 if (data != null)
                 {
                     med = Mapper.Map<DTO.MedicationMap>(data);
@@ -64,9 +63,9 @@ namespace Phytel.API.AppDomain.NG.Medication
                                 Id = request.PatientMedSupp.FamilyId,
                                 FullName  = request.PatientMedSupp.Name,
                                 SubstanceName = string.Empty,
-                                Strength = string.Empty,
-                                Route = string.Empty,
-                                Form = string.Empty,
+                                Strength = string.IsNullOrEmpty(request.PatientMedSupp.Strength) ? string.Empty : request.PatientMedSupp.Strength,
+                                Route = string.IsNullOrEmpty(request.PatientMedSupp.Route) ? string.Empty : request.PatientMedSupp.Route,
+                                Form = string.IsNullOrEmpty(request.PatientMedSupp.Form) ? string.Empty : request.PatientMedSupp.Form,
                                 Custom = true,
                                 Verified = false
                             },

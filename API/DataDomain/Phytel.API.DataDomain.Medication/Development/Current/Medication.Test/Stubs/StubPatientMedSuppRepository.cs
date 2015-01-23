@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DataDomain.Medication.Repo;
+using Phytel.API.DataDomain.Medication.DTO;
 
 namespace Phytel.API.DataDomain.Medication.Test
 {
@@ -25,7 +26,10 @@ namespace Phytel.API.DataDomain.Medication.Test
         
         public object FindByPatientId(object request)
         {
-            throw new NotImplementedException();
+            List<PatientMedSuppData> results = new List<PatientMedSuppData>();
+            results.Add(new PatientMedSuppData { CategoryId = 1, Dosage = "2", EndDate = DateTime.Now, Form = "TABLET", Id = "54bdde96fe7a5b27384a970b", Name = "ASPIRIN", Notes = "test notes 1", PatientId = "54bdde96fe7a5b27384a9b76", Route = "", StatusId = 1, Strength = "30 mg" });
+            results.Add(new PatientMedSuppData { CategoryId = 2, Dosage = "10", EndDate = DateTime.Now, Form = "TABLET", Id = "54bdde96fe7a5b27384aab1c", Name = "TYLENOL PM", Notes = "test notes 2", PatientId = "54bdde96fe7a5b27384a9b76", Route = "", StatusId = 1, Strength = "25 mg" });
+            return results;
         }
 
         public object FindNDCCodes(object request)
@@ -40,7 +44,22 @@ namespace Phytel.API.DataDomain.Medication.Test
 
         public object Insert(object newEntity)
         {
-            throw new NotImplementedException();
+            return new PatientMedSuppData { 
+                CategoryId = 1,
+                CreatedOn = DateTime.Now,
+                DeleteFlag = false,
+                Dosage = "2",
+                EndDate = DateTime.Now.AddDays(10),
+                Form = "ORAL",
+                Id = "54bdde96fe7a5b27384aaad9",
+                Name = "ADVIL",
+                PatientId = "54bdde96fe7a5b27384a9551",
+                Reason = "test reason",
+                Route = "ORAL",
+                StatusId = 1,
+                Strength = "30 mg",
+                SystemName = "Engage"
+            };
         }
 
         public object InsertAll(List<object> entities)
@@ -60,14 +79,30 @@ namespace Phytel.API.DataDomain.Medication.Test
 
         public object FindByID(string entityID)
         {
-            throw new NotImplementedException();
+            return new PatientMedSuppData
+            {
+                CategoryId = 1,
+                CreatedOn = DateTime.Now,
+                DeleteFlag = false,
+                Dosage = "2",
+                EndDate = DateTime.Now.AddDays(10),
+                Form = "ORAL",
+                Id = "54bdde96fe7a5b27384aaad9",
+                Name = "ADVIL",
+                PatientId = "54bdde96fe7a5b27384a9551",
+                Reason = "test reason",
+                Route = "ORAL",
+                StatusId = 1,
+                Strength = "30 mg",
+                SystemName = "Engage"
+            };
         }
 
         public Tuple<string, IEnumerable<object>> Select(Interface.APIExpression expression)
         {
             throw new NotImplementedException();
         }
-
+        
         public IEnumerable<object> SelectAll()
         {
             throw new NotImplementedException();
@@ -75,7 +110,7 @@ namespace Phytel.API.DataDomain.Medication.Test
 
         public object Update(object entity)
         {
-            throw new NotImplementedException();
+            return true;
         }
 
         public void CacheByID(List<string> entityIDs)
