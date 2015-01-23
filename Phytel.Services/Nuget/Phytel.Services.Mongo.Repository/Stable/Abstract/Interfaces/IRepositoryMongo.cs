@@ -19,9 +19,11 @@ namespace Phytel.Services.Mongo.Repository
 
         MongoCursor<T> Find<T, TKey>(IMongoQuery query) where T : class, IMongoEntity<TKey>;
 
-        List<T> FindAsList<T, TKey>(IMongoQuery query) where T : class, IMongoEntity<TKey>;
-
         T FindAndModify<T, TKey>(IMongoQuery query, IMongoSortBy sort, IMongoUpdate update) where T : class, IMongoEntity<TKey>;
+
+        T FindAndModify<T, TKey>(FindAndModifyArgs args) where T : class, IMongoEntity<TKey>;
+
+        List<T> FindAsList<T, TKey>(IMongoQuery query) where T : class, IMongoEntity<TKey>;
 
         T First<T, TKey>(Expression<Func<T, bool>> predicate) where T : class, IMongoEntity<TKey>;
 
@@ -34,6 +36,8 @@ namespace Phytel.Services.Mongo.Repository
         IQueryable<T> Query<T, TKey>(Expression<Func<T, bool>> predicate) where T : IMongoEntity<TKey>;
 
         long Remove<T, TKey>(Expression<Func<T, bool>> predicate) where T : IMongoEntity<TKey>;
+
+        WriteConcernResult Remove<T, TKey>(IMongoQuery query) where T : IMongoEntity<TKey>;
 
         void Save<T, TKey>(T entity) where T : IMongoEntity<TKey>;
 
