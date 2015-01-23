@@ -67,6 +67,10 @@
       <HintPath>..\..\..\..\..\packages\AutoMapper.3.2.1\lib\net40\AutoMapper.Net4.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Lucene.Net, Version=3.0.3.0, Culture=neutral, PublicKeyToken=85089178b9ac3181, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\packages\Lucene.Net.3.0.3\lib\NET40\Lucene.Net.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.QualityTools.Testing.Fakes, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="MongoDB.Bson">
       <HintPath>..\..\..\..\..\packages\mongocsharpdriver.1.9.2\lib\net35\MongoDB.Bson.dll</HintPath>
@@ -170,6 +174,7 @@
     <Compile Include="Programs\Specifications\RemoveSelectedResponseSpecification_Test.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Search\Data_Search_Test.cs" />
+    <Compile Include="Search\LuceneStrategy\BaseLuceneStrategyTests.cs" />
     <Compile Include="Search\SearchManagerTests.cs" />
     <Compile Include="Stubs\StubAppHostBase.cs" />
     <Compile Include="Stubs\StubAuditUtil.cs" />

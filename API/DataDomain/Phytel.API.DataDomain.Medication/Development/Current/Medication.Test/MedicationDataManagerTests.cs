@@ -64,10 +64,10 @@ namespace Phytel.API.DataDomain.Medication.Tests
                             ProductId = reader["PRODUCTID"].ToString().Trim(),
                             NDC = reader["PRODUCTNDC"].ToString().Trim(),
                             FullName = GetFullName(reader["PROPRIETARYNAME"].ToString().Trim() , reader["PROPRIETARYNAMESUFFIX"].ToString().Trim()),
-                            ProprietaryName = reader["PROPRIETARYNAME"].ToString().Trim().Replace("\"", ""),
-                            ProprietaryNameSuffix = reader["PROPRIETARYNAMESUFFIX"].ToString().Trim().Replace("\"", ""),
+                            ProprietaryName = reader["PROPRIETARYNAME"].ToString().Trim().Replace("\"", "").ToUpper(),
+                            ProprietaryNameSuffix = reader["PROPRIETARYNAMESUFFIX"].ToString().Trim().Replace("\"", "").ToUpper(),
                             StartDate = formatDate(reader["STARTMARKETINGDATE"].ToString().Trim()),
-                            SubstanceName = reader["SUBSTANCENAME"].ToString().Trim(), //GetList(reader["SUBSTANCENAME"].ToString().Trim()),
+                            SubstanceName = reader["SUBSTANCENAME"].ToString().Trim().ToUpper(), //GetList(reader["SUBSTANCENAME"].ToString().Trim()),
                             PharmClass = GetList(reader["PHARM_CLASSES"].ToString().Trim()),
                             Route = reader["ROUTENAME"].ToString().Trim(), //GetList(reader["ROUTENAME"].ToString().Trim()),
                             Form = reader["DOSAGEFORMNAME"].ToString().Trim(),
@@ -94,7 +94,7 @@ namespace Phytel.API.DataDomain.Medication.Tests
             var name = fpN;
             if (suffix.Length > 0)
                 name = fpN + " " + sfx;
-            return name;
+            return name.ToUpper();
         }
 
         private List<string> GetList(string p)

@@ -59,7 +59,6 @@ namespace DataDomain.Medication.Repo
                         DeleteFlag = m.DeleteFlag,
                         EndDate = m.EndDate,
                         Form = m.Form,
-                        FamilyId = ObjectId.Parse(m.FamilyId),
                         Version = m.Version,
                         Unit = m.Unit,
                         Strength = m.Strength,
@@ -73,6 +72,11 @@ namespace DataDomain.Medication.Repo
                         ProprietaryName = m.ProprietaryName,
                         ProprietaryNameSuffix = m.ProprietaryNameSuffix
                     };
+                    
+                    ObjectId objId;
+                    if (ObjectId.TryParse(m.FamilyId, out objId))
+                        med.FamilyId = objId;
+
                     mColl.Add(med);
                 });
 

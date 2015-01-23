@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
+using Contrib.Regex;
 using Lucene.Net.Analysis.Standard;
 using Lucene.Net.Documents;
 using Lucene.Net.Index;
 using Lucene.Net.QueryParsers;
 using Lucene.Net.Search;
+using Lucene.Net.Search.Spans;
 using Lucene.Net.Store;
 using Phytel.API.Common.CustomObject;
 
@@ -113,59 +116,53 @@ namespace Phytel.API.AppDomain.NG.Search.LuceneStrategy
             return query;
         }
 
-        public Query ParseWholeQueryWc(string searchQuery, string[] fields, QueryParser parser)
+        public Query ParseQueryWc(string searchQuery, string[] fields, QueryParser parser)
         {
-            Query query = new PhraseQuery();
-            Query query2 = new PhraseQuery();
-            Query q = new BooleanQuery();
-            Query mq = new BooleanQuery();
+            BooleanQuery mq = new BooleanQuery();
+            try
+            {
+                var qrArr = searchQuery.Split(null);
+
+                for (var i = 0; i < qrArr.Length; i++)
+                {
+                    mq.Add(new SpanRegexQuery(new Term(fields[0], qrArr[i] + ".*")), Occur.SHOULD);
+                    mq.Add(new SpanRegexQuery(new Term(fields[1], qrArr[i] + ".*")), Occur.SHOULD);
+                }
+            }
+            catch (ParseException ex)
+            {
+                throw new ArgumentException("BaseLuceneStrategy:ParseQueryWc():" + ex.Message);
+            }
+            return mq;
+        }
+
+        public BooleanQuery ParseWholeQueryWc(string searchQuery, string[] fields, QueryParser parser)
+        {
+            BooleanQuery mq = new BooleanQuery();
 
             try
             {
-                var bld = ParseTermWithWildcards(searchQuery);
+                var qrArr = searchQuery.Split(null);
+                SpanQuery[] compNmQ = new SpanQuery[qrArr.Length];
+                SpanQuery[] subsNmQ = new SpanQuery[qrArr.Length];
 
-                // phrase
-                query = parser.Parse("\"" + searchQuery.Trim() + "\"");
+                for (var i = 0; i < qrArr.Length; i++)
+                {
+                    compNmQ[i] = new SpanRegexQuery(new Term(fields[0], qrArr[i] + ".*"));
+                    subsNmQ[i] = new SpanRegexQuery(new Term(fields[1], qrArr[i] + ".*"));
+                }
 
-                // or
-                //"\"" + bld.ToString() + "\""
-                //((BooleanQuery)q).Add(new BooleanClause(new TermQuery(new Term(fields[0], "\"" + bld.ToString() + "\"")), Occur.SHOULD));
-                //((BooleanQuery)q).Add(new BooleanClause(new TermQuery(new Term(fields[1], "\"" + bld.ToString() + "\"")), Occur.SHOULD));
-                query2 = parser.Parse(searchQuery + "*");
+                SpanQuery compNameQ = new SpanNearQuery(compNmQ, 20, false);
+                SpanQuery subsNameQ = new SpanNearQuery(subsNmQ, 20, false);
 
-                // main
-                ((BooleanQuery) mq).Add(query, Occur.SHOULD);
-                ((BooleanQuery)mq).Add(query2, Occur.SHOULD);
+                mq.Add(compNameQ, Occur.SHOULD);
+                mq.Add(subsNameQ, Occur.SHOULD);
             }
             catch (ParseException ex)
             {
                 throw new ArgumentException("BaseLuceneStrategy:ParseWholeQueryWc():" + ex.Message);
             }
             return mq;
-        }
-
-        public StringBuilder ParseTermWithWildcards(string searchQuery)
-        {
-            try
-            {
-                var trmW = searchQuery.Trim().Split(null);
-                var bld = new System.Text.StringBuilder();
-
-                for (int i = 0; i < trmW.Length; i++)
-                {
-                    if (i == trmW.Length - 1)
-                        bld.Append(trmW[i] + "*");
-                    else
-                    {
-                        bld.Append(trmW[i] + "* ");
-                    }
-                }
-                return bld;
-            }
-            catch (Exception ex)
-            {
-                throw new ArgumentException("BaseLuceneStrategy:ParseTermWithWildcards():" + ex.Message);
-            }
         }
 
         public Query ParseWholeQuery(string searchQuery, QueryParser parser)
@@ -200,6 +197,15 @@ namespace Phytel.API.AppDomain.NG.Search.LuceneStrategy
         public List<TT> Search(string input, string fieldName = "")
         {
             return string.IsNullOrEmpty(input) ? new List<TT>() : ExecuteSearch(input, fieldName);
+        }
+
+        public string ParseSpecialCharacters(string value)
+        {
+            var specialCharacters = new char[] {'.', ',', '/', '-', '(', ')', ';', '%'};
+            var str = specialCharacters.Aggregate(value, (current, c) => current.Replace(c, ' '));
+            // parse consecutive white spaces to one
+            str = Regex.Replace(str, @"\s+", " ").Trim();
+            return str;
         }
     }
 }
