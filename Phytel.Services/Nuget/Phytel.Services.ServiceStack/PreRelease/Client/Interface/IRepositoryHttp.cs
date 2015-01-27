@@ -1,4 +1,5 @@
-﻿using System.Collections.Specialized;
+﻿using System;
+using System.Collections.Specialized;
 
 namespace Phytel.Services.ServiceStack.Client
 {
@@ -25,6 +26,8 @@ namespace Phytel.Services.ServiceStack.Client
         TResponse Post<TResponse>(string relativeUrlFormat, params string[] relativeUrlParams);
 
         void Post(object requestDto);
+
+        void PostAsync<TResponse>(object requestDto, Action<TResponse> onSuccess, Action<TResponse, Exception> onError);
 
         TResponse Post<TResponse>(object requestDto);
 

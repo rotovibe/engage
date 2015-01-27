@@ -105,6 +105,13 @@ namespace Phytel.Services.ServiceStack.Client
             return _client.Post<TResponse>(request);
         }
 
+        public void PostAsync<TResponse>(object requestDto, Action<TResponse> onSuccess, Action<TResponse, Exception> onError)
+        {
+            IReturn<TResponse> request = OnExecuteConvertToIReturn<TResponse>(requestDto);
+
+            _client.PostAsync<TResponse>(request, onSuccess, onError);
+        }
+
         public void Post(object requestDto)
         {
             IReturnVoid request = OnExecuteConvertToIReturnVoid(requestDto);
