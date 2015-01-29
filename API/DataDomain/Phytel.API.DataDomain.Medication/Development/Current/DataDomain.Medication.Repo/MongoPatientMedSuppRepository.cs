@@ -52,14 +52,14 @@ namespace DataDomain.Medication.Repo
                     {
                         PatientId = ObjectId.Parse(data.PatientId),
                         //FamilyId = string.IsNullOrEmpty(data.FamilyId) ? (ObjectId?)null : ObjectId.Parse(data.FamilyId),
-                        Name = data.Name,
+                        Name = data.Name.ToUpper(),
                         CategoryId = (Category)data.CategoryId,
                         TypeId  = ObjectId.Parse(data.TypeId),
                         StatusId = (Status)data.StatusId,
                         Dosage = data.Dosage,
                         Strength = data.Strength,
-                        Route = data.Route,
-                        Form = data.Form,
+                        Route = data.Route.ToUpper(),
+                        Form = data.Form.ToUpper(),
                         PharmClasses = getPharmClassses(ctx, data.Name),
                         NDCs = data.NDCs,
                         FreqQuantity = data.FreqQuantity,
@@ -419,17 +419,6 @@ namespace DataDomain.Medication.Repo
         public object FindNDCCodes(object request)
         {
             throw new NotImplementedException();
-        }
-
-        private static string getMedSuppName(MedicationMongoContext ctx, ObjectId msid)
-        {
-            string name = null;
-            MEMedication meM = ctx.Medications.Collection.Find(Query.EQ(MEMedication.IdProperty, msid)).SetFields(MEMedication.FullNameProperty).FirstOrDefault();
-            if (meM != null)
-            {
-                name = meM.FullName.ToUpper();
-            }
-            return name;
         }
 
         public object Initialize(object newEntity)
