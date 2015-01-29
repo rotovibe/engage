@@ -196,7 +196,7 @@ namespace DataDomain.Medication.Repo
                     uv.Add(MB.Update.Set(MEMedicationMapping.LastUpdatedOnProperty, System.DateTime.UtcNow));
                     if (!string.IsNullOrEmpty(data.FullName))
                     {
-                        uv.Add(MB.Update.Set(MEMedicationMapping.FullNameProperty, data.FullName));
+                        uv.Add(MB.Update.Set(MEMedicationMapping.FullNameProperty, data.FullName.ToUpper()));
                     }
                     else
                     {
@@ -220,7 +220,7 @@ namespace DataDomain.Medication.Repo
                     }
                     if (!string.IsNullOrEmpty(data.Form))
                     {
-                        uv.Add(MB.Update.Set(MEMedicationMapping.FormProperty, data.Form));
+                        uv.Add(MB.Update.Set(MEMedicationMapping.FormProperty, data.Form.ToUpper()));
                     }
                     else
                     {
@@ -228,7 +228,7 @@ namespace DataDomain.Medication.Repo
                     }
                     if (!string.IsNullOrEmpty(data.Route))
                     {
-                        uv.Add(MB.Update.Set(MEMedicationMapping.RouteProperty, data.Route));
+                        uv.Add(MB.Update.Set(MEMedicationMapping.RouteProperty, data.Route.ToUpper()));
                     }
                     else
                     {
