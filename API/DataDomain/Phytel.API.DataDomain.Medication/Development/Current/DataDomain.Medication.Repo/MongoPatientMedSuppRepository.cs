@@ -397,11 +397,11 @@ namespace DataDomain.Medication.Repo
             List<MEMedication> meMs = ctx.Medications.Collection.Find(Query.EQ(MEMedication.FullNameProperty, name)).SetFields(MEMedication.PharmClassProperty).ToList();
             if (meMs != null && meMs.Count > 0)
             {
+                result = new List<string>();
                 meMs.ForEach(m =>
                 {
                     if (m.PharmClass != null && m.PharmClass.Count > 0)
                     {
-                        result = new List<string>();
                         m.PharmClass.ForEach(p =>
                         {
                             // get only unique pharm classes codes.
