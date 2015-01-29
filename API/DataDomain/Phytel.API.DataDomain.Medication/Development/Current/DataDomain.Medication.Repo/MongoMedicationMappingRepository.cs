@@ -292,10 +292,10 @@ namespace DataDomain.Medication.Repo
             {
                 MEMedicationMapping meMM = new MEMedicationMapping(this.UserId)
                 {
-                    FullName = request.MedicationMapData.FullName.ToUpper(),
+                    FullName = string.IsNullOrEmpty(request.MedicationMapData.FullName) ? null : request.MedicationMapData.FullName.ToUpper(),
                     Strength = request.MedicationMapData.Strength,
-                    Form = request.MedicationMapData.Form.ToUpper(),
-                    Route = request.MedicationMapData.Route.ToUpper(), 
+                    Form = string.IsNullOrEmpty(request.MedicationMapData.Form) ? null : request.MedicationMapData.Form.ToUpper(),
+                    Route = string.IsNullOrEmpty(request.MedicationMapData.Route) ? null : request.MedicationMapData.Route.ToUpper(),
                     TTLDate = System.DateTime.UtcNow.AddDays(_initializeDays),
                     DeleteFlag = false
                 };
