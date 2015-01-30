@@ -74,7 +74,7 @@ namespace Phytel.API.AppDomain.NG.Medication
                             Version = request.Version
                         };
                         MedicationMapData medData = EndpointUtil.UpdateMedicationMap(req);
-                        DTO.Medication newMed = new DTO.Medication { Id = medData.Id, ProprietaryName = medData.FullName, Strength = medData.Strength, DosageFormName = medData.Form, RouteName = medData.Route };
+                        DTO.Medication newMed = new DTO.Medication { Id = medData.Id, ProprietaryName = medData.FullName, Strength = medData.Strength, DosageFormName = medData.Form, RouteName = medData.Route, SubstanceName = string.Empty };
                         // Register newly initialized medicationMap in search index.
                         SearchManager.RegisterMedDocumentInSearchIndex(newMed, req.ContractNumber);
                     }
