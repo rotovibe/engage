@@ -404,8 +404,8 @@ namespace DataDomain.Medication.Repo
                     {
                         m.PharmClass.ForEach(p =>
                         {
-                            // get only unique pharm classes codes.
-                            if (!result.Contains(p))
+                            // Add only unique pharm classes codes & do not add if it is string empty.
+                            if (!result.Contains(p) && !string.IsNullOrEmpty(p))
                             {
                                 result.Add(p);
                             }
