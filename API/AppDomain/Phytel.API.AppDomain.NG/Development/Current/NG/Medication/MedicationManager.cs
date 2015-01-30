@@ -61,11 +61,11 @@ namespace Phytel.API.AppDomain.NG.Medication
                             MedicationMap = new DTO.MedicationMap
                             {
                                 Id = request.PatientMedSupp.FamilyId,
-                                FullName  = request.PatientMedSupp.Name,
+                                FullName = string.IsNullOrEmpty(request.PatientMedSupp.Name) ? string.Empty : request.PatientMedSupp.Name.ToUpper(),
                                 SubstanceName = string.Empty,
                                 Strength = string.IsNullOrEmpty(request.PatientMedSupp.Strength) ? string.Empty : request.PatientMedSupp.Strength,
-                                Route = string.IsNullOrEmpty(request.PatientMedSupp.Route) ? string.Empty : request.PatientMedSupp.Route,
-                                Form = string.IsNullOrEmpty(request.PatientMedSupp.Form) ? string.Empty : request.PatientMedSupp.Form,
+                                Route = string.IsNullOrEmpty(request.PatientMedSupp.Route) ? string.Empty : request.PatientMedSupp.Route.ToUpper(),
+                                Form = string.IsNullOrEmpty(request.PatientMedSupp.Form) ? string.Empty : request.PatientMedSupp.Form.ToUpper(),
                                 Custom = true,
                                 Verified = false
                             },
