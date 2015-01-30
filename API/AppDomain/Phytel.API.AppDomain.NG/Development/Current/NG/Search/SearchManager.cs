@@ -32,9 +32,9 @@ namespace Phytel.API.AppDomain.NG.Allergy
             try
             {
                 var nfp = AutoMapper.Mapper.Map<MedNameSearchDoc>(med);
-                //var np = AutoMapper.Mapper.Map<MedFieldsSearchDoc>(med);
+                var np = AutoMapper.Mapper.Map<MedFieldsSearchDoc>(med);
                 new MedNameLuceneStrategy<MedNameSearchDoc, TextValuePair> { Contract = contractNumber }.AddUpdateLuceneIndex(nfp);
-                //new MedFieldsLuceneStrategy<MedFieldsSearchDoc, MedFieldsSearchDoc>{ Contract = contractNumber}.AddUpdateLuceneIndex(np);
+                new MedFieldsLuceneStrategy<MedFieldsSearchDoc, MedFieldsSearchDoc>{ Contract = contractNumber}.AddUpdateLuceneIndex(np);
             }
             catch (Exception ex)
             {

@@ -61,7 +61,7 @@ namespace Phytel.API.AppDomain.NG.Search.LuceneStrategy
             doc.Add(new Field("RouteName", sampleData.RouteName.Trim(), Field.Store.YES, Field.Index.ANALYZED));
             doc.Add(new Field("SubstanceName", sampleData.SubstanceName.Trim(), Field.Store.YES, Field.Index.ANALYZED));
             doc.Add(new Field("Strength", sampleData.Strength.Trim(), Field.Store.YES, Field.Index.ANALYZED));
-            doc.Add(new Field("Unit", sampleData.Unit.Trim(), Field.Store.YES, Field.Index.ANALYZED));
+            doc.Add(new Field("Unit", sampleData.Unit, Field.Store.YES, Field.Index.ANALYZED));
 
             writer.AddDocument(doc);
         }
@@ -75,7 +75,7 @@ namespace Phytel.API.AppDomain.NG.Search.LuceneStrategy
                 foreach (var sampleData in sampleDatas) AddToLuceneIndex(sampleData, writer);
 
                 analyzer.Close();
-                writer.Dispose();
+                //writer.Dispose();
             }
         }
 

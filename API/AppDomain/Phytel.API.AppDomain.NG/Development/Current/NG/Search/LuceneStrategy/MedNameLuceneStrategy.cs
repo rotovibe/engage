@@ -53,7 +53,7 @@ namespace Phytel.API.AppDomain.NG.Search.LuceneStrategy
                 foreach (var sampleData in sampleDatas) AddToLuceneIndex(sampleData, writer);
 
                 analyzer.Close();
-                writer.Dispose();
+                //writer.Dispose();
             }
         }
 

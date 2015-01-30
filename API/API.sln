@@ -252,9 +252,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Medication.Servi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Medication.Test", "DataDomain\Phytel.API.DataDomain.Medication\Development\Current\Medication.Test\DataDomain.Medication.Test.csproj", "{B181877E-DD18-412A-B01A-A662764BE6B8}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NG_Med_Import", "NG_Med_Import", "{B4A7EAB8-06F4-44EF-9EDF-59C41BDEB8CB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NGMedSuppImport", "NG_MedSupp_Import\NGMedSuppImport\NGMedSuppImport.csproj", "{BDA2A68B-4EDA-4A58-8529-DA23E3BEA4C5}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 84
+		SccNumberOfProjects = 85
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://hillstfs2013:8080/tfs/phytel
 		SccLocalPath0 = .
@@ -590,6 +594,10 @@ Global
 		SccProjectTopLevelParentUniqueName83 = API.sln
 		SccProjectName83 = DataDomain/Phytel.API.DataDomain.Medication/Development/Current/Medication.Test
 		SccLocalPath83 = DataDomain\\Phytel.API.DataDomain.Medication\\Development\\Current\\Medication.Test
+		SccProjectUniqueName84 = NG_MedSupp_Import\\NGMedSuppImport\\NGMedSuppImport.csproj
+		SccProjectTopLevelParentUniqueName84 = API.sln
+		SccProjectName84 = NG_MedSupp_Import/NGMedSuppImport
+		SccLocalPath84 = NG_MedSupp_Import\\NGMedSuppImport
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1093,6 +1101,12 @@ Global
 		{B181877E-DD18-412A-B01A-A662764BE6B8}.Model|Any CPU.Build.0 = Model|Any CPU
 		{B181877E-DD18-412A-B01A-A662764BE6B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B181877E-DD18-412A-B01A-A662764BE6B8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BDA2A68B-4EDA-4A58-8529-DA23E3BEA4C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BDA2A68B-4EDA-4A58-8529-DA23E3BEA4C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BDA2A68B-4EDA-4A58-8529-DA23E3BEA4C5}.Model|Any CPU.ActiveCfg = Release|Any CPU
+		{BDA2A68B-4EDA-4A58-8529-DA23E3BEA4C5}.Model|Any CPU.Build.0 = Release|Any CPU
+		{BDA2A68B-4EDA-4A58-8529-DA23E3BEA4C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BDA2A68B-4EDA-4A58-8529-DA23E3BEA4C5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1136,6 +1150,7 @@ Global
 		{25CF3C3F-221F-4A49-B5EF-A8A5FCF9A5BA} = {BE4D6E45-ED2C-41A4-839C-AC49756E4166}
 		{AE842695-4DD4-4403-9BE4-8473BCA09580} = {BE4D6E45-ED2C-41A4-839C-AC49756E4166}
 		{F59D966C-C273-4097-8F91-066E284C39EB} = {BE4D6E45-ED2C-41A4-839C-AC49756E4166}
+		{B4A7EAB8-06F4-44EF-9EDF-59C41BDEB8CB} = {BE4D6E45-ED2C-41A4-839C-AC49756E4166}
 		{42F7185B-2EE1-49F9-AB6F-E89E6F8AF7C6} = {2A01ECE4-66FB-4A8C-BEA0-74A20BDD6543}
 		{D4489296-17A3-4172-8FDF-DB6C0A7AE748} = {2A01ECE4-66FB-4A8C-BEA0-74A20BDD6543}
 		{229026B1-C3E5-4D2B-8D2B-61D00E8A52CC} = {2A01ECE4-66FB-4A8C-BEA0-74A20BDD6543}
@@ -1200,5 +1215,6 @@ Global
 		{006555BA-C927-4CE0-BC5A-7A6A7053D0D5} = {E30294CC-3ED1-4520-9621-2BC65E467307}
 		{12D22E0C-BFFF-4F2E-AC47-6B8E50E69861} = {E30294CC-3ED1-4520-9621-2BC65E467307}
 		{B181877E-DD18-412A-B01A-A662764BE6B8} = {E30294CC-3ED1-4520-9621-2BC65E467307}
+		{BDA2A68B-4EDA-4A58-8529-DA23E3BEA4C5} = {B4A7EAB8-06F4-44EF-9EDF-59C41BDEB8CB}
 	EndGlobalSection
 EndGlobal
