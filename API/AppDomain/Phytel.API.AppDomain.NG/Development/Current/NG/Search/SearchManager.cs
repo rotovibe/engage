@@ -34,7 +34,7 @@ namespace Phytel.API.AppDomain.NG.Allergy
                 var nfp = AutoMapper.Mapper.Map<MedNameSearchDoc>(med);
                 var np = AutoMapper.Mapper.Map<MedFieldsSearchDoc>(med);
                 new MedNameLuceneStrategy<MedNameSearchDoc, TextValuePair> { Contract = contractNumber }.AddUpdateLuceneIndex(nfp);
-                new MedFieldsLuceneStrategy<MedFieldsSearchDoc, MedFieldsSearchDoc>{ Contract = contractNumber}.AddUpdateLuceneIndex(np);
+                //new MedFieldsLuceneStrategy<MedFieldsSearchDoc, MedFieldsSearchDoc>{ Contract = contractNumber}.AddUpdateLuceneIndex(np);
             }
             catch (Exception ex)
             {
@@ -175,13 +175,13 @@ namespace Phytel.API.AppDomain.NG.Allergy
 
                 for (int i = 0; i < strengthS.Length; i++)
                 {
-                    if (i == strengthS.Length -1)
+                    if (i == strengthS.Length - 1)
                     {
-                        val.Append(strengthS[i] + " " + unitS[i]);
+                        val.Append((strengthS[i] + " " + unitS[i]).Trim());
                     }
                     else
                     {
-                        val.Append(strengthS[i] + " " + unitS[i] + ";");
+                        val.Append((strengthS[i] + " " + unitS[i] + ";").Trim());
                     }
                 }
 

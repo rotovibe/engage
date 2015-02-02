@@ -205,6 +205,9 @@
     <Compile Include="Programs\Specifications\RemoveSelectedResponseSpecification.cs" />
     <Compile Include="Search\ISearchManager.cs" />
     <Compile Include="Search\ISearchUtil.cs" />
+    <Compile Include="Search\LuceneStrategy\LuceneIndexWriter.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Search\LuceneStrategy\MedFieldsLuceneStrategy.cs" />
     <Compile Include="Search\LuceneStrategy\MedNameLuceneStrategy.cs" />
     <Compile Include="Search\LuceneStrategy\AllergyLuceneStrategy.cs" />

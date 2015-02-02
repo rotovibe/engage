@@ -62,5 +62,59 @@ namespace Phytel.API.AppDomain.NG.Allergy.Tests
             //Assert.AreEqual(propName + " "+ propSufx, results[0].Text);
             Assert.IsTrue(true);
         }
+
+        [TestMethod()]
+        public void RegisterAllergyDocumentInSearchIndexTest()
+        {
+            Assert.AreEqual("Test", "Test");
+        }
+
+        [TestMethod()]
+        public void RegisterMedDocumentInSearchIndexTest1()
+        {
+            Assert.AreEqual("Test", "Test");
+        }
+
+        [TestMethod()]
+        public void GetSearchMedNameResultsTest()
+        {
+            Assert.AreEqual("Test", "Test");
+        }
+
+        [TestMethod()]
+        public void GetSearchMedFieldsResultsTest()
+        {
+            Assert.AreEqual("Test", "Test");
+        }
+
+        [TestMethod()]
+        public void GetRouteSelectionsTest()
+        {
+            Assert.AreEqual("Test", "Test");
+        }
+
+        [TestMethod()]
+        public void GetFormSelectionsTest()
+        {
+            Assert.AreEqual("Test", "Test");
+        }
+
+        [TestMethod()]
+        public void GetStrengthSelectionsTest()
+        {
+            Assert.AreEqual("Test", "Test");
+        }
+
+        [TestMethod()]
+        public void GetUnitSelectionsTest()
+        {
+            Assert.AreEqual("Test", "Test");
+        }
+
+        [TestMethod()]
+        public void GetSearchDomainResultsTest()
+        {
+            Assert.AreEqual("Test", "Test");
+        }
     }
 }
