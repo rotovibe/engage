@@ -29,37 +29,62 @@ namespace Phytel.API.AppDomain.NG.Search.LuceneStrategy
 
         public override void AddToLuceneIndex(T sampleData, IndexWriter writer)
         {
-            var searchQuery = new TermQuery(new Term("MongoId", sampleData.Id.Trim()));
-            writer.DeleteDocuments(searchQuery);
-            var doc = new Document();
-            doc.Add(new Field("MongoId", sampleData.Id == null ? string.Empty : sampleData.Id.Trim(), Field.Store.YES, Field.Index.NOT_ANALYZED));
-            doc.Add(new Field("CompositeName", sampleData.CompositeName == null ? string.Empty : sampleData.CompositeName.Trim(), Field.Store.YES, Field.Index.ANALYZED));
-            doc.Add(new Field("SubstanceName", sampleData.SubstanceName == null ? string.Empty : sampleData.SubstanceName.Trim(), Field.Store.YES, Field.Index.ANALYZED));
-            //doc.Add(new Field("PackageId", sampleData.ProductId.Trim(), Field.Store.YES, Field.Index.NOT_ANALYZED));
-            //doc.Add(new Field("ProductNDC", sampleData.ProductNDC.Trim(), Field.Store.YES, Field.Index.NOT_ANALYZED));
-            //doc.Add(new Field("ProprietaryName", sampleData.ProprietaryName.Trim(), Field.Store.YES, Field.Index.ANALYZED));
-            //doc.Add(new Field("ProprietaryNameSuffix", sampleData.ProprietaryNameSuffix.Trim(), Field.Store.YES, Field.Index.ANALYZED));
+            try
+            {
+                var searchQuery = new TermQuery(new Term("MongoId", sampleData.Id.Trim()));
+                writer.DeleteDocuments(searchQuery);
+                var doc = new Document();
+                doc.Add(new Field("MongoId", sampleData.Id == null ? string.Empty : sampleData.Id.Trim(), Field.Store.YES, Field.Index.NOT_ANALYZED));
+                doc.Add(new Field("CompositeName", sampleData.CompositeName == null ? string.Empty : sampleData.CompositeName.Trim(), Field.Store.YES, Field.Index.ANALYZED));
+                doc.Add(new Field("SubstanceName", sampleData.SubstanceName == null ? string.Empty : sampleData.SubstanceName.Trim(), Field.Store.YES, Field.Index.ANALYZED));
+                //doc.Add(new Field("PackageId", sampleData.ProductId.Trim(), Field.Store.YES, Field.Index.NOT_ANALYZED));
+                //doc.Add(new Field("ProductNDC", sampleData.ProductNDC.Trim(), Field.Store.YES, Field.Index.NOT_ANALYZED));
+                //doc.Add(new Field("ProprietaryName", sampleData.ProprietaryName.Trim(), Field.Store.YES, Field.Index.ANALYZED));
+                //doc.Add(new Field("ProprietaryNameSuffix", sampleData.ProprietaryNameSuffix.Trim(), Field.Store.YES, Field.Index.ANALYZED));
 
-            writer.AddDocument(doc);
+                writer.AddDocument(doc);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:AddToLuceneIndex()::" + ex.Message, ex.InnerException);
+            }
         }
 
         public override void AddUpdateLuceneIndex(IEnumerable<T> sampleDatas)
         {
-            var analyzer = new StandardAnalyzer(Lucene.Net.Util.Version.LUCENE_30, new HashSet<string>());
-            //var analyzer = new WhitespaceAnalyzer();
-
-            using (var writer = new IndexWriter(Directory, analyzer, IndexWriter.MaxFieldLength.UNLIMITED))
+            try
             {
-                foreach (var sampleData in sampleDatas) AddToLuceneIndex(sampleData, writer);
+                var analyzer = new StandardAnalyzer(Lucene.Net.Util.Version.LUCENE_30, new HashSet<string>());
 
-                analyzer.Close();
-                //writer.Dispose();
+
+                using (var writer = LuceneIndexWriter.Writer(Directory, analyzer))
+                {
+                    foreach (var sampleData in sampleDatas) AddToLuceneIndex(sampleData, writer);
+
+                    analyzer.Close();
+                    writer.Commit();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:AddToLuceneIndex()::" + ex.Message, ex.InnerException);
+            }
+            finally
+            {
+                IndexWriter.Unlock(Directory);
             }
         }
 
         public override void AddUpdateLuceneIndex(T sampleData)
         {
-            AddUpdateLuceneIndex(new List<T> { sampleData });
+            try
+            {
+                AddUpdateLuceneIndex(new List<T> {sampleData});
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:AddUpdateLuceneIndex()::" + ex.Message, ex.InnerException);
+            }
         }
 
 
