@@ -29,6 +29,26 @@ namespace Phytel.API.AppDomain.NG.Medication
                                     request.Version,
                                     request.ContractNumber), request.UserId);
 
+                string strength = null;
+                List<string> strList = null;
+                if (!string.IsNullOrEmpty(request.PatientMedSupp.Strength))
+                {
+                    string[] combined = request.PatientMedSupp.Strength.Split(';');
+                    if (combined.Length > 0)
+                    {
+                        strList = new List<string>();
+                        foreach (string s in combined)
+                        {
+                            string[] str = s.Trim().Split(' ');
+                            if (str.Length > 0)
+                            {
+                                strList.Add(str[0]);
+                            }
+                        };
+                        strength = string.Join("; ", strList);
+                    }
+                }
+
                 GetMedicationNDCsDataResponse dataDomainResponse = client.Post<GetMedicationNDCsDataResponse>(url, new GetMedicationNDCsDataRequest
                 {
                     Context = "NG",
@@ -36,7 +56,7 @@ namespace Phytel.API.AppDomain.NG.Medication
                     UserId = request.UserId,
                     Version = request.Version,
                     Name = request.PatientMedSupp.Name,
-                    Strength = request.PatientMedSupp.Strength,
+                    Strength = strength,
                     Form = request.PatientMedSupp.Form,
                     Route = request.PatientMedSupp.Route
                 } as object);
