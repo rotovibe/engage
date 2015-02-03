@@ -61,7 +61,7 @@ namespace DataDomain.Medication.Repo
                         Route = string.IsNullOrEmpty(data.Route) ? null : data.Route.ToUpper(),
                         Form = string.IsNullOrEmpty(data.Form) ? null : data.Form.ToUpper(),
                         PharmClasses = getPharmClassses(ctx, data.Name),
-                        NDCs = data.NDCs,
+                        NDCs = (data.NDCs != null && data.NDCs.Count > 0) ? data.NDCs : null,
                         FreqQuantity = data.FreqQuantity,
                         FreqHowOftenId = string.IsNullOrEmpty(data.FreqHowOftenId) ? (ObjectId?)null : ObjectId.Parse(data.FreqHowOftenId),
                         FreqWhenId = string.IsNullOrEmpty(data.FreqWhenId) ? (ObjectId?)null : ObjectId.Parse(data.FreqWhenId),
@@ -224,8 +224,8 @@ namespace DataDomain.Medication.Repo
                     {
                         uv.Add(MB.Update.Set(MEPatientMedSupp.RouteProperty, BsonNull.Value));
                     }
-                    uv.Add(MB.Update.SetWrapped<List<string>>(MEPatientMedSupp.PharmClassProperty, data.PharmClasses));
-                    uv.Add(MB.Update.SetWrapped<List<string>>(MEPatientMedSupp.NDCProperty, data.NDCs));
+                    uv.Add(MB.Update.SetWrapped<List<string>>(MEPatientMedSupp.PharmClassProperty, (data.PharmClasses != null && data.PharmClasses.Count > 0) ? data.PharmClasses : null));
+                    uv.Add(MB.Update.SetWrapped<List<string>>(MEPatientMedSupp.NDCProperty, (data.NDCs != null && data.NDCs.Count > 0) ? data.NDCs : null));
                     if (!string.IsNullOrEmpty(data.FreqQuantity))
                     {
                         uv.Add(MB.Update.Set(MEPatientMedSupp.FreqQuantityProperty, data.FreqQuantity));
