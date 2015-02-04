@@ -175,7 +175,7 @@ namespace DataDomain.Medication.Repo
                     if (data.PatientId != null) uv.Add(MB.Update.Set(MEPatientMedSupp.PatientIdProperty, ObjectId.Parse(data.PatientId)));
                     if (!string.IsNullOrEmpty(data.Name))
                     {
-                        uv.Add(MB.Update.Set(MEPatientMedSupp.NameProperty, data.Name));
+                        uv.Add(MB.Update.Set(MEPatientMedSupp.NameProperty, data.Name.ToUpper()));
                     }
                     else
                     {
@@ -210,7 +210,7 @@ namespace DataDomain.Medication.Repo
                     }
                     if (!string.IsNullOrEmpty(data.Form))
                     {
-                        uv.Add(MB.Update.Set(MEPatientMedSupp.FormProperty, data.Form));
+                        uv.Add(MB.Update.Set(MEPatientMedSupp.FormProperty, data.Form.ToUpper()));
                     }
                     else
                     {
@@ -218,7 +218,7 @@ namespace DataDomain.Medication.Repo
                     }
                     if (!string.IsNullOrEmpty(data.Route))
                     {
-                        uv.Add(MB.Update.Set(MEPatientMedSupp.RouteProperty, data.Route));
+                        uv.Add(MB.Update.Set(MEPatientMedSupp.RouteProperty, data.Route.ToUpper()));
                     }
                     else 
                     {
