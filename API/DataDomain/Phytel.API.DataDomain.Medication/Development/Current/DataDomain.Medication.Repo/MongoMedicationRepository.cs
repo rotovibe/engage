@@ -208,9 +208,9 @@ namespace DataDomain.Medication.Repo
 
         /// <summary>
         /// Find the exact match on name, strength, route and form 
-        /// If it does not yield any result, find a match for name alone.
-        /// If it yields results more than 1, then find a match on name, form. 
-        /// If it yields results more than 1, then find a match on name, form, strength. 
+        /// If it does not yield any result, find a match on name, route and form.
+        /// If it does not yield any result, find a match on name and route.
+        /// If it does not yield any result, find a match on name.
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
@@ -244,46 +244,46 @@ namespace DataDomain.Medication.Repo
                     list = ctx.Medications.Collection.Find(mQuery1).SetFields(MEMedication.NDCProperty).ToList();
                     if (list.Count ==  0)
                     {
-                        // Run the query again on the name alone. 
+                        // find a match on name, route and form.
                         List<IMongoQuery> query2 = new List<IMongoQuery>();
                         query2.Add(Query.EQ(MEMedication.DeleteFlagProperty, false));
                         if (!string.IsNullOrEmpty(dataRequest.Name))
                         {
                             query2.Add(Query.EQ(MEMedication.FullNameProperty, dataRequest.Name));
                         }
+                        if (!string.IsNullOrEmpty(dataRequest.Form))
+                        {
+                            query2.Add(Query.EQ(MEMedication.FormProperty, dataRequest.Form));
+                        }
+                        if (!string.IsNullOrEmpty(dataRequest.Route))
+                        {
+                            query2.Add(Query.EQ(MEMedication.RouteProperty, dataRequest.Route));
+                        }
                         IMongoQuery mQuery2 = Query.And(query2);
                         list = ctx.Medications.Collection.Find(mQuery2).SetFields(MEMedication.NDCProperty).ToList();
-                        if (list.Count > 1)
+                        if (list.Count == 0)
                         {
-                            // Run the query again on the name and form.
+                            // find a match on name and route.
                             List<IMongoQuery> query3 = new List<IMongoQuery>();
                             query3.Add(Query.EQ(MEMedication.DeleteFlagProperty, false));
                             if (!string.IsNullOrEmpty(dataRequest.Name))
                             {
                                 query3.Add(Query.EQ(MEMedication.FullNameProperty, dataRequest.Name));
                             }
-                            if (!string.IsNullOrEmpty(dataRequest.Form))
+                            if (!string.IsNullOrEmpty(dataRequest.Route))
                             {
-                                query3.Add(Query.EQ(MEMedication.FormProperty, dataRequest.Form));
+                                query3.Add(Query.EQ(MEMedication.RouteProperty, dataRequest.Route));
                             }
                             IMongoQuery mQuery3 = Query.And(query3);
                             list = ctx.Medications.Collection.Find(mQuery3).SetFields(MEMedication.NDCProperty).ToList();
-                            if (list.Count > 1)
+                            if (list.Count == 0)
                             {
-                                // Run the query again on the name, form and strength.
+                                // find a match on name.
                                 List<IMongoQuery> query4 = new List<IMongoQuery>();
                                 query4.Add(Query.EQ(MEMedication.DeleteFlagProperty, false));
                                 if (!string.IsNullOrEmpty(dataRequest.Name))
                                 {
                                     query4.Add(Query.EQ(MEMedication.FullNameProperty, dataRequest.Name));
-                                }
-                                if (!string.IsNullOrEmpty(dataRequest.Form))
-                                {
-                                    query4.Add(Query.EQ(MEMedication.FormProperty, dataRequest.Form));
-                                }
-                                if (!string.IsNullOrEmpty(dataRequest.Strength))
-                                {
-                                    query4.Add(Query.EQ(MEMedication.StrengthProperty, dataRequest.Strength));
                                 }
                                 IMongoQuery mQuery4 = Query.And(query4);
                                 list = ctx.Medications.Collection.Find(mQuery4).SetFields(MEMedication.NDCProperty).ToList();
