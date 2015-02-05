@@ -206,6 +206,11 @@ namespace DataDomain.Medication.Repo
             throw new NotImplementedException();
         }
 
+        public object FindByName(object request)
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         /// Find the exact match on name, strength, route and form 
         /// If it does not yield any result, find a match on name, route and form.

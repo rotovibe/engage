@@ -9,6 +9,7 @@ namespace Phytel.API.DataDomain.Medication.DTO
 {
     [BsonIgnoreExtraElements(false)]
     [MongoIndex(Keys = new string[] { TTLDateProperty }, TimeToLive = 0)]
+    [MongoIndex(Keys = new string[] { FullNameProperty, DeleteFlagProperty, TTLDateProperty }, Unique = false)]
     public class MEMedicationMapping : IMongoEntity<ObjectId>, IMEEntity
     {
         public MEMedicationMapping()

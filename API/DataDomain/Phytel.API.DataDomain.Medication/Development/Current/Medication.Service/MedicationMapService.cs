@@ -8,6 +8,21 @@ namespace Phytel.API.DataDomain.Medication.Service
     {
         public IMedicationMappingDataManager Manager { get; set; }
 
+        public GetMedicationMapDataResponse Get(GetMedicationMapDataRequest request)
+        {
+            var response = new GetMedicationMapDataResponse { Version = request.Version };
+            try
+            {
+                RequireUserId(request);
+                response.MedicationMapsData = Manager.GetMedicationMap(request);
+            }
+            catch (Exception ex)
+            {
+                RaiseException(response, ex);
+            }
+            return response;
+        }
+
         public PutInsertMedicationMappingResponse Put(PutInsertMedicationMappingRequest request)
         {
             var response = new PutInsertMedicationMappingResponse { Version = request.Version };

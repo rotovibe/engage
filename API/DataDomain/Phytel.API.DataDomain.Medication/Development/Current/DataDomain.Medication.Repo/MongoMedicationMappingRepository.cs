@@ -154,6 +154,35 @@ namespace DataDomain.Medication.Repo
             catch (Exception ex) { throw ex;  }
         }
 
+        public object FindByName(object request)
+        {
+            List<MedicationMapData> list = null;
+            GetMedicationMapDataRequest dataRequest = (GetMedicationMapDataRequest)request;
+            try
+            {
+                using (MedicationMongoContext ctx = new MedicationMongoContext(ContractDBName))
+                {
+                    List<IMongoQuery> queries = new List<IMongoQuery>();
+                    queries.Add(Query.EQ(MEMedicationMapping.FullNameProperty, dataRequest.Name));
+                    queries.Add(Query.EQ(MEMedicationMapping.DeleteFlagProperty, false));
+                    queries.Add(Query.EQ(MEMedicationMapping.TTLDateProperty, BsonNull.Value));
+                    IMongoQuery mQuery = Query.And(queries);
+                    List<MEMedicationMapping> meMMs = ctx.MedicationMaps.Collection.Find(mQuery).ToList();
+                    if (meMMs != null && meMMs.Count > 0)
+                    {
+                        list = new List<MedicationMapData>();
+                        meMMs.ForEach(p =>
+                        {
+                            MedicationMapData data = AutoMapper.Mapper.Map<MedicationMapData>(p);
+                            list.Add(data);
+                        });
+                    }
+                }
+                return list;
+            }
+            catch (Exception) { throw; }
+        }
+
         public Tuple<string, IEnumerable<object>> Select(Phytel.API.Interface.APIExpression expression)
         {
             throw new NotImplementedException();

@@ -38,6 +38,21 @@ namespace Phytel.API.DataDomain.Allergy.Test
             Assert.IsNotNull(response);
         }
 
+        [TestMethod]
+        public void GetMedicationMap_Test()
+        {
+            GetMedicationMapDataRequest request = new GetMedicationMapDataRequest
+            {
+                Name = "ADVIL",
+                Context = context,
+                ContractNumber = contractNumber,
+                UserId = userId,
+                Version = version
+            };
+            //[Route("/{Context}/{Version}/{ContractNumber}/MedicationMap/{Name}", "GET")]
+            GetMedicationMapDataResponse response = client.Get<GetMedicationMapDataResponse>(string.Format("{0}/{1}/{2}/{3}/MedicationMap/{4}", url, context, version, contractNumber, request.Name));
+            Assert.IsNotNull(response);
+        }
 
         [TestMethod]
         public void UpdateMedicationMap_Test()

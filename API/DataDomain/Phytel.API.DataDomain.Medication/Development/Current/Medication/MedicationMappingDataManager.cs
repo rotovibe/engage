@@ -11,6 +11,21 @@ namespace Phytel.API.DataDomain.Medication
 {
     public class MedicationMappingDataManager : IMedicationMappingDataManager
     {
+        public List<MedicationMapData> GetMedicationMap(GetMedicationMapDataRequest request)
+        {
+            try
+            {
+                List<MedicationMapData> result = null;
+                if (!string.IsNullOrEmpty(request.Name))
+                {
+                    var repo = MedicationRepositoryFactory.GetMedicationRepository(request, RepositoryType.MedicationMapping);
+                    result = repo.FindByName(request) as List<MedicationMapData>;
+                }
+                return result;
+            }
+            catch (Exception ex) { throw ex; }
+        }
+        
         public MedicationMapData InitializeMedicationMap(PutInitializeMedicationMapDataRequest request)
         {
             try

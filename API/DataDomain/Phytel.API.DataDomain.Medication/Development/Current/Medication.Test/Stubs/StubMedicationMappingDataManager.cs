@@ -35,5 +35,11 @@ namespace Phytel.API.DataDomain.Medication
             }
             return result;
         }
+
+
+        public List<MedicationMapData> GetMedicationMap(GetMedicationMapDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
     }
 }   
