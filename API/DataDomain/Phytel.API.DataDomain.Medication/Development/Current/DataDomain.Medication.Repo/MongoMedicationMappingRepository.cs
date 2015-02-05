@@ -167,7 +167,12 @@ namespace DataDomain.Medication.Repo
                     queries.Add(Query.EQ(MEMedicationMapping.DeleteFlagProperty, false));
                     queries.Add(Query.EQ(MEMedicationMapping.TTLDateProperty, BsonNull.Value));
                     IMongoQuery mQuery = Query.And(queries);
-                    List<MEMedicationMapping> meMMs = ctx.MedicationMaps.Collection.Find(mQuery).ToList();
+                    List<MEMedicationMapping> meMMs = ctx.MedicationMaps.Collection.Find(mQuery).SetFields(
+                            MEMedicationMapping.IdProperty,
+                            MEMedicationMapping.FullNameProperty,
+                            MEMedicationMapping.RouteProperty,
+                            MEMedicationMapping.StrengthProperty,
+                            MEMedicationMapping.FormProperty).ToList();
                     if (meMMs != null && meMMs.Count > 0)
                     {
                         list = new List<MedicationMapData>();
