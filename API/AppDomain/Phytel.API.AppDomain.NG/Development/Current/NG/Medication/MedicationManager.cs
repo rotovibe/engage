@@ -54,7 +54,7 @@ namespace Phytel.API.AppDomain.NG.Medication
                 if (request.PatientMedSupp != null)
                 {
                     //Update Medication collection to add any newly initialized medication and then register in search index.
-                    if (request.PatientMedSupp.IsNew)
+                    if (!string.IsNullOrEmpty(request.PatientMedSupp.FamilyId))
                     {
                         PostMedicationMapRequest req = new DTO.PostMedicationMapRequest
                         {

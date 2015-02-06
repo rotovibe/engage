@@ -52,7 +52,6 @@ namespace Phytel.API.AppDomain.NG.Test
                 FamilyId = "54d1011184ac082234697ad7",
                 CategoryId  = 1,
                 DeleteFlag = false,
-                IsNew = true,
                // Dosage = "Two",
                 //EndDate = DateTime.UtcNow,
                 //FreqHowOftenId = "545be059d43323224896663a",

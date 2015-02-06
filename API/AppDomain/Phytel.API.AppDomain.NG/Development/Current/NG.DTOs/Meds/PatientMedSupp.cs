@@ -14,7 +14,6 @@ namespace Phytel.API.AppDomain.NG.DTO
         public string Name { get; set; }
         public int CategoryId { get; set; }
         public string TypeId { get; set; }
-        public bool IsNew { get; set; }
         public int StatusId { get; set; }
         public string Dosage { get; set; }
         public string Strength { get; set; }
