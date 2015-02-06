@@ -278,7 +278,11 @@ namespace Phytel.API.DataDomain.Medication.Test.Search
                         ProductNDC = r.NDC,
                         ProprietaryName = r.ProprietaryName,
                         ProprietaryNameSuffix = r.ProprietaryNameSuffix,
-                        SubstanceName = r.SubstanceName
+                        SubstanceName = r.SubstanceName,
+                        RouteName = r.Route,
+                        DosageFormname = r.Form,
+                        Strength = r.Strength,
+                        Unit = r.Unit
                     });
             });
         }
