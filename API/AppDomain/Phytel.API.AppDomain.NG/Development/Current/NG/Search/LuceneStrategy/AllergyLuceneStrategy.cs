@@ -88,5 +88,6 @@ namespace Phytel.API.AppDomain.NG.Search.LuceneStrategy
                 }
             }
         }
+
     }
 }

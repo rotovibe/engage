@@ -12,6 +12,7 @@ using Phytel.API.AppDomain.NG.PlanCOR;
 using Phytel.API.AppDomain.NG.Programs;
 using Phytel.API.AppDomain.NG.Programs.ElementActivation;
 using Phytel.API.AppDomain.NG.Search;
+using Phytel.API.AppDomain.NG.Search.LuceneStrategy;
 using Phytel.API.Common.Audit;
 using Phytel.API.Common.CustomObject;
 using Phytel.API.Common.Format;
@@ -65,6 +66,11 @@ namespace Phytel.API.AppDomain.NG.Service
                 // search
                 container.RegisterAutoWiredAs<SearchManager, ISearchManager>().ReusedWithin(Funq.ReuseScope.Request);
                 container.RegisterAutoWiredAs<SearchUtil, ISearchUtil>().ReusedWithin(Funq.ReuseScope.Request);
+                container.RegisterAutoWiredAs<SearchEndpointUtil, ISearchEndpointUtil>().ReusedWithin(Funq.ReuseScope.Request);
+                container.RegisterAutoWiredAs<MedFieldsLuceneStrategy<MedFieldsSearchDoc, MedFieldsSearchDoc>, IMedFieldsLuceneStrategy<MedFieldsSearchDoc, MedFieldsSearchDoc>>().ReusedWithin(Funq.ReuseScope.Container);
+                container.RegisterAutoWiredAs<MedNameLuceneStrategy<MedNameSearchDoc, TextValuePair>, IMedNameLuceneStrategy<MedNameSearchDoc, TextValuePair>>().ReusedWithin(Funq.ReuseScope.Container);
+
+                
 
                 #region Automapper Configuration
                 #region Allergy & PatientAllergy
@@ -72,6 +78,7 @@ namespace Phytel.API.AppDomain.NG.Service
                 Mapper.CreateMap<DTO.Allergy, AllergyData>();
                 Mapper.CreateMap<PatientAllergyData, PatientAllergy>();
                 Mapper.CreateMap<PatientAllergy, PatientAllergyData>();
+                Mapper.CreateMap<MedicationMapData, MedicationMap>();
                 Mapper.CreateMap<DTO.Allergy, IdNamePair>().ForMember(d => d.Name, opt => opt.MapFrom(src => src.Name.Trim().ToUpper().Replace("\"", "").Replace(",", "")));
                 #endregion
                 
@@ -185,6 +192,17 @@ namespace Phytel.API.AppDomain.NG.Service
                 Mapper.CreateMap<Document, TextValuePair>()
                                     .ForMember(d => d.Value, opt => opt.MapFrom(src => src.Get("CompositeName").Trim()))
                                     .ForMember(d => d.Text,  opt => opt.MapFrom(src => src.Get("CompositeName").Trim()));
+
+                Mapper.CreateMap<Document, MedNameSearchDoc>()
+                    .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Get("MongoId")))
+                    .ForMember(d => d.ProductId, opt => opt.MapFrom(src => src.Get("PackageId")))
+                    .ForMember(d => d.DosageFormname, opt => opt.MapFrom(src => src.Get("DosageFormName")))
+                    .ForMember(d => d.CompositeName, opt => opt.MapFrom(src => src.Get("CompositeName")))
+                    .ForMember(d => d.ProprietaryName, opt => opt.MapFrom(src => src.Get("ProprietaryName")))
+                    .ForMember(d => d.RouteName, opt => opt.MapFrom(src => src.Get("RouteName")))
+                    .ForMember(d => d.SubstanceName, opt => opt.MapFrom(src => src.Get("SubstanceName")))
+                    .ForMember(d => d.Strength, opt => opt.MapFrom(src => src.Get("Strength")))
+                    .ForMember(d => d.Unit, opt => opt.MapFrom(src => src.Get("Unit")));
 
                 Mapper.CreateMap<Document, MedFieldsSearchDoc>()
                     .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Get("MongoId")))

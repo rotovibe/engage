@@ -17,14 +17,19 @@ using Phytel.API.Common.CustomObject;
 
 namespace Phytel.API.AppDomain.NG.Search.LuceneStrategy
 {
-    public class MedNameLuceneStrategy<T, TT> : BaseLuceneStrategy<T, TT> where T : MedNameSearchDoc where TT : TextValuePair
+    public class MedNameLuceneStrategy<T, TT> : BaseLuceneStrategy<T, TT>, IMedNameLuceneStrategy<T, TT> where T : MedNameSearchDoc where TT : TextValuePair
     {
         protected static readonly string SearchIndexPath = ConfigurationManager.AppSettings["SearchIndexPath"];
+        public override string LuceneDir{ get { return SearchIndexPath + "\\" + Contract + "\\" + @"\MedNames_Index"; } }
         public string Contract { get; set; }
+        public StandardAnalyzer Analyzer { get; set; }
+        private IndexWriter _writer;
 
-        public override string LuceneDir
+        public MedNameLuceneStrategy()
         {
-            get { return SearchIndexPath + "\\" + Contract + "\\" + @"\MedNames_Index"; }
+            Contract = "InHealth001";
+            Analyzer = new StandardAnalyzer(Lucene.Net.Util.Version.LUCENE_30, new HashSet<string>());
+            _writer = new IndexWriter(Directory, Analyzer, IndexWriter.MaxFieldLength.UNLIMITED);
         }
 
         public override void AddToLuceneIndex(T sampleData, IndexWriter writer)
@@ -37,16 +42,17 @@ namespace Phytel.API.AppDomain.NG.Search.LuceneStrategy
                 doc.Add(new Field("MongoId", sampleData.Id == null ? string.Empty : sampleData.Id.Trim(), Field.Store.YES, Field.Index.NOT_ANALYZED));
                 doc.Add(new Field("CompositeName", sampleData.CompositeName == null ? string.Empty : sampleData.CompositeName.Trim(), Field.Store.YES, Field.Index.ANALYZED));
                 doc.Add(new Field("SubstanceName", sampleData.SubstanceName == null ? string.Empty : sampleData.SubstanceName.Trim(), Field.Store.YES, Field.Index.ANALYZED));
-                //doc.Add(new Field("PackageId", sampleData.ProductId.Trim(), Field.Store.YES, Field.Index.NOT_ANALYZED));
-                //doc.Add(new Field("ProductNDC", sampleData.ProductNDC.Trim(), Field.Store.YES, Field.Index.NOT_ANALYZED));
-                //doc.Add(new Field("ProprietaryName", sampleData.ProprietaryName.Trim(), Field.Store.YES, Field.Index.ANALYZED));
-                //doc.Add(new Field("ProprietaryNameSuffix", sampleData.ProprietaryNameSuffix.Trim(), Field.Store.YES, Field.Index.ANALYZED));
+                doc.Add(new Field("RouteName", sampleData.RouteName == null ? string.Empty : sampleData.RouteName.Trim(), Field.Store.YES, Field.Index.NOT_ANALYZED));
+                doc.Add(new Field("DosageFormName", sampleData.DosageFormname == null ? string.Empty : sampleData.DosageFormname.Trim(), Field.Store.YES, Field.Index.NOT_ANALYZED));
+                doc.Add(new Field("Strength", sampleData.Strength == null ? string.Empty : sampleData.Strength.Trim(), Field.Store.YES, Field.Index.NOT_ANALYZED));
+                doc.Add(new Field("Unit", sampleData.Unit == null ? string.Empty : sampleData.Unit.Trim(), Field.Store.YES, Field.Index.NOT_ANALYZED));
 
                 writer.AddDocument(doc);
+                writer.Commit();
             }
             catch (Exception ex)
             {
-                throw new Exception("AD:AddToLuceneIndex()::" + ex.Message, ex.InnerException);
+                throw new Exception("AD:MedNameLuceneStrategy:AddToLuceneIndex(T sampleData, IndexWriter writer)::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -54,20 +60,11 @@ namespace Phytel.API.AppDomain.NG.Search.LuceneStrategy
         {
             try
             {
-                var analyzer = new StandardAnalyzer(Lucene.Net.Util.Version.LUCENE_30, new HashSet<string>());
-
-
-                using (var writer = LuceneIndexWriter.Writer(Directory, analyzer))
-                {
-                    foreach (var sampleData in sampleDatas) AddToLuceneIndex(sampleData, writer);
-
-                    analyzer.Close();
-                    writer.Commit();
-                }
+                foreach (var sampleData in sampleDatas) AddToLuceneIndex(sampleData, _writer);
             }
             catch (Exception ex)
             {
-                throw new Exception("AD:AddToLuceneIndex()::" + ex.Message, ex.InnerException);
+                throw new Exception("AD:MedNameLuceneStrategy:AddToLuceneIndex()::" + ex.Message, ex.InnerException);
             }
             finally
             {
@@ -83,7 +80,7 @@ namespace Phytel.API.AppDomain.NG.Search.LuceneStrategy
             }
             catch (Exception ex)
             {
-                throw new Exception("AD:AddUpdateLuceneIndex()::" + ex.Message, ex.InnerException);
+                throw new Exception("AD:MedNameLuceneStrategy:AddUpdateLuceneIndex()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -94,15 +91,15 @@ namespace Phytel.API.AppDomain.NG.Search.LuceneStrategy
 
             searchQuery = ParseSpecialCharacters(searchQuery);
 
-            using (var searcher = new IndexSearcher(Directory, false))
+            using (var searcher = new IndexSearcher(Directory, true))
             {
                 BooleanQuery.MaxClauseCount = 1024 * 32;
                 var hits_limit = 1000;
-                var analyzer = new StandardAnalyzer(Lucene.Net.Util.Version.LUCENE_30, new HashSet<string>());
+                //var analyzer = new StandardAnalyzer(Lucene.Net.Util.Version.LUCENE_30, new HashSet<string>());
 
                 if (!string.IsNullOrEmpty(searchField))
                 {
-                    var parser = new QueryParser(Lucene.Net.Util.Version.LUCENE_30, searchField, analyzer)
+                    var parser = new QueryParser(Lucene.Net.Util.Version.LUCENE_30, searchField, Analyzer)
                     {
                         AllowLeadingWildcard = true,
                         PhraseSlop = 0
@@ -110,14 +107,14 @@ namespace Phytel.API.AppDomain.NG.Search.LuceneStrategy
                     var query = ParseWholeQuery(searchQuery, parser);
                     var hits = searcher.Search(query, hits_limit).ScoreDocs;
                     var results = MapLuceneToDataList(hits, searcher);
-                    analyzer.Close();
+                    //_analyzer.Close();
                     searcher.Dispose();
                     return results;
                 }
                 else
                 {
                     var fields = new[] {"CompositeName", "SubstanceName"};
-                    var parser = new MultiFieldQueryParser(Lucene.Net.Util.Version.LUCENE_30, fields, analyzer)
+                    var parser = new MultiFieldQueryParser(Lucene.Net.Util.Version.LUCENE_30, fields, Analyzer)
                     {
                         DefaultOperator = QueryParser.Operator.AND,
                         PhraseSlop = 0
@@ -126,7 +123,7 @@ namespace Phytel.API.AppDomain.NG.Search.LuceneStrategy
                     var hits = searcher.Search(query, null, hits_limit, Sort.RELEVANCE).ScoreDocs;
 
                     var results = MapLuceneToDataList(hits, searcher);
-                    analyzer.Close();
+                    //Analyzer.Close();
                     searcher.Dispose();
                     return results;
                 }

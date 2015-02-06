@@ -1,16 +1,10 @@
-using Phytel.API.AppDomain.NG.Allergy;
-using Phytel.API.AppDomain.NG.DTO;
 using Phytel.API.AppDomain.NG.DTO.Search;
 using Phytel.API.AppDomain.Security.DTO;
 using Phytel.API.Common.Audit;
 using Phytel.API.Common.Format;
-using Phytel.API.DataAudit;
 using ServiceStack.ServiceClient.Web;
-using ServiceStack.ServiceHost;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 
 namespace Phytel.API.AppDomain.NG.Service
 {

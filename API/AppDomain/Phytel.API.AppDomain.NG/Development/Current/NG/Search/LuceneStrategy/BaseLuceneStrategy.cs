@@ -12,6 +12,7 @@ using Lucene.Net.QueryParsers;
 using Lucene.Net.Search;
 using Lucene.Net.Search.Spans;
 using Lucene.Net.Store;
+using Phytel.API.AppDomain.NG.DTO.Search;
 using Phytel.API.Common.CustomObject;
 
 namespace Phytel.API.AppDomain.NG.Search.LuceneStrategy
@@ -38,8 +39,8 @@ namespace Phytel.API.AppDomain.NG.Search.LuceneStrategy
 
                 if (DirectoryTemp == null) DirectoryTemp = FSDirectory.Open(new DirectoryInfo(LuceneDir));
                 if (IndexWriter.IsLocked(DirectoryTemp)) IndexWriter.Unlock(DirectoryTemp);
-                var lockFilePath = Path.Combine(LuceneDir, "write.lock");
-                if (File.Exists(lockFilePath)) File.Delete(lockFilePath);
+                //var lockFilePath = Path.Combine(LuceneDir, "write.lock");
+                //if (File.Exists(lockFilePath)) File.Delete(lockFilePath);
                 return DirectoryTemp;
             }
         }
@@ -95,6 +96,16 @@ namespace Phytel.API.AppDomain.NG.Search.LuceneStrategy
         public List<TT> MapLuceneToDataList(IEnumerable<ScoreDoc> hits, IndexSearcher searcher)
         {
             return hits.Select(hit => MapLuceneDocumentToData(searcher.Doc(hit.Doc))).ToList();
+        }
+
+        public List<MedNameSearchDoc> MapLuceneToDeepDataList(IEnumerable<ScoreDoc> hits, IndexSearcher searcher)
+        {
+            return hits.Select(hit => MapDeepLuceneDocumentToData(searcher.Doc(hit.Doc))).ToList();
+        }
+
+        public MedNameSearchDoc MapDeepLuceneDocumentToData(Document doc)
+        {
+            return AutoMapper.Mapper.Map<MedNameSearchDoc>(doc);
         }
 
         public TT MapLuceneDocumentToData(Document doc)
@@ -163,6 +174,42 @@ namespace Phytel.API.AppDomain.NG.Search.LuceneStrategy
                 throw new ArgumentException("BaseLuceneStrategy:ParseWholeQueryWc():" + ex.Message);
             }
             return mq;
+        }
+
+        public BooleanQuery ParseWholeDeepQueryWc(string searchQuery, string[] fields, QueryParser parser)
+        {
+            BooleanQuery mq = new BooleanQuery();
+
+            try
+            {
+                PhraseQuery query = new PhraseQuery();
+                String[] words = searchQuery.Split(' ');
+                foreach (var word in words)
+                {
+                    query.Add(new Term(fields[0], word));
+                }
+
+                mq.Add(query, Occur.MUST);
+            }
+            catch (ParseException ex)
+            {
+                throw new ArgumentException("BaseLuceneStrategy:ParseWholeQueryWc():" + ex.Message);
+            }
+            return mq;
+        }
+
+        public Query ParseWholeDeepQuery(string searchQuery, QueryParser parser)
+        {
+            Query query = new PhraseQuery();
+            try
+            {
+                query = parser.Parse("\"" + searchQuery + "\"");
+            }
+            catch (ParseException)
+            {
+                //query = parser.Parse(QueryParser.Escape(searchQuery.Trim()));
+            }
+            return query;
         }
 
         public Query ParseWholeQuery(string searchQuery, QueryParser parser)

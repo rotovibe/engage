@@ -203,8 +203,11 @@
     <Compile Include="Programs\Specifications\ISpecification.cs" />
     <Compile Include="Programs\Specifications\IsModuleCompletedSpecification.cs" />
     <Compile Include="Programs\Specifications\RemoveSelectedResponseSpecification.cs" />
+    <Compile Include="Search\ISearchEndpointUtil.cs" />
     <Compile Include="Search\ISearchManager.cs" />
     <Compile Include="Search\ISearchUtil.cs" />
+    <Compile Include="Search\LuceneStrategy\IMedFieldsLuceneStrategy.cs" />
+    <Compile Include="Search\LuceneStrategy\IMedNameLuceneStrategy.cs" />
     <Compile Include="Search\LuceneStrategy\LuceneIndexWriter.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -212,6 +215,7 @@
     <Compile Include="Search\LuceneStrategy\MedNameLuceneStrategy.cs" />
     <Compile Include="Search\LuceneStrategy\AllergyLuceneStrategy.cs" />
     <Compile Include="Search\LuceneStrategy\BaseLuceneStrategy.cs" />
+    <Compile Include="Search\SearchEndpointUtil.cs" />
     <Compile Include="Search\SearchManager.cs" />
     <Compile Include="Search\SearchUtil.cs" />
     <Compile Include="UnitOfWork\INGUnitOfWork.cs" />
