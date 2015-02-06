@@ -38,28 +38,36 @@ namespace Phytel.API.AppDomain.NG.Allergy.Tests
 
             Mapper.CreateMap<DTO.Medication, MedNameSearchDoc>()
                 .ForMember(d => d.ProductNDC, opt => opt.MapFrom(src => src.NDC))
-                .ForMember(d => d.CompositeName, opt => opt.MapFrom(src => src.ProprietaryName + " " + src.ProprietaryNameSuffix));
+                .ForMember(d => d.CompositeName,
+                    opt => opt.MapFrom(src => src.ProprietaryName + " " + src.ProprietaryNameSuffix))
+                .ForMember(d => d.DosageFormname, opt => opt.MapFrom(src => src.DosageFormName))
+                .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Id))
+                .ForMember(d => d.ProductId, opt => opt.MapFrom(src => src.ProductId))
+                .ForMember(d => d.ProprietaryName, opt => opt.MapFrom(src => src.ProprietaryName))
+                .ForMember(d => d.ProprietaryNameSuffix, opt => opt.MapFrom(src => src.ProprietaryNameSuffix))
+                .ForMember(d => d.RouteName, opt => opt.MapFrom(src => src.RouteName))
+                .ForMember(d => d.Strength, opt => opt.MapFrom(src => src.Strength))
+                .ForMember(d => d.SubstanceName, opt => opt.MapFrom(src => src.SubstanceName))
+                .ForMember(d => d.Unit, opt => opt.MapFrom(src => string.Empty));
+
 
             Mapper.CreateMap<DTO.Medication, MedFieldsSearchDoc>()
-                .ForMember(d => d.CompositeName, opt => opt.MapFrom(src => src.ProprietaryName + " " + src.ProprietaryNameSuffix))
-            .ForMember(d => d.DosageFormname, opt => opt.MapFrom(src => src.DosageFormName))
-            .ForMember(d => d.RouteName, opt => opt.MapFrom(src => src.RouteName))
-            .ForMember(d => d.Strength, opt => opt.MapFrom(src => src.Strength))
-            .ForMember(d => d.SubstanceName, opt => opt.MapFrom(src => src.SubstanceName))
-            .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Id))
-            .ForMember(d => d.ProductId, opt => opt.MapFrom(src => src.ProductId))
-            .ForMember(d => d.ProprietaryName, opt => opt.MapFrom(src => src.ProprietaryName))
-            .ForMember(d => d.Unit, opt => opt.MapFrom(src => string.Empty));
+                .ForMember(d => d.CompositeName,
+                    opt => opt.MapFrom(src => src.ProprietaryName + " " + src.ProprietaryNameSuffix))
+                .ForMember(d => d.DosageFormname, opt => opt.MapFrom(src => src.DosageFormName))
+                .ForMember(d => d.RouteName, opt => opt.MapFrom(src => src.RouteName))
+                .ForMember(d => d.Strength, opt => opt.MapFrom(src => src.Strength))
+                .ForMember(d => d.SubstanceName, opt => opt.MapFrom(src => src.SubstanceName))
+                .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Id))
+                .ForMember(d => d.ProductId, opt => opt.MapFrom(src => src.ProductId))
+                .ForMember(d => d.ProprietaryName, opt => opt.MapFrom(src => src.ProprietaryName))
+                .ForMember(d => d.Unit, opt => opt.MapFrom(src => string.Empty));
 
             var nfp = Mapper.Map<MedNameSearchDoc>(med);
 
-            ISearchManager manager = new SearchManager();
+            ISearchManager manager = new SearchManager{ MedNameStrategy = new MedNameLuceneStrategy<MedNameSearchDoc, TextValuePair>()};
             manager.RegisterMedDocumentInSearchIndex(med, contractNumber);
 
-            //var req = new GetMedNamesRequest { Context = "Nightingale", ContractNumber = "InHealth001", Take = 30, Term = propName + " " + propSufx, Token = "54ac4a9084ac0522946dc106" };
-            //var results = manager.GetSearchMedNameResults(req);
-
-            //Assert.AreEqual(propName + " "+ propSufx, results[0].Text);
             Assert.IsTrue(true);
         }
 
