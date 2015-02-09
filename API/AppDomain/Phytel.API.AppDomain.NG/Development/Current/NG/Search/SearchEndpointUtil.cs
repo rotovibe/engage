@@ -26,7 +26,7 @@ namespace Phytel.API.AppDomain.NG.Search
 
                 IRestClient client = new JsonServiceClient();
 
-                var url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/MedicationMap/{4}",
+                var url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/MedicationMap?Name={4}",
                                    _ddMedicationServiceUrl,
                                    "NG",
                                    e.Version,
