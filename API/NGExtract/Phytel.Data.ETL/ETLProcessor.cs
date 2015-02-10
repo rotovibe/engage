@@ -37,6 +37,8 @@ using Phytel.Services;
 using Phytel.API.DataDomain.Program;
 using Phytel.API.DataDomain.Program.MongoDB.DTO;
 using System.Diagnostics;
+using System.Reflection;
+using System.Text.RegularExpressions;
 using Action = Phytel.API.DataDomain.Program.MongoDB.DTO.Action;
 using CommMode = Phytel.API.DataDomain.Contact.DTO.CommMode;
 using Language = Phytel.API.DataDomain.Contact.DTO.Language;
@@ -46,6 +48,7 @@ using System.Windows.Forms;
 using Logging;
 using Phytel.Data.ETL.BulkCopy;
 using Category = Phytel.API.DataDomain.LookUp.DTO.Category;
+using Module = Phytel.API.DataDomain.Program.MongoDB.DTO.Module;
 
 
 namespace Phytel.Data.ETL
@@ -110,7 +113,6 @@ namespace Phytel.Data.ETL
                 LoadPatientSystems(contract);
 
                 LoadPatientNotes(contract);
-                //LoadPatientProblems(contract); depricated
                 LoadPatientObservations(contract);
                 LoadContacts(contract);
 
@@ -890,7 +892,7 @@ namespace Phytel.Data.ETL
             }
             catch (Exception ex)
             {
-                OnEtlEvent(new ETLEventArgs { Message = "LoadGoalAttributes():Error" });
+                OnEtlEvent(new ETLEventArgs { Message = "LoadGoalAttributes():Error:" + ex.Message + ex.StackTrace, IsError = true });
             }
         }
 
@@ -1494,11 +1496,14 @@ namespace Phytel.Data.ETL
             {
                 OnEtlEvent(new ETLEventArgs { Message = "Loading observations.", IsError = false });
 
+                OnEtlEvent(new ETLEventArgs { Message = "Getting MEObservations from MONGO.", IsError = false });
                 ConcurrentBag<MEObservation> observations;
                 using (PatientObservationMongoContext poctx = new PatientObservationMongoContext(ctr))
                 {
                     observations = new ConcurrentBag<MEObservation>(poctx.Observations.Collection.FindAllAs<MEObservation>().ToList());
                 }
+
+                OnEtlEvent(new ETLEventArgs { Message = "Inserting observations into SQL.", IsError = false });
                     Parallel.ForEach(observations, obs =>
                     //foreach (MEObservation obs in observations)//.Where(t => !t.DeleteFlag))
                     {
@@ -1545,7 +1550,7 @@ namespace Phytel.Data.ETL
             }
             catch (Exception ex)
             {
-                throw ex; //SimpleLog.Log(new ArgumentException("LoadObservations()", ex));
+                OnEtlEvent(new ETLEventArgs { Message = "LoadObservations()" + ex.Message + ": " + ex.StackTrace, IsError = true });
             }
         }
 
@@ -1952,11 +1957,13 @@ namespace Phytel.Data.ETL
             {
                 OnEtlEvent(new ETLEventArgs { Message = "Loading patient observations.", IsError = false });
 
-                ConcurrentBag<MEPatientObservation> observations;                
-                using (PatientObservationMongoContext poctx = new PatientObservationMongoContext(ctr))
-                {
-                    observations = new ConcurrentBag<MEPatientObservation>(poctx.PatientObservations.Collection.FindAllAs<MEPatientObservation>().ToList());
-                }
+                ConcurrentBag<MEPatientObservation> observations;
+                    using (PatientObservationMongoContext poctx = new PatientObservationMongoContext(ctr))
+                    {
+                        observations =
+                            new ConcurrentBag<MEPatientObservation>(
+                                poctx.PatientObservations.Collection.FindAllAs<MEPatientObservation>().ToList());
+                    }
 
                 var rSeries = new ReadObservationsSeries().ReadEObservationSeries(observations.ToList());
 
@@ -1995,11 +2002,44 @@ namespace Phytel.Data.ETL
                     }
                     catch (Exception ex)
                     {
-                        OnEtlEvent(new ETLEventArgs
+                        if (ex.Message.Contains("Received an invalid column length from the bcp client for colid"))
                         {
-                            Message = "LoadPatientObservations(): SqlBulkCopy process failure: " + ex.Message + " : " + ex.InnerException,
-                            IsError = true
-                        });
+                            string pattern = @"\d+";
+                            Match match = Regex.Match(ex.Message.ToString(), pattern);
+                            var index = Convert.ToInt32(match.Value) - 1;
+
+                            FieldInfo fi = typeof(SqlBulkCopy).GetField("_sortedColumnMappings",
+                                BindingFlags.NonPublic | BindingFlags.Instance);
+                            var sortedColumns = fi.GetValue(bcc);
+                            var items =
+                                (Object[])
+                                    sortedColumns.GetType()
+                                        .GetField("_items", BindingFlags.NonPublic | BindingFlags.Instance)
+                                        .GetValue(sortedColumns);
+
+                            FieldInfo itemdata = items[index].GetType()
+                                .GetField("_metadata", BindingFlags.NonPublic | BindingFlags.Instance);
+                            var metadata = itemdata.GetValue(items[index]);
+
+                            var column =
+                                metadata.GetType()
+                                    .GetField("column",
+                                        BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+                                    .GetValue(metadata);
+                            var length =
+                                metadata.GetType()
+                                    .GetField("length",
+                                        BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+                                    .GetValue(metadata);
+
+                            OnEtlEvent(new ETLEventArgs
+                            {
+                                Message =
+                                    "LoadPatientObservations():SqlBulkCopy process failure: " + ex.Message + String.Format("Column: {0} contains data with a length greater than: {1}", column, length) + " : " +
+                                    ex.InnerException,
+                                IsError = true
+                            });
+                        }
                     }
                 }
 
@@ -2049,62 +2089,14 @@ namespace Phytel.Data.ETL
             }
             catch (Exception ex)
             {
-                throw ex; //SimpleLog.Log(new ArgumentException("LoadPatientObservations()", ex));
+                OnEtlEvent(new ETLEventArgs
+                {
+                    Message =
+                        "LoadPatientObservations():SqlBulkCopy process failure: " + ex.Message + ex.InnerException,
+                    IsError = true
+                });
             }
         }
-
-        //private void LoadPatientProblems(string ctr)
-        //{
-        //    try
-        //    {
-        //        OnEtlEvent(new ETLEventArgs { Message = "Loading patient problems.", IsError = false });
-
-        //        List<MEPatientProblem> problems;                
-        //        using (PatientProblemMongoContext ppctx = new PatientProblemMongoContext(ctr))
-        //        {
-        //            problems =
-        //                ppctx.PatientProblems.Collection.FindAllAs<MEPatientProblem>().ToList();
-        //        }
-
-        //        //Parallel.ForEach(problems, new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount * _exponent }, problem =>
-        //            foreach (MEPatientProblem problem in problems)//.Where(t => !t.DeleteFlag))
-        //            {
-        //                try
-        //                {
-        //                    ParameterCollection parms = new ParameterCollection();
-        //                    parms.Add(new Parameter("@MongoID", (string.IsNullOrEmpty(problem.Id.ToString()) ? string.Empty : problem.Id.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
-        //                    parms.Add(new Parameter("@PatientMongoId", (string.IsNullOrEmpty(problem.PatientID.ToString()) ? string.Empty : problem.PatientID.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
-        //                    parms.Add(new Parameter("@ProblemMongoId", (string.IsNullOrEmpty(problem.ProblemID.ToString()) ? string.Empty : problem.ProblemID.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
-        //                    parms.Add(new Parameter("@Active", (string.IsNullOrEmpty(problem.Active.ToString()) ? string.Empty : problem.Active.ToString()), SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
-        //                    parms.Add(new Parameter("@Featured", (string.IsNullOrEmpty(problem.Featured.ToString()) ? string.Empty : problem.Featured.ToString()), SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
-        //                    parms.Add(new Parameter("@Level", problem.Level, SqlDbType.Int, ParameterDirection.Input, 32));
-        //                    parms.Add(new Parameter("@UpdatedBy", (string.IsNullOrEmpty(problem.UpdatedBy.ToString()) ? string.Empty : problem.UpdatedBy.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
-        //                    parms.Add(new Parameter("@LastUpdatedOn", problem.LastUpdatedOn ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
-        //                    parms.Add(new Parameter("@RecordCreatedBy", (string.IsNullOrEmpty(problem.RecordCreatedBy.ToString()) ? string.Empty : problem.RecordCreatedBy.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
-        //                    parms.Add(new Parameter("@RecordCreatedOn", problem.RecordCreatedOn, SqlDbType.DateTime, ParameterDirection.Input, 50));
-        //                    parms.Add(new Parameter("@Version", problem.Version, SqlDbType.Float, ParameterDirection.Input, 32));
-        //                    parms.Add(new Parameter("@Delete", (string.IsNullOrEmpty(problem.DeleteFlag.ToString()) ? string.Empty : problem.DeleteFlag.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
-        //                    parms.Add(new Parameter("@StartDate", problem.StartDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
-        //                    parms.Add(new Parameter("@EndDate", problem.EndDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
-        //                    parms.Add(new Parameter("@TTLDate", problem.TTLDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
-        //                    if (problem.ExtraElements != null)
-        //                        parms.Add(new Parameter("@ExtraElements", problem.ExtraElements.ToString(), SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
-        //                    else
-        //                        parms.Add(new Parameter("@ExtraElements", string.Empty, SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
-
-        //                    SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_RPT_SavePatientProblem", parms);
-        //                }
-        //                catch (Exception ex)
-        //                {
-        //                    OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace, IsError = true });
-        //                }
-        //            }//);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw ex; //SimpleLog.Log(new ArgumentException("LoadPatientProblems()", ex));
-        //    }
-        //}
 
         private void LoadToDos(string ctr)
         {
@@ -2274,13 +2266,44 @@ namespace Phytel.Data.ETL
                     }
                     catch (Exception ex)
                     {
-                        OnEtlEvent(new ETLEventArgs
+                        if (ex.Message.Contains("Received an invalid column length from the bcp client for colid"))
                         {
-                            Message =
-                                "LoadPatientProgramAttributes():SqlBulkCopy process failure: " + ex.Message + " : " +
-                                ex.InnerException,
-                            IsError = true
-                        });
+                            string pattern = @"\d+";
+                            Match match = Regex.Match(ex.Message.ToString(), pattern);
+                            var index = Convert.ToInt32(match.Value) - 1;
+
+                            FieldInfo fi = typeof(SqlBulkCopy).GetField("_sortedColumnMappings",
+                                BindingFlags.NonPublic | BindingFlags.Instance);
+                            var sortedColumns = fi.GetValue(bcc);
+                            var items =
+                                (Object[])
+                                    sortedColumns.GetType()
+                                        .GetField("_items", BindingFlags.NonPublic | BindingFlags.Instance)
+                                        .GetValue(sortedColumns);
+
+                            FieldInfo itemdata = items[index].GetType()
+                                .GetField("_metadata", BindingFlags.NonPublic | BindingFlags.Instance);
+                            var metadata = itemdata.GetValue(items[index]);
+
+                            var column =
+                                metadata.GetType()
+                                    .GetField("column",
+                                        BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+                                    .GetValue(metadata);
+                            var length =
+                                metadata.GetType()
+                                    .GetField("length",
+                                        BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+                                    .GetValue(metadata);
+
+                            OnEtlEvent(new ETLEventArgs
+                            {
+                                Message =
+                                    "LoadPatientProgramAttributes():SqlBulkCopy process failure: " + ex.Message + String.Format("Column: {0} contains data with a length greater than: {1}", column, length) + " : " +
+                                    ex.InnerException,
+                                IsError = true
+                            });
+                        }
                     }
                 }
 
@@ -2349,7 +2372,8 @@ namespace Phytel.Data.ETL
                 //ConcurrentBag<MEPatientProgram> programs;
                 using (ProgramMongoContext pctx = new ProgramMongoContext(ctr))
                 {
-                    programs = new List<MEPatientProgram>(Utils.GetMongoCollectionList(pctx.PatientPrograms.Collection, 50));
+                    //programs = new List<MEPatientProgram>(Utils.GetMongoCollectionList(pctx.PatientPrograms.Collection, 300));
+                    programs = new List<MEPatientProgram>(pctx.PatientPrograms.Collection.FindAllAs<MEPatientProgram>().ToList());
                 }
 
                 LoadPlanElementLists();
@@ -2408,13 +2432,44 @@ namespace Phytel.Data.ETL
                     }
                     catch (Exception ex)
                     {
-                        OnEtlEvent(new ETLEventArgs
+                        if (ex.Message.Contains("Received an invalid column length from the bcp client for colid"))
                         {
-                            Message =
-                                "LoadPatientProgramResponses():SqlBulkCopy process failure: " + ex.Message + " : " +
-                                ex.InnerException,
-                            IsError = true
-                        });
+                            string pattern = @"\d+";
+                            Match match = Regex.Match(ex.Message.ToString(), pattern);
+                            var index = Convert.ToInt32(match.Value) - 1;
+
+                            FieldInfo fi = typeof(SqlBulkCopy).GetField("_sortedColumnMappings",
+                                BindingFlags.NonPublic | BindingFlags.Instance);
+                            var sortedColumns = fi.GetValue(bcc);
+                            var items =
+                                (Object[])
+                                    sortedColumns.GetType()
+                                        .GetField("_items", BindingFlags.NonPublic | BindingFlags.Instance)
+                                        .GetValue(sortedColumns);
+
+                            FieldInfo itemdata = items[index].GetType()
+                                .GetField("_metadata", BindingFlags.NonPublic | BindingFlags.Instance);
+                            var metadata = itemdata.GetValue(items[index]);
+
+                            var column =
+                                metadata.GetType()
+                                    .GetField("column",
+                                        BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+                                    .GetValue(metadata);
+                            var length =
+                                metadata.GetType()
+                                    .GetField("length",
+                                        BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+                                    .GetValue(metadata);
+
+                            OnEtlEvent(new ETLEventArgs
+                            {
+                                Message =
+                                    "LoadPatientPrograms():SqlBulkCopy process failure: " + ex.Message + String.Format("Column: {0} contains data with a length greater than: {1}", column, length) + " : " +
+                                    ex.InnerException,
+                                IsError = true
+                            });
+                        }
                     }
                 }
 
@@ -2538,8 +2593,7 @@ namespace Phytel.Data.ETL
             }
             catch (Exception ex)
             {
-                throw new ArgumentException("LoadPatientPrograms() : ", ex.InnerException);
-                //throw ex; //SimpleLog.Log(new ArgumentException("LoadPatientPrograms()", ex));
+                throw new ArgumentException("LoadPatientPrograms() : " + ex.Message + ex.StackTrace, ex.InnerException);
             }
         }
 
@@ -2597,13 +2651,43 @@ namespace Phytel.Data.ETL
                     }
                     catch (Exception ex)
                     {
-                        OnEtlEvent(new ETLEventArgs
+                        if (ex.Message.Contains("Received an invalid column length from the bcp client for colid"))
                         {
-                            Message =
-                                "LoadPatientProgramModules():SqlBulkCopy process failure: " + ex.Message + " : " +
-                                ex.InnerException,
-                            IsError = true
-                        });
+                            string pattern = @"\d+";
+                            Match match = Regex.Match(ex.Message.ToString(), pattern);
+                            var index = Convert.ToInt32(match.Value) - 1;
+
+                            FieldInfo fi = typeof(SqlBulkCopy).GetField("_sortedColumnMappings",
+                                BindingFlags.NonPublic | BindingFlags.Instance);
+                            var sortedColumns = fi.GetValue(bcc);
+                            var items =
+                                (Object[])
+                                    sortedColumns.GetType()
+                                        .GetField("_items", BindingFlags.NonPublic | BindingFlags.Instance)
+                                        .GetValue(sortedColumns);
+
+                            FieldInfo itemdata = items[index].GetType()
+                                .GetField("_metadata", BindingFlags.NonPublic | BindingFlags.Instance);
+                            var metadata = itemdata.GetValue(items[index]);
+
+                            var column =
+                                metadata.GetType()
+                                    .GetField("column",
+                                        BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+                                    .GetValue(metadata);
+                            var length =
+                                metadata.GetType()
+                                    .GetField("length",
+                                        BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+                                    .GetValue(metadata);
+                            OnEtlEvent(new ETLEventArgs
+                            {
+                                Message =
+                                    "LoadPatientProgramModules():SqlBulkCopy process failure: " + ex.Message + String.Format("Column: {0} contains data with a length greater than: {1}", column, length) + " : " +
+                                    ex.InnerException,
+                                IsError = true
+                            });
+                        }
                     }
                 }
 
@@ -2727,13 +2811,43 @@ namespace Phytel.Data.ETL
                     }
                     catch (Exception ex)
                     {
-                        OnEtlEvent(new ETLEventArgs
+                        if (ex.Message.Contains("Received an invalid column length from the bcp client for colid"))
                         {
-                            Message =
-                                "LoadPatientProgramActions():SqlBulkCopy process failure: " + ex.Message + " : " +
-                                ex.InnerException,
-                            IsError = true
-                        });
+                            string pattern = @"\d+";
+                            Match match = Regex.Match(ex.Message.ToString(), pattern);
+                            var index = Convert.ToInt32(match.Value) - 1;
+
+                            FieldInfo fi = typeof (SqlBulkCopy).GetField("_sortedColumnMappings",
+                                BindingFlags.NonPublic | BindingFlags.Instance);
+                            var sortedColumns = fi.GetValue(bcc);
+                            var items =
+                                (Object[])
+                                    sortedColumns.GetType()
+                                        .GetField("_items", BindingFlags.NonPublic | BindingFlags.Instance)
+                                        .GetValue(sortedColumns);
+
+                            FieldInfo itemdata = items[index].GetType()
+                                .GetField("_metadata", BindingFlags.NonPublic | BindingFlags.Instance);
+                            var metadata = itemdata.GetValue(items[index]);
+
+                            var column =
+                                metadata.GetType()
+                                    .GetField("column",
+                                        BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+                                    .GetValue(metadata);
+                            var length =
+                                metadata.GetType()
+                                    .GetField("length",
+                                        BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+                                    .GetValue(metadata);
+                            OnEtlEvent(new ETLEventArgs
+                            {
+                                Message =
+                                    "LoadPatientProgramActions():SqlBulkCopy process failure: " + ex.Message + String.Format("Column: {0} contains data with a length greater than: {1}", column, length) + " : " +
+                                    ex.InnerException,
+                                IsError = true
+                            });
+                        }
                     }
                 }
 
@@ -2870,13 +2984,30 @@ namespace Phytel.Data.ETL
                     }
                     catch (Exception ex)
                     {
-                        OnEtlEvent(new ETLEventArgs
+                        if (ex.Message.Contains("Received an invalid column length from the bcp client for colid"))
                         {
-                            Message =
-                                "LoadPatientProgramSteps():SqlBulkCopy process failure: " + ex.Message + " : " +
-                                ex.InnerException,
-                            IsError = true
-                        });
+                                string pattern = @"\d+";
+                                Match match = Regex.Match(ex.Message.ToString(), pattern);
+                                var index = Convert.ToInt32(match.Value) - 1;
+
+                                FieldInfo fi = typeof(SqlBulkCopy).GetField("_sortedColumnMappings", BindingFlags.NonPublic | BindingFlags.Instance);
+                                var sortedColumns = fi.GetValue(bcc);
+                                var items = (Object[])sortedColumns.GetType().GetField("_items", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(sortedColumns);
+
+                                FieldInfo itemdata = items[index].GetType().GetField("_metadata", BindingFlags.NonPublic | BindingFlags.Instance);
+                                var metadata = itemdata.GetValue(items[index]);
+
+                                var column = metadata.GetType().GetField("column", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance).GetValue(metadata);
+                                var length = metadata.GetType().GetField("length", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance).GetValue(metadata);
+
+                            OnEtlEvent(new ETLEventArgs
+                            {
+                                Message =
+                                    "LoadPatientProgramSteps():SqlBulkCopy process failure: " + String.Format("Column: {0} contains data with a length greater than: {1}", column, length) + " : " +
+                                    ex.InnerException,
+                                IsError = true
+                            });
+                        }
                     }
                 }
 
@@ -3000,13 +3131,49 @@ namespace Phytel.Data.ETL
                         bcc.DestinationTableName = "RPT_PatientProgramResponse";
                         bcc.WriteToServer(objRdr);
                     }
+
                     catch (Exception ex)
                     {
-                        OnEtlEvent(new ETLEventArgs
+                        if (ex.Message.Contains("Received an invalid column length from the bcp client for colid"))
                         {
-                            Message = "LoadPatientProgramResponses():SqlBulkCopy process failure: " + ex.Message + " : " + ex.InnerException,
-                            IsError = true
-                        });
+                            string pattern = @"\d+";
+                            Match match = Regex.Match(ex.Message.ToString(), pattern);
+                            var index = Convert.ToInt32(match.Value) - 1;
+
+                            FieldInfo fi = typeof (SqlBulkCopy).GetField("_sortedColumnMappings",
+                                BindingFlags.NonPublic | BindingFlags.Instance);
+                            var sortedColumns = fi.GetValue(bcc);
+                            var items =
+                                (Object[])
+                                    sortedColumns.GetType()
+                                        .GetField("_items", BindingFlags.NonPublic | BindingFlags.Instance)
+                                        .GetValue(sortedColumns);
+
+                            FieldInfo itemdata = items[index].GetType()
+                                .GetField("_metadata", BindingFlags.NonPublic | BindingFlags.Instance);
+                            var metadata = itemdata.GetValue(items[index]);
+
+                            var column =
+                                metadata.GetType()
+                                    .GetField("column",
+                                        BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+                                    .GetValue(metadata);
+                            var length =
+                                metadata.GetType()
+                                    .GetField("length",
+                                        BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+                                    .GetValue(metadata);
+
+                            OnEtlEvent(new ETLEventArgs
+                            {
+                                Message =
+                                    "LoadPatientProgramResponses():SqlBulkCopy process failure: " + ex.Message +
+                                    String.Format("Column: {0} contains data with a length greater than: {1}", column,
+                                        length) + " : " +
+                                    ex.InnerException,
+                                IsError = true
+                            });
+                        }
                     }
                 }
             }
@@ -3397,7 +3564,8 @@ namespace Phytel.Data.ETL
                         ParameterCollection parms = new ParameterCollection();
 
                         parms.Add(new Parameter("@MongoId", (string.IsNullOrEmpty(pm.Id.ToString()) ? string.Empty : pm.Id.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                        parms.Add(new Parameter("@MongoFamilyId", (string.IsNullOrEmpty(pm.FamilyId.ToString()) ? string.Empty : pm.FamilyId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                        //parms.Add(new Parameter("@MongoFamilyId", (string.IsNullOrEmpty(pm.FamilyId.ToString()) ? string.Empty : pm.FamilyId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                        parms.Add(new Parameter("@MongoFamilyId", string.Empty, SqlDbType.VarChar, ParameterDirection.Input, 50));
                         parms.Add(new Parameter("@MongoPatientId", (string.IsNullOrEmpty(pm.PatientId.ToString()) ? string.Empty : pm.PatientId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
                         parms.Add(new Parameter("@Name", (string.IsNullOrEmpty(pm.Name) ? string.Empty : pm.Name), SqlDbType.VarChar, ParameterDirection.Input, 200));
                         parms.Add(new Parameter("@Category", (string.IsNullOrEmpty(pm.CategoryId.ToString()) ? string.Empty : pm.CategoryId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 200));
@@ -3515,6 +3683,7 @@ namespace Phytel.Data.ETL
 
         private void LoadUsers(string ctr)
         {
+            string name = string.Empty;
             try
             {
                 OnEtlEvent(new ETLEventArgs { Message = "Loading users.", IsError = false });
@@ -3528,6 +3697,7 @@ namespace Phytel.Data.ETL
                     Parallel.ForEach(contacts, contact =>
                     //foreach (MEContact contact in contacts)//.Where(t => !t.DeleteFlag))
                     {
+                        name = contact.LastName +", " + contact.FirstName;
                         if (contact.PatientId == null)
                         {
                             try
@@ -3569,14 +3739,14 @@ namespace Phytel.Data.ETL
                             }
                             catch (Exception ex)
                             {
-                                OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace, IsError = true });
+                                OnEtlEvent(new ETLEventArgs { Message = "name: " + name + ": " + ex.Message + ": " + ex.StackTrace, IsError = true });
                             }
                         }
                     });
             }
             catch (Exception ex)
             {
-                throw ex; //SimpleLog.Log(new ArgumentException("LoadUsers()", ex));
+                OnEtlEvent(new ETLEventArgs {  Message = "LoadUsers():: name: " + name + ": " + ex.Message + ": " + ex.StackTrace, IsError = true });
             }
         }
     }
