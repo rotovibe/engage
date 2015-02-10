@@ -27,17 +27,6 @@ namespace Phytel.API.DataDomain.Medication.Test.Search
         }
 
         [TestMethod]
-        public void InitializeProductFields()
-        {
-            var listNames = new List<MedFieldsSearchDoc>();
-            //GetProductMedFieldsSql(listNames);
-            GetProductInfo(listNames);
-
-            var lucene = new MedFieldsLuceneStrategy<MedFieldsSearchDoc, MedFieldsSearchDoc>() { Contract = "InHealth001" };
-            lucene.AddUpdateLuceneIndex(listNames);
-        }
-
-        [TestMethod]
         public void InitializeMedicationMappingData()
         {
             var medlist = GetMedicationMongoList();

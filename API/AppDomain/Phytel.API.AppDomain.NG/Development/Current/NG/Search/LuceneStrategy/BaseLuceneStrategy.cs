@@ -163,8 +163,8 @@ namespace Phytel.API.AppDomain.NG.Search.LuceneStrategy
                     subsNmQ[i] = new SpanRegexQuery(new Term(fields[1], qrArr[i] + ".*"));
                 }
 
-                SpanQuery compNameQ = new SpanNearQuery(compNmQ, 20, false);
-                SpanQuery subsNameQ = new SpanNearQuery(subsNmQ, 20, false);
+                SpanQuery compNameQ = new SpanNearQuery(compNmQ, 1, false);
+                SpanQuery subsNameQ = new SpanNearQuery(subsNmQ, 1, false);
 
                 mq.Add(compNameQ, Occur.SHOULD);
                 mq.Add(subsNameQ, Occur.SHOULD);
@@ -174,42 +174,6 @@ namespace Phytel.API.AppDomain.NG.Search.LuceneStrategy
                 throw new ArgumentException("BaseLuceneStrategy:ParseWholeQueryWc():" + ex.Message);
             }
             return mq;
-        }
-
-        public BooleanQuery ParseWholeDeepQueryWc(string searchQuery, string[] fields, QueryParser parser)
-        {
-            BooleanQuery mq = new BooleanQuery();
-
-            try
-            {
-                PhraseQuery query = new PhraseQuery();
-                String[] words = searchQuery.Split(' ');
-                foreach (var word in words)
-                {
-                    query.Add(new Term(fields[0], word));
-                }
-
-                mq.Add(query, Occur.MUST);
-            }
-            catch (ParseException ex)
-            {
-                throw new ArgumentException("BaseLuceneStrategy:ParseWholeQueryWc():" + ex.Message);
-            }
-            return mq;
-        }
-
-        public Query ParseWholeDeepQuery(string searchQuery, QueryParser parser)
-        {
-            Query query = new PhraseQuery();
-            try
-            {
-                query = parser.Parse("\"" + searchQuery + "\"");
-            }
-            catch (ParseException)
-            {
-                //query = parser.Parse(QueryParser.Escape(searchQuery.Trim()));
-            }
-            return query;
         }
 
         public Query ParseWholeQuery(string searchQuery, QueryParser parser)

@@ -67,9 +67,7 @@ namespace Phytel.API.AppDomain.NG.Service
                 container.RegisterAutoWiredAs<SearchManager, ISearchManager>().ReusedWithin(Funq.ReuseScope.Request);
                 container.RegisterAutoWiredAs<SearchUtil, ISearchUtil>().ReusedWithin(Funq.ReuseScope.Request);
                 container.RegisterAutoWiredAs<SearchEndpointUtil, ISearchEndpointUtil>().ReusedWithin(Funq.ReuseScope.Request);
-                container.RegisterAutoWiredAs<MedFieldsLuceneStrategy<MedFieldsSearchDoc, MedFieldsSearchDoc>, IMedFieldsLuceneStrategy<MedFieldsSearchDoc, MedFieldsSearchDoc>>().ReusedWithin(Funq.ReuseScope.Container);
                 container.RegisterAutoWiredAs<MedNameLuceneStrategy<MedNameSearchDoc, TextValuePair>, IMedNameLuceneStrategy<MedNameSearchDoc, TextValuePair>>().ReusedWithin(Funq.ReuseScope.Container);
-
                 
 
                 #region Automapper Configuration

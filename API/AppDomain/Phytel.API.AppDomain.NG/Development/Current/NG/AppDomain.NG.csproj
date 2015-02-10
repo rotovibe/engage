@@ -81,6 +81,9 @@
     <Reference Include="Lucene.Net.Contrib.Highlighter">
       <HintPath>..\..\..\..\..\packages\Lucene.Net.Contrib.3.0.3\lib\net40\Lucene.Net.Contrib.Highlighter.dll</HintPath>
     </Reference>
+    <Reference Include="Lucene.Net.Contrib.Management">
+      <HintPath>..\..\..\..\..\packages\Lucene.Net.Contrib.Management.1.0.3\lib\net40-full\Lucene.Net.Contrib.Management.dll</HintPath>
+    </Reference>
     <Reference Include="Lucene.Net.Contrib.Memory">
       <HintPath>..\..\..\..\..\packages\Lucene.Net.Contrib.3.0.3\lib\net40\Lucene.Net.Contrib.Memory.dll</HintPath>
     </Reference>

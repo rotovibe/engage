@@ -1,19 +1,13 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using Lucene.Net.Analysis;
 using Lucene.Net.Analysis.Standard;
 using Lucene.Net.Documents;
 using Lucene.Net.Index;
 using Lucene.Net.QueryParsers;
 using Lucene.Net.Search;
 using Phytel.API.AppDomain.NG.DTO.Search;
-using Phytel.API.Common.CustomObject;
+using Version = Lucene.Net.Util.Version;
 
 namespace Phytel.API.AppDomain.NG.Search.LuceneStrategy
 {
@@ -27,8 +21,8 @@ namespace Phytel.API.AppDomain.NG.Search.LuceneStrategy
 
         public MedNameLuceneStrategy()
         {
-            Contract = "InHealth001";
-            Analyzer = new StandardAnalyzer(Lucene.Net.Util.Version.LUCENE_30, new HashSet<string>());
+            Contract = ConfigurationManager.AppSettings["SearchContractName"]; //"InHealth001";
+            Analyzer = new StandardAnalyzer(Version.LUCENE_30, new HashSet<string>());
             _writer = new IndexWriter(Directory, Analyzer, IndexWriter.MaxFieldLength.UNLIMITED);
         }
 
@@ -39,8 +33,9 @@ namespace Phytel.API.AppDomain.NG.Search.LuceneStrategy
                 var searchQuery = new TermQuery(new Term("MongoId", sampleData.Id.Trim()));
                 writer.DeleteDocuments(searchQuery);
                 var doc = new Document();
+
+                doc.Add(new Field("CompositeName", sampleData.CompositeName == null ? string.Empty : sampleData.CompositeName.Trim(), Field.Store.YES, Field.Index.ANALYZED) { Boost = 10 });
                 doc.Add(new Field("MongoId", sampleData.Id == null ? string.Empty : sampleData.Id.Trim(), Field.Store.YES, Field.Index.NOT_ANALYZED));
-                doc.Add(new Field("CompositeName", sampleData.CompositeName == null ? string.Empty : sampleData.CompositeName.Trim(), Field.Store.YES, Field.Index.ANALYZED));
                 doc.Add(new Field("SubstanceName", sampleData.SubstanceName == null ? string.Empty : sampleData.SubstanceName.Trim(), Field.Store.YES, Field.Index.ANALYZED));
                 doc.Add(new Field("RouteName", sampleData.RouteName == null ? string.Empty : sampleData.RouteName.Trim(), Field.Store.YES, Field.Index.NOT_ANALYZED));
                 doc.Add(new Field("DosageFormName", sampleData.DosageFormname == null ? string.Empty : sampleData.DosageFormname.Trim(), Field.Store.YES, Field.Index.NOT_ANALYZED));
@@ -49,6 +44,7 @@ namespace Phytel.API.AppDomain.NG.Search.LuceneStrategy
 
                 writer.AddDocument(doc);
                 writer.Commit();
+                writer.Optimize();
             }
             catch (Exception ex)
             {
@@ -91,42 +87,39 @@ namespace Phytel.API.AppDomain.NG.Search.LuceneStrategy
 
             searchQuery = ParseSpecialCharacters(searchQuery);
 
-            using (var searcher = new IndexSearcher(Directory, true))
+            IndexReader rdr = IndexReader.Open(Directory, true);
+            IndexSearcher searcher = new IndexSearcher(rdr);
+            BooleanQuery.MaxClauseCount = 1024*32;
+            const int hitsLimit = 1000;
+
+            if (!string.IsNullOrEmpty(searchField))
             {
-                BooleanQuery.MaxClauseCount = 1024 * 32;
-                var hits_limit = 1000;
-                //var analyzer = new StandardAnalyzer(Lucene.Net.Util.Version.LUCENE_30, new HashSet<string>());
-
-                if (!string.IsNullOrEmpty(searchField))
+                var parser = new QueryParser(Version.LUCENE_30, searchField, Analyzer)
                 {
-                    var parser = new QueryParser(Lucene.Net.Util.Version.LUCENE_30, searchField, Analyzer)
-                    {
-                        AllowLeadingWildcard = true,
-                        PhraseSlop = 0
-                    };
-                    var query = ParseWholeQuery(searchQuery, parser);
-                    var hits = searcher.Search(query, hits_limit).ScoreDocs;
-                    var results = MapLuceneToDataList(hits, searcher);
-                    //_analyzer.Close();
-                    searcher.Dispose();
-                    return results;
-                }
-                else
+                    AllowLeadingWildcard = true,
+                    PhraseSlop = 0
+                };
+                var query = ParseWholeQuery(searchQuery, parser);
+                var hits = searcher.Search(query, hitsLimit).ScoreDocs;
+                var results = MapLuceneToDataList(hits, searcher);
+                searcher.Dispose();
+                return results;
+            }
+            else
+            {
+                var fields = new[] {"CompositeName", "SubstanceName"};
+                var parser = new MultiFieldQueryParser(Version.LUCENE_30, fields, Analyzer)
                 {
-                    var fields = new[] {"CompositeName", "SubstanceName"};
-                    var parser = new MultiFieldQueryParser(Lucene.Net.Util.Version.LUCENE_30, fields, Analyzer)
-                    {
-                        DefaultOperator = QueryParser.Operator.AND,
-                        PhraseSlop = 0
-                    };
-                    var query = ParseWholeQueryWc(searchQuery.ToLower(), fields, parser);
-                    var hits = searcher.Search(query, null, hits_limit, Sort.RELEVANCE).ScoreDocs;
+                    DefaultOperator = QueryParser.Operator.AND,
+                    PhraseSlop = 0
+                };
 
-                    var results = MapLuceneToDataList(hits, searcher);
-                    //Analyzer.Close();
-                    searcher.Dispose();
-                    return results;
-                }
+                var query = ParseWholeQueryWc(searchQuery.ToLower(), fields, parser);
+                var hits = searcher.Search(query, null, hitsLimit, Sort.RELEVANCE).ScoreDocs;
+
+                var results = MapLuceneToDataList(hits, searcher);
+                searcher.Dispose();
+                return results;
             }
         }
     }

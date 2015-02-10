@@ -5,16 +5,16 @@ using System.Configuration;
 
 namespace Phytel.API.DataDomain.LookUp
 {
-    public class LookUpMongoContext : MongoContext
-    {
-        private static string COLL_LOOKUP = "LookUp";
+	public class LookUpMongoContext : MongoContext
+	{
+		private static string COLL_LOOKUP = "LookUp";
 
-        public LookUpMongoContext(string contractDBName)
-            : base(ConfigurationManager.AppSettings.Get("PhytelServicesConnName"), contractDBName, true)
+		public LookUpMongoContext(string contractDBName)
+			: base(ConfigurationManager.AppSettings.Get("PhytelServicesConnName"), contractDBName, true)
 		{
-            LookUps = new MongoSet<MELookup, ObjectId>(this, COLL_LOOKUP);
+			LookUps = new MongoSet<MELookup, ObjectId>(this, COLL_LOOKUP);
 		}
 
-        public MongoSet<MELookup, ObjectId> LookUps { get; private set; }
-    }
+		public MongoSet<MELookup, ObjectId> LookUps { get; private set; }
+	}
 }
