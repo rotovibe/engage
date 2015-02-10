@@ -2,6 +2,6 @@
 {
     public interface IContextRequest
     {
-        string ContextCode { get; set; }
+        string Context { get; set; }
     }
 }

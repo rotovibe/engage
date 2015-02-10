@@ -2,9 +2,11 @@
 {
     public static class Constants
     {
-        public const string HostContextKeyContextCode = "ContextCode";
+        public const string HostContextKeyContext = "Context";
         public const string HostContextKeyContractNumber = "ContractNumber";
-        public const string NamedStringContextCode = HostContextKeyContextCode;
+        public const string HostContextKeyVersion = "Version";
+        public const string NamedStringContext = HostContextKeyContext;
         public const string NamedStringContractNumber = HostContextKeyContractNumber;
+        public const string NamedStringVersion = HostContextKeyVersion;
     }
 }

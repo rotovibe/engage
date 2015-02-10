@@ -105,13 +105,6 @@ namespace Phytel.Services.ServiceStack.Client
             return _client.Post<TResponse>(request);
         }
 
-        public void PostAsync<TResponse>(object requestDto, Action<TResponse> onSuccess, Action<TResponse, Exception> onError)
-        {
-            IReturn<TResponse> request = OnExecuteConvertToIReturn<TResponse>(requestDto);
-
-            _client.PostAsync<TResponse>(request, onSuccess, onError);
-        }
-
         public void Post(object requestDto)
         {
             IReturnVoid request = OnExecuteConvertToIReturnVoid(requestDto);
@@ -119,21 +112,19 @@ namespace Phytel.Services.ServiceStack.Client
             _client.Post(request);
         }
 
-        protected virtual IReturnVoid OnExecuteConvertToIReturnVoid(object requestDto)
+        public TResponse Post<TResponse>(object request, NameValueCollection headers, string relativeUrlFormat, params string[] relativeUrlParams)
         {
-            IReturnVoid rvalue = null;
+            _client.LocalHttpWebRequestFilter = x => x.Headers.Add(headers);
 
-            if (requestDto is IReturnVoid)
-            {
-                rvalue = requestDto as IReturnVoid;
-            }
+            string relativeOrAbsoluteUrl = string.Format(relativeUrlFormat, relativeUrlParams);
+            return _client.Post<TResponse>(relativeOrAbsoluteUrl, request);
+        }
 
-            if (rvalue == null)
-            {
-                throw new ArgumentException("Provided request dto was not of type " + typeof(IReturnVoid).Name);
-            }
+        public void PostAsync<TResponse>(object requestDto, Action<TResponse> onSuccess, Action<TResponse, Exception> onError)
+        {
+            IReturn<TResponse> request = OnExecuteConvertToIReturn<TResponse>(requestDto);
 
-            return rvalue;
+            _client.PostAsync<TResponse>(request, onSuccess, onError);
         }
 
         public TResponse Put<TResponse>(object requestDto)
@@ -181,12 +172,21 @@ namespace Phytel.Services.ServiceStack.Client
             return rvalue;
         }
 
-        public TResponse Post<TResponse>(object request, NameValueCollection headers, string relativeUrlFormat, params string[] relativeUrlParams)
+        protected virtual IReturnVoid OnExecuteConvertToIReturnVoid(object requestDto)
         {
-            _client.LocalHttpWebRequestFilter = x => x.Headers.Add(headers);
+            IReturnVoid rvalue = null;
 
-            string relativeOrAbsoluteUrl = string.Format(relativeUrlFormat, relativeUrlParams);
-            return _client.Post<TResponse>(relativeOrAbsoluteUrl, request);
+            if (requestDto is IReturnVoid)
+            {
+                rvalue = requestDto as IReturnVoid;
+            }
+
+            if (rvalue == null)
+            {
+                throw new ArgumentException("Provided request dto was not of type " + typeof(IReturnVoid).Name);
+            }
+
+            return rvalue;
         }
     }
 }

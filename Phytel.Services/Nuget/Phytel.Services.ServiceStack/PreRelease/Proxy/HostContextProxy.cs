@@ -50,6 +50,23 @@ namespace Phytel.Services.ServiceStack.Proxy
             return _hostContext.Items[key];
         }
 
+        public double GetItemAsDouble(string key)
+        {
+            double rvalue = default(double);
+
+            string rvalueAsString = GetItemAsString(key);
+            if(!string.IsNullOrEmpty(rvalueAsString))
+            {
+                double rvalueAsDouble;
+                if(double.TryParse(rvalueAsString, out rvalueAsDouble))
+                {
+                    rvalue = rvalueAsDouble;
+                }
+            }
+
+            return rvalue;
+        }
+
         public string GetItemAsString(string key)
         {
             string rvalue = null;

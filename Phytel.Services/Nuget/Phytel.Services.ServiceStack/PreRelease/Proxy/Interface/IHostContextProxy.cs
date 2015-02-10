@@ -12,6 +12,8 @@ namespace Phytel.Services.ServiceStack.Proxy
 
         string GetItemAsString(string key);
 
+        double GetItemAsDouble(string key);
+
         void SetItem(string key, object value);
     }
 }

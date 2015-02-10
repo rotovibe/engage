@@ -37,9 +37,9 @@ namespace Phytel.Services.ServiceStack.Filter
             if (requestDto is IContextRequest)
             {
                 IContextRequest contextRequest = requestDto as IContextRequest;
-                if (contextRequest != null && !string.IsNullOrEmpty(contextRequest.ContextCode))
+                if (contextRequest != null && !string.IsNullOrEmpty(contextRequest.Context))
                 {
-                    contextCode = contextRequest.ContextCode;                    
+                    contextCode = contextRequest.Context;                    
                 }
             }
 
@@ -61,7 +61,7 @@ namespace Phytel.Services.ServiceStack.Filter
             }
             else
             {
-                HostContextProxy.SetItem(Constants.HostContextKeyContextCode, contextCode);
+                HostContextProxy.SetItem(Constants.HostContextKeyContext, contextCode);
             }
         }
     }

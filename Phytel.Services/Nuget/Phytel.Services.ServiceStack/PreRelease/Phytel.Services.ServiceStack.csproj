@@ -92,15 +92,23 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="ContainerExtend.cs" />
-    <Compile Include="Container\ContextCodeContainer.cs" />
+    <Compile Include="Container\ContextContainer.cs" />
+    <Compile Include="Container\VersionContainer.cs" />
     <Compile Include="Container\ContractNumberContainer.cs" />
     <Compile Include="Container\ServiceStackConfigProxyContainer.cs" />
     <Compile Include="DTO\ContractRequest.cs" />
+    <Compile Include="DTO\Interface\IAppDomainRequest.cs" />
     <Compile Include="DTO\Interface\IContextRequest.cs" />
     <Compile Include="DTO\Interface\IContractRequest.cs" />
+    <Compile Include="DTO\Interface\IDataDomainRequest.cs" />
+    <Compile Include="DTO\Interface\IDomainResponse.cs" />
+    <Compile Include="DTO\Interface\IVersionRequest.cs" />
     <Compile Include="Filter\ContextRequestFilterAttribute.cs" />
+    <Compile Include="Filter\VersionRequestFilterAttribute.cs" />
     <Compile Include="Filter\ContractRequestFilterAttribute.cs" />
     <Compile Include="Client\Interface\IRepositoryHttp.cs" />
+    <Compile Include="Provider\Interface\IVersionProvider.cs" />
+    <Compile Include="Provider\VersionProvider.cs" />
     <Compile Include="Provider\ContractNumberProvider.cs" />
     <Compile Include="Provider\Interface\IContractNumberProvider.cs" />
     <Compile Include="Provider\Interface\IServiceConfigProxy.cs" />
