@@ -24,14 +24,7 @@ namespace Phytel.Services.ServiceStack.Filter
 
             string contractNumber = ContractNumberProvider.Get(requestDto);
 
-            if (string.IsNullOrEmpty(contractNumber))
-            {
-                throw new Exception("Contract number was not provided.");
-            }
-            else
-            {
-                HostContextProxy.SetItem(Constants.HostContextKeyContractNumber, contractNumber);
-            }
+            HostContextProxy.SetItem(Constants.HostContextKeyContractNumber, contractNumber);
         }
     }
 }
