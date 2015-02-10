@@ -170,6 +170,18 @@ namespace Phytel.Data.ETL
 
                 try
                 {
+                    if (BsonClassMap.IsClassMapRegistered(typeof(MEPatient)) == false)
+                    {
+                        BsonClassMap.RegisterClassMap<MEPatient>();
+                    }
+                }
+                catch
+                {
+                    throw;
+                }
+
+                try
+                {
                     if (BsonClassMap.IsClassMapRegistered(typeof (MELookup)) == false)
                     {
                         BsonClassMap.RegisterClassMap<MELookup>();
@@ -1563,7 +1575,7 @@ namespace Phytel.Data.ETL
                 ConcurrentBag<MEPatient> patients;
                 using (PatientMongoContext pmctx = new PatientMongoContext(ctr))
                 {
-                    patients = new ConcurrentBag<MEPatient>(Utils.GetMongoCollectionList(pmctx.Patients.Collection, 1000));
+                    patients = new ConcurrentBag<MEPatient>(Utils.GetMongoCollectionList(pmctx.Patients.Collection, 1));
                 }
 
                     Parallel.ForEach(patients, patient =>
@@ -1899,8 +1911,7 @@ namespace Phytel.Data.ETL
                             parms.Add(new Parameter("@MongoID", (string.IsNullOrEmpty(note.Id.ToString()) ? string.Empty : note.Id.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
                             parms.Add(new Parameter("@PatientMongoId", (string.IsNullOrEmpty(note.PatientId.ToString()) ? string.Empty : note.PatientId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
                             parms.Add(new Parameter("@Text", (string.IsNullOrEmpty(note.Text) ? string.Empty : note.Text), SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
-                            //parms.Add(new Parameter("@Type", note.Type.ToString() ?? (object) DBNull.Value, SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@Type", string.Empty, SqlDbType.VarChar, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@Type", note.Type.ToString() ?? (object) DBNull.Value, SqlDbType.VarChar, ParameterDirection.Input, 50));
                             parms.Add(new Parameter("@MongoMethodId", (string.IsNullOrEmpty(note.MethodId.ToString()) ? string.Empty : note.MethodId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
                             parms.Add(new Parameter("@MongoOutcomeId", (string.IsNullOrEmpty(note.OutcomeId.ToString()) ? string.Empty : note.OutcomeId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
                             parms.Add(new Parameter("@MongoWhoId", (string.IsNullOrEmpty(note.WhoId.ToString()) ? string.Empty : note.WhoId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));

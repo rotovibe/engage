@@ -12,15 +12,24 @@ namespace Phytel.Data.ETL
         public static List<T> GetMongoCollectionList<T>(MongoCollection<T> mogoList, int skip)
         {
             var list = new List<T>();
-            var count = mogoList.Count();
-            var interval = skip;
-            for (var i = 0; i <= count; i = i + interval)
+            int counter = 0;
+            try
             {
-                list.AddRange(
-                    mogoList.FindAllAs<T>()
-                        .Skip(i)
-                        .Take(interval)
-                        .ToList());
+                var count = mogoList.Count();
+                var interval = skip;
+                for (var i = 0; i <= count; i = i + interval)
+                {
+                    list.AddRange(
+                        mogoList.FindAllAs<T>()
+                            .Skip(i)
+                            .Take(interval)
+                            .ToList());
+                    counter++;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("GetMongoCollectionList(): patient counter:" + counter + " " + ex.Message + ex.StackTrace);
             }
             return list;
         }
