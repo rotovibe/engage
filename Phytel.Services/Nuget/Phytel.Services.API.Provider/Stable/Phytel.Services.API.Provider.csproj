@@ -72,6 +72,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constants.cs" />
     <Compile Include="ContractNumberProvider.cs" />
     <Compile Include="HostContextProxy.cs" />
     <Compile Include="Interface\IContractNumberProvider.cs" />
