@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
+using Phytel.Services.API.DTO;
+using Phytel.Services.API.Provider;
 using Phytel.Services.Dates;
 using Phytel.Services.Dispatch;
-using Phytel.Services.ServiceStack.Provider;
 using ServiceStack.ServiceHost;
 using System;
 
