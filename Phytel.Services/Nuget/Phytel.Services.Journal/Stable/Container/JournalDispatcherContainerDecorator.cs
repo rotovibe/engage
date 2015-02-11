@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
+using Phytel.Services.API.Provider;
 using Phytel.Services.AppSettings;
 using Phytel.Services.Dates;
 using Phytel.Services.Dispatch.Ase;
 using Phytel.Services.IOC;
 using Phytel.Services.Journal.Dispatch;
 using Phytel.Services.Serializer;
-using Phytel.Services.ServiceStack.Provider;
 
 namespace Phytel.Services.Journal
 {
