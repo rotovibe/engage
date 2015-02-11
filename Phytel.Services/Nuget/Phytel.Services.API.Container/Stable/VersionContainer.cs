@@ -1,9 +1,8 @@
-﻿using Phytel.Services.IOC;
-using Phytel.Services.ServiceStack.Provider;
-using Phytel.Services.ServiceStack.Proxy;
+﻿using Phytel.Services.API.Provider;
+using Phytel.Services.IOC;
 using ServiceStack.Common;
 
-namespace Phytel.Services.ServiceStack
+namespace Phytel.Services.API.Container
 {
     public class VersionContainer : ContainerDecorator
     {
@@ -19,10 +18,10 @@ namespace Phytel.Services.ServiceStack
 
             container.Register<IVersionProvider>(new VersionProvider());
 
-            container.Register<double>(Constants.NamedStringVersion, c =>
+            container.Register<double>(API.Container.Constants.NamedStringVersion, c =>
             {
                 IHostContextProxy hostContextProxy = c.Resolve<IHostContextProxy>();
-                return hostContextProxy.GetItemAsDouble(Constants.HostContextKeyVersion);
+                return hostContextProxy.GetItemAsDouble(API.Provider.Constants.HostContextKeyVersion);
             }).ReusedWithin(Funq.ReuseScope.Request);
         }
     }

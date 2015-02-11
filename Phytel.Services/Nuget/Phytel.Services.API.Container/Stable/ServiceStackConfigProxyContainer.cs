@@ -1,7 +1,7 @@
-﻿using Phytel.Services.IOC;
-using Phytel.Services.ServiceStack.Provider;
+﻿using Phytel.Services.API.Provider;
+using Phytel.Services.IOC;
 
-namespace Phytel.Services.ServiceStack
+namespace Phytel.Services.API.Container
 {
     public class ServiceStackConfigProxyContainer : ContainerDecorator
     {

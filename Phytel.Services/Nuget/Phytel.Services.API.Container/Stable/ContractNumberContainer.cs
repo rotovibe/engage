@@ -1,9 +1,8 @@
-﻿using Phytel.Services.IOC;
-using Phytel.Services.ServiceStack.Provider;
-using Phytel.Services.ServiceStack.Proxy;
+﻿using Phytel.Services.API.Provider;
+using Phytel.Services.IOC;
 using ServiceStack.Common;
 
-namespace Phytel.Services.ServiceStack
+namespace Phytel.Services.API.Container
 {
     public class ContractNumberContainer : ContainerDecorator
     {
@@ -19,10 +18,10 @@ namespace Phytel.Services.ServiceStack
 
             container.Register<IContractNumberProvider>(new ContractNumberProvider());
 
-            container.Register<string>(Constants.NamedStringContractNumber, c =>
+            container.Register<string>(API.Container.Constants.NamedStringContractNumber, c =>
             {
                 IHostContextProxy hostContextProxy = c.Resolve<IHostContextProxy>();
-                return hostContextProxy.GetItemAsString(Constants.HostContextKeyContractNumber);
+                return hostContextProxy.GetItemAsString(API.Provider.Constants.HostContextKeyContractNumber);
             }).ReusedWithin(Funq.ReuseScope.Request);
         }
     }
