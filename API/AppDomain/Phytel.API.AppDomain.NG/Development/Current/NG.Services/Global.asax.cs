@@ -13,6 +13,8 @@ using Phytel.API.AppDomain.NG.Programs;
 using Phytel.API.AppDomain.NG.Programs.ElementActivation;
 using Phytel.API.AppDomain.NG.Search;
 using Phytel.API.AppDomain.NG.Search.LuceneStrategy;
+using Phytel.API.AppDomain.NG.Service.Containers;
+using Phytel.API.AppDomain.NG.Service.Mappers;
 using Phytel.API.Common.Audit;
 using Phytel.API.Common.CustomObject;
 using Phytel.API.Common.Format;
@@ -47,194 +49,15 @@ namespace Phytel.API.AppDomain.NG.Service
 
             public override void Configure(Funq.Container container)
             {
-                //register any dependencies your services use, e.g:
-                container.RegisterAutoWiredAs<SecurityManager, ISecurityManager>().ReusedWithin(Funq.ReuseScope.Request);
-                container.RegisterAutoWiredAs<CommonFormatterUtil, ICommonFormatterUtil>().ReusedWithin(Funq.ReuseScope.Request);
-                container.RegisterAutoWiredAs<EndpointUtils, IEndpointUtils>().ReusedWithin(Funq.ReuseScope.Request);
-                container.RegisterAutoWiredAs<AllergyEndpointUtil, IAllergyEndpointUtil>().ReusedWithin(Funq.ReuseScope.Request);                
-                container.RegisterAutoWiredAs<PlanElementUtils, IPlanElementUtils>().ReusedWithin(Funq.ReuseScope.Request);
-                container.RegisterAutoWiredAs<NGManager, INGManager>().ReusedWithin(Funq.ReuseScope.Request);
-                container.RegisterAutoWiredAs<AuditUtil, IAuditUtil>().ReusedWithin(Funq.ReuseScope.Request);
-                container.RegisterAutoWiredAs<ObservationEndpointUtil, IObservationEndpointUtil>().ReusedWithin(Funq.ReuseScope.Request);
-                container.RegisterAutoWiredAs<ObservationsManager, IObservationsManager>().ReusedWithin(Funq.ReuseScope.Request);
-                container.RegisterAutoWiredAs<AllergyManager, IAllergyManager>().ReusedWithin(Funq.ReuseScope.Request);
-                container.RegisterAutoWiredAs<MedicationManager, IMedicationManager>().ReusedWithin(Funq.ReuseScope.Request);
-                container.RegisterAutoWiredAs<MedicationEndpointUtil, IMedicationEndpointUtil>().ReusedWithin(Funq.ReuseScope.Request);
-                container.RegisterAutoWiredAs<ElementActivationStrategy, IElementActivationStrategy>().ReusedWithin(Funq.ReuseScope.Request);
-                container.RegisterAutoWiredAs<StepPlanProcessor, IStepPlanProcessor>().ReusedWithin(Funq.ReuseScope.Request);
-                container.RegisterAutoWiredAs<GoalsEndpointUtils, IGoalsEndpointUtils>().ReusedWithin(Funq.ReuseScope.Request);
-                // search
-                container.RegisterAutoWiredAs<SearchManager, ISearchManager>().ReusedWithin(Funq.ReuseScope.Request);
-                container.RegisterAutoWiredAs<SearchUtil, ISearchUtil>().ReusedWithin(Funq.ReuseScope.Request);
-                container.RegisterAutoWiredAs<SearchEndpointUtil, ISearchEndpointUtil>().ReusedWithin(Funq.ReuseScope.Request);
-                container.RegisterAutoWiredAs<MedNameLuceneStrategy<MedNameSearchDoc, TextValuePair>, IMedNameLuceneStrategy<MedNameSearchDoc, TextValuePair>>().ReusedWithin(Funq.ReuseScope.Container);
+                //containers
+                HttpServiceContainer.Build(container);
+                SearchContainer.Build(container);
                 
-
-                #region Automapper Configuration
-                #region Allergy & PatientAllergy
-                Mapper.CreateMap<AllergyData, DTO.Allergy>();
-                Mapper.CreateMap<DTO.Allergy, AllergyData>();
-                Mapper.CreateMap<PatientAllergyData, PatientAllergy>();
-                Mapper.CreateMap<PatientAllergy, PatientAllergyData>();
-                Mapper.CreateMap<MedicationMapData, MedicationMap>();
-                Mapper.CreateMap<DTO.Allergy, IdNamePair>().ForMember(d => d.Name, opt => opt.MapFrom(src => src.Name.Trim().ToUpper().Replace("\"", "").Replace(",", "")));
-                #endregion
-                
-                #region Goal, Task, Intervention, PatientGoal, PatientTask and PatientIntervention
-                Mapper.CreateMap<GoalData, Goal>()
-                    .ForMember(d => d.CustomAttributes,
-                        opt => opt.MapFrom(src => src.CustomAttributes.ConvertAll(
-                    c => new CustomAttribute { Id = c.Id, Values = c.Values })));
-
-                Mapper.CreateMap<TaskData, Task>()
-                    .ForMember(d => d.CustomAttributes,
-                        opt => opt.MapFrom(src => src.CustomAttributes.ConvertAll(
-                            c => new CustomAttribute { Id = c.Id, Values = c.Values })));
-
-                Mapper.CreateMap<Task, PatientTask>()
-                    .ForMember(d => d.CustomAttributes,
-                        opt => opt.MapFrom(src => src.CustomAttributes.ConvertAll(
-                            c => new CustomAttribute { Id = c.Id, Values = c.Values })));
-
-                Mapper.CreateMap<PatientTaskData, PatientTask>()
-                    .ForMember(d => d.CustomAttributes,
-                        opt => opt.MapFrom(src => src.CustomAttributes.ConvertAll(
-                            c => new CustomAttribute { Id = c.Id, Values = c.Values })));
-
-                Mapper.CreateMap<InterventionData, Intervention>();
-
-                // goal to patientgoal
-                Mapper.CreateMap<Goal, PatientGoal>()
-                    .ForMember(d => d.CustomAttributes,
-                        opt => opt.MapFrom(src => src.CustomAttributes.ConvertAll(
-                            c => new CustomAttribute { Id = c.Id, Values = c.Values })));
-
-                Mapper.CreateMap<PatientInterventionData, PatientIntervention>();
-
-                Mapper.CreateMap<PatientGoalData, PatientGoal>()
-                    .ForMember(d => d.CustomAttributes,
-                        opt => opt.MapFrom(src => src.CustomAttributes.ConvertAll(
-                            c => new CustomAttribute { Id = c.Id, Values = c.Values })))
-                    .ForMember(d => d.Barriers,
-                        opt => opt.MapFrom(src => src.BarriersData.ConvertAll(
-                            c =>
-                                new PatientBarrier
-                                {
-                                    Id = c.Id,
-                                    CategoryId = c.CategoryId,
-                                    DeleteFlag = c.DeleteFlag,
-                                    Name = c.Name,
-                                    PatientGoalId = c.PatientGoalId,
-                                    StatusDate = c.StatusDate,
-                                    StatusId = c.StatusId
-                                })))
-                    .ForMember(d => d.Tasks,
-                        opt => opt.MapFrom(src => src.TasksData.ConvertAll(
-                            c =>
-                                new PatientTask
-                                {
-                                    Id = c.Id,
-                                    BarrierIds = c.BarrierIds,
-                                    ClosedDate = c.ClosedDate,
-                                    CreatedById = c.CreatedById,
-                                    CustomAttributes =
-                                        c.CustomAttributes.ConvertAll(
-                                            ca =>
-                                                new CustomAttribute
-                                                {
-                                                    ControlType = ca.ControlType,
-                                                    Id = ca.Id,
-                                                    Name = ca.Name,
-                                                    Order = ca.Order,
-                                                    Required = ca.Required,
-                                                    Type = ca.Type,
-                                                    Values = ca.Values,
-                                                    Options = NGUtils.FormatOptions(ca.Options)
-                                                }),
-                                    DeleteFlag = c.DeleteFlag,
-                                    Description = c.Description,
-                                    GoalName = c.GoalName,
-                                    PatientGoalId = c.PatientGoalId,
-                                    StartDate = c.StartDate,
-                                    StatusDate = c.StatusDate,
-                                    StatusId = c.StatusId,
-                                    TargetDate = c.TargetDate,
-                                    TargetValue = c.TargetValue,
-                                })))
-                    .ForMember(d => d.Interventions,
-                        opt => opt.MapFrom(src => src.InterventionsData.ConvertAll(
-                            c =>
-                                new PatientIntervention
-                                {
-                                    AssignedToId = c.AssignedToId,
-                                    BarrierIds = c.BarrierIds,
-                                    CategoryId = c.CategoryId,
-                                    ClosedDate = c.ClosedDate,
-                                    CreatedById = c.CreatedById,
-                                    DeleteFlag = c.DeleteFlag,
-                                    Description = c.Description,
-                                    GoalName = c.GoalName,
-                                    Id = c.Id,
-                                    PatientGoalId = c.PatientGoalId,
-                                    PatientId = c.PatientId,
-                                    StartDate = c.StartDate,
-                                    StatusDate = c.StatusDate,
-                                    StatusId = c.StatusId
-                                })));
-                #endregion
-
-                Mapper.CreateMap<Document, IdNamePair>()
-                    .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Get("Id")))
-                    .ForMember(d => d.Name, opt => opt.MapFrom(src => src.Get("Name")));
-
-                Mapper.CreateMap<Document, TextValuePair>()
-                                    .ForMember(d => d.Value, opt => opt.MapFrom(src => src.Get("CompositeName").Trim()))
-                                    .ForMember(d => d.Text,  opt => opt.MapFrom(src => src.Get("CompositeName").Trim()));
-
-                Mapper.CreateMap<Document, MedNameSearchDoc>()
-                    .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Get("MongoId")))
-                    .ForMember(d => d.ProductId, opt => opt.MapFrom(src => src.Get("PackageId")))
-                    .ForMember(d => d.DosageFormname, opt => opt.MapFrom(src => src.Get("DosageFormName")))
-                    .ForMember(d => d.CompositeName, opt => opt.MapFrom(src => src.Get("CompositeName")))
-                    .ForMember(d => d.ProprietaryName, opt => opt.MapFrom(src => src.Get("ProprietaryName")))
-                    .ForMember(d => d.RouteName, opt => opt.MapFrom(src => src.Get("RouteName")))
-                    .ForMember(d => d.SubstanceName, opt => opt.MapFrom(src => src.Get("SubstanceName")))
-                    .ForMember(d => d.Strength, opt => opt.MapFrom(src => src.Get("Strength")))
-                    .ForMember(d => d.Unit, opt => opt.MapFrom(src => src.Get("Unit")));
-
-                Mapper.CreateMap<Document, MedFieldsSearchDoc>()
-                    .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Get("MongoId")))
-                    .ForMember(d => d.ProductId, opt => opt.MapFrom(src => src.Get("PackageId")))
-                    .ForMember(d => d.DosageFormname, opt => opt.MapFrom(src => src.Get("DosageFormname")))
-                    .ForMember(d => d.CompositeName, opt => opt.MapFrom(src => src.Get("CompositeName")))
-                    .ForMember(d => d.ProprietaryName, opt => opt.MapFrom(src => src.Get("ProprietaryName")))
-                    .ForMember(d => d.RouteName, opt => opt.MapFrom(src => src.Get("RouteName")))
-                    .ForMember(d => d.SubstanceName, opt => opt.MapFrom(src => src.Get("SubstanceName")))
-                    .ForMember(d => d.Strength, opt => opt.MapFrom(src => src.Get("Strength")))
-                    .ForMember(d => d.Unit, opt => opt.MapFrom(src => src.Get("Unit")));
-
-                Mapper.CreateMap<DTO.Medication, MedFieldsSearchDoc>()
-                    .ForMember(d => d.CompositeName, opt => opt.MapFrom(src => src.ProprietaryName + " " + src.ProprietaryNameSuffix))
-                .ForMember(d => d.DosageFormname, opt => opt.MapFrom(src => src.DosageFormName))
-                .ForMember(d => d.RouteName, opt => opt.MapFrom(src => src.RouteName))
-                .ForMember(d => d.Strength, opt => opt.MapFrom(src => src.Strength))
-                .ForMember(d => d.SubstanceName, opt => opt.MapFrom(src => src.SubstanceName))
-                .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Id))
-                .ForMember(d => d.ProductId, opt => opt.MapFrom(src => src.ProductId))
-                .ForMember(d => d.ProprietaryName, opt => opt.MapFrom(src => src.ProprietaryName))
-                .ForMember(d => d.Unit, opt => opt.MapFrom(src => string.Empty));
-
-                Mapper.CreateMap<DTO.Medication, MedNameSearchDoc>()
-                    .ForMember(d => d.ProductNDC, opt => opt.MapFrom(src => src.NDC))
-                    .ForMember(d => d.CompositeName, opt => opt.MapFrom(src => src.ProprietaryName + " " + src.ProprietaryNameSuffix));
-
-                #region Medication & PatientMedSupp
-                Mapper.CreateMap<MedicationMapData, DTO.MedicationMap>();
-                Mapper.CreateMap<DTO.MedicationMap, MedicationMapData>();
-                Mapper.CreateMap<PatientMedSuppData, PatientMedSupp>();
-                Mapper.CreateMap<PatientMedSupp, PatientMedSuppData>();
-                #endregion
-                #endregion
+                // mappings
+                AllergyMapper.Build();
+                GoalsMapper.Build();
+                AllergyMedSearchMapper.Build();
+                MedSuppMapper.Build();
 
                 Plugins.Add(new RequestLogsFeature() { RequiredRoles = new string[] { } });
 

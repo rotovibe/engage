@@ -113,6 +113,12 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Containers\HttpServiceContainer.cs" />
+    <Compile Include="Containers\SearchContainer.cs" />
+    <Compile Include="Mappers\AllergyMapper.cs" />
+    <Compile Include="Mappers\AllergyMedSearchMapper.cs" />
+    <Compile Include="Mappers\MedSuppMapper.cs" />
+    <Compile Include="Mappers\GoalsMapper.cs" />
     <Compile Include="MedicationService.cs" />
     <Compile Include="SearchService.cs" />
     <Compile Include="Global.asax.cs">
@@ -178,6 +184,7 @@
       <Name>AppDomain.NG</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
