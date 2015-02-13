@@ -30,4 +30,4 @@ tf checkout "$/PhytelCode/Phytel.Net/Client Apps/NG/Atmosphere.Site/Release Cand
 tf checkin "$/PhytelCode/Phytel.Net/Client Apps/NG/Atmosphere.Core/Release Candidate/Current" /comment:"Merge Changes for RC Release" /recursive /force /noprompt
 tf checkin "$/PhytelCode/Phytel.Net/Client Apps/NG/Atmosphere.Site/Release Candidate/Current" /comment:"Merge Changes for RC Release" /recursive /force /noprompt
 
-TFSBuild start http://hillstfs2013:8080/tfs PhytelCode "Atmosphere.Site (RC)" /silent
+REM TFSBuild start http://hillstfs2013:8080/tfs PhytelCode "Atmosphere.Site (RC)" /silent
