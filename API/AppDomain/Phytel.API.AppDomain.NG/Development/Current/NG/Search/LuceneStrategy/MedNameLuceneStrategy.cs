@@ -1,29 +1,41 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Linq;
 using Lucene.Net.Analysis.Standard;
 using Lucene.Net.Documents;
 using Lucene.Net.Index;
 using Lucene.Net.QueryParsers;
 using Lucene.Net.Search;
 using Phytel.API.AppDomain.NG.DTO.Search;
+using ServiceStack.Common;
 using Version = Lucene.Net.Util.Version;
 
 namespace Phytel.API.AppDomain.NG.Search.LuceneStrategy
 {
     public class MedNameLuceneStrategy<T, TT> : BaseLuceneStrategy<T, TT>, IMedNameLuceneStrategy<T, TT> where T : MedNameSearchDoc where TT : TextValuePair
     {
-        protected static readonly string SearchIndexPath = ConfigurationManager.AppSettings["SearchIndexPath"];
-        public override string LuceneDir{ get { return SearchIndexPath + "\\" + Contract + "\\" + @"\MedNames_Index"; } }
+        protected readonly string SearchIndexPath = ConfigurationManager.AppSettings["SearchIndexPath"];
+        private readonly string indexPath = ConfigurationManager.AppSettings["SearchIndexPath"] + "\\";
+        private readonly string mednameIndex = @"\MedNames_Index";
+
         public string Contract { get; set; }
         public StandardAnalyzer Analyzer { get; set; }
         private IndexWriter _writer;
 
+        private readonly Dictionary<string, IndexWriter> _writerPool;
+
         public MedNameLuceneStrategy()
         {
-            Contract = ConfigurationManager.AppSettings["SearchContractName"]; //"InHealth001";
             Analyzer = new StandardAnalyzer(Version.LUCENE_30, new HashSet<string>());
-            _writer = new IndexWriter(Directory, Analyzer, IndexWriter.MaxFieldLength.UNLIMITED);
+            _writerPool = GetWriterPool();
+        }
+
+        private Dictionary<string, IndexWriter> GetWriterPool()
+        {
+            var contracts = ConfigurationManager.AppSettings["SearchContractName"].Split(';');
+            return contracts.ToDictionary(s => s, s => new IndexWriter(GetDirectory(indexPath + s + mednameIndex), Analyzer, IndexWriter.MaxFieldLength.UNLIMITED));
         }
 
         public override void AddToLuceneIndex(T sampleData, IndexWriter writer)
@@ -56,7 +68,8 @@ namespace Phytel.API.AppDomain.NG.Search.LuceneStrategy
         {
             try
             {
-                foreach (var sampleData in sampleDatas) AddToLuceneIndex(sampleData, _writer);
+                //foreach (var sampleData in sampleDatas) AddToLuceneIndex(sampleData, _writer);
+                foreach (var sampleData in sampleDatas) AddToLuceneIndex(sampleData, _writerPool[HostContext.Instance.Items["Contract"].ToString()]);
             }
             catch (Exception ex)
             {
@@ -64,7 +77,7 @@ namespace Phytel.API.AppDomain.NG.Search.LuceneStrategy
             }
             finally
             {
-                IndexWriter.Unlock(Directory);
+                IndexWriter.Unlock(_writerPool[HostContext.Instance.Items["Contract"].ToString()].Directory);
             }
         }
 
@@ -87,7 +100,7 @@ namespace Phytel.API.AppDomain.NG.Search.LuceneStrategy
 
             searchQuery = ParseSpecialCharacters(searchQuery);
 
-            IndexReader rdr = IndexReader.Open(Directory, true);
+            IndexReader rdr = IndexReader.Open(_writerPool[HostContext.Instance.Items["Contract"].ToString()].Directory, true);
             IndexSearcher searcher = new IndexSearcher(rdr);
             BooleanQuery.MaxClauseCount = 1024*32;
             const int hitsLimit = 1000;
@@ -121,6 +134,11 @@ namespace Phytel.API.AppDomain.NG.Search.LuceneStrategy
                 searcher.Dispose();
                 return results;
             }
+        }
+
+        public override string LuceneDir
+        {
+            get { throw new NotImplementedException(); }
         }
     }
 }

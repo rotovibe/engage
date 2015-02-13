@@ -272,5 +272,11 @@ namespace Phytel.API.AppDomain.NG.Search.LuceneStrategy
                 throw new Exception("AD:MedFieldsLuceneStrategy:ExecuteSearch()::" + ex.Message + ex.StackTrace, ex.InnerException);
             }
         }
+
+
+        public Lucene.Net.Store.FSDirectory Directory
+        {
+            get { throw new NotImplementedException(); }
+        }
     }
 }

@@ -1,20 +1,20 @@
 using MongoDB.Bson;
 using Phytel.API.DataDomain.PatientNote.DTO;
-using Phytel.Mongo.Linq;
+using Phytel.Services.Mongo.Linq;
 using System.Configuration;
 
 namespace Phytel.API.DataDomain.PatientNote
 {
-    public class PatientNoteMongoContext : MongoContext
-    {
-        private static string COLL_PatientNoteS = "PatientNote";
+	public class PatientNoteMongoContext : MongoContext
+	{
+		private static string COLL_PatientNoteS = "PatientNote";
 
-        public PatientNoteMongoContext(string contractDBName)
-            : base(ConfigurationManager.AppSettings.Get("PhytelServicesConnName"), contractDBName, true)
+		public PatientNoteMongoContext(string contractDBName)
+			: base(ConfigurationManager.AppSettings.Get("PhytelServicesConnName"), contractDBName, true)
 		{
-            PatientNotes = new MongoSet<MEPatientNote, ObjectId>(this, COLL_PatientNoteS);
+			PatientNotes = new MongoSet<MEPatientNote, ObjectId>(this, COLL_PatientNoteS);
 		}
 
-        public MongoSet<MEPatientNote, ObjectId> PatientNotes { get; private set; }
-    }
+		public MongoSet<MEPatientNote, ObjectId> PatientNotes { get; private set; }
+	}
 }

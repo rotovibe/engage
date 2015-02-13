@@ -1,6 +1,6 @@
 using MongoDB.Bson;
 using Phytel.API.DataDomain.Contact.DTO;
-using Phytel.Mongo.Linq;
+using Phytel.Services.Mongo.Linq;
 using System.Configuration;
 
 namespace Phytel.API.DataDomain.Contact

@@ -54,6 +54,15 @@
     <Reference Include="Phytel.Mongo">
       <HintPath>..\References\Phytel.Mongo.dll</HintPath>
     </Reference>
+    <Reference Include="Phytel.Services.Mongo">
+      <HintPath>..\..\..\..\..\packages\Phytel.Services.Mongo.1.3.2.04\lib\net451\Phytel.Services.Mongo.dll</HintPath>
+    </Reference>
+    <Reference Include="Phytel.Services.Security">
+      <HintPath>..\..\..\..\..\packages\Phytel.Services.Security.1.3.0.06\lib\net451\Phytel.Services.Security.dll</HintPath>
+    </Reference>
+    <Reference Include="Phytel.Services.SQLServer">
+      <HintPath>..\..\..\..\..\packages\Phytel.Services.SQLServer.1.3.0.09\lib\net451\Phytel.Services.SQLServer.dll</HintPath>
+    </Reference>
     <Reference Include="PhytelServices">
       <HintPath>..\References\PhytelServices.dll</HintPath>
     </Reference>

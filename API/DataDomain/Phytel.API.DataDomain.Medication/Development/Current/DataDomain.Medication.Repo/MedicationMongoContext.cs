@@ -1,6 +1,6 @@
 using MongoDB.Bson;
 using Phytel.API.DataDomain.Medication.DTO;
-using Phytel.Mongo.Linq;
+using Phytel.Services.Mongo.Linq;
 
 namespace DataDomain.Medication.Repo
 {

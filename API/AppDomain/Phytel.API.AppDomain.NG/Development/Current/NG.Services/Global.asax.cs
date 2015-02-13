@@ -22,7 +22,9 @@ using Phytel.API.DataAudit;
 using Phytel.API.DataDomain.Allergy.DTO;
 using Phytel.API.DataDomain.PatientGoal.DTO;
 using Phytel.API.DataDomain.Medication.DTO;
+using Phytel.API.Interface;
 using ServiceStack;
+using ServiceStack.Common;
 using ServiceStack.Common.Web;
 using ServiceStack.MiniProfiler;
 using ServiceStack.ServiceHost;
@@ -43,7 +45,7 @@ namespace Phytel.API.AppDomain.NG.Service
 
             //Tell Service Stack the name of your application and where to find your web services
             public NGAppHost()
-                : base("Phytel NG Services", typeof(NGService).Assembly)
+                : base("Phytel NG Services", typeof (NGService).Assembly)
             {
             }
 
@@ -52,23 +54,34 @@ namespace Phytel.API.AppDomain.NG.Service
                 //containers
                 HttpServiceContainer.Build(container);
                 SearchContainer.Build(container);
-                
+
                 // mappings
                 AllergyMapper.Build();
                 GoalsMapper.Build();
                 AllergyMedSearchMapper.Build();
                 MedSuppMapper.Build();
 
-                Plugins.Add(new RequestLogsFeature() { RequiredRoles = new string[] { } });
+                Plugins.Add(new RequestLogsFeature() {RequiredRoles = new string[] {}});
+
+                // request filtering for setting global vals.
+                RequestFilters.Add((req, res, requestDto) =>
+                {
+                    HostContext.Instance.Items.Add("Contract", ((IAppDomainRequest) requestDto).ContractNumber);
+                });
 
                 var emitGlobalHeadersHandler = new CustomActionHandler((httpReq, httpRes) => httpRes.EndRequest());
                 SetConfig(new EndpointHostConfig
                 {
-                    RawHttpHandlers = { (httpReq) => httpReq.HttpMethod == HttpMethods.Options ? emitGlobalHeadersHandler : null },
-                    GlobalResponseHeaders = { 
-                    //{"Access-Control-Allow-Origin", "*"},
-                    { "Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS" }, 
-                    { "Access-Control-Allow-Headers", "Content-Type" }, },
+                    RawHttpHandlers =
+                    {
+                        (httpReq) => httpReq.HttpMethod == HttpMethods.Options ? emitGlobalHeadersHandler : null
+                    },
+                    GlobalResponseHeaders =
+                    {
+                        //{"Access-Control-Allow-Origin", "*"},
+                        {"Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS"},
+                        {"Access-Control-Allow-Headers", "Content-Type"},
+                    },
                     AllowJsonpRequests = true
                 });
 

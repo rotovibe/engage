@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using Phytel.API.Interface;
-using Phytel.Mongo.Linq;
+using Phytel.Services.Mongo.Linq;
 
 namespace Phytel.API.DataDomain.Medication.DTO
 {

@@ -1,6 +1,6 @@
 ﻿using MongoDB.Bson;
 using Phytel.API.DataDomain.LookUp.DTO;
-using Phytel.Mongo.Linq;
+using Phytel.Services.Mongo.Linq;
 using System.Configuration;
 
 namespace Phytel.API.DataDomain.LookUp

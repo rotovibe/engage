@@ -3,6 +3,7 @@ using MongoDB.Driver;
 using Phytel.API.DataDomain.ASE.Common.Enums;
 using Phytel.API.DataDomain.ASE.DTO.Message;
 using Phytel.ASE.Core;
+using Phytel.Services.Mongo;
 
 namespace Phytel.API.DataAuditProcessor
 {
@@ -18,7 +19,7 @@ namespace Phytel.API.DataAuditProcessor
 
                 DataAudit.DataAudit da = MessageQueueHelper.DeserializeXmlObject(queueMessage.Body, typeof(DataAudit.DataAudit)) as DataAudit.DataAudit;
 
-                MongoDatabase db = Phytel.Services.MongoService.Instance.GetDatabase(_DBConnName, da.Contract, true, "Audit");
+                MongoDatabase db = MongoService.Instance.GetDatabase(_DBConnName, da.Contract, true, "Audit");
                 db.GetCollection(da.EntityType).Insert(da);
             }
             catch(Exception ex)

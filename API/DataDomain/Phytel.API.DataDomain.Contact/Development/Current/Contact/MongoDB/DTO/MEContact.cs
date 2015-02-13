@@ -4,7 +4,7 @@ using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using Phytel.API.DataDomain.Contact.DTO;
 using Phytel.API.Interface;
-using Phytel.Mongo.Linq;
+using Phytel.Services.Mongo.Linq;
 
 namespace Phytel.API.DataDomain.Contact.DTO
 {

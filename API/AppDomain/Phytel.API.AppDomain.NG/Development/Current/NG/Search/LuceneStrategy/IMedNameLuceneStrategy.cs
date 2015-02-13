@@ -11,10 +11,10 @@ namespace Phytel.API.AppDomain.NG.Search.LuceneStrategy
 {
     public interface IMedNameLuceneStrategy<T, TT> where T : MedNameSearchDoc where TT : TextValuePair
     {
-        string LuceneDir { get; }
+        //string LuceneDir { get; }
         string Contract { get; set; }
         StandardAnalyzer Analyzer { get; set; }
-        FSDirectory Directory { get; }
+        //FSDirectory Directory { get; }
         void AddToLuceneIndex(T sampleData, IndexWriter writer);
         void AddUpdateLuceneIndex(IEnumerable<T> sampleDatas);
         void AddUpdateLuceneIndex(T sampleData);

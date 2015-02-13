@@ -26,7 +26,6 @@ namespace Phytel.API.AppDomain.NG.Search.LuceneStrategy
         public abstract void AddUpdateLuceneIndex(T sampleData);
         public FSDirectory DirectoryTemp;
 
-
         public FSDirectory Directory
         {
             get
@@ -43,6 +42,23 @@ namespace Phytel.API.AppDomain.NG.Search.LuceneStrategy
                 //if (File.Exists(lockFilePath)) File.Delete(lockFilePath);
                 return DirectoryTemp;
             }
+        }
+
+        public FSDirectory GetDirectory(string dir)
+        {
+            FSDirectory directoryTemp = null;
+
+            if (!System.IO.Directory.Exists(dir))
+            {
+                var filePath = new FileInfo(dir);
+                filePath.Directory.Create();
+            }
+
+            directoryTemp = FSDirectory.Open(new DirectoryInfo(dir));
+            if (IndexWriter.IsLocked(directoryTemp)) IndexWriter.Unlock(directoryTemp);
+            //var lockFilePath = Path.Combine(LuceneDir, "write.lock");
+            //if (File.Exists(lockFilePath)) File.Delete(lockFilePath);
+            return directoryTemp;
         }
 
         public void ClearLuceneIndexRecord(int recordId)
