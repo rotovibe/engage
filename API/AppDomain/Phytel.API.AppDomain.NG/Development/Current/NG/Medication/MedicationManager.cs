@@ -53,32 +53,77 @@ namespace Phytel.API.AppDomain.NG.Medication
             {
                 if (request.PatientMedSupp != null)
                 {
-                    //Update Medication collection to add any newly initialized medication and then register in search index.
-                    if (!string.IsNullOrEmpty(request.PatientMedSupp.FamilyId))
+                    string name = string.IsNullOrEmpty(request.PatientMedSupp.Name) ? string.Empty : request.PatientMedSupp.Name.ToUpper();
+                    string form = string.IsNullOrEmpty(request.PatientMedSupp.Form) ? string.Empty : request.PatientMedSupp.Form.ToUpper();
+                    string route = string.IsNullOrEmpty(request.PatientMedSupp.Route) ? string.Empty : request.PatientMedSupp.Route.ToUpper();
+                    string strength = string.IsNullOrEmpty(request.PatientMedSupp.Strength) ? string.Empty : request.PatientMedSupp.Strength;
+                    
+                    #region Search MedicationMap
+                    // Search if any record exists with the given combination of name, strength, route and form.
+                    GetMedicationMapsRequest mmRequest = new GetMedicationMapsRequest
                     {
-                        PostMedicationMapRequest req = new DTO.PostMedicationMapRequest
+                        Name = name,
+                        Route = route,
+                        Form = form,
+                        Strength = strength,
+                        ContractNumber = request.ContractNumber,
+                        UserId = request.UserId,
+                        Version = request.Version
+                    };
+                    List<MedicationMapData> list = EndpointUtil.SearchMedicationMap(mmRequest); 
+                    #endregion
+                    if(list == null)
+                    {
+                        MedicationMapData medData = null;
+                        if (string.IsNullOrEmpty(request.PatientMedSupp.FamilyId))
                         {
-                            MedicationMap = new DTO.MedicationMap
+                            #region Insert MedicationMap
+                            PostMedicationMapRequest insertReq = new PostMedicationMapRequest
                             {
-                                Id = request.PatientMedSupp.FamilyId,
-                                FullName = string.IsNullOrEmpty(request.PatientMedSupp.Name) ? string.Empty : request.PatientMedSupp.Name.ToUpper(),
-                                SubstanceName = string.Empty,
-                                Strength = string.IsNullOrEmpty(request.PatientMedSupp.Strength) ? string.Empty : request.PatientMedSupp.Strength,
-                                Route = string.IsNullOrEmpty(request.PatientMedSupp.Route) ? string.Empty : request.PatientMedSupp.Route.ToUpper(),
-                                Form = string.IsNullOrEmpty(request.PatientMedSupp.Form) ? string.Empty : request.PatientMedSupp.Form.ToUpper(),
-                                Custom = true,
-                                Verified = false
-                            },
-                            ContractNumber = request.ContractNumber,
-                            UserId = request.UserId,
-                            Version = request.Version
-                        };
-                        MedicationMapData medData = EndpointUtil.UpdateMedicationMap(req);
-                        DTO.Medication newMed = new DTO.Medication { Id = medData.Id, ProprietaryName = medData.FullName, Strength = medData.Strength, DosageFormName = medData.Form, RouteName = medData.Route, SubstanceName = string.Empty, NDC = string.Empty,  ProductId = string.Empty,  ProprietaryNameSuffix = string.Empty};
-                        // Register newly initialized medicationMap in search index.
-                        SearchManager.RegisterMedDocumentInSearchIndex(newMed, req.ContractNumber);
+                                MedicationMap = new DTO.MedicationMap
+                                {
+                                    FullName = name,
+                                    SubstanceName = string.Empty,
+                                    Strength = strength,
+                                    Route = route,
+                                    Form = form,
+                                    Custom = true,
+                                    Verified = false
+                                },
+                                ContractNumber = request.ContractNumber,
+                                UserId = request.UserId,
+                                Version = request.Version
+                            };
+                            medData = EndpointUtil.InsertMedicationMap(insertReq);
+                            #endregion
+                        }
+                        else 
+                        {
+                            #region Update MedicationMap
+                            // This saves the initialized medicine map
+                            PutMedicationMapRequest req = new PutMedicationMapRequest
+                            {
+                                MedicationMap = new DTO.MedicationMap
+                                {
+                                    Id = request.PatientMedSupp.FamilyId,
+                                    FullName = name,
+                                    SubstanceName = string.Empty,
+                                    Strength = strength,
+                                    Route = route,
+                                    Form = form,
+                                    Custom = true,
+                                    Verified = false
+                                },
+                                ContractNumber = request.ContractNumber,
+                                UserId = request.UserId,
+                                Version = request.Version
+                            };
+                            medData = EndpointUtil.UpdateMedicationMap(req);
+                            #endregion
+                        }
+                        RegisterMedication(request.ContractNumber, medData);
                     }
-                    // Populate calculated NDC codes and Pharm classes in the request object before save.
+                    #region Calculate NDC codes.
                     bool calculateNDC = false;
                     if (request.Insert)
                     {
@@ -96,7 +141,8 @@ namespace Phytel.API.AppDomain.NG.Medication
                     if (calculateNDC)
                     {
                         request.PatientMedSupp.NDCs = EndpointUtil.GetMedicationNDCs(request);
-                    }
+                    } 
+                    #endregion
                     PatientMedSuppData data = EndpointUtil.SavePatientMedSupp(request);
                     if (data != null)
                     {
@@ -106,6 +152,28 @@ namespace Phytel.API.AppDomain.NG.Medication
                 return patientMedSupp;
             }
             catch (Exception ex) { throw ex; }
+        }
+
+        /// <summary>
+        /// Register new medication name in Lucene indexes.
+        /// </summary>
+        /// <param name="contractNumber">contract Number sent in the request.</param>
+        /// <param name="medData">MedicationMapData object.</param>
+        private void RegisterMedication(string contractNumber, MedicationMapData medData)
+        {
+            DTO.Medication newMed = new DTO.Medication
+            {
+                Id = medData.Id,
+                ProprietaryName = medData.FullName,
+                Strength = medData.Strength,
+                DosageFormName = medData.Form,
+                RouteName = medData.Route,
+                SubstanceName = string.Empty,
+                NDC = string.Empty,
+                ProductId = string.Empty,
+                ProprietaryNameSuffix = string.Empty
+            };
+            SearchManager.RegisterMedDocumentInSearchIndex(newMed, contractNumber);
         }
         #endregion
     }

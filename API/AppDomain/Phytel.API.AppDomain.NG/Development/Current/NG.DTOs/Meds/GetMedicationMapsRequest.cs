@@ -1,11 +1,12 @@
-using System.Collections.Generic;
 using Phytel.API.Interface;
 using ServiceStack.ServiceHost;
+using System.Runtime.Serialization;
+using System.Collections.Generic;
 
-namespace Phytel.API.DataDomain.Medication.DTO
+namespace Phytel.API.AppDomain.NG.DTO
 {
-    [Route("/{Context}/{Version}/{ContractNumber}/MedicationMap", "GET")]
-    public class GetMedicationMapDataRequest : IDataDomainRequest
+    [Route("/{Version}/{ContractNumber}/MedicationMap", "GET")]
+    public class GetMedicationMapsRequest : IAppDomainRequest
     {
         [ApiMember(Name = "Name", Description = "Full Name of the medication map that is being requested", ParameterType = "property", DataType = "string", IsRequired = false)]
         public string Name { get; set; }
@@ -18,17 +19,19 @@ namespace Phytel.API.DataDomain.Medication.DTO
 
         [ApiMember(Name = "Strength", Description = "Strength of the medication map that is being requested", ParameterType = "property", DataType = "string", IsRequired = false)]
         public string Strength { get; set; }
-
-        [ApiMember(Name = "UserId", Description = "UserId of the logged in user", ParameterType = "property", DataType = "string", IsRequired = false)]
+        
+        [ApiMember(Name = "UserID", Description = "ID of the user making the request (Internally used ONLY)", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string UserId { get; set; }
 
-        [ApiMember(Name = "Context", Description = "Product Context", ParameterType = "property", DataType = "string", IsRequired = false)]
-        public string Context { get; set; }
-
-        [ApiMember(Name = "ContractNumber", Description = "Contract Number to retrieve data from", ParameterType = "property", DataType = "string", IsRequired = false)]
+        [ApiMember(Name = "ContractNumber", Description = "Contract Number to retrieve data from", ParameterType = "path", DataType = "string", IsRequired = true)]
         public string ContractNumber { get; set; }
 
-        [ApiMember(Name = "Version", Description = "Version of the API being called", ParameterType = "property", DataType = "double", IsRequired = false)]
+        [ApiMember(Name = "Token", Description = "Request Token", ParameterType = "QueryString", DataType = "string", IsRequired = true)]
+        public string Token { get; set; }
+
+        [ApiMember(Name = "Version", Description = "Version of the API being called", ParameterType = "property", DataType = "double", IsRequired = true)]
         public double Version { get; set; }
+
+        public GetMedicationMapsRequest() { }
     }
 }

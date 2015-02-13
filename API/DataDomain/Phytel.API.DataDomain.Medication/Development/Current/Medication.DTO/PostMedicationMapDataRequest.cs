@@ -4,11 +4,11 @@ using ServiceStack.ServiceHost;
 
 namespace Phytel.API.DataDomain.Medication.DTO
 {
-    [Route("/{Context}/{Version}/{ContractNumber}/MedicationMapping/Insert", "PUT")]
-    public class PutInsertMedicationMappingRequest : IDataDomainRequest
+    [Route("/{Context}/{Version}/{ContractNumber}/MedicationMap/Insert", "POST")]
+    public class PostMedicationMapDataRequest : IDataDomainRequest
     {
-        [ApiMember(Name = "Medications", Description = "Medications to insert", ParameterType = "property", DataType = "List<MedicationData>", IsRequired = false)]
-        public DTO.MedicationMapData MedicationMapping { get; set; }
+        [ApiMember(Name = "MedicationMapData", Description = "MedicationMap to be inserted", ParameterType = "property", DataType = "MedicationMapData", IsRequired = false)]
+        public MedicationMapData MedicationMapData { get; set; }
 
         [ApiMember(Name = "UserId", Description = "UserId of the logged in user", ParameterType = "property", DataType = "string", IsRequired = false)]
         public string UserId { get; set; }

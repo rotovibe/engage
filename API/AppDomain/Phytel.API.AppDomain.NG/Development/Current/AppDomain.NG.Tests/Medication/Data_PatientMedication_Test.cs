@@ -49,7 +49,7 @@ namespace Phytel.API.AppDomain.NG.Test
         {
             PatientMedSupp pms = new PatientMedSupp
             {
-                FamilyId = "54d1011184ac082234697ad7",
+                //FamilyId = "54dd28e784ac0714f0cef2cb",
                 CategoryId  = 1,
                 DeleteFlag = false,
                // Dosage = "Two",
@@ -57,14 +57,14 @@ namespace Phytel.API.AppDomain.NG.Test
                 //FreqHowOftenId = "545be059d43323224896663a",
                 //FreqQuantity = "4",
              //   FreqWhenId = "545be126d433232248966643",
-                // Id = "5462991ed4332323a01ce994",
-                Name = "SALINER",//"NICOTINE",
-                Form = "LIQUID",
+                Id = "54dd2d63d43328283844e107",
+                Name = "ARMES",//"NICOTINE",
+                Form = "TABLET",
                 Route = "ORAL",
                 Strength = "56 l",
                 //NDCs = ,
                // Notes = "note for Acetomophine 2",
-                PatientId = "5325d9fcd6a4850adcbba4ea",
+                PatientId = "54dd289384ac0511987c998e",
                 //PharmClasses = ,
             //  PrescribedBy = "Dr Basu",
                // Reason = "Reason for Acetomophine 2",
@@ -81,7 +81,7 @@ namespace Phytel.API.AppDomain.NG.Test
                 ContractNumber = contractNumber,
                 PatientMedSupp = pms,
                 RecalculateNDC = false,
-                Insert = true,
+                Insert = false,
                 UserId = userId,
                 Version = version
             };

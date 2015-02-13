@@ -16,11 +16,8 @@ namespace Phytel.API.DataDomain.Medication
             try
             {
                 List<MedicationMapData> result = null;
-                if (!string.IsNullOrEmpty(request.Name))
-                {
-                    var repo = MedicationRepositoryFactory.GetMedicationRepository(request, RepositoryType.MedicationMapping);
-                    result = repo.FindByName(request) as List<MedicationMapData>;
-                }
+                var repo = MedicationRepositoryFactory.GetMedicationRepository(request, RepositoryType.MedicationMapping);
+                result = repo.Search(request) as List<MedicationMapData>;
                 return result;
             }
             catch (Exception ex) { throw ex; }
@@ -36,20 +33,19 @@ namespace Phytel.API.DataDomain.Medication
             catch (Exception ex) { throw ex; }
         }
 
-        public DTO.MedicationMapData InsertMedicationMapping(PutInsertMedicationMappingRequest request, DTO.MedicationMapData mm)
+        public DTO.MedicationMapData InsertMedicationMap(PostMedicationMapDataRequest request)
         {
+            MedicationMapData result = null;
             try
             {
-                DTO.MedicationMapData result;
                 var repo = MedicationRepositoryFactory.GetMedicationRepository(request, RepositoryType.MedicationMapping);
-
-                result = repo.Insert(request as object) as DTO.MedicationMapData;
+                if (request.MedicationMapData != null)
+                {
+                    result = repo.Insert(request as object) as MedicationMapData;
+                }
                 return result;
             }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            catch (Exception ex) { throw ex; }
         }
 
         public MedicationMapData UpdateMedicationMap(PutMedicationMapDataRequest request)

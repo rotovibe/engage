@@ -42,25 +42,19 @@ namespace DataDomain.Medication.Repo
 
         public object Insert(object newEntity)
         {
+            var request = newEntity as PostMedicationMapDataRequest;
+            var mm = request.MedicationMapData;
             try
             {
-                var req = newEntity as PutInsertMedicationMappingRequest;
-                var mm = req.MedicationMapping;
-                // create endpoints for insert so you can use the request object.
-                var MEMedMap = new MEMedicationMapping(req.UserId)
+                var MEMedMap = new MEMedicationMapping(this.UserId)
                 {
-                    Custom = mm.Custom,
-                    FullName = mm.FullName,
-                    LastUpdatedOn = mm.LastUpdatedOn,
+                    FullName = string.IsNullOrEmpty(mm.FullName) ? null : mm.FullName.ToUpper(),
                     SubstanceName = mm.SubstanceName,
-                    TTLDate = mm.TTLDate,
-                    Verified = mm.Verified,
-                    Version = mm.Version,
-                    //UpdatedBy = mm.UpdatedBy,
                     Strength = mm.Strength,
-                    Route = mm.Route,
-                    Form = mm.Form,
-                    DeleteFlag = false
+                    Route = string.IsNullOrEmpty(mm.Route) ? null : mm.Route.ToUpper(),
+                    Form = string.IsNullOrEmpty(mm.Form) ? null : mm.Form.ToUpper(),
+                    Verified = mm.Verified,
+                    Custom = mm.Custom
                 };
 
                 using (MedicationMongoContext ctx = new MedicationMongoContext(ContractDBName))
@@ -71,7 +65,7 @@ namespace DataDomain.Medication.Repo
                                             MongoCollectionName.MedicationMap.ToString(),
                                             MEMedMap.Id.ToString(),
                                             DataAuditType.Insert,
-                                            ContractDBName);
+                                            request.ContractNumber);
                     return AutoMapper.Mapper.Map<MedicationMapData>(MEMedMap);
                 }
             }
@@ -154,7 +148,7 @@ namespace DataDomain.Medication.Repo
             catch (Exception ex) { throw ex;  }
         }
 
-        public object FindByName(object request)
+        public object Search(object request)
         {
             List<MedicationMapData> list = null;
             GetMedicationMapDataRequest dataRequest = (GetMedicationMapDataRequest)request;
@@ -163,7 +157,22 @@ namespace DataDomain.Medication.Repo
                 using (MedicationMongoContext ctx = new MedicationMongoContext(ContractDBName))
                 {
                     List<IMongoQuery> queries = new List<IMongoQuery>();
-                    queries.Add(Query.EQ(MEMedicationMapping.FullNameProperty, dataRequest.Name));
+                    if (!string.IsNullOrEmpty(MEMedicationMapping.FullNameProperty))
+                    {
+                        queries.Add(Query.EQ(MEMedicationMapping.FullNameProperty, dataRequest.Name));
+                    }
+                    if (!string.IsNullOrEmpty(MEMedicationMapping.RouteProperty))
+                    {
+                        queries.Add(Query.EQ(MEMedicationMapping.RouteProperty, dataRequest.Route));
+                    }
+                    if (!string.IsNullOrEmpty(MEMedicationMapping.FormProperty))
+                    {
+                        queries.Add(Query.EQ(MEMedicationMapping.FormProperty, dataRequest.Form));
+                    }
+                    if (!string.IsNullOrEmpty(MEMedicationMapping.StrengthProperty))
+                    {
+                        queries.Add(Query.EQ(MEMedicationMapping.StrengthProperty, dataRequest.Strength));
+                    }
                     queries.Add(Query.EQ(MEMedicationMapping.DeleteFlagProperty, false));
                     queries.Add(Query.EQ(MEMedicationMapping.TTLDateProperty, BsonNull.Value));
                     IMongoQuery mQuery = Query.And(queries);

@@ -10,6 +10,8 @@ namespace Phytel.API.AppDomain.NG.Medication
         PatientMedSuppData SavePatientMedSupp(PostPatientMedSuppRequest request);
         List<string> GetMedicationNDCs(PostPatientMedSuppRequest request);
         MedicationMapData InitializeMedicationMap(PostInitializeMedicationMapRequest request);
-        MedicationMapData UpdateMedicationMap(PostMedicationMapRequest request);
+        MedicationMapData UpdateMedicationMap(PutMedicationMapRequest request);
+        MedicationMapData InsertMedicationMap(PostMedicationMapRequest request);
+        List<MedicationMapData> SearchMedicationMap(GetMedicationMapsRequest request);
     }
 }

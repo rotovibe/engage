@@ -123,7 +123,7 @@ namespace Phytel.API.DataDomain.Medication.Test
             // return nothing.
         }
 
-        public object FindByName(object request)
+        public object Search(object request)
         {
             throw new NotImplementedException();
         }

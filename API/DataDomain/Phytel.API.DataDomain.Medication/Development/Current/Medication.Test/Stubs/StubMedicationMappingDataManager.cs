@@ -13,7 +13,7 @@ namespace Phytel.API.DataDomain.Medication
     public class StubMedicationMappingDataManager : IMedicationMappingDataManager
     {
 
-        public MedicationMapData InsertMedicationMapping(PutInsertMedicationMappingRequest request, MedicationMapData mm)
+        public MedicationMapData InsertMedicationMap(PostMedicationMapDataRequest request)
         {
             throw new NotImplementedException();
         }

@@ -3,10 +3,10 @@ using ServiceStack.ServiceHost;
 
 namespace Phytel.API.AppDomain.NG.DTO
 {
-    [Route("/{Version}/{ContractNumber}/MedicationMap/Insert", "POST")]
-    public class PostMedicationMapRequest : IAppDomainRequest
+    [Route("/{Version}/{ContractNumber}/MedicationMap/Update", "PUT")]
+    public class PutMedicationMapRequest : IAppDomainRequest
     {
-        [ApiMember(Name = "MedicationMap", Description = "MedicationMap details that need to be inserted.", ParameterType = "property", DataType = "MedicationMap", IsRequired = true)]
+        [ApiMember(Name = "MedicationMap", Description = "MedicationMap details that need to be updated.", ParameterType = "property", DataType = "MedicationMap", IsRequired = true)]
         public MedicationMap MedicationMap { get; set; }
 
         [ApiMember(Name = "Token", Description = "Token parameter", ParameterType = "path", DataType = "string", IsRequired = true)]
@@ -21,6 +21,6 @@ namespace Phytel.API.AppDomain.NG.DTO
         [ApiMember(Name = "UserID", Description = "ID of the user making the request (Internally used ONLY)", ParameterType = "property", DataType = "string", IsRequired = false)]
         public string UserId { get; set; }
 
-        public PostMedicationMapRequest() { }
+        public PutMedicationMapRequest() { }
     }
 }

@@ -23,13 +23,13 @@ namespace Phytel.API.DataDomain.Medication.Service
             return response;
         }
 
-        public PutInsertMedicationMappingResponse Put(PutInsertMedicationMappingRequest request)
+        public PostMedicationMapDataResponse Post(PostMedicationMapDataRequest request)
         {
-            var response = new PutInsertMedicationMappingResponse { Version = request.Version };
+            var response = new PostMedicationMapDataResponse { Version = request.Version };
             try
             {
                 RequireUserId(request);
-                var result = Manager.InsertMedicationMapping(request, request.MedicationMapping);
+                var result = Manager.InsertMedicationMap(request);
                 response.MedMapData = result;
             }
             catch (Exception ex)

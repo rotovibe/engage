@@ -46,16 +46,16 @@ namespace Phytel.API.DataDomain.Medication.Tests
                     SubstanceName = "Sassy Substance"
                 };
 
-                var request = new PutInsertMedicationMappingRequest
+                var request = new PostMedicationMapDataRequest
                 {
                     Context = "NG",
                     ContractNumber = "InHealth001",
                     UserId = "5325c81f072ef705080d347e",
                     Version = 1,
-                    MedicationMapping = mmap
+                    MedicationMapData = mmap
                 };
 
-                var result = mgr.InsertMedicationMapping(request, mmap);
+                var result = mgr.InsertMedicationMap(request);
 
                 Assert.IsTrue(result != null);
             }

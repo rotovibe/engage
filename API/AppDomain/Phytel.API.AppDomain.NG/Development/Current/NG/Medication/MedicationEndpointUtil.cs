@@ -106,7 +106,7 @@ namespace Phytel.API.AppDomain.NG.Medication
             catch (Exception ex) { throw ex; }
         }
 
-        public MedicationMapData UpdateMedicationMap(PostMedicationMapRequest request)
+        public MedicationMapData UpdateMedicationMap(PutMedicationMapRequest request)
         {
             try
             {
@@ -140,7 +140,72 @@ namespace Phytel.API.AppDomain.NG.Medication
                 return result;
             }
             catch (Exception ex) { throw ex; }
-        } 
+        }
+
+
+        public MedicationMapData InsertMedicationMap(PostMedicationMapRequest request)
+        {
+            try
+            {
+                MedicationMapData result = null;
+                IRestClient client = new JsonServiceClient();
+                //[Route("/{Context}/{Version}/{ContractNumber}/MedicationMap/Insert", "POST")]
+                var url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/MedicationMap/Insert",
+                                    DDMedicationUrl,
+                                    "NG",
+                                    request.Version,
+                                    request.ContractNumber), request.UserId);
+
+                if (request.MedicationMap != null)
+                {
+                    MedicationMapData data = new MedicationMapData();
+                    data = Mapper.Map<MedicationMapData>(request.MedicationMap);
+                    PostMedicationMapDataResponse dataDomainResponse = client.Post<PostMedicationMapDataResponse>(url, new PostMedicationMapDataRequest
+                    {
+                        Context = "NG",
+                        ContractNumber = request.ContractNumber,
+                        UserId = request.UserId,
+                        Version = request.Version,
+                        MedicationMapData = data
+                    } as object);
+
+                    if (dataDomainResponse != null)
+                    {
+                        result = dataDomainResponse.MedMapData;
+                    }
+                }
+                return result;
+            }
+            catch (Exception ex) { throw ex; }
+        }
+
+        public List<MedicationMapData> SearchMedicationMap(GetMedicationMapsRequest request)
+        {
+            try
+            {
+                List<MedicationMapData> result = null;
+                 //[Route("/{Context}/{Version}/{ContractNumber}/MedicationMap", "GET")]
+                IRestClient client = new JsonServiceClient();
+                var url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/MedicationMap?Name={4}&Form={5}&Route={6}&Strength={7}",
+                                   DDMedicationUrl,
+                                   "NG",
+                                   request.Version,
+                                   request.ContractNumber,
+                                   request.Name,
+                                   request.Form,
+                                   request.Route,
+                                   request.Strength), request.UserId);
+
+                GetMedicationMapDataResponse dataDomainResponse = client.Get<GetMedicationMapDataResponse>(url);
+
+                if (dataDomainResponse != null)
+                {
+                    result = dataDomainResponse.MedicationMapsData;
+                }
+                return result;
+            }
+            catch (Exception ex) { throw ex; }
+        }
         #endregion
 
         #region PatientMedSupps - Posts
@@ -210,5 +275,7 @@ namespace Phytel.API.AppDomain.NG.Medication
             catch (Exception ex) { throw ex; }
         }
         #endregion
+
+
     }
 }

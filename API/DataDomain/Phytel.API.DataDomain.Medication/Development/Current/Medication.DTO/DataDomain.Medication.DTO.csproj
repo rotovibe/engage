@@ -94,8 +94,8 @@
     <Compile Include="GetPatientMedSuppsDataResponse.cs" />
     <Compile Include="MedicationMapData.cs" />
     <Compile Include="PatientMedSuppData.cs" />
-    <Compile Include="PutInsertMedicationMappingRequest.cs" />
-    <Compile Include="PutInsertMedicationMappingResponse.cs" />
+    <Compile Include="PostMedicationMapDataRequest.cs" />
+    <Compile Include="PostMedicationMapDataResponse.cs" />
     <Compile Include="PutMedicationMapDataRequest.cs" />
     <Compile Include="PutMedicationMapDataResponse.cs" />
     <Compile Include="PutBulkInsertMedicationsRequest.cs" />
