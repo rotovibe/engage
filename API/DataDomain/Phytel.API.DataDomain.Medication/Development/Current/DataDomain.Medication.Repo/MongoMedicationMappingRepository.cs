@@ -157,19 +157,19 @@ namespace DataDomain.Medication.Repo
                 using (MedicationMongoContext ctx = new MedicationMongoContext(ContractDBName))
                 {
                     List<IMongoQuery> queries = new List<IMongoQuery>();
-                    if (!string.IsNullOrEmpty(MEMedicationMapping.FullNameProperty))
+                    if (!string.IsNullOrEmpty(dataRequest.Name))
                     {
                         queries.Add(Query.EQ(MEMedicationMapping.FullNameProperty, dataRequest.Name));
                     }
-                    if (!string.IsNullOrEmpty(MEMedicationMapping.RouteProperty))
+                    if (!string.IsNullOrEmpty(dataRequest.Route))
                     {
                         queries.Add(Query.EQ(MEMedicationMapping.RouteProperty, dataRequest.Route));
                     }
-                    if (!string.IsNullOrEmpty(MEMedicationMapping.FormProperty))
+                    if (!string.IsNullOrEmpty(dataRequest.Form))
                     {
                         queries.Add(Query.EQ(MEMedicationMapping.FormProperty, dataRequest.Form));
                     }
-                    if (!string.IsNullOrEmpty(MEMedicationMapping.StrengthProperty))
+                    if (!string.IsNullOrEmpty(dataRequest.Strength))
                     {
                         queries.Add(Query.EQ(MEMedicationMapping.StrengthProperty, dataRequest.Strength));
                     }
