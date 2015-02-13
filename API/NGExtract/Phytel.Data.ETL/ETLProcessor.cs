@@ -1,24 +1,25 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Configuration;
+using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
+using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using DataDomain.Allergy.Repo;
 using DataDomain.Medication.Repo;
 using FastMember;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
-using MongoDB.Driver;
 using Phytel.API.DataDomain.Allergy.DTO;
+using Phytel.API.DataDomain.CareMember;
+using Phytel.API.DataDomain.CareMember.DTO;
 using Phytel.API.DataDomain.Contact;
 using Phytel.API.DataDomain.Contact.DTO;
 using Phytel.API.DataDomain.LookUp;
 using Phytel.API.DataDomain.LookUp.DTO;
-using System;
-using System.Data;
-using System.Collections.Generic;
-using System.Linq;
-using Phytel.API.DataDomain.CareMember;
-using Phytel.API.DataDomain.CareMember.DTO;
 using Phytel.API.DataDomain.Medication.DTO;
 using Phytel.API.DataDomain.Patient;
 using Phytel.API.DataDomain.Patient.DTO;
@@ -28,28 +29,20 @@ using Phytel.API.DataDomain.PatientNote;
 using Phytel.API.DataDomain.PatientNote.DTO;
 using Phytel.API.DataDomain.PatientObservation;
 using Phytel.API.DataDomain.PatientObservation.DTO;
-//using Phytel.API.DataDomain.PatientProblem;
-//using Phytel.API.DataDomain.PatientProblem.DTO;
 using Phytel.API.DataDomain.PatientSystem;
 using Phytel.API.DataDomain.PatientSystem.DTO;
-using Phytel.API.DataDomain.Scheduling;
-using Phytel.Services;
 using Phytel.API.DataDomain.Program;
 using Phytel.API.DataDomain.Program.MongoDB.DTO;
-using System.Diagnostics;
-using System.Reflection;
-using System.Text.RegularExpressions;
-using Action = Phytel.API.DataDomain.Program.MongoDB.DTO.Action;
-using CommMode = Phytel.API.DataDomain.Contact.DTO.CommMode;
-using Language = Phytel.API.DataDomain.Contact.DTO.Language;
-using Objective = Phytel.API.DataDomain.LookUp.DTO.Objective;
-using TimeZone = Phytel.API.DataDomain.LookUp.DTO.TimeZone;
-using System.Windows.Forms;
-using Logging;
+using Phytel.API.DataDomain.Scheduling;
 using Phytel.Data.ETL.BulkCopy;
 using Phytel.Services.SQLServer;
+using Action = Phytel.API.DataDomain.Program.MongoDB.DTO.Action;
 using Category = Phytel.API.DataDomain.LookUp.DTO.Category;
+using CommMode = Phytel.API.DataDomain.LookUp.DTO.CommMode;
+using Language = Phytel.API.DataDomain.LookUp.DTO.Language;
 using Module = Phytel.API.DataDomain.Program.MongoDB.DTO.Module;
+using Objective = Phytel.API.DataDomain.LookUp.DTO.Objective;
+using TimeZone = Phytel.API.DataDomain.LookUp.DTO.TimeZone;
 
 
 namespace Phytel.Data.ETL
@@ -243,9 +236,9 @@ namespace Phytel.Data.ETL
 
                 try
                 {
-                    if (BsonClassMap.IsClassMapRegistered(typeof (Phytel.API.DataDomain.LookUp.DTO.CommMode)) == false)
+                    if (BsonClassMap.IsClassMapRegistered(typeof (CommMode)) == false)
                     {
-                        BsonClassMap.RegisterClassMap<Phytel.API.DataDomain.LookUp.DTO.CommMode>();
+                        BsonClassMap.RegisterClassMap<CommMode>();
                     }
                 }
                 catch
@@ -303,9 +296,9 @@ namespace Phytel.Data.ETL
 
                 try
                 {
-                    if (BsonClassMap.IsClassMapRegistered(typeof (Phytel.API.DataDomain.LookUp.DTO.Language)) == false)
+                    if (BsonClassMap.IsClassMapRegistered(typeof (Language)) == false)
                     {
-                        BsonClassMap.RegisterClassMap<Phytel.API.DataDomain.LookUp.DTO.Language>();
+                        BsonClassMap.RegisterClassMap<Language>();
                     }
                 }
                 catch
@@ -719,7 +712,7 @@ namespace Phytel.Data.ETL
 
                                 if (contact.Languages != null)
                                 {
-                                    foreach (Language lang in contact.Languages)
+                                    foreach (API.DataDomain.Contact.DTO.Language lang in contact.Languages)
                                     {
                                         parms.Clear();
                                         parms.Add(new Parameter("@LanguageLookUpMongoId", (string.IsNullOrEmpty(lang.LookUpLanguageId.ToString()) ? string.Empty : lang.LookUpLanguageId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
@@ -738,7 +731,7 @@ namespace Phytel.Data.ETL
 
                                 if (contact.Modes != null)
                                 {
-                                    foreach (CommMode mode in contact.Modes)
+                                    foreach (API.DataDomain.Contact.DTO.CommMode mode in contact.Modes)
                                     {
                                         parms.Clear();
                                         parms.Add(new Parameter("@ModeLookUpMongoId", (string.IsNullOrEmpty(mode.ModeId.ToString()) ? string.Empty : mode.ModeId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
@@ -1111,7 +1104,7 @@ namespace Phytel.Data.ETL
         {
             foreach (LookUpBase lbase in lookup.Data)
             {
-                Phytel.API.DataDomain.LookUp.DTO.CommMode cmm = (Phytel.API.DataDomain.LookUp.DTO.CommMode)lbase;
+                CommMode cmm = (CommMode)lbase;
 
                 ParameterCollection parms = new ParameterCollection();
 
@@ -1175,7 +1168,7 @@ namespace Phytel.Data.ETL
         {
             foreach (LookUpBase lbase in lookup.Data)
             {
-                Phytel.API.DataDomain.LookUp.DTO.Language la = (Phytel.API.DataDomain.LookUp.DTO.Language)lbase;
+                Language la = (Language)lbase;
 
                 ParameterCollection parms = new ParameterCollection();
 
