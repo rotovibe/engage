@@ -12,8 +12,8 @@ using Phytel.API.DataDomain.Medication.Test;
 
 namespace Phytel.API.DataDomain.Medication.Test
 {
-    [TestClass]
-    public class MongoData_PatientMedication_Test
+    //[TestClass]
+    public class Data_PatientMedication_Test
     {
         string context = "NG";
         string contractNumber = "InHealth001";

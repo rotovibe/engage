@@ -11,8 +11,8 @@ using ServiceStack.ServiceClient.Web;
 
 namespace Phytel.API.DataDomain.Allergy.Test
 {
-    [TestClass]
-    public class MongoData_Medication_Test
+    //[TestClass]
+    public class Data_Medication_Test
     {
         string context = "NG";
         string contractNumber = "InHealth001";
@@ -49,7 +49,7 @@ namespace Phytel.API.DataDomain.Allergy.Test
                 UserId = userId,
                 Version = version
             };
-            //[Route("/{Context}/{Version}/{ContractNumber}/MedicationMap/{Name}", "GET")]
+            //[Route("/{Context}/{Version}/{ContractNumber}/MedicationMap/{Name}", "POST")]
             GetMedicationMapDataResponse response = client.Get<GetMedicationMapDataResponse>(string.Format("{0}/{1}/{2}/{3}/MedicationMap/{4}", url, context, version, contractNumber, request.Name));
             Assert.IsNotNull(response);
         }

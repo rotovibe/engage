@@ -102,8 +102,8 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="Data\MongoData_MedicationMap_Test.cs" />
-    <Compile Include="Data\MongoData_PatientMedication_Test.cs" />
+    <Compile Include="Data\Data_MedicationMap_Test.cs" />
+    <Compile Include="Data\Data_PatientMedication_Test.cs" />
     <Compile Include="MedicationDataManagerTests.cs" />
     <Compile Include="MedicationMappingDataManagerTests.cs" />
     <Compile Include="MedicationRepositoryFactoryTests.cs" />

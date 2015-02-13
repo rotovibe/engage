@@ -99,8 +99,8 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="Data\MongoData_Allergy_Test.cs" />
-    <Compile Include="Data\MongoData_PatientAllergy_Test.cs" />
+    <Compile Include="Data\Data_Allergy_Test.cs" />
+    <Compile Include="Data\Data_PatientAllergy_Test.cs" />
     <Compile Include="Stubs\StubRepositoryFactory.cs" />
     <Compile Include="Stubs\StubAllergy_Test.cs" />
     <Compile Include="Stubs\StubPatientAllergy_Test.cs" />
