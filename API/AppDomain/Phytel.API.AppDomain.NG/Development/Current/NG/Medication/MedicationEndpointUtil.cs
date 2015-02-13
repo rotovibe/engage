@@ -184,19 +184,24 @@ namespace Phytel.API.AppDomain.NG.Medication
             try
             {
                 List<MedicationMapData> result = null;
-                 //[Route("/{Context}/{Version}/{ContractNumber}/MedicationMap", "GET")]
+                //[Route("/{Context}/{Version}/{ContractNumber}/MedicationMap", "POST")]
                 IRestClient client = new JsonServiceClient();
-                var url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/MedicationMap?Name={4}&Form={5}&Route={6}&Strength={7}",
+                var url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/MedicationMap",
                                    DDMedicationUrl,
                                    "NG",
                                    request.Version,
-                                   request.ContractNumber,
-                                   request.Name,
-                                   request.Form,
-                                   request.Route,
-                                   request.Strength), request.UserId);
+                                   request.ContractNumber), request.UserId);
 
-                GetMedicationMapDataResponse dataDomainResponse = client.Get<GetMedicationMapDataResponse>(url);
+                GetMedicationMapDataResponse dataDomainResponse = client.Post<GetMedicationMapDataResponse>(url, new GetMedicationMapDataRequest { 
+                     Context = "NG",
+                     ContractNumber = request.ContractNumber,
+                     Form = request.Form,
+                     Name = request.Name,
+                     Route = request.Route,
+                     Strength = request.Strength,
+                     UserId = request.UserId,
+                     Version = request.Version
+                } as object);
 
                 if (dataDomainResponse != null)
                 {

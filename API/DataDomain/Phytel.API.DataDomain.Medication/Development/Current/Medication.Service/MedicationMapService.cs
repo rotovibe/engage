@@ -8,7 +8,7 @@ namespace Phytel.API.DataDomain.Medication.Service
     {
         public IMedicationMappingDataManager Manager { get; set; }
 
-        public GetMedicationMapDataResponse Get(GetMedicationMapDataRequest request)
+        public GetMedicationMapDataResponse Post(GetMedicationMapDataRequest request)
         {
             var response = new GetMedicationMapDataResponse { Version = request.Version };
             try
