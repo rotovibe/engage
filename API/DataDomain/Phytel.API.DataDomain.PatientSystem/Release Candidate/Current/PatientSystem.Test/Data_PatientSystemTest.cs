@@ -3,7 +3,7 @@ using Phytel.API.DataDomain.PatientSystem.DTO;
 
 namespace Phytel.API.DataDomain.PatientSystem.Test
 {
-    public class MongoData_PatientSystemTest
+    public class Data_PatientSystemTest
     {
         string context = "NG";
         string contractNumber = "InHealth001";
