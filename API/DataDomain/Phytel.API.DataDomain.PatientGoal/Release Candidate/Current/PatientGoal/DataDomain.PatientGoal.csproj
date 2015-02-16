@@ -51,14 +51,29 @@
     <Reference Include="AutoMapper.Net4">
       <HintPath>..\..\..\..\..\packages\AutoMapper.3.2.1\lib\net40\AutoMapper.Net4.dll</HintPath>
     </Reference>
-    <Reference Include="MongoDB.Bson">
-      <HintPath>..\References\MongoDB.Bson.dll</HintPath>
+    <Reference Include="MongoDB.Bson, Version=1.9.2.235, Culture=neutral, PublicKeyToken=f686731cfb9cc103, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\packages\mongocsharpdriver.1.9.2\lib\net35\MongoDB.Bson.dll</HintPath>
     </Reference>
-    <Reference Include="MongoDB.Driver">
-      <HintPath>..\References\MongoDB.Driver.dll</HintPath>
+    <Reference Include="MongoDB.Driver, Version=1.9.2.235, Culture=neutral, PublicKeyToken=f686731cfb9cc103, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\packages\mongocsharpdriver.1.9.2\lib\net35\MongoDB.Driver.dll</HintPath>
     </Reference>
     <Reference Include="Phytel.Mongo">
       <HintPath>..\References\Phytel.Mongo.dll</HintPath>
+    </Reference>
+    <Reference Include="Phytel.Services.Mongo">
+      <HintPath>..\..\..\..\..\packages\Phytel.Services.Mongo.1.3.2.04\lib\net451\Phytel.Services.Mongo.dll</HintPath>
+    </Reference>
+    <Reference Include="Phytel.Services.Security">
+      <HintPath>..\..\..\..\..\packages\Phytel.Services.Security.1.3.0.06\lib\net451\Phytel.Services.Security.dll</HintPath>
+    </Reference>
+    <Reference Include="Phytel.Services.SQLServer">
+      <HintPath>..\..\..\..\..\packages\Phytel.Services.SQLServer.1.3.0.09\lib\net451\Phytel.Services.SQLServer.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack, Version=3.9.70.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\packages\ServiceStack.3.9.70\lib\net35\ServiceStack.dll</HintPath>
     </Reference>
     <Reference Include="ServiceStack.Common">
       <HintPath>..\..\..\..\..\packages\ServiceStack.Common.3.9.70\lib\net35\ServiceStack.Common.dll</HintPath>
@@ -80,6 +95,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Container\PatientGoalContainer.cs" />
     <Compile Include="IAttributeRepository.cs" />
     <Compile Include="IPatientGoalDataManager.cs" />
     <Compile Include="IGoalRepository.cs" />
