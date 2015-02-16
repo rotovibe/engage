@@ -15,6 +15,6 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="..\..\bin\Phytel.Services.Specflow.Assist.dll" target="lib\net451\Phytel.Services.Specflow.Assist.dll" />
+    <file src="..\bin\Phytel.Services.Specflow.Assist.dll" target="lib\net451\Phytel.Services.Specflow.Assist.dll" />
   </files>
 </package>
