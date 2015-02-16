@@ -1,6 +1,6 @@
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
-using Phytel.Mongo.Linq;
+using Phytel.Services.Mongo.Linq;
 using Phytel.API.Interface;
 using System.Collections.Generic;
 using System;
