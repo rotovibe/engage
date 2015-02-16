@@ -10,10 +10,4 @@ namespace Phytel.API.DataDomain.PatientNote.DTO
     {
         PatientNote
     }
-
-    public enum NoteType
-    {
-       General = 1,
-       Touchpoint = 2
-    }
 }
