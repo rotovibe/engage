@@ -44,7 +44,7 @@ namespace Phytel.API.DataDomain.Medication
             try
             {
                 GetMedicationNDCsDataResponse result = new GetMedicationNDCsDataResponse();
-                var repo = MedicationRepositoryFactory.GetMedicationRepository(request, RepositoryType.Medication)    ;
+                var repo = MedicationRepositoryFactory.GetMedicationRepository(request, RepositoryType.Medication);
                 List<MEMedication> meMeds = repo.FindNDCCodes(request) as List<MEMedication>;
                 if (meMeds != null && meMeds.Count > 0)
                 {
@@ -63,5 +63,6 @@ namespace Phytel.API.DataDomain.Medication
             }
             catch (Exception ex) { throw ex; }
         }
+
     }
 }   

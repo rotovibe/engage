@@ -10,13 +10,7 @@ namespace Phytel.API.DataDomain.Medication
 {
     public class PatientMedSuppDataManager : IPatientMedSuppDataManager
     {
-        //protected readonly IMongoPatientMedSuppRepository PatientMedSuppRepository;
         public IMongoPatientMedSuppRepository PatientMedSuppRepository { get; set; }
-
-        //public PatientMedSuppDataManager(IMongoPatientMedSuppRepository repository)
-        //{
-        //    PatientMedSuppRepository = repository;
-        //}
         
         public List<PatientMedSuppData> GetPatientMedSupps(GetPatientMedSuppsDataRequest request)
         {

@@ -41,17 +41,17 @@ namespace Phytel.API.DataDomain.Medication.Tests
                 SqlCommand command =
                     new SqlCommand(
                         @"SELECT [PRODUCTID]
-                              ,[PRODUCTNDC]
-                              ,[PROPRIETARYNAME]
-                              ,[PROPRIETARYNAMESUFFIX]
-                              ,[STARTMARKETINGDATE]
-                              ,[SUBSTANCENAME]
-                              ,[PHARM_CLASSES]
-                              ,[ROUTENAME]
-                              ,[DOSAGEFORMNAME]
-                              ,[ACTIVE_INGRED_UNIT]
-                              ,[ACTIVE_NUMERATOR_STRENGTH]
-                          FROM [AllergiesAndMeds].[dbo].[products_Array_formatted]",
+                          ,[PRODUCTNDC]
+                          ,[PROPRIETARYNAME]
+                          ,[PROPRIETARYNAMESUFFIX]
+                          ,[STARTMARKETINGDATE]
+                          ,[SUBSTANCENAME]
+                          ,[PHARM_CLASSES]
+                          ,[ROUTENAME]
+                          ,[DOSAGEFORMNAME]
+                          ,[ACTIVE_INGRED_UNIT]
+                          ,[ACTIVE_NUMERATOR_STRENGTH]
+                        FROM [AllergiesAndMeds].[dbo].[products]  ",
                         connection))
             {
                 connection.Open();
@@ -64,15 +64,15 @@ namespace Phytel.API.DataDomain.Medication.Tests
                             ProductId = reader["PRODUCTID"].ToString().Trim(),
                             NDC = reader["PRODUCTNDC"].ToString().Trim(),
                             FullName = GetFullName(reader["PROPRIETARYNAME"].ToString().Trim() , reader["PROPRIETARYNAMESUFFIX"].ToString().Trim()),
-                            ProprietaryName = reader["PROPRIETARYNAME"].ToString().Trim().Replace("\"", ""),
-                            ProprietaryNameSuffix = reader["PROPRIETARYNAMESUFFIX"].ToString().Trim().Replace("\"", ""),
+                            ProprietaryName = reader["PROPRIETARYNAME"].ToString().Trim().Replace("\"", "").ToUpper(),
+                            ProprietaryNameSuffix = reader["PROPRIETARYNAMESUFFIX"].ToString().Trim().Replace("\"", "").ToUpper(),
                             StartDate = formatDate(reader["STARTMARKETINGDATE"].ToString().Trim()),
-                            SubstanceName = GetList(reader["SUBSTANCENAME"].ToString().Trim()),
+                            SubstanceName = reader["SUBSTANCENAME"].ToString().Trim().ToUpper(), //GetList(reader["SUBSTANCENAME"].ToString().Trim()),
                             PharmClass = GetList(reader["PHARM_CLASSES"].ToString().Trim()),
-                            Route = GetList(reader["ROUTENAME"].ToString().Trim()),
+                            Route = reader["ROUTENAME"].ToString().Trim(), //GetList(reader["ROUTENAME"].ToString().Trim()),
                             Form = reader["DOSAGEFORMNAME"].ToString().Trim(),
-                            Unit = GetList(reader["ACTIVE_INGRED_UNIT"].ToString().Trim()),
-                            Strength = GetList(reader["ACTIVE_NUMERATOR_STRENGTH"].ToString().Trim()),
+                            Unit = reader["ACTIVE_INGRED_UNIT"].ToString().Trim(),//GetList(reader["ACTIVE_INGRED_UNIT"].ToString().Trim()),
+                            Strength = reader["ACTIVE_NUMERATOR_STRENGTH"].ToString().Trim(), //GetList(reader["ACTIVE_NUMERATOR_STRENGTH"].ToString().Trim()),
                             RecordCreatedBy = "5368ff2ad4332316288f3e3e",
                             RecordCreatedOn = System.DateTime.UtcNow,
                             DeleteFlag = false,
@@ -94,7 +94,7 @@ namespace Phytel.API.DataDomain.Medication.Tests
             var name = fpN;
             if (suffix.Length > 0)
                 name = fpN + " " + sfx;
-            return name;
+            return name.ToUpper();
         }
 
         private List<string> GetList(string p)
