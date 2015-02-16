@@ -23,9 +23,9 @@ namespace Phytel.API.AppDomain.NG.Test
                 OutcomeId = "540f1f10d4332319883f3e92",
                 PatientId = "5325db71d6a4850adcbba94a",
                 SourceId = "540f208ed4332319883f3e9b",
-                 Text = "HEllo Hello",
-                 TypeId = 2,
-                 ValidatedIdentity  = true,
+                Text = "HEllo Hello",
+                TypeId = "54909992d43323251c0a1dfd",
+                ValidatedIdentity  = true,
                 WhoId = "540f1fc7d4332319883f3e99"
             };
             

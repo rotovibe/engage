@@ -10,6 +10,7 @@ namespace Phytel.API.AppDomain.NG.DTO
     {
         public string Id { get; set; }
         public string PatientId { get; set; }
+        public string FamilyId { get; set; }
         public string Name { get; set; }
         public int CategoryId { get; set; }
         public string TypeId { get; set; }

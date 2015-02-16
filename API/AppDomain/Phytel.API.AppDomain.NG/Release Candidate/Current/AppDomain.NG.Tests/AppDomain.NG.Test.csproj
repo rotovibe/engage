@@ -67,14 +67,16 @@
       <HintPath>..\..\..\..\..\packages\AutoMapper.3.2.1\lib\net40\AutoMapper.Net4.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.QualityTools.Testing.Fakes, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
-    <Reference Include="MongoDB.Bson, Version=1.8.1.20, Culture=neutral, PublicKeyToken=f686731cfb9cc103, processorArchitecture=MSIL">
+    <Reference Include="Lucene.Net, Version=3.0.3.0, Culture=neutral, PublicKeyToken=85089178b9ac3181, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\References\MongoDB.Bson.dll</HintPath>
+      <HintPath>..\..\..\..\..\packages\Lucene.Net.3.0.3\lib\NET40\Lucene.Net.dll</HintPath>
     </Reference>
-    <Reference Include="MongoDB.Driver, Version=1.8.1.20, Culture=neutral, PublicKeyToken=f686731cfb9cc103, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\References\MongoDB.Driver.dll</HintPath>
+    <Reference Include="Microsoft.QualityTools.Testing.Fakes, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="MongoDB.Bson">
+      <HintPath>..\..\..\..\..\packages\mongocsharpdriver.1.9.2\lib\net35\MongoDB.Bson.dll</HintPath>
+    </Reference>
+    <Reference Include="MongoDB.Driver">
+      <HintPath>..\..\..\..\..\packages\mongocsharpdriver.1.9.2\lib\net35\MongoDB.Driver.dll</HintPath>
     </Reference>
     <Reference Include="Moq">
       <HintPath>..\..\..\..\..\packages\Moq.4.2.1409.1722\lib\net40\Moq.dll</HintPath>
@@ -87,6 +89,16 @@
     </Reference>
     <Reference Include="Phytel.Mongo">
       <HintPath>..\References\Phytel.Mongo.dll</HintPath>
+    </Reference>
+    <Reference Include="Phytel.Services.Mongo">
+      <HintPath>..\..\..\..\..\packages\Phytel.Services.Mongo.1.3.2.04\lib\net451\Phytel.Services.Mongo.dll</HintPath>
+    </Reference>
+    <Reference Include="Phytel.Services.Security">
+      <HintPath>..\..\..\..\..\packages\Phytel.Services.Security.1.3.0.06\lib\net451\Phytel.Services.Security.dll</HintPath>
+    </Reference>
+    <Reference Include="Phytel.Services.SQLServer">
+      <HintPath>..\..\..\..\..\packages\Phytel.Services.SQLServer.1.3.0.09\lib\net451\Phytel.Services.SQLServer.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="ServiceStack">
       <HintPath>..\..\..\..\..\packages\ServiceStack.3.9.70\lib\net35\ServiceStack.dll</HintPath>
@@ -114,6 +126,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Web" />
   </ItemGroup>
   <Choose>
@@ -136,6 +149,7 @@
     <Compile Include="Factories\NGManagerFactory.cs" />
     <Compile Include="Factories\SampleFactory.cs" />
     <Compile Include="Factories\SecurityManagerFactory.cs" />
+    <Compile Include="Medication\Data_MedicationMap_Test.cs" />
     <Compile Include="Medication\Data_PatientMedication_Test.cs" />
     <Compile Include="MongoDB\Repository\MongoPatientGoalRepositoryTests.cs" />
     <Compile Include="NGService_Tests.cs" />
@@ -169,6 +183,8 @@
     <Compile Include="Programs\Specifications\RemoveSelectedResponseSpecification_Test.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Search\Data_Search_Test.cs" />
+    <Compile Include="Search\LuceneStrategy\BaseLuceneStrategyTests.cs" />
+    <Compile Include="Search\SearchManagerTests.cs" />
     <Compile Include="Stubs\StubAppHostBase.cs" />
     <Compile Include="Stubs\StubAuditUtil.cs" />
     <Compile Include="Stubs\StubCommonFormatterUtil.cs" />
