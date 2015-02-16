@@ -55,7 +55,7 @@ namespace Phytel.API.DataDomain.Program.Test.Stubs
             throw new NotImplementedException();
         }
 
-        public IEnumerable<object> Find(List<global::MongoDB.Bson.ObjectId> Ids)
+        public IEnumerable<object> Find(List<ObjectId> Ids)
         {
             throw new NotImplementedException();
         }
