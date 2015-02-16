@@ -1,6 +1,6 @@
 using MongoDB.Bson;
 using Phytel.API.DataDomain.Scheduling.DTO;
-using Phytel.Mongo.Linq;
+using Phytel.Services.Mongo.Linq;
 
 namespace Phytel.API.DataDomain.Scheduling
 {

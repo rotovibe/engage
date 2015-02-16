@@ -1,7 +1,7 @@
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using Phytel.API.Interface;
-using Phytel.Mongo.Linq;
+using Phytel.Services.Mongo.Linq;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -60,7 +60,7 @@ namespace Phytel.API.DataDomain.Scheduling
 
         [BsonElement(AssignedToProperty)]
         [BsonIgnoreIfNull(false)]
-        public ObjectId AssignedToId { get; set; }
+        public ObjectId? AssignedToId { get; set; }
 
         [BsonElement(DescriptionProperty)]
         [BsonIgnoreIfNull(true)]
