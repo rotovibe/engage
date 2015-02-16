@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 
@@ -24,7 +20,7 @@ namespace Phytel.Services.Specflow.Assist
 
         public static DateTime GetAsDateTime<T>(this TableRow row, Expression<Func<T, object>> propertySelector)
         {
-            var memberExpression = GetMemberInfo(propertySelector);
+            var memberExpression = propertySelector.GetMemberInfo();
             return row.GetAsDateTime(memberExpression.Member.Name);
         }
 
@@ -41,7 +37,7 @@ namespace Phytel.Services.Specflow.Assist
 
         public static DateTime? GetAsDateTimeNullable<T>(this TableRow row, Expression<Func<T, object>> propertySelector)
         {
-            var memberExpression = GetMemberInfo(propertySelector);
+            var memberExpression = propertySelector.GetMemberInfo();
             return row.GetAsDateTimeNullable(memberExpression.Member.Name);
         }
 
@@ -60,7 +56,7 @@ namespace Phytel.Services.Specflow.Assist
 
         public static TEnum? GetAsEnum<T, TEnum>(this TableRow row, Expression<Func<T, object>> propertySelector) where TEnum : struct
         {
-            var memberExpression = GetMemberInfo(propertySelector);
+            var memberExpression = propertySelector.GetMemberInfo();
             return row.GetAsEnum<TEnum>(memberExpression.Member.Name);
         }
 
@@ -77,37 +73,13 @@ namespace Phytel.Services.Specflow.Assist
 
         public static string GetAsString<T>(this TableRow row, Expression<Func<T, object>> propertySelector)
         {
-            var memberExpression = GetMemberInfo(propertySelector);
+            var memberExpression = propertySelector.GetMemberInfo();
             return row.GetAsString(memberExpression.Member.Name);
         }
 
         public static bool HasValueForProperty(this TableRow row, string propertyName)
         {
             return row.Keys.Contains(propertyName) && !string.IsNullOrEmpty(row[propertyName]);
-        }
-
-        private static MemberExpression GetMemberInfo(Expression method)
-        {
-            LambdaExpression lambda = method as LambdaExpression;
-            if (lambda == null)
-                throw new ArgumentNullException("method");
-
-            MemberExpression memberExpr = null;
-
-            if (lambda.Body.NodeType == ExpressionType.Convert)
-            {
-                memberExpr =
-                    ((UnaryExpression)lambda.Body).Operand as MemberExpression;
-            }
-            else if (lambda.Body.NodeType == ExpressionType.MemberAccess)
-            {
-                memberExpr = lambda.Body as MemberExpression;
-            }
-
-            if (memberExpr == null)
-                throw new ArgumentException("method");
-
-            return memberExpr;
         }
     }
 }
