@@ -78,6 +78,11 @@ namespace Phytel.Services.SQLServer.Repository
             _dbContext.Database.ExecuteSqlCommand(sql);
         }
 
+        public virtual void Update()
+        {
+            _dbContext.SaveChanges();
+        }
+
         protected virtual IQueryable<T> Includes<T>(Expression<Func<T, object>>[] includes)
             where T : class
         {
