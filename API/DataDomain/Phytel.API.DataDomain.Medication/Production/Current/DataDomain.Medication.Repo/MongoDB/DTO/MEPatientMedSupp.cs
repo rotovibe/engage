@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using Phytel.API.Interface;
-using Phytel.Mongo.Linq;
+using Phytel.Services.Mongo.Linq;
 
 namespace Phytel.API.DataDomain.Medication.DTO
 {
@@ -27,6 +27,11 @@ namespace Phytel.API.DataDomain.Medication.DTO
         [BsonElement(PatientIdProperty)]
         [BsonIgnoreIfNull(true)]
         public ObjectId PatientId { get; set; }
+
+        public const string FamilyIdProperty = "fmid";
+        [BsonElement(FamilyIdProperty)]
+        [BsonIgnoreIfNull(true)]
+        public ObjectId? FamilyId { get; set; }
 
         public const string NameProperty = "nm";
         [BsonElement(NameProperty)]

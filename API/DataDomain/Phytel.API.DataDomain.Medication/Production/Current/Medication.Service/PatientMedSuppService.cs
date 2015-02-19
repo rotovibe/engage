@@ -5,13 +5,7 @@ namespace Phytel.API.DataDomain.Medication.Service
 {
     public class PatientMedSuppService : ServiceBase
     {
-        //protected readonly IPatientMedSuppDataManager Manager;
         public IPatientMedSuppDataManager Manager { get; set; }
-
-        //public PatientMedSuppService(IPatientMedSuppDataManager mgr)
-        //{
-        //    Manager = mgr;
-        //}
 
         #region Posts
         public GetPatientMedSuppsDataResponse Post(GetPatientMedSuppsDataRequest request)

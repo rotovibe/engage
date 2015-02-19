@@ -6,13 +6,7 @@ namespace Phytel.API.DataDomain.Medication.Service
 {
     public class MedicationService : ServiceBase
     {
-        //protected readonly IMedicationDataManager Manager;
         public IMedicationDataManager Manager { get; set; }
-
-        //public MedicationService(IMedicationDataManager mgr)
-        //{
-        //    Manager = mgr;
-        //}
 
         public GetAllMedicationsResponse Get(GetAllMedicationsRequest request)
         {
@@ -35,7 +29,6 @@ namespace Phytel.API.DataDomain.Medication.Service
             try
             {
                 RequireUserId(request);
-                //response.Medications = 
                     var result = Manager.BulkInsertMedications(new List<DTO.MedicationData>(), request);
                 response.Status = result;
             }

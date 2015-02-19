@@ -12,8 +12,8 @@ using Phytel.API.DataDomain.Medication.Test;
 
 namespace Phytel.API.DataDomain.Medication.Test
 {
-    [TestClass]
-    public class MongoData_PatientMedication_Test
+    //[TestClass]
+    public class Data_PatientMedication_Test
     {
         string context = "NG";
         string contractNumber = "InHealth001";
@@ -76,15 +76,14 @@ namespace Phytel.API.DataDomain.Medication.Test
             {
                 Context = context,
                 ContractNumber = contractNumber,
-                Insert = true,
                 PatientMedSuppData  = pms,
                 UserId = userId,
                 Version = version
             };
 
-            //[Route("/{Context}/{Version}/{ContractNumber}/PatientMedSupp/Save", "PUT")]
+            //[Route("/{Context}/{Version}/{ContractNumber}/PatientMedSupp/Update", "PUT")]
             PutPatientMedSuppDataResponse response = client.Put<PutPatientMedSuppDataResponse>(
-                string.Format("{0}/{1}/{2}/{3}/PatientMedSupp/Save", url, context, version, contractNumber), request);
+                string.Format("{0}/{1}/{2}/{3}/PatientMedSupp/Update", url, context, version, contractNumber), request);
             Assert.IsNotNull(response);
         }
 

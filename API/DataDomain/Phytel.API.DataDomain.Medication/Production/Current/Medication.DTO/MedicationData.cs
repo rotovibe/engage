@@ -13,12 +13,13 @@ namespace Phytel.API.DataDomain.Medication.DTO
         public string ProprietaryNameSuffix { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
-        public List<string> SubstanceName { get; set; }
+        public string SubstanceName { get; set; }
         public List<string> PharmClass { get; set; }
-        public List<string> Route { get; set; }
+        public string Route { get; set; }
         public string Form { get; set; }
-        public List<string> Unit { get; set; }
-        public List<string> Strength { get; set; }
+        public string Unit { get; set; }
+        public string Strength { get; set; }
+        public string FamilyId { get; set; }
 
         public double Version { get; set; }
         public string UpdatedBy { get; set; }

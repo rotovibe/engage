@@ -6,7 +6,9 @@ namespace DataDomain.Medication.Repo
 {
     public interface IMongoMedicationRepository : IRepository
     {
+        object Search(object request);
         object FindByPatientId(object request);
         object FindNDCCodes(object request);
+        object Initialize(object newEntity);
     }
 }

@@ -51,16 +51,17 @@ namespace DataDomain.Medication.Repo
                     MEPatientMedSupp mePMS = new MEPatientMedSupp(this.UserId)
                     {
                         PatientId = ObjectId.Parse(data.PatientId),
-                        Name = data.Name,
+                        //FamilyId = string.IsNullOrEmpty(data.FamilyId) ? (ObjectId?)null : ObjectId.Parse(data.FamilyId),
+                        Name = string.IsNullOrEmpty(data.Name) ? null : data.Name.ToUpper(),
                         CategoryId = (Category)data.CategoryId,
                         TypeId  = ObjectId.Parse(data.TypeId),
                         StatusId = (Status)data.StatusId,
                         Dosage = data.Dosage,
                         Strength = data.Strength,
-                        Route = data.Route,
-                        Form = data.Form,
+                        Route = string.IsNullOrEmpty(data.Route) ? null : data.Route.ToUpper(),
+                        Form = string.IsNullOrEmpty(data.Form) ? null : data.Form.ToUpper(),
                         PharmClasses = getPharmClassses(ctx, data.Name),
-                        NDCs = data.NDCs,
+                        NDCs = (data.NDCs != null && data.NDCs.Count > 0) ? data.NDCs : null,
                         FreqQuantity = data.FreqQuantity,
                         FreqHowOftenId = string.IsNullOrEmpty(data.FreqHowOftenId) ? (ObjectId?)null : ObjectId.Parse(data.FreqHowOftenId),
                         FreqWhenId = string.IsNullOrEmpty(data.FreqWhenId) ? (ObjectId?)null : ObjectId.Parse(data.FreqWhenId),
@@ -174,12 +175,20 @@ namespace DataDomain.Medication.Repo
                     if (data.PatientId != null) uv.Add(MB.Update.Set(MEPatientMedSupp.PatientIdProperty, ObjectId.Parse(data.PatientId)));
                     if (!string.IsNullOrEmpty(data.Name))
                     {
-                        uv.Add(MB.Update.Set(MEPatientMedSupp.NameProperty, data.Name));
+                        uv.Add(MB.Update.Set(MEPatientMedSupp.NameProperty, data.Name.ToUpper()));
                     }
                     else
                     {
                         uv.Add(MB.Update.Set(MEPatientMedSupp.NameProperty, BsonNull.Value));
                     }
+                    //if (data.FamilyId != null)
+                    //{
+                    //    uv.Add(MB.Update.Set(MEPatientMedSupp.FamilyIdProperty, ObjectId.Parse(data.FamilyId)));
+                    //}
+                    //else
+                    //{
+                    //    uv.Add(MB.Update.Set(MEPatientMedSupp.FamilyIdProperty, BsonNull.Value));
+                    //}
                     if (data.CategoryId != 0) uv.Add(MB.Update.Set(MEPatientMedSupp.CategoryProperty, data.CategoryId));
                     if (data.TypeId != null) uv.Add(MB.Update.Set(MEPatientMedSupp.TypeIdProperty, ObjectId.Parse(data.TypeId)));
                     if (data.StatusId != 0) uv.Add(MB.Update.Set(MEPatientMedSupp.StatusProperty, data.StatusId));
@@ -201,7 +210,7 @@ namespace DataDomain.Medication.Repo
                     }
                     if (!string.IsNullOrEmpty(data.Form))
                     {
-                        uv.Add(MB.Update.Set(MEPatientMedSupp.FormProperty, data.Form));
+                        uv.Add(MB.Update.Set(MEPatientMedSupp.FormProperty, data.Form.ToUpper()));
                     }
                     else
                     {
@@ -209,14 +218,14 @@ namespace DataDomain.Medication.Repo
                     }
                     if (!string.IsNullOrEmpty(data.Route))
                     {
-                        uv.Add(MB.Update.Set(MEPatientMedSupp.RouteProperty, data.Route));
+                        uv.Add(MB.Update.Set(MEPatientMedSupp.RouteProperty, data.Route.ToUpper()));
                     }
                     else 
                     {
                         uv.Add(MB.Update.Set(MEPatientMedSupp.RouteProperty, BsonNull.Value));
                     }
-                    uv.Add(MB.Update.SetWrapped<List<string>>(MEPatientMedSupp.PharmClassProperty, data.PharmClasses));
-                    uv.Add(MB.Update.SetWrapped<List<string>>(MEPatientMedSupp.NDCProperty, data.NDCs));
+                    uv.Add(MB.Update.SetWrapped<List<string>>(MEPatientMedSupp.PharmClassProperty, (data.PharmClasses != null && data.PharmClasses.Count > 0) ? data.PharmClasses : null));
+                    uv.Add(MB.Update.SetWrapped<List<string>>(MEPatientMedSupp.NDCProperty, (data.NDCs != null && data.NDCs.Count > 0) ? data.NDCs : null));
                     if (!string.IsNullOrEmpty(data.FreqQuantity))
                     {
                         uv.Add(MB.Update.Set(MEPatientMedSupp.FreqQuantityProperty, data.FreqQuantity));
@@ -388,26 +397,37 @@ namespace DataDomain.Medication.Repo
             List<MEMedication> meMs = ctx.Medications.Collection.Find(Query.EQ(MEMedication.FullNameProperty, name)).SetFields(MEMedication.PharmClassProperty).ToList();
             if (meMs != null && meMs.Count > 0)
             {
+                List<string> list = new List<string>();
                 meMs.ForEach(m =>
                 {
                     if (m.PharmClass != null && m.PharmClass.Count > 0)
                     {
-                        result = new List<string>();
                         m.PharmClass.ForEach(p =>
                         {
-                            // get only unique pharm classes codes.
-                            if (!result.Contains(p))
+                            // Add only unique pharm classes codes & do not add if it is string empty.
+                            if (!list.Contains(p) && !string.IsNullOrEmpty(p))
                             {
-                                result.Add(p);
+                                list.Add(p);
                             }
                         });
                     }
                 });
+                if (list.Count > 0) result = list;
             }
             return result;
         }
 
         public object FindNDCCodes(object request)
+        {
+            throw new NotImplementedException();
+        }
+
+        public object Initialize(object newEntity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public object Search(object request)
         {
             throw new NotImplementedException();
         }
