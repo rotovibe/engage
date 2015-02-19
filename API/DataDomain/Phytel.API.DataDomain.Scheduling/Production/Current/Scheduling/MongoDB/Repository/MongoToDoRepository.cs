@@ -148,7 +148,7 @@ namespace Phytel.API.DataDomain.Scheduling
                     {
                         todoData = new ToDoData
                         {
-                            AssignedToId = meToDo.AssignedToId.ToString(),
+                            AssignedToId = meToDo.AssignedToId == null ? string.Empty : meToDo.AssignedToId.ToString(),
                             CategoryId = meToDo.Category.ToString(),
                             ClosedDate = meToDo.ClosedDate,
                             CreatedById = meToDo.RecordCreatedBy.ToString(),
@@ -156,7 +156,7 @@ namespace Phytel.API.DataDomain.Scheduling
                             Description = meToDo.Description,
                             DueDate = meToDo.DueDate,
                             Id = meToDo.Id.ToString(),
-                            PatientId = meToDo.PatientId.ToString(),
+                            PatientId = meToDo.PatientId == null ? string.Empty : meToDo.PatientId.ToString(),
                             PriorityId = (int)meToDo.Priority,
                             ProgramIds = Helper.ConvertToStringList(meToDo.ProgramIds),
                             StatusId = (int)meToDo.Status,
@@ -389,7 +389,7 @@ namespace Phytel.API.DataDomain.Scheduling
                                 Description = t.Description,
                                 DueDate = t.DueDate,
                                 Id = t.Id.ToString(),
-                                PatientId = t.PatientId.ToString(),
+                                PatientId = t.PatientId == null ? string.Empty : t.PatientId.ToString(),
                                 PriorityId = (int)t.Priority,
                                 ProgramIds = Helper.ConvertToStringList(t.ProgramIds),
                                 StatusId = (int)t.Status,
