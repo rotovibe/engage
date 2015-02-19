@@ -1,6 +1,6 @@
 using MongoDB.Bson;
 using Phytel.API.DataDomain.PatientGoal.DTO;
-using Phytel.Mongo.Linq;
+using Phytel.Services.Mongo.Linq;
 using System.Configuration;
 
 namespace Phytel.API.DataDomain.PatientGoal
