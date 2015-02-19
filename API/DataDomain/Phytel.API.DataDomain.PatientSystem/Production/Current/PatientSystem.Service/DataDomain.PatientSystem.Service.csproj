@@ -45,6 +45,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Phytel.Services.IOC">
+      <HintPath>..\..\..\..\..\packages\Phytel.Services.IOC.1.3.3.01\lib\net451\Phytel.Services.IOC.dll</HintPath>
+    </Reference>
+    <Reference Include="Phytel.Services.ServiceStack">
+      <HintPath>..\..\..\..\..\packages\Phytel.Services.ServiceStack.1.5.0.01\lib\net451\Phytel.Services.ServiceStack.dll</HintPath>
+    </Reference>
     <Reference Include="ServiceStack, Version=3.9.70.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\packages\ServiceStack.3.9.70\lib\net35\ServiceStack.dll</HintPath>
