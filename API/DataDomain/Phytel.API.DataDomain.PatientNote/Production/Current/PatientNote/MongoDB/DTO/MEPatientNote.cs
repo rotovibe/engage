@@ -1,7 +1,7 @@
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using Phytel.API.Interface;
-using Phytel.Mongo.Linq;
+using Phytel.Services.Mongo.Linq;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -61,7 +61,7 @@ namespace Phytel.API.DataDomain.PatientNote.DTO
 
         [BsonElement(NoteTypeProperty)]
         [BsonIgnoreIfNull(true)]
-        public NoteType Type { get; set; }
+        public ObjectId Type { get; set; }
 
         [BsonElement(MethodIdProperty)]
         [BsonIgnoreIfNull(true)]
