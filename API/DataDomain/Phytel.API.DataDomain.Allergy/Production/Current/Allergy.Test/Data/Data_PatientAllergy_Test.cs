@@ -11,8 +11,8 @@ using ServiceStack.ServiceClient.Web;
 
 namespace Phytel.API.DataDomain.Allergy.Test
 {
-    [TestClass]
-    public class MongoData_PatientAllergy_Test
+    //[TestClass]
+    public class Data_PatientAllergy_Test
     {
         string context = "NG";
         string contractNumber = "InHealth001";
