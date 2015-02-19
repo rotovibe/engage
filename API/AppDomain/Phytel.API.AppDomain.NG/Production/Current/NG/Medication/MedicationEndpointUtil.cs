@@ -5,6 +5,7 @@ using ServiceStack.ServiceClient.Web;
 using System.Collections.Generic;
 using System.Configuration;
 using AutoMapper;
+using System;
 
 namespace Phytel.API.AppDomain.NG.Medication
 {
@@ -28,18 +29,23 @@ namespace Phytel.API.AppDomain.NG.Medication
                                     request.Version,
                                     request.ContractNumber), request.UserId);
 
-                string strength = string.Empty;
-                string unit = string.Empty;
+                string strength = null;
+                List<string> strList = null;
                 if (!string.IsNullOrEmpty(request.PatientMedSupp.Strength))
                 {
-                    string[] values = request.PatientMedSupp.Strength.Split(' ');
-                    if(values.Length > 0)
-                    { 
-                        strength = values[0];
-                        if (values.Length > 1)
+                    string[] combined = request.PatientMedSupp.Strength.Split(';');
+                    if (combined.Length > 0)
+                    {
+                        strList = new List<string>();
+                        foreach (string s in combined)
                         {
-                            unit = values[1].ToUpper();// Medication collection store all units in upper case.
-                        }
+                            string[] str = s.Trim().Split(' ');
+                            if (str.Length > 0)
+                            {
+                                strList.Add(str[0]);
+                            }
+                        };
+                        strength = string.Join("; ", strList);
                     }
                 }
 
@@ -52,8 +58,7 @@ namespace Phytel.API.AppDomain.NG.Medication
                     Name = request.PatientMedSupp.Name,
                     Strength = strength,
                     Form = request.PatientMedSupp.Form,
-                    Route = request.PatientMedSupp.Route,
-                    Unit = unit
+                    Route = request.PatientMedSupp.Route
                 } as object);
 
                 if (dataDomainResponse != null)
@@ -66,6 +71,145 @@ namespace Phytel.API.AppDomain.NG.Medication
             {
                 throw new WebServiceException("AD:GetMedicationDetails()::" + ex.Message, ex.InnerException);
             }
+        }
+
+        public MedicationMapData InitializeMedicationMap(PostInitializeMedicationMapRequest request)
+        {
+            try
+            {
+                MedicationMapData result = null;
+                IRestClient client = new JsonServiceClient();
+                // [Route("/{Context}/{Version}/{ContractNumber}/MedicationMap/Initialize", "PUT")]
+                var url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/MedicationMap/Initialize",
+                                    DDMedicationUrl,
+                                    "NG",
+                                    request.Version,
+                                    request.ContractNumber), request.UserId);
+
+                MedicationMapData data = new MedicationMapData();
+                data = Mapper.Map<MedicationMapData>(request.MedicationMap);
+                PutInitializeMedicationMapDataResponse dataDomainResponse = client.Put<PutInitializeMedicationMapDataResponse>(url, new PutInitializeMedicationMapDataRequest
+                {
+                    Context = "NG",
+                    ContractNumber = request.ContractNumber,
+                    MedicationMapData = data,
+                    UserId = request.UserId,
+                    Version = request.Version
+                } as object);
+
+                if (dataDomainResponse != null)
+                {
+                    result = dataDomainResponse.MedicationMappingData;
+                }
+                return result;
+            }
+            catch (Exception ex) { throw ex; }
+        }
+
+        public MedicationMapData UpdateMedicationMap(PutMedicationMapRequest request)
+        {
+            try
+            {
+                MedicationMapData result = null;
+                IRestClient client = new JsonServiceClient();
+                //[Route("/{Context}/{Version}/{ContractNumber}/MedicationMap/Update", "PUT")]
+                var url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/MedicationMap/Update",
+                                    DDMedicationUrl,
+                                    "NG",
+                                    request.Version,
+                                    request.ContractNumber), request.UserId);
+
+                if (request.MedicationMap != null)
+                {
+                    MedicationMapData data = new MedicationMapData();
+                    data = Mapper.Map<MedicationMapData>(request.MedicationMap);
+                    PutMedicationMapDataResponse dataDomainResponse = client.Put<PutMedicationMapDataResponse>(url, new PutMedicationMapDataRequest
+                    {
+                        Context = "NG",
+                        ContractNumber = request.ContractNumber,
+                        UserId = request.UserId,
+                        Version = request.Version,
+                        MedicationMapData = data
+                    } as object);
+
+                    if (dataDomainResponse != null)
+                    {
+                        result = dataDomainResponse.MedicationMappingData;
+                    }
+                }
+                return result;
+            }
+            catch (Exception ex) { throw ex; }
+        }
+
+
+        public MedicationMapData InsertMedicationMap(PostMedicationMapRequest request)
+        {
+            try
+            {
+                MedicationMapData result = null;
+                IRestClient client = new JsonServiceClient();
+                //[Route("/{Context}/{Version}/{ContractNumber}/MedicationMap/Insert", "POST")]
+                var url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/MedicationMap/Insert",
+                                    DDMedicationUrl,
+                                    "NG",
+                                    request.Version,
+                                    request.ContractNumber), request.UserId);
+
+                if (request.MedicationMap != null)
+                {
+                    MedicationMapData data = new MedicationMapData();
+                    data = Mapper.Map<MedicationMapData>(request.MedicationMap);
+                    PostMedicationMapDataResponse dataDomainResponse = client.Post<PostMedicationMapDataResponse>(url, new PostMedicationMapDataRequest
+                    {
+                        Context = "NG",
+                        ContractNumber = request.ContractNumber,
+                        UserId = request.UserId,
+                        Version = request.Version,
+                        MedicationMapData = data
+                    } as object);
+
+                    if (dataDomainResponse != null)
+                    {
+                        result = dataDomainResponse.MedMapData;
+                    }
+                }
+                return result;
+            }
+            catch (Exception ex) { throw ex; }
+        }
+
+        public List<MedicationMapData> SearchMedicationMap(GetMedicationMapsRequest request)
+        {
+            try
+            {
+                List<MedicationMapData> result = null;
+                //[Route("/{Context}/{Version}/{ContractNumber}/MedicationMap", "POST")]
+                IRestClient client = new JsonServiceClient();
+                var url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/MedicationMap",
+                                   DDMedicationUrl,
+                                   "NG",
+                                   request.Version,
+                                   request.ContractNumber), request.UserId);
+
+                GetMedicationMapDataResponse dataDomainResponse = client.Post<GetMedicationMapDataResponse>(url, new GetMedicationMapDataRequest { 
+                     Context = "NG",
+                     ContractNumber = request.ContractNumber,
+                     Form = request.Form,
+                     Name = request.Name,
+                     Route = request.Route,
+                     Strength = request.Strength,
+                     UserId = request.UserId,
+                     Version = request.Version
+                } as object);
+
+                if (dataDomainResponse != null)
+                {
+                    result = dataDomainResponse.MedicationMapsData;
+                }
+                return result;
+            }
+            catch (Exception ex) { throw ex; }
         }
         #endregion
 
@@ -101,10 +245,7 @@ namespace Phytel.API.AppDomain.NG.Medication
                 }
                 return result;
             }
-            catch (WebServiceException ex)
-            {
-                throw new WebServiceException("AD:GetPatientMedSupps()::" + ex.Message, ex.InnerException);
-            }
+            catch (Exception ex) { throw ex; }
         }
 
         public PatientMedSuppData SavePatientMedSupp(PostPatientMedSuppRequest request)
@@ -120,10 +261,6 @@ namespace Phytel.API.AppDomain.NG.Medication
                                     request.Version,
                                     request.ContractNumber), request.UserId);
                 PatientMedSuppData data = Mapper.Map<PatientMedSuppData>(request.PatientMedSupp);
-                if (request.Insert)
-                {
-                    data.SystemName = Constants.SystemName;
-                }
                 PutPatientMedSuppDataResponse dataDomainResponse = client.Put<PutPatientMedSuppDataResponse>(url, new PutPatientMedSuppDataRequest
                 {
                     Context = "NG",
@@ -140,11 +277,10 @@ namespace Phytel.API.AppDomain.NG.Medication
                 }
                 return result;
             }
-            catch (WebServiceException ex)
-            {
-                throw new WebServiceException("AD:SavePatientMedSupp()::" + ex.Message, ex.InnerException);
-            }
+            catch (Exception ex) { throw ex; }
         }
         #endregion
+
+
     }
 }

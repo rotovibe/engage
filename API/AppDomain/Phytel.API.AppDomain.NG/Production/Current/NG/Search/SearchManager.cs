@@ -6,14 +6,18 @@ using Phytel.API.Common.CustomObject;
 using ServiceStack.ServiceClient.Web;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using Phytel.API.AppDomain.NG.DTO;
 
 namespace Phytel.API.AppDomain.NG.Allergy
 {
     public class SearchManager : ManagerBase, ISearchManager
     {
         public ISearchUtil SearchUtil { get; set; }
+        public ISearchEndpointUtil EndpointUtil { get; set; }
+        public IMedNameLuceneStrategy<MedNameSearchDoc, TextValuePair> MedNameStrategy { get; set; }
 
-        public void RegisterDocumentInSearchIndex(DTO.Allergy allergy,string contractNumber)
+        public void RegisterAllergyDocumentInSearchIndex(DTO.Allergy allergy,string contractNumber)
         {
             try
             {
@@ -22,20 +26,20 @@ namespace Phytel.API.AppDomain.NG.Allergy
             }
             catch (Exception ex)
             {
-                throw new WebServiceException("AD:RegisterDocumentInSearchIndex()::" + ex.Message, ex.InnerException);
+                throw new WebServiceException("AD:RegisterAllergyDocumentInSearchIndex()::" + ex.Message, ex.InnerException);
             }
         }
 
-        public void RegisterMedDocumentInSearchIndex(DTO.Allergy allergy)
+        public void RegisterMedDocumentInSearchIndex(DTO.Medication med, string contractNumber)
         {
             try
             {
-                //var np = AutoMapper.Mapper.Map<IdNamePair>(allergy);
-                //new MedFieldsLuceneStrategy<Medication>().AddUpdateLuceneIndex(np);
+                var nfp = AutoMapper.Mapper.Map<MedNameSearchDoc>(med);
+                MedNameStrategy.AddUpdateLuceneIndex(nfp);
             }
             catch (Exception ex)
             {
-                throw new WebServiceException("AD:RegisterDocumentInSearchIndex()::" + ex.Message, ex.InnerException);
+                throw new WebServiceException("AD:RegisterMedDocumentInSearchIndex()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -44,10 +48,9 @@ namespace Phytel.API.AppDomain.NG.Allergy
         {
             try
             {
-                var matches = new MedNameLuceneStrategy<MedNameSearchDoc, TextValuePair> { Contract = request.ContractNumber }.Search(request.Term);
+                var matches = MedNameStrategy.Search(request.Term);
                 matches.All(x => { x.Text = x.Text.Trim(); return true; });
                 var groupby = matches.GroupBy(a => a.Text).Select(s => s.First()).ToList();
-                //var result = groupby.OrderBy(g => g.Text.Length).ToList();
                 var result = groupby;
                 return result;
             }
@@ -62,15 +65,13 @@ namespace Phytel.API.AppDomain.NG.Allergy
             try
             {
                 var lists = new MedFieldsLists();
-                var matches = new MedFieldsLuceneStrategy<MedFieldsSearchDoc, MedFieldsSearchDoc>{ Contract = request.ContractNumber}.Search(request.Name, "CompositeName");
-
-                matches = SearchUtil.FilterFieldResultsByParams(request, matches);
+                var matches = EndpointUtil.GetMedicationMapsByName(request, request.UserId);
+                var fMatches = SearchUtil.FilterFieldResultsByParams(request, matches);
 
                 // break out into seperate lists here.
-                lists.RouteList = GetRouteSelections(matches);
-                lists.FormList = GetFormSelections(matches);
-                lists.StrengthList = GetStrengthSelections(matches);
-                lists.UnitsList = GetUnitSelections(matches);
+                lists.RouteList = GetRouteSelections(fMatches);
+                lists.FormList = GetFormSelections(fMatches);
+                lists.StrengthList = GetStrengthSelections(fMatches);
                 return lists;
             }
             catch (WebServiceException ex)
@@ -79,7 +80,7 @@ namespace Phytel.API.AppDomain.NG.Allergy
             }
         }
 
-        public List<TextValuePair> GetRouteSelections(List<MedFieldsSearchDoc> matches)
+        public List<TextValuePair> GetRouteSelections(List<MedicationMap> matches)
         {
             try
             {
@@ -89,15 +90,19 @@ namespace Phytel.API.AppDomain.NG.Allergy
                     {
                         var pair = new TextValuePair
                         {
-                            Text = m.RouteName,
-                            Value = m.RouteName
+                            Text = m.Route,
+                            Value = m.Route
                         };
 
-                        var rec = vals.Find(f => f.Value == m.RouteName);
-                        if (rec == null)
-                            vals.Add(pair);
+                        if (m.Route != null)
+                        {
+                            var rec = vals.Find(f => f.Value == m.Route);
+                            if (rec == null)
+                                vals.Add(pair);
+                        }
                     });
-                //matches.GroupBy(b => b.RouteName).Select(s => s.First()).ToList().ForEach(m => vals.Add(new TextValuePair {Text = m.RouteName, Value = m.RouteName}));
+
+                SortSelections(vals);
                 return vals;
             }
             catch (WebServiceException ex)
@@ -106,7 +111,7 @@ namespace Phytel.API.AppDomain.NG.Allergy
             }
         }
 
-        public List<TextValuePair> GetFormSelections(List<MedFieldsSearchDoc> matches)
+        public List<TextValuePair> GetFormSelections(List<MedicationMap> matches)
         {
             try
             {
@@ -114,18 +119,17 @@ namespace Phytel.API.AppDomain.NG.Allergy
                 matches.ForEach(
                     m =>
                     {
-                        var pair = new TextValuePair
-                        {
-                            Text = m.DosageFormname,
-                            Value = m.DosageFormname
-                        };
+                        var pair = new TextValuePair{ Text = m.Form, Value = m.Form};
 
-                        var rec = vals.Find(f => f.Value == m.DosageFormname);
-                        if (rec == null)
-                            vals.Add(pair);
+                        if (m.Form != null)
+                        {
+                            var rec = vals.Find(f => f.Value == m.Form);
+                            if (rec == null)
+                                vals.Add(pair);
+                        }
                     });
 
-                //matches.GroupBy(b => b.DosageFormname).Select(s => s.First()).ToList().ForEach(m => vals.Add(new TextValuePair { Text = m.DosageFormname, Value = m.DosageFormname }));
+                SortSelections(vals);
                 return vals;
             }
             catch (WebServiceException ex)
@@ -134,7 +138,7 @@ namespace Phytel.API.AppDomain.NG.Allergy
             }
         }
 
-        public List<TextValuePair> GetStrengthSelections(List<MedFieldsSearchDoc> matches)
+        public List<TextValuePair> GetStrengthSelections(List<MedicationMap> matches)
         {
             try
             {
@@ -142,16 +146,21 @@ namespace Phytel.API.AppDomain.NG.Allergy
                 matches.ForEach(
                     m =>
                     {
+                        var val = m.Strength; //FormatStrengthDisplay(m.Strength, m.Unit);
                         var pair = new TextValuePair
                         {
-                            Text = m.Strength + " " + m.Unit,
-                            Value = m.Strength
+                            Text = val,
+                            Value = val
                         };
 
-                        var rec = vals.Find(f => f.Text == m.Strength + " " + m.Unit);
-                        if (rec == null)
-                            vals.Add(pair);
+                        if (m.Strength != null)
+                        {
+                            var rec = vals.Find(f => f.Text == val);
+                            if (rec == null)
+                                vals.Add(pair);
+                        }
                     });
+                SortSelections(vals);
                 return vals;
             }
             catch (WebServiceException ex)
@@ -160,31 +169,67 @@ namespace Phytel.API.AppDomain.NG.Allergy
             }
         }
 
-        public List<TextValuePair> GetUnitSelections(List<MedFieldsSearchDoc> matches)
+        private static void SortSelections(List<TextValuePair> vals)
         {
-            try
-            {
-                var vals = new List<TextValuePair>();
-                matches.ForEach(
-                    m =>
-                    {
-                        var pair = new TextValuePair
-                        {
-                            Text = m.Unit,
-                            Value = m.Unit
-                        };
-
-                        var rec = vals.Find(f => f.Text == m.Unit);
-                        if (rec == null)
-                            vals.Add(pair);
-                    });
-                return vals;
-            }
-            catch (WebServiceException ex)
-            {
-                throw new WebServiceException("AD:GetStrengthSelections()::" + ex.Message, ex.InnerException);
-            }
+            vals.Sort((emp1, emp2) => emp1.Text.CompareTo(emp2.Text));
         }
+
+        //private string FormatStrengthDisplay(string strength, string unit)
+        //{
+        //    try
+        //    {
+        //        if (unit.Length == 0) return strength.Trim();
+
+        //        var val = new StringBuilder();
+
+        //        string[] strengthS = strength.Split(';');
+        //        string[] unitS = unit.Split(';');
+
+        //        for (int i = 0; i < strengthS.Length; i++)
+        //        {
+        //            if (i == strengthS.Length - 1)
+        //            {
+        //                val.Append((strengthS[i] + " " + unitS[i]).Trim());
+        //            }
+        //            else
+        //            {
+        //                val.Append((strengthS[i] + " " + unitS[i] + ";").Trim());
+        //            }
+        //        }
+
+        //        return val.ToString();
+        //    }
+        //    catch (WebServiceException ex)
+        //    {
+        //        throw new WebServiceException("AD:GetStrengthSelections()::" + ex.Message, ex.InnerException);
+        //    }
+        //}
+
+        //public List<TextValuePair> GetUnitSelections(List<MedicationMap> matches)
+        //{
+        //    try
+        //    {
+        //        var vals = new List<TextValuePair>();
+        //        matches.ForEach(
+        //            m =>
+        //            {
+        //                var pair = new TextValuePair
+        //                {
+        //                    Text = m.Unit,
+        //                    Value = m.Unit
+        //                };
+
+        //                var rec = vals.Find(f => f.Text == m.Unit);
+        //                if (rec == null)
+        //                    vals.Add(pair);
+        //            });
+        //        return vals;
+        //    }
+        //    catch (WebServiceException ex)
+        //    {
+        //        throw new WebServiceException("AD:GetStrengthSelections()::" + ex.Message, ex.InnerException);
+        //    }
+        //}
 
         public List<IdNamePair> GetSearchDomainResults(GetSearchResultsRequest request)
         {
@@ -192,7 +237,6 @@ namespace Phytel.API.AppDomain.NG.Allergy
             {
                 // create a switch to determine which lucene strat to use
                 var result = new AllergyLuceneStrategy<IdNamePair, IdNamePair> { Contract = request.ContractNumber }.SearchComplex(request.SearchTerm, "Name");
-                //var result = new AllergyLuceneStrategy<IdNamePair>().Search(request.SearchTerm);
                 return result;
             }
             catch (WebServiceException ex)

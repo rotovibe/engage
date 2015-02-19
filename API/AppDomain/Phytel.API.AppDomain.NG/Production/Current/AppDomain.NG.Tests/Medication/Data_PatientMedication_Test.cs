@@ -11,16 +11,16 @@ using ServiceStack.ServiceClient.Web;
 
 namespace Phytel.API.AppDomain.NG.Test
 {
-    [TestClass]
+    //[TestClass]
     public class Data_PatientMedication_Test
     {
         string context = "NG";
-        string contractNumber = "Demo001";
+        string contractNumber = "InHealth001";
         string userId = "000000000000000000000000";
         double version = 1.0;
         string url = "http://localhost:888/Nightingale";
         IRestClient client = new JsonServiceClient();
-        string token = "546bac6f60e4b90c7839b9eb";
+        string token = "54b81d0b84ac050580839a18";
 
         [TestMethod]
         public void GetPatientMedSupps_Test()
@@ -49,6 +49,7 @@ namespace Phytel.API.AppDomain.NG.Test
         {
             PatientMedSupp pms = new PatientMedSupp
             {
+                //FamilyId = "54dd28e784ac0714f0cef2cb",
                 CategoryId  = 1,
                 DeleteFlag = false,
                // Dosage = "Two",
@@ -56,22 +57,22 @@ namespace Phytel.API.AppDomain.NG.Test
                 //FreqHowOftenId = "545be059d43323224896663a",
                 //FreqQuantity = "4",
              //   FreqWhenId = "545be126d433232248966643",
-                // Id = "5462991ed4332323a01ce994",
-                Name = "KINERASE SPF 30 BROAD SPECTRUM UVA/UVB",
-             //   Form = "INJECTION, SOLUTION",
-               // Route = "INTRADERMAL",
-              //  Strength = ".0021 g/mL",
+                Id = "54dd2d63d43328283844e107",
+                Name = "ARMES",//"NICOTINE",
+                Form = "TABLET",
+                Route = "ORAL",
+                Strength = "56 l",
                 //NDCs = ,
                // Notes = "note for Acetomophine 2",
-                PatientId = "5325db30d6a4850adcbba882",
+                PatientId = "54dd289384ac0511987c998e",
                 //PharmClasses = ,
             //  PrescribedBy = "Dr Basu",
                // Reason = "Reason for Acetomophine 2",
                 //SigCode = ,
                 SourceId = "544e9976d433231d9c0330ae",
                 StartDate = DateTime.UtcNow,
-                StatusId = 2,
-                SystemName = "Engage",
+                StatusId = 1,
+              //  SystemName = "Engage",
                 TypeId = "545bdfa1d433232248966638"
             };
 
@@ -79,8 +80,8 @@ namespace Phytel.API.AppDomain.NG.Test
             {
                 ContractNumber = contractNumber,
                 PatientMedSupp = pms,
-                Insert = true,
-                RecalculateNDC = true,
+                RecalculateNDC = false,
+                Insert = false,
                 UserId = userId,
                 Version = version
             };

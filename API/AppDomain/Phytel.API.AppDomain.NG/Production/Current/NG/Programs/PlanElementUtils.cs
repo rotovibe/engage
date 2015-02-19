@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using MongoDB.Bson;
 using Phytel.API.AppDomain.NG.DTO;
 using Phytel.API.AppDomain.NG.DTO.Goal;
 using Phytel.API.AppDomain.NG.PlanCOR;
@@ -8,6 +7,7 @@ using Phytel.API.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using MongoDB.Bson;
 using ServiceStack.Common.Extensions;
 using DD = Phytel.API.DataDomain.Program.DTO;
 using Phytel.API.AppDomain.NG.Specifications;
