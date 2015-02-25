@@ -9,7 +9,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Components to support dispatching messages onto the ase bus</description>
     <dependencies>
-      <dependency id="Phytel.Services.Dispatch" version="1.4.0-beta5047" />
+      <dependency id="Phytel.Services.Dispatch" version="1.4.0" />
       <dependency id="Phytel.Services.Serializer" version="1.3.0" />
       <dependency id="ServiceStack.Text" version="3.9.70" />
       <dependency id="Phytel.ASE" version="2.1.3" />
