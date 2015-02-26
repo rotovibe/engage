@@ -73,6 +73,22 @@
     <Compile Include="Abstract\Interfaces\IUnitOfWork.cs" />
     <Compile Include="Abstract\RepositorySql.cs" />
     <Compile Include="Abstract\UnitOfWork.cs" />
+    <Compile Include="PredicateBuilder\Factories\PredicateBuilderTypeFactory.cs" />
+    <Compile Include="PredicateBuilder\Interfaces\IPredicateBuilder.cs" />
+    <Compile Include="PredicateBuilder\Model\Enums.cs" />
+    <Compile Include="PredicateBuilder\Model\FilterValue.cs" />
+    <Compile Include="PredicateBuilder\Model\PredicateFilter.cs" />
+    <Compile Include="PredicateBuilder\QueryBuilder.cs" />
+    <Compile Include="PredicateBuilder\TypeBuilders\PredicateBuilderBoolean.cs" />
+    <Compile Include="PredicateBuilder\TypeBuilders\PredicateBuilderDate.cs" />
+    <Compile Include="PredicateBuilder\TypeBuilders\PredicateBuilderDecimal.cs" />
+    <Compile Include="PredicateBuilder\TypeBuilders\PredicateBuilderInteger.cs" />
+    <Compile Include="PredicateBuilder\TypeBuilders\PredicateBuilderNull.cs" />
+    <Compile Include="PredicateBuilder\TypeBuilders\PredicateBuilderString.cs" />
+    <Compile Include="PredicateBuilder\Utilities\OrderByHelper.cs" />
+    <Compile Include="PredicateBuilder\Utilities\ParameterRebinder.cs" />
+    <Compile Include="PredicateBuilder\Utilities\PredicateUtility.cs" />
+    <Compile Include="PredicateBuilder\Utilities\TypeHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -80,6 +96,7 @@
     <None Include="packages.config" />
     <None Include="Phytel.Services.SQLServer.Repository.nuspec" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
