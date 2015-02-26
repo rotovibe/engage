@@ -95,7 +95,7 @@ namespace DataDomain.Medication.Repo
 
         public void Delete(object entity)
         {
-            DeleteMedSuppsByPatientIdDataRequest request = (DeleteMedSuppsByPatientIdDataRequest)entity;
+            DeletePatientMedSuppDataRequest request = (DeletePatientMedSuppDataRequest)entity;
             try
             {
                 using (MedicationMongoContext ctx = new MedicationMongoContext(ContractDBName))

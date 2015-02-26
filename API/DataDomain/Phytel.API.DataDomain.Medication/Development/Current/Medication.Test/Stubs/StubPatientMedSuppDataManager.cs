@@ -49,5 +49,11 @@ namespace Phytel.API.DataDomain.Medication
             response.Success = true;
             return response;
         }
+
+
+        public DeletePatientMedSuppDataResponse Delete(DeletePatientMedSuppDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

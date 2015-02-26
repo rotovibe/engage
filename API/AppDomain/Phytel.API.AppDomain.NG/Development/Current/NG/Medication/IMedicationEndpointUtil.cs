@@ -13,5 +13,6 @@ namespace Phytel.API.AppDomain.NG.Medication
         MedicationMapData UpdateMedicationMap(PutMedicationMapRequest request);
         MedicationMapData InsertMedicationMap(PostMedicationMapRequest request);
         List<MedicationMapData> SearchMedicationMap(GetMedicationMapsRequest request);
+        void DeletePatientMedSupp(DeletePatientMedSuppRequest request);
     }
 }

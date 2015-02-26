@@ -97,6 +97,21 @@ namespace Phytel.API.DataDomain.Allergy.Service
             }
             return response;
         }
+
+        public DeletePatientAllergyDataResponse Delete(DeletePatientAllergyDataRequest request)
+        {
+            DeletePatientAllergyDataResponse response = new DeletePatientAllergyDataResponse { Version = request.Version };
+            try
+            {
+                RequireUserId(request);
+                response = Manager.Delete(request);
+            }
+            catch (Exception ex)
+            {
+                RaiseException(response, ex);
+            }
+            return response;
+        }
         #endregion
     }   
 }

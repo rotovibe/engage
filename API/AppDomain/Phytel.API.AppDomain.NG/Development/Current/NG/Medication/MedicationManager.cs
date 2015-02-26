@@ -176,5 +176,17 @@ namespace Phytel.API.AppDomain.NG.Medication
             SearchManager.RegisterMedDocumentInSearchIndex(newMed, contractNumber);
         }
         #endregion
+
+        #region PatientMedSupp - Delete
+        public void DeletePatientMedSupp(DeletePatientMedSuppRequest request)
+        {
+            try
+            {
+                EndpointUtil.DeletePatientMedSupp(request);
+
+            }
+            catch (Exception ex) { throw ex; }
+        }
+        #endregion
     }
 }

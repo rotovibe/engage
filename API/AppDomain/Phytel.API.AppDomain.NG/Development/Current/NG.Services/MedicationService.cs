@@ -150,5 +150,51 @@ namespace Phytel.API.AppDomain.NG.Service
             return response;
         }
         #endregion
+
+        #region PatientMedSupps - Delete
+        public DeletePatientMedSuppResponse Delete(DeletePatientMedSuppRequest request)
+        {
+            DeletePatientMedSuppResponse response = new DeletePatientMedSuppResponse();
+            ValidateTokenResponse result = null;
+
+            try
+            {
+                if (base.Request != null)
+                {
+                    request.Token = base.Request.Headers["Token"] as string;
+                }
+                result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                if (result.UserId.Trim() != string.Empty)
+                {
+                    request.UserId = result.UserId;
+                    MedicationManager.DeletePatientMedSupp(request);
+                }
+                else
+                    throw new UnauthorizedAccessException();
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                if ((ex is WebServiceException) == false)
+                    MedicationManager.LogException(ex);
+            }
+            finally
+            {
+                List<string> patientIds = null;
+                if (request.PatientId != null)
+                {
+                    patientIds = new List<string>();
+                    patientIds.Add(request.PatientId);
+                }
+                if (result != null)
+                {
+                    string browser = (base.Request != null) ? base.Request.UserAgent : unknownBrowserType;
+                    string hostAddress = (base.Request != null) ? base.Request.UserHostAddress : unknownUserHostAddress;
+                    AuditUtil.LogAuditData(request, result.SQLUserId, patientIds, browser, hostAddress, request.GetType().Name);
+                }
+            }
+            return response;
+        }
+        #endregion  
     }
 }

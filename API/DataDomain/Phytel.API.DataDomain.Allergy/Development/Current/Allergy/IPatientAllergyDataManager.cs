@@ -10,5 +10,6 @@ namespace Phytel.API.DataDomain.Allergy
         List<PatientAllergyData> UpdatePatientAllergies(PutPatientAllergiesDataRequest request);
         DeleteAllergiesByPatientIdDataResponse DeletePatientAllergies(DeleteAllergiesByPatientIdDataRequest request);
         UndoDeletePatientAllergiesDataResponse UndoDeletePatientAllergies(UndoDeletePatientAllergiesDataRequest request);
+        DeletePatientAllergyDataResponse Delete(DeletePatientAllergyDataRequest request);
     }
 }

@@ -46,7 +46,7 @@ namespace DataDomain.Allergy.Repo
 
         public void Delete(object entity)
         {
-            DeleteAllergiesByPatientIdDataRequest request = (DeleteAllergiesByPatientIdDataRequest)entity;
+            DeletePatientAllergyDataRequest request = (DeletePatientAllergyDataRequest)entity;
             try
             {
                 using (AllergyMongoContext ctx = new AllergyMongoContext(ContractDBName))

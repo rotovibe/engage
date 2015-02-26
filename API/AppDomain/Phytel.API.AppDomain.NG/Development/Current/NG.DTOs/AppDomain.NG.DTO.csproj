@@ -108,9 +108,11 @@
     <Compile Include="Allergy\PostInitializePatientAllergyResponse.cs" />
     <Compile Include="Allergy\PostInsertNewAllergyRequest.cs" />
     <Compile Include="Allergy\PostInsertNewAllergyResponse.cs" />
+    <Compile Include="Allergy\DeletePatientAllergyRequest.cs" />
     <Compile Include="Allergy\PostPatientAllergiesRequest.cs" />
     <Compile Include="Allergy\PostAllergyRequest.cs" />
     <Compile Include="Allergy\PostAllergyResponse.cs" />
+    <Compile Include="Allergy\DeletePatientAllergyResponse.cs" />
     <Compile Include="Allergy\PostPatientAllergiesResponse.cs" />
     <Compile Include="Goal\GetTasksRequest.cs" />
     <Compile Include="Goal\GetInterventionsRequest.cs" />
@@ -133,6 +135,8 @@
     <Compile Include="LookUp\Program\GetAllObjectivesResponse.cs" />
     <Compile Include="Contact\GetRecentPatientsRequest.cs" />
     <Compile Include="Contact\GetRecentPatientsResponse .cs" />
+    <Compile Include="Meds\DeletePatientMedSuppRequest.cs" />
+    <Compile Include="Meds\DeletePatientMedSuppResponse.cs" />
     <Compile Include="Meds\GetMedicationMapsRequest.cs" />
     <Compile Include="Meds\GetPatientMedSuppsRequest.cs" />
     <Compile Include="Meds\GetMedicationMapsResponse.cs" />

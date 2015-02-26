@@ -57,5 +57,11 @@ namespace Phytel.API.DataDomain.Allergy.Test
             response.Success = true;
             return response;
         }
+
+
+        public DeletePatientAllergyDataResponse Delete(DeletePatientAllergyDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

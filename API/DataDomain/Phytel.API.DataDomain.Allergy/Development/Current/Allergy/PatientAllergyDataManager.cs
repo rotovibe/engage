@@ -98,12 +98,11 @@ namespace Phytel.API.DataDomain.Allergy
                     deletedIds = new List<string>();
                     patientAllergies.ForEach(u =>
                     {
-                        DeleteAllergiesByPatientIdDataRequest deletePADataRequest = new DeleteAllergiesByPatientIdDataRequest
+                        DeletePatientAllergyDataRequest deletePADataRequest = new DeletePatientAllergyDataRequest
                         {
                             Context = request.Context,
                             ContractNumber = request.ContractNumber,
                             Id = u.Id,
-                            PatientId = request.PatientId,
                             UserId = request.UserId,
                             Version = request.Version
                         };
@@ -138,7 +137,24 @@ namespace Phytel.API.DataDomain.Allergy
                 return response;
             }
             catch (Exception ex) { throw ex; }
-        } 
+        }
+
+        public DeletePatientAllergyDataResponse Delete(DeletePatientAllergyDataRequest request)
+        {
+            DeletePatientAllergyDataResponse response = null;
+            try
+            {
+                response = new DeletePatientAllergyDataResponse();
+
+                var repo = AllergyRepositoryFactory.GetAllergyRepository(request, RepositoryType.PatientAllergy);
+                if (!string.IsNullOrEmpty(request.Id))
+                {
+                    repo.Delete(request);
+                }
+                return response;
+            }
+            catch (Exception ex) { throw ex; }
+        }
         #endregion
 
     }

@@ -81,7 +81,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="DeletePatientAllergyDataRequest.cs" />
     <Compile Include="DeleteAllergiesByPatientIdDataRequest.cs" />
+    <Compile Include="DeletePatientAllergyDataResponse.cs" />
     <Compile Include="DeleteAllergiesByPatientIdDataResponse.cs" />
     <Compile Include="DomainResponse.cs" />
     <Compile Include="Enums.cs" />
