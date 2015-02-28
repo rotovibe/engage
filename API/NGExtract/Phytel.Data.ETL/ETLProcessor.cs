@@ -146,7 +146,7 @@ namespace Phytel.Data.ETL
             try
             {
                 //[spPhy_RPT_Flat_BSHSI_HW2]
-                SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_RPT_Flat_BSHSI_HW2", new ParameterCollection());
+                SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_Flat_BSHSI_HW2", new ParameterCollection(), 0);
             }
             catch (Exception ex)
             {
