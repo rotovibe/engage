@@ -12,6 +12,7 @@ namespace DataDomain.Template.Repo
     public class MongoTemplateRepository<TContext> : IMongoTemplateRepository where TContext : TemplateMongoContext
     {
         protected readonly TContext Context;
+        public string ContractDBName { get; set; }
         public string UserId { get; set; }
 
         public MongoTemplateRepository(IUOWMongo<TContext> uow)

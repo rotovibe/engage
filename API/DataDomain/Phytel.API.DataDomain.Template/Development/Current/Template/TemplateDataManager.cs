@@ -8,21 +8,13 @@ namespace Phytel.API.DataDomain.Template
 {
     public class TemplateDataManager : ITemplateDataManager
     {
-        protected readonly IMongoTemplateRepository TemplateRepository;
-
-        public TemplateDataManager(IMongoTemplateRepository repository)
-        {
-            TemplateRepository = repository;
-        }
-
         public DTO.Template GetTemplateByID(GetTemplateRequest request)
         {
             try
             {
                 DTO.Template result = null;
-                TemplateRepository.UserId = request.UserId;
-                result = TemplateRepository.FindByID(request.TemplateID) as DTO.Template;
-
+                var repo = TemplateRepositoryFactory.GetTemplateRepository(request, RepositoryType.Template);
+                result = repo.FindByID(request.TemplateID) as DTO.Template;
                 return result;
             }
             catch (Exception ex)
@@ -36,8 +28,8 @@ namespace Phytel.API.DataDomain.Template
             try
             {
                 List<DTO.Template> result = null;
-                TemplateRepository.UserId = request.UserId;
-                result = TemplateRepository.SelectAll().Cast<DTO.Template>().ToList<DTO.Template>();
+                var repo = TemplateRepositoryFactory.GetTemplateRepository(request, RepositoryType.Template);
+                result = repo.SelectAll().Cast<DTO.Template>().ToList<DTO.Template>();
 
                 return result;
             }

@@ -1,6 +1,4 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Phytel.API.DataDomain.Template.DTO;
-using Phytel.API.DataDomain.Template.Test.Stubs;
 
 namespace Phytel.API.DataDomain.Template.Test
 {

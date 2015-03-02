@@ -23,9 +23,8 @@ namespace DataDomain.Template.Repo
                 {
                     case RepositoryType.Template:
                     {
-                        var db = AppHostBase.Instance.Container.ResolveNamed<string>(Constants.Domain);
-                        var context = new TemplateMongoContext(db);
-                        repo = new MongoTemplateRepository<TemplateMongoContext>(context) {UserId = request.UserId};
+                        var context = new TemplateMongoContext(request.ContractNumber);
+                        repo = new MongoTemplateRepository<TemplateMongoContext>(context){UserId = request.UserId,ContractDBName = request.ContractNumber};
                         break;
                     }
                 }

@@ -36,12 +36,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MongoDB.Bson">
-      <HintPath>..\References\MongoDB.Bson.dll</HintPath>
-    </Reference>
-    <Reference Include="MongoDB.Driver">
-      <HintPath>..\References\MongoDB.Driver.dll</HintPath>
-    </Reference>
     <Reference Include="ServiceStack, Version=3.9.70.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\packages\ServiceStack.3.9.70\lib\net35\ServiceStack.dll</HintPath>
@@ -66,7 +60,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ITemplateDataManager.cs" />
-    <Compile Include="DataTemplateManager.cs" />
+    <Compile Include="TemplateDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TemplateContainer.cs" />
   </ItemGroup>

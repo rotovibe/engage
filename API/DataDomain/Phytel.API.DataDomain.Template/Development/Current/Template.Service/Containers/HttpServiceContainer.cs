@@ -9,13 +9,13 @@ namespace Phytel.API.DataDomain.Template.Service.Containers
 
         public static Funq.Container Build(Funq.Container container)
         {
-            container.Register<IServiceProxy>(Proxy, new ServiceProxy());
+            //container.Register<IServiceProxy>(Proxy, new ServiceProxy());
 
-            container.Register<string>(Constants.NamedString, c =>
-            {
-                var serviceProxy = c.ResolveNamed<IServiceProxy>(Proxy);
-                return serviceProxy.ContractNumber;
-            }).ReusedWithin(Funq.ReuseScope.Request);
+            //container.Register<string>(Constants.NamedString, c =>
+            //{
+            //    var serviceProxy = c.ResolveNamed<IServiceProxy>(Proxy);
+            //    return serviceProxy.ContractNumber;
+            //}).ReusedWithin(Funq.ReuseScope.Request);
 
             container = TemplateContainer.Configure(container);
 
