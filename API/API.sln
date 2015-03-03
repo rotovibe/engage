@@ -256,9 +256,21 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NG_Med_Import", "NG_Med_Imp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NGMedSuppImport", "NG_MedSupp_Import\NGMedSuppImport\NGMedSuppImport.csproj", "{BDA2A68B-4EDA-4A58-8529-DA23E3BEA4C5}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Search", "Search", "{E992EC3F-748F-4CB1-BF5E-C8ABCCCB91AE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Search.Repo", "DataDomain\Phytel.API.DataDomain.Search\Development\Current\DataDomain.Search.Repo\DataDomain.Search.Repo.csproj", "{F7D7B682-C23F-4C36-B76D-6F375B61CD42}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Search", "DataDomain\Phytel.API.DataDomain.Search\Development\Current\Search\DataDomain.Search.csproj", "{D3D050CD-99AC-42DC-94ED-0A49B9B4CCDD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Search.DTO", "DataDomain\Phytel.API.DataDomain.Search\Development\Current\Search.DTO\DataDomain.Search.DTO.csproj", "{066FBEA2-6D40-47F2-9F36-16365FA17DD2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Search.Service", "DataDomain\Phytel.API.DataDomain.Search\Development\Current\Search.Service\DataDomain.Search.Service.csproj", "{6699907A-159F-4D9D-A5B9-258B453017B1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Search.Test", "DataDomain\Phytel.API.DataDomain.Search\Development\Current\Search.Test\DataDomain.Search.Test.csproj", "{453FBE4D-D83F-4932-ADA0-42978BCB2777}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 85
+		SccNumberOfProjects = 90
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://hillstfs2013:8080/tfs/phytel
 		SccLocalPath0 = .
@@ -598,6 +610,26 @@ Global
 		SccProjectTopLevelParentUniqueName84 = API.sln
 		SccProjectName84 = NG_MedSupp_Import/NGMedSuppImport
 		SccLocalPath84 = NG_MedSupp_Import\\NGMedSuppImport
+		SccProjectUniqueName85 = DataDomain\\Phytel.API.DataDomain.Search\\Development\\Current\\DataDomain.Search.Repo\\DataDomain.Search.Repo.csproj
+		SccProjectTopLevelParentUniqueName85 = API.sln
+		SccProjectName85 = DataDomain/Phytel.API.DataDomain.Search/Development/Current/DataDomain.Search.Repo
+		SccLocalPath85 = DataDomain\\Phytel.API.DataDomain.Search\\Development\\Current\\DataDomain.Search.Repo
+		SccProjectUniqueName86 = DataDomain\\Phytel.API.DataDomain.Search\\Development\\Current\\Search\\DataDomain.Search.csproj
+		SccProjectTopLevelParentUniqueName86 = API.sln
+		SccProjectName86 = DataDomain/Phytel.API.DataDomain.Search/Development/Current/Search
+		SccLocalPath86 = DataDomain\\Phytel.API.DataDomain.Search\\Development\\Current\\Search
+		SccProjectUniqueName87 = DataDomain\\Phytel.API.DataDomain.Search\\Development\\Current\\Search.DTO\\DataDomain.Search.DTO.csproj
+		SccProjectTopLevelParentUniqueName87 = API.sln
+		SccProjectName87 = DataDomain/Phytel.API.DataDomain.Search/Development/Current/Search.DTO
+		SccLocalPath87 = DataDomain\\Phytel.API.DataDomain.Search\\Development\\Current\\Search.DTO
+		SccProjectUniqueName88 = DataDomain\\Phytel.API.DataDomain.Search\\Development\\Current\\Search.Service\\DataDomain.Search.Service.csproj
+		SccProjectTopLevelParentUniqueName88 = API.sln
+		SccProjectName88 = DataDomain/Phytel.API.DataDomain.Search/Development/Current/Search.Service
+		SccLocalPath88 = DataDomain\\Phytel.API.DataDomain.Search\\Development\\Current\\Search.Service
+		SccProjectUniqueName89 = DataDomain\\Phytel.API.DataDomain.Search\\Development\\Current\\Search.Test\\DataDomain.Search.Test.csproj
+		SccProjectTopLevelParentUniqueName89 = API.sln
+		SccProjectName89 = DataDomain/Phytel.API.DataDomain.Search/Development/Current/Search.Test
+		SccLocalPath89 = DataDomain\\Phytel.API.DataDomain.Search\\Development\\Current\\Search.Test
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1107,6 +1139,36 @@ Global
 		{BDA2A68B-4EDA-4A58-8529-DA23E3BEA4C5}.Model|Any CPU.Build.0 = Release|Any CPU
 		{BDA2A68B-4EDA-4A58-8529-DA23E3BEA4C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BDA2A68B-4EDA-4A58-8529-DA23E3BEA4C5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F7D7B682-C23F-4C36-B76D-6F375B61CD42}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F7D7B682-C23F-4C36-B76D-6F375B61CD42}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F7D7B682-C23F-4C36-B76D-6F375B61CD42}.Model|Any CPU.ActiveCfg = Release|Any CPU
+		{F7D7B682-C23F-4C36-B76D-6F375B61CD42}.Model|Any CPU.Build.0 = Release|Any CPU
+		{F7D7B682-C23F-4C36-B76D-6F375B61CD42}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F7D7B682-C23F-4C36-B76D-6F375B61CD42}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D3D050CD-99AC-42DC-94ED-0A49B9B4CCDD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D3D050CD-99AC-42DC-94ED-0A49B9B4CCDD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D3D050CD-99AC-42DC-94ED-0A49B9B4CCDD}.Model|Any CPU.ActiveCfg = Release|Any CPU
+		{D3D050CD-99AC-42DC-94ED-0A49B9B4CCDD}.Model|Any CPU.Build.0 = Release|Any CPU
+		{D3D050CD-99AC-42DC-94ED-0A49B9B4CCDD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D3D050CD-99AC-42DC-94ED-0A49B9B4CCDD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{066FBEA2-6D40-47F2-9F36-16365FA17DD2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{066FBEA2-6D40-47F2-9F36-16365FA17DD2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{066FBEA2-6D40-47F2-9F36-16365FA17DD2}.Model|Any CPU.ActiveCfg = Release|Any CPU
+		{066FBEA2-6D40-47F2-9F36-16365FA17DD2}.Model|Any CPU.Build.0 = Release|Any CPU
+		{066FBEA2-6D40-47F2-9F36-16365FA17DD2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{066FBEA2-6D40-47F2-9F36-16365FA17DD2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6699907A-159F-4D9D-A5B9-258B453017B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6699907A-159F-4D9D-A5B9-258B453017B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6699907A-159F-4D9D-A5B9-258B453017B1}.Model|Any CPU.ActiveCfg = Release|Any CPU
+		{6699907A-159F-4D9D-A5B9-258B453017B1}.Model|Any CPU.Build.0 = Release|Any CPU
+		{6699907A-159F-4D9D-A5B9-258B453017B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6699907A-159F-4D9D-A5B9-258B453017B1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{453FBE4D-D83F-4932-ADA0-42978BCB2777}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{453FBE4D-D83F-4932-ADA0-42978BCB2777}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{453FBE4D-D83F-4932-ADA0-42978BCB2777}.Model|Any CPU.ActiveCfg = Release|Any CPU
+		{453FBE4D-D83F-4932-ADA0-42978BCB2777}.Model|Any CPU.Build.0 = Release|Any CPU
+		{453FBE4D-D83F-4932-ADA0-42978BCB2777}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{453FBE4D-D83F-4932-ADA0-42978BCB2777}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1130,6 +1192,7 @@ Global
 		{633190DF-40AB-4F81-800E-BE17965DD269} = {81F6F5D5-AADE-4C4A-ACAE-EB1B3651E150}
 		{16ED6D96-F453-41D4-930B-A734BF7028BA} = {81F6F5D5-AADE-4C4A-ACAE-EB1B3651E150}
 		{E30294CC-3ED1-4520-9621-2BC65E467307} = {81F6F5D5-AADE-4C4A-ACAE-EB1B3651E150}
+		{E992EC3F-748F-4CB1-BF5E-C8ABCCCB91AE} = {81F6F5D5-AADE-4C4A-ACAE-EB1B3651E150}
 		{B84263C2-54D7-4254-B159-DDB1F39D0783} = {8E28768D-9A7C-4CA0-A4D0-761C06DA259C}
 		{8F254AC6-F99C-4BEC-9088-EBBA9C696CAF} = {8E28768D-9A7C-4CA0-A4D0-761C06DA259C}
 		{5D9C233B-E53D-4BE1-B578-1AA9722DE1CF} = {8E28768D-9A7C-4CA0-A4D0-761C06DA259C}
@@ -1216,5 +1279,10 @@ Global
 		{12D22E0C-BFFF-4F2E-AC47-6B8E50E69861} = {E30294CC-3ED1-4520-9621-2BC65E467307}
 		{B181877E-DD18-412A-B01A-A662764BE6B8} = {E30294CC-3ED1-4520-9621-2BC65E467307}
 		{BDA2A68B-4EDA-4A58-8529-DA23E3BEA4C5} = {B4A7EAB8-06F4-44EF-9EDF-59C41BDEB8CB}
+		{F7D7B682-C23F-4C36-B76D-6F375B61CD42} = {E992EC3F-748F-4CB1-BF5E-C8ABCCCB91AE}
+		{D3D050CD-99AC-42DC-94ED-0A49B9B4CCDD} = {E992EC3F-748F-4CB1-BF5E-C8ABCCCB91AE}
+		{066FBEA2-6D40-47F2-9F36-16365FA17DD2} = {E992EC3F-748F-4CB1-BF5E-C8ABCCCB91AE}
+		{6699907A-159F-4D9D-A5B9-258B453017B1} = {E992EC3F-748F-4CB1-BF5E-C8ABCCCB91AE}
+		{453FBE4D-D83F-4932-ADA0-42978BCB2777} = {E992EC3F-748F-4CB1-BF5E-C8ABCCCB91AE}
 	EndGlobalSection
 EndGlobal
