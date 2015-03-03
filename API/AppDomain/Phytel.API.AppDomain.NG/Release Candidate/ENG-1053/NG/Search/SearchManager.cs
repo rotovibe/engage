@@ -48,7 +48,8 @@ namespace Phytel.API.AppDomain.NG.Allergy
         {
             try
             {
-                var matches = MedNameStrategy.Search(request.Term);
+                var matches = EndpointUtil.GetTermSearchResults(request.Term);
+                //var matches = MedNameStrategy.Search(request.Term);
                 matches.All(x => { x.Text = x.Text.Trim(); return true; });
                 var groupby = matches.GroupBy(a => a.Text).Select(s => s.First()).ToList();
                 var result = groupby;
