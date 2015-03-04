@@ -1,7 +1,9 @@
 ﻿using Phytel.Services.API.Cache.Mongo;
 using Phytel.Services.AppSettings;
+using Phytel.Services.Dates;
 using Phytel.Services.IOC;
 using Phytel.Services.Mongo.Repository;
+using ServiceStack.CacheAccess;
 
 namespace Phytel.Services.API.Cache
 {
@@ -18,10 +20,30 @@ namespace Phytel.Services.API.Cache
         {
             container.Register<IUnitOfWorkMongo<CacheContext>>(ScopeName, c =>
                 new UnitOfWorkMongo<CacheContext>(
-                    c.Resolve<IAppSettingsProvider>().Get(Constants.AppSettingsKeys.ConnectionName, Constants.AppSettingDefaultValues.ConnectionName),
+                    c.Resolve<IAppSettingsProvider>().Get(Services.API.Cache.Constants.AppSettingsKeys.ConnectionName, Services.API.Cache.Constants.AppSettingDefaultValues.ConnectionName),
                     false
                     )
                 ).ReusedWithin(Funq.ReuseScope.Default);
+
+            container.Register<IRepositoryMongo>(ScopeName, c =>
+                new RepositoryMongo<CacheContext>(
+                    c.Resolve<IUnitOfWorkMongo<CacheContext>>()
+                    )
+                ).ReusedWithin(Funq.ReuseScope.Default);
+
+            container.Register<IPhytelCache>(c =>
+                new CacheRepository(
+                    c.ResolveNamed<IRepositoryMongo>(ScopeName),
+                    c.Resolve<IDateTimeProxy>()
+                    )
+                ).ReusedWithin(Funq.ReuseScope.Default);
+
+            container.Register<ICacheClient>(c =>
+                new MongoClientCache(
+                    c.Resolve<IPhytelCache>(),
+                    c.Resolve<IDateTimeProxy>()
+                    )
+                );
         }
     }
 }
