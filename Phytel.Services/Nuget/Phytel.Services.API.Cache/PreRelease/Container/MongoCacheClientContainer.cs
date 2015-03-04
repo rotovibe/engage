@@ -39,7 +39,7 @@ namespace Phytel.Services.API.Cache
                 ).ReusedWithin(Funq.ReuseScope.Default);
 
             container.Register<ICacheClient>(c =>
-                new MongoClientCache(
+                new MongoCacheClient(
                     c.Resolve<IPhytelCache>(),
                     c.Resolve<IDateTimeProxy>()
                     )

@@ -4,12 +4,12 @@ using System.Collections.Generic;
 
 namespace Phytel.Services.API.Cache
 {
-    public class MongoClientCache : ServiceStack.CacheAccess.ICacheClient
+    public class MongoCacheClient : ServiceStack.CacheAccess.ICacheClient
     {
         protected readonly IPhytelCache _cache;
         protected readonly IDateTimeProxy _dateTimeProxy;
 
-        public MongoClientCache(IPhytelCache cache, IDateTimeProxy dateTimeProxy)
+        public MongoCacheClient(IPhytelCache cache, IDateTimeProxy dateTimeProxy)
         {
             _cache = cache;
             _dateTimeProxy = dateTimeProxy;
