@@ -27,7 +27,7 @@ namespace Phytel.Services.API.Cache
 
             container.Register<IRepositoryMongo>(ScopeName, c =>
                 new RepositoryMongo<CacheContext>(
-                    c.Resolve<IUnitOfWorkMongo<CacheContext>>()
+                    c.ResolveNamed<IUnitOfWorkMongo<CacheContext>>(ScopeName)
                     )
                 ).ReusedWithin(Funq.ReuseScope.Default);
 
