@@ -26,5 +26,7 @@ namespace Phytel.Services.SQLServer.Repository
         T Single<T>(params object[] keyValues) where T : class;
 
         void Truncate(string tableName);
+
+        void Update();
     }
 }

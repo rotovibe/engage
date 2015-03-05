@@ -13,7 +13,7 @@ namespace Phytel.Services.SQLServer.Repository
         public const string SqlFormatIdentityReseed = "DBCC CHECKIDENT ('{0}', RESEED, {1})";
         public const string SqlFormatTruncate = "TRUNCATE TABLE {0}";
 
-        protected readonly TContext _dbContext;
+        public readonly TContext _dbContext;
         protected readonly IUnitOfWork<TContext> _uow;
 
         public RepositorySql(IUnitOfWork<TContext> uow)
@@ -76,6 +76,12 @@ namespace Phytel.Services.SQLServer.Repository
         {
             string sql = string.Format(SqlFormatTruncate, tableName);
             _dbContext.Database.ExecuteSqlCommand(sql);
+        }
+
+        public virtual void Update()
+        {
+            _dbContext.ChangeTracker.DetectChanges();
+            _dbContext.SaveChanges();
         }
 
         protected virtual IQueryable<T> Includes<T>(Expression<Func<T, object>>[] includes)
