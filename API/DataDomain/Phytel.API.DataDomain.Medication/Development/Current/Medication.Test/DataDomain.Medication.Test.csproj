@@ -102,6 +102,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Data\Data_PatientMedFrequency_Test.cs" />
     <Compile Include="Data\Data_MedicationMap_Test.cs" />
     <Compile Include="Data\Data_PatientMedication_Test.cs" />
     <Compile Include="MedicationDataManagerTests.cs" />

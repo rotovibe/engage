@@ -22,6 +22,7 @@ namespace DataDomain.Medication.Repo.Containers
             container.RegisterAutoWiredAs<MedicationDataManager, IMedicationDataManager>().ReusedWithin(Funq.ReuseScope.Request);
             container.RegisterAutoWiredAs<MedicationMappingDataManager, IMedicationMappingDataManager>().ReusedWithin(Funq.ReuseScope.Request);
             container.RegisterAutoWiredAs<PatientMedSuppDataManager, IPatientMedSuppDataManager>().ReusedWithin(Funq.ReuseScope.Request);
+            container.RegisterAutoWiredAs<PatientMedFrequencyDataManager, IPatientMedFrequencyDataManager>().ReusedWithin(Funq.ReuseScope.Request);
             container.RegisterAutoWiredAs<CommonFormatterUtil, ICommonFormatterUtil>().ReusedWithin(Funq.ReuseScope.Request);
             container.RegisterAutoWiredAs<Helpers, IHelpers>().ReusedWithin(Funq.ReuseScope.Request);
             return container;

@@ -138,12 +138,17 @@
     <Compile Include="Meds\DeletePatientMedSuppRequest.cs" />
     <Compile Include="Meds\DeletePatientMedSuppResponse.cs" />
     <Compile Include="Meds\GetMedicationMapsRequest.cs" />
+    <Compile Include="Meds\GetPatientMedFrequenciesRequest.cs" />
     <Compile Include="Meds\GetPatientMedSuppsRequest.cs" />
     <Compile Include="Meds\GetMedicationMapsResponse.cs" />
+    <Compile Include="Meds\GetPatientMedFrequenciesResponse.cs" />
     <Compile Include="Meds\GetPatientMedSuppsResponse.cs" />
     <Compile Include="Meds\Medication.cs" />
+    <Compile Include="Meds\PatientMedFrequency.cs" />
     <Compile Include="Meds\MedicationMap.cs" />
     <Compile Include="Meds\PatientMedSupp.cs" />
+    <Compile Include="Meds\PostPatientMedFrequencyRequest.cs" />
+    <Compile Include="Meds\PostPatientMedFrequencyResponse.cs" />
     <Compile Include="Meds\PutMedicationMapRequest.cs" />
     <Compile Include="Meds\PostMedicationMapRequest.cs" />
     <Compile Include="Meds\PutMedicationMapResponse.cs" />

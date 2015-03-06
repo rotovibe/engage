@@ -188,5 +188,35 @@ namespace Phytel.API.AppDomain.NG.Medication
             catch (Exception ex) { throw ex; }
         }
         #endregion
+
+        #region PatientMedFrequency
+        public List<PatientMedFrequency> GetPatientMedFrequencies(GetPatientMedFrequenciesRequest request)
+        {
+            List<PatientMedFrequency> patientMedFreqs = null;
+            try
+            {
+                List<PatientMedFrequencyData> data = EndpointUtil.GetPatientMedFrequencies(request);
+                if (data != null && data.Count > 0)
+                {
+                    patientMedFreqs = new List<PatientMedFrequency>();
+                    data.ForEach(a =>
+                        patientMedFreqs.Add(new PatientMedFrequency { Id = a.Id, Name = a.PatientId } ));
+                }
+                return patientMedFreqs;
+            }
+            catch (Exception ex) { throw ex; }
+        }
+
+        public string InsertPatientMedFrequency(PostPatientMedFrequencyRequest request)
+        {
+            string id = null;
+            try
+            {
+                id = EndpointUtil.InsertPatientMedFrequency(request);
+                return id;
+            }
+            catch (Exception ex) { throw ex; }
+        }
+        #endregion
     }
 }

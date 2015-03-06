@@ -91,12 +91,17 @@
     <Compile Include="GetMedicationNDCsDataResponse.cs" />
     <Compile Include="DomainRequest.cs" />
     <Compile Include="GetMedicationMapDataRequest.cs" />
+    <Compile Include="GetPatientMedFrequenciesDataRequest.cs" />
     <Compile Include="GetPatientMedSuppsDataRequest.cs" />
     <Compile Include="GetMedicationMapDataResponse.cs" />
+    <Compile Include="GetPatientMedFrequenciesDataResponse.cs" />
     <Compile Include="GetPatientMedSuppsDataResponse.cs" />
     <Compile Include="MedicationMapData.cs" />
+    <Compile Include="PatientMedFrequencyData.cs" />
     <Compile Include="PatientMedSuppData.cs" />
+    <Compile Include="PostPatientMedFrequencyDataRequest.cs" />
     <Compile Include="PostMedicationMapDataRequest.cs" />
+    <Compile Include="PostPatientMedFrequencyDataResponse.cs" />
     <Compile Include="PostMedicationMapDataResponse.cs" />
     <Compile Include="PutMedicationMapDataRequest.cs" />
     <Compile Include="PutMedicationMapDataResponse.cs" />

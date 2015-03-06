@@ -92,13 +92,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Containers\MedicationRepositoryContainer.cs" />
+    <Compile Include="IMongoPatientMedFrequencyRepository.cs" />
     <Compile Include="IMongoMedicationMappingRepository.cs" />
     <Compile Include="IMongoPatientMedSuppRepository.cs" />
     <Compile Include="IMongoMedicationRepository.cs" />
     <Compile Include="IUOWMongo.cs" />
     <Compile Include="MongoDB\DTO\MEMedication.cs" />
     <Compile Include="MongoDB\DTO\MEMedicationMapping.cs" />
+    <Compile Include="MongoDB\DTO\MEPatientMedFrequency.cs" />
     <Compile Include="MongoDB\DTO\MEPatientMedSupp.cs" />
+    <Compile Include="MongoPatientMedFrequencyRepository.cs" />
     <Compile Include="MongoMedicationMappingRepository.cs" />
     <Compile Include="MongoPatientMedSuppRepository.cs" />
     <Compile Include="MongoMedicationRepository.cs" />
