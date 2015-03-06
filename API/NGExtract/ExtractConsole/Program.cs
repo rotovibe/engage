@@ -11,7 +11,7 @@ namespace ExtractConsole
     {
         static void Main(string[] args)
         {
-            ETLProcessor pro = new ETLProcessor();
+            ETLProcessor pro = new ETLProcessor("InHealth001");
             pro.EtlEvent += pro_EtlEvent;
             pro.Rebuild();
             Console.WriteLine("Process Finished");

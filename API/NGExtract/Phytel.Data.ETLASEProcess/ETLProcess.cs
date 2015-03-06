@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 
 namespace Phytel.Data.ETLASEProcess
 {
@@ -11,7 +12,12 @@ namespace Phytel.Data.ETLASEProcess
     {
         public override void Execute(API.DataDomain.ASE.DTO.Message.QueueMessage queueMessage)
         {
-            ETLProcessor pro = new ETLProcessor();
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(queueMessage.Body);
+            var contStr = doc.DocumentElement.InnerText;
+
+            // add contstr to constructor
+            ETLProcessor pro = new ETLProcessor(contStr);
             pro.EtlEvent += pro_EtlEvent;
             pro.Rebuild();
         }

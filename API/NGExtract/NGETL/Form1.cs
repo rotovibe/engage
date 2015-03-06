@@ -20,7 +20,7 @@ namespace NGETL
 
         private void button1_Click(object sender, EventArgs e)
         {
-            ETLProcessor pro = new ETLProcessor();
+            ETLProcessor pro = new ETLProcessor("InHealth001");
             pro.Rebuild();
             MessageBox.Show("ETL process complete!!!");
         }

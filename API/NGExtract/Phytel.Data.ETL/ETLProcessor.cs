@@ -54,7 +54,7 @@ namespace Phytel.Data.ETL
         public event ETLEventHandler EtlEvent;
         private int _exponent = Convert.ToInt32(ConfigurationManager.AppSettings["ParallelProcess"]);
         private bool truncate = Convert.ToBoolean(ConfigurationManager.AppSettings["Truncate"]);
-        string contract = "InHealth001";
+        string _contract;
         private List<SpawnElementHash> _spawnElementDict = new List<SpawnElementHash>();
         private SqlConnection _sqlConnection;
         private string connString;
@@ -73,13 +73,15 @@ namespace Phytel.Data.ETL
             }
         }
 
-        public ETLProcessor()
+        public ETLProcessor(string contract)
         {
+            _contract = contract;
+
             OnEtlEvent(new ETLEventArgs {Message = "ETLProcessor start initialized.", IsError = false});
 
             connString =
                 SQLDataService.Instance.GetConnectionString(
-                    ConfigurationManager.AppSettings["PhytelServicesConnName"], contract, true, "REPORT");
+                    ConfigurationManager.AppSettings["PhytelServicesConnName"], _contract, true, "REPORT");
 
             _sqlConnection = new SqlConnection(connString);
 
@@ -95,42 +97,42 @@ namespace Phytel.Data.ETL
                 OnEtlEvent(new ETLEventArgs {Message = "*** ETL PROCESS START ***", IsError = false});
                 OnEtlEvent(new ETLEventArgs {Message = "Truncate Tables.", IsError = false});
                 //Truncate/Delete SQL databases
-                SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_TruncateTables",
+                SQLDataService.Instance.ExecuteProcedure(_contract, true, "REPORT", "spPhy_RPT_TruncateTables",
                     new ParameterCollection());
 
                 RegisterClasses();
-                LoadUsers(contract);
-                LoadLookUps(contract);
-                LoadGoalAttributes(contract);
-                LoadObservations(contract);
-                LoadPatients(contract);
-                LoadPatientSystems(contract);
+                LoadUsers(_contract);
+                LoadLookUps(_contract);
+                LoadGoalAttributes(_contract);
+                LoadObservations(_contract);
+                LoadPatients(_contract);
+                LoadPatientSystems(_contract);
 
-                LoadPatientNotes(contract);
-                LoadPatientObservations(contract);
-                LoadContacts(contract);
+                LoadPatientNotes(_contract);
+                LoadPatientObservations(_contract);
+                LoadContacts(_contract);
 
-                LoadCareMembers(contract);
-                LoadPatientUsers(contract);
+                LoadCareMembers(_contract);
+                LoadPatientUsers(_contract);
 
-                LoadPatientGoals(contract);
-                LoadPatientBarriers(contract);
-                LoadPatientInterventions(contract);
-                LoadPatientTasks(contract);
+                LoadPatientGoals(_contract);
+                LoadPatientBarriers(_contract);
+                LoadPatientInterventions(_contract);
+                LoadPatientTasks(_contract);
 
-                LoadAllergies(contract);
-                LoadPatientAllergies(contract);
-                LoadPatientMedSups(contract);
+                LoadAllergies(_contract);
+                LoadPatientAllergies(_contract);
+                LoadPatientMedSups(_contract);
 
-                LoadPatientPrograms(contract);
-                LoadPatientProgramModules(contract);
-                LoadPatientProgramActions(contract);
-                LoadPatientProgramSteps(contract);
-                LoadPatientProgramResponses(contract);
-                LoadPatientProgramAttributes(contract);
+                LoadPatientPrograms(_contract);
+                LoadPatientProgramModules(_contract);
+                LoadPatientProgramActions(_contract);
+                LoadPatientProgramSteps(_contract);
+                LoadPatientProgramResponses(_contract);
+                LoadPatientProgramAttributes(_contract);
                 
                 ProcessSpawnElements();
-                LoadToDos(contract);
+                LoadToDos(_contract);
 
                 FlattenReportSprocs();
                 OnEtlEvent(new ETLEventArgs {Message = "*** ETL PROCESS COMPLETED ***", IsError = false});
@@ -146,7 +148,7 @@ namespace Phytel.Data.ETL
             try
             {
                 //[spPhy_RPT_Flat_BSHSI_HW2]
-                SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_Flat_BSHSI_HW2", new ParameterCollection(), 0);
+                SQLDataService.Instance.ExecuteProcedure(_contract, true, "REPORT", "spPhy_RPT_Flat_BSHSI_HW2", new ParameterCollection(), 0);
             }
             catch (Exception ex)
             {
@@ -602,7 +604,7 @@ namespace Phytel.Data.ETL
                         else
                             parms.Add(new Parameter("@ExtraElements", string.Empty, SqlDbType.VarChar,ParameterDirection.Input, int.MaxValue));
 
-                        SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_RPT_SaveCareMember", parms);
+                        SQLDataService.Instance.ExecuteScalar(_contract, true, "REPORT", "spPhy_RPT_SaveCareMember", parms);
                     }
                     catch (Exception ex)
                     {
@@ -657,7 +659,7 @@ namespace Phytel.Data.ETL
                                 else
                                     parms.Add(new Parameter("@ExtraElements", string.Empty, SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
 
-                                SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveContact", parms);
+                                SQLDataService.Instance.ExecuteProcedure(_contract, true, "REPORT", "spPhy_RPT_SaveContact", parms);
 
                                 if (contact.Addresses != null)
                                 {
@@ -683,7 +685,7 @@ namespace Phytel.Data.ETL
                                         parms.Add(new Parameter("@RecordCreatedOn", contact.RecordCreatedOn, SqlDbType.DateTime, ParameterDirection.Input, 50));
                                         parms.Add(new Parameter("@TTLDate", contact.TTLDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
 
-                                        SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveContactAddress", parms);
+                                        SQLDataService.Instance.ExecuteProcedure(_contract, true, "REPORT", "spPhy_RPT_SaveContactAddress", parms);
                                     }
                                 }
 
@@ -706,7 +708,7 @@ namespace Phytel.Data.ETL
                                         parms.Add(new Parameter("@RecordCreatedOn", contact.RecordCreatedOn, SqlDbType.DateTime, ParameterDirection.Input, 50));
                                         parms.Add(new Parameter("@TTLDate", contact.TTLDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
 
-                                        SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveContactEmail", parms);
+                                        SQLDataService.Instance.ExecuteProcedure(_contract, true, "REPORT", "spPhy_RPT_SaveContactEmail", parms);
                                     }
                                 }
 
@@ -725,7 +727,7 @@ namespace Phytel.Data.ETL
                                         parms.Add(new Parameter("@RecordCreatedOn", contact.RecordCreatedOn, SqlDbType.DateTime, ParameterDirection.Input, 50));
                                         parms.Add(new Parameter("@TTLDate", contact.TTLDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
 
-                                        SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveContactLanguage", parms);
+                                        SQLDataService.Instance.ExecuteProcedure(_contract, true, "REPORT", "spPhy_RPT_SaveContactLanguage", parms);
                                     }
                                 }
 
@@ -745,7 +747,7 @@ namespace Phytel.Data.ETL
                                         parms.Add(new Parameter("@RecordCreatedOn", contact.RecordCreatedOn, SqlDbType.DateTime, ParameterDirection.Input, 50));
                                         parms.Add(new Parameter("@TTLDate", contact.TTLDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
 
-                                        SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveContactMode", parms);
+                                        SQLDataService.Instance.ExecuteProcedure(_contract, true, "REPORT", "spPhy_RPT_SaveContactMode", parms);
                                     }
                                 }
 
@@ -770,7 +772,7 @@ namespace Phytel.Data.ETL
                                         parms.Add(new Parameter("@RecordCreatedOn", contact.RecordCreatedOn, SqlDbType.DateTime, ParameterDirection.Input, 50));
                                         parms.Add(new Parameter("@TTLDate", contact.TTLDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
 
-                                        SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveContactPhone", parms);
+                                        SQLDataService.Instance.ExecuteProcedure(_contract, true, "REPORT", "spPhy_RPT_SaveContactPhone", parms);
                                     }
                                 }
 
@@ -788,7 +790,7 @@ namespace Phytel.Data.ETL
                                         parms.Add(new Parameter("@RecordCreatedOn", contact.RecordCreatedOn, SqlDbType.DateTime, ParameterDirection.Input, 50));
                                         parms.Add(new Parameter("@TTLDate", contact.TTLDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
 
-                                        SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveContactTimeOfDay", parms);
+                                        SQLDataService.Instance.ExecuteProcedure(_contract, true, "REPORT", "spPhy_RPT_SaveContactTimeOfDay", parms);
                                     }
                                 }
 
@@ -806,7 +808,7 @@ namespace Phytel.Data.ETL
                                         parms.Add(new Parameter("@RecordCreatedOn", contact.RecordCreatedOn, SqlDbType.DateTime, ParameterDirection.Input, 50));
                                         parms.Add(new Parameter("@TTLDate", contact.TTLDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
 
-                                        SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveContactWeekDay", parms);
+                                        SQLDataService.Instance.ExecuteProcedure(_contract, true, "REPORT", "spPhy_RPT_SaveContactWeekDay", parms);
                                     }
                                 }
 
@@ -823,7 +825,7 @@ namespace Phytel.Data.ETL
                                         parms.Add(new Parameter("@RecordCreatedBy", (string.IsNullOrEmpty(contact.RecordCreatedBy.ToString()) ? string.Empty : contact.RecordCreatedBy.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
                                         parms.Add(new Parameter("@RecordCreatedOn", contact.RecordCreatedOn, SqlDbType.DateTime, ParameterDirection.Input, 50));
 
-                                        SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveContactRecentList", parms);
+                                        SQLDataService.Instance.ExecuteProcedure(_contract, true, "REPORT", "spPhy_RPT_SaveContactRecentList", parms);
                                     }
                                 }
                             }
@@ -874,7 +876,7 @@ namespace Phytel.Data.ETL
                             else
                                 parms.Add(new Parameter("@ExtraElements", string.Empty, SqlDbType.VarChar, ParameterDirection.Input, 50));
 
-                            SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveGoalAttribute", parms);
+                            SQLDataService.Instance.ExecuteProcedure(_contract, true, "REPORT", "spPhy_RPT_SaveGoalAttribute", parms);
 
                             foreach (KeyValuePair<int, string> option in att.Options)
                             {
@@ -887,7 +889,7 @@ namespace Phytel.Data.ETL
                                 parms.Add(new Parameter("@UpdatedBy", (string.IsNullOrEmpty(att.UpdatedBy.ToString()) ? string.Empty : att.UpdatedBy.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
                                 parms.Add(new Parameter("@LastUpdatedOn", att.LastUpdatedOn ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
 
-                                SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveGoalAttributeOption", parms);
+                                SQLDataService.Instance.ExecuteProcedure(_contract, true, "REPORT", "spPhy_RPT_SaveGoalAttributeOption", parms);
                             }
                         }
                         catch (Exception ex)
@@ -1047,7 +1049,7 @@ namespace Phytel.Data.ETL
                 parms.Add(new Parameter("@MongoID", bc.DataId, SqlDbType.VarChar, ParameterDirection.Input, 50));
                 parms.Add(new Parameter("@Name", bc.Name, SqlDbType.VarChar, ParameterDirection.Input, 300));
 
-                SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveBarrierCategoryLookUp", parms);
+                SQLDataService.Instance.ExecuteProcedure(_contract, true, "REPORT", "spPhy_RPT_SaveBarrierCategoryLookUp", parms);
             }
  
         }
@@ -1064,7 +1066,7 @@ namespace Phytel.Data.ETL
                 parms.Add(new Parameter("@MongoID", cmt.DataId, SqlDbType.VarChar, ParameterDirection.Input, 50));
                 parms.Add(new Parameter("@Name", cmt.Name, SqlDbType.VarChar, ParameterDirection.Input, 300));
 
-                SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveCareMemberTypeLookUp", parms);
+                SQLDataService.Instance.ExecuteProcedure(_contract, true, "REPORT", "spPhy_RPT_SaveCareMemberTypeLookUp", parms);
             }
         }
 
@@ -1080,7 +1082,7 @@ namespace Phytel.Data.ETL
                 parms.Add(new Parameter("@MongoID", cat.DataId, SqlDbType.VarChar, ParameterDirection.Input, 50));
                 parms.Add(new Parameter("@Name", cat.Name, SqlDbType.VarChar, ParameterDirection.Input, 300));
 
-                SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveCategoryLookUp", parms);
+                SQLDataService.Instance.ExecuteProcedure(_contract, true, "REPORT", "spPhy_RPT_SaveCategoryLookUp", parms);
             }
         }
 
@@ -1096,7 +1098,7 @@ namespace Phytel.Data.ETL
                 parms.Add(new Parameter("@MongoID", cs.DataId, SqlDbType.VarChar, ParameterDirection.Input, 50));
                 parms.Add(new Parameter("@Name", cs.Name, SqlDbType.VarChar, ParameterDirection.Input, 300));
 
-                SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveCodingSystemLookUp", parms);
+                SQLDataService.Instance.ExecuteProcedure(_contract, true, "REPORT", "spPhy_RPT_SaveCodingSystemLookUp", parms);
             }
         }
 
@@ -1112,7 +1114,7 @@ namespace Phytel.Data.ETL
                 parms.Add(new Parameter("@MongoID", cmm.DataId, SqlDbType.VarChar, ParameterDirection.Input, 50));
                 parms.Add(new Parameter("@Name", cmm.Name, SqlDbType.VarChar, ParameterDirection.Input, 300));
 
-                SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveCommModeLookUp", parms);
+                SQLDataService.Instance.ExecuteProcedure(_contract, true, "REPORT", "spPhy_RPT_SaveCommModeLookUp", parms);
             }
         }
 
@@ -1128,7 +1130,7 @@ namespace Phytel.Data.ETL
                 parms.Add(new Parameter("@MongoID", cmt.DataId, SqlDbType.VarChar, ParameterDirection.Input, 50));
                 parms.Add(new Parameter("@Name", cmt.Name, SqlDbType.VarChar, ParameterDirection.Input, 300));
 
-                SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveCommTypeLookUp", parms);
+                SQLDataService.Instance.ExecuteProcedure(_contract, true, "REPORT", "spPhy_RPT_SaveCommTypeLookUp", parms);
              }
         }
 
@@ -1144,7 +1146,7 @@ namespace Phytel.Data.ETL
                 parms.Add(new Parameter("@MongoID", fa.DataId, SqlDbType.VarChar, ParameterDirection.Input, 50));
                 parms.Add(new Parameter("@Name", fa.Name, SqlDbType.VarChar, ParameterDirection.Input, 300));
 
-                SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveFocusAreaLookUp", parms);
+                SQLDataService.Instance.ExecuteProcedure(_contract, true, "REPORT", "spPhy_RPT_SaveFocusAreaLookUp", parms);
             }
         }
 
@@ -1160,7 +1162,7 @@ namespace Phytel.Data.ETL
                 parms.Add(new Parameter("@MongoID", ic.DataId, SqlDbType.VarChar, ParameterDirection.Input, 50));
                 parms.Add(new Parameter("@Name", ic.Name, SqlDbType.VarChar, ParameterDirection.Input, 300));
 
-                SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveInterventionCategoryLookUp", parms);
+                SQLDataService.Instance.ExecuteProcedure(_contract, true, "REPORT", "spPhy_RPT_SaveInterventionCategoryLookUp", parms);
             }
         }
 
@@ -1178,7 +1180,7 @@ namespace Phytel.Data.ETL
                 parms.Add(new Parameter("@Code", la.Code, SqlDbType.VarChar, ParameterDirection.Input, 50));
                 parms.Add(new Parameter("@Active", la.Active, SqlDbType.VarChar, ParameterDirection.Input, 50));
 
-                SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveLanguageLookUp", parms);
+                SQLDataService.Instance.ExecuteProcedure(_contract, true, "REPORT", "spPhy_RPT_SaveLanguageLookUp", parms);
             }
         }
 
@@ -1195,7 +1197,7 @@ namespace Phytel.Data.ETL
                 parms.Add(new Parameter("@Name", o.Name, SqlDbType.VarChar, ParameterDirection.Input, 300));
                 parms.Add(new Parameter("@Description", o.Description, SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
 
-                SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveObjectiveLookUp", parms);
+                SQLDataService.Instance.ExecuteProcedure(_contract, true, "REPORT", "spPhy_RPT_SaveObjectiveLookUp", parms);
             }
         }
 
@@ -1211,7 +1213,7 @@ namespace Phytel.Data.ETL
                 parms.Add(new Parameter("@MongoID", ot.DataId, SqlDbType.VarChar, ParameterDirection.Input, 50));
                 parms.Add(new Parameter("@Name", ot.Name, SqlDbType.VarChar, ParameterDirection.Input, 300));
 
-                SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveObservationTypeLookUp", parms);
+                SQLDataService.Instance.ExecuteProcedure(_contract, true, "REPORT", "spPhy_RPT_SaveObservationTypeLookUp", parms);
             }
         }
 
@@ -1233,7 +1235,7 @@ namespace Phytel.Data.ETL
                 parms.Add(new Parameter("@Default", prb.DefaultFeatured, SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
                 parms.Add(new Parameter("@DefaultLevel", (string.IsNullOrEmpty(prb.DefaultLevel.ToString()) ? string.Empty : prb.DefaultLevel.ToString()), SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
 
-                SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveProblemLookUp", parms);
+                SQLDataService.Instance.ExecuteProcedure(_contract, true, "REPORT", "spPhy_RPT_SaveProblemLookUp", parms);
             }
         }
 
@@ -1250,7 +1252,7 @@ namespace Phytel.Data.ETL
                 parms.Add(new Parameter("@MongoID", prb.DataId, SqlDbType.VarChar, ParameterDirection.Input, 50));
                 parms.Add(new Parameter("@Name", prb.Name, SqlDbType.VarChar, ParameterDirection.Input, 300));
 
-                SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveFreqWhenLookUp", parms);
+                SQLDataService.Instance.ExecuteProcedure(_contract, true, "REPORT", "spPhy_RPT_SaveFreqWhenLookUp", parms);
             }
         }
 
@@ -1267,7 +1269,7 @@ namespace Phytel.Data.ETL
                 parms.Add(new Parameter("@MongoID", prb.DataId, SqlDbType.VarChar, ParameterDirection.Input, 50));
                 parms.Add(new Parameter("@Name", prb.Name, SqlDbType.VarChar, ParameterDirection.Input, 300));
 
-                SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveFreqHowOftenLookUp", parms);
+                SQLDataService.Instance.ExecuteProcedure(_contract, true, "REPORT", "spPhy_RPT_SaveFreqHowOftenLookUp", parms);
             }
         }
 
@@ -1284,7 +1286,7 @@ namespace Phytel.Data.ETL
                 parms.Add(new Parameter("@MongoID", prb.DataId, SqlDbType.VarChar, ParameterDirection.Input, 50));
                 parms.Add(new Parameter("@Name", prb.Name, SqlDbType.VarChar, ParameterDirection.Input, 300));
 
-                SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveMedSupTypeLookUp", parms);
+                SQLDataService.Instance.ExecuteProcedure(_contract, true, "REPORT", "spPhy_RPT_SaveMedSupTypeLookUp", parms);
             }
         }
 
@@ -1302,7 +1304,7 @@ namespace Phytel.Data.ETL
                 parms.Add(new Parameter("@CodeSystem", (string.IsNullOrEmpty(prb.CodingSystemId.ToString()) ? string.Empty : prb.CodingSystemId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
                 parms.Add(new Parameter("@Code", (string.IsNullOrEmpty(prb.CodingSystemCode) ? string.Empty : prb.CodingSystemCode), SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
 
-                SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveReactionLookUp", parms);
+                SQLDataService.Instance.ExecuteProcedure(_contract, true, "REPORT", "spPhy_RPT_SaveReactionLookUp", parms);
             }
         }
 
@@ -1320,7 +1322,7 @@ namespace Phytel.Data.ETL
                 parms.Add(new Parameter("@CodeSystem", (string.IsNullOrEmpty(prb.CodingSystemId.ToString()) ? string.Empty : prb.CodingSystemId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
                 parms.Add(new Parameter("@Code", (string.IsNullOrEmpty(prb.CodingSystemCode) ? string.Empty : prb.CodingSystemCode), SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
 
-                SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveSeverityLookUp", parms);
+                SQLDataService.Instance.ExecuteProcedure(_contract, true, "REPORT", "spPhy_RPT_SaveSeverityLookUp", parms);
             }
         }
         
@@ -1339,7 +1341,7 @@ namespace Phytel.Data.ETL
                 parms.Add(new Parameter("@Active", prb.Active, SqlDbType.VarChar, ParameterDirection.Input, 50));
                 parms.Add(new Parameter("@Default", prb.Default, SqlDbType.VarChar, ParameterDirection.Input, 50));
 
-                SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveAllergySourceLookUp", parms);
+                SQLDataService.Instance.ExecuteProcedure(_contract, true, "REPORT", "spPhy_RPT_SaveAllergySourceLookUp", parms);
             }
         }
 
@@ -1357,7 +1359,7 @@ namespace Phytel.Data.ETL
                 parms.Add(new Parameter("@CodeSystem", (string.IsNullOrEmpty(prb.CodingSystemId.ToString()) ? string.Empty : prb.CodingSystemId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
                 parms.Add(new Parameter("@Code", (string.IsNullOrEmpty(prb.CodingSystemCode) ? string.Empty : prb.CodingSystemCode), SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
 
-                SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveAllergyTypeLookUp", parms);
+                SQLDataService.Instance.ExecuteProcedure(_contract, true, "REPORT", "spPhy_RPT_SaveAllergyTypeLookUp", parms);
             }
         }
 
@@ -1373,7 +1375,7 @@ namespace Phytel.Data.ETL
                 parms.Add(new Parameter("@MongoID", src.DataId, SqlDbType.VarChar, ParameterDirection.Input, 50));
                 parms.Add(new Parameter("@Name", src.Name, SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
 
-                SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveSourceLookUp", parms);
+                SQLDataService.Instance.ExecuteProcedure(_contract, true, "REPORT", "spPhy_RPT_SaveSourceLookUp", parms);
             }
         }
 
@@ -1390,7 +1392,7 @@ namespace Phytel.Data.ETL
                 parms.Add(new Parameter("@Name", st.Name, SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
                 parms.Add(new Parameter("@Code", st.Code, SqlDbType.VarChar, ParameterDirection.Input, 50));
 
-                SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveStateLookUp", parms);
+                SQLDataService.Instance.ExecuteProcedure(_contract, true, "REPORT", "spPhy_RPT_SaveStateLookUp", parms);
             }
         }
 
@@ -1406,7 +1408,7 @@ namespace Phytel.Data.ETL
                 parms.Add(new Parameter("@MongoID", tod.DataId, SqlDbType.VarChar, ParameterDirection.Input, 50));
                 parms.Add(new Parameter("@Name", tod.Name, SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
 
-                SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveTimesOfDayLookUp", parms);
+                SQLDataService.Instance.ExecuteProcedure(_contract, true, "REPORT", "spPhy_RPT_SaveTimesOfDayLookUp", parms);
             }
         }
 
@@ -1423,7 +1425,7 @@ namespace Phytel.Data.ETL
                 parms.Add(new Parameter("@Name", tz.Name, SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
                 parms.Add(new Parameter("@Default", tz.Default, SqlDbType.VarChar, ParameterDirection.Input, 50));
 
-                SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveTimeZoneLookUp", parms);
+                SQLDataService.Instance.ExecuteProcedure(_contract, true, "REPORT", "spPhy_RPT_SaveTimeZoneLookUp", parms);
             }
         }
 
@@ -1442,7 +1444,7 @@ namespace Phytel.Data.ETL
                     new Parameter("@Default", lu.Default, SqlDbType.VarChar, ParameterDirection.Input, 50)
                 };
 
-                SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", sp, parms);
+                SQLDataService.Instance.ExecuteProcedure(_contract, true, "REPORT", sp, parms);
             }
         }
 
@@ -1458,7 +1460,7 @@ namespace Phytel.Data.ETL
                 parms.Add(new Parameter("@MongoID", tz.DataId, SqlDbType.VarChar, ParameterDirection.Input, 50));
                 parms.Add(new Parameter("@Name", tz.Name, SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
 
-                SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveToDoCategoryLookUp", parms);
+                SQLDataService.Instance.ExecuteProcedure(_contract, true, "REPORT", "spPhy_RPT_SaveToDoCategoryLookUp", parms);
             }
         }
 
@@ -1474,7 +1476,7 @@ namespace Phytel.Data.ETL
                     parms.Add(new Parameter("@CommTypeMongoId", cmt.DataId.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
                     parms.Add(new Parameter("@CommModeMongoId", mode.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
 
-                    SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveCommTypeCommMode", parms);
+                    SQLDataService.Instance.ExecuteProcedure(_contract, true, "REPORT", "spPhy_RPT_SaveCommTypeCommMode", parms);
                 }
             }
         }
@@ -1490,7 +1492,7 @@ namespace Phytel.Data.ETL
                     parms.Add(new Parameter("@ObjectiveMongoId", o.DataId, SqlDbType.VarChar, ParameterDirection.Input, 50));
                     parms.Add(new Parameter("@CategoryMongoId", cat.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
 
-                    SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveObjectiveCategory", parms);
+                    SQLDataService.Instance.ExecuteProcedure(_contract, true, "REPORT", "spPhy_RPT_SaveObjectiveCategory", parms);
                 }
             }
         }
@@ -1546,7 +1548,7 @@ namespace Phytel.Data.ETL
                                 parms.Add(new Parameter("@ExtraElements", string.Empty, SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
 
 
-                            SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveObservation", parms);
+                            SQLDataService.Instance.ExecuteProcedure(_contract, true, "REPORT", "spPhy_RPT_SaveObservation", parms);
                         }
                         catch (Exception ex)
                         {
@@ -1604,7 +1606,7 @@ namespace Phytel.Data.ETL
                                 else
                                     parms.Add(new Parameter("@ExtraElements", string.Empty, SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
 
-                                SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SavePatient", parms);
+                                SQLDataService.Instance.ExecuteProcedure(_contract, true, "REPORT", "spPhy_RPT_SavePatient", parms);
                         }
                         catch (Exception ex)
                         {
@@ -1655,7 +1657,7 @@ namespace Phytel.Data.ETL
                             else
                                 parms.Add(new Parameter("@ExtraElements", string.Empty, SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
 
-                            SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_RPT_SavePatientBarrier", parms);
+                            SQLDataService.Instance.ExecuteScalar(_contract, true, "REPORT", "spPhy_RPT_SavePatientBarrier", parms);
                         }
                         catch (Exception ex)
                         {
@@ -1714,7 +1716,7 @@ namespace Phytel.Data.ETL
 
                             parms.Add(new Parameter("@TemplateId", (string.IsNullOrEmpty(goal.TemplateId.ToString()) ? string.Empty : goal.TemplateId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
 
-                            SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_RPT_SavePatientGoal", parms);
+                            SQLDataService.Instance.ExecuteScalar(_contract, true, "REPORT", "spPhy_RPT_SavePatientGoal", parms);
 
                             if (goal.Attributes != null)
                             {
@@ -1729,7 +1731,7 @@ namespace Phytel.Data.ETL
                                     parms.Add(new Parameter("@RecordCreatedOn", goal.RecordCreatedOn == null ? string.Empty : goal.RecordCreatedOn.ToString(), SqlDbType.DateTime, ParameterDirection.Input, 50));
                                     parms.Add(new Parameter("@Version", goal.Version.ToString(), SqlDbType.Float, ParameterDirection.Input, 32));
 
-                                    SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_RPT_SavePatientGoalAttribute", parms);
+                                    SQLDataService.Instance.ExecuteScalar(_contract, true, "REPORT", "spPhy_RPT_SavePatientGoalAttribute", parms);
 
                                     if (att.Values != null)
                                     {
@@ -1745,7 +1747,7 @@ namespace Phytel.Data.ETL
                                             parms.Add(new Parameter("@RecordCreatedOn", goal.RecordCreatedOn == null ? string.Empty : goal.RecordCreatedOn.ToString(), SqlDbType.DateTime, ParameterDirection.Input, 50));
                                             parms.Add(new Parameter("@Version", goal.Version.ToString(), SqlDbType.Float, ParameterDirection.Input, 32));
 
-                                            SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_RPT_SavePatientGoalAttributeValue", parms);
+                                            SQLDataService.Instance.ExecuteScalar(_contract, true, "REPORT", "spPhy_RPT_SavePatientGoalAttributeValue", parms);
                                         }
                                     }
                                 }
@@ -1764,7 +1766,7 @@ namespace Phytel.Data.ETL
                                     parms.Add(new Parameter("@RecordCreatedOn", goal.RecordCreatedOn == null ? string.Empty : goal.RecordCreatedOn.ToString(), SqlDbType.DateTime, ParameterDirection.Input, 50));
                                     parms.Add(new Parameter("@Version", goal.Version.ToString(), SqlDbType.Float, ParameterDirection.Input, 32));
 
-                                    SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_RPT_SavePatientGoalFocusArea", parms);
+                                    SQLDataService.Instance.ExecuteScalar(_contract, true, "REPORT", "spPhy_RPT_SavePatientGoalFocusArea", parms);
                                 }
                             }
 
@@ -1781,7 +1783,7 @@ namespace Phytel.Data.ETL
                                     parms.Add(new Parameter("@RecordCreatedOn", goal.RecordCreatedOn == null ? string.Empty : goal.RecordCreatedOn.ToString(), SqlDbType.DateTime, ParameterDirection.Input, 50));
                                     parms.Add(new Parameter("@Version", goal.Version.ToString(), SqlDbType.Float, ParameterDirection.Input, 32));
 
-                                    SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_RPT_SavePatientGoalProgram", parms);
+                                    SQLDataService.Instance.ExecuteScalar(_contract, true, "REPORT", "spPhy_RPT_SavePatientGoalProgram", parms);
                                 }
                             }
                         }
@@ -1845,7 +1847,7 @@ namespace Phytel.Data.ETL
                                 parms.Add(new Parameter("@ClosedDate", intervention.ClosedDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
                                 parms.Add(new Parameter("@TemplateId", (string.IsNullOrEmpty(intervention.TemplateId.ToString()) ? string.Empty : intervention.TemplateId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
 
-                                SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_RPT_SavePatientIntervention", parms);
+                                SQLDataService.Instance.ExecuteScalar(_contract, true, "REPORT", "spPhy_RPT_SavePatientIntervention", parms);
                             
                                 if (intervention.BarrierIds != null)
                                 {
@@ -1863,7 +1865,7 @@ namespace Phytel.Data.ETL
                                             parms.Add(new Parameter("@RecordCreatedOn", intervention.RecordCreatedOn, SqlDbType.DateTime, ParameterDirection.Input, 50));
                                         parms.Add(new Parameter("@Version", (string.IsNullOrEmpty(intervention.Version.ToString()) ? string.Empty : intervention.Version.ToString()), SqlDbType.Float, ParameterDirection.Input, 32));
 
-                                        SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_RPT_SavePatientInterventionBarrier", parms);
+                                        SQLDataService.Instance.ExecuteScalar(_contract, true, "REPORT", "spPhy_RPT_SavePatientInterventionBarrier", parms);
 
                                     }
                                 }
@@ -1926,7 +1928,7 @@ namespace Phytel.Data.ETL
                             else
                                 parms.Add(new Parameter("@ExtraElements", string.Empty, SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
 
-                            SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_RPT_SavePatientNote", parms);
+                            SQLDataService.Instance.ExecuteScalar(_contract, true, "REPORT", "spPhy_RPT_SavePatientNote", parms);
 
                             if (note.ProgramIds != null)
                             {
@@ -1941,7 +1943,7 @@ namespace Phytel.Data.ETL
                                     parms.Add(new Parameter("@RecordCreatedOn", note.RecordCreatedOn, SqlDbType.DateTime, ParameterDirection.Input, 50));
                                     parms.Add(new Parameter("@Version", (string.IsNullOrEmpty(note.Version.ToString()) ? string.Empty : note.Version.ToString()), SqlDbType.Float, ParameterDirection.Input, 32));
 
-                                    SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_RPT_SavePatientNoteProgram", parms);
+                                    SQLDataService.Instance.ExecuteScalar(_contract, true, "REPORT", "spPhy_RPT_SavePatientNoteProgram", parms);
                                 }
                             }
                         }
@@ -2083,7 +2085,7 @@ namespace Phytel.Data.ETL
                 //                else
                 //                    parms.Add(new Parameter("@ExtraElements", string.Empty, SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
 
-                //                SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_RPT_SavePatientObservation", parms);
+                //                SQLDataService.Instance.ExecuteScalar(_contract, true, "REPORT", "spPhy_RPT_SavePatientObservation", parms);
                 //            }
                 //        }
                 //        catch (Exception ex)
@@ -2144,7 +2146,7 @@ namespace Phytel.Data.ETL
                                 new Parameter("@ExtraElements",td.ExtraElements != null ? td.ExtraElements.ToString() : (object) DBNull.Value, SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue)
                             };
 
-                            SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_RPT_SaveToDo", parms);
+                            SQLDataService.Instance.ExecuteScalar(_contract, true, "REPORT", "spPhy_RPT_SaveToDo", parms);
 
 
                             if (td.ProgramIds != null && td.ProgramIds.Count > 0)
@@ -2176,7 +2178,7 @@ namespace Phytel.Data.ETL
                         new Parameter("@MongoProgramId", pid.ToString() ,SqlDbType.VarChar, ParameterDirection.Input, 50)
                     };
 
-                    SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_RPT_SaveToDoProgram", parms);
+                    SQLDataService.Instance.ExecuteScalar(_contract, true, "REPORT", "spPhy_RPT_SaveToDoProgram", parms);
                 });
             }
             catch (Exception ex)
@@ -2350,7 +2352,7 @@ namespace Phytel.Data.ETL
                 //                parms.Add(new Parameter("@TTLDate", prog.TTLDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
 
 
-                //                var patientProgramId = SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT",
+                //                var patientProgramId = SQLDataService.Instance.ExecuteScalar(_contract, true, "REPORT",
                 //                    "spPhy_RPT_SavePatientProgramAttribute", parms);
 
                 //                //OnEtlEvent(new ETLEventArgs { Message = "Program attribute:" + prog.PlanElementId.ToString() + "Loaded." });
@@ -2532,7 +2534,7 @@ namespace Phytel.Data.ETL
 
                 //            #region -- archived 
                 //            // original call
-                //            //patientProgramId = SQLDataService.Instance.ExecuteScalar("InHealth001", true,
+                //            //patientProgramId = SQLDataService.Instance.ExecuteScalar(_contract, true,
                 //            //    "REPORT",
                 //            //    "spPhy_RPT_SavePatientProgram", parms);
 
@@ -2733,7 +2735,7 @@ namespace Phytel.Data.ETL
                 //            //
                 //            //parms.Add(new Parameter("@BackGround", (string.IsNullOrEmpty(prog.Background) ? string.Empty : prog.Background), SqlDbType.VarChar, ParameterDirection.Input, 50));
 
-                //            var patientProgramModuleId = SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_RPT_SavePatientProgramModule", parms);
+                //            var patientProgramModuleId = SQLDataService.Instance.ExecuteScalar(_contract, true, "REPORT", "spPhy_RPT_SavePatientProgramModule", parms);
 
                 //            if (patientProgramModuleId != null && mod.Spawn != null && mod.Spawn.Count > 0)
                 //            {
@@ -2901,7 +2903,7 @@ namespace Phytel.Data.ETL
                     //        parms.Add(new Parameter("@TTLDate", prog.TTLDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
                     //        parms.Add(new Parameter("@Delete", prog.DeleteFlag.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
 
-                    //        var patientProgramActionId = SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_RPT_SavePatientProgramModuleAction", parms);
+                    //        var patientProgramActionId = SQLDataService.Instance.ExecuteScalar(_contract, true, "REPORT", "spPhy_RPT_SavePatientProgramModuleAction", parms);
 
                     //        if (patientProgramActionId != null && act.Spawn != null && act.Spawn.Count > 0)
                     //        {
@@ -3066,7 +3068,7 @@ namespace Phytel.Data.ETL
                 //        parms.Add(new Parameter("@TTLDate", prog.TTLDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
                 //        parms.Add(new Parameter("@Delete", prog.DeleteFlag.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
 
-                //        var StepId = SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_RPT_SavePatientProgramModuleActionStep", parms);
+                //        var StepId = SQLDataService.Instance.ExecuteScalar(_contract, true, "REPORT", "spPhy_RPT_SavePatientProgramModuleActionStep", parms);
 
                 //        if (StepId != null && step.Spawn != null && step.Spawn.Count > 0)
                 //        {
@@ -3232,7 +3234,7 @@ namespace Phytel.Data.ETL
                     parms.Add(new Parameter("@Tag", entry.SpawnElem.Tag ?? string.Empty, SqlDbType.VarChar, ParameterDirection.Input, 50));
                     parms.Add(new Parameter("@Type", (int)entry.SpawnElem.Type, SqlDbType.Int, ParameterDirection.Input, 50));
 
-                    SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveSpawnElement", parms);
+                    SQLDataService.Instance.ExecuteProcedure(_contract, true, "REPORT", "spPhy_RPT_SaveSpawnElement", parms);
                     //OnEtlEvent(new ETLEventArgs { Message = "Spawn Element : "+ entry.SqlId + " saved.", IsError = false });
                 }
                 catch (Exception ex)
@@ -3253,7 +3255,7 @@ namespace Phytel.Data.ETL
         //            parms.Add(new Parameter("@Tag", spawn.Tag == null ? string.Empty : spawn.Tag.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
         //            parms.Add(new Parameter("@Type", (int)spawn.Type, SqlDbType.Int, ParameterDirection.Input, 50));
 
-        //            SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveSpawnElement", parms);
+        //            SQLDataService.Instance.ExecuteProcedure(_contract, true, "REPORT", "spPhy_RPT_SaveSpawnElement", parms);
         //        }
         //        catch (Exception ex)
         //        {
@@ -3296,7 +3298,7 @@ namespace Phytel.Data.ETL
                             else
                                 parms.Add(new Parameter("@ExtraElements", string.Empty, SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
 
-                            SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_RPT_SavePatientSystem", parms);
+                            SQLDataService.Instance.ExecuteScalar(_contract, true, "REPORT", "spPhy_RPT_SavePatientSystem", parms);
                         }
                         catch (Exception ex)
                         {
@@ -3353,7 +3355,7 @@ namespace Phytel.Data.ETL
                             parms.Add(new Parameter("@ClosedDate", task.ClosedDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
                             parms.Add(new Parameter("@TemplateId", (string.IsNullOrEmpty(task.TemplateId.ToString()) ? string.Empty : task.TemplateId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
 
-                            SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_RPT_SavePatientTask", parms);
+                            SQLDataService.Instance.ExecuteScalar(_contract, true, "REPORT", "spPhy_RPT_SavePatientTask", parms);
 
                             if (task.Attributes != null)
                             {
@@ -3368,7 +3370,7 @@ namespace Phytel.Data.ETL
                                     parms.Add(new Parameter("@RecordCreatedOn", task.RecordCreatedOn, SqlDbType.DateTime, ParameterDirection.Input, 50));
                                     parms.Add(new Parameter("@Version", task.Version, SqlDbType.Float, ParameterDirection.Input, 50));
 
-                                    SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_RPT_SavePatientTaskAttribute", parms);
+                                    SQLDataService.Instance.ExecuteScalar(_contract, true, "REPORT", "spPhy_RPT_SavePatientTaskAttribute", parms);
 
                                     if (att.Values != null)
                                     {
@@ -3384,7 +3386,7 @@ namespace Phytel.Data.ETL
                                             parms.Add(new Parameter("@RecordCreatedOn", task.RecordCreatedOn, SqlDbType.DateTime, ParameterDirection.Input, 50));
                                             parms.Add(new Parameter("@Version", task.Version, SqlDbType.Float, ParameterDirection.Input, 50));
 
-                                            SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_RPT_SavePatientTaskAttributeValue", parms);
+                                            SQLDataService.Instance.ExecuteScalar(_contract, true, "REPORT", "spPhy_RPT_SavePatientTaskAttributeValue", parms);
                                         }
                                     }
                                 }
@@ -3403,7 +3405,7 @@ namespace Phytel.Data.ETL
                                     parms.Add(new Parameter("@RecordCreatedOn", task.RecordCreatedOn, SqlDbType.DateTime, ParameterDirection.Input, 50));
                                     parms.Add(new Parameter("@Version", task.Version, SqlDbType.Float, ParameterDirection.Input, 50));                            
 
-                                    SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_RPT_SavePatientTaskBarrier", parms);
+                                    SQLDataService.Instance.ExecuteScalar(_contract, true, "REPORT", "spPhy_RPT_SavePatientTaskBarrier", parms);
                                 }
                             }
                         }
@@ -3450,7 +3452,7 @@ namespace Phytel.Data.ETL
                         parms.Add(new Parameter("@TTLDate", a.TTLDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
                         parms.Add(new Parameter("@Delete", (string.IsNullOrEmpty(a.DeleteFlag.ToString()) ? string.Empty : a.DeleteFlag.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
 
-                        SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_RPT_SaveAllergy", parms);
+                        SQLDataService.Instance.ExecuteScalar(_contract, true, "REPORT", "spPhy_RPT_SaveAllergy", parms);
 
                         if (a.TypeIds != null)
                         {
@@ -3466,7 +3468,7 @@ namespace Phytel.Data.ETL
                                 parms.Add(new Parameter("@RecordCreatedOn", a.RecordCreatedOn, SqlDbType.DateTime, ParameterDirection.Input, 50));
                                 parms.Add(new Parameter("@Version", a.Version, SqlDbType.Float, ParameterDirection.Input, 50));
 
-                                SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_RPT_SaveAllergyType", parms);
+                                SQLDataService.Instance.ExecuteScalar(_contract, true, "REPORT", "spPhy_RPT_SaveAllergyType", parms);
                             }
                         }
                     }
@@ -3519,7 +3521,7 @@ namespace Phytel.Data.ETL
                         parms.Add(new Parameter("@TTLDate", pa.TTLDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
                         parms.Add(new Parameter("@Delete", (string.IsNullOrEmpty(pa.DeleteFlag.ToString()) ? string.Empty : pa.DeleteFlag.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
 
-                        SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_RPT_SavePatientAllergy", parms);
+                        SQLDataService.Instance.ExecuteScalar(_contract, true, "REPORT", "spPhy_RPT_SavePatientAllergy", parms);
 
                         if (pa.ReactionIds != null)
                         {
@@ -3534,7 +3536,7 @@ namespace Phytel.Data.ETL
                                 parms.Add(new Parameter("@RecordCreatedOn", pa.RecordCreatedOn, SqlDbType.DateTime, ParameterDirection.Input, 50));
                                 parms.Add(new Parameter("@Version", pa.Version, SqlDbType.Float, ParameterDirection.Input, 50));
 
-                                SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_RPT_SavePatientAllergyReaction", parms);
+                                SQLDataService.Instance.ExecuteScalar(_contract, true, "REPORT", "spPhy_RPT_SavePatientAllergyReaction", parms);
                             }
                         }
                     }
@@ -3599,7 +3601,7 @@ namespace Phytel.Data.ETL
                         parms.Add(new Parameter("@TTLDate", pm.TTLDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
                         parms.Add(new Parameter("@Delete", (string.IsNullOrEmpty(pm.DeleteFlag.ToString()) ? string.Empty : pm.DeleteFlag.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
 
-                        SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_RPT_SavePatientMedSupp", parms);
+                        SQLDataService.Instance.ExecuteScalar(_contract, true, "REPORT", "spPhy_RPT_SavePatientMedSupp", parms);
 
                         if (pm.NDCs != null)
                         {
@@ -3610,7 +3612,7 @@ namespace Phytel.Data.ETL
                                 parms.Add(new Parameter("@NDC", (string.IsNullOrEmpty(rec) ? string.Empty : rec), SqlDbType.VarChar, ParameterDirection.Input, 200));
 
 
-                                SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_RPT_PatientMedSuppNDC", parms);
+                                SQLDataService.Instance.ExecuteScalar(_contract, true, "REPORT", "spPhy_RPT_PatientMedSuppNDC", parms);
                             }
                         }
 
@@ -3623,7 +3625,7 @@ namespace Phytel.Data.ETL
                                 parms.Add(new Parameter("@PharmClass", (string.IsNullOrEmpty(rec) ? string.Empty : rec), SqlDbType.VarChar, ParameterDirection.Input, 2000));
 
 
-                                SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_RPT_PatientMedSuppPhClass", parms);
+                                SQLDataService.Instance.ExecuteScalar(_contract, true, "REPORT", "spPhy_RPT_PatientMedSuppPhClass", parms);
                             }
                         }
                     }
@@ -3673,7 +3675,7 @@ namespace Phytel.Data.ETL
                             else
                                 parms.Add(new Parameter("@ExtraElements", string.Empty, SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
 
-                            SQLDataService.Instance.ExecuteScalar("InHealth001", true, "REPORT", "spPhy_RPT_SavePatientUser", parms);
+                            SQLDataService.Instance.ExecuteScalar(_contract, true, "REPORT", "spPhy_RPT_SavePatientUser", parms);
                         }
                         catch (Exception ex)
                         {
@@ -3722,7 +3724,7 @@ namespace Phytel.Data.ETL
                                 parms.Add(new Parameter("@Delete", (string.IsNullOrEmpty(contact.DeleteFlag.ToString()) ? string.Empty : contact.DeleteFlag.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
                                 parms.Add(new Parameter("@TTLDate", contact.TTLDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
 
-                                SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveUser", parms);
+                                SQLDataService.Instance.ExecuteProcedure(_contract, true, "REPORT", "spPhy_RPT_SaveUser", parms);
 
                                 if (contact.RecentList != null)
                                 {
@@ -3737,7 +3739,7 @@ namespace Phytel.Data.ETL
                                         parms.Add(new Parameter("@RecordCreatedBy", (string.IsNullOrEmpty(contact.RecordCreatedBy.ToString()) ? string.Empty : contact.RecordCreatedBy.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
                                         parms.Add(new Parameter("@RecordCreatedOn", contact.RecordCreatedOn, SqlDbType.DateTime, ParameterDirection.Input, 50));
 
-                                        SQLDataService.Instance.ExecuteProcedure("InHealth001", true, "REPORT", "spPhy_RPT_SaveUserRecentList", parms);
+                                        SQLDataService.Instance.ExecuteProcedure(_contract, true, "REPORT", "spPhy_RPT_SaveUserRecentList", parms);
                                     }
                                 }
 
