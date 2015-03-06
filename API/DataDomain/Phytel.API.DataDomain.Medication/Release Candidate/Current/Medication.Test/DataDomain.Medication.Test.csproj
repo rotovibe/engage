@@ -109,7 +109,6 @@
     <Compile Include="MedicationRepositoryFactoryTests.cs" />
     <Compile Include="MedicationTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Search\Search_Index_Initialization_Test.cs" />
     <Compile Include="Stubs\StubMedicationMapping_Test.cs" />
     <Compile Include="Stubs\StubMedication_Test.cs" />
     <Compile Include="Stubs\StubPatientMedSupp_Test.cs" />
@@ -143,7 +142,9 @@
       <Name>DataDomain.Medication</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Search\" />
+  </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

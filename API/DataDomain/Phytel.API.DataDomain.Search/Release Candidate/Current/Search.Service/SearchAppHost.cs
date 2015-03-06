@@ -24,8 +24,9 @@ namespace Phytel.API.DataDomain.Search.Service
             
             RequestFilters.Add((req, res, requestDto) =>
             {
-                HostContext.Instance.Items.Add("Contract", ((IDataDomainRequest)requestDto).ContractNumber);
+                HostContext.Instance.Items.Add("Contract", ((IDataDomainRequest)requestDto).ContractNumber.ToLower());
             });
+
         }
     }
 }

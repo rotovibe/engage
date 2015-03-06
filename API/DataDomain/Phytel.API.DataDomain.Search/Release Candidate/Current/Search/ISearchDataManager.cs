@@ -5,7 +5,9 @@ namespace Phytel.API.DataDomain.Search
 {
     public interface ISearchDataManager
     {
-        List<TextValuePair> GetTermSearchResults(GetSearchRequest request);
+        List<object> GetTermSearchResults(GetSearchRequest request, SearchEnum type);
+        bool InsertMedDocInIndex(PutMedRegistrationRequest request);
+        bool InsertAllergyDocInIndex(PutAllergyRegistrationRequest request);
         List<DTO.Search> GetSearchList(GetAllSearchsRequest request);
     }
 }

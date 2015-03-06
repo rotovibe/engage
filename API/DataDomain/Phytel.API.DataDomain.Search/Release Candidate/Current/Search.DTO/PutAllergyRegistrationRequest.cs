@@ -1,19 +1,17 @@
+using Phytel.API.Common.CustomObject;
 using Phytel.API.Interface;
 using ServiceStack.ServiceHost;
 
 namespace Phytel.API.DataDomain.Search.DTO
 {
-    [Route("/{Context}/{Version}/{ContractNumber}/Search/{Type}/", "GET")]
-    public class GetSearchRequest : IDataDomainRequest
+    [Route("/{Context}/{Version}/{ContractNumber}/Search/AllergyIndex/Insert", "PUT")]
+    public class PutAllergyRegistrationRequest : IDataDomainRequest
     {
         [ApiMember(Name = "UserId", Description = "UserId of the logged in user", ParameterType = "property", DataType = "string", IsRequired = false)]
         public string UserId { get; set; }
 
-        [ApiMember(Name = "Type", Description = "Type to search for: Med or Allergy", ParameterType = "property", DataType = "string", IsRequired = true)]
-        public string Type { get; set; }
-
-        [ApiMember(Name = "Term", Description = "Term to search for", ParameterType = "property", DataType = "string", IsRequired = true)]
-        public string Term { get; set; }
+        [ApiMember(Name = "IdNamePair", Description = "New Allergy document to register in the search index.", ParameterType = "property", DataType = "string", IsRequired = true)]
+        public IdNamePair AllergyDocument { get; set; }
 
         [ApiMember(Name = "Context", Description = "Product Context requesting the Search", ParameterType = "property", DataType = "string", IsRequired = false)]
         public string Context { get; set; }

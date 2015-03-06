@@ -1,6 +1,5 @@
 using AutoMapper;
 using DataDomain.Search.Repo.LuceneStrategy;
-using DataDomain.Search.Repo.Search;
 using Lucene.Net.Documents;
 using Phytel.API.Common.CustomObject;
 using Phytel.API.DataDomain.Search.DTO;
@@ -42,7 +41,7 @@ namespace DataDomain.Search.Repo.Containers
                                 .ForMember(d => d.Value, opt => opt.MapFrom(src => src.Get("CompositeName").Trim()))
                                 .ForMember(d => d.Text, opt => opt.MapFrom(src => src.Get("CompositeName").Trim()));
 
-            Mapper.CreateMap<Document, MedNameSearchDoc>()
+            Mapper.CreateMap<Document, MedNameSearchDocData>()
                 .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Get("MongoId")))
                 .ForMember(d => d.ProductId, opt => opt.MapFrom(src => src.Get("PackageId")))
                 .ForMember(d => d.DosageFormname, opt => opt.MapFrom(src => src.Get("DosageFormName")))
@@ -53,12 +52,13 @@ namespace DataDomain.Search.Repo.Containers
                 .ForMember(d => d.Strength, opt => opt.MapFrom(src => src.Get("Strength")))
                 .ForMember(d => d.Unit, opt => opt.MapFrom(src => src.Get("Unit")));
 
-            Mapper.CreateMap<DTO.Medication, MedNameSearchDoc>()
+            Mapper.CreateMap<DTO.Medication, MedNameSearchDocData>()
                 .ForMember(d => d.ProductNDC, opt => opt.MapFrom(src => src.NDC))
                 .ForMember(d => d.CompositeName, opt => opt.MapFrom(src => src.ProprietaryName + " " + src.ProprietaryNameSuffix));
 
             // search index initialization
-            container.RegisterAutoWiredAs<MedNameLuceneStrategy<MedNameSearchDoc, TextValuePair>, IMedNameLuceneStrategy<MedNameSearchDoc, TextValuePair>>().ReusedWithin(Funq.ReuseScope.Container);
+            container.RegisterAutoWiredAs<MedNameLuceneStrategy<MedNameSearchDocData, TextValuePair>, IMedNameLuceneStrategy<MedNameSearchDocData, TextValuePair>>().ReusedWithin(Funq.ReuseScope.Container);
+            container.RegisterAutoWiredAs<AllergyLuceneStrategy<IdNamePair, IdNamePair>, IAllergyLuceneStrategy<IdNamePair, IdNamePair>>().ReusedWithin(Funq.ReuseScope.Container);
             return container;
         }
     }

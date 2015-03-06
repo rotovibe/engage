@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
-using DataDomain.Search.Repo.Search;
 using Lucene.Net.Analysis.Standard;
 using Lucene.Net.Documents;
 using Lucene.Net.Index;
@@ -14,7 +13,7 @@ using Version = Lucene.Net.Util.Version;
 
 namespace DataDomain.Search.Repo.LuceneStrategy
 {
-    public class MedNameLuceneStrategy<T, TT> : BaseLuceneStrategy<T, TT>, IMedNameLuceneStrategy<T, TT> where T : MedNameSearchDoc where TT : TextValuePair
+    public class MedNameLuceneStrategy<T, TT> : BaseLuceneStrategy<T, TT>, IMedNameLuceneStrategy<T, TT> where T : MedNameSearchDocData where TT : TextValuePair
     {
         protected readonly string SearchIndexPath = ConfigurationManager.AppSettings["SearchIndexPath"];
         private readonly string indexPath = ConfigurationManager.AppSettings["SearchIndexPath"] + "\\";

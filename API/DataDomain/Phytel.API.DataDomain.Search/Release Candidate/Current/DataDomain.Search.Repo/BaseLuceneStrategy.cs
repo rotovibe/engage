@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Contrib.Regex;
-using DataDomain.Search.Repo.Search;
 using Lucene.Net.Analysis.Standard;
 using Lucene.Net.Documents;
 using Lucene.Net.Index;
@@ -12,6 +11,7 @@ using Lucene.Net.QueryParsers;
 using Lucene.Net.Search;
 using Lucene.Net.Search.Spans;
 using Lucene.Net.Store;
+using Phytel.API.DataDomain.Search.DTO;
 
 namespace DataDomain.Search.Repo.LuceneStrategy
 {
@@ -112,14 +112,14 @@ namespace DataDomain.Search.Repo.LuceneStrategy
             return hits.Select(hit => MapLuceneDocumentToData(searcher.Doc(hit.Doc))).ToList();
         }
 
-        public List<MedNameSearchDoc> MapLuceneToDeepDataList(IEnumerable<ScoreDoc> hits, IndexSearcher searcher)
+        public List<MedNameSearchDocData> MapLuceneToDeepDataList(IEnumerable<ScoreDoc> hits, IndexSearcher searcher)
         {
             return hits.Select(hit => MapDeepLuceneDocumentToData(searcher.Doc(hit.Doc))).ToList();
         }
 
-        public MedNameSearchDoc MapDeepLuceneDocumentToData(Document doc)
+        public MedNameSearchDocData MapDeepLuceneDocumentToData(Document doc)
         {
-            return AutoMapper.Mapper.Map<MedNameSearchDoc>(doc);
+            return AutoMapper.Mapper.Map<MedNameSearchDocData>(doc);
         }
 
         public TT MapLuceneDocumentToData(Document doc)
