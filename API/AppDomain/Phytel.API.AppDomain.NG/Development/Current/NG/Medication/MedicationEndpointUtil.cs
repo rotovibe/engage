@@ -347,7 +347,7 @@ namespace Phytel.API.AppDomain.NG.Medication
                         Name = request.PatientMedFrequency.Name,
                         PatientId = request.PatientMedFrequency.PatientId
                     };
-                    PostPatientMedFrequencyDataResponse dataDomainResponse = client.Put<PostPatientMedFrequencyDataResponse>(url, new PostPatientMedFrequencyDataRequest
+                    PostPatientMedFrequencyDataResponse dataDomainResponse = client.Post<PostPatientMedFrequencyDataResponse>(url, new PostPatientMedFrequencyDataRequest
                     {
                         Context = "NG",
                         ContractNumber = request.ContractNumber,
