@@ -200,7 +200,7 @@ namespace Phytel.API.AppDomain.NG.Medication
                 {
                     patientMedFreqs = new List<PatientMedFrequency>();
                     data.ForEach(a =>
-                        patientMedFreqs.Add(new PatientMedFrequency { Id = a.Id, Name = a.PatientId } ));
+                        patientMedFreqs.Add(new PatientMedFrequency { Id = a.Id, Name = a.Name } ));
                 }
                 return patientMedFreqs;
             }
