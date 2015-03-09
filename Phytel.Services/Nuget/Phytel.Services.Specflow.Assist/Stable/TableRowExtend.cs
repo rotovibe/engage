@@ -77,6 +77,38 @@ namespace Phytel.Services.Specflow.Assist
             return row.GetAsString(memberExpression.Member.Name);
         }
 
+        public static int GetAsInt(this TableRow row, string propertyName)
+        {
+            int rvalue = default(int);
+            string rvalueAsString = row.GetAsString(propertyName);
+            int.TryParse(rvalueAsString, out rvalue);
+            return rvalue;
+        }
+
+        public static int GetAsInt<T>(this TableRow row, Expression<Func<T, object>> propertySelector)
+        {
+            var memberExpression = propertySelector.GetMemberInfo();
+            return row.GetAsInt(memberExpression.Member.Name);
+        }
+
+        public static int? GetAsIntNullable(this TableRow row, string propertyName)
+        {
+            int? rvalue = null;
+            string rvalueAsString = row.GetAsString(propertyName);
+            int rvalueAsInt = default(int);
+            if (int.TryParse(rvalueAsString, out rvalueAsInt))
+            {
+                rvalue = rvalueAsInt;
+            }
+            return rvalue;
+        }
+
+        public static int? GetAsIntNullable<T>(this TableRow row, Expression<Func<T, object>> propertySelector)
+        {
+            var memberExpression = propertySelector.GetMemberInfo();
+            return row.GetAsIntNullable(memberExpression.Member.Name);
+        }
+
         public static bool HasValueForProperty(this TableRow row, string propertyName)
         {
             return row.Keys.Contains(propertyName) && !string.IsNullOrEmpty(row[propertyName]);
