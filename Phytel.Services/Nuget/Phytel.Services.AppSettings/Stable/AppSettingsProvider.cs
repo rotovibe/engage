@@ -64,5 +64,22 @@ namespace Phytel.Services.AppSettings
 
             return rvalue;
         }
+
+        public virtual bool GetAsBoolean(string key, bool defaultValue = false)
+        {
+            bool rvalue = defaultValue;
+
+            string rvalueAsString = Get(key, defaultValue.ToString());
+            if(!string.IsNullOrEmpty(rvalueAsString))
+            {
+                bool isBool = bool.TryParse(rvalueAsString, out rvalue);
+                if(!isBool)
+                {
+                    rvalue = defaultValue;
+                }
+            }
+
+            return rvalue;
+        }
     }
 }

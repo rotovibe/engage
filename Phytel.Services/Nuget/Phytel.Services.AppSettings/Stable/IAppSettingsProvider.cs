@@ -11,5 +11,7 @@
         int GetAsInt(string key);
 
         int GetAsInt(string key, int defaultValue);
+
+        bool GetAsBoolean(string key, bool defaultValue = false);
     }
 }

@@ -42,3 +42,23 @@ Scenario: Returns provided default value when setting not defined and default va
 	Given setting "timeout" is not defined
 	When I provide default value "50" and get the setting "timeout"
 	Then the result should be "50"
+
+Scenario: Returns defined setting value when setting defined and getting as bool
+	Given setting "enabled" is defined as "true"
+	When I get the setting "enabled" as bool
+	Then the bool result should be true
+
+Scenario: Returns false when setting not defined and gettting as bool
+	Given setting "enabled" is not defined
+	When I get the setting "enabled" as bool
+	Then the bool result should be false
+
+Scenario: Returns false when setting not defined as bool and gettting as bool
+	Given setting "enabled" is defined as "foo"
+	When I get the setting "enabled" as bool
+	Then the bool result should be false
+
+Scenario: Returns provided default value when setting not defined as bool and default value provided and gettting as bool
+	Given setting "enabled" is defined as "foo"
+	When I provide default value "true" and get the setting "enabled" as bool
+	Then the bool result should be true
