@@ -21,8 +21,8 @@ namespace Phytel.Services.AppSettings.Contract
             IAppSettingsProvider rvalue = null;
 
             IContractClient contractClient = container.Resolve<IContractClient>();
-            string contractNumber = container.ResolveNamed<string>(Phytel.Services.API.Container.Constants.NamedStringContractNumber);
-            string context = container.ResolveNamed<string>(Phytel.Services.API.Container.Constants.NamedStringContext);
+            string contractNumber = container.TryResolveNamed<string>(Phytel.Services.API.Container.Constants.NamedStringContractNumber);
+            string context = container.TryResolveNamed<string>(Phytel.Services.API.Container.Constants.NamedStringContext);
 
             if (string.IsNullOrEmpty(context))
             {
