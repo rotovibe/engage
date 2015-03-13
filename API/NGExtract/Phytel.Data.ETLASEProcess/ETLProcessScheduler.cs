@@ -11,11 +11,11 @@ namespace Phytel.Data.ETLASEProcess
 {
     public class ETLProcessScheduler : Phytel.ASE.Core.QueueProcessBase
     {
-        public override void Execute(API.DataDomain.ASE.DTO.Message.QueueMessage queueMessage)
+        public override void Execute(QueueMessage queueMessage)
         {
 //<Phytel.ASE.Process>
 //<ProcessConfiguration>
-            //<Contracts publishkey="etlcontractready">
+//<Contracts publishkey="etlcontractready">
 //<Contract>InHealth001</Contract>
 //    <Contract>OrlandHealth001</Contract>
 //</Contracts>

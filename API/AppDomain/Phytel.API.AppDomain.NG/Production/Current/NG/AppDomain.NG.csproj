@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -212,15 +212,6 @@
     <Compile Include="Search\ISearchEndpointUtil.cs" />
     <Compile Include="Search\ISearchManager.cs" />
     <Compile Include="Search\ISearchUtil.cs" />
-    <Compile Include="Search\LuceneStrategy\IMedFieldsLuceneStrategy.cs" />
-    <Compile Include="Search\LuceneStrategy\IMedNameLuceneStrategy.cs" />
-    <Compile Include="Search\LuceneStrategy\LuceneIndexWriter.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Search\LuceneStrategy\MedFieldsLuceneStrategy.cs" />
-    <Compile Include="Search\LuceneStrategy\MedNameLuceneStrategy.cs" />
-    <Compile Include="Search\LuceneStrategy\AllergyLuceneStrategy.cs" />
-    <Compile Include="Search\LuceneStrategy\BaseLuceneStrategy.cs" />
     <Compile Include="Search\SearchEndpointUtil.cs" />
     <Compile Include="Search\SearchManager.cs" />
     <Compile Include="Search\SearchUtil.cs" />

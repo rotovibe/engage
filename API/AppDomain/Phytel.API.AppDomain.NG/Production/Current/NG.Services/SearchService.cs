@@ -33,7 +33,7 @@ namespace Phytel.API.AppDomain.NG.Service
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
-                     var res = SearchManager.GetSearchDomainResults(request);
+                     var res = SearchManager.GetSearchAllergyResults(request);
                      var count = res.Count;
                      if (request.Take > 0 && res.Count > request.Take)
                      {

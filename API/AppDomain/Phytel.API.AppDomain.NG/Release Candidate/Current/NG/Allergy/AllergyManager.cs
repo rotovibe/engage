@@ -1,21 +1,10 @@
-﻿using AutoMapper;
-using Lucene.Net.Analysis;
-using Lucene.Net.Analysis.Standard;
-using Lucene.Net.Index;
-using Lucene.Net.Store;
+﻿using System;
+using System.Collections.Generic;
+using AutoMapper;
 using Phytel.API.AppDomain.NG.DTO;
-using Phytel.API.AppDomain.NG.DTO;
-using Phytel.API.AppDomain.NG.DTO.Search;
-using Phytel.API.AppDomain.NG.Search;
-using Phytel.API.AppDomain.NG.Search.LuceneStrategy;
 using Phytel.API.Common.CustomObject;
 using Phytel.API.DataDomain.Allergy.DTO;
-using ServiceStack.Service;
 using ServiceStack.ServiceClient.Web;
-using System;
-using System.Collections.Generic;
-using System.Configuration;
-using Phytel.API.Common;
 
 namespace Phytel.API.AppDomain.NG.Allergy
 {
@@ -64,7 +53,7 @@ namespace Phytel.API.AppDomain.NG.Allergy
             {
                 var searchDocs = new List<IdNamePair>();
                 result.ForEach(a => searchDocs.Add(Mapper.Map<IdNamePair>(a)));
-                new AllergyLuceneStrategy<IdNamePair,IdNamePair>().AddUpdateLuceneIndex(searchDocs);
+                //new AllergyLuceneStrategy<IdNamePair,IdNamePair>().AddUpdateLuceneIndex(searchDocs);
             }
             catch (Exception ex)
             {
@@ -119,7 +108,7 @@ namespace Phytel.API.AppDomain.NG.Allergy
                     { 
                         if(p.IsNewAllergy)
                         {
-                            PostAllergyRequest req = new DTO.PostAllergyRequest
+                            PostAllergyRequest req = new PostAllergyRequest
                             {
                                 Allergy = new DTO.Allergy { Id = p.AllergyId, TypeIds = p.AllergyTypeIds, Name = p.AllergyName },
                                 ContractNumber = request.ContractNumber,
@@ -129,7 +118,7 @@ namespace Phytel.API.AppDomain.NG.Allergy
                             AllergyData allergyData = EndpointUtil.UpdateAllergy(req);
                             DTO.Allergy newAllergy = Mapper.Map<DTO.Allergy>(allergyData);
                             // Register newly initialized allergies in search index.
-                            SearchManager.RegisterAllergyDocumentInSearchIndex(newAllergy, req.ContractNumber);
+                            SearchManager.RegisterAllergyDocumentInSearchIndex(newAllergy, req.ContractNumber, request);
                         }
                     });
                 }

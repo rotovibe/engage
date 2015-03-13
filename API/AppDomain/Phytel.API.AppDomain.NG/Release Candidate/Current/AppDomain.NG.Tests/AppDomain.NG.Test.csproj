@@ -173,7 +173,6 @@
     <Compile Include="Programs\ElementActivation\ToDoActivationRuleTests.cs" />
     <Compile Include="Programs\EndpointUtils_Tests.cs" />
     <Compile Include="Programs\PlanElemStrategy\PlanElementActivationStrategyTests.cs" />
-    <Compile Include="Programs\PlanElemStrategy\ProblemActivationRuleTests.cs" />
     <Compile Include="Programs\PlanElemStrategy\SetModulePropertiesForRepeat_Test.cs" />
     <Compile Include="Programs\PlanManagerTests.cs" />
     <Compile Include="Programs\PlanManager_Test.cs" />

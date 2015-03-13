@@ -1,27 +1,9 @@
 using System;
 using System.Web;
-using AutoMapper;
-using Lucene.Net.Documents;
-using Phytel.API.AppDomain.NG.Allergy;
-using Phytel.API.AppDomain.NG.DTO;
-using Phytel.API.AppDomain.NG.DTO.Goal;
-using Phytel.API.AppDomain.NG.DTO.Search;
-using Phytel.API.AppDomain.NG.Medication;
-using Phytel.API.AppDomain.NG.Observation;
-using Phytel.API.AppDomain.NG.PlanCOR;
-using Phytel.API.AppDomain.NG.Programs;
-using Phytel.API.AppDomain.NG.Programs.ElementActivation;
-using Phytel.API.AppDomain.NG.Search;
-using Phytel.API.AppDomain.NG.Search.LuceneStrategy;
+using System.Web.Configuration;
+using Funq;
 using Phytel.API.AppDomain.NG.Service.Containers;
 using Phytel.API.AppDomain.NG.Service.Mappers;
-using Phytel.API.Common.Audit;
-using Phytel.API.Common.CustomObject;
-using Phytel.API.Common.Format;
-using Phytel.API.DataAudit;
-using Phytel.API.DataDomain.Allergy.DTO;
-using Phytel.API.DataDomain.PatientGoal.DTO;
-using Phytel.API.DataDomain.Medication.DTO;
 using Phytel.API.Interface;
 using ServiceStack;
 using ServiceStack.Common;
@@ -36,20 +18,18 @@ using ServiceStack.WebHost.Endpoints.Support;
 
 namespace Phytel.API.AppDomain.NG.Service
 {
-    public class Global : System.Web.HttpApplication
+    public class Global : HttpApplication
     {
-        private static readonly bool Profile = Convert.ToBoolean(System.Web.Configuration.WebConfigurationManager.AppSettings.Get("Profiler"));
+        private static readonly bool Profile = Convert.ToBoolean(WebConfigurationManager.AppSettings.Get("Profiler"));
 
         public class NGAppHost : AppHostBase
         {
-
             //Tell Service Stack the name of your application and where to find your web services
-            public NGAppHost()
-                : base("Phytel NG Services", typeof (NGService).Assembly)
+            public NGAppHost() : base("Phytel NG Services", typeof (NGService).Assembly)
             {
             }
 
-            public override void Configure(Funq.Container container)
+            public override void Configure(Container container)
             {
                 //containers
                 HttpServiceContainer.Build(container);

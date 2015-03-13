@@ -3,11 +3,14 @@ using ServiceStack.ServiceHost;
 
 namespace Phytel.API.DataDomain.Search.DTO
 {
-    [Route("/{Context}/{Version}/{ContractNumber}/Search/{Term}", "GET")]
+    [Route("/{Context}/{Version}/{ContractNumber}/Search/{Type}/", "GET")]
     public class GetSearchRequest : IDataDomainRequest
     {
         [ApiMember(Name = "UserId", Description = "UserId of the logged in user", ParameterType = "property", DataType = "string", IsRequired = false)]
         public string UserId { get; set; }
+
+        [ApiMember(Name = "Type", Description = "Type to search for: Med or Allergy", ParameterType = "property", DataType = "string", IsRequired = true)]
+        public string Type { get; set; }
 
         [ApiMember(Name = "Term", Description = "Term to search for", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string Term { get; set; }

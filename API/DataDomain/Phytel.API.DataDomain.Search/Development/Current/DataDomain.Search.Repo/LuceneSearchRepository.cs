@@ -5,7 +5,6 @@ using MongoDB.Driver.Builders;
 using System;
 using System.Collections.Generic;
 using DataDomain.Search.Repo.LuceneStrategy;
-using DataDomain.Search.Repo.Search;
 using DTO = Phytel.API.DataDomain.Search.DTO;
 using Phytel.API.DataDomain.Search.DTO;
 
@@ -15,7 +14,7 @@ namespace DataDomain.Search.Repo
     {
         public string ContractDBName { get; set; }
         public string UserId { get; set; }
-        public IMedNameLuceneStrategy<MedNameSearchDoc, TextValuePair> MedNameStrategy { get; set; }
+        public IMedNameLuceneStrategy<MedNameSearchDocData, TextValuePair> MedNameStrategy { get; set; }
 
         public object Insert(object newEntity)
         {

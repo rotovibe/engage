@@ -29,27 +29,27 @@ namespace Phytel.API.AppDomain.NG.Service.Mappers
                 .ForMember(d => d.Strength, opt => opt.MapFrom(src => src.Get("Strength")))
                 .ForMember(d => d.Unit, opt => opt.MapFrom(src => src.Get("Unit")));
 
-            Mapper.CreateMap<Document, MedFieldsSearchDoc>()
-                .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Get("MongoId")))
-                .ForMember(d => d.ProductId, opt => opt.MapFrom(src => src.Get("PackageId")))
-                .ForMember(d => d.DosageFormname, opt => opt.MapFrom(src => src.Get("DosageFormname")))
-                .ForMember(d => d.CompositeName, opt => opt.MapFrom(src => src.Get("CompositeName")))
-                .ForMember(d => d.ProprietaryName, opt => opt.MapFrom(src => src.Get("ProprietaryName")))
-                .ForMember(d => d.RouteName, opt => opt.MapFrom(src => src.Get("RouteName")))
-                .ForMember(d => d.SubstanceName, opt => opt.MapFrom(src => src.Get("SubstanceName")))
-                .ForMember(d => d.Strength, opt => opt.MapFrom(src => src.Get("Strength")))
-                .ForMember(d => d.Unit, opt => opt.MapFrom(src => src.Get("Unit")));
+            //Mapper.CreateMap<Document, MedFieldsSearchDoc>()
+            //    .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Get("MongoId")))
+            //    .ForMember(d => d.ProductId, opt => opt.MapFrom(src => src.Get("PackageId")))
+            //    .ForMember(d => d.DosageFormname, opt => opt.MapFrom(src => src.Get("DosageFormname")))
+            //    .ForMember(d => d.CompositeName, opt => opt.MapFrom(src => src.Get("CompositeName")))
+            //    .ForMember(d => d.ProprietaryName, opt => opt.MapFrom(src => src.Get("ProprietaryName")))
+            //    .ForMember(d => d.RouteName, opt => opt.MapFrom(src => src.Get("RouteName")))
+            //    .ForMember(d => d.SubstanceName, opt => opt.MapFrom(src => src.Get("SubstanceName")))
+            //    .ForMember(d => d.Strength, opt => opt.MapFrom(src => src.Get("Strength")))
+            //    .ForMember(d => d.Unit, opt => opt.MapFrom(src => src.Get("Unit")));
 
-            Mapper.CreateMap<DTO.Medication, MedFieldsSearchDoc>()
-                .ForMember(d => d.CompositeName, opt => opt.MapFrom(src => src.ProprietaryName + " " + src.ProprietaryNameSuffix))
-            .ForMember(d => d.DosageFormname, opt => opt.MapFrom(src => src.DosageFormName))
-            .ForMember(d => d.RouteName, opt => opt.MapFrom(src => src.RouteName))
-            .ForMember(d => d.Strength, opt => opt.MapFrom(src => src.Strength))
-            .ForMember(d => d.SubstanceName, opt => opt.MapFrom(src => src.SubstanceName))
-            .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Id))
-            .ForMember(d => d.ProductId, opt => opt.MapFrom(src => src.ProductId))
-            .ForMember(d => d.ProprietaryName, opt => opt.MapFrom(src => src.ProprietaryName))
-            .ForMember(d => d.Unit, opt => opt.MapFrom(src => string.Empty));
+            //Mapper.CreateMap<DTO.Medication, MedFieldsSearchDoc>()
+            //    .ForMember(d => d.CompositeName, opt => opt.MapFrom(src => src.ProprietaryName + " " + src.ProprietaryNameSuffix))
+            //.ForMember(d => d.DosageFormname, opt => opt.MapFrom(src => src.DosageFormName))
+            //.ForMember(d => d.RouteName, opt => opt.MapFrom(src => src.RouteName))
+            //.ForMember(d => d.Strength, opt => opt.MapFrom(src => src.Strength))
+            //.ForMember(d => d.SubstanceName, opt => opt.MapFrom(src => src.SubstanceName))
+            //.ForMember(d => d.Id, opt => opt.MapFrom(src => src.Id))
+            //.ForMember(d => d.ProductId, opt => opt.MapFrom(src => src.ProductId))
+            //.ForMember(d => d.ProprietaryName, opt => opt.MapFrom(src => src.ProprietaryName))
+            //.ForMember(d => d.Unit, opt => opt.MapFrom(src => string.Empty));
 
             Mapper.CreateMap<DTO.Medication, MedNameSearchDoc>()
                 .ForMember(d => d.ProductNDC, opt => opt.MapFrom(src => src.NDC))

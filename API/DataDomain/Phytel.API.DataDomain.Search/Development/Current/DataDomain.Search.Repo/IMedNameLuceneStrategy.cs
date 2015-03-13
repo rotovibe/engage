@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using DataDomain.Search.Repo.Search;
 using Lucene.Net.Analysis.Standard;
 using Lucene.Net.Documents;
 using Lucene.Net.Index;
@@ -9,7 +8,7 @@ using Phytel.API.DataDomain.Search.DTO;
 
 namespace DataDomain.Search.Repo.LuceneStrategy
 {
-    public interface IMedNameLuceneStrategy<T, TT> where T : MedNameSearchDoc where TT : TextValuePair
+    public interface IMedNameLuceneStrategy<T, TT> where T : MedNameSearchDocData where TT : TextValuePair
     {
         //string LuceneDir { get; }
         string Contract { get; set; }

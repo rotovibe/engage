@@ -1,13 +1,16 @@
 ﻿using System;
-using Phytel.API.AppDomain.NG.DTO.Search;
-using Phytel.API.AppDomain.NG.Search;
-using Phytel.API.AppDomain.NG.Search.LuceneStrategy;
-using Phytel.API.Common.CustomObject;
-using ServiceStack.ServiceClient.Web;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using AutoMapper;
 using Phytel.API.AppDomain.NG.DTO;
+using Phytel.API.AppDomain.NG.DTO.Search;
+using Phytel.API.AppDomain.NG.Search;
+using Phytel.API.Common.CustomObject;
+using Phytel.API.DataDomain.Allergy.DTO;
+using Phytel.API.DataDomain.Search.DTO;
+using Phytel.API.Interface;
+using ServiceStack.ServiceClient.Web;
+using TextValuePair = Phytel.API.AppDomain.NG.DTO.Search.TextValuePair;
 
 namespace Phytel.API.AppDomain.NG.Allergy
 {
@@ -15,14 +18,14 @@ namespace Phytel.API.AppDomain.NG.Allergy
     {
         public ISearchUtil SearchUtil { get; set; }
         public ISearchEndpointUtil EndpointUtil { get; set; }
-        public IMedNameLuceneStrategy<MedNameSearchDoc, TextValuePair> MedNameStrategy { get; set; }
 
-        public void RegisterAllergyDocumentInSearchIndex(DTO.Allergy allergy,string contractNumber)
+        public void RegisterAllergyDocumentInSearchIndex(DTO.Allergy allergy,string contractNumber, IAppDomainRequest request)
         {
             try
             {
-                var np =  AutoMapper.Mapper.Map<IdNamePair>(allergy);
-                new AllergyLuceneStrategy<IdNamePair, IdNamePair> { Contract = contractNumber }.AddUpdateLuceneIndex(np);
+                var np =  Mapper.Map<IdNamePair>(allergy);
+                //new AllergyLuceneStrategy<IdNamePair, IdNamePair> { Contract = contractNumber }.AddUpdateLuceneIndex(np);
+                EndpointUtil.RegisterAllergyDocument(request, np);
             }
             catch (Exception ex)
             {
@@ -30,12 +33,12 @@ namespace Phytel.API.AppDomain.NG.Allergy
             }
         }
 
-        public void RegisterMedDocumentInSearchIndex(DTO.Medication med, string contractNumber)
+        public void RegisterMedDocumentInSearchIndex(DTO.Medication med, IAppDomainRequest request)
         {
             try
             {
-                var nfp = AutoMapper.Mapper.Map<MedNameSearchDoc>(med);
-                MedNameStrategy.AddUpdateLuceneIndex(nfp);
+                var nfp = Mapper.Map<MedNameSearchDoc>(med);
+                EndpointUtil.RegisterMedDocument(request, nfp);
             }
             catch (Exception ex)
             {
@@ -48,7 +51,7 @@ namespace Phytel.API.AppDomain.NG.Allergy
         {
             try
             {
-                var matches = MedNameStrategy.Search(request.Term);
+                var matches = EndpointUtil.GetTermSearchResults(request, SearchEnum.Medication, request.Term).Cast<TextValuePair>().ToList();
                 matches.All(x => { x.Text = x.Text.Trim(); return true; });
                 var groupby = matches.GroupBy(a => a.Text).Select(s => s.First()).ToList();
                 var result = groupby;
@@ -56,7 +59,21 @@ namespace Phytel.API.AppDomain.NG.Allergy
             }
             catch (WebServiceException ex)
             {
-                throw new WebServiceException("AD:GetSearchDomainResults()::" + ex.Message, ex.InnerException);
+                throw new WebServiceException("AD:GetSearchAllergyResults()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        public List<IdNamePair> GetSearchAllergyResults(GetSearchResultsRequest request)
+        {
+            try
+            {
+                var result = EndpointUtil.GetTermSearchResults(request, SearchEnum.Allergy, request.SearchTerm).Cast<IdNamePair>().ToList();
+                //var result = new AllergyLuceneStrategy<IdNamePair, IdNamePair> { Contract = request.ContractNumber }.SearchComplex(request.SearchTerm, "Name");
+                return result;
+            }
+            catch (WebServiceException ex)
+            {
+                throw new WebServiceException("AD:GetSearchAllergyResults()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -76,7 +93,7 @@ namespace Phytel.API.AppDomain.NG.Allergy
             }
             catch (WebServiceException ex)
             {
-                throw new WebServiceException("AD:GetSearchDomainResults()::" + ex.Message, ex.InnerException);
+                throw new WebServiceException("AD:GetSearchAllergyResults()::" + ex.Message, ex.InnerException);
             }
         }
 
@@ -173,78 +190,5 @@ namespace Phytel.API.AppDomain.NG.Allergy
         {
             vals.Sort((emp1, emp2) => emp1.Text.CompareTo(emp2.Text));
         }
-
-        //private string FormatStrengthDisplay(string strength, string unit)
-        //{
-        //    try
-        //    {
-        //        if (unit.Length == 0) return strength.Trim();
-
-        //        var val = new StringBuilder();
-
-        //        string[] strengthS = strength.Split(';');
-        //        string[] unitS = unit.Split(';');
-
-        //        for (int i = 0; i < strengthS.Length; i++)
-        //        {
-        //            if (i == strengthS.Length - 1)
-        //            {
-        //                val.Append((strengthS[i] + " " + unitS[i]).Trim());
-        //            }
-        //            else
-        //            {
-        //                val.Append((strengthS[i] + " " + unitS[i] + ";").Trim());
-        //            }
-        //        }
-
-        //        return val.ToString();
-        //    }
-        //    catch (WebServiceException ex)
-        //    {
-        //        throw new WebServiceException("AD:GetStrengthSelections()::" + ex.Message, ex.InnerException);
-        //    }
-        //}
-
-        //public List<TextValuePair> GetUnitSelections(List<MedicationMap> matches)
-        //{
-        //    try
-        //    {
-        //        var vals = new List<TextValuePair>();
-        //        matches.ForEach(
-        //            m =>
-        //            {
-        //                var pair = new TextValuePair
-        //                {
-        //                    Text = m.Unit,
-        //                    Value = m.Unit
-        //                };
-
-        //                var rec = vals.Find(f => f.Text == m.Unit);
-        //                if (rec == null)
-        //                    vals.Add(pair);
-        //            });
-        //        return vals;
-        //    }
-        //    catch (WebServiceException ex)
-        //    {
-        //        throw new WebServiceException("AD:GetStrengthSelections()::" + ex.Message, ex.InnerException);
-        //    }
-        //}
-
-        public List<IdNamePair> GetSearchDomainResults(GetSearchResultsRequest request)
-        {
-            try
-            {
-                // create a switch to determine which lucene strat to use
-                var result = new AllergyLuceneStrategy<IdNamePair, IdNamePair> { Contract = request.ContractNumber }.SearchComplex(request.SearchTerm, "Name");
-                return result;
-            }
-            catch (WebServiceException ex)
-            {
-                throw new WebServiceException("AD:GetSearchDomainResults()::" + ex.Message, ex.InnerException);
-            }
-        }
-
-
     }
 }

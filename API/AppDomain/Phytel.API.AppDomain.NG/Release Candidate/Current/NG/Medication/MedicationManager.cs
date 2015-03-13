@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using AutoMapper;
 using Phytel.API.AppDomain.NG.DTO;
 using Phytel.API.DataDomain.Medication.DTO;
+using Phytel.API.Interface;
 
 namespace Phytel.API.AppDomain.NG.Medication
 {
@@ -121,7 +122,7 @@ namespace Phytel.API.AppDomain.NG.Medication
                             medData = EndpointUtil.UpdateMedicationMap(req);
                             #endregion
                         }
-                        RegisterMedication(request.ContractNumber, medData);
+                        RegisterMedication(request, medData);
                     }
                     #region Calculate NDC codes.
                     bool calculateNDC = false;
@@ -159,7 +160,7 @@ namespace Phytel.API.AppDomain.NG.Medication
         /// </summary>
         /// <param name="contractNumber">contract Number sent in the request.</param>
         /// <param name="medData">MedicationMapData object.</param>
-        private void RegisterMedication(string contractNumber, MedicationMapData medData)
+        private void RegisterMedication(IAppDomainRequest request, MedicationMapData medData)
         {
             DTO.Medication newMed = new DTO.Medication
             {
@@ -173,7 +174,7 @@ namespace Phytel.API.AppDomain.NG.Medication
                 ProductId = string.Empty,
                 ProprietaryNameSuffix = string.Empty
             };
-            SearchManager.RegisterMedDocumentInSearchIndex(newMed, contractNumber);
+            SearchManager.RegisterMedDocumentInSearchIndex(newMed, request);
         }
         #endregion
     }
