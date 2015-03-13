@@ -17,6 +17,11 @@ namespace Phytel.Services.Mongo.Repository
             _context = System.Activator.CreateInstance(typeof(TContext), connectionString, databaseName) as TContext;
         }
 
+        public UnitOfWorkMongo(TContext context)
+        {
+            _context = context;
+        }
+
         public TContext MongoContext
         {
             get { return _context; }
