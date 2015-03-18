@@ -348,13 +348,10 @@ namespace Phytel.API.DataDomain.PatientObservation
             {
                 mePg = new MEPatientObservation(this.UserId)
                 {
-                    Id = ObjectId.GenerateNewId(),
                     PatientId = ObjectId.Parse(request.PatientId),
                     ObservationId = ObjectId.Parse(request.ObservationId),
                     DeleteFlag = false,
                     TTLDate = GetTTLDate(request.Initial),
-                    StartDate = DateTime.UtcNow,
-                    EndDate = null,
                     Display = ObservationDisplay.Primary,
                     State = ObservationState.Active,
                     Source = CareManager,
