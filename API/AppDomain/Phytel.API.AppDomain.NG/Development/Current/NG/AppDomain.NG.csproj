@@ -212,15 +212,6 @@
     <Compile Include="Search\ISearchEndpointUtil.cs" />
     <Compile Include="Search\ISearchManager.cs" />
     <Compile Include="Search\ISearchUtil.cs" />
-    <Compile Include="Search\LuceneStrategy\IMedFieldsLuceneStrategy.cs" />
-    <Compile Include="Search\LuceneStrategy\IMedNameLuceneStrategy.cs" />
-    <Compile Include="Search\LuceneStrategy\LuceneIndexWriter.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Search\LuceneStrategy\MedFieldsLuceneStrategy.cs" />
-    <Compile Include="Search\LuceneStrategy\MedNameLuceneStrategy.cs" />
-    <Compile Include="Search\LuceneStrategy\AllergyLuceneStrategy.cs" />
-    <Compile Include="Search\LuceneStrategy\BaseLuceneStrategy.cs" />
     <Compile Include="Search\SearchEndpointUtil.cs" />
     <Compile Include="Search\SearchManager.cs" />
     <Compile Include="Search\SearchUtil.cs" />
@@ -327,6 +318,10 @@
     <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.Scheduling\Development\Current\Scheduling.DTO\DataDomain.Scheduling.DTO.csproj">
       <Project>{1e303326-eec9-42a8-ba50-880ab7ad99b2}</Project>
       <Name>DataDomain.Scheduling.DTO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.Search\Development\Current\Search.DTO\DataDomain.Search.DTO.csproj">
+      <Project>{066fbea2-6d40-47f2-9f36-16365fa17dd2}</Project>
+      <Name>DataDomain.Search.DTO</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\..\Interfaces\Development\Current\Phytel.API.Interface\Phytel.API.Interface.csproj">
       <Project>{abe948fb-247e-4955-b3ab-b7c93e10a542}</Project>
