@@ -93,7 +93,7 @@ namespace Phytel.Services.Journal.Dispatch
                 message.Entries.Add(entry);
             }
 
-            _dispatcher.Dispatch(message);
+            _dispatcher.DispatchAsync(message);
         }
 
 
