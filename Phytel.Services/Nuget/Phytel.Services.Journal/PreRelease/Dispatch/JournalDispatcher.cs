@@ -60,7 +60,10 @@ namespace Phytel.Services.Journal.Dispatch
             entry.Verb = verb;
             entry.State = state;
 
-            entry.Body = ServiceStack.Text.JsonSerializer.SerializeToString(requestDto, requestDto.GetType());
+            if(state == State.Started)
+            {
+                entry.Body = ServiceStack.Text.JsonSerializer.SerializeToString(requestDto, requestDto.GetType());
+            }            
 
             if (timeUtc.HasValue)
             {
