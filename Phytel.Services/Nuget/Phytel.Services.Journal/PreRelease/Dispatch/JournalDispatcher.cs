@@ -38,7 +38,7 @@ namespace Phytel.Services.Journal.Dispatch
                 IJournaledRequest journaledRequest = requestDto as IJournaledRequest;
                 if (journaledRequest != null)
                 {
-                    journaledRequest.ActionId = _actionIdProvider.New();
+                    journaledRequest.ActionId = actionId;
                 }
             }
 
@@ -60,7 +60,10 @@ namespace Phytel.Services.Journal.Dispatch
             entry.Verb = verb;
             entry.State = state;
 
-            entry.Body = ServiceStack.Text.JsonSerializer.SerializeToString(requestDto, requestDto.GetType());         
+            if(requestDto != null && requestDto.GetType().IsPrimitive == false)
+            {
+                entry.Body = ServiceStack.Text.JsonSerializer.SerializeToString(requestDto, requestDto.GetType());         
+            }
 
             if (timeUtc.HasValue)
             {
