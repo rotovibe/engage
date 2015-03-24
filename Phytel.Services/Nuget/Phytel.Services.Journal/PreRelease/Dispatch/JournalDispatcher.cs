@@ -26,7 +26,7 @@ namespace Phytel.Services.Journal.Dispatch
             _mappingEngine = mappingEngine;
         }
 
-        public virtual JournalEntry Dispatch(object requestDto, State state, string actionId = null, string name = null, string product = null, string ipAddress = null, string verb = null, DateTime? timeUtc = null, string parentActionId = null, Exception exception = null)
+        public virtual JournalEntry Dispatch(State state, object requestDto = null, string actionId = null, string name = null, string product = null, string ipAddress = null, string verb = null, DateTime? timeUtc = null, string parentActionId = null, Exception exception = null)
         {
             if (string.IsNullOrEmpty(actionId))
             {
@@ -60,10 +60,7 @@ namespace Phytel.Services.Journal.Dispatch
             entry.Verb = verb;
             entry.State = state;
 
-            if(state == State.Started)
-            {
-                entry.Body = ServiceStack.Text.JsonSerializer.SerializeToString(requestDto, requestDto.GetType());
-            }            
+            entry.Body = ServiceStack.Text.JsonSerializer.SerializeToString(requestDto, requestDto.GetType());         
 
             if (timeUtc.HasValue)
             {
@@ -100,11 +97,11 @@ namespace Phytel.Services.Journal.Dispatch
         }
 
 
-        public virtual JournalEntry Dispatch(object requestDto, State state, IHttpRequest request, string actionId = null, DateTime? timeUtc = null, string parentActionId = null, Exception exception = null)
+        public virtual JournalEntry Dispatch(State state, object requestDto = null, IHttpRequest request, string actionId = null, DateTime? timeUtc = null, string parentActionId = null, Exception exception = null)
         {
             return Dispatch(
-                requestDto,
                 state,
+                requestDto,
                 actionId,
                 request.OperationName,
                 _serviceConfigProxy.GetServiceName(),

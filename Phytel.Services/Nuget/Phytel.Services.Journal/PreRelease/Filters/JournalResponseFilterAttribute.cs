@@ -16,7 +16,7 @@ namespace Phytel.Services.Journal.Filters
                 JournalEntry startedJournalEntry = req.Items[Constants.RequestItemkeyStartedJournalEntry] as JournalEntry;
                 if (startedJournalEntry != null)
                 {
-                    JournalDispatcher.Dispatch(startedJournalEntry.ActionId, State.Ended, req, parentActionId: startedJournalEntry.ParentActionId);
+                    JournalDispatcher.Dispatch(State.Ended, req, actionId: startedJournalEntry.ActionId, parentActionId: startedJournalEntry.ParentActionId);
                 }
             }
         }

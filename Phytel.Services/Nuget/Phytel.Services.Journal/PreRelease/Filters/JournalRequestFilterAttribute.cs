@@ -10,7 +10,7 @@ namespace Phytel.Services.Journal.Filters
 
         public override void Execute(IHttpRequest req, IHttpResponse res, object requestDto)
         {
-            JournalEntry startedEntry = JournalDispatcher.Dispatch(requestDto, State.Started, req);
+            JournalEntry startedEntry = JournalDispatcher.Dispatch(State.Started, req, requestDto: requestDto);
 
             if (startedEntry != null)
             {
