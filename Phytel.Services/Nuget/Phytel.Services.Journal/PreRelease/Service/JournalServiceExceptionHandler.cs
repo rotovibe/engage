@@ -25,7 +25,7 @@ namespace Phytel.Services.Journal
                 JournalEntry startedJournalEntry = req.Items[Constants.RequestItemkeyStartedJournalEntry] as JournalEntry;
                 if (startedJournalEntry != null)
                 {
-                    _journalDispatch.Dispatch(startedJournalEntry.ActionId, State.Failed, req, parentActionId: startedJournalEntry.ParentActionId, exception: exception);
+                    _journalDispatch.Dispatch(State.Failed, req, actionId: startedJournalEntry.ActionId, parentActionId: startedJournalEntry.ParentActionId, exception: exception);
                 }
             }
 

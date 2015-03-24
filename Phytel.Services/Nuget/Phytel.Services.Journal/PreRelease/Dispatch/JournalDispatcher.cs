@@ -97,7 +97,7 @@ namespace Phytel.Services.Journal.Dispatch
         }
 
 
-        public virtual JournalEntry Dispatch(State state, object requestDto = null, IHttpRequest request, string actionId = null, DateTime? timeUtc = null, string parentActionId = null, Exception exception = null)
+        public virtual JournalEntry Dispatch(State state, IHttpRequest request, object requestDto = null, string actionId = null, DateTime? timeUtc = null, string parentActionId = null, Exception exception = null)
         {
             return Dispatch(
                 state,
