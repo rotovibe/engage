@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Phytel.Framework.ASE.Bus;
 using Phytel.Services.API.DTO;
 using Phytel.Services.API.Provider;
 using Phytel.Services.Dates;
@@ -25,19 +26,41 @@ namespace Phytel.Services.Journal.Dispatch
             _mappingEngine = mappingEngine;
         }
 
-        public virtual JournalEntry Dispatch(string actionId, State state, IHttpRequest request, DateTime? timeUtc = null, string parentActionId = null, Exception exception = null)
+        public virtual JournalEntry Dispatch(object requestDto, State state, string actionId = null, string name = null, string product = null, string ipAddress = null, string verb = null, DateTime? timeUtc = null, string parentActionId = null, Exception exception = null)
         {
-            AddJournalEntriesMessage message = new AddJournalEntriesMessage();
+            if (string.IsNullOrEmpty(actionId))
+            {
+                actionId = _actionIdProvider.New();
+            }
+
+            if (requestDto is IJournaledRequest)
+            {
+                IJournaledRequest journaledRequest = requestDto as IJournaledRequest;
+                if (journaledRequest != null)
+                {
+                    journaledRequest.ActionId = _actionIdProvider.New();
+                }
+            }
+
+            if (requestDto is IJournaledAsChildRequest)
+            {
+                IJournaledAsChildRequest journaledAsChildRequest = requestDto as IJournaledAsChildRequest;
+                if (journaledAsChildRequest != null)
+                {
+                    journaledAsChildRequest.ParentActionId = parentActionId;
+                }
+            }
+
             JournalEntry entry = new JournalEntry();
             entry.ActionId = actionId;
             entry.ParentActionId = parentActionId;
-            entry.Name = request.OperationName;
-            entry.Product = _serviceConfigProxy.GetServiceName();
-            entry.IPAddress = request.RemoteIp;
-            entry.Body = request.GetRawBody();
-            entry.Url = request.RawUrl;
-            entry.Verb = request.HttpMethod;
+            entry.Name = name;
+            entry.Product = product;
+            entry.IPAddress = ipAddress;
+            entry.Verb = verb;
             entry.State = state;
+
+            entry.Body = ServiceStack.Text.JsonSerializer.SerializeToString(requestDto, requestDto.GetType());
 
             if (timeUtc.HasValue)
             {
@@ -47,46 +70,47 @@ namespace Phytel.Services.Journal.Dispatch
             {
                 entry.Time = _dateTimeProxy.GetCurrentDateTime();
             }
-            
+
             if (exception != null)
             {
                 entry.Error = _mappingEngine.Map<Error>(exception);
             }
 
-            message.Entries.Add(entry);
-
-            _dispatcher.Dispatch(message);
+            DispatchEntries(entry);
 
             return entry;
         }
 
-        public virtual JournalEntry Dispatch(object requestDto, State state, IHttpRequest request, DateTime? timeUtc = null, Exception exception = null)
+        public virtual void DispatchEntries(params JournalEntry[] entries)
         {
-            JournalEntry rvalue = new JournalEntry();
-
-            if (requestDto is IJournaledRequest)
+            AddJournalEntriesMessage message = new AddJournalEntriesMessage();
+            if(message.Entries == null)
             {
-                IJournaledRequest journaledRequest = requestDto as IJournaledRequest;
-                if (journaledRequest != null)
-                {
-                    journaledRequest.ActionId = _actionIdProvider.New();
-                    rvalue.ActionId = journaledRequest.ActionId;
-                }
+                message.Entries = new System.Collections.Generic.List<JournalEntry>();
+            }
+            foreach (JournalEntry entry in entries)
+            {
+                message.Entries.Add(entry);
             }
 
-            if (requestDto is IJournaledAsChildRequest)
-            {
-                IJournaledAsChildRequest journaledAsChildRequest = requestDto as IJournaledAsChildRequest;
-                if (journaledAsChildRequest != null)
-                {
-                    journaledAsChildRequest.ParentActionId = journaledAsChildRequest.ParentActionId;
-                    rvalue.ParentActionId = journaledAsChildRequest.ParentActionId;
-                }
-            }
+            _dispatcher.Dispatch(message);
+        }
 
-            rvalue = Dispatch(rvalue.ActionId, state, request, timeUtc, rvalue.ParentActionId, exception);
 
-            return rvalue;
+        public virtual JournalEntry Dispatch(object requestDto, State state, IHttpRequest request, string actionId = null, DateTime? timeUtc = null, string parentActionId = null, Exception exception = null)
+        {
+            return Dispatch(
+                requestDto,
+                state,
+                actionId,
+                request.OperationName,
+                _serviceConfigProxy.GetServiceName(),
+                request.RemoteIp,
+                request.HttpMethod,
+                timeUtc,
+                parentActionId,
+                exception
+                );
         }
     }
 }
