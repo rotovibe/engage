@@ -5,6 +5,7 @@ using Phytel.Services.API.Provider;
 using Phytel.Services.Dates;
 using Phytel.Services.Dispatch;
 using ServiceStack.ServiceHost;
+using ServiceStack.Text;
 using System;
 
 namespace Phytel.Services.Journal.Dispatch
@@ -62,6 +63,10 @@ namespace Phytel.Services.Journal.Dispatch
 
             if(requestDto != null && requestDto.GetType().IsPrimitive == false)
             {
+                JsConfig<DateTime>.SerializeFn = (dateTime) =>
+                {
+                    return dateTime.ToString();
+                };
                 entry.Body = ServiceStack.Text.JsonSerializer.SerializeToString(requestDto, requestDto.GetType());         
             }
 
