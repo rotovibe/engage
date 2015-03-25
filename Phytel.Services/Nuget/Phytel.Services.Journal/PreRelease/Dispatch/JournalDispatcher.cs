@@ -49,7 +49,14 @@ namespace Phytel.Services.Journal.Dispatch
                 IJournaledAsChildRequest journaledAsChildRequest = requestDto as IJournaledAsChildRequest;
                 if (journaledAsChildRequest != null)
                 {
-                    journaledAsChildRequest.ParentActionId = parentActionId;
+                    if (string.IsNullOrEmpty(journaledAsChildRequest.ParentActionId))
+                    {
+                        journaledAsChildRequest.ParentActionId = parentActionId;
+                    }
+                    else
+                    {
+                        parentActionId = journaledAsChildRequest.ParentActionId;
+                    }
                 }
             }
 
