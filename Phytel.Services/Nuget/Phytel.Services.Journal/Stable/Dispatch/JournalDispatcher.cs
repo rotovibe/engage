@@ -7,6 +7,7 @@ using Phytel.Services.Dispatch;
 using ServiceStack.ServiceHost;
 using ServiceStack.Text;
 using System;
+using MongoDB.Bson;
 
 namespace Phytel.Services.Journal.Dispatch
 {
@@ -63,11 +64,7 @@ namespace Phytel.Services.Journal.Dispatch
 
             if(requestDto != null && requestDto.GetType().IsPrimitive == false)
             {
-                JsConfig<DateTime>.SerializeFn = (dateTime) =>
-                {
-                    return dateTime.ToString();
-                };
-                entry.Body = ServiceStack.Text.JsonSerializer.SerializeToString(requestDto, requestDto.GetType());         
+                entry.Body = MongoDB.Bson.BsonExtensionMethods.ToJson(requestDto);
             }
 
             if (timeUtc.HasValue)
@@ -101,7 +98,7 @@ namespace Phytel.Services.Journal.Dispatch
                 message.Entries.Add(entry);
             }
 
-            _dispatcher.DispatchAsync(message);
+            _dispatcher.Dispatch(message);
         }
 
 
