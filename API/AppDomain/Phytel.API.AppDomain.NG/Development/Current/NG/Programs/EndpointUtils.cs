@@ -917,7 +917,8 @@ namespace Phytel.API.AppDomain.NG
                     StatusId = response.Schedule.StatusId,
                     Title = response.Schedule.Title,
                     TypeId = response.Schedule.TypeId,
-                    UpdatedOn = response.Schedule.UpdatedOn
+                    UpdatedOn = response.Schedule.UpdatedOn,
+                    DefaultAssignment = response.Schedule.DefaultAssignment
                 };
 
                 return schedule;

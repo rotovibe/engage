@@ -77,7 +77,7 @@ namespace Phytel.Data.ETL
         {
             _contract = contract;
 
-            OnEtlEvent(new ETLEventArgs {Message = "ETLProcessor start initialized.", IsError = false});
+            OnEtlEvent(new ETLEventArgs { Message = "[" + _contract + "] ETLProcessor start initialized.", IsError = false });
 
             connString =
                 SQLDataService.Instance.GetConnectionString(
@@ -94,8 +94,8 @@ namespace Phytel.Data.ETL
         {
             try
             {
-                OnEtlEvent(new ETLEventArgs {Message = "*** ETL PROCESS START ***", IsError = false});
-                OnEtlEvent(new ETLEventArgs {Message = "Truncate Tables.", IsError = false});
+                OnEtlEvent(new ETLEventArgs { Message = "["+_contract+"] *** ETL PROCESS START ***", IsError = false });
+                OnEtlEvent(new ETLEventArgs { Message = "[" + _contract + "] Truncate Tables.", IsError = false });
                 //Truncate/Delete SQL databases
                 SQLDataService.Instance.ExecuteProcedure(_contract, true, "REPORT", "spPhy_RPT_TruncateTables",
                     new ParameterCollection());
@@ -135,11 +135,11 @@ namespace Phytel.Data.ETL
                 LoadToDos(_contract);
 
                 FlattenReportSprocs();
-                OnEtlEvent(new ETLEventArgs {Message = "*** ETL PROCESS COMPLETED ***", IsError = false});
+                OnEtlEvent(new ETLEventArgs { Message = "[" + _contract + "] *** ETL PROCESS COMPLETED ***", IsError = false });
             }
             catch (Exception ex)
             {
-                throw ex; //SimpleLog.Log(new ArgumentException("Rebuild()", ex));
+                OnEtlEvent(new ETLEventArgs { Message = "[" + _contract + "] " + ex.Message + ": " + ex.StackTrace, IsError = true });
             }
         }
 
@@ -148,7 +148,7 @@ namespace Phytel.Data.ETL
             try
             {
                 //[spPhy_RPT_Flat_BSHSI_HW2]
-                SQLDataService.Instance.ExecuteProcedure(_contract, true, "REPORT", "spPhy_RPT_Flat_BSHSI_HW2", new ParameterCollection(), 0);
+                SQLDataService.Instance.ExecuteProcedure(_contract, true, "REPORT", "spPhy_RPT_Initialize_Flat_Tables", new ParameterCollection(), 0);
             }
             catch (Exception ex)
             {
@@ -160,7 +160,7 @@ namespace Phytel.Data.ETL
         {
             try
             {
-                OnEtlEvent(new ETLEventArgs {Message = "registering classes.", IsError = false});
+                OnEtlEvent(new ETLEventArgs { Message = "[" + _contract + "] registering classes.", IsError = false });
 
                 #region Register ClassMap
 
@@ -550,6 +550,18 @@ namespace Phytel.Data.ETL
 
                 try
                 {
+                    if (BsonClassMap.IsClassMapRegistered(typeof(Frequency)) == false)
+                    {
+                        BsonClassMap.RegisterClassMap<Frequency>();
+                    }
+                }
+                catch
+                {
+                    throw;
+                }
+
+                try
+                {
                     if (BsonClassMap.IsClassMapRegistered(typeof(FreqWhen)) == false)
                     {
                         BsonClassMap.RegisterClassMap<FreqWhen>();
@@ -564,7 +576,7 @@ namespace Phytel.Data.ETL
             }
             catch (Exception ex)
             {
-                OnEtlEvent(new ETLEventArgs {Message = ex.Message + ": " + ex.StackTrace, IsError = true});
+                OnEtlEvent(new ETLEventArgs {Message = "["+_contract+"] " +ex.Message + ": " + ex.StackTrace, IsError = true});
             }
         }
 
@@ -572,7 +584,7 @@ namespace Phytel.Data.ETL
         {
             try
             {
-                OnEtlEvent(new ETLEventArgs { Message = "Loading care members.", IsError = false });
+                OnEtlEvent(new ETLEventArgs { Message = "[" + _contract + "] Loading care members.", IsError = false });
 
                 ConcurrentBag<MECareMember> members;
                 using (CareMemberMongoContext cmctx = new CareMemberMongoContext(ctr))
@@ -608,13 +620,13 @@ namespace Phytel.Data.ETL
                     }
                     catch (Exception ex)
                     {
-                        OnEtlEvent(new ETLEventArgs {Message = ex.Message + ": " + ex.StackTrace, IsError = true});
+                        OnEtlEvent(new ETLEventArgs { Message = "[" + _contract + "] " + ex.Message + ": " + ex.StackTrace, IsError = true });
                     }
                 });
             }
             catch (Exception ex)
             {
-                OnEtlEvent(new ETLEventArgs { Message = "LoadCareMembers():Error" });
+                OnEtlEvent(new ETLEventArgs { Message = "[" + _contract + "] LoadCareMembers():Error" });
             }
         }
 
@@ -622,7 +634,7 @@ namespace Phytel.Data.ETL
         {
             try
             {
-                OnEtlEvent(new ETLEventArgs { Message = "Loading contacts.", IsError = false });
+                OnEtlEvent(new ETLEventArgs { Message = "[" + _contract + "] Loading contacts.", IsError = false });
 
                 ConcurrentBag<MEContact> contacts;
                 using (ContactMongoContext cmctx = new ContactMongoContext(ctr))
@@ -831,14 +843,14 @@ namespace Phytel.Data.ETL
                             }
                             catch (Exception ex)
                             {
-                                OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace, IsError = true });
+                                OnEtlEvent(new ETLEventArgs { Message = "[" + _contract + "] " + ex.Message + ": " + ex.StackTrace, IsError = true });
                             }
                         }
                     });
             }
             catch (Exception ex)
             {
-                OnEtlEvent(new ETLEventArgs { Message = "LoadContacts():Error" });
+                OnEtlEvent(new ETLEventArgs { Message = "[" + _contract + "] LoadContacts():Error" });
             }
         }
 
@@ -846,7 +858,7 @@ namespace Phytel.Data.ETL
         {
             try
             {
-                OnEtlEvent(new ETLEventArgs { Message = "Loading goal attributes.", IsError = false });
+                OnEtlEvent(new ETLEventArgs { Message = "[" + _contract + "] Loading goal attributes.", IsError = false });
 
                 ConcurrentBag<MEAttributeLibrary> attributes;
                 using (PatientGoalMongoContext pgctx = new PatientGoalMongoContext(ctr))
@@ -894,23 +906,22 @@ namespace Phytel.Data.ETL
                         }
                         catch (Exception ex)
                         {
-                            OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace, IsError = true });
+                            OnEtlEvent(new ETLEventArgs { Message = "[" + _contract + "] " + ex.Message + ": " + ex.StackTrace, IsError = true });
                         }
                     });
             }
             catch (Exception ex)
             {
-                OnEtlEvent(new ETLEventArgs { Message = "LoadGoalAttributes():Error:" + ex.Message + ex.StackTrace, IsError = true });
+                OnEtlEvent(new ETLEventArgs { Message = "[" + _contract + "] LoadGoalAttributes():Error:" + ex.Message + ex.StackTrace, IsError = true });
             }
         }
 
         private void LoadLookUps(string ctr)
         {
+            List<MELookup> lookups;
             try
             {
-                OnEtlEvent(new ETLEventArgs {Message = "Loading lookups.", IsError = false});
-
-                List<MELookup> lookups;
+                OnEtlEvent(new ETLEventArgs { Message = "[" + _contract + "] Loading lookups.", IsError = false });
                 using (LookUpMongoContext lmctx = new LookUpMongoContext(ctr))
                 {
                     lookups = lmctx.LookUps.Collection.FindAll().ToList();
@@ -1023,7 +1034,13 @@ namespace Phytel.Data.ETL
                     }
                     catch (Exception ex)
                     {
-                        OnEtlEvent(new ETLEventArgs {Message = ex.Message + ": " + ex.StackTrace, IsError = true});
+                        OnEtlEvent(new ETLEventArgs
+                        {
+                            Message =
+                                "[" + _contract + "] Error loading specific lookup:" + lookup.GetType().Name + " : " + ex.Message + ": " +
+                                ex.StackTrace,
+                            IsError = true
+                        });
                     }
                 }
 
@@ -1032,7 +1049,7 @@ namespace Phytel.Data.ETL
             }
             catch (Exception ex)
             {
-                OnEtlEvent(new ETLEventArgs {Message = ex.Message + ": " + ex.StackTrace, IsError = true});
+                OnEtlEvent(new ETLEventArgs { Message = "[" + _contract + "] LoadLookUps():" + ex.Message + ": " + ex.StackTrace, IsError = true });
             }
         }
 
@@ -1502,16 +1519,16 @@ namespace Phytel.Data.ETL
         {
             try
             {
-                OnEtlEvent(new ETLEventArgs { Message = "Loading observations.", IsError = false });
+                OnEtlEvent(new ETLEventArgs { Message = "[" + _contract + "] Loading observations.", IsError = false });
 
-                OnEtlEvent(new ETLEventArgs { Message = "Getting MEObservations from MONGO.", IsError = false });
+                OnEtlEvent(new ETLEventArgs { Message = "[" + _contract + "] Getting MEObservations from MONGO.", IsError = false });
                 ConcurrentBag<MEObservation> observations;
                 using (PatientObservationMongoContext poctx = new PatientObservationMongoContext(ctr))
                 {
                     observations = new ConcurrentBag<MEObservation>(poctx.Observations.Collection.FindAllAs<MEObservation>().ToList());
                 }
 
-                OnEtlEvent(new ETLEventArgs { Message = "Inserting observations into SQL.", IsError = false });
+                OnEtlEvent(new ETLEventArgs { Message = "[" + _contract + "] Inserting observations into SQL.", IsError = false });
                     Parallel.ForEach(observations, obs =>
                     //foreach (MEObservation obs in observations)//.Where(t => !t.DeleteFlag))
                     {
@@ -1552,13 +1569,13 @@ namespace Phytel.Data.ETL
                         }
                         catch (Exception ex)
                         {
-                            OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace, IsError = true });
+                            OnEtlEvent(new ETLEventArgs { Message = "[" + _contract + "] " + ex.Message + ": " + ex.StackTrace, IsError = true });
                         }
                     });
             }
             catch (Exception ex)
             {
-                OnEtlEvent(new ETLEventArgs { Message = "LoadObservations()" + ex.Message + ": " + ex.StackTrace, IsError = true });
+                OnEtlEvent(new ETLEventArgs { Message = "[" + _contract + "] LoadObservations()" + ex.Message + ": " + ex.StackTrace, IsError = true });
             }
         }
 
@@ -1566,7 +1583,7 @@ namespace Phytel.Data.ETL
         {
             try
             {
-                OnEtlEvent(new ETLEventArgs { Message = "Loading patients.", IsError = false });
+                OnEtlEvent(new ETLEventArgs { Message = "[" + _contract + "] Loading patients.", IsError = false });
 
                 ConcurrentBag<MEPatient> patients;
                 using (PatientMongoContext pmctx = new PatientMongoContext(ctr))
@@ -1610,7 +1627,7 @@ namespace Phytel.Data.ETL
                         }
                         catch (Exception ex)
                         {
-                            OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace, IsError = true });
+                            OnEtlEvent(new ETLEventArgs { Message = "[" + _contract + "] " + ex.Message + ": " + ex.StackTrace, IsError = true });
                         }
                     });
             }
@@ -1624,7 +1641,7 @@ namespace Phytel.Data.ETL
         {
             try
             {
-                OnEtlEvent(new ETLEventArgs { Message = "Loading patient barriers.", IsError = false });
+                OnEtlEvent(new ETLEventArgs { Message = "[" + _contract + "] Loading patient barriers.", IsError = false });
 
                 ConcurrentBag<MEPatientBarrier> barriers;
                 using (PatientGoalMongoContext pgctx = new PatientGoalMongoContext(ctr))
@@ -1661,7 +1678,7 @@ namespace Phytel.Data.ETL
                         }
                         catch (Exception ex)
                         {
-                            OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace, IsError = true });
+                            OnEtlEvent(new ETLEventArgs { Message = "[" + _contract + "] " + ex.Message + ": " + ex.StackTrace, IsError = true });
                         }
                     });
             }
@@ -1675,7 +1692,7 @@ namespace Phytel.Data.ETL
         {
             try
             {
-                OnEtlEvent(new ETLEventArgs { Message = "Loading patient goals.", IsError = false });
+                OnEtlEvent(new ETLEventArgs { Message = "[" + _contract + "] Loading patient goals.", IsError = false });
 
                 ConcurrentBag<MEPatientGoal> goals;
                 using (PatientGoalMongoContext pgctx = new PatientGoalMongoContext(ctr))
@@ -1789,7 +1806,7 @@ namespace Phytel.Data.ETL
                         }
                         catch (Exception ex)
                         {
-                            OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace, IsError = true });
+                            OnEtlEvent(new ETLEventArgs { Message = "[" + _contract + "] " + ex.Message + ": " + ex.StackTrace, IsError = true });
                         }
                     });
                 #endregion
@@ -1804,7 +1821,7 @@ namespace Phytel.Data.ETL
         {
             try
             {
-                OnEtlEvent(new ETLEventArgs { Message = "Loading patient interventions.", IsError = false });
+                OnEtlEvent(new ETLEventArgs { Message = "[" + _contract + "] Loading patient interventions.", IsError = false });
 
                 ConcurrentBag<MEPatientIntervention> interventions;                
                 using (PatientGoalMongoContext pgctx = new PatientGoalMongoContext(ctr))
@@ -1873,7 +1890,7 @@ namespace Phytel.Data.ETL
                         }
                         catch (Exception ex)
                         {
-                            OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace, IsError = true });
+                            OnEtlEvent(new ETLEventArgs { Message = "[" + _contract + "] " + ex.Message + ": " + ex.StackTrace, IsError = true });
                         }
                     });
             }
@@ -1887,7 +1904,7 @@ namespace Phytel.Data.ETL
         {
             try
             {
-                OnEtlEvent(new ETLEventArgs { Message = "Loading Patient Notes.", IsError = false });
+                OnEtlEvent(new ETLEventArgs { Message = "[" + _contract + "] Loading Patient Notes.", IsError = false });
 
                 ConcurrentBag<MEPatientNote> notes;
                 using (PatientNoteMongoContext pnctx = new PatientNoteMongoContext(ctr))
@@ -1949,7 +1966,7 @@ namespace Phytel.Data.ETL
                         }
                         catch (Exception ex)
                         {
-                            OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace, IsError = true });
+                            OnEtlEvent(new ETLEventArgs { Message = "[" + _contract + "] " + ex.Message + ": " + ex.StackTrace, IsError = true });
                         }
                     });
             }
@@ -1963,7 +1980,7 @@ namespace Phytel.Data.ETL
         {
             try
             {
-                OnEtlEvent(new ETLEventArgs { Message = "Loading patient observations.", IsError = false });
+                OnEtlEvent(new ETLEventArgs { Message = "[" + _contract + "] Loading patient observations.", IsError = false });
 
                 ConcurrentBag<MEPatientObservation> observations;
                     using (PatientObservationMongoContext poctx = new PatientObservationMongoContext(ctr))
@@ -1973,7 +1990,7 @@ namespace Phytel.Data.ETL
                                 poctx.PatientObservations.Collection.FindAllAs<MEPatientObservation>().ToList());
                     }
 
-                var rSeries = new ReadObservationsSeries().ReadEObservationSeries(observations.ToList());
+                var rSeries = new ReadObservationsSeries(_contract).ReadEObservationSeries(observations.ToList());
 
                 using (var bcc = new SqlBulkCopy(connString, SqlBulkCopyOptions.Default))
                 using (var objRdr = ObjectReader.Create(rSeries))
@@ -2043,7 +2060,7 @@ namespace Phytel.Data.ETL
                             OnEtlEvent(new ETLEventArgs
                             {
                                 Message =
-                                    "LoadPatientObservations():SqlBulkCopy process failure: " + ex.Message + String.Format("Column: {0} contains data with a length greater than: {1}", column, length) + " : " +
+                                    "[" + _contract + "] LoadPatientObservations():SqlBulkCopy process failure: " + ex.Message + String.Format("Column: {0} contains data with a length greater than: {1}", column, length) + " : " +
                                     ex.InnerException,
                                 IsError = true
                             });
@@ -2100,7 +2117,7 @@ namespace Phytel.Data.ETL
                 OnEtlEvent(new ETLEventArgs
                 {
                     Message =
-                        "LoadPatientObservations():SqlBulkCopy process failure: " + ex.Message + ex.InnerException,
+                        "[" + _contract + "] LoadPatientObservations():SqlBulkCopy process failure: " + ex.Message + ex.InnerException,
                     IsError = true
                 });
             }
@@ -2110,7 +2127,7 @@ namespace Phytel.Data.ETL
         {
             try
             {
-                OnEtlEvent(new ETLEventArgs { Message = "Loading todos.", IsError = false });
+                OnEtlEvent(new ETLEventArgs { Message = "[" + _contract + "] Loading todos.", IsError = false });
 
                 ConcurrentBag<METoDo> todo;
                 using (SchedulingMongoContext smct = new SchedulingMongoContext(ctr))
@@ -2156,7 +2173,7 @@ namespace Phytel.Data.ETL
                         }
                         catch (Exception ex)
                         {
-                            OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace, IsError = true });
+                            OnEtlEvent(new ETLEventArgs { Message = "[" + _contract + "] " + ex.Message + ": " + ex.StackTrace, IsError = true });
                         }
                     });
             }
@@ -2183,7 +2200,7 @@ namespace Phytel.Data.ETL
             }
             catch (Exception ex)
             {
-                OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace, IsError = true });
+                OnEtlEvent(new ETLEventArgs { Message = "[" + _contract + "] " + ex.Message + ": " + ex.StackTrace, IsError = true });
             }
         }
 
@@ -2227,14 +2244,14 @@ namespace Phytel.Data.ETL
         {
             try
             {
-                OnEtlEvent(new ETLEventArgs { Message = "Loading program attributes.", IsError = false });
+                OnEtlEvent(new ETLEventArgs { Message = "[" + _contract + "] Loading program attributes.", IsError = false });
                 ConcurrentBag<MEProgramAttribute> programAttributes;
                 using (ProgramMongoContext pmctx = new ProgramMongoContext(ctr))
                 {
                     programAttributes = new ConcurrentBag<MEProgramAttribute>(pmctx.ProgramAttributes.Collection.FindAllAs<MEProgramAttribute>().ToList());
                 }
 
-                var rSeries = new ReadPlanElementsSeries().ReadEProgramAttributeSeries(programAttributes);
+                var rSeries = new ReadPlanElementsSeries(_contract).ReadEProgramAttributeSeries(programAttributes);
 
                 using (var bcc = new SqlBulkCopy(connString, SqlBulkCopyOptions.Default))
                 using (var objRdr = ObjectReader.Create(rSeries))
@@ -2307,7 +2324,7 @@ namespace Phytel.Data.ETL
                             OnEtlEvent(new ETLEventArgs
                             {
                                 Message =
-                                    "LoadPatientProgramAttributes():SqlBulkCopy process failure: " + ex.Message + String.Format("Column: {0} contains data with a length greater than: {1}", column, length) + " : " +
+                                    "[" + _contract + "] LoadPatientProgramAttributes():SqlBulkCopy process failure: " + ex.Message + String.Format("Column: {0} contains data with a length greater than: {1}", column, length) + " : " +
                                     ex.InnerException,
                                 IsError = true
                             });
@@ -2375,7 +2392,7 @@ namespace Phytel.Data.ETL
         {
             try
             {
-                OnEtlEvent(new ETLEventArgs { Message = "Loading patient programs.", IsError = false });
+                OnEtlEvent(new ETLEventArgs { Message = "[" + _contract + "] Loading patient programs.", IsError = false });
 
                 //ConcurrentBag<MEPatientProgram> programs;
                 using (ProgramMongoContext pctx = new ProgramMongoContext(ctr))
@@ -2386,7 +2403,7 @@ namespace Phytel.Data.ETL
 
                 LoadPlanElementLists();
 
-                var rSeries = new ReadPlanElementsSeries().ReadEProgramSeries(programs);
+                var rSeries = new ReadPlanElementsSeries(_contract).ReadEProgramSeries(programs);
 
                 using (var bcc = new SqlBulkCopy(connString, SqlBulkCopyOptions.Default))
                 using (var objRdr = ObjectReader.Create(rSeries))
@@ -2473,7 +2490,7 @@ namespace Phytel.Data.ETL
                             OnEtlEvent(new ETLEventArgs
                             {
                                 Message =
-                                    "LoadPatientPrograms():SqlBulkCopy process failure: " + ex.Message + String.Format("Column: {0} contains data with a length greater than: {1}", column, length) + " : " +
+                                    "[" + _contract + "] LoadPatientPrograms():SqlBulkCopy process failure: " + ex.Message + String.Format("Column: {0} contains data with a length greater than: {1}", column, length) + " : " +
                                     ex.InnerException,
                                 IsError = true
                             });
@@ -2601,6 +2618,7 @@ namespace Phytel.Data.ETL
             }
             catch (Exception ex)
             {
+                OnEtlEvent(new ETLEventArgs { Message = "[" + _contract + "] " + ex.Message + ": " + ex.StackTrace, IsError = true });
                 throw new ArgumentException("LoadPatientPrograms() : " + ex.Message + ex.StackTrace, ex.InnerException);
             }
         }
@@ -2609,9 +2627,9 @@ namespace Phytel.Data.ETL
         {
             try
             {
-                OnEtlEvent(new ETLEventArgs { Message = "Loading patient modules.", IsError = false });
+                OnEtlEvent(new ETLEventArgs { Message = "[" + _contract + "] Loading patient modules.", IsError = false });
 
-                var rSeries = new ReadPlanElementsSeries().ReadEModuleSeries(modules, programs);
+                var rSeries = new ReadPlanElementsSeries(_contract).ReadEModuleSeries(modules, programs);
 
                 using (var bcc = new SqlBulkCopy(connString, SqlBulkCopyOptions.Default))
                 using (var objRdr = ObjectReader.Create(rSeries))
@@ -2691,7 +2709,7 @@ namespace Phytel.Data.ETL
                             OnEtlEvent(new ETLEventArgs
                             {
                                 Message =
-                                    "LoadPatientProgramModules():SqlBulkCopy process failure: " + ex.Message + String.Format("Column: {0} contains data with a length greater than: {1}", column, length) + " : " +
+                                    "[" + _contract + "] LoadPatientProgramModules():SqlBulkCopy process failure: " + ex.Message + String.Format("Column: {0} contains data with a length greater than: {1}", column, length) + " : " +
                                     ex.InnerException,
                                 IsError = true
                             });
@@ -2754,7 +2772,8 @@ namespace Phytel.Data.ETL
             }
             catch (Exception ex)
             {
-                throw ex; //SimpleLog.Log(new ArgumentException("LoadPatientProgramModules()", ex));
+                OnEtlEvent(new ETLEventArgs { Message = "[" + _contract + "] " + ex.Message + ": " + ex.StackTrace, IsError = true });
+                throw new Exception("LoadPatientProgramModules()" + ex.Message + ex.StackTrace);
             }
         }
 
@@ -2762,9 +2781,9 @@ namespace Phytel.Data.ETL
         {
             try
             {
-                OnEtlEvent(new ETLEventArgs { Message = "Loading patient actions.", IsError = false });
+                OnEtlEvent(new ETLEventArgs { Message = "[" + _contract + "] Loading patient actions.", IsError = false });
 
-                var rSeries = new ReadPlanElementsSeries().ReadEActionSeries(actions, modules, programs);
+                var rSeries = new ReadPlanElementsSeries(_contract).ReadEActionSeries(actions, modules, programs);
 
                 using (var bcc = new SqlBulkCopy(connString, SqlBulkCopyOptions.Default))
                 using (var objRdr = ObjectReader.Create(rSeries))
@@ -2851,7 +2870,7 @@ namespace Phytel.Data.ETL
                             OnEtlEvent(new ETLEventArgs
                             {
                                 Message =
-                                    "LoadPatientProgramActions():SqlBulkCopy process failure: " + ex.Message + String.Format("Column: {0} contains data with a length greater than: {1}", column, length) + " : " +
+                                    "[" + _contract + "] LoadPatientProgramActions():SqlBulkCopy process failure: " + ex.Message + String.Format("Column: {0} contains data with a length greater than: {1}", column, length) + " : " +
                                     ex.InnerException,
                                 IsError = true
                             });
@@ -2931,9 +2950,9 @@ namespace Phytel.Data.ETL
             try
             {
 
-                OnEtlEvent(new ETLEventArgs {Message = "Loading patient steps.", IsError = false});
+                OnEtlEvent(new ETLEventArgs { Message = "[" + _contract + "] Loading patient steps.", IsError = false });
 
-                var rSeries = new ReadPlanElementsSeries().ReadEStepSeries(steps, modules, programs);
+                var rSeries = new ReadPlanElementsSeries(_contract).ReadEStepSeries(steps, modules, programs);
 
                 using (var bcc = new SqlBulkCopy(connString, SqlBulkCopyOptions.Default))
                 using (var objRdr = ObjectReader.Create(rSeries))
@@ -3011,7 +3030,7 @@ namespace Phytel.Data.ETL
                             OnEtlEvent(new ETLEventArgs
                             {
                                 Message =
-                                    "LoadPatientProgramSteps():SqlBulkCopy process failure: " + String.Format("Column: {0} contains data with a length greater than: {1}", column, length) + " : " +
+                                    "[" + _contract + "] LoadPatientProgramSteps():SqlBulkCopy process failure: " + String.Format("Column: {0} contains data with a length greater than: {1}", column, length) + " : " +
                                     ex.InnerException,
                                 IsError = true
                             });
@@ -3094,7 +3113,7 @@ namespace Phytel.Data.ETL
         {
             try
             {
-                OnEtlEvent(new ETLEventArgs { Message = "Loading program responses.", IsError = false });
+                OnEtlEvent(new ETLEventArgs { Message = "[" + _contract + "] Loading program responses.", IsError = false });
                 
                 List<MEPatientProgramResponse> responses;
                 using (ProgramMongoContext pmctx = new ProgramMongoContext(ctr))
@@ -3103,8 +3122,8 @@ namespace Phytel.Data.ETL
                 }
 
                 // get stepidlist
-                var stepIdList = Utils.GetStepIdList();
-                var rSeries = new ReadPlanElementsSeries().ReadEStepResponseSeries(responses);
+                var stepIdList = Utils.GetStepIdList(_contract);
+                var rSeries = new ReadPlanElementsSeries(_contract).ReadEStepResponseSeries(responses);
 
                 using (var bcc = new SqlBulkCopy(connString, SqlBulkCopyOptions.Default))
                 using (var objRdr = ObjectReader.Create(rSeries))
@@ -3175,7 +3194,7 @@ namespace Phytel.Data.ETL
                             OnEtlEvent(new ETLEventArgs
                             {
                                 Message =
-                                    "LoadPatientProgramResponses():SqlBulkCopy process failure: " + ex.Message +
+                                    "[" + _contract + "] LoadPatientProgramResponses():SqlBulkCopy process failure: " + ex.Message +
                                     String.Format("Column: {0} contains data with a length greater than: {1}", column,
                                         length) + " : " +
                                     ex.InnerException,
@@ -3211,14 +3230,14 @@ namespace Phytel.Data.ETL
         }
             catch (Exception ex)
             {
-                OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace, IsError = true });
+                OnEtlEvent(new ETLEventArgs { Message = "[" + _contract + "] " + ex.Message + ": " + ex.StackTrace, IsError = true });
                 //throw ex; //SimpleLog.Log(new ArgumentException("RegisterSpawnElement()", ex));
             }
         }
 
         public void ProcessSpawnElements()
         {
-            OnEtlEvent(new ETLEventArgs { Message = "Loading SpawnElements.", IsError = false });
+            OnEtlEvent(new ETLEventArgs { Message = "[" + _contract + "] Loading SpawnElements.", IsError = false });
             Parallel.ForEach(_spawnElementDict, entry =>
             //foreach (var entry in _spawnElementDict)
             {
@@ -3239,7 +3258,7 @@ namespace Phytel.Data.ETL
                 }
                 catch (Exception ex)
                 {
-                    OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace, IsError = true });
+                    OnEtlEvent(new ETLEventArgs { Message = "[" + _contract + "] " + ex.Message + ": " + ex.StackTrace, IsError = true });
                 }
             });
         }
@@ -3267,7 +3286,7 @@ namespace Phytel.Data.ETL
         {
             try
             {
-                OnEtlEvent(new ETLEventArgs { Message = "Loading patient system.", IsError = false });
+                OnEtlEvent(new ETLEventArgs { Message = "[" + _contract + "] Loading patient system.", IsError = false });
 
                 ConcurrentBag<MEPatientSystem> systems;                
                 using (PatientSystemMongoContext psctx = new PatientSystemMongoContext(ctr))
@@ -3302,7 +3321,7 @@ namespace Phytel.Data.ETL
                         }
                         catch (Exception ex)
                         {
-                            OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace, IsError = true });
+                            OnEtlEvent(new ETLEventArgs { Message = "[" + _contract + "] " + ex.Message + ": " + ex.StackTrace, IsError = true });
                         }
                     });
             }
@@ -3316,7 +3335,7 @@ namespace Phytel.Data.ETL
         {
             try
             {
-                OnEtlEvent(new ETLEventArgs { Message = "Loading patient tasks.", IsError = false });
+                OnEtlEvent(new ETLEventArgs { Message = "[" + _contract + "] Loading patient tasks.", IsError = false });
 
                 ConcurrentBag<MEPatientTask> tasks;                
                 using (PatientGoalMongoContext pgctx = new PatientGoalMongoContext(ctr))
@@ -3411,7 +3430,7 @@ namespace Phytel.Data.ETL
                         }
                         catch (Exception ex)
                         {
-                            OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace, IsError = true });
+                            OnEtlEvent(new ETLEventArgs { Message = "[" + _contract + "] " + ex.Message + ": " + ex.StackTrace, IsError = true });
                         }
                     });
             }
@@ -3425,7 +3444,7 @@ namespace Phytel.Data.ETL
         {
             try
             {
-                OnEtlEvent(new ETLEventArgs { Message = "Loading allergies.", IsError = false });
+                OnEtlEvent(new ETLEventArgs { Message = "[" + _contract + "] Loading allergies.", IsError = false });
 
                 ConcurrentBag<MEAllergy> pts;
                 using (AllergyMongoContext pctx = new AllergyMongoContext(ctr))
@@ -3474,7 +3493,7 @@ namespace Phytel.Data.ETL
                     }
                     catch (Exception ex)
                     {
-                        OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace, IsError = true });
+                        OnEtlEvent(new ETLEventArgs { Message = "[" + _contract + "] " + ex.Message + ": " + ex.StackTrace, IsError = true });
                     }
                 }//);
             }
@@ -3488,7 +3507,7 @@ namespace Phytel.Data.ETL
         {
             try
             {
-                OnEtlEvent(new ETLEventArgs { Message = "Loading patient allergies.", IsError = false });
+                OnEtlEvent(new ETLEventArgs { Message = "[" + _contract + "] Loading patient allergies.", IsError = false });
 
                 ConcurrentBag<MEPatientAllergy> pts;
                 using (AllergyMongoContext pctx = new AllergyMongoContext(ctr))
@@ -3542,7 +3561,7 @@ namespace Phytel.Data.ETL
                     }
                     catch (Exception ex)
                     {
-                        OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace, IsError = true });
+                        OnEtlEvent(new ETLEventArgs { Message = "[" + _contract + "] " + ex.Message + ": " + ex.StackTrace, IsError = true });
                     }
                 }//);
             }
@@ -3556,7 +3575,7 @@ namespace Phytel.Data.ETL
         {
             try
             {
-                OnEtlEvent(new ETLEventArgs { Message = "Loading patient MedSupp.", IsError = false });
+                OnEtlEvent(new ETLEventArgs { Message = "[" + _contract + "] Loading patient MedSupp.", IsError = false });
 
                 ConcurrentBag<MEPatientMedSupp> pts;
                 using (MedicationMongoContext pctx = new MedicationMongoContext(ctr))
@@ -3631,7 +3650,7 @@ namespace Phytel.Data.ETL
                     }
                     catch (Exception ex)
                     {
-                        OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace, IsError = true });
+                        OnEtlEvent(new ETLEventArgs { Message = "[" + _contract + "] " + ex.Message + ": " + ex.StackTrace, IsError = true });
                     }
                 }//);
             }
@@ -3645,7 +3664,7 @@ namespace Phytel.Data.ETL
         {
             try
             {
-                OnEtlEvent(new ETLEventArgs { Message = "Loading patient users.", IsError = false });
+                OnEtlEvent(new ETLEventArgs { Message = "[" + _contract + "] Loading patient users.", IsError = false });
 
                 ConcurrentBag<MEPatientUser> users;
                 using (PatientMongoContext pctx = new PatientMongoContext(ctr))
@@ -3679,7 +3698,7 @@ namespace Phytel.Data.ETL
                         }
                         catch (Exception ex)
                         {
-                            OnEtlEvent(new ETLEventArgs { Message = ex.Message + ": " + ex.StackTrace, IsError = true });
+                            OnEtlEvent(new ETLEventArgs { Message = "[" + _contract + "] " + ex.Message + ": " + ex.StackTrace, IsError = true });
                         }
                     });
             }
@@ -3694,7 +3713,7 @@ namespace Phytel.Data.ETL
             string name = string.Empty;
             try
             {
-                OnEtlEvent(new ETLEventArgs { Message = "Loading users.", IsError = false });
+                OnEtlEvent(new ETLEventArgs { Message = "[" + _contract + "] Loading users.", IsError = false });
 
                 ConcurrentBag<MEContact> contacts;
                 using (ContactMongoContext cctx = new ContactMongoContext(ctr))
@@ -3747,14 +3766,14 @@ namespace Phytel.Data.ETL
                             }
                             catch (Exception ex)
                             {
-                                OnEtlEvent(new ETLEventArgs { Message = "name: " + name + ": " + ex.Message + ": " + ex.StackTrace, IsError = true });
+                                OnEtlEvent(new ETLEventArgs { Message = "[" + _contract + "] name: " + name + ": " + ex.Message + ": " + ex.StackTrace, IsError = true });
                             }
                         }
                     });
             }
             catch (Exception ex)
             {
-                OnEtlEvent(new ETLEventArgs {  Message = "LoadUsers():: name: " + name + ": " + ex.Message + ": " + ex.StackTrace, IsError = true });
+                OnEtlEvent(new ETLEventArgs { Message = "[" + _contract + "] LoadUsers():: name: " + name + ": " + ex.Message + ": " + ex.StackTrace, IsError = true });
             }
         }
     }

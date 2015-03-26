@@ -158,7 +158,7 @@ namespace Phytel.API.DataDomain.Scheduling
             {
                 var result = new GetScheduleDataResponse();
 
-                ISchedulingRepository repo = Factory.GetRepository(request, RepositoryType.Schedule);
+                var repo = Factory.GetRepository(request, RepositoryType.Schedule);
                 repo.UserId = request.UserId;
                 result.Schedule = (ScheduleData)repo.FindByID(request.Id);
                 return result;

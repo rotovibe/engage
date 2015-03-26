@@ -8,45 +8,67 @@ namespace Phytel.Data.ETL.BulkCopy
 {
     public class ReadPlanElementsSeries : ReadSeries
     {
+        protected readonly Dictionary<string, int> stepIdList;
+        protected readonly Dictionary<string, int> userIdList;
+        protected readonly Dictionary<string, int> patientIdList;
+        protected readonly Dictionary<string, int> observationIdList;
+        public string Contract { get; set; }
+
+        public ReadPlanElementsSeries(string contract)
+        {
+            Contract = contract;
+            stepIdList = Utils.GetStepIdList(contract);
+            userIdList = Utils.GetUserIdList(contract);
+            patientIdList = Utils.GetPatientIdList(contract);
+            observationIdList = Utils.GetObservationIdsList(contract);
+        }
+
         public IEnumerable<EStepResponse> ReadEStepResponseSeries(List<MEPatientProgramResponse> list)
         {
-            var enumerable = new ConcurrentBag<EStepResponse>();
-
-            Parallel.ForEach(list, r =>
+            try
             {
-                var stepIds = stepIdList;
-                var userIds = userIdList;
+                var enumerable = new ConcurrentBag<EStepResponse>();
 
-                enumerable.Add(new EStepResponse
+                Parallel.ForEach(list, r =>
                 {
-                    MongoId = r.Id.ToString(),
-                    MongoStepSourceId = r.StepSourceId.ToString(),
-                    MongoActionId = r.ActionId.ToString(),
-                    ActionId = 0, //get action id, // int
-                    Delete = r.DeleteFlag.ToString(),
-                    LastUpdatedOn = r.LastUpdatedOn,
-                    MongoNextStepId = r.NextStepId == null ? string.Empty : r.NextStepId.ToString(),
-                    NextStepId = GetId(stepIds, r.NextStepId.ToString()), // int
-                    Nominal = r.Nominal.ToString(),
-                    Order = r.Order.ToString(),
-                    Text = r.Text ?? string.Empty,
-                    Value = r.Value ?? string.Empty,
-                    Required = r.Required.ToString(),
-                    Selected = r.Selected.ToString(),
-                    MongoRecordCreatedBy = r.RecordCreatedBy.ToString(),
-                    RecordCreatedBy = GetId(userIds, r.RecordCreatedBy.ToString()), // int
-                    RecordCreatedOn = r.RecordCreatedOn,
-                    MongoStepId = r.StepId == null ? string.Empty : r.StepId.ToString(),
-                    StepId = GetId(stepIds, r.StepId.ToString()), // int 
-                    StepSourceId = 000000000000000000000000, //int
-                    MongoUpdatedBy = r.UpdatedBy == null ? string.Empty : r.UpdatedBy.ToString(),
-                    UpdatedBy = GetId(userIds, r.UpdatedBy.ToString()), // int
-                    TTLDate = r.TTLDate ?? null,
-                    Version = Convert.ToInt32(r.Version) // int
-                });
-            });
+                    var stepIds = stepIdList;
+                    var userIds = userIdList;
 
-            return enumerable;
+                    enumerable.Add(new EStepResponse
+                    {
+                        MongoId = r.Id.ToString(),
+                        MongoStepSourceId = r.StepSourceId.ToString(),
+                        MongoActionId = r.ActionId.ToString(),
+                        ActionId = 0, //get action id, // int
+                        Delete = r.DeleteFlag.ToString(),
+                        LastUpdatedOn = r.LastUpdatedOn,
+                        MongoNextStepId = r.NextStepId == null ? string.Empty : r.NextStepId.ToString(),
+                        NextStepId = GetId(stepIds, r.NextStepId.ToString()), // int
+                        Nominal = r.Nominal.ToString(),
+                        Order = r.Order.ToString(),
+                        Text = r.Text ?? string.Empty,
+                        Value = r.Value ?? string.Empty,
+                        Required = r.Required.ToString(),
+                        Selected = r.Selected.ToString(),
+                        MongoRecordCreatedBy = r.RecordCreatedBy.ToString(),
+                        RecordCreatedBy = GetId(userIds, r.RecordCreatedBy.ToString()), // int
+                        RecordCreatedOn = r.RecordCreatedOn,
+                        MongoStepId = r.StepId == null ? string.Empty : r.StepId.ToString(),
+                        StepId = GetId(stepIds, r.StepId.ToString()), // int 
+                        StepSourceId = 000000000000000000000000, //int
+                        MongoUpdatedBy = r.UpdatedBy == null ? string.Empty : r.UpdatedBy.ToString(),
+                        UpdatedBy = GetId(userIds, r.UpdatedBy.ToString()), // int
+                        TTLDate = r.TTLDate ?? null,
+                        Version = Convert.ToInt32(r.Version) // int
+                    });
+                });
+
+                return enumerable;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("ReadEStepResponseSeries()" + ex.Message + ex.StackTrace);
+            }
         }
 
         public IEnumerable<EProgram> ReadEProgramSeries(List<MEPatientProgram> programs)
@@ -66,7 +88,7 @@ namespace Phytel.Data.ETL.BulkCopy
                         AssignedToId = r.AssignedTo == null ? 0 : GetId(userIds, r.AssignedTo.ToString()),
                         CompletedBy = r.CompletedBy == null ? 0 : GetId(userIds, r.CompletedBy.ToString()),
                         UpdatedBy = r.UpdatedBy == null ? 0 : GetId(userIds, r.UpdatedBy.ToString()),
-                        PatientId = r.PatientId == null ? 0 :  GetId(patientIds, r.PatientId.ToString()),
+                        PatientId = r.PatientId == null ? 0 : GetId(patientIds, r.PatientId.ToString()),
                         RecordCreatedBy = r.RecordCreatedBy == null ? 0 : GetId(userIds, r.RecordCreatedBy.ToString()),
                         MongoAssignedBy = r.AssignedBy == null ? string.Empty : r.AssignedBy.ToString(),
                         AssignedOn = r.AssignedOn ?? null,
@@ -109,8 +131,7 @@ namespace Phytel.Data.ETL.BulkCopy
             }
             catch (Exception ex)
             {
-
-                throw ex;
+                throw new Exception("ReadEProgramSeries()" + ex.Message + ex.StackTrace);
             }
         }
 
@@ -119,13 +140,24 @@ namespace Phytel.Data.ETL.BulkCopy
             try
             {
                 var enumerable = new ConcurrentBag<EModule>();
-                var programids = Utils.GetProgramIdList();
+                var programids = Utils.GetProgramIdList(Contract);
 
                 Parallel.ForEach(modules, r =>
                 {
                     var userIds = userIdList;
                     var patientIds = patientIdList;
-                    var pp = programs.Find(p => p.Id == r.ProgramId);
+                    MEPatientProgram pp;
+
+                    try
+                    {
+                        pp = programs.Find(p => p.Id == r.ProgramId);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception(
+                            "Error in trying to find the program id in the programs list. ProgramId : " + r.ProgramId +
+                            ", " + ex.Message + ex.StackTrace);
+                    }
 
                     enumerable.Add(new EModule
                     {
@@ -169,18 +201,18 @@ namespace Phytel.Data.ETL.BulkCopy
             }
             catch (Exception ex)
             {
-
-                throw ex;
+                throw new Exception("ReadEModuleSeries()" + ex.Message + ex.StackTrace);
             }
         }
 
-        public IEnumerable<EAction> ReadEActionSeries(List<Phytel.API.DataDomain.Program.MongoDB.DTO.Action> actions, List<Module> modules, List<MEPatientProgram> programs)
+        public IEnumerable<EAction> ReadEActionSeries(List<Phytel.API.DataDomain.Program.MongoDB.DTO.Action> actions,
+            List<Module> modules, List<MEPatientProgram> programs)
         {
             try
             {
                 var enumerable = new ConcurrentBag<EAction>();
-                var moduleIds = Utils.GetModuleIdList();
-                var moduleSourceIds = Utils.GetModuleIdBySourceIdList();
+                var moduleIds = Utils.GetModuleIdList(Contract);
+                var moduleSourceIds = Utils.GetModuleIdBySourceIdList(Contract);
 
                 Parallel.ForEach(actions, r =>
                 {
@@ -248,12 +280,13 @@ namespace Phytel.Data.ETL.BulkCopy
             }
         }
 
-        public IEnumerable<EStep> ReadEStepSeries(List<Phytel.API.DataDomain.Program.MongoDB.DTO.Step> steps, List<Module> modules, List<MEPatientProgram> programs)
+        public IEnumerable<EStep> ReadEStepSeries(List<Phytel.API.DataDomain.Program.MongoDB.DTO.Step> steps,
+            List<Module> modules, List<MEPatientProgram> programs)
         {
             try
             {
                 var enumerable = new ConcurrentBag<EStep>();
-                var actionIds = Utils.GetActionIdList();
+                var actionIds = Utils.GetActionIdList(Contract);
 
                 Parallel.ForEach(steps, r =>
                 {
@@ -318,7 +351,7 @@ namespace Phytel.Data.ETL.BulkCopy
             }
             catch (Exception ex)
             {
-                throw new ArgumentException("ReadEActionSeries()", ex);
+                throw new ArgumentException("ReadStepSeries()" + ex.Message + ex.StackTrace, ex);
             }
         }
 
@@ -327,8 +360,8 @@ namespace Phytel.Data.ETL.BulkCopy
             try
             {
                 var enumerable = new ConcurrentBag<EProgramAttribute>();
-                var actionIds = Utils.GetActionIdList();
-                var progIds = Utils.GetProgramIdList();
+                var actionIds = Utils.GetActionIdList(Contract);
+                var progIds = Utils.GetProgramIdList(Contract);
 
                 Parallel.ForEach(pAttr, r =>
                 {
@@ -371,12 +404,13 @@ namespace Phytel.Data.ETL.BulkCopy
             }
             catch (Exception ex)
             {
-                throw new ArgumentException("ReadEActionSeries()", ex);
+                throw new Exception("ReadEProgramAttributeSeries()" + ex.Message + ex.StackTrace);
             }
         }
 
 
-        private int GetModuleId(MongoDB.Bson.ObjectId objectId, Dictionary<string, int> moduleIds, Dictionary<string, int> moduleSourceIds)
+        private int GetModuleId(MongoDB.Bson.ObjectId objectId, Dictionary<string, int> moduleIds,
+            Dictionary<string, int> moduleSourceIds)
         {
             try
             {

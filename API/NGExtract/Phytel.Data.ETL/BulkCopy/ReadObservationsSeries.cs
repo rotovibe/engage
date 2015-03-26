@@ -8,6 +8,19 @@ namespace Phytel.Data.ETL.BulkCopy
 {
     public class ReadObservationsSeries : ReadSeries
     {
+        protected readonly Dictionary<string, int> stepIdList;
+        protected readonly Dictionary<string, int> userIdList;
+        protected readonly Dictionary<string, int> patientIdList;
+        protected readonly Dictionary<string, int> observationIdList;
+
+        public ReadObservationsSeries(string contract)
+        {
+            stepIdList = Utils.GetStepIdList(contract);
+            userIdList = Utils.GetUserIdList(contract);
+            patientIdList = Utils.GetPatientIdList(contract);
+            observationIdList = Utils.GetObservationIdsList(contract);
+        }
+
         public IEnumerable<EObservationResponse> ReadEObservationSeries(List<MEPatientObservation> list)
         {
             var enumerable = new ConcurrentBag<EObservationResponse>();

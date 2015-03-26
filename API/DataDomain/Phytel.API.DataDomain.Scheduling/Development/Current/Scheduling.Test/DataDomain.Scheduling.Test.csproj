@@ -85,6 +85,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="SchedulingDataManagerTests.cs" />
     <Compile Include="Stubs\StubMongoScheduleRepository.cs" />
     <Compile Include="Stubs\StubMongoToDoRepository.cs" />
     <Compile Include="Stubs\StubSchedulingRepositoryFactory.cs" />

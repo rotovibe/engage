@@ -171,6 +171,7 @@
     <Compile Include="Programs\ElementActivation\ElementActivationStrategyTests.cs" />
     <Compile Include="Programs\ElementActivation\GoalActivationRuleTests.cs" />
     <Compile Include="Programs\ElementActivation\ToDoActivationRuleTests.cs" />
+    <Compile Include="Programs\EndpointUtilsTests.cs" />
     <Compile Include="Programs\EndpointUtils_Tests.cs" />
     <Compile Include="Programs\PlanElemStrategy\PlanElementActivationStrategyTests.cs" />
     <Compile Include="Programs\PlanElemStrategy\SetModulePropertiesForRepeat_Test.cs" />

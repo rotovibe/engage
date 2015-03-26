@@ -35,74 +35,120 @@ namespace Phytel.Data.ETL
             return list;
         }
 
-        internal static Dictionary<string, int> GetStepIdList()
+        internal static Dictionary<string, int> GetStepIdList(string contract)
         {
-            var set = SQLDataService.Instance.ExecuteSQL("InHealth001", true, "REPORT", "select StepId, MongoId from RPT_PatientProgramStep");
+            try
+            {
+                var set = SQLDataService.Instance.ExecuteSQL(contract, true, "REPORT",
+                    "select StepId, MongoId from RPT_PatientProgramStep");
 
-            if (set == null)
-                throw new ArgumentException("GetStepIdList(): UserId was not found.");
+                if (set == null)
+                    throw new ArgumentException("GetStepIdList(): UserId was not found.");
 
-            return set.Tables[0].Rows.Cast<DataRow>()
-                .ToDictionary(dr => dr["MongoId"].ToString(), dr => Convert.ToInt32(dr["StepId"]));
+                return set.Tables[0].Rows.Cast<DataRow>()
+                    .ToDictionary(dr => dr["MongoId"].ToString(), dr => Convert.ToInt32(dr["StepId"]));
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("GetStepIdList()" + ex.Message + ex.StackTrace);
+            }
         }
 
-        internal static Dictionary<string, int> GetProgramIdList()
+        internal static Dictionary<string, int> GetProgramIdList(string contract)
         {
-            var set = SQLDataService.Instance.ExecuteSQL("InHealth001", true, "REPORT", "SELECT PatientProgramId,MongoId FROM RPT_PatientProgram");
+            try
+            {
+                var set = SQLDataService.Instance.ExecuteSQL(contract, true, "REPORT",
+                    "SELECT PatientProgramId,MongoId FROM RPT_PatientProgram");
 
-            if (set == null)
-                throw new ArgumentException("GetProgramIdList(): ProgramId was not found.");
+                if (set == null)
+                    throw new ArgumentException("GetProgramIdList(): ProgramId was not found.");
 
-            return set.Tables[0].Rows.Cast<DataRow>()
-                .ToDictionary(dr => dr["MongoId"].ToString(), dr => Convert.ToInt32(dr["PatientProgramId"]));
+                return set.Tables[0].Rows.Cast<DataRow>()
+                    .ToDictionary(dr => dr["MongoId"].ToString(), dr => Convert.ToInt32(dr["PatientProgramId"]));
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("GetProgramIdList()" + ex.Message + ex.StackTrace);
+            }
         }
 
-        internal static Dictionary<string, int> GetActionIdList()
+        internal static Dictionary<string, int> GetActionIdList(string contract)
         {
-            var set = SQLDataService.Instance.ExecuteSQL("InHealth001", true, "REPORT", "SELECT ActionId,MongoId FROM RPT_PatientProgramAction");
+            try { 
+            var set = SQLDataService.Instance.ExecuteSQL(contract, true, "REPORT", "SELECT ActionId,MongoId FROM RPT_PatientProgramAction");
 
             if (set == null)
                 throw new ArgumentException("GetActionIdList(): ProgramId was not found.");
 
             return set.Tables[0].Rows.Cast<DataRow>()
                 .ToDictionary(dr => dr["MongoId"].ToString(), dr => Convert.ToInt32(dr["ActionId"]));
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("GetActionIdList()" + ex.Message + ex.StackTrace);
+            }
         }
 
-        internal static Dictionary<string, int> GetModuleIdList()
+        internal static Dictionary<string, int> GetModuleIdList(string contract)
         {
-            var set = SQLDataService.Instance.ExecuteSQL("InHealth001", true, "REPORT", "SELECT PatientProgramModuleId,MongoId FROM RPT_PatientProgramModule");
+            try { 
+            var set = SQLDataService.Instance.ExecuteSQL(contract, true, "REPORT", "SELECT PatientProgramModuleId,MongoId FROM RPT_PatientProgramModule");
             if (set == null)
                 throw new ArgumentException("GetModuleIdList(): ModuleId was not found.");
 
             return set.Tables[0].Rows.Cast<DataRow>()
                 .ToDictionary(dr => dr["MongoId"].ToString(), dr => Convert.ToInt32(dr["PatientProgramModuleId"]));
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("GetModuleIdList()" + ex.Message + ex.StackTrace);
+            }
         }
 
-        internal static Dictionary<string, int> GetModuleIdBySourceIdList()
+        internal static Dictionary<string, int> GetModuleIdBySourceIdList(string contract)
         {
-            var set = SQLDataService.Instance.ExecuteSQL("InHealth001", true, "REPORT", "SELECT PatientProgramModuleId,SourceId FROM RPT_PatientProgramModule");
-            if (set == null)
-                throw new ArgumentException("GetModuleIdBySourceIdList(): ModuleId was not found.");
+            try
+            {
+                var set = SQLDataService.Instance.ExecuteSQL(contract, true, "REPORT",
+                    "SELECT PatientProgramModuleId,SourceId FROM RPT_PatientProgramModule");
+                if (set == null)
+                    throw new ArgumentException("GetModuleIdBySourceIdList(): ModuleId was not found.");
 
-            return set.Tables[0].Rows.Cast<DataRow>().GroupBy(p => p["SourceId"].ToString(), StringComparer.OrdinalIgnoreCase)
-                .ToDictionary(dr => dr.Key, dr => Convert.ToInt32( ((DataRow)dr.First()).ItemArray.GetValue(0)), StringComparer.OrdinalIgnoreCase);
+                return set.Tables[0].Rows.Cast<DataRow>()
+                    .GroupBy(p => p["SourceId"].ToString(), StringComparer.OrdinalIgnoreCase)
+                    .ToDictionary(dr => dr.Key, dr => Convert.ToInt32(((DataRow) dr.First()).ItemArray.GetValue(0)),
+                        StringComparer.OrdinalIgnoreCase);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("GetModuleIdBySourceIdList()" + ex.Message + ex.StackTrace);
+            }
         }
 
-        internal static Dictionary<string, int> GetUserIdList()
+        internal static Dictionary<string, int> GetUserIdList(string contract)
         {
-            var set = SQLDataService.Instance.ExecuteSQL("InHealth001", true, "REPORT",
-                "select dbo.[RPT_User].UserId, MongoId from dbo.[RPT_User]");
+            try
+            {
+                var set = SQLDataService.Instance.ExecuteSQL(contract, true, "REPORT",
+                    "select dbo.[RPT_User].UserId, MongoId from dbo.[RPT_User]");
 
-            if (set == null)
-                throw new ArgumentException("GetUserIdList(): UserId was not found.");
+                if (set == null)
+                    throw new ArgumentException("GetUserIdList(): UserId was not found.");
 
-            return set.Tables[0].Rows.Cast<DataRow>()
-                .ToDictionary(dr => dr["MongoId"].ToString(), dr => Convert.ToInt32(dr["UserId"]));
+                return set.Tables[0].Rows.Cast<DataRow>()
+                    .ToDictionary(dr => dr["MongoId"].ToString(), dr => Convert.ToInt32(dr["UserId"]));
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("GetUserIdList()" + ex.Message + ex.StackTrace);
+            }
         }
 
-        internal static Dictionary<string, int> GetPatientIdList()
+        internal static Dictionary<string, int> GetPatientIdList(string contract)
         {
-            var set = SQLDataService.Instance.ExecuteSQL("InHealth001", true, "REPORT",
+            try { 
+            var set = SQLDataService.Instance.ExecuteSQL(contract, true, "REPORT",
                 "select dbo.[RPT_Patient].PatientId, MongoId from dbo.[RPT_Patient]");
 
             if (set == null)
@@ -110,11 +156,17 @@ namespace Phytel.Data.ETL
 
             return set.Tables[0].Rows.Cast<DataRow>()
                 .ToDictionary(dr => dr["MongoId"].ToString(), dr => Convert.ToInt32(dr["PatientId"]));
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("GetPatientIdList()" + ex.Message + ex.StackTrace);
+            }
         }
 
-        internal static Dictionary<string, int> GetObservationIdsList()
+        internal static Dictionary<string, int> GetObservationIdsList(string contract)
         {
-            var set = SQLDataService.Instance.ExecuteSQL("InHealth001", true, "REPORT",
+            try { 
+            var set = SQLDataService.Instance.ExecuteSQL(contract, true, "REPORT",
                 "select dbo.[RPT_Observation].ObservationId, MongoId from dbo.[RPT_Observation]");
 
             if (set == null)
@@ -122,22 +174,34 @@ namespace Phytel.Data.ETL
 
             return set.Tables[0].Rows.Cast<DataRow>()
                 .ToDictionary(dr => dr["MongoId"].ToString(), dr => Convert.ToInt32(dr["ObservationId"]));
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("GetObservationIdsList()" + ex.Message + ex.StackTrace);
+            }
         }
 
-        internal static int GetUserId(string mId)
+        internal static int GetUserId(string mId, string contract)
         {
-            var set = SQLDataService.Instance.ExecuteSQL("InHealth001", true, "REPORT",
-                "select dbo.[RPT_User].UserId from dbo.[RPT_User] where MongoId = '" + mId + "'");
+            try
+            {
+                var set = SQLDataService.Instance.ExecuteSQL(contract, true, "REPORT",
+                    "select dbo.[RPT_User].UserId from dbo.[RPT_User] where MongoId = '" + mId + "'");
 
-            var row = set.Tables[0].Rows.Cast<DataRow>().FirstOrDefault<DataRow>();
-            var id = 0;
-            if (row != null)
-                id = Convert.ToInt32(row[0]);
+                var row = set.Tables[0].Rows.Cast<DataRow>().FirstOrDefault<DataRow>();
+                var id = 0;
+                if (row != null)
+                    id = Convert.ToInt32(row[0]);
 
-            //if (id == 0)
-            //    throw new ArgumentException("GetUserId(): UserId was not found.");
+                //if (id == 0)
+                //    throw new ArgumentException("GetUserId(): UserId was not found.");
 
-            return id;
+                return id;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("GetUserId()" + ex.Message + ex.StackTrace);
+            }
         }
     }
 }
