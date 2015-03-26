@@ -146,6 +146,31 @@ namespace DataDomain.Medication.Repo
             catch (Exception) { throw; }
         }
 
+        public object FindByName(object request)
+        {
+            PostPatientMedFrequencyDataRequest dataRequest = (PostPatientMedFrequencyDataRequest)request;
+            string id = null;
+            try
+            {
+                using (MedicationMongoContext ctx = new MedicationMongoContext(ContractDBName))
+                {
+                    var query =
+                    from meFreq in ctx.PatientMedFrequencies.AsQueryable<MEPatientMedFrequency>()
+                    where   meFreq.Name.ToLower() == dataRequest.PatientMedFrequencyData.Name.ToLower() 
+                            && meFreq.DeleteFlag == false 
+                            && meFreq.TTLDate == BsonNull.Value
+                            && meFreq.PatientId == ObjectId.Parse(dataRequest.PatientMedFrequencyData.PatientId)
+                    select meFreq;
+                    if (query.FirstOrDefault() != null)
+                    {
+                        id = query.FirstOrDefault().Id.ToString();
+                    }
+                }
+                return id;
+            }
+            catch (Exception) { throw; }
+        }
+
         public object FindNDCCodes(object request)
         {
             throw new NotImplementedException();

@@ -42,8 +42,8 @@ namespace Phytel.API.DataDomain.Allergy.Test
         {
             PatientMedFrequencyData data = new PatientMedFrequencyData
             {
-                Name = "2 hours before sleep",
-                PatientId = "5325daefd6a4850adcbba7ca", 
+                Name = "abc",
+                PatientId = "5325da88d6a4850adcbba68a", 
             };
 
             PostPatientMedFrequencyDataRequest request = new PostPatientMedFrequencyDataRequest

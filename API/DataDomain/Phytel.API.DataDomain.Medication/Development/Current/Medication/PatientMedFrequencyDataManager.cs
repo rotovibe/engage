@@ -31,7 +31,12 @@ namespace Phytel.API.DataDomain.Medication
                 var repo = MedicationRepositoryFactory.GetMedicationRepository(request, RepositoryType.PatientMedFrequency);
                 if (request.PatientMedFrequencyData != null)
                 {
-                    id = repo.Insert(request as object) as string;
+                    // Check if frequency by the same name exists before inserting the new one.
+                    id = repo.FindByName(request) as string;
+                    if (string.IsNullOrEmpty(id))
+                    {
+                        id = repo.Insert(request) as string;
+                    }
                 }
                 return id;
             }

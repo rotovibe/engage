@@ -440,5 +440,11 @@ namespace DataDomain.Medication.Repo
         {
             throw new NotImplementedException();
         }
+
+
+        public object FindByName(object request)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
