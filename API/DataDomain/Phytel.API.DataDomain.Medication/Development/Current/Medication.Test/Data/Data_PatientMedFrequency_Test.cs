@@ -11,7 +11,7 @@ using ServiceStack.ServiceClient.Web;
 
 namespace Phytel.API.DataDomain.Allergy.Test
 {
-    [TestClass]
+    //[TestClass]
     public class Data_PatientMedFrequency_Test
     {
         string context = "NG";
