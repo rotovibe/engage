@@ -1,13 +1,10 @@
 ﻿using AutoMapper;
-using Phytel.Framework.ASE.Bus;
 using Phytel.Services.API.DTO;
 using Phytel.Services.API.Provider;
 using Phytel.Services.Dates;
 using Phytel.Services.Dispatch;
 using ServiceStack.ServiceHost;
-using ServiceStack.Text;
 using System;
-using MongoDB.Bson;
 
 namespace Phytel.Services.Journal.Dispatch
 {
@@ -28,7 +25,7 @@ namespace Phytel.Services.Journal.Dispatch
             _mappingEngine = mappingEngine;
         }
 
-        public virtual JournalEntry Dispatch(State state, object requestDto = null, string actionId = null, string name = null, string product = null, string ipAddress = null, string verb = null, DateTime? timeUtc = null, string parentActionId = null, Exception exception = null)
+        public virtual JournalEntry Dispatch(State state, object requestDto = null, string actionId = null, string name = null, string product = null, string ipAddress = null, string url = null, string verb = null, DateTime? timeUtc = null, string parentActionId = null, Exception exception = null)
         {
             if (string.IsNullOrEmpty(actionId))
             {
@@ -68,8 +65,9 @@ namespace Phytel.Services.Journal.Dispatch
             entry.IPAddress = ipAddress;
             entry.Verb = verb;
             entry.State = state;
+            entry.Url = url;
 
-            if(requestDto != null && requestDto.GetType().IsPrimitive == false)
+            if (requestDto != null && requestDto.GetType().IsPrimitive == false)
             {
                 entry.Body = MongoDB.Bson.BsonExtensionMethods.ToJson(requestDto);
             }
@@ -93,22 +91,6 @@ namespace Phytel.Services.Journal.Dispatch
             return entry;
         }
 
-        public virtual void DispatchEntries(params JournalEntry[] entries)
-        {
-            AddJournalEntriesMessage message = new AddJournalEntriesMessage();
-            if(message.Entries == null)
-            {
-                message.Entries = new System.Collections.Generic.List<JournalEntry>();
-            }
-            foreach (JournalEntry entry in entries)
-            {
-                message.Entries.Add(entry);
-            }
-
-            _dispatcher.Dispatch(message);
-        }
-
-
         public virtual JournalEntry Dispatch(State state, IHttpRequest request, object requestDto = null, string actionId = null, DateTime? timeUtc = null, string parentActionId = null, Exception exception = null)
         {
             return Dispatch(
@@ -118,11 +100,27 @@ namespace Phytel.Services.Journal.Dispatch
                 request.OperationName,
                 _serviceConfigProxy.GetServiceName(),
                 request.RemoteIp,
+                request.RawUrl,
                 request.HttpMethod,
                 timeUtc,
                 parentActionId,
                 exception
                 );
+        }
+
+        public virtual void DispatchEntries(params JournalEntry[] entries)
+        {
+            AddJournalEntriesMessage message = new AddJournalEntriesMessage();
+            if (message.Entries == null)
+            {
+                message.Entries = new System.Collections.Generic.List<JournalEntry>();
+            }
+            foreach (JournalEntry entry in entries)
+            {
+                message.Entries.Add(entry);
+            }
+
+            _dispatcher.Dispatch(message);
         }
     }
 }
