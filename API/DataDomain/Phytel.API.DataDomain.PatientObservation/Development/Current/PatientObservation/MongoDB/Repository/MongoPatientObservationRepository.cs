@@ -212,6 +212,7 @@ namespace Phytel.API.DataDomain.PatientObservation
                     queries.Add(Query.EQ(MEPatientObservation.ObservationIdProperty, ObjectId.Parse(entityId)));
                     queries.Add(Query.EQ(MEPatientObservation.DeleteFlagProperty, false));
                     queries.Add(Query.EQ(MEPatientObservation.ObservationStateProperty, 2));
+                    queries.Add(Query.EQ(MEPatientObservation.TTLDateProperty, BsonNull.Value));
                     IMongoQuery mQuery = Query.And(queries);
 
                     MEPatientObservation o = ctx.PatientObservations.Collection.Find(mQuery).FirstOrDefault();

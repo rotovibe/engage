@@ -22,7 +22,6 @@ namespace DataDomain.Search.Repo.LuceneStrategy
         public string Contract { get; set; }
         public StandardAnalyzer Analyzer { get; set; }
         private IndexWriter _writer;
-
         private readonly Dictionary<string, IndexWriter> _writerPool;
 
         public MedNameLuceneStrategy()
@@ -95,52 +94,61 @@ namespace DataDomain.Search.Repo.LuceneStrategy
 
         public override List<TT> ExecuteSearch(string searchQuery, string searchField = "")
         {
-            if (string.IsNullOrEmpty(searchQuery.Replace("*", "").Replace("?", ""))) return new List<TT>();
-
-            searchQuery = ParseSpecialCharacters(searchQuery);
-
-            IndexReader rdr;
             try
             {
-                rdr = IndexReader.Open(_writerPool[HostContext.Instance.Items["Contract"].ToString()].Directory, true);
+                if (string.IsNullOrEmpty(searchQuery.Replace("*", "").Replace("?", ""))) return new List<TT>();
+
+                searchQuery = ParseSpecialCharacters(searchQuery);
+
+                IndexReader rdr;
+                try
+                {
+                    rdr = IndexReader.Open(_writerPool[HostContext.Instance.Items["Contract"].ToString()].Directory,
+                        true);
+                }
+                catch (Exception ex)
+                {
+                    throw new ArgumentException(
+                        "ExecuteSearch(): Could not find contract name in the WriterPool." + ex.Message, ex.StackTrace);
+                }
+
+                IndexSearcher searcher = new IndexSearcher(rdr);
+                BooleanQuery.MaxClauseCount = 1024*32;
+                const int hitsLimit = 1000;
+
+                if (!string.IsNullOrEmpty(searchField))
+                {
+                    var parser = new QueryParser(Version.LUCENE_30, searchField, Analyzer)
+                    {
+                        AllowLeadingWildcard = true,
+                        PhraseSlop = 0
+                    };
+                    var query = ParseWholeQuery(searchQuery, parser);
+                    var hits = searcher.Search(query, hitsLimit).ScoreDocs;
+                    var results = MapLuceneToDataList(hits, searcher);
+                    searcher.Dispose();
+                    return results;
+                }
+                else
+                {
+                    var fields = new[] {"CompositeName", "SubstanceName"};
+                    var parser = new MultiFieldQueryParser(Version.LUCENE_30, fields, Analyzer)
+                    {
+                        DefaultOperator = QueryParser.Operator.AND,
+                        PhraseSlop = 0
+                    };
+
+                    var query = ParseWholeQueryWc(searchQuery.ToLower(), fields, parser);
+                    var hits = searcher.Search(query, null, hitsLimit, Sort.RELEVANCE).ScoreDocs;
+
+                    var results = MapLuceneToDataList(hits, searcher);
+                    searcher.Dispose();
+                    return results;
+                }
             }
             catch (Exception ex)
             {
-                throw new ArgumentException("ExecuteSearch(): Could not find contract name in the WriterPool." + ex.Message, ex.StackTrace);
-            }
-
-            IndexSearcher searcher = new IndexSearcher(rdr);
-            BooleanQuery.MaxClauseCount = 1024*32;
-            const int hitsLimit = 1000;
-
-            if (!string.IsNullOrEmpty(searchField))
-            {
-                var parser = new QueryParser(Version.LUCENE_30, searchField, Analyzer)
-                {
-                    AllowLeadingWildcard = true,
-                    PhraseSlop = 0
-                };
-                var query = ParseWholeQuery(searchQuery, parser);
-                var hits = searcher.Search(query, hitsLimit).ScoreDocs;
-                var results = MapLuceneToDataList(hits, searcher);
-                searcher.Dispose();
-                return results;
-            }
-            else
-            {
-                var fields = new[] {"CompositeName", "SubstanceName"};
-                var parser = new MultiFieldQueryParser(Version.LUCENE_30, fields, Analyzer)
-                {
-                    DefaultOperator = QueryParser.Operator.AND,
-                    PhraseSlop = 0
-                };
-
-                var query = ParseWholeQueryWc(searchQuery.ToLower(), fields, parser);
-                var hits = searcher.Search(query, null, hitsLimit, Sort.RELEVANCE).ScoreDocs;
-
-                var results = MapLuceneToDataList(hits, searcher);
-                searcher.Dispose();
-                return results;
+                throw new ArgumentException("ExecuteSearch():" + ex.Message, ex.StackTrace);
             }
         }
 

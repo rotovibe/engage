@@ -51,7 +51,7 @@ namespace Phytel.API.AppDomain.NG.Search
                         Version = e.Version
                     });
             }
-            catch (Exception ex)
+            catch (WebServiceException ex)
             {
                 throw new Exception("AD:SearchEndpointUtil:RegisterMedDocument()::" + ex.Message, ex.InnerException);
             }
@@ -64,10 +64,10 @@ namespace Phytel.API.AppDomain.NG.Search
                 IRestClient client = new JsonServiceClient();
                 //[Route("/{Context}/{Version}/{ContractNumber}/Search/AllergyIndex/Insert", "PUT")]
                 var url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Search/AllergyIndex/Insert",
-                                   _ddSearchServiceUrl,
-                                   "NG",
-                                   e.Version,
-                                   e.ContractNumber), e.UserId);
+                    _ddSearchServiceUrl,
+                    "NG",
+                    e.Version,
+                    e.ContractNumber), e.UserId);
 
                 client.Put<PutAllergyRegistrationResponse>(url,
                     new PutAllergyRegistrationRequest
@@ -79,7 +79,7 @@ namespace Phytel.API.AppDomain.NG.Search
                         Version = e.Version
                     });
             }
-            catch (Exception ex)
+            catch (WebServiceException ex)
             {
                 throw new Exception("AD:SearchEndpointUtil:RegisterMedDocument()::" + ex.Message, ex.InnerException);
             }
@@ -88,7 +88,7 @@ namespace Phytel.API.AppDomain.NG.Search
         public List<object> GetTermSearchResults(IAppDomainRequest e, SearchEnum type, string term)
         {
             string urlTest = null;
-
+            GetSearchResponse dataDomainResponse = null;
             try
             {
                 List<object> result = new List<object>();
@@ -104,7 +104,7 @@ namespace Phytel.API.AppDomain.NG.Search
 
                 url = url + "&Term=" + term;
 
-                GetSearchResponse dataDomainResponse = client.Get<GetSearchResponse>(url);
+                dataDomainResponse = client.Get<GetSearchResponse>(url);
 
                 switch (type)
                 {
@@ -135,9 +135,9 @@ namespace Phytel.API.AppDomain.NG.Search
                 }
                 return result;
             }
-            catch (Exception ex)
+            catch (WebServiceException ex)
             {
-                throw new Exception("AD:SearchEndpointUtil:GetTermSearchResults():: url:" + urlTest+ " message:" + ex.Message + " trace:" + ex.StackTrace, ex.InnerException);
+                throw new Exception("AD:SearchEndpointUtil:GetTermSearchResults():: url:" + urlTest+ " message:" + dataDomainResponse.Status.Message + " trace:" + ex.StackTrace, ex.InnerException);
             }
         }
 
@@ -172,7 +172,7 @@ namespace Phytel.API.AppDomain.NG.Search
 
                 return result;
             }
-            catch (Exception ex)
+            catch (WebServiceException ex)
             {
                 throw new Exception("AD:SearchEndpointUtil:GetMedicationMapsByName()::" + ex.Message, ex.InnerException);
             }
