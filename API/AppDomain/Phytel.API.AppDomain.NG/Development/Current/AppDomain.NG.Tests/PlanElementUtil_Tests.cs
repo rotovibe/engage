@@ -832,6 +832,30 @@ namespace Phytel.API.AppDomain.NG.Tests
                     Assert.IsTrue(ex != null);
                 }
             }
+
+            [TestMethod()]
+            public void SetProgramAttributes_DoNot_Set_Program_State_state_1()
+            {
+                IPlanElementUtils pUtils = new PlanElementUtils();
+                var pe = new AD.PlanElement {Enabled = false};
+                var progAttr = new ProgramAttributeData();
+                var prog = new AD.Program {Name = "test"};
+                pUtils.SetProgramAttributes(new AD.SpawnElement {Tag = "1", ElementType = 10, ElementId = "1234"}, prog, "user", progAttr);
+
+                Assert.AreEqual(0, prog.ElementState);
+            }
+
+            [TestMethod()]
+            public void SetProgramAttributes_DoNot_Set_Program_State_state_2()
+            {
+                IPlanElementUtils pUtils = new PlanElementUtils();
+                var pe = new AD.PlanElement {Enabled = false};
+                var progAttr = new ProgramAttributeData();
+                var prog = new AD.Program {Name = "test"};
+                pUtils.SetProgramAttributes(new AD.SpawnElement {Tag = "2", ElementType = 10, ElementId = "1234"}, prog, "user", progAttr);
+
+                Assert.AreEqual(0, prog.ElementState);
+            }
         }
     }
 }

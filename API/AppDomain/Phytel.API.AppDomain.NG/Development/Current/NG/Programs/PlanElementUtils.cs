@@ -218,11 +218,12 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        public void SetProgramAttributes(SpawnElement r, Program program, string userId,
-            DD.ProgramAttributeData progAttr)
+        public void SetProgramAttributes(SpawnElement r, Program program, string userId, DD.ProgramAttributeData progAttr)
         {
             try
             {
+
+
                 if (r.ElementType == 10)
                 {
                     try
@@ -246,14 +247,14 @@ namespace Phytel.API.AppDomain.NG
                     switch (state)
                     {
                         case 1:
-                            program.ElementState = (int) DataDomain.Program.DTO.ElementState.Completed; //5;
-                            program.StateUpdatedOn = System.DateTime.UtcNow;
+                            //program.ElementState = (int) DataDomain.Program.DTO.ElementState.Completed; //5;
+                            //program.StateUpdatedOn = System.DateTime.UtcNow;
                             progAttr.Eligibility = 1;
                             program.AttrEndDate = System.DateTime.UtcNow;
                             break;
                         case 2:
-                            program.ElementState = (int) DataDomain.Program.DTO.ElementState.InProgress; //4;
-                            program.StateUpdatedOn = System.DateTime.UtcNow;
+                            //program.ElementState = (int) DataDomain.Program.DTO.ElementState.InProgress; //4;
+                            //program.StateUpdatedOn = System.DateTime.UtcNow;
                             progAttr.Eligibility = 2;
                             break;
                     }
