@@ -10,6 +10,8 @@ using Phytel.API.AppDomain.NG.Test.Factories;
 using AD = Phytel.API.AppDomain.NG.DTO;
 using Phytel.API.DataDomain.Program.DTO;
 using MongoDB.Bson;
+using Phytel.API.AppDomain.NG.Programs.ProgramAttributes;
+
 namespace Phytel.API.AppDomain.NG.Tests
 {
     [TestClass()]
@@ -836,7 +838,7 @@ namespace Phytel.API.AppDomain.NG.Tests
             [TestMethod()]
             public void SetProgramAttributes_DoNot_Set_Program_State_state_1()
             {
-                IPlanElementUtils pUtils = new PlanElementUtils();
+                IPlanElementUtils pUtils = new PlanElementUtils{ ProgramAttributeStrategy = new ProgramAttributeStrategy()};
                 var pe = new AD.PlanElement {Enabled = false};
                 var progAttr = new ProgramAttributeData();
                 var prog = new AD.Program {Name = "test"};
@@ -848,7 +850,7 @@ namespace Phytel.API.AppDomain.NG.Tests
             [TestMethod()]
             public void SetProgramAttributes_DoNot_Set_Program_State_state_2()
             {
-                IPlanElementUtils pUtils = new PlanElementUtils();
+                IPlanElementUtils pUtils = new PlanElementUtils { ProgramAttributeStrategy = new ProgramAttributeStrategy() };
                 var pe = new AD.PlanElement {Enabled = false};
                 var progAttr = new ProgramAttributeData();
                 var prog = new AD.Program {Name = "test"};

@@ -185,6 +185,11 @@
     <Compile Include="Programs\ElementActivation\ElementActivationRule.cs" />
     <Compile Include="Programs\ElementActivation\ElementActivationStrategy.cs" />
     <Compile Include="Programs\PlanResponsibilityChain\IStepPlanProcessor.cs" />
+    <Compile Include="Programs\ProgramAttributes\EligibilityAttributeRule.cs" />
+    <Compile Include="Programs\ProgramAttributes\IProgramAttributeRule.cs" />
+    <Compile Include="Programs\ProgramAttributes\IProgramAttributeStrategy.cs" />
+    <Compile Include="Programs\ProgramAttributes\ProgramAttributeRule.cs" />
+    <Compile Include="Programs\ProgramAttributes\ProgramAttributeStrategy.cs" />
     <Compile Include="SchedulingManager.cs" />
     <Compile Include="CareMembersManager.cs" />
     <Compile Include="Command\CareMembersCommand.cs" />

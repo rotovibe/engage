@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using MongoDB.Bson;
+using Phytel.API.AppDomain.NG.Programs.ProgramAttributes;
 using ServiceStack.Common.Extensions;
 using DD = Phytel.API.DataDomain.Program.DTO;
 using Phytel.API.AppDomain.NG.Specifications;
@@ -18,6 +19,7 @@ namespace Phytel.API.AppDomain.NG
 
     public class PlanElementUtils : IPlanElementUtils
     {
+        public IProgramAttributeStrategy ProgramAttributeStrategy { get; set; }
         private readonly Specification<PlanElement> _isModifyAllowed;
 
         public PlanElementUtils()
@@ -222,42 +224,9 @@ namespace Phytel.API.AppDomain.NG
         {
             try
             {
-
-
                 if (r.ElementType == 10)
                 {
-                    try
-                    {
-                        if (r.Tag == null)
-                            throw new ArgumentException("Cannot set attribute of type " + r.ElementType +
-                                                        ". Tag value is null.");
-
-                        progAttr.Eligibility = (!string.IsNullOrEmpty(r.Tag)) ? Convert.ToInt32(r.Tag) : 0;
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new Exception("AD:SetProgramAttributes()::Eligibility" + ex.Message, ex.InnerException);
-                    }
-
-                    int state; // no = 1, yes = 2
-                    var isNum = int.TryParse(r.Tag, out state);
-                    if (!isNum) return;
-
-                    // program is closed due to ineligibility
-                    switch (state)
-                    {
-                        case 1:
-                            //program.ElementState = (int) DataDomain.Program.DTO.ElementState.Completed; //5;
-                            //program.StateUpdatedOn = System.DateTime.UtcNow;
-                            progAttr.Eligibility = 1;
-                            program.AttrEndDate = System.DateTime.UtcNow;
-                            break;
-                        case 2:
-                            //program.ElementState = (int) DataDomain.Program.DTO.ElementState.InProgress; //4;
-                            //program.StateUpdatedOn = System.DateTime.UtcNow;
-                            progAttr.Eligibility = 2;
-                            break;
-                    }
+                    ProgramAttributeStrategy.Run(r, program, userId, progAttr); // move out of "if statement tree" once everything is ready to be refactored.
                 }
                 else if (r.ElementType == 11)
                 {
@@ -265,15 +234,13 @@ namespace Phytel.API.AppDomain.NG
                     try
                     {
                         if (r.Tag == null)
-                            throw new ArgumentException("Cannot set attribute of type " + r.ElementType +
-                                                        ". Tag value is null.");
+                            throw new ArgumentException("Cannot set attribute of type " + r.ElementType + ". Tag value is null.");
 
                         progAttr.IneligibleReason = (!string.IsNullOrEmpty(r.Tag)) ? r.Tag : null;
                     }
                     catch (Exception ex)
                     {
-                        throw new Exception("AD:SetProgramAttributes()::IneligibleReason" + ex.Message,
-                            ex.InnerException);
+                        throw new Exception("AD:SetProgramAttributes()::IneligibleReason" + ex.Message, ex.InnerException);
                     }
                 }
                 else if (r.ElementType == 12)
@@ -281,8 +248,7 @@ namespace Phytel.API.AppDomain.NG
                     try
                     {
                         if (r.Tag == null)
-                            throw new ArgumentException("Cannot set attribute of type " + r.ElementType +
-                                                        ". Tag value is null.");
+                            throw new ArgumentException("Cannot set attribute of type " + r.ElementType + ". Tag value is null.");
 
                         program.ElementState = (!string.IsNullOrEmpty(r.Tag)) ? Convert.ToInt32(r.Tag) : 0;
                         program.StateUpdatedOn = System.DateTime.UtcNow;
