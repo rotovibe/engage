@@ -19,6 +19,8 @@ namespace Phytel.Services.API.Client
 
         TResponse Get<TResponse>(object requestDto);
 
+        void GetAsync<TResponse>(object requestDto, Action<TResponse> onSuccess, Action<TResponse, Exception> onError);
+
         TResponse Patch<TResponse>(object requestDto);
 
         void Patch(object requestDto);

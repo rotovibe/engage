@@ -74,6 +74,13 @@ namespace Phytel.Services.API.Client
             return _client.Get<TResponse>(request);
         }
 
+        public void GetAsync<TResponse>(object requestDto, Action<TResponse> onSuccess, Action<TResponse, Exception> onError)
+        {
+            IReturn<TResponse> request = OnExecuteConvertToIReturn<TResponse>(requestDto);
+
+            _client.GetAsync<TResponse>(request, onSuccess, onError);
+        }
+
         public TResponse Patch<TResponse>(object requestDto)
         {
             IReturn<TResponse> request = OnExecuteConvertToIReturn<TResponse>(requestDto);
