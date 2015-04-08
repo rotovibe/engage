@@ -11,15 +11,21 @@ namespace Phytel.Services.API.Client
 
         void Delete(object requestDto);
 
+        void DeleteAsync<TResponse>(object requestDto, Action<TResponse> onSuccess, Action<TResponse, Exception> onError);
+
         TResponse Get<TResponse>(string relativeUrlFormat, params string[] relativeUrlParams) where TResponse : class, new();
 
         TResponse Get<TResponse>(string relativeUrlFormat, NameValueCollection headers, params string[] relativeUrlParams) where TResponse : class, new();
 
         TResponse Get<TResponse>(object requestDto);
 
+        void GetAsync<TResponse>(object requestDto, Action<TResponse> onSuccess, Action<TResponse, Exception> onError);
+
         TResponse Patch<TResponse>(object requestDto);
 
         void Patch(object requestDto);
+
+        void PatchAsync<TResponse>(object requestDto, Action<TResponse> onSuccess, Action<TResponse, Exception> onError);
 
         TResponse Patch<TResponse>(object request, string relativeUrlFormat, params string[] relativeUrlParams);
 
@@ -42,5 +48,7 @@ namespace Phytel.Services.API.Client
         TResponse Put<TResponse>(object request, string relativeUrlFormat, params string[] relativeUrlParams);
 
         TResponse Put<TResponse>(object request, NameValueCollection headers, string relativeUrlFormat, params string[] relativeUrlParams);
+
+        void PutAsync<TResponse>(object requestDto, Action<TResponse> onSuccess, Action<TResponse, Exception> onError);
     }
 }
