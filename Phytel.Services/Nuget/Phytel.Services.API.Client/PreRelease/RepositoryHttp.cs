@@ -36,6 +36,13 @@ namespace Phytel.Services.API.Client
             _client.Delete(request);
         }
 
+        public void DeleteAsync<TResponse>(object requestDto, Action<TResponse> onSuccess, Action<TResponse, Exception> onError)
+        {
+            IReturn<TResponse> request = OnExecuteConvertToIReturn<TResponse>(requestDto);
+
+            _client.DeleteAsync<TResponse>(request, onSuccess, onError);
+        }
+
         public TResponse Get<TResponse>(string relativeUrlFormat, params string[] relativeUrlParams)
             where TResponse : class, new()
         {
@@ -72,6 +79,13 @@ namespace Phytel.Services.API.Client
             IReturn<TResponse> request = OnExecuteConvertToIReturn<TResponse>(requestDto);
 
             return _client.Patch<TResponse>(request);
+        }
+
+        public void PatchAsync<TResponse>(object requestDto, Action<TResponse> onSuccess, Action<TResponse, Exception> onError)
+        {
+            IReturn<TResponse> request = OnExecuteConvertToIReturn<TResponse>(requestDto);
+
+            _client.PatchAsync<TResponse>(request, onSuccess, onError);
         }
 
         public void Patch(object requestDto)
@@ -132,6 +146,13 @@ namespace Phytel.Services.API.Client
             IReturn<TResponse> request = OnExecuteConvertToIReturn<TResponse>(requestDto);
 
             return _client.Put<TResponse>(request);
+        }
+
+        public void PutAsync<TResponse>(object requestDto, Action<TResponse> onSuccess, Action<TResponse, Exception> onError)
+        {
+            IReturn<TResponse> request = OnExecuteConvertToIReturn<TResponse>(requestDto);
+
+            _client.PutAsync<TResponse>(request, onSuccess, onError);
         }
 
         public void Put(object requestDto)
