@@ -98,8 +98,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IPatientMedFrequencyDataManager.cs" />
     <Compile Include="IMedicationMappingDataManager.cs" />
     <Compile Include="IPatientMedSuppDataManager.cs" />
+    <Compile Include="PatientMedFrequencyDataManager.cs" />
     <Compile Include="MedicationMappingDataManager.cs" />
     <Compile Include="MedicationDataManager.cs" />
     <Compile Include="IMedicationDataManager.cs" />

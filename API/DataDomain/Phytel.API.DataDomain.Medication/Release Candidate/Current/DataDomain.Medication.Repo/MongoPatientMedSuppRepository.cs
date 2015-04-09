@@ -65,6 +65,7 @@ namespace DataDomain.Medication.Repo
                         FreqQuantity = data.FreqQuantity,
                         FreqHowOftenId = string.IsNullOrEmpty(data.FreqHowOftenId) ? (ObjectId?)null : ObjectId.Parse(data.FreqHowOftenId),
                         FreqWhenId = string.IsNullOrEmpty(data.FreqWhenId) ? (ObjectId?)null : ObjectId.Parse(data.FreqWhenId),
+                        FrequencyId = string.IsNullOrEmpty(data.FrequencyId) ? (ObjectId?)null : ObjectId.Parse(data.FrequencyId),
                         SourceId = ObjectId.Parse(data.SourceId),
                         StartDate = data.StartDate == null ? (DateTime?)null : data.StartDate,
                         EndDate = data.EndDate == null ? (DateTime?)null : data.EndDate,
@@ -95,7 +96,7 @@ namespace DataDomain.Medication.Repo
 
         public void Delete(object entity)
         {
-            DeleteMedSuppsByPatientIdDataRequest request = (DeleteMedSuppsByPatientIdDataRequest)entity;
+            DeletePatientMedSuppDataRequest request = (DeletePatientMedSuppDataRequest)entity;
             try
             {
                 using (MedicationMongoContext ctx = new MedicationMongoContext(ContractDBName))
@@ -249,6 +250,14 @@ namespace DataDomain.Medication.Repo
                     else
                     {
                         uv.Add(MB.Update.Set(MEPatientMedSupp.FreqWhenIdProperty, BsonNull.Value));
+                    }
+                    if (data.FrequencyId != null)
+                    {
+                        uv.Add(MB.Update.Set(MEPatientMedSupp.FrequencyIdProperty, ObjectId.Parse(data.FrequencyId)));
+                    }
+                    else
+                    {
+                        uv.Add(MB.Update.Set(MEPatientMedSupp.FrequencyIdProperty, BsonNull.Value));
                     }
                     if (data.SourceId != null) { uv.Add(MB.Update.Set(MEPatientMedSupp.SourceIdProperty, ObjectId.Parse(data.SourceId))); }
                     if (data.StartDate != null)
@@ -428,6 +437,12 @@ namespace DataDomain.Medication.Repo
         }
 
         public object Search(object request)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public object FindByName(object request)
         {
             throw new NotImplementedException();
         }

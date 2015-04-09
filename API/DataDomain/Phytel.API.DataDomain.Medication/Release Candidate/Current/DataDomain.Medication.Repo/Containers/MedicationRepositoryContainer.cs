@@ -60,6 +60,9 @@ namespace DataDomain.Medication.Repo.Containers
                     )
                 ).ReusedWithin(Funq.ReuseScope.Request);
 
+            Mapper.CreateMap<PatientMedFrequencyData, MEPatientMedFrequency>();
+            Mapper.CreateMap<MEPatientMedFrequency, PatientMedFrequencyData>();
+
             return container;
         }
     }

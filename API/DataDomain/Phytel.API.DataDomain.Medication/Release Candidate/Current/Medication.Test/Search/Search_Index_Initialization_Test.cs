@@ -2,29 +2,30 @@
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Phytel.API.AppDomain.NG.DTO.Search;
-using Phytel.API.AppDomain.NG.Search.LuceneStrategy;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using AutoMapper;
 using DataDomain.Medication.Repo;
+using DataDomain.Search.Repo.LuceneStrategy;
 using Phytel.API.DataDomain.Medication.DTO;
+using Phytel.API.DataDomain.Search.DTO;
 
 namespace Phytel.API.DataDomain.Medication.Test.Search
 {
     [TestClass]
     public class Search_Index_Initialization_Test
     {
-        [TestMethod]
-        public void InitializeProductName()
-        {
-            var listNames = new List<MedNameSearchDoc>();
+        //[TestMethod]
+        //public void InitializeProductName()
+        //{
+        //    var listNames = new List<MedNameSearchDoc>();
             
-            //GetProductInfoSql(listNames);
-            GetProductInfo(listNames);
-            var lucene = new MedNameLuceneStrategy<MedNameSearchDoc, TextValuePair>() { Contract = "InHealth001" };
-            lucene.AddUpdateLuceneIndex(listNames);
-        }
+        //    //GetProductInfoSql(listNames);
+        //    GetProductInfo(listNames);
+        //    var lucene = new MedNameLuceneStrategy<MedNameSearchDoc, TextValuePair>() { Contract = "InHealth001" };
+        //    lucene.AddUpdateLuceneIndex(listNames);
+        //}
 
         [TestMethod]
         public void InitializeMedicationMappingData()

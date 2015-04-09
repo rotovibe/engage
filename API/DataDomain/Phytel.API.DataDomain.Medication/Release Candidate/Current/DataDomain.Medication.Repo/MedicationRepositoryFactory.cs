@@ -9,7 +9,8 @@ namespace DataDomain.Medication.Repo
     {
         Medication,
         PatientMedSupp,
-        MedicationMapping
+        MedicationMapping,
+        PatientMedFrequency
     }
 
     public abstract class MedicationRepositoryFactory
@@ -39,6 +40,12 @@ namespace DataDomain.Medication.Repo
                     {
                         var context = new MedicationMongoContext(request.ContractNumber);
                         repo = new MongoPatientMedSuppRepository<MedicationMongoContext>(context) { UserId = request.UserId, ContractDBName = request.ContractNumber };
+                        break;
+                    }
+                    case RepositoryType.PatientMedFrequency:
+                    {
+                        var context = new MedicationMongoContext(request.ContractNumber);
+                        repo = new MongoPatientMedFrequencyRepository<MedicationMongoContext>(context) { UserId = request.UserId, ContractDBName = request.ContractNumber };
                         break;
                     }
                 }
