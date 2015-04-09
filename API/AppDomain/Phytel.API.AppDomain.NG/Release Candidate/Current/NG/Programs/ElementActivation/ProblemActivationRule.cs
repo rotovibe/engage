@@ -29,24 +29,25 @@ namespace Phytel.API.AppDomain.NG.Programs.ElementActivation
             return spawnType;
         }
 
-        private void HandlePatientProblemRegistration(PlanElementEventArg e, string userId, SpawnElement rse)
+        public void HandlePatientProblemRegistration(PlanElementEventArg e, string userId, SpawnElement rse)
         {
             try
             {
                 // check if problem code is already registered for patient
                 var ppd = EndpointUtil.GetPatientProblem(rse.ElementId, e, userId);
 
-                var uspc = new UpdateSpawnProblemCode(e, rse, ppd, true) {EndPointUtil = EndpointUtil};
-                var updateSpawnProblemCode = new SpawnElementStrategy(uspc);
-
-                var spc = new RegisterSpawnProblemCode(e, rse, ppd) {EndPointUtil = EndpointUtil};
-                var registerSpawnProblemCode = new SpawnElementStrategy(spc);
-
                 if (ppd != null)
                 {
+                    var uspc = new UpdateSpawnProblemCode(e, rse, ppd, true) {EndPointUtil = EndpointUtil};
+                    var updateSpawnProblemCode = new SpawnElementStrategy(uspc);
                     if (ppd.StateId != 2) updateSpawnProblemCode.Evoke();
                 }
-                else{ registerSpawnProblemCode.Evoke(); }
+                else
+                {
+                    var spc = new RegisterSpawnProblemCode(e, rse) { EndPointUtil = EndpointUtil };
+                    var registerSpawnProblemCode = new SpawnElementStrategy(spc);
+                    registerSpawnProblemCode.Evoke();
+                }
 
                 // register new problem code with cohortpatientview
                 PlanUtils.RegisterCohortPatientViewProblemToPatient(rse.ElementId, e.PatientId,

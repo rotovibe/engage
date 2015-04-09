@@ -24,6 +24,7 @@ namespace Phytel.API.AppDomain.NG.DTO
         public string FreqQuantity { get; set; }
         public string FreqHowOftenId { get; set; }
         public string FreqWhenId { get; set; }
+        public string FrequencyId { get; set; }
         public string SourceId { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }

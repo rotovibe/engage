@@ -92,5 +92,24 @@ namespace Phytel.API.AppDomain.NG.Test
                 string.Format("{0}/{1}/{2}/PatientMedSupp/Save", url, version, contractNumber), request);
             Assert.IsNotNull(response);
         }
+
+        [TestMethod]
+        public void DeletePatientMedSupp_Test()
+        {
+            
+            DeletePatientAllergyRequest request = new DeletePatientAllergyRequest
+            {
+                ContractNumber = contractNumber,
+                Id = "54ef51a984ac0711a867cd43",
+                PatientId = "5325db24d6a4850adcbba85a",
+                UserId = userId,
+                Version = version
+            };
+
+            //[Route("/{Version}/{ContractNumber}/Patient/{PatientId}/PatientMedSupp/{Id}", "DELETE")]
+            DeletePatientMedSuppResponse response = client.Delete<DeletePatientMedSuppResponse>(
+                string.Format("{0}/{1}/{2}/Patient/{3}/PatientMedSupp/{4}?UserId={5}", url, version, contractNumber, request.PatientId, request.Id, request.UserId));
+            Assert.IsNotNull(response);
+        }
     }
 }

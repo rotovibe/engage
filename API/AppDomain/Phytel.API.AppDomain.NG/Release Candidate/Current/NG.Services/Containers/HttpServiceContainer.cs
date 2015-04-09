@@ -5,6 +5,7 @@ using Phytel.API.AppDomain.NG.Observation;
 using Phytel.API.AppDomain.NG.PlanCOR;
 using Phytel.API.AppDomain.NG.Programs;
 using Phytel.API.AppDomain.NG.Programs.ElementActivation;
+using Phytel.API.AppDomain.NG.Programs.ProgramAttributes;
 using Phytel.API.Common.Audit;
 using Phytel.API.Common.Format;
 using Phytel.API.DataAudit;
@@ -20,6 +21,7 @@ namespace Phytel.API.AppDomain.NG.Service.Containers
             container.RegisterAutoWiredAs<CommonFormatterUtil, ICommonFormatterUtil>().ReusedWithin(ReuseScope.Request);
             container.RegisterAutoWiredAs<EndpointUtils, IEndpointUtils>().ReusedWithin(ReuseScope.Request);
             container.RegisterAutoWiredAs<AllergyEndpointUtil, IAllergyEndpointUtil>().ReusedWithin(ReuseScope.Request);
+            container.RegisterAutoWiredAs<ProgramAttributeStrategy, IProgramAttributeStrategy>().ReusedWithin(ReuseScope.Request);
             container.RegisterAutoWiredAs<PlanElementUtils, IPlanElementUtils>().ReusedWithin(ReuseScope.Request);
             container.RegisterAutoWiredAs<NGManager, INGManager>().ReusedWithin(ReuseScope.Request);
             container.RegisterAutoWiredAs<AuditUtil, IAuditUtil>().ReusedWithin(ReuseScope.Request);

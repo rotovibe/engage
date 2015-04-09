@@ -64,13 +64,13 @@ namespace Phytel.API.AppDomain.NG
 
                 return result;
             }
-            catch (Exception ex)
+            catch (WebServiceException ex)
             {
                 throw new Exception("AD:PlanElementEndpointUtil:GetPatientProblem()::" + ex.Message, ex.InnerException);
             }
         }
 
-        public DD.ProgramDetail SaveAction(IProcessActionRequest request, string actionId, AD.Program p, bool repeat)
+        public ProgramDetail SaveAction(IProcessActionRequest request, string actionId, AD.Program p, bool repeat)
         {
             try
             {
@@ -917,7 +917,8 @@ namespace Phytel.API.AppDomain.NG
                     StatusId = response.Schedule.StatusId,
                     Title = response.Schedule.Title,
                     TypeId = response.Schedule.TypeId,
-                    UpdatedOn = response.Schedule.UpdatedOn
+                    UpdatedOn = response.Schedule.UpdatedOn,
+                    DefaultAssignment = response.Schedule.DefaultAssignment
                 };
 
                 return schedule;

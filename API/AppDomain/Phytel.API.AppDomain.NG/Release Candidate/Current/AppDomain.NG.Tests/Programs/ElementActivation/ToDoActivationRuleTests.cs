@@ -143,5 +143,57 @@ namespace Phytel.API.AppDomain.NG.Programs.ElementActivation.Tests
                 Assert.IsNull(val);
             }
         }
+
+        [TestClass()]
+        public class SetDefaultAssignmentTest
+        {
+            [TestMethod()]
+            public void SetDefaultAssignment_True()
+            {
+                var todoRule = new ToDoActivationRule
+                {
+                    EndpointUtil = new StubEndpointUtils(),
+                    PlanUtils = new StubPlanElementUtils()
+                };
+
+                var userid = "Testing";
+                var schedule = new DTO.Scheduling.Schedule
+                {
+                    DefaultAssignment = true,
+                    AssignedToId = userid,
+                    CreatedById = userid
+                };
+
+                var todoData = new DataDomain.Scheduling.DTO.ToDoData();
+
+                todoRule.SetDefaultAssignment(userid, schedule, todoData);
+
+                Assert.AreEqual(userid, todoData.AssignedToId);
+            }
+
+            [TestMethod()]
+            public void SetDefaultAssignment_False()
+            {
+                var todoRule = new ToDoActivationRule
+                {
+                    EndpointUtil = new StubEndpointUtils(),
+                    PlanUtils = new StubPlanElementUtils()
+                };
+
+                var userid = "Testing";
+                var schedule = new DTO.Scheduling.Schedule
+                {
+                    DefaultAssignment = false,
+                    AssignedToId = userid,
+                    CreatedById = userid
+                };
+
+                var todoData = new DataDomain.Scheduling.DTO.ToDoData();
+
+                todoRule.SetDefaultAssignment(userid, schedule, todoData);
+
+                Assert.AreNotEqual(userid, todoData.AssignedToId);
+            }
+        }
     }
 }

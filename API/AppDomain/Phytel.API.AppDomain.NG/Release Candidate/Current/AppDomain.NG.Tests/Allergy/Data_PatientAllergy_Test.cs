@@ -15,7 +15,7 @@ namespace Phytel.API.AppDomain.NG.Test
     public class Data_PatientAllergy_Test
     {
         string context = "NG";
-        string contractNumber = "Demo001";
+        string contractNumber = "InHealth001";
         string userId = "000000000000000000000000";
         double version = 1.0;
         string url = "http://localhost:888/Nightingale";
@@ -125,6 +125,24 @@ namespace Phytel.API.AppDomain.NG.Test
             //[Route("/{Version}/{ContractNumber}/PatientAllergy/Update", "POST")]
             PostPatientAllergiesResponse response = client.Post<PostPatientAllergiesResponse>(
                 string.Format("{0}/{1}/{2}/PatientAllergy/Update", url, version, contractNumber), request);
+            Assert.IsNotNull(response);
+        }
+
+        [TestMethod]
+        public void DeletePatientAllergy_Test()
+        {
+            DeletePatientAllergyRequest request = new DeletePatientAllergyRequest
+            {
+                ContractNumber = contractNumber,
+                Id = "54ef51b784ac050d0c615d6b",
+                PatientId = "5325db24d6a4850adcbba85a",
+                UserId = userId,
+                Version = version
+            };
+
+            //[Route("/{Version}/{ContractNumber}/Patient/{PatientId}/PatientAllergy/{Id}", "DELETE")]
+            DeletePatientAllergyResponse response = client.Delete<DeletePatientAllergyResponse>(
+                string.Format("{0}/{1}/{2}/Patient/{3}/PatientAllergy/{4}?UserId={5}", url, version, contractNumber, request.PatientId, request.Id, request.UserId));
             Assert.IsNotNull(response);
         }
     }

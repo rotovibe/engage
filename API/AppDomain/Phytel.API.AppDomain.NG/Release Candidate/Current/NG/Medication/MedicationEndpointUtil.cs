@@ -281,6 +281,90 @@ namespace Phytel.API.AppDomain.NG.Medication
         }
         #endregion
 
+        #region PatientMedSupp - Delete
+        public void DeletePatientMedSupp(DeletePatientMedSuppRequest request)
+        {
+            try
+            {
+                IRestClient client = new JsonServiceClient();
+                //[Route("/{Context}/{Version}/{ContractNumber}/PatientMedSupp/{Id}", "DELETE")]
+                var url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/PatientMedSupp/{4}",
+                                    DDMedicationUrl,
+                                    "NG",
+                                    request.Version,
+                                    request.ContractNumber,
+                                    request.Id), request.UserId);
+                DeletePatientMedSuppDataResponse dataDomainResponse = client.Delete<DeletePatientMedSuppDataResponse>(url);
+            }
+            catch (WebServiceException ex) { throw ex; }
+        }
+        #endregion
 
+        #region PatientMedFrequency - Posts
+        public List<PatientMedFrequencyData> GetPatientMedFrequencies(GetPatientMedFrequenciesRequest request)
+        {
+            try
+            {
+                List<PatientMedFrequencyData> result = null;
+                IRestClient client = new JsonServiceClient();
+                //[Route("/{Context}/{Version}/{ContractNumber}/PatientMedSupp/Frequency/{PatientId}", "GET")]
+                var url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/PatientMedSupp/Frequency/{4}",
+                                    DDMedicationUrl,
+                                    "NG",
+                                    request.Version,
+                                    request.ContractNumber,
+                                    request.PatientId), request.UserId);
+    
+                GetPatientMedFrequenciesDataResponse dataDomainResponse = client.Get<GetPatientMedFrequenciesDataResponse>(url);
+
+                if (dataDomainResponse != null)
+                {
+                    result = dataDomainResponse.PatientMedFrequenciesData;
+                }
+                return result;
+            }
+            catch (Exception ex) { throw ex; }
+        }
+
+        public string InsertPatientMedFrequency(PostPatientMedFrequencyRequest request)
+        {
+            try
+            {
+                string id = null;
+                IRestClient client = new JsonServiceClient();
+                //[Route("/{Context}/{Version}/{ContractNumber}/PatientMedSupp/Frequency/Insert", "POST")]
+                var url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/PatientMedSupp/Frequency/Insert",
+                                    DDMedicationUrl,
+                                    "NG",
+                                    request.Version,
+                                    request.ContractNumber), request.UserId);
+                if (request.PatientMedFrequency != null)
+                {
+
+
+                    PatientMedFrequencyData data = new PatientMedFrequencyData
+                    {
+                        Name = request.PatientMedFrequency.Name,
+                        PatientId = request.PatientMedFrequency.PatientId
+                    };
+                    PostPatientMedFrequencyDataResponse dataDomainResponse = client.Post<PostPatientMedFrequencyDataResponse>(url, new PostPatientMedFrequencyDataRequest
+                    {
+                        Context = "NG",
+                        ContractNumber = request.ContractNumber,
+                        UserId = request.UserId,
+                        Version = request.Version,
+                        PatientMedFrequencyData = data,
+                    } as object);
+
+                    if (dataDomainResponse != null)
+                    {
+                        id = dataDomainResponse.Id;
+                    }
+                }
+                return id;
+            }
+            catch (Exception ex) { throw ex; }
+        }
+        #endregion
     }
 }
