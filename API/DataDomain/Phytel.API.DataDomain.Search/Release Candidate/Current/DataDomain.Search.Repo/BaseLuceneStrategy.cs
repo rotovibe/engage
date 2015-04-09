@@ -206,31 +206,52 @@ namespace DataDomain.Search.Repo.LuceneStrategy
 
         public List<TT> SearchComplex(string input, string fieldName = "")
         {
-            if (string.IsNullOrEmpty(input)) return new List<TT>();
+            try
+            {
+                if (string.IsNullOrEmpty(input)) return new List<TT>();
 
-            // added to remove symbol
-            input = input.Replace("^", " ");
+                // added to remove symbol
+                input = input.Replace("^", " ");
 
-            var terms = input.Trim().Replace("-", " ").Split(' ')
-                .Where(x => !string.IsNullOrEmpty(x)).Select(x =>  "*" + x.Trim() + "*");
+                var terms = input.Trim().Replace("-", " ").Split(' ')
+                    .Where(x => !string.IsNullOrEmpty(x)).Select(x => "*" + x.Trim() + "*");
 
-            input = string.Join(" ", terms);
+                input = string.Join(" ", terms);
 
-            return ExecuteSearch(input, fieldName);
+                return ExecuteSearch(input, fieldName);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("SearchComplex():"+ ex.Message + ex.StackTrace);
+            }
         }
 
         public List<TT> Search(string input, string fieldName = "")
         {
-            return string.IsNullOrEmpty(input) ? new List<TT>() : ExecuteSearch(input, fieldName);
+            try
+            {
+                return string.IsNullOrEmpty(input) ? new List<TT>() : ExecuteSearch(input, fieldName);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Search():" + ex.Message + ex.StackTrace);
+            }
         }
 
         public string ParseSpecialCharacters(string value)
         {
-            var specialCharacters = new char[] {'.', ',', '/', '-', '(', ')', ';', '%'};
-            var str = specialCharacters.Aggregate(value, (current, c) => current.Replace(c, ' '));
-            // parse consecutive white spaces to one
-            str = Regex.Replace(str, @"\s+", " ").Trim();
-            return str;
+            try
+            {
+                var specialCharacters = new char[] {'.', ',', '/', '-', '(', ')', ';', '%','[','*'};
+                var str = specialCharacters.Aggregate(value, (current, c) => current.Replace(c, ' '));
+                // parse consecutive white spaces to one
+                str = Regex.Replace(str, @"\s+", " ").Trim();
+                return str;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("ParseSpecialCharacters():" + ex.Message + ex.StackTrace);
+            }
         }
     }
 }

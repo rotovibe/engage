@@ -34,10 +34,10 @@ namespace Phytel.API.DataDomain.Search.Service
         public GetSearchResponse Get(GetSearchRequest request)
         {
             var response = new GetSearchResponse { Version = request.Version };
-
             try
             {
                 RequireUserId(request);
+
                 var type = (SearchEnum)Enum.Parse(typeof(SearchEnum), request.Type);
                 switch (type)
                 {
