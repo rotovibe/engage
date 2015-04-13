@@ -83,7 +83,7 @@ namespace DataDomain.Medication.Repo
                                             mePMS.Id.ToString(),
                                             DataAuditType.Insert,
                                             request.ContractNumber);
-                    return AutoMapper.Mapper.Map<PatientMedSuppData>(mePMS);
+                    return mePMS.Id.ToString();
                 }
             }
             catch (Exception) { throw; }
