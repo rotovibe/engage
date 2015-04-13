@@ -39,7 +39,11 @@ namespace Phytel.API.DataDomain.Medication
                 {
                     if (request.Insert)
                     {
-                        result = (PatientMedSuppData)repo.Insert(request);
+                        string id = (string)repo.Insert(request);
+                        if (!string.IsNullOrEmpty(id))
+                        {
+                            result = (PatientMedSuppData)repo.FindByID(id);
+                        }
                     }
                     else
                     {
