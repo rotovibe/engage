@@ -39,7 +39,7 @@ namespace Phytel.API.AppDomain.NG.Programs.ProgramAttributes
                     //program.ElementState = (int) DataDomain.Program.DTO.ElementState.Completed; //5;
                     //program.StateUpdatedOn = System.DateTime.UtcNow;
                     progAttr.Eligibility = 1;
-                    program.AttrEndDate = System.DateTime.UtcNow;
+                    //program.AttrEndDate = System.DateTime.UtcNow;
                     break;
                 case 2:
                     //program.ElementState = (int) DataDomain.Program.DTO.ElementState.InProgress; //4;
