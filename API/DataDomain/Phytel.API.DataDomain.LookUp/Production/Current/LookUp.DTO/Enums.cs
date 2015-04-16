@@ -37,6 +37,7 @@ namespace Phytel.API.DataDomain.LookUp.DTO
         MedSuppType = 27,
         FreqHowOften = 28,
         FreqWhen = 29,
-        NoteType = 30
+        NoteType = 30,
+        Frequency = 31
     }
 }
