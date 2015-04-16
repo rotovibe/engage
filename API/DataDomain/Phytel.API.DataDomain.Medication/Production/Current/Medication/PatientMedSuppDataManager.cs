@@ -39,7 +39,11 @@ namespace Phytel.API.DataDomain.Medication
                 {
                     if (request.Insert)
                     {
-                        result = (PatientMedSuppData)repo.Insert(request);
+                        string id = (string)repo.Insert(request);
+                        if (!string.IsNullOrEmpty(id))
+                        {
+                            result = (PatientMedSuppData)repo.FindByID(id);
+                        }
                     }
                     else
                     {
@@ -78,12 +82,11 @@ namespace Phytel.API.DataDomain.Medication
                     deletedIds = new List<string>();
                     patientMedSupps.ForEach(u =>
                     {
-                        DeleteMedSuppsByPatientIdDataRequest deletePMSDataRequest = new DeleteMedSuppsByPatientIdDataRequest
+                        DeletePatientMedSuppDataRequest deletePMSDataRequest = new DeletePatientMedSuppDataRequest
                         {
                             Context = request.Context,
                             ContractNumber = request.ContractNumber,
                             Id = u.Id,
-                            PatientId = request.PatientId,
                             UserId = request.UserId,
                             Version = request.Version
                         };
@@ -115,6 +118,22 @@ namespace Phytel.API.DataDomain.Medication
                     });
                 }
                 response.Success = true;
+                return response;
+            }
+            catch (Exception ex) { throw ex; }
+        }
+
+        public DeletePatientMedSuppDataResponse Delete(DeletePatientMedSuppDataRequest request)
+        {
+            DeletePatientMedSuppDataResponse response = null;
+            try
+            {
+                response = new DeletePatientMedSuppDataResponse();
+                if (!string.IsNullOrEmpty(request.Id))
+                {
+                    var repo = MedicationRepositoryFactory.GetMedicationRepository(request, RepositoryType.PatientMedSupp);
+                    repo.Delete(request);
+                }
                 return response;
             }
             catch (Exception ex) { throw ex; }

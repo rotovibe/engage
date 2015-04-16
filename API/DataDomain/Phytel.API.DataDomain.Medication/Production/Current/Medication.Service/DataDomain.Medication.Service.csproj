@@ -104,6 +104,7 @@
   <ItemGroup>
     <Compile Include="Containers\HttpServiceContainer.cs" />
     <Compile Include="IServiceProxy.cs" />
+    <Compile Include="PatientMedFrequencyService.cs" />
     <Compile Include="MedicationMapService.cs" />
     <Compile Include="PatientMedSuppService.cs" />
     <Compile Include="ServiceBase.cs" />

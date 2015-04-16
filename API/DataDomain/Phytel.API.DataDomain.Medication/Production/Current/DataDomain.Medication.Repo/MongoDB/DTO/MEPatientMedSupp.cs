@@ -93,6 +93,11 @@ namespace Phytel.API.DataDomain.Medication.DTO
         [BsonIgnoreIfNull(true)]
         public ObjectId? FreqWhenId { get; set; }
 
+        public const string FrequencyIdProperty = "freqid";
+        [BsonElement(FrequencyIdProperty)]
+        [BsonIgnoreIfNull(true)]
+        public ObjectId? FrequencyId { get; set; }
+
         public const string SourceIdProperty = "srcid";
         [BsonElement(SourceIdProperty)]
         [BsonIgnoreIfNull(true)]

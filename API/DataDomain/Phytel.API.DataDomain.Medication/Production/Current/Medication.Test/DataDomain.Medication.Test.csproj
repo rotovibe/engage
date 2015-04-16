@@ -102,6 +102,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Data\Data_PatientMedFrequency_Test.cs" />
     <Compile Include="Data\Data_MedicationMap_Test.cs" />
     <Compile Include="Data\Data_PatientMedication_Test.cs" />
     <Compile Include="MedicationDataManagerTests.cs" />
@@ -109,7 +110,6 @@
     <Compile Include="MedicationRepositoryFactoryTests.cs" />
     <Compile Include="MedicationTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Search\Search_Index_Initialization_Test.cs" />
     <Compile Include="Stubs\StubMedicationMapping_Test.cs" />
     <Compile Include="Stubs\StubMedication_Test.cs" />
     <Compile Include="Stubs\StubPatientMedSupp_Test.cs" />
@@ -126,17 +126,25 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\AppDomain\Phytel.API.AppDomain.NG\Production\Current\NG.DTOs\AppDomain.NG.DTO.csproj">
-      <Project>{e9957107-8f2a-4946-834e-629d4235b9b3}</Project>
-      <Name>AppDomain.NG.DTO</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\AppDomain\Phytel.API.AppDomain.NG\Production\Current\NG\AppDomain.NG.csproj">
-      <Project>{e368da81-d304-4556-b1c4-d4774c0defd2}</Project>
-      <Name>AppDomain.NG</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\..\..\Interfaces\Production\Current\Phytel.API.Interface\Phytel.API.Interface.csproj">
       <Project>{abe948fb-247e-4955-b3ab-b7c93e10a542}</Project>
       <Name>Phytel.API.Interface</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\Phytel.API.DataDomain.Search\Production\Current\DataDomain.Search.Repo\DataDomain.Search.Repo.csproj">
+      <Project>{F7D7B682-C23F-4C36-B76D-6F375B61CD42}</Project>
+      <Name>DataDomain.Search.Repo</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\Phytel.API.DataDomain.Search\Production\Current\Search.DTO\DataDomain.Search.DTO.csproj">
+      <Project>{066fbea2-6d40-47f2-9f36-16365fa17dd2}</Project>
+      <Name>DataDomain.Search.DTO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\Phytel.API.DataDomain.Search\Production\Current\Search.Service\DataDomain.Search.Service.csproj">
+      <Project>{6699907a-159f-4d9d-a5b9-258b453017b1}</Project>
+      <Name>DataDomain.Search.Service</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\Phytel.API.DataDomain.Search\Production\Current\Search\DataDomain.Search.csproj">
+      <Project>{d3d050cd-99ac-42dc-94ed-0a49b9b4ccdd}</Project>
+      <Name>DataDomain.Search</Name>
     </ProjectReference>
     <ProjectReference Include="..\DataDomain.Medication.Repo\DataDomain.Medication.Repo.csproj">
       <Project>{60C6A9F6-D668-4053-8997-8CFE661628DD}</Project>
@@ -151,7 +159,9 @@
       <Name>DataDomain.Medication</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Search\" />
+  </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>
