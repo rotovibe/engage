@@ -35,6 +35,7 @@ namespace Phytel.API.DataDomain.Scheduling
         public const string DueDateRangeProperty = "ddr";
         public const string ClosedDateProperty = "cd";
         public const string SchedulingTypeProperty = "type";
+        public const string DefaultAssignmentProperty = "dasgn";
 
         #region Standard IMongoEntity Constants
         public const string ExtraElementsProperty = "ex";
@@ -97,6 +98,10 @@ namespace Phytel.API.DataDomain.Scheduling
         [BsonElement(SchedulingTypeProperty)]
         [BsonIgnoreIfNull(true)]
         public ScheduleType Type { get; set; }
+
+        [BsonElement(DefaultAssignmentProperty)]
+        [BsonIgnoreIfNull(true)]
+        public bool DefaultAssignment { get; set; }
 
         #region Standard IMongoEntity Implementation
 

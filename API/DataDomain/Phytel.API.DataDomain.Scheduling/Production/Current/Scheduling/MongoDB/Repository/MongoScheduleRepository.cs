@@ -53,7 +53,7 @@ namespace Phytel.API.DataDomain.Scheduling
                     List<IMongoQuery> queries = new List<IMongoQuery>();
                     queries.Add(Query.EQ(MESchedule.DeleteFlagProperty, false));
                     queries.Add(Query.EQ(MESchedule.IdProperty, ObjectId.Parse(entityID)));
-                    IMongoQuery mQuery = Query.And(queries);
+                    var mQuery = Query.And(queries);
                     MESchedule meSch = ctx.Schedules.Collection.Find(mQuery).FirstOrDefault();
                     if (meSch != null)
                     {
@@ -74,7 +74,8 @@ namespace Phytel.API.DataDomain.Scheduling
                             StatusId = (int)meSch.Status,
                             Title = meSch.Title,
                             UpdatedOn = meSch.LastUpdatedOn,
-                            TypeId = (int)meSch.Type
+                            TypeId = (int)meSch.Type,
+                            DefaultAssignment = meSch.DefaultAssignment
                         };
                     }
                 }

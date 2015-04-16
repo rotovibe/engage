@@ -352,7 +352,19 @@ namespace Phytel.API.DataDomain.Scheduling
                     queries.Add(Query.EQ(METoDo.DeleteFlagProperty, false));
                     if (!string.IsNullOrEmpty(dataRequest.AssignedToId))
                     {
-                        queries.Add(Query.EQ(METoDo.AssignedToProperty, ObjectId.Parse(dataRequest.AssignedToId)));
+                        ObjectId ato;
+                        if (ObjectId.TryParse(dataRequest.AssignedToId, out ato))
+                        {
+                            queries.Add(Query.EQ(METoDo.AssignedToProperty, ato));
+                        }
+                        else
+                        {
+                            // Fix for bug  - ENG-1068, UI sends AssignedToId = -1 to query on all unassigned ToDos.
+                            if (string.Compare(dataRequest.AssignedToId, "-1", true) == 0)
+                            {
+                                queries.Add(Query.EQ(METoDo.AssignedToProperty, BsonNull.Value));
+                            }
+                        }
                     }
                     if (!string.IsNullOrEmpty(dataRequest.CreatedById))
                     {
