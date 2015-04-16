@@ -4,6 +4,7 @@ using Phytel.API.Common;
 using Phytel.API.Common.Format;
 using Phytel.API.Interface;
 
+
 namespace Phytel.API.DataDomain.Search.Service
 {
     public class ServiceBase : ServiceStack.ServiceInterface.Service

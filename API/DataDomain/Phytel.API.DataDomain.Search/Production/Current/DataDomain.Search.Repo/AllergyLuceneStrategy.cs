@@ -37,9 +37,14 @@ namespace DataDomain.Search.Repo.LuceneStrategy
         public AllergyLuceneStrategy()
         {
             Analyzer = new StandardAnalyzer(Version.LUCENE_30, new HashSet<string>());
-            Contract = HostContext.Instance.Items["Contract"].ToString();
+            _writerPool = GetWriterPool();
         }
 
+        private Dictionary<string, IndexWriter> GetWriterPool()
+        {
+            var contracts = ConfigurationManager.AppSettings["SearchContractName"].Split(';');
+            return contracts.ToDictionary(s => s.ToLower(), s => new IndexWriter(GetDirectory(indexPath + s + allergyIndex), Analyzer, IndexWriter.MaxFieldLength.UNLIMITED));
+        }
 
         public override void AddToLuceneIndex(T sampleData, IndexWriter writer)
         {
@@ -50,26 +55,23 @@ namespace DataDomain.Search.Repo.LuceneStrategy
             doc.Add(new Field("Name", sampleData.Name.Trim(), Field.Store.YES, Field.Index.ANALYZED));
 
             writer.AddDocument(doc);
+            writer.Commit();
+            writer.Optimize();
         }
 
         public override void AddUpdateLuceneIndex(IEnumerable<T> sampleDatas)
         {
             try
             {
-                var analyzer = new StandardAnalyzer(Lucene.Net.Util.Version.LUCENE_30);
-                using (var writer = new IndexWriter(Directory, analyzer, IndexWriter.MaxFieldLength.UNLIMITED))
-                {
-                    foreach (var sampleData in sampleDatas)
-                        AddToLuceneIndex(sampleData, writer);
-
-                    analyzer.Close();
-                    writer.Dispose();
-                }
+                foreach (var sampleData in sampleDatas) AddToLuceneIndex(sampleData, _writerPool[HostContext.Instance.Items["Contract"].ToString()]);
             }
             catch (Exception ex)
             {
-                FileLog.LogMessageToFile(ex.Message + " trace:" + ex.StackTrace);
-                throw ex;
+                throw new Exception("DD:AllergyLuceneStrategy:AddToLuceneIndex()::" + ex.Message, ex.InnerException);
+            }
+            finally
+            {
+                IndexWriter.Unlock(_writerPool[HostContext.Instance.Items["Contract"].ToString()].Directory);
             }
         }
 
@@ -83,11 +85,22 @@ namespace DataDomain.Search.Repo.LuceneStrategy
         {
             try
             {
-                FileLog.LogMessageToFile(Directory.Directory.FullName);
-
                 if (string.IsNullOrEmpty(searchQuery.Replace("*", "").Replace("?", ""))) return new List<TT>();
 
-                using (var searcher = new IndexSearcher(Directory, false))
+
+                IndexReader rdr;
+                try
+                {
+                    rdr = IndexReader.Open(_writerPool[HostContext.Instance.Items["Contract"].ToString()].Directory,
+                        true);
+                }
+                catch (Exception ex)
+                {
+                    throw new ArgumentException(
+                        "DD:AllergyLuceneStrategy:ExecuteSearch(): Could not find contract name in the WriterPool." + ex.Message, ex.StackTrace);
+                }
+
+                using (var searcher = new IndexSearcher(rdr))
                 {
                     var hits_limit = 1000;
                     var analyzer = new StandardAnalyzer(Lucene.Net.Util.Version.LUCENE_30);

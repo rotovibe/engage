@@ -10,13 +10,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Search", "Search
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Search.DTO", "Search.DTO\DataDomain.Search.DTO.csproj", "{1C2C63A1-4246-4EC9-BAD1-C00E9ECD85F6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.API.Interface", "..\..\..\..\Interfaces\Development\Current\Phytel.API.Interface\Phytel.API.Interface.csproj", "{ABE948FB-247E-4955-B3AB-B7C93E10A542}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.API.Interface", "..\..\..\..\Interfaces\Production\Current\Phytel.API.Interface\Phytel.API.Interface.csproj", "{ABE948FB-247E-4955-B3AB-B7C93E10A542}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{688504DA-15E9-46D5-B068-020B92F8836D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.API.Common", "..\..\..\..\Common\Phytel.API.Common\Development\Current\Phytel.API.Common.csproj", "{25CF3C3F-221F-4A49-B5EF-A8A5FCF9A5BA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.API.Common", "..\..\..\..\Common\Phytel.API.Common\Production\Current\Phytel.API.Common.csproj", "{25CF3C3F-221F-4A49-B5EF-A8A5FCF9A5BA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.API.DataAudit", "..\..\..\..\Common\Phytel.API.DataAudit\Development\Current\Phytel.API.DataAudit.csproj", "{AE842695-4DD4-4403-9BE4-8473BCA09580}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.API.DataAudit", "..\..\..\..\Common\Phytel.API.DataAudit\Production\Current\Phytel.API.DataAudit.csproj", "{AE842695-4DD4-4403-9BE4-8473BCA09580}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Search.Repo", "DataDomain.Search.Repo\DataDomain.Search.Repo.csproj", "{3102572C-54BF-4004-8453-077790779157}"
 EndProject
@@ -45,18 +45,18 @@ Global
 		SccProjectUniqueName4 = Search.DTO\\DataDomain.Search.DTO.csproj
 		SccProjectName4 = Search.DTO
 		SccLocalPath4 = Search.DTO
-		SccProjectUniqueName5 = ..\\..\\..\\..\\Interfaces\\Development\\Current\\Phytel.API.Interface\\Phytel.API.Interface.csproj
+		SccProjectUniqueName5 = ..\\..\\..\\..\\Interfaces\\Production\\Current\\Phytel.API.Interface\\Phytel.API.Interface.csproj
 		SccProjectTopLevelParentUniqueName5 = DataDomain.Search.sln
-		SccProjectName5 = ../../../../Interfaces/Development/Current/Phytel.API.Interface
-		SccLocalPath5 = ..\\..\\..\\..\\Interfaces\\Development\\Current\\Phytel.API.Interface
-		SccProjectUniqueName6 = ..\\..\\..\\..\\Common\\Phytel.API.Common\\Development\\Current\\Phytel.API.Common.csproj
+		SccProjectName5 = ../../../../Interfaces/Production/Current/Phytel.API.Interface
+		SccLocalPath5 = ..\\..\\..\\..\\Interfaces\\Production\\Current\\Phytel.API.Interface
+		SccProjectUniqueName6 = ..\\..\\..\\..\\Common\\Phytel.API.Common\\Production\\Current\\Phytel.API.Common.csproj
 		SccProjectTopLevelParentUniqueName6 = DataDomain.Search.sln
-		SccProjectName6 = ../../../../Common/Phytel.API.Common/Development/Current
-		SccLocalPath6 = ..\\..\\..\\..\\Common\\Phytel.API.Common\\Development\\Current
-		SccProjectUniqueName7 = ..\\..\\..\\..\\Common\\Phytel.API.DataAudit\\Development\\Current\\Phytel.API.DataAudit.csproj
+		SccProjectName6 = ../../../../Common/Phytel.API.Common/Production/Current
+		SccLocalPath6 = ..\\..\\..\\..\\Common\\Phytel.API.Common\\Production\\Current
+		SccProjectUniqueName7 = ..\\..\\..\\..\\Common\\Phytel.API.DataAudit\\Production\\Current\\Phytel.API.DataAudit.csproj
 		SccProjectTopLevelParentUniqueName7 = DataDomain.Search.sln
-		SccProjectName7 = ../../../../Common/Phytel.API.DataAudit/Development/Current
-		SccLocalPath7 = ..\\..\\..\\..\\Common\\Phytel.API.DataAudit\\Development\\Current
+		SccProjectName7 = ../../../../Common/Phytel.API.DataAudit/Production/Current
+		SccLocalPath7 = ..\\..\\..\\..\\Common\\Phytel.API.DataAudit\\Production\\Current
 		SccProjectUniqueName8 = DataDomain.Search.Repo\\DataDomain.Search.Repo.csproj
 		SccProjectName8 = DataDomain.Search.Repo
 		SccLocalPath8 = DataDomain.Search.Repo
