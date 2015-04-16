@@ -146,5 +146,23 @@ namespace Phytel.API.DataDomain.Allergy.Test
                 string.Format("{0}/{1}/{2}/{3}/PatientAllergy/UndoDelete", url, context, version, contractNumber), request);
             Assert.IsNotNull(response);
         }
+
+        [TestMethod]
+        public void DeletePatientAllergy_Test()
+        {
+            DeletePatientAllergyDataRequest request = new DeletePatientAllergyDataRequest
+            {
+                Context = context,
+                ContractNumber = contractNumber,
+                Id = "54ef4da084ac050d0c615d5c",
+                UserId = userId,
+                Version = version
+            };
+
+            //[Route("/{Context}/{Version}/{ContractNumber}/PatientAllergy/{Id}", "DELETE")]
+            DeletePatientAllergyDataResponse response = client.Delete<DeletePatientAllergyDataResponse>(
+                string.Format("{0}/{1}/{2}/{3}/PatientAllergy/{4}?UserId={5}", url, context, version, contractNumber, request.Id, request.UserId));
+            Assert.IsNotNull(response);
+        }
     }
 }
