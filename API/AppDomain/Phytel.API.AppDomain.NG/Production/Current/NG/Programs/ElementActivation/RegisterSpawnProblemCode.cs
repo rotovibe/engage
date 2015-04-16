@@ -12,7 +12,7 @@ namespace Phytel.API.AppDomain.NG.ElementActivation
         private PlanElementEventArg _e;
         private SpawnElement _se;
 
-        public RegisterSpawnProblemCode(PlanElementEventArg e, SpawnElement rse, PatientObservation ppd)
+        public RegisterSpawnProblemCode(PlanElementEventArg e, SpawnElement rse)
         {
             _e = e;
             _se = rse;

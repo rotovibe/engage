@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -149,6 +149,7 @@
     <Compile Include="Factories\NGManagerFactory.cs" />
     <Compile Include="Factories\SampleFactory.cs" />
     <Compile Include="Factories\SecurityManagerFactory.cs" />
+    <Compile Include="Medication\Data_PatientMedFrequency_Test.cs" />
     <Compile Include="Medication\Data_MedicationMap_Test.cs" />
     <Compile Include="Medication\Data_PatientMedication_Test.cs" />
     <Compile Include="MongoDB\Repository\MongoPatientGoalRepositoryTests.cs" />
@@ -171,9 +172,9 @@
     <Compile Include="Programs\ElementActivation\ElementActivationStrategyTests.cs" />
     <Compile Include="Programs\ElementActivation\GoalActivationRuleTests.cs" />
     <Compile Include="Programs\ElementActivation\ToDoActivationRuleTests.cs" />
+    <Compile Include="Programs\EndpointUtilsTests.cs" />
     <Compile Include="Programs\EndpointUtils_Tests.cs" />
     <Compile Include="Programs\PlanElemStrategy\PlanElementActivationStrategyTests.cs" />
-    <Compile Include="Programs\PlanElemStrategy\ProblemActivationRuleTests.cs" />
     <Compile Include="Programs\PlanElemStrategy\SetModulePropertiesForRepeat_Test.cs" />
     <Compile Include="Programs\PlanManagerTests.cs" />
     <Compile Include="Programs\PlanManager_Test.cs" />
@@ -242,6 +243,22 @@
       <Project>{1e303326-eec9-42a8-ba50-880ab7ad99b2}</Project>
       <Name>DataDomain.Scheduling.DTO</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.Search\Production\Current\DataDomain.Search.Repo\DataDomain.Search.Repo.csproj">
+      <Project>{F7D7B682-C23F-4C36-B76D-6F375B61CD42}</Project>
+      <Name>DataDomain.Search.Repo</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.Search\Production\Current\Search.DTO\DataDomain.Search.DTO.csproj">
+      <Project>{066fbea2-6d40-47f2-9f36-16365fa17dd2}</Project>
+      <Name>DataDomain.Search.DTO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.Search\Production\Current\Search.Service\DataDomain.Search.Service.csproj">
+      <Project>{6699907a-159f-4d9d-a5b9-258b453017b1}</Project>
+      <Name>DataDomain.Search.Service</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.Search\Production\Current\Search\DataDomain.Search.csproj">
+      <Project>{d3d050cd-99ac-42dc-94ed-0a49b9b4ccdd}</Project>
+      <Name>DataDomain.Search</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\..\Interfaces\Production\Current\Phytel.API.Interface\Phytel.API.Interface.csproj">
       <Project>{abe948fb-247e-4955-b3ab-b7c93e10a542}</Project>
       <Name>Phytel.API.Interface</Name>
@@ -251,7 +268,7 @@
       <Name>AppDomain.Security.DTO</Name>
     </ProjectReference>
     <ProjectReference Include="..\NG.DTOs\AppDomain.NG.DTO.csproj">
-      <Project>{e9957107-8f2a-4946-834e-629d4235b9b3}</Project>
+      <Project>{E9957107-8F2A-4946-834E-629D4235B9B3}</Project>
       <Name>AppDomain.NG.DTO</Name>
     </ProjectReference>
     <ProjectReference Include="..\NG.Services\AppDomain.NG.Service.csproj">
@@ -259,7 +276,7 @@
       <Name>AppDomain.NG.Service</Name>
     </ProjectReference>
     <ProjectReference Include="..\NG\AppDomain.NG.csproj">
-      <Project>{e368da81-d304-4556-b1c4-d4774c0defd2}</Project>
+      <Project>{E368DA81-D304-4556-B1C4-D4774C0DEFD2}</Project>
       <Name>AppDomain.NG</Name>
     </ProjectReference>
   </ItemGroup>

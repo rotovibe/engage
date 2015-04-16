@@ -51,11 +51,10 @@ namespace Phytel.API.AppDomain.NG.Programs.ElementActivation
                 {
                     todo = new ToDoData
                     {
-                        AssignedToId = userId,
-                        CreatedById = userId,
                         SourceId = todoTemp.Id,
                         Title = todoTemp.Title,
                         CategoryId = todoTemp.CategoryId,
+                        CreatedById = userId,
                         StatusId = todoTemp.StatusId,
                         Description = todoTemp.Description,
                         PriorityId = todoTemp.PriorityId,
@@ -64,6 +63,8 @@ namespace Phytel.API.AppDomain.NG.Programs.ElementActivation
                         ProgramIds = prog,
                         CreatedOn = DateTime.UtcNow
                     };
+
+                    SetDefaultAssignment(userId, todoTemp, todo);
 
                     // modified for ENG-709
                     if (todo.StatusId == 2 || todo.StatusId == 4)
@@ -92,6 +93,20 @@ namespace Phytel.API.AppDomain.NG.Programs.ElementActivation
             catch (Exception ex)
             {
                 throw new Exception("AD:ToDoActivationRule:Execute()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        public void SetDefaultAssignment(string userId, Schedule todoTemp, ToDoData todo)
+        {
+            try
+            {
+                // eng-1069
+                if (!todoTemp.DefaultAssignment) return;
+                todo.AssignedToId = userId;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:ToDoActivationRule:SetDefaultAssignment()::" + ex.Message, ex.InnerException);
             }
         }
 

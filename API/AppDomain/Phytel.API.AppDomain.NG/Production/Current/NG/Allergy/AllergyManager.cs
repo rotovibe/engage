@@ -133,5 +133,17 @@ namespace Phytel.API.AppDomain.NG.Allergy
             catch (Exception ex) { throw ex; }
         }
         #endregion
+
+        #region PatientAllergy - Delete
+        public void DeletePatientAllergy(DeletePatientAllergyRequest request)
+        {
+            try
+            {
+                EndpointUtil.DeletePatientAllergy(request);
+
+            }
+            catch (Exception ex) { throw ex; }
+        }
+        #endregion
     }
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
+using DataDomain.Search.Repo.LuceneStrategy;
 using Lucene.Net.Documents;
 using Phytel.API.AppDomain.NG.Allergy;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -65,8 +66,8 @@ namespace Phytel.API.AppDomain.NG.Allergy.Tests
 
             var nfp = Mapper.Map<MedNameSearchDoc>(med);
 
-            ISearchManager manager = new SearchManager { MedNameStrategy = new MedNameLuceneStrategy<MedNameSearchDoc, TextValuePair>() };
-            manager.RegisterMedDocumentInSearchIndex(med, contractNumber);
+            //ISearchManager manager = new SearchManager { MedNameStrategy = new MedNameLuceneStrategy<MedNameSearchDoc, TextValuePair>() };
+            //manager.RegisterMedDocumentInSearchIndex(med, contractNumber);
 
             Assert.IsTrue(true);
         }
@@ -121,8 +122,8 @@ namespace Phytel.API.AppDomain.NG.Allergy.Tests
 
             var nfp = Mapper.Map<MedNameSearchDoc>(med);
 
-            ISearchManager manager = new SearchManager{ MedNameStrategy = new MedNameLuceneStrategy<MedNameSearchDoc, TextValuePair>()};
-            manager.RegisterMedDocumentInSearchIndex(med, contractNumber);
+            //ISearchManager manager = new SearchManager{ MedNameStrategy = new MedNameLuceneStrategy<MedNameSearchDoc, TextValuePair>()};
+            //manager.RegisterMedDocumentInSearchIndex(med, contractNumber);
 
             Assert.IsTrue(true);
         }

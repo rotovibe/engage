@@ -232,5 +232,24 @@ namespace Phytel.API.AppDomain.NG.Allergy
             }
         }
         #endregion
+
+        #region PatientAllergy - Delete
+        public void DeletePatientAllergy(DeletePatientAllergyRequest request)
+        {
+            try
+            {
+                IRestClient client = new JsonServiceClient();
+                //[Route("/{Context}/{Version}/{ContractNumber}/PatientAllergy/{Id}", "DELETE")]
+                var url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/PatientAllergy/{4}",
+                                    DDAllergyUrl,
+                                    "NG",
+                                    request.Version,
+                                    request.ContractNumber,
+                                    request.Id), request.UserId);
+                DeletePatientAllergyDataResponse dataDomainResponse = client.Delete<DeletePatientAllergyDataResponse>(url);
+            }
+            catch (WebServiceException ex) { throw ex; }
+        } 
+        #endregion
     }
 }

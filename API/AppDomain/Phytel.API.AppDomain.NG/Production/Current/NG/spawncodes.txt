@@ -18,27 +18,27 @@ Problem code series 100’s
 Diabetes = 101
 
 example for the opt-out series:
-         "Responses":[
-            {
-               "Id":"52e51ef5d6a48505344c9f4d",
-               "Order":1,
-               "Text":"",
-               "stepid":"52e51ef5d6a48505344c9f4a",
-               "Value":"",
-               "Nominal":true,
-               "Required":false,
-               "NextStepId":"52e03b59d6a4850d00a3a8b7",
-                  "SpawnElement" : [{
-                      "ElementType" : 16,
-                      "ElementId" : "528a66f4d4332317acc5095f"
-                    },
+		 "Responses":[
+			{
+			   "Id":"52e51ef5d6a48505344c9f4d",
+			   "Order":1,
+			   "Text":"",
+			   "stepid":"52e51ef5d6a48505344c9f4a",
+			   "Value":"",
+			   "Nominal":true,
+			   "Required":false,
+			   "NextStepId":"52e03b59d6a4850d00a3a8b7",
+				  "SpawnElement" : [{
+					  "ElementType" : 16,
+					  "ElementId" : "528a66f4d4332317acc5095f"
+					},
 					{
-                      "ElementType" : 17,
-                      "Tag" : "They chickened out."
-                    },
+					  "ElementType" : 17,
+					  "Tag" : "They chickened out."
+					},
 					{
-                      "ElementType" : 18,
-                      "Tag" : "1/1/2014"
-                    }]
-            }
-         ]
+					  "ElementType" : 18,
+					  "Tag" : "1/1/2014"
+					}]
+			}
+		 ]

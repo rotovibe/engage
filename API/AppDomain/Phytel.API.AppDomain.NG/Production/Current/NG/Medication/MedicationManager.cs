@@ -4,6 +4,8 @@ using AutoMapper;
 using Phytel.API.AppDomain.NG.DTO;
 using Phytel.API.DataDomain.Medication.DTO;
 using Phytel.API.Interface;
+using Phytel.API.Common.CustomObject;
+using Phytel.API.DataDomain.LookUp.DTO;
 
 namespace Phytel.API.AppDomain.NG.Medication
 {
@@ -175,6 +177,69 @@ namespace Phytel.API.AppDomain.NG.Medication
                 ProprietaryNameSuffix = string.Empty
             };
             SearchManager.RegisterMedDocumentInSearchIndex(newMed, request);
+        }
+        #endregion
+
+        #region PatientMedSupp - Delete
+        public void DeletePatientMedSupp(DeletePatientMedSuppRequest request)
+        {
+            try
+            {
+                EndpointUtil.DeletePatientMedSupp(request);
+
+            }
+            catch (Exception ex) { throw ex; }
+        }
+        #endregion
+
+        #region PatientMedFrequency
+        public List<PatientMedFrequency> GetPatientMedFrequencies(GetPatientMedFrequenciesRequest request)
+        {
+            List<PatientMedFrequency> patientMedFreqs = null;
+            try
+            {
+                List<PatientMedFrequencyData> data = EndpointUtil.GetPatientMedFrequencies(request);
+                if (data != null && data.Count > 0)
+                {
+                    patientMedFreqs = new List<PatientMedFrequency>();
+                    data.ForEach(a =>
+                        patientMedFreqs.Add(new PatientMedFrequency { Id = a.Id, Name = a.Name } ));
+                }
+                return patientMedFreqs;
+            }
+            catch (Exception ex) { throw ex; }
+        }
+
+        public string InsertPatientMedFrequency(PostPatientMedFrequencyRequest request)
+        {
+            string id = null;
+            try
+            {
+                // Before inserting a new one, check if the Frequency lookup already contains that name.
+                if (request.PatientMedFrequency != null && !string.IsNullOrEmpty(request.PatientMedFrequency.Name))
+                {
+                    NGManager ngManager = new NGManager();
+                    GetLookUpsRequest lookUpRequest = new GetLookUpsRequest
+                    {
+                        ContractNumber = request.ContractNumber,
+                        TypeName = LookUpType.Frequency.ToString(),
+                        UserId = request.UserId,
+                        Version = request.Version,
+                    };
+                    List<IdNamePair> lookups = ngManager.GetLookUps(lookUpRequest);
+                    var freq = lookups.Find(x => x.Name.ToLower() == request.PatientMedFrequency.Name.ToLower());
+                    if (freq != null)
+                    {
+                        id = freq.Id;
+                    }
+                }
+                if (string.IsNullOrEmpty(id))
+                {
+                    id = EndpointUtil.InsertPatientMedFrequency(request);
+                }
+                return id;
+            }
+            catch (Exception ex) { throw ex; }
         }
         #endregion
     }

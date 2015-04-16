@@ -24,5 +24,6 @@ namespace Phytel.API.AppDomain.NG.DTO.Scheduling
         public string Title { get; set; }
         public DateTime CreatedOn { get; set; }
         public DateTime? UpdatedOn { get; set; }
+        public bool DefaultAssignment { get; set; }
     }
 }
