@@ -74,7 +74,8 @@ namespace Phytel.API.Common
         PatientAllergy,
         Medication,
         PatientMedSupp,
-        MedicationMap
+        MedicationMap,
+        PatientMedFrequency
 
     }
 }
