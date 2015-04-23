@@ -9,10 +9,13 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Filters for storing common properties (contract, version, context) in host context so that they can be acccessible by all filters and IOC containers.</description>
     <dependencies>
-      <dependency id="Phytel.Services.API.DTO" version="1.0.0" />
-      <dependency id="Phytel.Services.API.Provider" version="1.0.0" />
-      <dependency id="ServiceStack.Common" version="3.9.71" />
+      <dependency id="Phytel.Services.API.DTO" version="1.1.0.01" />
+      <dependency id="Phytel.Services.API.Provider" version="1.1.0.01" />
       <dependency id="ServiceStack" version="3.9.70" />
+      <dependency id="ServiceStack.Common" version="3.9.71" />
+      <dependency id="ServiceStack.OrmLite.SqlServer" version="3.9.70" />
+      <dependency id="ServiceStack.Redis" version="3.9.70" />
+      <dependency id="ServiceStack.Text" version="3.9.11" />
     </dependencies>
   </metadata>
   <files>
