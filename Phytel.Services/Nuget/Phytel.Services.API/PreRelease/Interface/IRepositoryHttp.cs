@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Specialized;
 
-namespace Phytel.Services.API.Client
+namespace Phytel.Services.API
 {
     public interface IRepositoryHttp
     {
