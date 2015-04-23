@@ -11,6 +11,8 @@
     <dependencies>
       <group targetFramework=".NETFramework4.5.1">
         <dependency id="Phytel.Services.Security" version="1.4.0.01" />
+        <dependency id="ServiceStack.Common" version="3.9.71" />
+        <dependency id="ServiceStack.Text" version="3.9.11" />
       </group>
     </dependencies>
   </metadata>
