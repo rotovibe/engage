@@ -12,19 +12,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{B1C55F
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MongoTest", "..\MongoTest\MongoTest.csproj", "{88221A72-C166-4BE9-AD0A-1065EA563314}"
-EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 3
+		SccNumberOfProjects = 2
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://hillstfs2013:8080/tfs/phytel
 		SccLocalPath0 = .
 		SccProjectUniqueName1 = Phytel.Services.Mongo.csproj
 		SccLocalPath1 = .
-		SccProjectUniqueName2 = ..\\MongoTest\\MongoTest.csproj
-		SccProjectName2 = ../MongoTest
-		SccLocalPath2 = ..\\MongoTest
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,10 +30,6 @@ Global
 		{381F3161-50B0-4531-AB10-D7B6BAEFA377}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{381F3161-50B0-4531-AB10-D7B6BAEFA377}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{381F3161-50B0-4531-AB10-D7B6BAEFA377}.Release|Any CPU.Build.0 = Release|Any CPU
-		{88221A72-C166-4BE9-AD0A-1065EA563314}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{88221A72-C166-4BE9-AD0A-1065EA563314}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{88221A72-C166-4BE9-AD0A-1065EA563314}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{88221A72-C166-4BE9-AD0A-1065EA563314}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
