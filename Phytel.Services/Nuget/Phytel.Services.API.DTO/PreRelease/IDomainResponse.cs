@@ -4,6 +4,6 @@ namespace Phytel.Services.API.DTO
 {
     public interface IDomainResponse
     {
-        ResponseStatus Status { get; set; }
+        ResponseStatus ResponseStatus { get; set; }
     }
 }
