@@ -1,7 +1,7 @@
 ﻿using Phytel.Services.API.Provider;
 using Phytel.Services.IOC;
 
-namespace Phytel.Services.API.Container
+namespace Phytel.Services.API.Filter
 {
     public class ServiceStackConfigProxyContainer : ContainerDecorator
     {

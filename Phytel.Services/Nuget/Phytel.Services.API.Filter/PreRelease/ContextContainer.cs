@@ -2,7 +2,7 @@
 using Phytel.Services.IOC;
 using ServiceStack.Common;
 
-namespace Phytel.Services.API.Container
+namespace Phytel.Services.API.Filter
 {
     public class ContextContainer : ContainerDecorator
     {

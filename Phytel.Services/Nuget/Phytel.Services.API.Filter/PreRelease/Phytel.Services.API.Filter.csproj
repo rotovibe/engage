@@ -80,9 +80,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constants.cs" />
+    <Compile Include="ContextContainer.cs" />
     <Compile Include="ContextRequestFilterAttribute.cs" />
+    <Compile Include="ContractNumberContainer.cs" />
     <Compile Include="ContractRequestFilterAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ServiceStackConfigProxyContainer.cs" />
+    <Compile Include="VersionContainer.cs" />
     <Compile Include="VersionRequestFilterAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
