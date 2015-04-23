@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
   <metadata>
     <id>Phytel.Services.API.DTO</id>
-    <version>1.0.0</version>
+    <version>1.1.0</version>
     <title>Phytel.Services.API.DTO</title>
     <authors>Tony DiGiorgio</authors>
     <owners>Phytel,Inc.</owners>
@@ -10,6 +10,7 @@
     <description>Common request and response DTO interfaces for all data and app domains.</description>
     <dependencies>
       <dependency id="ServiceStack.Common" version="3.9.71" />
+      <dependency id="ServiceStack.Text" version="3.9.11" />
     </dependencies>
   </metadata>
   <files>
