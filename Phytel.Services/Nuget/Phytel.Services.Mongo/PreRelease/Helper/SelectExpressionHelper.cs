@@ -7,10 +7,26 @@ using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.Builders;
 
-namespace Phytel.API.Interface
+namespace Phytel.Services.Mongo.Helper
 {
     public static class SelectExpressionHelper
     {
+        public enum SelectExpressionType
+        {
+            EQ,
+            NOTEQ,
+            LIKE,
+            NOTLIKE,
+            STARTWITH,
+            IN
+        }
+
+        public enum SelectExpressionGroupType
+        {
+            AND,
+            OR,
+            EQ
+        }
 
         /// <summary>
         /// Applies appropriate query operators on fied name and value.

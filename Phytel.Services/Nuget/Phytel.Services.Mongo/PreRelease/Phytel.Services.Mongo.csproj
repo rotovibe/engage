@@ -67,6 +67,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helper\SelectExpressionHelper.cs" />
     <Compile Include="Linq\Extensions.cs" />
     <Compile Include="Linq\IMongoConnectionProperties.cs" />
     <Compile Include="Linq\IMongoEntity.cs" />
