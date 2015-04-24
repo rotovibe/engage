@@ -18,7 +18,7 @@ namespace Phytel.Services.API.Filter
 
             container.Register<IVersionProvider>(new VersionProvider());
 
-            container.Register<double>(API.Container.Constants.NamedStringVersion, c =>
+            container.Register<double>(Constants.NamedStringVersion, c =>
             {
                 IHostContextProxy hostContextProxy = c.Resolve<IHostContextProxy>();
                 return hostContextProxy.GetItemAsDouble(API.Provider.Constants.HostContextKeyVersion);

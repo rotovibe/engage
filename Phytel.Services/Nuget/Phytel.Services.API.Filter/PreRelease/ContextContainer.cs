@@ -16,7 +16,7 @@ namespace Phytel.Services.API.Filter
             container.Register<HostContext>(c => HostContext.Instance).ReusedWithin(Funq.ReuseScope.Request);
             container.RegisterAutoWiredAs<HostContextProxy, IHostContextProxy>().ReusedWithin(Funq.ReuseScope.Request);
 
-            container.Register<string>(API.Container.Constants.NamedStringContext, c =>
+            container.Register<string>(Constants.NamedStringContext, c =>
             {
                 IHostContextProxy hostContextProxy = c.Resolve<IHostContextProxy>();
                 return hostContextProxy.GetItem<string>(API.Provider.Constants.HostContextKeyContext);

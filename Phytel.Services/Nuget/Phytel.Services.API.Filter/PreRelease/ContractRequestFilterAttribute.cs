@@ -23,7 +23,7 @@ namespace Phytel.Services.API.Filter
 
             string contractNumber = ContractNumberProvider.Get(requestDto);
 
-            HostContextProxy.SetItem(Constants.HostContextKeyContractNumber, contractNumber);
+            HostContextProxy.SetItem(Provider.Constants.HostContextKeyContractNumber, contractNumber);
         }
     }
 }

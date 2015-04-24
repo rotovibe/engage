@@ -23,7 +23,7 @@ namespace Phytel.Services.API.Filter
 
             double version = VersionProvider.Get(requestDto);
 
-            HostContextProxy.SetItem(Constants.HostContextKeyVersion, version);
+            HostContextProxy.SetItem(Provider.Constants.HostContextKeyVersion, version);
         }
     }
 }

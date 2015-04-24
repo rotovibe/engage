@@ -18,7 +18,7 @@ namespace Phytel.Services.API.Filter
 
             container.Register<IContractNumberProvider>(new ContractNumberProvider());
 
-            container.Register<string>(API.Container.Constants.NamedStringContractNumber, c =>
+            container.Register<string>(Constants.NamedStringContractNumber, c =>
             {
                 IHostContextProxy hostContextProxy = c.Resolve<IHostContextProxy>();
                 return hostContextProxy.GetItemAsString(API.Provider.Constants.HostContextKeyContractNumber);

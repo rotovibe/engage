@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
   <metadata>
     <id>Phytel.Services.API.Filter</id>
-    <version>1.0.0</version>
+    <version>1.1.0</version>
     <title>Phytel.Services.API.Filter</title>
     <authors>Phytel.Services.API.Filter</authors>
     <owners>Phytel,Inc.</owners>
@@ -11,11 +11,12 @@
     <dependencies>
       <dependency id="Phytel.Services.API.DTO" version="1.1.0.01" />
       <dependency id="Phytel.Services.API.Provider" version="1.1.0.01" />
+      <dependency id="Phytel.Services.IOC" version="1.4.0.01" />
       <dependency id="ServiceStack" version="3.9.70" />
       <dependency id="ServiceStack.Common" version="3.9.71" />
       <dependency id="ServiceStack.OrmLite.SqlServer" version="3.9.70" />
       <dependency id="ServiceStack.Redis" version="3.9.70" />
-      <dependency id="ServiceStack.Text" version="3.9.11" />
+      <dependency id="ServiceStack.Text" version="3.9.70" />
     </dependencies>
   </metadata>
   <files>
