@@ -61,7 +61,7 @@ namespace Phytel.Services.API.Filter
             }
             else
             {
-                HostContextProxy.SetItem(Constants.HostContextKeyContext, contextCode);
+                HostContextProxy.SetItem(Provider.Constants.HostContextKeyContext, contextCode);
             }
         }
     }
