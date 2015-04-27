@@ -70,6 +70,7 @@
     <Compile Include="Helper\SelectExpressionHelper.cs" />
     <Compile Include="Linq\Extensions.cs" />
     <Compile Include="Linq\IMongoConnectionProperties.cs" />
+    <Compile Include="Linq\INonTransMongoEntity.cs" />
     <Compile Include="Linq\IMongoEntity.cs" />
     <Compile Include="Linq\MongoCollectionAttribute.cs" />
     <Compile Include="Linq\MongoContext.cs" />
