@@ -49,8 +49,9 @@
     <Reference Include="MongoDB.Driver">
       <HintPath>packages\mongocsharpdriver.1.9.2\lib\net35\MongoDB.Driver.dll</HintPath>
     </Reference>
-    <Reference Include="Phytel.Services.Mongo">
-      <HintPath>packages\Phytel.Services.Mongo.1.4.0.02\lib\net451\Phytel.Services.Mongo.dll</HintPath>
+    <Reference Include="Phytel.Services.Mongo, Version=1.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>packages\Phytel.Services.Mongo.1.4.0.04\lib\net451\Phytel.Services.Mongo.dll</HintPath>
     </Reference>
     <Reference Include="Phytel.Services.Security">
       <HintPath>packages\Phytel.Services.Security.1.4.0.01\lib\net451\Phytel.Services.Security.dll</HintPath>

@@ -11,7 +11,7 @@
     <dependencies>
       <group targetFramework=".NETFramework4.5.1">
         <dependency id="mongocsharpdriver" version="1.9.2" />
-        <dependency id="Phytel.Services.Mongo" version="1.4.0.02" />
+        <dependency id="Phytel.Services.Mongo" version="1.4.0.04" />
         <dependency id="Phytel.Services.Security" version="1.4.0.01" />
         <dependency id="Phytel.Services.SQLServer" version="1.4.0.01" />
         <dependency id="Phytel.Services.Utility" version="1.4.0.01" />
