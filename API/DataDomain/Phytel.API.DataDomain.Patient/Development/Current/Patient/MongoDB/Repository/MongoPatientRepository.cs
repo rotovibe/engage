@@ -330,7 +330,7 @@ namespace Phytel.API.DataDomain.Patient
                 using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
                 {
                     List<IMongoQuery> queries = new List<IMongoQuery>();
-                    queries.Add(Query.In(MEPatientUser.IdProperty, new BsonArray(patientIds)));
+                    queries.Add(Query.In(MEPatientUser.IdProperty, new BsonArray(Helper.ConvertToObjectIdList(patientIds))));
                     queries.Add(Query.EQ(MEPatientUser.DeleteFlagProperty, false));
                     IMongoQuery mQuery = Query.And(queries);
                     List<MEPatient> mePatients = ctx.Patients.Collection.Find(mQuery).ToList();

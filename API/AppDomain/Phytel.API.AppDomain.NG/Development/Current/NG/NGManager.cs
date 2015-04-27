@@ -1788,8 +1788,8 @@ namespace Phytel.API.AppDomain.NG
                             patients = new List<CohortPatient>();
                             foreach (string id in recentPatientIds)
                             {
-                                PatientData pd = patientDDResponse.Patients[id];
-                                if(pd != null)
+                                PatientData pd;
+                                if (patientDDResponse.Patients.TryGetValue(id, out pd))
                                 {
                                     patients.Add(new CohortPatient
                                     {

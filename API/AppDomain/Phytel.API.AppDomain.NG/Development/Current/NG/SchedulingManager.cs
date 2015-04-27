@@ -52,24 +52,29 @@ namespace Phytel.API.AppDomain.NG
                 {
                     result = new List<ToDo>();
                     List<ToDoData> dataList = ddResponse.ToDos;
-                    List<string> patientIds = dataList.Select(p => p.PatientId).ToList<string>();
+                    var distintPatients = dataList.GroupBy(p => p.PatientId).Select(grp => grp.FirstOrDefault()).ToList();
+                    List<string> patientIds = distintPatients.Select(p => p.PatientId).ToList();
                     // Call Patient DD to get patient details.
                     Dictionary<string, PatientData> patients = getPatients(request.Version, request.ContractNumber, request.UserId, client, patientIds);
+                    
                     foreach (ToDoData n in dataList)
                     {
                         ToDo toDo = convertToToDo(n);
-                        PatientData pd = patients[n.PatientId];
-                        if (pd != null)
+                        if (patients != null && !string.IsNullOrEmpty(n.PatientId))
                         {
-                            toDo.PatientDetails = new PatientDetails
+                            PatientData pd;
+                            if(patients.TryGetValue(n.PatientId, out pd))
                             {
-                                Id = pd.Id,
-                                FirstName = pd.FirstName,
-                                LastName = pd.LastName,
-                                MiddleName = pd.MiddleName,
-                                PreferredName = pd.PreferredName,
-                                Suffix = pd.Suffix
-                            };
+                                toDo.PatientDetails = new PatientDetails
+                                {
+                                    Id = pd.Id,
+                                    FirstName = pd.FirstName,
+                                    LastName = pd.LastName,
+                                    MiddleName = pd.MiddleName,
+                                    PreferredName = pd.PreferredName,
+                                    Suffix = pd.Suffix
+                                };
+                            }
                         }
                         result.Add(toDo);
                     }
