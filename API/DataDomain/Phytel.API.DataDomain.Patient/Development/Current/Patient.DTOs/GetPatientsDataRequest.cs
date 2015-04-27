@@ -7,8 +7,8 @@ namespace Phytel.API.DataDomain.Patient.DTO
     [Route("/{Context}/{Version}/{ContractNumber}/Patients", "POST")]
     public class GetPatientsDataRequest : IDataDomainRequest
     {
-        [ApiMember(Name = "PatientIds", Description = "Array of PatientIds", ParameterType = "property", DataType = "string", IsRequired = true)]
-        public string[] PatientIds { get; set; }
+        [ApiMember(Name = "PatientIds", Description = "List of PatientIds", ParameterType = "property", DataType = "List<string>", IsRequired = true)]
+        public List<string> PatientIds { get; set; }
 
         [ApiMember(Name = "Context", Description = "Product Context requesting the patient", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string Context { get; set; }

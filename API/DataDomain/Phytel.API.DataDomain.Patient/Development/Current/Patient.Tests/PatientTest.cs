@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Phytel.API.DataDomain.Patient.DTO;
 
@@ -48,7 +49,10 @@ namespace Phytel.API.DataDomain.Patient.Test
         [TestMethod]
         public void GetPatients()
         {
-            string[] patientIds = new string[] { "5325da2dd6a4850adcbba576", "5325da31d6a4850adcbba582", "5325da3ad6a4850adcbba59a" };
+            List<string> patientIds = new List<string>();
+            patientIds.Add("5325da2dd6a4850adcbba576");
+            patientIds.Add("5325da31d6a4850adcbba582");
+            patientIds.Add("5325da3ad6a4850adcbba59a");
             GetPatientsDataRequest request = new GetPatientsDataRequest { PatientIds = patientIds };
 
             IPatientDataManager pm = new PatientDataManager { Factory = new PatientRepositoryFactory() };

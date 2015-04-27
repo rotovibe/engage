@@ -321,61 +321,48 @@ namespace Phytel.API.DataDomain.Patient
             throw new NotImplementedException();
         }
 
-        public GetPatientsDataResponse Select(string[] patientIds)
+        public GetPatientsDataResponse Select(List<string> patientIds)
         {
+            Dictionary<string, PatientData> response = null;
             GetPatientsDataResponse pdResponse = new GetPatientsDataResponse();
             try
             {
-                BsonValue[] bsv = new BsonValue[patientIds.Length];
-                if(patientIds != null && patientIds.Length > 0)
+                using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
                 {
-                    for (int i = 0; i < patientIds.Length; i++)
+                    List<IMongoQuery> queries = new List<IMongoQuery>();
+                    queries.Add(Query.In(MEPatientUser.IdProperty, new BsonArray(patientIds)));
+                    queries.Add(Query.EQ(MEPatientUser.DeleteFlagProperty, false));
+                    IMongoQuery mQuery = Query.And(queries);
+                    List<MEPatient> mePatients = ctx.Patients.Collection.Find(mQuery).ToList();
+                    if(mePatients != null && mePatients.Count > 0)
                     {
-                        bsv[i] = ObjectId.Parse(patientIds[i]);
-                    }
-
-                    var query = MB.Query.And(
-                        MB.Query<MEPatientUser>.In(b => b.Id, bsv),
-                        MB.Query<MEPatientUser>.EQ(b => b.DeleteFlag, false));
-
-                    List<PatientData> pResp = null;
-                    using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
-                    {
-                        List<MEPatient> pr = ctx.Patients.Collection.Find(query).ToList();
-                        if(pr != null && pr.Count > 0)
+                        response = new Dictionary<string, PatientData>();
+                        foreach (MEPatient meP in mePatients)
                         {
-                            pResp = new List<PatientData>();
-                            foreach (MEPatient mp in pr)
+                            PatientData data = new PatientData 
                             {
-                                pResp.Add(new DTO.PatientData
-                                {
-                                    Id = mp.Id.ToString(),
-                                    PreferredName = mp.PreferredName,
-                                    DOB = mp.DOB,
-                                    FirstName = mp.FirstName,
-                                    Gender = mp.Gender,
-                                    LastName = mp.LastName,
-                                    MiddleName = mp.MiddleName,
-                                    Suffix = mp.Suffix,
-                                    Version = mp.Version,
-                                    PriorityData = (int)mp.Priority,
-                                    DisplayPatientSystemId = mp.DisplayPatientSystemId.ToString(),
-                                    Background = mp.Background,
-                                    LastFourSSN = mp.LastFourSSN
-                                });
-                            }
+                                Id = meP.Id.ToString(),
+                                PreferredName = meP.PreferredName,
+                                DOB = meP.DOB,
+                                FirstName = meP.FirstName,
+                                Gender = meP.Gender,
+                                LastName = meP.LastName,
+                                MiddleName = meP.MiddleName,
+                                Suffix = meP.Suffix,
+                                Version = meP.Version,
+                                PriorityData = (int)meP.Priority,
+                                DisplayPatientSystemId = meP.DisplayPatientSystemId.ToString(),
+                                Background = meP.Background,
+                                LastFourSSN = meP.LastFourSSN
+                            };
+                            response.Add(data.Id, data);
                         }
-                        
-                    }
-                    pdResponse.Patients = pResp;      
+                    }   
                 }
-
+                pdResponse.Patients = response;      
                 return pdResponse;
             }
-            catch (Exception)
-            {
-                throw;
-            }
+            catch (Exception) { throw; }
         }
 
         public IEnumerable<object> SelectAll()
