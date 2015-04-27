@@ -52,7 +52,7 @@ namespace Phytel.Services.Journal
                         c.Resolve<IServiceConfigProxy>(),
                         c.Resolve<IMappingEngine>()
                     )
-                );
+                ).ReusedWithin(Funq.ReuseScope.Request);
         }
     }
 }
