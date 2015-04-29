@@ -50,5 +50,63 @@ namespace Phytel.Services.API
         TResponse Put<TResponse>(object request, NameValueCollection headers, string relativeUrlFormat, params string[] relativeUrlParams);
 
         void PutAsync<TResponse>(object requestDto, Action<TResponse> onSuccess, Action<TResponse, Exception> onError);
+
+        TResponse Delete<TResponse>(string relativeUrlFormat, TimeSpan timeout, params object[] relativeUrlParams);
+
+        TResponse Delete<TResponse>(object requestDto, TimeSpan timeout);
+
+        void Delete(object requestDto, TimeSpan timeout);
+
+        TResponse Get<TResponse>(string relativeUrlFormat, TimeSpan timeout, params string[] relativeUrlParams) where TResponse : class, new();
+
+        TResponse Get<TResponse>(string relativeUrlFormat, NameValueCollection headers, TimeSpan timeout, params string[] relativeUrlParams) where TResponse : class, new();
+
+        TResponse Get<TResponse>(object requestDto, TimeSpan timeout);
+
+        TResponse Patch<TResponse>(object requestDto, TimeSpan timeout);
+
+        void Patch(object requestDto, TimeSpan timeout);
+
+        TResponse Patch<TResponse>(object request, string relativeUrlFormat, TimeSpan timeout, params string[] relativeUrlParams);
+
+        TResponse Post<TResponse>(string relativeUrlFormat, TimeSpan timeout, params string[] relativeUrlParams);
+
+        void Post(object requestDto, TimeSpan timeout);
+
+        TResponse Post<TResponse>(object requestDto, TimeSpan timeout);
+
+        TResponse Post<TResponse>(object request, string relativeUrlFormat, TimeSpan timeout, params string[] relativeUrlParams);
+
+        TResponse Post<TResponse>(object request, NameValueCollection headers, string relativeUrlFormat, TimeSpan timeout, params string[] relativeUrlParams);
+
+        TResponse Put<TResponse>(object requestDto, TimeSpan timeout);
+
+        void Put(object requestDto, TimeSpan timeout);
+
+        TResponse Put<TResponse>(object request, string relativeUrlFormat, TimeSpan timeout, params string[] relativeUrlParams);
+
+        TResponse Put<TResponse>(object request, NameValueCollection headers, string relativeUrlFormat, TimeSpan timeout, params string[] relativeUrlParams);
+
+        TResponse Get<TResponse>(object requestDto, NameValueCollection headers, TimeSpan timeout);
+
+        TResponse Patch<TResponse>(object requestDto, NameValueCollection headers, TimeSpan timeout);
+
+        void Patch(object requestDto, NameValueCollection headers, TimeSpan timeout);
+
+        TResponse Patch<TResponse>(object request, string relativeUrlFormat, NameValueCollection headers, TimeSpan timeout, params string[] relativeUrlParams);
+
+        TResponse Post<TResponse>(string relativeUrlFormat, NameValueCollection headers, TimeSpan timeout, params string[] relativeUrlParams);
+
+        void Post(object requestDto, NameValueCollection headers, TimeSpan timeout);
+
+        TResponse Post<TResponse>(object requestDto, NameValueCollection headers, TimeSpan timeout);
+
+        TResponse Post<TResponse>(object request, string relativeUrlFormat, NameValueCollection headers, TimeSpan timeout, params string[] relativeUrlParams);
+
+        TResponse Put<TResponse>(object requestDto, NameValueCollection headers, TimeSpan timeout);
+
+        void Put(object requestDto, NameValueCollection headers, TimeSpan timeout);
+
+        TResponse Put<TResponse>(object request, string relativeUrlFormat, NameValueCollection headers, TimeSpan timeout, params string[] relativeUrlParams);
     }
 }
