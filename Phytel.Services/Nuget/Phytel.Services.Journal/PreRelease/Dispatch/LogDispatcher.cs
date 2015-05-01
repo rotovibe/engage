@@ -109,9 +109,10 @@ namespace Phytel.Services.Journal.Dispatch
         }
 
         public virtual void DispatchEntries(params LogEvent[] logEvents)
-        {
+        {            
             foreach (LogEvent logEvent in logEvents)
             {
+                var putLogEvent = new { Event = logEvent };
                 _dispatcher.Dispatch(logEvent);
             }            
         }
