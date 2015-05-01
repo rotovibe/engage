@@ -8,7 +8,7 @@ using System;
 
 namespace Phytel.Services.Journal.Dispatch
 {
-    public class JournalDispatcher : IJournalDispatcher
+    public class LogDispatcher : ILogDispatcher
     {
         protected readonly IActionIdProvider _actionIdProvider;
         protected readonly IDateTimeProxy _dateTimeProxy;
@@ -16,7 +16,7 @@ namespace Phytel.Services.Journal.Dispatch
         protected readonly IMappingEngine _mappingEngine;
         protected readonly IServiceConfigProxy _serviceConfigProxy;
 
-        public JournalDispatcher(IDispatcher dispatcher, IActionIdProvider actionIdProvider, IDateTimeProxy dateTimeProxy, IServiceConfigProxy serviceConfigProxy, IMappingEngine mappingEngine)
+        public LogDispatcher(IDispatcher dispatcher, IActionIdProvider actionIdProvider, IDateTimeProxy dateTimeProxy, IServiceConfigProxy serviceConfigProxy, IMappingEngine mappingEngine)
         {
             _dispatcher = dispatcher;
             _actionIdProvider = actionIdProvider;
@@ -25,7 +25,7 @@ namespace Phytel.Services.Journal.Dispatch
             _mappingEngine = mappingEngine;
         }
 
-        public virtual JournalEntry Dispatch(State state, object requestDto = null, string actionId = null, string name = null, string product = null, string ipAddress = null, string url = null, string verb = null, DateTime? timeUtc = null, string parentActionId = null, Exception exception = null)
+        public virtual LogEvent Dispatch(State state, object requestDto = null, string actionId = null, string name = null, string product = null, string ipAddress = null, string url = null, string verb = null, DateTime? timeUtc = null, string parentActionId = null, Exception exception = null)
         {
             if (string.IsNullOrEmpty(actionId))
             {
@@ -57,41 +57,41 @@ namespace Phytel.Services.Journal.Dispatch
                 }
             }
 
-            JournalEntry entry = new JournalEntry();
-            entry.ActionId = actionId;
-            entry.ParentActionId = parentActionId;
-            entry.Name = name;
-            entry.Product = product;
-            entry.IPAddress = ipAddress;
-            entry.Verb = verb;
-            entry.State = state;
-            entry.Url = url;
+            LogEvent logEvent = new LogEvent();
+            logEvent.ActionId = actionId;
+            logEvent.ParentActionId = parentActionId;
+            logEvent.Name = name;
+            logEvent.Product = product;
+            logEvent.IPAddress = ipAddress;
+            logEvent.Verb = verb;
+            logEvent.State = state;
+            logEvent.Url = url;
 
             if (requestDto != null && requestDto.GetType().IsPrimitive == false)
             {
-                entry.Body = MongoDB.Bson.BsonExtensionMethods.ToJson(requestDto);
+                logEvent.Body = MongoDB.Bson.BsonExtensionMethods.ToJson(requestDto);
             }
 
             if (timeUtc.HasValue)
             {
-                entry.Time = timeUtc.Value;
+                logEvent.Time = timeUtc.Value;
             }
             else
             {
-                entry.Time = _dateTimeProxy.GetCurrentDateTime();
+                logEvent.Time = _dateTimeProxy.GetCurrentDateTime();
             }
 
             if (exception != null)
             {
-                entry.Error = _mappingEngine.Map<Error>(exception);
+                logEvent.Error = _mappingEngine.Map<Error>(exception);
             }
 
-            DispatchEntries(entry);
+            DispatchEntries(logEvent);
 
-            return entry;
+            return logEvent;
         }
 
-        public virtual JournalEntry Dispatch(State state, IHttpRequest request, object requestDto = null, string actionId = null, DateTime? timeUtc = null, string parentActionId = null, Exception exception = null)
+        public virtual LogEvent Dispatch(State state, IHttpRequest request, object requestDto = null, string actionId = null, DateTime? timeUtc = null, string parentActionId = null, Exception exception = null)
         {
             return Dispatch(
                 state,
@@ -108,19 +108,13 @@ namespace Phytel.Services.Journal.Dispatch
                 );
         }
 
-        public virtual void DispatchEntries(params JournalEntry[] entries)
-        {
-            AddJournalEntriesMessage message = new AddJournalEntriesMessage();
-            if (message.Entries == null)
+        public virtual void DispatchEntries(params LogEvent[] logEvents)
+        {            
+            foreach (LogEvent logEvent in logEvents)
             {
-                message.Entries = new System.Collections.Generic.List<JournalEntry>();
-            }
-            foreach (JournalEntry entry in entries)
-            {
-                message.Entries.Add(entry);
-            }
-
-            _dispatcher.Dispatch(message);
+                var putLogEvent = new { Event = logEvent };
+                _dispatcher.Dispatch(putLogEvent);
+            }            
         }
     }
 }

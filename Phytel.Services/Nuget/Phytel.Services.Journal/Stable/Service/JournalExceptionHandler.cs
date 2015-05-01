@@ -7,21 +7,21 @@ namespace Phytel.Services.Journal
 {
     public class JournalExceptionHandler : IJournalExceptionHandler
     {
-        protected IJournalDispatcher _journalDispatch;
+        protected ILogDispatcher _logDispatch;
 
-        public JournalExceptionHandler(IJournalDispatcher journalDispatcher)
+        public JournalExceptionHandler(ILogDispatcher logDispatch)
         {
-            _journalDispatch = journalDispatcher;
+            _logDispatch = logDispatch;
         }
 
         public virtual void HandleException(IHttpRequest req, IHttpResponse res, string operationName, Exception exception)
         {
-            if (req.Items.Any(x => x.Key == Constants.RequestItemkeyStartedJournalEntry))
+            if (req.Items.Any(x => x.Key == Constants.RequestItemKeyStartedLogEvent))
             {
-                JournalEntry startedJournalEntry = req.Items[Constants.RequestItemkeyStartedJournalEntry] as JournalEntry;
-                if (startedJournalEntry != null)
+                LogEvent startedLogEvent = req.Items[Constants.RequestItemKeyStartedLogEvent] as LogEvent;
+                if (startedLogEvent != null)
                 {
-                    _journalDispatch.Dispatch(State.Failed, req, actionId: startedJournalEntry.ActionId, parentActionId: startedJournalEntry.ParentActionId, exception: exception);
+                    _logDispatch.Dispatch(State.Failed, req, actionId: startedLogEvent.ActionId, parentActionId: startedLogEvent.ParentActionId, exception: exception);
                 }
             }
         }

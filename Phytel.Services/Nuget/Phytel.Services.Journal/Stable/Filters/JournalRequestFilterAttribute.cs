@@ -6,15 +6,15 @@ namespace Phytel.Services.Journal.Filters
 {
     public class JournalRequestFilterAttribute : RequestFilterAttribute
     {
-        public IJournalDispatcher JournalDispatcher { get; set; }
+        public ILogDispatcher LogDispatcher { get; set; }
 
         public override void Execute(IHttpRequest req, IHttpResponse res, object requestDto)
         {
-            JournalEntry startedEntry = JournalDispatcher.Dispatch(State.Started, req, requestDto: requestDto);
+            LogEvent startedLogEvent = LogDispatcher.Dispatch(State.Started, req, requestDto: requestDto);
 
-            if (startedEntry != null)
+            if (startedLogEvent != null)
             {
-                req.Items.Add(Constants.RequestItemkeyStartedJournalEntry, startedEntry);
+                req.Items.Add(Constants.RequestItemKeyStartedLogEvent, startedLogEvent);
             }
         }
     }
