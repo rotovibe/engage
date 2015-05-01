@@ -9,23 +9,23 @@ namespace Phytel.Services.Journal
 {
     public class JournalServiceExceptionHandler : IJournalServiceExceptionHandler
     {
-        protected readonly IJournalDispatcher _journalDispatch;
+        protected readonly ILogDispatcher _logDispatch;
         protected readonly IMappingEngine _mappingEngine;
 
-        public JournalServiceExceptionHandler(IJournalDispatcher journalDispatcher, IMappingEngine mappingEngine)
+        public JournalServiceExceptionHandler(ILogDispatcher logDispatch, IMappingEngine mappingEngine)
         {
-            _journalDispatch = journalDispatcher;
+            _logDispatch = logDispatch;
             _mappingEngine = mappingEngine;
         }
 
         public virtual ErrorResponse HandleServiceException(IHttpRequest req, object requestDto, Exception exception)
         {
-            if (req.Items.Any(x => x.Key == Constants.RequestItemkeyStartedJournalEntry))
+            if (req.Items.Any(x => x.Key == Constants.RequestItemKeyStartedLogEvent))
             {
-                JournalEntry startedJournalEntry = req.Items[Constants.RequestItemkeyStartedJournalEntry] as JournalEntry;
-                if (startedJournalEntry != null)
+                LogEvent startedLogEvent = req.Items[Constants.RequestItemKeyStartedLogEvent] as LogEvent;
+                if (startedLogEvent != null)
                 {
-                    _journalDispatch.Dispatch(State.Failed, req, actionId: startedJournalEntry.ActionId, parentActionId: startedJournalEntry.ParentActionId, exception: exception);
+                    _logDispatch.Dispatch(State.Failed, req, actionId: startedLogEvent.ActionId, parentActionId: startedLogEvent.ParentActionId, exception: exception);
                 }
             }
 

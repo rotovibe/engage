@@ -43,7 +43,7 @@ namespace Phytel.Services.Journal
         {
             container =
                 _containerProfile.GetBuilder(container)
-                .DecorateWith(cb => new JournalDispatcherContainerDecorator(cb))
+                .DecorateWith(cb => new LogDispatcherContainerDecorator(cb))
                 .DecorateWith(cb => new JournalExceptionHandlerContainerDecorator(cb))
                 .Build();
 
@@ -54,9 +54,9 @@ namespace Phytel.Services.Journal
         {
             if (_globalJournalingEnabled)
             {
-                JournalRequestFilterAttribute journalRequest = new JournalRequestFilterAttribute { JournalDispatcher = TryResolve<IJournalDispatcher>() };
+                JournalRequestFilterAttribute journalRequest = new JournalRequestFilterAttribute { LogDispatcher = TryResolve<ILogDispatcher>() };
                 RequestFilters.Add(journalRequest.RequestFilter);
-                JournalResponseFilterAttribute journalResponse = new JournalResponseFilterAttribute { JournalDispatcher = TryResolve<IJournalDispatcher>() };
+                JournalResponseFilterAttribute journalResponse = new JournalResponseFilterAttribute { LogDispatcher = TryResolve<ILogDispatcher>() };
                 ResponseFilters.Add(journalResponse.ResponseFilter);
             }
 

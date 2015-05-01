@@ -15,12 +15,12 @@ namespace Phytel.Services.Journal
         {
             container.Register<IJournalExceptionHandler>(c =>
                 new JournalExceptionHandler(
-                    c.Resolve<IJournalDispatcher>()
+                    c.Resolve<ILogDispatcher>()
                     )
                 );
             container.Register<IJournalServiceExceptionHandler>(c =>
                 new JournalServiceExceptionHandler(
-                    c.Resolve<IJournalDispatcher>(),
+                    c.Resolve<ILogDispatcher>(),
                     c.Resolve<IMappingEngine>()
                 ));
         }

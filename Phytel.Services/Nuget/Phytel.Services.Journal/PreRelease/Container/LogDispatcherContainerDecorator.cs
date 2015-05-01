@@ -6,22 +6,15 @@ using Phytel.Services.Dispatch.Ase;
 using Phytel.Services.IOC;
 using Phytel.Services.Journal.Dispatch;
 using Phytel.Services.Serializer;
+using System;
 
 namespace Phytel.Services.Journal
 {
-    public class JournalDispatcherContainerDecorator : ContainerDecorator
+    public class LogDispatcherContainerDecorator : ContainerDecorator
     {
-        public const string AppSettingKeyPublishKey = "Ase.PublishKey.Journal.PostEntries";
-        public const string PublishKey = "journalpostentries";
-
-        protected readonly string _appSettingKeyPublishKey;
-        protected readonly string _publishKey;
-
-        public JournalDispatcherContainerDecorator(ContainerBuilder containerBuilder, string publishKey = null, string appSettingKeyPublishKey = AppSettingKeyPublishKey)
+        public LogDispatcherContainerDecorator(ContainerBuilder containerBuilder)
             : base(containerBuilder)
         {
-            _appSettingKeyPublishKey = appSettingKeyPublishKey;
-            _publishKey = publishKey;
         }
 
         protected override void OnBuild(Funq.Container container)
@@ -41,10 +34,10 @@ namespace Phytel.Services.Journal
                 container.Register<IServiceConfigProxy>(new ServiceStackServiceConfigProxy());
             }
 
-            container.Register<IJournalDispatcher>(c =>
-                new JournalDispatcher(
+            container.Register<ILogDispatcher>(c =>
+                new LogDispatcher(
                     new AseBusDispatcher(
-                        c.Resolve<IAppSettingsProvider>().Get(_appSettingKeyPublishKey, _publishKey, PublishKey),
+                        c.Resolve<IAppSettingsProvider>().Get(Constants.AppSettingKeys.PutEventPublishKey, Constants.AppSettingDefaultValues.PutEventPublishKey),
                         new SerializerJson()
                         ),
                         c.Resolve<IActionIdProvider>(),
@@ -52,7 +45,7 @@ namespace Phytel.Services.Journal
                         c.Resolve<IServiceConfigProxy>(),
                         c.Resolve<IMappingEngine>()
                     )
-                ).ReusedWithin(Funq.ReuseScope.Request);
+            ).ReusedWithin(Funq.ReuseScope.Request); ;
         }
     }
 }

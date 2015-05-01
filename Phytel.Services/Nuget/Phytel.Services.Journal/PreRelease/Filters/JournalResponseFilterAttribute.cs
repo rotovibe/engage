@@ -7,16 +7,16 @@ namespace Phytel.Services.Journal.Filters
 {
     public class JournalResponseFilterAttribute : ResponseFilterAttribute
     {
-        public IJournalDispatcher JournalDispatcher { get; set; }
+        public ILogDispatcher LogDispatcher { get; set; }
         
         public override void Execute(IHttpRequest req, IHttpResponse res, object responseDto)
         {
-            if (req.Items.Any(x => x.Key == Constants.RequestItemkeyStartedJournalEntry))
+            if (req.Items.Any(x => x.Key == Constants.RequestItemKeyStartedLogEvent))
             {
-                JournalEntry startedJournalEntry = req.Items[Constants.RequestItemkeyStartedJournalEntry] as JournalEntry;
-                if (startedJournalEntry != null)
+                LogEvent startedLogEvent = req.Items[Constants.RequestItemKeyStartedLogEvent] as LogEvent;
+                if (startedLogEvent != null)
                 {
-                    JournalDispatcher.Dispatch(State.Ended, req, actionId: startedJournalEntry.ActionId, parentActionId: startedJournalEntry.ParentActionId);
+                    LogDispatcher.Dispatch(State.Ended, req, actionId: startedLogEvent.ActionId, parentActionId: startedLogEvent.ParentActionId);
                 }
             }
         }
