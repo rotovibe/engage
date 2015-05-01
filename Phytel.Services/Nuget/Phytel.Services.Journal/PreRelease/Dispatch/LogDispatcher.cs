@@ -113,7 +113,7 @@ namespace Phytel.Services.Journal.Dispatch
             foreach (LogEvent logEvent in logEvents)
             {
                 var putLogEvent = new { Event = logEvent };
-                _dispatcher.Dispatch(logEvent);
+                _dispatcher.Dispatch(putLogEvent);
             }            
         }
     }
