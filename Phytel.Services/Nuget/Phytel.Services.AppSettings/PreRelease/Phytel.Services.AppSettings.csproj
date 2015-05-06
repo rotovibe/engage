@@ -49,6 +49,7 @@
     <Compile Include="AppSettingsProvider.cs" />
     <Compile Include="AseAppSettingsProvider.cs" />
     <Compile Include="ConfigAppSettingsProvider.cs" />
+    <Compile Include="EagerLoadedAppSettingsProvider.cs" />
     <Compile Include="IAppSettingsProvider.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

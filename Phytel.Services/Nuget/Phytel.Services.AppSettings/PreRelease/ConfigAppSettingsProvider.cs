@@ -3,7 +3,7 @@ using System.Configuration;
 
 namespace Phytel.Services.AppSettings
 {
-    public class ConfigAppSettingsProvider : AppSettingsProvider
+    public class ConfigAppSettingsProvider : EagerLoadedAppSettingsProvider
     {
         public ConfigAppSettingsProvider()
             : this(ConfigurationManager.AppSettings)

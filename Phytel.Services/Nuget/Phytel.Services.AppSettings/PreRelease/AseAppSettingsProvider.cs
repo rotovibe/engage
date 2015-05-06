@@ -2,7 +2,7 @@
 
 namespace Phytel.Services.AppSettings
 {
-    public class AseAppSettingsProvider : AppSettingsProvider
+    public class AseAppSettingsProvider : EagerLoadedAppSettingsProvider
     {
         public AseAppSettingsProvider(XmlNode configuration)
             : base(configuration.ToDictionary())

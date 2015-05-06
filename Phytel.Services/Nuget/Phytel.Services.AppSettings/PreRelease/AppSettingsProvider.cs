@@ -3,15 +3,8 @@ using System.Linq;
 
 namespace Phytel.Services.AppSettings
 {
-    public class AppSettingsProvider : IAppSettingsProvider
+    public abstract class AppSettingsProvider : IAppSettingsProvider
     {
-        protected readonly IDictionary<string, string> _appSettings;
-
-        public AppSettingsProvider(IDictionary<string, string> appSettings)
-        {
-            _appSettings = appSettings;
-        }
-
         public string Get(string key)
         {
             return Get(key, string.Empty);
@@ -28,20 +21,15 @@ namespace Phytel.Services.AppSettings
 
             if (string.IsNullOrEmpty(rvalue))
             {
-                rvalue = defaultValue;
+                string valueFromSource = OnGetValueFromSource(key);
 
-                if (_appSettings.Any() && _appSettings.ContainsKey(key))
-                {
-                    string valueFromAppSettings = _appSettings[key];
-                    if (!string.IsNullOrEmpty(valueFromAppSettings))
-                    {
-                        rvalue = valueFromAppSettings;
-                    }
-                }
+                rvalue = valueFromSource ?? defaultValue;
             }
 
             return rvalue;
         }
+
+        protected abstract string OnGetValueFromSource(string key);
 
         public int GetAsInt(string key)
         {
