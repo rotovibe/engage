@@ -10,6 +10,8 @@
     <description>Components to support getting app settings from contract database's contract property table.</description>
     <dependencies>
       <group targetFramework=".NETFramework4.5.1">
+        <dependency id="Phytel.Services.AppSettings" version="1.4.1" />
+        <dependency id="Phytel.API.DataDomain.Contract.DTO" version="1.1.0" />
       </group>
     </dependencies>
   </metadata>
