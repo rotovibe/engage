@@ -61,7 +61,7 @@ namespace Phytel.Services.AppSettings.Test.Specs
         [When(@"I get the setting ""(.*)""")]
         public void WhenIGetTheSetting(string key)
         {
-            _appSettingsProvider = new AppSettingsProvider(_appSettings);
+            _appSettingsProvider = new EagerLoadedAppSettingsProvider(_appSettings);
 
             _resultActual = _appSettingsProvider.Get(key);
         }
@@ -69,7 +69,7 @@ namespace Phytel.Services.AppSettings.Test.Specs
         [When(@"I get the setting ""(.*)"" as bool")]
         public void WhenIGetTheSettingAsBool(string key)
         {
-            _appSettingsProvider = new AppSettingsProvider(_appSettings);
+            _appSettingsProvider = new EagerLoadedAppSettingsProvider(_appSettings);
 
             _resultAsBoolActual = _appSettingsProvider.GetAsBoolean(key);
         }
@@ -77,7 +77,7 @@ namespace Phytel.Services.AppSettings.Test.Specs
         [When(@"I get the setting ""(.*)"" as int")]
         public void WhenIGetTheSettingAsInt(string key)
         {
-            _appSettingsProvider = new AppSettingsProvider(_appSettings);
+            _appSettingsProvider = new EagerLoadedAppSettingsProvider(_appSettings);
 
             _resultAsIntActual = _appSettingsProvider.GetAsInt(key);
         }
@@ -85,7 +85,7 @@ namespace Phytel.Services.AppSettings.Test.Specs
         [When(@"I provide default value ""(.*)"" and get the setting ""(.*)""")]
         public void WhenIProvideDefaultValueAndGetTheSetting(string defaultValue, string key)
         {
-            _appSettingsProvider = new AppSettingsProvider(_appSettings);
+            _appSettingsProvider = new EagerLoadedAppSettingsProvider(_appSettings);
 
             _resultActual = _appSettingsProvider.Get(key, defaultValue);
         }
@@ -93,7 +93,7 @@ namespace Phytel.Services.AppSettings.Test.Specs
         [When(@"I provide default value ""(.*)"" and get the setting ""(.*)"" as bool")]
         public void WhenIProvideDefaultValueAndGetTheSettingAsBool(string defaultValueAsString, string key)
         {
-            _appSettingsProvider = new AppSettingsProvider(_appSettings);
+            _appSettingsProvider = new EagerLoadedAppSettingsProvider(_appSettings);
 
             bool defaultValue = bool.Parse(defaultValueAsString);
 
@@ -103,7 +103,7 @@ namespace Phytel.Services.AppSettings.Test.Specs
         [When(@"I provide default value (.*) and get the setting ""(.*)"" as int")]
         public void WhenIProvideDefaultValueAndGetTheSettingAsInt(int defaultValue, string key)
         {
-            _appSettingsProvider = new AppSettingsProvider(_appSettings);
+            _appSettingsProvider = new EagerLoadedAppSettingsProvider(_appSettings);
 
             _resultAsIntActual = _appSettingsProvider.GetAsInt(key, defaultValue);
         }
