@@ -59,6 +59,6 @@
     display: none;
   }
   > .content .fullscreen-only {
-      display: initial;
+      display: block;   /*initial is not supported in ie*/
   }
 }
