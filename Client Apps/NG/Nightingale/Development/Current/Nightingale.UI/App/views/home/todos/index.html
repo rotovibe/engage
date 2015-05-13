@@ -3,7 +3,7 @@
         <div>
             <div class="column" data-bind="css: { 'open': leftColumnOpen() }">
                 <div class="widget-wrapper">
-                    <div class="widget open" data-bind="css: { 'fullscreen': fullScreenWidget() === 'todopanel' }, columnSizer: {triggers: {a: selectedView, b: filtersHeaderOpen(), c: filtersOpen()}}">
+                    <div class="widget open" data-bind="css: { 'fullscreen': fullScreenWidget() === 'todopanel' }, columnSizer: {triggers: {a: selectedView().name(), b: filtersHeaderOpen(), c: filtersOpen()}}">
                         <div class="content">
                             <div class="content-fill">
                                 <div class="wrapper">
