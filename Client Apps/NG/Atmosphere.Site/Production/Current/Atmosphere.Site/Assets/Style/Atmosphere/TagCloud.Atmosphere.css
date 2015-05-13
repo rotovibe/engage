@@ -1,0 +1,20 @@
+.RadTagCloud_Atmosphere
+{
+	border: 1px dotted #ccc;
+}
+.RadTagCloud_Atmosphere .rtcTagList .rtcTagItem
+{
+	color: #ccc;
+}
+.RadTagCloud_Atmosphere .rtcTagList .rtcTagItem:hover
+{
+	color: #c5c5c5;
+}
+.RadTagCloud_Atmosphere .rtcTagList .rtcTagItem a
+{
+	color: #333;
+}
+.RadTagCloud_Atmosphere .rtcTagList .rtcTagItem a:hover
+{
+	background: #c5c5c5;
+}

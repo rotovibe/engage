@@ -1,0 +1,13 @@
+/* RadRating for ASP.NET AJAX Default Skin */
+
+.RadRating_Atmosphere a,
+.RadRating_Atmosphere a span
+{
+	background-image: url('Rating/Sprite.png');
+}
+
+* html .RadRating_Atmosphere a,
+* html .RadRating_Atmosphere a span
+{
+	background-image: url('Rating/Sprite.gif');
+}

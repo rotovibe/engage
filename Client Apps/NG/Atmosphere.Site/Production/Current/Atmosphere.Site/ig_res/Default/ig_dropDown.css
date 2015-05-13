@@ -1,0 +1,381 @@
+/*
+
+Main control CSS class
+*/
+.igdd_Control
+{
+}
+
+.igdd_ControlArea
+{
+	border: 1px solid #BBBBBB;
+	table-layout:fixed;
+}
+
+/*
+ Main Control CSS class when it's disabled
+*/
+.igdd_ControlDisabled
+{
+}
+
+/*
+ Main control css class on hover
+*/
+.igdd_ControlHover
+{
+	background-color: #F5F5F5;
+}
+
+/*
+Loading message container
+*/
+.igdd_LoadingItemsMessage
+{
+	background-color: #FFCC33;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10pt;
+	font-weight: bold;
+	margin: 1px 0px 0px 1px;
+	padding: 3px;
+	color: #FFFFFF;
+}
+
+/*
+
+*/
+.igdd_ControlFocus
+{
+	border: 1px solid #999999;
+	background-color: #F5F5F5;
+	table-layout:fixed;
+}
+
+/*
+ CSS class for the table that accomodates the value display and the drop down button, and which is a 
+ child of the main control (div)
+*/
+.igdd_ValueDisplayTable
+{
+}
+
+/*
+CSS class for the actual input field (<input type="text" />)
+*/
+.igdd_ValueDisplay
+{
+	width: 100%;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10pt;
+	font-weight: normal;
+	border: 0px;
+	background-color: Transparent;
+}
+
+/*
+
+*/
+.igdd_ValueDisplayHover
+{
+}
+
+/*
+
+*/
+.igdd_ValueDisplayFocus
+{
+	
+}
+
+/*
+
+*/
+.igdd_ValueDisplayDisabled
+{
+	
+}
+
+/*
+
+*/
+.igdd_ValueDisplayReadOnly
+{
+	
+}
+
+/*
+
+*/
+.igdd_DropDownList
+{
+	margin: 0px;
+	padding: 1px;
+	font-size: 10pt;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+}
+
+/*
+
+*/
+.igdd_DropDownListHover
+{
+	
+}
+
+/*
+
+*/
+.igdd_DropDownListDisabled
+{
+	
+}
+
+/*
+
+*/
+.igdd_DropDownListFocus
+{
+	
+}
+
+/*
+
+*/
+.igdd_DropDownListReadOnly
+{
+	
+}
+
+/*
+	
+*/
+.igdd_DropDownListContainer
+{
+	float: left;
+	border: 1px solid #BBBBBB;
+	background-color: #FFFFFF;
+}
+
+/*
+
+*/
+.igdd_DropDownListContainerFocus
+{
+	
+}
+
+/*
+
+*/
+.igdd_DropDownListContainerHover
+{
+}
+
+/*
+
+*/
+.igdd_DropDownButton
+{
+	width: 17px;
+	z-index: 9999;
+}
+
+/*
+
+*/
+.igdd_DropDownButtonHover
+{
+	
+}
+
+/*
+	
+*/
+.igdd_DropDownButtonFocus
+{
+	
+}
+
+/*
+
+*/
+.igdd_DropDownButtonDisabled
+{
+	
+}
+
+/*
+CSS class that controls the style of the LI items in the list
+*/
+.igdd_ListItem
+{
+	list-style-type: none;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10pt;
+	padding: 3px 5px 3px 5px;
+	cursor: pointer;
+	width: auto;
+	min-height: 15px;
+	height: auto !important;
+	border: 1px solid transparent;
+}
+
+.igdd_ListItem a:link
+{
+	color: #333333;
+	text-decoration: none;
+}
+
+.igdd_ListItem a:visited
+{
+	color: #333333;
+	text-decoration: none;
+}
+
+/*
+
+*/
+.igdd_ListItemSelected
+{
+	list-style-type: none;
+	background-color: #F1F1F1;
+	color: #333333;
+	border: 1px solid #F1F1F1;
+}
+
+/*
+
+*/
+.igdd_ListItemActive
+{
+	list-style-type: none;
+	background-color: #D1EBFE;
+	color: #333333;
+	border: 1px solid #BBBBBB;
+}
+
+.igdd_ListItemActive a:link
+{
+	text-decoration: none;
+	color: #333333;
+}
+
+/*
+
+*/
+.igdd_ListItemHover
+{
+	list-style-type: none;
+	background-color: #FF9933;
+	background-image:url(images/igdd_ListItemHover.png);
+	background-repeat: repeat-x;
+	background-position: top;
+	border: 1px solid transparent;
+}
+
+/*
+Styling for anchor when hovered anywhere on ListItem
+*/
+.igdd_ListItemHover a:link
+{
+	text-decoration: none;
+	color: #FFFFFF;
+}
+
+.igdd_ListItem a:link
+{
+}
+
+.igdd_ListItem a:visited
+{
+}
+
+.igdd_ListItem a:active
+{
+}
+
+.igdd_ListItem a:hover
+{
+}
+
+/*
+
+*/
+.igdd_ListItemDisabled
+{
+	list-style-type: none;
+	width: auto;
+	cursor: default;
+}
+
+/*
+For Disabled=True of a DropDownItem
+*/
+.igdd_ListItemDisabled a:link
+{
+	color: #BBBBBB;
+	cursor: default;
+}
+
+/*
+
+*/
+.igdd_ListItemFocus
+{
+	list-style-type: none;
+	width: auto;
+}
+
+
+/*
+Applied to the whole pager
+*/
+.igdd_Pager
+{
+	float: left;
+	padding: 5px;
+	background-color: #F7F7F7;
+	text-align: right;
+	vertical-align: middle;
+}
+
+/*
+Styles all page links in general 
+*/
+.igdd_PageLink
+{
+	float: left;
+	vertical-align: middle;
+	cursor: pointer;
+	margin: 5px;
+	font-size: 8pt;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	color: #333333;
+}
+
+/*
+Styles the current page link only
+*/
+.igdd_PageCurrent
+{
+	float: left;
+	vertical-align: middle;
+	cursor: pointer;
+	margin: 5px;
+	font-size: 8pt;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	color: #FF9933;
+	text-decoration: underline;
+}
+
+/*
+pseudo class used so Value Display input does not have focus
+glow in some browsers like GoogleChrome or AppleSafari
+*/
+input:focus
+{  
+	outline: none;  
+} 
+
+
+

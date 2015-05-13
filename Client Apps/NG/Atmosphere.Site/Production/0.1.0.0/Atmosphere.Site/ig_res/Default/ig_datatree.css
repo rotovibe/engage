@@ -1,0 +1,82 @@
+.igdt_Control {
+	background-color:transparent;
+	border:1px solid transparent;
+	color:#000000;
+	font-size: xx-small;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+}
+
+.igdt_ControlActive {
+
+}
+
+.igdt_Node
+{
+	cursor:hand;
+	color:#333333;
+	text-decoration:none;	
+	padding:1px 3px 1px 3px;
+	line-height: 15px;
+	
+}
+
+.igdt_NodeRoot {
+	font-weight:bold;
+	color:#74B8E4;
+
+}
+
+.igdt_NodeImage {	
+	vertical-align: middle;
+}
+
+.igdt_NodeSelected {
+	background-color:#9EDEFF;
+	color: White;
+}
+
+.igdt_NodeActive 
+{
+	border:1px solid #74B8E4;
+	padding: 0px 3px 0px 2px;
+}
+
+.igdt_NodeHover {
+	
+	background-color:#BEE2F8;
+}
+
+.igdt_NodeDisabled
+{
+	color:Gray;
+}
+
+.igdt_InternalNodeEditor
+{
+	border:1px solid #74B8E4;
+	padding-left: 2px;
+}
+
+
+/* //////////////////// GROUP STYLES //////////////////// */
+.igdt_NodeGroup {
+	list-style :none;	
+	margin-left: 0px;
+	padding-left: 0px;
+}
+
+.igdt_NodeHolder {
+	white-space:nowrap;
+	/*margin-left: 0px;
+	padding-left: 0px;
+	margin-top: 0px;
+	padding-top: 0px;
+	margin-bottom: 0px;*/
+}
+
+
+.igdt_NodeHolder img {
+	vertical-align: middle;
+}
+
+/* //////////////////// GROUP STYLES //////////////////// */
