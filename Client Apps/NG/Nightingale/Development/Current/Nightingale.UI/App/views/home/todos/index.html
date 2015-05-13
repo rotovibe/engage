@@ -133,7 +133,7 @@
             </div>
             <div class="column" data-bind="css: { 'open': !leftColumnOpen() }">
                 <div class="widget-wrapper">
-                    <div class="widget open" data-bind="css: { 'fullscreen': fullScreenWidget() === 'todochart' }, columnSizer: true">
+                    <div class="widget open" data-bind="css: { 'fullscreen': fullScreenWidget() === 'todochart' }, columnSizer: {triggers:{a: selectedView().name()}}">
                         <div class="content">
                             <div class="content-fill">
                                 <div class="wrapper">
