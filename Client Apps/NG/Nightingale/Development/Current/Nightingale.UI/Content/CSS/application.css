@@ -4803,8 +4803,7 @@ section:not(.slider) .btn.active.toggle[data-method="slider"][data-type="remove"
 .widget.fullscreen .arrow-runner {
   display: none; }
 .widget.fullscreen > .content .fullscreen-only {
-  display: block;
-  /*initial is not supported in ie*/ }
+  display: initial; }
 
 /* General settings */
 div.selector, div.selector span, div.checker span, div.radio span, div.uploader, div.uploader span.action, div.button, div.button span {
