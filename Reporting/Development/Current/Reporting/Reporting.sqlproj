@@ -67,6 +67,7 @@
     <Folder Include="Scripts\Sprocs" />
     <Folder Include="Scripts\Views" />
     <Folder Include="Scripts\1.0" />
+    <Folder Include="Scripts\1.0.1" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Scripts\Update_Script_2_26_2015.sql" />
@@ -355,6 +356,12 @@
     <Build Include="Scripts\1.0\spPhy_RPT_ProgramResponse_Flat.sql" />
     <Build Include="Scripts\1.0\RM-13806.sql" />
     <Build Include="Scripts\1.0\RM-13806_Rollback.sql" />
+    <Build Include="Scripts\1.0.1\ENG-1212.sql" />
+    <Build Include="Scripts\1.0.1\ENG_1215.sql" />
+    <Build Include="Scripts\1.0.1\ENG_1215_Rollback.sql" />
+    <Build Include="Scripts\1.0.1\ENG_1216.sql" />
+    <Build Include="Scripts\1.0.1\ENG_1216_Rollback.sql" />
+    <Build Include="Scripts\1.0.1\ENG-1212_Rollback.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Scripts\CareBridge_RPT_Scripts.sql" />
