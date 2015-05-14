@@ -44,10 +44,9 @@
                             <header>
                                 <h1>Data Summary</h1>
                                 <div class="options">
-                                    <button class="btn color small" data-bind="click: $parents[1].addData, disable: $parents[1].isEditing">
-                                        <i class="icon-plus"></i>
-                                        <span class="pad-left">Add Data</span>
-                                    </button>
+									<div class="toggle">
+										<i class="pointer icon-plus" data-bind="click: $parents[1].addData, disable: $parents[1].isEditing" title="Add"></i>
+									</div>                                    
                                 </div>
                             </header>
                         </div>

@@ -24,17 +24,12 @@
                                                             </label>
                                                             <span style="color: whitesmoke;">-</span>
                                                         </div>
-                                                        <div class="span1 grey">
+                                                        <div class="span2 grey">
                                                             <div class="pull-right" data-bind="visible: (selectedTodoCategories().length > 0 || selectedTodoPriorities().length > 0)">
                                                                 <button class="small" data-bind="click: resetTodoFilters, enable: (selectedTodoCategories().length > 0 || selectedTodoPriorities().length > 0)">Reset</button>
                                                             </div>
                                                             <span style="color: whitesmoke;">-</span>
-                                                        </div>
-                                                        <div class="span1 grey" data-bind="click: refreshTodoView">
-                                                            <div class="pull-right">
-                                                                <i class="fa fa-lg fa-refresh filter-toggle" data-bind="css: { 'fa-spin': todosSaving }"></i>
-                                                            </div>
-                                                        </div>
+                                                        </div>                                                        
                                                     </div>
                                                 </section>
                                                 <div class="filter-content" data-bind="visible: todoFiltersOpen">
@@ -72,6 +67,9 @@
                                                 <div class="controls">
                                                     <i class="fa fa-filter pad-right" data-bind="click: function () { toggleHeaderOpen(todoFiltersHeaderOpen, todosPanelOpen); }, clickBubble: false, css: ((selectedTodoCategories().length > 0 || selectedTodoPriorities().length > 0) ? 'red' : (todoFiltersHeaderOpen() ? 'lighterblue': 'lightestblue'))">
                                                     </i>
+													<div class="toggle gray" data-bind="click: refreshTodoView, clickBubble: false" title="Refresh Data">
+														<i class="fa fa-lg fa-refresh filter-toggle" data-bind="css: { 'fa-spin': todosSaving }"></i>
+													</div>
                                                     <div class="toggle fullscreen" data-method="fullscreen" data-target="widget" data-type="both" data-bind="click: function () { toggleFullScreen('todopanel') }, clickBubble: false">
                                                     </div>
                                                 </div>
@@ -114,17 +112,12 @@
                                                             </label>
                                                             <span style="color: whitesmoke;">-</span>
                                                         </div>
-                                                        <div class="span1 grey">
+                                                        <div class="span2 grey">
                                                             <div class="pull-right" data-bind="visible: (selectedInterventionCategories().length > 0)">
                                                                 <button class="small" data-bind="click: resetInterventionFilters, enable: (selectedInterventionCategories().length > 0)">Reset</button>
                                                             </div>
                                                             <span style="color: whitesmoke;">-</span>
-                                                        </div>
-                                                        <div class="span1 grey" data-bind="click: refreshInterventionView">
-                                                            <div class="pull-right">
-                                                                <i class="fa fa-lg fa-refresh filter-toggle" data-bind="css: { 'fa-spin': interventionsSaving }"></i>
-                                                            </div>
-                                                        </div>
+                                                        </div>                                                        
                                                     </div>
                                                 </section>
                                                 <div class="filter-content" data-bind="visible: interventionFiltersOpen">
@@ -154,6 +147,9 @@
                                                 <div class="controls">
                                                     <i class="fa fa-filter pad-right" data-bind="click: function () { toggleHeaderOpen(interventionFiltersHeaderOpen, interventionsPanelOpen); }, clickBubble: false, css: (selectedInterventionCategories().length > 0 ? 'red' : (interventionFiltersHeaderOpen() ? 'lighterblue': 'lightestblue'))">
                                                     </i>
+													<div class="toggle gray" data-bind="click: refreshInterventionView, clickBubble: false" title="Refresh Data">
+														<i class="fa fa-lg fa-refresh filter-toggle" data-bind="css: { 'fa-spin': interventionsSaving }"></i>
+													</div>
                                                     <div class="toggle fullscreen" data-method="fullscreen" data-target="widget" data-type="both" data-bind="click: function () { toggleFullScreen('interventionpanel') }, clickBubble: false">
                                                     </div>
                                                 </div>
@@ -196,17 +192,12 @@
                                                             </label>
                                                             <span style="color: whitesmoke;">-</span>
                                                         </div>
-                                                        <div class="span1 grey">
+                                                        <div class="span2 grey">
                                                             <div class="pull-right" data-bind="visible: (-1 > 0)">
                                                                 <button class="small" data-bind="click: resetTaskFilters, enable: (-1 > 0)">Reset</button>
                                                             </div>
                                                             <span style="color: whitesmoke;">-</span>
-                                                        </div>
-                                                        <div class="span1 grey" data-bind="click: refreshTaskView">
-                                                            <div class="pull-right">
-                                                                <i class="fa fa-lg fa-refresh filter-toggle" data-bind="css: { 'fa-spin': tasksSaving }"></i>
-                                                            </div>
-                                                        </div>
+                                                        </div>                                                        
                                                     </div>
                                                 </section>
                                             </div>
@@ -221,6 +212,9 @@
                                                 <div class="controls">
                                                     <i class="fa fa-filter lightestblue pad-right" data-bind="click: function () { toggleHeaderOpen(taskFiltersHeaderOpen, taskPanelOpen); }, clickBubble: false, css: ((taskFiltersHeaderOpen() ? 'lighterblue': 'lightestblue'))">
                                                     </i>
+													<div class="toggle gray" data-bind="click: refreshTaskView, clickBubble: false" title="Refresh Data">
+														<i class="fa fa-lg fa-refresh filter-toggle" data-bind="css: { 'fa-spin': tasksSaving }"></i>
+													</div>
                                                     <div class="toggle fullscreen" data-method="fullscreen" data-target="widget" data-type="both" data-bind="click: function () { toggleFullScreen('taskpanel') }, clickBubble: false">
                                                     </div>
                                                 </div>

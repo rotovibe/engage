@@ -55,16 +55,12 @@
                                                 <header>
                                                     <h1>My To-Do List - <span data-bind="text: myToDos().length + ' showing'"></span></h1>
                                                     <div class="controls pad-left">
+														<div class="toggle">
+															<i class="pointer icon-plus" data-bind="click: addToDo, clickBubble: false" title="Add"></i>
+														</div>                                                       
                                                         <div class="toggle fullscreen" data-method="fullscreen" data-target="widget" data-type="both" data-bind="click: function () { toggleFullScreen('myToDoList') }, clickBubble: false">
                                                         </div>
-                                                    </div>
-                                                    <div class="options">												
-                                                        <a class="btn small color small new_goal" data-bind="click: addToDo" href="#">
-                                                            <i class="icon-plus"></i>
-                                                            <span class="pad-left">To Do
-                                                            </span>
-                                                        </a>
-                                                    </div>
+                                                    </div>                                                   
                                                 </header>
                                             </div>
                                         </div>

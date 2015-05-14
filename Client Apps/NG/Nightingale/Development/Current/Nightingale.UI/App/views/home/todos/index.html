@@ -24,17 +24,12 @@
                                                                 </label>
                                                                 <span style="color: whitesmoke;">-</span>
                                                             </div>
-                                                            <div class="span1 grey">
+                                                            <div class="span2 grey">
                                                                 <div class="pull-right" data-bind="visible: (selectedCategories().length > 0 || selectedPriorities().length > 0)">
                                                                     <button class="small" data-bind="click: resetFilters, enable: (selectedCategories().length > 0 || selectedPriorities().length > 0)">Reset</button>
                                                                 </div>
                                                                 <span style="color: whitesmoke;">-</span>
-                                                            </div>
-                                                            <div class="span1 grey" data-bind="click: refreshView">
-                                                                <div class="pull-right">
-                                                                    <i class="fa fa-lg fa-refresh filter-toggle" data-bind="css: { 'fa-spin': todosSaving }"></i>
-                                                                </div>
-                                                            </div>
+                                                            </div>                                                            
                                                         </div>
                                                     </section>
                                                     <div class="filter-content" data-bind="visible: filtersOpen">
@@ -67,22 +62,21 @@
                                                 <header class="ellipsis">
                                                     <h1><span data-bind="text: selectedView() ? selectedView().name : 'To-Do List'"></span> - <span data-bind="text: myToDos().length + ' showing'"></span></h1>
                                                     <div class="controls">
+														<div class="toggle" ">
+															<i class="pointer icon-plus" data-bind="click: addToDo, clickBubble: false" title="Add"></i>
+														</div>
                                                         <i class="pointer fa fa-filter pad-horizontal" data-bind="clickToggle: filtersHeaderOpen, clickBubble: false, css: ((selectedCategories().length > 0 || selectedPriorities().length > 0) ? 'red' : (filtersHeaderOpen() ? 'lighterblue': 'lightestblue'))">
                                                         </i>
+														<div class="toggle gray" data-bind="click: refreshView, clickBubble: false" title="Refresh Data">
+															<i class="fa fa-lg fa-refresh filter-toggle" data-bind="css: { 'fa-spin': todosSaving }"></i>
+														</div>
                                                         <div class="toggle single-arrow-left" data-method="open" data-target="column" data-type="remove" data-bind="click: toggleOpenColumn, enable: leftColumnOpen(), clickBubble: false">
                                                         </div>
                                                         <div class="toggle double-arrow-right" data-method="open" data-target="column" data-type="add" data-bind="click: toggleOpenColumn, enable: !leftColumnOpen(), clickBubble: false">
                                                         </div>
                                                         <div class="toggle fullscreen" data-method="fullscreen" data-target="widget" data-type="both" data-bind="click: function () { toggleFullScreen('todopanel') }, clickBubble: false">
                                                         </div>
-                                                    </div>
-                                                    <div class="options">
-                                                        <a class="btn small color small new_goal" data-bind="click: addToDo" href="#">
-                                                            <i class="icon-plus"></i>
-                                                            <span class="pad-left">To Do
-                                                            </span>
-                                                        </a>
-                                                    </div>
+                                                    </div>                                                   
                                                 </header>
                                             </div>
                                         </div>
