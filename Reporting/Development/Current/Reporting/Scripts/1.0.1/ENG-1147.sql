@@ -1,4 +1,32 @@
-﻿IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[spPhy_RPT_SavePatientInfo]') AND type in (N'P', N'PC'))
+﻿-- Create RPT_Patient_PCM_Program_Info table
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RPT_Patient_PCM_Program_Info]') AND type in (N'U'))
+DROP TABLE [dbo].[RPT_Patient_PCM_Program_Info]
+GO
+
+CREATE TABLE [dbo].[RPT_Patient_PCM_Program_Info](
+	[PatientId] [int] NOT NULL,
+	[FirstName] [varchar](100) NULL,
+	[MiddleName] [varchar](100) NULL,
+	[LastName] [varchar](100) NULL,
+	[DateOfBirth] [varchar](50) NULL,
+	[Age] [tinyint] NULL,
+	[Gender] [varchar](50) NULL,
+	[Priority] [varchar](50) NULL,
+	[SystemId] [varchar](50) NULL,
+	[Assigned_PCM] [varchar](100) NULL,
+	[PatientProgramId] [int] NULL,
+	[ProgramName] [varchar](100) NULL,
+	[State] [varchar](50) NULL,
+	[Assigned_Date] [datetime] NULL,
+	[StartDate] [datetime] NULL,
+	[EndDate] [datetime] NULL,
+	[Program_CM] [varchar](100) NULL
+) ON [PRIMARY]
+
+GO
+
+-- Create spPhy_RPT_SavePatientInfo store procedure
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[spPhy_RPT_SavePatientInfo]') AND type in (N'P', N'PC'))
 DROP PROCEDURE [dbo].[spPhy_RPT_SavePatientInfo]
 GO
 
