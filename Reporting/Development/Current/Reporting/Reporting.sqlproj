@@ -362,6 +362,13 @@
     <Build Include="Scripts\1.0.1\ENG_1216.sql" />
     <Build Include="Scripts\1.0.1\ENG_1216_Rollback.sql" />
     <Build Include="Scripts\1.0.1\ENG-1212_Rollback.sql" />
+    <Build Include="Scripts\1.0.1\ENG_1025_Rollback.sql" />
+    <Build Include="Scripts\1.0.1\ENG_1025.sql" />
+    <Build Include="Scripts\1.0.1\ENG_1150.sql" />
+    <Build Include="Scripts\1.0.1\RPT_Initialize_Flat_Tables.sql" />
+    <Build Include="Scripts\1.0.1\DBServerMigration_prod.sql" />
+    <Build Include="Scripts\1.0.1\DBServerMigration.sql" />
+    <Build Include="Scripts\1.0.1\ENG_1150_Rollback.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Scripts\CareBridge_RPT_Scripts.sql" />
