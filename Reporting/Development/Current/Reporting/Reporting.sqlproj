@@ -371,6 +371,8 @@
     <Build Include="Scripts\1.0.1\ENG_1150_Rollback.sql" />
     <Build Include="Scripts\1.0.1\ENG_724.sql" />
     <Build Include="Scripts\1.0.1\ENG_724_Rollback.sql" />
+    <Build Include="Scripts\1.0.1\ENG-1147.sql" />
+    <Build Include="Scripts\1.0.1\ENG-1147_Rollback.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Scripts\CareBridge_RPT_Scripts.sql" />
