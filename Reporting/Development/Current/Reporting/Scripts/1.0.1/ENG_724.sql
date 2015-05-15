@@ -3,6 +3,37 @@ IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RPT_T
 DROP TABLE [dbo].[RPT_TouchPoint_Dim]
 GO
 
+CREATE TABLE [dbo].[RPT_TouchPoint_Dim](
+	[DimId] [int] IDENTITY(1,1) NOT NULL,
+	[PatientNoteId] [int] NULL,
+	[Method] [varchar](100) NULL,
+	[Who] [varchar](100) NULL,
+	[Source] [varchar](100) NULL,
+	[Outcome] [varchar](100) NULL,
+	[ContactedOn] [datetime] NULL,
+	[Name] [varchar](200) NULL,
+	[Duration] [varchar](100) NULL,
+	[ValidatedIntentity] [varchar](100) NULL,
+	[Text] [varchar](5000) NULL,
+	[RecordCreatedOn] [datetime] NULL,
+	[Record_Created_By] [varchar](200) NULL,
+	[PATIENTID] [int] NULL,
+	[FIRSTNAME] [varchar](200) NULL,
+	[LASTNAME] [varchar](200) NULL,
+	[DATEOFBIRTH] [datetime] NULL,
+	[AGE] [int] NULL,
+	[GENDER] [varchar](100) NULL,
+	[PRIORITY] [varchar](100) NULL,
+	[SYSTEMID] [varchar](100) NULL,
+	[ASSIGNED_PCM] [varchar](500) NULL,
+	[State] [varchar](100) NULL,
+	[StartDate] [datetime] NULL,
+	[EndDate] [datetime] NULL,
+	[AssignedOn] [datetime] NULL
+) ON [PRIMARY]
+
+GO
+
 
 /****** Object:  StoredProcedure [dbo].[spPhy_RPT_Flat_TouchPoint_Dim]    Script Date: 05/15/2015 16:33:17 ******/
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[spPhy_RPT_Flat_TouchPoint_Dim]') AND type in (N'P', N'PC'))
