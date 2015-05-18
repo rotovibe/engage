@@ -132,6 +132,7 @@
     <Content Include="Fonts\helvetica_neue\thin\normal.svg" />
     <Content Include="Fonts\nightingale-glyphs\Backup\fontcustom.svg" />
     <Content Include="Fonts\nightingale-glyphs\fontcustom.svg" />
+    <Content Include="Fonts\nightingale-glyphs\fontcustomv1.svg" />
     <Content Include="Global.asax" />
     <Content Include="Fonts\helvetica_neue\bold\normal.eot" />
     <Content Include="Fonts\helvetica_neue\bold\normal.ttf" />
@@ -157,6 +158,9 @@
     <Content Include="Fonts\nightingale-glyphs\fontcustom.eot" />
     <Content Include="Fonts\nightingale-glyphs\fontcustom.ttf" />
     <Content Include="Fonts\nightingale-glyphs\fontcustom.woff" />
+    <Content Include="Fonts\nightingale-glyphs\fontcustomv1.eot" />
+    <Content Include="Fonts\nightingale-glyphs\fontcustomv1.ttf" />
+    <Content Include="Fonts\nightingale-glyphs\fontcustomv1.woff" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Images\address_blue_large.png" />
     <Content Include="Images\address_blue_small.png" />

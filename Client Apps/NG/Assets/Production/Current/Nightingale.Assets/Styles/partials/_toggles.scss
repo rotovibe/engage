@@ -1,3 +1,4 @@
+
 header, .header, .filters {
   .toggle {
     @include inline-block(middle);
@@ -6,25 +7,54 @@ header, .header, .filters {
     @include toggle-setup;
     background-position: center center;
     background-repeat: no-repeat;
-    &.fullscreen {
-      background-image: image-url("images/full_screen_open.png");
-    }
-    &.double-arrow-right {
-      background-image: image-url("images/expand_right.png");
-    }
-    &.single-arrow-left {
-      background-image: image-url("images/collapse_left.png");
-    }
-    &.next {
-      background-image: image-url("images/page_forward_small.png");
-    }
-    &.down-up {
-      background-image: image-url("images/expand_down.png");
-    }
-    &.up-down {
-      background-image: image-url("images/collapse_up.png");
-    }
-  }
+
+		&.refresh {
+			background-image: image-url("images/refresh.png");
+		}
+
+		&.filter {
+			background-image: image-url("images/filter_inactive.png");
+
+			&.active {
+				background-image: image-url("images/filter_active.png");
+			}
+		}
+
+        &.fullscreen {
+          background-image: image-url("images/full_screen_open.png");
+        }
+        &.double-arrow-right {
+          background-image: image-url("images/expand_right.png");
+        }
+        &.single-arrow-left {
+          background-image: image-url("images/collapse_left.png");
+        }
+        &.next {
+          background-image: image-url("images/page_forward_small.png");
+        }
+        &.down-up {
+          background-image: image-url("images/expand_down.png");
+        }
+        &.up-down {
+          background-image: image-url("images/collapse_up.png");
+        }
+
+		&.plus {
+			background-image: image-url("images/add_blue.png");
+		}
+
+		&.print {
+			background-image: image-url("images/print_blue_small.png");
+		}
+
+		&.edit {
+			background-image: image-url("images/edit_blue.png");
+		}
+
+		&.remove {
+			background-image: image-url("images/cancel_x.png");
+		}
+	}
 }
 
 .widget.fullscreen .toggle.fullscreen {
@@ -44,7 +74,7 @@ header, .header, .filters {
 .filter-toggle {
   cursor: pointer;
   &:hover {
-    background-color: $blue-lightest;
+		background-color: tint($blue-lighter, 60%);
   }
   &.active {
     background-color: $blue-lighter;

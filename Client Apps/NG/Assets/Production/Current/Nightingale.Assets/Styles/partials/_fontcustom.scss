@@ -6,11 +6,11 @@ $CDNPath : "//az571236.vo.msecnd.net/";
 
 @font-face {
   font-family: "fontcustom";
-  src: url("#{$CDNPath}fonts/fontcustom.eot");
-  src: url("#{$CDNPath}fonts/fontcustom.eot?#iefix") format("embedded-opentype"),
-       url("#{$CDNPath}fonts/fontcustom.woff") format("woff"),
-       url("#{$CDNPath}fonts/fontcustom.ttf") format("truetype"),
-       url("#{$CDNPath}fonts/fontcustom.svg#fontcustom") format("svg");
+  src: url("#{$CDNPath}fontcustom/fontcustomv1.eot");
+  src: url("#{$CDNPath}fontcustom/fontcustomv1.eot?#iefix") format("embedded-opentype"),
+       url("#{$CDNPath}fontcustom/fontcustomv1.woff") format("woff"),
+       url("#{$CDNPath}fontcustom/fontcustomv1.ttf") format("truetype"),
+       url("#{$CDNPath}fontcustom/fontcustomv1.svg#fontcustom") format("svg");
   font-weight: normal;
   font-style: normal;
 }
@@ -18,7 +18,7 @@ $CDNPath : "//az571236.vo.msecnd.net/";
 @media screen and (-webkit-min-device-pixel-ratio:0) {
   @font-face {
     font-family: "fontcustom";
-    src: font-url("fonts/fontcustom.svg#fontcustom") format("svg");
+    src: font-url("fontcustom/fontcustomv1.svg#fontcustom") format("svg");
   }
 }
 
@@ -36,30 +36,42 @@ $CDNPath : "//az571236.vo.msecnd.net/";
 .icon-calendar:before,
 .icon-cancel:before,
 .icon-check:before,
+.icon-checkbox-off:before,
+.icon-checkbox-on:before,
 .icon-edit:before,
 .icon-email:before,
 .icon-enter-fullscreen:before,
 .icon-exit-fullscreen:before,
+.icon-filter:before,
+.icon-filter_clear:before,
 .icon-flag:before,
+.icon-icon_new:before,
 .icon-info:before,
 .icon-inprogress:before,
+.icon-letter:before,
 .icon-menu:before,
 .icon-notes:before,
 .icon-notes-call:before,
 .icon-notes-metrics:before,
 .icon-otc:before,
 .icon-phone:before,
+.icon-phone_incoming:before,
 .icon-plus:before,
 .icon-print:before,
 .icon-priority:before,
 .icon-priority-empty:before,
+.icon-radio-off:before,
+.icon-radio-on:before,
+.icon-refresh:before,
 .icon-rx:before,
 .icon-search:before,
+.icon-settings:before,
 .icon-single-chevron-down:before,
 .icon-single-chevron-left:before,
 .icon-single-chevron-right:before,
 .icon-single-chevron-up:before,
 .icon-sms:before,
+.icon-supplements:before,
 .icon-table:before,
 .icon-triangle-down:before,
 .icon-twitter:before,
@@ -91,33 +103,99 @@ $CDNPath : "//az571236.vo.msecnd.net/";
 .icon-calendar:before { content: "\f108"; }
 .icon-cancel:before { content: "\f109"; }
 .icon-check:before { content: "\f10a"; }
+.icon-checkbox-off:before { content: "\f138"; }
+.icon-checkbox-on:before { content: "\f139"; }
 .icon-edit:before { content: "\f10b"; }
 .icon-email:before { content: "\f10c"; }
 .icon-enter-fullscreen:before { content: "\f10d"; }
 .icon-exit-fullscreen:before { content: "\f10e"; }
+.icon-filter:before { content: "\f12d"; }
+.icon-filter_clear:before { content: "\f12f"; }
 .icon-flag:before { content: "\f10f"; }
-.icon-info:before { content: "\f110"; }
-.icon-inprogress:before { content: "\f127"; }
-.icon-menu:before { content: "\f111"; }
-.icon-notes:before { content: "\f112"; }
-.icon-notes-call:before { content: "\f113"; }
-.icon-notes-metrics:before { content: "\f114"; }
-.icon-otc:before { content: "\f115"; }
-.icon-phone:before { content: "\f116"; }
-.icon-plus:before { content: "\f117"; }
-.icon-print:before { content: "\f118"; }
-.icon-priority:before { content: "\f119"; }
-.icon-priority-empty:before { content: "\f11a"; }
-.icon-rx:before { content: "\f11b"; }
-.icon-search:before { content: "\f11c"; }
-.icon-single-chevron-down:before { content: "\f11d"; }
-.icon-single-chevron-left:before { content: "\f11e"; }
-.icon-single-chevron-right:before { content: "\f11f"; }
-.icon-single-chevron-up:before { content: "\f120"; }
-.icon-sms:before { content: "\f121"; }
-.icon-table:before { content: "\f122"; }
-.icon-triangle-down:before { content: "\f123"; }
-.icon-twitter:before { content: "\f124"; }
-.icon-unstarted:before { content: "\f128"; }
-.icon-warning:before { content: "\f125"; }
-.icon-warning-o:before { content: "\f126"; }
+.icon-icon_new:before { content: "\f110"; }
+.icon-info:before { content: "\f111"; }
+.icon-inprogress:before { content: "\f112"; }
+.icon-letter:before { content: "\f13c"; }
+.icon-menu:before { content: "\f113"; }
+.icon-notes:before { content: "\f114"; }
+.icon-notes-call:before { content: "\f115"; }
+.icon-notes-metrics:before { content: "\f116"; }
+.icon-otc:before { content: "\f117"; }
+.icon-phone:before { content: "\f118"; }
+.icon-phone_incoming:before { content: "\f119"; }
+.icon-plus:before { content: "\f11a"; }
+.icon-print:before { content: "\f11b"; }
+.icon-priority:before { content: "\f11c"; }
+.icon-priority-empty:before { content: "\f11d"; }
+.icon-radio-off:before { content: "\f13a"; }
+.icon-radio-on:before { content: "\f13b"; }
+.icon-refresh:before { content: "\f12e"; }
+.icon-rx:before { content: "\f11e"; }
+.icon-search:before { content: "\f11f"; }
+.icon-settings:before { content: "\f120"; }
+.icon-single-chevron-down:before { content: "\f121"; }
+.icon-single-chevron-left:before { content: "\f122"; }
+.icon-single-chevron-right:before { content: "\f123"; }
+.icon-single-chevron-up:before { content: "\f124"; }
+.icon-sms:before { content: "\f125"; }
+.icon-supplements:before { content: "\f126"; }
+.icon-table:before { content: "\f127"; }
+.icon-triangle-down:before { content: "\f128"; }
+.icon-twitter:before { content: "\f129"; }
+.icon-unstarted:before { content: "\f12a"; }
+.icon-warning:before { content: "\f12b"; }
+.icon-warning-o:before { content: "\f12c"; }
+
+$font-fontcustom-address: "\f100";
+$font-fontcustom-angle-double-down: "\f101";
+$font-fontcustom-angle-double-left: "\f102";
+$font-fontcustom-angle-double-right: "\f103";
+$font-fontcustom-angle-double-up: "\f104";
+$font-fontcustom-arrow-left: "\f105";
+$font-fontcustom-arrow-right: "\f106";
+$font-fontcustom-assign-patient: "\f107";
+$font-fontcustom-calendar: "\f108";
+$font-fontcustom-cancel: "\f109";
+$font-fontcustom-check: "\f10a";
+$font-fontcustom-checkbox-off: "\f138";
+$font-fontcustom-checkbox-on: "\f139";
+$font-fontcustom-edit: "\f10b";
+$font-fontcustom-email: "\f10c";
+$font-fontcustom-enter-fullscreen: "\f10d";
+$font-fontcustom-exit-fullscreen: "\f10e";
+$font-fontcustom-filter: "\f12d";
+$font-fontcustom-filter_clear: "\f12f";
+$font-fontcustom-flag: "\f10f";
+$font-fontcustom-icon_new: "\f110";
+$font-fontcustom-info: "\f111";
+$font-fontcustom-inprogress: "\f112";
+$font-fontcustom-letter: "\f13c";
+$font-fontcustom-menu: "\f113";
+$font-fontcustom-notes: "\f114";
+$font-fontcustom-notes-call: "\f115";
+$font-fontcustom-notes-metrics: "\f116";
+$font-fontcustom-otc: "\f117";
+$font-fontcustom-phone: "\f118";
+$font-fontcustom-phone_incoming: "\f119";
+$font-fontcustom-plus: "\f11a";
+$font-fontcustom-print: "\f11b";
+$font-fontcustom-priority: "\f11c";
+$font-fontcustom-priority-empty: "\f11d";
+$font-fontcustom-radio-off: "\f13a";
+$font-fontcustom-radio-on: "\f13b";
+$font-fontcustom-refresh: "\f12e";
+$font-fontcustom-rx: "\f11e";
+$font-fontcustom-search: "\f11f";
+$font-fontcustom-settings: "\f120";
+$font-fontcustom-single-chevron-down: "\f121";
+$font-fontcustom-single-chevron-left: "\f122";
+$font-fontcustom-single-chevron-right: "\f123";
+$font-fontcustom-single-chevron-up: "\f124";
+$font-fontcustom-sms: "\f125";
+$font-fontcustom-supplements: "\f126";
+$font-fontcustom-table: "\f127";
+$font-fontcustom-triangle-down: "\f128";
+$font-fontcustom-twitter: "\f129";
+$font-fontcustom-unstarted: "\f12a";
+$font-fontcustom-warning: "\f12b";
+$font-fontcustom-warning-o: "\f12c";
