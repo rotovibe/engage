@@ -60,7 +60,7 @@ BEGIN
 		, pt.MiddleName
 		, pt.LastName
 		, pt.DateOfBirth
-		,CASE WHEN PT.DATEOFBIRTH != '' THEN  CAST(DATEDIFF(DAY, CONVERT(DATETIME,PT.DATEOFBIRTH), GETDATE()) / (365.23076923074) AS INT) END as Age
+		,CASE WHEN PT.DATEOFBIRTH != '' AND ISDATE(PT.DATEOFBIRTH) = 1 THEN  CAST(DATEDIFF(DAY, CONVERT(DATETIME,PT.DATEOFBIRTH), GETDATE()) / (365.23076923074) AS INT) END as Age
 		, pt.Gender
 		,pt.[Priority]
 		, ps.SystemId
@@ -91,11 +91,10 @@ BEGIN
 			AND pp.PatientProgramId = ppt.PatientProgramId) as [Program_CM]
 	FROM
 		RPT_Patient as pt with (nolock) 	
-		INNER JOIN RPT_PatientProgram as ppt with (nolock) ON pt.PatientId = ppt.PatientId  	
+		LEFT JOIN RPT_PatientProgram as ppt with (nolock) ON pt.PatientId = ppt.PatientId  	
 		LEFT JOIN RPT_PatientSystem as ps with (nolock) ON pt.PatientId = ps.PatientId   	 
 	WHERE
-		pt.[Delete] = 'False' 	
-		AND ppt.[Delete] = 'False'
+		pt.[Delete] = 'False' or ppt.[Delete] = 'False'
 END
 GO
 
