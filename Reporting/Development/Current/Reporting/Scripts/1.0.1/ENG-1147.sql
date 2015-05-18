@@ -91,10 +91,10 @@ BEGIN
 			AND pp.PatientProgramId = ppt.PatientProgramId) as [Program_CM]
 	FROM
 		RPT_Patient as pt with (nolock) 	
-		LEFT JOIN RPT_PatientProgram as ppt with (nolock) ON pt.PatientId = ppt.PatientId  	
+		LEFT JOIN RPT_PatientProgram as ppt with (nolock) ON pt.PatientId = ppt.PatientId and ppt.[Delete] = 'False'
 		LEFT JOIN RPT_PatientSystem as ps with (nolock) ON pt.PatientId = ps.PatientId   	 
 	WHERE
-		pt.[Delete] = 'False' or ppt.[Delete] = 'False'
+		pt.[Delete] = 'False' 
 END
 GO
 
