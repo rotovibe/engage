@@ -1914,7 +1914,8 @@ namespace Phytel.API.AppDomain.NG
                     Archived = a.Archived,
                     ArchivedDate = a.ArchivedDate,
                     ArchiveOriginId = a.ArchiveOriginId,
-                    Objectives = GetObjectivesInfo(a.Objectives)
+                    Objectives = GetObjectivesInfo(a.Objectives),
+                    DeleteFlag = a.DeleteFlag
                 };
                 if (includeSteps)
                 {

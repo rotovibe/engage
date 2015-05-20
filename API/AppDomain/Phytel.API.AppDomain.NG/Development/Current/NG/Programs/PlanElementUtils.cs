@@ -1078,7 +1078,8 @@ namespace Phytel.API.AppDomain.NG
                     SpawnElement = ac.SpawnElement,
                     Status = ac.Status,
                     Text = ac.Text,
-                    Steps = new List<Step>()
+                    Steps = new List<Step>(),
+                    DeleteFlag = ac.DeleteFlag
                 };
                 return a;
             }
