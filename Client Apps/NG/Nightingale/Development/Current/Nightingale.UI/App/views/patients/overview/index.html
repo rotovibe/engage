@@ -24,9 +24,10 @@
                                                             </label>
                                                             <span style="color: whitesmoke;">-</span>
                                                         </div>
-                                                        <div class="span2 grey">
-                                                            <div class="pull-right" data-bind="visible: (selectedTodoCategories().length > 0 || selectedTodoPriorities().length > 0)">
-                                                                <button class="small" data-bind="click: resetTodoFilters, enable: (selectedTodoCategories().length > 0 || selectedTodoPriorities().length > 0)">Reset</button>
+                                                        <div class="span3 grey">
+                                                            <div class="pull-right filters" data-bind="visible: (selectedTodoCategories().length > 0 || selectedTodoPriorities().length > 0)">
+                                                                <i class="icon-filter_clear pointer blue toggle" data-bind="click: resetTodoFilters, enable: (selectedTodoCategories().length > 0 || selectedTodoPriorities().length > 0)" style="position: inherit;" title="Clear Filter"></i>
+																<span>&nbsp</span>
                                                             </div>
                                                             <span style="color: whitesmoke;">-</span>
                                                         </div>                                                        
@@ -105,7 +106,7 @@
 															<label class="span1 gray">Filter:</label>
 															<div style="display: inline-block" data-bind="chsnsingle: { options: interventionViews, value: selectedInterventionView, text: 'name', label: 'interventionViews' }"></div>
                                                         </div>
-                                                        <div class="span4 grey">
+                                                        <div class="span5 grey">
                                                             <label data-bind="visible: (selectedInterventionCategories().length > 0)">
                                                                 <i class="fa fa-filter red"></i>
                                                                 Additional filters applied
@@ -113,8 +114,9 @@
                                                             <span style="color: whitesmoke;">-</span>
                                                         </div>
                                                         <div class="span2 grey">
-                                                            <div class="pull-right" data-bind="visible: (selectedInterventionCategories().length > 0)">
-                                                                <button class="small" data-bind="click: resetInterventionFilters, enable: (selectedInterventionCategories().length > 0)">Reset</button>
+															<div class="pull-right filters" data-bind="visible: (selectedInterventionCategories().length > 0)">
+                                                                <i class="icon-filter_clear pointer blue toggle" data-bind="click: resetInterventionFilters, enable: (selectedInterventionCategories().length > 0)" style="position: inherit;" title="Clear Filter"></i>
+																<span>&nbsp</span>
                                                             </div>
                                                             <span style="color: whitesmoke;">-</span>
                                                         </div>                                                        
@@ -185,7 +187,7 @@
                                                             <label class="span1 gray">Filter:</label>
                                                             <div style="display: inline-block" data-bind="chsnsingle: { options: taskViews, value: selectedTaskView, text: 'name', label: 'taskViews' }"></div>
                                                         </div>
-                                                        <div class="span4 grey">
+                                                        <div class="span5 grey">
                                                             <label data-bind="visible: (-1 > 0)">
                                                                 <i class="fa fa-filter red"></i>
                                                                 Additional filters applied
@@ -193,9 +195,10 @@
                                                             <span style="color: whitesmoke;">-</span>
                                                         </div>
                                                         <div class="span2 grey">
-                                                            <div class="pull-right" data-bind="visible: (-1 > 0)">
-                                                                <button class="small" data-bind="click: resetTaskFilters, enable: (-1 > 0)">Reset</button>
-                                                            </div>
+															<div class="pull-right filters" data-bind="visible: (-1 > 0)">
+                                                                <i class="icon-filter_clear pointer blue toggle" data-bind="click: resetTaskFilters, enable: (-1 > 0)" style="position: inherit;" title="Clear Filter"></i>
+																<span>&nbsp</span>
+                                                            </div>                                                            
                                                             <span style="color: whitesmoke;">-</span>
                                                         </div>                                                        
                                                     </div>

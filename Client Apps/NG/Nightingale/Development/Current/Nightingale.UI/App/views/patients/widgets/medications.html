@@ -21,9 +21,9 @@
                                             </label>
                                             <span style="color: whitesmoke;">-</span>
                                         </div>
-                                        <div class="span2 grey" data-bind="click: resetFilters">
-                                            <div class="pull-right">
-                                                <i class="icon-cancel pointer red" data-bind="visible: (selectedMedicationTypes().length > 0)"></i>
+                                        <div class="span2 grey" data-bind="visible: (selectedMedicationTypes().length > 0)">
+                                            <div class="pull-right filters">
+                                                <i class="icon-filter_clear pointer blue toggle" data-bind="click: resetFilters" title="Clear Filter"></i>
                                                 <span>&nbsp</span>
                                             </div>
                                         </div>                                        

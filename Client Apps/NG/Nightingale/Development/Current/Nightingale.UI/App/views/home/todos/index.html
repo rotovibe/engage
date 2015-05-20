@@ -17,7 +17,7 @@
 																<label class="span1 gray">Filter:</label>
 																<div style="display: inline-block" data-bind="chsnsingle: { options: views, value: selectedView, text: 'name', label: 'programs' }"></div>                                                                
                                                             </div>
-                                                            <div class="span3 grey">
+                                                            <div class="span4 grey">
                                                                 <label data-bind="visible: (selectedCategories().length > 0 || selectedPriorities().length > 0)">
                                                                     <i class="fa fa-filter red"></i>
                                                                     Filters applied
@@ -25,10 +25,11 @@
                                                                 <span style="color: whitesmoke;">-</span>
                                                             </div>
                                                             <div class="span2 grey">
-                                                                <div class="pull-right" data-bind="visible: (selectedCategories().length > 0 || selectedPriorities().length > 0)">
-                                                                    <button class="small" data-bind="click: resetFilters, enable: (selectedCategories().length > 0 || selectedPriorities().length > 0)">Reset</button>
+                                                                <div class="pull-right filters" data-bind="visible: (selectedCategories().length > 0 || selectedPriorities().length > 0)">
+																	<i class="icon-filter_clear pointer blue toggle" data-bind="click: resetFilters, enable: (selectedCategories().length > 0 || selectedPriorities().length > 0)" style="position: inherit;" title="Clear Filter"></i>
+																	<span>&nbsp</span>
                                                                 </div>
-                                                                <span style="color: whitesmoke;">-</span>
+                                                                <!-- <span style="color: whitesmoke;">-</span> -->
                                                             </div>                                                            
                                                         </div>
                                                     </section>

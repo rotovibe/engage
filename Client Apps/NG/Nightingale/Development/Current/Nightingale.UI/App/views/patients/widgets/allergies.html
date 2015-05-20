@@ -14,10 +14,10 @@
                                                 <div class="span8" data-bind="multiselect: { options: allergyTypes, values: selectedAllergyTypes, text: 'name', label: 'allergytypes', idValue: 'id' }"></div>
                                             </label>
                                         </div>
-                                        <div class="span4">&nbsp</div>
-                                        <div class="span2 grey" data-bind="click: resetFilters">
-                                            <div class="pull-right">
-                                                <i class="icon-cancel pointer red" data-bind="visible: canReset"></i>
+                                        <div class="span5">&nbsp</div>
+                                        <div class="span2" data-bind="click: resetFilters">
+                                            <div class="pull-right filters grey">
+                                                <i class="icon-filter_clear pointer blue toggle" data-bind="visible: canReset" style="position: inherit;" title="Clear Filter"></i>
                                                 <span>&nbsp</span>
                                             </div>
                                         </div>                                        
