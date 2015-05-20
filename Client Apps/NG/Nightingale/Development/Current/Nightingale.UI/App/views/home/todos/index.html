@@ -97,6 +97,9 @@
                                                     <div class="controls">
                                                         <i class="pointer fa fa-filter pad-horizontal" data-bind="clickToggle: filtersHeaderOpen, clickBubble: false, css: ((selectedCategories().length > 0) ? 'red' : (filtersHeaderOpen() ? 'lighterblue': 'lightestblue'))">
                                                         </i>
+														<div class="toggle gray" data-bind="click: refreshView, clickBubble: false" title="Refresh Data">
+															<i class="fa fa-lg fa-refresh filter-toggle" data-bind="css: { 'fa-spin': todosSaving }"></i>
+														</div>
                                                         <div class="toggle single-arrow-left" data-method="open" data-target="column" data-type="remove" data-bind="click: toggleOpenColumn, enable: leftColumnOpen(), clickBubble: false">
                                                         </div>
                                                         <div class="toggle double-arrow-right" data-method="open" data-target="column" data-type="add" data-bind="click: toggleOpenColumn, enable: !leftColumnOpen(), clickBubble: false">
