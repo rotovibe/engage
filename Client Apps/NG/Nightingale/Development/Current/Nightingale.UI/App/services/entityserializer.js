@@ -25,7 +25,7 @@
             .from('fakePath')
             .where('id', '==', action.id())
             .toType('Action')
-            .select('id, archived, archiveOriginId, name, moduleId, sourceId, order, completed, enabled, status, elementState, dateCompleted, next, previous, assignDate, assignById, assignToId, attrStartDate, attrEndDate, completedBy, stateUpdatedOn, description');
+            .select('id, archived, archiveOriginId, name, moduleId, sourceId, order, completed, enabled, status, deleteFlag, elementState, dateCompleted, next, previous, assignDate, assignById, assignToId, attrStartDate, attrEndDate, completedBy, stateUpdatedOn, description');
         var results = manager.executeQueryLocally(actionQuery);
         var unwrappedAction = results[0];
         unwrappedAction.steps = [];
@@ -83,6 +83,7 @@
         thisAction.CompletedBy = unwrappedAction.completedBy;
         thisAction.Enabled = unwrappedAction.enabled;
         thisAction.Status = unwrappedAction.status;
+		thisAction.DeleteFlag = unwrappedAction.deleteFlag;
         thisAction.ElementState = unwrappedAction.elementState;
         thisAction.StateUpdatedOn = unwrappedAction.stateUpdatedOn;
         thisAction.DateCompleted = unwrappedAction.dateCompleted;
