@@ -34,7 +34,7 @@ define(['services/session', 'services/datacontext', 'config.services', 'viewmode
 
         // All the available columns
     	var allColumns = [
-            new Column('expand', '', 'span1 ellipsis', '', true),
+            new Column('expand', '', 'span1 ellipsis filters', '', true),
             new Column('priority', 'Priority', 'span2 ellipsis', 'priority.id'),
     		new Column('status', 'Status', 'span2 ellipsis', 'statusId'),
             new Column('priority-small', 'Priority', 'span1 ellipsis', 'priority.id'),
