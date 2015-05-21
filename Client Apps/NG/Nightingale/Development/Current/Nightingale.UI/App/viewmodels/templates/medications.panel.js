@@ -2,6 +2,7 @@
  * medications.panel module manages medication list and saving a medication from the data dialog
  *
  * @module medications.panel
+ * @class medications.panel
  */
 
 define(['services/session', 'services/datacontext', 'config.services', 'viewmodels/shell/shell', 'models/base', 'viewmodels/patients/medications/index', 'durandal/app'],

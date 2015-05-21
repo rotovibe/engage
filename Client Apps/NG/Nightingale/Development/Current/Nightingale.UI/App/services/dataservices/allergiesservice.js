@@ -1,6 +1,6 @@
 ﻿/**
 *	@module allergiesservice
-*	
+*	@class allergiesservice
 */
 define(['services/session', 'config.services', 'services/entityfinder'],
     function (session, servicesConfig, entityFinder) {

@@ -1,30 +1,7 @@
 /**
- * @module dropdown.w.addnew - dropdown with "add new" option.
- * activationdata:
- *  @param selectionLabel: string - the dropdown field label text.
- *  @param optionsLabel: css class name for the label (chsnsingle - label)
- *	@param placeholderText: text for the field title tooltip.
- *  @param selectedValue: observable-string/object - to bind the selected value or the new text value. 
- *	@param optionTextProp: string - the property of the option object that holds the text to be presented.
- *	@param optionIdValueProp: string - property name: if the selected value needs to be the value of a property of the option and not all the option object. 
- *  @param AddNewOptionText: the add new option text will be added as an option to the dropdown. 
- *              once selected, it will turn to a text box and remove the selection from the dom.
- *	@param isAddNewOption: boolean. if true: the "Add New" option will be automatically added to the selectOptions.
- *				if false: the "Add New" option will not be added. it is assumed that the option is already in the given selectOptions.
- *				intention: use false when the options are breeze entities, and "add new" option is already there.
- *							use true when the options are just plain string array and "add new" is not given in it.
- *  @param isCreateNew: observable- bool - bind the state of the control so the parent will be aware of it.
- *              note: when creating a new option the medication.edit screen state gets notified. 
- *              this allows it to call initialize for creating a new medicationMap record and attach the id as familyId on the patientMedication.
- *	@param isEditModeOnly: observable/ not - bool optional: true: to lock the control showing only in edit mode.
- *							example usage: rote/form/strength show as edit box in a new medication. with isEditModeOnly()=true - the cancel/escape will not turn it into dropdown.
- *  @param isCreateNewEnabled: observable / not observable - bool - bind to allow the parent module to control the creation of the "add new" option as necessary.
- *              note: in medication - if no medication is selected the control should be disabled.
- *  @param isEnabled: lets the parent module enable/disable this control.
- *  @param selectOptions: accepting an observable array for dropdown options - each option object has {Text, Value}
- *              note: this module will automatically add the AddNewOptionText option.
- *	@param newCustomValue: an observable to keep/send the custom new added value to the containing parent for saving.
- *					its optional to set this parameter - and only needed when the selectOptions are breeze entities.
+ * dropdown with "add new" option.
+ * @module dropdown.w.addnew
+ * 
  * 
  */
 
@@ -32,7 +9,11 @@
 define([],
 	function(){
         var subscriptionTokens= [];
-
+		
+		/**
+		*
+		*	@class dropdown.w.addnew
+		*/
 		var ctor = function () {
             var self = this;					
         };
@@ -64,6 +45,34 @@ define([],
 			return self.newCustomValue? self.newCustomValue : self.selectedValue;
 		}		
 		
+		/**
+		 * 	@method activationData
+		 *  @param selectionLabel: string - the dropdown field label text.
+		 *  @param optionsLabel: css class name for the label (chsnsingle - label)
+		 *	@param placeholderText: text for the field title tooltip.
+		 *  @param selectedValue: observable-string/object - to bind the selected value or the new text value. 
+		 *	@param optionTextProp: string - the property of the option object that holds the text to be presented.
+		 *	@param optionIdValueProp: string - property name: if the selected value needs to be the value of a property of the option and not all the option object. 
+		 *  @param AddNewOptionText: the add new option text will be added as an option to the dropdown. 
+		 *              once selected, it will turn to a text box and remove the selection from the dom.
+		 *	@param isAddNewOption: boolean. if true: the "Add New" option will be automatically added to the selectOptions.
+		 *				if false: the "Add New" option will not be added. it is assumed that the option is already in the given selectOptions.
+		 *				intention: use false when the options are breeze entities, and "add new" option is already there.
+		 *							use true when the options are just plain string array and "add new" is not given in it.
+		 *  @param isCreateNew: observable- bool - bind the state of the control so the parent will be aware of it.
+		 *              note: when creating a new option the medication.edit screen state gets notified. 
+		 *              this allows it to call initialize for creating a new medicationMap record and attach the id as familyId on the patientMedication.
+		 *	@param isEditModeOnly: observable/ not - bool optional: true: to lock the control showing only in edit mode.
+		 *							example usage: rote/form/strength show as edit box in a new medication. with isEditModeOnly()=true - the cancel/escape will not turn it into dropdown.
+		 *  @param isCreateNewEnabled: observable / not observable - bool - bind to allow the parent module to control the creation of the "add new" option as necessary.
+		 *              note: in medication - if no medication is selected the control should be disabled.
+		 *  @param isEnabled: lets the parent module enable/disable this control.
+		 *  @param selectOptions: accepting an observable array for dropdown options - each option object has {Text, Value}
+		 *              note: this module will automatically add the AddNewOptionText option.
+		 *	@param newCustomValue: an observable to keep/send the custom new added value to the containing parent for saving.
+		 *					its optional to set this parameter - and only needed when the selectOptions are breeze entities.
+		 * 
+		*/
         ctor.prototype.activate = function (settings) {        	
             var self = this;
             //activationData:

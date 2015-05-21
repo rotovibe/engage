@@ -1,10 +1,11 @@
 ﻿
 /**
-*	@module	jsonResultsAdapter: parses api result data into entities
+*			jsonResultsAdapter parses api result data into entities
 *			engage api returned results are ususally enclosed in a wrapper object.
 *			the requested result object array is within. for breeze to read it and materialize entities, 
 *			we need the data.results to contain the array. => every get endpoint type should be added to the extractResults.
-*				
+*	@module	jsonResultsAdapter
+*	@class jsonResultsAdapter			
 */
 define([], new breeze.JsonResultsAdapter({
 

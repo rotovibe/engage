@@ -6,7 +6,13 @@
  * in the DataContext provides a service and the end-point definition and
  * The unit of work uses a factory-type pattern to provide methods to getting
  * the data.
+ *
  * @module datacontext
+ */
+ 
+ /**
+ *	@class datacontext
+ *
  */
 define(['services/session', 'services/jsonResultsAdapter', 'models/base', 'config.services', 'services/dataservices/getentityservice', 'models/programs', 'models/lookups', 'models/contacts', 'models/goals', 'models/notes', 'models/observations', 'models/allergies', 'models/medications', 'services/dataservices/programsservice', 'services/entityfinder', 'services/usercontext', 'services/dataservices/contactservice', 'services/entityserializer', 'services/dataservices/lookupsservice', 'services/dataservices/goalsservice', 'services/dataservices/notesservice', 'services/dataservices/observationsservice', 'services/dataservices/caremembersservice', 'services/dataservices/patientsservice', 'services/dataservices/allergiesservice', 'services/dataservices/medicationsservice', 'services/local.collections'],
     function (session, jsonResultsAdapter, modelConfig, servicesConfig, getEntityService, stepModelConfig, lookupModelConfig, contactModelConfig, goalModelConfig, notesModelConfig, observationsModelConfig, allergyModelConfig, medicationModelConfig, programsService, entityFinder, usercontext, contactService, entitySerializer, lookupsService, goalsService, notesService, observationsService, careMembersService, patientsService, allergiesService, medicationsService, localCollections) {
@@ -426,7 +432,8 @@ define(['services/session', 'services/jsonResultsAdapter', 'models/base', 'confi
             }			
         }
 		/**
-		*	@method processLookpus - perform operations after lookups are loaded. 
+		*	perform operations after lookups are loaded.
+		*	@method processLookpus 
 		*
 		*/
 		function processLookpus(){
@@ -437,9 +444,11 @@ define(['services/session', 'services/jsonResultsAdapter', 'models/base', 'confi
 		}
 		
 		/**
-		*	@method processFrequencyLookup - consolidate frequency lookups ("Frequency") into PatientMedicationFrequency entities.
+		*			consolidate frequency lookups ("Frequency") into PatientMedicationFrequency entities.
 		*			the Frequency lookups will be the global part of the list, common to all patients.
 		*			each patient may have their own specific PatientMedicationFrequency entities - we will read them when selecting a patient (getPatientFrequencies).
+		*
+		*	@method processFrequencyLookup 
 		*/
 		function processFrequencyLookup(){
 			//consolidate frequency lookups into PatientMedicationFrequency entities:
@@ -1298,7 +1307,6 @@ define(['services/session', 'services/jsonResultsAdapter', 'models/base', 'confi
         }
 
         /**		
-		*	@method - cancelEntityChanges
 		*		note: breeze rejectChanges has a known issue with array of complex type:
 		*			regardless of the entityState, all items of the array will be removed, 
 		*			even if there were no changes. (https://github.com/Breeze/breeze.js/issues/47)
@@ -1306,6 +1314,8 @@ define(['services/session', 'services/jsonResultsAdapter', 'models/base', 'confi
 		*	 	1. reload the entity from the server right after rejectChanges.
 		*	 	2. keep the original pristine state to go back to. (example - see todo.panel todo.programIds restored by originalProgramIds).
 		*	
+		*	@method cancelEntityChanges
+		*		
 		*	@param entity - a single entity to cancel changes if any.		
 		*/		
         function cancelEntityChanges(entity) {
@@ -1478,9 +1488,10 @@ define(['services/session', 'services/jsonResultsAdapter', 'models/base', 'confi
 		}
 		
 		/**
-		*	@method syncCalendarEvents : synchronize Event entities based on the given todos.
-		*					the event entities are on client only and they reflect todos and interventions.
-		*					in this function we reflect the given todos on Event entities by creating / updating / deleting accirdingly.
+		*	synchronize Event entities based on the given todos.
+		*	the event entities are on client only and they reflect todos and interventions.
+		*	in this function we reflect the given todos on Event entities by creating / updating / deleting accirdingly.
+		*	@method syncCalendarEvents 		
 		*	@param theseTodos: the current user todos - expected todos assigned to the current user and that are not deleted.
 		*
 		*/
@@ -1611,12 +1622,12 @@ define(['services/session', 'services/jsonResultsAdapter', 'models/base', 'confi
         }
 		
 		/**
-		*
-		*	@method getPatientFrequencies
 		*			read medication frequencies from 'Frequency' lookup merged with patient specific medication frequencies ('PatientMedFrequency' - as in back end).
 		*			the cache entity for this merge is : PatientMedicationFrequency.
 		*			we need to return frequencies (PatientMedicationFrequency entities) 
 		*			with patientId = null OR patientId = -1 OR patientId = given patientId.
+		*
+		*	@method getPatientFrequencies		
 		*/
 		function getPatientFrequencies(observable, patientId, forceRemote){
 			return medicationsService.getPatientFrequencies(manager, observable, patientId, forceRemote);

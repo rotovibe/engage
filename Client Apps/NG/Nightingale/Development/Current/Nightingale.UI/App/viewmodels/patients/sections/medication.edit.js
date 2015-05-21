@@ -2,6 +2,7 @@
  * medication.edit manages patientMedication (add/edit) and also adding a new medication (medicationMap).
  *
  * @module medication.edit
+ * @class medication.edit
  */
 
 define(['models/base', 'config.services', 'services/datacontext', 'services/session'],
@@ -85,9 +86,9 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
 	  self.isCreateNewFrequencyEnabled = ko.observable(true);
 	  
       /**
-       * get/observe the new medication model object for this patient
+       * computed - get/observe the new medication model object for this patient
        *
-       * @method newPatientMedication (computed)
+       * @method newPatientMedication 
        * @return {Object} the new patient medication for this screen
        */
       self.newPatientMedication = ko.computed({
@@ -173,11 +174,11 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
 	  self.isNewMedicationName = ko.observable(false);
 	  self.screenMode = ko.observable(screenModes.NoMedSelected);	
       /**
-       * controls if the save will skip and ignor or call the api services
+       * computed - controls if the save will skip and ignor or call the api services
        * the value tracks the screen mode and will allow saving only if a medication 
        * (new or existing) was selected from the typeahead medication name suggestions.
        *
-       * @method canAdd (computed)
+       * @method canAdd
        * @return boolean
        */
       self.canAdd = ko.computed({
@@ -275,8 +276,10 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
       });
 	
 	  /**
-	  *	@method self.ltrim - left trim a string. (trimLeft() wont work on ie)
-	  *
+	  *	left trim a string. (trimLeft() wont work on ie)
+	  *	@method self.ltrim 
+	  *	@param str {string} 
+	  *	@return the trimmed result string.
 	  */
 	  self.ltrim = function(str){
 			if(str){
@@ -337,10 +340,10 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
       }
 
       /**
-       * tracks medication name changes and updates the screenMode value accordingly       
+       * computed - tracks medication name changes and updates the screenMode value accordingly       
        * when a name changes by the user it will clear and disable route/form/strength dropdowns
 	   * 
-       * @method medicationNameWatcher (computed)
+       * @method medicationNameWatcher
        * @return no return value.
        */
 
@@ -430,14 +433,14 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
 	  }).extend({ throttle: 75 });	 	  
 	  
       /**
-	   *	in editing mode of a patient medication, we may add new strength/form/route:
+	   *	computed - in editing mode of a patient medication, we may add new strength/form/route:
        *  listen /track if form/strength/route dropdowns turn to "add new" (textbox) mode.
        *  if/when one of them does: 
        *  	update the screenMode value AddNewMedValues.
        *  if any of them has a custom value entered: this means we will have to create a medicationMap record and get a familyId when saved:
        * 	set isCreateNewMedication
 	   *
-       * @method addingNewValue (computed)
+       * @method addingNewValue 
        * @return no return value.
        */
       self.addingNewValue = ko.computed({

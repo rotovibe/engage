@@ -1,4 +1,10 @@
-﻿define([],
+﻿/**
+*	custom bindings definitions
+*
+*	@module bindings
+*/
+
+define([],
     function () {
 
         var datacontext;
@@ -274,8 +280,16 @@
                 });
             }
         };
-
+		
+		/**
+		*
+		*	@class datepicker
+		*/
         ko.bindingHandlers.datepicker = {
+			/**
+			*
+			* 	@method datepicker.init
+			*/
             init: function (element, valueAccessor, allBindingsAccessor, bindingContext) {
                 var observable = valueAccessor();
                 var $el = $(element);				
@@ -367,6 +381,10 @@
                     $el.datepicker("destroy");								
                 });
             },
+			/**
+			*
+			* 	@method datepicker.update
+			*/
             update: function (element, valueAccessor, allBindingsAccessor, bindingContext) {
                 var observable = valueAccessor();	//ko.utils.unwrapObservable(valueAccessor()),
                     $el = $(element),
@@ -408,15 +426,19 @@
 			return momentDest;
 		}
 		
-		/**
-		* 	@method jqtimepicker.init 
+		/**				
 		*			this binding wraps jquery.timepicker plugin (jQuery Timepicker - v1.3.2 - 2014-09-13 http://timepicker.co) 
 		*			it should be applied within: <!-- ko ifnot: Modernizr.inputtypes.time -->
 		*			note: for html5 supporting input type=time use the other binding: timepicker. 	
-		*	@param valueAccessor expecting a date observable that the timepicker manipulates its time fields only.
-		*	@example data-bind="timepicker: contactedOn"
+		* 	@class jqtimepicker
 		*/
         ko.bindingHandlers.jqtimepicker = {
+			/**			
+			* 	@method jqtimepicker.init 
+			*
+			*	@param valueAccessor expecting a date observable that the timepicker manipulates its time fields only.
+			*	@example data-bind="timepicker: contactedOn"			
+			*/
             init: function (element, valueAccessor, allBindingsAccessor, bindingContext) {
                 // Get the value of the observable binding
                 var observable = valueAccessor();
@@ -448,9 +470,9 @@
 					observable.extend({ notify: 'always' });
 				}				
 				/**
-				*	@method onTimeChange 
 				*			defines a subscription callback to timepicker changes, in order to sync the timepicker time 
 				*			onto the given data-binded observable 
+				*	@method onTimeChange 
 				*/
 				function onTimeChange(time){
 					var element = $(this);
@@ -769,23 +791,28 @@
         };
 
 		/**
-		*	@method columnSizer.init
-		*	@method columnSizer.update
 		*	columnSizer is a binding fix for firefox and ie (< 11) for the "widget" elements in engage.
 		*	this is a hack that sets the heights of the .content's and .body elements inside the widget's structure.
 		*	in these browsers/versions the widgets dont show. the hack also deals with expand-collaps-fullscreen /resize behaviors.
 		*	these are set as triggers in the binding that are subscribed for updates.		
-		* 	the binding should be applied on <div class="widget" 
-		*	@example 1: "columnSizer: true" - when the widget does not have any expand-collaps-fullscreen.
-		*	@example 2: "columnSizer: {triggers: myToDoListOpen}" - widget have expand-collaps-fullscreen and myToDoListOpen is the observable.
-		*	@example 3: "columnSizer: {triggers: {a: isOpen, b: selectedPatient()}}" - in addition to expand-collapse we subscribe to patient selection changes.
-		*	@example 4: "columnSizer: {triggers: {a: selectedView, b: filtersHeaderOpen(), c: filtersOpen()}}" - this widget (home-todos) needs to trigger a re-set heights 
+		* 	the binding should be applied on 
+		*
+		*		<div class="widget" 
+		*		
+		*	@example "columnSizer: true" - when the widget does not have any expand-collaps-fullscreen.
+		*	@example "columnSizer: {triggers: myToDoListOpen}" - widget have expand-collaps-fullscreen and myToDoListOpen is the observable.
+		*	@example "columnSizer: {triggers: {a: isOpen, b: selectedPatient()}}" - in addition to expand-collapse we subscribe to patient selection changes.
+		*	@example "columnSizer: {triggers: {a: selectedView, b: filtersHeaderOpen(), c: filtersOpen()}}" - this widget (home-todos) needs to trigger a re-set heights 
 		*				on these changes: 
 		*					1. when the filter toggles shows/hides - filtersHeaderOpen. 
 		*					2. the expanded filter content toggles show/hide - filtersOpen.
 		*					3. a specific todo filter value changes in: selectedView
+		* 	@class columnSizer
 		*/
         ko.bindingHandlers.columnSizer = {
+			/**			
+			*	@method columnSizer.init
+			*/
             init: function (element, valueAccessor, allBindingsAccessor) {                
                 if (isChrome() || isIe11()) {
 					return;
@@ -803,6 +830,9 @@
                     });
                 }
             },
+			/**			
+			*	@method columnSizer.update
+			*/
 			update: function (element, valueAccessor, allBindingsAccessor){					
 				var triggers = ko.unwrap(allBindingsAccessor().columnSizer.triggers); //track/subscribe to any widget hight altering parameter/s. the widgets may have the expand-collaps toggle observable (isOpen) and/or filters show/hide toggle and/or filter content.
 				
@@ -821,8 +851,9 @@
         };
 
 		/**
-		*	@method setHeights - for columnSizer binding fix for firefox and ie < 11
-		*
+		* 	for columnSizer binding fix for firefox and ie < 11
+		*	@method setHeights 
+		*	@for columnSizer
 		*/
 		function setHeights($el, nobody) {
 			var $contents, $widgets;

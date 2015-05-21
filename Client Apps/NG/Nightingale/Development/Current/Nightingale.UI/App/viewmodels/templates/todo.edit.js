@@ -1,6 +1,7 @@
 ﻿/**
-*	@module todo.edit - todo details edit / add view
-*
+*	todo details edit / add view
+*	@module todo.edit 
+*	@class todo.edit
 */
 define(['services/datacontext', 'services/local.collections'],
     function (datacontext, localCollections) {
@@ -179,9 +180,11 @@ define(['services/datacontext', 'services/local.collections'],
         };
 		
 		/**
-		*	@method detached: clearing KO subscriptions/computeds memory: 
-		*		
+		*	clearing KO subscriptions/computeds memory
+		*	@method detached		
+		*	@example	 	
 		*	for subscriptions: 
+		*
 		*		1. declare tokens collection:	var subscriptionTokens= [];
 		*		2. keep the returned token/s:
 		*	
@@ -192,7 +195,7 @@ define(['services/datacontext', 'services/local.collections'],
 		*			ko.utils.arrayForEach(subscriptionTokens, function (token) {
 		*				token.dispose();
 		*			});
-		*
+		*	@example
 		*	for computeds:
 		*	
 		*		self.someComputed.dispose();

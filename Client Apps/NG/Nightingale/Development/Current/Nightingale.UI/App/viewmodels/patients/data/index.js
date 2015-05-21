@@ -1,8 +1,10 @@
 ﻿/**
  * data.index module manages/ hosts the data dialog
  *
- * @module data.index
+ * 	@module data.index
+ *	@class data.index
  */
+ 
 
 define(['plugins/router', 'services/navigation', 'config.services', 'services/session', 'services/datacontext', 'viewmodels/patients/index', 'viewmodels/shell/shell', 'models/base'],
     function (router, navigation, servicesConfig, session, datacontext, patientsIndex, shell, modelConfig) {
@@ -191,7 +193,7 @@ define(['plugins/router', 'services/navigation', 'config.services', 'services/se
         *   saveNewMedication saves a new patient medication (insert only)
         *   using child module: medication.edit
         *
-        * @method saveNewMedication
+        * 	@method saveNewMedication
         */
         function saveNewMedication() {
 
