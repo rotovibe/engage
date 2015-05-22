@@ -241,6 +241,7 @@ namespace Phytel.Data.ETL.BulkCopy
                         //Delete = pp.DeleteFlag.ToString(),
                         //RecordCreatedOn = GetNullableDate(pp.RecordCreatedOn),
                         //TTLDate = pp.TTLDate ?? null,
+                        //Delete = r.DeleteFlag.ToString(), //add later
                         Next = 0,
                         Previous = 0,
                         MongoNext = r.Next == null ? string.Empty : r.Next.ToString(),

@@ -79,13 +79,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BulkCopy\EToDoProgram.cs" />
     <Compile Include="BulkCopy\EProgramAttribute.cs" />
     <Compile Include="BulkCopy\EStep.cs" />
     <Compile Include="BulkCopy\EAction.cs" />
     <Compile Include="BulkCopy\EObservationResponse.cs" />
     <Compile Include="BulkCopy\EModule.cs" />
     <Compile Include="BulkCopy\EProgram.cs" />
+    <Compile Include="BulkCopy\EPatientNoteProgram.cs" />
     <Compile Include="BulkCopy\EStepResponse.cs" />
+    <Compile Include="BulkCopy\ReadPatientNoteProgramSeries.cs" />
     <Compile Include="BulkCopy\ReadObservationsSeries.cs" />
     <Compile Include="BulkCopy\ReadPlanElementsSeries.cs" />
     <Compile Include="BulkCopy\ReadSeries.cs" />
@@ -95,6 +98,9 @@
     <Compile Include="SpawnElementHash.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SimpleLog.cs" />
+    <Compile Include="Templates\DocumentCollection.cs" />
+    <Compile Include="Templates\ToDo.cs" />
+    <Compile Include="Templates\PatientNotes.cs" />
     <Compile Include="Utils.cs" />
   </ItemGroup>
   <ItemGroup>
