@@ -91,8 +91,8 @@ BEGIN
 			AND pp.PatientProgramId = ppt.PatientProgramId) as [Program_CM]
 	FROM
 		RPT_Patient as pt with (nolock) 	
-		LEFT JOIN RPT_PatientProgram as ppt with (nolock) ON pt.PatientId = ppt.PatientId and ppt.[Delete] = 'False' and ppt.TTLDate IS NULL
-		LEFT JOIN RPT_PatientSystem as ps with (nolock) ON pt.PatientId = ps.PatientId   	 
+		LEFT JOIN RPT_PatientProgram as ppt with (nolock) ON pt.MongoId = ppt.MongoPatientId and ppt.[Delete] = 'False' and ppt.TTLDate IS NULL
+		LEFT JOIN RPT_PatientSystem as ps with (nolock) ON pt.MongoId = ps.MongoPatientId
 	WHERE
 		pt.[Delete] = 'False' and pt.TTLDate IS NULL
 END

@@ -1,8 +1,17 @@
+IF NOT EXISTS ( SELECT *  FROM   sys.columns WHERE  object_id = OBJECT_ID(N'[dbo].[RPT_BSHSI_HW2_Enrollment_Info]') AND name = 'Risk_Level')
+BEGIN
 ALTER TABLE dbo.RPT_BSHSI_HW2_Enrollment_Info ADD
-	Risk_Level varchar(50) NULL,
-	Acuity_Frequency varchar(50) NULL
-GO
+	Risk_Level varchar(50) NULL
 ALTER TABLE dbo.RPT_BSHSI_HW2_Enrollment_Info SET (LOCK_ESCALATION = TABLE)
+END
+GO
+
+IF NOT EXISTS ( SELECT *  FROM   sys.columns WHERE  object_id = OBJECT_ID(N'[dbo].[RPT_BSHSI_HW2_Enrollment_Info]') AND name = 'Acuity_Frequency')
+BEGIN
+ALTER TABLE dbo.RPT_BSHSI_HW2_Enrollment_Info ADD
+	Acuity_Frequency varchar(50) NULL
+ALTER TABLE dbo.RPT_BSHSI_HW2_Enrollment_Info SET (LOCK_ESCALATION = TABLE)
+END
 GO
 
 /****** Object:  StoredProcedure [dbo].[spPhy_RPT_Flat_BSHSI_HW2]    Script Date: 05/14/2015 13:53:05 ******/

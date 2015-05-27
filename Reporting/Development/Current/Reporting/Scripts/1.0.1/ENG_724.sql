@@ -11,7 +11,7 @@ CREATE TABLE [dbo].[RPT_TouchPoint_Dim](
 	[Source] [varchar](100) NULL,
 	[Outcome] [varchar](100) NULL,
 	[ContactedOn] [datetime] NULL,
-	[Name] [varchar](200) NULL,
+	[ProgramName] [varchar](200) NULL,
 	[Duration] [varchar](100) NULL,
 	[ValidatedIntentity] [varchar](100) NULL,
 	[Text] [varchar](5000) NULL,
@@ -19,6 +19,7 @@ CREATE TABLE [dbo].[RPT_TouchPoint_Dim](
 	[Record_Created_By] [varchar](200) NULL,
 	[PATIENTID] [int] NULL,
 	[FIRSTNAME] [varchar](200) NULL,
+	[MIDDLENAME] [varchar](200) NULL,
 	[LASTNAME] [varchar](200) NULL,
 	[DATEOFBIRTH] [datetime] NULL,
 	[AGE] [int] NULL,
@@ -26,6 +27,7 @@ CREATE TABLE [dbo].[RPT_TouchPoint_Dim](
 	[PRIORITY] [varchar](100) NULL,
 	[SYSTEMID] [varchar](100) NULL,
 	[ASSIGNED_PCM] [varchar](500) NULL,
+	[ASSIGNEDTO] [varchar](500),
 	[State] [varchar](100) NULL,
 	[StartDate] [datetime] NULL,
 	[EndDate] [datetime] NULL,
@@ -44,7 +46,7 @@ GO
 CREATE PROCEDURE [dbo].[spPhy_RPT_Flat_TouchPoint_Dim]
 AS
 BEGIN
-	DELETE [RPT_TouchPoint_Dim]
+	TRUNCATE TABLE [RPT_TouchPoint_Dim]
 	INSERT INTO [RPT_TouchPoint_Dim]
 	(
 	[PatientNoteId],
@@ -53,7 +55,7 @@ BEGIN
 	[Source],
 	[Outcome],
 	[ContactedOn],
-	[Name],
+	[ProgramName],
 	[Duration],
 	[ValidatedIntentity],
 	[Text],
@@ -61,6 +63,7 @@ BEGIN
 	[Record_Created_By],
 	[PATIENTID],
 	[FIRSTNAME],
+	[MIDDLENAME],
 	[LASTNAME],
 	[DATEOFBIRTH],
 	[AGE],
@@ -68,36 +71,38 @@ BEGIN
 	[PRIORITY],
 	[SYSTEMID],
 	[ASSIGNED_PCM],
+	[ASSIGNEDTO],
 	[State],
 	[StartDate],
 	[EndDate],
 	[AssignedOn]		
 	)
-	SELECT 
+	SELECT
 		pn.PatientNoteId,
-		nm.Name as [Method],
-		nw.Name as [Who],
-		ns.Name as [Source],
-		noc.Name as [Outcome],
+		(SELECT DISTINCT Name FROM RPT_NoteMethodLookUp nm WHERE nm.MongoId = pn.MongoMethodId) as [Method],
+		(SELECT DISTINCT Name FROM RPT_NoteWhoLookUp nw WHERE nw.MongoId = pn.MongoWhoId) as [Who],
+		(SELECT DISTINCT Name FROM RPT_NoteSourceLookUp ns WHERE ns.MongoId= pn.MongoSourceId) as [Source],
+		(SELECT DISTINCT Name FROM RPT_NoteOutcomeLookUp noc WHERE noc.MongoId = pn.MongoOutcomeId) as [Outcome],
 		pn.ContactedOn,
-		pp.Name,
-		nd.Name as [Duration],
+		pp.Name as [ProgramName],
+		(SELECT DISTINCT Name FROM RPT_NoteDurationLookUp nd WHERE nd.MongoId = pn.MongoDurationId) as [Duration],
 		pn.ValidatedIntentity,
 		pn.Text,
 		pn.RecordCreatedOn,
-		u.LastName + ', ' + u.FirstName as [Record_Created_By],
+		u.PreferredName as [Record_Created_By],
 		PT.PATIENTID,
 		PT.FIRSTNAME,
+		PT.MiddleName,
 		PT.LASTNAME,
-		PT.DATEOFBIRTH,
+		(CASE WHEN PT.DateOfBirth = '' THEN NULL ELSE PT.DATEOFBIRTH END) AS [DATEOFBIRTH],
 		CASE
 			WHEN PT.DATEOFBIRTH IS NOT NULL AND PT.DateOfBirth != '' THEN 
 				CAST(DATEDIFF(DAY, CONVERT(DATETIME,PT.DATEOFBIRTH), GETDATE()) / (365.23076923074) AS INT)
 		END  AS [AGE],
 		PT.GENDER,
 		PT.PRIORITY,
-		PS.SYSTEMID
-		,(SELECT  		
+		PS.SYSTEMID,
+		(SELECT TOP 1	
 			U.PREFERREDNAME 	  
 		  FROM
 			RPT_PATIENT AS P,
@@ -106,24 +111,26 @@ BEGIN
 		  WHERE
 			P.MONGOID = C.MONGOPATIENTID
 			AND C.MONGOUSERID = U.MONGOID
-			AND P.PATIENTID = PT.PATIENTID 	) AS [ASSIGNED_PCM]
+			AND P.MongoId = PT.MongoId 	) AS [ASSIGNED_PCM]
+		, (SELECT TOP 1  		
+			U.PREFERREDNAME 	  
+		  FROM
+			RPT_USER AS U
+		  WHERE
+			u.MongoId = pp.MongoAssignedToId) AS [AssignedTo]
 		, pp.[State]
-		, pp.[StartDate]
-		, pp.[EndDate]
+		, pp.AttributeStartDate as [StartDate]
+		, pp.[AttributeEndDate]  as [EndDate]
 		, pp.[AssignedOn]
 	FROM 
-		RPT_PatientNote pn 
-		INNER JOIN RPT_PATIENT PT ON pn.PatientId = pt.PatientId
-		INNER JOIN RPT_PATIENTSYSTEM PS ON PT.DISPLAYPATIENTSYSTEMID = PS.PATIENTSYSTEMID
-		INNER JOIN RPT_PATIENTPROGRAM PP ON PT.PatientId = pt.PatientId
-		INNER JOIN RPT_NoteMethodLookUp nm ON pn.MethodId = nm.NoteMethodId
-		INNER JOIN RPT_NoteWhoLookUp nw ON pn.WhoId = nw.NoteWhoId
-		INNER JOIN RPT_NoteSourceLookUp ns ON pn.SourceId = ns.NoteSourceId
-		INNER JOIN RPT_NoteOutcomeLookUp noc ON pn.OutcomeId = noc.NoteOutcomeId
-		INNER JOIN RPT_NoteDurationLookUp nd ON pn.DurationId = nd.NoteDurationId
-		INNER JOIN RPT_User u ON pn.RecordCreatedById = u.UserId
+		RPT_PatientNote pn
+		left outer join RPT_PatientNoteProgram pnp on pn.MongoId = pnp.MongoPatientNoteId
+		INNER JOIN RPT_PATIENT PT ON pn.MongoPatientId = pt.MongoId
+		LEFT OUTER JOIN RPT_PATIENTSYSTEM PS ON PT.MongoPatientSystemId = PS.MongoId
+		LEFT OUTER JOIN RPT_PATIENTPROGRAM PP ON PP.MongoId = pnp.MongoId
+		INNER JOIN RPT_User u ON pn.MongoRecordCreatedBy = u.MongoId
 	WHERE
-		pn.[Type] = '54909997d43323251c0a1dfe'		
-	
+		pn.[Type] = '54909997d43323251c0a1dfe'
+		and pn.[Delete] = 'False'	
 END
 GO
