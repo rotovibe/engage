@@ -548,10 +548,11 @@ GO
 
 /***** ADD LOGGING TO THE FLAT TABLE INITIALIZAION ******/
 /****** Object:  StoredProcedure [dbo].[spPhy_RPT_Initialize_Flat_Tables]    Script Date: 05/11/2015 10:11:29 ******/
-IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[spPhy_RPT_Initialize_Flat_Tables]') AND type in (N'P'))
-	DROP PROCEDURE [spPhy_RPT_Initialize_Flat_Tables]
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[spPhy_RPT_Initialize_Flat_Tables]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[spPhy_RPT_Initialize_Flat_Tables]
 GO
 
+/****** Object:  StoredProcedure [dbo].[spPhy_RPT_Initialize_Flat_Tables]    Script Date: 05/15/2015 13:34:55 ******/
 CREATE PROCEDURE [dbo].[spPhy_RPT_Initialize_Flat_Tables]
 AS
 BEGIN
@@ -572,7 +573,20 @@ BEGIN
 	SET @StartTime = GETDATE();	
 	EXECUTE [spPhy_RPT_Flat_Engage];
 	INSERT RPT_ProcessAudit ([Statement], [Start], [End], [Contract], [Time]) VALUES ('spPhy_RPT_Flat_Engage', @StartTime, GETDATE(), '', LEFT(CONVERT(VARCHAR(10), GETDATE() - @StartTime, 108), 10));	
+	
+	SET @StartTime = GETDATE();	
+	EXECUTE [spPhy_RPT_Flat_Observations_Dim];
+	INSERT RPT_ProcessAudit ([Statement], [Start], [End], [Contract], [Time]) VALUES ('spPhy_RPT_Flat_Observations_Dim', @StartTime, GETDATE(), '', LEFT(CONVERT(VARCHAR(10), GETDATE() - @StartTime, 108), 10));		
+
+	SET @StartTime = GETDATE();	
+	EXECUTE [spPhy_RPT_Flat_TouchPoint_Dim];
+	INSERT RPT_ProcessAudit ([Statement], [Start], [End], [Contract], [Time]) VALUES ('spPhy_RPT_Flat_TouchPoint_Dim', @StartTime, GETDATE(), '', LEFT(CONVERT(VARCHAR(10), GETDATE() - @StartTime, 108), 10));	
+	
+	SET @StartTime = GETDATE();	
+	EXECUTE [spPhy_RPT_SavePatientInfo];
+	INSERT RPT_ProcessAudit ([Statement], [Start], [End], [Contract], [Time]) VALUES ('spPhy_RPT_SavePatientInfo', @StartTime, GETDATE(), '', LEFT(CONVERT(VARCHAR(10), GETDATE() - @StartTime, 108), 10));		
 END
+GO
 
 /**** ADDING RECOMMENDED NON-CLUSTERED INDEXES *****/
 IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[dbo].[RPT_PatientProgramResponse]') AND name = 'IX_RPT_PatientProgramResponse_StepidSelected')
