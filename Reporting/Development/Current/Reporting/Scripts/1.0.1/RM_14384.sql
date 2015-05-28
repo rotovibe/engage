@@ -1,53 +1,22 @@
 /******** ENG-1025 **********/
-/****** Object:  Table [dbo].[RPT_BSHSI_HW2_Enrollment_Info]    Script Date: 05/14/2015 13:27:45 ******/
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RPT_BSHSI_HW2_Enrollment_Info]') AND type in (N'U'))
-DROP TABLE [dbo].[RPT_BSHSI_HW2_Enrollment_Info]
+IF NOT EXISTS ( SELECT *  FROM   sys.columns WHERE  object_id = OBJECT_ID(N'[dbo].[RPT_BSHSI_HW2_Enrollment_Info]') AND name = 'Risk_Level')
+BEGIN
+ALTER TABLE dbo.RPT_BSHSI_HW2_Enrollment_Info ADD
+	Risk_Level varchar(50) NULL
+ALTER TABLE dbo.RPT_BSHSI_HW2_Enrollment_Info SET (LOCK_ESCALATION = TABLE)
+END
 GO
 
-/****** Object:  Table [dbo].[RPT_BSHSI_HW2_Enrollment_Info]    Script Date: 05/14/2015 13:27:47 ******/
-CREATE TABLE [dbo].[RPT_BSHSI_HW2_Enrollment_Info](
-	[PatientId] [int] NOT NULL,
-	[PatientProgramId] [int] NOT NULL,
-	[Priority] [varchar](50) NULL,
-	[firstName] [varchar](100) NULL,
-	[SystemId] [varchar](50) NULL,
-	[LastName] [varchar](100) NULL,
-	[MiddleName] [varchar](100) NULL,
-	[Suffix] [varchar](50) NULL,
-	[Gender] [varchar](50) NULL,
-	[DateOfBirth] [varchar](50) NULL,
-	[LSSN] [int] NULL,
-	[Assigned_PCM] [varchar](100) NULL,
-	[Program_CM] [varchar](100) NULL,
-	[Enrollment] [varchar](50) NULL,
-	[GraduatedFlag] [varchar](50) NULL,
-	[StartDate] [datetime] NULL,
-	[EndDate] [datetime] NULL,
-	[Assigned_Date] [datetime] NULL,
-	[Last_State_Update_Date] [datetime] NULL,
-	[State] [varchar](50) NULL,
-	[Eligibility] [varchar](50) NULL,
-	[Program_Completed_Date] [date] NULL,
-	[Re_enrollment_Date] [date] NULL,
-	[Enrolled_Date] [date] NULL,
-	[Pending_Enrolled_Date] [date] NULL,
-	[Enrollment_Action_Completion_Date] [date] NULL,
-	[Market] [varchar](max) NULL,
-	[Disenroll_Date] [date] NULL,
-	[Disenroll_Reason] [varchar](max) NULL,
-	[did_not_enroll_date] [date] NULL,
-	[did_not_enroll_reason] [varchar](max) NULL
-) ON [PRIMARY]
-
+IF NOT EXISTS ( SELECT *  FROM   sys.columns WHERE  object_id = OBJECT_ID(N'[dbo].[RPT_BSHSI_HW2_Enrollment_Info]') AND name = 'Acuity_Frequency')
+BEGIN
+ALTER TABLE dbo.RPT_BSHSI_HW2_Enrollment_Info ADD
+	Acuity_Frequency varchar(50) NULL
+ALTER TABLE dbo.RPT_BSHSI_HW2_Enrollment_Info SET (LOCK_ESCALATION = TABLE)
+END
 GO
 
-/****** Object:  StoredProcedure [dbo].[spPhy_RPT_Flat_BSHSI_HW2]    Script Date: 05/14/2015 13:52:12 ******/
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[spPhy_RPT_Flat_BSHSI_HW2]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [dbo].[spPhy_RPT_Flat_BSHSI_HW2]
-GO
-
-/****** Object:  StoredProcedure [dbo].[spPhy_RPT_Flat_BSHSI_HW2]    Script Date: 05/14/2015 13:52:12 ******/
-CREATE PROCEDURE [dbo].[spPhy_RPT_Flat_BSHSI_HW2]
+/****** Object:  StoredProcedure [dbo].[spPhy_RPT_Flat_BSHSI_HW2]    Script Date: 05/14/2015 13:53:05 ******/
+ALTER PROCEDURE [dbo].[spPhy_RPT_Flat_BSHSI_HW2]
 AS
 BEGIN
 	DELETE [RPT_BSHSI_HW2_Enrollment_Info]
@@ -83,7 +52,9 @@ BEGIN
 		Disenroll_Date,
 		Disenroll_Reason,
 		did_not_enroll_date,
-		did_not_enroll_reason
+		did_not_enroll_reason,
+		Risk_Level,
+		Acuity_Frequency
 	) 
 	SELECT DISTINCT 	
 		pt.PatientId
@@ -142,6 +113,10 @@ BEGIN
 		,( select CASE WHEN LEN(Value) > 0 THEN Value ELSE NULL END
 			from fn_RPT_GetDate(pt.PatientId, ppt.PatientProgramId, '541943a6bdd4dfa5d90002da', '53f4fd75ac80d30e00000083', '53f4fc71ac80d30e02000074') ) as [did_not_enroll_date]
 		,(select Reason FROM dbo.fn_RPT_DidNotEnrollReason(pt.PatientId,ppt.PatientProgramId,'541943a6bdd4dfa5d90002da', '53f4fd75ac80d30e00000083', '53f4f885ac80d30e00000065')) as [did_not_enroll_reason]
+		,(select CASE WHEN LEN(Value) > 0 THEN Value ELSE NULL END 
+			from fn_RPT_GetText_SingleSelect(pt.PatientId, ppt.PatientProgramId, '541943a6bdd4dfa5d90002da', '53f6ce5bac80d3138d000022', '53f6cc01ac80d3139000000d') ) as [Risk_Level]
+		,(select CASE WHEN LEN(Value) > 0 THEN Value ELSE NULL END 
+			from fn_RPT_GetText_SingleSelect(pt.PatientId, ppt.PatientProgramId, '541943a6bdd4dfa5d90002da', '53f6ce5bac80d3138d000022', '53f6cc4cac80d3138d000012') )as [Acuity_Frequency]
 	FROM
 		RPT_Patient as pt with (nolock) 	
 		INNER JOIN RPT_PatientProgram as ppt with (nolock) ON pt.PatientId = ppt.PatientId  	
@@ -154,7 +129,6 @@ BEGIN
 		AND ppt.SourceId = '541943a6bdd4dfa5d90002da'
 		AND ppt.[Delete] = 'False'
 END
-
 GO
 
 
@@ -241,41 +215,41 @@ GO
 
 /******** ENG-1215 **********/
 /**** RPT_CareBridge_Enrollment_Info ****/
-IF NOT EXISTS(SELECT * FROM SYS.COLUMNS WHERE NAME = N'Primary_Physician' AND OBJECT_ID = OBJECT_ID(N'RPT_CareBridge_Enrollment_Info'))
+IF EXISTS(SELECT * FROM SYS.COLUMNS WHERE NAME = N'Primary_Physician' AND OBJECT_ID = OBJECT_ID(N'RPT_CareBridge_Enrollment_Info'))
 BEGIN
 	ALTER TABLE 
 		RPT_CareBridge_Enrollment_Info
-	ADD 
-		[Primary_Physician] VARCHAR(1000) NULL;
+	DROP COLUMN 
+		[Primary_Physician];
 END
 GO
 
-IF NOT EXISTS(SELECT * FROM SYS.COLUMNS WHERE NAME = N'Primary_Physician_Practice' AND OBJECT_ID = OBJECT_ID(N'RPT_CareBridge_Enrollment_Info'))
+IF EXISTS(SELECT * FROM SYS.COLUMNS WHERE NAME = N'Primary_Physician_Practice' AND OBJECT_ID = OBJECT_ID(N'RPT_CareBridge_Enrollment_Info'))
 BEGIN
 	ALTER TABLE 
 		RPT_CareBridge_Enrollment_Info 
-	ADD
-		[Primary_Physician_Practice] VARCHAR(2000) NULL;	
+	DROP COLUMN 
+		[Primary_Physician_Practice];	
 END	
 GO
 
 /**** RPT_Engage_Enrollment_Info ****/
-IF NOT EXISTS(SELECT * FROM SYS.COLUMNS WHERE NAME = N'Primary_Physician' AND OBJECT_ID = OBJECT_ID(N'RPT_Engage_Enrollment_Info'))
+IF EXISTS(SELECT * FROM SYS.COLUMNS WHERE NAME = N'Primary_Physician' AND OBJECT_ID = OBJECT_ID(N'RPT_Engage_Enrollment_Info'))
 BEGIN
 	ALTER TABLE 
 		RPT_Engage_Enrollment_Info 
-	ADD 
-		[Primary_Physician] VARCHAR(1000) NULL;
+	DROP COLUMN 
+		[Primary_Physician];
 END
 GO
 
-IF NOT EXISTS(SELECT * FROM SYS.COLUMNS WHERE NAME = N'Primary_Physician_Practice' AND OBJECT_ID = OBJECT_ID(N'RPT_Engage_Enrollment_Info'))
+IF EXISTS(SELECT * FROM SYS.COLUMNS WHERE NAME = N'Primary_Physician_Practice' AND OBJECT_ID = OBJECT_ID(N'RPT_Engage_Enrollment_Info'))
 BEGIN
 	ALTER TABLE 
 		RPT_Engage_Enrollment_Info 
-	ADD 
-		[Primary_Physician_Practice] VARCHAR(2000) NULL;	
-END
+	DROP COLUMN 
+		[Primary_Physician_Practice];	
+END	
 GO
 
 
