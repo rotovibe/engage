@@ -32,6 +32,7 @@ namespace Phytel.Data.ETLASEProcess
             {
                 var str = n.InnerText;
                 var bodyStr = "<Contract>" + str + "</Contract>";
+                base.LogDebug("Sending Contract " + str + " to bus.");
                 Phytel.ASE.Core.APIService.PutMessageOnBus(base.APIURL, key, bodyStr);
             }
 
