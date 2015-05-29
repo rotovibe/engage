@@ -312,8 +312,6 @@ IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RPT_P
 DROP TABLE [dbo].[RPT_PatientNoteProgram]
 GO
 
-USE [INHEALTHENGAGE001]
-GO
 
 /****** Object:  Table [dbo].[RPT_PatientNoteProgram]    Script Date: 05/22/2015 13:10:42 ******/
 CREATE TABLE [dbo].[RPT_PatientNoteProgram](
