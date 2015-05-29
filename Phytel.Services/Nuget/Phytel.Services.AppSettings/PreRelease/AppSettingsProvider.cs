@@ -5,6 +5,10 @@ namespace Phytel.Services.AppSettings
 {
     public abstract class AppSettingsProvider : IAppSettingsProvider
     {
+        public AppSettingsProvider()
+        {
+        }
+
         public string Get(string key)
         {
             return Get(key, string.Empty);
