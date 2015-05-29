@@ -14,6 +14,7 @@ namespace Phytel.Services.AppSettings.Contract
         protected readonly string _context;
 
         public ContractAppSettingsProvider(IContractClient contractClient, string contractNumber, string context)
+            :base()
         {
             _contractClient = contractClient;
             _contractNumber = contractNumber;
