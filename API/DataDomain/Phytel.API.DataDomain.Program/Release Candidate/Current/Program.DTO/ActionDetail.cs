@@ -14,5 +14,6 @@ namespace Phytel.API.DataDomain.Program.DTO
         public List<StepsDetail> Steps { get; set; }
         public int Status { get; set; }
         public string Text { get; set; }
+        public bool DeleteFlag { get; set; }
     }
 }

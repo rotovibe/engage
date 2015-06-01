@@ -187,7 +187,8 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                             SourceId = ai.SourceId,
                             AssignedOn = ai.AssignedOn,
                             State = ElementState.NotStarted,
-                            Steps = GetClonedSteps(contractNumber, userId, ai, sil)
+                            Steps = GetClonedSteps(contractNumber, userId, ai, sil),
+                            DeleteFlag = ai.DeleteFlag
                         };
                         ac.Objectives = null;
 
@@ -665,7 +666,8 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                             Previous = ParseObjectId(a.Previous),
                             SourceId = ObjectId.Parse(a.SourceId),
                             Spawn = GetSpawnElements(a.SpawnElement),
-                            Status = (Status)a.Status
+                            Status = (Status)a.Status,
+                            DeleteFlag = a.DeleteFlag
                         });
                     });
                 }
@@ -1136,7 +1138,8 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                         Steps = GetSteps(a.Steps, contract, userId),
                         Archived = a.Archived,
                         ArchivedDate = a.ArchivedDate,
-                        ArchiveOriginId = a.ArchiveOriginId
+                        ArchiveOriginId = a.ArchiveOriginId,
+                        DeleteFlag = a.DeleteFlag
                     };
                 }
             }
