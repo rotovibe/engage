@@ -235,7 +235,6 @@
     <Content Include="App\views\templates\allergy.type.html" />
     <Content Include="App\views\templates\allergy.status.html" />
     <Content Include="App\views\templates\allergy.edit.html" />
-    <Content Include="Content\nightingale\fonts\fontcustom\fontcustomv1.svg" />
     <Content Include="Properties\PublishProfiles\Azure QA Publish.pubxml.user" />
     <Content Include="Scripts\breeze.ajaxpost2.js" />
     <Content Include="Scripts\breeze.debug.js" />
@@ -806,9 +805,6 @@
     <Content Include="App\viewmodels\patients\medications\index.min.js.map">
       <DependentUpon>index.js</DependentUpon>
     </Content>
-    <Content Include="Content\nightingale\fonts\fontcustom\fontcustomv1.eot" />
-    <Content Include="Content\nightingale\fonts\fontcustom\fontcustomv1.ttf" />
-    <Content Include="Content\nightingale\fonts\fontcustom\fontcustomv1.woff" />
     <None Include="yuidoc_readme.txt" />
     <None Include="Properties\PublishProfiles\Azure QA Publish.pubxml" />
     <None Include="Properties\PublishProfiles\Phytel Model Publish.pubxml">
