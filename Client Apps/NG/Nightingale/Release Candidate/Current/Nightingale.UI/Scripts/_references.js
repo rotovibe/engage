@@ -220,6 +220,8 @@
 /// <reference path="../app/services/usercontext.js" />
 /// <reference path="../app/services/validatorfactory.js" />
 /// <reference path="../app/main.js" />
+/// <reference path="../App/viewmodels/patients/sections/dropdown.w.addnew.js" />
+/// <reference path="jquery.timepicker.min.js" />
  
  / / /   < r e f e r e n c e   p a t h = " b r e e z e . d e b u g . j s "   / >  
  

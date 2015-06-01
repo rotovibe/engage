@@ -5,7 +5,12 @@
     <div class="span5">
         <input data-bind="datepicker: value, datepickerOptions: {  }" type="text" class="datepicker">
     </div>
-    <div class="span4">
-        <input data-bind="timepicker: value, attr: { 'disabled': !value() }" type="time">
+    <div class="span4">        
+		<!-- ko if: Modernizr.inputtypes.time -->
+			<input data-bind="timepicker: value, attr: { 'disabled': !value() }" type="time">			
+		<!-- /ko -->
+		<!-- ko ifnot: Modernizr.inputtypes.time -->
+			<input data-bind="jqtimepicker: value, attr: { 'disabled': !value() }" type="text">
+		<!-- /ko -->
     </div>
 </div>

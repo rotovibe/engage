@@ -18,9 +18,9 @@
 				<tbody>
 					<!-- ko foreach: computedObservationGroups -->
 						<tr data-bind="style: { backgroundColor: $index()%2 == 0 ? 'whitesmoke' : '' }">
-							<td>
-								<a class="toggle vitalshistory" href="#" data-bind="click: $parent.toggleExpand">
-									<i class="" data-bind="css: isOpen() ? 'icon-single-chevron-up' : 'icon-angle-double-down'"></i>
+							<td>																								
+								<a class="toggle vitalshistory filters" href="#" data-bind="click: $parent.toggleExpand">
+									<i class="toggle" data-bind="css: isOpen() ? 'icon-single-chevron-up' : 'icon-angle-double-down'"></i>
 								</a>
 							</td>
 							<!-- ko with: parentObservation -->

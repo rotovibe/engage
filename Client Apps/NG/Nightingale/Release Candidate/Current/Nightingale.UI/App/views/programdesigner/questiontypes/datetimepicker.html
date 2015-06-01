@@ -10,7 +10,12 @@
         <input data-bind="datepicker: value, datepickerOptions: {  }, disable: (!$parent.computedResponse() && !$parent.activeStep()|| $parents[1].completed())" type="text" class="datepicker">
     </div>
     <div class="span6">
-        <input data-bind="timepicker: value, valueUpdate: blur, disable: (!$parent.computedResponse() && !$parent.activeStep() || $parents[1].completed() || !value())" type="time">
+		<!-- ko if: Modernizr.inputtypes.time -->
+			<input data-bind="timepicker: value, valueUpdate: blur, disable: (!$parent.computedResponse() && !$parent.activeStep() || $parents[1].completed() || !value())" type="time">
+		<!-- /ko -->
+		<!-- ko ifnot: Modernizr.inputtypes.time -->
+			<input id="value" data-bind="jqtimepicker: value, disable: (!$parent.computedResponse() && !$parent.activeStep() || $parents[1].completed() || !value())" type="text">
+		<!-- /ko -->
     </div>
     <!-- /ko -->
     <!-- /ko -->

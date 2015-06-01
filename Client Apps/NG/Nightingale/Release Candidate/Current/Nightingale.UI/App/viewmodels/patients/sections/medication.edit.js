@@ -2,6 +2,7 @@
  * medication.edit manages patientMedication (add/edit) and also adding a new medication (medicationMap).
  *
  * @module medication.edit
+ * @class medication.edit
  */
 
 define(['models/base', 'config.services', 'services/datacontext', 'services/session'],
@@ -85,9 +86,9 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
 	  self.isCreateNewFrequencyEnabled = ko.observable(true);
 	  
       /**
-       * get/observe the new medication model object for this patient
+       * computed - get/observe the new medication model object for this patient
        *
-       * @method newPatientMedication (computed)
+       * @method newPatientMedication 
        * @return {Object} the new patient medication for this screen
        */
       self.newPatientMedication = ko.computed({
@@ -170,13 +171,14 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
 	  self.isAddingNewFrequencyValue = ko.observable(false);
       self.isCreateNewEnabled = ko.observable(false);	  
       self.isDropdownEnabled = ko.observable(false);
+	  self.isNewMedicationName = ko.observable(false);
 	  self.screenMode = ko.observable(screenModes.NoMedSelected);	
       /**
-       * controls if the save will skip and ignor or call the api services
+       * computed - controls if the save will skip and ignor or call the api services
        * the value tracks the screen mode and will allow saving only if a medication 
        * (new or existing) was selected from the typeahead medication name suggestions.
        *
-       * @method canAdd (computed)
+       * @method canAdd
        * @return boolean
        */
       self.canAdd = ko.computed({
@@ -242,7 +244,7 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
             }
             self.medicationBloodhound.clear();
             var selectedmedication = self.trimmedMedication().trim();	//full trim the typed value
-            self.newPatientMedication().name(self.newPatientMedication().name().trimLeft());	//force trim to prevent duplicates, but allow space for entering multiple words.
+            self.newPatientMedication().name(self.ltrim(self.newPatientMedication().name()));	//force left trim to prevent duplicates, but allow space from the right for entering multiple words.
 			
             ko.utils.arrayForEach(parsedResponse.ProprietaryNames, function (med) {
               med.DisplayName = med.Text;
@@ -272,7 +274,19 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
           cache: false
         }
       });
-
+	
+	  /**
+	  *	left trim a string. (trimLeft() wont work on ie)
+	  *	@method self.ltrim 
+	  *	@param str {string} 
+	  *	@return the trimmed result string.
+	  */
+	  self.ltrim = function(str){
+			if(str){
+				return str.replace(/^\s+/, "");
+			}
+			else return str;
+	  }
       self.addNewOptionText = '-Add New-';
 
       self.resetDropdowns = function () {
@@ -326,10 +340,10 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
       }
 
       /**
-       * tracks medication name changes and updates the screenMode value accordingly       
+       * computed - tracks medication name changes and updates the screenMode value accordingly       
        * when a name changes by the user it will clear and disable route/form/strength dropdowns
 	   * 
-       * @method medicationNameWatcher (computed)
+       * @method medicationNameWatcher
        * @return no return value.
        */
 
@@ -419,14 +433,14 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
 	  }).extend({ throttle: 75 });	 	  
 	  
       /**
-	   *	in editing mode of a patient medication, we may add new strength/form/route:
+	   *	computed - in editing mode of a patient medication, we may add new strength/form/route:
        *  listen /track if form/strength/route dropdowns turn to "add new" (textbox) mode.
        *  if/when one of them does: 
        *  	update the screenMode value AddNewMedValues.
        *  if any of them has a custom value entered: this means we will have to create a medicationMap record and get a familyId when saved:
        * 	set isCreateNewMedication
 	   *
-       * @method addingNewValue (computed)
+       * @method addingNewValue 
        * @return no return value.
        */
       self.addingNewValue = ko.computed({
@@ -550,16 +564,18 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
         $el.change();        
         self.newPatientMedication().isDuplicate(false);
 		self.isDuplicate(false);
+		self.isNewMedicationName(false);
 		self.newPatientMedication().isCreateNewMedication(false);
 		self.newPatientMedication().recalculateNDC(true);	//new medication needs to review its NDC.
 		self.lastMedName = suggestion.Text.toUpperCase(); //keep med name so the medicationNameWatcher will ignore this change.
         // Then we can grab the suggestion -                		
         if( suggestion.Id && suggestion.Id == -1){
-            //this is a new med  
+            //this is a new med 
+			self.isNewMedicationName(true);	
             $el.typeahead('val', suggestion.Text.toUpperCase());  //workaround: since typeahead is overriding the text on blur.            			
 			//flag to start a new medication map record                      
 			self.newPatientMedication().isCreateNewMedication(true);
-			console.log('new medication selected: isCreateNewMedication = true')			
+			console.log('new medication selected: isCreateNewMedication = true');			
 			
             //set the screen state:
             self.screenMode(screenModes.AddNewMed);

@@ -1,4 +1,4 @@
-﻿<div class="widget" data-bind="css: { 'fullscreen': isFullScreen() }">
+﻿<div class="widget" data-bind="css: { 'fullscreen': isFullScreen() }, columnSizer: true">
     <div class="content">
         <!-- <div class="arrow-runner"><i class="arrow" style="top: 125px;"></i></div> -->
         <div class="content-fill">
@@ -55,7 +55,7 @@
                                         </div>
                                     </div>
                                     <div class="row pad-top" data-bind="with: programString">
-                                        <strong class="span3">Programs:</strong>
+                                        <strong class="span3">Program(s):</strong>
                                         <span class="span9" data-bind="text: $data, attr: { 'title': $data }"></span>
                                     </div>
                                     <div class="row pad-top" data-bind="if: createdOn">

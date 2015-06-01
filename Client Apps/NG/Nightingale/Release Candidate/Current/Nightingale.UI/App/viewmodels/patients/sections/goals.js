@@ -76,7 +76,7 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
             self.alphabeticalOrderSort = function (l, r) { return (l.order() == r.order()) ? (l.order() > r.order() ? 1 : -1) : (l.order() > r.order() ? 1 : -1) };
             self.alphabeticalNameSort = function (l, r) { return (l.name() == r.name()) ? (l.name() > r.name() ? 1 : -1) : (l.name() > r.name() ? 1 : -1) };
             self.addTask = function (goal) {
-                var startDate = new Date();
+                var startDate = new Date(moment().format('MM/DD/YYYY'));
                 self.addEntity('Task', goal, startDate).then(doSomething);
 
                 function doSomething(task) {
@@ -85,7 +85,7 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
                 }
             };
             self.addIntervention = function (goal) {
-                var startDate = new Date();
+                var startDate = new Date(moment().format('MM/DD/YYYY'));
                 self.addEntity('Intervention', goal, startDate, session.currentUser().userId()).then(doSomething);
 
                 function doSomething(intervention) {
@@ -137,8 +137,9 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
             return datacontext.initializeEntity(null, type, thisPatientId, thisGoalId).then(entityReturned);
 
             function entityReturned(data) {
-                var thisId = data.httpResponse.data.Id;
+                var thisId = data.httpResponse.data.Id; // note inconsistent back end: a task would return the id returned in data.httpResponse.data.Task.Id but intervention in data.httpResponse.data.Id
                 if (thisId) {
+					//intervention
                     var params = {};
                     params.id = thisId;
                     params.patientGoalId = thisGoalId;
@@ -152,9 +153,9 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
                     var thisEntity = datacontext.createEntity(type, params);
                     return thisEntity;
                 }
-                else {
+                else {	//task
                     var thisTask = data.results[0];
-                    thisTask.startDate(new Date());
+                    thisTask.startDate(new Date(moment().format('MM/DD/YYYY')));
                     thisTask.statusId(1);
                     thisTask.patientGoalId(thisGoalId);
                     return thisTask;

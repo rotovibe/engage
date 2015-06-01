@@ -1,8 +1,10 @@
 ﻿/**
  * data.index module manages/ hosts the data dialog
  *
- * @module data.index
+ * 	@module data.index
+ *	@class data.index
  */
+ 
 
 define(['plugins/router', 'services/navigation', 'config.services', 'services/session', 'services/datacontext', 'viewmodels/patients/index', 'viewmodels/shell/shell', 'models/base'],
     function (router, navigation, servicesConfig, session, datacontext, patientsIndex, shell, modelConfig) {
@@ -176,7 +178,7 @@ define(['plugins/router', 'services/navigation', 'config.services', 'services/se
             if (needsSaving.length > 0) {
                 datacontext.saveAllergies(needsSaving).then(saveAllergiesCompleted);
 
-                function saveAllergiesCompleted(data) {
+            var saveAllergiesCompleted = function(data) {
                     // For each saved allergy
                     ko.utils.arrayForEach(data, function (allg) {
                         // Make sure it is set to not be new anymore
@@ -191,7 +193,7 @@ define(['plugins/router', 'services/navigation', 'config.services', 'services/se
         *   saveNewMedication saves a new patient medication (insert only)
         *   using child module: medication.edit
         *
-        * @method saveNewMedication
+        * 	@method saveNewMedication
         */
         function saveNewMedication() {
 
@@ -205,7 +207,7 @@ define(['plugins/router', 'services/navigation', 'config.services', 'services/se
             if (needsSaving) {
 				datacontext.saveMedication(needsSaving).then(saveMedicationCompleted);									
 				
-                function saveMedicationCompleted(data) {
+                var saveMedicationCompleted = function(data) {
                 }
             }                            
             else{ 

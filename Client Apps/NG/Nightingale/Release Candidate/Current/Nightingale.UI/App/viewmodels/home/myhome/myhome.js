@@ -328,8 +328,7 @@
             // Go get a list of cohorts locally
             datacontext.getEntityList(cohortsList, cohortEndPoint().EntityType, cohortEndPoint().ResourcePath, null, null, false, null, 'sName').then(cohortsReturned);
             // Get my todos
-            getCurrentUserToDos().then(generateCalendarEvents);
-			getUnassignedToDos();
+            getCurrentUserToDos().then(generateCalendarEvents);			
 			
             // Get my Interventions
             getCurrentUserInterventions();
@@ -421,11 +420,6 @@
 			var theseTodos = getCurrentUserToDos( true );
 			//create calendar event entities to reflect these todos:
             datacontext.syncCalendarEvents(theseTodos);
-		}
-		
-		function getUnassignedToDos() {						
-			//get all unassigned todos (regardless of created by)
-			return datacontext.getToDos(null, { StatusIds: [1,2,3,4], AssignedToId: '-1' }); //unassigned TBD top this ? 
 		}
 
         function getCurrentUserInterventions() {
