@@ -16,5 +16,6 @@ namespace Phytel.API.AppDomain.NG.DTO
         public int Status { get; set; }
         public string Text { get; set; }
         public string ModuleId { get; set; }
+        public bool DeleteFlag { get; set; }
     }
 }

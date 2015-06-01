@@ -416,7 +416,8 @@ namespace Phytel.API.AppDomain.NG
                             Text = a.Text,
                             Archived = a.Archived,
                             ArchivedDate = a.ArchivedDate,
-                            ArchiveOriginId = a.ArchiveOriginId
+                            ArchiveOriginId = a.ArchiveOriginId,
+                            DeleteFlag = a.DeleteFlag
                         };
                         ad.Add(adi);
                     });
@@ -464,7 +465,8 @@ namespace Phytel.API.AppDomain.NG
                             Text = a.Text,
                             Archived = a.Archived,
                             ArchivedDate = a.ArchivedDate,
-                            ArchiveOriginId = a.ArchiveOriginId
+                            ArchiveOriginId = a.ArchiveOriginId,
+                            DeleteFlag = a.DeleteFlag
                         };
                         ad.Add(adi);
                     });
