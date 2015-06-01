@@ -4,8 +4,8 @@
 *	@module bindings
 */
 
-define([],
-    function () {
+define(['services/formatter'],
+    function (formatter) {
 
         var datacontext;
 
@@ -282,6 +282,167 @@ define([],
         };
 		
 		/**
+		*	masking and validating a social security number (SSN).
+		*	@class ssn social security number
+		*/
+		ko.bindingHandlers.ssn = {
+			/**
+			*	@param valueAccessor expecting an observable that holds/binds to the ssn number.
+			*	@method ssn.init
+			*/
+			init: function(element, valueAccessor, allBindingsAccessor, bindingContext){
+				$(element).attr('maxlength', 11);
+				
+				//format initial value
+				var ssn = valueAccessor();				
+				var number = ssn();
+				if(number && number.length > 0){					
+					number = formatter.formatSeparators(number, 'XXX-XX-XXXX', '-');	
+					ssn(number);
+				}
+				
+				//prevent typing non numerics:
+				$(element).on('keypress', function(e){
+					var key = e.charCode || e.keyCode;
+					if( (key < 48 || key > 57) && key !== 116 && key !== 8 && key !== 9 && key !== 37 && key !== 39 && key !== 46 ){	//exclude 116 (=F5), 8(=bkspc), 9(=tab) , 37,39 (<-, ->), 46(=del)
+						e.preventDefault();												
+					}
+				});
+				
+				//mask ssn number to : XXX-XX-XXXX
+				$(element).on('keydown paste', function(e){
+					setTimeout(function(){						
+						var key = e.charCode || e.keyCode;
+						var number = $(element).val();
+						var position = element.selectionStart;
+						if( number && key !== 37 && key !== 39 && key !== 9){ //exclude <- , ->, Tab
+							if( position === number.length && key === 8 ){
+								return;	//bkspc on the last char - dont rearrange and dont add dash.
+							}							
+							number = number.replace( /\D/g, ''); //remove all non digits chars
+							var newNumber = formatter.formatSeparators(number, 'XXX-XX-XXXX', '-');
+							ssn(newNumber);
+							if( key === 46 || (key === 8 && position < newNumber.length)){	//46=delete or 8=bkspc not on last char: return the cursor to its original position
+								element.setSelectionRange(position, position);
+							}
+						}						
+					}, 5);
+				});
+			}
+		};
+		
+		/**
+		*	masking and validating phone number fields
+		*	@class phone
+		* 	
+		*/
+		ko.bindingHandlers.phone = {
+			/**
+			*	@method phone.init
+			*	@param valueAccessor expecting an object (complex value) with a validate function. 
+			*	@example in models\contacts.js "Phone" entity instance is sent for each of the contactCard - phones tab (views\templates\contactcard.html, views\templates\phone.edit.html).
+			*/
+			init: function (element, valueAccessor, allBindingsAccessor, bindingContext) {
+				var phone = valueAccessor();
+				$(element).on('blur', function(){
+					if( !phone.validate() ){
+						$(element).addClass("invalid");
+					}
+					else{
+						$(element).removeClass("invalid");
+					}
+				});
+				$(element).attr('maxlength', 12);				
+				var number = phone.number();
+				if(number && number.length > 0){					
+					number = formatter.formatSeparators(number, 'XXX-XXX-XXXX', '-');	
+					phone.number(number);
+				}
+				
+				//prevent typing non numerics:
+				$(element).on('keypress', function(e){
+					var key = e.charCode || e.keyCode;
+					if( (key < 48 || key > 57) && key !== 116 && key !== 8 && key !== 9 && key !== 37 && key !== 39 && key !== 46 ){	//exclude 116 (=F5), 8(=bkspc), 9(=tab) , 37,39 (<-, ->), 46(=del)
+						e.preventDefault();												
+					}
+				});
+				
+				//mask phone number to : XXX-XXX-XXXX
+				$(element).on('keydown paste', function(e){
+					setTimeout(function(){						
+						var key = e.charCode || e.keyCode;
+						var number = $(element).val();
+						var position = element.selectionStart;
+						if( number && key !== 37 && key !== 39 && key !== 9){ //exclude <- , ->, Tab
+							if( position === number.length && key === 8 ){
+								return;	//bkspc on the last char - dont rearrange and dont add dash.
+							}							
+							number = number.replace( /\D/g, ''); //remove all non digits chars
+							var newNumber = formatter.formatSeparators(number, 'XXX-XXX-XXXX', '-');
+							phone.number(newNumber);
+							if( key === 46 || (key === 8 && position < newNumber.length)){	//46=delete or 8=bkspc not on last char: return the cursor to its original position
+								element.setSelectionRange(position, position);
+							}
+						}						
+					}, 5);
+				});
+			}
+		};
+		
+		/**
+		*	input date field that allows keyboard entry with masking.
+		*	@class date
+		*/
+		ko.bindingHandlers.date = {
+			init: function (element, valueAccessor, allBindingsAccessor, bindingContext) {
+				var observable = valueAccessor();
+				//masking: start
+				//prevent typing non numerics:
+				$(element).on('keypress', function(e){
+					var key = e.charCode || e.keyCode;
+					if( (key < 48 || key > 57) && key !== 47 && key !== 116 && key !== 8 && key !== 9 && key !== 37 && key !== 39 ){	//exclude 47(/), 116 (=F5), 8(=bkspc), 9(=tab) , 37,39 (<-, ->)
+						e.preventDefault();												
+					}
+				});
+				
+				//mask: optimize / auto complete year
+				$(element).on('blur', function(){
+					var date = $(element).val();
+					if(date){
+						date = formatter.date.optimizeYear( date );						
+						$(element).val(date);
+						observable(date);	
+					}
+				});	
+				//mask: MM/DD/....
+				$(element).on('keydown paste', function(e){
+					setTimeout(function(){						
+						var key = e.charCode || e.keyCode;						
+						var date = $(element).val();
+						console.log('date='+date + ' key=' + key + ' position=' +element.selectionStart );
+						if( e.shiftKey || e.ctrlKey || key == 37 || key == 39 || key == 9 || key == 8 || key == 35 || key == 36 ){ //exclude <- , ->, Tab, bkspc, home, end
+							return;
+						}						
+						var position = element.selectionStart;
+						if( date ){ 							
+							var newDate = formatter.date.optimizeDate(date);						
+							if( newDate && newDate !== date){
+								$(element).val(newDate);
+								observable(newDate);
+							}
+							if( key === 46 || (key === 8 && position < newDate.length)){	//46=delete or 8=bkspc not on last char: return the cursor to its original position
+								element.setSelectionRange(position, position);
+							}
+						}						
+					}, 5);
+				});
+				//masking ends
+			},
+			update: function (element, valueAccessor, allBindingsAccessor, bindingContext) {
+				var date = valueAccessor();								
+			}
+		};
+		/**
 		*
 		*	@class datepicker
 		*/
@@ -338,7 +499,7 @@ define([],
 					}	
 					// console.log('datepicker registerEventHandler set observable= ' + observableMoment.toISOString());	
                     observable(observableMoment.toISOString());
-                });								
+                });																
 				
                 // If there is a datepicker options with a mindate that is an observable,
                 if (dynoptions && dynoptions.minDate && ko.isObservable(dynoptions.minDate)) {
@@ -522,12 +683,7 @@ define([],
 				}
 			}
 		};
-		
-		function padZeroLeft(num, size){
-			var s = num+"";
-			while (s.length < size) s = "0" + s;
-			return s;
-		}
+						
 		/**
 		*	timepicker - bind on HTML5 input type=time and behind if Modernizr.inputtypes.time to verify browser support.
 		*

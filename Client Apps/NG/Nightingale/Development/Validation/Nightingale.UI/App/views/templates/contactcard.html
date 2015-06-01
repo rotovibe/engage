@@ -8,7 +8,7 @@
                 </li>
                 <li data-bind="css: { 'active': activeTab() === 'phones' }, setActiveTab: 'phones'">
                     <i class="icon-phone blue"></i>
-                    <a role="menuitem">Phone</a>
+                    <a role="menuitem" data-bind="style: {color: phoneValidationErrors().length > 0 ? 'red' : 'black'}">Phone</a>
                 </li>
                 <li data-bind="css: { 'active': activeTab() === 'texts' }, setActiveTab: 'texts'">
                     <i class="icon-sms blue"></i>
@@ -149,6 +149,15 @@
         </ul>
     </div>
     <div class="row modal-tab" data-bind="visible: activeTab() === 'phones'">
+	<!-- the number of phone validation errors is: <span data-bind="text: phoneValidationErrorsArray().length"></span> -->
+		<div class="row" data-bind="if: phoneValidationErrors().length > 0">
+			<ul data-bind="foreach: phoneValidationErrors">
+				<li class="validation-errors">
+					<h5 data-bind="text: Message"></h5>
+				</li>
+			</ul>
+		</div>
+		
         <ul class="list-items">
             <li class="row">
                 <strong class="span2">Preferred?</strong>

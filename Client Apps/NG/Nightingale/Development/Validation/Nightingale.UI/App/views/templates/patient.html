@@ -45,13 +45,13 @@
         </label>
         <label class="span6">
             <span>DOB</span>
-            <input type="text" data-bind="value: dOB, valueUpdate: 'afterkeydown'" placeholder="date of birth" />
+            <input type="text" data-bind="value: dOB, date: dOB, valueUpdate: 'afterkeydown', css: { invalid: (validationErrorsArray().indexOf('dOB') !== -1) }" placeholder="MM/DD/YYYY" title="MM/DD/YYYY" maxlength="10"/>
         </label>
     </div>
     <div class="row">
         <label class="span6">
             <span>Override SSN - <span data-bind="with: formattedSSN">(<span data-bind="text: $data"></span>)</span>:</span>
-            <input type="text" data-bind="value: fullSSN" placeholder="full ssn" />
+            <input type="text" data-bind="ssn: fullSSN, value: fullSSN, valueUpdate: 'afterkeydown', css: { invalid: (validationErrorsArray().indexOf('fullSSN') !== -1) }" placeholder="XXX-XX-XXXX" title="XXX-XX-XXXX" maxlength="11"/>
         </label>
     </div>
     <div class="row">

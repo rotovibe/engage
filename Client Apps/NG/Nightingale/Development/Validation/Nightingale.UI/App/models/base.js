@@ -237,7 +237,27 @@ define(['services/validatorfactory', 'services/customvalidators'],
                         Validator.required(),
                         Validator.maxLength({ maxLength: 20 })
                     ]
-                }
+                },
+				{
+					name: 'fullSSN',
+					displayName: 'Social Security Number',
+					validatorsList: [
+						Validator.required(),
+						customValidators.validators.ssnValidator
+					]
+				},
+				{
+					name: 'dOB',
+					displayName: 'DOB',
+					validatorsList: [
+						Validator.required(),
+						//Validator.date(),	//too funky - will allow "1" as a date !!
+						customValidators.validators.dobValidator
+						//customValidators.validators.lessThanValidator({other:'today', isDate: true}),	//must be in the past
+						//customValidators.validators.greaterThanValidator({other: moment().subtract(200, 'y').format('MM-DD-YYYY'), isDate: true})	//max 200 years ago
+					]
+				}
+				
                 // Example of using a custom regex for validation
                 //,
                 //{
