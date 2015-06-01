@@ -17,8 +17,8 @@ namespace Phytel.API.DataDomain.PatientObservation.DTO
         public int? Order { get; set; }
         public string CodingSystem { get; set; }
         public string CodingSystemCode { get; set; }
-        public int? LowValue { get; set; }
-        public int? HighValue { get; set; }
+        public double? LowValue { get; set; }
+        public double? HighValue { get; set; }
         public int Status { get; set; }
         public string Units { get; set; }
         public string Source { get; set; }
