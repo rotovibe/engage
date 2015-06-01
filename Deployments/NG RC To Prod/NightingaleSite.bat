@@ -10,14 +10,14 @@ set hrMin=%hrMin:~3,2%
 
 set branchDate=%mydate%_%hr%-%hrMin%
 
-REM tf branch "$/PhytelCode/Phytel.Net/Client Apps/NG/Nightingale/Production/Current" "$/PhytelCode/Phytel.Net/Client Apps/NG/Nightingale/Production/%branchDate%" /checkin /noprompt /silent
+REM tf branch "$/Nightingale/Client Apps/NG/Nightingale/Production/Current" "$/Nightingale/Client Apps/NG/Nightingale/Production/%branchDate%" /checkin /noprompt /silent
 
-tf merge "$/PhytelCode/Phytel.Net/Client Apps/NG/Nightingale/Release Candidate/Current" "$/PhytelCode/Phytel.Net/Client Apps/NG/Nightingale/Production/Current" /recursive /nosummary /lock:checkout
+tf merge "$/Nightingale/Client Apps/NG/Nightingale/Release Candidate/Current" "$/Nightingale/Client Apps/NG/Nightingale/Production/Current" /recursive /nosummary /lock:checkout
 
-tf checkout "$/PhytelCode/Phytel.Net/Client Apps/NG/Nightingale/Production/Current/*.sln" /lock:checkout /recursive
-tf checkout "$/PhytelCode/Phytel.Net/Client Apps/NG/Nightingale/Production/Current/*.csproj" /lock:checkout /recursive
-tf checkout "$/PhytelCode/Phytel.Net/Client Apps/NG/Nightingale/Production/Current/*.config" /lock:checkout /recursive
+tf checkout "$/Nightingale/Client Apps/NG/Nightingale/Production/Current/*.sln" /lock:checkout /recursive
+tf checkout "$/Nightingale/Client Apps/NG/Nightingale/Production/Current/*.csproj" /lock:checkout /recursive
+tf checkout "$/Nightingale/Client Apps/NG/Nightingale/Production/Current/*.config" /lock:checkout /recursive
 
-"UpdateRCProjectInfo.exe" /RF:"C:\Projects\TFS2013\PhytelCode\Phytel.Net\Client Apps\NG\Nightingale\Production\Current" /RW:"Release Candidate" /WW:"Production"
+"UpdateRCProjectInfo.exe" /RF:"C:\Projects\TFS2013\Nightingale\Client Apps\NG\Nightingale\Production\Current" /RW:"Release Candidate" /WW:"Production"
 
-tf checkin "$/PhytelCode/Phytel.Net/Client Apps/NG/Nightingale/Production/Current" /comment:"Merge Changes for Prod Release" /recursive /force /noprompt
+tf checkin "$/Nightingale/Client Apps/NG/Nightingale/Production/Current" /comment:"Merge Changes for Prod Release" /recursive /force /noprompt

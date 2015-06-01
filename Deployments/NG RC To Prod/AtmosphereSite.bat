@@ -10,22 +10,22 @@ set hrMin=%hrMin:~3,2%
 
 set branchDate=%mydate%_%hr%-%hrMin%
 
-REM tf branch "$/PhytelCode/Phytel.Net/Client Apps/NG/Atmosphere.Core/Production/Current" "$/PhytelCode/Phytel.Net/Client Apps/NG/Atmosphere.Core/Production/%branchDate%" /checkin /noprompt /silent
-REM tf branch "$/PhytelCode/Phytel.Net/Client Apps/NG/Atmosphere.Site/Production/Current" "$/PhytelCode/Phytel.Net/Client Apps/NG/Atmosphere.Site/Production/%branchDate%" /checkin /noprompt /silent
+REM tf branch "$/Nightingale/Client Apps/NG/Atmosphere.Core/Production/Current" "$/Nightingale/Client Apps/NG/Atmosphere.Core/Production/%branchDate%" /checkin /noprompt /silent
+REM tf branch "$/Nightingale/Client Apps/NG/Atmosphere.Site/Production/Current" "$/Nightingale/Client Apps/NG/Atmosphere.Site/Production/%branchDate%" /checkin /noprompt /silent
 
-tf merge "$/PhytelCode/Phytel.Net/Client Apps/NG/Atmosphere.Core/Release Candidate/Current" "$/PhytelCode/Phytel.Net/Client Apps/NG/Atmosphere.Core/Production/Current" /recursive /nosummary /lock:checkout
-tf merge "$/PhytelCode/Phytel.Net/Client Apps/NG/Atmosphere.Site/Release Candidate/Current" "$/PhytelCode/Phytel.Net/Client Apps/NG/Atmosphere.Site/Production/Current" /recursive /nosummary /lock:checkout
+tf merge "$/Nightingale/Client Apps/NG/Atmosphere.Core/Release Candidate/Current" "$/Nightingale/Client Apps/NG/Atmosphere.Core/Production/Current" /recursive /nosummary /lock:checkout
+tf merge "$/Nightingale/Client Apps/NG/Atmosphere.Site/Release Candidate/Current" "$/Nightingale/Client Apps/NG/Atmosphere.Site/Production/Current" /recursive /nosummary /lock:checkout
 
-tf checkout "$/PhytelCode/Phytel.Net/Client Apps/NG/Atmosphere.Core/Production/Current/*.sln" /lock:checkout /recursive
-tf checkout "$/PhytelCode/Phytel.Net/Client Apps/NG/Atmosphere.Core/Production/Current/*.csproj" /lock:checkout /recursive
-tf checkout "$/PhytelCode/Phytel.Net/Client Apps/NG/Atmosphere.Core/Production/Current/*.config" /lock:checkout /recursive
+tf checkout "$/Nightingale/Client Apps/NG/Atmosphere.Core/Production/Current/*.sln" /lock:checkout /recursive
+tf checkout "$/Nightingale/Client Apps/NG/Atmosphere.Core/Production/Current/*.csproj" /lock:checkout /recursive
+tf checkout "$/Nightingale/Client Apps/NG/Atmosphere.Core/Production/Current/*.config" /lock:checkout /recursive
 
-tf checkout "$/PhytelCode/Phytel.Net/Client Apps/NG/Atmosphere.Site/Production/Current/*.sln" /lock:checkout /recursive
-tf checkout "$/PhytelCode/Phytel.Net/Client Apps/NG/Atmosphere.Site/Production/Current/*.csproj" /lock:checkout /recursive
-tf checkout "$/PhytelCode/Phytel.Net/Client Apps/NG/Atmosphere.Site/Production/Current/*.config" /lock:checkout /recursive
+tf checkout "$/Nightingale/Client Apps/NG/Atmosphere.Site/Production/Current/*.sln" /lock:checkout /recursive
+tf checkout "$/Nightingale/Client Apps/NG/Atmosphere.Site/Production/Current/*.csproj" /lock:checkout /recursive
+tf checkout "$/Nightingale/Client Apps/NG/Atmosphere.Site/Production/Current/*.config" /lock:checkout /recursive
 
-"UpdateRCProjectInfo.exe" /RF:"C:\Projects\TFS2013\PhytelCode\Phytel.Net\Client Apps\NG\Atmosphere.Core\Production\Current" /RW:"Release Candidate" /WW:"Production"
-"UpdateRCProjectInfo.exe" /RF:"C:\Projects\TFS2013\PhytelCode\Phytel.Net\Client Apps\NG\Atmosphere.Site\Production\Current" /RW:"Release Candidate" /WW:"Production"
+"UpdateRCProjectInfo.exe" /RF:"C:\Projects\TFS2013\Nightingale\Client Apps\NG\Atmosphere.Core\Production\Current" /RW:"Release Candidate" /WW:"Production"
+"UpdateRCProjectInfo.exe" /RF:"C:\Projects\TFS2013\Nightingale\Client Apps\NG\Atmosphere.Site\Production\Current" /RW:"Release Candidate" /WW:"Production"
 
-tf checkin "$/PhytelCode/Phytel.Net/Client Apps/NG/Atmosphere.Core/Production/Current" /comment:"Merge Changes for Prod Release" /recursive /force /noprompt
-tf checkin "$/PhytelCode/Phytel.Net/Client Apps/NG/Atmosphere.Site/Production/Current" /comment:"Merge Changes for Prod Release" /recursive /force /noprompt
+tf checkin "$/Nightingale/Client Apps/NG/Atmosphere.Core/Production/Current" /comment:"Merge Changes for Prod Release" /recursive /force /noprompt
+tf checkin "$/Nightingale/Client Apps/NG/Atmosphere.Site/Production/Current" /comment:"Merge Changes for Prod Release" /recursive /force /noprompt
