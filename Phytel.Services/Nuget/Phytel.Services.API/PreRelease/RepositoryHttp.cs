@@ -190,6 +190,58 @@ namespace Phytel.Services.API
             _client.Delete(request);
         }
 
+
+        public TResponse Delete<TResponse>(string relativeUrlFormat, NameValueCollection headers, TimeSpan timeout, params object[] relativeUrlParams)
+        {
+            _client.LocalHttpWebRequestFilter = x => x.Headers.Add(headers);
+
+            string relativeOrAbsoluteUrl = string.Format(relativeUrlFormat, relativeUrlParams);
+            _client.Timeout = timeout;
+            return _client.Delete<TResponse>(relativeOrAbsoluteUrl);
+        }
+
+        public TResponse Delete<TResponse>(object requestDto, NameValueCollection headers, TimeSpan timeout)
+        {
+            _client.LocalHttpWebRequestFilter = x => x.Headers.Add(headers);
+
+            IReturn<TResponse> request = OnExecuteConvertToIReturn<TResponse>(requestDto);
+            _client.Timeout = timeout;
+            return _client.Delete<TResponse>(request);
+        }
+
+        public void Delete(object requestDto, NameValueCollection headers, TimeSpan timeout)
+        {
+            _client.LocalHttpWebRequestFilter = x => x.Headers.Add(headers);
+            
+            IReturnVoid request = OnExecuteConvertToIReturnVoid(requestDto);
+            _client.Timeout = timeout;
+            _client.Delete(request);
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         public TResponse Get<TResponse>(string relativeUrlFormat, TimeSpan timeout, params string[] relativeUrlParams) 
             where TResponse : class, new()
         {
