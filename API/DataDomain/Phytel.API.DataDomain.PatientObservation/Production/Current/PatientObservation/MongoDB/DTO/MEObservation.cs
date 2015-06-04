@@ -73,12 +73,12 @@ namespace Phytel.API.DataDomain.PatientObservation.DTO
         public const string LowValueProperty = "lv";
         [BsonElement(LowValueProperty)]
         [BsonIgnoreIfNull(true)]
-        public int? LowValue { get; set; }
+        public double? LowValue { get; set; }
 
         public const string HighValueProperty = "hv";
         [BsonElement(HighValueProperty)]
         [BsonIgnoreIfNull(true)]
-        public int? HighValue { get; set; }
+        public double? HighValue { get; set; }
 
         public const string StatusProperty = "sts";
         [BsonElement(StatusProperty)]
