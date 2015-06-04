@@ -1766,7 +1766,6 @@ namespace Phytel.API.AppDomain.NG
                     List<string> recentPatientIds = dataDomainResponse.Contact.RecentsList;
                     if (recentPatientIds != null && recentPatientIds.Count > 0)
                     {
-                        string[] patientsArray = recentPatientIds.ToArray();
                         //[Route("/{Context}/{Version}/{ContractNumber}/Patients", "POST")]
                         string patientDDURL = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patients",
                                                                                         DDPatientServiceURL,
@@ -1781,7 +1780,7 @@ namespace Phytel.API.AppDomain.NG
                                 ContractNumber = request.ContractNumber,
                                 Version = request.Version,
                                 UserId = request.UserId,
-                                PatientIds = patientsArray
+                                PatientIds = recentPatientIds
                             } as object);
 
                         if (patientDDResponse != null && patientDDResponse.Patients != null)
@@ -1789,8 +1788,8 @@ namespace Phytel.API.AppDomain.NG
                             patients = new List<CohortPatient>();
                             foreach (string id in recentPatientIds)
                             {
-                                PatientData pd = patientDDResponse.Patients.Where(p => p.Id == id).FirstOrDefault();
-                                if(pd != null)
+                                PatientData pd;
+                                if (patientDDResponse.Patients.TryGetValue(id, out pd))
                                 {
                                     patients.Add(new CohortPatient
                                     {
@@ -1915,7 +1914,8 @@ namespace Phytel.API.AppDomain.NG
                     Archived = a.Archived,
                     ArchivedDate = a.ArchivedDate,
                     ArchiveOriginId = a.ArchiveOriginId,
-                    Objectives = GetObjectivesInfo(a.Objectives)
+                    Objectives = GetObjectivesInfo(a.Objectives),
+                    DeleteFlag = a.DeleteFlag
                 };
                 if (includeSteps)
                 {

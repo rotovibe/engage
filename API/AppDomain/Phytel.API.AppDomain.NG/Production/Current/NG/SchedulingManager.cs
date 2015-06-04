@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using Phytel.API.Common;
 using Phytel.API.DataDomain.Scheduling.DTO;
+using System.Linq;
 
 namespace Phytel.API.AppDomain.NG
 {
@@ -51,11 +52,30 @@ namespace Phytel.API.AppDomain.NG
                 {
                     result = new List<ToDo>();
                     List<ToDoData> dataList = ddResponse.ToDos;
+                    var distintPatients = dataList.GroupBy(p => p.PatientId).Select(grp => grp.FirstOrDefault()).ToList();
+                    List<string> patientIds = distintPatients.Select(p => p.PatientId).ToList();
+                    // Call Patient DD to get patient details.
+                    Dictionary<string, PatientData> patients = getPatients(request.Version, request.ContractNumber, request.UserId, client, patientIds);
+                    
                     foreach (ToDoData n in dataList)
                     {
                         ToDo toDo = convertToToDo(n);
-                        // Call Patient DD to get patient details.
-                        getPatientDetails(request.Version, request.ContractNumber, request.UserId, client, toDo);
+                        if (patients != null && !string.IsNullOrEmpty(n.PatientId))
+                        {
+                            PatientData pd;
+                            if(patients.TryGetValue(n.PatientId, out pd))
+                            {
+                                toDo.PatientDetails = new PatientDetails
+                                {
+                                    Id = pd.Id,
+                                    FirstName = pd.FirstName,
+                                    LastName = pd.LastName,
+                                    MiddleName = pd.MiddleName,
+                                    PreferredName = pd.PreferredName,
+                                    Suffix = pd.Suffix
+                                };
+                            }
+                        }
                         result.Add(toDo);
                     }
                 }
@@ -67,7 +87,7 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        private static void getPatientDetails(double version, string contractNumber, string userId, IRestClient client, ToDo toDo)
+        private static void getPatient(double version, string contractNumber, string userId, IRestClient client, ToDo toDo)
         {
             if (!string.IsNullOrEmpty(toDo.PatientId))
             {
@@ -93,6 +113,33 @@ namespace Phytel.API.AppDomain.NG
                     };
                 }
             }
+        }
+
+        private static Dictionary<string, PatientData> getPatients(double version, string contractNumber, string userId, IRestClient client, List<string> patientIds)
+        {
+            Dictionary<string, PatientData> data = null;
+            //[Route("/{Context}/{Version}/{ContractNumber}/Patients", "POST")]
+            string patientDDURL = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patients",
+                                                                            DDPatientServiceURL,
+                                                                            "NG",
+                                                                            version,
+                                                                            contractNumber), userId);
+
+            GetPatientsDataResponse patientDDResponse =
+                client.Post<GetPatientsDataResponse>(patientDDURL, new GetPatientsDataRequest
+                {
+                    Context = "NG",
+                    ContractNumber = contractNumber,
+                    Version = version,
+                    UserId = userId,
+                    PatientIds = patientIds
+                } as object);
+
+            if (patientDDResponse != null && patientDDResponse.Patients != null)
+            {
+                data = patientDDResponse.Patients;
+            }
+            return data;
         }
 
         public PostInsertToDoResponse InsertToDo(PostInsertToDoRequest request)
@@ -140,7 +187,7 @@ namespace Phytel.API.AppDomain.NG
                 {
                     ToDo toDo = convertToToDo(dataDomainResponse.ToDoData);
                     // Call Patient DD to get patient details.
-                    getPatientDetails(request.Version, request.ContractNumber, request.UserId, client, toDo);
+                    getPatient(request.Version, request.ContractNumber, request.UserId, client, toDo);
                     response.ToDo = toDo;
                     response.Version = dataDomainResponse.Version;
                 }
@@ -199,7 +246,7 @@ namespace Phytel.API.AppDomain.NG
                 {
                     ToDo toDo = convertToToDo(dataDomainResponse.ToDoData);
                     // Call Patient DD to get patient details.
-                    getPatientDetails(request.Version, request.ContractNumber, request.UserId, client, toDo);
+                    getPatient(request.Version, request.ContractNumber, request.UserId, client, toDo);
                     response.ToDo = toDo;
                     response.Version = dataDomainResponse.Version;
                 }

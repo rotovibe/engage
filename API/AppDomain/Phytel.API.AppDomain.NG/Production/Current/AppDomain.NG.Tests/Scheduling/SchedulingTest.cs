@@ -28,9 +28,9 @@ namespace Phytel.API.AppDomain.NG.Test.Scheduling
                 Version = version,
                 ContractNumber = contractNumber,
                 UserId = userId,
-                AssignedToId = "5325c821072ef705080d348c",
-                FromDate = DateTime.Parse("9/1/2014 3:47:01 PM"),
-                StatusIds = new List<int> { 2, 4}
+                AssignedToId = "5325c821072ef705080d3488",
+               // FromDate = DateTime.Parse("9/1/2014 3:47:01 PM"),
+                StatusIds = new List<int> { 1, 3}
             };
 
             List<AppDomain.NG.DTO.ToDo> list = ngm.GetToDos(request);
