@@ -999,7 +999,8 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
                         ElementState = (int)a.State,
                         DateCompleted = a.DateCompleted,
                         Objectives = GetObjectives(a.Objectives),
-                        Steps = GetSteps(a.Steps, contract, userId)
+                        Steps = GetSteps(a.Steps, contract, userId),
+                        DeleteFlag = a.DeleteFlag
                     };
                 }
             }

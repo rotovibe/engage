@@ -41,5 +41,12 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
         public const string StatusProperty = "sts";
         [BsonElement(StatusProperty)]
         public Status Status { get; set; }
+
+        // ENG-1099
+        public const string DeleteFlagProperty = "del";
+        [BsonElement(DeleteFlagProperty)]
+        [BsonDefaultValue(false)]
+        [BsonIgnoreIfNull(true)]
+        public bool DeleteFlag { get; set; }
     }
 }
