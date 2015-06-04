@@ -122,7 +122,7 @@ namespace Phytel.API.DataDomain.Patient.Test.Stub
             throw new NotImplementedException();
         }
 
-        DTO.GetPatientsDataResponse IPatientRepository.Select(string[] patientIds)
+        DTO.GetPatientsDataResponse IPatientRepository.Select(List<string> patientIds)
         {
             throw new NotImplementedException();
         }

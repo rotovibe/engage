@@ -15,14 +15,14 @@ namespace Phytel.API.DataDomain.Patient.Test.Stub
         {
         }
 
-        public DTO.GetPatientsDataResponse Select(string[] patientIds)
+        public DTO.GetPatientsDataResponse Select(List<string> patientIds)
         {
             GetPatientsDataResponse response = new GetPatientsDataResponse();
-            List<PatientData> patientData = new List<PatientData>();
-            patientData.Add( new PatientData { Id = "abc", FirstName = "mark", LastName = "anderson", PreferredName = "MA", MiddleName = "jay", Gender = "M", DOB = "01/01/1945"});
-            patientData.Add( new PatientData { Id = "efg", FirstName = "lisa", LastName = "anderson", PreferredName = "LA", MiddleName = "olivia", Gender = "F", DOB = "02/02/1932"});
-            patientData.Add( new PatientData { Id = "hij", FirstName = "mark1", LastName = "anderson2", PreferredName = "MA", MiddleName = "jay", Gender = "M", DOB = "01/01/1945"});
-            patientData.Add( new PatientData { Id = "xyz", FirstName = "mark2", LastName = "anderson3", PreferredName = "MA", MiddleName = "jay", Gender = "M", DOB = "01/01/1945"});
+            Dictionary<string, PatientData> patientData = new Dictionary<string,PatientData>();
+            patientData.Add("abc", new PatientData { Id = "abc", FirstName = "mark", LastName = "anderson", PreferredName = "MA", MiddleName = "jay", Gender = "M", DOB = "01/01/1945"});
+            patientData.Add("efg", new PatientData { Id = "efg", FirstName = "lisa", LastName = "anderson", PreferredName = "LA", MiddleName = "olivia", Gender = "F", DOB = "02/02/1932"});
+            patientData.Add("hij", new PatientData { Id = "hij", FirstName = "mark1", LastName = "anderson2", PreferredName = "MA", MiddleName = "jay", Gender = "M", DOB = "01/01/1945"});
+            patientData.Add("xyz", new PatientData { Id = "xyz", FirstName = "mark2", LastName = "anderson3", PreferredName = "MA", MiddleName = "jay", Gender = "M", DOB = "01/01/1945"});
             response.Version = 1;
             response.Patients = patientData;
 
