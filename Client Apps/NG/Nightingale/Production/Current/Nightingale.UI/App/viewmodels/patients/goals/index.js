@@ -131,7 +131,7 @@
         var thisGoal = data.results[0];
         thisGoal.statusId(1);
         // In case we need to override the save or cancel methods
-        thisGoal.startDate(new Date());
+        thisGoal.startDate(new Date(moment().format('MM/DD/YYYY')));
         thisGoal.isNew(true);
         thisGoal.patientId(selectedPatient().id());
         editGoal(thisGoal, 'Add Goal');

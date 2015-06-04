@@ -1,6 +1,7 @@
 ﻿/**
-*	@module todo.edit - todo details edit / add view
-*
+*	todo details edit / add view
+*	@module todo.edit 
+*	@class todo.edit
 */
 define(['services/datacontext', 'services/local.collections'],
     function (datacontext, localCollections) {
@@ -112,7 +113,11 @@ define(['services/datacontext', 'services/local.collections'],
                 self.assignedToDisplay('');
             };
             self.removePatientAssociation = function () {                				
-				self.todo().patientId(null);				
+				self.todo().patientId(null);	
+				//clear all associated programs:
+                if (self.todo() && self.todo().programIds().length > 0 && !self.todo().patientId()) {                    
+					self.todo().programIds.removeAll();                    
+                }
             };
 			self.removeUserAssociation = function () {                
 				self.removeAssignment();									
@@ -175,9 +180,11 @@ define(['services/datacontext', 'services/local.collections'],
         };
 		
 		/**
-		*	@method detached: clearing KO subscriptions/computeds memory: 
-		*		
+		*	clearing KO subscriptions/computeds memory
+		*	@method detached		
+		*	@example	 	
 		*	for subscriptions: 
+		*
 		*		1. declare tokens collection:	var subscriptionTokens= [];
 		*		2. keep the returned token/s:
 		*	
@@ -188,7 +195,7 @@ define(['services/datacontext', 'services/local.collections'],
 		*			ko.utils.arrayForEach(subscriptionTokens, function (token) {
 		*				token.dispose();
 		*			});
-		*
+		*	@example
 		*	for computeds:
 		*	
 		*		self.someComputed.dispose();

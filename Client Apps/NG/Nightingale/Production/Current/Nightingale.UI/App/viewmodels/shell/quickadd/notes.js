@@ -185,13 +185,14 @@
                     self.newTouchPoint().createdById(session.currentUser().userId());
                     self.newTouchPoint().createdOn(new Date());
                     datacontext.saveNote(self.newTouchPoint()).then(saved);
-                    function saved() {
-                        self.isShowing(false);
-                        self.newTouchPoint(null);
-                        self.isSaving(false);
-                        self.createNewTouchPoint();
-                    }
+                    
                 }
+				function saved() {
+					self.isShowing(false);
+					self.newTouchPoint(null);
+					self.isSaving(false);
+					self.createNewTouchPoint();
+				}
             };
             self.selectedPatient.subscribe(function () {
                 self.cancel();
@@ -219,6 +220,13 @@
                 return self.newNote() && !self.isSaving() && self.newNote().text();
             });
             self.canSaveTouchPoint = ko.computed(function () {
+				//subscribe to the condition variables: (this fixes a firefox issue)
+				var hasNewTouchPoint = self.newTouchPoint()? true : false;
+				var isSaving = self.isSaving();
+				if(self.newTouchPoint()){
+					var text = self.newTouchPoint().text();
+					var contactedOn = self.newTouchPoint().contactedOn();
+				}				
                 return self.newTouchPoint() && !self.isSaving() && self.newTouchPoint().text() && self.newTouchPoint().contactedOn();
             });
             self.createNewNote();

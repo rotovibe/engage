@@ -126,13 +126,9 @@
             self.removeAssociation = function () {
                 // Remove the association to the patient
                 self.newTodo().patientId(null);
-                // If patient has been removed and program ids are still there
+                // If patient has been removed: clear all associated programs (if any):
                 if (self.newTodo() && self.newTodo().programIds().length > 0 && !self.newTodo().patientId()) {                    
-                    // Go through each one,
-                    ko.utils.arrayForEach(self.newTodo().programIds(), function (progId) {
-                        // And remove it
-                        self.newTodo().programIds.remove(progId);
-                    });
+                    self.newTodo().programIds.removeAll();					
                 }
             };
 			self.removeUserAssociation = function () {                

@@ -1,6 +1,6 @@
 ﻿/**
 *	@module medicationservice
-*
+*	@class medicationservice
 */
 define(['services/session', 'config.services', 'services/entityfinder', 'services/dataservices/getentityservice'],
     function (session, servicesConfig, entityFinder, getEntityService) {
@@ -315,7 +315,8 @@ define(['services/session', 'config.services', 'services/entityfinder', 'service
 			return getEntityService.getLocalById(manager, medicationFrequencyEndpoint().ResourcePath + id, 'PatientMedicationFrequency', 'id', id);
 		}
 		/**
-		*	@method saveCustomFrequency - saving a frequency lookup for a specific patient.
+		*	saving a frequency lookup for a specific patient.
+		*	@method saveCustomFrequency
 		*	@param	customFrequency - string mandatory
 		*	@param	patientId - string mandatory
 		*/
@@ -364,11 +365,12 @@ define(['services/session', 'config.services', 'services/entityfinder', 'service
 		}
 		
 		/**
-		*	@method getPatientFrequencies - get patient specific medication frequencies.
+		*			get patient specific medication frequencies.
 		*			the frequency lookup dropdown will need to show general frequency values and these patient specific values (if any)
 		*			the dropdown needs to show a merged list of the lookup values (Frequency entity/lookup) and patient frequencies from PatientMedSupp/Frequency/<patientId>.
 		*			the entity: PatientMedicationFrequency is on the client cache only and it represent that list, with added patientId property.
-		*			the global frequencies taken from the lookup "Frequency" are pushed into this collection with patientId null.
+		*			the global frequencies taken from the lookup "Frequency" are pushed into this collection with patientId null.		
+		*	@method getPatientFrequencies 
 		*/
 		function getPatientFrequencies(manager, observable, patientId, forceRemote){
 			checkDataContext();
@@ -386,10 +388,10 @@ define(['services/session', 'config.services', 'services/entityfinder', 'service
 			else return getLocalFrequencies(observable, patientId);
 			
 			/**
-			*	@method getLocalFrequencies - 			
-			*			now once we got this specific patient frequencies or we assume we have it in the cache (forceRemote=null or undefined), 
-			*				query locally to get a merged frequency list of this patient + the static part of the frequencies list (patientId=null or empty)
-			*			note: to query by patientId it must be in the properties of the metadata of the entity.
+			*	once we got this specific patient frequencies or we assume we have it in the cache (forceRemote=null or undefined), 
+			*		query locally to get a merged frequency list of this patient + the static part of the frequencies list (patientId=null or empty)
+			*	note: to query by patientId it must be in the properties of the metadata of the entity.			
+			*	@method getLocalFrequencies
 			*
 			*/
 			function getLocalFrequencies(observable, patientId){

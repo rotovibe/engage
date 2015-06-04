@@ -55,7 +55,7 @@
         </div>
     </div>
     <div class="row pad-top" data-bind="with: $parent.newTodo">
-        <div class="span2 align-right grey">Related Program(s):
+        <div class="span2 align-right grey">Program(s):
         </div>
         <div class="span5 pad-left" data-bind="visible: patientId()">
             <div class="span12" data-bind="multiselect: { options: $parents[1].availablePrograms, values: programIds, idValue: 'id', text: 'name', label: 'programs', stringValue: programString }"></div>

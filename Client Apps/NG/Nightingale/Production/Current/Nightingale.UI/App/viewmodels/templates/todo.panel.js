@@ -1,7 +1,7 @@
 ﻿/**
-*	@module todo.panel
-*			displays todo grid with edit/delete	and opens edit modal.	
-*
+*	displays todo grid with edit/delete	and opens edit modal.
+*	@module todo.panel	
+*	@class todo.panel
 */
 define(['services/session', 'services/datacontext', 'config.services', 'viewmodels/shell/shell', 'models/base'],
     function (session, datacontext, servicesConfig, shell, modelConfig) {
@@ -31,8 +31,9 @@ define(['services/session', 'services/datacontext', 'config.services', 'viewmode
             self.modalEntity = ko.observable(new ModalEntity(self.modalShowing));
 			
 			/**
-			*	@property originalProgramIds - used for keeping a snapshot of the original selected program ids	
-			*			for this todo. this is part of a workaround for restoring the values when the user cancel to close the todo edit modal.  
+			*	used for keeping a snapshot of the original selected program ids
+			*	for this todo. this is part of a workaround for restoring the values when the user cancel to close the todo edit modal. 
+			*	@property originalProgramIds {array}				
 			*			
 			*/
 			self.originalProgramIds = ko.observableArray([]);
@@ -79,13 +80,9 @@ define(['services/session', 'services/datacontext', 'config.services', 'viewmode
             self.toggleSort = data.toggleSort;
             self.canSort = data.canSort ? data.canSort : false;
             self.saveOverride = function () {
-                // If patient has been removed and program ids are still there
+                // If patient has been removed - clear all associated programs:
                 if (self.modalEntity().todo() && self.modalEntity().todo().programIds().length > 0 && !self.modalEntity().todo().patientId()) {                    
-                    // Go through each one,
-                    ko.utils.arrayForEach(self.modalEntity().todo().programIds(), function (progId) {
-                        // And remove it
-                        self.modalEntity().todo().programIds.remove(progId);
-                    });
+					self.modalEntity().todo().programIds.removeAll();                    
                 }
                 datacontext.saveToDo(self.modalEntity().todo(), 'Update').then(saveCompleted);
 
@@ -97,9 +94,10 @@ define(['services/session', 'services/datacontext', 'config.services', 'viewmode
             };          
 
 			/**
-			*	@method	cancelOverride - close todo modal dialog and cancel any changes if made.
+			*	close todo modal dialog and cancel any changes if made.
 			*			note: rejectChanges issue with complex type array have a known bug that clears todo.programIds.
-			*			the workaround uses originalProgramIds observable.
+			*			the workaround uses originalProgramIds observable.			
+			*	@method	cancelOverride 
 			*/
 			self.cancelOverride = function () {				
 				if(self.modalEntity().todo().entityAspect.entityState.isAddedModifiedOrDeleted()){					
@@ -158,8 +156,9 @@ define(['services/session', 'services/datacontext', 'config.services', 'viewmode
     		});
 			
 			/**
-			*	@method editToDo - opens a todo details modal view.
+			*	opens a todo details modal view.
 			*		note - we record the todo.programIds in originalProgramIds.
+			*	@method editToDo 			
 			*
 			*/
     		self.editToDo = function (todo) {
@@ -204,8 +203,9 @@ define(['services/session', 'services/datacontext', 'config.services', 'viewmode
     	}
 
         /**
-		*	@method detached: clearing KO subscriptions/computeds memory: 
-		*		
+		*	clearing KO subscriptions/computeds memory 		
+		*	@method detached
+		*	@example	
 		*	for subscriptions: 
 		*		1. declare tokens collection:	var subscriptionTokens= [];
 		*		2. keep the returned token/s:
@@ -217,7 +217,7 @@ define(['services/session', 'services/datacontext', 'config.services', 'viewmode
 		*			ko.utils.arrayForEach(subscriptionTokens, function (token) {
 		*				token.dispose();
 		*			});
-		*
+		*	@example
 		*	for computeds:
 		*	
 		*		self.someComputed.dispose();

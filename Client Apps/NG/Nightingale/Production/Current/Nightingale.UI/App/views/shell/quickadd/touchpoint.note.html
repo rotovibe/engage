@@ -44,15 +44,20 @@
 			        <h5 class="grey pad-bottom">Date/Time of Contact</h5>
                 	<div class="row">
 					    <div class="span6">
-					        <input data-bind="datepicker: contactedOn, datepickerOptions: {  }" type="text" class="datepicker">
+					        <input data-bind="datepicker: contactedOn, datepickerOptions: {  }" type="text">
 					    </div>
-					    <div class="span6">
-					        <input data-bind="timepicker: contactedOn, attr: { 'disabled': !contactedOn() }" type="time" style="height: 20px;">
+					    <div class="span6">						
+							<!-- ko if: Modernizr.inputtypes.time -->
+								<input data-bind="timepicker: contactedOn, attr: { 'disabled': !contactedOn() }" type="time" style="height: 20px; width: 100%">
+							<!-- /ko -->
+							<!-- ko ifnot: Modernizr.inputtypes.time -->
+								<input data-bind="jqtimepicker: contactedOn, attr: { 'disabled': !contactedOn() }" type="text" style="height: 20px; width: 100%">
+							<!-- /ko -->
 					    </div>
 					</div>
                 </div>
                 <div class="span6">
-                    <h5 class="grey pad-bottom">Related Program(s)</h5>
+                    <h5 class="grey pad-bottom">Program(s)</h5>
                     <div class="icon-list span10" data-bind="multiselect: { options: $parents[1].availablePrograms, values: programIds, idValue: 'id', text: 'name', label: 'programs', stringValue: programString }"></div>
                 </div>
             </div>

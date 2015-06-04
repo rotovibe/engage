@@ -55,7 +55,11 @@ namespace Nightingale.Site
             /** jQuery full calendar plug-in **/
             bundles.Add(new ScriptBundle("~/bundles/fullcalendar.js")
                         .Include("~/Scripts/fullcalendar.js"));
-
+			
+			/** jQuery timepicker **/
+			bundles.Add(new ScriptBundle("~/bundles/jquery.timePicker.js")
+						.Include("~/Scripts/jquery.timePicker.js"));
+						
             //IE8 Shims
             bundles.Add(new ScriptBundle("~/bundles/ie8shims").Include(
                         "~/Scripts/es5-shim.min.js",

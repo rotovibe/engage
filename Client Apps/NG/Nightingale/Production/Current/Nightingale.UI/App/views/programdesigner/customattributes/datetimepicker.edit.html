@@ -6,6 +6,11 @@
         <input data-bind="datepicker: value, datepickerOptions: {  }" type="text" class="datepicker">
     </div>
     <div class="span4">
-        <input data-bind="timepicker: value, valueUpdate: blur" type="time">
+		<!-- ko if: Modernizr.inputtypes.time -->
+			<input data-bind="timepicker: value, valueUpdate: blur" type="time">
+		<!-- /ko -->
+		<!-- ko ifnot: Modernizr.inputtypes.time -->
+			<input data-bind="jqtimepicker: value" type="text">
+		<!-- /ko -->
     </div>
 </div>

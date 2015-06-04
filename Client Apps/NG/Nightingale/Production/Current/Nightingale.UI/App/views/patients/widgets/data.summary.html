@@ -1,4 +1,4 @@
-﻿<div class="widget open fullscreen">
+﻿<div class="widget open fullscreen" data-bind="columnSizer: {triggers: {a: $parents[1].isOpen, b: $parents[1].selectedPatient()}}">
     <div class="content">
         <div class="content-fill">
             <div class="wrapper">
@@ -44,10 +44,9 @@
                             <header>
                                 <h1>Data Summary</h1>
                                 <div class="options">
-                                    <button class="btn color small" data-bind="click: $parents[1].addData, disable: $parents[1].isEditing">
-                                        <i class="icon-plus"></i>
-                                        <span class="pad-left">Add Data</span>
-                                    </button>
+									<div class="toggle">
+										<i class="pointer icon-plus" data-bind="click: $parents[1].addData, disable: $parents[1].isEditing" title="Add"></i>
+									</div>                                    
                                 </div>
                             </header>
                         </div>

@@ -1,4 +1,4 @@
-﻿<div class="widget" data-bind=" css: { open: settings.isOpen(), fullscreen: settings.isFullScreen() }">
+﻿<div class="widget" data-bind=" css: { open: settings.isOpen(), fullscreen: settings.isFullScreen() }, columnSizer: {triggers: settings.isOpen}">
     <div class="content">
         <header data-bind="click: toggleWidgetOpen">
             <h1 data-bind="text: settings.data.content"></h1>

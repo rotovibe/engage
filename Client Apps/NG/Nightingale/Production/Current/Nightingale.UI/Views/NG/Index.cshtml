@@ -21,12 +21,12 @@
         <script type="text/javascript" src="~/Scripts/es5-sham.min.js"></script>*@
     @Styles.Render("~/Content/normalize")
     @*<link rel="stylesheet" type="text/css" href="~/Content/CSS/application.css" media="screen" />*@
-    <link rel="stylesheet" type="text/css" href="//az571236.vo.msecnd.net/css/applicationv17.css?v18" media="screen" />
+    <link rel="stylesheet" type="text/css" href="//az571236.vo.msecnd.net/css/applicationv21.css?v21" media="screen" />
     @Styles.Render("~/Content/ie10mobile")
     @*@Styles.Render("~/Content/nightingale/vendor")*@
     @Styles.Render("~/Content/nightingale/Nightingale")
     @*<script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.3.11/d3.min.js" type="text/javascript"></script>*@
-    <script>
+    @*<script>
     if(window.location.href.indexOf("azurephytel.cloudapp") > -1) {
         console.log('LOADING - FullStory');
         window['_fs_debug'] = false;
@@ -42,7 +42,7 @@
     } else {
         console.log('NOT LOADING - FullStory');
     }
-    </script>
+    </script>*@
     <script type="text/javascript">
         if (navigator.userAgent.match(/IEMobile\/10\.0/)) {
             var msViewportStyle = document.createElement("style");
@@ -73,26 +73,6 @@
     <!-- End Google Analytics -->
 </head>
 <body class="full_span" data-phyautomation="body-full_span">
-    @*
-        remarked: the GTM code here is cousing Tracking Code Mismatch as it seems to have a production account code on it (GTM-PLVT55).
-
-        <!-- Google Tag Manager -->
-    <noscript>
-        <iframe src="//www.googletagmanager.com/ns.html?id=GTM-PLVT55"
-                height="0" width="0" style="display:none;visibility:hidden"></iframe>
-    </noscript>
-    <script>
-        (function (w, d, s, l, i) {
-            w[l] = w[l] || []; w[l].push({
-                'gtm.start':
-                new Date().getTime(), event: 'gtm.js'
-            }); var f = d.getElementsByTagName(s)[0],
-            j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
-            '//www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
-        })(window, document, 'script', 'dataLayer', 'GTM-PLVT55');
-    </script>
-    <!-- End Google Tag Manager -->*@
-
     <div id="applicationHost">
     </div>
     @Scripts.Render("~/bundles/jquery.js")
@@ -107,6 +87,7 @@
     @Scripts.Render("~/bundles/vendor.js")
     @*@Scripts.Render("~/bundles/venn.js")*@
     @Scripts.Render("~/bundles/fullcalendar.js")
+    @Scripts.Render("~/bundles/jquery.timePicker.js")
     @if (HttpContext.Current.IsDebuggingEnabled)
     {
         <script type="text/javascript" src="~/Scripts/require.js" data-main="@Url.Content("~/App/main")"></script>

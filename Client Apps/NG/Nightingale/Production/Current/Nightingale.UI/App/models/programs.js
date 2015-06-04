@@ -176,6 +176,7 @@ define(['config.services', 'services/session', 'services/entityserializer', 'ser
 		            completedBy: { dataType: "String" },
                     enabled: { dataType: "Boolean" },
                     status: { dataType: "Int64" },
+					deleteFlag: { dataType: "Boolean" },
                     elementState: { dataType: "Int64" },
 		            stateUpdatedOn: { dataType: "DateTime" },
                     dateCompleted: { dataType: "DateTime" },

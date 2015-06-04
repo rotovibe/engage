@@ -555,8 +555,11 @@ define(['services/session', 'services/datacontext', 'config.services', 'models/b
             // Go refresh all possible todos
             datacontext.getToDos(null, { StatusIds: [2,4], AssignedToId: session.currentUser().userId(), FromDate: thirtyDaysAgo });
             datacontext.getToDos(null, { StatusIds: [2,4], CreatedById: session.currentUser().userId(), FromDate: thirtyDaysAgo });
-			datacontext.getToDos(null, { StatusIds: [1,2,3,4], AssignedToId: '-1'}); //get all unassigned todo's. regardless of created by. TBD: top the result ? will require paging.
-
+			// all open && unassigned, regardless of created by.
+			datacontext.getToDos(null, { StatusIds: [1,3], AssignedToId: '-1'});
+			// all closed && unassigned, in the last 30 days, regardless of created by.
+			datacontext.getToDos(null, { StatusIds: [2,4], AssignedToId: '-1', FromDate: thirtyDaysAgo});
+			
             datacontext.getInterventions(null, { StatusIds: [1], AssignedToId: session.currentUser().userId() });
             datacontext.getInterventions(null, { StatusIds: [1], CreatedById: session.currentUser().userId() });
             datacontext.getInterventions(null, { StatusIds: [2,3], AssignedToId: session.currentUser().userId() });

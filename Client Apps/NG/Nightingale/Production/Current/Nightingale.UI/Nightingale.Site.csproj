@@ -238,6 +238,8 @@
     <Content Include="Properties\PublishProfiles\Azure QA Publish.pubxml.user" />
     <Content Include="Scripts\breeze.ajaxpost2.js" />
     <Content Include="Scripts\breeze.debug.js" />
+    <Content Include="Scripts\jquery.timepicker.js" />
+    <Content Include="Scripts\jquery.timepicker.min.js" />
     <Content Include="Scripts\typeahead.js" />
     <Content Include="App\viewmodels\patients\sections\intervention.details.js" />
     <Content Include="App\viewmodels\patients\sections\task.details.js" />
