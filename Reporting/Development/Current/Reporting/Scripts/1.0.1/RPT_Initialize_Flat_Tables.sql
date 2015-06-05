@@ -36,6 +36,14 @@ BEGIN
 	SET @StartTime = GETDATE();	
 	EXECUTE [spPhy_RPT_SavePatientInfo];
 	INSERT RPT_ProcessAudit ([Statement], [Start], [End], [Contract], [Time]) VALUES ('spPhy_RPT_SavePatientInfo', @StartTime, GETDATE(), '', LEFT(CONVERT(VARCHAR(10), GETDATE() - @StartTime, 108), 10));		
+
+	SET @StartTime = GETDATE();	
+	EXECUTE [spPhy_RPT_SavePatientGoalMetrics];
+	INSERT RPT_ProcessAudit ([Statement], [Start], [End], [Contract], [Time]) VALUES ('spPhy_RPT_SavePatientGoalMetrics', @StartTime, GETDATE(), '', LEFT(CONVERT(VARCHAR(10), GETDATE() - @StartTime, 108), 10));	
+
+	SET @StartTime = GETDATE();	
+	EXECUTE [spPhy_RPT_SavePatientClinicalData];
+	INSERT RPT_ProcessAudit ([Statement], [Start], [End], [Contract], [Time]) VALUES ('spPhy_RPT_SavePatientClinicalData', @StartTime, GETDATE(), '', LEFT(CONVERT(VARCHAR(10), GETDATE() - @StartTime, 108), 10));	
 END
 
 GO

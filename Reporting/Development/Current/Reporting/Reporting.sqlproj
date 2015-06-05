@@ -387,5 +387,9 @@
     <None Include="Scripts\UDFs\fn_RPT_Engage_GetPCP.sql" />
     <None Include="Scripts\UDFs\fn_RPT_GetPractice_Engage.sql" />
     <None Include="Scripts\UDFs\fn_RPT_DisenrollmentReasonV2.sql" />
+    <None Include="Scripts\1.0.1\ENG-725.sql" />
+    <None Include="Scripts\1.0.1\ENG-725_Rollback.sql" />
+    <None Include="Scripts\1.0.1\ENG-1149.sql" />
+    <None Include="Scripts\1.0.1\ENG-1149_Rollback.sql" />
   </ItemGroup>
 </Project>
