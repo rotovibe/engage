@@ -3,8 +3,10 @@ using Phytel.Services.IOC;
 using Phytel.Services.Journal.Dispatch;
 using Phytel.Services.Journal.Filters;
 using Phytel.Services.Journal.Map;
+using ServiceStack.ServiceHost;
 using ServiceStack.WebHost.Endpoints;
 using System.Reflection;
+using System.Linq;
 
 namespace Phytel.Services.Journal
 {
@@ -60,17 +62,24 @@ namespace Phytel.Services.Journal
                 ResponseFilters.Add(journalResponse.ResponseFilter);
             }
 
-            IJournalExceptionHandler exceptionHander = container.TryResolve<IJournalExceptionHandler>();
-            if (exceptionHander != null)
+            base.ServiceExceptionHandler = (request, requestDto, exception) =>
             {
-                ExceptionHandler = exceptionHander.HandleException;
-            }
 
-            IJournalServiceExceptionHandler serviceExceptionHander = container.TryResolve<IJournalServiceExceptionHandler>();
-            if (serviceExceptionHander != null)
-            {
-                ServiceExceptionHandler = serviceExceptionHander.HandleServiceException;
-            }
+                ILogDispatcher logDispatcher = request.TryResolve<ILogDispatcher>();
+
+                if (logDispatcher != null && request.Items.Any(x => x.Key == Phytel.Services.Journal.Constants.RequestItemKeyStartedLogEvent))
+                {
+                    LogEvent startedLogEvent = request.Items[Phytel.Services.Journal.Constants.RequestItemKeyStartedLogEvent] as LogEvent;
+                    if (startedLogEvent != null)
+                    {
+                        logDispatcher.Dispatch(State.Failed, request, actionId: startedLogEvent.ActionId, parentActionId: startedLogEvent.ParentActionId, exception: exception);
+                    }
+                }
+
+                return DtoUtils.HandleException(this, requestDto, exception);
+            };
         }
+
+        
     }
 }
