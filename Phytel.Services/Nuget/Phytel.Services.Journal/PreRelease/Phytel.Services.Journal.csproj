@@ -144,7 +144,6 @@
     <Compile Include="Container\LogDispatcherContainerDecorator.cs" />
     <Compile Include="Dispatch\ILogDispatcher.cs" />
     <Compile Include="Dispatch\LogDispatcher.cs" />
-    <Compile Include="Container\JournalExceptionHandlerContainerDecorator.cs" />
     <Compile Include="Model\LogEvent.cs" />
     <Compile Include="Filters\JournalResponseFilterAttribute.cs" />
     <Compile Include="Filters\JournalRequestFilterAttribute.cs" />
