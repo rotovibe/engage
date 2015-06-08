@@ -6,6 +6,7 @@ using DataDomain.Search.Repo;
 using DataDomain.Search.Repo.LuceneStrategy;
 using Phytel.API.Common.CustomObject;
 using Phytel.API.DataDomain.Search.DTO;
+using Phytel.API.DataDomain.Search.DTO.Request;
 
 namespace Phytel.API.DataDomain.Search
 {
@@ -19,6 +20,20 @@ namespace Phytel.API.DataDomain.Search
             try
             {
                 MedNameStrategy.AddUpdateLuceneIndex(request.MedDocument);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("SearchDD:GetSearchByID()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        public bool DeleteMedDocs(List<MedNameSearchDocData> meds)
+        {
+            try
+            {
+                MedNameStrategy.DeleteFromIndex(meds);
+
                 return true;
             }
             catch (Exception ex)

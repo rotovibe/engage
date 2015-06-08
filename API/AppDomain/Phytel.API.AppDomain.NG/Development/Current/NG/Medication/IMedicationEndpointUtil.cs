@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Phytel.API.AppDomain.NG.DTO;
 using Phytel.API.DataDomain.Medication.DTO;
+using Phytel.API.DataDomain.Medication.DTO.Request;
 
 namespace Phytel.API.AppDomain.NG.Medication
 {
@@ -12,6 +13,7 @@ namespace Phytel.API.AppDomain.NG.Medication
         MedicationMapData InitializeMedicationMap(PostInitializeMedicationMapRequest request);
         MedicationMapData UpdateMedicationMap(PutMedicationMapRequest request);
         MedicationMapData InsertMedicationMap(PostMedicationMapRequest request);
+        bool DeleteMedicationMap(PutDeleteMedMapDataRequest request);
         List<MedicationMapData> SearchMedicationMap(GetMedicationMapsRequest request);
         void DeletePatientMedSupp(DeletePatientMedSuppRequest request);
         List<PatientMedFrequencyData> GetPatientMedFrequencies(GetPatientMedFrequenciesRequest request);

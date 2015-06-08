@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Phytel.API.DataDomain.Search.DTO;
+using Phytel.API.DataDomain.Search.DTO.Request;
 
 namespace Phytel.API.DataDomain.Search
 {
@@ -9,5 +10,6 @@ namespace Phytel.API.DataDomain.Search
         bool InsertMedDocInIndex(PutMedRegistrationRequest request);
         bool InsertAllergyDocInIndex(PutAllergyRegistrationRequest request);
         List<DTO.Search> GetSearchList(GetAllSearchsRequest request);
+        bool DeleteMedDocs(List<MedNameSearchDocData> request);
     }
 }

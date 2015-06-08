@@ -31,5 +31,7 @@ namespace DataDomain.Search.Repo.LuceneStrategy
         List<TT> SearchComplex(string input, string fieldName = "");
         List<TT> Search(string input, string fieldName = "");
         string ParseSpecialCharacters(string value);
+        void Delete(T sampleData, IndexWriter writer);
+        void DeleteFromIndex(IEnumerable<T> sampleDatas);
     }
 }

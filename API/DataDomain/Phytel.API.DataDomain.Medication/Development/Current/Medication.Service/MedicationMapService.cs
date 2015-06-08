@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using Phytel.API.DataDomain.Medication.DTO;
+using Phytel.API.DataDomain.Medication.DTO.Request;
+using Phytel.API.DataDomain.Medication.DTO.Response;
 
 namespace Phytel.API.DataDomain.Medication.Service
 {
@@ -62,6 +64,25 @@ namespace Phytel.API.DataDomain.Medication.Service
             {
                 RequireUserId(request);
                 response.MedicationMappingData = Manager.UpdateMedicationMap(request);
+            }
+            catch (Exception ex)
+            {
+                RaiseException(response, ex);
+            }
+            return response;
+        }
+
+        public PutDeleteMedMapDataResponse Put(PutDeleteMedMapDataRequest request)
+        {
+            PutDeleteMedMapDataResponse response = new PutDeleteMedMapDataResponse { Version = request.Version };
+            try
+            {
+                RequireUserId(request);
+                if (Manager.DeleteMedicationMaps(request))
+                    response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus
+                    {
+                        Message = "Success"
+                    };
             }
             catch (Exception ex)
             {

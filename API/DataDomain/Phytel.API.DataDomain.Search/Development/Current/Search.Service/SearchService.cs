@@ -4,6 +4,8 @@ using System.Linq;
 using Phytel.API.Common.CustomObject;
 using Phytel.API.DataDomain.Search;
 using Phytel.API.DataDomain.Search.DTO;
+using Phytel.API.DataDomain.Search.DTO.Request;
+using Phytel.API.DataDomain.Search.DTO.Response;
 
 namespace Phytel.API.DataDomain.Search.Service
 {
@@ -69,6 +71,22 @@ namespace Phytel.API.DataDomain.Search.Service
             {
                 RequireUserId(request);
                 response.Success = Manager.InsertMedDocInIndex(request);
+            }
+            catch (Exception ex)
+            {
+                RaiseException(response, ex);
+            }
+            return response;
+        }
+
+        public DeleteMedsResponse Delete(DeleteMedsRequest request)
+        {
+            var response = new DeleteMedsResponse { Version = request.Version };
+
+            try
+            {
+                RequireUserId(request);
+                response.Success = Manager.DeleteMedDocs(request.MedDocuments);
             }
             catch (Exception ex)
             {

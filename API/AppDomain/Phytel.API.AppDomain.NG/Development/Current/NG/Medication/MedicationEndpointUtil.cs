@@ -6,6 +6,9 @@ using System.Collections.Generic;
 using System.Configuration;
 using AutoMapper;
 using System;
+using Phytel.API.DataDomain.Medication.DTO.Request;
+using Phytel.API.DataDomain.Medication.DTO.Response;
+using ServiceStack.ServiceHost;
 
 namespace Phytel.API.AppDomain.NG.Medication
 {
@@ -177,6 +180,36 @@ namespace Phytel.API.AppDomain.NG.Medication
                 return result;
             }
             catch (Exception ex) { throw ex; }
+        }
+
+        public bool DeleteMedicationMap(PutDeleteMedMapDataRequest request)
+        {
+            try
+            {
+                IRestClient client = new JsonServiceClient();
+                //[Route("/{Context}/{Version}/{ContractNumber}/MedicationMap/Delete", "DELETE")]
+                var url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/MedicationMap/Delete",
+                    DDMedicationUrl,
+                    "NG",
+                    request.Version,
+                    request.ContractNumber), request.UserId);
+
+                PutDeleteMedMapDataResponse response = client.Put<PutDeleteMedMapDataResponse>(url,
+                    new PutDeleteMedMapDataRequest
+                    {
+                        Context = request.Context,
+                        ContractNumber = request.ContractNumber,
+                        MedicationMaps = request.MedicationMaps,
+                        UserId = request.UserId,
+                        Version = request.Version
+                    } as object);
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         public List<MedicationMapData> SearchMedicationMap(GetMedicationMapsRequest request)

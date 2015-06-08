@@ -149,6 +149,8 @@
     <Compile Include="Meds\PatientMedSupp.cs" />
     <Compile Include="Meds\PostPatientMedFrequencyRequest.cs" />
     <Compile Include="Meds\PostPatientMedFrequencyResponse.cs" />
+    <Compile Include="Meds\Request\DeleteMedMapRequest.cs" />
+    <Compile Include="Meds\Response\DeleteMedMapResponse.cs" />
     <Compile Include="Meds\PutMedicationMapRequest.cs" />
     <Compile Include="Meds\PostMedicationMapRequest.cs" />
     <Compile Include="Meds\PutMedicationMapResponse.cs" />
