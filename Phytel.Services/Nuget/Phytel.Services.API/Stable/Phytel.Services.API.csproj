@@ -69,6 +69,7 @@
     <Compile Include="Interface\IRepositoryHttp.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RepositoryHttp.cs" />
+    <Compile Include="RepositoryHttpExtend.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
