@@ -46,7 +46,6 @@ namespace Phytel.Services.Journal
             container =
                 _containerProfile.GetBuilder(container)
                 .DecorateWith(cb => new LogDispatcherContainerDecorator(cb))
-                .DecorateWith(cb => new JournalExceptionHandlerContainerDecorator(cb))
                 .Build();
 
             return container;
