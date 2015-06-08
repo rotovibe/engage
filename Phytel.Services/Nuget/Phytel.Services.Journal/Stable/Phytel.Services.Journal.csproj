@@ -144,12 +144,7 @@
     <Compile Include="Container\LogDispatcherContainerDecorator.cs" />
     <Compile Include="Dispatch\ILogDispatcher.cs" />
     <Compile Include="Dispatch\LogDispatcher.cs" />
-    <Compile Include="Container\JournalExceptionHandlerContainerDecorator.cs" />
     <Compile Include="Model\LogEvent.cs" />
-    <Compile Include="Service\Interface\IJournalExceptionHandler.cs" />
-    <Compile Include="Service\Interface\IJournalServiceExceptionHandler.cs" />
-    <Compile Include="Service\JournalServiceExceptionHandler.cs" />
-    <Compile Include="Service\JournalExceptionHandler.cs" />
     <Compile Include="Filters\JournalResponseFilterAttribute.cs" />
     <Compile Include="Filters\JournalRequestFilterAttribute.cs" />
     <Compile Include="Map\ErrorMap.cs" />
@@ -169,7 +164,9 @@
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Service\Interface\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
