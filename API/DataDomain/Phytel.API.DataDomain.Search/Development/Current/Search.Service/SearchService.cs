@@ -1,11 +1,7 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using Phytel.API.Common.CustomObject;
-using Phytel.API.DataDomain.Search;
 using Phytel.API.DataDomain.Search.DTO;
-using Phytel.API.DataDomain.Search.DTO.Request;
-using Phytel.API.DataDomain.Search.DTO.Response;
 
 namespace Phytel.API.DataDomain.Search.Service
 {
@@ -79,9 +75,9 @@ namespace Phytel.API.DataDomain.Search.Service
             return response;
         }
 
-        public DeleteMedsResponse Delete(DeleteMedsRequest request)
+        public PutDeleteMedsResponse Put(PutDeleteMedsRequest request)
         {
-            var response = new DeleteMedsResponse { Version = request.Version };
+            var response = new PutDeleteMedsResponse { Version = request.Version };
 
             try
             {

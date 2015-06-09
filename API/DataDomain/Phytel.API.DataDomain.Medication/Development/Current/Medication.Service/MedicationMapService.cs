@@ -1,8 +1,5 @@
 using System;
-using System.Collections.Generic;
 using Phytel.API.DataDomain.Medication.DTO;
-using Phytel.API.DataDomain.Medication.DTO.Request;
-using Phytel.API.DataDomain.Medication.DTO.Response;
 
 namespace Phytel.API.DataDomain.Medication.Service
 {

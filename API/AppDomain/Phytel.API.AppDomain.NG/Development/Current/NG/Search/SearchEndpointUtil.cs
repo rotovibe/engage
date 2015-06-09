@@ -2,15 +2,11 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using AutoMapper;
+using Phytel.API.AppDomain.NG.DTO;
 using Phytel.API.AppDomain.NG.DTO.Search;
-using Phytel.API.AppDomain.NG.PlanCOR;
 using Phytel.API.Common.CustomObject;
-using Phytel.API.DataDomain.Allergy.DTO;
 using Phytel.API.DataDomain.Medication.DTO;
-using Phytel.API.DataDomain.PatientObservation.DTO;
 using Phytel.API.DataDomain.Search.DTO;
 using Phytel.API.Interface;
 using ServiceStack.Service;
@@ -175,6 +171,43 @@ namespace Phytel.API.AppDomain.NG.Search
             catch (WebServiceException ex)
             {
                 throw new Exception("AD:SearchEndpointUtil:GetMedicationMapsByName()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        public bool DeleteMedDocuments(PutDeleteMedMapRequest request)
+        {
+            try
+            {
+                IRestClient client = new JsonServiceClient();
+                //[Route("/{Context}/{Version}/{ContractNumber}/Search/MedicationIndex/Medications/Delete", "PUT
+                var url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Search/MedicationIndex/Medications/Delete",
+                    _ddSearchServiceUrl,
+                    "NG",
+                    request.Version,
+                    request.ContractNumber), request.UserId);
+
+                PutDeleteMedsResponse response = client.Put<PutDeleteMedsResponse>(url,
+                    new PutDeleteMedsRequest
+                    {
+                        Context = "NG",
+                        ContractNumber = request.ContractNumber,
+                        UserId = request.UserId,
+                        Version = request.Version,
+                        MedDocuments = request.MedicationMaps.Select(
+                            map => new MedNameSearchDocData
+                            {
+                                CompositeName = map.FullName,
+                                RouteName = map.Route,
+                                Strength = map.Strength,
+                                DosageFormname = map.Form
+                            }).ToList(),
+                    } as object);
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
     }

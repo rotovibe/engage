@@ -2,12 +2,10 @@
 using System.Collections.Generic;
 using AutoMapper;
 using Phytel.API.AppDomain.NG.DTO;
-using Phytel.API.AppDomain.NG.DTO.Meds.Request;
 using Phytel.API.DataDomain.Medication.DTO;
 using Phytel.API.Interface;
 using Phytel.API.Common.CustomObject;
 using Phytel.API.DataDomain.LookUp.DTO;
-using Phytel.API.DataDomain.Medication.DTO.Request;
 using System.Linq;
 
 namespace Phytel.API.AppDomain.NG.Medication
@@ -161,39 +159,17 @@ namespace Phytel.API.AppDomain.NG.Medication
         }
 
 
-        public bool DeleteMedicationMap(DeleteMedMapRequest request)
+        public void DeleteMedicationMap(PutDeleteMedMapRequest request)
         {
-            bool result = false;
             try
             {
                 if (request.MedicationMaps != null)
                 {
-                    PutDeleteMedMapDataRequest insertReq = new PutDeleteMedMapDataRequest
-                    {
-                        MedicationMaps = request.MedicationMaps.Select(
-                            map => new MedicationMapData
-                            {
-                                FullName = map.FullName,
-                                Route = map.Route,
-                                SubstanceName = map.SubstanceName,
-                                Strength = map.Strength,
-                                Form = map.Form
-                            }).ToList(),
-                        ContractNumber = request.ContractNumber,
-                        UserId = request.UserId,
-                        Version = request.Version
-                    };
-
-                    EndpointUtil.DeleteMedicationMap(insertReq);
-
-                    //RegisterMedication(request, medData);
+                    EndpointUtil.DeleteMedicationMap(request);
+                    SearchManager.DeleteMedDocuments(request);
                 }
-                return result;
             }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            catch (Exception ex) { throw ex; }
         }
 
         /// <summary>

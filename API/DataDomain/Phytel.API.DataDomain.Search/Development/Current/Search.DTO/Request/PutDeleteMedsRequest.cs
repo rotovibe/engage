@@ -1,12 +1,11 @@
 using System.Collections.Generic;
-using Phytel.API.DataDomain.Search.DTO;
 using Phytel.API.Interface;
 using ServiceStack.ServiceHost;
 
-namespace Phytel.API.DataDomain.Search.DTO.Request
+namespace Phytel.API.DataDomain.Search.DTO
 {
-    [Route("/{Context}/{Version}/{ContractNumber}/Search/MedicationIndex/Medications/Delete", "DELETE")]
-    public class DeleteMedsRequest : IDataDomainRequest
+    [Route("/{Context}/{Version}/{ContractNumber}/Search/MedicationIndex/Medications/Delete", "PUT")]
+    public class PutDeleteMedsRequest : IDataDomainRequest
     {
         [ApiMember(Name = "UserId", Description = "UserId of the logged in user", ParameterType = "property", DataType = "string", IsRequired = false)]
         public string UserId { get; set; }

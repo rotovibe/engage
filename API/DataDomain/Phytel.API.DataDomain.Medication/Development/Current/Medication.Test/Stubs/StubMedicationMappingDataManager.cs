@@ -43,7 +43,7 @@ namespace Phytel.API.DataDomain.Medication
         }
 
 
-        public bool DeleteMedicationMaps(DTO.Request.PutDeleteMedMapDataRequest request)
+        public bool DeleteMedicationMaps(PutDeleteMedMapDataRequest request)
         {
             throw new NotImplementedException();
         }

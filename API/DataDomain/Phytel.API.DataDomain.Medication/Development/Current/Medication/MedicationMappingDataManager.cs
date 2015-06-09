@@ -3,10 +3,6 @@ using System.Linq;
 using DataDomain.Medication.Repo;
 using Phytel.API.DataDomain.Medication.DTO;
 using System;
-using AutoMapper;
-using Phytel.API.Interface;
-using System.Configuration;
-using Phytel.API.DataDomain.Medication.DTO.Request;
 
 namespace Phytel.API.DataDomain.Medication
 {

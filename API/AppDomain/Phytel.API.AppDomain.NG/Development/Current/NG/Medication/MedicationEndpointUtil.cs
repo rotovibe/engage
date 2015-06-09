@@ -6,9 +6,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using AutoMapper;
 using System;
-using Phytel.API.DataDomain.Medication.DTO.Request;
-using Phytel.API.DataDomain.Medication.DTO.Response;
-using ServiceStack.ServiceHost;
+using System.Linq;
 
 namespace Phytel.API.AppDomain.NG.Medication
 {
@@ -182,12 +180,12 @@ namespace Phytel.API.AppDomain.NG.Medication
             catch (Exception ex) { throw ex; }
         }
 
-        public bool DeleteMedicationMap(PutDeleteMedMapDataRequest request)
+        public void DeleteMedicationMap(PutDeleteMedMapRequest request)
         {
             try
             {
                 IRestClient client = new JsonServiceClient();
-                //[Route("/{Context}/{Version}/{ContractNumber}/MedicationMap/Delete", "DELETE")]
+                //[Route("/{Context}/{Version}/{ContractNumber}/MedicationMap/Delete", "PUT")]
                 var url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/MedicationMap/Delete",
                     DDMedicationUrl,
                     "NG",
@@ -197,14 +195,20 @@ namespace Phytel.API.AppDomain.NG.Medication
                 PutDeleteMedMapDataResponse response = client.Put<PutDeleteMedMapDataResponse>(url,
                     new PutDeleteMedMapDataRequest
                     {
-                        Context = request.Context,
+                        Context = "NG",
                         ContractNumber = request.ContractNumber,
-                        MedicationMaps = request.MedicationMaps,
+                        MedicationMaps = request.MedicationMaps.Select(
+                            map => new MedicationMapData
+                            {
+                                FullName = map.FullName,
+                                Route = map.Route,
+                                SubstanceName = map.SubstanceName,
+                                Strength = map.Strength,
+                                Form = map.Form
+                            }).ToList(),
                         UserId = request.UserId,
                         Version = request.Version
                     } as object);
-
-                return true;
             }
             catch (Exception ex)
             {

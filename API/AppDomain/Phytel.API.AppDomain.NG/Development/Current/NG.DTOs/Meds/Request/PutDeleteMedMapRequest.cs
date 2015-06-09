@@ -2,10 +2,10 @@
 using Phytel.API.Interface;
 using ServiceStack.ServiceHost;
 
-namespace Phytel.API.AppDomain.NG.DTO.Meds.Request
+namespace Phytel.API.AppDomain.NG.DTO
 {
-    [Route("/{Version}/{ContractNumber}/MedicationMap/Delete", "DELETE")]
-    public class DeleteMedMapRequest : IAppDomainRequest
+    [Route("/{Version}/{ContractNumber}/MedicationMap/Delete", "PUT")]
+    public class PutDeleteMedMapRequest : IAppDomainRequest
     {
         [ApiMember(Name = "MedicationMaps", Description = "MedicationMaps that need to be deleted.", ParameterType = "property", DataType = "PatientMedSupp", IsRequired = true)]
         public List<MedicationMap> MedicationMaps { get; set; }

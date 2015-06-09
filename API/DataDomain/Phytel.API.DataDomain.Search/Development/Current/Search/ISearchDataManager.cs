@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using Phytel.API.DataDomain.Search.DTO;
-using Phytel.API.DataDomain.Search.DTO.Request;
 
 namespace Phytel.API.DataDomain.Search
 {

@@ -1,11 +1,12 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System.Collections.Generic;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Phytel.API.AppDomain.NG.DTO;
 using ServiceStack.Service;
 using ServiceStack.ServiceClient.Web;
 
 namespace Phytel.API.AppDomain.NG.Test
 {
-    //[TestClass]
+    [TestClass]
     public class Data_MedicationMap_Test
     {
         string context = "NG";
@@ -33,6 +34,31 @@ namespace Phytel.API.AppDomain.NG.Test
 
             // [Route("/{Version}/{ContractNumber}/MedicationMap/Initialize", "POST")]
             PostInitializeMedicationMapResponse response = client.Post<PostInitializeMedicationMapResponse>(string.Format("{0}/{1}/{2}/MedicationMap/Initialize", url, version, contractNumber), request);
+
+            Assert.IsNotNull(response);
+        }
+
+
+        [TestMethod]
+        public void DeleteCustomMedications_Test()
+        {
+            List<MedicationMap> medList = new List<MedicationMap>();
+            medList.Add(new MedicationMap { FullName = "MOMO", Route = "ORAL", Strength = "1000 mg", Form = "CAPSULE" });
+            medList.Add(new MedicationMap { FullName = "NONO", Route = "TOPICAL", Strength = "50 ml", Form = "SOLUTION" });
+            
+            PutDeleteMedMapRequest request = new PutDeleteMedMapRequest
+            {
+                ContractNumber = contractNumber,
+                UserId = userId,
+                Version = version,
+                MedicationMaps = medList
+            };
+
+            JsonServiceClient.HttpWebRequestFilter = x =>
+                x.Headers.Add(string.Format("{0}: {1}", "Token", token));
+
+            //[Route("/{Version}/{ContractNumber}/MedicationMap/Delete", "PUT")]
+            PutDeleteMedMapResponse response = client.Put<PutDeleteMedMapResponse>(string.Format("{0}/{1}/{2}/MedicationMap/Delete", url, version, contractNumber), request);
 
             Assert.IsNotNull(response);
         }

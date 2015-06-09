@@ -1,19 +1,12 @@
-using AutoMapper;
 using Phytel.API.AppDomain.NG.Medication;
 using Phytel.API.AppDomain.NG.DTO;
 using Phytel.API.AppDomain.Security.DTO;
 using Phytel.API.Common.Audit;
-using Phytel.API.Common.CustomObject;
 using Phytel.API.Common.Format;
 using Phytel.API.DataAudit;
 using ServiceStack.ServiceClient.Web;
-using ServiceStack.ServiceHost;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using Phytel.API.AppDomain.NG.DTO.Meds.Request;
-using Phytel.API.AppDomain.NG.DTO.Meds.Response;
 
 namespace Phytel.API.AppDomain.NG.Service
 {
@@ -153,9 +146,9 @@ namespace Phytel.API.AppDomain.NG.Service
         }
         #endregion
 
-        public DeleteMedMapResponse Delete(DeleteMedMapRequest request)
+        public PutDeleteMedMapResponse Put(PutDeleteMedMapRequest request)
         {
-            DeleteMedMapResponse resp = new DeleteMedMapResponse();
+            PutDeleteMedMapResponse resp = new PutDeleteMedMapResponse();
             ValidateTokenResponse result = null;
 
             try

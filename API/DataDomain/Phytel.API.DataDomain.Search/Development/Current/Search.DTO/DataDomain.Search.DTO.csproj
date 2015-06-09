@@ -95,8 +95,8 @@
     <Compile Include="Medication.cs" />
     <Compile Include="MedNameSearchDocData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Request\DeleteMedsRequest.cs" />
-    <Compile Include="Response\DeleteMedsResponse.cs" />
+    <Compile Include="Request\PutDeleteMedsRequest.cs" />
+    <Compile Include="Response\PutDeleteMedsResponse.cs" />
     <Compile Include="Search.cs" />
     <Compile Include="SearchEnum.cs" />
     <Compile Include="TextValuePair.cs" />

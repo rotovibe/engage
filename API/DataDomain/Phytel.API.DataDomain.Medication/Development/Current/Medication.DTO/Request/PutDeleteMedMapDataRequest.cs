@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Phytel.API.Interface;
 using ServiceStack.ServiceHost;
 
-namespace Phytel.API.DataDomain.Medication.DTO.Request
+namespace Phytel.API.DataDomain.Medication.DTO
 {
     [Route("/{Context}/{Version}/{ContractNumber}/MedicationMap/Delete", "PUT")]
     public class PutDeleteMedMapDataRequest : IDataDomainRequest

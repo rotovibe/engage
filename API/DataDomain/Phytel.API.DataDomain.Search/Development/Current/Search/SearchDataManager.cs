@@ -1,12 +1,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System;
-using System.Diagnostics.Contracts;
 using DataDomain.Search.Repo;
 using DataDomain.Search.Repo.LuceneStrategy;
 using Phytel.API.Common.CustomObject;
 using Phytel.API.DataDomain.Search.DTO;
-using Phytel.API.DataDomain.Search.DTO.Request;
 
 namespace Phytel.API.DataDomain.Search
 {
