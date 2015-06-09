@@ -11,7 +11,7 @@
     <dependencies>
       <group targetFramework=".NETFramework4.5.1">
         <dependency id="Phytel.Services.AppSettings" version="1.4.2" />
-        <dependency id="Phytel.API.DataDomain.Contract.DTO" version="1.1.0" />
+        <dependency id="Phytel.API.DataDomain.Contract.DTO" version="1.1.1" />
       </group>
     </dependencies>
   </metadata>

@@ -44,7 +44,7 @@
     </Reference>
     <Reference Include="Phytel.API.DataDomain.Contract.DTO, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>packages\Phytel.API.DataDomain.Contract.DTO.1.1.0.01\lib\net451\Phytel.API.DataDomain.Contract.DTO.dll</HintPath>
+      <HintPath>packages\Phytel.API.DataDomain.Contract.DTO.1.1.1.01\lib\net451\Phytel.API.DataDomain.Contract.DTO.dll</HintPath>
     </Reference>
     <Reference Include="Phytel.Services.API">
       <HintPath>packages\Phytel.Services.API.1.4.0.01\lib\net451\Phytel.Services.API.dll</HintPath>
@@ -110,13 +110,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="ContractExceptionAppSettingsProvider.cs" />
     <Compile Include="ContractAppSettingsProvider.cs" />
     <Compile Include="ContractPropertyAppSettingsProviderContainer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-    <None Include="Phytel.Services.AppSettings.Contract.nuspec" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Phytel.Services.AppSettings.Contract.nuspec">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
