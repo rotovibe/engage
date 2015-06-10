@@ -42,26 +42,13 @@ namespace DataDomain.Search.Repo.LuceneStrategy
             {
                 List<Query> str = new List<Query>();
 
-                //if (!sampleData.CompositeName.IsNullOrEmpty())
-                    str.Add(new TermQuery(new Term("CompositeName", sampleData.CompositeName.Trim())));
-
-                //if (!sampleData.RouteName.IsNullOrEmpty())
-                    str.Add(new TermQuery(new Term("RouteName", sampleData.RouteName.Trim())));
-
-                //if (!sampleData.DosageFormname.IsNullOrEmpty())
-                    str.Add(new TermQuery(new Term("DosageFormName", sampleData.DosageFormname.Trim())));
-
-                //if (!sampleData.Strength.IsNullOrEmpty())
-                    str.Add(new TermQuery(new Term("Strength", sampleData.Strength.Trim())));
-
-                //if (!sampleData.Id.IsNullOrEmpty())
-                    str.Add(new TermQuery(new Term("MongoId", sampleData.Id.Trim())));
-
-                //if (!sampleData.SubstanceName.IsNullOrEmpty())
-                    str.Add(new TermQuery(new Term("SubstanceName", sampleData.SubstanceName.Trim())));
-
-                //if (!sampleData.Unit.IsNullOrEmpty())
-                    str.Add(new TermQuery(new Term("Unit", sampleData.Unit.Trim())));
+                str.Add(new TermQuery(new Term("CompositeName", sampleData.CompositeName == null ? string.Empty : sampleData.CompositeName.Trim())));
+                str.Add(new TermQuery(new Term("RouteName", sampleData.RouteName == null ? string.Empty : sampleData.RouteName.Trim())));
+                str.Add(new TermQuery(new Term("DosageFormName", sampleData.DosageFormname == null ? string.Empty : sampleData.DosageFormname.Trim())));
+                str.Add(new TermQuery(new Term("Strength", sampleData.Strength == null ? string.Empty : sampleData.Strength.Trim())));
+                str.Add(new TermQuery(new Term("MongoId", sampleData.Id == null ? string.Empty : sampleData.Id.Trim())));
+                str.Add(new TermQuery(new Term("SubstanceName", sampleData.SubstanceName == null ? string.Empty : sampleData.SubstanceName.Trim())));
+                str.Add(new TermQuery(new Term("Unit", sampleData.Unit == null ? string.Empty : sampleData.Unit.Trim())));
 
                 writer.DeleteDocuments(str.ToArray());
                 writer.Commit();
