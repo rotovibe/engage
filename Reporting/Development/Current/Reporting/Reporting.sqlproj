@@ -68,6 +68,9 @@
     <Folder Include="Scripts\Views" />
     <Folder Include="Scripts\1.0" />
     <Folder Include="Scripts\1.0.1" />
+    <Folder Include="Scripts\Releases" />
+    <Folder Include="Scripts\Releases\HOTFIXES" />
+    <Folder Include="Scripts\Releases\HOTFIXES\ENG-1255" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Scripts\Update_Script_2_26_2015.sql" />
@@ -377,6 +380,13 @@
     <Build Include="Scripts\1.0.1\RM_14384_Rollback.sql" />
     <Build Include="Scripts\1.0.1\ENG-1251.sql" />
     <Build Include="Scripts\1.0.1\ENG-1251_Rollback.sql" />
+    <Build Include="Scripts\Releases\HOTFIXES\ENG-1255\ENG_1255_hotfix.sql" />
+    <Build Include="Scripts\Releases\HOTFIXES\ENG-1255\ENG_1255_hotfix_Rollback.sql" />
+    <Build Include="Scripts\Releases\HOTFIXES\ENG-1255\HW_general_Info.sql" />
+    <Build Include="Scripts\Releases\HOTFIXES\ENG-1255\RPT_Program_Details_By_Individual_Healthy_Weight.sql" />
+    <Build Include="Scripts\Releases\HOTFIXES\ENG-1255\RPT_Program_Details_By_Individual_Healthy_Weight2.sql" />
+    <Build Include="Scripts\Releases\HOTFIXES\ENG-1255\sproc_automation_scripts.sql" />
+    <Build Include="Scripts\Releases\HOTFIXES\ENG-1255\sproc_automation_scripts_rollback.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Scripts\CareBridge_RPT_Scripts.sql" />
