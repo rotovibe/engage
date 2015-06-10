@@ -42,25 +42,25 @@ namespace DataDomain.Search.Repo.LuceneStrategy
             {
                 List<Query> str = new List<Query>();
 
-                if (!sampleData.CompositeName.IsNullOrEmpty())
+                //if (!sampleData.CompositeName.IsNullOrEmpty())
                     str.Add(new TermQuery(new Term("CompositeName", sampleData.CompositeName.Trim())));
 
-                if (!sampleData.RouteName.IsNullOrEmpty())
+                //if (!sampleData.RouteName.IsNullOrEmpty())
                     str.Add(new TermQuery(new Term("RouteName", sampleData.RouteName.Trim())));
 
-                if (!sampleData.DosageFormname.IsNullOrEmpty())
+                //if (!sampleData.DosageFormname.IsNullOrEmpty())
                     str.Add(new TermQuery(new Term("DosageFormName", sampleData.DosageFormname.Trim())));
 
-                if (!sampleData.Strength.IsNullOrEmpty())
+                //if (!sampleData.Strength.IsNullOrEmpty())
                     str.Add(new TermQuery(new Term("Strength", sampleData.Strength.Trim())));
 
-                if (!sampleData.Id.IsNullOrEmpty())
+                //if (!sampleData.Id.IsNullOrEmpty())
                     str.Add(new TermQuery(new Term("MongoId", sampleData.Id.Trim())));
 
-                if (!sampleData.SubstanceName.IsNullOrEmpty())
+                //if (!sampleData.SubstanceName.IsNullOrEmpty())
                     str.Add(new TermQuery(new Term("SubstanceName", sampleData.SubstanceName.Trim())));
 
-                if (!sampleData.Unit.IsNullOrEmpty())
+                //if (!sampleData.Unit.IsNullOrEmpty())
                     str.Add(new TermQuery(new Term("Unit", sampleData.Unit.Trim())));
 
                 writer.DeleteDocuments(str.ToArray());
