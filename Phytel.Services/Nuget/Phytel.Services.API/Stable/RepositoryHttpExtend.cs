@@ -56,9 +56,7 @@ namespace Phytel.Services.API
 
             throw new ApplicationException("RetryException");
         }
-
-        public static TResponse DoWithRetry(Fun)
-
+        
         public static TResponse DoWithRetry<TResponse>(Func<object, TResponse> func, object request, int retries, int retryInterval)
         {
             int retryCounter = 1;
@@ -122,11 +120,6 @@ namespace Phytel.Services.API
         public static void Post(this IRepositoryHttp repositoryHttp, object request, int retries, int retryInterval)
         {
             DoWithRetry(repositoryHttp.Post, request, retries, retryInterval);
-        }
-
-        public static void Post(this IRepositoryHttp repositoryHttp, object request, int retries, int retryInterval)
-        {
-            return DoWithRetry(repositoryHttp.Post, request, retries, retryInterval);
         }
 
         public static TResponse Put<TResponse>(this IRepositoryHttp repositoryHttp, object request, int retries, int retryInterval)
