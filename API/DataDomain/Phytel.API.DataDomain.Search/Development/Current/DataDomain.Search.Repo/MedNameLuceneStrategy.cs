@@ -55,13 +55,13 @@ namespace DataDomain.Search.Repo.LuceneStrategy
                     str.Add(new TermQuery(new Term("Strength", sampleData.Strength.Trim())));
 
                 if (!sampleData.Id.IsNullOrEmpty())
-                    str.Add(new TermQuery(new Term("Strength", sampleData.Id.Trim())));
+                    str.Add(new TermQuery(new Term("MongoId", sampleData.Id.Trim())));
 
                 if (!sampleData.SubstanceName.IsNullOrEmpty())
-                    str.Add(new TermQuery(new Term("Strength", sampleData.SubstanceName.Trim())));
+                    str.Add(new TermQuery(new Term("SubstanceName", sampleData.SubstanceName.Trim())));
 
                 if (!sampleData.Unit.IsNullOrEmpty())
-                    str.Add(new TermQuery(new Term("Strength", sampleData.Unit.Trim())));
+                    str.Add(new TermQuery(new Term("Unit", sampleData.Unit.Trim())));
 
                 writer.DeleteDocuments(str.ToArray());
                 writer.Commit();
