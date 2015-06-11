@@ -5,6 +5,7 @@ using System.Threading;
 
 namespace Phytel.Services.API
 {
+    [Serializable]
     public static class RepositoryHttpExtend
     {
         public static TResponse Delete<TResponse>(this IRepositoryHttp repositoryHttp, object request, int retries, int retryInterval)
