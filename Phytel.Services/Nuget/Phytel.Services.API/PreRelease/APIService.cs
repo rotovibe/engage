@@ -4,6 +4,7 @@ using System.Xml;
 
 namespace Phytel.Services.API
 {
+    [Serializable]
     public sealed class APIService
     {
         private static volatile APIService instance;

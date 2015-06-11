@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace Phytel.Services.API
 {
+    [Serializable]
     public class DomainWebServiceException : WebServiceException
     {
         public DomainWebServiceException(WebServiceException wex)

@@ -5,6 +5,7 @@ using System.Collections.Specialized;
 
 namespace Phytel.Services.API
 {
+    [Serializable]
     public class RepositoryHttp : IRepositoryHttp
     {
         public const int DefaultTimeoutInSeconds = 60;
@@ -217,30 +218,6 @@ namespace Phytel.Services.API
             _client.Timeout = timeout;
             _client.Delete(request);
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         public TResponse Get<TResponse>(string relativeUrlFormat, TimeSpan timeout, params string[] relativeUrlParams) 
             where TResponse : class, new()
