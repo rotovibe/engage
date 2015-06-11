@@ -36,6 +36,31 @@ namespace DataDomain.Search.Repo.LuceneStrategy
             return contracts.ToDictionary(s => s.ToLower(), s => new IndexWriter(GetDirectory(indexPath + s + mednameIndex), Analyzer, IndexWriter.MaxFieldLength.UNLIMITED));
         }
 
+        public void Delete(T sampleData, IndexWriter writer)
+        {
+            try
+            {
+                List<Query> str = new List<Query>();
+
+                str.Add(new TermQuery(new Term("CompositeName", sampleData.CompositeName == null ? string.Empty : sampleData.CompositeName.Trim())));
+                str.Add(new TermQuery(new Term("RouteName", sampleData.RouteName == null ? string.Empty : sampleData.RouteName.Trim())));
+                str.Add(new TermQuery(new Term("DosageFormName", sampleData.DosageFormname == null ? string.Empty : sampleData.DosageFormname.Trim())));
+                str.Add(new TermQuery(new Term("Strength", sampleData.Strength == null ? string.Empty : sampleData.Strength.Trim())));
+                str.Add(new TermQuery(new Term("MongoId", sampleData.Id == null ? string.Empty : sampleData.Id.Trim())));
+                str.Add(new TermQuery(new Term("SubstanceName", sampleData.SubstanceName == null ? string.Empty : sampleData.SubstanceName.Trim())));
+                str.Add(new TermQuery(new Term("Unit", sampleData.Unit == null ? string.Empty : sampleData.Unit.Trim())));
+
+                writer.DeleteDocuments(str.ToArray());
+                writer.Commit();
+                writer.Optimize();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:MedNameLuceneStrategy:Delete(T sampleData, IndexWriter writer)::" + ex.Message,
+                    ex.InnerException);
+            }
+        }
+
         public override void AddToLuceneIndex(T sampleData, IndexWriter writer)
         {
             try
@@ -59,6 +84,22 @@ namespace DataDomain.Search.Repo.LuceneStrategy
             catch (Exception ex)
             {
                 throw new Exception("AD:MedNameLuceneStrategy:AddToLuceneIndex(T sampleData, IndexWriter writer)::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        public void DeleteFromIndex(IEnumerable<T> sampleDatas)
+        {
+            try
+            {
+                foreach (var sampleData in sampleDatas) Delete(sampleData, _writerPool[HostContext.Instance.Items["Contract"].ToString()]);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:MedNameLuceneStrategy:DeleteFromIndex()::" + ex.Message, ex.InnerException);
+            }
+            finally
+            {
+                IndexWriter.Unlock(_writerPool[HostContext.Instance.Items["Contract"].ToString()].Directory);
             }
         }
 

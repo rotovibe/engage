@@ -9,5 +9,6 @@ namespace Phytel.API.DataDomain.Search
         bool InsertMedDocInIndex(PutMedRegistrationRequest request);
         bool InsertAllergyDocInIndex(PutAllergyRegistrationRequest request);
         List<DTO.Search> GetSearchList(GetAllSearchsRequest request);
+        bool DeleteMedDocs(List<MedNameSearchDocData> request);
     }
 }
