@@ -3,9 +3,6 @@ using System.Linq;
 using DataDomain.Medication.Repo;
 using Phytel.API.DataDomain.Medication.DTO;
 using System;
-using AutoMapper;
-using Phytel.API.Interface;
-using System.Configuration;
 
 namespace Phytel.API.DataDomain.Medication
 {
@@ -66,6 +63,24 @@ namespace Phytel.API.DataDomain.Medication
                 return result;
             }
             catch (Exception ex) { throw ex; }
+        }
+
+        public bool DeleteMedicationMaps(PutDeleteMedMapDataRequest request)
+        {
+            try
+            {
+                var repo = MedicationRepositoryFactory.GetMedicationRepository(request, RepositoryType.MedicationMapping);
+
+                if (request.MedicationMaps != null)
+                {
+                    repo.DeleteAll(request.MedicationMaps.Cast<object>().ToList());
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }   

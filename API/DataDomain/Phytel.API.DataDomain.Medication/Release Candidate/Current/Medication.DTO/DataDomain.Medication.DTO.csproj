@@ -117,6 +117,8 @@
     <Compile Include="PutInitializeMedicationMapDataResponse.cs" />
     <Compile Include="PutPatientMedSuppDataRequest.cs" />
     <Compile Include="PutPatientMedSuppDataResponse.cs" />
+    <Compile Include="Request\PutDeleteMedMapDataRequest.cs" />
+    <Compile Include="Response\PutDeleteMedMapDataResponse.cs" />
     <Compile Include="UndoDeletePatientMedSuppsDataRequest.cs" />
     <Compile Include="UndoDeletePatientMedSuppsDataResponse.cs" />
   </ItemGroup>
@@ -129,6 +131,7 @@
       <Name>Phytel.API.Interface</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
