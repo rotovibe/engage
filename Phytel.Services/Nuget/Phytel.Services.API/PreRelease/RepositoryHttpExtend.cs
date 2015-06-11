@@ -26,6 +26,7 @@ namespace Phytel.Services.API
                 try
                 {
                     func(request);
+                    break;
                 }
                 catch (WebServiceException ex)
                 {
