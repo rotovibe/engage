@@ -26,6 +26,48 @@ namespace Phytel.Services.API
                 try
                 {
                     func(request);
+                    retryCounter += retries;
+                    break;
+                }
+                catch (WebServiceException ex)
+                {
+                    //If this is a client error (bad url, unauthorized, etc) do not retry
+                    if (ex.StatusCode >= (int)HttpStatusCode.BadRequest && ex.StatusCode < (int)HttpStatusCode.InternalServerError)
+                    {
+                        throw ex;
+                    }
+                    else if (retryCounter == retries)
+                    {
+                        throw ex;
+                    }
+
+                    retryCounter++;
+                    Thread.Sleep(retryInterval);
+                }
+                catch (Exception ex)
+                {
+                    if (retryCounter == retries)
+                    {
+                        throw ex;
+                    }
+
+                    retryCounter++;
+                    Thread.Sleep(retryInterval);
+                }
+            }
+        }
+        
+        public static TResponse DoWithRetry<TResponse>(Func<object, TResponse> func, object request, int retries, int retryInterval)
+        {
+            int retryCounter = 1;
+            TResponse rvalue = default(TResponse);
+
+            while (retryCounter <= retries)
+            {
+                try
+                {
+                    rvalue = func(request);
+                    retryCounter += retries;
                     break;
                 }
                 catch (WebServiceException ex)
@@ -55,47 +97,7 @@ namespace Phytel.Services.API
                 }
             }
 
-            throw new ApplicationException("RetryException");
-        }
-        
-        public static TResponse DoWithRetry<TResponse>(Func<object, TResponse> func, object request, int retries, int retryInterval)
-        {
-            int retryCounter = 1;
-
-            while (retryCounter <= retries)
-            {
-                try
-                {
-                    return func(request);
-                }
-                catch (WebServiceException ex)
-                {
-                    //If this is a client error (bad url, unauthorized, etc) do not retry
-                    if (ex.StatusCode >= (int)HttpStatusCode.BadRequest && ex.StatusCode < (int)HttpStatusCode.InternalServerError)
-                    {
-                        throw ex;
-                    }
-                    else if (retryCounter == retries)
-                    {
-                        throw ex;
-                    }
-
-                    retryCounter++;
-                    Thread.Sleep(retryInterval);
-                }
-                catch (Exception ex)
-                {
-                    if (retryCounter == retries)
-                    {
-                        throw ex;
-                    }
-
-                    retryCounter++;
-                    Thread.Sleep(retryInterval);
-                }
-            }
-
-            throw new ApplicationException("RetryException");
+            return rvalue;
         }
 
         public static TResponse Get<TResponse>(this IRepositoryHttp repositoryHttp, object request, int retries, int retryInterval)
