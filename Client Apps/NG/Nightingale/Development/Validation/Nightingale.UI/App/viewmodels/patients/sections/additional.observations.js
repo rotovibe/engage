@@ -28,10 +28,33 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
             self.settings = settings;
             self.activeDataType = self.settings.activeDataType;
             self.selectedPatient = self.settings.selectedPatient;
+			self.isValid = self.settings.isValid;
+			self.validationErrors = self.settings.validationErrors;
             // A list of additional observations
             self.additionalObservations = ko.observableArray();
             // A list of additional observations to enter data for
             self.additionalObservationsToEnter = ko.observableArray();
+			
+			self.additionalObservationsValidationErrors = ko.computed(function() {
+				var observations = self.additionalObservationsToEnter();
+				var tempArray = [];
+				ko.utils.arrayForEach( observations, function(obs){
+					if( !obs.isValid() ){
+						ko.utils.arrayForEach( obs.validationErrors(), function(error){
+							tempArray.push(	{Message: error.Message} );
+						});						
+					}
+				});	
+				if( tempArray.length > 0 ){
+					self.isValid(false);
+				}
+				else{
+					self.isValid(true);
+				}
+				self.validationErrors(tempArray);
+				return tempArray;
+			}).extend({ throttle: 50 });
+			
             // The selected additional observation
             self.selectedAdditionalObservation = ko.observable();
             self.canAdd = ko.computed(function () {

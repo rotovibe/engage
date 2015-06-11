@@ -148,9 +148,9 @@
             <!-- /ko -->
         </ul>
     </div>
-    <div class="row modal-tab" data-bind="visible: activeTab() === 'phones'">
-	<!-- the number of phone validation errors is: <span data-bind="text: phoneValidationErrorsArray().length"></span> -->
-		<div class="row" data-bind="if: phoneValidationErrors().length > 0">
+    <div class="row modal-tab" data-bind="visible: activeTab() === 'phones'">	
+		<div class="row validation-summary" data-bind="if: phoneValidationErrors().length > 0">
+            <h3>Please correct the following errors:</h3>
 			<ul data-bind="foreach: phoneValidationErrors">
 				<li class="validation-errors">
 					<h5 data-bind="text: Message"></h5>

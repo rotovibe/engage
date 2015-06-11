@@ -357,8 +357,9 @@ define(['plugins/router', 'services/navigation', 'config.services', 'services/se
             self.selectedPatient = selectedPatient;
             self.showDropdown = true;
             self.showActions = false;
-            // Object containing parameters to pass to the modal
-            self.activationData = { selectedPatient: self.selectedPatient, activeDataType: self.activeDataType, showDropdown: self.showDropdown, showActions: self.showActions };
             self.canSave = ko.observable(true);
+			
+			// Object containing parameters to pass to the modal
+            self.activationData = { selectedPatient: self.selectedPatient, activeDataType: self.activeDataType, canSave: self.canSave, showDropdown: self.showDropdown, showActions: self.showActions };            
         }
     });

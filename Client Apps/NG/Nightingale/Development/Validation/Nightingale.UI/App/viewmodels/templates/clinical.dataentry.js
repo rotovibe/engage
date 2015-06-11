@@ -9,6 +9,7 @@
             var self = this;
             self.settings = settings;
             self.activeDataType = self.settings.activeDataType;
+			self.canSave = self.settings.canSave;
             self.showing = ko.computed(function () { return !!self.activeDataType() });
             self.selectedPatient = self.settings.selectedPatient;
             self.selectedTemplate = ko.observable();
@@ -64,6 +65,33 @@
                     }
                 }
             });
+			
+			/**
+			*	computed. returns the templates (data entry screens) that have any validation errors. 
+			*	returns one message for each errored screen, excluding the current screen 
+			*	(since on the current screen the detailed validation errors will show).
+			*	@method dataEntryValidationErrors
+			*/
+			self.dataEntryValidationErrors = ko.computed(function(){
+				//list the tabs that have errors, except the current tab
+				var theseTypes = self.dataTypes();
+				var currentTemplate = self.selectedTemplate();
+				var tempArray = [];
+				var isValid = false;
+				if( currentTemplate ){
+					isValid =  true;
+					ko.utils.arrayForEach( self.templates(), function( template ){
+						if( !template.isValid() ){
+							isValid = false;
+							if( currentTemplate.typeName !== template.typeName ){
+								tempArray.push( {name: template.typeName, Message: 'errors in ' + template.typeName} );
+							}
+						}
+					});
+				}				
+				self.canSave(isValid);				
+				return tempArray;
+			});
         };
 
         ctor.prototype.attached = function () {
@@ -72,16 +100,28 @@
 
         return ctor;
 
+		/**
+		*	represents a screen (by data type) in the data entry modal.
+		*	@class Template
+		*/
         function Template(name, pathone, pathtwo) {
             var self = this;
             self.typeName = name;
             self.firstSection = new Section(pathone);
-            self.secondSection = new Section(pathtwo);
+            self.secondSection = new Section(pathtwo);			
+			self.isValid = ko.computed( function(){
+				return ( self.firstSection.isValid() && self.secondSection.isValid() );
+			});
+			self.templateValidationErrors = ko.computed( function(){
+				return self.firstSection.validationErrors().concat( self.secondSection.validationErrors() );
+			});
         }
 
         function Section(path) {
             var self = this;
             self.path = path;
+			self.isValid = ko.observable(true);
+			self.validationErrors = ko.observableArray();
         }
 
     });

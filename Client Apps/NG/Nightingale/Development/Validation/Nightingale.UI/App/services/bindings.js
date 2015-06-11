@@ -4,8 +4,8 @@
 *	@module bindings
 */
 
-define(['services/formatter'],
-    function (formatter) {
+define(['services/formatter', 'services/dateHelper'],
+    function (formatter, dateHelper) {
 
         var datacontext;
 
@@ -396,11 +396,15 @@ define(['services/formatter'],
 		ko.bindingHandlers.date = {
 			init: function (element, valueAccessor, allBindingsAccessor, bindingContext) {
 				var observable = valueAccessor();
+				$(element).attr('maxlength', 10);
+				$(element).attr('placeholder', "MM/DD/YYYY");
+				$(element).attr('title', "MM/DD/YYYY");
+				
 				//masking: start
 				//prevent typing non numerics:
 				$(element).on('keypress', function(e){
 					var key = e.charCode || e.keyCode;
-					if( (key < 48 || key > 57) && key !== 47 && key !== 116 && key !== 8 && key !== 9 && key !== 37 && key !== 39 ){	//exclude 47(/), 116 (=F5), 8(=bkspc), 9(=tab) , 37,39 (<-, ->)
+					if( (key < 48 || key > 57) && key !== 47 && key !== 116 && key !== 9 && key !== 37 && key !== 39 ){	//exclude 47(/), 116 (=F5), 9(=tab) , 37,39 (<-, ->)	\\&& key !== 8, 8(=bkspc)
 						e.preventDefault();												
 					}
 				});
@@ -408,7 +412,7 @@ define(['services/formatter'],
 				//mask: optimize / auto complete year
 				$(element).on('blur', function(){
 					var date = $(element).val();
-					if(date){
+					if(date){						
 						date = formatter.date.optimizeYear( date );						
 						$(element).val(date);
 						observable(date);	
@@ -419,28 +423,41 @@ define(['services/formatter'],
 					setTimeout(function(){						
 						var key = e.charCode || e.keyCode;						
 						var date = $(element).val();
-						console.log('date='+date + ' key=' + key + ' position=' +element.selectionStart );
-						if( e.shiftKey || e.ctrlKey || key == 37 || key == 39 || key == 9 || key == 8 || key == 35 || key == 36 ){ //exclude <- , ->, Tab, bkspc, home, end
+						//hide the datepicker if binded: while typing we may have fields movements due to validation errors going on and off.
+						//	the picker is not needed when typing and its position is fixed.
+						if( $(element).datepicker ){
+							$(element).datepicker( "hide" ); //TODO: show/hide on arrow down/ up / enter
+						}
+						//console.log('date='+date + ' key=' + key + ' position=' +element.selectionStart );
+						if( e.shiftKey || e.ctrlKey || key == 37 || key == 39 || key == 9 || key == 35 || key == 36 || key === 46 ){ //exclude <- , ->, Tab, home, end //|| key == 8 
 							return;
-						}						
+						}
+						if( key == 8 ){
+							//observable(date);
+							return;
+						}
+						//observable(date);						
 						var position = element.selectionStart;
-						if( date ){ 							
+						if( date ){ 
+							//do the mask:
 							var newDate = formatter.date.optimizeDate(date);						
 							if( newDate && newDate !== date){
 								$(element).val(newDate);
-								observable(newDate);
+								//if( isValidDate(newDate) ){	//newDate may be an incomplete date string
+									observable(newDate);
+								//}
 							}
-							if( key === 46 || (key === 8 && position < newDate.length)){	//46=delete or 8=bkspc not on last char: return the cursor to its original position
+							if( key === 46 ){	//46=delete: return the cursor to its original position
 								element.setSelectionRange(position, position);
 							}
 						}						
 					}, 5);
 				});
 				//masking ends
-			},
-			update: function (element, valueAccessor, allBindingsAccessor, bindingContext) {
-				var date = valueAccessor();								
-			}
+			}//,
+			// update: function (element, valueAccessor, allBindingsAccessor, bindingContext) {
+				// var date = valueAccessor();								
+			// }
 		};
 		/**
 		*
@@ -461,46 +478,54 @@ define(['services/formatter'],
                 // Track dynamic options if available
                 var dynoptions = allBindingsAccessor().datepickerDynamicOptions || {};				
                 $el.datepicker(options);
-								
-				var observableMoment = moment.utc(observable());
-				if( observableMoment.isValid() ){
+												
+				if( dateHelper.isValidDate( observable() ) ){
+					var observableMoment = moment.utc(observable());	//utc to local??
 					//set the initial date to the datepicker
 					observableMoment.local(); //move from utc to local time
 					var strDate = observableMoment.format('MM/DD/YYYY');					
 					$el.datepicker("setDate", strDate);
 					// console.log('datepicker init setDate to :' + strDate);
 				}
-                //handle the field changing
+/*                //handle the field changing (datepicker select clicked)
                 ko.utils.registerEventHandler(element, "change", function () {					
                     // Get the new date
                     var newValue = $el.datepicker("getDate");
-                    var datepickerMoment = moment.utc(newValue);//.toISOString();
-                    if (!datepickerMoment.isValid()) {
-						// console.log('datepicker registerEventHandler cleared the observable');
-                        observable('');
+					if( !newValue ) { 
+						observable('');
                         return null;
-                    }
+					}
+                    var datepickerMoment = moment.utc(newValue);//.toISOString();
+                    // if (!datepickerMoment.isValid()) {
+						// // console.log('datepicker registerEventHandler cleared the observable');
+                        // observable('');
+                        // return null;
+                    // }
                     if (bindingContext.step) {	//TBD program logic that should not be here
                         if (bindingContext.step().action().elementState() !== 4) {
                             bindingContext.step().action().stateUpdatedOn(new moment().toISOString());
                             bindingContext.step().action().elementState(4);
                         }
                     }
+					//TODO: need to pass the datepicker date to the observable:
+					// var observableIsValid = dateHelper.isValidDate(observable());
 					//set the datepicker date value on to the observable date (only! without changing its time)
-					var observableMoment = moment(observable());
-					if( observableMoment.isValid() ){
-						if( !isSameDate(datepickerMoment, observableMoment) ){
-							// console.log('datepicker registerEventHandler calling setDateValue src = ' +datepickerMoment.toISOString() + ' dest='+ observableMoment.toISOString());
-							observableMoment = setDateValue( datepickerMoment, observableMoment );
-						}
-					}
+					if( dateHelper.isValidDate(observable()) ){
+						var observableMoment = moment(observable());
+						//if( observableMoment.isValid ){
+							if( !dateHelper.isSameDate(datepickerMoment, observableMoment) ){
+								// console.log('datepicker registerEventHandler calling setDateValue src = ' +datepickerMoment.toISOString() + ' dest='+ observableMoment.toISOString());
+								observableMoment = dateHelper.setDateValue( datepickerMoment, observableMoment );
+							}
+						//}
+					}							
 					else{
 						observableMoment = datepickerMoment;
 					}	
-					// console.log('datepicker registerEventHandler set observable= ' + observableMoment.toISOString());	
-                    observable(observableMoment.toISOString());
+					// // console.log('datepicker registerEventHandler set observable= ' + observableMoment.toISOString());	
+                    observable( observableMoment.format("MM/DD/YYYY") );//observableMoment.toISOString()
                 });																
-				
+*/				
                 // If there is a datepicker options with a mindate that is an observable,
                 if (dynoptions && dynoptions.minDate && ko.isObservable(dynoptions.minDate)) {
                     if (dynoptions.minDate()) {
@@ -547,25 +572,25 @@ define(['services/formatter'],
 			* 	@method datepicker.update
 			*/
             update: function (element, valueAccessor, allBindingsAccessor, bindingContext) {
-                var observable = valueAccessor();	//ko.utils.unwrapObservable(valueAccessor()),
+                var observable = valueAccessor(),	//ko.utils.unwrapObservable(valueAccessor()),
                     $el = $(element),
                     datepickerMoment = moment.utc($el.datepicker("getDate"));						
-				var observableMoment = moment.utc(observable());
-               if ( observableMoment.isValid() && datepickerMoment.isValid() && !isSameDate(observableMoment, datepickerMoment) ) {					 					
-						//the observable date has changed - update the datepicker with the date parts only:
-					observableMoment.local(); //move from utc to local time	
-					var strDate = observableMoment.format('MM/DD/YYYY');
-					$el.datepicker("setDate", strDate);
-					$el.blur().change();	//note: this is part of an IE fix for datepicker re-opens itself after a selection is made.					                    
-                }
-				
+				if( dateHelper.isValidDate(observable()) ){
+					var observableMoment = moment.utc(observable());
+					if ( observableMoment.isValid() && datepickerMoment.isValid() && !dateHelper.isSameDate(observableMoment, datepickerMoment) ) {
+							//the observable date has changed - update the datepicker with the date parts only:
+						observableMoment.local(); //move from utc to local time	
+						var strDate = observableMoment.format('MM/DD/YYYY');
+						$el.datepicker("setDate", strDate);
+						$el.blur().change();	//note: this is part of an IE fix for datepicker re-opens itself after a selection is made.					                    
+					}
+				}
                 // jQuery Datepicker doesn't allow clearing dates
                 // so this is a hack - set the value to clear to
                 // let the binding clear the value
                 // If the value was set to clear,
-                if (observable === 'clear' || !observableMoment.isValid()) {
-                    // Clear the control
-                    var observable = valueAccessor();
+                if (observable === 'clear') { //|| !observableIsValid
+                    // Clear the control                    
                     observable(null);
                     $.datepicker._clearDate($el);
                 }
@@ -573,20 +598,6 @@ define(['services/formatter'],
             }
         };
 
-		function isSameDate(moment1, moment2){
-			//compare date parts only:			
-			return moment(moment1.format('MM/DD/YYYY')).isSame(moment2.format('MM/DD/YYYY'))
-		}
-		
-		function setDateValue( momentSrc, momentDest ){
-			// console.log('datepicker setDateValue starts: src='+ momentSrc.toISOString() + ' dest=' +momentDest.toISOString());
-			momentDest.date( momentSrc.date() );
-			momentDest.month( momentSrc.month() );
-			momentDest.year( momentSrc.year() );
-			// console.log('datepicker setDateValue returns: ' + momentDest.toISOString());
-			return momentDest;
-		}
-		
 		/**				
 		*			this binding wraps jquery.timepicker plugin (jQuery Timepicker - v1.3.2 - 2014-09-13 http://timepicker.co) 
 		*			it should be applied within: <!-- ko ifnot: Modernizr.inputtypes.time -->

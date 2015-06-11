@@ -55,6 +55,8 @@
       self.settings = settings;
       self.showing = ko.computed(function () { return true; });
       self.selectedPatient = self.settings.selectedPatient;
+	  self.isValid = self.settings.isValid;
+	  self.validationErrors = self.settings.validationErrors;
       // A list of the problem observations for this patient
       self.computedProblemObservations = ko.computed(function () {
         var filteredObservations = [];
@@ -66,11 +68,32 @@
         }).sort(self.newThenAlphabeticalSort);
         return filteredObservations;
       }).extend({ throttle: 50 });
+	  
+	  self.observationsValidationErrors = ko.computed(function() {
+		var observations = self.computedProblemObservations();
+		var tempArray = [];
+		ko.utils.arrayForEach( observations, function(obs){
+			if( !obs.isValid() ){
+				ko.utils.arrayForEach( obs.validationErrors(), function(error){
+					tempArray.push(	{Message: error.Message} );
+				});						
+			}
+		});	
+		if( tempArray.length > 0 ){
+			self.isValid(false);
+		}
+		else{
+			self.isValid(true);
+		}
+		self.validationErrors(tempArray);
+		return tempArray;
+	  }).extend({ throttle: 50 });
+	
       // self.showActions = self.settings.hasOwnProperty('showActions') ? self.settings.showActions : self.showing;
       // self.saveFocusProblems = self.settings.saveFocusProblems || function () { return false; };
-      // self.cancelFocusProblems = self.settings.cancelFocusProblems || function () { return false; };
+      // self.cancelFocusProblems = self.settings.cancelFocusProblems || function () { return false; };	  
     };
-
+	
     ctor.prototype.attached = function () {
 
     };

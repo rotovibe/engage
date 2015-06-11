@@ -12,7 +12,8 @@
             self.addNew = self.settings.addNew;
             self.canAdd = ko.computed(function () {
                 if (self.observation && self.observation.computedValue() && self.observation.startDate()) {
-                    return (!!self.observation.computedValue().value() && moment(self.observation.startDate()).isValid());
+					return self.observation.isValid();
+                    //return (!!self.observation.computedValue().value() && moment(self.observation.startDate()).isValid());
                 }
             });
         };

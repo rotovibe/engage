@@ -22,10 +22,12 @@
 				"dobValidator",
 				dobValidatorFn,
 				{
-					messageTemplate: "'%displayName%' %msg%",					
+					messageTemplate: "'%displayName%' %msg%"
 				}
 		);
-		
+					
+		//the value can be a partial date string when date fields are keyboard friendly.
+		// moment nor breeze date validators wont cut it right.
 		function dobValidatorFn( value, context ){			
 			if (value == null || value == "") return true;	//valid
 			if( isNaN(new Date(value).valueOf()) ){
@@ -45,6 +47,79 @@
 				context.msg = "is not valid (over 200 years ago)";
 				return false;
 			}
+			return true;	//valid
+		}
+		
+		// validators.observationValidator = new breeze.validator(
+			// 'observationValidator',
+			// observationValidatorFn,
+			// { 
+				// messageTemplate: "%msg%"
+			// }
+		// );
+		
+		// function observationValidatorFn( entity, context ){
+			// var startDate = entity.getProperty('startDate');
+			// var values = entity.getProperty('values');
+		// }
+		
+		validators.dateValidator = function(context){
+			
+			return new breeze.Validator(
+				"dateValidator",
+				dateValidatorFn,
+				{
+					minDate: context.minDate,
+					maxDate: context.maxDate,
+					messageTemplate: "'%displayName%' %msg%",					
+				}
+			);	
+		};
+		
+		//the value can be a partial date string when date fields are keyboard friendly.
+		// moment nor breeze date validators wont cut it right.
+		function dateValidatorFn( value, context ){
+			if (value == null || value == "") return true;	//valid
+			if( isNaN(new Date(value).valueOf()) ){
+				context.msg = "is not valid";
+				return false;
+			}
+			if( !moment(value, ["MM-DD-YYYY","MM/DD/YYYY"], true).isValid() ){
+				context.msg = "is not valid";
+				return false;
+			}
+			if( context.minDate ){
+				var minDate = context.minDate;
+				var minStr;
+				if( minDate === 'now' || minDate === 'today'){
+					minStr = minDate;
+					minDate = moment();										
+				}					
+				else{
+					minStr = moment(minDate).format("MM/DD/YYYY");
+				}
+				if( !moment(minDate).isValid() ) return true;
+				if( moment(value).isBefore(moment(minDate), 'days') ){
+					context.msg = "can not be before " + minStr;
+					return false;
+				}				
+			}				
+			if( context.maxDate ){
+				var maxDate = context.maxDate;
+				var maxStr;
+				if( maxDate === 'now' || maxDate === 'today'){
+					maxStr = maxDate;
+					maxDate = moment();									
+				}
+				else{
+					maxStr = moment(maxDate).format("MM/DD/YYYY");
+				}
+				if( !moment(maxDate).isValid() ) return true;
+				if( moment(value).isAfter(moment(maxDate), 'days') ){
+					context.msg = "can not be after " + maxStr;
+					return false;
+				}				
+			}			
 			return true;	//valid
 		}
 		

@@ -1,6 +1,6 @@
 // Register all of the user related models in the entity manager (initialize function) and provide other non-entity models
-define(['services/session', 'services/validatorfactory', 'services/customvalidators'],
-	function (session, validatorFactory, customValidators) {
+define(['services/session', 'services/validatorfactory', 'services/customvalidators', 'services/dateHelper'],
+	function (session, validatorFactory, customValidators, dateHelper) {
 
 		var datacontext;
 
@@ -23,7 +23,7 @@ define(['services/session', 'services/validatorfactory', 'services/customvalidat
 		function initialize(metadataStore) {
 
 		    // Patient Observation information
-		    metadataStore.addEntityType({
+		    var patientObservationType = metadataStore.addEntityType({
 		    	shortName: "PatientObservation",
 		    	namespace: "Nightingale",
 		    	dataProperties: {
@@ -36,7 +36,7 @@ define(['services/session', 'services/validatorfactory', 'services/customvalidat
 		    		displayId: { dataType: "String" },
 		    		patientId: { dataType: "String" },
 		    		units: { dataType: "String" },
-		    		startDate: { dataType: "DateTime" },
+		    		startDate: { dataType: "String" },
 		    		endDate: { dataType: "DateTime" },
 		    		groupId: { dataType: "String" },
 		    		deleteFlag: { dataType: "Boolean" },
@@ -66,7 +66,7 @@ define(['services/session', 'services/validatorfactory', 'services/customvalidat
 		    		}
 		    	}
 		    });
-
+			
 		    // var patientObservationPropertyList = [
                 // {
 		            // // Short name of property
@@ -75,11 +75,13 @@ define(['services/session', 'services/validatorfactory', 'services/customvalidat
 		            // displayName: 'Start Date',
 		            // // Collection of validators
 		            // validatorsList: [
-                        // breeze.Validator.required()
+						// customValidators.validators.dateValidator({maxDate: 'today'})
+                        // //breeze.Validator.required()
+						
 		            // ]
                 // }
 		    // ];
-
+			// //patientObservationType.validators.push( customValidators.validators.observationValidator );			
 		    // validatorFactory.fixNamesAndRegisterValidators(metadataStore, 'PatientObservation', patientObservationPropertyList);
 
 		    // Observations' value complex type
@@ -127,7 +129,7 @@ define(['services/session', 'services/validatorfactory', 'services/customvalidat
 		    		}
 		    	}
 		    });
-
+						
 		    // Observation Display property
 		    metadataStore.addEntityType({
 		    	shortName: "ObservationDisplay",
@@ -158,6 +160,10 @@ define(['services/session', 'services/validatorfactory', 'services/customvalidat
 		    metadataStore.registerEntityTypeCtor(
 		    	'ObservationValue', null, observationValueInitializer);
 
+			/**
+			*
+			* 	@method patientObservationInitializer
+			*/			
 		    function patientObservationInitializer(patObs) {
                 patObs.isNew = ko.observable(false);
 		    	patObs.computedValue = ko.computed({
@@ -206,24 +212,125 @@ define(['services/session', 'services/validatorfactory', 'services/customvalidat
 		    		}
 		    		return thisValue;
 		    	});
-			    patObs.isValid = ko.observable(true);
+				patObs.validationErrors = ko.observableArray([]);
+				/**
+				*	computed. validating the patient observation and updating errors and error messages into patObs.validationErrors. 
+				*	returns true for valid observation.
+				*	@method isValid 
+				*/
+			    patObs.isValid = ko.computed( function() {					
+					var values = patObs.values();
+					var startDate = patObs.startDate();
+					var hasErrors = patObs.entityAspect.hasValidationErrors;
+					var type = patObs.type()? patObs.type().name() : null;
+					switch( type ){
+						case 'Assessments':
+						
+							break;
+						case 'Labs':
+							hasErrors = validateLab();
+							break;
+						case 'Problems':
+							hasErrors = validateProblem();
+							break;
+						case 'Risks':
+							break;
+						case 'Vitals':
+							hasErrors = validateLab();
+							break;
+						case 'Allergies':
+							break;
+						case 'Medications':
+							break;
+					}
+					
+					return !hasErrors;
+					
+					function validateLab(){
+						var hasActualValues = false;
+						var obsErrors = [];
+						// if( hasErrors ){
+							// //breeze validation errors (not in use for now)
+							// var errors = patObs.entityAspect.getValidationErrors();
+							// ko.utils.arrayForEach(errors, function (error) {
+								// obsErrors.push({ PropName: error.propertyName, Message: error.errorMessage});
+							// });
+						// }
+						
+						ko.utils.arrayForEach( values, function(value) {
+							var propName = 'value';
+							if( value.text && value.text() && value.text().indexOf("Systolic") !== -1 ){
+								propName = 'systolic';
+							}
+							else if( value.text && value.text() && value.text().indexOf("Diastolic") !== -1 ){
+								propName = 'diastolic';
+							}
+							if( isNaN(value.value()) ){	//note: this will change when we get alert limits high/low: numeric/decimal with prefix +/-. when no high/low its any string.																
+								var name = value.name? value.name() : value.text? value.text() : 'observation ';
+								var msg = name + ' has invalid value' ;
+								obsErrors.push({ PropName: propName, Message: msg });
+								hasErrors = true;
+							}
+							if( startDate && !value.value() ){
+								var name = value.name? value.name() : value.text? value.text() : 'observation ';	//patObs.name()
+								var msg = name + ' must have a value';
+								obsErrors.push({ PropName: propName, Message: msg });
+								hasErrors = true;
+							}
+							else if( value.value() ){
+								hasActualValues = true;
+							}
+						});
+						
+						if( !startDate && hasActualValues ){
+							obsErrors.push({ PropName: 'startDate', Message: patObs.name() + ' must have a Date' });
+							hasErrors = true;
+						}	
+						var context = {maxDate: 'today'};
+						var startDateError = dateHelper.isInvalidDate(startDate, context);
+						if( startDateError != null ){
+							obsErrors.push({ PropName: 'startDate', Message: patObs.name() + ' Date ' + startDateError.Message});
+							hasErrors = true;
+						}
+						patObs.validationErrors(obsErrors);
+						return hasErrors;
+					}
+					function validateProblem(){
+						var obsErrors = [];
+						var context = {maxDate: 'today'};
+						var startDateError = dateHelper.isInvalidDate(startDate, context);
+						if( startDateError != null ){
+							obsErrors.push({ PropName: 'startDate', Message: patObs.name() + ' Date ' + startDateError.Message});
+							hasErrors = true;
+						}
+						patObs.validationErrors(obsErrors);
+						return hasErrors;
+					}
+				});
+								
 			    patObs.canSave = ko.computed(patObs.isValid);
-			    patObs.validationErrors = ko.observableArray([]);
-			    patObs.entityAspect.validationErrorsChanged.subscribe(function (validationChangeArgs) {
-			        var hasErrors = patObs.entityAspect.hasValidationErrors;
-			        var errorsList = [];
-			        if (hasErrors) {
-			            patObs.isValid(false);
-			            var errors = patObs.entityAspect.getValidationErrors();
-			            ko.utils.arrayForEach(errors, function (error) {
-			                errorsList.push(new validationError(error.propertyName, error.errorMessage));
-			            });
-			            patObs.validationErrors(errorsList);
-			        } else {
-			            patObs.validationErrors([]);
-			            patObs.isValid(true);
-			        }
-			    });
+			    
+			    // patObs.entityAspect.validationErrorsChanged.subscribe(function (validationChangeArgs) {
+			        // var hasErrors = patObs.entityAspect.hasValidationErrors;
+			        // var errorsList = [];
+			        // if (hasErrors) {
+			            // patObs.isValid(false);
+			            // var errors = patObs.entityAspect.getValidationErrors();
+			            // ko.utils.arrayForEach(errors, function (error) {
+			                // errorsList.push(new validationError(error.propertyName, error.errorMessage));
+			            // });
+			            // patObs.validationErrors(errorsList);
+			        // } else {
+			            // patObs.validationErrors([]);
+			            // patObs.isValid(true);
+			        // }
+			    // });
+				
+				/**
+				*	computed. tracks for any validation errors and returns a list of the errored property names.
+				*	this will be used in the property field css binding condition for invalid styling.
+				*	@method patObs.validationErrorsArray
+				*/
 			    patObs.validationErrorsArray = ko.computed(function () {
 			        var thisArray = [];
 			        ko.utils.arrayForEach(patObs.validationErrors(), function (error) {

@@ -5757,6 +5757,12 @@ div.time-picker li.selected {
   background: #0063CE;
   color: #fff; }
 
+.validation-summary {
+  color: red;
+  margin: 10px; }
+  .validation-summary h3, .validation-summary nav.pagination span, nav.pagination .validation-summary span {
+    color: red; }
+
 header[role=banner] .loading-messages {
   display: inline;
   float: right;

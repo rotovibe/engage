@@ -97,6 +97,8 @@
                 return type.name().toLowerCase() === 'touchpoint';
             });
             self.newTouchPoint(datacontext.createEntity('Note', { id: self.thisTouchPointId(), patientId: self.selectedPatient().id(), contactedOn: new moment().format(), outcome: self.defaultOutcome, method: self.defaultMethod, source: self.defaultSource, duration: self.defaultDuration, who: self.defaultWho, typeId: touchpointNoteType.id(), validatedIdentity: false }));
+			self.newTouchPoint().contactedOnStr( moment().format("MM/DD/YYYY") );
+			
             // If new touch points' date changes
             self.newTouchPointToken = self.newTouchPoint().contactedOn.subscribe(function (newValue) {
                 // If there is no new value,
@@ -105,6 +107,7 @@
                     var thisnow = new moment().format();
                     setTimeout(function () {
                         self.newTouchPoint().contactedOn(thisnow);
+						self.newTouchPoint().contactedOnStr( moment(thisnow).format("MM/DD/YYYY") );
                     }, 100);
                 }
             });

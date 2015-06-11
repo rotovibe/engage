@@ -21,6 +21,8 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
             self.settings = settings;
             self.activeDataType = self.settings.activeDataType;
             self.selectedPatient = self.settings.selectedPatient;
+			self.isValid = self.settings.isValid;
+			self.validationErrors = self.settings.validationErrors;
             self.getBasicObservationsById = function () {
                 if (self.activeDataType()) {
                     // Get a list of this patient's observations
@@ -72,6 +74,27 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
                 });
                 return theseObservations.sort(self.alphabeticalNameSort)
             }).extend({ throttle: 50 });
+			
+			self.observationsValidationErrors = ko.computed(function() {
+				var observations = self.computedBasicObservations();
+				var tempArray = [];
+				ko.utils.arrayForEach( observations, function(obs){
+					if( !obs.isValid() ){
+						ko.utils.arrayForEach( obs.validationErrors(), function(error){
+							tempArray.push(	{Message: error.Message} );
+						});						
+					}
+				});	
+				if( tempArray.length > 0 ){
+					self.isValid(false);
+				}
+				else{
+					self.isValid(true);
+				}
+				self.validationErrors(tempArray);
+				return tempArray;
+			}).extend({ throttle: 50 });
+			
             self.addNew = function (sender) {
                 var newObservation = ko.observable();
                 if (moment(sender.startDate()).isValid()) {

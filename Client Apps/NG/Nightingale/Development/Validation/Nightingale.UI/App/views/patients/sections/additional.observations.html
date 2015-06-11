@@ -4,6 +4,14 @@
     </div>
     <div class="accordion-content columns">
         <div class="column">
+			<div class="row validation-summary" data-bind="if: additionalObservationsValidationErrors().length > 0">
+                <h3>Please correct the following errors:</h3>
+				<ul data-bind="foreach: additionalObservationsValidationErrors">
+					<li>
+						<h5 data-bind="text: Message"></h5>
+					</li>
+				</ul>
+			</div>
             <form>
                 <div class="row pad top">
                     <div class="span6">

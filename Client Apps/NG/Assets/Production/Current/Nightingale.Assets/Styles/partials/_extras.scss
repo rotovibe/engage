@@ -63,3 +63,10 @@ div.time-picker li.selected {
   background: #0063CE;
   color: #fff;
 }
+.validation-summary {
+    color: red;
+    margin: 10px;
+    h3 {
+        color: red;
+    }
+}

@@ -1,6 +1,6 @@
 // Register all of the user related models in the entity manager (initialize function) and provide other non-entity models
-define(['services/session'],
-	function (session) {
+define(['services/session', 'services/dateHelper'],
+	function (session, dateHelper) {
 
 	    var datacontext;
 
@@ -224,6 +224,41 @@ define(['services/session'],
 	                	return note.text();
 	                }
                 });
+				
+				/**
+				*
+				*	@method note.contactedOnStr ( observable )this is used for the typable date string and will bind to the custom binding "date"
+				*		in addition to the datepicker binding. the date binding adds masking for dates. 
+				*		the validation will observe this string field while the note.contactedOn property will be synched accordingly.
+				*		this delagation is needed when we have separate date + time controls for the same datetime property.
+				*/
+				note.contactedOnStr = ko.observable();
+				
+				/**
+				*	pass the typed date string into the date part of the note.contactedOn property, without affecting the time.
+				*	@method note.contactedOnWatcher
+				*/
+				note.contactedOnWatcher = ko.computed( function(){
+					var enteredDateStr = note.contactedOnStr();					
+					if( dateHelper.isValidDate(enteredDateStr) ){
+						var contactedOnMoment;
+						var enteredMoment = moment(enteredDateStr);	
+						if( note.contactedOn() ){
+							contactedOnMoment = moment(note.contactedOn());											
+							if( !dateHelper.isSameDate(contactedOnMoment, enteredMoment) ){					
+								contactedOnMoment = dateHelper.setDateValue( enteredMoment, contactedOnMoment );
+								note.contactedOn( contactedOnMoment.toISOString() );
+							}						
+						}
+						else{
+							note.contactedOn( enteredMoment.toISOString() );
+						}						
+					}							
+					else{
+						//note.contactedOn(''); //this may zero the time!!
+					}
+				});
+				
 		    }
 
 		    function todoInitializer (todo) {

@@ -5,15 +5,16 @@
     <div class="span4">
         <div class="row">
             <div class="span6" data-bind="with: $parent.systolicObservationValue">
-                <input type="text" data-bind="value: value, valueUpdate: 'afterkeydown', css: { 'invalid': (!value() && (value() || $parent.startDate())) }">
+                <input type="text" data-bind="value: value, valueUpdate: 'afterkeydown', css: { 'invalid': ($parent.validationErrorsArray().indexOf('systolic') !== -1) }"> <!-- (!value() && (value() || $parent.startDate())) -->
             </div>
             <div class="span6" data-bind="with: $parent.diastolicObservationValue">
-                <input type="text" data-bind="value: value, valueUpdate: 'afterkeydown', css: { 'invalid': (!value() && (value() || $parent.startDate())) }">
+                <input type="text" data-bind="value: value, valueUpdate: 'afterkeydown', css: { 'invalid': ($parent.validationErrorsArray().indexOf('diastolic') !== -1) }">
             </div>
         </div>
     </div>
     <div class="span3">
-        <input class="datepicker" type="text" readonly="readonly" data-bind="datepicker: startDate, datepickerOptions: { maxDate: '+0' }, css: { 'invalid': (($parent.diastolicObservationValue() && $parent.diastolicObservationValue().value() || $parent.systolicObservationValue() && $parent.systolicObservationValue().value()) && !moment(startDate()).isValid()) }" />
+        <!-- <input class="datepicker" type="text" readonly="readonly" data-bind="datepicker: startDate, datepickerOptions: { maxDate: '+0' }, css: { 'invalid': (($parent.diastolicObservationValue() && $parent.diastolicObservationValue().value() || $parent.systolicObservationValue() && $parent.systolicObservationValue().value()) && !moment(startDate()).isValid()) }" /> -->
+		<input class="datepicker" type="text" data-bind="value: startDate, datepicker: startDate, date: startDate, valueUpdate: 'afterkeydown', datepickerOptions: { maxDate: '+0' }, css: { 'invalid': (validationErrorsArray().indexOf('startDate') !== -1) }">
     </div>
     <div class="span2">
         <label>
