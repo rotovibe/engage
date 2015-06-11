@@ -6,6 +6,7 @@ using Phytel.API.DataDomain.Medication.DTO;
 using Phytel.API.Interface;
 using Phytel.API.Common.CustomObject;
 using Phytel.API.DataDomain.LookUp.DTO;
+using System.Linq;
 
 namespace Phytel.API.AppDomain.NG.Medication
 {
@@ -153,6 +154,20 @@ namespace Phytel.API.AppDomain.NG.Medication
                     }
                 }
                 return patientMedSupp;
+            }
+            catch (Exception ex) { throw ex; }
+        }
+
+
+        public void DeleteMedicationMap(PutDeleteMedMapRequest request)
+        {
+            try
+            {
+                if (request.MedicationMaps != null)
+                {
+                    EndpointUtil.DeleteMedicationMap(request);
+                    SearchManager.DeleteMedDocuments(request);
+                }
             }
             catch (Exception ex) { throw ex; }
         }
