@@ -131,20 +131,52 @@ namespace DataDomain.Medication.Repo
                 entities.Cast<MedicationMapData>().ForEach(e =>
                 {
                     List<IMongoQuery> qList = new List<IMongoQuery>();
-                    if (!e.Form.IsNullOrEmpty())
+                    if (e.Form.IsNullOrEmpty())
+                    {
+                        qList.Add(Query.EQ(MEMedicationMapping.FormProperty, BsonNull.Value));
+                    }
+                    else
+                    {
                         qList.Add(Query<MEMedicationMapping>.EQ(b => b.Form, e.Form));
+                    }
 
-                    if (!e.Strength.IsNullOrEmpty())
+                    if (e.Strength.IsNullOrEmpty())
+                    {
+                        qList.Add(Query.EQ(MEMedicationMapping.StrengthProperty, BsonNull.Value));
+                    }
+                    else
+                    {
                         qList.Add(Query<MEMedicationMapping>.EQ(b => b.Strength, e.Strength));
+                    }
 
-                    if (!e.SubstanceName.IsNullOrEmpty())
+                    if (e.SubstanceName.IsNullOrEmpty())
+                    {
+                        qList.Add(Query.EQ(MEMedicationMapping.SubstanceNameProperty, BsonNull.Value));
+                    }
+                    else
+                    {
                         qList.Add(Query<MEMedicationMapping>.EQ(b => b.SubstanceName, e.SubstanceName));
+                    }
 
-                    if (!e.Route.IsNullOrEmpty())
+                    if (e.Route.IsNullOrEmpty())
+                    {
+                        qList.Add(Query.EQ(MEMedicationMapping.RouteProperty, BsonNull.Value));
+                    }
+                    else
+                    {
                         qList.Add(Query<MEMedicationMapping>.EQ(b => b.Route, e.Route));
+                    }
 
-                    if (!e.FullName.IsNullOrEmpty())
+                    if (e.FullName.IsNullOrEmpty())
+                    {
+                        qList.Add(Query.EQ(MEMedicationMapping.FullNameProperty, BsonNull.Value));
+                    }
+                    else
+                    {
                         qList.Add(Query<MEMedicationMapping>.EQ(b => b.FullName, e.FullName));
+                    }
+
+                    qList.Add(Query<MEMedicationMapping>.EQ(b => b.Custom, true));
 
                     var query = Query.And(qList);
                     Context.MedicationMaps.Collection.Remove(query);
