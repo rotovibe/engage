@@ -196,6 +196,7 @@ namespace Phytel.API.AppDomain.NG.Search
                         MedDocuments = request.MedicationMaps.Select(
                             map => new MedNameSearchDocData
                             {
+                                Id = map.Id,
                                 CompositeName = map.FullName,
                                 RouteName = map.Route,
                                 Strength = map.Strength,
