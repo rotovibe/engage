@@ -414,7 +414,7 @@ define(['services/formatter', 'services/dateHelper'],
 				//prevent typing non numerics:
 				$(element).on('keypress', function(e){
 					var key = e.which || e.keyCode;
-					if( (key < 48 || key > 57) && key !== 47 && key !== 116 && key !== 9 && key !== 37 && key !== 39 ){	//exclude 47(/), 116 (=F5), 9(=tab) , 37,39 (<-, ->)	\\&& key !== 8, 8(=bkspc)
+					if( (key < 48 || key > 57) && key !== 47 && key !== 116 && key !== 8 && key !== 9 && key !== 37 && key !== 39 && key !== 46 && !(key == 118 && e.ctrlKey) ){	//exclude 47(/), 116 (=F5), 9(=tab) , 37,39 (<-, ->)	\\&& key !== 8, 8(=bkspc)
 						e.preventDefault();												
 					}
 				});
