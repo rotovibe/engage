@@ -2016,21 +2016,21 @@ body {
 
 @font-face {
   font-family: "fontcustom";
-  src: url("//az571236.vo.msecnd.net/fonts/fontcustom.eot");
-  src: url("//az571236.vo.msecnd.net/fonts/fontcustom.eot?#iefix") format("embedded-opentype"), url("//az571236.vo.msecnd.net/fonts/fontcustom.woff") format("woff"), url("//az571236.vo.msecnd.net/fonts/fontcustom.ttf") format("truetype"), url("//az571236.vo.msecnd.net/fonts/fontcustom.svg#fontcustom") format("svg");
+  src: url("//az571236.vo.msecnd.net/fontcustom/fontcustomv1.eot");
+  src: url("//az571236.vo.msecnd.net/fontcustom/fontcustomv1.eot?#iefix") format("embedded-opentype"), url("//az571236.vo.msecnd.net/fontcustom/fontcustomv1.woff") format("woff"), url("//az571236.vo.msecnd.net/fontcustom/fontcustomv1.ttf") format("truetype"), url("//az571236.vo.msecnd.net/fontcustom/fontcustomv1.svg#fontcustom") format("svg");
   font-weight: normal;
   font-style: normal; }
 
 @media screen and (-webkit-min-device-pixel-ratio: 0) {
   @font-face {
     font-family: "fontcustom";
-    src: font-url("fonts/fontcustom.svg#fontcustom") format("svg"); }
+    src: font-url("fontcustom/fontcustomv1.svg#fontcustom") format("svg"); }
  }
 
 [data-icon]:before {
   content: attr(data-icon); }
 
-[data-icon]:before, .icon-address:before, .icon-angle-double-down:before, .icon-angle-double-left:before, .icon-angle-double-right:before, .icon-angle-double-up:before, .icon-arrow-left:before, .icon-arrow-right:before, .icon-assign-patient:before, .icon-calendar:before, input.datepicker:before, .icon-cancel:before, .icon-check:before, .icon-edit:before, .icon-email:before, .icon-enter-fullscreen:before, .icon-exit-fullscreen:before, .icon-flag:before, .icon-info:before, .icon-inprogress:before, .icon-menu:before, .icon-notes:before, .icon-notes-call:before, .icon-notes-metrics:before, .icon-otc:before, .icon-phone:before, .icon-plus:before, .icon-print:before, .icon-priority:before, .icon-priority-empty:before, .icon-rx:before, .icon-search:before, .icon-single-chevron-down:before, .icon-single-chevron-left:before, .icon-single-chevron-right:before, .icon-single-chevron-up:before, .accordion .accordion-toggle.open .icon-single-chevron-down:before, .accordion .accordion-toggle.open > .icon-angle-double-down:before, .icon-sms:before, .icon-table:before, .icon-triangle-down:before, .input.error .chosen-container .chosen-single b:before, .input.error .chosen-container .widget .content > .filters .wrapper input[type="email"] b:before, .widget .content > .filters .wrapper .input.error .chosen-container input[type="email"] b:before, .input.error .chosen-container .widget .content > .filters .wrapper input[type="number"] b:before, .widget .content > .filters .wrapper .input.error .chosen-container input[type="number"] b:before, .input.error .chosen-container .widget .content > .filters .wrapper input[type="password"] b:before, .widget .content > .filters .wrapper .input.error .chosen-container input[type="password"] b:before, .input.error .chosen-container .widget .content > .filters .wrapper input[type="search"] b:before, .widget .content > .filters .wrapper .input.error .chosen-container input[type="search"] b:before, .input.error .chosen-container .widget .content > .filters .wrapper input[type="tel"] b:before, .widget .content > .filters .wrapper .input.error .chosen-container input[type="tel"] b:before, .input.error .chosen-container .widget .content > .filters .wrapper input[type="text"] b:before, .widget .content > .filters .wrapper .input.error .chosen-container input[type="text"] b:before, .input.error .chosen-container .widget .content > .filters .wrapper input[type="url"] b:before, .widget .content > .filters .wrapper .input.error .chosen-container input[type="url"] b:before, .input.error .chosen-container .widget .content > .filters .wrapper textarea b:before, .widget .content > .filters .wrapper .input.error .chosen-container textarea b:before, .input.error .chosen-container .chosen-container-multi .chosen-choices b:before, .chosen-container-multi .input.error .chosen-container .chosen-choices b:before, .icon-twitter:before, .icon-unstarted:before, .icon-warning:before, .icon-warning-o:before {
+[data-icon]:before, .icon-address:before, .icon-angle-double-down:before, .icon-angle-double-left:before, .icon-angle-double-right:before, .icon-angle-double-up:before, .icon-arrow-left:before, .icon-arrow-right:before, .icon-assign-patient:before, .icon-calendar:before, input.datepicker:before, .icon-cancel:before, .icon-check:before, .icon-checkbox-off:before, .icon-checkbox-on:before, .icon-edit:before, .icon-email:before, .icon-enter-fullscreen:before, .icon-exit-fullscreen:before, .icon-filter:before, .icon-filter_clear:before, .icon-flag:before, .icon-icon_new:before, .icon-info:before, .icon-inprogress:before, .icon-letter:before, .icon-menu:before, .icon-notes:before, .icon-notes-call:before, .icon-notes-metrics:before, .icon-otc:before, .icon-phone:before, .icon-phone_incoming:before, .icon-plus:before, .icon-print:before, .icon-priority:before, .icon-priority-empty:before, .icon-radio-off:before, .icon-radio-on:before, .icon-refresh:before, .icon-rx:before, .icon-search:before, .icon-settings:before, .icon-single-chevron-down:before, .icon-single-chevron-left:before, .icon-single-chevron-right:before, .icon-single-chevron-up:before, .accordion .accordion-toggle.open .icon-single-chevron-down:before, .accordion .accordion-toggle.open > .icon-angle-double-down:before, .icon-sms:before, .icon-supplements:before, .icon-table:before, .icon-triangle-down:before, .input.error .chosen-container .chosen-single b:before, .input.error .chosen-container .widget .content > .filters .wrapper input[type="email"] b:before, .widget .content > .filters .wrapper .input.error .chosen-container input[type="email"] b:before, .input.error .chosen-container .widget .content > .filters .wrapper input[type="number"] b:before, .widget .content > .filters .wrapper .input.error .chosen-container input[type="number"] b:before, .input.error .chosen-container .widget .content > .filters .wrapper input[type="password"] b:before, .widget .content > .filters .wrapper .input.error .chosen-container input[type="password"] b:before, .input.error .chosen-container .widget .content > .filters .wrapper input[type="search"] b:before, .widget .content > .filters .wrapper .input.error .chosen-container input[type="search"] b:before, .input.error .chosen-container .widget .content > .filters .wrapper input[type="tel"] b:before, .widget .content > .filters .wrapper .input.error .chosen-container input[type="tel"] b:before, .input.error .chosen-container .widget .content > .filters .wrapper input[type="text"] b:before, .widget .content > .filters .wrapper .input.error .chosen-container input[type="text"] b:before, .input.error .chosen-container .widget .content > .filters .wrapper input[type="url"] b:before, .widget .content > .filters .wrapper .input.error .chosen-container input[type="url"] b:before, .input.error .chosen-container .widget .content > .filters .wrapper textarea b:before, .widget .content > .filters .wrapper .input.error .chosen-container textarea b:before, .input.error .chosen-container .chosen-container-multi .chosen-choices b:before, .chosen-container-multi .input.error .chosen-container .chosen-choices b:before, .icon-twitter:before, .icon-unstarted:before, .icon-warning:before, .icon-warning-o:before {
   display: inline-block;
   font-family: "fontcustom";
   font-style: normal;
@@ -2077,6 +2077,12 @@ body {
 .icon-check:before {
   content: "\f10a"; }
 
+.icon-checkbox-off:before {
+  content: "\f138"; }
+
+.icon-checkbox-on:before {
+  content: "\f139"; }
+
 .icon-edit:before {
   content: "\f10b"; }
 
@@ -2089,83 +2095,113 @@ body {
 .icon-exit-fullscreen:before {
   content: "\f10e"; }
 
+.icon-filter:before {
+  content: "\f12d"; }
+
+.icon-filter_clear:before {
+  content: "\f12f"; }
+
 .icon-flag:before {
   content: "\f10f"; }
 
-.icon-info:before {
+.icon-icon_new:before {
   content: "\f110"; }
 
-.icon-inprogress:before {
-  content: "\f127"; }
-
-.icon-menu:before {
+.icon-info:before {
   content: "\f111"; }
 
-.icon-notes:before {
+.icon-inprogress:before {
   content: "\f112"; }
 
-.icon-notes-call:before {
+.icon-letter:before {
+  content: "\f13c"; }
+
+.icon-menu:before {
   content: "\f113"; }
 
-.icon-notes-metrics:before {
+.icon-notes:before {
   content: "\f114"; }
 
-.icon-otc:before {
+.icon-notes-call:before {
   content: "\f115"; }
 
-.icon-phone:before {
+.icon-notes-metrics:before {
   content: "\f116"; }
 
-.icon-plus:before {
+.icon-otc:before {
   content: "\f117"; }
 
-.icon-print:before {
+.icon-phone:before {
   content: "\f118"; }
 
-.icon-priority:before {
+.icon-phone_incoming:before {
   content: "\f119"; }
 
-.icon-priority-empty:before {
+.icon-plus:before {
   content: "\f11a"; }
 
-.icon-rx:before {
+.icon-print:before {
   content: "\f11b"; }
 
-.icon-search:before {
+.icon-priority:before {
   content: "\f11c"; }
 
-.icon-single-chevron-down:before {
+.icon-priority-empty:before {
   content: "\f11d"; }
 
-.icon-single-chevron-left:before {
+.icon-radio-off:before {
+  content: "\f13a"; }
+
+.icon-radio-on:before {
+  content: "\f13b"; }
+
+.icon-refresh:before {
+  content: "\f12e"; }
+
+.icon-rx:before {
   content: "\f11e"; }
 
-.icon-single-chevron-right:before {
+.icon-search:before {
   content: "\f11f"; }
 
-.icon-single-chevron-up:before, .accordion .accordion-toggle.open .icon-single-chevron-down:before, .accordion .accordion-toggle.open > .icon-angle-double-down:before {
+.icon-settings:before {
   content: "\f120"; }
 
-.icon-sms:before {
+.icon-single-chevron-down:before {
   content: "\f121"; }
 
-.icon-table:before {
+.icon-single-chevron-left:before {
   content: "\f122"; }
 
-.icon-triangle-down:before, .input.error .chosen-container .chosen-single b:before, .input.error .chosen-container .widget .content > .filters .wrapper input[type="email"] b:before, .widget .content > .filters .wrapper .input.error .chosen-container input[type="email"] b:before, .input.error .chosen-container .widget .content > .filters .wrapper input[type="number"] b:before, .widget .content > .filters .wrapper .input.error .chosen-container input[type="number"] b:before, .input.error .chosen-container .widget .content > .filters .wrapper input[type="password"] b:before, .widget .content > .filters .wrapper .input.error .chosen-container input[type="password"] b:before, .input.error .chosen-container .widget .content > .filters .wrapper input[type="search"] b:before, .widget .content > .filters .wrapper .input.error .chosen-container input[type="search"] b:before, .input.error .chosen-container .widget .content > .filters .wrapper input[type="tel"] b:before, .widget .content > .filters .wrapper .input.error .chosen-container input[type="tel"] b:before, .input.error .chosen-container .widget .content > .filters .wrapper input[type="text"] b:before, .widget .content > .filters .wrapper .input.error .chosen-container input[type="text"] b:before, .input.error .chosen-container .widget .content > .filters .wrapper input[type="url"] b:before, .widget .content > .filters .wrapper .input.error .chosen-container input[type="url"] b:before, .input.error .chosen-container .widget .content > .filters .wrapper textarea b:before, .widget .content > .filters .wrapper .input.error .chosen-container textarea b:before, .input.error .chosen-container .chosen-container-multi .chosen-choices b:before, .chosen-container-multi .input.error .chosen-container .chosen-choices b:before {
+.icon-single-chevron-right:before {
   content: "\f123"; }
 
-.icon-twitter:before {
+.icon-single-chevron-up:before, .accordion .accordion-toggle.open .icon-single-chevron-down:before, .accordion .accordion-toggle.open > .icon-angle-double-down:before {
   content: "\f124"; }
 
-.icon-unstarted:before {
-  content: "\f128"; }
-
-.icon-warning:before {
+.icon-sms:before {
   content: "\f125"; }
 
-.icon-warning-o:before {
+.icon-supplements:before {
   content: "\f126"; }
+
+.icon-table:before {
+  content: "\f127"; }
+
+.icon-triangle-down:before, .input.error .chosen-container .chosen-single b:before, .input.error .chosen-container .widget .content > .filters .wrapper input[type="email"] b:before, .widget .content > .filters .wrapper .input.error .chosen-container input[type="email"] b:before, .input.error .chosen-container .widget .content > .filters .wrapper input[type="number"] b:before, .widget .content > .filters .wrapper .input.error .chosen-container input[type="number"] b:before, .input.error .chosen-container .widget .content > .filters .wrapper input[type="password"] b:before, .widget .content > .filters .wrapper .input.error .chosen-container input[type="password"] b:before, .input.error .chosen-container .widget .content > .filters .wrapper input[type="search"] b:before, .widget .content > .filters .wrapper .input.error .chosen-container input[type="search"] b:before, .input.error .chosen-container .widget .content > .filters .wrapper input[type="tel"] b:before, .widget .content > .filters .wrapper .input.error .chosen-container input[type="tel"] b:before, .input.error .chosen-container .widget .content > .filters .wrapper input[type="text"] b:before, .widget .content > .filters .wrapper .input.error .chosen-container input[type="text"] b:before, .input.error .chosen-container .widget .content > .filters .wrapper input[type="url"] b:before, .widget .content > .filters .wrapper .input.error .chosen-container input[type="url"] b:before, .input.error .chosen-container .widget .content > .filters .wrapper textarea b:before, .widget .content > .filters .wrapper .input.error .chosen-container textarea b:before, .input.error .chosen-container .chosen-container-multi .chosen-choices b:before, .chosen-container-multi .input.error .chosen-container .chosen-choices b:before {
+  content: "\f128"; }
+
+.icon-twitter:before {
+  content: "\f129"; }
+
+.icon-unstarted:before {
+  content: "\f12a"; }
+
+.icon-warning:before {
+  content: "\f12b"; }
+
+.icon-warning-o:before {
+  content: "\f12c"; }
 
 body {
   color: #222222;
@@ -2306,21 +2342,21 @@ header[role=banner] a:hover, header[role=navigation] a:hover {
 
 @font-face {
   font-family: "fontcustom";
-  src: url("//az571236.vo.msecnd.net/fonts/fontcustom.eot");
-  src: url("//az571236.vo.msecnd.net/fonts/fontcustom.eot?#iefix") format("embedded-opentype"), url("//az571236.vo.msecnd.net/fonts/fontcustom.woff") format("woff"), url("//az571236.vo.msecnd.net/fonts/fontcustom.ttf") format("truetype"), url("//az571236.vo.msecnd.net/fonts/fontcustom.svg#fontcustom") format("svg");
+  src: url("//az571236.vo.msecnd.net/fontcustom/fontcustomv1.eot");
+  src: url("//az571236.vo.msecnd.net/fontcustom/fontcustomv1.eot?#iefix") format("embedded-opentype"), url("//az571236.vo.msecnd.net/fontcustom/fontcustomv1.woff") format("woff"), url("//az571236.vo.msecnd.net/fontcustom/fontcustomv1.ttf") format("truetype"), url("//az571236.vo.msecnd.net/fontcustom/fontcustomv1.svg#fontcustom") format("svg");
   font-weight: normal;
   font-style: normal; }
 
 @media screen and (-webkit-min-device-pixel-ratio: 0) {
   @font-face {
     font-family: "fontcustom";
-    src: font-url("fonts/fontcustom.svg#fontcustom") format("svg"); }
+    src: font-url("fontcustom/fontcustomv1.svg#fontcustom") format("svg"); }
  }
 
 [data-icon]:before {
   content: attr(data-icon); }
 
-[data-icon]:before, .icon-address:before, .icon-angle-double-down:before, .icon-angle-double-left:before, .icon-angle-double-right:before, .icon-angle-double-up:before, .icon-arrow-left:before, .icon-arrow-right:before, .icon-assign-patient:before, .icon-calendar:before, input.datepicker:before, .icon-cancel:before, .icon-check:before, .icon-edit:before, .icon-email:before, .icon-enter-fullscreen:before, .icon-exit-fullscreen:before, .icon-flag:before, .icon-info:before, .icon-inprogress:before, .icon-menu:before, .icon-notes:before, .icon-notes-call:before, .icon-notes-metrics:before, .icon-otc:before, .icon-phone:before, .icon-plus:before, .icon-print:before, .icon-priority:before, .icon-priority-empty:before, .icon-rx:before, .icon-search:before, .icon-single-chevron-down:before, .icon-single-chevron-left:before, .icon-single-chevron-right:before, .icon-single-chevron-up:before, .accordion .accordion-toggle.open .icon-single-chevron-down:before, .accordion .accordion-toggle.open > .icon-angle-double-down:before, .icon-sms:before, .icon-table:before, .icon-triangle-down:before, .input.error .chosen-container .chosen-single b:before, .input.error .chosen-container .widget .content > .filters .wrapper input[type="email"] b:before, .widget .content > .filters .wrapper .input.error .chosen-container input[type="email"] b:before, .input.error .chosen-container .widget .content > .filters .wrapper input[type="number"] b:before, .widget .content > .filters .wrapper .input.error .chosen-container input[type="number"] b:before, .input.error .chosen-container .widget .content > .filters .wrapper input[type="password"] b:before, .widget .content > .filters .wrapper .input.error .chosen-container input[type="password"] b:before, .input.error .chosen-container .widget .content > .filters .wrapper input[type="search"] b:before, .widget .content > .filters .wrapper .input.error .chosen-container input[type="search"] b:before, .input.error .chosen-container .widget .content > .filters .wrapper input[type="tel"] b:before, .widget .content > .filters .wrapper .input.error .chosen-container input[type="tel"] b:before, .input.error .chosen-container .widget .content > .filters .wrapper input[type="text"] b:before, .widget .content > .filters .wrapper .input.error .chosen-container input[type="text"] b:before, .input.error .chosen-container .widget .content > .filters .wrapper input[type="url"] b:before, .widget .content > .filters .wrapper .input.error .chosen-container input[type="url"] b:before, .input.error .chosen-container .widget .content > .filters .wrapper textarea b:before, .widget .content > .filters .wrapper .input.error .chosen-container textarea b:before, .input.error .chosen-container .chosen-container-multi .chosen-choices b:before, .chosen-container-multi .input.error .chosen-container .chosen-choices b:before, .icon-twitter:before, .icon-unstarted:before, .icon-warning:before, .icon-warning-o:before {
+[data-icon]:before, .icon-address:before, .icon-angle-double-down:before, .icon-angle-double-left:before, .icon-angle-double-right:before, .icon-angle-double-up:before, .icon-arrow-left:before, .icon-arrow-right:before, .icon-assign-patient:before, .icon-calendar:before, input.datepicker:before, .icon-cancel:before, .icon-check:before, .icon-checkbox-off:before, .icon-checkbox-on:before, .icon-edit:before, .icon-email:before, .icon-enter-fullscreen:before, .icon-exit-fullscreen:before, .icon-filter:before, .icon-filter_clear:before, .icon-flag:before, .icon-icon_new:before, .icon-info:before, .icon-inprogress:before, .icon-letter:before, .icon-menu:before, .icon-notes:before, .icon-notes-call:before, .icon-notes-metrics:before, .icon-otc:before, .icon-phone:before, .icon-phone_incoming:before, .icon-plus:before, .icon-print:before, .icon-priority:before, .icon-priority-empty:before, .icon-radio-off:before, .icon-radio-on:before, .icon-refresh:before, .icon-rx:before, .icon-search:before, .icon-settings:before, .icon-single-chevron-down:before, .icon-single-chevron-left:before, .icon-single-chevron-right:before, .icon-single-chevron-up:before, .accordion .accordion-toggle.open .icon-single-chevron-down:before, .accordion .accordion-toggle.open > .icon-angle-double-down:before, .icon-sms:before, .icon-supplements:before, .icon-table:before, .icon-triangle-down:before, .input.error .chosen-container .chosen-single b:before, .input.error .chosen-container .widget .content > .filters .wrapper input[type="email"] b:before, .widget .content > .filters .wrapper .input.error .chosen-container input[type="email"] b:before, .input.error .chosen-container .widget .content > .filters .wrapper input[type="number"] b:before, .widget .content > .filters .wrapper .input.error .chosen-container input[type="number"] b:before, .input.error .chosen-container .widget .content > .filters .wrapper input[type="password"] b:before, .widget .content > .filters .wrapper .input.error .chosen-container input[type="password"] b:before, .input.error .chosen-container .widget .content > .filters .wrapper input[type="search"] b:before, .widget .content > .filters .wrapper .input.error .chosen-container input[type="search"] b:before, .input.error .chosen-container .widget .content > .filters .wrapper input[type="tel"] b:before, .widget .content > .filters .wrapper .input.error .chosen-container input[type="tel"] b:before, .input.error .chosen-container .widget .content > .filters .wrapper input[type="text"] b:before, .widget .content > .filters .wrapper .input.error .chosen-container input[type="text"] b:before, .input.error .chosen-container .widget .content > .filters .wrapper input[type="url"] b:before, .widget .content > .filters .wrapper .input.error .chosen-container input[type="url"] b:before, .input.error .chosen-container .widget .content > .filters .wrapper textarea b:before, .widget .content > .filters .wrapper .input.error .chosen-container textarea b:before, .input.error .chosen-container .chosen-container-multi .chosen-choices b:before, .chosen-container-multi .input.error .chosen-container .chosen-choices b:before, .icon-twitter:before, .icon-unstarted:before, .icon-warning:before, .icon-warning-o:before {
   display: inline-block;
   font-family: "fontcustom";
   font-style: normal;
@@ -2367,6 +2403,12 @@ header[role=banner] a:hover, header[role=navigation] a:hover {
 .icon-check:before {
   content: "\f10a"; }
 
+.icon-checkbox-off:before {
+  content: "\f138"; }
+
+.icon-checkbox-on:before {
+  content: "\f139"; }
+
 .icon-edit:before {
   content: "\f10b"; }
 
@@ -2379,83 +2421,113 @@ header[role=banner] a:hover, header[role=navigation] a:hover {
 .icon-exit-fullscreen:before {
   content: "\f10e"; }
 
+.icon-filter:before {
+  content: "\f12d"; }
+
+.icon-filter_clear:before {
+  content: "\f12f"; }
+
 .icon-flag:before {
   content: "\f10f"; }
 
-.icon-info:before {
+.icon-icon_new:before {
   content: "\f110"; }
 
-.icon-inprogress:before {
-  content: "\f127"; }
-
-.icon-menu:before {
+.icon-info:before {
   content: "\f111"; }
 
-.icon-notes:before {
+.icon-inprogress:before {
   content: "\f112"; }
 
-.icon-notes-call:before {
+.icon-letter:before {
+  content: "\f13c"; }
+
+.icon-menu:before {
   content: "\f113"; }
 
-.icon-notes-metrics:before {
+.icon-notes:before {
   content: "\f114"; }
 
-.icon-otc:before {
+.icon-notes-call:before {
   content: "\f115"; }
 
-.icon-phone:before {
+.icon-notes-metrics:before {
   content: "\f116"; }
 
-.icon-plus:before {
+.icon-otc:before {
   content: "\f117"; }
 
-.icon-print:before {
+.icon-phone:before {
   content: "\f118"; }
 
-.icon-priority:before {
+.icon-phone_incoming:before {
   content: "\f119"; }
 
-.icon-priority-empty:before {
+.icon-plus:before {
   content: "\f11a"; }
 
-.icon-rx:before {
+.icon-print:before {
   content: "\f11b"; }
 
-.icon-search:before {
+.icon-priority:before {
   content: "\f11c"; }
 
-.icon-single-chevron-down:before {
+.icon-priority-empty:before {
   content: "\f11d"; }
 
-.icon-single-chevron-left:before {
+.icon-radio-off:before {
+  content: "\f13a"; }
+
+.icon-radio-on:before {
+  content: "\f13b"; }
+
+.icon-refresh:before {
+  content: "\f12e"; }
+
+.icon-rx:before {
   content: "\f11e"; }
 
-.icon-single-chevron-right:before {
+.icon-search:before {
   content: "\f11f"; }
 
-.icon-single-chevron-up:before, .accordion .accordion-toggle.open .icon-single-chevron-down:before, .accordion .accordion-toggle.open > .icon-angle-double-down:before {
+.icon-settings:before {
   content: "\f120"; }
 
-.icon-sms:before {
+.icon-single-chevron-down:before {
   content: "\f121"; }
 
-.icon-table:before {
+.icon-single-chevron-left:before {
   content: "\f122"; }
 
-.icon-triangle-down:before, .input.error .chosen-container .chosen-single b:before, .input.error .chosen-container .widget .content > .filters .wrapper input[type="email"] b:before, .widget .content > .filters .wrapper .input.error .chosen-container input[type="email"] b:before, .input.error .chosen-container .widget .content > .filters .wrapper input[type="number"] b:before, .widget .content > .filters .wrapper .input.error .chosen-container input[type="number"] b:before, .input.error .chosen-container .widget .content > .filters .wrapper input[type="password"] b:before, .widget .content > .filters .wrapper .input.error .chosen-container input[type="password"] b:before, .input.error .chosen-container .widget .content > .filters .wrapper input[type="search"] b:before, .widget .content > .filters .wrapper .input.error .chosen-container input[type="search"] b:before, .input.error .chosen-container .widget .content > .filters .wrapper input[type="tel"] b:before, .widget .content > .filters .wrapper .input.error .chosen-container input[type="tel"] b:before, .input.error .chosen-container .widget .content > .filters .wrapper input[type="text"] b:before, .widget .content > .filters .wrapper .input.error .chosen-container input[type="text"] b:before, .input.error .chosen-container .widget .content > .filters .wrapper input[type="url"] b:before, .widget .content > .filters .wrapper .input.error .chosen-container input[type="url"] b:before, .input.error .chosen-container .widget .content > .filters .wrapper textarea b:before, .widget .content > .filters .wrapper .input.error .chosen-container textarea b:before, .input.error .chosen-container .chosen-container-multi .chosen-choices b:before, .chosen-container-multi .input.error .chosen-container .chosen-choices b:before {
+.icon-single-chevron-right:before {
   content: "\f123"; }
 
-.icon-twitter:before {
+.icon-single-chevron-up:before, .accordion .accordion-toggle.open .icon-single-chevron-down:before, .accordion .accordion-toggle.open > .icon-angle-double-down:before {
   content: "\f124"; }
 
-.icon-unstarted:before {
-  content: "\f128"; }
-
-.icon-warning:before {
+.icon-sms:before {
   content: "\f125"; }
 
-.icon-warning-o:before {
+.icon-supplements:before {
   content: "\f126"; }
+
+.icon-table:before {
+  content: "\f127"; }
+
+.icon-triangle-down:before, .input.error .chosen-container .chosen-single b:before, .input.error .chosen-container .widget .content > .filters .wrapper input[type="email"] b:before, .widget .content > .filters .wrapper .input.error .chosen-container input[type="email"] b:before, .input.error .chosen-container .widget .content > .filters .wrapper input[type="number"] b:before, .widget .content > .filters .wrapper .input.error .chosen-container input[type="number"] b:before, .input.error .chosen-container .widget .content > .filters .wrapper input[type="password"] b:before, .widget .content > .filters .wrapper .input.error .chosen-container input[type="password"] b:before, .input.error .chosen-container .widget .content > .filters .wrapper input[type="search"] b:before, .widget .content > .filters .wrapper .input.error .chosen-container input[type="search"] b:before, .input.error .chosen-container .widget .content > .filters .wrapper input[type="tel"] b:before, .widget .content > .filters .wrapper .input.error .chosen-container input[type="tel"] b:before, .input.error .chosen-container .widget .content > .filters .wrapper input[type="text"] b:before, .widget .content > .filters .wrapper .input.error .chosen-container input[type="text"] b:before, .input.error .chosen-container .widget .content > .filters .wrapper input[type="url"] b:before, .widget .content > .filters .wrapper .input.error .chosen-container input[type="url"] b:before, .input.error .chosen-container .widget .content > .filters .wrapper textarea b:before, .widget .content > .filters .wrapper .input.error .chosen-container textarea b:before, .input.error .chosen-container .chosen-container-multi .chosen-choices b:before, .chosen-container-multi .input.error .chosen-container .chosen-choices b:before {
+  content: "\f128"; }
+
+.icon-twitter:before {
+  content: "\f129"; }
+
+.icon-unstarted:before {
+  content: "\f12a"; }
+
+.icon-warning:before {
+  content: "\f12b"; }
+
+.icon-warning-o:before {
+  content: "\f12c"; }
 
 @font-face {
   font-family: "Helvetica Neue W02";
@@ -4701,6 +4773,12 @@ header .toggle, .header .toggle, .filters .toggle {
   background-repeat: no-repeat; }
   header .toggle:hover, .header .toggle:hover, .filters .toggle:hover {
     opacity: 1; }
+  header .toggle.refresh, .header .toggle.refresh, .filters .toggle.refresh {
+    background-image: url("/images/refresh.png"); }
+  header .toggle.filter, .header .toggle.filter, .filters .toggle.filter {
+    background-image: url("/images/filter_inactive.png"); }
+    header .toggle.filter.active, .header .toggle.filter.active, .filters .toggle.filter.active {
+      background-image: url("/images/filter_active.png"); }
   header .toggle.fullscreen, .header .toggle.fullscreen, .filters .toggle.fullscreen {
     background-image: url("/images/full_screen_open.png"); }
   header .toggle.double-arrow-right, .header .toggle.double-arrow-right, .filters .toggle.double-arrow-right {
@@ -4713,6 +4791,14 @@ header .toggle, .header .toggle, .filters .toggle {
     background-image: url("/images/expand_down.png"); }
   header .toggle.up-down, .header .toggle.up-down, .filters .toggle.up-down {
     background-image: url("/images/collapse_up.png"); }
+  header .toggle.plus, .header .toggle.plus, .filters .toggle.plus {
+    background-image: url("/images/add_blue.png"); }
+  header .toggle.print, .header .toggle.print, .filters .toggle.print {
+    background-image: url("/images/print_blue_small.png"); }
+  header .toggle.edit, .header .toggle.edit, .filters .toggle.edit {
+    background-image: url("/images/edit_blue.png"); }
+  header .toggle.remove, .header .toggle.remove, .filters .toggle.remove {
+    background-image: url("/images/cancel_x.png"); }
 
 .widget.fullscreen .toggle.fullscreen {
   background-image: url("/images/full_screen_close.png"); }
@@ -4725,7 +4811,7 @@ header .toggle, .header .toggle, .filters .toggle {
 .filter-toggle {
   cursor: pointer; }
   .filter-toggle:hover {
-    background-color: #f2fbff; }
+    background-color: tint(#e0f5ff, 60%); }
   .filter-toggle.active {
     background-color: #e0f5ff; }
   .filter-toggle.dirty {
@@ -5670,6 +5756,12 @@ div.time-picker li {
 div.time-picker li.selected {
   background: #0063CE;
   color: #fff; }
+
+.validation-summary {
+  color: red;
+  margin: 10px; }
+  .validation-summary h3, .validation-summary nav.pagination span, nav.pagination .validation-summary span {
+    color: red; }
 
 header[role=banner] .loading-messages {
   display: inline;

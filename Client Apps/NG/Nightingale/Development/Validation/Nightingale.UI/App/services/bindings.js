@@ -353,6 +353,9 @@ define(['services/formatter', 'services/dateHelper'],
 					}
 				});
 				$(element).attr('maxlength', 12);				
+				$(element).attr('placeholder', "XXX-XXX-XXXX");
+				$(element).attr('title', "XXX-XXX-XXXX");
+
 				var number = phone.number();
 				if(number && number.length > 0){					
 					number = formatter.formatSeparators(number, 'XXX-XXX-XXXX', '-');	

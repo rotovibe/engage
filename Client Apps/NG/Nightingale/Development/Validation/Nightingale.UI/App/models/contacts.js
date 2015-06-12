@@ -3,7 +3,6 @@ define(['services/session', 'services/validatorfactory', 'services/customvalidat
 	function (session, validatorFactory, customValidators) {		
 
 	    var datacontext;
-		var subscriptionTokens= [];
 		var DT = breeze.DataType;
 		var Validator = breeze.Validator;				
 		
@@ -257,7 +256,7 @@ define(['services/session', 'services/validatorfactory', 'services/customvalidat
 		            }					
 		        }
 		        contactCard.removePhone = function (phone) {
-		            contactCard.phones.remove(phone);					
+		            contactCard.phones.remove(phone);
 		        }
 		        contactCard.addEmail = function () {
 		            // Add a phone here without properties

@@ -18,7 +18,7 @@ define('knockout', ko);
 
 
 
-define(['durandal/system', 'durandal/app', 'durandal/viewLocator'],  function (system, app, viewLocator) {
+define(['durandal/system', 'durandal/app', 'durandal/viewLocator', 'durandal/composition'],  function (system, app, viewLocator, composition) {
     //>>excludeStart("build", true);
     system.debug(true);
     //>>excludeEnd("build");
@@ -37,7 +37,7 @@ define(['durandal/system', 'durandal/app', 'durandal/viewLocator'],  function (s
         //Replace 'viewmodels' in the moduleId with 'views' to locate the view.
         //Look for partial views in a 'views' folder in the root.
         viewLocator.useConvention();
-
+		composition.addBindingHandler('hasFocus');	//fix for durandal bug missing KO binding.
         //Show the app by setting the root view model for our application with a transition.
         app.setRoot('viewmodels/shell/shell');
     });
