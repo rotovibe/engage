@@ -315,13 +315,13 @@ define(['services/formatter'],
 				//prevent typing non numerics:
 				$(element).on('keypress', function(e){
 					var key = e.which || e.keyCode;
-					if( (key < 48 || key > 57) && key !== 116 && key !== 8 && key !== 9 && key !== 37 && key !== 39 && key !== 46 ){	//exclude 116 (=F5), 8(=bkspc), 9(=tab) , 37,39 (<-, ->), 46(=del)
+					if( (key < 48 || key > 57) && key !== 116 && key !== 8 && key !== 9 && key !== 37 && key !== 39 && key !== 46 && !(key == 118 && e.ctrlKey) ){	//exclude 116 (=F5), 8(=bkspc), 9(=tab) , 37,39 (<-, ->), 46(=del), ctrl+V (118)						
 						e.preventDefault();												
 					}
 				});
 				
 				//mask phone number to : XXX-XXX-XXXX
-				$(element).on('keydown paste', function(e){
+				$(element).on('keydown paste', function(e){					
 					setTimeout(function(){						
 						var key = e.which || e.keyCode;
 						var number = $(element).val();
