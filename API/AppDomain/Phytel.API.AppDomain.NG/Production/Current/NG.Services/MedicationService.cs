@@ -1,17 +1,12 @@
-using AutoMapper;
 using Phytel.API.AppDomain.NG.Medication;
 using Phytel.API.AppDomain.NG.DTO;
 using Phytel.API.AppDomain.Security.DTO;
 using Phytel.API.Common.Audit;
-using Phytel.API.Common.CustomObject;
 using Phytel.API.Common.Format;
 using Phytel.API.DataAudit;
 using ServiceStack.ServiceClient.Web;
-using ServiceStack.ServiceHost;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace Phytel.API.AppDomain.NG.Service
 {
@@ -150,6 +145,35 @@ namespace Phytel.API.AppDomain.NG.Service
             return response;
         }
         #endregion
+
+        public PutDeleteMedMapResponse Put(PutDeleteMedMapRequest request)
+        {
+            PutDeleteMedMapResponse resp = new PutDeleteMedMapResponse();
+            ValidateTokenResponse result = null;
+
+            try
+            {
+                if (base.Request != null)
+                {
+                    request.Token = base.Request.Headers["Token"] as string;
+                }
+                result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                if (result.UserId.Trim() != string.Empty)
+                {
+                    request.UserId = result.UserId;
+                    MedicationManager.DeleteMedicationMap(request);
+                }
+                else
+                    throw new UnauthorizedAccessException();
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(resp, base.Response, ex);
+                if ((ex is WebServiceException) == false)
+                    MedicationManager.LogException(ex);
+            }
+            return resp;
+        }
 
         #region PatientMedSupps - Delete
         public DeletePatientMedSuppResponse Delete(DeletePatientMedSuppRequest request)
