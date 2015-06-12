@@ -364,8 +364,8 @@ define(['services/formatter', 'services/dateHelper'],
 				
 				//prevent typing non numerics:
 				$(element).on('keypress', function(e){
-					var key = e.charCode || e.keyCode;
-					if( (key < 48 || key > 57) && key !== 116 && key !== 8 && key !== 9 && key !== 37 && key !== 39 && key !== 46 ){	//exclude 116 (=F5), 8(=bkspc), 9(=tab) , 37,39 (<-, ->), 46(=del)
+					var key = e.which || e.keyCode;
+					if( (key < 48 || key > 57) && key !== 116 && key !== 8 && key !== 9 && key !== 37 && key !== 39 && key !== 46 && !(key == 118 && e.ctrlKey) ){	//exclude 116 (=F5), 8(=bkspc), 9(=tab) , 37,39 (<-, ->), 46(=del), ctrl+V (118)						
 						e.preventDefault();												
 					}
 				});
@@ -373,17 +373,20 @@ define(['services/formatter', 'services/dateHelper'],
 				//mask phone number to : XXX-XXX-XXXX
 				$(element).on('keydown paste', function(e){
 					setTimeout(function(){						
-						var key = e.charCode || e.keyCode;
+						var key = e.which || e.keyCode;
 						var number = $(element).val();
 						var position = element.selectionStart;
 						if( number && key !== 37 && key !== 39 && key !== 9){ //exclude <- , ->, Tab
 							if( position === number.length && key === 8 ){
 								return;	//bkspc on the last char - dont rearrange and dont add dash.
 							}							
-							number = number.replace( /\D/g, ''); //remove all non digits chars
-							var newNumber = formatter.formatSeparators(number, 'XXX-XXX-XXXX', '-');
+							
+							var newNumber = formatter.formatSeparators(number.replace( /\D/g, ''), 'XXX-XXX-XXXX', '-');
 							phone.number(newNumber);
 							if( key === 46 || (key === 8 && position < newNumber.length)){	//46=delete or 8=bkspc not on last char: return the cursor to its original position
+								element.setSelectionRange(position, position);
+							}
+							else if( key >= 48 && key <= 57  && position < number.length ){	//digit added in the middle
 								element.setSelectionRange(position, position);
 							}
 						}						
@@ -406,13 +409,13 @@ define(['services/formatter', 'services/dateHelper'],
 				//masking: start
 				//prevent typing non numerics:
 				$(element).on('keypress', function(e){
-					var key = e.charCode || e.keyCode;
+					var key = e.which || e.keyCode;
 					if( (key < 48 || key > 57) && key !== 47 && key !== 116 && key !== 9 && key !== 37 && key !== 39 ){	//exclude 47(/), 116 (=F5), 9(=tab) , 37,39 (<-, ->)	\\&& key !== 8, 8(=bkspc)
 						e.preventDefault();												
 					}
 				});
 				
-				//mask: optimize / auto complete year
+				//mask: optimize / auto complete year YYYY
 				$(element).on('blur', function(){
 					var date = $(element).val();
 					if(date){						
@@ -424,7 +427,7 @@ define(['services/formatter', 'services/dateHelper'],
 				//mask: MM/DD/....
 				$(element).on('keydown paste', function(e){
 					setTimeout(function(){						
-						var key = e.charCode || e.keyCode;						
+						var key = e.which || e.keyCode;						
 						var date = $(element).val();
 						//hide the datepicker if binded: while typing we may have fields movements due to validation errors going on and off.
 						//	the picker is not needed when typing and its position is fixed.
@@ -432,14 +435,9 @@ define(['services/formatter', 'services/dateHelper'],
 							$(element).datepicker( "hide" ); //TODO: show/hide on arrow down/ up / enter
 						}
 						//console.log('date='+date + ' key=' + key + ' position=' +element.selectionStart );
-						if( e.shiftKey || e.ctrlKey || key == 37 || key == 39 || key == 9 || key == 35 || key == 36 || key === 46 ){ //exclude <- , ->, Tab, home, end //|| key == 8 
+						if( e.shiftKey || e.ctrlKey || key == 37 || key == 39 || key == 9 || key == 35 || key == 36 || key === 46 || key == 8 ){ //exclude <- , ->, Tab, home, end //|| key == 8 (bkspc)
 							return;
-						}
-						if( key == 8 ){
-							//observable(date);
-							return;
-						}
-						//observable(date);						
+						}						
 						var position = element.selectionStart;
 						if( date ){ 
 							//do the mask:

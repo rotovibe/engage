@@ -250,7 +250,7 @@
             var newPhone = {};
             newPhone.Id = phone.id.peek();
             newPhone.IsText = phone.isText.peek();
-            newPhone.Number = phone.number.peek();
+            newPhone.Number = phone.number.peek().replace(/-/g, '');	//remove separators
             newPhone.OptOut = phone.optOut.peek();
             newPhone.PhonePreferred = phone.phonePreferred.peek();
             newPhone.TextPreferred = phone.textPreferred.peek();

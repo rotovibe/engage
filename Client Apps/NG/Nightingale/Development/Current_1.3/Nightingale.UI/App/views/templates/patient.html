@@ -11,7 +11,8 @@
     <div class="row">
         <h2 class="span12" data-bind="text: fullName"></h2>
     </div>
-    <div class="row" data-bind="if: !isValid()">
+    <div class="row validation-summary" data-bind="if: !isValid()">
+		<h3>Please correct the follwing errors:</h3>
         <ul data-bind="foreach: validationErrors">
             <li class="validation-errors">
                 <h5 data-bind="text: Message"></h5>
@@ -45,13 +46,13 @@
         </label>
         <label class="span6">
             <span>DOB</span>
-            <input type="text" data-bind="value: dOB, valueUpdate: 'afterkeydown'" placeholder="date of birth" />
+            <input type="text" data-bind="value: dOB, date: dOB, valueUpdate: 'afterkeydown', css: { invalid: (validationErrorsArray().indexOf('dOB') !== -1) }" />
         </label>
     </div>
     <div class="row">
         <label class="span6">
             <span>Override SSN - <span data-bind="with: formattedSSN">(<span data-bind="text: $data"></span>)</span>:</span>
-            <input type="text" data-bind="value: fullSSN" placeholder="full ssn" />
+            <input type="text" data-bind="ssn: fullSSN, value: fullSSN, valueUpdate: 'afterkeydown', css: { invalid: (validationErrorsArray().indexOf('fullSSN') !== -1) }" />
         </label>
     </div>
     <div class="row">

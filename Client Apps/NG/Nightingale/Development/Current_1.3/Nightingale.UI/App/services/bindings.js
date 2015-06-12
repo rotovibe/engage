@@ -4,8 +4,8 @@
 *	@module bindings
 */
 
-define(['services/formatter'],
-    function (formatter) {
+define(['services/formatter', 'services/dateHelper'],
+    function (formatter, dateHelper) {
 
         var datacontext;
 
@@ -282,6 +282,60 @@ define(['services/formatter'],
         };
 		
 		/**
+		*	masking and validating a social security number (SSN).
+		*	@class ssn social security number
+		*/
+		ko.bindingHandlers.ssn = {
+			/**
+			*	@param valueAccessor expecting an observable that holds/binds to the ssn number.
+			*	@method ssn.init
+			*/
+			init: function(element, valueAccessor, allBindingsAccessor, bindingContext){
+				$(element).attr('maxlength', 11);				
+				$(element).attr('placeholder', "XXX-XX-XXXX");
+				$(element).attr('title', "XXX-XX-XXXX");		
+				
+				//format initial value
+				var ssn = valueAccessor();				
+				var number = ssn();
+				if(number && number.length > 0){					
+					number = formatter.formatSeparators(number, 'XXX-XX-XXXX', '-');	
+					ssn(number);
+				}
+				
+				//prevent typing non numerics:
+				$(element).on('keypress', function(e){
+					var key = e.which || e.keyCode;
+					if( (key < 48 || key > 57) && key !== 116 && key !== 8 && key !== 9 && key !== 37 && key !== 39 && key !== 46 && !(key == 118 && e.ctrlKey)){	//exclude 116 (=F5), 8(=bkspc), 9(=tab) , 37,39 (<-, ->), 46(=del), ctrl+V (118) on firefox!
+						e.preventDefault();												
+					}
+				});
+				
+				//mask ssn number to : XXX-XX-XXXX
+				$(element).on('keydown paste', function(e){
+					setTimeout(function(){						
+						var key = e.which || e.keyCode;
+						var number = $(element).val();
+						var position = element.selectionStart;
+						if( number && key !== 37 && key !== 39 && key !== 9){ //exclude <- , ->, Tab
+							if( position === number.length && key === 8 ){
+								return;	//bkspc on the last char - dont rearrange and dont add dash.
+							}														
+							var newNumber = formatter.formatSeparators(number.replace( /\D/g, ''), 'XXX-XX-XXXX', '-');
+							ssn(newNumber);
+							if( key === 46 || (key === 8 && position < newNumber.length)){	//46=delete or 8=bkspc not on last char: return the cursor to its original position
+								element.setSelectionRange(position, position);
+							}
+							else if( key >= 48 && key <= 57  && position < number.length ){	//digit added in the middle
+								element.setSelectionRange(position, position);
+							}
+						}						
+					}, 5);
+				});
+			}
+		};
+		
+		/**
 		*	masking and validating phone number fields
 		*	@class phone
 		* 	
@@ -315,7 +369,7 @@ define(['services/formatter'],
 				//prevent typing non numerics:
 				$(element).on('keypress', function(e){
 					var key = e.which || e.keyCode;
-					if( (key < 48 || key > 57) && key !== 116 && key !== 8 && key !== 9 && key !== 37 && key !== 39 && key !== 46 && !(key == 118 && e.ctrlKey) ){	//exclude 116 (=F5), 8(=bkspc), 9(=tab) , 37,39 (<-, ->), 46(=del), ctrl+V (118)						
+					if( (key < 48 || key > 57) && key !== 116 && key !== 8 && key !== 9 && key !== 37 && key !== 39 && key !== 46 && !(key == 118 && e.ctrlKey) ){	//exclude 116 (=F5), 8(=bkspc), 9(=tab) , 37,39 (<-, ->), 46(=del), ctrl+V (118) on firefox!						
 						e.preventDefault();												
 					}
 				});
@@ -345,6 +399,65 @@ define(['services/formatter'],
 			}
 		};
 		
+		/**
+		*	input date field that allows keyboard entry with masking.
+		*	@class date
+		*/
+		ko.bindingHandlers.date = {
+			init: function (element, valueAccessor, allBindingsAccessor, bindingContext) {
+				var observable = valueAccessor();
+				$(element).attr('maxlength', 10);
+				$(element).attr('placeholder', "MM/DD/YYYY");
+				$(element).attr('title', "MM/DD/YYYY");
+				
+				//masking: start
+				//prevent typing non numerics:
+				$(element).on('keypress', function(e){
+					var key = e.which || e.keyCode;
+					if( (key < 48 || key > 57) && key !== 47 && key !== 116 && key !== 9 && key !== 37 && key !== 39 ){	//exclude 47(/), 116 (=F5), 9(=tab) , 37,39 (<-, ->)	\\&& key !== 8, 8(=bkspc)
+						e.preventDefault();												
+					}
+				});
+				
+				//mask: optimize / auto complete year YYYY
+				$(element).on('blur', function(){
+					var date = $(element).val();
+					if(date){						
+						date = formatter.date.optimizeYear( date );						
+						$(element).val(date);
+						observable(date);	
+					}
+				});	
+				//mask: MM/DD/....
+				$(element).on('keydown paste', function(e){
+					setTimeout(function(){						
+						var key = e.which || e.keyCode;						
+						var date = $(element).val();
+						//hide the datepicker if binded: while typing we may have fields movements due to validation errors going on and off.
+						//	the picker is not needed when typing and its position is fixed.
+						if( $(element).datepicker ){
+							$(element).datepicker( "hide" ); //TODO: show/hide on arrow down/ up / enter
+						}						
+						if( e.shiftKey || e.ctrlKey || key == 37 || key == 39 || key == 9 || key == 35 || key == 36 || key === 46 || key == 8 ){ //exclude <- , ->, Tab, home, end //|| key == 8 (bkspc)
+							return;
+						}						
+						var position = element.selectionStart;
+						if( date ){ 
+							//do the mask:
+							var newDate = formatter.date.optimizeDate(date);						
+							if( newDate && newDate !== date){
+								$(element).val(newDate);
+								observable(newDate);								
+							}
+							if( key === 46 ){	//46=delete: return the cursor to its original position
+								element.setSelectionRange(position, position);
+							}
+						}						
+					}, 5);
+				});
+				//masking ends
+			}
+		};
 		/**
 		*
 		*	@class datepicker
@@ -378,8 +491,7 @@ define(['services/formatter'],
                     // Get the new date
                     var newValue = $el.datepicker("getDate");
                     var datepickerMoment = moment.utc(newValue);//.toISOString();
-                    if (!datepickerMoment.isValid()) {
-						// console.log('datepicker registerEventHandler cleared the observable');
+                    if (!datepickerMoment.isValid()) {						
                         observable('');
                         return null;
                     }
@@ -392,15 +504,13 @@ define(['services/formatter'],
 					//set the datepicker date value on to the observable date (only! without changing its time)
 					var observableMoment = moment(observable());
 					if( observableMoment.isValid() ){
-						if( !isSameDate(datepickerMoment, observableMoment) ){
-							// console.log('datepicker registerEventHandler calling setDateValue src = ' +datepickerMoment.toISOString() + ' dest='+ observableMoment.toISOString());
+						if( !isSameDate(datepickerMoment, observableMoment) ){							
 							observableMoment = setDateValue( datepickerMoment, observableMoment );
 						}
 					}
 					else{
 						observableMoment = datepickerMoment;
-					}	
-					// console.log('datepicker registerEventHandler set observable= ' + observableMoment.toISOString());	
+					}						
                     observable(observableMoment.toISOString());
                 });								
 				

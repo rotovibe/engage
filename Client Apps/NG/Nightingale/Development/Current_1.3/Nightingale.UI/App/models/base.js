@@ -237,7 +237,24 @@ define(['services/validatorfactory', 'services/customvalidators'],
                         Validator.required(),
                         Validator.maxLength({ maxLength: 20 })
                     ]
-                }
+                },
+				{
+					name: 'fullSSN',
+					displayName: 'SSN',
+					validatorsList: [
+						//Validator.required(),
+						customValidators.validators.ssnValidator
+					]
+				},
+				{
+					name: 'dOB',
+					displayName: 'DOB',
+					validatorsList: [
+						Validator.required(),
+						customValidators.validators.dateValidator({minDate: moment().subtract(200, 'year').format('MM/DD/YYYY'), maxDate: 'today'})	//customValidators.validators.dobValidator
+					]
+				}
+				
                 // Example of using a custom regex for validation
                 //,
                 //{
