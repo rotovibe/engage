@@ -12,6 +12,7 @@ using System.Configuration;
 using MB = MongoDB.Driver.Builders;
 using Phytel.API.DataAudit;
 using Phytel.API.Common;
+using ServiceStack.Common.Extensions;
 
 namespace DataDomain.Medication.Repo
 {
@@ -125,7 +126,31 @@ namespace DataDomain.Medication.Repo
 
         public void DeleteAll(List<object> entities)
         {
-            throw new NotImplementedException();
+            try
+            {
+                entities.Cast<MedicationMapData>().ForEach(e =>
+                {
+                    List<IMongoQuery> qList = new List<IMongoQuery>();
+                    if (!e.Form.IsNullOrEmpty())
+                        qList.Add(Query<MEMedicationMapping>.EQ(b => b.Form, e.Form));
+
+                    if (!e.Strength.IsNullOrEmpty())
+                        qList.Add(Query<MEMedicationMapping>.EQ(b => b.Strength, e.Strength));
+
+                    if (!e.SubstanceName.IsNullOrEmpty())
+                        qList.Add(Query<MEMedicationMapping>.EQ(b => b.SubstanceName, e.SubstanceName));
+
+                    if (!e.Route.IsNullOrEmpty())
+                        qList.Add(Query<MEMedicationMapping>.EQ(b => b.Route, e.Route));
+
+                    if (!e.FullName.IsNullOrEmpty())
+                        qList.Add(Query<MEMedicationMapping>.EQ(b => b.FullName, e.FullName));
+
+                    var query = Query.And(qList);
+                    Context.MedicationMaps.Collection.Remove(query);
+                });
+            }
+            catch (Exception ex) { throw ex; }
         }
 
         public object FindByID(string entityID)
