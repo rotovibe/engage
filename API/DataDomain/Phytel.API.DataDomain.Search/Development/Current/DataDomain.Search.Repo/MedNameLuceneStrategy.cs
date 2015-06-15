@@ -132,7 +132,6 @@ namespace DataDomain.Search.Repo.LuceneStrategy
             }
         }
 
-
         public override List<TT> ExecuteSearch(string searchQuery, string searchField = "")
         {
             try
