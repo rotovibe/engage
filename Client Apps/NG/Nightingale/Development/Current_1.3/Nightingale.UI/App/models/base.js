@@ -250,7 +250,7 @@ define(['services/validatorfactory', 'services/customvalidators'],
 					name: 'dOB',
 					displayName: 'DOB',
 					validatorsList: [
-						Validator.required(),
+						//Validator.required(),
 						customValidators.validators.dateValidator({minDate: moment().subtract(200, 'year').format('MM/DD/YYYY'), maxDate: 'today'})	//customValidators.validators.dobValidator
 					]
 				}
@@ -580,7 +580,7 @@ define(['services/validatorfactory', 'services/customvalidators'],
 			            patient.validationErrors([]);
 			            patient.isValid(true);
 			        }
-			    });
+			    });								
 			    patient.validationErrorsArray = ko.computed(function () {
 			        var thisArray = [];
 			        ko.utils.arrayForEach(patient.validationErrors(), function (error) {
