@@ -146,6 +146,11 @@ namespace DataDomain.Medication.Repo
             catch (Exception) { throw; }
         }
 
+        public object Find(object request)
+        {
+            throw new NotImplementedException();
+        }
+
         public object FindByName(object request)
         {
             PostPatientMedFrequencyDataRequest dataRequest = (PostPatientMedFrequencyDataRequest)request;

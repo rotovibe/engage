@@ -43,8 +43,8 @@ namespace Phytel.API.AppDomain.NG.Test
         public void DeleteCustomMedications_Test()
         {
             List<MedicationMap> medList = new List<MedicationMap>();
-            medList.Add(new MedicationMap { FullName = "MOMO", Route = "ORAL", Strength = "1000 mg", Form = "CAPSULE" });
-            medList.Add(new MedicationMap { FullName = "NONO", Route = "TOPICAL", Strength = "50 ml", Form = "SOLUTION" });
+            medList.Add(new MedicationMap { FullName = "BLUEFISH", Route = "", Strength = "56 ml", Form = "" });
+            medList.Add(new MedicationMap { FullName = "CATFISH", Route = "", Strength = "", Form = "TABLET" });
             
             PutDeleteMedMapRequest request = new PutDeleteMedMapRequest
             {

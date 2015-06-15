@@ -75,11 +75,7 @@ namespace Phytel.API.DataDomain.Medication.Service
             try
             {
                 RequireUserId(request);
-                if (Manager.DeleteMedicationMaps(request))
-                    response.Status = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus
-                    {
-                        Message = "Success"
-                    };
+                response.MedicationMapsData = Manager.DeleteMedicationMaps(request);
             }
             catch (Exception ex)
             {

@@ -9,6 +9,6 @@ namespace Phytel.API.DataDomain.Medication
         MedicationMapData InitializeMedicationMap(PutInitializeMedicationMapDataRequest request);
         MedicationMapData UpdateMedicationMap(PutMedicationMapDataRequest request);
         List<MedicationMapData> GetMedicationMap(GetMedicationMapDataRequest request);
-        bool DeleteMedicationMaps(PutDeleteMedMapDataRequest request);
+        List<MedicationMapData> DeleteMedicationMaps(PutDeleteMedMapDataRequest request);
     }
 }

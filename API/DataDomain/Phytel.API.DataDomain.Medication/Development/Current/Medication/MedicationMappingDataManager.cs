@@ -65,7 +65,7 @@ namespace Phytel.API.DataDomain.Medication
             catch (Exception ex) { throw ex; }
         }
 
-        public bool DeleteMedicationMaps(PutDeleteMedMapDataRequest request)
+        public List<MedicationMapData> DeleteMedicationMaps(PutDeleteMedMapDataRequest request)
         {
             try
             {
@@ -73,9 +73,14 @@ namespace Phytel.API.DataDomain.Medication
 
                 if (request.MedicationMaps != null)
                 {
-                    repo.DeleteAll(request.MedicationMaps.Cast<object>().ToList());
+                    request.MedicationMaps.ForEach(m =>
+                    {
+                        string id = (string)repo.Find(m);
+                        m.Id = id;
+                        repo.Delete(id);
+                    });
                 }
-                return true;
+                return request.MedicationMaps;
             }
             catch (Exception ex)
             {
