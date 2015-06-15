@@ -44,7 +44,7 @@
                 function ssnReturned(data) {
 					if(data.SSN){
 						var formattedNumber = formatter.formatSeparators(data.SSN.replace( /\D/g, ''), 'XXX-XX-XXXX', '-');
-						alert('Full SSN - ' + formattedNumber);
+						alert('Full SSN: ' + formattedNumber);
 					}
                 }
             };
