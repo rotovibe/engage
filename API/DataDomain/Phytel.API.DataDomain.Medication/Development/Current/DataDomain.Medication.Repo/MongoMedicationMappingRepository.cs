@@ -398,15 +398,6 @@ namespace DataDomain.Medication.Repo
                     qList.Add(Query<MEMedicationMapping>.EQ(b => b.Strength, e.Strength));
                 }
 
-                if (e.SubstanceName.IsNullOrEmpty())
-                {
-                    qList.Add(Query.EQ(MEMedicationMapping.SubstanceNameProperty, BsonNull.Value));
-                }
-                else
-                {
-                    qList.Add(Query<MEMedicationMapping>.EQ(b => b.SubstanceName, e.SubstanceName));
-                }
-
                 if (e.Route.IsNullOrEmpty())
                 {
                     qList.Add(Query.EQ(MEMedicationMapping.RouteProperty, BsonNull.Value));
