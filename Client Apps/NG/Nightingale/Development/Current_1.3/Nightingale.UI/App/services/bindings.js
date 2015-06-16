@@ -444,6 +444,9 @@ define(['services/formatter', 'services/dateHelper'],
 						var position = element.selectionStart;
 						if( date ){ 
 							//do the mask:
+							if( e.type === 'paste'){
+								date = date.replace( /\D/g, '');	//clean any separators before re-formatting
+							}
 							var newDate = formatter.date.optimizeDate(date);						
 							if( newDate && newDate !== date){
 								$(element).val(newDate);
