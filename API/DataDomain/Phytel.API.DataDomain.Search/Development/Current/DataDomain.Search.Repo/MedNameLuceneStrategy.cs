@@ -41,15 +41,7 @@ namespace DataDomain.Search.Repo.LuceneStrategy
             try
             {
                 List<Query> str = new List<Query>();
-
-                str.Add(new TermQuery(new Term("CompositeName", sampleData.CompositeName == null ? string.Empty : sampleData.CompositeName.Trim())));
-                str.Add(new TermQuery(new Term("RouteName", sampleData.RouteName == null ? string.Empty : sampleData.RouteName.Trim())));
-                str.Add(new TermQuery(new Term("DosageFormName", sampleData.DosageFormname == null ? string.Empty : sampleData.DosageFormname.Trim())));
-                str.Add(new TermQuery(new Term("Strength", sampleData.Strength == null ? string.Empty : sampleData.Strength.Trim())));
                 str.Add(new TermQuery(new Term("MongoId", sampleData.Id == null ? string.Empty : sampleData.Id.Trim())));
-                str.Add(new TermQuery(new Term("SubstanceName", sampleData.SubstanceName == null ? string.Empty : sampleData.SubstanceName.Trim())));
-                str.Add(new TermQuery(new Term("Unit", sampleData.Unit == null ? string.Empty : sampleData.Unit.Trim())));
-
                 writer.DeleteDocuments(str.ToArray());
                 writer.Commit();
                 writer.Optimize();
