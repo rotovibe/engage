@@ -76,8 +76,11 @@ namespace Phytel.API.DataDomain.Medication
                     request.MedicationMaps.ForEach(m =>
                     {
                         string id = (string)repo.Find(m);
-                        m.Id = id;
-                        repo.Delete(id);
+                        if (!string.IsNullOrEmpty(id))
+                        {
+                            m.Id = id;
+                            repo.Delete(id);
+                        }
                     });
                 }
                 return request.MedicationMaps;
