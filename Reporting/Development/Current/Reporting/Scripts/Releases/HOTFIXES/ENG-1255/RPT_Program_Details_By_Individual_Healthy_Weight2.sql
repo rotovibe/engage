@@ -58,7 +58,7 @@ AS
 	,ppt.PatientProgramId
 	,ppt.MongoId
 	,(select CASE WHEN LEN(Value) > 0 THEN Value ELSE NULL END 
-		from fn_RPT_GetText(pt.PatientId, ppt.PatientProgramId, @ProgramSourceId, '53f6cb33ac80d3138d00000a' , '53f6ca09ac80d31390000001' ) ) AS [Do_you_currently_have_a_PCP] --*
+		from fn_RPT_GetText_SingleSelect(pt.PatientId, ppt.PatientProgramId, @ProgramSourceId, '53f6cb33ac80d3138d00000a' , '53f6ca09ac80d31390000001' ) ) AS [Do_you_currently_have_a_PCP] --*
 	,(select CASE WHEN LEN(Value) > 0 THEN Value ELSE NULL END 
 		from fn_RPT_GetValue(pt.PatientId, ppt.PatientProgramId, @ProgramSourceId, '53f6cb33ac80d3138d00000a' , '53f6ca4aac80d31390000002'  ) ) AS [Provider_Name]  --*
 	,(select CASE WHEN LEN(Value) > 0 THEN Value ELSE NULL END

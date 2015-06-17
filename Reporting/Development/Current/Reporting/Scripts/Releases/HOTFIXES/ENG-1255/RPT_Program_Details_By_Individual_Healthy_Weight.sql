@@ -87,7 +87,7 @@ AS
 	,ppt.PatientProgramId
 	,ppt.MongoId
 	,(select CASE WHEN LEN(Value) > 0 THEN Value ELSE NULL END 
-		from fn_RPT_GetText(pt.PatientId, ppt.PatientProgramId, @ProgramSourceId, '52f8c601c34786763500007f' , '52f4fb32c34786626c000029' ) ) AS [Do_you_currently_have_a_PCP]
+		from fn_RPT_GetText_SingleSelect(pt.PatientId, ppt.PatientProgramId, @ProgramSourceId, '52f8c601c34786763500007f' , '52f4fb32c34786626c000029' ) ) AS [Do_you_currently_have_a_PCP]
 	,(select CASE WHEN LEN(Value) > 0 THEN Value ELSE NULL END 
 		from fn_RPT_GetValue(pt.PatientId, ppt.PatientProgramId, @ProgramSourceId, '52f8c601c34786763500007f' , '52f4fff2c34786626c00002a'  ) ) AS [Provider_Name] 
 	,(select CASE WHEN LEN(Value) > 0 THEN Value ELSE NULL END
@@ -121,7 +121,7 @@ AS
 	,(select CASE WHEN LEN(Value) > 0 THEN Value ELSE NULL END 
 				from fn_RPT_GetValue(pt.PatientId, ppt.PatientProgramId, @ProgramSourceId, '532c9833a38116ac18000371', '52f50d60c34786662e000001'  ) ) AS [Risk_Level]
 	,(select CASE WHEN LEN(Value) > 0 THEN Value ELSE NULL END 
-		from fn_RPT_GetText(pt.PatientId, ppt.PatientProgramId, @ProgramSourceId, '532c9833a38116ac18000371', '52f50dc3c34786662e000002') ) AS [Acuity_Level]
+		from fn_RPT_GetText_SingleSelect(pt.PatientId, ppt.PatientProgramId, @ProgramSourceId, '532c9833a38116ac18000371', '52f50dc3c34786662e000002') ) AS [Acuity_Level]
 	,(select CASE WHEN LEN(Value) > 0 THEN Value ELSE NULL END 
 		from fn_RPT_GetValue(pt.PatientId, ppt.PatientProgramId, @ProgramSourceId, '531f300ac347861e7700001b', '52f54de1c34786660a0000de') ) AS [PHQ2_Total_Point_Score]
 	,(select CASE WHEN LEN(Value) > 0 THEN Value ELSE NULL END 

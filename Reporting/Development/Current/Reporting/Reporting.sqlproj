@@ -71,6 +71,7 @@
     <Folder Include="Scripts\Releases" />
     <Folder Include="Scripts\Releases\HOTFIXES" />
     <Folder Include="Scripts\Releases\HOTFIXES\ENG-1255" />
+    <Folder Include="Scripts\Releases\1.0.2" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Scripts\Update_Script_2_26_2015.sql" />
@@ -387,6 +388,10 @@
     <Build Include="Scripts\Releases\HOTFIXES\ENG-1255\RPT_Program_Details_By_Individual_Healthy_Weight2.sql" />
     <Build Include="Scripts\Releases\HOTFIXES\ENG-1255\sproc_automation_scripts.sql" />
     <Build Include="Scripts\Releases\HOTFIXES\ENG-1255\sproc_automation_scripts_rollback.sql" />
+    <Build Include="Scripts\Releases\1.0.2\ENG_734.sql" />
+    <Build Include="Scripts\Releases\1.0.2\ENG_734_rollback.sql" />
+    <Build Include="Scripts\Releases\1.0.2\ENG-1146.sql" />
+    <Build Include="Scripts\Releases\1.0.2\ENG-1146_Rollback.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Scripts\CareBridge_RPT_Scripts.sql" />
