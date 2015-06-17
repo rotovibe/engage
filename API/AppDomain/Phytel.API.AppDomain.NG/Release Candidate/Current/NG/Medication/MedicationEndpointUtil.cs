@@ -180,10 +180,11 @@ namespace Phytel.API.AppDomain.NG.Medication
             catch (Exception ex) { throw ex; }
         }
 
-        public void DeleteMedicationMap(PutDeleteMedMapRequest request)
+        public List<MedicationMapData> DeleteMedicationMap(PutDeleteMedMapRequest request)
         {
             try
             {
+                List<MedicationMapData> result = null;
                 IRestClient client = new JsonServiceClient();
                 //[Route("/{Context}/{Version}/{ContractNumber}/MedicationMap/Delete", "PUT")]
                 var url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/MedicationMap/Delete",
@@ -209,6 +210,12 @@ namespace Phytel.API.AppDomain.NG.Medication
                         UserId = request.UserId,
                         Version = request.Version
                     } as object);
+
+                if (response != null)
+                {
+                    result = response.MedicationMapsData;
+                }
+                return result;
             }
             catch (Exception ex)
             {
