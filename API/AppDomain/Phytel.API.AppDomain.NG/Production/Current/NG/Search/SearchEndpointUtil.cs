@@ -186,23 +186,24 @@ namespace Phytel.API.AppDomain.NG.Search
                     request.Version,
                     request.ContractNumber), request.UserId);
 
-                PutDeleteMedsResponse response = client.Put<PutDeleteMedsResponse>(url,
-                    new PutDeleteMedsRequest
-                    {
-                        Context = "NG",
-                        ContractNumber = request.ContractNumber,
-                        UserId = request.UserId,
-                        Version = request.Version,
-                        MedDocuments = request.MedicationMaps.Select(
-                            map => new MedNameSearchDocData
-                            {
-                                CompositeName = map.FullName,
-                                RouteName = map.Route,
-                                Strength = map.Strength,
-                                DosageFormname = map.Form
-                            }).ToList(),
-                    } as object);
+                PutDeleteMedsRequest searchRequest =  new PutDeleteMedsRequest
+                {
+                    Context = "NG",
+                    ContractNumber = request.ContractNumber,
+                    UserId = request.UserId,
+                    Version = request.Version,
+                    MedDocuments = request.MedicationMaps.Select(
+                        map => new MedNameSearchDocData
+                        {
+                            Id = map.Id,
+                            CompositeName = map.FullName,
+                            RouteName = map.Route,
+                            Strength = map.Strength,
+                            DosageFormname = map.Form
+                        }).ToList(),
+                };
 
+                PutDeleteMedsResponse response = client.Put<PutDeleteMedsResponse>(url, searchRequest as object);
                 return true;
             }
             catch (Exception ex)

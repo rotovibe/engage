@@ -165,8 +165,25 @@ namespace Phytel.API.AppDomain.NG.Medication
             {
                 if (request.MedicationMaps != null)
                 {
-                    EndpointUtil.DeleteMedicationMap(request);
-                    SearchManager.DeleteMedDocuments(request);
+                    List<MedicationMapData> list = EndpointUtil.DeleteMedicationMap(request);
+                    if (list != null)
+                    {
+                        List<MedicationMap> newMaps = new List<MedicationMap>();
+                        list.ForEach(x =>
+                        {   
+                            MedicationMap m = new MedicationMap { 
+                                Id = x.Id,
+                                FullName = x.FullName,
+                                Form = x.Form,
+                                Route = x.Route,
+                                Strength = x.Strength
+                            };
+                            newMaps.Add(m);
+                        });
+                        request.MedicationMaps = newMaps;
+                        // call the search endpoint with new request. New Request has the Id populated.
+                        SearchManager.DeleteMedDocuments(request);
+                    }
                 }
             }
             catch (Exception ex) { throw ex; }
