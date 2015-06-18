@@ -101,5 +101,10 @@ namespace Phytel.API.DataDomain.Medication.Test
         {
             throw new NotImplementedException();
         }
+
+        public object Find(object request)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

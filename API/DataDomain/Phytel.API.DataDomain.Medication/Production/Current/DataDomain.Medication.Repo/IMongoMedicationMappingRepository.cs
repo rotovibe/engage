@@ -11,5 +11,6 @@ namespace DataDomain.Medication.Repo
         object FindNDCCodes(object request);
         object Initialize(object newEntity);
         object FindByName(object request);
+        object Find(object entity);
     }
 }

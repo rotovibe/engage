@@ -121,36 +121,20 @@ namespace DataDomain.Medication.Repo
 
         public void Delete(object entity)
         {
-            throw new NotImplementedException();
+            try
+            {
+                string id = (string)entity;
+                if (!string.IsNullOrEmpty(id))
+                {
+                    Context.MedicationMaps.Collection.Remove(Query<MEMedicationMapping>.EQ(b => b.Id, ObjectId.Parse(id)));
+                }
+            }
+            catch (Exception ex) { throw ex; }
         }
 
         public void DeleteAll(List<object> entities)
         {
-            try
-            {
-                entities.Cast<MedicationMapData>().ForEach(e =>
-                {
-                    List<IMongoQuery> qList = new List<IMongoQuery>();
-                    if (!e.Form.IsNullOrEmpty())
-                        qList.Add(Query<MEMedicationMapping>.EQ(b => b.Form, e.Form));
-
-                    if (!e.Strength.IsNullOrEmpty())
-                        qList.Add(Query<MEMedicationMapping>.EQ(b => b.Strength, e.Strength));
-
-                    if (!e.SubstanceName.IsNullOrEmpty())
-                        qList.Add(Query<MEMedicationMapping>.EQ(b => b.SubstanceName, e.SubstanceName));
-
-                    if (!e.Route.IsNullOrEmpty())
-                        qList.Add(Query<MEMedicationMapping>.EQ(b => b.Route, e.Route));
-
-                    if (!e.FullName.IsNullOrEmpty())
-                        qList.Add(Query<MEMedicationMapping>.EQ(b => b.FullName, e.FullName));
-
-                    var query = Query.And(qList);
-                    Context.MedicationMaps.Collection.Remove(query);
-                });
-            }
-            catch (Exception ex) { throw ex; }
+            throw new NotImplementedException();
         }
 
         public object FindByID(string entityID)
@@ -389,7 +373,61 @@ namespace DataDomain.Medication.Repo
             catch (Exception) { throw; }
         }
 
+        public object Find(object entity)
+        {
+            string result = null;
+            try
+            {
+                MedicationMapData e = (MedicationMapData)entity;
+                List<IMongoQuery> qList = new List<IMongoQuery>();
+                if (e.Form.IsNullOrEmpty())
+                {
+                    qList.Add(Query.EQ(MEMedicationMapping.FormProperty, BsonNull.Value));
+                }
+                else
+                {
+                    qList.Add(Query<MEMedicationMapping>.EQ(b => b.Form, e.Form));
+                }
 
+                if (e.Strength.IsNullOrEmpty())
+                {
+                    qList.Add(Query.EQ(MEMedicationMapping.StrengthProperty, BsonNull.Value));
+                }
+                else
+                {
+                    qList.Add(Query<MEMedicationMapping>.EQ(b => b.Strength, e.Strength));
+                }
+
+                if (e.Route.IsNullOrEmpty())
+                {
+                    qList.Add(Query.EQ(MEMedicationMapping.RouteProperty, BsonNull.Value));
+                }
+                else
+                {
+                    qList.Add(Query<MEMedicationMapping>.EQ(b => b.Route, e.Route));
+                }
+
+                if (e.FullName.IsNullOrEmpty())
+                {
+                    qList.Add(Query.EQ(MEMedicationMapping.FullNameProperty, BsonNull.Value));
+                }
+                else
+                {
+                    qList.Add(Query<MEMedicationMapping>.EQ(b => b.FullName, e.FullName));
+                }
+
+                qList.Add(Query<MEMedicationMapping>.EQ(b => b.Custom, true));
+
+                var query = Query.And(qList);
+                MEMedicationMapping meMM = Context.MedicationMaps.Collection.Find(query).FirstOrDefault();
+                if(meMM != null)
+                {
+                    result = meMM.Id.ToString();
+                }
+                return result;
+            }
+            catch (Exception ex) { throw ex; }
+        }
 
         public object FindByName(object request)
         {
