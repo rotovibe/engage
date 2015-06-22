@@ -2,18 +2,19 @@
 DROP TABLE [dbo].[RPT_Patient_ClinicalData]
 GO
 
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+SET ANSI_PADDING OFF
+GO
+
 CREATE TABLE [dbo].[RPT_Patient_ClinicalData](
-	[PatientId] [int] NOT NULL,
-	[FirstName] [varchar](100) NULL,
-	[MiddleName] [varchar](100) NULL,
-	[LastName] [varchar](100) NULL,
-	[DateOfBirth] [varchar](50) NULL,
-	[Age] [tinyint] NULL,
-	[Gender] [varchar](50) NULL,
-	[Priority] [varchar](50) NULL,
-	[SystemId] [varchar](50) NULL,
-	[Assigned_PCM] [varchar](100) NULL,
-	[PatientObservationId] [int] NULL,
+	[MongoPatientId] [varchar](50) NOT NULL,
+	[PatientObservationId] [int] NOT NULL,
+	[MongoId] [varchar](50) NOT NULL,
 	[ObservationType] [varchar](100) NULL,
 	[Code] [varchar](100) NULL,
 	[CodingSystem] [varchar](100) NULL,
@@ -40,8 +41,15 @@ GO
 SET ANSI_PADDING OFF
 GO
 
+
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[spPhy_RPT_SavePatientClinicalData]') AND type in (N'P', N'PC'))
 DROP PROCEDURE [dbo].[spPhy_RPT_SavePatientClinicalData]
+GO
+
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
 GO
 
 CREATE PROCEDURE [dbo].[spPhy_RPT_SavePatientClinicalData]
@@ -50,17 +58,9 @@ BEGIN
 	DELETE [RPT_Patient_ClinicalData]
 	INSERT INTO [RPT_Patient_ClinicalData]
 	(
-		 PatientId
-		,FirstName				
-		,MiddleName				
-		,LastName				
-		,DateOfBirth
-		,Age
-		,Gender
-		,[Priority]
-		,SystemId
-		,Assigned_PCM
+		 MongoPatientId
 		,PatientObservationId
+		,MongoId
         ,ObservationType
 		,Code
 		,CodingSystem
@@ -82,17 +82,9 @@ BEGIN
         ,RecordCreatedOn
 	) 
 	SELECT DISTINCT 	
-		p.PatientId
-		,p.FirstName
-		,p.MiddleName
-		,p.LastName
-		,p.DateOfBirth
-		,CASE WHEN p.DATEOFBIRTH != '' AND ISDATE(p.DATEOFBIRTH) = 1 THEN  CAST(DATEDIFF(DAY, CONVERT(DATETIME,p.DATEOFBIRTH), GETDATE()) / (365.23076923074) AS INT) END as Age
-		,p.Gender
-		,p.[Priority]
-		,ps.SystemId
-		,u.PreferredName as Assigned_PCM
+		 po.MongoPatientId
 	    ,po.PatientObservationId
+	    ,po.MongoId
         ,otl.Name as ObservationType
 		,o.Code
 		,csl.Name as CodingSystem
@@ -113,21 +105,18 @@ BEGIN
         ,u2.PreferredName as CreatedBy
         ,po.RecordCreatedOn
 	FROM
-		RPT_Patient as p with (nolock) 	
-		LEFT JOIN RPT_PatientSystem as ps with (nolock) ON p.MongoId = ps.MongoPatientId
-		LEFT JOIN RPT_CareMember as c with (nolock) on p.PatientId = c.PatientId
-		LEFT JOIN RPT_User as u with (nolock) on c.UserId = u.UserId 
-		LEFT JOIN RPT_PatientObservation as po with (nolock) on p.PatientId = po.PatientId and po.[Delete] = 'False' and po.TTLDate IS NULL
-		LEFT JOIN RPT_User as u1 with (nolock) on po.UpdatedById = u1.UserId
-		LEFT JOIN RPT_User as u2 with (nolock) on po.RecordCreatedById = u2.UserId
-		LEFT JOIN RPT_Observation as o with (nolock) on po.ObservationId = o.ObservationId
-		LEFT JOIN RPT_ObservationTypeLookUp as otl with (nolock) on o.ObservationTypeId = otl.ObservationTypeId
+		RPT_PatientObservation as po with (nolock) 	
+		LEFT JOIN RPT_User as u1 with (nolock) on po.MongoUpdatedBy = u1.MongoId
+		LEFT JOIN RPT_User as u2 with (nolock) on po.MongoRecordCreatedBy = u2.MongoId
+		LEFT JOIN RPT_Observation as o with (nolock) on po.MongoObservationId = o.MongoId
+		LEFT JOIN RPT_ObservationTypeLookUp as otl with (nolock) on o.MongoObservationLookUpId = otl.MongoId
 		LEFT JOIN RPT_CodingSystemLookUp as csl with (nolock) on o.CodingSystemId = csl.MongoId
 	WHERE
-		p.[Delete] = 'False' and p.TTLDate IS NULL
+		po.[Delete] = 'False' and po.TTLDate IS NULL
 END
 
-GO
 
+
+GO
 
 
