@@ -392,6 +392,10 @@
     <Build Include="Scripts\Releases\1.0.2\ENG_734_rollback.sql" />
     <Build Include="Scripts\Releases\1.0.2\ENG-1146.sql" />
     <Build Include="Scripts\Releases\1.0.2\ENG-1146_Rollback.sql" />
+    <None Include="Scripts\Releases\1.0.2\ENG-725.sql" />
+    <None Include="Scripts\Releases\1.0.2\ENG-725_Rollback.sql" />
+    <None Include="Scripts\Releases\1.0.2\ENG-1149.sql" />
+    <None Include="Scripts\Releases\1.0.2\ENG-1149_Rollback.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Scripts\CareBridge_RPT_Scripts.sql" />
@@ -402,9 +406,5 @@
     <None Include="Scripts\UDFs\fn_RPT_Engage_GetPCP.sql" />
     <None Include="Scripts\UDFs\fn_RPT_GetPractice_Engage.sql" />
     <None Include="Scripts\UDFs\fn_RPT_DisenrollmentReasonV2.sql" />
-    <None Include="Scripts\1.0.1\ENG-725.sql" />
-    <None Include="Scripts\1.0.1\ENG-725_Rollback.sql" />
-    <None Include="Scripts\1.0.1\ENG-1149.sql" />
-    <None Include="Scripts\1.0.1\ENG-1149_Rollback.sql" />
   </ItemGroup>
 </Project>
