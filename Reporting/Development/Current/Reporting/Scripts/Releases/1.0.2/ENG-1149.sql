@@ -15,6 +15,7 @@ CREATE TABLE [dbo].[RPT_Patient_ClinicalData](
 	[MongoPatientId] [varchar](50) NOT NULL,
 	[PatientObservationId] [int] NOT NULL,
 	[MongoId] [varchar](50) NOT NULL,
+    [MongoObservationId] [varchar](50) NOT NULL,
 	[ObservationType] [varchar](100) NULL,
 	[Code] [varchar](100) NULL,
 	[CodingSystem] [varchar](100) NULL,
@@ -61,6 +62,7 @@ BEGIN
 		 MongoPatientId
 		,PatientObservationId
 		,MongoId
+	    ,MongoObservationId
         ,ObservationType
 		,Code
 		,CodingSystem
@@ -85,6 +87,7 @@ BEGIN
 		 po.MongoPatientId
 	    ,po.PatientObservationId
 	    ,po.MongoId
+		,po.MongoObservationId
         ,otl.Name as ObservationType
 		,o.Code
 		,csl.Name as CodingSystem
