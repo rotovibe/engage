@@ -30,16 +30,20 @@
 		//the value can be a partial date string when date fields are keyboard friendly.
 		// moment nor breeze date validators wont cut it right.
 		function dateValidatorFn( value, context ){
+			// console.log('dateValidatorFn valiating date: ' + value );
 			if (value == null || value == "") return true;	//valid
 			if( isNaN(new Date(value).valueOf()) ){
+				// console.log( 'dateValidatorFn '+ value +' is not a valid Date. );
 				context.msg = "'"+ value + "' is not a valid " + context.property.displayName;
 				return false;
 			}			
 			if( !moment(value, ["MM-DD-YYYY","MM/DD/YYYY"], true).isValid() ){
+				// console.log( 'dateValidatorFn '+ value + ' failed initial string parse, trying to ooptimize...');
 				var formattedValue = formatter.date.optimizeDate( value );
 				formattedValue = formatter.date.optimizeYear( value );
 				if( !moment(formattedValue, ["MM-DD-YYYY","MM/DD/YYYY"], true).isValid() ){
 					context.msg = "'"+ value + "' is not a valid " + context.property.displayName;
+					// console.log( 'dateValidatorFn '+ context.msg );
 					return false;
 				}
 			}
@@ -68,7 +72,8 @@
 					context.msg = errorMessage;
 					return false;
 				}				
-			}			
+			}
+			// console.log( 'dateValidatorFn '+ value + ' is valid');	
 			return true;	//valid
 		}
 		

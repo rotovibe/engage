@@ -251,7 +251,7 @@ define(['services/validatorfactory', 'services/customvalidators'],
 					displayName: 'DOB',
 					validatorsList: [
 						//Validator.required(),
-						customValidators.validators.dateValidator({minDate: moment().subtract(200, 'year').format('MM/DD/YYYY'), maxDate: 'today'})	//customValidators.validators.dobValidator
+						customValidators.validators.dateValidator({minDate: moment().subtract(200, 'year').format('MM/DD/YYYY'), maxDate: 'today'})
 					]
 				}
 				
