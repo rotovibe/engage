@@ -1,6 +1,6 @@
 // Register all of the user related models in the entity manager (initialize function) and provide other non-entity models
-define(['services/session'],
-	function (session) {
+define(['services/session', 'services/dateHelper'],
+	function (session, dateHelper) {
 
 	    var datacontext;
 
@@ -25,8 +25,8 @@ define(['services/session'],
 		            allergyId: { dataType: "String" },
 		            patientId: { dataType: "String" },
 		            deleteFlag: { dataType: "Boolean" },
-					startDate: { dataType: "DateTime" },
-					endDate: { dataType: "DateTime" },
+					startDate: { dataType: "String" },
+					endDate: { dataType: "String" },
 					createdOn: { dataType: "DateTime" },
 					updatedOn: { dataType: "DateTime" },
 		            statusId: { dataType: "String" },
@@ -94,6 +94,56 @@ define(['services/session'],
 		            }
 		            return thisString;
 		        });
+				allergy.validationErrors = ko.observableArray([]);
+				allergy.isValid = ko.computed( function() {
+					var hasErrors = false;
+					var allergyErrors = [];
+					var context = {maxDate: 'today'};
+					var startDate = allergy.startDate();
+					var endDate = allergy.endDate();
+					if( startDate ){						
+						var startDateError = dateHelper.isInvalidDate(startDate, context);
+						if( startDateError != null ){
+							allergyErrors.push({ PropName: 'startDate', Message: allergy.allergyName() + 'Start Date ' + startDateError.Message});
+							hasErrors = true;
+						}
+					}
+					if( endDate ){						
+						var endDateError = dateHelper.isInvalidDate(endDate, context);
+						if( endDateError != null ){
+							allergyErrors.push({ PropName: 'endDate', Message: allergy.allergyName() + 'End Date ' + endDateError.Message});
+							hasErrors = true;
+						}
+						if( startDate && !hasErrors ){
+							//startDate - endDate range: both dates exist and valid:
+							if( moment( startDate ).isAfter( moment( endDate ) ) ){
+								allergyErrors.push({ PropName: 'endDate', Message: allergy.allergyName() + ' End Date must be on or after: ' + moment( startDate ).format("MM/DD/YYYY") });
+								allergyErrors.push({ PropName: 'startDate', Message: allergy.allergyName() + ' Start Date must be on or before: ' + moment( endDate ).format("MM/DD/YYYY") });
+								hasErrors = true;
+							}
+						}
+					}
+					allergy.validationErrors(allergyErrors);
+					return !hasErrors;
+				});
+				
+				/**
+				*	computed. tracks for any validation errors and returns a list of the errored property names.
+				*	this will be used in the property field css binding condition for invalid styling.
+				*	@method allergy.validationErrorsArray
+				*/
+			    allergy.validationErrorsArray = ko.computed(function () {
+			        var thisArray = [];
+			        ko.utils.arrayForEach(allergy.validationErrors(), function (error) {
+			            thisArray.push(error.PropName);
+			        });
+			        return thisArray;
+			    });
+				
+				allergy.needToSave = function(){
+					var result = (allergy.entityAspect.entityState.isModified() || allergy.isNew()) && allergy.sourceId();									
+					return result;
+				}
                 allergy.reactionString = ko.computed(function () {
 		            checkDataContext();
 		            var thisString = '';

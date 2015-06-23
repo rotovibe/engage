@@ -1,6 +1,6 @@
 // Register all of the user related models in the entity manager (initialize function) and provide other non-entity models
-define(['services/session'],
-	function (session) {
+define(['services/session', 'services/dateHelper'],
+	function (session, dateHelper) {
 
 	    var datacontext;
 
@@ -28,8 +28,8 @@ define(['services/session'],
 		            route: { dataType: "String" },
 		            form: { dataType: "String" },
 		            deleteFlag: { dataType: "Boolean" },
-					startDate: { dataType: "DateTime" },
-					endDate: { dataType: "DateTime" },
+					startDate: { dataType: "String" },
+					endDate: { dataType: "String" },
 					createdOn: { dataType: "DateTime" },
 					updatedOn: { dataType: "DateTime" },
 		            statusId: { dataType: "String" },
@@ -178,7 +178,59 @@ define(['services/session'],
 						return false;
 					}
 		        }
-		    }
+				
+				medication.validationErrors = ko.observableArray([]);
+				medication.isValid = ko.computed( function() {
+					var hasErrors = false;
+					var medicationErrors = [];
+					var startDate = medication.startDate();
+					var endDate = medication.endDate();
+					//var context = {maxDate: 'today'};
+					if( startDate ){						
+						var startDateError = dateHelper.isInvalidDate(startDate);
+						if( startDateError != null ){
+							medicationErrors.push({ PropName: 'startDate', Message: medication.name() + ' Start Date ' + startDateError.Message});
+							hasErrors = true;
+						}
+					}
+					if( endDate ){						
+						var endDateError = dateHelper.isInvalidDate(endDate);
+						if( endDateError != null ){
+							medicationErrors.push({ PropName: 'endDate', Message: medication.name() + ' End Date ' + endDateError.Message});
+							hasErrors = true;
+						}
+						if( startDate && !hasErrors ){
+							//startDate - endDate range: both dates exist and valid:
+							if( moment( startDate ).isAfter( moment( endDate ) ) ){
+								medicationErrors.push({ PropName: 'endDate', Message: medication.name() + ' End Date must be on or after: ' + moment( startDate ).format("MM/DD/YYYY") });
+								medicationErrors.push({ PropName: 'startDate', Message: medication.name() + ' Start Date must be on or before: ' + moment( endDate ).format("MM/DD/YYYY") });
+								hasErrors = true;
+							}
+						}
+					}
+					medication.validationErrors(medicationErrors);
+					return medication.canSave() && !hasErrors;
+				});
+				
+				medication.needToSave = function(){
+					var result = (medication.isNew() && medication.name() && medication.type() && medication.category() && medication.canSave());	
+					result = result || ( medication.isEditing() && medication.entityAspect.entityState.isModified() );
+					return result;
+				}
+				/**
+				*	computed. tracks for any validation errors and returns a list of the errored property names.
+				*	this will be used in the property field css binding condition for invalid styling.
+				*	@method medication.validationErrorsArray
+				*/
+			    medication.validationErrorsArray = ko.computed(function () {
+			        var thisArray = [];
+			        ko.utils.arrayForEach(medication.validationErrors(), function (error) {
+			            thisArray.push(error.PropName);
+			        });
+			        return thisArray;
+			    });
+				
+		    } //medicationInitializer ends
 			
 			metadataStore.addEntityType({
 			    shortName: "PatientMedicationFrequency",

@@ -153,7 +153,9 @@
     <Content Include="App\services\dataservices\calendarservice.js" />
     <Content Include="App\services\dataservices\lookupsservice.js" />
     <Content Include="App\services\dataservices\patientsservice.js" />
+    <Content Include="App\services\dateHelper.js" />
     <Content Include="App\services\entityserializer.js" />
+    <Content Include="App\services\formatter.js" />
     <Content Include="App\services\local.collections.js" />
     <Content Include="App\services\logger.js" />
     <Content Include="App\services\report.context.js" />

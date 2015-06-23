@@ -79,8 +79,14 @@ define(['services/session', 'services/datacontext', 'config.services', 'viewmode
             */
             self.saveOverride = function () {
                 var medication = self.modalEntity().medication();
-                datacontext.saveMedication(self.modalEntity().medication(), 'Update').then(saveCompleted);
-
+				if( medication.needToSave() ){	
+					if( medication.isValid() ){	
+						datacontext.saveMedication(self.modalEntity().medication(), 'Update').then(saveCompleted);
+					} else{
+						medication.entityAspect.rejectChanges();
+					}	
+				}
+				
                 function saveCompleted() {
                     self.modalEntity().medication().isEditing(false);
                     self.modalEntity().medication().isNew(false);

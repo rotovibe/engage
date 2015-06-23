@@ -1,6 +1,10 @@
 ﻿/**
  * medication.edit manages patientMedication (add/edit) and also adding a new medication (medicationMap).
- *
+ * notes:
+ *		1. the medication name is also used as a typeahead search and this needs to be changed when we will have to redesign for 
+ *			adding multiple medications. the preffered design is to follow allergies so that the search box is a separate tool 
+ *			and not part of the med record binding.
+ *		
  * @module medication.edit
  * @class medication.edit
  */
@@ -171,8 +175,17 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
 	  self.isAddingNewFrequencyValue = ko.observable(false);
       self.isCreateNewEnabled = ko.observable(false);	  
       self.isDropdownEnabled = ko.observable(false);
-	  self.isNewMedicationName = ko.observable(false);
-	  self.screenMode = ko.observable(screenModes.NoMedSelected);	
+	  self.isNewMedicationName = ko.observable(false);	  
+	  if( self.newPatientMedication() && self.newPatientMedication().name() && self.newPatientMedication().canSave() ){
+		//a med is selected, going back to medications screen  
+		self.lastMedName = self.newPatientMedication().name();
+		self.screenMode = ko.observable(screenModes.MedSelected);	  		
+	  }
+	  else{
+		self.lastMedName = '';  
+		self.screenMode = ko.observable(screenModes.NoMedSelected);	
+	  }
+	  
       /**
        * computed - controls if the save will skip and ignor or call the api services
        * the value tracks the screen mode and will allow saving only if a medication 
@@ -212,7 +225,8 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
           return thisValue;
         }
       }).extend({ throttle: 200 });
-      self.medicationBloodhound = new Bloodhound({
+      
+	  self.medicationBloodhound = new Bloodhound({
         datumTokenizer: function (d) {
           return Bloodhound.tokenizers.whitespace(d.name());
         },
@@ -315,9 +329,7 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
         self.dosageForms([]);
         self.strengths([]);            
         self.routes([]);        
-      };
-      
-      self.lastMedName = '';
+      };            
 
       self.ignoreMedicationNameChange = function(currentName, newName){
           //scenarios to ignore the medication name change:
