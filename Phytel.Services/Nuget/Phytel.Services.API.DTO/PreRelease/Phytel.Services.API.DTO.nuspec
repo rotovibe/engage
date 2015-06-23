@@ -10,7 +10,7 @@
     <description>Common request and response DTO interfaces for all data and app domains.</description>
     <dependencies>
       <dependency id="ServiceStack.Common" version="3.9.71" />
-      <dependency id="ServiceStack.Text" version="3.9.11" />
+      <dependency id="ServiceStack.Text" version="3.9.70" />
     </dependencies>
   </metadata>
   <files>
