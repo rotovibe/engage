@@ -104,14 +104,14 @@ define(['services/session', 'services/dateHelper'],
 					if( startDate ){						
 						var startDateError = dateHelper.isInvalidDate(startDate, context);
 						if( startDateError != null ){
-							allergyErrors.push({ PropName: 'startDate', Message: allergy.allergyName() + 'Start Date ' + startDateError.Message});
+							allergyErrors.push({ PropName: 'startDate', Message: allergy.allergyName() + ' Start Date ' + startDateError.Message});
 							hasErrors = true;
 						}
 					}
 					if( endDate ){						
 						var endDateError = dateHelper.isInvalidDate(endDate, context);
 						if( endDateError != null ){
-							allergyErrors.push({ PropName: 'endDate', Message: allergy.allergyName() + 'End Date ' + endDateError.Message});
+							allergyErrors.push({ PropName: 'endDate', Message: allergy.allergyName() + ' End Date ' + endDateError.Message});
 							hasErrors = true;
 						}
 						if( startDate && !hasErrors ){

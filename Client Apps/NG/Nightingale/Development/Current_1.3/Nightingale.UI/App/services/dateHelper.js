@@ -10,8 +10,12 @@ define([ 'services/formatter'],
 			/**
 		*	validate a date that can be a partial date string. this is important for typeable date inputs.
 		*	@method isValidDate
+		*	@param noOptimize {Boolean} optional parameter, if true it will evalueate the date string as it is. 
+		*	if false/undefined then it will optimize formatting of the date, then check if the optimized date string is valid. 
+		*	@example given date value="6/2/2015" with noOptimize = true => not valid.
+		*	@example given date value="6/2/2015" with noOptimize = false => optimize it to "06/02/2015" and then validate => valid.
 		*/
-		dateHelper.isValidDate = function (value){
+		dateHelper.isValidDate = function (value, noOptimize){
 			if (value === null || value === "" || value === undefined) return false;	
 			if ( Object.prototype.toString.call(value) === '[object Date]' ){
 				//value is a Date object
@@ -22,16 +26,18 @@ define([ 'services/formatter'],
 			}				
 			else{
 				//string
-				// if( value.search(/^\d{2}\/\d{2}\/\d{4}/) !== 0){
-					// //incomplete / not formatted date string
-					// return false;
-				// }
+				if( noOptimize && value.search(/^\d{2}\/\d{2}\/\d{4}/) !== 0 ){
+					//incomplete / not formatted date string
+					return false;
+				}
 				if( !moment(value, ["MM-DD-YYYY","MM/DD/YYYY"], true).isValid() ){				
 					//trying to parse value as a short date string failed
-					//try to optimize the date string:
-					var formattedValue = formatter.date.optimizeDate( value );
-					formattedValue = formatter.date.optimizeYear( value );
-					if( !moment(formattedValue, ["MM/DD/YYYY"], true).isValid() ){
+					if( !noOptimize ){
+						//try to optimize the date string:
+						value = formatter.date.optimizeDate( value );
+						value = formatter.date.optimizeYear( value );
+					}
+					if( !moment(value, ["MM/DD/YYYY"], true).isValid() ){
 						return false;	//failed
 					} 					
 				}				
@@ -61,9 +67,13 @@ define([ 'services/formatter'],
 			if( !moment(value, ["MM/DD/YYYY", "MM-DD-YYYY"], true).isValid() ){
 				//short format failed
 				var theMoment = moment(value);
-				if( !theMoment.isValid() || theMoment._f !== "YYYY-MM-DDTHH:mm:ss.SSSSZ" ){
+				if( !theMoment.isValid() ){	//|| theMoment._f !== "YYYY-MM-DDTHH:mm:ss.SSSSZ" 
 					//iso 8601 failed
-					return {Message: 'is not valid'};
+					var formattedValue = formatter.date.optimizeDate( value );
+					formattedValue = formatter.date.optimizeYear( value );
+					if( !moment(formattedValue, ["MM/DD/YYYY"], true).isValid() ){
+						return {Message: 'is not valid'};
+					}
 				}									
 			}	
 			if( context && context.minDate ){
