@@ -9,12 +9,12 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Mockable providers and proxies for extracting request and service data out of the ServiceStack configuration.</description>
     <dependencies>
-      <dependency id="Phytel.Services.API.DTO" version="1.1.0.01" />
+      <dependency id="Phytel.Services.API.DTO" version="1.1.0.02" />
       <dependency id="ServiceStack" version="3.9.70" />
       <dependency id="ServiceStack.Common" version="3.9.71" />
       <dependency id="ServiceStack.OrmLite.SqlServer" version="3.9.70" />
       <dependency id="ServiceStack.Redis" version="3.9.70" />
-      <dependency id="ServiceStack.Text" version="3.9.11" />
+      <dependency id="ServiceStack.Text" version="3.9.70" />
     </dependencies>
   </metadata>
   <files>
