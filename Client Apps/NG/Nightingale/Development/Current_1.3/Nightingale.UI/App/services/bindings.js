@@ -444,8 +444,11 @@ define(['services/formatter', 'services/dateHelper'],
 						if( e.type === 'paste'){
 							date = date.replace( /\D/g, '');	//clean any separators before re-formatting
 						}
-						var newDate = formatter.date.optimizeDate(date);						
-						if( newDate && newDate !== date){
+						var newDate = date;
+						if( position == date.length || e.type === 'paste' || date.replace( /\D/g, '').length >= 8 ){
+							newDate = formatter.date.optimizeDate(date);
+						}						
+						if( newDate && newDate !== date || e.type === 'paste'){
 							$(element).val(newDate);
 							observable(newDate);								
 						}
