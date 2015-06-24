@@ -170,15 +170,6 @@ namespace Phytel.API.DataDomain.Patient
             return response;
         }
 
-        public PutPatientBackgroundDataResponse UpdatePatientBackground(PutPatientBackgroundDataRequest request)
-        {
-            PutPatientBackgroundDataResponse response = new PutPatientBackgroundDataResponse();
-            IPatientRepository repo = Factory.GetRepository(request, RepositoryType.Patient);
-
-            response = repo.UpdateBackground(request) as PutPatientBackgroundDataResponse;
-            return response;
-        }
-
         public PutPatientSystemIdDataResponse UpdatePatientSystem(PutPatientSystemIdDataRequest request)
         {
             PutPatientSystemIdDataResponse response = new PutPatientSystemIdDataResponse();

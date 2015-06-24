@@ -35,18 +35,6 @@ namespace Phytel.API.DataDomain.Patient.Test
         }
 
         [TestMethod]
-        public void UpdatePatientBackground_Test()
-        {
-            PutPatientBackgroundDataRequest request = new PutPatientBackgroundDataRequest {  PatientId = "52f55899072ef709f84e7637", UserId = "bb241c64-a0ff-4e01-ba5f-4246ef50780e" };
-
-            IPatientDataManager pm = new PatientDataManager();
-            PutPatientBackgroundDataResponse response = pm.UpdatePatientBackground(request);
-
-            Assert.IsTrue(response.Success);
-        }
-
-
-        [TestMethod]
         public void GetPatients()
         {
             List<string> patientIds = new List<string>();

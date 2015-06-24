@@ -209,27 +209,6 @@ namespace Phytel.API.DataDomain.Patient.Service
             return response;
         }
 
-        public PutPatientBackgroundDataResponse Put(PutPatientBackgroundDataRequest request)
-        {
-            PutPatientBackgroundDataResponse response = new PutPatientBackgroundDataResponse();
-            try
-            {
-                if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("PatientDD:Put()::Unauthorized Access");
-
-                response = PatientManager.UpdatePatientBackground(request);
-                response.Version = request.Version;
-            }
-            catch (Exception ex)
-            {
-                CommonFormatterUtil.FormatExceptionResponse(response, base.Response, ex);
-
-                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
-                Helpers.LogException(int.Parse(aseProcessID), ex);
-            }
-            return response;
-        }
-
         public PutPatientSystemIdDataResponse Put(PutPatientSystemIdDataRequest request)
         {
             PutPatientSystemIdDataResponse response = new PutPatientSystemIdDataResponse();

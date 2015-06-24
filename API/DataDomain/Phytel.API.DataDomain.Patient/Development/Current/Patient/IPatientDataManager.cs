@@ -13,7 +13,6 @@ namespace Phytel.API.DataDomain.Patient
         PutPatientDataResponse InsertPatient(PutPatientDataRequest request);
         PutUpdateCohortPatientViewResponse UpdateCohortPatientViewProblem(PutUpdateCohortPatientViewRequest request);
         PutUpdatePatientDataResponse UpdatePatient(PutUpdatePatientDataRequest request);
-        PutPatientBackgroundDataResponse UpdatePatientBackground(PutPatientBackgroundDataRequest request);
         PutPatientSystemIdDataResponse UpdatePatientSystem(PutPatientSystemIdDataRequest request);
         PutPatientFlaggedResponse UpdatePatientFlagged(PutPatientFlaggedRequest request);
         PutPatientPriorityResponse UpdatePatientPriority(PutPatientPriorityRequest request);

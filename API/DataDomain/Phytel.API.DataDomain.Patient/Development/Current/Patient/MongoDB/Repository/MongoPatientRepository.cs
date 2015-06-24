@@ -85,6 +85,7 @@ namespace Phytel.API.DataDomain.Patient
                             Gender = request.Gender,
                             DOB = request.DOB,
                             Background = request.Background,
+                            ClinicalBackground = request.ClinicalBackground,
                             Version = request.Version,
                             UpdatedBy = ObjectId.Parse(this.UserId),
                             TTLDate = null,
@@ -211,6 +212,7 @@ namespace Phytel.API.DataDomain.Patient
                         PriorityData = (int)mePatient.Priority,
                         DisplayPatientSystemId = mePatient.DisplayPatientSystemId.ToString(),
                         Background = mePatient.Background,
+                        ClinicalBackground = mePatient.ClinicalBackground,
                         LastFourSSN = mePatient.LastFourSSN
                     };
                     if (!string.IsNullOrEmpty(userId))
@@ -353,6 +355,7 @@ namespace Phytel.API.DataDomain.Patient
                                 PriorityData = (int)meP.Priority,
                                 DisplayPatientSystemId = meP.DisplayPatientSystemId.ToString(),
                                 Background = meP.Background,
+                                ClinicalBackground = meP.ClinicalBackground,
                                 LastFourSSN = meP.LastFourSSN
                             };
                             response.Add(data.Id, data);
@@ -446,42 +449,6 @@ namespace Phytel.API.DataDomain.Patient
                                                 Common.DataAuditType.Update, 
                                                 request.ContractNumber);
                     }
-                    response.Success = true;
-                }
-                return response;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
-
-        public PutPatientBackgroundDataResponse UpdateBackground(PutPatientBackgroundDataRequest request)
-        {
-            PutPatientBackgroundDataResponse response = new PutPatientBackgroundDataResponse();
-            response.Success = false;
-            try
-            {
-                using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
-                {
-                    string background = string.Empty;
-                    if (!string.IsNullOrEmpty(request.Background))
-                    {
-                        background = request.Background;
-                    }
-                    
-                    FindAndModifyResult result = ctx.Patients.Collection.FindAndModify(MB.Query.EQ(MEPatient.IdProperty, ObjectId.Parse(request.PatientId)), MB.SortBy.Null,
-                                                new MB.UpdateBuilder()
-                                                .Set(MEPatient.BackgroundProperty, background)
-                                                .Set(MEPatient.UpdatedByProperty, ObjectId.Parse(this.UserId))
-                                                .Set(MEPatient.LastUpdatedOnProperty, DateTime.UtcNow));
-
-                    AuditHelper.LogDataAudit(this.UserId, 
-                                            MongoCollectionName.Patient.ToString(), 
-                                            request.PatientId, 
-                                            Common.DataAuditType.Update, 
-                                            request.ContractNumber);
-
                     response.Success = true;
                 }
                 return response;
@@ -601,6 +568,8 @@ namespace Phytel.API.DataDomain.Patient
                     updt.Set(MEPatient.TTLDateProperty, BsonNull.Value);
                     updt.Set(MEPatient.LastUpdatedOnProperty, System.DateTime.UtcNow);
                     updt.Set(MEPatient.PriorityProperty, request.PatientData.PriorityData);
+                    updt.Set(MEPatient.BackgroundProperty, request.PatientData.Background);
+                    updt.Set(MEPatient.ClinicalBackgroundProperty, request.PatientData.ClinicalBackground);
                     updt.Set(MEPatient.UpdatedByProperty, ObjectId.Parse(this.UserId));
                     updt.Set(MEPatient.VersionProperty, request.Version);
 

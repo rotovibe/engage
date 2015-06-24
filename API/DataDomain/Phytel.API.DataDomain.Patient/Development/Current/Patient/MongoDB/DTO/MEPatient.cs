@@ -30,6 +30,7 @@ namespace Phytel.API.DataDomain.Patient.DTO
         public const string PreferredNameProperty = "pfn";
         public const string PriorityProperty = "pri";
         public const string BackgroundProperty = "bkgrd";
+        public const string ClinicalBackgroundProperty = "cbkgrd";
         public const string LastFourSSNProperty = "lssn";
         public const string FullSSNProperty = "fssn";
         public const string VersionProperty = "v";
@@ -82,6 +83,10 @@ namespace Phytel.API.DataDomain.Patient.DTO
         [BsonElement(BackgroundProperty)]
         [BsonIgnoreIfNull(true)]
         public string Background { get; set; }
+
+        [BsonElement(ClinicalBackgroundProperty)]
+        [BsonIgnoreIfNull(true)]
+        public string ClinicalBackground { get; set; }
 
         [BsonElement(LastFourSSNProperty)]
         [BsonIgnoreIfNull(true)]

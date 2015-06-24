@@ -302,10 +302,8 @@
     <Compile Include="Patient.cs" />
     <Compile Include="Program\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Patient\PutPatientBackgroundRequest.cs" />
     <Compile Include="Patient\PutPatientFlaggedUpdateRequest.cs" />
     <Compile Include="Patient\PutPatientDetailsUpdateRequest.cs" />
-    <Compile Include="Patient\PutPatientBackgroundResponse.cs" />
     <Compile Include="Patient\PutPatientFlaggedUpdateResponse.cs" />
     <Compile Include="Patient\PutPatientDetailsUpdateResponse.cs" />
     <Compile Include="Program\Response.cs" />

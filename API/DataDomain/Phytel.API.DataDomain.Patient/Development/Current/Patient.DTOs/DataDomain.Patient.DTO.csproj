@@ -117,8 +117,6 @@
     <Compile Include="GetPatientSSNDataResponse.cs" />
     <Compile Include="PutCohortPatientViewDataRequest.cs" />
     <Compile Include="PutCohortPatientViewDataResponse.cs" />
-    <Compile Include="PutPatientBackgroundDataRequest.cs" />
-    <Compile Include="PutPatientBackgroundDataResponse.cs" />
     <Compile Include="PutUpdateCohortPatientViewRequest.cs" />
     <Compile Include="PutUpdateCohortPatientViewResponse.cs" />
     <Compile Include="GetPatientsDataRequest.cs" />

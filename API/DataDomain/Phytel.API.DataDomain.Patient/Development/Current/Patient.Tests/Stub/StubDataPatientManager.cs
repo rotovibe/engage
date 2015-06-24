@@ -59,11 +59,6 @@ namespace Phytel.API.DataDomain.Patient.Test.Stub
             throw new NotImplementedException();
         }
 
-        public DTO.PutPatientBackgroundDataResponse UpdatePatientBackground(DTO.PutPatientBackgroundDataRequest request)
-        {
-            throw new NotImplementedException();
-        }
-
         public DTO.PutPatientFlaggedResponse UpdatePatientFlagged(DTO.PutPatientFlaggedRequest request)
         {
             throw new NotImplementedException();
@@ -149,11 +144,6 @@ namespace Phytel.API.DataDomain.Patient.Test.Stub
         }
 
         PutUpdatePatientDataResponse IPatientDataManager.UpdatePatient(PutUpdatePatientDataRequest request)
-        {
-            throw new NotImplementedException();
-        }
-
-        PutPatientBackgroundDataResponse IPatientDataManager.UpdatePatientBackground(PutPatientBackgroundDataRequest request)
         {
             throw new NotImplementedException();
         }

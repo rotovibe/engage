@@ -32,6 +32,9 @@ namespace Phytel.API.DataDomain.Patient.DTO
         [ApiMember(Name = "Background", Description = "Background of the patient being created", ParameterType = "property", DataType = "string", IsRequired = false)]
         public string Background { get; set; }
 
+        [ApiMember(Name = "ClinicalBackground", Description = "ClinicalBackground of the patient being created", ParameterType = "property", DataType = "string", IsRequired = false)]
+        public string ClinicalBackground { get; set; }
+
         [ApiMember(Name = "FullSSN", Description = "SSN value of the patient being created", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string FullSSN { get; set; }
 

@@ -102,6 +102,7 @@ namespace Phytel.API.AppDomain.NG
                         Priority = response.Patient.PriorityData,
                         Flagged = Convert.ToInt32(response.Patient.Flagged),
                         Background = response.Patient.Background,
+                        ClinicalBackground = response.Patient.ClinicalBackground,
                         LastFourSSN = response.Patient.LastFourSSN
                     };
 
@@ -171,47 +172,6 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        // Deprecated - Problems is not in PatientObservations.
-        //public List<NG.DTO.PatientProblem> GetPatientProblems(NG.DTO.GetAllPatientProblemsRequest request)
-        //{
-        //    try
-        //    {
-        //        if (string.IsNullOrEmpty(request.PatientID))
-        //            throw new ArgumentException("PatientID is null or empty.");
-
-        //        List<Phytel.API.AppDomain.NG.DTO.PatientProblem> response = new List<Phytel.API.AppDomain.NG.DTO.PatientProblem>();
-
-        //        IRestClient client = new JsonServiceClient();
-        //        string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Problems",
-        //                DDPatientProblemServiceUrl,
-        //                "NG",
-        //                request.Version,
-        //                request.ContractNumber,
-        //                request.PatientID), request.UserId);
-
-        //        //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientID}/Problems", "GET")]
-        //        Phytel.API.DataDomain.PatientProblem.DTO.GetAllPatientProblemsDataResponse dataDomainResponse = client.Get<Phytel.API.DataDomain.PatientProblem.DTO.GetAllPatientProblemsDataResponse>(url);
-
-        //        List<Phytel.API.DataDomain.PatientProblem.DTO.PatientProblemData> problems = dataDomainResponse.PatientProblems;
-
-        //        foreach (Phytel.API.DataDomain.PatientProblem.DTO.PatientProblemData p in problems)
-        //        {
-        //            Phytel.API.AppDomain.NG.DTO.PatientProblem pp = new Phytel.API.AppDomain.NG.DTO.PatientProblem();
-        //            pp.ID = p.ID;
-        //            pp.PatientID = p.PatientID;
-        //            pp.ProblemID = p.ProblemID;
-        //            pp.Level = p.Level;
-        //            response.Add(pp);
-        //        }
-
-        //        return response;
-        //    }
-        //    catch (WebServiceException wse)
-        //    {
-        //        throw new WebServiceException("AD:GetPatientProblem()::" + wse.Message, wse.InnerException);
-        //    }
-        //}
-
         public PutPatientDetailsUpdateResponse PutPatientDetailsUpdate(PutPatientDetailsUpdateRequest request)
         {
             try
@@ -238,7 +198,9 @@ namespace Phytel.API.AppDomain.NG
                         DOB = request.Patient.DOB,
                         PriorityData = request.Patient.Priority,
                         Gender = request.Patient.Gender,
-                        FullSSN = request.Patient.FullSSN
+                        FullSSN = request.Patient.FullSSN,
+                        Background = request.Patient.Background,
+                        ClinicalBackground = request.Patient.ClinicalBackground
                     };
                     PutUpdatePatientDataResponse dataDomainResponse =
                         client.Put<PutUpdatePatientDataResponse>(url, new PutUpdatePatientDataRequest
@@ -294,42 +256,6 @@ namespace Phytel.API.AppDomain.NG
             catch (WebServiceException wse)
             {
                 throw new WebServiceException("AD:PutPatientFlaggedUpdate()::" + wse.Message, wse.InnerException);
-            }
-        }
-
-        public PutPatientBackgroundResponse UpdateBackground(PutPatientBackgroundRequest request)
-        {
-            try
-            {
-                PutPatientBackgroundResponse response = null;
-                IRestClient client = new JsonServiceClient();
-                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Background",
-                                                                                DDPatientServiceURL,
-                                                                                "NG",
-                                                                                request.Version,
-                                                                                request.ContractNumber,
-                                                                                request.PatientId), request.UserId);
-
-                //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Background", "PUT")]
-                PutPatientBackgroundDataResponse dataDomainResponse =
-                    client.Put<PutPatientBackgroundDataResponse>(url, new PutPatientBackgroundDataRequest
-                                                                                {
-                                                                                    Background = request.Background,
-                                                                                    Context = "NG",
-                                                                                    ContractNumber = request.ContractNumber,
-                                                                                    Version = request.Version,
-                                                                                    UserId = request.UserId,
-                                                                                    PatientId = request.PatientId
-                                                                                } as object);
-                if (dataDomainResponse != null && dataDomainResponse.Success)
-                {
-                    response = new PutPatientBackgroundResponse();
-                }
-                return response;
-            }
-            catch (WebServiceException wse)
-            {
-                throw new WebServiceException("AD:UpdateBackground()::" + wse.Message, wse.InnerException);
             }
         }
 
