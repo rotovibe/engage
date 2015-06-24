@@ -568,8 +568,14 @@ namespace Phytel.API.DataDomain.Patient
                     updt.Set(MEPatient.TTLDateProperty, BsonNull.Value);
                     updt.Set(MEPatient.LastUpdatedOnProperty, System.DateTime.UtcNow);
                     updt.Set(MEPatient.PriorityProperty, request.PatientData.PriorityData);
-                    updt.Set(MEPatient.BackgroundProperty, request.PatientData.Background);
-                    updt.Set(MEPatient.ClinicalBackgroundProperty, request.PatientData.ClinicalBackground);
+                    if (request.PatientData.Background != null)
+                    {
+                        updt.Set(MEPatient.BackgroundProperty, request.PatientData.Background);
+                    }
+                    if (request.PatientData.ClinicalBackground != null)
+                    {
+                        updt.Set(MEPatient.ClinicalBackgroundProperty, request.PatientData.ClinicalBackground);
+                    }
                     updt.Set(MEPatient.UpdatedByProperty, ObjectId.Parse(this.UserId));
                     updt.Set(MEPatient.VersionProperty, request.Version);
 
