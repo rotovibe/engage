@@ -32,6 +32,9 @@ define([ 'services/formatter'],
 				}
 				if( !moment(value, ["MM-DD-YYYY","MM/DD/YYYY"], true).isValid() ){				
 					//trying to parse value as a short date string failed
+					if( moment(value).isValid() && moment(value)._f === "YYYY-MM-DDTHH:mm:ss.SSSSZ" ){
+						return true; //ISO 8601
+					}
 					if( !noOptimize ){
 						//try to optimize the date string:
 						value = formatter.date.optimizeDate( value );
