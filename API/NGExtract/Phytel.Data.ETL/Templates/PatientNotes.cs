@@ -14,6 +14,7 @@ using MongoDB.Bson;
 using Phytel.API.DataDomain.PatientNote;
 using Phytel.Data.ETL.BulkCopy;
 using Phytel.Services.SQLServer;
+using Phytel.API.DataDomain.PatientNote.Repo;
 
 namespace Phytel.Data.ETL.Templates
 {

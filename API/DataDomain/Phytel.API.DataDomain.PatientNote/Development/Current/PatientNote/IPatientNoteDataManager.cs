@@ -9,12 +9,13 @@ namespace Phytel.API.DataDomain.PatientNote
 {
     public interface IPatientNoteDataManager
     {
-        string InsertPatientNote(PutPatientNoteDataRequest request);
+        string InsertPatientNote(InsertPatientNoteDataRequest request);
         PatientNoteData GetPatientNote(GetPatientNoteDataRequest request);
         List<PatientNoteData> GetAllPatientNotes(GetAllPatientNotesDataRequest request);
         bool DeletePatientNote(DeletePatientNoteDataRequest request);
         DeleteNoteByPatientIdDataResponse DeleteNoteByPatientId(DeleteNoteByPatientIdDataRequest request);
         UndoDeletePatientNotesDataResponse UndoDeletePatientNotes(UndoDeletePatientNotesDataRequest request);
         RemoveProgramInPatientNotesDataResponse RemoveProgramInPatientNotes(RemoveProgramInPatientNotesDataRequest request);
+        void UpdatePatientNote(UpdatePatientNoteDataRequest request);
     }
 }

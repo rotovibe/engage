@@ -8,27 +8,41 @@ using System.Configuration;
 
 namespace Phytel.API.DataDomain.PatientNote.Service
 {
-    public class PatientNoteService : ServiceStack.ServiceInterface.Service
+    public class PatientNoteService : ServiceBase
     {
         public IPatientNoteDataManager Manager { get; set; }
         
-        public PutPatientNoteDataResponse Put(PutPatientNoteDataRequest request)
+        public InsertPatientNoteDataResponse Post(InsertPatientNoteDataRequest request)
         {
-            PutPatientNoteDataResponse response = new PutPatientNoteDataResponse();
+            InsertPatientNoteDataResponse response = new InsertPatientNoteDataResponse();
             try
             {
                 if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("PatientNoteDD:Put()::Unauthorized Access");
+                    throw new UnauthorizedAccessException("PatientNoteDD:Post()::Unauthorized Access");
 
                 response.Id = Manager.InsertPatientNote(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
             {
-                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                RaiseException(response, ex);
+            }
+            return response;
+        }
 
-                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
-                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+        public UpdatePatientNoteDataResponse Put(UpdatePatientNoteDataRequest request)
+        {
+            UpdatePatientNoteDataResponse response = new UpdatePatientNoteDataResponse();
+            try
+            {
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("PatientNoteDD:Put()::Unauthorized Access");
+
+                Manager.UpdatePatientNote(request);
+            }
+            catch (Exception ex)
+            {
+                RaiseException(response, ex);
             }
             return response;
         }
@@ -46,10 +60,7 @@ namespace Phytel.API.DataDomain.PatientNote.Service
             }
             catch (Exception ex)
             {
-                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
-
-                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
-                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+                RaiseException(response, ex);
             }
             return response;
         }
@@ -67,10 +78,7 @@ namespace Phytel.API.DataDomain.PatientNote.Service
             }
             catch (Exception ex)
             {
-                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
-
-                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
-                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+                RaiseException(response, ex);
             }
             return response;
         }
@@ -88,10 +96,7 @@ namespace Phytel.API.DataDomain.PatientNote.Service
             }
             catch (Exception ex)
             {
-                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
-
-                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
-                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+                RaiseException(response, ex);
             }
             return response;
         }
@@ -110,10 +115,7 @@ namespace Phytel.API.DataDomain.PatientNote.Service
             }
             catch (Exception ex)
             {
-                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
-
-                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
-                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+                RaiseException(response, ex);
             }
             return response;
         }
@@ -131,10 +133,7 @@ namespace Phytel.API.DataDomain.PatientNote.Service
             }
             catch (Exception ex)
             {
-                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
-
-                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
-                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+                RaiseException(response, ex);
             }
             return response;
         }
@@ -152,10 +151,7 @@ namespace Phytel.API.DataDomain.PatientNote.Service
             }
             catch (Exception ex)
             {
-                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
-
-                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
-                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+                RaiseException(response, ex);
             }
             return response;
         }

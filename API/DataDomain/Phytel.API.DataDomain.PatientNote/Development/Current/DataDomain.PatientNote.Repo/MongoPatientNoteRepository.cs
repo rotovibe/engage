@@ -1,49 +1,45 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Phytel.API.DataDomain.PatientNote.DTO;
-using Phytel.API.Interface;
 using MongoDB.Driver;
 using MongoDB.Driver.Builders;
 using MongoDB.Bson;
-using Phytel.API.DataDomain.PatientNote;
 using MB = MongoDB.Driver.Builders;
-using MongoDB.Bson;
-using Phytel.API.Common;
-using Phytel.API.Common.Data;
 using System.Configuration;
-using Phytel.API.DataAudit;
 using MongoDB.Bson.Serialization;
+using Phytel.API.Common;
+using Phytel.API.Common.Audit;
+using Phytel.API.DataAudit;
 
-namespace Phytel.API.DataDomain.PatientNote
+namespace Phytel.API.DataDomain.PatientNote.Repo
 {
-    public class MongoPatientNoteRepository : IPatientNoteRepository
+    public class MongoPatientNoteRepository<TContext> : IMongoPatientNoteRepository where TContext : PatientNoteMongoContext
     {
-        private string _dbName = string.Empty;
         private int _expireDays = Convert.ToInt32(ConfigurationManager.AppSettings["ExpireDays"]);
 
-        static MongoPatientNoteRepository()
+        protected readonly TContext Context;
+        public string ContractDBName { get; set; }
+        public string UserId { get; set; }
+        
+        public MongoPatientNoteRepository(IUOWMongo<TContext> uow)
         {
-            #region Register ClassMap
-            try
-            {
-                if (BsonClassMap.IsClassMapRegistered(typeof(MEPatientNote)) == false)
-                    BsonClassMap.RegisterClassMap<MEPatientNote>();
-            }
-            catch { }
-            #endregion
+            Context = uow.MongoContext;
         }
 
-        public MongoPatientNoteRepository(string contractDBName)
+        public MongoPatientNoteRepository(TContext context)
         {
-            _dbName = contractDBName;
+            Context = context;
+        }
+
+        public MongoPatientNoteRepository(string dbName)
+        {
+            ContractDBName = dbName;
         }
 
         public object Insert(object newEntity)
         {
-            PutPatientNoteDataRequest request = (PutPatientNoteDataRequest)newEntity;
+            InsertPatientNoteDataRequest request = (InsertPatientNoteDataRequest)newEntity;
             PatientNoteData noteData = request.PatientNote;
             string noteId = string.Empty;
             MEPatientNote meN = null;
@@ -82,7 +78,7 @@ namespace Phytel.API.DataDomain.PatientNote
                     {
                         meN.DurationId = ObjectId.Parse(noteData.DurationId);
                     }
-                    using (PatientNoteMongoContext ctx = new PatientNoteMongoContext(_dbName))
+                    using (PatientNoteMongoContext ctx = new PatientNoteMongoContext(ContractDBName))
                     {
                         ctx.PatientNotes.Collection.Insert(meN);
 
@@ -115,7 +111,7 @@ namespace Phytel.API.DataDomain.PatientNote
             DeletePatientNoteDataRequest request = (DeletePatientNoteDataRequest)entity;
             try
             {
-                using (PatientNoteMongoContext ctx = new PatientNoteMongoContext(_dbName))
+                using (PatientNoteMongoContext ctx = new PatientNoteMongoContext(ContractDBName))
                 {
                     var q = MB.Query<MEPatientNote>.EQ(b => b.Id, ObjectId.Parse(request.Id));
 
@@ -154,7 +150,7 @@ namespace Phytel.API.DataDomain.PatientNote
             PatientNoteData noteData = null;
             try
             {
-                using (PatientNoteMongoContext ctx = new PatientNoteMongoContext(_dbName))
+                using (PatientNoteMongoContext ctx = new PatientNoteMongoContext(ContractDBName))
                 {
                     List<IMongoQuery> queries = new List<IMongoQuery>();
                     queries.Add(Query.EQ(MEPatientNote.IdProperty, ObjectId.Parse(entityID)));
@@ -209,10 +205,83 @@ namespace Phytel.API.DataDomain.PatientNote
 
         public object Update(object entity)
         {
+            bool result = false;
+            UpdatePatientNoteDataRequest request = (UpdatePatientNoteDataRequest)entity;
+            PatientNoteData pn = request.PatientNoteData;
             try
             {
-                throw new NotImplementedException();
-                // code here //
+                using (PatientNoteMongoContext ctx = new PatientNoteMongoContext(ContractDBName))
+                {
+                    var q = MB.Query<MEPatientNote>.EQ(b => b.Id, ObjectId.Parse(pn.Id));
+                    var uv = new List<MB.UpdateBuilder>();
+                    uv.Add(MB.Update.Set(MEPatientNote.UpdatedByProperty, ObjectId.Parse(this.UserId)));
+                    uv.Add(MB.Update.Set(MEPatientNote.VersionProperty, request.Version));
+                    uv.Add(MB.Update.Set(MEPatientNote.LastUpdatedOnProperty, System.DateTime.UtcNow));
+                    if (pn.PatientId != null) uv.Add(MB.Update.Set(MEPatientNote.PatientIdProperty, ObjectId.Parse(pn.PatientId)));
+                    if (pn.Text != null) uv.Add(MB.Update.Set(MEPatientNote.TextProperty, pn.Text));
+                    if (pn.TypeId != null) uv.Add(MB.Update.Set(MEPatientNote.NoteTypeProperty, ObjectId.Parse(pn.TypeId)));
+                    if (pn.ProgramIds != null && pn.ProgramIds.Count > 0)
+                    {
+                        uv.Add(MB.Update.SetWrapped<List<ObjectId>>(MEPatientNote.ProgramProperty, Helper.ConvertToObjectIdList(pn.ProgramIds)));
+                    }
+                    else
+                    {
+                        uv.Add(MB.Update.Set(MEPatientNote.ProgramProperty, BsonNull.Value));
+                    }
+                    if (pn.MethodId != null)
+                    {
+                        uv.Add(MB.Update.Set(MEPatientNote.MethodIdProperty, ObjectId.Parse(pn.MethodId)));
+                    }
+                    else
+                    {
+                        uv.Add(MB.Update.Set(MEPatientNote.MethodIdProperty, BsonNull.Value));
+                    }
+                    if (pn.WhoId != null)
+                    {
+                        uv.Add(MB.Update.Set(MEPatientNote.WhoIdProperty, pn.WhoId));
+                    }
+                    else
+                    {
+                        uv.Add(MB.Update.Set(MEPatientNote.WhoIdProperty, BsonNull.Value));
+                    }
+                    if (pn.SourceId != null)
+                    {
+                        uv.Add(MB.Update.Set(MEPatientNote.SourceIdProperty, pn.SourceId));
+                    }
+                    else
+                    {
+                        uv.Add(MB.Update.Set(MEPatientNote.SourceIdProperty, BsonNull.Value));
+                    }
+                    if (pn.OutcomeId != null)
+                    {
+                        uv.Add(MB.Update.Set(MEPatientNote.OutcomeIdProperty, pn.OutcomeId));
+                    }
+                    else
+                    {
+                        uv.Add(MB.Update.Set(MEPatientNote.OutcomeIdProperty, BsonNull.Value));
+                    }
+                    if (pn.DurationId != null)
+                    {
+                        uv.Add(MB.Update.Set(MEPatientNote.DurationIdProperty, ObjectId.Parse(pn.DurationId)));
+                    }
+                    else
+                    {
+                        uv.Add(MB.Update.Set(MEPatientNote.DurationIdProperty, BsonNull.Value));
+                    }
+                    if (pn.ValidatedIdentity != null) uv.Add(MB.Update.Set(MEPatientNote.ValidatedIdentityProperty, pn.ValidatedIdentity));
+                    if (pn.ContactedOn != null) uv.Add(MB.Update.Set(MEPatientNote.ContactedOnProperty, pn.ContactedOn));
+                    IMongoUpdate update = MB.Update.Combine(uv);
+                    ctx.PatientNotes.Collection.Update(q, update);
+
+                    AuditHelper.LogDataAudit(this.UserId,
+                                            MongoCollectionName.PatientNote.ToString(),
+                                            pn.Id,
+                                            DataAuditType.Update,
+                                            request.ContractNumber);
+
+                    result = true;
+                }
+                return result as object;
             }
             catch (Exception) { throw; }
         }
@@ -233,7 +302,7 @@ namespace Phytel.API.DataDomain.PatientNote
             GetAllPatientNotesDataRequest dataRequest = (GetAllPatientNotesDataRequest)request;
             try
             {
-                using (PatientNoteMongoContext ctx = new PatientNoteMongoContext(_dbName))
+                using (PatientNoteMongoContext ctx = new PatientNoteMongoContext(ContractDBName))
                 {
                     List<IMongoQuery> queries = new List<IMongoQuery>();
                     queries.Add(Query.EQ(MEPatientNote.PatientIdProperty, ObjectId.Parse(dataRequest.PatientId)));
@@ -277,15 +346,12 @@ namespace Phytel.API.DataDomain.PatientNote
             catch (Exception) { throw; }
         }
 
-        public string UserId { get; set; }
-
-
         public void UndoDelete(object entity)
         {
             UndoDeletePatientNotesDataRequest request = (UndoDeletePatientNotesDataRequest)entity;
             try
             {
-                using (PatientNoteMongoContext ctx = new PatientNoteMongoContext(_dbName))
+                using (PatientNoteMongoContext ctx = new PatientNoteMongoContext(ContractDBName))
                 {
                     var q = MB.Query<MEPatientNote>.EQ(b => b.Id, ObjectId.Parse(request.PatientNoteId));
 
@@ -315,7 +381,7 @@ namespace Phytel.API.DataDomain.PatientNote
             try
             {
                 List<ObjectId> ids = updatedProgramIds.ConvertAll(r => ObjectId.Parse(r));
-                using (PatientNoteMongoContext ctx = new PatientNoteMongoContext(_dbName))
+                using (PatientNoteMongoContext ctx = new PatientNoteMongoContext(ContractDBName))
                 {
                     var q = MB.Query<MEPatientNote>.EQ(b => b.Id, ObjectId.Parse(request.NoteId));
 
@@ -343,7 +409,7 @@ namespace Phytel.API.DataDomain.PatientNote
             List<PatientNoteData> noteDataList = null;
             try
             {
-                using (PatientNoteMongoContext ctx = new PatientNoteMongoContext(_dbName))
+                using (PatientNoteMongoContext ctx = new PatientNoteMongoContext(ContractDBName))
                 {
                     List<IMongoQuery> queries = new List<IMongoQuery>();
                     queries.Add(Query.In(MEPatientNote.ProgramProperty, new List<BsonValue> { BsonValue.Create(ObjectId.Parse(entityId)) }));

@@ -9,7 +9,7 @@ namespace Phytel.API.DataDomain.PatientNote.Test.Stubs
     public class StubPatientNoteDataManager : IPatientNoteDataManager
     {
 
-        public string InsertPatientNote(DTO.PutPatientNoteDataRequest request)
+        public string InsertPatientNote(DTO.InsertPatientNoteDataRequest request)
         {
             throw new NotImplementedException();
         }
@@ -40,6 +40,11 @@ namespace Phytel.API.DataDomain.PatientNote.Test.Stubs
         }
 
         public DTO.RemoveProgramInPatientNotesDataResponse RemoveProgramInPatientNotes(DTO.RemoveProgramInPatientNotesDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdatePatientNote(DTO.UpdatePatientNoteDataRequest request)
         {
             throw new NotImplementedException();
         }

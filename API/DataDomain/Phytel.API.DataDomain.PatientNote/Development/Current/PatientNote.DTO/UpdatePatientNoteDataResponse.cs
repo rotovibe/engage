@@ -4,9 +4,8 @@ using Phytel.API.Interface;
 
 namespace Phytel.API.DataDomain.PatientNote.DTO
 {
-    public class PutPatientNoteDataResponse : IDomainResponse
+    public class UpdatePatientNoteDataResponse : IDomainResponse
     {
-        public string Id { get; set; }
         public double Version { get; set; }
         public ResponseStatus Status { get; set; }
     }

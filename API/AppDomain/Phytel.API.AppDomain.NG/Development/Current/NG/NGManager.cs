@@ -945,8 +945,8 @@ namespace Phytel.API.AppDomain.NG
                 deletePatientProgramCommand.Execute();
 
                 #region InsertANote
-                //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Note/Insert", "PUT")]
-                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/patient/{4}/note/insert",
+                //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Note", "POST")]
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/patient/{4}/note",
                                                                         DDPatientNoteUrl,
                                                                         "NG",
                                                                         request.Version,
@@ -962,7 +962,7 @@ namespace Phytel.API.AppDomain.NG
                     CreatedOn = DateTime.UtcNow,
                     PatientId = request.PatientId
                 };
-                PutPatientNoteDataResponse noteDDResponse = client.Put<PutPatientNoteDataResponse>(url, new PutPatientNoteDataRequest
+                InsertPatientNoteDataResponse noteDDResponse = client.Post<InsertPatientNoteDataResponse>(url, new InsertPatientNoteDataRequest
                 {
                     PatientNote = noteData,
                     Context = "NG",

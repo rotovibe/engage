@@ -3,11 +3,12 @@ using Phytel.API.DataDomain.PatientNote.DTO;
 using Phytel.Services.Mongo.Linq;
 using System.Configuration;
 
-namespace Phytel.API.DataDomain.PatientNote
+namespace Phytel.API.DataDomain.PatientNote.Repo
 {
 	public class PatientNoteMongoContext : MongoContext
 	{
 		private static string COLL_PatientNoteS = "PatientNote";
+        public string ContractName { get; set; }
 
 		public PatientNoteMongoContext(string contractDBName)
 			: base(ConfigurationManager.AppSettings.Get("PhytelServicesConnName"), contractDBName, true)
