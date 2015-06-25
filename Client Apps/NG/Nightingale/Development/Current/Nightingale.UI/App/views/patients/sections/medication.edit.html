@@ -55,13 +55,13 @@
             Start Date:
         </div>
         <div class="span3 pad-left">
-        	<input data-bind="value: startDate, datepickerEditable: startDate, css: { 'invalid': (validationErrorsArray().indexOf('startDate') !== -1) }, valueUpdate: 'afterkeydown' " type="text" class="datepicker" > 
+        	<input id="startDate" data-bind="value: startDate, datepickerEditable: startDate, css: { 'invalid': (validationErrorsArray().indexOf('startDate') !== -1) }, valueUpdate: 'afterkeydown' " type="text" class="datepicker" > 
         </div>
         <div class="span2 align-right grey">
             End Date:
         </div>
         <div class="span3 pad-left">
-        	<input data-bind="value: endDate, datepickerEditable: endDate, datepickerDynamicOptions: { minDate: startDate }, css: { 'invalid': (validationErrorsArray().indexOf('endDate') !== -1) }, valueUpdate: 'afterkeydown' " type="text" class="datepicker" >
+        	<input id="endDate" data-bind="value: endDate, datepickerEditable: endDate, datepickerDynamicOptions: { minDate: startDate }, css: { 'invalid': (validationErrorsArray().indexOf('endDate') !== -1) }, valueUpdate: 'afterkeydown' " type="text" class="datepicker" >
         </div>
     </div>
     <div class="row pad-top divider filters">       

@@ -418,11 +418,16 @@ define(['services/formatter', 'services/dateHelper'],
 			//mask: optimize / auto complete year YYYY
 			$(element).on('blur', function(){
 				var date = $(element).val();
-				if(date){	
+				if(date){
 					date = formatter.date.optimizeDate( date );
-					date = formatter.date.optimizeYear( date );						
-					$(element).val(date);
-					observable(date);	
+					date = formatter.date.optimizeYear( date );
+					if( date !== $(element).val() ){
+						$(element).val(date);
+					}	
+					if( !dateHelper.isSameDate(moment(observable()), moment(date)) ){
+						//assign only if changed:
+						observable(date);
+					}					
 				}
 			});	
 			//mask: MM/DD/....
@@ -444,13 +449,13 @@ define(['services/formatter', 'services/dateHelper'],
 						if( e.type === 'paste'){
 							date = date.replace( /\D/g, '');	//clean any separators before re-formatting
 						}
-						var newDate = formatter.date.optimizeDate(date);						
-						if( newDate && newDate !== date){
+						var newDate = date;
+						if( position == date.length || e.type === 'paste' || date.replace( /\D/g, '').length >= 8 ){
+							newDate = formatter.date.optimizeDate(date);
+						}						
+						if( newDate && newDate !== date || e.type === 'paste'){
 							$(element).val(newDate);
 							observable(newDate);								
-						}
-						if( key === 46 ){	//46=delete: return the cursor to its original position
-							element.setSelectionRange(position, position);
 						}
 					}						
 				}, 5);
@@ -610,9 +615,9 @@ define(['services/formatter', 'services/dateHelper'],
             init: function (element, valueAccessor, allBindingsAccessor, bindingContext) {
                 var observable = valueAccessor();
                 var $el = $(element);							
-				bindEditableDate( element, observable );
-								
-                //initialize datepicker with some optional options
+				bindEditableDate( element, observable );				
+                
+				//initialize datepicker with some optional options
                 var options = allBindingsAccessor().datepickerOptions || {};
                 // Track dynamic options if available
                 var dynoptions = allBindingsAccessor().datepickerDynamicOptions || {};				
@@ -624,7 +629,7 @@ define(['services/formatter', 'services/dateHelper'],
 						//set the initial date to the datepicker
 						observableMoment.local(); //move from utc to local time
 						var strDate = observableMoment.format('MM/DD/YYYY');					
-						$el.datepicker("setDate", strDate);
+						$el.datepicker("setDate", strDate);						
 					}
 				}				
 				
@@ -633,13 +638,18 @@ define(['services/formatter', 'services/dateHelper'],
                     if (dynoptions.minDate()) {
                         // Set it on initialization
                         var initMinDate = moment(dynoptions.minDate());
-                        $el.datepicker("option", "minDate", initMinDate.toDate() );
+						if( initMinDate.isValid() ){
+							$el.datepicker("option", "minDate", initMinDate.toDate() );
+						}                        
                     }
                     // Subscribe to the value
-                    dynoptions.minDate.subscribe(function (newValue) {
+                   dynoptions.minDate.subscribe(function (newValue) {
 						if( newValue && dateHelper.isValidDate(newValue, true) ){
 							var newMinDate = moment(newValue);
-							$el.datepicker("option", "minDate", newMinDate.toDate() );
+							var date = $el.val();								
+							if( !date || dateHelper.isValidDate(date) && !moment(date).isBefore(newValue) ){	//dont set mindate if current value is out of range, since datepicker will also update the current date to the new minDate. 
+								$el.datepicker("option", "minDate", newMinDate.toDate() );						
+							}
 							// if (observable() && dateHelper.isValidDate(observable()) && moment(observable()).isBefore(newMinDate)) {
 								// observable( newMinDate.format("MM/DD/YYYY") );
 							// }
@@ -648,17 +658,22 @@ define(['services/formatter', 'services/dateHelper'],
                 }
 
                 // If there is a datepicker dynoptions with a mindate that is an observable,
-                if (dynoptions && dynoptions.maxDate && ko.isObservable(dynoptions.maxDate)) {
+               if (dynoptions && dynoptions.maxDate && ko.isObservable(dynoptions.maxDate)) {
                     if (dynoptions.maxDate()) {
                         // Set it on initialization
                         var initMaxDate = moment( dynoptions.maxDate() );
-                        $el.datepicker("option", "maxDate", initMaxDate.toDate() );
+						if( initMaxDate.isValid() ){
+							$el.datepicker("option", "maxDate", initMaxDate.toDate() );	
+						}                        
                     }
-                    // Subscribe to the value
-                    dynoptions.maxDate.subscribe(function (newValue) {
-						if( newValue && dateHelper.isValidDate(newValue, true) ){
-							var newMaxDate = moment(newValue);							
-							$el.datepicker("option", "maxDate", newMaxDate.toDate() );
+                 // Subscribe to the value
+                    dynoptions.maxDate.subscribe(function (newValue) {						
+						if( newValue && dateHelper.isValidDate(newValue, true) ){							
+							var newMaxDate = moment(newValue);											
+							var date = $el.val();								
+							if( !date || dateHelper.isValidDate(date) && !moment(date).isAfter(newValue) ){	//dont set maxdate if current value is out of range, since datepicker will also update the current date to the new minDate. 
+								$el.datepicker("option", "maxDate", newMaxDate.toDate() );					
+							}
 							// if (observable() && dateHelper.isValidDate(observable()) && moment(observable()).isAfter(newMaxDate) ) {
 								// observable( newMaxDate.format("MM/DD/YYYY") );
 							// }
@@ -676,10 +691,10 @@ define(['services/formatter', 'services/dateHelper'],
 			* 	@method datepickerEditable.update
 			*/
             update: function (element, valueAccessor, allBindingsAccessor, bindingContext) {
-                var observable = valueAccessor(),
-                    $el = $(element),
-                    datepickerMoment = moment.utc($el.datepicker("getDate"));						
-				if( dateHelper.isValidDate(observable()) ){
+                var observable = valueAccessor(), $el = $(element);
+				var selectedDate = $el.datepicker("getDate") ? $el.datepicker("getDate").toString() : null;
+                var datepickerMoment = moment.utc(selectedDate);
+				if( dateHelper.isValidDate(observable(), true) ){
 					var observableMoment = moment.utc(observable());
 					if ( observableMoment.isValid() && datepickerMoment.isValid() && !dateHelper.isSameDate(observableMoment, datepickerMoment) ) { 
 							//the observable date has changed - update the datepicker with the date parts only:
@@ -733,7 +748,8 @@ define(['services/formatter', 'services/dateHelper'],
 					zindex:'999', 	//the drop is invisible if not set!
 					interval: 15, 					
 					scrollbar: true,					
-					startTime: new Date(0,0,0,8,0,0),	
+					startTime: new Date(0,0,0,8,0,0),
+					dynamic: false,	
 					change: onTimeChange});
 								
 				if( observable && observable() && moment( observable() ).isValid() ){
@@ -741,9 +757,9 @@ define(['services/formatter', 'services/dateHelper'],
 					observableMoment.local(); //move from utc to local time
 					
 					//set then initial timepicker to the observable time:					
-					var initHour = padZeroLeft(observableMoment.hours(), 2);
-					var initMinute = padZeroLeft(observableMoment.minutes(), 2);					
-					thisElement.timepicker().setTime(initHour + ':' + initMinute);
+					var initHour = formatter.padZeroLeft(observableMoment.hours(), 2);
+					var initMinute = formatter.padZeroLeft(observableMoment.minutes(), 2);					
+					thisElement.timepicker('setTime', initHour + ':' + initMinute);
 				}
 				else{
 					initialized = true;
@@ -1107,7 +1123,6 @@ define(['services/formatter', 'services/dateHelper'],
 			update: function (element, valueAccessor, allBindingsAccessor){					
 				var triggers = ko.unwrap(allBindingsAccessor().columnSizer.triggers); //track/subscribe to any widget hight altering parameter/s. the widgets may have the expand-collaps toggle observable (isOpen) and/or filters show/hide toggle and/or filter content.
 				
-				//console.log('columnSizer update starts');
 				if (isChrome() || isIe11()){
 					return;
 				}
