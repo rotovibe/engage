@@ -457,9 +457,6 @@ define(['services/formatter', 'services/dateHelper'],
 							$(element).val(newDate);
 							observable(newDate);								
 						}
-						if( key === 46 ){	//46=delete: return the cursor to its original position
-							element.setSelectionRange(position, position);
-						}
 					}						
 				}, 5);
 			});			
@@ -694,10 +691,10 @@ define(['services/formatter', 'services/dateHelper'],
 			* 	@method datepickerEditable.update
 			*/
             update: function (element, valueAccessor, allBindingsAccessor, bindingContext) {
-                var observable = valueAccessor(),
-                    $el = $(element),
-                    datepickerMoment = moment.utc($el.datepicker("getDate"));
-				if( dateHelper.isValidDate(observable()) ){
+                var observable = valueAccessor(), $el = $(element);
+				var selectedDate = $el.datepicker("getDate") ? $el.datepicker("getDate").toString() : null;
+                var datepickerMoment = moment.utc(selectedDate);
+				if( dateHelper.isValidDate(observable(), true) ){
 					var observableMoment = moment.utc(observable());
 					if ( observableMoment.isValid() && datepickerMoment.isValid() && !dateHelper.isSameDate(observableMoment, datepickerMoment) ) { 
 							//the observable date has changed - update the datepicker with the date parts only:
