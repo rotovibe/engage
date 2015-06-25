@@ -6,7 +6,7 @@ define(['services/session', 'config.services'],
 
         // Create an object to use to reveal functions from this module
         var patientsService = {
-            saveBackground: saveBackground,
+            //saveBackground: saveBackground,
             saveIndividual: saveIndividual,
             getFullSSN: getFullSSN,
             deleteIndividual: deleteIndividual,
@@ -16,7 +16,7 @@ define(['services/session', 'config.services'],
         };
         return patientsService;
         
-        // POST to the server, check the results for entities
+        /**obsolete: use saveIndividual** POST to the server, check the results for entities
         function saveBackground(manager, patientId, background) {
 
             // If there is no manager, we can't query using breeze
@@ -54,7 +54,8 @@ define(['services/session', 'config.services'],
             function saveSucceeded(data) {
                 return data.httpResponse.data;
             }
-        }
+        }*/
+		
         // POST to the server, check the results for entities
         function saveIndividual(manager, serializedPatient, insert) {
 

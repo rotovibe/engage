@@ -169,6 +169,7 @@
     <Content Include="App\viewmodels\admin\reports\entity.template.js" />
     <Content Include="App\viewmodels\admin\reports\query.builder.js" />
     <Content Include="App\viewmodels\patients\medications\index.js" />
+    <Content Include="App\viewmodels\patients\sections\clinicalBackground.js" />
     <Content Include="App\viewmodels\patients\sections\dropdown.w.addnew.js" />
     <Content Include="App\viewmodels\patients\sections\medication.edit.js" />
     <Content Include="App\viewmodels\patients\sections\medications.search.js" />
@@ -190,6 +191,7 @@
     <Content Include="App\viewmodels\templates\allergies.panel.js" />
     <Content Include="App\viewmodels\templates\allergy.edit.js" />
     <Content Include="App\views\patients\medications\index.html" />
+    <Content Include="App\views\patients\sections\clinicalBackground.html" />
     <Content Include="App\views\patients\sections\dropdown.w.addnew.html" />
     <Content Include="App\views\patients\sections\allergies.edit.html" />
     <Content Include="App\views\patients\sections\medication.edit.html" />
@@ -199,6 +201,7 @@
     <Content Include="App\views\patients\sections\system.ids.html" />
     <Content Include="App\views\patients\widgets\allergies.html" />
     <Content Include="App\views\patients\widgets\medications.html" />
+    <Content Include="App\views\templates\clinicalBackground.html" />
     <Content Include="App\views\templates\event.details.html" />
     <Content Include="App\views\templates\medication.expand.html" />
     <Content Include="App\views\templates\medication.name.html" />

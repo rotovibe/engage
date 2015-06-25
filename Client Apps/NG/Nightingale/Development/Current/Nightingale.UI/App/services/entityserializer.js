@@ -733,7 +733,7 @@
             .from('fakePath')
             .where('id', '==', patient.id())
             .toType('Patient')
-            .select('id, priority, gender, firstName, lastName, preferredName, suffix, dOB, middleName, background, fullSSN');
+            .select('id, priority, gender, firstName, lastName, preferredName, suffix, dOB, middleName, background, clinicalBackground, fullSSN');
         var results = manager.executeQueryLocally(patientQuery);
         var unwrappedIndividual = results[0];
 
@@ -747,7 +747,8 @@
         thisIndividual.DOB = unwrappedIndividual.dOB;
         thisIndividual.MiddleName = unwrappedIndividual.middleName;
         thisIndividual.Background = unwrappedIndividual.background;
-        
+		thisIndividual.ClinicalBackground = unwrappedIndividual.clinicalBackground;
+		
         if (unwrappedIndividual.fullSSN) {
         // Add it as a parameter
             thisIndividual.FullSSN = unwrappedIndividual.fullSSN;

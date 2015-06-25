@@ -242,7 +242,7 @@ define(['services/session', 'services/jsonResultsAdapter', 'models/base', 'confi
             initializeObservation: initializeObservation,
             saveObservations: saveObservations,
             savePatientSystems: savePatientSystems,
-            saveBackground: saveBackground,
+            //saveBackground: saveBackground,
             getFullSSN: getFullSSN,
             addPatientToRecentList: addPatientToRecentList,
             hasChanges: hasChanges,
@@ -1252,7 +1252,7 @@ define(['services/session', 'services/jsonResultsAdapter', 'models/base', 'confi
             }
         }
 
-        // Save changes to a single contact card
+        /**obsolete: use saveIndividual**  Save changes to a single contact card
         function saveBackground(patient) {
             // Display a message while saving
             var message = queryStarted('Background', true, 'Saving');
@@ -1271,7 +1271,7 @@ define(['services/session', 'services/jsonResultsAdapter', 'models/base', 'confi
                 queryCompleted(message);
                 return true;
             }
-        }
+        } */
 
         // Get a patients full SSN for display only
         function getFullSSN(patientId) {
