@@ -4,7 +4,7 @@
 *	@module dateHelper
 */
 define([ 'services/formatter'],
-	function(){
+	function(formatter){
 		
 		var dateHelper = function(){};
 			/**
