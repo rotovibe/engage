@@ -4,8 +4,8 @@
 *	@module bindings
 */
 
-define([],
-    function () {
+define(['services/formatter'],
+    function (formatter) {
 
         var datacontext;
 
@@ -280,6 +280,70 @@ define([],
                 });
             }
         };
+		
+		/**
+		*	masking and validating phone number fields
+		*	@class phone
+		* 	
+		*/
+		ko.bindingHandlers.phone = {
+			/**
+			*	@method phone.init
+			*	@param valueAccessor expecting an object (complex value) with a validate function. 
+			*	@example in models\contacts.js "Phone" entity instance is sent for each of the contactCard - phones tab (views\templates\contactcard.html, views\templates\phone.edit.html).
+			*/
+			init: function (element, valueAccessor, allBindingsAccessor, bindingContext) {
+				var phone = valueAccessor();
+				$(element).on('blur', function(){
+					if( !phone.validate() ){
+						$(element).addClass("invalid");
+					}
+					else{
+						$(element).removeClass("invalid");
+					}
+				});
+				$(element).attr('maxlength', 12);				
+				$(element).attr('placeholder', "XXX-XXX-XXXX");
+				$(element).attr('title', "XXX-XXX-XXXX");
+
+				var number = phone.number();
+				if(number && number.length > 0){					
+					number = formatter.formatSeparators(number, 'XXX-XXX-XXXX', '-');	
+					phone.number(number);
+				}
+				
+				//prevent typing non numerics:
+				$(element).on('keypress', function(e){
+					var key = e.which || e.keyCode;
+					if( (key < 48 || key > 57) && key !== 116 && key !== 8 && key !== 9 && key !== 37 && key !== 39 && key !== 46 && !(key == 118 && e.ctrlKey) ){	//exclude 116 (=F5), 8(=bkspc), 9(=tab) , 37,39 (<-, ->), 46(=del), ctrl+V (118)						
+						e.preventDefault();												
+					}
+				});
+				
+				//mask phone number to : XXX-XXX-XXXX
+				$(element).on('keydown paste', function(e){					
+					setTimeout(function(){						
+						var key = e.which || e.keyCode;
+						var number = $(element).val();
+						var position = element.selectionStart;
+						if( number && key !== 37 && key !== 39 && key !== 9){ //exclude <- , ->, Tab
+							if( position === number.length && key === 8 ){
+								return;	//bkspc on the last char - dont rearrange and dont add dash.
+							}							
+							
+							var newNumber = formatter.formatSeparators(number.replace( /\D/g, ''), 'XXX-XXX-XXXX', '-');
+							phone.number(newNumber);
+							if( key === 46 || (key === 8 && position < newNumber.length)){	//46=delete or 8=bkspc not on last char: return the cursor to its original position
+								element.setSelectionRange(position, position);
+							}
+							else if( key >= 48 && key <= 57  && position < number.length ){	//digit added in the middle
+								element.setSelectionRange(position, position);
+							}
+						}						
+					}, 5);
+				});
+			}
+		};
 		
 		/**
 		*

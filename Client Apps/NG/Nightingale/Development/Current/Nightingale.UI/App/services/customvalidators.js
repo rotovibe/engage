@@ -1,5 +1,5 @@
-﻿define([],
-    function () {
+﻿define(['services/formatter'],
+    function (formatter) {
 
         var validators = {};
 
@@ -7,7 +7,7 @@
             "zipVal",
             /^\d{5}([\-]\d{4})?$/,
             "The %displayName% '%value%' is not a valid U.S. zip code.");
-
+		
         // Check if all of the characters are zeroes
         function notAllZeroesFn(value, context) {
             // '== null' matches null and empty string
