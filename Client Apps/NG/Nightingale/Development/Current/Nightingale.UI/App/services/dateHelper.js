@@ -69,8 +69,8 @@ define([ 'services/formatter'],
 			}
 			if( !moment(value, ["MM/DD/YYYY", "MM-DD-YYYY"], true).isValid() ){
 				//short format failed
-				var theMoment = moment(value);
-				if( !theMoment.isValid() ){	//|| theMoment._f !== "YYYY-MM-DDTHH:mm:ss.SSSSZ" 
+				var theMoment = moment(value, ["YYYY-MM-DDTHH:mm:ss.SSSSZ"], true);	//iso 8601
+				if( !theMoment.isValid() ){
 					//iso 8601 failed
 					var formattedValue = formatter.date.optimizeDate( value );
 					formattedValue = formatter.date.optimizeYear( value );
