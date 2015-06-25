@@ -1,6 +1,6 @@
 // Register all of the user related models in the entity manager (initialize function) and provide other non-entity models
-define(['services/session', 'services/validatorfactory', 'services/customvalidators'],
-	function (session, validatorFactory, customValidators) {
+define(['services/session', 'services/validatorfactory', 'services/customvalidators', 'services/dateHelper'],
+	function (session, validatorFactory, customValidators, dateHelper) {
 
 		var datacontext;
 
@@ -36,8 +36,8 @@ define(['services/session', 'services/validatorfactory', 'services/customvalidat
 		    		displayId: { dataType: "String" },
 		    		patientId: { dataType: "String" },
 		    		units: { dataType: "String" },
-		    		startDate: { dataType: "DateTime" },
-		    		endDate: { dataType: "DateTime" },
+		    		startDate: { dataType: "String" },
+		    		endDate: { dataType: "String" },
 		    		groupId: { dataType: "String" },
 		    		deleteFlag: { dataType: "Boolean" },
 		    		source: { dataType: "String" },
@@ -158,6 +158,10 @@ define(['services/session', 'services/validatorfactory', 'services/customvalidat
 		    metadataStore.registerEntityTypeCtor(
 		    	'ObservationValue', null, observationValueInitializer);
 
+			/**
+			*
+			* 	@method patientObservationInitializer
+			*/			
 		    function patientObservationInitializer(patObs) {
                 patObs.isNew = ko.observable(false);
 		    	patObs.computedValue = ko.computed({
@@ -206,24 +210,163 @@ define(['services/session', 'services/validatorfactory', 'services/customvalidat
 		    		}
 		    		return thisValue;
 		    	});
-			    patObs.isValid = ko.observable(true);
+				patObs.validationErrors = ko.observableArray([]);
+				
+				/**
+				*	indicate if the observation needs to be saved. note that except for problems,
+				*	empty observations display as valid but do not need to be saved.
+				*	@method needToSave
+				*/
+				patObs.needToSave = function(){
+					var result = false;
+					if( patObs.isNew() || patObs.entityAspect.entityState.isModified() ){
+						if( patObs.type().name() === 'Problems' ){						
+							result = patObs.isValid();	//problems dont need values and they dont require a startDate
+						}						
+						else{	
+							//assessments, labs, risks, vitals: 
+							 result = patObs.isValid() && patObs.hasActualValues(); 																		
+						}						
+					}					
+					return result;
+				}
+				patObs.hasActualValues = ko.observable();
+				
+				/**
+				*	computed. validating the patient observation and updating errors and error messages into patObs.validationErrors. 
+				*	returns true for valid observation.
+				*	@method isValid 
+				*/
+			    patObs.isValid = ko.computed( function() {					
+					var values = patObs.values();
+					var startDate = patObs.startDate();
+					var hasErrors = patObs.entityAspect.hasValidationErrors;
+					var type = patObs.type()? patObs.type().name() : null;
+					switch( type ){
+						case 'Assessments':
+							hasErrors = validateGeneralObservation();
+							break;
+						case 'Labs':
+							hasErrors = validateGeneralObservation();
+							break;
+						case 'Problems':
+							hasErrors = validateProblem();
+							break;
+						case 'Risks':
+							hasErrors = validateGeneralObservation();
+							break;
+						case 'Vitals':
+							hasErrors = validateGeneralObservation();
+							break;
+						// case 'Allergies':
+							// break;
+						// case 'Medications':
+							// break;
+					}
+					
+					return !hasErrors;
+
+					/**
+					*	validate for these observation types: (assessments, lbs, risks, vitals)
+					*	@method	validateGeneralObservation
+					*/
+					function validateGeneralObservation(){
+						patObs.hasActualValues(false);
+						var obsErrors = [];
+						// if( hasErrors ){
+							// //breeze validation errors (not in use for now)
+							// var errors = patObs.entityAspect.getValidationErrors();
+							// ko.utils.arrayForEach(errors, function (error) {
+								// obsErrors.push({ PropName: error.propertyName, Message: error.errorMessage});
+							// });
+						// }
+						
+						ko.utils.arrayForEach( values, function(value) {
+							var propName = 'value';
+							if( value.text && value.text() && value.text().indexOf("Systolic") !== -1 ){
+								propName = 'systolic';
+							}
+							else if( value.text && value.text() && value.text().indexOf("Diastolic") !== -1 ){
+								propName = 'diastolic';
+							}
+							if( isNaN(value.value()) ){	//note: this will change when we get alert limits high/low: numeric/decimal with prefix +/-. when no high/low its any string.																
+								//value exist but its not a number (note: +/- sign prefixed values are going to be valid)
+								var name = value.name? value.name() : value.text? value.text() : 'observation ';
+								var msg = name + ' has invalid value' ;
+								obsErrors.push({ PropName: propName, Message: msg });
+								hasErrors = true;
+							}
+							if( startDate && !value.value() ){
+								//start date exist therefore we must have a value/s
+								var name = value.name? value.name() : value.text? value.text() : 'observation ';	//patObs.name()
+								var msg = name + ' must have a value';
+								obsErrors.push({ PropName: propName, Message: msg });
+								hasErrors = true;
+							}
+							else if( value.value() ){
+								patObs.hasActualValues(true);
+							}
+						});
+						
+						if( !startDate && patObs.hasActualValues() ){
+							//value/s exist therefore we must have a star date
+							obsErrors.push({ PropName: 'startDate', Message: patObs.name() + ' must have a Date' });
+							hasErrors = true;
+						}	
+						var context = {maxDate: 'today'};
+						var startDateError = dateHelper.isInvalidDate(startDate, context);
+						if( startDateError != null ){
+							obsErrors.push({ PropName: 'startDate', Message: patObs.name() + ' Date ' + startDateError.Message});
+							hasErrors = true;
+						}
+						patObs.validationErrors(obsErrors);
+						return hasErrors;
+					}
+					
+					/**
+					*	problems dont need values and they dont require a startDate, however, if a start date is provided it will need to be valid.
+					*	@method validateProblem
+					*/
+					function validateProblem(){
+						var obsErrors = [];
+						var context = {maxDate: 'today'};
+						var startDateError = dateHelper.isInvalidDate(startDate, context);
+						if( startDateError != null ){
+							obsErrors.push({ PropName: 'startDate', Message: patObs.name() + ' Date ' + startDateError.Message});
+							hasErrors = true;
+						}
+						patObs.validationErrors(obsErrors);
+						return hasErrors;
+					}
+				});
+								
+				/**
+				*	computed. used to disable the save button if any observation is not valid.
+				*	@method canSave
+				*/
 			    patObs.canSave = ko.computed(patObs.isValid);
-			    patObs.validationErrors = ko.observableArray([]);
-			    patObs.entityAspect.validationErrorsChanged.subscribe(function (validationChangeArgs) {
-			        var hasErrors = patObs.entityAspect.hasValidationErrors;
-			        var errorsList = [];
-			        if (hasErrors) {
-			            patObs.isValid(false);
-			            var errors = patObs.entityAspect.getValidationErrors();
-			            ko.utils.arrayForEach(errors, function (error) {
-			                errorsList.push(new validationError(error.propertyName, error.errorMessage));
-			            });
-			            patObs.validationErrors(errorsList);
-			        } else {
-			            patObs.validationErrors([]);
-			            patObs.isValid(true);
-			        }
-			    });
+			    
+			    // patObs.entityAspect.validationErrorsChanged.subscribe(function (validationChangeArgs) {
+			        // var hasErrors = patObs.entityAspect.hasValidationErrors;
+			        // var errorsList = [];
+			        // if (hasErrors) {
+			            // patObs.isValid(false);
+			            // var errors = patObs.entityAspect.getValidationErrors();
+			            // ko.utils.arrayForEach(errors, function (error) {
+			                // errorsList.push(new validationError(error.propertyName, error.errorMessage));
+			            // });
+			            // patObs.validationErrors(errorsList);
+			        // } else {
+			            // patObs.validationErrors([]);
+			            // patObs.isValid(true);
+			        // }
+			    // });
+				
+				/**
+				*	computed. tracks for any validation errors and returns a list of the errored property names.
+				*	this will be used in the property field css binding condition for invalid styling.
+				*	@method patObs.validationErrorsArray
+				*/
 			    patObs.validationErrorsArray = ko.computed(function () {
 			        var thisArray = [];
 			        ko.utils.arrayForEach(patObs.validationErrors(), function (error) {

@@ -173,12 +173,13 @@ define(['plugins/router', 'services/navigation', 'config.services', 'services/se
             }
             // If there are any allergies that need saving
             var needsSaving = ko.utils.arrayFilter(selectedPatient().allergies(), function (allergy) {
-                return (allergy.entityAspect.entityState.isModified() || allergy.isNew()) && allergy.sourceId();
+                return allergy.needToSave() && allergy.isValid();
             });
+			
             if (needsSaving.length > 0) {
                 datacontext.saveAllergies(needsSaving).then(saveAllergiesCompleted);
-
-            var saveAllergiesCompleted = function(data) {
+				
+				var saveAllergiesCompleted = function(data) {
                     // For each saved allergy
                     ko.utils.arrayForEach(data, function (allg) {
                         // Make sure it is set to not be new anymore
@@ -187,6 +188,10 @@ define(['plugins/router', 'services/navigation', 'config.services', 'services/se
                     });
                 }
             }
+			var destroyThese = ko.utils.arrayFilter( selectedPatient().allergies(), function (allergy) {
+				return allergy.needToSave() && !allergy.isValid();
+			});
+			removeDataEntries( destroyThese );
         }
 
         /**
@@ -202,7 +207,7 @@ define(['plugins/router', 'services/navigation', 'config.services', 'services/se
             }
             // If there are any medications that need saving
             var needsSaving = ko.utils.arrayFirst(selectedPatient().medications(), function (medication) {
-                return (medication.isNew() && medication.name() && medication.type() && medication.category() && medication.canSave());
+                return medication.needToSave() && medication.isValid();
             });
             if (needsSaving) {
 				datacontext.saveMedication(needsSaving).then(saveMedicationCompleted);									
@@ -219,13 +224,17 @@ define(['plugins/router', 'services/navigation', 'config.services', 'services/se
             var thisMedsArray = selectedPatient().medications().slice(0);
             // Go through each med,
             ko.utils.arrayForEach(thisMedsArray, function (med) {                
-                if (med.isNew() && !med.canSave()) {
+                if( med.isNew() && !med.isValid() ) {
                     // Delete it from the manager
                     med.entityAspect.rejectChanges();
                 }
             });
         }
 
+		/**
+		*	saves all observations in data entry modal.
+		*	@method saveDataEntry
+		*/
         function saveDataEntry() {
             if (selectedPatient().observations().length === 0 ) {
                 return false;
@@ -252,9 +261,14 @@ define(['plugins/router', 'services/navigation', 'config.services', 'services/se
                             deleteThese.push(obs);
                         }
                     } else if (obs.entityAspect.entityState.isModified() || obs.isNew()) {
-                        // If it is a problem that has changes
-                        obs.entityAspect.acceptChanges();
-                        obs.isNew(false);
+                        // If it is a problem that has valid changes
+						if( obs.isValid() ){
+							obs.entityAspect.acceptChanges();
+						} else {
+							obs.entityAspect.rejectChanges();
+							deleteThese.push(obs);
+						}
+						obs.isNew(false);						
                         if (obs.deleteFlag()) {
                             deleteThese .push(obs);
                         }
@@ -319,18 +333,22 @@ define(['plugins/router', 'services/navigation', 'config.services', 'services/se
                     med.entityAspect.rejectChanges();
                 }
             });
-            while (destroyThese.length > 0) {
-                var observation = destroyThese[0];
-                observation.entityAspect.setDeleted();
-                observation.entityAspect.acceptChanges();
-                destroyThese.splice(0, 1);
-            };
+			removeDataEntries( destroyThese );
+            
             // Force the observations lists' to recalculate
             var thisActiveDataType = activeDataType();
             activeDataType(null);
             activeDataType(thisActiveDataType);
         }
-
+		
+		function removeDataEntries( destroyThese ){
+			while (destroyThese.length > 0) {
+                var entity = destroyThese[0];
+                entity.entityAspect.setDeleted();
+                entity.entityAspect.acceptChanges();
+                destroyThese.splice(0, 1);
+            };
+		}
         function setActiveDataType(sender) {
             activeDataType(sender);
         }

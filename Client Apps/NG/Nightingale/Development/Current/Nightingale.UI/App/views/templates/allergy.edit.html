@@ -39,13 +39,13 @@
             Start Date:
         </div>
         <div class="span3 pad-left">
-        	<input data-bind="datepicker: startDate, datepickerOptions: { maxDate: '+0' }, datepickerDynamicOptions: { recalc: [endDate]  }" type="text" class="datepicker" readonly="readonly">
+        	<input data-bind="value: startDate, datepickerEditable: startDate, datepickerOptions: { maxDate: '+0' }, datepickerDynamicOptions: { recalc: [endDate]  }, css: { 'invalid': (validationErrorsArray().indexOf('startDate') !== -1) }, valueUpdate: 'afterkeydown'" type="text" class="datepicker">
         </div>
         <div class="span2 align-right grey">
             End Date:
         </div>
         <div class="span3 pad-left">
-        	<input data-bind="datepicker: endDate, datepickerDynamicOptions: { minDate: startDate, recalc: [startDate] }" type="text" class="datepicker" readonly="readonly">
+        	<input data-bind="value: endDate, datepickerEditable: endDate, datepickerDynamicOptions: { minDate: startDate, recalc: [startDate] }, datepickerOptions: { maxDate: '+0' }, css: { 'invalid': (validationErrorsArray().indexOf('endDate') !== -1) }, valueUpdate: 'afterkeydown' " type="text" class="datepicker">
         </div>
     </div>
     <div class="row pad-top"></div>

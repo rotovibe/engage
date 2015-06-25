@@ -1,5 +1,5 @@
-﻿define(['services/formatter'],
-    function (formatter) {
+﻿define(['services/formatter', 'services/dateHelper'	],
+    function (formatter, dateHelper) {
 
         var validators = {};
 
@@ -34,10 +34,14 @@
 			if( isNaN(new Date(value).valueOf()) ){
 				context.msg = "'"+ value + "' is not a valid " + context.property.displayName;
 				return false;
-			}
+			}			
 			if( !moment(value, ["MM-DD-YYYY","MM/DD/YYYY"], true).isValid() ){
-				context.msg = "'"+ value + "' is not a valid " + context.property.displayName;
-				return false;
+				var formattedValue = formatter.date.optimizeDate( value );
+				formattedValue = formatter.date.optimizeYear( value );
+				if( !moment(formattedValue, ["MM-DD-YYYY","MM/DD/YYYY"], true).isValid() ){
+					context.msg = "'"+ value + "' is not a valid " + context.property.displayName;
+					return false;
+				}
 			}
 			if( context.minDate ){
 				var minDate = context.minDate;

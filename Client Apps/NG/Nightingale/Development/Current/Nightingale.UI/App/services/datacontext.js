@@ -1173,34 +1173,15 @@ define(['services/session', 'services/jsonResultsAdapter', 'models/base', 'confi
             var serializedObservations = [];
             serializedObservations.PatientId = patientId;
             // Go through the observations,
-            ko.utils.arrayForEach(theseObservations(), function (observation) {
-				if( observation.isNew() || observation.entityAspect.entityState.isModified() ){
-					var canSave = true;
-					if (observation.type().name() !== 'Problems'){						
-						//other than problems: (problems dont need values and they dont require a startDate)
-						canSave = false;
-						//must have startDate:
-						if(moment(observation.startDate()).isValid()){
-							//must have valid values:
-							// Go through each value and ensure a value exists:
-							ko.utils.arrayFirst(observation.values(), function (value) {								
-								canSave = true;
-								// If there is no value,
-								if (!value.value()) {
-									// Set the canSave to false
-									canSave = false;
-									return true; //break;
-								}
-							});
-						}
-					}
-					if (canSave) {
-                        // Accept it's changes (if modified)
-                        observation.entityAspect.acceptChanges();
-                        // Serialize it
-                        var serializedObservation = entitySerializer.serializeObservation(observation, manager);
-                        serializedObservations.push(serializedObservation);
-                    }					
+            ko.utils.arrayForEach(theseObservations(), function (observation) {				
+				if (observation.needToSave()) {
+					// Accept it's changes (if modified)
+					observation.entityAspect.acceptChanges();
+					// Serialize it
+					var serializedObservation = entitySerializer.serializeObservation(observation, manager);
+					serializedObservations.push(serializedObservation);
+				} else{
+					observation.entityAspect.rejectChanges();
 				}
             });
             if (serializedObservations.length > 0) {

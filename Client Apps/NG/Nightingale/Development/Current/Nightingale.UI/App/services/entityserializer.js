@@ -558,8 +558,10 @@
         // Copy actions properties
         thisObservation.Id = unwrappedObservation.id;
         thisObservation.Name = unwrappedObservation.name;
-        thisObservation.StartDate = unwrappedObservation.startDate;
-        thisObservation.EndDate = unwrappedObservation.endDate;
+		var startMoment = moment(unwrappedObservation.startDate);
+        thisObservation.StartDate = startMoment.isValid()? startMoment.toISOString() : null;
+		var endMoment = moment(unwrappedObservation.endDate);
+        thisObservation.EndDate = endMoment.isValid()? endMoment.toISOString() : null;
         thisObservation.GroupId = unwrappedObservation.groupId;
         thisObservation.Standard = unwrappedObservation.standard;
         thisObservation.ObservationId = unwrappedObservation.observationId;
@@ -818,8 +820,10 @@
         // Copy actions properties
         thisAllergy.Id = unwrappedObservation.id;
         thisAllergy.AllergyName = unwrappedObservation.allergyName;
-        thisAllergy.StartDate = unwrappedObservation.startDate;
-        thisAllergy.EndDate = unwrappedObservation.endDate;
+		var startMoment = moment(unwrappedObservation.startDate);        
+        thisAllergy.StartDate = startMoment.isValid()? startMoment.toISOString() : null;
+		var endMoment = moment(unwrappedObservation.endDate);        
+        thisAllergy.EndDate = endMoment.isValid()? endMoment.toISOString() : null;
         thisAllergy.PatientId = unwrappedObservation.patientId;
         thisAllergy.AllergyId = unwrappedObservation.allergyId;
         thisAllergy.StatusId = unwrappedObservation.statusId;
@@ -871,8 +875,10 @@
         // Copy actions properties
         thisMedication.Id = unwrappedObservation.id;
         thisMedication.Name = unwrappedObservation.name;
-        thisMedication.StartDate = unwrappedObservation.startDate;
-        thisMedication.EndDate = unwrappedObservation.endDate;
+		var startMoment = moment(unwrappedObservation.startDate);                
+        thisMedication.StartDate = startMoment.isValid()? startMoment.toISOString() : null;
+		var endMoment = moment(unwrappedObservation.endDate);
+        thisMedication.EndDate = endMoment.isValid()? endMoment.toISOString() : null;
         thisMedication.PatientId = unwrappedObservation.patientId;
         thisMedication.StatusId = unwrappedObservation.statusId;
         thisMedication.SourceId = unwrappedObservation.sourceId;

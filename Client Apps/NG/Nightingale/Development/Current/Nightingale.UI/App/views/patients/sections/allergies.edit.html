@@ -35,10 +35,10 @@
 	        	</div>
 	        </div>
 	        <div class="span2">
-        		<input data-bind="datepicker: startDate, datepickerOptions: { maxDate: '+0' }" type="text" class="datepicker" readonly="readonly">
+        		<input data-bind="value: startDate, datepickerEditable: startDate, datepickerOptions: { maxDate: '+0' }, css: { 'invalid': (validationErrorsArray().indexOf('startDate') !== -1) }, valueUpdate: 'afterkeydown' " type="text" class="datepicker" >
 	        </div>
 	        <div class="span2">
-        		<input data-bind="datepicker: endDate, datepickerDynamicOptions: { minDate: startDate }" type="text" class="datepicker" readonly="readonly">
+        		<input data-bind="value: endDate, datepickerEditable: endDate, datepickerDynamicOptions: { minDate: startDate}, datepickerOptions: { maxDate: '+0' }, css: { 'invalid': (validationErrorsArray().indexOf('endDate') !== -1) }, valueUpdate: 'afterkeydown' " type="text" class="datepicker" >
 	        </div>
 	        <div class="span2">
                 <div class="span12" data-bind="chsnsingle: { options: $parent.allergyStatuses, value: status, text: 'name', label: 'status' }"></div>
