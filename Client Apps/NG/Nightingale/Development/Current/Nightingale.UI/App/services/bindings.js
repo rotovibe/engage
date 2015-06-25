@@ -637,12 +637,12 @@ define(['services/formatter', 'services/dateHelper'],
                     }
                     // Subscribe to the value
                     dynoptions.minDate.subscribe(function (newValue) {
-						if( newValue && dateHelper.isValidDate(newValue) ){
+						if( newValue && dateHelper.isValidDate(newValue, true) ){
 							var newMinDate = moment(newValue);
 							$el.datepicker("option", "minDate", newMinDate.toDate() );
-							if (observable() && dateHelper.isValidDate(observable()) && moment(observable()).isBefore(newMinDate)) {
-								observable( newMinDate.format("MM/DD/YYYY") );
-							}
+							// if (observable() && dateHelper.isValidDate(observable()) && moment(observable()).isBefore(newMinDate)) {
+								// observable( newMinDate.format("MM/DD/YYYY") );
+							// }
 						}
                     });
                 }
@@ -656,13 +656,12 @@ define(['services/formatter', 'services/dateHelper'],
                     }
                     // Subscribe to the value
                     dynoptions.maxDate.subscribe(function (newValue) {
-						if( newValue && dateHelper.isValidDate(newValue) ){
-							var newMaxDate = moment(newValue);
-							
+						if( newValue && dateHelper.isValidDate(newValue, true) ){
+							var newMaxDate = moment(newValue);							
 							$el.datepicker("option", "maxDate", newMaxDate.toDate() );
-							if (observable() && dateHelper.isValidDate(observable()) && moment(observable()).isAfter(newMaxDate) ) {
-								observable( newMaxDate.format("MM/DD/YYYY") );
-							}
+							// if (observable() && dateHelper.isValidDate(observable()) && moment(observable()).isAfter(newMaxDate) ) {
+								// observable( newMaxDate.format("MM/DD/YYYY") );
+							// }
 						}
                     });
                 }

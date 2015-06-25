@@ -1,5 +1,9 @@
-﻿define(['services/formatter', 'services/dateHelper'	],
-    function (formatter, dateHelper) {
+﻿/**
+*	custom validators for breeze entities
+*	@module customvalidators
+*/
+define(['services/formatter'],
+    function (formatter) {
 
         var validators = {};
 
@@ -29,21 +33,17 @@
 		
 		//the value can be a partial date string when date fields are keyboard friendly.
 		// moment nor breeze date validators wont cut it right.
-		function dateValidatorFn( value, context ){
-			// console.log('dateValidatorFn valiating date: ' + value );
+		function dateValidatorFn( value, context ){			
 			if (value == null || value == "") return true;	//valid
-			if( isNaN(new Date(value).valueOf()) ){
-				// console.log( 'dateValidatorFn '+ value +' is not a valid Date. );
+			if( isNaN(new Date(value).valueOf()) ){				
 				context.msg = "'"+ value + "' is not a valid " + context.property.displayName;
 				return false;
 			}			
-			if( !moment(value, ["MM-DD-YYYY","MM/DD/YYYY"], true).isValid() ){
-				// console.log( 'dateValidatorFn '+ value + ' failed initial string parse, trying to ooptimize...');
+			if( !moment(value, ["MM-DD-YYYY","MM/DD/YYYY"], true).isValid() ){				
 				var formattedValue = formatter.date.optimizeDate( value );
-				formattedValue = formatter.date.optimizeYear( value );
+				formattedValue = formatter.date.optimizeYear( formattedValue );
 				if( !moment(formattedValue, ["MM-DD-YYYY","MM/DD/YYYY"], true).isValid() ){
-					context.msg = "'"+ value + "' is not a valid " + context.property.displayName;
-					// console.log( 'dateValidatorFn '+ context.msg );
+					context.msg = "'"+ value + "' is not a valid " + context.property.displayName;					
 					return false;
 				}
 			}
@@ -72,8 +72,7 @@
 					context.msg = errorMessage;
 					return false;
 				}				
-			}
-			// console.log( 'dateValidatorFn '+ value + ' is valid');	
+			}			
 			return true;	//valid
 		}
 		
