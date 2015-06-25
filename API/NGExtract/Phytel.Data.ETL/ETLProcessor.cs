@@ -16,8 +16,6 @@ using MongoDB.Bson.Serialization;
 using Phytel.API.DataDomain.Allergy.DTO;
 using Phytel.API.DataDomain.CareMember;
 using Phytel.API.DataDomain.CareMember.DTO;
-using Phytel.API.DataDomain.Contact;
-using Phytel.API.DataDomain.Contact.DTO;
 using Phytel.API.DataDomain.LookUp;
 using Phytel.API.DataDomain.LookUp.DTO;
 using Phytel.API.DataDomain.Medication.DTO;
@@ -25,26 +23,20 @@ using Phytel.API.DataDomain.Patient;
 using Phytel.API.DataDomain.Patient.DTO;
 using Phytel.API.DataDomain.PatientGoal;
 using Phytel.API.DataDomain.PatientGoal.DTO;
-using Phytel.API.DataDomain.PatientNote;
-using Phytel.API.DataDomain.PatientNote.DTO;
 using Phytel.API.DataDomain.PatientObservation;
 using Phytel.API.DataDomain.PatientObservation.DTO;
 using Phytel.API.DataDomain.PatientSystem;
 using Phytel.API.DataDomain.PatientSystem.DTO;
 using Phytel.API.DataDomain.Program;
 using Phytel.API.DataDomain.Program.MongoDB.DTO;
-using Phytel.API.DataDomain.Scheduling;
 using Phytel.Data.ETL.BulkCopy;
 using Phytel.Data.ETL.Templates;
 using Phytel.Services.SQLServer;
 using Action = Phytel.API.DataDomain.Program.MongoDB.DTO.Action;
 using Category = Phytel.API.DataDomain.LookUp.DTO.Category;
-using CommMode = Phytel.API.DataDomain.LookUp.DTO.CommMode;
-using Language = Phytel.API.DataDomain.LookUp.DTO.Language;
 using Module = Phytel.API.DataDomain.Program.MongoDB.DTO.Module;
 using Objective = Phytel.API.DataDomain.LookUp.DTO.Objective;
 using TimeZone = Phytel.API.DataDomain.LookUp.DTO.TimeZone;
-
 
 namespace Phytel.Data.ETL
 {
@@ -69,7 +61,8 @@ namespace Phytel.Data.ETL
         private ToDo ToDos;
         private Contacts Contact;
         private User Users;
-        //private Medication Meds;
+        private Medications Meds;
+        private MedicationMap MedMap;
 
         void Collections_DocColEvent(object sender, ETLEventArgs e)
         {
@@ -116,8 +109,11 @@ namespace Phytel.Data.ETL
             Users = new User { Contract = _contract, ConnectionString = connString };
             Users.DocColEvent += Collections_DocColEvent;
 
-            //Meds = new Medication { Contract = _contract, ConnectionString = connString };
-            //Meds.DocColEvent += Collections_DocColEvent;
+            Meds = new Medications { Contract = _contract, ConnectionString = connString };
+            Meds.DocColEvent += Collections_DocColEvent;
+
+            MedMap = new MedicationMap { Contract = _contract, ConnectionString = connString };
+            MedMap.DocColEvent += Collections_DocColEvent;
         }
 
         public void Rebuild()
@@ -152,7 +148,8 @@ namespace Phytel.Data.ETL
                 LoadAllergies(_contract);
                 LoadPatientAllergies(_contract);
                 LoadPatientMedSups(_contract);
-                //Meds.Export();
+                Meds.Export();
+                MedMap.Export();
 
                 LoadPatientPrograms(_contract);
                 LoadPatientProgramModules(_contract);
@@ -177,7 +174,7 @@ namespace Phytel.Data.ETL
         {
             try
             {
-                //[spPhy_RPT_Flat_BSHSI_HW2]
+                OnEtlEvent(new ETLEventArgs { Message = "[" + _contract + "] - Loading Flat Tables", IsError = false });
                 SQLDataService.Instance.ExecuteProcedure(_contract, true, "REPORT", "spPhy_RPT_Initialize_Flat_Tables", new ParameterCollection(), 0);
             }
             catch (Exception ex)
@@ -602,6 +599,30 @@ namespace Phytel.Data.ETL
                     throw;
                 }
 
+                try
+                {
+                    if (BsonClassMap.IsClassMapRegistered(typeof(MEMedication)) == false)
+                    {
+                        BsonClassMap.RegisterClassMap<MEMedication>();
+                    }
+                }
+                catch
+                {
+                    throw;
+                }
+
+                try
+                {
+                    if (BsonClassMap.IsClassMapRegistered(typeof(MEMedicationMapping)) == false)
+                    {
+                        BsonClassMap.RegisterClassMap<MEMedicationMapping>();
+                    }
+                }
+                catch
+                {
+                    throw;
+                }
+
                 #endregion
             }
             catch (Exception ex)
@@ -834,6 +855,18 @@ namespace Phytel.Data.ETL
                             case LookUpType.FreqWhen:
                                 LoadFreqWhen(lookup);
                                 break;
+                            case LookUpType.Frequency:
+                            {
+                                var pmFreq = new PatientMedicationFrequency { Contract = ctr, LookUp = lookup, ConnectionString = connString };
+                                pmFreq.Export();
+                                break;
+                            }
+                            case LookUpType.NoteType:
+                            {
+                                var pnType = new PatientNoteType { Contract = ctr, LookUp = lookup, ConnectionString = connString };
+                                pnType.Export();
+                                break;
+                            }
                             default:
                                 break;
                         }
@@ -1095,6 +1128,7 @@ namespace Phytel.Data.ETL
                 SQLDataService.Instance.ExecuteProcedure(_contract, true, "REPORT", "spPhy_RPT_SaveFreqHowOftenLookUp", parms);
             }
         }
+
 
         // LoadMedSupType
         private void LoadMedSupType(MELookup lookup)
@@ -3212,20 +3246,17 @@ namespace Phytel.Data.ETL
                         ParameterCollection parms = new ParameterCollection();
 
                         parms.Add(new Parameter("@MongoId", (string.IsNullOrEmpty(pm.Id.ToString()) ? string.Empty : pm.Id.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                        //parms.Add(new Parameter("@MongoFamilyId", (string.IsNullOrEmpty(pm.FamilyId.ToString()) ? string.Empty : pm.FamilyId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                        parms.Add(new Parameter("@MongoFrequencyId", pm.FrequencyId == null ? (object)DBNull.Value : pm.FrequencyId.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50)); 
                         parms.Add(new Parameter("@MongoFamilyId", string.Empty, SqlDbType.VarChar, ParameterDirection.Input, 50));
                         parms.Add(new Parameter("@MongoPatientId", (string.IsNullOrEmpty(pm.PatientId.ToString()) ? string.Empty : pm.PatientId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
                         parms.Add(new Parameter("@Name", (string.IsNullOrEmpty(pm.Name) ? string.Empty : pm.Name), SqlDbType.VarChar, ParameterDirection.Input, 200));
                         parms.Add(new Parameter("@Category", (string.IsNullOrEmpty(pm.CategoryId.ToString()) ? string.Empty : pm.CategoryId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 200));
                         parms.Add(new Parameter("@MongoTypeId", (string.IsNullOrEmpty(pm.TypeId.ToString()) ? string.Empty : pm.TypeId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
                         parms.Add(new Parameter("@Status", (string.IsNullOrEmpty(pm.StatusId.ToString()) ? string.Empty : pm.StatusId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 200));
-                        parms.Add(new Parameter("@Dosage", (string.IsNullOrEmpty(pm.Dosage) ? string.Empty : pm.Dosage), SqlDbType.VarChar, ParameterDirection.Input, 500));
                         parms.Add(new Parameter("@Strength", (string.IsNullOrEmpty(pm.Strength) ? string.Empty : pm.Strength), SqlDbType.VarChar, ParameterDirection.Input, 200));
                         parms.Add(new Parameter("@Route", (string.IsNullOrEmpty(pm.Route) ? string.Empty : pm.Route), SqlDbType.VarChar, ParameterDirection.Input, 200));
                         parms.Add(new Parameter("@Form", (string.IsNullOrEmpty(pm.Form) ? string.Empty : pm.Form), SqlDbType.VarChar, ParameterDirection.Input, 200));
                         parms.Add(new Parameter("@FreqQuantity", (string.IsNullOrEmpty(pm.FreqQuantity) ? string.Empty : pm.FreqQuantity), SqlDbType.VarChar, ParameterDirection.Input, 200));
-                        parms.Add(new Parameter("@MongoFreqHowOftenId", (string.IsNullOrEmpty(pm.FreqHowOftenId.ToString()) ? string.Empty : pm.FreqHowOftenId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                        parms.Add(new Parameter("@MongoFreqWhenId", (string.IsNullOrEmpty(pm.FreqWhenId.ToString()) ? string.Empty : pm.FreqWhenId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
                         parms.Add(new Parameter("@MongoSourceId", (string.IsNullOrEmpty(pm.SourceId.ToString()) ? string.Empty : pm.SourceId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
                         parms.Add(new Parameter("@StartDate", pm.StartDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
                         parms.Add(new Parameter("@EndDate", pm.EndDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));

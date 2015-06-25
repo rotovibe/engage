@@ -79,6 +79,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BulkCopy\EPatientNoteType.cs" />
+    <Compile Include="BulkCopy\EPatientMedicationFrequency.cs" />
+    <Compile Include="BulkCopy\EMedicationFrequency.cs" />
+    <Compile Include="BulkCopy\EMedicationMap.cs" />
+    <Compile Include="BulkCopy\EPharmClass.cs" />
+    <Compile Include="BulkCopy\EMedication.cs" />
     <Compile Include="BulkCopy\ERecentUserList.cs" />
     <Compile Include="BulkCopy\ERecentList.cs" />
     <Compile Include="BulkCopy\EWeekDay.cs" />
@@ -110,6 +116,11 @@
     <Compile Include="SimpleLog.cs" />
     <Compile Include="Templates\Contacts.cs" />
     <Compile Include="Templates\DocumentCollection.cs" />
+    <Compile Include="Templates\PatientNoteType.cs" />
+    <Compile Include="Templates\PatientMedicationFrequency.cs" />
+    <Compile Include="Templates\PatientMedSupp.cs" />
+    <Compile Include="Templates\MedicationMap.cs" />
+    <Compile Include="Templates\Medications.cs" />
     <Compile Include="Templates\User.cs" />
     <Compile Include="Templates\ToDo.cs" />
     <Compile Include="Templates\PatientNotes.cs" />
