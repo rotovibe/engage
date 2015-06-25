@@ -748,7 +748,8 @@ define(['services/formatter', 'services/dateHelper'],
 					zindex:'999', 	//the drop is invisible if not set!
 					interval: 15, 					
 					scrollbar: true,					
-					startTime: new Date(0,0,0,8,0,0),	
+					startTime: new Date(0,0,0,8,0,0),
+					dynamic: false,	
 					change: onTimeChange});
 								
 				if( observable && observable() && moment( observable() ).isValid() ){
@@ -756,9 +757,9 @@ define(['services/formatter', 'services/dateHelper'],
 					observableMoment.local(); //move from utc to local time
 					
 					//set then initial timepicker to the observable time:					
-					var initHour = padZeroLeft(observableMoment.hours(), 2);
-					var initMinute = padZeroLeft(observableMoment.minutes(), 2);					
-					thisElement.timepicker().setTime(initHour + ':' + initMinute);
+					var initHour = formatter.padZeroLeft(observableMoment.hours(), 2);
+					var initMinute = formatter.padZeroLeft(observableMoment.minutes(), 2);					
+					thisElement.timepicker('setTime', initHour + ':' + initMinute);
 				}
 				else{
 					initialized = true;
