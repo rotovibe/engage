@@ -62,12 +62,13 @@ define([ 'services/formatter'],
 		*			hasErrors = true;
 		*		}
 		*/
+		
 		dateHelper.isInvalidDate = function(value, context){
 			if (value == null || value == "") return null;	//valid	
 			if( isNaN(new Date(value).valueOf()) ){
 				return {Message: 'is not valid'};
 			}
-			if( !moment(value, ["MM/DD/YYYY", "MM-DD-YYYY"], true).isValid() ){
+			if( !moment(value, ["MM/DD/YYYY", "MM-DD-YYYY", "M/D/YY", "M/D/YYYY"], true).isValid() ){
 				//short format failed
 				var theMoment = moment(value, ["YYYY-MM-DDTHH:mm:ss.SSSSZ"], true);	//iso 8601
 				if( !theMoment.isValid() ){
