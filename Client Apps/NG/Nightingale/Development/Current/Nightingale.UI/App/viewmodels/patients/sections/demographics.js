@@ -1,5 +1,5 @@
-﻿define(['durandal/app', 'viewmodels/shell/shell', 'models/base', 'services/datacontext'],
-    function (app, shell, modelConfig, datacontext) {
+﻿define(['durandal/app', 'viewmodels/shell/shell', 'models/base', 'services/datacontext', 'services/formatter'],
+    function (app, shell, modelConfig, datacontext, formatter) {
 
         var ctor = function () {
 
@@ -42,7 +42,10 @@
                 datacontext.getFullSSN(self.selectedPatient.id()).then(ssnReturned);
 
                 function ssnReturned(data) {
-                    alert('Full SSN - ' + data.SSN);
+					if(data.SSN){
+						var formattedNumber = formatter.formatSeparators(data.SSN.replace( /\D/g, ''), 'XXX-XX-XXXX', '-');
+						alert('Full SSN: ' + formattedNumber);
+					}
                 }
             };
             self.canViewFullSSN = ko.computed(function () {
