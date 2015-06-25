@@ -113,7 +113,6 @@
     <Compile Include="SavePatientProgram.cs" />
     <Compile Include="SpawnElementHash.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SimpleLog.cs" />
     <Compile Include="Templates\Contacts.cs" />
     <Compile Include="Templates\DocumentCollection.cs" />
     <Compile Include="Templates\PatientNoteType.cs" />

@@ -78,9 +78,6 @@
     <Reference Include="MongoDB.Driver">
       <HintPath>..\..\..\..\..\packages\mongocsharpdriver.1.9.2\lib\net35\MongoDB.Driver.dll</HintPath>
     </Reference>
-    <Reference Include="Moq">
-      <HintPath>..\..\..\..\..\packages\Moq.4.2.1409.1722\lib\net40\Moq.dll</HintPath>
-    </Reference>
     <Reference Include="Phytel.API.AppDomain.NG.DTO.Fakes">
       <HintPath>FakesAssemblies\Phytel.API.AppDomain.NG.DTO.Fakes.dll</HintPath>
     </Reference>

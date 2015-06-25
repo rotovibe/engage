@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using AutoMapper;
 using MongoDB.Bson;
-using Moq;
 using Phytel.API.AppDomain.NG.DTO;
 using Phytel.API.AppDomain.NG.DTO.Goal;
+using Phytel.API.AppDomain.NG.DTO.Scheduling;
+using Phytel.API.AppDomain.NG.PlanCOR;
 using Phytel.API.AppDomain.NG.Programs;
+using Phytel.API.Common;
 using Phytel.API.DataDomain.Patient.DTO;
 using Phytel.API.DataDomain.PatientGoal.DTO;
 using Phytel.API.DataDomain.PatientObservation.DTO;
@@ -17,96 +16,97 @@ using Phytel.API.DataDomain.Scheduling.DTO;
 using Phytel.API.Interface;
 using ServiceStack.Service;
 using ServiceStack.ServiceClient.Web;
-using Task = Phytel.API.AppDomain.NG.DTO.Goal.Task;
+using Outcome = Phytel.API.AppDomain.NG.DTO.Outcome;
+using Program = Phytel.API.AppDomain.NG.DTO.Program;
 
 namespace Phytel.API.AppDomain.NG.Test.Stubs
 {
     public class StubEndpointUtils : IEndpointUtils
     {
-        public DTO.PatientObservation GetPatientProblem(string probId, PlanCOR.PlanElementEventArg e, string userId)
+        public PatientObservation GetPatientProblem(string probId, PlanElementEventArg e, string userId)
         {
-            return new DTO.PatientObservation { Id = "101010101010101010101010", Name="fake Patient Observation"};
+            return new PatientObservation { Id = "101010101010101010101010", Name="fake Patient Observation"};
         }
 
-        public ProgramAttributeData GetProgramAttributes(string planElemId, Interface.IAppDomainRequest request)
-        {
-            throw new NotImplementedException();
-        }
-
-        public List<StepResponse> GetResponsesForStep(string stepId, Interface.IAppDomainRequest request)
+        public ProgramAttributeData GetProgramAttributes(string planElemId, IAppDomainRequest request)
         {
             throw new NotImplementedException();
         }
 
-        public bool InsertNewProgramAttribute(ProgramAttributeData pa, Interface.IAppDomainRequest request)
+        public List<StepResponse> GetResponsesForStep(string stepId, IAppDomainRequest request)
         {
             throw new NotImplementedException();
         }
 
-        public PutRegisterPatientObservationResponse PutNewPatientProblem(string patientId, string userId, string elementId, Interface.IAppDomainRequest request)
+        public bool InsertNewProgramAttribute(ProgramAttributeData pa, IAppDomainRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+        public PutRegisterPatientObservationResponse PutNewPatientProblem(string patientId, string userId, string elementId, IAppDomainRequest request)
         {
             return new PutRegisterPatientObservationResponse { };
         }
 
-        public CohortPatientViewData RequestCohortPatientViewData(string patientId, Interface.IAppDomainRequest request)
+        public CohortPatientViewData RequestCohortPatientViewData(string patientId, IAppDomainRequest request)
         {
             throw new NotImplementedException();
         }
 
-        public DTO.Program RequestPatientProgramDetail(DTO.IProcessActionRequest request)
+        public Program RequestPatientProgramDetail(IProcessActionRequest request)
         {
             throw new NotImplementedException();
         }
 
-        public GetProgramDetailsSummaryResponse RequestPatientProgramDetailsSummary(DTO.GetPatientProgramDetailsSummaryRequest request)
+        public GetProgramDetailsSummaryResponse RequestPatientProgramDetailsSummary(GetPatientProgramDetailsSummaryRequest request)
         {
             throw new NotImplementedException();
         }
 
-        public ProgramDetail SaveAction(DTO.IProcessActionRequest request, string actionId, DTO.Program p, bool repeat)
+        public ProgramDetail SaveAction(IProcessActionRequest request, string actionId, Program p, bool repeat)
         {
             throw new NotImplementedException();
         }
 
-        public void UpdateCohortPatientViewProblem(CohortPatientViewData cpvd, string patientId, Interface.IAppDomainRequest request)
+        public void UpdateCohortPatientViewProblem(CohortPatientViewData cpvd, string patientId, IAppDomainRequest request)
         {
             throw new NotImplementedException();
         }
 
-        public PutUpdateObservationDataResponse UpdatePatientProblem(string patientId, string userId, string elementId, DTO.PatientObservation pod, bool _active, Interface.IAppDomainRequest request)
+        public PutUpdateObservationDataResponse UpdatePatientProblem(string patientId, string userId, string elementId, PatientObservation pod, bool _active, IAppDomainRequest request)
         {
             return new PutUpdateObservationDataResponse { Result = true};
         }
 
-        public bool UpdateProgramAttributes(DataDomain.Program.DTO.ProgramAttributeData pAtt, Interface.IAppDomainRequest request)
+        public bool UpdateProgramAttributes(ProgramAttributeData pAtt, IAppDomainRequest request)
         {
             throw new NotImplementedException();
         }
 
-        public DataDomain.Program.DTO.PutProgramToPatientResponse AssignPatientToProgram(DTO.PostPatientToProgramsRequest request, string careManagerId)
+        public PutProgramToPatientResponse AssignPatientToProgram(PostPatientToProgramsRequest request, string careManagerId)
         {
             throw new NotImplementedException();
         }
 
-        public string GetPrimaryCareManagerForPatient(DTO.PostPatientToProgramsRequest request)
+        public string GetPrimaryCareManagerForPatient(PostPatientToProgramsRequest request)
         {
             throw new NotImplementedException();
         }
 
-        public void SaveResponses(DTO.Actions action, DTO.IProcessActionRequest request, bool repeat)
+        public void SaveResponses(Actions action, IProcessActionRequest request, bool repeat)
         {
             throw new NotImplementedException();
         }
 
-        public DTO.Outcome SaveProgramAttributeChanges(DTO.PostProgramAttributesChangeRequest request, DataDomain.Program.DTO.ProgramDetail pg)
+        public Outcome SaveProgramAttributeChanges(PostProgramAttributesChangeRequest request, ProgramDetail pg)
         {
             throw new NotImplementedException();
         }
 
 
-        public DTO.Scheduling.Schedule GetScheduleToDoById(string p, string userId, IAppDomainRequest request)
+        public Schedule GetScheduleToDoById(string p, string userId, IAppDomainRequest request)
         {
-            return new DTO.Scheduling.Schedule
+            return new Schedule
             {
                 Id = "888888888888888888888888",
                 DueDateRange = 5,
@@ -157,7 +157,7 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
                 IRestClient client = new JsonServiceClient();
 
                 //"/{Context}/{Version}/{ContractNumber}/Goal/{Id}"
-                var url = Common.Helper.BuildURL(string.Format(@"{0}/{1}/{2}/{3}/Goal/{4}",
+                var url = Helper.BuildURL(string.Format(@"{0}/{1}/{2}/{3}/Goal/{4}",
                     "http://localhost:8888/PatientGoal",
                     "NG",
                     req.Version,
@@ -196,7 +196,7 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
                 IRestClient client = new JsonServiceClient();
 
                 //"/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Goal/"
-                var url = Common.Helper.BuildURL(string.Format(@"{0}/{1}/{2}/{3}/Patient/{4}/Goal/?TemplateId={5}",
+                var url = Helper.BuildURL(string.Format(@"{0}/{1}/{2}/{3}/Patient/{4}/Goal/?TemplateId={5}",
                     "http://localhost:8888/PatientGoal",
                     "NG",
                     req.Version,
@@ -228,7 +228,7 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
                 IRestClient client = new JsonServiceClient();
 
                 //"/{Context}/{Version}/{ContractNumber}/Goal/Interventions?Id={Id}"
-                var url = Common.Helper.BuildURL(string.Format(@"{0}/{1}/{2}/{3}/Goal/Interventions?Id={4}",
+                var url = Helper.BuildURL(string.Format(@"{0}/{1}/{2}/{3}/Goal/Interventions?Id={4}",
                     "http://localhost:8888/PatientGoal",
                     "NG",
                     req.Version,
@@ -259,7 +259,7 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
                 IRestClient client = new JsonServiceClient();
 
                 var url =
-                    Common.Helper.BuildURL(
+                    Helper.BuildURL(
                         string.Format(@"{0}/{1}/{2}/{3}/Patient/{4}/Goal/Interventions?TemplateId={5}&GoalId={6}",
                             "http://localhost:8888/PatientGoal",
                             "NG",
@@ -283,12 +283,12 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
         }
 
 
-        public DTO.Goal.Task GetTaskById(string sid, string userId, IAppDomainRequest req)
+        public Task GetTaskById(string sid, string userId, IAppDomainRequest req)
         {
             try
             {
                 IRestClient client = new JsonServiceClient();
-                var url = Common.Helper.BuildURL(string.Format(@"{0}/{1}/{2}/{3}/Goal/Tasks?Id={4}",
+                var url = Helper.BuildURL(string.Format(@"{0}/{1}/{2}/{3}/Goal/Tasks?Id={4}",
                     "http://localhost:8888/PatientGoal",
                     "NG",
                     req.Version,
@@ -318,7 +318,7 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
                 IRestClient client = new JsonServiceClient();
 
                 var url =
-                    Common.Helper.BuildURL(
+                    Helper.BuildURL(
                         string.Format(@"{0}/{1}/{2}/{3}/Patient/{4}/Goal/Tasks?TemplateId={5}&GoalId={6}",
                             "http://localhost:8888/PatientGoal",
                             "NG",
