@@ -76,6 +76,7 @@ namespace NightingaleImport
         private double version = double.Parse(ConfigurationManager.AppSettings.Get("version"));
         private string context = ConfigurationManager.AppSettings.Get("context");
 
+        public const string SystemProperty = "Engage";
         string _headerUserId = "000000000000000000000000";
 
         public Form1()
@@ -124,7 +125,7 @@ namespace NightingaleImport
                     foreach (ListViewItem lvi in listView1.CheckedItems)
                     {
 
-                        PutPatientDataRequest patientRequest = new PutPatientDataRequest
+                        PatientData pdata = new PatientData
                         {
                             FirstName = lvi.SubItems[colFirstN].Text.Trim(),
                             LastName = lvi.SubItems[colLastN].Text.Trim(),
@@ -133,18 +134,23 @@ namespace NightingaleImport
                             PreferredName = (String.IsNullOrEmpty(lvi.SubItems[colPrefN].Text)) ? null : lvi.SubItems[colPrefN].Text.Trim(),
                             Gender = lvi.SubItems[colGen].Text.Trim(),
                             DOB = lvi.SubItems[colDB].Text.Trim(),
+                            System = SystemProperty
+                        };
+                        PutPatientDataRequest patientRequest = new PutPatientDataRequest
+                        {
+                            Patient = pdata,
                             Context = context,
                             ContractNumber = txtContract.Text,
                             Version = version
                         };
 
-                        lblStatus.Text = string.Format("Importing '{0} {1}'...", patientRequest.FirstName, patientRequest.LastName);
+                        lblStatus.Text = string.Format("Importing '{0} {1}'...", pdata.FirstName, pdata.LastName);
                         lblStatus.Refresh();
 
                         PutPatientDataResponse responsePatient = putPatientServiceCall(patientRequest);
                         if (responsePatient.Id == null)
                         {
-                            dictionaryFail.Add(patientRequest.FirstName + " " + patientRequest.LastName, string.Format("Message: {0} StackTrace: {1}", responsePatient.Status.Message, responsePatient.Status.StackTrace));
+                            dictionaryFail.Add(pdata.FirstName + " " + pdata.LastName, string.Format("Message: {0} StackTrace: {1}", responsePatient.Status.Message, responsePatient.Status.StackTrace));
                             int n = listView1.CheckedItems.IndexOf(lvi);
                             listView1.CheckedItems[n].BackColor = Color.Red;
                             listView1.CheckedItems[n].Checked = false;
@@ -175,8 +181,8 @@ namespace NightingaleImport
                                 PatientData data = new PatientData
                                 {
                                     Id = responsePatient.Id.ToString(),
-                                    FirstName = patientRequest.FirstName,
-                                    LastName = patientRequest.LastName,
+                                    FirstName = pdata.FirstName,
+                                    LastName = pdata.LastName,
                                     DisplayPatientSystemId = responsePatientPS.PatientSystemId.ToString(),
                                     PriorityData = 0
                                 };
@@ -529,7 +535,7 @@ namespace NightingaleImport
 
                             if (responsePatient.Id != null && responsePatient.Status == null)
                             {
-                                dictionarySucceed.Add(patientRequest.FirstName + " " + patientRequest.LastName, responsePatient.Id);
+                                dictionarySucceed.Add(pdata.FirstName + " " + pdata.LastName, responsePatient.Id);
                                 int n = listView1.CheckedItems.IndexOf(lvi);
                                 listView1.CheckedItems[n].Remove();
                             }
