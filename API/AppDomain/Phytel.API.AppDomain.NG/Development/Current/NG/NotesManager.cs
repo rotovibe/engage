@@ -212,6 +212,7 @@ namespace Phytel.API.AppDomain.NG
 
                     PatientNoteData pnData = new PatientNoteData
                     {
+                        Id = pn.Id,
                         Text = pn.Text,
                         ProgramIds = pn.ProgramIds,
                         CreatedById = request.UserId,

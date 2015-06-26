@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Phytel.API.AppDomain.NG.DTO;
+using ServiceStack.Service;
+using ServiceStack.ServiceClient.Web;
 
 namespace Phytel.API.AppDomain.NG.Test
 {
@@ -77,39 +79,44 @@ namespace Phytel.API.AppDomain.NG.Test
             Assert.IsNotNull(response);
         }
 
-        //[TestMethod]
-        //public void SavePatientGoal_Test()
-        //{
-        //    PostPatientGoalRequest request = new PostPatientGoalRequest();
-        //    request.ContractNumber = "InHealth001";
-        //    request.UserId = "AD_TestHarness";
-        //    request.Version = 1;
-        //    request.PatientId = "52f55874072ef709f84e68c5";
-        //    request.UserId = "Snehal";
-        //    request.Goal = new PatientGoal { Name =  "my name", SourceId = "my source"};
+        [TestMethod]
+        public void UpdatePatientNote_Test()
+        {
+            List<string> prog = new List<string>();
+            prog.Add("558c756184ac0707d02f72c8");
 
-        //    GoalsManager gManager = new GoalsManager();
-        //    PostPatientGoalResponse response = gManager.SavePatientGoal(request);
+            PatientNote data = new PatientNote
+            {
+                Id = "558c757284ac05114837dc38",
+                PatientId = "5429d29984ac050c788bd34f",
+                Text = "JJJJ",
+                ProgramIds = prog,
+                TypeId = "54909997d43323251c0a1dfe",
+                MethodId = "540f1da7d4332319883f3e8c",
+                WhoId = "540f1fc3d4332319883f3e97",
+                OutcomeId = "540f1f14d4332319883f3e93",
+                SourceId = "540f2091d4332319883f3e9c",
+                DurationId = "540f2174d4332319883f3ea0",
+                ValidatedIdentity = true,
+                ContactedOn = DateTime.Now.AddDays(4)
+            };
 
-        //    Assert.IsNotNull(response);
-        //}
+            UpdatePatientNoteRequest request = new UpdatePatientNoteRequest
+            {
+                ContractNumber = "InHealth001",
+                UserId = "54909997d43323251c0a1dfe",
+                Version = 1.0,
+                PatientNote = data,
+                Id = data.Id,
+                PatientId = data.PatientId
+            };
 
+            string requestURL = string.Format("{0}/{1}/{2}/Patient/{3}/Note/{4}?UserId={5}", "http://localhost:888/Nightingale", request.Version, request.ContractNumber, data.PatientId, data.Id, request.UserId);
+            //[Route("/{Version}/{ContractNumber}/Patient/{PatientId}/Note/{Id}", "PUT")]
+            IRestClient client = new JsonServiceClient();
+            UpdatePatientNoteResponse response = client.Put<UpdatePatientNoteResponse>(requestURL, request);
 
-        
-        //[TestMethod]
-        //public void InitializePatientGoal_Test()
-        //{
-        //    GetInitializeGoalRequest request = new GetInitializeGoalRequest();
-        //    request.ContractNumber = "InHealth001";
-        //    request.UserId = "AD_TestHarness";
-        //    request.Version = 1;
-        //    request.PatientId = "52f55877072ef709f84e69b0";
-        //    request.UserId = "Snehal";
-
-        //    GoalsManager gManager = new GoalsManager();
-        //    GetInitializeGoalResponse response = gManager.GetInitialGoalRequest(request);
-
-        //    Assert.IsNotNull(response);
-        //}
+            Assert.IsNotNull(response);
+        }
     }
 }
