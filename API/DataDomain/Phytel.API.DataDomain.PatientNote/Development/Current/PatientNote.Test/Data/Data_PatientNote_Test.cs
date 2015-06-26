@@ -65,11 +65,13 @@ namespace Phytel.API.DataDomain.PatientNote.Test
                ContractNumber = contractNumber,
                UserId = userId,
                Version = version,
-               PatientNoteData = data
+               PatientNoteData = data,
+               Id  = data.Id,
+               PatientId  = data.PatientId
            };
 
            string requestURL = string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Note/{5}", url, context, version, contractNumber, data.PatientId, data.Id);
-           //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Note/{PatientNoteId}", "PUT")]
+           //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Note/{Id}", "PUT")]
            UpdatePatientNoteDataResponse response = client.Put<UpdatePatientNoteDataResponse>(requestURL, request);
 
            Assert.IsNotNull(response);

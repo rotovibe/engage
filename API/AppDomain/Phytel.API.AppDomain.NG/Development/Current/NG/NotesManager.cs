@@ -200,7 +200,7 @@ namespace Phytel.API.AppDomain.NG
                 if (request.PatientNote != null)
                 {
                     PatientNote pn = request.PatientNote;
-                    //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Note/{PatientNoteId}", "PUT")]
+                    //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Note/{Id}", "PUT")]
                     IRestClient client = new JsonServiceClient();
                     string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Note/{5}",
                                                                             DDPatientNoteUrl,
