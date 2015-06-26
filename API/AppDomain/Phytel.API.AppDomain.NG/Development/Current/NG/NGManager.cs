@@ -103,7 +103,8 @@ namespace Phytel.API.AppDomain.NG
                         Flagged = Convert.ToInt32(response.Patient.Flagged),
                         Background = response.Patient.Background,
                         ClinicalBackground = response.Patient.ClinicalBackground,
-                        LastFourSSN = response.Patient.LastFourSSN
+                        LastFourSSN = response.Patient.LastFourSSN,
+                        System = response.Patient.System
                     };
 
                     if (sysResponse != null && sysResponse.PatientSystem != null)

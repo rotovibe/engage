@@ -25,5 +25,7 @@ namespace Phytel.API.AppDomain.NG.DTO
         public string ClinicalBackground { get; set; }
         public int? LastFourSSN { get; set; }
         public string FullSSN { get; set; }
+        public string System { get; set; }
+
     }
 }
