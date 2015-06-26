@@ -67,9 +67,44 @@ namespace Phytel.API.DataDomain.PatientNote.Test
                Version = version,
                PatientNoteData = data
            };
+
+           string requestURL = string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Note/{5}", url, context, version, contractNumber, data.PatientId, data.Id);
            //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Note/{PatientNoteId}", "PUT")]
-           UpdatePatientNoteDataResponse response = client.Put<UpdatePatientNoteDataResponse>(
-   string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Note/{5}", url, context, version, contractNumber, data.PatientId, data.Id), request);
+           UpdatePatientNoteDataResponse response = client.Put<UpdatePatientNoteDataResponse>(requestURL, request);
+
+           Assert.IsNotNull(response);
+       }
+
+       [TestMethod]
+       public void InsertPatientNote_Test()
+       {
+           List<string> prog = new List<string>();
+           prog.Add("558c756184ac0707d02f72c8");
+
+           PatientNoteData data = new PatientNoteData
+           {
+               PatientId = "5429d29984ac050c788bd34f",
+               Text = "GGGG",
+               ProgramIds = prog,
+               TypeId = "54909997d43323251c0a1dfe",
+               MethodId = "540f1da7d4332319883f3e8c",
+               ValidatedIdentity = false,
+               ContactedOn = DateTime.Now.AddDays(4)
+           };
+
+           InsertPatientNoteDataRequest request = new InsertPatientNoteDataRequest
+           {
+               Context = context,
+               ContractNumber = contractNumber,
+               UserId = userId,
+               Version = version,
+               PatientNote = data,
+               PatientId = "5429d29984ac050c788bd34f",
+           };
+
+           string requestURL = string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Note", url, context, version, contractNumber, data.PatientId);
+           //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Note", "POST")]
+           InsertPatientNoteDataResponse response = client.Post<InsertPatientNoteDataResponse>(requestURL, request);
 
            Assert.IsNotNull(response);
        }

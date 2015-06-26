@@ -17,9 +17,7 @@ namespace Phytel.API.DataDomain.PatientNote.Service
             InsertPatientNoteDataResponse response = new InsertPatientNoteDataResponse();
             try
             {
-                if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("PatientNoteDD:Post()::Unauthorized Access");
-
+                RequireUserId(request); 
                 response.Id = Manager.InsertPatientNote(request);
                 response.Version = request.Version;
             }
@@ -35,9 +33,7 @@ namespace Phytel.API.DataDomain.PatientNote.Service
             UpdatePatientNoteDataResponse response = new UpdatePatientNoteDataResponse();
             try
             {
-                if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("PatientNoteDD:Put()::Unauthorized Access");
-
+                RequireUserId(request);
                 Manager.UpdatePatientNote(request);
             }
             catch (Exception ex)
@@ -52,9 +48,7 @@ namespace Phytel.API.DataDomain.PatientNote.Service
             GetPatientNoteDataResponse response = new GetPatientNoteDataResponse();
             try
             {
-                if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("PatientNoteDD:Get()::Unauthorized Access");
-
+                RequireUserId(request);
                 response.PatientNote = Manager.GetPatientNote(request);
                 response.Version = request.Version;
             }
@@ -70,9 +64,7 @@ namespace Phytel.API.DataDomain.PatientNote.Service
             GetAllPatientNotesDataResponse response = new GetAllPatientNotesDataResponse();
             try
             {
-                if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("PatientNoteDD:Get()::Unauthorized Access");
-
+                RequireUserId(request); 
                 response.PatientNotes = Manager.GetAllPatientNotes(request);
                 response.Version = request.Version;
             }
@@ -88,9 +80,7 @@ namespace Phytel.API.DataDomain.PatientNote.Service
             DeletePatientNoteDataResponse response = new DeletePatientNoteDataResponse();
             try
             {
-                if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("PatientNoteDD:Delete()");
-
+                RequireUserId(request); 
                 response.Deleted = Manager.DeletePatientNote(request);
                 response.Version = request.Version;
             }
@@ -107,9 +97,7 @@ namespace Phytel.API.DataDomain.PatientNote.Service
             DeleteNoteByPatientIdDataResponse response = new DeleteNoteByPatientIdDataResponse();
             try
             {
-                if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("PatientNoteDD:PatientNoteDelete()::Unauthorized Access");
-
+                RequireUserId(request);
                 response = Manager.DeleteNoteByPatientId(request);
                 response.Version = request.Version;
             }
@@ -125,9 +113,7 @@ namespace Phytel.API.DataDomain.PatientNote.Service
             UndoDeletePatientNotesDataResponse response = new UndoDeletePatientNotesDataResponse();
             try
             {
-                if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("PatientNoteDD:PatientNoteUndoDelete()::Unauthorized Access");
-
+                RequireUserId(request); 
                 response = Manager.UndoDeletePatientNotes(request);
                 response.Version = request.Version;
             }
@@ -143,9 +129,7 @@ namespace Phytel.API.DataDomain.PatientNote.Service
             RemoveProgramInPatientNotesDataResponse response = new RemoveProgramInPatientNotesDataResponse();
             try
             {
-                if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("PatientNoteDD:RemoveProgramInPatientNotes()::Unauthorized Access");
-
+                RequireUserId(request);
                 response = Manager.RemoveProgramInPatientNotes(request);
                 response.Version = request.Version;
             }
