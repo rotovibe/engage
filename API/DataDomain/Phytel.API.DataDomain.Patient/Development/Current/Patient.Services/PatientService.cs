@@ -1,13 +1,8 @@
-using Phytel.API.Common.Format;
-using Phytel.API.DataDomain.Patient;
-using Phytel.API.DataDomain.Patient.DTO;
 using System;
-using System.Net;
-using Phytel.API.Common.Audit;
-using Phytel.API.DataAudit;
 using System.Configuration;
-using System.Web;
 using Phytel.API.Common;
+using Phytel.API.Common.Format;
+using Phytel.API.DataDomain.Patient.DTO;
 
 namespace Phytel.API.DataDomain.Patient.Service
 {
@@ -246,7 +241,7 @@ namespace Phytel.API.DataDomain.Patient.Service
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
 
                 string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
-                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+                Helper.LogException(int.Parse(aseProcessID), ex);
             }
             return response;
         }

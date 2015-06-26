@@ -201,7 +201,8 @@ namespace Phytel.API.AppDomain.NG
                         Gender = request.Patient.Gender,
                         FullSSN = request.Patient.FullSSN,
                         Background = request.Patient.Background,
-                        ClinicalBackground = request.Patient.ClinicalBackground
+                        ClinicalBackground = request.Patient.ClinicalBackground,
+                        System = request.Patient.System
                     };
                     PutUpdatePatientDataResponse dataDomainResponse =
                         client.Put<PutUpdatePatientDataResponse>(url, new PutUpdatePatientDataRequest

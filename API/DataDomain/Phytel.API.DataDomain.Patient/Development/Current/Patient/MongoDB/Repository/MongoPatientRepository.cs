@@ -95,7 +95,7 @@ namespace Phytel.API.DataDomain.Patient
                             TTLDate = null,
                             DeleteFlag = false,
                             LastUpdatedOn = System.DateTime.UtcNow,
-                            System = pd.System
+                            System = pd.System == null ? null : pd.System.Substring(0, 50)
                         };
                         ctx.Patients.Collection.Insert(patient);
 
@@ -347,7 +347,7 @@ namespace Phytel.API.DataDomain.Patient
                         response = new Dictionary<string, PatientData>();
                         foreach (MEPatient meP in mePatients)
                         {
-                            PatientData data = new PatientData 
+                            PatientData data = new PatientData
                             {
                                 Id = meP.Id.ToString(),
                                 PreferredName = meP.PreferredName,
@@ -358,12 +358,12 @@ namespace Phytel.API.DataDomain.Patient
                                 MiddleName = meP.MiddleName,
                                 Suffix = meP.Suffix,
                                 Version = meP.Version,
-                                PriorityData = (int)meP.Priority,
+                                PriorityData = (int) meP.Priority,
                                 DisplayPatientSystemId = meP.DisplayPatientSystemId.ToString(),
                                 Background = meP.Background,
                                 ClinicalBackground = meP.ClinicalBackground,
                                 LastFourSSN = meP.LastFourSSN,
-                                System = meP.System
+                                System = meP.System == null ? null : meP.System.Substring(0, 50)
                             };
                             response.Add(data.Id, data);
                         }
