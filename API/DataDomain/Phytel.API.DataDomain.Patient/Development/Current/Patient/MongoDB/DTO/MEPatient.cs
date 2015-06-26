@@ -4,6 +4,7 @@ using Phytel.API.Interface;
 using Phytel.Services.Mongo.Linq;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System;
 
 namespace Phytel.API.DataDomain.Patient.DTO
 {
@@ -16,7 +17,7 @@ namespace Phytel.API.DataDomain.Patient.DTO
             Id = ObjectId.GenerateNewId();
             Version = 1.0;
             RecordCreatedBy = ObjectId.Parse(userId);
-            RecordCreatedOn = System.DateTime.UtcNow;
+            RecordCreatedOn = DateTime.UtcNow;
         }
 
         public const string IdProperty = "_id";
@@ -55,6 +56,11 @@ namespace Phytel.API.DataDomain.Patient.DTO
         [BsonElement(LastNameProperty)]
         [BsonIgnoreIfNull(true)]
         public string LastName { get; set; }
+
+        public const string SystemProperty = "sys";
+        [BsonElement(SystemProperty)]
+        [BsonIgnoreIfNull(true)]
+        public string System { get; set; }
 
         [BsonElement(SuffixProperty)]
         [BsonIgnoreIfNull(true)]
@@ -112,12 +118,12 @@ namespace Phytel.API.DataDomain.Patient.DTO
 
         [BsonElement(TTLDateProperty)]
         [BsonIgnoreIfNull(true)]
-        [BsonDateTimeOptions(Kind = System.DateTimeKind.Utc)]
+        [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
         public System.DateTime? TTLDate { get; set; }
 
         [BsonElement(LastUpdatedOnProperty)]
         [BsonIgnoreIfNull(true)]
-        [BsonDateTimeOptions(Kind = System.DateTimeKind.Utc)]
+        [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
         public System.DateTime? LastUpdatedOn { get; set; }
 
         [BsonIgnoreIfNull(true)]
@@ -126,7 +132,7 @@ namespace Phytel.API.DataDomain.Patient.DTO
 
         [BsonIgnoreIfNull(true)]
         [BsonElement(RecordCreatedOnProperty)]
-        [BsonDateTimeOptions(Kind = System.DateTimeKind.Utc)]
+        [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
         public System.DateTime RecordCreatedOn { get; private set; }
     }
 

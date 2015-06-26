@@ -53,17 +53,21 @@ namespace Phytel.API.DataDomain.Patient
             {
                 //Patient
                 PutPatientDataRequest request = newEntity as PutPatientDataRequest;
+                PatientData pd = request.Patient;
                 MEPatient patient = null;
                 using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
                 {
                     //Does the patient exist?
                     string searchQuery = string.Empty;
-                    searchQuery = string.Format("{0} : /^{1}$/i, {2} : /^{3}$/i, {4} : '{5}', {6} : false, {7} : null", MEPatient.FirstNameProperty, request.FirstName,
-                              MEPatient.LastNameProperty, request.LastName,
-                              MEPatient.DOBProperty, request.DOB,
-                              MEPatient.DeleteFlagProperty,
-                              MEPatient.TTLDateProperty);
-                    string jsonQuery = "{ ";
+                    searchQuery = string.Format("{0} : /^{1}$/i, {2} : /^{3}$/i, {4} : '{5}', {6} : false, {7} : null",
+                        MEPatient.FirstNameProperty,
+                        pd.FirstName,
+                        MEPatient.LastNameProperty, pd.LastName,
+                        MEPatient.DOBProperty, pd.DOB,
+                        MEPatient.DeleteFlagProperty,
+                        MEPatient.TTLDateProperty);
+
+                    var jsonQuery = "{ ";
                     jsonQuery += searchQuery;
                     jsonQuery += " }";
                     QueryDocument query = new QueryDocument(BsonSerializer.Deserialize<BsonDocument>(jsonQuery));
@@ -77,20 +81,21 @@ namespace Phytel.API.DataDomain.Patient
                         patient = new MEPatient(this.UserId)
                         {
                             Id = ObjectId.GenerateNewId(),
-                            FirstName = request.FirstName,
-                            LastName = request.LastName,
-                            MiddleName = request.MiddleName,
-                            Suffix = request.Suffix,
-                            PreferredName = request.PreferredName,
-                            Gender = request.Gender,
-                            DOB = request.DOB,
-                            Background = request.Background,
-                            ClinicalBackground = request.ClinicalBackground,
+                            FirstName = pd.FirstName,
+                            LastName = pd.LastName,
+                            MiddleName = pd.MiddleName,
+                            Suffix = pd.Suffix,
+                            PreferredName = pd.PreferredName,
+                            Gender = pd.Gender,
+                            DOB = pd.DOB,
+                            Background = pd.Background,
+                            ClinicalBackground = pd.ClinicalBackground,
                             Version = request.Version,
                             UpdatedBy = ObjectId.Parse(this.UserId),
                             TTLDate = null,
                             DeleteFlag = false,
-                            LastUpdatedOn = System.DateTime.UtcNow
+                            LastUpdatedOn = System.DateTime.UtcNow,
+                            System = pd.System
                         };
                         ctx.Patients.Collection.Insert(patient);
 
@@ -213,7 +218,8 @@ namespace Phytel.API.DataDomain.Patient
                         DisplayPatientSystemId = mePatient.DisplayPatientSystemId.ToString(),
                         Background = mePatient.Background,
                         ClinicalBackground = mePatient.ClinicalBackground,
-                        LastFourSSN = mePatient.LastFourSSN
+                        LastFourSSN = mePatient.LastFourSSN,
+                        System = mePatient.System
                     };
                     if (!string.IsNullOrEmpty(userId))
                     {
@@ -356,7 +362,8 @@ namespace Phytel.API.DataDomain.Patient
                                 DisplayPatientSystemId = meP.DisplayPatientSystemId.ToString(),
                                 Background = meP.Background,
                                 ClinicalBackground = meP.ClinicalBackground,
-                                LastFourSSN = meP.LastFourSSN
+                                LastFourSSN = meP.LastFourSSN,
+                                System = meP.System
                             };
                             response.Add(data.Id, data);
                         }

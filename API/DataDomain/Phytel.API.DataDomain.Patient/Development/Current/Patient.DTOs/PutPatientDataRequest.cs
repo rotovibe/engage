@@ -8,35 +8,8 @@ namespace Phytel.API.DataDomain.Patient.DTO
     [Route("/{Context}/{Version}/{ContractNumber}/Patient/Insert", "PUT")]
     public class PutPatientDataRequest : IDataDomainRequest
     {
-        [ApiMember(Name = "FirstName", Description = "First Name of the patient being created", ParameterType = "property", DataType = "string", IsRequired = true)]
-        public string FirstName { get; set; }
-
-        [ApiMember(Name = "LastName", Description = "Last name of the patient being created", ParameterType = "property", DataType = "string", IsRequired = true)]
-        public string LastName { get; set; }
-
-        [ApiMember(Name = "MiddleName", Description = "Middle name of the patient being created", ParameterType = "property", DataType = "string", IsRequired = false)]
-        public string MiddleName { get; set; }
-
-        [ApiMember(Name = "Suffix", Description = "Suffix of the patient being created", ParameterType = "property", DataType = "string", IsRequired = false)]
-        public string Suffix { get; set; }
-
-        [ApiMember(Name = "PreferredName", Description = "Preferred name of the patient being created", ParameterType = "property", DataType = "string", IsRequired = false)]
-        public string PreferredName { get; set; }
-
-        [ApiMember(Name = "Gender", Description = "Gender of the patient being created", ParameterType = "property", DataType = "string", IsRequired = false)]
-        public string Gender { get; set; }
-
-        [ApiMember(Name = "DOB", Description = "Date of birth of the patient being created", ParameterType = "property", DataType = "string", IsRequired = false)]
-        public string DOB { get; set; }
-
-        [ApiMember(Name = "Background", Description = "Background of the patient being created", ParameterType = "property", DataType = "string", IsRequired = false)]
-        public string Background { get; set; }
-
-        [ApiMember(Name = "ClinicalBackground", Description = "ClinicalBackground of the patient being created", ParameterType = "property", DataType = "string", IsRequired = false)]
-        public string ClinicalBackground { get; set; }
-
-        [ApiMember(Name = "FullSSN", Description = "SSN value of the patient being created", ParameterType = "property", DataType = "string", IsRequired = true)]
-        public string FullSSN { get; set; }
+        [ApiMember(Name = "Patient", Description = "Patient to insert", ParameterType = "property", DataType = "string", IsRequired = true)]
+        public PatientData Patient { get; set; }
 
         [ApiMember(Name = "Context", Description = "Product Context creating the patient", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string Context { get; set; }
