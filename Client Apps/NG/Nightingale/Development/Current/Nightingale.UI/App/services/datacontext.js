@@ -757,7 +757,9 @@ define(['services/session', 'services/jsonResultsAdapter', 'models/base', 'confi
 
             // Display a message while saving
             var message = queryStarted('Individual', true, 'Saving');
-
+			if( patient.isNew() && !patient.system() ){
+				patient.system("Engage");
+			}
             // Should the individual be inserted or just updated?
             var insert = patient.isNew();
 
