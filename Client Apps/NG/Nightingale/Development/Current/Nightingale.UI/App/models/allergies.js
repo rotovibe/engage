@@ -116,7 +116,7 @@ define(['services/session', 'services/dateHelper'],
 						}
 						if( startDate && !hasErrors ){
 							//startDate - endDate range: both dates exist and valid:
-							if( moment( startDate ).isAfter( moment( endDate ) ) ){
+							if( moment( startDate, "MM/DD/YYYY", true ).isAfter( moment( endDate, "MM/DD/YYYY", true ) ) ){
 								allergyErrors.push({ PropName: 'endDate', Message: allergy.allergyName() + ' End Date must be on or after: ' + moment( startDate ).format("MM/DD/YYYY") });
 								allergyErrors.push({ PropName: 'startDate', Message: allergy.allergyName() + ' Start Date must be on or before: ' + moment( endDate ).format("MM/DD/YYYY") });
 								hasErrors = true;

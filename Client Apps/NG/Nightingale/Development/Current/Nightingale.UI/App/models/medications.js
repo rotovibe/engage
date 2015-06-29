@@ -201,7 +201,7 @@ define(['services/session', 'services/dateHelper'],
 						}
 						if( startDate && !hasErrors ){
 							//startDate - endDate range: both dates exist and valid:
-							if( moment( startDate ).isAfter( moment( endDate ) ) ){
+							if( moment( startDate, "MM/DD/YYYY", true ).isAfter( moment( endDate, "MM/DD/YYYY", true ) ) ){
 								medicationErrors.push({ PropName: 'endDate', Message: medication.name() + ' End Date must be on or after: ' + moment( startDate ).format("MM/DD/YYYY") });
 								medicationErrors.push({ PropName: 'startDate', Message: medication.name() + ' Start Date must be on or before: ' + moment( endDate ).format("MM/DD/YYYY") });
 								hasErrors = true;

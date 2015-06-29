@@ -38,10 +38,10 @@ define(['services/formatter'],
 			if( isNaN(new Date(value).valueOf()) ){				
 				context.msg = "'"+ value + "' is not a valid " + context.property.displayName;
 				return false;
-			}			
-			if( !moment(value, ["MM-DD-YYYY","MM/DD/YYYY"], true).isValid() ){				
-				var formattedValue = formatter.date.optimizeDate( value );
-				formattedValue = formatter.date.optimizeYear( formattedValue );
+			}	
+			var theMoment = moment(value, ["MM-DD-YYYY","MM/DD/YYYY", "M/D/YYYY"], true);
+			if( !theMoment.isValid() ){				
+				var formattedValue = formatter.date.optimizeDate( value );				
 				if( !moment(formattedValue, ["MM-DD-YYYY","MM/DD/YYYY"], true).isValid() ){
 					context.msg = "'"+ value + "' is not a valid " + context.property.displayName;					
 					return false;
@@ -55,7 +55,7 @@ define(['services/formatter'],
 					minDate = moment();										
 				}									
 				if( !moment(minDate).isValid() ) return true;
-				if( moment(value).isBefore(moment(minDate).format("MM/DD/YYYY"), 'days') ){
+				if( theMoment.isBefore(moment(minDate).format("MM/DD/YYYY"), 'days') ){
 					context.msg = errorMessage;
 					return false;
 				}				
@@ -68,7 +68,7 @@ define(['services/formatter'],
 					maxDate = moment();									
 				}				
 				if( !moment(maxDate).isValid() ) return true;
-				if( moment(value).isAfter(moment(maxDate).format("MM/DD/YYYY"), 'days') ){
+				if( theMoment.isAfter(moment(maxDate).format("MM/DD/YYYY"), 'days') ){
 					context.msg = errorMessage;
 					return false;
 				}				

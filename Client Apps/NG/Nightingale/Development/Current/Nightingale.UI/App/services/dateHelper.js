@@ -7,45 +7,12 @@ define([ 'services/formatter'],
 	function(formatter){
 		
 		var dateHelper = function(){};
-			/**
+		/**
 		*	validate a date that can be a partial date string. this is important for typeable date inputs.
-		*	@method isValidDate
-		*	@param noOptimize {Boolean} optional parameter, if true it will evalueate the date string as it is. 
-		*	if false/undefined then it will optimize formatting of the date, then check if the optimized date string is valid. 
-		*	@example given date value="6/2/2015" with noOptimize = true => not valid.
-		*	@example given date value="6/2/2015" with noOptimize = false => optimize it to "06/02/2015" and then validate => valid.
+		*	@method isValidDate		
 		*/
-		dateHelper.isValidDate = function (value, noOptimize){
-			if (value === null || value === "" || value === undefined) return false;	
-			if ( Object.prototype.toString.call(value) === '[object Date]' ){
-				//value is a Date object
-				if( isNaN(value.valueOf()) ){				
-					return false;	
-				}
-				return true;	//valid
-			}				
-			else{
-				//string
-				if( noOptimize && value.search(/^\d{2}\/\d{2}\/\d{4}/) !== 0 ){
-					//incomplete / not formatted date string
-					return false;
-				}
-				if( !moment(value, ["MM-DD-YYYY","MM/DD/YYYY"], true).isValid() ){				
-					//trying to parse value as a short date string failed
-					if( moment(value).isValid() && moment(value)._f === "YYYY-MM-DDTHH:mm:ss.SSSSZ" ){
-						return true; //ISO 8601
-					}
-					if( !noOptimize ){
-						//try to optimize the date string:
-						value = formatter.date.optimizeDate( value );
-						value = formatter.date.optimizeYear( value );
-					}
-					if( !moment(value, ["MM/DD/YYYY"], true).isValid() ){
-						return false;	//failed
-					} 					
-				}				
-			}	
-			return true;
+		dateHelper.isValidDate = function (value){
+			return !this.isInvalidDate( value, null, true );
 		};
 		
 		/**
@@ -54,6 +21,7 @@ define([ 'services/formatter'],
 		*	@param value {String} or {date} 
 		*	@param context optional: a validation context object with minDate / maxDate
 		*	@param context.mindate {String} or {Date} or one of the following: 'now' , 'today'
+		*	@emptyIsInvalid {Boolean} if true then empty date values (null / "" / undefined) are not valid.
 		* 	@example testing a date with isInvalidDate with a max date value of today: 
 		*
 		*		var startDateError = dateHelper.isInvalidDate( medication.startDate(), { maxDate: 'today'} );	
@@ -63,19 +31,26 @@ define([ 'services/formatter'],
 		*		}
 		*/
 		
-		dateHelper.isInvalidDate = function(value, context){
-			if (value == null || value == "") return null;	//valid	
+		dateHelper.isInvalidDate = function(value, context, emptyIsInvalid){
+			if ( value == null || value == "" || value === undefined ){
+				if( emptyIsInvalid ){
+					return {Message: 'is not valid'};
+				}
+				else{
+					return null;	//valid	
+				}
+			} 	
 			if( isNaN(new Date(value).valueOf()) ){
 				return {Message: 'is not valid'};
 			}
-			if( !moment(value, ["MM/DD/YYYY", "MM-DD-YYYY", "M/D/YY", "M/D/YYYY"], true).isValid() ){
+			var theMoment = moment(value, ["MM-DD-YYYY","MM/DD/YYYY","M/D/YYYY"], true);
+			if( !theMoment.isValid() || value.search(/^\d{1,2}\/\d{1,2}\/\d{4}/) === -1 ){
 				//short format failed
-				var theMoment = moment(value, ["YYYY-MM-DDTHH:mm:ss.SSSSZ"], true);	//iso 8601
+				theMoment = moment(value, ["YYYY-MM-DDTHH:mm:ss.SSSSZ"], true);	//iso 8601
 				if( !theMoment.isValid() ){
 					//iso 8601 failed
 					var formattedValue = formatter.date.optimizeDate( value );
-					formattedValue = formatter.date.optimizeYear( value );
-					if( !moment(formattedValue, ["MM/DD/YYYY"], true).isValid() ){
+					if( !moment(formattedValue, ["MM/DD/YYYY"], true).isValid() || value.search(/^\d{1,2}\/\d{1,2}\/\d{4}/) === -1 ){
 						return {Message: 'is not valid'};
 					}
 				}									
@@ -91,7 +66,7 @@ define([ 'services/formatter'],
 					minStr = moment(minDate).format("MM/DD/YYYY");
 				}
 				if( !moment(minDate).isValid() ) return true;
-				if( moment(value).isBefore(moment(minDate), 'days') ){
+				if( theMoment.isBefore(moment(minDate), 'days') ){
 					return {Message: 'can not be before ' + minStr};					
 				}				
 			}				
@@ -106,7 +81,7 @@ define([ 'services/formatter'],
 					maxStr = moment(maxDate).format("MM/DD/YYYY");
 				}
 				if( !moment(maxDate).isValid() ) return true;
-				if( moment(value).isAfter(moment(maxDate), 'days') ){
+				if( theMoment.isAfter(moment(maxDate), 'days') ){
 					return {Message: 'can not be after ' + maxStr};					
 				}				
 			}
@@ -118,12 +93,10 @@ define([ 'services/formatter'],
 			return moment(moment1.format('MM/DD/YYYY')).isSame(moment2.format('MM/DD/YYYY'))
 		};
 		
-		dateHelper.setDateValue = function ( momentSrc, momentDest ){
-			// console.log('datepicker setDateValue starts: src='+ momentSrc.toISOString() + ' dest=' +momentDest.toISOString());
+		dateHelper.setDateValue = function ( momentSrc, momentDest ){			
 			momentDest.date( momentSrc.date() );
 			momentDest.month( momentSrc.month() );
-			momentDest.year( momentSrc.year() );
-			// console.log('datepicker setDateValue returns: ' + momentDest.toISOString());
+			momentDest.year( momentSrc.year() );			
 			return momentDest;
 		};
 		
