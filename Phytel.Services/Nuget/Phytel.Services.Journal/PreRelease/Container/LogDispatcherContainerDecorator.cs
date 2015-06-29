@@ -2,7 +2,6 @@
 using Phytel.Services.API.Provider;
 using Phytel.Services.AppSettings;
 using Phytel.Services.Dates;
-using Phytel.Services.Dispatch.Ase;
 using Phytel.Services.IOC;
 using Phytel.Services.Journal.Dispatch;
 using Phytel.Services.Serializer;
@@ -35,17 +34,15 @@ namespace Phytel.Services.Journal
             }
 
             container.Register<ILogDispatcher>(c =>
-                new LogDispatcher(
-                    new AseBusDispatcher(
-                        c.Resolve<IAppSettingsProvider>().Get(Constants.AppSettingKeys.PutEventPublishKey, Constants.AppSettingDefaultValues.PutEventPublishKey),
-                        new SerializerJson()
-                        ),
+                new LogDispatcher(                    
+                        c.Resolve<IAppSettingsProvider>(),
+                        new SerializerJson(),
                         c.Resolve<IActionIdProvider>(),
                         new DateTimeUtcProxy(),
                         c.Resolve<IServiceConfigProxy>(),
                         c.Resolve<IMappingEngine>()
                     )
-            ).ReusedWithin(Funq.ReuseScope.Request); ;
+            ).ReusedWithin(Funq.ReuseScope.Request);
         }
     }
 }
