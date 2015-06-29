@@ -145,10 +145,11 @@ namespace Phytel.API.DataDomain.Patient
 
         public string FormatSystem(string p)
         {
-            var val = string.Empty;
-            if (p.Length > 50)
+            var val = p;
+            if (!string.IsNullOrEmpty(p) && p.Length > 50)
+            {
                 val = p.Substring(0, 50);
-
+            }
             return val;
         }
 
