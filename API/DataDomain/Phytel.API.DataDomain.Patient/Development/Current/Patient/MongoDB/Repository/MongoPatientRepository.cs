@@ -95,7 +95,7 @@ namespace Phytel.API.DataDomain.Patient
                             TTLDate = null,
                             DeleteFlag = false,
                             LastUpdatedOn = System.DateTime.UtcNow,
-                            System = pd.System == null ? null : pd.System.Substring(0, 50)
+                            System = FormatSystem(pd.System)
                         };
                         ctx.Patients.Collection.Insert(patient);
 
@@ -141,6 +141,15 @@ namespace Phytel.API.DataDomain.Patient
             {
                 throw ex;
             }
+        }
+
+        public string FormatSystem(string p)
+        {
+            var val = string.Empty;
+            if (p.Length > 50)
+                val = p.Substring(0, 50);
+
+            return val;
         }
 
         public object InsertAll(List<object> entities)
@@ -363,7 +372,7 @@ namespace Phytel.API.DataDomain.Patient
                                 Background = meP.Background,
                                 ClinicalBackground = meP.ClinicalBackground,
                                 LastFourSSN = meP.LastFourSSN,
-                                System = meP.System == null ? null : meP.System.Substring(0, 50)
+                                System = FormatSystem(meP.System)
                             };
                             response.Add(data.Id, data);
                         }
