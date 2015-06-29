@@ -49,7 +49,9 @@ namespace Phytel.API.AppDomain.NG
                         SourceId = n.SourceId,
                         DurationId = n.DurationId,
                         ValidatedIdentity = n.ValidatedIdentity,
-                        ContactedOn = n.ContactedOn
+                        ContactedOn = n.ContactedOn,
+                        UpdatedById = n.UpdatedById,
+                        UpdatedOn = n.UpdatedOn
                     };
                 }
                 return result;
@@ -95,7 +97,9 @@ namespace Phytel.API.AppDomain.NG
                             SourceId = n.SourceId,
                             DurationId = n.DurationId,
                             ValidatedIdentity = n.ValidatedIdentity,
-                            ContactedOn = n.ContactedOn
+                            ContactedOn = n.ContactedOn,
+                            UpdatedById = n.UpdatedById,
+                            UpdatedOn = n.UpdatedOn
                         }
                         );
                     }

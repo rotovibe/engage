@@ -174,7 +174,9 @@ namespace Phytel.API.DataDomain.PatientNote.Repo
                             SourceId = (meN.SourceId == null) ? null : meN.SourceId.ToString(),
                             DurationId = (meN.DurationId == null) ? null : meN.DurationId.ToString(),
                             ValidatedIdentity = meN.ValidatedIdentity,
-                            ContactedOn = meN.ContactedOn
+                            ContactedOn = meN.ContactedOn,
+                            UpdatedById = (meN.UpdatedBy == null) ? null : meN.UpdatedBy.ToString(),
+                            UpdatedOn = meN.LastUpdatedOn
                         };
                     }
                 }
@@ -336,7 +338,9 @@ namespace Phytel.API.DataDomain.PatientNote.Repo
                                 SourceId = (meN.SourceId == null) ? null : meN.SourceId.ToString(),
                                 DurationId = (meN.DurationId == null) ? null : meN.DurationId.ToString(),
                                 ValidatedIdentity = meN.ValidatedIdentity,
-                                ContactedOn = meN.ContactedOn
+                                ContactedOn = meN.ContactedOn,
+                                UpdatedById = (meN.UpdatedBy == null) ? null : meN.UpdatedBy.ToString(),
+                                UpdatedOn = meN.LastUpdatedOn
                             });
                         }
                     }
