@@ -1,8 +1,11 @@
 ﻿using AutoMapper;
+using Phytel.Bus;
+using Phytel.Framework.ASE.Bus.Data;
 using Phytel.Services.API.DTO;
 using Phytel.Services.API.Provider;
+using Phytel.Services.AppSettings;
 using Phytel.Services.Dates;
-using Phytel.Services.Dispatch;
+using Phytel.Services.Serializer;
 using ServiceStack.ServiceHost;
 using System;
 
@@ -10,15 +13,17 @@ namespace Phytel.Services.Journal.Dispatch
 {
     public class LogDispatcher : ILogDispatcher
     {
+        protected readonly IAppSettingsProvider _appSettingsProvider;
+        protected readonly ISerializer _serializer;
         protected readonly IActionIdProvider _actionIdProvider;
         protected readonly IDateTimeProxy _dateTimeProxy;
-        protected readonly IDispatcher _dispatcher;
         protected readonly IMappingEngine _mappingEngine;
         protected readonly IServiceConfigProxy _serviceConfigProxy;
 
-        public LogDispatcher(IDispatcher dispatcher, IActionIdProvider actionIdProvider, IDateTimeProxy dateTimeProxy, IServiceConfigProxy serviceConfigProxy, IMappingEngine mappingEngine)
+        public LogDispatcher(IAppSettingsProvider appSettingsProvider, ISerializer serializer, IActionIdProvider actionIdProvider, IDateTimeProxy dateTimeProxy, IServiceConfigProxy serviceConfigProxy, IMappingEngine mappingEngine)
         {
-            _dispatcher = dispatcher;
+            _appSettingsProvider = appSettingsProvider;
+            _serializer = serializer;
             _actionIdProvider = actionIdProvider;
             _dateTimeProxy = dateTimeProxy;
             _serviceConfigProxy = serviceConfigProxy;
@@ -86,7 +91,7 @@ namespace Phytel.Services.Journal.Dispatch
                 logEvent.Error = _mappingEngine.Map<Error>(exception);
             }
 
-            DispatchEntries(logEvent);
+            OnDispatch(logEvent);
 
             return logEvent;
         }
@@ -108,13 +113,18 @@ namespace Phytel.Services.Journal.Dispatch
                 );
         }
 
-        public virtual void DispatchEntries(params LogEvent[] logEvents)
-        {            
-            foreach (LogEvent logEvent in logEvents)
+        protected virtual void OnDispatch(LogEvent logEvent)
+        {
+            if(logEvent != null)
             {
-                var putLogEvent = new { Event = logEvent };
-                _dispatcher.Dispatch(putLogEvent);
-            }            
+                var messageBody = new { Event = logEvent };
+                string publishKey = _appSettingsProvider.Get(Constants.AppSettingKeys.PutEventPublishKey, Constants.AppSettingDefaultValues.PutEventPublishKey);
+                PublishMessage message = new PublishMessage();
+                message.PublishKey = publishKey;
+                message.Message = _serializer.Serialize(messageBody, messageBody.GetType());
+                MessageBus messageBus = new MessageBus(3, 3, 15, 15);
+                messageBus.PutOnBus(message);
+            }
         }
     }
 }
