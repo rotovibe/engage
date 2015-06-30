@@ -229,7 +229,7 @@ namespace Phytel.API.DataDomain.Patient
                         Background = mePatient.Background,
                         ClinicalBackground = mePatient.ClinicalBackground,
                         LastFourSSN = mePatient.LastFourSSN,
-                        System = mePatient.System
+                        System = FormatSystem(mePatient.System)
                     };
                     if (!string.IsNullOrEmpty(userId))
                     {
@@ -517,6 +517,15 @@ namespace Phytel.API.DataDomain.Patient
                         else
                             updt.Set(MEPatient.SuffixProperty, request.PatientData.Suffix);
                     }
+
+                    if (request.PatientData.System != null)
+                    {
+                        if (request.PatientData.System == "\"\"" || (request.PatientData.System == "\'\'"))
+                            updt.Set(MEPatient.SystemProperty, string.Empty);
+                        else
+                            updt.Set(MEPatient.SystemProperty, request.PatientData.System);
+                    }
+
                     if (request.PatientData.PreferredName != null)
                     {
                         if (request.PatientData.PreferredName == "\"\"" || (request.PatientData.PreferredName == "\'\'"))
@@ -538,11 +547,13 @@ namespace Phytel.API.DataDomain.Patient
                         else
                             updt.Set(MEPatient.DOBProperty, request.PatientData.DOB);
                     }
+
                     if (request.PatientData.DisplayPatientSystemId != null)
                     {
                         if (ObjectId.Parse(request.PatientData.DisplayPatientSystemId) != null)
                             updt.Set(MEPatient.DisplayPatientSystemIdProperty, ObjectId.Parse(request.PatientData.DisplayPatientSystemId));
                     }
+
                     if (request.PatientData.FullSSN != null)
                     {
                         string fullSSN = request.PatientData.FullSSN.Trim().Replace("-", string.Empty);
