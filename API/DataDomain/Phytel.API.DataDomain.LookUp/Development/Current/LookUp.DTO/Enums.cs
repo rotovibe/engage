@@ -38,6 +38,11 @@ namespace Phytel.API.DataDomain.LookUp.DTO
         FreqHowOften = 28,
         FreqWhen = 29,
         NoteType = 30,
-        Frequency = 31
+        Frequency = 31,
+        VisitType = 32,
+        UtilizationSource = 33,
+        Disposition = 34,
+        UtilizationLocation = 35,
+        Reason = 36
     }
 }
