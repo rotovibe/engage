@@ -117,9 +117,11 @@
     <Compile Include="Containers\SearchContainer.cs" />
     <Compile Include="Mappers\AllergyMapper.cs" />
     <Compile Include="Mappers\AllergyMedSearchMapper.cs" />
+    <Compile Include="Mappers\PatientUtilizationMapper.cs" />
     <Compile Include="Mappers\MedSuppMapper.cs" />
     <Compile Include="Mappers\GoalsMapper.cs" />
     <Compile Include="MedicationService.cs" />
+    <Compile Include="PatientUtilizationService.cs" />
     <Compile Include="SearchService.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -166,6 +168,10 @@
     <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.PatientGoal\Development\Current\PatientGoal.DTO\DataDomain.PatientGoal.DTO.csproj">
       <Project>{92488af4-963e-4098-8ba8-23d6952bd952}</Project>
       <Name>DataDomain.PatientGoal.DTO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.PatientNote\Development\Current\PatientNote.DTO\DataDomain.PatientNote.DTO.csproj">
+      <Project>{99F4EC29-B099-424E-9757-223E67029001}</Project>
+      <Name>DataDomain.PatientNote.DTO</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\..\Interfaces\Development\Current\Phytel.API.Interface\Phytel.API.Interface.csproj">
       <Project>{abe948fb-247e-4955-b3ab-b7c93e10a542}</Project>

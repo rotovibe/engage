@@ -1,18 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using AutoMapper;
 using Phytel.API.AppDomain.NG.DTO;
+using Phytel.API.AppDomain.NG.DTO.Utilization;
+using Phytel.API.AppDomain.NG.Notes.Visitors;
 using Phytel.API.DataDomain.PatientNote.DTO;
 using ServiceStack.Service;
 using ServiceStack.ServiceClient.Web;
+using System.Linq;
 
-namespace Phytel.API.AppDomain.NG
+namespace Phytel.API.AppDomain.NG.Notes
 {
-    public class NotesManager : ManagerBase
+    public class NotesManager : ManagerBase, INotesManager
     {
         #region endpoint addresses
         protected static readonly string DDPatientNoteUrl = ConfigurationManager.AppSettings["DDPatientNoteUrl"];
         #endregion
+
+        public IUtilizationManager UtilManager { get; set; }
 
         public PatientNote GetPatientNote(GetPatientNoteRequest request)
         {
@@ -64,46 +70,14 @@ namespace Phytel.API.AppDomain.NG
             try
             {
                 List<PatientNote> result = null;
-                //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Notes/{Count}", "GET")]
-                IRestClient client = new JsonServiceClient();
-                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Notes/{5}",
-                    DDPatientNoteUrl,
-                    "NG",
-                    request.Version,
-                    request.ContractNumber,
-                    request.PatientId,
-                    request.Count), request.UserId);
+                var hlist = new HistoryListVisitable(request);
+                hlist.Accept(new PatientNoteVisitor());
+                hlist.Accept(new PatientUtilizationVisitor());
+                //hlist.Modify(new OrderModifier());
 
-                GetAllPatientNotesDataResponse ddResponse = client.Get<GetAllPatientNotesDataResponse>(url);
-
-                if (ddResponse != null && ddResponse.PatientNotes != null && ddResponse.PatientNotes.Count > 0)
-                {
-                    result = new List<PatientNote>();
-                    List<PatientNoteData> dataList = ddResponse.PatientNotes;
-                    foreach (PatientNoteData n in dataList)
-                    {
-                        result.Add(new PatientNote
-                        {
-                            Id = n.Id,
-                            PatientId = n.PatientId,
-                            Text = n.Text,
-                            ProgramIds = n.ProgramIds,
-                            CreatedOn = n.CreatedOn,
-                            CreatedById = n.CreatedById,
-                            TypeId = n.TypeId,
-                            MethodId = n.MethodId,
-                            OutcomeId = n.OutcomeId,
-                            WhoId = n.WhoId,
-                            SourceId = n.SourceId,
-                            DurationId = n.DurationId,
-                            ValidatedIdentity = n.ValidatedIdentity,
-                            ContactedOn = n.ContactedOn,
-                            UpdatedById = n.UpdatedById,
-                            UpdatedOn = n.UpdatedOn
-                        }
-                        );
-                    }
-                }
+                // do some filtering or something.
+                result = hlist.GetList().OrderByDescending(r => r.CreatedOn).ToList();
+                result = result.Take(request.Count).ToList();
                 return result;
             }
             catch (WebServiceException ex) { throw ex; }

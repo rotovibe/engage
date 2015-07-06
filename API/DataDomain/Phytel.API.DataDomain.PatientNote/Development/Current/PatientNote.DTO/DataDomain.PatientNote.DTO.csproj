@@ -81,11 +81,22 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="PatientUtilizationData.cs" />
     <Compile Include="PatientNoteData.cs" />
+    <Compile Include="Request\Utilization\DeletePatientUtilizationDataRequest.cs" />
+    <Compile Include="Request\Utilization\GetPatientUtilizationDataRequest.cs" />
+    <Compile Include="Request\Utilization\GetAllPatientUtilizationDataRequest.cs" />
+    <Compile Include="Request\Utilization\PutPatientUtilizationDataRequest.cs" />
+    <Compile Include="Response\Utilization\DeletePatientUtilizationDataResponse.cs" />
+    <Compile Include="Response\Utilization\GetPatientUtilizationDataResponse.cs" />
+    <Compile Include="Response\Utilization\GetAllPatientUtilizationDataResponse.cs" />
+    <Compile Include="Response\Utilization\PutPatientUtilizationDataResponse.cs" />
     <Compile Include="UpdatePatientNoteDataRequest.cs" />
     <Compile Include="UpdatePatientNoteDataResponse.cs" />
     <Compile Include="RemoveProgramInPatientNotesDataRequest.cs" />
     <Compile Include="RemoveProgramInPatientNotesDataResponse.cs" />
+    <Compile Include="Request\Utilization\PostPatientUtilizationDataRequest.cs" />
+    <Compile Include="Response\Utilization\PostPatientUtilizationDataResponse.cs" />
     <Compile Include="UndoDeletePatientNotesDataRequest.cs" />
     <Compile Include="DeleteNoteByPatientIdDataRequest.cs" />
     <Compile Include="UndoDeletePatientNotesDataResponse.cs" />

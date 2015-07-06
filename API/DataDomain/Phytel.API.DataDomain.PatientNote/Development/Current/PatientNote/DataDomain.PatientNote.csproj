@@ -85,6 +85,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataPatientUtilizationManager.cs" />
+    <Compile Include="IDataPatientUtilizationManager.cs" />
     <Compile Include="IPatientNoteDataManager.cs" />
     <Compile Include="DataPatientNoteManager.cs" />
     <Compile Include="PatientNoteContainer.cs" />
@@ -109,6 +111,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

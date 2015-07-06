@@ -159,6 +159,11 @@
     <Compile Include="Meds\PostInitializeMedicationMapResponse.cs" />
     <Compile Include="Meds\PostPatientMedSuppRequest.cs" />
     <Compile Include="Meds\PostPatientMedSuppResponse.cs" />
+    <Compile Include="Utilization\GetPatientUtilizationsRequest.cs" />
+    <Compile Include="Utilization\GetPatientUtilizationsResponse.cs" />
+    <Compile Include="Utilization\GetPatientUtilizationRequest.cs" />
+    <Compile Include="Utilization\GetPatientUtilizationResponse.cs" />
+    <Compile Include="Utilization\PatientUtilization.cs" />
     <Compile Include="Note\UpdatePatientNoteRequest.cs" />
     <Compile Include="Note\UpdatePatientNoteResponse.cs" />
     <Compile Include="Observation\GetHistoricalPatientObservationsRequest.cs" />
@@ -331,6 +336,12 @@
     <Compile Include="Search\MedNameSearchDoc.cs" />
     <Compile Include="Search\SearchedItem.cs" />
     <Compile Include="Search\TextValuePair.cs" />
+    <Compile Include="Utilization\DeletePatientUtilizationRequest.cs" />
+    <Compile Include="Utilization\DeletePatientUtilizationResponse.cs" />
+    <Compile Include="Utilization\PutPatientUtilizationRequest.cs" />
+    <Compile Include="Utilization\PostPatientUtilizationRequest.cs" />
+    <Compile Include="Utilization\PutPatientUtilizationResponse.cs" />
+    <Compile Include="Utilization\PostPatientUtilizationResponse.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -95,6 +95,7 @@
     <Compile Include="IServiceProxy.cs" />
     <Compile Include="PatientNoteAppHost.cs" />
     <Compile Include="Containers\HttpServiceContainer.cs" />
+    <Compile Include="PatientUtilizationService.cs" />
     <Compile Include="PatientNoteService.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>

@@ -1,6 +1,7 @@
 ﻿using Funq;
 using Phytel.API.AppDomain.NG.Allergy;
 using Phytel.API.AppDomain.NG.Medication;
+using Phytel.API.AppDomain.NG.Notes;
 using Phytel.API.AppDomain.NG.Observation;
 using Phytel.API.AppDomain.NG.PlanCOR;
 using Phytel.API.AppDomain.NG.Programs;
@@ -23,6 +24,8 @@ namespace Phytel.API.AppDomain.NG.Service.Containers
             container.RegisterAutoWiredAs<AllergyEndpointUtil, IAllergyEndpointUtil>().ReusedWithin(ReuseScope.Request);
             container.RegisterAutoWiredAs<ProgramAttributeStrategy, IProgramAttributeStrategy>().ReusedWithin(ReuseScope.Request);
             container.RegisterAutoWiredAs<PlanElementUtils, IPlanElementUtils>().ReusedWithin(ReuseScope.Request);
+            container.RegisterAutoWiredAs<UtilizationManager, IUtilizationManager>().ReusedWithin(ReuseScope.Request);
+            container.RegisterAutoWiredAs<NotesManager, INotesManager>().ReusedWithin(ReuseScope.Request);
             container.RegisterAutoWiredAs<NGManager, INGManager>().ReusedWithin(ReuseScope.Request);
             container.RegisterAutoWiredAs<AuditUtil, IAuditUtil>().ReusedWithin(ReuseScope.Request);
             container.RegisterAutoWiredAs<ObservationEndpointUtil, IObservationEndpointUtil>().ReusedWithin(ReuseScope.Request);

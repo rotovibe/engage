@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Phytel.API.AppDomain.NG.DTO;
+using Phytel.API.AppDomain.NG.Notes;
 using ServiceStack.Service;
 using ServiceStack.ServiceClient.Web;
 

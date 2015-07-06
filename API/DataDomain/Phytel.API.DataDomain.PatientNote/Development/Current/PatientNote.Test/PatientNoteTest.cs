@@ -1,13 +1,15 @@
 using System.Collections.Generic;
+using DataDomain.PatientNote.Repo;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Phytel.API.DataDomain.PatientNote.DTO;
+using Phytel.API.DataDomain.PatientNote.Repo;
 
 namespace Phytel.API.DataDomain.PatientNote.Test
 {
     [TestClass]
     public class PatientNoteTest
     {
-        IPatientNoteDataManager m = new PatientNoteDataManager();
+        IPatientNoteDataManager m = new PatientNoteDataManager(new PatientNoteRepositoryFactory("InHealth001", "123456789012345678901234") );
         
         [TestMethod]
         public void GetPatientNote_Test_Passes()

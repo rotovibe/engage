@@ -311,14 +311,14 @@ namespace Phytel.API.DataDomain.PatientNote.Repo
                     queries.Add(Query.EQ(MEPatientNote.DeleteFlagProperty, false));
                     IMongoQuery mQuery = Query.And(queries);
                     List<MEPatientNote> meNotes = null;
-                    if (dataRequest.Count > 0)
-                    {
-                        meNotes = ctx.PatientNotes.Collection.Find(mQuery).OrderByDescending(o => o.RecordCreatedOn).Take(dataRequest.Count).ToList();
-                    }
-                    else
-                    {
+                    //if (dataRequest.Count > 0)
+                    //{
+                    //    meNotes = ctx.PatientNotes.Collection.Find(mQuery).OrderByDescending(o => o.RecordCreatedOn).Take(dataRequest.Count).ToList();
+                    //}
+                    //else
+                    //{
                         meNotes = ctx.PatientNotes.Collection.Find(mQuery).ToList();
-                    }
+                    //}
                     if (meNotes != null && meNotes.Count > 0)
                     {
                         noteDataList = new List<PatientNoteData>();

@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using Phytel.API.AppDomain.NG.Notes;
 
 namespace Phytel.API.AppDomain.NG.Service
 {
@@ -17,6 +18,7 @@ namespace Phytel.API.AppDomain.NG.Service
         public ISecurityManager Security {get; set;}
         public INGManager NGManager {get; set;}
         public IAuditUtil AuditUtil { get; set; }
+        public INotesManager NotesManager { get; set; }
         public ICommonFormatterUtil CommonFormatterUtil { get; set; }
 
         private const string unknownBrowserType = "Unknown browser";
@@ -1313,7 +1315,6 @@ namespace Phytel.API.AppDomain.NG.Service
         public GetAllPatientNotesResponse Get(GetAllPatientNotesRequest request)
         {
             GetAllPatientNotesResponse response = new GetAllPatientNotesResponse();
-            NotesManager ntm = new NotesManager();
             ValidateTokenResponse result = null;
 
             try
@@ -1323,7 +1324,7 @@ namespace Phytel.API.AppDomain.NG.Service
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
-                    response.Notes = ntm.GetAllPatientNotes(request);
+                    response.Notes = NotesManager.GetAllPatientNotes(request);
                 }
                 else
                     throw new UnauthorizedAccessException();

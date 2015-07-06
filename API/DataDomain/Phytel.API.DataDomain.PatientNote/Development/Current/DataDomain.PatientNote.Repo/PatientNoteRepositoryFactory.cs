@@ -1,20 +1,28 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Phytel.API.Interface;
+using Phytel.API.DataDomain.PatientNote.Repo;
 
-namespace Phytel.API.DataDomain.PatientNote.Repo
+namespace DataDomain.PatientNote.Repo
 {
     public enum RepositoryType
     {
-        PatientNote
+        PatientNote,
+        Utilization
     }
     
-    public abstract class PatientNoteRepositoryFactory
+    public class PatientNoteRepositoryFactory : IPatientNoteRepositoryFactory
     {
-        public static IMongoPatientNoteRepository GetRepository(IDataDomainRequest request, RepositoryType type)
+        private readonly string _contract;
+        private readonly string _userId;
+        private readonly PatientNoteMongoContext _context;
+
+        public PatientNoteRepositoryFactory(string contract, string userid)
+        {
+            _contract = contract;
+            _userId = userid;
+            _context = new PatientNoteMongoContext(_contract);
+        }
+
+        public IMongoPatientNoteRepository GetRepository(RepositoryType type)
         {
             try
             {
@@ -24,8 +32,12 @@ namespace Phytel.API.DataDomain.PatientNote.Repo
                 {
                     case RepositoryType.PatientNote:
                         {
-                            var context = new PatientNoteMongoContext(request.ContractNumber);
-                            repo = new MongoPatientNoteRepository<PatientNoteMongoContext>(context) { UserId = request.UserId, ContractDBName = request.ContractNumber };
+                            repo = new MongoPatientNoteRepository<PatientNoteMongoContext>(_context) { UserId = _userId, ContractDBName = _contract};
+                            break;
+                        }
+                    case RepositoryType.Utilization:
+                        {
+                            repo = new MongoPatientUtilizationRepository<PatientNoteMongoContext>(_context){UserId = _userId, ContractDBName = _contract};
                             break;
                         }
                 }

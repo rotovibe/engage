@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using DataDomain.PatientNote.Repo;
 using Phytel.API.DataDomain.PatientNote.DTO;
 using Phytel.API.DataDomain.PatientNote.Repo;
 
@@ -7,12 +8,19 @@ namespace Phytel.API.DataDomain.PatientNote
 {
     public class PatientNoteDataManager : IPatientNoteDataManager
     {
+        IPatientNoteRepositoryFactory Factory { get; set; }
+
+        public PatientNoteDataManager(IPatientNoteRepositoryFactory repo)
+        {
+            Factory = repo;
+        }
+
         public string InsertPatientNote(InsertPatientNoteDataRequest request)
         {
             string noteId = string.Empty;
             try
             {
-                IMongoPatientNoteRepository repo = PatientNoteRepositoryFactory.GetRepository(request, RepositoryType.PatientNote);
+                IMongoPatientNoteRepository repo = Factory.GetRepository(RepositoryType.PatientNote);
                 noteId = (string)repo.Insert(request);
             }
             catch (Exception ex)
@@ -26,7 +34,7 @@ namespace Phytel.API.DataDomain.PatientNote
         {
             try
             {
-                IMongoPatientNoteRepository repo = PatientNoteRepositoryFactory.GetRepository(request, RepositoryType.PatientNote);
+                IMongoPatientNoteRepository repo = Factory.GetRepository(RepositoryType.PatientNote);
                 repo.Update(request);
             }
             catch (Exception ex)
@@ -40,7 +48,7 @@ namespace Phytel.API.DataDomain.PatientNote
             try
             {
                 PatientNoteData response = null; 
-                IMongoPatientNoteRepository repo = PatientNoteRepositoryFactory.GetRepository(request, RepositoryType.PatientNote);
+                IMongoPatientNoteRepository repo = Factory.GetRepository(RepositoryType.PatientNote);
                 response = repo.FindByID(request.Id) as PatientNoteData;
                 return response;
             }
@@ -55,7 +63,7 @@ namespace Phytel.API.DataDomain.PatientNote
             try
             {
                 List<PatientNoteData> response = null;
-                IMongoPatientNoteRepository repo = PatientNoteRepositoryFactory.GetRepository(request, RepositoryType.PatientNote);
+                IMongoPatientNoteRepository repo = Factory.GetRepository(RepositoryType.PatientNote);
                 response = repo.FindByPatientId(request) as List<PatientNoteData>;
                 return response;
             }
@@ -69,7 +77,7 @@ namespace Phytel.API.DataDomain.PatientNote
         {
             try
             {
-                IMongoPatientNoteRepository repo = PatientNoteRepositoryFactory.GetRepository(request, Phytel.API.DataDomain.PatientNote.Repo.RepositoryType.PatientNote);
+                IMongoPatientNoteRepository repo = Factory.GetRepository(RepositoryType.PatientNote);
                 repo.Delete(request);
                 return true;
             }
@@ -86,7 +94,7 @@ namespace Phytel.API.DataDomain.PatientNote
             {
                 response = new DeleteNoteByPatientIdDataResponse();
 
-                IMongoPatientNoteRepository repo = PatientNoteRepositoryFactory.GetRepository(request, RepositoryType.PatientNote);
+                IMongoPatientNoteRepository repo = Factory.GetRepository(RepositoryType.PatientNote);
                 GetAllPatientNotesDataRequest getAllPatientNotesDataRequest = new GetAllPatientNotesDataRequest 
                 {
                      Context = request.Context,
@@ -129,7 +137,7 @@ namespace Phytel.API.DataDomain.PatientNote
             {
                 response = new UndoDeletePatientNotesDataResponse();
 
-                IMongoPatientNoteRepository repo = PatientNoteRepositoryFactory.GetRepository(request, RepositoryType.PatientNote);
+                IMongoPatientNoteRepository repo = Factory.GetRepository(RepositoryType.PatientNote);
                 if (request.Ids != null && request.Ids.Count > 0)
                 {
                     request.Ids.ForEach(u =>
@@ -151,7 +159,7 @@ namespace Phytel.API.DataDomain.PatientNote
             {
                 response = new RemoveProgramInPatientNotesDataResponse();
 
-                IMongoPatientNoteRepository repo = PatientNoteRepositoryFactory.GetRepository(request, RepositoryType.PatientNote);
+                IMongoPatientNoteRepository repo = Factory.GetRepository(RepositoryType.PatientNote);
                 if (request.ProgramId != null)
                 {
                     List<PatientNoteData> notes = repo.FindNotesWithAProgramId(request.ProgramId) as List<PatientNoteData>;
