@@ -617,7 +617,11 @@ namespace Phytel.API.DataDomain.Patient
                     {
                         updt.Set(MEPatient.ReasonProperty, ObjectId.Parse(request.PatientData.ReasonId));
                     }
-                    if (request.PatientData.StatusId != 0) updt.Set(MEPatient.StatusProperty, request.PatientData.StatusId);
+                    else
+                    {
+                        updt.Set(MEPatient.ReasonProperty, BsonNull.Value);
+                    }
+                    updt.Set(MEPatient.StatusProperty, request.PatientData.StatusId);
                     updt.Set(MEPatient.UpdatedByProperty, ObjectId.Parse(this.UserId));
                     updt.Set(MEPatient.VersionProperty, request.Version);
 
