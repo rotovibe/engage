@@ -104,7 +104,9 @@ namespace Phytel.API.AppDomain.NG
                         Background = response.Patient.Background,
                         ClinicalBackground = response.Patient.ClinicalBackground,
                         LastFourSSN = response.Patient.LastFourSSN,
-                        System = response.Patient.System
+                        System = response.Patient.System,
+                        ReasonId  = response.Patient.ReasonId,
+                        StatusId = response.Patient.StatusId
                     };
 
                     if (sysResponse != null && sysResponse.PatientSystem != null)
@@ -202,7 +204,9 @@ namespace Phytel.API.AppDomain.NG
                         FullSSN = request.Patient.FullSSN,
                         Background = request.Patient.Background,
                         ClinicalBackground = request.Patient.ClinicalBackground,
-                        System = request.Patient.System
+                        System = request.Patient.System,
+                        ReasonId = request.Patient.ReasonId,
+                        StatusId = request.Patient.StatusId
                     };
                     PutUpdatePatientDataResponse dataDomainResponse =
                         client.Put<PutUpdatePatientDataResponse>(url, new PutUpdatePatientDataRequest

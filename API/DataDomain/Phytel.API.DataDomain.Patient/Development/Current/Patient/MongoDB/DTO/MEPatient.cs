@@ -34,6 +34,9 @@ namespace Phytel.API.DataDomain.Patient.DTO
         public const string ClinicalBackgroundProperty = "cbkgrd";
         public const string LastFourSSNProperty = "lssn";
         public const string FullSSNProperty = "fssn";
+        public const string SystemProperty = "sys";
+        public const string StatusProperty = "sts";
+        public const string ReasonProperty = "rsn";
         public const string VersionProperty = "v";
         public const string UpdatedByProperty = "uby";
         public const string DeleteFlagProperty = "del";
@@ -57,7 +60,6 @@ namespace Phytel.API.DataDomain.Patient.DTO
         [BsonIgnoreIfNull(true)]
         public string LastName { get; set; }
 
-        public const string SystemProperty = "sys";
         [BsonElement(SystemProperty)]
         [BsonIgnoreIfNull(true)]
         public string System { get; set; }
@@ -101,6 +103,14 @@ namespace Phytel.API.DataDomain.Patient.DTO
         [BsonElement(FullSSNProperty)]
         [BsonIgnoreIfNull(true)]
         public string FullSSN { get; set; }
+
+        [BsonElement(StatusProperty)]
+        [BsonIgnoreIfNull(true)]
+        public Status Status { get; set; }
+
+        [BsonElement(ReasonProperty)]
+        [BsonIgnoreIfNull(true)]
+        public ObjectId? ReasonId { get; set; }
 
         [BsonExtraElements]
         public BsonDocument ExtraElements { get; set; }

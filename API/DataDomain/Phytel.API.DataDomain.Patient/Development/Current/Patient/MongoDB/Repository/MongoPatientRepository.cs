@@ -95,8 +95,13 @@ namespace Phytel.API.DataDomain.Patient
                             TTLDate = null,
                             DeleteFlag = false,
                             LastUpdatedOn = System.DateTime.UtcNow,
-                            System = FormatSystem(pd.System)
+                            System = FormatSystem(pd.System),
+                            Status = (Status)pd.StatusId
                         };
+                        if(!string.IsNullOrEmpty(pd.ReasonId))
+                        {
+                            patient.ReasonId = ObjectId.Parse(pd.ReasonId);
+                        }
                         ctx.Patients.Collection.Insert(patient);
 
                         List<SearchFieldData> data = new List<SearchFieldData>();
@@ -229,7 +234,9 @@ namespace Phytel.API.DataDomain.Patient
                         Background = mePatient.Background,
                         ClinicalBackground = mePatient.ClinicalBackground,
                         LastFourSSN = mePatient.LastFourSSN,
-                        System = FormatSystem(mePatient.System)
+                        System = FormatSystem(mePatient.System),
+                        ReasonId = mePatient.ReasonId == null ? null : mePatient.ReasonId.ToString(),
+                        StatusId = (int)mePatient.Status
                     };
                     if (!string.IsNullOrEmpty(userId))
                     {
@@ -373,7 +380,9 @@ namespace Phytel.API.DataDomain.Patient
                                 Background = meP.Background,
                                 ClinicalBackground = meP.ClinicalBackground,
                                 LastFourSSN = meP.LastFourSSN,
-                                System = FormatSystem(meP.System)
+                                System = FormatSystem(meP.System),
+                                ReasonId = meP.ReasonId == null ? null : meP.ReasonId.ToString(),
+                                StatusId = (int)meP.Status
                             };
                             response.Add(data.Id, data);
                         }
@@ -604,6 +613,11 @@ namespace Phytel.API.DataDomain.Patient
                     {
                         updt.Set(MEPatient.ClinicalBackgroundProperty, request.PatientData.ClinicalBackground);
                     }
+                    if (!string.IsNullOrEmpty(request.PatientData.ReasonId))
+                    {
+                        updt.Set(MEPatient.ReasonProperty, ObjectId.Parse(request.PatientData.ReasonId));
+                    }
+                    if (request.PatientData.StatusId != 0) updt.Set(MEPatient.StatusProperty, request.PatientData.StatusId);
                     updt.Set(MEPatient.UpdatedByProperty, ObjectId.Parse(this.UserId));
                     updt.Set(MEPatient.VersionProperty, request.Version);
 

@@ -26,6 +26,8 @@ namespace Phytel.API.AppDomain.NG.DTO
         public int? LastFourSSN { get; set; }
         public string FullSSN { get; set; }
         public string System { get; set; }
+        public string ReasonId { get; set; }
+        public int StatusId { get; set; }
 
     }
 }
