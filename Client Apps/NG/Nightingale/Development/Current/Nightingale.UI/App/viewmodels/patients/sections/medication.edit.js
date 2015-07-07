@@ -387,7 +387,6 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
                 if(self.ignoreMedicationNameChange(self.lastMedName, medName)){                    
                     return false; 
                 }	
-				console.log('medication name changed: from:' +self.lastMedName +' to:' + (medName===null? 'null' : medName) )	
                 self.lastMedName = medName;                                 
 				self.screenMode(screenModes.NoMedSelected);
 				self.clearDropdowns();
@@ -416,7 +415,6 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
 													route){
 		    var isCustomValueCreated = null;			
 			if(mode === screenModes.AddNewMedValues){
-				console.log(' evaluating isCreateNewMedication in AddNewMedValues mode.');	
 				isCustomValueCreated = false;
 				if(isAddingNewRouteValue === true && self.isValidCustomOptionValue(route)){
 					isCustomValueCreated = true;			  					 
@@ -431,11 +429,9 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
 					//one or more of the dropdowns route/form/strength is turned to textbox -custom mode and it has a value.
 					//note - some other value could be in a textbox mode but empty.
 					thisMed.isCreateNewMedication(true); 
-					console.log(' isCreateNewMedication = true');			
 				}   
 				else{
 					thisMed.isCreateNewMedication(false);					  
-					console.log(' isCreateNewMedication = false');				  						
 				}
 			}			
 			return isCustomValueCreated;
@@ -520,12 +516,10 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
 			thisForm !== self.initialMedicationValues().form || 
 			thisRoute !== self.initialMedicationValues().route){
 				self.newPatientMedication().recalculateNDC(true);				
-				console.log('recalculateNDC set to true');
 				return true;
 		  }		  
 		  else{
 			  self.newPatientMedication().recalculateNDC(false);
-			  console.log('recalculateNDC set to false');
 			  return false;
 		  }	
 	  }).extend({ throttle: 200 });
@@ -605,7 +599,6 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
             $el.typeahead('val', suggestion.Text.toUpperCase());  //workaround: since typeahead is overriding the text on blur.            			
 			//flag to start a new medication map record                      
 			self.newPatientMedication().isCreateNewMedication(true);
-			console.log('new medication selected: isCreateNewMedication = true');			
 			
             //set the screen state:
             self.screenMode(screenModes.AddNewMed);
@@ -644,7 +637,6 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
 
     ctor.prototype.detached = function() { 
       var self = this;		
-		//console.log(' medication.edit - detached: isCreateNewMedication=' + self.newPatientMedication().isCreateNewMedication());
 		
         //dispose computeds:
         //ctor.prototype.freqHowOftens.dispose();

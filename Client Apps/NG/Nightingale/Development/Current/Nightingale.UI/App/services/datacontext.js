@@ -1657,19 +1657,16 @@ define(['services/session', 'services/jsonResultsAdapter', 'models/base', 'confi
 			function handleCreateNew(medication){
 				//continue saving:
 				if(medication.isCreateNewMedication() === true){
-					console.log('datacontext-saveMedication: isCreateNewMedication = true');				
 					//initialize medicationMap record and link by setting its id in familyId before saving this patient medication:
 					return medicationsService.initializeNewMedication(manager, name)
 						.then(function(data){
 							if(data && data.MedicationMap && data.MedicationMap.Id){ 
-								console.log('datacontext-saveMedication: isCreateNewMedication = true => got a familyId ' + data.MedicationMap.Id);
 								medication.familyId(data.MedicationMap.Id);                							
 								return saveIt(medication);							               
 							}
 						});
 				}
 				else{
-					console.log('datacontext-saveMedication: isCreateNewMedication = false');
 					return saveIt(medication);
 				}
 			}
@@ -1710,7 +1707,6 @@ define(['services/session', 'services/jsonResultsAdapter', 'models/base', 'confi
 			}
 			
 			function saveIt(medication){
-				console.log('datacontext-saveMedication: saveIt recalculateNDC=' + medication.recalculateNDC());
 				medication.entityAspect.acceptChanges();
 				// Serialize it
 				var serializedMedication = entitySerializer.serializePatientMedication(medication, manager);

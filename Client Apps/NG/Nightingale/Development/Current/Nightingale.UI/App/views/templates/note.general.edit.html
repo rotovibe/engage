@@ -1,0 +1,22 @@
+<div data-bind="with: note">
+	<!-- TODO: display validationErrors -->
+    <div class="column"> 
+        <section class="accordion">
+            <div class="row accordion-toggle">
+            </div>
+            <div class="accordion-content">
+                <div class="row pad-top">
+                    <h5 class="grey pad-bottom">Content</h5>
+					<textarea class="span12" data-bind="value: text, valueUpdate: 'afterkeydown', css: { 'invalid': (validationErrorsArray().indexOf('text') !== -1) }" 
+						class="string optional"	maxlength="255" type="text" style="height: 150px; resize: both;"/>
+                </div>
+                <div class="row pad-top">
+                    <div class="span6">
+                        <h5 class="grey pad-bottom">Program(s)</h5>
+						<div class="span10" data-bind="multiselect: { options: $parent.availablePrograms, values: programIds, idValue: 'id', text: 'name', label: 'programs', stringValue: programString }"></div>	
+                    </div>                    
+                </div>
+            </div>
+        </section>                        
+    </div>
+</div>

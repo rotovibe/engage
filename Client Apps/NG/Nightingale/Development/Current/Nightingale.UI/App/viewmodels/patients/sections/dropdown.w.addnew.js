@@ -148,7 +148,6 @@ define([],
 					else{
 						newValueText = newValue;
 					}
-					console.log(self.selectionLabel + ' changed to: ' + newValueText);
                 	if(newValueText === self.AddNewOptionText){                		
                         if(self.isCreateNew){
                             self.isCreateNew(true);  //change to text box 

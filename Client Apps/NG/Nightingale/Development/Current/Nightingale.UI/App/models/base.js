@@ -1,7 +1,7 @@
 ﻿// Register all of the models in the entity manager (initialize function) and provide other non-entity models
 
-define(['services/validatorfactory', 'services/customvalidators'],
-	function (validatorFactory, customValidators) {
+define(['services/validatorfactory', 'services/customvalidators', 'services/formatter'],
+	function (validatorFactory, customValidators, formatter) {
 
 	    var datacontext;
 	    var DT = breeze.DataType;
@@ -158,7 +158,8 @@ define(['services/validatorfactory', 'services/customvalidators'],
                     fullSSN: { dataType: "String" },
                     priority: { dataType: "String" },
                     flagged: { dataType: "Boolean" },
-                    twitterHandle: { dataType: "String" }
+                    twitterHandle: { dataType: "String" },
+					system: {dataType: "String" }
 				},
 				navigationProperties: {
 					provider: {
@@ -527,29 +528,14 @@ define(['services/validatorfactory', 'services/customvalidators'],
 					patient.saveChanges();
 				}
                 // Method to save changes to the patient
-			    patient.saveChanges = function () {
-    				checkDataContext();
-			        // // Get the patients id
-			        // var patientId = patient.id();
+			    patient.saveChanges = function () {					
+    				checkDataContext();			
+					if( patient.dOB() ){
+						//ensure zero padded date "MM/DD/YYYY" as in some scenarios it is possible to send "M/D/YYYY" :
+						patient.dOB( formatter.date.optimizeDate( patient.dOB() ) );										
+					}
 			        var thisPatient = patient;
-			        // var params = [
-           //                              new Parameter('Id', patientId),
-           //                              new Parameter('Priority', thisPatient.priority()),
-           //                              new Parameter('Gender', thisPatient.gender()),
-           //                              new Parameter('FirstName', thisPatient.firstName()),
-           //                              new Parameter('LastName', thisPatient.lastName()),
-           //                              new Parameter('PreferredName', thisPatient.preferredName()),
-           //                              new Parameter('Suffix', thisPatient.suffix()),
-           //                              new Parameter('DOB', thisPatient.dOB()),
-           //                              new Parameter('MiddleName', thisPatient.middleName()),
-           //                              new Parameter('Background', thisPatient.background())
-			        // ];
-			        // If they are trying to override the ssn,
-			        // if (thisPatient.fullSSN()) {
-			        // 	// Add it as a parameter
-           //              params.push(new Parameter('FullSSN', thisPatient.fullSSN()));
-			        // }
-			        // Go save the entity, pass in which parameters should be different
+			        
 			        datacontext.saveIndividual(thisPatient);
 			    }
                 // Method on the modal to cancel changes to the patient

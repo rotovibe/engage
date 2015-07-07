@@ -418,14 +418,13 @@ define(['services/formatter', 'services/dateHelper'],
 			//mask: optimize / auto complete year YYYY
 			$(element).on('blur', function(){
 				var date = $(element).val();
-				if(date){
+				if(date){					
 					date = formatter.date.optimizeDate( date );
 					date = formatter.date.optimizeYear( date );
 					if( date !== $(element).val() ){
 						$(element).val(date);
 					}	
-					if( !dateHelper.isSameDate(moment(observable()), moment(date)) ){
-						//assign only if changed:
+					if( observable() !== date ){
 						observable(date);
 					}					
 				}
@@ -463,13 +462,14 @@ define(['services/formatter', 'services/dateHelper'],
 		}
 		
 		/**
-		*	input date field that allows keyboard entry with masking.
+		*	input date field that allows keyboard entry with masking. intended for observable string only.
 		*	note this binding is to be used for non datepicker editable date (patient DOB).
 		*	@class date
+		*	@param valueAccessor() {String} observable 
 		*/
 		ko.bindingHandlers.date = {
 			init: function (element, valueAccessor, allBindingsAccessor, bindingContext) {
-				var observable = valueAccessor();
+				var observable = valueAccessor();	//made for an observable string date !
 				bindEditableDate( element, observable );				
 			}
 		};
@@ -692,7 +692,8 @@ define(['services/formatter', 'services/dateHelper'],
 			*/
             update: function (element, valueAccessor, allBindingsAccessor, bindingContext) {
                 var observable = valueAccessor(), $el = $(element);
-				var selectedDate = $el.datepicker("getDate") ? $el.datepicker("getDate").toString() : null;
+				var selectedDate = $el.datepicker("getDate");
+				selectedDate = selectedDate? selectedDate.toString() : null;
                 var datepickerMoment = moment.utc(selectedDate);
 				if( dateHelper.isValidDate(observable(), true) ){
 					var observableMoment = moment.utc(observable());
@@ -766,7 +767,59 @@ define(['services/formatter', 'services/dateHelper'],
 				}
 				if( observable ){
 					observable.extend({ notify: 'always' });
-				}				
+				}	
+				
+				//mask time keyboard entry:
+				$(element).attr('maxlength', 8);	
+				$(element).attr('placeholder', "HH:mm AM/PM");
+				$(element).attr('title', "HH:mm AM/PM");
+				
+				//masking: prevent typing non numerics:
+				$(element).on('keypress', function(e){
+					var key = e.which || e.keyCode;
+					if( (key < 48 || key > 57) && key !== 47 && key !== 8 && key !== 9 && key !== 37 && key !== 39 && key !== 46 && !(key == 118 && e.ctrlKey) && key !== 97 && key !== 65 && key !== 109 && key !== 77 && key !== 112 && key !== 80 && key !== 58){	//exclude 47(/), 116 (=F5), 9(=tab) , 37,39 (<-, ->)	\\&& key !== 8, 8(=bkspc) and also AMamPMpm (97,65,109,77,112,80), ':' (58)
+						e.preventDefault();												
+					}
+				});
+				
+				//masking: 
+				$(element).on('keydown paste', function(e){					
+					setTimeout(function(){						
+						var key = e.which || e.keyCode;						
+						var timeStr = $(element).val();						
+						if( e.shiftKey || e.ctrlKey || key == 37 || key == 39 || key == 9 || key == 35 || key == 36 || key === 46 || key == 8 ){ //exclude <- , ->, Tab, home, end //|| key == 8 (bkspc)
+							if( timeStr ){
+								return;
+							}
+						}							
+						var position = element.selectionStart;
+						if( timeStr ){ 
+							//do the mask:
+							if( e.type === 'paste'){
+								timeStr = timeStr.replace( /\D/g, '');	//clean any separators before re-formatting
+							}
+							var newTime = timeStr;
+							if( position == timeStr.length || e.type === 'paste' || timeStr.replace( /\D/g, '').length >= 8 ){
+								newTime = formatter.date.optimizeTime(timeStr);
+							}						
+							if( newTime && newTime !== timeStr || e.type === 'paste'){
+								$(element).val(newTime);
+								//observable(newTime);								
+							}
+						}
+						else{
+							//content cleared or deleted - zero time when the field was empty (12:00 AM will be the time on the observable!)
+							//	note: at this point - we do not invalidate when empty.
+							observable = valueAccessor();
+							observableMoment = moment(observable());
+							if( observableMoment.isValid() && observableMoment.hour() !== 0 || observableMoment.minute() !== 0 ){
+								observableMoment.hour(0);
+								observableMoment.minute(0);
+								observable( observableMoment.toISOString() )
+							}
+						}
+					}, 5);
+				});	
 				/**
 				*			defines a subscription callback to timepicker changes, in order to sync the timepicker time 
 				*			onto the given data-binded observable 
@@ -846,8 +899,10 @@ define(['services/formatter', 'services/dateHelper'],
             update: function (element, valueAccessor, allBindingsAccessor) {
                 var value = ko.utils.unwrapObservable(valueAccessor());
                 var thisElement = $(element);
-                var thisMoment = new moment(value).format('HH:mm');
-                thisElement[0].value = thisMoment;
+                var thisMoment = new moment(value);
+				if( thisMoment.isValid() ){
+					thisElement[0].value = thisMoment.format('HH:mm');
+				}                
             }
         };
 

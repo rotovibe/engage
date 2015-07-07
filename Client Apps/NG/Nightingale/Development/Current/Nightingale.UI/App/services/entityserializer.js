@@ -1,4 +1,5 @@
-﻿define([], function () {
+﻿define([], 
+	function () {
 
     // Function to capitalize the first letter of a string
     function capitalize(s) {
@@ -733,7 +734,7 @@
             .from('fakePath')
             .where('id', '==', patient.id())
             .toType('Patient')
-            .select('id, priority, gender, firstName, lastName, preferredName, suffix, dOB, middleName, background, clinicalBackground, fullSSN');
+            .select('id, priority, gender, firstName, lastName, preferredName, suffix, dOB, middleName, background, clinicalBackground, fullSSN, system');
         var results = manager.executeQueryLocally(patientQuery);
         var unwrappedIndividual = results[0];
 
@@ -743,11 +744,12 @@
         thisIndividual.FirstName = unwrappedIndividual.firstName;
         thisIndividual.LastName = unwrappedIndividual.lastName;
         thisIndividual.PreferredName = unwrappedIndividual.preferredName;
-        thisIndividual.Suffix = unwrappedIndividual.suffix;
+        thisIndividual.Suffix = unwrappedIndividual.suffix;		
         thisIndividual.DOB = unwrappedIndividual.dOB;
         thisIndividual.MiddleName = unwrappedIndividual.middleName;
         thisIndividual.Background = unwrappedIndividual.background;
 		thisIndividual.ClinicalBackground = unwrappedIndividual.clinicalBackground;
+		thisIndividual.System = unwrappedIndividual.system;
 		
         if (unwrappedIndividual.fullSSN) {
         // Add it as a parameter

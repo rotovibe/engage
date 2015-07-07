@@ -225,6 +225,9 @@
 /// <reference path="../app/services/datehelper.js" />
 /// <reference path="../app/services/formatter.js" />
 /// <reference path="../app/viewmodels/patients/sections/clinicalbackground.js" />
+/// <reference path="../app/viewmodels/templates/datetimepicker.js" />
+/// <reference path="../app/viewmodels/templates/note.general.edit.js" />
+/// <reference path="../app/viewmodels/templates/note.touchpoint.edit.js" />
  
  / / /   < r e f e r e n c e   p a t h = " b r e e z e . d e b u g . j s "   / >  
  

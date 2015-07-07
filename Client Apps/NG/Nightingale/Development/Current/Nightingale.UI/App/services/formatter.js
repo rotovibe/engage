@@ -174,7 +174,7 @@ define([],
 		};
 		
 		/**
-		*
+		*	masking time string keyboard entry. intended as helper fo jqtimepicker
 		*	@method optimizeTime
 		*	@param	time {String}
 		*/
