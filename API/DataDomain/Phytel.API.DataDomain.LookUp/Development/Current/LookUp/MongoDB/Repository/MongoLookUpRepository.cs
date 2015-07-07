@@ -1169,6 +1169,7 @@ namespace Phytel.API.DataDomain.LookUp
                                         lookupList.Add(data);
                                     }       
                                 }
+                                lookupList = lookupList.OrderBy(s => s.Name).ToList();
                             }
                         }
                     }
