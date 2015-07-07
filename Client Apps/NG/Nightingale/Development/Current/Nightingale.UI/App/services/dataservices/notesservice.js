@@ -33,22 +33,33 @@
             checkDataContext();
 
             // Create an end point to use
-            var endPoint = new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'Patient/' + serializedNote.PatientId + '/Note/Insert', 'Note');
+			var endPoint;
+			var method = 'POST'
+			if( !isNaN(serializedNote.Id) && Number(serializedNote.Id) < 1 ){
+				//insert: (new notes have negative int id's)
+				endPoint = new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'Patient/' + serializedNote.PatientId + '/Note/Insert', 'Note');					
+			}
+			else{
+				//update:
+				endPoint = new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'Patient/' + serializedNote.PatientId + '/Note/' + String(serializedNote.Id) , 'PatientNote');	
+				method = 'PUT'; 
+			}
+            
 
             // If there is a contact card,
             if (serializedNote) {
 
                 // Create a payload from the JS object
                 var payload = {};
-
-                payload.Note = serializedNote;
+				
+                payload[endPoint.EntityType] = serializedNote;	//insert: "Note" ; update: "PatientNote"
                 payload = JSON.stringify(payload);
 
                 // Query to post the results
                 var query = breeze.EntityQuery
                     .from(endPoint.ResourcePath)
                     .withParameters({
-                        $method: 'POST',
+                        $method: method,
                         $encoding: 'JSON',
                         $data: payload
                     });

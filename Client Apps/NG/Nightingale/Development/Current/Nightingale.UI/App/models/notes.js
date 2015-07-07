@@ -1,6 +1,6 @@
 // Register all of the user related models in the entity manager (initialize function) and provide other non-entity models
-define(['services/session'],
-	function (session) {
+define(['services/session', 'services/dateHelper'],
+	function (session, dateHelper) {
 
 	    var datacontext;
 
@@ -224,6 +224,56 @@ define(['services/session'],
 	                	return note.text();
 	                }
                 });
+				
+				note.contactedOnErrors = ko.observableArray([]);	//datetimepicker validation errors
+				note.validationErrors = ko.observableArray([]);	
+				note.isValid = ko.computed( function(){
+					var type = note.type();
+					var typeName = type ? type.name().toLowerCase() : null;
+					var hasErrors = false;
+					var noteErrors = [];
+					var contactedOn = note.contactedOn();
+					var contactedOnErrors = note.contactedOnErrors();
+					var text = note.text();
+					if( !text ){
+						noteErrors.push({ PropName: 'text', Message: 'Content is required' });
+						hasErrors = true;
+					}
+					switch( typeName ){
+						case 'touchpoint':
+						{
+							if( contactedOn ){								
+								if( contactedOnErrors.length > 0 ){	
+									//datetimepicker validation errors:
+									ko.utils.arrayForEach( contactedOnErrors, function(error){
+										noteErrors.push({ PropName: 'contactedOn', Message: 'Date/Time of Contact ' + error.Message});										
+										hasErrors = true;
+									});						
+								}
+							}							
+							break;
+						}		
+						case null:						
+						case undefined:
+						{
+							noteErrors.push({ PropName: 'Type', Message: 'Type is required '});
+							hasErrors = true;
+						}
+						default:
+						{							
+							break;
+						}
+					}
+					note.validationErrors(noteErrors);
+					return !hasErrors;
+				});
+				note.validationErrorsArray = ko.computed( function(){
+					var thisArray = [];
+					ko.utils.arrayForEach( note.validationErrors(), function(error){
+						thisArray.push( error.PropName );
+					});
+					return thisArray;
+				});
 		    }
 
 		    function todoInitializer (todo) {

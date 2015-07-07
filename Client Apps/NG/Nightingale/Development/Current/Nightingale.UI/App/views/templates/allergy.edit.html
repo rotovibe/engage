@@ -39,13 +39,25 @@
             Start Date:
         </div>
         <div class="span3 pad-left">
-        	<input data-bind="value: startDate, datepickerEditable: startDate, datepickerOptions: { maxDate: '+0' }, datepickerDynamicOptions: { recalc: [endDate]  }, css: { 'invalid': (validationErrorsArray().indexOf('startDate') !== -1) }, valueUpdate: 'afterkeydown'" type="text" class="datepicker">
+			<!-- ko compose: { model: 'viewmodels/templates/datetimepicker', activationData:
+				{
+					observableDateTime: startDate, dateErrors: startDateErrors, showInvalid: setInvalidStartDate, 
+					maxDate: 'today', datepickerOptions:{ maxDate: '+0' }, datepickerDynamicOptions: {}
+				}
+			} -->
+			<!-- /ko -->		
         </div>
         <div class="span2 align-right grey">
             End Date:
         </div>
         <div class="span3 pad-left">
-        	<input data-bind="value: endDate, datepickerEditable: endDate, datepickerDynamicOptions: { minDate: startDate, recalc: [startDate] }, datepickerOptions: { maxDate: '+0' }, css: { 'invalid': (validationErrorsArray().indexOf('endDate') !== -1) }, valueUpdate: 'afterkeydown' " type="text" class="datepicker">
+				<!-- ko compose: { model: 'viewmodels/templates/datetimepicker', activationData:
+					{
+						observableDateTime: endDate, dateErrors: endDateErrors, showInvalid: setInvalidEndDate, 
+						datepickerOptions:{maxDate: '+0'}, datepickerDynamicOptions: {minDate: startDate}
+					}
+				} -->
+				<!-- /ko -->		
         </div>
     </div>
     <div class="row pad-top"></div>

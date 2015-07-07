@@ -36,8 +36,8 @@ define(['services/session', 'services/validatorfactory', 'services/customvalidat
 		    		displayId: { dataType: "String" },
 		    		patientId: { dataType: "String" },
 		    		units: { dataType: "String" },
-		    		startDate: { dataType: "String" },
-		    		endDate: { dataType: "String" },
+		    		startDate: { dataType: "DateTime" },
+		    		endDate: { dataType: "DateTime" },
 		    		groupId: { dataType: "String" },
 		    		deleteFlag: { dataType: "Boolean" },
 		    		source: { dataType: "String" },
@@ -211,7 +211,7 @@ define(['services/session', 'services/validatorfactory', 'services/customvalidat
 		    		return thisValue;
 		    	});
 				patObs.validationErrors = ko.observableArray([]);
-				
+				patObs.startDateErrors = ko.observableArray([]);	//datetimepicker validation errors
 				/**
 				*	indicate if the observation needs to be saved. note that except for problems,
 				*	empty observations display as valid but do not need to be saved.
@@ -240,6 +240,7 @@ define(['services/session', 'services/validatorfactory', 'services/customvalidat
 			    patObs.isValid = ko.computed( function() {					
 					var values = patObs.values();
 					var startDate = patObs.startDate();
+					var startDateErrors = patObs.startDateErrors();
 					var hasErrors = patObs.entityAspect.hasValidationErrors;
 					var type = patObs.type()? patObs.type().name() : null;
 					switch( type ){
@@ -257,11 +258,7 @@ define(['services/session', 'services/validatorfactory', 'services/customvalidat
 							break;
 						case 'Vitals':
 							hasErrors = validateGeneralObservation();
-							break;
-						// case 'Allergies':
-							// break;
-						// case 'Medications':
-							// break;
+							break;						
 					}
 					
 					return !hasErrors;
@@ -272,7 +269,7 @@ define(['services/session', 'services/validatorfactory', 'services/customvalidat
 					*/
 					function validateGeneralObservation(){
 						patObs.hasActualValues(false);
-						var obsErrors = [];
+						var obsErrors = [];						
 						// if( hasErrors ){
 							// //breeze validation errors (not in use for now)
 							// var errors = patObs.entityAspect.getValidationErrors();
@@ -312,12 +309,13 @@ define(['services/session', 'services/validatorfactory', 'services/customvalidat
 							//value/s exist therefore we must have a star date
 							obsErrors.push({ PropName: 'startDate', Message: patObs.name() + ' must have a Date' });
 							hasErrors = true;
-						}	
-						var context = {maxDate: 'today'};
-						var startDateError = dateHelper.isInvalidDate(startDate, context);
-						if( startDateError != null ){
-							obsErrors.push({ PropName: 'startDate', Message: patObs.name() + ' Date ' + startDateError.Message});
-							hasErrors = true;
+						}							
+						if( startDateErrors.length > 0 ){						
+							//datetimepicker validation errors:
+							ko.utils.arrayForEach( startDateErrors, function(error){
+								obsErrors.push({ PropName: 'startDate', Message: patObs.name() + ' Date ' + error.Message});								
+								hasErrors = true;
+							});						
 						}
 						patObs.validationErrors(obsErrors);
 						return hasErrors;
@@ -328,12 +326,13 @@ define(['services/session', 'services/validatorfactory', 'services/customvalidat
 					*	@method validateProblem
 					*/
 					function validateProblem(){
-						var obsErrors = [];
-						var context = {maxDate: 'today'};
-						var startDateError = dateHelper.isInvalidDate(startDate, context);
-						if( startDateError != null ){
-							obsErrors.push({ PropName: 'startDate', Message: patObs.name() + ' Date ' + startDateError.Message});
-							hasErrors = true;
+						var obsErrors = [];						
+						if( startDateErrors.length > 0 ){
+							//datetimepicker validation errors:
+							ko.utils.arrayForEach( startDateErrors, function(error){
+								obsErrors.push({ PropName: 'startDate', Message: patObs.name() + ' Date ' + error.Message});								
+								hasErrors = true;
+							});						
 						}
 						patObs.validationErrors(obsErrors);
 						return hasErrors;
@@ -374,6 +373,16 @@ define(['services/session', 'services/validatorfactory', 'services/customvalidat
 			        });
 			        return thisArray;
 			    });
+				
+				/**
+				*	computed. to allow forcing the datetimepicker control to set the start date as invalid.
+				*	this is needed when the date is valid but range is wrong.
+				*	@method patObs.setInvalidStartDate
+				*/
+				patObs.setInvalidStartDate = ko.computed( function(){
+					var validationErrorsArray = patObs.validationErrorsArray();
+					return (validationErrorsArray && validationErrorsArray.indexOf('startDate') !== -1);  
+				}); 
 		    }
 
 		    function observationInitializer(addtlObs) {

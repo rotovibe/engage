@@ -46,7 +46,7 @@ define([ 'services/formatter'],
 			var theMoment = moment(value, ["MM-DD-YYYY","MM/DD/YYYY","M/D/YYYY"], true);
 			if( !theMoment.isValid() || value.search(/^\d{1,2}\/\d{1,2}\/\d{4}/) === -1 ){
 				//short format failed
-				theMoment = moment(value, ["YYYY-MM-DDTHH:mm:ss.SSSSZ"], true);	//iso 8601
+				theMoment = moment(value, ["YYYY-MM-DDTHH:mm:ss.SSSSZ", "YYYY-MM-DDTHH:mm:ssZ"], true);	//iso 8601
 				if( !theMoment.isValid() ){
 					//iso 8601 failed
 					var formattedValue = formatter.date.optimizeDate( value );
@@ -100,5 +100,10 @@ define([ 'services/formatter'],
 			return momentDest;
 		};
 		
+		dateHelper.setTimeValue = function( hour, minute, momentDest ){
+			momentDest.hour( hour );
+			momentDest.minute( minute );
+			return momentDest;
+		};
 		return dateHelper;
 });

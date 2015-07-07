@@ -175,7 +175,25 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
 	  self.isAddingNewFrequencyValue = ko.observable(false);
       self.isCreateNewEnabled = ko.observable(false);	  
       self.isDropdownEnabled = ko.observable(false);
-	  self.isNewMedicationName = ko.observable(false);	  
+	  self.isNewMedicationName = ko.observable(false);
+	  
+		/**
+		*	computed. to allow forcing the datetimepicker control to set the start date as invalid.
+		*	this is needed when the date is valid but range is wrong.
+		*	@method setInvalidStartDate
+		*/
+	  self.setInvalidStartDate = ko.computed( function(){
+			return (!self.newPatientMedication() || self.newPatientMedication() && self.newPatientMedication().validationErrorsArray().indexOf('startDate') !== -1);  
+	  }); 
+		/**
+		*	computed. to allow forcing the datetimepicker control to set the end date as invalid.
+		*	this is needed when the date is valid but range is wrong.
+		*	@method setInvalidEndDate
+		*/
+	  self.setInvalidEndDate = ko.computed( function(){
+			return (!self.newPatientMedication() || self.newPatientMedication() && self.newPatientMedication().validationErrorsArray().indexOf('endDate') !== -1);  
+	  }); 
+	  
 	  if( self.newPatientMedication() && self.newPatientMedication().name() && self.newPatientMedication().canSave() ){
 		//a med is selected, going back to medications screen  
 		self.lastMedName = self.newPatientMedication().name();

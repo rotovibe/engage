@@ -29,7 +29,7 @@ define(['durandal/system', 'durandal/app', 'durandal/viewLocator', 'durandal/com
         router: true,
         dialog: true,
         widget: {
-            kinds: ['singleselect', 'multiselect', 'chsnsingle', 'chsnsingledark']
+            kinds: ['singleselect', 'multiselect', 'chsnsingle', 'chsnsingledark']	//, 'datetimepicker'
         }
     });
 

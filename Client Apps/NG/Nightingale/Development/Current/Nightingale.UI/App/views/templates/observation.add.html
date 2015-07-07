@@ -6,7 +6,13 @@
         <input type="text" data-bind="value: computedValue().value, valueUpdate: 'afterkeydown', css: { 'invalid': (validationErrorsArray().indexOf('value') !== -1) }">
     </div>
     <div class="span3">
-        <input class="datepicker" type="text" data-bind="value: startDate, datepickerEditable: startDate, datepickerOptions: { maxDate: '+0' }, css: { 'invalid': (validationErrorsArray().indexOf('startDate') !== -1) }, valueUpdate: 'afterkeydown' ">
+		<!-- ko compose: { model: 'viewmodels/templates/datetimepicker', activationData:
+			{
+				observableDateTime: startDate, dateErrors: startDateErrors, showInvalid: setInvalidStartDate, 
+				maxDate: 'today', datepickerOptions:{ maxDate: '+0' }, datepickerDynamicOptions: {}
+			}
+		} -->
+		<!-- /ko -->
     </div>
     <div class="span4">
         <label>

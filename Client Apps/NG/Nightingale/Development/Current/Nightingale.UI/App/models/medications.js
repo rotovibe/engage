@@ -28,8 +28,8 @@ define(['services/session', 'services/dateHelper'],
 		            route: { dataType: "String" },
 		            form: { dataType: "String" },
 		            deleteFlag: { dataType: "Boolean" },
-					startDate: { dataType: "String" },
-					endDate: { dataType: "String" },
+					startDate: { dataType: "DateTime" },
+					endDate: { dataType: "DateTime" },
 					createdOn: { dataType: "DateTime" },
 					updatedOn: { dataType: "DateTime" },
 		            statusId: { dataType: "String" },
@@ -178,30 +178,34 @@ define(['services/session', 'services/dateHelper'],
 						return false;
 					}
 		        }
-				
+				medication.startDateErrors = ko.observableArray([]);	//datetimepicker validation errors
+				medication.endDateErrors = ko.observableArray([]);	//datetimepicker validation errors 
 				medication.validationErrors = ko.observableArray([]);
 				medication.isValid = ko.computed( function() {
 					var hasErrors = false;
 					var medicationErrors = [];
 					var startDate = medication.startDate();
 					var endDate = medication.endDate();
-					//var context = {maxDate: 'today'};
-					if( startDate ){						
-						var startDateError = dateHelper.isInvalidDate(startDate);
-						if( startDateError != null ){
-							medicationErrors.push({ PropName: 'startDate', Message: medication.name() + ' Start Date ' + startDateError.Message});
+					var startDateErrors = medication.startDateErrors();
+					var endDateErrors = medication.endDateErrors();
+					if( startDateErrors.length > 0 ){
+						//datetimepicker validation errors: 
+						ko.utils.arrayForEach( startDateErrors, function(error){
+							medicationErrors.push({ PropName: 'startDate', Message: medication.name() + ' Start Date ' + error.Message});							
 							hasErrors = true;
-						}
+						});						
 					}
-					if( endDate ){						
-						var endDateError = dateHelper.isInvalidDate(endDate);
-						if( endDateError != null ){
-							medicationErrors.push({ PropName: 'endDate', Message: medication.name() + ' End Date ' + endDateError.Message});
-							hasErrors = true;
-						}
+					if( endDate ){
+						if( endDateErrors.length > 0 ){	
+							//datetimepicker validation errors: 
+							ko.utils.arrayForEach( endDateErrors, function(error){
+								medicationErrors.push({ PropName: 'endDate', Message: medication.name() + ' End Date ' + error.Message});
+								hasErrors = true;
+							});
+						}						
 						if( startDate && !hasErrors ){
 							//startDate - endDate range: both dates exist and valid:
-							if( moment( startDate, "MM/DD/YYYY", true ).isAfter( moment( endDate, "MM/DD/YYYY", true ) ) ){
+							if( moment(startDate).isAfter( moment( endDate ) ) ){
 								medicationErrors.push({ PropName: 'endDate', Message: medication.name() + ' End Date must be on or after: ' + moment( startDate ).format("MM/DD/YYYY") });
 								medicationErrors.push({ PropName: 'startDate', Message: medication.name() + ' Start Date must be on or before: ' + moment( endDate ).format("MM/DD/YYYY") });
 								hasErrors = true;

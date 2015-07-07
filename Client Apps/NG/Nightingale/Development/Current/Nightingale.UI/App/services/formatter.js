@@ -172,5 +172,33 @@ define([],
 				return result;
 			}
 		};
+		
+		/**
+		*
+		*	@method optimizeTime
+		*	@param	time {String}
+		*/
+		formatter.date.optimizeTime = function( time ){
+			var newTime = time;
+			if( time ){
+				var timeParts = time.split(':');				
+				if( timeParts.length >= 1 ){
+					var part = timeParts[0];
+					part = part.replace( /\D/g, '');					
+					if( part.length === 1 && timeParts.length > 1){
+						newTime = '0' + part + ':';											
+					}
+					else if( part.length === 2 ){
+						newTime = part + ':';					
+					}					
+					if( timeParts.length > 1 ){			
+						var part = timeParts[1];					
+						newTime = newTime + timeParts[1];
+					}
+				}				
+			}
+			return newTime;
+		};
+		
 		return formatter;
 });

@@ -38,6 +38,9 @@
             self.isOpen = ko.observable(data.open);
             self.column = column;
             self.isFullScreen = ko.observable(false);
+			self.showEditButton = ko.computed( function(){ 
+				return data.showEdit? data.showEdit() : false; 
+			});			
         }
 
         function column(name, open, widgets) {
@@ -50,12 +53,12 @@
             self.widgets = ko.observableArray();
             $.each(widgets, function (index, item) {
                 self.widgets.push(new widget(item, self))
-            });
+            });			
         }
 
         var columns = ko.observableArray([
             new column('historyList', false, [{ name: 'History', path: 'patients/widgets/history.list.html', open: true }]),
-            new column('details', false, [{ name: 'Details', path: 'patients/widgets/history.detail.html', open: true }])
+            new column('details', false, [{ name: 'Details', path: 'patients/widgets/history.detail.html', open: true, showEdit: activeNote }])
         ]);
 
         var computedOpenColumn = ko.computed({
@@ -82,7 +85,9 @@
                 }
             }
         });
-
+		
+		var noteModalShowing = ko.observable(true);
+		
         var vm = {
             activate: activate,
             selectedPatient: selectedPatient,
@@ -90,10 +95,11 @@
             computedOpenColumn: computedOpenColumn,
             activeNote: activeNote,
             setActiveNote: setActiveNote,
+			editClickFunc: editNote,
             setOpenColumn: setOpenColumn,
             minimizeThisColumn: minimizeThisColumn,
             maximizeThisColumn: maximizeThisColumn,
-            toggleFullScreen: toggleFullScreen,
+            toggleFullScreen: toggleFullScreen,			
             groups: groups,
             notes: notes,
             attached: attached,
@@ -163,7 +169,32 @@
         function setActiveNote(sender) {
             activeNote(sender);
         }
-
+		//edit note:
+	    function ModalEntity(note) {
+			var self = this;
+			self.note = note;
+			// Object containing parameters to pass to the modal
+			self.activationData = { note: self.note };
+			self.canSave = ko.computed(function () {
+				return self.note.isValid(); 
+				return true; 
+			});
+		}
+		function editNote(sender){						    
+			var modalEntity = ko.observable(new ModalEntity(activeNote()));
+			var saveOverride = function () {					  
+			  datacontext.saveNote(modalEntity().note);
+			};
+			var cancelOverride = function () {
+			  var noteCancel = modalEntity().note;
+			  noteCancel.entityAspect.rejectChanges();			  
+			};
+			var msg = 'Edit ' + activeNote().type().name() + ' Note';				  
+			var modal = new modelConfig.modal(msg, modalEntity, 'viewmodels/patients/notes/index', noteModalShowing, saveOverride, cancelOverride);
+			noteModalShowing(true);
+			shell.currentModal(modal);				
+		}
+		
         function setOpenColumn(sender) {
             openColumn(sender);
         }
