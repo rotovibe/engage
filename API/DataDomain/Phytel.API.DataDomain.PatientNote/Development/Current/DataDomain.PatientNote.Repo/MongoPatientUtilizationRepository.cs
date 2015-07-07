@@ -63,7 +63,7 @@ namespace Phytel.API.DataDomain.PatientNote.Repo
                         Context.PatientUtilizations.Collection.Insert(meN);
 
                         AuditHelper.LogDataAudit(this.UserId,
-                            MongoCollectionName.PatientNote.ToString(),
+                            MongoCollectionName.PatientUtilization.ToString(),
                             meN.Id.ToString(),
                             DataAuditType.Insert,
                             ContractDBName);
@@ -108,7 +108,7 @@ namespace Phytel.API.DataDomain.PatientNote.Repo
                     ctx.PatientUtilizations.Collection.Update(q, update);
 
                     AuditHelper.LogDataAudit(this.UserId, 
-                                            MongoCollectionName.PatientNote.ToString(), 
+                                            MongoCollectionName.PatientUtilization.ToString(), 
                                             utilId, 
                                             DataAuditType.Delete, 
                                             ContractDBName);
@@ -205,49 +205,101 @@ namespace Phytel.API.DataDomain.PatientNote.Repo
                 using (PatientNoteMongoContext ctx = new PatientNoteMongoContext(ContractDBName))
                 {
                     var q = MB.Query<MEPatientUtilization>.EQ(b => b.Id, ObjectId.Parse(pn.Id));
-                    
+
                     var uv = new List<MB.UpdateBuilder>();
                     uv.Add(MB.Update.Set(MEPatientUtilization.UpdatedByProperty, ObjectId.Parse(this.UserId)));
                     uv.Add(MB.Update.Set(MEPatientUtilization.AdmittedProperty, pn.Admitted));
                     uv.Add(MB.Update.Set(MEPatientUtilization.LastUpdatedOnProperty, DateTime.UtcNow));
-                    if (pn.PatientId != null) uv.Add(MB.Update.Set(MEPatientUtilization.PatientIdProperty, ObjectId.Parse(pn.PatientId)));
-                    if (pn.VisitType != null) uv.Add(MB.Update.Set(MEPatientUtilization.VisitTypeProperty, ObjectId.Parse(pn.VisitType)));
                     if (pn.OtherType != null) uv.Add(MB.Update.Set(MEPatientUtilization.OtherTypeProperty, pn.OtherType));
                     if (pn.AdmitDate != null) uv.Add(MB.Update.Set(MEPatientUtilization.AdmitDateProperty, pn.AdmitDate));
                     if (pn.DischargeDate != null) uv.Add(MB.Update.Set(MEPatientUtilization.DischargeDateProperty, pn.DischargeDate));
-                    if (pn.Location != null) uv.Add(MB.Update.Set(MEPatientUtilization.LocationProperty, pn.Location));
                     if (pn.OtherLocation != null) uv.Add(MB.Update.Set(MEPatientUtilization.OtherLocationProperty, pn.OtherLocation));
                     if (pn.Reason != null) uv.Add(MB.Update.Set(MEPatientUtilization.ReasonProperty, pn.Reason));
-                    if (pn.Disposition != null) uv.Add(MB.Update.Set(MEPatientUtilization.DispositionProperty, pn.Disposition));
                     if (pn.OtherDisposition != null) uv.Add(MB.Update.Set(MEPatientUtilization.OtherDispositionProperty, pn.OtherDisposition));
-                    if (pn.SourceId != null) uv.Add(MB.Update.Set(MEPatientUtilization.SourceIdProperty, ObjectId.Parse(pn.SourceId)));
                     if (pn.PSystem != null) uv.Add(MB.Update.Set(MEPatientUtilization.SystemProperty, pn.PSystem));
-                    if (pn.NoteType != null) uv.Add(MB.Update.Set(MEPatientUtilization.NoteTypeProperty, ObjectId.Parse(pn.NoteType)));
+
+                    if (!string.IsNullOrEmpty(pn.PatientId))
+                    {
+                        uv.Add(MB.Update.Set(MEPatientUtilization.PatientIdProperty, ObjectId.Parse(pn.PatientId)));
+                    }
+                    else
+                    {
+                        uv.Add(MB.Update.Set(MEPatientUtilization.PatientIdProperty, BsonNull.Value));
+                    }
+
+                    if (!string.IsNullOrEmpty(pn.VisitType))
+                    {
+                        uv.Add(MB.Update.Set(MEPatientUtilization.VisitTypeProperty, ObjectId.Parse(pn.VisitType)));
+                    }
+                    else
+                    {
+                        uv.Add(MB.Update.Set(MEPatientUtilization.VisitTypeProperty, BsonNull.Value));
+                    }
+
+                    if (!string.IsNullOrEmpty(pn.Location))
+                    {
+                        uv.Add(MB.Update.Set(MEPatientUtilization.LocationProperty, ObjectId.Parse(pn.Location)));
+                    }
+                    else
+                    {
+                        uv.Add(MB.Update.Set(MEPatientUtilization.LocationProperty, BsonNull.Value));
+                    }
+
+                    if (!string.IsNullOrEmpty(pn.Disposition))
+                    {
+                        uv.Add(MB.Update.Set(MEPatientUtilization.DispositionProperty, ObjectId.Parse(pn.Disposition)));
+                    }
+                    else
+                    {
+                        uv.Add(MB.Update.Set(MEPatientUtilization.DispositionProperty, BsonNull.Value));
+                    }
+
+                    if (!string.IsNullOrEmpty(pn.SourceId))
+                    {
+                        uv.Add(MB.Update.Set(MEPatientUtilization.SourceIdProperty, ObjectId.Parse(pn.SourceId)));
+                    }
+                    else
+                    {
+                        uv.Add(MB.Update.Set(MEPatientUtilization.SourceIdProperty, BsonNull.Value));
+                    }
+
+                    if (!string.IsNullOrEmpty(pn.NoteType))
+                    {
+                        uv.Add(MB.Update.Set(MEPatientUtilization.NoteTypeProperty, ObjectId.Parse(pn.NoteType)));
+                    }
+                    else
+                    {
+                        uv.Add(MB.Update.Set(MEPatientUtilization.NoteTypeProperty, BsonNull.Value));
+                    }
 
                     if (pn.ProgramIds != null && pn.ProgramIds.Count > 0)
                     {
-                        uv.Add(MB.Update.SetWrapped<List<ObjectId>>(MEPatientUtilization.ProgramsProperty, Helper.ConvertToObjectIdList(pn.ProgramIds)));
+                        uv.Add(MB.Update.SetWrapped<List<ObjectId>>(MEPatientUtilization.ProgramsProperty,
+                            Helper.ConvertToObjectIdList(pn.ProgramIds)));
                     }
                     else
                     {
                         uv.Add(MB.Update.Set(MEPatientUtilization.ProgramsProperty, BsonNull.Value));
                     }
-                   
-                    
+
+
                     IMongoUpdate update = MB.Update.Combine(uv);
                     ctx.PatientUtilizations.Collection.Update(q, update);
 
                     AuditHelper.LogDataAudit(this.UserId,
-                                            MongoCollectionName.PatientNote.ToString(),
-                                            pn.Id,
-                                            DataAuditType.Update,
-                                            ContractDBName);
+                        MongoCollectionName.PatientUtilization.ToString(),
+                        pn.Id,
+                        DataAuditType.Update,
+                        ContractDBName);
 
                     result = true;
                 }
                 return result as object;
             }
-            catch (Exception) { throw; }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         public void CacheByID(List<string> entityIDs)
@@ -308,7 +360,7 @@ namespace Phytel.API.DataDomain.PatientNote.Repo
                     ctx.PatientNotes.Collection.Update(q, update);
 
                     AuditHelper.LogDataAudit(this.UserId,
-                                            MongoCollectionName.PatientNote.ToString(),
+                                            MongoCollectionName.PatientUtilization.ToString(),
                                             request.PatientNoteId.ToString(),
                                             DataAuditType.UndoDelete,
                                             request.ContractNumber);
@@ -337,7 +389,7 @@ namespace Phytel.API.DataDomain.PatientNote.Repo
                     ctx.PatientNotes.Collection.Update(q, update);
 
                     AuditHelper.LogDataAudit(this.UserId,
-                                            MongoCollectionName.PatientNote.ToString(),
+                                            MongoCollectionName.PatientUtilization.ToString(),
                                             request.NoteId.ToString(),
                                             DataAuditType.Update,
                                             request.ContractNumber);

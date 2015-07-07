@@ -173,6 +173,7 @@
     <Compile Include="Medication\IMedicationManager.cs" />
     <Compile Include="Notes\UtilizationManager.cs" />
     <Compile Include="Notes\Visitors\HistoryListVisitable.cs" />
+    <Compile Include="Notes\Visitors\TakeModifier.cs" />
     <Compile Include="Notes\Visitors\OrderModifier.cs" />
     <Compile Include="Notes\Visitors\PatientUtilizationVisitor.cs" />
     <Compile Include="Notes\Visitors\PatientNoteVisitor.cs" />

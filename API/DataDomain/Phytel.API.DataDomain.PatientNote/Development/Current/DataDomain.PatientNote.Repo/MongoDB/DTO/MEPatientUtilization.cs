@@ -47,13 +47,11 @@ namespace Phytel.API.DataDomain.PatientNote.Repo
         public bool Admitted { get; set; }
 
         public const string AdmitDateProperty = "admtdt";
-
         [BsonElement(AdmitDateProperty)]
         [BsonIgnoreIfNull(true)]
         public DateTime? AdmitDate { get; set; }
 
         public const string DischargeDateProperty = "disdt";
-
         [BsonElement(DischargeDateProperty)]
         [BsonIgnoreIfNull(true)]
         public DateTime? DischargeDate { get; set; }
@@ -74,31 +72,26 @@ namespace Phytel.API.DataDomain.PatientNote.Repo
         public string OtherLocation { get; set; }
 
         public const string ReasonProperty = "rsn";
-
         [BsonElement(ReasonProperty)]
         [BsonIgnoreIfNull(true)]
         public string Reason { get; set; }
 
         public const string DispositionProperty = "disp";
-
         [BsonElement(DispositionProperty)]
         [BsonIgnoreIfNull(true)]
         public ObjectId? Disposition { get; set; }
 
         public const string OtherDispositionProperty = "odisp";
-
         [BsonElement(OtherDispositionProperty)]
         [BsonIgnoreIfNull(true)]
         public string OtherDisposition { get; set; }
 
         public const string SourceIdProperty = "src";
-
         [BsonElement(SourceIdProperty)]
         [BsonIgnoreIfNull(true)]
         public ObjectId? SourceId { get; set; }
 
         public const string ProgramsProperty = "progs";
-
         [BsonElement(ProgramsProperty)]
         [BsonIgnoreIfNull(true)]
         public List<ObjectId> ProgramIds { get; set; }

@@ -69,18 +69,17 @@ namespace Phytel.API.AppDomain.NG.Notes
         {
             try
             {
-                List<PatientNote> result = null;
                 var hlist = new HistoryListVisitable(request);
                 hlist.Accept(new PatientNoteVisitor());
                 hlist.Accept(new PatientUtilizationVisitor());
-                //hlist.Modify(new OrderModifier());
-
-                // do some filtering or something.
-                result = hlist.GetList().OrderByDescending(r => r.CreatedOn).ToList();
-                result = result.Take(request.Count).ToList();
-                return result;
+                hlist.Modify(new OrderModifier());
+                hlist.Modify(new TakeModifier(request.Count));
+                return hlist.GetList();
             }
-            catch (WebServiceException ex) { throw ex; }
+            catch (WebServiceException ex)
+            {
+                throw ex;
+            }
         }
 
         public PostPatientNoteResponse InsertPatientNote(PostPatientNoteRequest request)

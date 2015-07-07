@@ -39,7 +39,7 @@ namespace Phytel.API.AppDomain.NG.Notes.Visitors
 
         public void Modify(ModifierBase modifier)
         {
-            modifier.Modify(ref _histList);
+            _histList = modifier.Modify(_histList);
         }
 
         public List<PatientNote> GetList()

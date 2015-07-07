@@ -16,13 +16,13 @@ namespace Phytel.API.AppDomain.NG.Notes.Visitors
             {
                 ContractNumber = ContractNumber,
                 PatientId = PatientId,
-                //Token = Token,
                 UserId = UserId,
                 Version = Version,
                 Count = Count
             });
 
-            result.AddRange(response.Utilizations.Select(u => Mapper.Map<PatientNote>(u)));
+            if (response.Utilizations != null)
+                result.AddRange(response.Utilizations.Select(Mapper.Map<PatientNote>));
 
             return result;
         }

@@ -140,6 +140,12 @@ namespace Phytel.API.AppDomain.NG.Service
                 result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
+                    if (string.IsNullOrEmpty(request.Utilization.PatientId))
+                        throw new ArgumentException("Missing patientid");
+
+                    if (string.IsNullOrEmpty(request.Utilization.VisitType))
+                        throw new ArgumentException("Missing visittypeid");
+
                     request.UserId = result.UserId;
                     response = UtilManager.InsertPatientUtilization(request);
                 }
@@ -176,6 +182,16 @@ namespace Phytel.API.AppDomain.NG.Service
                 result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
+                    // refactor this validators to a pattern
+                    if (string.IsNullOrEmpty(request.Utilization.Id))
+                        throw new ArgumentException("Missing utilization id");
+
+                    if (string.IsNullOrEmpty(request.Utilization.PatientId))
+                        throw new ArgumentException("Missing patientid");
+
+                    if (string.IsNullOrEmpty(request.Utilization.VisitType))
+                        throw new ArgumentException("Missing visittypeid");
+
                     request.UserId = result.UserId;
                     response = UtilManager.UpdatePatientUtilization(request);
                 }

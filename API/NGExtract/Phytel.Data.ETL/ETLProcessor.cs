@@ -623,6 +623,66 @@ namespace Phytel.Data.ETL
                     throw;
                 }
 
+                try
+                {
+                    if (BsonClassMap.IsClassMapRegistered(typeof(UtilizationLocation)) == false)
+                    {
+                        BsonClassMap.RegisterClassMap<UtilizationLocation>();
+                    }
+                }
+                catch
+                {
+                    throw;
+                }
+
+                try
+                {
+                    if (BsonClassMap.IsClassMapRegistered(typeof(UtilizationSource)) == false)
+                    {
+                        BsonClassMap.RegisterClassMap<UtilizationSource>();
+                    }
+                }
+                catch
+                {
+                    throw;
+                }
+
+                try
+                {
+                    if (BsonClassMap.IsClassMapRegistered(typeof(VisitType)) == false)
+                    {
+                        BsonClassMap.RegisterClassMap<VisitType>();
+                    }
+                }
+                catch
+                {
+                    throw;
+                }
+
+                try
+                {
+                    if (BsonClassMap.IsClassMapRegistered(typeof(Disposition)) == false)
+                    {
+                        BsonClassMap.RegisterClassMap<Disposition>();
+                    }
+                }
+                catch
+                {
+                    throw;
+                }
+
+                try
+                {
+                    if (BsonClassMap.IsClassMapRegistered(typeof(Reason)) == false)
+                    {
+                        BsonClassMap.RegisterClassMap<Reason>();
+                    }
+                }
+                catch
+                {
+                    throw;
+                }
+
                 #endregion
             }
             catch (Exception ex)
