@@ -12,6 +12,7 @@
         public string Gender { get; set; }
         public string ReasonId { get; set; }
         public int StatusId { get; set; }
+        public string StatusSystemSource { get; set; }
         public string DOB { get; set; }
         public double Version { get; set; }
         public string DisplayPatientSystemId { get; set; }

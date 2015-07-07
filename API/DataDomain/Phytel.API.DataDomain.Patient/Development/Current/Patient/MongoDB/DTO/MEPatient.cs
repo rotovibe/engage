@@ -36,6 +36,7 @@ namespace Phytel.API.DataDomain.Patient.DTO
         public const string FullSSNProperty = "fssn";
         public const string SystemProperty = "sys";
         public const string StatusProperty = "sts";
+        public const string StatusSystemSourceProperty = "stssys";
         public const string ReasonProperty = "rsn";
         public const string VersionProperty = "v";
         public const string UpdatedByProperty = "uby";
@@ -111,6 +112,10 @@ namespace Phytel.API.DataDomain.Patient.DTO
         [BsonElement(ReasonProperty)]
         [BsonIgnoreIfNull(true)]
         public ObjectId? ReasonId { get; set; }
+
+        [BsonElement(StatusSystemSourceProperty)]
+        [BsonIgnoreIfNull(true)]
+        public string StatusSystemSource { get; set; }
 
         [BsonExtraElements]
         public BsonDocument ExtraElements { get; set; }

@@ -96,7 +96,8 @@ namespace Phytel.API.DataDomain.Patient
                             DeleteFlag = false,
                             LastUpdatedOn = System.DateTime.UtcNow,
                             System = FormatSystem(pd.System),
-                            Status = (Status)pd.StatusId
+                            Status = (Status)pd.StatusId,
+                            StatusSystemSource  = pd.StatusSystemSource
                         };
                         if(!string.IsNullOrEmpty(pd.ReasonId))
                         {
@@ -235,6 +236,7 @@ namespace Phytel.API.DataDomain.Patient
                         ClinicalBackground = mePatient.ClinicalBackground,
                         LastFourSSN = mePatient.LastFourSSN,
                         System = FormatSystem(mePatient.System),
+                        StatusSystemSource = mePatient.StatusSystemSource,
                         ReasonId = mePatient.ReasonId == null ? null : mePatient.ReasonId.ToString(),
                         StatusId = (int)mePatient.Status
                     };
@@ -381,6 +383,7 @@ namespace Phytel.API.DataDomain.Patient
                                 ClinicalBackground = meP.ClinicalBackground,
                                 LastFourSSN = meP.LastFourSSN,
                                 System = FormatSystem(meP.System),
+                                StatusSystemSource = meP.StatusSystemSource,
                                 ReasonId = meP.ReasonId == null ? null : meP.ReasonId.ToString(),
                                 StatusId = (int)meP.Status
                             };
@@ -622,6 +625,10 @@ namespace Phytel.API.DataDomain.Patient
                         updt.Set(MEPatient.ReasonProperty, BsonNull.Value);
                     }
                     updt.Set(MEPatient.StatusProperty, request.PatientData.StatusId);
+                    if (request.PatientData.StatusSystemSource != null)
+                    {
+                        updt.Set(MEPatient.StatusSystemSourceProperty, request.PatientData.StatusSystemSource);
+                    }
                     updt.Set(MEPatient.UpdatedByProperty, ObjectId.Parse(this.UserId));
                     updt.Set(MEPatient.VersionProperty, request.Version);
 

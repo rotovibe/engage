@@ -28,6 +28,7 @@ namespace Phytel.API.AppDomain.NG.DTO
         public string System { get; set; }
         public string ReasonId { get; set; }
         public int StatusId { get; set; }
+        public string StatusSystemSource { get; set; }
 
     }
 }
