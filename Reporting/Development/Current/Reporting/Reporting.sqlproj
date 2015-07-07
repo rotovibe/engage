@@ -396,6 +396,13 @@
     <None Include="Scripts\Releases\1.0.2\ENG-725_Rollback.sql" />
     <None Include="Scripts\Releases\1.0.2\ENG-1149.sql" />
     <None Include="Scripts\Releases\1.0.2\ENG-1149_Rollback.sql" />
+    <Build Include="Scripts\Releases\1.0.2\ENG-1288.sql" />
+    <Build Include="Scripts\Releases\1.0.2\ENG-1288_rollback.sql" />
+    <Build Include="Scripts\Releases\1.0.2\ENG-1289.sql" />
+    <Build Include="Scripts\Releases\1.0.2\ENG-1289_Rollback.sql" />
+    <Build Include="Scripts\Releases\1.0.2\RM-15538.sql" />
+    <Build Include="Scripts\Releases\1.0.2\RM-15538_rollback.sql" />
+    <Build Include="Scripts\Releases\1.0.2\ENG_940.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Scripts\CareBridge_RPT_Scripts.sql" />

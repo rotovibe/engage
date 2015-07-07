@@ -45,11 +45,13 @@ BEGIN
 	DELETE RPT_PatientAllergyReaction
 	-- patient medsupps
 	DELETE RPT_PatientMedSuppPhClass
+	DELETE RPT_MedPharmClass
 	DELETE RPT_PatientMedSuppNDC
 	DELETE RPT_PatientMedSupp	
 	DELETE RPT_Medication
 	Delete RPT_MedicationMap
 	Delete RPT_PatientMedFrequency
+	Delete RPT_CustomPatientMedFrequency
 	
 	-- patient goal
 	DELETE RPT_PatientGoalProgram
@@ -89,6 +91,7 @@ BEGIN
 	DELETE RPT_MedSupTypeLookUp
 	DELETE RPT_FreqHowOftenLookUp
 	DELETE RPT_FreqWhenLookUp
+	DELETE RPT_NoteTypeLookUp
 	DELETE RPT_UserRecentList
 	DELETE [RPT_User]
 	
@@ -135,6 +138,8 @@ BEGIN
 	DBCC CHECKIDENT ('RPT_MedicationMap', RESEED, 0)
 	DBCC CHECKIDENT ('RPT_Medication', RESEED, 0)
 	DBCC CHECKIDENT ('RPT_PatientMedFrequency', RESEED, 0)
+	DBCC CHECKIDENT ('RPT_CustomPatientMedFrequency', RESEED, 0)
+	DBCC CHECKIDENT ('RPT_MedPharmClass', RESEED,0)
 	
 	DBCC CHECKIDENT ('RPT_AllergyTypeLookUp', RESEED, 0)
 	DBCC CHECKIDENT ('RPT_AllergySourceLookUp', RESEED, 0)
@@ -143,6 +148,7 @@ BEGIN
 	DBCC CHECKIDENT ('RPT_MedSupTypeLookUp', RESEED, 0)
 	DBCC CHECKIDENT ('RPT_FreqHowOftenLookUp', RESEED, 0)
 	DBCC CHECKIDENT ('RPT_FreqWhenLookUp', RESEED, 0)
+	DBCC CHECKIDENT ('RPT_NoteTypeLookUp', RESEED, 0)
 
 	DBCC CHECKIDENT ('RPT_ObjectiveCategory', RESEED, 0)
 	DBCC CHECKIDENT ('RPT_ObjectiveLookUp', RESEED, 0)
@@ -212,18 +218,18 @@ CREATE TABLE [dbo].[RPT_Medication](
 [MedId] [int] IDENTITY(1,1) NOT NULL,
 [MongoId] [varchar](50) NOT NULL,
 [ProductId] [varchar](100) NULL,
-[NDC] [varchar](900) NULL,
-[FullName] [varchar](5000) NULL,
-[ProprietaryName] [varchar](900) NULL,
-[ProprietaryNameSuffix] [varchar](900) NULL,
+[NDC] [varchar](20) NULL,
+[FullName] [varchar](300) NULL,
+[ProprietaryName] [varchar](300) NULL,
+[ProprietaryNameSuffix] [varchar](200) NULL,
 [StartDate] [varchar](100) NULL,
 [EndDate] [varchar](100) NULL,
-[SubstanceName] [varchar](5000) NULL,
-[Route] [varchar](5000) NULL,
-[Form] [varchar](5000) NULL,
+[SubstanceName] [varchar](3000) NULL,
+[Route] [varchar](200) NULL,
+[Form] [varchar](100) NULL,
 [FamilyId] [varchar](50) NULL,
 [Unit] [varchar](5000) NULL,
-[Strength] [varchar](5000) NULL,
+[Strength] [varchar](900) NULL,
 [Version] [float] NULL,
 [DeleteFlag] [varchar](50) NULL,
 [TTLDate] [datetime] NULL,
@@ -261,7 +267,7 @@ GO
 CREATE TABLE [dbo].[RPT_MedPharmClass](
 [PhmCId] [int] IDENTITY(1,1) NOT NULL,
 [MedMongoId] [varchar](50) NULL,
-[PharmClass] [varchar](900) NULL,
+[PharmClass] [varchar](150) NULL,
 	
  CONSTRAINT [PK_MedPharmClass] PRIMARY KEY CLUSTERED 
 (
@@ -290,15 +296,17 @@ GO
 CREATE TABLE [dbo].[RPT_MedicationMap](
 [MedMapId] [int] IDENTITY(1,1) NOT NULL,
 [MongoId] [varchar](50) NOT NULL,
-[FullName] [varchar](5000) NULL,
-[SubstanceName] [varchar](5000) NULL,
-[Route] [varchar](5000) NULL,
-[Form] [varchar](5000) NULL,
-[Strength] [varchar](5000) NULL,
+[FullName] [varchar](300) NULL,
+[SubstanceName] [varchar](3000) NULL,
+[Route] [varchar](200) NULL,
+[Form] [varchar](100) NULL,
+[Strength] [varchar](2000) NULL,
 [Version] [float] NULL,
 [DeleteFlag] [varchar](50) NULL,
---[TTLDate] [datetime] NULL,
---[LastUpdatedOn] [datetime] NULL,
+[Custom] [varchar](50) NULL,
+[Verified] [varchar](50) NULL,
+[TTLDate] [datetime] NULL,
+[LastUpdatedOn] [datetime] NULL,
 [MongoRecordCreatedBy] [varchar](50) NULL,
 [RecordCreatedOn] [datetime] NULL,
 [MongoUpdatedBy] [varchar](50) NULL,
@@ -355,6 +363,33 @@ CREATE TABLE [dbo].[RPT_PatientMedSupp](
 )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON, FILLFACTOR = 90) ON [PRIMARY]
 ) ON [PRIMARY]
 
+GO
+
+IF EXISTS (SELECT name FROM sys.indexes
+			WHERE name = N'IX_RPT_PatientMedSupp_Compound') 
+	DROP INDEX IX_RPT_PatientMedSupp_Compound ON RPT_PatientMedSupp; 
+GO
+
+CREATE NONCLUSTERED INDEX IX_RPT_PatientMedSupp_Compound 
+	ON [RPT_PatientMedSupp] 
+	(
+		[MongoId]
+		,[PatientId]
+		,[MongoPatientId]
+		,[MongoFrequencyId]
+		,[MongoFamilyId]
+		,[Name]
+		--,[Category]
+		--,[MongoTypeId]
+		,[TypeId]
+		--,[Status]
+		--,[Strength]
+		,[Route]
+		,[Form]
+		--,[FreqQuantity]
+		--,[MongoSourceId]
+		,[SourceId]
+	) ON [PRIMARY]; 
 GO
 
 
@@ -539,6 +574,333 @@ CREATE TABLE [dbo].[RPT_PatientMedFrequency](
 )
 GO
 
-select * from RPT_PatientMedFrequency
-select * from RPT_PatientMedSupp
-select * from RPT_MedPharmClass
+/*** RPT_PatientMedFrequency ***/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RPT_CustomPatientMedFrequency]') AND type in (N'U'))
+	DROP TABLE [dbo].[RPT_CustomPatientMedFrequency]
+GO
+
+CREATE TABLE [dbo].[RPT_CustomPatientMedFrequency](
+	[CPMFreqId] [int] IDENTITY(1,1) NOT NULL,
+	[MongoId] [varchar](100) NOT NULL,
+	[Name] [varchar](300) NULL,
+	[MongoPatientId] [VARCHAR](50) NULL,
+	[Version] [float] NULL,
+	[MongoUpdatedBy] [VARCHAR](50) NULL,
+	[DeleteFlag] [VARCHAR](50) NULL,
+	[TTLDate] [DATETIME] NULL,
+	[LastUpdatedOn] [DATETIME] NULL,
+	[MongoRecordCreatedBy] [VARCHAR](50) NULL,
+	[RecordCreatedOn] [DATETIME] NULL
+	
+)
+GO
+
+/*** [add non clustered indexes to medication, map, and phcls] ***/
+IF EXISTS (SELECT name FROM sys.indexes
+			WHERE name = N'IX_RPT_Medication_FamilyId') 
+	DROP INDEX IX_RPT_Medication_FamilyId ON RPT_Medication; 
+GO
+
+CREATE NONCLUSTERED INDEX IX_RPT_Medication_FamilyId 
+	ON RPT_Medication 
+	(
+		[FamilyId]
+		,[ProductId]
+		,[NDC]
+		,[ProprietaryName]
+		--,[ProprietaryNameSuffix]
+		,[StartDate]
+		,[EndDate]
+		,[Version]
+		,[DeleteFlag]
+		,[TTLDate]
+		,[LastUpdatedOn]
+		,[MongoRecordCreatedBy]
+		,[RecordCreatedOn]
+		,[MongoUpdatedBy]		
+		--,[Unit]		
+	) ON [PRIMARY]; 
+GO
+
+IF EXISTS (SELECT name FROM sys.indexes
+			WHERE name = N'IX_RPT_MedicationMap_MongoId') 
+	DROP INDEX IX_RPT_MedicationMap_MongoId ON RPT_MedicationMap; 
+GO
+
+CREATE NONCLUSTERED INDEX IX_RPT_MedicationMap_MongoId 
+	ON RPT_MedicationMap 
+	(
+		[MongoId]
+	--,[FullName]
+	--,[SubstanceName]
+	,[Route]
+	,[Form]
+	--,[Strength]
+	,[Version]
+	,[DeleteFlag]
+	,[Custom]
+	,[Verified]
+	,[TTLDate]
+	,[LastUpdatedOn]
+	,[MongoRecordCreatedBy]
+	,[RecordCreatedOn]
+	,[MongoUpdatedBy]		
+	) ON [PRIMARY]; 
+GO
+
+IF EXISTS (SELECT name FROM sys.indexes
+			WHERE name = N'IX_RPT_MedPharmClass_MedMongoId') 
+	DROP INDEX IX_RPT_MedPharmClass_MedMongoId ON RPT_MedPharmClass; 
+GO
+
+CREATE NONCLUSTERED INDEX IX_RPT_MedPharmClass_MedMongoId
+	ON RPT_MedPharmClass ([MedMongoId], [PharmClass]) ON [PRIMARY]; 
+GO
+
+
+/*** RPT_PatientMedFrequency ***/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RPT_Flat_MedicationMap_Dim]') AND type in (N'U'))
+	DROP TABLE [RPT_Flat_MedicationMap_Dim]
+GO
+
+CREATE TABLE [dbo].[RPT_Flat_MedicationMap_Dim](
+	[MMId] [int] IDENTITY(1,1) NOT NULL,	
+	[MongoId] [varchar](50) NOT NULL,
+	[ProductId] [varchar](50) NULL,
+	[NDC] [varchar](20) NULL,
+	[ProprietaryName] [varchar](300) NULL,
+	[ProprietaryNameSuffix] [varchar](200) NULL,
+	[StartDate] [varchar](25) NULL,
+	[EndDate] [varchar](25) NULL,
+	[Unit] [varchar](2000) NULL,
+	[FullName] [varchar](300) NULL,
+	[SubstanceName] [varchar](3000) NULL,
+	[Route] [varchar](200) NULL,
+	[Form] [varchar](50) NULL,
+	[Strength] [varchar](2000) NULL,
+	[Custom] [varchar](10) NULL,
+	[Verified] [varchar](10) NULL,
+	[PharmClass] [varchar](100) NULL,
+	[Version] [float] NULL,
+	[MongoUpdatedBy] [VARCHAR](50) NULL,
+	[DeleteFlag] [VARCHAR](10) NULL,
+	[TTLDate] [DATETIME] NULL,
+	[LastUpdatedOn] [DATETIME] NULL,
+	[MongoRecordCreatedBy] [VARCHAR](50) NULL,
+	[RecordCreatedOn] [DATETIME] NULL,
+	[Med_Version] [float] NULL,
+	[Med_DeleteFlag] [VARCHAR](10) NULL,
+	[Med_TTLDate] [VARCHAR](50) NULL,
+	[Med_LastUpdatedOn]  [DATETIME] NULL,
+	[Med_MongoRecordCreatedBy]  [VARCHAR](50) NULL,
+	[Med_RecordCreatedOn]  [DATETIME] NULL,
+	[Med_MongoUpdatedBy] [VARCHAR](50) NULL
+)
+GO
+
+IF (OBJECT_ID('[spPhy_RPT_Flat_MedicationMap_Dim]') IS NOT NULL)
+  DROP PROCEDURE spPhy_RPT_Flat_MedicationMap_Dim
+GO
+
+CREATE PROCEDURE [dbo].[spPhy_RPT_Flat_MedicationMap_Dim]
+AS
+BEGIN
+	TRUNCATE TABLE RPT_Flat_MedicationMap_Dim
+	INSERT INTO RPT_Flat_MedicationMap_Dim
+	(
+		[MongoId]
+		,[ProductId]
+		,[NDC]
+		,[ProprietaryName]
+		,[ProprietaryNameSuffix]
+		,[StartDate]
+		,[EndDate]
+		,[Unit]
+		,[FullName]
+		,[SubstanceName]
+		,[Route]
+		,[Form]
+		,[Strength]
+		,[Version]
+		,[DeleteFlag]
+		,[Custom]
+		,[Verified]
+		,[TTLDate]
+		,[LastUpdatedOn]
+		,[MongoRecordCreatedBy]
+		,[RecordCreatedOn]
+		,[MongoUpdatedBy]
+		,[PharmClass] 
+		,[Med_Version]
+		,[Med_DeleteFlag]
+		,[Med_TTLDate]
+		,[Med_LastUpdatedOn]
+		,[Med_MongoRecordCreatedBy]
+		,[Med_RecordCreatedOn]
+		,[Med_MongoUpdatedBy]
+	)
+	select
+		mm.[MongoId]
+		,m.[ProductId]
+		,m.[NDC]
+		,m.[ProprietaryName]
+		,m.[ProprietaryNameSuffix]
+		,m.[StartDate]
+		,m.[EndDate]
+		,m.[Unit]
+		,mm.[FullName]
+		,mm.[SubstanceName]
+		,mm.[Route]
+		,mm.[Form]
+		,mm.[Strength]
+		,mm.[Version]
+		,mm.[DeleteFlag]
+		,mm.[Custom]
+		,mm.[Verified]
+		,mm.[TTLDate]
+		,mm.[LastUpdatedOn]
+		,(SELECT PreferredName FROM RPT_User WHERE MongoId = mm.[MongoRecordCreatedBy]) as [MongoRecordCreatedBy]
+		,mm.[RecordCreatedOn]
+		,(SELECT PreferredName FROM RPT_User WHERE MongoId = mm.[MongoUpdatedBy]) as [MongoUpdatedBy]
+		,pc.[PharmClass] 
+		,m.[Version] AS [Med_Version]
+		,m.[DeleteFlag] AS [Med_DeleteFlag]
+		,m.[TTLDate] AS [Med_TTLDate]
+		,m.[LastUpdatedOn] AS [Med_LastUpdatedOn]
+		,(SELECT PreferredName FROM RPT_User WHERE MongoId = m.[MongoRecordCreatedBy]) as [Med_MongoRecordCreatedBy]
+		,m.[RecordCreatedOn] AS [Med_RecordCreatedOn]
+		,(SELECT PreferredName FROM RPT_User WHERE MongoId = m.[MongoUpdatedBy]) as [Med_MongoUpdatedBy]		
+	from 
+		RPT_MedicationMap as [mm] WITH (NOLOCK) 
+		LEFT JOIN RPT_Medication as [m] WITH (NOLOCK) ON mm.MongoId = m.FamilyId
+		LEFT OUTER JOIN RPT_MedPharmClass as [pc] WITH (NOLOCK) ON pc.MedMongoId = m.MongoId
+	WHERE
+		mm.DeleteFlag = 'False'
+		AND mm.TTLDate IS NULL
+END
+GO
+
+/*** [RPT_Flat_PatientMedSup_Dim] ***/
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RPT_Flat_PatientMedSup_Dim]') AND type in (N'U'))
+	DROP TABLE [RPT_Flat_PatientMedSup_Dim]
+GO
+
+CREATE TABLE [RPT_Flat_PatientMedSup_Dim](
+ [PMSId] [int] IDENTITY(1,1) NOT NULL	 
+,[Name] [VARCHAR](200) NULL
+,[MongoId] [VARCHAR](50) NULL
+,[MongoPatientId] [VARCHAR](50) NULL
+,[Frequency] [VARCHAR](300) NULL
+,[MongoFamilyId] [VARCHAR](50) NULL
+,[Category] [VARCHAR](200) NULL
+,[Type] [VARCHAR](300) NULL
+,[Status] [VARCHAR](200) NULL
+,[Strength] [VARCHAR](300) NULL
+,[Route] [VARCHAR](300) NULL
+,[Form] [VARCHAR](300) NULL
+,[FreqQuantity] [VARCHAR](200) NULL
+,[Source] [VARCHAR](max) NULL
+,[StartDate] [VARCHAR](25) NULL
+,[EndDate] [VARCHAR](25) NULL
+,[Reason] [VARCHAR](5000) NULL
+,[Notes] [VARCHAR](5000) NULL
+,[PrescribedBy] [VARCHAR](900) NULL
+,[SystemName] [VARCHAR](300) NULL
+,[UpdatedBy] [VARCHAR](100) NULL
+,[LastUpdatedOn] [DATETIME] NULL
+,[RecordCreatedBy] [VARCHAR](100) NULL
+,[RecordCreatedOn] [DATETIME] NULL
+,[Version] [float] NULL
+,[TTLDate] [VARCHAR](25) NULL
+,[Delete] [VARCHAR](10) NULL
+,[PharmClass] [VARCHAR](200) NULL
+,[NDC] [VARCHAR](50) NULL
+,[Custom] [VARCHAR](50) NULL
+,[Verified] [VARCHAR](10) NULL
+)
+GO
+
+IF (OBJECT_ID('[spPhy_RPT_Flat_PatientMedSup_Dim]') IS NOT NULL)
+  DROP PROCEDURE [spPhy_RPT_Flat_PatientMedSup_Dim]
+GO
+
+CREATE PROCEDURE [spPhy_RPT_Flat_PatientMedSup_Dim]
+AS
+BEGIN
+	TRUNCATE TABLE [RPT_Flat_PatientMedSup_Dim]
+	INSERT INTO [RPT_Flat_PatientMedSup_Dim]
+	(
+		[Name]
+		,[MongoId]
+		,[MongoPatientId]
+		,[Frequency]
+		,[MongoFamilyId]
+		,[Category]
+		,[Type]
+		,[Status]
+		,[Strength]
+		,[Route]
+		,[Form]
+		,[FreqQuantity]
+		,[Source]
+		,[StartDate]
+		,[EndDate]
+		,[Reason]
+		,[Notes]
+		,[PrescribedBy]
+		,[SystemName]
+		,[UpdatedBy]
+		,[LastUpdatedOn]
+		,[RecordCreatedBy] 
+		,[RecordCreatedOn]
+		,[Version]
+		,[TTLDate]
+		,[Delete]
+		,[PharmClass]
+		,[NDC]
+		,[Custom]
+		,[Verified]
+	)
+	select 
+		pm.Name
+		,pm.[MongoId]
+		,pm.[MongoPatientId]
+		, (COALESCE( (select TOP 1 Name from RPT_PatientMedFrequency where MongoId = pm.[MongoFrequencyId]), (select TOP 1  Name from RPT_CustomPatientMedFrequency  where MongoId = pm.[MongoFrequencyId]) )) as [Frequency]
+		,pm.[MongoFamilyId]
+		,pm.[Category]
+		,(select Name from RPT_MedSupTypeLookUp where MongoId = pm.[MongoTypeId]) as [Type]
+		,pm.[Status]
+		,pm.[Strength]
+		,pm.[Route]
+		,pm.[Form]
+		,pm.[FreqQuantity]
+		,(select Name from RPT_AllergySourceLookUp where MongoId = pm.[MongoSourceId]) as [Source]
+		,pm.[StartDate]
+		,pm.[EndDate]
+		,pm.[Reason]
+		,pm.[Notes]
+		,pm.[PrescribedBy]
+		,pm.[SystemName]
+		,(SELECT PreferredName FROM RPT_User WHERE MongoId = pm.[MongoUpdatedBy])as [UpdatedBy]
+		,pm.[LastUpdatedOn]
+		,(SELECT PreferredName FROM RPT_User WHERE MongoId = pm.[MongoRecordCreatedBy]) as [RecordCreatedBy] 
+		,pm.[RecordCreatedOn]
+		,pm.[Version]
+		,pm.[TTLDate]
+		,pm.[Delete]
+		,pc.PharmClass
+		,n.NDC
+		,mm.Custom
+		, mm.Verified
+	from 
+		RPT_PatientMedSupp pm
+		left outer join RPT_PatientMedSuppNDC n on pm.MongoId = n.MongoPatientMedSuppId
+		left outer join RPT_PatientMedSuppPhClass pc on pm.MongoId = pc.MongoPatientMedSuppId
+		left outer join RPT_MedicationMap mm on (pm.Name = mm.FullName and pm.Route = mm.Route and pm.Form = mm.Form and pm.Strength = mm.Strength) 
+		or (pm.Name = mm.FullName and pm.Route = mm.Route and pm.Form
+		 = mm.Form) or (pm.Name = mm.FullName and pm.Route = mm.Route) or (pm.Name = mm.FullName)
+	WHERE
+		pm.TTLDate IS NULL
+		AND pm.[Delete] = 'False'
+END
+GO	
