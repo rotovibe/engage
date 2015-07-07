@@ -5759,7 +5759,8 @@ div.time-picker li.selected {
 
 .validation-summary {
   color: red;
-  margin: 10px; }
+  margin-top: 10px;
+  margin-bottom: 10px; }
   .validation-summary h3, .validation-summary nav.pagination span, nav.pagination .validation-summary span {
     color: red; }
 
