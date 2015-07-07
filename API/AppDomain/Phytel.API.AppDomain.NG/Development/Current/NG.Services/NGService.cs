@@ -423,8 +423,14 @@ namespace Phytel.API.AppDomain.NG.Service
             }
             finally
             {
+                List<string> patientIds = null;
+                if (!string.IsNullOrEmpty(response.Id))
+                {
+                    patientIds = new List<string>();
+                    patientIds.Add(response.Id);
+                }
                 if (result != null)
-                    AuditHelper.LogAuditData(request, result.SQLUserId, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
+                    AuditHelper.LogAuditData(request, result.SQLUserId, patientIds, System.Web.HttpContext.Current.Request, request.GetType().Name);
             }
             
             return response; 
