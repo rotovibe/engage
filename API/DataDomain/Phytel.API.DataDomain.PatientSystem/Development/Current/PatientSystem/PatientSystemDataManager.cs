@@ -1,6 +1,4 @@
 using Phytel.API.DataDomain.PatientSystem.DTO;
-using System.Data.SqlClient;
-using Phytel.API.DataDomain.PatientSystem;
 using System;
 using System.Collections.Generic;
 
@@ -8,41 +6,59 @@ namespace Phytel.API.DataDomain.PatientSystem
 {
     public class PatientSystemDataManager : IPatientSystemDataManager
     {
-        public IPatientSystemRepositoryFactory Factory { get; set; }
+        IPatientSystemRepositoryFactory Factory { get; set; }
+
+        public PatientSystemDataManager(IPatientSystemRepositoryFactory repo)
+        {
+            Factory = repo;
+        }
         
         public GetPatientSystemDataResponse GetPatientSystem(GetPatientSystemDataRequest request)
         {
             GetPatientSystemDataResponse result = new GetPatientSystemDataResponse();
-            IPatientSystemRepository repo = Factory.GetRepository(request, RepositoryType.PatientSystem);
-            result.PatientSystem = repo.FindByID(request.PatientSystemID) as PatientSystemData;
-
-            return result;
+            try
+            {
+                var repo = Factory.GetRepository(RepositoryType.PatientSystem);
+                result.PatientSystem = repo.FindByID(request.PatientSystemID) as PatientSystemData;
+                return result;
+            }
+            catch (Exception ex) { throw ex; }
         }
 
         public GetPatientSystemsDataResponse GetPatientSystems(GetPatientSystemsDataRequest request)
         {
             GetPatientSystemsDataResponse result = new GetPatientSystemsDataResponse();
-            IPatientSystemRepository repo = Factory.GetRepository(request, RepositoryType.PatientSystem);
-            result.PatientSystems = repo.FindByPatientId(request.PatientId) as List<PatientSystemData>;
-            return result;
+            try
+            {
+                var repo = Factory.GetRepository(RepositoryType.PatientSystem);
+                result.PatientSystems = repo.FindByPatientId(request.PatientId) as List<PatientSystemData>;
+                return result;
+            }
+            catch (Exception ex) { throw ex; }
         }
 
         public PutPatientSystemDataResponse InsertPatientSystem(PutPatientSystemDataRequest request)
         {
-            PutPatientSystemDataResponse result = new PutPatientSystemDataResponse();
-            IPatientSystemRepository repo = Factory.GetRepository(request, RepositoryType.PatientSystem);
-
-            result.PatientSystemId = repo.Insert(request) as string;
-            return result;
+            try
+            {
+                PutPatientSystemDataResponse result = new PutPatientSystemDataResponse();
+                var repo = Factory.GetRepository(RepositoryType.PatientSystem);
+                result.PatientSystemId = repo.Insert(request) as string;
+                return result;
+            }
+            catch (Exception ex) { throw ex; }
         }
 
         public PutUpdatePatientSystemDataResponse UpdatePatientSystem(PutUpdatePatientSystemDataRequest request)
         {
             PutUpdatePatientSystemDataResponse result = new PutUpdatePatientSystemDataResponse();
-            IPatientSystemRepository repo = Factory.GetRepository(request, RepositoryType.PatientSystem);
-
-            result.Success = (bool)repo.Update(request);
-            return result;
+            try
+            {
+                var repo = Factory.GetRepository(RepositoryType.PatientSystem);
+                result.Success = (bool)repo.Update(request);
+                return result;
+            }
+            catch (Exception ex) { throw ex; }
         }
 
         public DeletePatientSystemByPatientIdDataResponse DeletePatientSystemByPatientId(DeletePatientSystemByPatientIdDataRequest request)
@@ -51,7 +67,7 @@ namespace Phytel.API.DataDomain.PatientSystem
             try
             {
                 response = new DeletePatientSystemByPatientIdDataResponse();
-                IPatientSystemRepository repo = Factory.GetRepository(request, RepositoryType.PatientSystem);
+                var repo = Factory.GetRepository(RepositoryType.PatientSystem);
                 List<PatientSystemData> patientSystems = repo.FindByPatientId(request.PatientId) as List<PatientSystemData>;
                 List<string> deletedIds = null;
                 if (patientSystems != null)
@@ -77,7 +93,7 @@ namespace Phytel.API.DataDomain.PatientSystem
             try
             {
                 response = new UndoDeletePatientSystemsDataResponse();
-                IPatientSystemRepository repo = Factory.GetRepository(request, RepositoryType.PatientSystem);
+                var repo = Factory.GetRepository(RepositoryType.PatientSystem);
                 if (request.Ids != null && request.Ids.Count > 0)
                 {
                     request.Ids.ForEach(u =>

@@ -82,20 +82,23 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Enums.cs" />
-    <Compile Include="PutUpdatePatientSystemDataRequest.cs" />
-    <Compile Include="PutUpdatePatientSystemDataResponse.cs" />
-    <Compile Include="UndoDeletePatientSystemsDataRequest.cs" />
-    <Compile Include="DeletePatientSystemByPatientIdDataRequest.cs" />
-    <Compile Include="UndoDeletePatientSystemsDataResponse.cs" />
-    <Compile Include="DeletePatientSystemByPatientIdDataResponse.cs" />
-    <Compile Include="GetPatientSystemsDataRequest.cs" />
-    <Compile Include="PutPatientSystemDataResponse.cs" />
-    <Compile Include="PutPatientSystemDataRequest.cs" />
-    <Compile Include="GetPatientSystemDataRequest.cs" />
-    <Compile Include="GetPatientSystemsDataResponse.cs" />
-    <Compile Include="GetPatientSystemDataResponse.cs" />
-    <Compile Include="PatientSystemData.cs" />
+    <Compile Include="PatientSystem\PutUpdatePatientSystemDataRequest.cs" />
+    <Compile Include="PatientSystem\PutUpdatePatientSystemDataResponse.cs" />
+    <Compile Include="PatientSystem\UndoDeletePatientSystemsDataRequest.cs" />
+    <Compile Include="PatientSystem\DeletePatientSystemByPatientIdDataRequest.cs" />
+    <Compile Include="PatientSystem\UndoDeletePatientSystemsDataResponse.cs" />
+    <Compile Include="PatientSystem\DeletePatientSystemByPatientIdDataResponse.cs" />
+    <Compile Include="PatientSystem\GetPatientSystemsDataRequest.cs" />
+    <Compile Include="PatientSystem\PutPatientSystemDataResponse.cs" />
+    <Compile Include="PatientSystem\PutPatientSystemDataRequest.cs" />
+    <Compile Include="PatientSystem\GetPatientSystemDataRequest.cs" />
+    <Compile Include="PatientSystem\GetPatientSystemsDataResponse.cs" />
+    <Compile Include="PatientSystem\GetPatientSystemDataResponse.cs" />
+    <Compile Include="PatientSystem\PatientSystemData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SystemSource\GetSystemSourcesDataRequest.cs" />
+    <Compile Include="SystemSource\GetSystemSourcesDataResponse.cs" />
+    <Compile Include="SystemSource\SystemSourceData.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

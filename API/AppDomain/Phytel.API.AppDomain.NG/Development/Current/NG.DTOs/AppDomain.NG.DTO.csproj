@@ -159,8 +159,8 @@
     <Compile Include="Meds\PostInitializeMedicationMapResponse.cs" />
     <Compile Include="Meds\PostPatientMedSuppRequest.cs" />
     <Compile Include="Meds\PostPatientMedSuppResponse.cs" />
-    <Compile Include="PatientSystem\SystemSource\GetSystemSourcesRequest.cs" />
-    <Compile Include="PatientSystem\SystemSource\GetSystemSourcesResponse.cs" />
+    <Compile Include="PatientSystem\SystemSource\GetActiveSystemSourcesRequest.cs" />
+    <Compile Include="PatientSystem\SystemSource\GetActiveSystemSourcesResponse.cs" />
     <Compile Include="PatientSystem\SystemSource\SystemSource.cs" />
     <Compile Include="Utilization\GetPatientUtilizationsRequest.cs" />
     <Compile Include="Utilization\GetPatientUtilizationsResponse.cs" />

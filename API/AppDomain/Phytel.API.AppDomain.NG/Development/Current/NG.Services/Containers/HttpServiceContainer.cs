@@ -36,6 +36,8 @@ namespace Phytel.API.AppDomain.NG.Service.Containers
             container.RegisterAutoWiredAs<ElementActivationStrategy, IElementActivationStrategy>().ReusedWithin(ReuseScope.Request);
             container.RegisterAutoWiredAs<StepPlanProcessor, IStepPlanProcessor>().ReusedWithin(ReuseScope.Request);
             container.RegisterAutoWiredAs<GoalsEndpointUtils, IGoalsEndpointUtils>().ReusedWithin(ReuseScope.Request);
+            container.RegisterAutoWiredAs<PatientSystemEndpointUtil, IPatientSystemEndpointUtil>().ReusedWithin(ReuseScope.Request);
+            container.RegisterAutoWiredAs<PatientSystemManager, IPatientSystemManager>().ReusedWithin(ReuseScope.Request);
             return container;
         }
     }

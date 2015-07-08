@@ -1,42 +1,40 @@
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Phytel.API.DataDomain.PatientSystem.DTO;
-using Phytel.API.Interface;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.Builders;
-using MongoDB.Bson;
-using Phytel.API.DataDomain.PatientSystem;
-using Phytel.API.DataAudit;
 using Phytel.API.Common;
-using MongoDB.Bson.Serialization;
+using Phytel.API.DataAudit;
+using Phytel.API.DataDomain.PatientSystem.DTO;
+using Phytel.API.DataDomain.PatientSystem.Repo;
 using MB = MongoDB.Driver.Builders;
-using System.Configuration;
 
 namespace Phytel.API.DataDomain.PatientSystem
 {
-    public class MongoPatientSystemRepository : IPatientSystemRepository
+    
+    public class MongoPatientSystemRepository<TContext> : IMongoPatientSystemRepository where TContext : PatientSystemMongoContext
     {
-        private string _dbName = string.Empty;
         private int _expireDays = Convert.ToInt32(ConfigurationManager.AppSettings["ExpireDays"]);
 
-        static MongoPatientSystemRepository()
+        protected readonly TContext Context;
+        public string ContractDBName { get; set; }
+        public string UserId { get; set; }
+        
+        public MongoPatientSystemRepository(IUOWMongo<TContext> uow)
         {
-            try 
-            {
-                #region Register ClassMap
-                if (BsonClassMap.IsClassMapRegistered(typeof(MEPatientSystem)) == false)
-                    BsonClassMap.RegisterClassMap<MEPatientSystem>();
-                #endregion
-            }
-            catch { }
+            Context = uow.MongoContext;
         }
 
-        public MongoPatientSystemRepository(string contractDBName)
+        public MongoPatientSystemRepository(TContext context)
         {
-            _dbName = contractDBName;
+            Context = context;
+        }
+
+        public MongoPatientSystemRepository(string dbName)
+        {
+            ContractDBName = dbName;
         }
 
         public object Insert(object newEntity)
@@ -45,7 +43,7 @@ namespace Phytel.API.DataDomain.PatientSystem
             string patientSystemId = null;
             try
             {
-                using (PatientSystemMongoContext ctx = new PatientSystemMongoContext(_dbName))
+                using (PatientSystemMongoContext ctx = new PatientSystemMongoContext(ContractDBName))
                 {
                     IMongoQuery query = Query.And(
                                     Query.EQ(MEPatientSystem.PatientIDProperty, ObjectId.Parse(request.PatientID)));
@@ -90,7 +88,7 @@ namespace Phytel.API.DataDomain.PatientSystem
             DeletePatientSystemByPatientIdDataRequest request = (DeletePatientSystemByPatientIdDataRequest)entity;
             try
             {
-                using (PatientSystemMongoContext ctx = new PatientSystemMongoContext(_dbName))
+                using (PatientSystemMongoContext ctx = new PatientSystemMongoContext(ContractDBName))
                 {
                     var query = MB.Query<MEPatientSystem>.EQ(b => b.Id, ObjectId.Parse(request.Id));
                     var builder = new List<MB.UpdateBuilder>();
@@ -120,7 +118,7 @@ namespace Phytel.API.DataDomain.PatientSystem
         public object FindByID(string entityID)
         {
             DTO.PatientSystemData patientSystemData = null;
-            using (PatientSystemMongoContext ctx = new PatientSystemMongoContext(_dbName))
+            using (PatientSystemMongoContext ctx = new PatientSystemMongoContext(ContractDBName))
             {
                 patientSystemData = (from p in ctx.PatientSystems
                            where p.Id == ObjectId.Parse(entityID)
@@ -153,7 +151,7 @@ namespace Phytel.API.DataDomain.PatientSystem
             {
                 if (request.Id != null)
                 {
-                    using (PatientSystemMongoContext ctx = new PatientSystemMongoContext(_dbName))
+                    using (PatientSystemMongoContext ctx = new PatientSystemMongoContext(ContractDBName))
                     {
                         var q = MB.Query<MEPatientSystem>.EQ(b => b.Id, ObjectId.Parse(request.Id));
                         var uv = new List<MB.UpdateBuilder>();
@@ -225,7 +223,7 @@ namespace Phytel.API.DataDomain.PatientSystem
             List<PatientSystemData> dataList = null;
             try
             {
-                using (PatientSystemMongoContext ctx = new PatientSystemMongoContext(_dbName))
+                using (PatientSystemMongoContext ctx = new PatientSystemMongoContext(ContractDBName))
                 {
                     List<IMongoQuery> queries = new List<IMongoQuery>();
                     queries.Add(Query.EQ(MEPatientSystem.PatientIDProperty, ObjectId.Parse(patientId)));
@@ -255,15 +253,12 @@ namespace Phytel.API.DataDomain.PatientSystem
             catch (Exception) { throw; }
         }
 
-        public string UserId { get; set; }
-
-
         public void UndoDelete(object entity)
         {
             UndoDeletePatientSystemsDataRequest request = (UndoDeletePatientSystemsDataRequest)entity;
             try
             {
-                using (PatientSystemMongoContext ctx = new PatientSystemMongoContext(_dbName))
+                using (PatientSystemMongoContext ctx = new PatientSystemMongoContext(ContractDBName))
                 {
                     var query = MB.Query<MEPatientSystem>.EQ(b => b.Id, ObjectId.Parse(request.PatientSystemId));
                     var builder = new List<MB.UpdateBuilder>();
@@ -283,6 +278,12 @@ namespace Phytel.API.DataDomain.PatientSystem
                 }
             }
             catch (Exception) { throw; }
+        }
+
+
+        public IEnumerable<object> Find(object newEntity)
+        {
+            throw new NotImplementedException();
         }
     }
 }

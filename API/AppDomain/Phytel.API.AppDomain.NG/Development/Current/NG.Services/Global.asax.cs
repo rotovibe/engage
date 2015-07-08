@@ -41,6 +41,7 @@ namespace Phytel.API.AppDomain.NG.Service
                 AllergyMedSearchMapper.Build();
                 MedSuppMapper.Build();
                 PatientUtilizationMapper.Build();
+                PatientSystemMapper.Build();
 
                 Plugins.Add(new RequestLogsFeature() {RequiredRoles = new string[] {}});
 

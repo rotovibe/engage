@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using MongoDB.Bson;
 using Phytel.API.DataDomain.PatientSystem.DTO;
+using Phytel.API.DataDomain.PatientSystem.Repo;
 
 namespace Phytel.API.DataDomain.PatientSystem.Test
 {
-    class StubPatientSystemRepository : IPatientSystemRepository
+    class StubPatientSystemRepository : IMongoPatientSystemRepository
     {
         public IEnumerable<object> FindByPatientId(string patientId)
         {
@@ -115,6 +116,12 @@ namespace Phytel.API.DataDomain.PatientSystem.Test
             {
                 this.userId = value;
             }
+        }
+
+
+        public IEnumerable<object> Find(object entity)
+        {
+            throw new NotImplementedException();
         }
     }
 }

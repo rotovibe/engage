@@ -6,6 +6,6 @@ namespace Phytel.API.DataDomain.PatientSystem
 {
     public interface IPatientSystemRepositoryFactory
     {
-        IPatientSystemRepository GetRepository(IDataDomainRequest request, RepositoryType type);
+        IMongoPatientSystemRepository GetRepository(RepositoryType type);
     }
 }

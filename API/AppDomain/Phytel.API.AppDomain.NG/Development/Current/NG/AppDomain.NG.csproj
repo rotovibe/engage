@@ -179,6 +179,10 @@
     <Compile Include="Notes\Visitors\PatientNoteVisitor.cs" />
     <Compile Include="Notes\Visitors\ModifierBase.cs" />
     <Compile Include="Notes\Visitors\VisitorBase.cs" />
+    <Compile Include="PatientSystem\PatientSystemEndpointUtil.cs" />
+    <Compile Include="PatientSystem\PatientSystemManager.cs" />
+    <Compile Include="PatientSystem\IPatientSystemEndpointUtil.cs" />
+    <Compile Include="PatientSystem\IPatientSystemManager.cs" />
     <Compile Include="Programs\ElementActivation\TaskActivationRule.cs" />
     <Compile Include="Programs\ElementActivation\InterventionActivationRule.cs" />
     <Compile Include="Programs\ElementActivation\ProgramAttributeActivationRule.cs" />

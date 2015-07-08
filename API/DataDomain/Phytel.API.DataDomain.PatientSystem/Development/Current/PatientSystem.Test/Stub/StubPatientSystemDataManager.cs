@@ -19,7 +19,7 @@ namespace Phytel.API.DataDomain.PatientSystem.Test
         public DTO.GetPatientSystemsDataResponse GetPatientSystems(DTO.GetPatientSystemsDataRequest request)
         {
             GetPatientSystemsDataResponse result = new GetPatientSystemsDataResponse();
-            IPatientSystemRepository repo = Factory.GetRepository(request, RepositoryType.PatientSystem);
+            var repo = Factory.GetRepository(RepositoryType.PatientSystem);
             result.PatientSystems = repo.FindByPatientId(request.PatientId) as List<PatientSystemData>;
             return result;
         }
@@ -27,7 +27,7 @@ namespace Phytel.API.DataDomain.PatientSystem.Test
         public DTO.PutPatientSystemDataResponse InsertPatientSystem(DTO.PutPatientSystemDataRequest request)
         {
             PutPatientSystemDataResponse result = new PutPatientSystemDataResponse();
-            IPatientSystemRepository repo = Factory.GetRepository(request, RepositoryType.PatientSystem);
+            var repo = Factory.GetRepository(RepositoryType.PatientSystem);
             result.PatientSystemId = repo.Insert(request) as string;
             return result;
         }
@@ -35,7 +35,7 @@ namespace Phytel.API.DataDomain.PatientSystem.Test
         public DTO.PutUpdatePatientSystemDataResponse UpdatePatientSystem(DTO.PutUpdatePatientSystemDataRequest request)
         {
             PutUpdatePatientSystemDataResponse result = new PutUpdatePatientSystemDataResponse();
-            IPatientSystemRepository repo = Factory.GetRepository(request, RepositoryType.PatientSystem);
+            var repo = Factory.GetRepository(RepositoryType.PatientSystem);
             result.Success = (bool)repo.Update(request);
             return result;
         }

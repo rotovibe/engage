@@ -113,6 +113,8 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Mappers\PatientSystemMapper.cs" />
+    <Compile Include="PatientSystemService.cs" />
     <Compile Include="Containers\HttpServiceContainer.cs" />
     <Compile Include="Containers\SearchContainer.cs" />
     <Compile Include="Mappers\AllergyMapper.cs" />
@@ -172,6 +174,10 @@
     <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.PatientNote\Development\Current\PatientNote.DTO\DataDomain.PatientNote.DTO.csproj">
       <Project>{99F4EC29-B099-424E-9757-223E67029001}</Project>
       <Name>DataDomain.PatientNote.DTO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.PatientSystem\Development\Current\PatientSystem.DTO\DataDomain.PatientSystem.DTO.csproj">
+      <Project>{6033a8ea-a3ef-4182-bfdd-4a9826ecf871}</Project>
+      <Name>DataDomain.PatientSystem.DTO</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\..\Interfaces\Development\Current\Phytel.API.Interface\Phytel.API.Interface.csproj">
       <Project>{abe948fb-247e-4955-b3ab-b7c93e10a542}</Project>
