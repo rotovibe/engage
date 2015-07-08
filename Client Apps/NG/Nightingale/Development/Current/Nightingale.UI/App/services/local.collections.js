@@ -14,7 +14,11 @@
         new modelConfig.Gender('m', 'M', 'Male'),
         new modelConfig.Gender('f', 'F', 'Female'),
         new modelConfig.Gender('n', 'N', 'Neutral')
-    ]);
+    ]);	
+	
+	enums.patientStatuses = ko.observableArray();
+	enums.patientStatusReasons = ko.observableArray();
+	
     enums.daysOfWeek = ko.observableArray([
         new modelConfig.Day('0', 'M', 'Monday'),
         new modelConfig.Day('1', 'Tu', 'Tuesday'),

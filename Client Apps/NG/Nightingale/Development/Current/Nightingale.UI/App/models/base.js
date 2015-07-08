@@ -150,6 +150,8 @@ define(['services/validatorfactory', 'services/customvalidators', 'services/form
                     providerId: { dataType: "Int64" },
                     dOB: { dataType: "String" },
                     gender: { dataType: "String" },
+					statusId: { dataType: "String" },
+					reasonId: { dataType: "String" },
                     marital: { dataType: "String" },
                     background: { dataType: "String" },
 					clinicalBackground: { dataType: "String" },
@@ -159,7 +161,8 @@ define(['services/validatorfactory', 'services/customvalidators', 'services/form
                     priority: { dataType: "String" },
                     flagged: { dataType: "Boolean" },
                     twitterHandle: { dataType: "String" },
-					system: {dataType: "String" }
+					system: {dataType: "String" },
+					statusSystemSource: { dataType: "String" }
 				},
 				navigationProperties: {
 					provider: {
@@ -169,6 +172,14 @@ define(['services/validatorfactory', 'services/customvalidators', 'services/form
 					priorityModel: {
 					    entityTypeName: "Priority", isScalar: true,
 					    associationName: "Priority_Patients", foreignKeyNames: ["priority"]
+					},
+					patientStatus: {
+						entityTypeName: "PatientStatus", isScalar: true,
+						associationName: "Patient_PatientStatus", foreignKeyNames: ["statusId"]
+					},
+					patientStatusReason: {
+						entityTypeName: "PatientStatusReason", isScalar: true,
+						associationName: "Patient_PatientStatusReason", foreignKeyNames: ["reasonId"]
 					},
 					problems: {
 					    entityTypeName: "PatientProblem", isScalar: false,
@@ -587,6 +598,17 @@ define(['services/validatorfactory', 'services/customvalidators', 'services/form
 				    	patient.lastName('');
 				    }, 1);
 			    }
+				
+				patient.setDefaultStatusReason = function(){
+					unknownReason = ko.utils.arrayFirst(datacontext.enums.patientStatusReasons(), function (reason) {
+						return 'Unknown' === reason.name;
+					});
+					patient.patientStatusReason(unknownReason);
+				}
+				
+				if( patient.patientStatusReason() === null ){
+					patient.setDefaultStatusReason();
+				}
             }
 
             function careMemberInitializer(careTeam) {

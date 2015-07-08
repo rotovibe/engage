@@ -1,6 +1,6 @@
-﻿/**
-*	edit individual background dialog
-*	@module background
+/**
+*	Individual Status section in individual details 
+*	@module status
 */
 define(['models/base', 'services/datacontext', 'viewmodels/shell/shell'],
     function (modelConfig, datacontext, shell) {
@@ -8,31 +8,30 @@ define(['models/base', 'services/datacontext', 'viewmodels/shell/shell'],
         var ctor = function () {
 
         };
-
+		
         ctor.prototype.activate = function (settings) {
             var self = this;
             self.settings = settings;
-            self.selectedPatient = self.settings.selectedPatient;
-            self.background = self.selectedPatient.background;
-            self.backgroundModalShowing = ko.observable(false);
-            self.saveBackground = function () {
+            self.selectedPatient = self.settings.selectedPatient;            												
+            self.statusModalShowing = ko.observable(false);
+            self.saveStatus = function () {
                 datacontext.saveIndividual(self.selectedPatient);
             }
-            self.cancelBackground = function () {
+            self.cancelStatus = function () {
                 self.selectedPatient.entityAspect.rejectChanges();
             }
-            self.modal = new modelConfig.modal('Edit Background', self.selectedPatient, 'templates/background.html', self.backgroundModalShowing, self.saveBackground, self.cancelBackground);
+            self.modal = new modelConfig.modal('Edit Status', self.selectedPatient, 'templates/patient.status.html', self.statusModalShowing, self.saveStatus, self.cancelStatus);
             self.isOpen = ko.observable(true);
             self.isEditing = ko.observable(false);
             self.isExpanded = ko.observable(false);
             self.toggleEditing = function () {
                 if (self.isEditing()) {
-                    self.backgroundModalShowing(false);
+                    self.statusModalShowing(false);
                 }
                 else {
                     shell.currentModal(self.modal);
-                    self.backgroundModalShowing(true);
-                    var editingToken = self.backgroundModalShowing.subscribe(function () {
+                    self.statusModalShowing(true);
+                    var editingToken = self.statusModalShowing.subscribe(function () {
                         self.isEditing(false);
                         editingToken.dispose();
                     });

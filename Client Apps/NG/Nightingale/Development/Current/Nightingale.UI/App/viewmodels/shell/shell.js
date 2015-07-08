@@ -48,6 +48,8 @@
         var emailTypes = ko.computed(datacontext.enums.emailTypes); 
         var daysOfWeek = ko.computed(datacontext.enums.daysOfWeek);
         var timesOfDay = ko.computed(datacontext.enums.timesOfDay);
+		var patientStatuses = ko.computed(datacontext.enums.patientStatuses);
+		var patientStatusReasons = ko.computed(datacontext.enums.patientStatusReasons);			
         var languages = ko.computed(datacontext.enums.languages);
         var timeZones = ko.computed(datacontext.enums.timeZones);
         var addressTypes = ko.computed(datacontext.enums.addressTypes);
@@ -91,6 +93,8 @@
             stateList: states,
             daysOfWeek: daysOfWeek,
             timesOfDay: timesOfDay,
+			patientStatuses: patientStatuses,
+			patientStatusReasons: patientStatusReasons,
             languages: languages,
             timeZones: timeZones,
             phoneTypes: phoneTypes,

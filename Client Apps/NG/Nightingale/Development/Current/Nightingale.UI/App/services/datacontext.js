@@ -292,6 +292,7 @@ define(['services/session', 'services/jsonResultsAdapter', 'models/base', 'confi
                 getCohortsLookup(),
                 getContractProgramsLookup(),
                 getTimesOfDayLookup(),
+				getPatientStatusReasonLookup(),
                 getTimeZonesLookup(),
                 getAllStatesLookup(),
                 getAllLanguagesLookup(),
@@ -343,6 +344,13 @@ define(['services/session', 'services/jsonResultsAdapter', 'models/base', 'confi
             }
         }
 
+		function getPatientStatusReasonLookup() {
+			if( session.currentUser() && session.currentUser().contracts().length !== 0 ) {
+				var endPoint = new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'lookup/Reason', 'PatientStatusReason');
+				return getEntityList(datacontext.enums.patientStatusReasons, endPoint.EntityType, endPoint.ResourcePath, null, null, true);
+			}
+		}
+		
         // Get a list of time zones
         function getTimeZonesLookup() {
             if (session.currentUser() && session.currentUser().contracts().length !== 0) {
@@ -594,6 +602,7 @@ define(['services/session', 'services/jsonResultsAdapter', 'models/base', 'confi
             usercontext.initializeEnums(manager);
             // Set the collections into the enums namespace
             datacontext.getEntityList(datacontext.enums.priorities, 'Priority', 'fakeEndPoint', null, null, false);
+			datacontext.getEntityList(datacontext.enums.patientStatuses, 'PatientStatus', 'fakeEndPoint', null, null, false);
             datacontext.getEntityList(datacontext.enums.goalTypes, 'GoalType', 'fakeEndPoint', null, null, false);
             datacontext.getEntityList(datacontext.enums.goalTaskStatuses, 'GoalTaskStatus', 'fakeEndPoint', null, null, false);
             datacontext.getEntityList(datacontext.enums.barrierStatuses, 'BarrierStatus', 'fakeEndPoint', null, null, false);

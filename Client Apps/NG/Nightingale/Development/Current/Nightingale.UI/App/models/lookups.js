@@ -98,6 +98,26 @@ define(['services/session'],
 		        }
 		    });
 
+			//individual status - enum
+			metadataStore.addEntityType({
+		        shortName: "PatientStatus",
+		        namespace: "Nightingale",
+		        dataProperties: {
+		            id: { dataType: "String", isPartOfKey: true },
+		            name: { dataType: "String" }
+		        }
+		    });
+			
+			//individual status reason - lookup
+			metadataStore.addEntityType({
+		        shortName: "PatientStatusReason",
+		        namespace: "Nightingale",
+		        dataProperties: {
+		            id: { dataType: "String", isPartOfKey: true },
+		            name: { dataType: "String" }
+		        }
+		    });			
+			
 		    // Observation Type
 		    metadataStore.addEntityType({
 		        shortName: "ObservationType",
@@ -349,7 +369,12 @@ define(['services/session'],
 		    manager.createEntity('Priority', { id: 1, levelName: 'Low', imageSource: '/NightingaleUI/Content/images/priority_low.png', iconClass: 'icon-priority grey' }).entityAspect.acceptChanges();
 		    manager.createEntity('Priority', { id: 2, levelName: 'Medium', imageSource: '/NightingaleUI/Content/images/priority_medium.png', iconClass: 'icon-priority yellow' }).entityAspect.acceptChanges();
 		    manager.createEntity('Priority', { id: 3, levelName: 'High', imageSource: '/NightingaleUI/Content/images/priority_high.png', iconClass: 'icon-priority red' }).entityAspect.acceptChanges();
-
+			
+			//enums.patientStatus
+		    manager.createEntity('PatientStatus', { id: 1, name: 'Active'   }).entityAspect.acceptChanges();
+		    manager.createEntity('PatientStatus', { id: 2, name: 'Inactive' }).entityAspect.acceptChanges();
+			manager.createEntity('PatientStatus', { id: 3, name: 'Archived' }).entityAspect.acceptChanges();
+			
             // Types of steps enums
 		    manager.createEntity('StepType', { id: 1, name: 'Radio', path: 'programdesigner/questiontypes/radio.html' }).entityAspect.acceptChanges();
 		    manager.createEntity('StepType', { id: 2, name: 'Text', path: 'programdesigner/questiontypes/label.html' }).entityAspect.acceptChanges();

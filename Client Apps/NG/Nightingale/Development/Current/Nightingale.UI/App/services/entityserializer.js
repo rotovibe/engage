@@ -734,7 +734,7 @@
             .from('fakePath')
             .where('id', '==', patient.id())
             .toType('Patient')
-            .select('id, priority, gender, firstName, lastName, preferredName, suffix, dOB, middleName, background, clinicalBackground, fullSSN, system');
+            .select('id, priority, gender, firstName, lastName, preferredName, suffix, dOB, middleName, background, clinicalBackground, fullSSN, system, statusId, reasonId, statusSystemSource');
         var results = manager.executeQueryLocally(patientQuery);
         var unwrappedIndividual = results[0];
 
@@ -750,6 +750,9 @@
         thisIndividual.Background = unwrappedIndividual.background;
 		thisIndividual.ClinicalBackground = unwrappedIndividual.clinicalBackground;
 		thisIndividual.System = unwrappedIndividual.system;
+		thisIndividual.StatusId = unwrappedIndividual.statusId;
+		thisIndividual.ReasonId = unwrappedIndividual.reasonId;
+		thisIndividual.StatusSystemSource = unwrappedIndividual.statusSystemSource;
 		
         if (unwrappedIndividual.fullSSN) {
         // Add it as a parameter

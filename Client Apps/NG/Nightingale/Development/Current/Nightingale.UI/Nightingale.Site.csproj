@@ -177,6 +177,7 @@
     <Content Include="App\viewmodels\patients\sections\data.list.js" />
     <Content Include="App\viewmodels\patients\sections\medications.js" />
     <Content Include="App\viewmodels\patients\sections\allergies.edit.js" />
+    <Content Include="App\viewmodels\patients\sections\status.js" />
     <Content Include="App\viewmodels\patients\sections\system.ids.js" />
     <Content Include="App\viewmodels\patients\widgets\action.details.js" />
     <Content Include="App\viewmodels\patients\widgets\medications.js" />
@@ -188,6 +189,7 @@
     <Content Include="App\viewmodels\templates\medications.panel.js" />
     <Content Include="App\viewmodels\templates\note.general.edit.js" />
     <Content Include="App\viewmodels\templates\note.touchpoint.edit.js" />
+    <Content Include="App\viewmodels\templates\patient.status.js" />
     <Content Include="App\viewmodels\templates\patient.systems.js" />
     <Content Include="App\viewmodels\templates\task.panel.js" />
     <Content Include="App\viewmodels\templates\intervention.panel.js" />
@@ -201,6 +203,7 @@
     <Content Include="App\views\patients\sections\medications.search.html" />
     <Content Include="App\views\patients\sections\allergies.search.html" />
     <Content Include="App\views\patients\sections\medications.html" />
+    <Content Include="App\views\patients\sections\status.html" />
     <Content Include="App\views\patients\sections\system.ids.html" />
     <Content Include="App\views\patients\widgets\allergies.html" />
     <Content Include="App\views\patients\widgets\medications.html" />
@@ -219,6 +222,7 @@
     <Content Include="App\views\templates\allergy.severity.html" />
     <Content Include="App\views\templates\note.general.edit.html" />
     <Content Include="App\views\templates\note.touchpoint.edit.html" />
+    <Content Include="App\views\templates\patient.status.html" />
     <Content Include="App\views\templates\patient.systems.html" />
     <Content Include="App\views\templates\system.id.edit.html" />
     <Content Include="App\views\templates\intervention.closeddate.html" />
