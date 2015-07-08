@@ -41,18 +41,19 @@ define(['models/base', 'services/datacontext', 'viewmodels/shell/shell'],
             };
 			/**
 			*	computed. when the status is active set the reason back to null.
-			*	when the status is anything else - the reason updates to null.
+			*	when the status is set to anything other than active and the reason is null - the reason updates to "Unknown" (default).
 			*	@method updateStatusReason
 			*/
-			self.updateStatusReason = ko.computed( function(){
-				var patient = self.selectedPatient;
-				var statusId = patient.statusId();
+			self.updateStatusReason = ko.computed( function(){				
+				var statusId = self.selectedPatient.statusId();
 				if( statusId && statusId === '1' ){
-					patient.reasonId(null);
+					self.selectedPatient.reasonId(null);
 					return true;
 				}
 				else{
-					patient.setDefaultStatusReason();
+					if( self.selectedPatient.reasonId() === null ){
+						self.selectedPatient.setDefaultStatusReason();
+					}
 				}
 				return false;
 			});

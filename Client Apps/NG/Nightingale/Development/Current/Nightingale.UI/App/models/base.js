@@ -604,11 +604,7 @@ define(['services/validatorfactory', 'services/customvalidators', 'services/form
 						return 'Unknown' === reason.name();
 					});
 					patient.patientStatusReason(unknownReason);
-				}
-				
-				if( patient.patientStatusReason() === null ){
-					patient.setDefaultStatusReason();
-				}
+				}				
             }
 
             function careMemberInitializer(careTeam) {
