@@ -601,7 +601,7 @@ define(['services/validatorfactory', 'services/customvalidators', 'services/form
 				
 				patient.setDefaultStatusReason = function(){
 					unknownReason = ko.utils.arrayFirst(datacontext.enums.patientStatusReasons(), function (reason) {
-						return 'Unknown' === reason.name;
+						return 'Unknown' === reason.name();
 					});
 					patient.patientStatusReason(unknownReason);
 				}

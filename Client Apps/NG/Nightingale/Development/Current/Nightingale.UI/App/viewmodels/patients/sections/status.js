@@ -39,6 +39,23 @@ define(['models/base', 'services/datacontext', 'viewmodels/shell/shell'],
                 self.isEditing(!self.isEditing());
                 self.isOpen(true);
             };
+			/**
+			*	computed. when the status is active set the reason back to null.
+			*	when the status is anything else - the reason updates to null.
+			*	@method updateStatusReason
+			*/
+			self.updateStatusReason = ko.computed( function(){
+				var patient = self.selectedPatient;
+				var statusId = patient.statusId();
+				if( statusId && statusId === '1' ){
+					patient.reasonId(null);
+					return true;
+				}
+				else{
+					patient.setDefaultStatusReason();
+				}
+				return false;
+			});
         };
 
         ctor.prototype.attached = function () {
