@@ -181,14 +181,9 @@ namespace NightingaleImport
                                     throw new Exception("Patient System import request failed.");
                                 }
                                 //Update Patient with DisplayPatientSystemId
-                                PatientData data = new PatientData
-                                {
-                                    Id = responsePatient.Id.ToString(),
-                                    FirstName = pdata.FirstName,
-                                    LastName = pdata.LastName,
-                                    DisplayPatientSystemId = responsePatientPS.PatientSystemId.ToString(),
-                                    PriorityData = 0
-                                };
+                                PatientData data = pdata;
+                                data.Id = responsePatient.Id.ToString();
+                                data.DisplayPatientSystemId = responsePatientPS.PatientSystemId.ToString();
                                 PutUpdatePatientDataRequest updatePatientRequest = new PutUpdatePatientDataRequest
                                 {
                                     PatientData = data,
