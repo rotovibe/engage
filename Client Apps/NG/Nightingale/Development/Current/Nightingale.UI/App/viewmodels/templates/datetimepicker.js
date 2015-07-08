@@ -163,10 +163,9 @@ define(['durandal/composition','services/dateHelper', 'services/formatter'],
 				}						
 			}							
 			else{
-				// if( self.observableDateTime() ){
-					// self.observableDateTime(null); //? this will zero the time and eliminate the validation errors!!
-					// console.log('date cleared');
-				// }
+				if( self.observableDateTime() && !enteredDateStr ){
+					self.observableDateTime(null); 	//the date field was cleared
+				}
 			}			
 		});
 				
