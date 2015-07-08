@@ -135,7 +135,9 @@ namespace NightingaleImport
                             Gender = lvi.SubItems[colGen].Text.Trim(),
                             DOB = lvi.SubItems[colDB].Text.Trim(),
                             System = SystemProperty,
-                            StatusId = (int)Phytel.API.DataDomain.Patient.DTO.Status.Active
+                            StatusId = (int)Phytel.API.DataDomain.Patient.DTO.Status.Active,
+                            StatusSystemSource = SystemProperty,
+
                         };
                         PutPatientDataRequest patientRequest = new PutPatientDataRequest
                         {
