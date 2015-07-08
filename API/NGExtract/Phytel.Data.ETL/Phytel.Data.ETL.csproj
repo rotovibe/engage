@@ -222,6 +222,10 @@
       <Project>{6033a8ea-a3ef-4182-bfdd-4a9826ecf871}</Project>
       <Name>DataDomain.PatientSystem.DTO</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\DataDomain\Phytel.API.DataDomain.PatientSystem\Development\Current\PatientSystem.Repo\DataDomain.PatientSystem.Repo.csproj">
+      <Project>{64428b06-18e5-4307-ba78-fb0d238816d8}</Project>
+      <Name>DataDomain.PatientSystem.Repo</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\DataDomain\Phytel.API.DataDomain.PatientSystem\Development\Current\PatientSystem\DataDomain.PatientSystem.csproj">
       <Project>{bf2f1262-d5cc-41f0-bcfc-7ccdce479795}</Project>
       <Name>DataDomain.PatientSystem</Name>

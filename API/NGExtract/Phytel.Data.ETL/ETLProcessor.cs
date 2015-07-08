@@ -27,6 +27,7 @@ using Phytel.API.DataDomain.PatientObservation;
 using Phytel.API.DataDomain.PatientObservation.DTO;
 using Phytel.API.DataDomain.PatientSystem;
 using Phytel.API.DataDomain.PatientSystem.DTO;
+using Phytel.API.DataDomain.PatientSystem.Repo;
 using Phytel.API.DataDomain.Program;
 using Phytel.API.DataDomain.Program.MongoDB.DTO;
 using Phytel.Data.ETL.BulkCopy;
