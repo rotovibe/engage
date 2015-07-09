@@ -16,6 +16,14 @@
 						<div class="span10" data-bind="multiselect: { options: $parent.availablePrograms, values: programIds, idValue: 'id', text: 'name', label: 'programs', stringValue: programString }"></div>	
                     </div>                    
                 </div>
+				<div class="row pad-top">
+					<span class="grey">Created On: 	</span>
+					<span class="pad-left" data-bind="DateOrDash: createdOn"></span>
+				</div>
+				<div class="row pad-top">
+					<span class="grey">Updated On:  </span>
+					<span class="pad-left" data-bind="DateOrDash: updatedOn"></span>
+				</div>
             </div>
         </section>                        
     </div>

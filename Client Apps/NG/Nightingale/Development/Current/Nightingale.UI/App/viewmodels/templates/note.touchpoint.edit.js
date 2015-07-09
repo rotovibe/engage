@@ -12,7 +12,7 @@ define(['services/datacontext'],
 			// Available properties of a note
             self.methods = datacontext.enums.noteMethods;
             self.whos = datacontext.enums.noteWhos;
-            self.sources = datacontext.enums.noteSources;
+            self.sources = datacontext.enums.noteSources;	
             self.outcomes = datacontext.enums.noteOutcomes;
             self.durations = datacontext.enums.noteDurations;
         };
@@ -22,9 +22,7 @@ define(['services/datacontext'],
             self.settings = settings;
             self.note = self.settings.note;
             self.focusAreas = datacontext.enums.focusAreas;
-            self.sources = datacontext.enums.sources;
-            //self.goalTaskStatuses = datacontext.enums.goalTaskStatuses;            
-            //self.goalTypes = datacontext.enums.goalTypes;
+            
             self.availablePrograms = ko.computed(function () {
                 var computedPrograms = [];
                 if (self.note.patient()) {
