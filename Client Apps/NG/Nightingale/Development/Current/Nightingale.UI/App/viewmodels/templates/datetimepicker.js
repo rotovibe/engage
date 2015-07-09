@@ -55,7 +55,7 @@ define(['durandal/composition','services/dateHelper', 'services/formatter'],
 					// Set it on initialization
 					var initMaxDate = moment( self.dynoptions.maxDate() );
 					if( initMaxDate.isValid() ){
-						$el.datepicker("option", "maxDate", initMaxDate.toDate() );	
+						self.dateElm.datepicker("option", "maxDate", initMaxDate.toDate() );	
 					}                        
 				}			 
 				self.dynoptions.maxDate.subscribe(function (newValue) {						
@@ -63,7 +63,7 @@ define(['durandal/composition','services/dateHelper', 'services/formatter'],
 					if( newMaxDate.isValid() ){																							
 						var date = self.observableDateTime();								
 						if( !date || moment(date).isValid() && !moment(date).isAfter(newMaxDate) ){	//dont set maxdate if current value is out of range, since datepicker will also update the current date to the new minDate. 
-							$el.datepicker("option", "maxDate", newMaxDate.toDate() );					
+							self.dateElm.datepicker("option", "maxDate", newMaxDate.toDate() );					
 						}
 					}
 				});
@@ -137,13 +137,18 @@ define(['durandal/composition','services/dateHelper', 'services/formatter'],
 						observableMoment = dateHelper.setDateValue( enteredMoment, observableMoment );
 						needsUpdate = true;						
 					}
-					if( self.showTime && Modernizr.inputtypes.time && enteredTimeStr ){
-						var time = parseTime( enteredTimeStr )
-						if( time && ( observableMoment.hour() !== time.hour || observableMoment.minute() !== time.minute ) ){
-							//time has changed - update observable
-							observableMoment.hour( time.hour );
-							observableMoment.minute( time.minute );
-							needsUpdate = true;							
+					if( self.showTime && Modernizr.inputtypes.time ){
+						if( enteredTimeStr ){
+							var time = parseTime( enteredTimeStr )
+							if( time && ( observableMoment.hour() !== time.hour || observableMoment.minute() !== time.minute ) ){
+								//time has changed - update observable
+								observableMoment.hour( time.hour );
+								observableMoment.minute( time.minute );
+								needsUpdate = true;							
+							}
+						}
+						else{
+							self.timeStr( observableMoment.format('HH:mm') );							
 						}
 					}
 					if( needsUpdate ){
