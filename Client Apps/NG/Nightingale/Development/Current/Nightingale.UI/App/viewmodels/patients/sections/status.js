@@ -4,7 +4,7 @@
 */
 define(['models/base', 'services/datacontext', 'viewmodels/shell/shell'],
     function (modelConfig, datacontext, shell) {
-
+		var subscriptionTokens= [];
         var ctor = function () {
 
         };
@@ -61,6 +61,13 @@ define(['models/base', 'services/datacontext', 'viewmodels/shell/shell'],
 
         ctor.prototype.attached = function () {
         };
-
+		ctor.prototype.detached = function() { 
+			var self = this;
+			ko.utils.arrayForEach(subscriptionTokens, function (token) {
+				token.dispose();
+			});
+			//computed cleanup:
+			self.updateStatusReason.dispose();				
+		}
         return ctor;
     });

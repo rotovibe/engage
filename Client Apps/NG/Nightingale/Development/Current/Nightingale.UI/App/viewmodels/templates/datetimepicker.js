@@ -13,7 +13,7 @@ define(['durandal/composition','services/dateHelper', 'services/formatter'],
 
 	ctor.prototype.compositionComplete = function(view, parent){
 		var self = this;
-		self.dateElm = $(view).find("[name='date']");
+		self.dateElm = $(view).find("[name='" + self.dateName +"']");
 		bindEditableDate( self.dateElm, self.dateStr );
 		if( self.isDatepicker ){			
 			self.dateElm.datepicker(self.datepickerOptions);
@@ -39,7 +39,7 @@ define(['durandal/composition','services/dateHelper', 'services/formatter'],
 					}                        
 				}
 				// Subscribe to the value
-				self.dynoptions.minDate.subscribe(function (newValue) {
+				var minDateToken = self.dynoptions.minDate.subscribe(function (newValue) {
 				   var newMinDate = moment(newValue);
 					if( newMinDate.isValid() ){
 						var date = self.observableDateTime();								
@@ -48,6 +48,7 @@ define(['durandal/composition','services/dateHelper', 'services/formatter'],
 						}
 					}
 				});
+				subscriptionTokens.push(minDateToken);
 			}
 			 // If there is a datepicker dynoptions with a mindate that is an observable,
 			if (self.dynoptions && self.dynoptions.maxDate && ko.isObservable(self.dynoptions.maxDate)) {
@@ -58,7 +59,7 @@ define(['durandal/composition','services/dateHelper', 'services/formatter'],
 						self.dateElm.datepicker("option", "maxDate", initMaxDate.toDate() );	
 					}                        
 				}			 
-				self.dynoptions.maxDate.subscribe(function (newValue) {						
+				var maxDateToken = self.dynoptions.maxDate.subscribe(function (newValue) {						
 					var newMaxDate = moment(newValue);
 					if( newMaxDate.isValid() ){																							
 						var date = self.observableDateTime();								
@@ -67,9 +68,10 @@ define(['durandal/composition','services/dateHelper', 'services/formatter'],
 						}
 					}
 				});
+				subscriptionTokens.push(maxDateToken);
 			}
 		}		
-		self.timeElm = $(view).find("[name='time']");
+		self.timeElm = $(view).find("[name='"+ self.timeName +"']");
 		// if( self.showTime ){
 			// self.timeElm[0].value = thisMoment.format('HH:mm');
 		// }
@@ -79,6 +81,7 @@ define(['durandal/composition','services/dateHelper', 'services/formatter'],
         var self = this;
         self.settings = settings;
 		//date
+		self.dateName = self.settings.dateName ? self.settings.dateName : 'date';		
 		self.showDate = true;	//self.settings.showDate;
 		self.dateCss = self.settings.dateCss ? self.settings.dateCss : "";
 		self.observableDateTime = self.settings.observableDateTime;
@@ -92,6 +95,7 @@ define(['durandal/composition','services/dateHelper', 'services/formatter'],
 		self.maxDate = self.settings.maxDate ? self.settings.maxDate : null;
 		
 		//time
+		self.timeName = self.settings.timeName ? self.settings.timeName : 'time';
 		self.showTime = self.settings.showTime ? self.settings.showTime : false;
 		self.timeCss = self.settings.timeCss ? self.settings.timeCss : "";
 		
@@ -282,7 +286,10 @@ define(['durandal/composition','services/dateHelper', 'services/formatter'],
 		ko.utils.arrayForEach(subscriptionTokens, function (token) {
 			token.dispose();
 		});
-		//self.isInvalid.dispose();		
+		//computed cleanup:
+		self.datetimeWatcher.dispose();
+		self.disableTime.dispose();
+		self.isValidDate.dispose();			
 	}
     return ctor;
 });

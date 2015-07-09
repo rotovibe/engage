@@ -58,7 +58,7 @@
 			<!-- ko compose: { model: 'viewmodels/templates/datetimepicker', activationData:
 				{
 					observableDateTime: startDate, dateErrors: startDateErrors, showInvalid: $parent.setInvalidStartDate, 
-					datepickerOptions:{}, datepickerDynamicOptions: {}
+					datepickerOptions:{}, datepickerDynamicOptions: {}, dateName: 'startDate'
 				}
 			} -->
 			<!-- /ko -->			
@@ -70,7 +70,7 @@
 			<!-- ko compose: { model: 'viewmodels/templates/datetimepicker', activationData:
 				{
 					observableDateTime: endDate, dateErrors: endDateErrors, showInvalid: $parent.setInvalidEndDate, 
-					datepickerOptions:{}, datepickerDynamicOptions: {minDate: startDate}
+					datepickerOptions:{}, datepickerDynamicOptions: {minDate: startDate}, dateName: 'endDate'
 				}
 			} -->
 			<!-- /ko -->

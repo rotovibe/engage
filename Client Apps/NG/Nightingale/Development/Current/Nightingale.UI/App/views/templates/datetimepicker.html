@@ -1,17 +1,19 @@
 <div>
 	<div data-bind="if: showDate, attr: {class: dateCss}">	
-		<input name="date" 
+		<input 
 			data-bind="value: dateStr, valueUpdate: 'afterkeydown', 
 					css: { 'invalid': (dateErrors().length > 0) || showInvalid, 'datepicker': isDatepicker }, 
-					datepickerOptions: datepickerOptions" type="text">		
+					datepickerOptions: datepickerOptions,
+					attr:{ name: dateName }" type="text">		
 	</div>
 	<div data-bind="if: showTime, attr: {class: timeCss}">								
 		<!-- ko if: Modernizr.inputtypes.time -->			
-			<input name="time" data-bind="value: timeStr, attr: { 'disabled': disableTime }" 
-				type="time" style="height: 20px; width: 100%">
+			<input data-bind="value: timeStr, attr: { 'disabled': disableTime }, attr:{ name: timeName }" 
+					type="time" style="height: 20px; width: 100%">
 		<!-- /ko -->
 		<!-- ko ifnot: Modernizr.inputtypes.time -->
-			<input data-bind="jqtimepicker: observableDateTime, attr: { 'disabled': !observableDateTime() }" type="text" style="height: 20px; width: 100%">			
+			<input data-bind="jqtimepicker: observableDateTime, 
+					attr: { 'disabled': !observableDateTime(), name: timeName }" type="text" style="height: 20px; width: 100%">			
 		<!-- /ko -->
 	</div>
 </div>

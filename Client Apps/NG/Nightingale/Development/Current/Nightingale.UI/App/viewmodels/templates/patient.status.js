@@ -23,5 +23,15 @@ define(['services/datacontext'],
 
     };
 
+	ctor.prototype.detached = function() { 
+		var self = this;
+		ko.utils.arrayForEach(subscriptionTokens, function (token) {
+			token.dispose();
+		});
+		//computed cleanup:
+		self.showing.dispose();	
+		self.selectedPatient.dispose();
+	}
+	
     return ctor;
   });

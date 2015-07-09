@@ -42,7 +42,7 @@
 			<!-- ko compose: { model: 'viewmodels/templates/datetimepicker', activationData:
 				{
 					observableDateTime: startDate, dateErrors: startDateErrors, showInvalid: setInvalidStartDate, 
-					maxDate: 'today', datepickerOptions:{ maxDate: '+0' }, datepickerDynamicOptions: {}
+					maxDate: 'today', datepickerOptions:{ maxDate: '+0' }, datepickerDynamicOptions: {}, dateName: 'startDate'
 				}
 			} -->
 			<!-- /ko -->		
@@ -54,7 +54,7 @@
 				<!-- ko compose: { model: 'viewmodels/templates/datetimepicker', activationData:
 					{
 						observableDateTime: endDate, dateErrors: endDateErrors, showInvalid: setInvalidEndDate, 
-						datepickerOptions:{maxDate: '+0'}, datepickerDynamicOptions: {minDate: startDate}
+						datepickerOptions:{maxDate: '+0'}, datepickerDynamicOptions: {minDate: startDate}, dateName: 'endDate'
 					}
 				} -->
 				<!-- /ko -->		
