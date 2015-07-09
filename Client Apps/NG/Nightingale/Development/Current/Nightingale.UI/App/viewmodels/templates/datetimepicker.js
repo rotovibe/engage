@@ -22,7 +22,7 @@ define(['durandal/composition','services/dateHelper', 'services/formatter'],
 				//set the initial date to the datepicker
 				observableMoment.local(); //move from utc to local time
 				var strDate = observableMoment.format('MM/DD/YYYY');					
-				self.dateElm.datepicker("setDate", strDate);						
+				self.dateElm.datepicker("setDate", strDate);
 			}
 			//handle disposal (if KO removes by the template binding)
 			ko.utils.domNodeDisposal.addDisposeCallback(self.dateElm, function () {
@@ -170,6 +170,7 @@ define(['durandal/composition','services/dateHelper', 'services/formatter'],
 			else{
 				if( self.observableDateTime() && !enteredDateStr ){
 					self.observableDateTime(null); 	//the date field was cleared
+					self.dateElm.datepicker("setDate", null);
 				}
 			}			
 		});
@@ -238,6 +239,11 @@ define(['durandal/composition','services/dateHelper', 'services/formatter'],
 				if( observable() !== date ){	//!dateHelper.isSameDate(moment(observable()), moment(date)) ){						
 					observable(date);
 				}					
+			}
+			else{
+				if( observable() ){
+					observable(null);
+				}
 			}
 		});	
 		//mask: MM/DD/....

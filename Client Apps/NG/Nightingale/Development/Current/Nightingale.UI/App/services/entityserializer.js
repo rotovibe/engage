@@ -561,6 +561,7 @@
         thisObservation.Name = unwrappedObservation.name;
 		var startMoment = moment(unwrappedObservation.startDate);
         thisObservation.StartDate = startMoment.isValid()? startMoment.toISOString() : null;
+console.log( 'serializeObservation: ' + thisObservation.Name + ' StartDate=' + thisObservation.StartDate ? thisObservation.StartDate : 'null'); 		
 		var endMoment = moment(unwrappedObservation.endDate);
         thisObservation.EndDate = endMoment.isValid()? endMoment.toISOString() : null;
         thisObservation.GroupId = unwrappedObservation.groupId;
