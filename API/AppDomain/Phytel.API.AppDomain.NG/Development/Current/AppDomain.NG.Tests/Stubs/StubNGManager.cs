@@ -260,12 +260,6 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
             throw new NotImplementedException();
         }
 
-
-        public GetPatientSystemsResponse GetPatientSystems(GetPatientSystemsRequest request)
-        {
-            throw new NotImplementedException();
-        }
-
         public InsertPatientSystemsResponse SavePatientSystem(InsertPatientSystemsRequest request)
         {
             throw new NotImplementedException();

@@ -75,19 +75,20 @@ namespace Phytel.API.AppDomain.NG
 
                 if (response != null && response.Patient != null)
                 {
-                    Phytel.API.DataDomain.PatientSystem.DTO.GetPatientSystemDataResponse sysResponse = null;
+                    // Commented this part out, as there is a separate endpoint to get patient systems ids.
+                    //Phytel.API.DataDomain.PatientSystem.DTO.GetPatientSystemDataResponse sysResponse = null;
 
-                    if (string.IsNullOrEmpty(response.Patient.DisplayPatientSystemId) == false)
-                    {
-                        client = new JsonServiceClient();
-                        string patientSystemUrl = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/PatientSystem/{4}",
-                                                                                    DDPatientSystemUrl,
-                                                                                    "NG",
-                                                                                    request.Version,
-                                                                                    request.ContractNumber,
-                                                                                    response.Patient.DisplayPatientSystemId), request.UserId);
-                        sysResponse = client.Get<Phytel.API.DataDomain.PatientSystem.DTO.GetPatientSystemDataResponse>(patientSystemUrl);
-                    }
+                    //if (string.IsNullOrEmpty(response.Patient.DisplayPatientSystemId) == false)
+                    //{
+                    //    client = new JsonServiceClient();
+                    //    string patientSystemUrl = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/PatientSystem/{4}",
+                    //                                                                DDPatientSystemUrl,
+                    //                                                                "NG",
+                    //                                                                request.Version,
+                    //                                                                request.ContractNumber,
+                    //                                                                response.Patient.DisplayPatientSystemId), request.UserId);
+                    //    sysResponse = client.Get<Phytel.API.DataDomain.PatientSystem.DTO.GetPatientSystemDataResponse>(patientSystemUrl);
+                    //}
                     
                     pResponse.Patient = new NG.DTO.Patient
                     {
@@ -110,12 +111,13 @@ namespace Phytel.API.AppDomain.NG
                         StatusSystemSource = response.Patient.StatusSystemSource
                     };
 
-                    if (sysResponse != null && sysResponse.PatientSystemData != null)
-                    {
-                     //   pResponse.Patient.DisplaySystemId = sysResponse.PatientSystem.SystemId;
-                     //   pResponse.Patient.DisplaySystemName = sysResponse.PatientSystem.SystemName;
-                        pResponse.Patient.DisplayLabel = sysResponse.PatientSystemData.DisplayLabel;
-                    }
+                    // Commented this part out, as there is a separate endpoint to get patient systems ids.
+                    //if (sysResponse != null && sysResponse.PatientSystemData != null)
+                    //{
+                    // //   pResponse.Patient.DisplaySystemId = sysResponse.PatientSystem.SystemId;
+                    // //   pResponse.Patient.DisplaySystemName = sysResponse.PatientSystem.SystemName;
+                    //    pResponse.Patient.DisplayLabel = sysResponse.PatientSystemData.DisplayLabel;
+                    //}
 
 
                     // Add the recently accessed patient to the User's(Contact) recent list. NIGHT-911.
@@ -359,153 +361,6 @@ namespace Phytel.API.AppDomain.NG
                 throw new WebServiceException("AD:DeletePatient()::" + ex.Message, ex.InnerException);
             }
         }
-        #endregion
-
-        #region PatientSystem
-        public GetPatientSystemsResponse GetPatientSystems(GetPatientSystemsRequest request)
-        {
-            GetPatientSystemsResponse response = new GetPatientSystemsResponse();
-
-            try
-            {
-                
-                IRestClient client = new JsonServiceClient();
-                //[Route("/{Context}/{Version}/{ContractNumber}/PatientSystem/Patient/{PatientId}", "GET")]
-                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/PatientSystem/Patient/{4}",
-                                                                                            DDPatientSystemUrl,
-                                                                                            "NG",
-                                                                                            request.Version,
-                                                                                            request.ContractNumber,
-                                                                                            request.PatientId), request.UserId);
-
-                GetPatientSystemsDataResponse ddResponse = client.Get<GetPatientSystemsDataResponse>(url);
-                List<PatientSystem> patientSystems = null;
-                if (ddResponse != null && ddResponse.PatientSystemsData != null && ddResponse.PatientSystemsData.Count > 0)
-                {
-                    patientSystems = new List<PatientSystem>();
-                    List<PatientSystemData> data = ddResponse.PatientSystemsData;
-                    data.ForEach(p =>
-                        {
-                            PatientSystem ps = new PatientSystem { 
-                                Id = p.Id, 
-                                DisplayLabel  = p.DisplayLabel,
-                                PatientId = p.PatientId,
-                              //  SystemId = p.SystemId,
-                              //  SystemName = p.SystemName,
-                              //  DeleteFlag  = p.DeleteFlag
-                            };
-                            patientSystems.Add(ps);
-                        });
-                }
-                response.PatientSystems = patientSystems;
-                return response;
-            }
-            catch (WebServiceException wse)
-            {
-                throw new WebServiceException("AD:GetPatientSystems()::" + wse.Message, wse.InnerException);
-            }
-        }
-
-        //public PostPatientSystemResponse SavePatientSystem(PostPatientSystemRequest request)
-        //{
-        //    PostPatientSystemResponse response = new PostPatientSystemResponse();
-        //    try
-        //    {
-        //        if (request.PatientSystem != null)
-        //        {
-        //            IRestClient client = new JsonServiceClient();
-        //            if (request.Insert)
-        //            {
-        //                // Call insert method.
-        //                //[Route("/{Context}/{Version}/{ContractNumber}/PatientSystem", "PUT")]
-        //                string insertUrl = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/PatientSystem",
-        //                                                                    DDPatientSystemUrl,
-        //                                                                    "NG",
-        //                                                                    request.Version,
-        //                                                                    request.ContractNumber), request.UserId);
-
-        //                PutPatientSystemDataResponse ddInsertResponse =
-        //                    client.Put<PutPatientSystemDataResponse>(insertUrl, new PutPatientSystemDataRequest
-        //                    {
-        //                        Context = "NG",
-        //                        ContractNumber = request.ContractNumber,
-        //                        UserId = request.UserId,
-        //                        Version = request.Version,
-        //                        DisplayLabel = request.PatientSystem.DisplayLabel,
-        //                        PatientID = request.PatientSystem.PatientId,
-        //                    //    SystemID = request.PatientSystem.SystemId,
-        //                     //   SystemName = request.PatientSystem.SystemName
-        //                    } as object);
-        //                if (ddInsertResponse != null && !string.IsNullOrEmpty(ddInsertResponse.PatientSystemId))
-        //                {
-
-        //                    response.PatientSystemId = ddInsertResponse.PatientSystemId;
-        //                    // Call Patient Datadomain to update the patient record with the primary patientsystem Id.
-        //                    //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/PatientSystem/{PatientSystemId}", "PUT")]
-        //                    string patientUrl = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/PatientSystem/{5}",
-        //                                                                    DDPatientServiceURL,
-        //                                                                    "NG",
-        //                                                                    request.Version,
-        //                                                                    request.ContractNumber,
-        //                                                                    request.PatientSystem.PatientId,
-        //                                                                    ddInsertResponse.PatientSystemId), request.UserId);
-                                           
-        //                    PatientData patientData = new PatientData {
-        //                         Id  = request.PatientSystem.PatientId,
-        //                         DisplayPatientSystemId = ddInsertResponse.PatientSystemId
-        //                    };
-        //                    PutPatientSystemIdDataResponse ddPatientResponse =
-        //                    client.Put<PutPatientSystemIdDataResponse>(patientUrl, new PutPatientSystemIdDataRequest
-        //                    {
-        //                        Context = "NG",
-        //                        ContractNumber = request.ContractNumber,
-        //                        UserId = request.UserId,
-        //                        Version = request.Version,
-        //                        PatientId = request.PatientSystem.PatientId,
-        //                        PatientSystemId = ddInsertResponse.PatientSystemId
-        //                    } as object);
-        //                    if (ddPatientResponse == null && !ddPatientResponse.Success)
-        //                    {
-        //                        throw new Exception("Failed to update the PatientSystemId in the Patient collection.");
-        //                    }
-        //                }
-        //            }
-        //            else
-        //            {
-        //                // call update method.
-        //                //[Route("/{Context}/{Version}/{ContractNumber}/PatientSystem/Update", "PUT")]
-        //                string updateUrl = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/PatientSystem/Update",
-        //                                                                    DDPatientSystemUrl,
-        //                                                                    "NG",
-        //                                                                    request.Version,
-        //                                                                    request.ContractNumber), request.UserId);
-        //                PutUpdatePatientSystemDataResponse ddUpdateResponse =
-        //                client.Put<PutUpdatePatientSystemDataResponse>(updateUrl, new PutUpdatePatientSystemDataRequest
-        //                {
-        //                    Context = "NG",
-        //                    ContractNumber = request.ContractNumber,
-        //                    UserId = request.UserId,
-        //                    Version = request.Version,
-        //                    Id = request.PatientSystem.Id,
-        //                  //  DeleteFlag = request.PatientSystem.DeleteFlag,
-        //                    DisplayLabel = request.PatientSystem.DisplayLabel,
-        //                    PatientID = request.PatientSystem.PatientId,
-        //                 //   SystemID = request.PatientSystem.SystemId,
-        //                  //  SystemName = request.PatientSystem.SystemName
-        //                } as object);
-        //                if (ddUpdateResponse != null && ddUpdateResponse.Success)
-        //                {
-        //                    response.PatientSystemId = request.PatientSystem.Id;
-        //                }
-        //            }
-        //        }
-        //        return response;
-        //    }
-        //    catch (WebServiceException wse)
-        //    {
-        //        throw new WebServiceException("AD:SavePatientSystem()::" + wse.Message, wse.InnerException);
-        //    }
-        //} 
         #endregion
 
         #region Cohort 
