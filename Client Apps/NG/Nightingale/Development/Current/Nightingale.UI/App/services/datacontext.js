@@ -230,6 +230,7 @@ define(['services/session', 'services/jsonResultsAdapter', 'models/base', 'confi
             deleteGoal: deleteGoal,
             saveNote: saveNote,
             deleteNote: deleteNote,
+			getNote: getNote,
             saveCareMember: saveCareMember,
             enums: localCollections.enums,
             alerts: localCollections.alerts,
@@ -415,6 +416,11 @@ define(['services/session', 'services/jsonResultsAdapter', 'models/base', 'confi
                 lookupsService.getNoteLookup(manager, 'NoteWho', datacontext.enums.noteWhos, true);
                 lookupsService.getNoteLookup(manager, 'NoteSource', datacontext.enums.noteSources, true);
                 lookupsService.getLookup(manager, 'NoteType', datacontext.enums.noteTypes, true);
+				//utilization note lookups:
+				lookupsService.getLookup(manager, 'VisitType', datacontext.enums.visitTypes, true);
+				lookupsService.getLookup(manager, 'UtilizationSource', datacontext.enums.utilizationSources, true);
+				lookupsService.getLookup(manager, 'Disposition', datacontext.enums.dispositions, true);
+				lookupsService.getLookup(manager, 'UtilizationLocation', datacontext.enums.utilizationLocations, true);
                 return lookupsService.getNoteLookup(manager, 'NoteDuration', datacontext.enums.noteDurations, true);
             }
         }
@@ -1115,7 +1121,7 @@ define(['services/session', 'services/jsonResultsAdapter', 'models/base', 'confi
             // Display a message while saving
             var message = queryStarted('Note', true, 'Saving');
             var serializedNote = entitySerializer.serializeNote(note, manager);
-            return notesService.saveNote(manager, serializedNote).then(saveCompleted);
+            return notesService.saveNote(manager, serializedNote, note.type().name()).then(saveCompleted);
 
             function saveCompleted(data) {
                 // Replace the id of the note since we had a negative number there
@@ -1143,7 +1149,22 @@ define(['services/session', 'services/jsonResultsAdapter', 'models/base', 'confi
                 queryCompleted(message);
             }
         }
-
+		/**
+		*	get note by id. initialy intended to load the full object of utilization type note.
+		*	as notes list in history are retrieved through the note endpoint, they are retrieving only some of the utilization props.		
+		*	@method getNote
+		*	@param id {string} 
+		*/
+		function getNote( id, patientId, type, observable ){
+			if( type && type.toLowerCase() === 'utilization' ){
+				//var message = queryStarted('Note', true, 'Loading');
+				return notesService.getNote( manager, id, patientId, type, observable );
+			}
+			else{
+				return Q();	//return a resolved promise.	
+			}
+		}
+		
         // Save changes to a single contact card
         function saveCareMember(careMember, saveType) {
             // Display a message while saving

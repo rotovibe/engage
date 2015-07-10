@@ -7,6 +7,8 @@
             self.newNote = ko.observable();
             // Touchpoint note
             self.newTouchPoint = ko.observable();
+			self.newUtilization = ko.observable();
+			
             // Are we currently saving
             self.newTouchPointToken = {};
             self.isSaving = ko.observable();
@@ -29,14 +31,22 @@
                 var returnValue = '';
                 // Get the type name
                 var typename = self.selectedNoteType().name().toLowerCase();
-                // If it's a touchpoint,
-                if (typename === 'touchpoint') {
-                    // Show the touchpoint template
-                    returnValue = 'shell/quickadd/touchpoint.note.html';
-                } else {
-                    // Else always show the general
-                    returnValue = 'shell/quickadd/general.note.html';
-                }
+				switch( typename ){
+					case 'touchpoint':{
+						// Show the touchpoint template
+						returnValue = 'shell/quickadd/touchpoint.note.html';
+						break;
+					}
+					case 'utilization':{						
+						returnValue = 'shell/quickadd/utilization.note.html';
+						break;
+					}
+					default:{
+						// Else always show the general
+						returnValue = 'shell/quickadd/general.note.html';
+						break;
+					}				
+				}                
                 return returnValue;
             });
             // Available properties of a note
@@ -45,7 +55,12 @@
             self.sources = datacontext.enums.noteSources;
             self.outcomes = datacontext.enums.noteOutcomes;
             self.durations = datacontext.enums.noteDurations;
-
+			//utilization note lookups:
+			self.visitTypes = datacontext.enums.visitTypes;
+			self.utilizationSources = datacontext.enums.utilizationSources;
+			self.dispositions = datacontext.enums.dispositions;
+			self.utilizationLocations = datacontext.enums.utilizationLocations;
+	
             // TODO: REMOVE THESE ONCE IS DEFAULT IS SET
             self.defaultOutcome = ko.utils.arrayFirst(self.outcomes(), function (outcome) {
                 return outcome.isDefault();
@@ -62,6 +77,19 @@
             self.defaultDuration = ko.utils.arrayFirst(self.durations(), function (duration) {
                 return duration.isDefault();
             });
+			self.defaultVisitType = ko.utils.arrayFirst(self.visitTypes(), function (visitType) {
+                return visitType.isDefault();
+            });
+			self.defaultUtilizationSource = ko.utils.arrayFirst(self.utilizationSources(), function (utilizationSource) {
+                return utilizationSource.isDefault();
+            });
+			self.defaultDisposition = ko.utils.arrayFirst(self.dispositions(), function (disposition) {
+                return disposition.isDefault();
+            });
+			self.defaultUtilizationLocations = ko.utils.arrayFirst(self.utilizationLocations(), function (location) {
+                return location.isDefault();
+            });
+			
             // Content area toggling for a touchpoint
             self.tpContentOpen = ko.observable(true);
             self.tpDetailsOpen = ko.observable(false);
@@ -89,7 +117,25 @@
             // Set the newNote obs to a new note entity
             self.newNote(datacontext.createEntity('Note', { id: self.thisNoteId(), patientId: self.selectedPatient().id(), typeId: generalNoteType.id() }));
         };
-
+		ctor.prototype.createNewUtilization = function () {
+            var self = this;
+            // Find a utilization note type id
+            var utilizationNoteType = ko.utils.arrayFirst(self.noteTypes(), function (type) {
+                return type.name().toLowerCase() === 'utilization';
+            });
+            self.newUtilization(datacontext.createEntity('Note', 
+					{ 	id: self.thisUtilizationId(), 
+						patientId: self.selectedPatient().id(), 										
+						pSystem: "Engage",
+						admitted: false,
+						typeId: utilizationNoteType.id()
+					}));
+					
+					// visitType: null,	//visitTypeId	defaultVisitType					
+					// utilizationSourceId: defaultUtilizationSource,
+					// disposition: defaultDisposition, //dispositionId					
+					// location: defaultUtilizationLocations,	//utilizationLocationId					
+        };
         ctor.prototype.createNewTouchPoint = function () {
             var self = this;
             // Find a touchpoint note type id
@@ -131,6 +177,10 @@
             self.thisTouchPointId = ko.computed(function () {
                 return self.thisNoteId() - 100;
             });
+			// utilization note id
+            self.thisUtilizationId = ko.computed(function () {
+                return self.thisTouchPointId() - 100;
+            });
             self.isShowing = self.settings.data.isShowing;
             self.cancel = function () {
                 self.newNote().entityAspect.rejectChanges();
@@ -145,6 +195,11 @@
                     self.newTouchPointToken.dispose();
                 }
                 self.createNewTouchPoint();
+                self.isShowing(false);
+            };
+			self.cancelUtilization = function () {
+                self.newUtilization().entityAspect.rejectChanges();                
+                self.createNewUtilization();
                 self.isShowing(false);
             };
             self.availablePrograms = ko.computed(function () {
@@ -194,6 +249,23 @@
 					self.createNewTouchPoint();
 				}
             };
+			self.saveUtilization = function(){
+				if (self.newUtilization()) {
+                    self.newUtilization().patientId(self.selectedPatient().id());
+                    self.isSaving(true);
+                    self.newUtilization().createdById(session.currentUser().userId());
+					//self.newUtilization().text(	self.newUtilization().reason() ); //copy reason into text so it will display in the history notes list as content
+                    self.newUtilization().createdOn(new Date());
+					self.newUtilization().createdById(session.currentUser().userId());
+                    datacontext.saveNote(self.newUtilization()).then(saved);                    
+                }
+				function saved() {
+					self.isShowing(false);
+					self.newUtilization(null);
+					self.isSaving(false);
+					self.createNewUtilization();
+				}
+			};			
             self.selectedPatient.subscribe(function () {
                 self.cancel();
                 self.cancelTouchPoint();
@@ -229,8 +301,16 @@
 				}				
                 return self.newTouchPoint() && !self.isSaving() && self.newTouchPoint().text() && self.newTouchPoint().contactedOn();
             });
+			self.canSaveUtilization = ko.computed(function () {
+				//subscribe to the condition variables: (this fixes a firefox issue)
+				//TODO: verify validation rules for utilization
+				var hasNewUtilization = self.newUtilization()? true : false;
+				var isSaving = self.isSaving();							
+                return self.newUtilization() && !self.isSaving() && self.newUtilization().text();	
+            });
             self.createNewNote();
             self.createNewTouchPoint();
+			self.createNewUtilization();
             self.lastThreeNotes = ko.computed(function () {
                 var theseNotes = self.selectedPatient().notes().sort(self.alphabeticalDateSort);
                 var lastNotes = [];

@@ -17,14 +17,16 @@
                         <div class="table-cell">
                             <div class="body">
                                 <div class="content" data-bind="with: $parents[1].activeNote">
-                                    <div class="row pad-top">
-                                        <strong>Content:</strong>
-                                    </div>
-                                    <div class="row pad-top">
-                                        <textarea readonly="readonly" class="display-only span12" data-bind="text: text, autoHeight: text, attr: { 'title': text }"></textarea>
-                                    </div>
-                                    <div class="row pad-top divider"></div>
+                                    
                                     <div data-bind="visible: type().name().toLowerCase() === 'touchpoint'">
+										<div class="row pad-top">
+											<strong>Content:</strong>
+										</div>
+										<div class="row pad-top">
+											<textarea readonly="readonly" class="display-only span12" data-bind="text: text, autoHeight: text, attr: { 'title': text }"></textarea>
+										</div>
+										<div class="row pad-top divider"></div>
+										
                                         <div class="row pad-top" data-bind="with: method">
                                             <strong class="span3">Method:</strong>
                                             <span class="span9" data-bind="text: name"></span>
@@ -54,13 +56,87 @@
                                             <span class="span9" data-bind="DateTime: contactedOn"></span>
                                         </div>
                                     </div>
+									<div data-bind="visible: type().name().toLowerCase() === 'utilization'">
+										<div class="row pad-top">
+											<strong>Reason:</strong>
+										</div>
+										<div class="row pad-top">
+											<textarea readonly="readonly" class="display-only span12" data-bind="text: text, autoHeight: text, attr: { 'title': text }"></textarea>
+										</div>
+										<div class="row pad-top divider"></div>
+										
+										<div class="row pad-top" data-bind="visible: visitType, with: visitType">
+                                            <strong class="span3">Visit Type:</strong>
+											<span data-bind="text: name" class="span3"></span>
+											<div data-bind="visible: (name() && name().toLowerCase() === 'other')">
+												<strong class="span3">Other Type:</strong>
+												<span class="span3" data-bind="text: $parent.otherType" class="span3"></span>
+											</div>
+                                        </div>
+										<div class="row pad-top" data-bind="visible: admitDate">
+                                            <strong class="span3">Visit/Admit Date:</strong>
+                                            <span class="span9" data-bind="DateTime: admitDate"></span>
+                                        </div>
+										<div class="row pad-top" data-bind="visible: (admitted === true || admitted === false)">
+                                            <strong class="span3">Admitted:</strong>
+                                            <span class="span9" data-bind="text: admitted() ? 'Yes' : 'No' "></span>
+                                        </div>
+										<div class="row pad-top" data-bind="visible: dischargeDate">
+                                            <strong class="span3">Discharge Date:</strong>
+                                            <span class="span9" data-bind="DateTime: dischargeDate"></span>
+                                        </div>
+										<div class="row pad-top" data-bind="visible: utilizationLength">
+                                            <strong class="span3">Length:</strong>
+                                            <span data-bind="text: utilizationLength"></span><span data-bind="text: ((utilizationLength === 1)? ' day' : ' days')"></span>
+                                        </div>										
+										<div class="row pad-top" data-bind="visible: utilizationLocation, with: utilizationLocation">
+                                            <strong class="span3">Location:</strong>                                            
+											<span data-bind="text: name" class="span3"></span>											
+											<div data-bind="visible: (name() && name().toLowerCase() === 'other')">
+												<strong class="span3">Other Location:</strong>
+												<span data-bind="text: $parent.otherLocation" class="span3"></span>
+											</div>
+                                        </div>
+										<div class="row pad-top" data-bind="visible: disposition, with: disposition">
+                                            <strong class="span3">Disposition:</strong>                                            
+											<span data-bind="text: name" class="span3"></span>
+											<div data-bind="visible: (name() && name().toLowerCase() === 'other')">
+												<strong class="span3">Other Disposition:</strong>
+												<span data-bind="text: $parent.otherDisposition" class="span3"></span>
+											</div>
+											
+                                        </div>
+										<div class="row pad-top" data-bind="visible: utilizationSource, with: utilizationSource">
+                                            <strong class="span3">Source:</strong>
+                                            <span class="span9" data-bind="text: name"></span>
+                                        </div>																													
+									</div>
+									
+									<div data-bind="visible: (type().name().toLowerCase() !== 'utilization' && type().name().toLowerCase() !== 'touchpoint')">
+										<div class="row pad-top">
+											<strong>Content:</strong>
+										</div>
+										<div class="row pad-top">
+											<textarea readonly="readonly" class="display-only span12" data-bind="text: text, autoHeight: text, attr: { 'title': text }"></textarea>
+										</div>
+										<div class="row pad-top divider"></div>
+									</div>
+									
                                     <div class="row pad-top" data-bind="with: programString">
                                         <strong class="span3">Program(s):</strong>
                                         <span class="span9" data-bind="text: $data, attr: { 'title': $data }"></span>
                                     </div>
-                                    <div class="row pad-top" data-bind="if: createdOn">
+									<div class="row pad-top" data-bind="visible: systemSource">
+                                        <strong class="span3">System:</strong>
+                                        <span class="span9"><span data-bind="text: systemSource"></span>
+                                    </div>
+                                    <div class="row pad-top" data-bind="visible: createdOn">
                                         <strong class="span3">Created:</strong>
-                                        <span class="span9"><span data-bind="DateTime: createdOn"></span> by <span data-bind="text: createdBy().preferredName"></span></span>
+										<span data-bind="DateTime: createdOn"></span> by <span data-bind="text: createdBy().preferredName"></span>
+                                    </div>
+									<div class="row pad-top" data-bind="visible: updatedOn">
+                                        <strong class="span3">updated:</strong>
+                                        <span data-bind="DateTime: updatedOn"></span> by <span data-bind="text: (updatedBy()? updatedBy().preferredName : '')"></span>
                                     </div>
                                 </div>
                             </div>

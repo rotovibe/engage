@@ -599,7 +599,7 @@
 
         // Get the values of the properties of the action
         //var unwrappedNote = ko.toJS(note);        
-
+//TODO: add utilization props to entity
         var noteQuery = breeze.EntityQuery
             .from('fakePath')
             .where('id', '==', note.id())

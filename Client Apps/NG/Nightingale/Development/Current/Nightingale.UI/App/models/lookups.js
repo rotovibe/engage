@@ -254,6 +254,46 @@ define(['services/session'],
 		            isDefault: { dataType: "String" }
 		        }
 		    });
+			//utilization note:	VisitType		
+			metadataStore.addEntityType({
+		        shortName: "VisitType",
+		        namespace: "Nightingale",
+		        dataProperties: {
+		            id: { dataType: "String", isPartOfKey: true },
+		            name: { dataType: "String" },
+		            isDefault: { dataType: "String" }		            
+		        }
+		    });
+			//utilization note:	UtilizationSource	
+			metadataStore.addEntityType({
+		        shortName: "UtilizationSource",
+		        namespace: "Nightingale",
+		        dataProperties: {
+		            id: { dataType: "String", isPartOfKey: true },
+		            name: { dataType: "String" },
+		            isDefault: { dataType: "String" }		            
+		        }
+		    });
+			//utilization note:	Disposition	
+			metadataStore.addEntityType({
+		        shortName: "Disposition",
+		        namespace: "Nightingale",
+		        dataProperties: {
+		            id: { dataType: "String", isPartOfKey: true },
+		            name: { dataType: "String" },
+		            isDefault: { dataType: "String" }	            
+		        }
+		    });
+			//utilization note: UtilizationLocation	
+			metadataStore.addEntityType({
+		        shortName: "UtilizationLocation",
+		        namespace: "Nightingale",
+		        dataProperties: {
+		            id: { dataType: "String", isPartOfKey: true },
+		            name: { dataType: "String" },
+		            isDefault: { dataType: "String" }		            
+		        }
+		    });		
 
 		    // AllergyType
 		    metadataStore.addEntityType({

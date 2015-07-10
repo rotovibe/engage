@@ -16,6 +16,7 @@
         // Create an object to use to reveal functions from this module
         var contactService = {
             saveNote: saveNote,
+			getNote: getNote,
             deleteNote: deleteNote,
             saveToDo: saveToDo,
             getToDos: getToDos,
@@ -24,7 +25,7 @@
         return contactService;
         
         // POST to the server, check the results for entities
-        function saveNote(manager, serializedNote) {
+        function saveNote(manager, serializedNote, type) {
 
             // If there is no manager, we can't query using breeze
             if (!manager) { throw new Error("[manager] cannot be a null parameter"); }
@@ -36,12 +37,24 @@
 			var endPoint;
 			var method = 'POST'
 			if( !isNaN(serializedNote.Id) && Number(serializedNote.Id) < 1 ){
-				//insert: (new notes have negative int id's)
-				endPoint = new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'Patient/' + serializedNote.PatientId + '/Note/Insert', 'Note');					
+				//insert: (new notes have negative int id's)				
+				if( type && type.toLowerCase() === 'utilization' ){
+					//different endpoint for utilization note type
+					endPoint = new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'Patient/' + serializedNote.PatientId + '/Notes/Utilization', 'Note');										
+				}
+				else{
+					endPoint = new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'Patient/' + serializedNote.PatientId + '/Note/Insert', 'Note');					
+				}
 			}
 			else{
-				//update:
-				endPoint = new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'Patient/' + serializedNote.PatientId + '/Note/' + String(serializedNote.Id) , 'PatientNote');	
+				//update:				
+				if( type && type.toLowerCase() === 'utilization' ){
+					//different endpoint for utilization note type
+					endPoint = new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'Patient/' + serializedNote.PatientId + '/Notes/Utilization/' + String(serializedNote.Id) , 'PatientNote');	
+				}
+				else{
+					endPoint = new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'Patient/' + serializedNote.PatientId + '/Note/' + String(serializedNote.Id) , 'PatientNote');		
+				}				
 				method = 'PUT'; 
 			}
             
@@ -81,9 +94,15 @@
             // Check if the datacontext is available, if so require it
             checkDataContext();
 
-            // Create an end point to use
-            var endPoint = new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'Patient/' + note.patientId() + '/Note/' + note.id() + '/Delete', 'Note');
-
+            // Create an end point to use	
+			if( type && type.toLowerCase() === 'utilization' ){
+				//different endpoint for utilization note type
+				var endPoint = new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'Patient/' + note.PatientId + '/Notes/Utilization/' + note.id() + '/Delete', 'Note');
+			}
+			else{
+				var endPoint = new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'Patient/' + note.patientId() + '/Note/' + note.id() + '/Delete', 'Note');
+			}
+			
             // Create a payload from the JS object
             var payload = {};
 
@@ -104,7 +123,57 @@
                 return data.httpResponse.data;
             }
         }
+		/**
+		*	get note by id. initialy intended to load the full object of utilization type note only.
+		*	as notes list in history are retrieved through the note endpoint, they are retrieving only some of the utilization props.		
+		*	@method getNote
+		*	@param manager datacontext manager
+		*	@param id {string} 
+		*	@param type {string} the note type name (examples: utilization, general touchpoint etc. )
+		*	@param observable optional. to keep the result 
+		*/
+		function getNote( manager, id, patientId, type, observable ){
+			if( type && type.toLowerCase() === 'utilization' ){
+				checkDataContext();
+				// If there is no manager, we can't query using breeze
+				if (!manager) { throw new Error("[manager] cannot be a null parameter"); }
 
+				var endPoint = new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 
+									'Patient/' + patientId + '/Notes/Utilizations/' + id, 'Note');
+				
+				// Query to post the results
+				var query = breeze.EntityQuery
+					.from(endPoint.ResourcePath)
+					.withParameters({
+						$method: 'GET',
+						$encoding: 'JSON'						
+					})
+					.toType('Note');
+				
+				return manager.executeQuery(query).then(querySucceeded).fail(queryFailed);
+
+				function querySucceeded(data) {
+					var s = data.results;
+					if (observable) {
+						return observable(s);
+					} else {
+						return s;
+					}
+				}
+
+				function queryFailed(error) {
+					console.log(error);
+					checkDataContext();
+					checkForFourOhOne(error);
+					var messager = 'Failed to load ' + entityType + ' from server.';
+					var thisAlert = datacontext.createEntity('Alert', { result: 0, reason: messager });
+					thisAlert.entityAspect.acceptChanges();
+					datacontext.alerts.push(thisAlert);
+					return false;
+				}
+			}
+		}
+		
         // POST to the server, check the results for entities
         function saveToDo(manager, serializedToDo, verb) {
 

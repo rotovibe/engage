@@ -24,7 +24,17 @@
         var groups = ko.observableArray();
 
         var activeNote = ko.observable();
-
+		var activeNoteLoader = ko.computed(function(){
+			var note = activeNote();
+			if( note && note.type() && note.type().name().toLowerCase() === 'utilization' ){				
+				console.log('activeNote changed to: '+ activeNote().type().name() + ' ' + activeNote().id()+ ' ' + activeNote().text());	//here we need to load the note if its utilization type.	
+				//load this note if the type is utilization
+				datacontext.getNote( note.id(), note.patientId(), note.type().name() ).then( noteLoaded );
+				function noteLoaded(data){					
+					//note.text( note.reason() );
+				}
+			}			
+		});
         var alphabeticalOrderSort = function (l, r) { return (l.order() == r.order()) ? (l.order() > r.order() ? 1 : -1) : (l.order() > r.order() ? 1 : -1) };
 
         var openColumn = ko.observable();
@@ -167,7 +177,7 @@
         }
 
         function setActiveNote(sender) {
-            activeNote(sender);
+            activeNote(sender);			
         }
 		//edit note:
 	    function ModalEntity(note) {
@@ -181,6 +191,11 @@
 			});
 		}
 		function editNote(sender){						    
+			if( activeNote().type().name() && activeNote().type().name().toLowerCase() === 'utilization' ){
+				//TODO: this is temporary !! 
+				alert(' edit utilization note - not implemented. ');
+				return;
+			}
 			var modalEntity = ko.observable(new ModalEntity(activeNote()));
 			var saveOverride = function () {					  
 			  datacontext.saveNote(modalEntity().note);

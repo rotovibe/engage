@@ -64,6 +64,11 @@
     enums.noteSources = ko.observableArray();
     enums.noteOutcomes = ko.observableArray();
     enums.noteDurations = ko.observableArray();
+	// Note utilization type lookups
+	enums.visitTypes = ko.observableArray();
+	enums.utilizationSources = ko.observableArray();
+	enums.dispositions = ko.observableArray();
+	enums.utilizationLocations = ko.observableArray();
     // Allergy lookups
     enums.allergyTypes = ko.observableArray();
     enums.severities = ko.observableArray();

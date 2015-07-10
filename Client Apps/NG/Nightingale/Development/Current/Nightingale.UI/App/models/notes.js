@@ -26,6 +26,7 @@ define(['services/session', 'services/dateHelper'],
 		            createdOn: { dataType: "DateTime" },
 					updatedOn: { dataType: "DateTime" },
 		            createdById: { dataType: "String" },
+					updatedById: { dataType: "String" },
 		            typeId: { dataType: "String" },
 		            methodId: { dataType: "String" },
 		            outcomeId: { dataType: "String" },
@@ -34,7 +35,19 @@ define(['services/session', 'services/dateHelper'],
 		            durationId: { dataType: "String" },
 		            contactedOn: { dataType: "DateTime" },
 		            validatedIdentity: { dataType: "Boolean" },
-		            programIds: { complexTypeName: "Identifier:#Nightingale", isScalar: false }
+		            programIds: { complexTypeName: "Identifier:#Nightingale", isScalar: false },
+					//utilization props:
+					admitDate: { dataType: "DateTime" },
+					dischargeDate: { dataType: "DateTime" },					
+					systemSource: { dataType: "String" },
+					admitted: { dataType: "Boolean" },
+					visitTypeId: { dataType: "String" },
+					otherType: { dataType: "String" },					
+					utilizationSourceId: { dataType: "String" },	//<-map from sourceId
+					dispositionId: { dataType: "String" },
+					otherDisposition: { dataType: "String" },
+					locationId: { dataType: "String" },	//utilizationLocationId
+					otherLocation: { dataType: "String" }
 		        },
 		        navigationProperties: {
 		            patient: {
@@ -65,6 +78,23 @@ define(['services/session', 'services/dateHelper'],
 		                entityTypeName: "NoteDuration", isScalar: true,
 		                associationName: "Note_Duration", foreignKeyNames: ["durationId"]
 		            },
+					//utilization lookups:
+					visitType: {
+						entityTypeName: "VisitType", isScalar: true,
+						associationName: "Note_VisitType", foreignKeyNames: ["visitTypeId"]
+					},
+					utilizationSource: {
+						entityTypeName: "UtilizationSource", isScalar: true,
+						associationName: "Note_UtilizationSource", foreignKeyNames: ["utilizationSourceId"]
+					},
+					disposition: {
+						entityTypeName: "Disposition", isScalar: true,
+						associationName: "Note_Disposition", foreignKeyNames: ["dispositionId"]
+					},
+					utilizationLocation: {
+						entityTypeName: "UtilizationLocation", isScalar: true,
+						associationName: "Note_UtilizationLocation", foreignKeyNames: ["locationId"]
+					},					
 		        }
 		    });
 
@@ -207,6 +237,13 @@ define(['services/session', 'services/dateHelper'],
                     });
                     return thisMatchedCareManager;
                 });
+				note.updatedBy = ko.computed(function () {
+                    checkDataContext();
+                    var thisMatchedCareManager = ko.utils.arrayFirst(datacontext.enums.careManagers(), function (caremanager) {
+                        return caremanager.id() === note.updatedById();
+                    });
+                    return thisMatchedCareManager;
+                });
                 note.localDate = ko.computed(function () {
                     var thisDate = moment(note.createdOn()).format('MM/DD/YYYY');
                     return thisDate;
@@ -253,7 +290,12 @@ define(['services/session', 'services/dateHelper'],
 								}
 							}							
 							break;
-						}		
+						}
+						case 'utilization':
+						{
+							//TODO:
+							break;
+						}
 						case null:						
 						case undefined:
 						{
@@ -267,6 +309,34 @@ define(['services/session', 'services/dateHelper'],
 					}
 					note.validationErrors(noteErrors);
 					return !hasErrors;
+				});
+				
+				/**
+				*	for utilization note type: calculate the days from admitDate to discharge ( or until today )
+				*	note: same day (admission = discharge) should calculate to 0 
+				*	@method note.utilizationLength
+				*/
+				note.utilizationLength = ko.computed( function(){
+					var admitted = note.admitted();
+					var admitDate = note.admitDate();
+					var dischargeDate = note.dischargeDate();
+					var result = null;
+					if( admitted ){
+						if( moment(admitDate).isValid() ){							
+							if( !moment(dischargeDate).isValid() ){
+								//days from Visit/Admit Date until today
+								result = moment().diff( admitDate, 'days' );
+							}
+							else{
+								//days from Visit/Admit Date until discharge Date
+								result = moment(dischargeDate).diff( admitDate, 'days' );								
+							}
+						}
+						else{
+							result = '-';
+						}
+					}					
+					return result;
 				});
 				note.validationErrorsArray = ko.computed( function(){
 					var thisArray = [];
