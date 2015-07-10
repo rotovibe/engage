@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Phytel.API.AppDomain.NG.Test.Stubs;
 using Phytel.API.AppDomain.NG.DTO;
+using ServiceStack.Service;
+using ServiceStack.ServiceClient.Web;
 
 namespace Phytel.API.AppDomain.NG.Test.PatientSystem
 {
@@ -13,54 +15,103 @@ namespace Phytel.API.AppDomain.NG.Test.PatientSystem
     [TestClass]
     public class PatientSystem_Test
     {
-        string userId = "000000000000000000000000";
-        string contractNumber = "InHealth001";
-        double version = 1.0;
         string context = "NG";
+        string contractNumber = "InHealth001";
+        string userId = "000000000000000000000000";
+        double version = 1.0;
+        string url = "http://localhost:888/Nightingale";
+        IRestClient client = new JsonServiceClient();
+        string token = "54e7970984ac0727006941bd";
 
-        [TestMethod()]
+        [TestMethod]
         public void GetPatientSystems_Test()
         {
-            INGManager ngm = new NGManager();
-
             GetPatientSystemsRequest request = new GetPatientSystemsRequest
             {
-                Version = version,
                 ContractNumber = contractNumber,
                 UserId = userId,
-                PatientId = "5447e56684ac05125410e26b"
+                Version = version,
+                Token = token,
+                PatientId = "5325da9ed6a4850adcbba6ce"
             };
 
-            GetPatientSystemsResponse response = ngm.GetPatientSystems(request);
-            Assert.IsTrue(response.PatientSystems.Count > 0);
+            JsonServiceClient.HttpWebRequestFilter = x =>
+                x.Headers.Add(string.Format("{0}: {1}", "Token", token));
+
+            //[Route("/{Version}/{ContractNumber}/Patient/{PatientId}PatientSystems", "GET")]
+            GetPatientSystemsResponse response = client.Get<GetPatientSystemsResponse>(string.Format("{0}/{1}/{2}/Patient/{3}/PatientSystems", url, version, contractNumber, request.PatientId));
+            Assert.IsNotNull(response);
         }
 
-        [TestMethod()]
-        public void SavePatientSystem_Test()
+        [TestMethod]
+        public void InsertPatientSystems_Test()
         {
-            INGManager ngm = new NGManager();
-
-            Phytel.API.AppDomain.NG.DTO.PatientSystem p = new DTO.PatientSystem
+            List<DTO.PatientSystem> list = new List<DTO.PatientSystem>();
+            list.Add(new DTO.PatientSystem { PatientId = "5325da9ed6a4850adcbba6ce", Value = " 000987 ", StatusId = 1, Primary = false, SystemSourceId = "559e8c70d4332320bc076f4d" });
+            list.Add(new DTO.PatientSystem { PatientId = "5325da9ed6a4850adcbba6ce", Value = " 005764 ", StatusId = 1, Primary = true, SystemSourceId = "559e8c70d4332320bc076f4d" });
+            
+            InsertPatientSystemsRequest request = new InsertPatientSystemsRequest
             {
-                DeleteFlag  = false,
-                //DisplayLabel = "ID",
-                Id = "54481ddf84ac051254201e67",
-                PatientId = "5447e56684ac05125410e26b",
-                SystemId = "4444",
-                SystemName = "Lamar"
-            };
-
-            PostPatientSystemRequest request = new PostPatientSystemRequest
-            {
-                Version = version,
                 ContractNumber = contractNumber,
                 UserId = userId,
-                Token = string.Empty,
-                PatientSystem = p,
-                Insert = false,
+                Version = version,
+                Token = token,
+                PatientId = "5325da9ed6a4850adcbba6ce",
+                PatientSystems = list
             };
 
-            PostPatientSystemResponse response = ngm.SavePatientSystem(request);
+            JsonServiceClient.HttpWebRequestFilter = x =>
+                x.Headers.Add(string.Format("{0}: {1}", "Token", token));
+
+            //[Route("/{Version}/{ContractNumber}/Patient/{PatientId}/PatientSystems", "POST")]
+            InsertPatientSystemsResponse response = client.Post<InsertPatientSystemsResponse>(string.Format("{0}/{1}/{2}/Patient/{3}/PatientSystems", url, version, contractNumber, request.PatientId), request as object);
+            Assert.IsNotNull(response);
+        }
+
+        [TestMethod]
+        public void UpdatePatientSystems_Test()
+        {
+            List<DTO.PatientSystem> list = new List<DTO.PatientSystem>();
+            list.Add(new DTO.PatientSystem { Id = "55a038f7d43325251c8fbdb8", PatientId = "5325da9ed6a4850adcbba6ce", Value = " 456HHUPD ", StatusId = 2, Primary = true, SystemSourceId = "559e8c70d4332320bc076f4e" });
+            list.Add(new DTO.PatientSystem { Id = "55a038f8d43325251c8fbdbf", PatientId = "5325da9ed6a4850adcbba6ce", Value = " 009DFUPD ", StatusId = 2, Primary = true, SystemSourceId = "559e8c70d4332320bc076f4f" });
+
+            UpdatePatientSystemsRequest request = new UpdatePatientSystemsRequest
+            {
+                ContractNumber = contractNumber,
+                UserId = userId,
+                Version = version,
+                Token = token,
+                PatientId = "5325da9ed6a4850adcbba6ce",
+                PatientSystems = list
+            };
+
+            JsonServiceClient.HttpWebRequestFilter = x =>
+                x.Headers.Add(string.Format("{0}: {1}", "Token", token));
+
+            //[Route("/{Version}/{ContractNumber}/Patient/{PatientId}PatientSystems", "PUT")]
+            UpdatePatientSystemsResponse response = client.Put<UpdatePatientSystemsResponse>(string.Format("{0}/{1}/{2}/Patient/{3}/PatientSystems", url, version, contractNumber, request.PatientId), request  as object);
+            Assert.IsNotNull(response);
+        }
+
+
+        [TestMethod]
+        public void DeletePatientSystems_Test()
+        {
+            DeletePatientSystemsRequest request = new DeletePatientSystemsRequest
+            {
+                ContractNumber = contractNumber,
+                UserId = userId,
+                Version = version,
+                Token = token,
+                PatientId = "5325da9ed6a4850adcbba6ce",
+                Ids = "55a038f7d43325251c8fbdb8,55a038f8d43325251c8fbdbf"
+            };
+
+            JsonServiceClient.HttpWebRequestFilter = x =>
+                x.Headers.Add(string.Format("{0}: {1}", "Token", token));
+
+            //[Route("/{Version}/{ContractNumber}/Patient/{PatientId}PatientSystems/{Ids}", "DELETE")]
+            DeletePatientSystemsResponse response = client.Delete<DeletePatientSystemsResponse>(string.Format("{0}/{1}/{2}/Patient/{3}/PatientSystems/{4}", url, version, contractNumber, request.PatientId, request.Ids));
             Assert.IsNotNull(response);
         }
     }

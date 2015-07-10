@@ -34,7 +34,7 @@ namespace Phytel.API.DataDomain.PatientNote.Service
             try
             {
                 RequireUserId(request);
-                Manager.UpdatePatientNote(request);
+                response.PatientNoteData = Manager.UpdatePatientNote(request);
             }
             catch (Exception ex)
             {

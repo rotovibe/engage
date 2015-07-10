@@ -7,5 +7,9 @@ namespace Phytel.API.AppDomain.NG
     {
         void LogException(Exception ex);
         List<SystemSource> GetActiveSystemSources(GetActiveSystemSourcesRequest request);
+        List<PatientSystem> GetPatientSystems(GetPatientSystemsRequest request);
+        List<PatientSystem> InsertPatientSystems(InsertPatientSystemsRequest request);
+        List<PatientSystem> UpdatePatientSystems(UpdatePatientSystemsRequest request);
+        void DeletePatientSystems(DeletePatientSystemsRequest request);
     }
 }

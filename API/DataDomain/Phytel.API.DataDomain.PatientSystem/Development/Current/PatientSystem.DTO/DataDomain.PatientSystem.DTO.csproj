@@ -82,15 +82,21 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Enums.cs" />
-    <Compile Include="PatientSystem\PutUpdatePatientSystemDataRequest.cs" />
-    <Compile Include="PatientSystem\PutUpdatePatientSystemDataResponse.cs" />
+    <Compile Include="PatientSystem\InsertPatientSystemDataRequest.cs" />
+    <Compile Include="PatientSystem\InsertPatientSystemsDataRequest.cs" />
+    <Compile Include="PatientSystem\InsertPatientSystemDataResponse.cs" />
+    <Compile Include="PatientSystem\InsertPatientSystemsDataResponse.cs" />
+    <Compile Include="PatientSystem\DeletePatientSystemsDataRequest.cs" />
+    <Compile Include="PatientSystem\UpdatePatientSystemDataRequest.cs" />
+    <Compile Include="PatientSystem\UpdatePatientSystemsDataRequest.cs" />
+    <Compile Include="PatientSystem\DeletePatientSystemsDataResponse.cs" />
+    <Compile Include="PatientSystem\UpdatePatientSystemDataResponse.cs" />
+    <Compile Include="PatientSystem\UpdatePatientSystemsDataResponse.cs" />
     <Compile Include="PatientSystem\UndoDeletePatientSystemsDataRequest.cs" />
     <Compile Include="PatientSystem\DeletePatientSystemByPatientIdDataRequest.cs" />
     <Compile Include="PatientSystem\UndoDeletePatientSystemsDataResponse.cs" />
     <Compile Include="PatientSystem\DeletePatientSystemByPatientIdDataResponse.cs" />
     <Compile Include="PatientSystem\GetPatientSystemsDataRequest.cs" />
-    <Compile Include="PatientSystem\PutPatientSystemDataResponse.cs" />
-    <Compile Include="PatientSystem\PutPatientSystemDataRequest.cs" />
     <Compile Include="PatientSystem\GetPatientSystemDataRequest.cs" />
     <Compile Include="PatientSystem\GetPatientSystemsDataResponse.cs" />
     <Compile Include="PatientSystem\GetPatientSystemDataResponse.cs" />

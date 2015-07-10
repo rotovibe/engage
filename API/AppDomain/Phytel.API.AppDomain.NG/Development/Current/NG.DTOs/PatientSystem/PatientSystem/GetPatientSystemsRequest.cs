@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Phytel.API.AppDomain.NG.DTO
 {
-    [Route("/{Version}/{ContractNumber}/PatientSystem/{PatientId}", "GET")]
+    [Route("/{Version}/{ContractNumber}/Patient/{PatientId}/PatientSystems", "GET")]
     public class GetPatientSystemsRequest : IAppDomainRequest
     {
         [ApiMember(Name = "PatientId", Description = "Id of the patient for whom the system ids are retrieved.", ParameterType = "path", DataType = "string", IsRequired = true)]

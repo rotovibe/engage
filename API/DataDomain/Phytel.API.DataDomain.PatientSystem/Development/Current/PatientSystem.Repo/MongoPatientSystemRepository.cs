@@ -39,38 +39,34 @@ namespace Phytel.API.DataDomain.PatientSystem
 
         public object Insert(object newEntity)
         {
-            PutPatientSystemDataRequest request = newEntity as PutPatientSystemDataRequest;
-            string patientSystemId = null;
+            InsertPatientSystemDataRequest request = newEntity as InsertPatientSystemDataRequest;
+            PatientSystemData data = request.PatientSystemsData;
+            string Id = null;
             try
             {
-                using (PatientSystemMongoContext ctx = new PatientSystemMongoContext(ContractDBName))
+                if(data != null)
                 {
-                    IMongoQuery query = Query.And(
-                                    Query.EQ(MEPatientSystem.PatientIDProperty, ObjectId.Parse(request.PatientID)));
-
-                    MEPatientSystem patientSystem = ctx.PatientSystems.Collection.FindOneAs<MEPatientSystem>(query);
-                    if (patientSystem == null)
+                    using (PatientSystemMongoContext ctx = new PatientSystemMongoContext(ContractDBName))
                     {
-                        patientSystem = new MEPatientSystem(this.UserId)
-                        {
-                            PatientID = ObjectId.Parse(request.PatientID),
-                            SystemID = request.SystemID,
-                            DisplayLabel = request.DisplayLabel,
-                            SystemName = request.SystemName,
-                            TTLDate = null,
-                            DeleteFlag = false
-                        };
-                        ctx.PatientSystems.Collection.Insert(patientSystem);
-                        patientSystemId = patientSystem.Id.ToString();
+                        MEPatientSystem mePS = new MEPatientSystem(this.UserId)
+                            {
+                                PatientId = ObjectId.Parse(data.PatientId),
+                                Value =  !string.IsNullOrEmpty(data.Value)? data.Value.Trim() : null,
+                                Status = (Status)data.StatusId,
+                                Primary = data.Primary,
+                                SystemSourceId = ObjectId.Parse(data.SystemSourceId),
+                                DeleteFlag = false
+                            };
+                        ctx.PatientSystems.Collection.Insert(mePS);
                         AuditHelper.LogDataAudit(this.UserId, 
                                                 MongoCollectionName.PatientSystem.ToString(), 
-                                                patientSystem.Id.ToString(), 
-                                                Common.DataAuditType.Insert, 
+                                                mePS.Id.ToString(), 
+                                                DataAuditType.Insert, 
                                                 request.ContractNumber);
-
+                        Id = mePS.Id.ToString();
                     }
-                    return patientSystemId;
                 }
+                return Id;
             }
             catch (Exception)
             {
@@ -117,20 +113,33 @@ namespace Phytel.API.DataDomain.PatientSystem
 
         public object FindByID(string entityID)
         {
-            DTO.PatientSystemData patientSystemData = null;
-            using (PatientSystemMongoContext ctx = new PatientSystemMongoContext(ContractDBName))
+            PatientSystemData data = null;
+            try
             {
-                patientSystemData = (from p in ctx.PatientSystems
-                           where p.Id == ObjectId.Parse(entityID)
-                           select new DTO.PatientSystemData
-                           {
-                            PatientId = p.PatientID.ToString(),
-                            SystemId = p.SystemID,
-                            SystemName = p.SystemName,
-                            DisplayLabel = p.DisplayLabel
-                           }).FirstOrDefault();
+                using (PatientSystemMongoContext ctx = new PatientSystemMongoContext(ContractDBName))
+                {
+                    List<IMongoQuery> queries = new List<IMongoQuery>();
+                    queries.Add(Query.EQ(MEPatientSystem.IdProperty, ObjectId.Parse(entityID)));
+                    queries.Add(Query.EQ(MEPatientSystem.DeleteFlagProperty, false));
+                    queries.Add(Query.EQ(MEPatientSystem.TTLDateProperty, BsonNull.Value));
+                    IMongoQuery mQuery = Query.And(queries);
+                    MEPatientSystem mePS = ctx.PatientSystems.Collection.Find(mQuery).FirstOrDefault();
+                    if (mePS != null)
+                    {
+                        data = new PatientSystemData 
+                        {
+                            Id = mePS.Id.ToString(),
+                            PatientId = mePS.PatientId.ToString(),
+                            Value = mePS.Value,
+                            StatusId = (int)mePS.Status,
+                            Primary = mePS.Primary,
+                            SystemSourceId = mePS.SystemSourceId.ToString()
+                        };
+                    }
+                }
+                return data;
             }
-            return patientSystemData;
+            catch (Exception) { throw; }
         }
 
         public Tuple<string, IEnumerable<object>> Select(Interface.APIExpression expression)
@@ -145,55 +154,32 @@ namespace Phytel.API.DataDomain.PatientSystem
 
         public object Update(object entity)
         {
-            PutUpdatePatientSystemDataRequest request = (PutUpdatePatientSystemDataRequest)entity;
+            UpdatePatientSystemDataRequest request = (UpdatePatientSystemDataRequest)entity;
+            PatientSystemData data = request.PatientSystemsData;
             bool result = false;
             try
             {
-                if (request.Id != null)
+                if (data != null)
                 {
                     using (PatientSystemMongoContext ctx = new PatientSystemMongoContext(ContractDBName))
                     {
-                        var q = MB.Query<MEPatientSystem>.EQ(b => b.Id, ObjectId.Parse(request.Id));
+                        var q = MB.Query<MEPatientSystem>.EQ(b => b.Id, ObjectId.Parse(data.Id));
                         var uv = new List<MB.UpdateBuilder>();
                         uv.Add(MB.Update.Set(MEPatientSystem.UpdatedByProperty, ObjectId.Parse(this.UserId)));
                         uv.Add(MB.Update.Set(MEPatientSystem.VersionProperty, request.Version));
                         uv.Add(MB.Update.Set(MEPatientSystem.LastUpdatedOnProperty, System.DateTime.UtcNow));
-                        if (!string.IsNullOrEmpty(request.SystemID))
+                        if (!string.IsNullOrEmpty(data.PatientId)) uv.Add(MB.Update.Set(MEPatientSystem.PatientIdProperty, ObjectId.Parse(data.PatientId)));
+                        if (!string.IsNullOrEmpty(data.Value))
                         {
-                            uv.Add(MB.Update.Set(MEPatientSystem.SystemIDProperty, request.SystemID));
+                            uv.Add(MB.Update.Set(MEPatientSystem.ValueProperty, data.Value.Trim()));
                         }
                         else
                         {
-                            uv.Add(MB.Update.Set(MEPatientSystem.SystemIDProperty, BsonNull.Value));
+                            uv.Add(MB.Update.Set(MEPatientSystem.ValueProperty, BsonNull.Value));
                         }
-                        if (!string.IsNullOrEmpty(request.SystemName))
-                        {
-                            uv.Add(MB.Update.Set(MEPatientSystem.SystemNameProperty, request.SystemName));
-                        }
-                        else
-                        {
-                            uv.Add(MB.Update.Set(MEPatientSystem.SystemNameProperty, BsonNull.Value));
-                        }
-                        if (!string.IsNullOrEmpty(request.DisplayLabel))
-                        {
-                            uv.Add(MB.Update.Set(MEPatientSystem.DisplayLabelProperty, request.DisplayLabel));
-                        }
-                        else
-                        {
-                            uv.Add(MB.Update.Set(MEPatientSystem.DisplayLabelProperty, BsonNull.Value));
-                        }
-                        uv.Add(MB.Update.Set(MEPatientSystem.DeleteFlagProperty, request.DeleteFlag));
-                        DataAuditType type;
-                        if (request.DeleteFlag)
-                        {
-                            uv.Add(MB.Update.Set(MEPatientSystem.TTLDateProperty, System.DateTime.UtcNow.AddDays(_expireDays)));
-                            type = Common.DataAuditType.Delete;
-                        }
-                        else
-                        {
-                            uv.Add(MB.Update.Set(MEPatientSystem.TTLDateProperty, BsonNull.Value));
-                            type = Common.DataAuditType.Update;
-                        }
+                        if (data.StatusId != 0) uv.Add(MB.Update.Set(MEPatientSystem.StatusProperty, data.StatusId));
+                        uv.Add(MB.Update.Set(MEPatientSystem.PrimaryProperty, data.Primary));
+                        if (!string.IsNullOrEmpty(data.SystemSourceId)) uv.Add(MB.Update.Set(MEPatientSystem.SystemSourceIdProperty, ObjectId.Parse(data.SystemSourceId)));
                         IMongoUpdate update = MB.Update.Combine(uv);
                         WriteConcernResult res = ctx.PatientSystems.Collection.Update(q, update);
                         if (res.Ok == false)
@@ -201,8 +187,8 @@ namespace Phytel.API.DataDomain.PatientSystem
                         else
                             AuditHelper.LogDataAudit(this.UserId,
                                                     MongoCollectionName.PatientSystem.ToString(),
-                                                    request.Id,
-                                                    type,
+                                                    data.Id,
+                                                    DataAuditType.Update,
                                                     request.ContractNumber);
 
                         result = true;
@@ -226,7 +212,7 @@ namespace Phytel.API.DataDomain.PatientSystem
                 using (PatientSystemMongoContext ctx = new PatientSystemMongoContext(ContractDBName))
                 {
                     List<IMongoQuery> queries = new List<IMongoQuery>();
-                    queries.Add(Query.EQ(MEPatientSystem.PatientIDProperty, ObjectId.Parse(patientId)));
+                    queries.Add(Query.EQ(MEPatientSystem.PatientIdProperty, ObjectId.Parse(patientId)));
                     queries.Add(Query.EQ(MEPatientSystem.DeleteFlagProperty, false));
                     queries.Add(Query.EQ(MEPatientSystem.TTLDateProperty, BsonNull.Value));
                     IMongoQuery mQuery = Query.And(queries);
@@ -239,11 +225,11 @@ namespace Phytel.API.DataDomain.PatientSystem
                             dataList.Add(new PatientSystemData
                             {
                                 Id = mePS.Id.ToString(),
-                                PatientId = mePS.PatientID.ToString(),
-                                SystemId = mePS.SystemID,
-                                DisplayLabel = mePS.DisplayLabel,
-                                SystemName =  mePS.SystemName,
-                                DeleteFlag = mePS.DeleteFlag
+                                PatientId = mePS.PatientId.ToString(),
+                                Value = mePS.Value,
+                                StatusId = (int)mePS.Status,
+                                Primary = mePS.Primary,
+                                SystemSourceId = mePS.SystemSourceId.ToString()
                             });
                         }
                     }

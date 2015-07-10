@@ -21,20 +21,20 @@ namespace Phytel.API.DataDomain.PatientSystem.Test
         IRestClient client = new JsonServiceClient();
 
         [TestMethod]
-        public void GetPatientSystem_Test()
+        public void GetPatientSystems_Test()
         {
-            GetPatientSystemDataRequest request = new GetPatientSystemDataRequest
+            GetPatientSystemsDataRequest request = new GetPatientSystemsDataRequest
             {
                 Context = context,
                 ContractNumber = contractNumber,
                 UserId = userId,
                 Version = version,
-                PatientSystemID = "5325d9e7d6a4850adc44d94d"
+                PatientId = "546d0d0684ac0508e43299d2"
                 
             };
-            //[Route("/{Context}/{Version}/{ContractNumber}/PatientSystem/{PatientSystemID}", "GET")]
-            
-            GetSystemSourcesDataResponse response = client.Get<GetSystemSourcesDataResponse>(string.Format("{0}/{1}/{2}/{3}/PatientSystem/{4}", url, context, version, contractNumber, request.PatientSystemID));
+            //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/PatientSystems", "GET")]
+
+            GetSystemSourcesDataResponse response = client.Get<GetSystemSourcesDataResponse>(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/PatientSystems?UserId={5}", url, context, version, contractNumber, request.PatientId, request.UserId));
             Assert.IsNotNull(response);
         }
         
@@ -55,45 +55,70 @@ namespace Phytel.API.DataDomain.PatientSystem.Test
 
         //    Assert.IsTrue(response.PatientSystems.Count > 0);
         //}
+        [TestMethod]
+        public void InsertPatientSystems_Test()
+        {
+            List<PatientSystemData> list = new List<PatientSystemData>();
+            list.Add(new PatientSystemData { PatientId = "546d0d0684ac0508e43299d2", Value = " 12345 ", StatusId = 1, Primary = false, SystemSourceId = "559e8c70d4332320bc076f4e" });
+            list.Add(new PatientSystemData { PatientId = "546d0d0684ac0508e43299d2", Value = " ABCFG ", StatusId = 1, Primary = true, SystemSourceId = "559e8c70d4332320bc076f4f" });
+            
+            InsertPatientSystemsDataRequest request = new InsertPatientSystemsDataRequest
+            {
+                Context = context,
+                ContractNumber = contractNumber,
+                UserId = userId,
+                Version = version,
+                PatientSystemsData = list,
+                PatientId = "546d0d0684ac0508e43299d2"
+            };
 
-        //public void InsertPatientSystem_Test()
-        //{
-        //    PutPatientSystemDataRequest request = new PutPatientSystemDataRequest {
-        //        Context = context,
-        //        ContractNumber = contractNumber,
-        //        DisplayLabel = "ID",
-        //        PatientID = "5446d99f84ac051254108d69",
-        //        SystemID = "122345",
-        //        SystemName = "Knoxville",
-        //        UserId = userId,
-        //        Version = version
-        //        };
-        //    IPatientSystemDataManager psM = new PatientSystemDataManager { Factory = new PatientSystemRepositoryFactory() };
-        //    PutPatientSystemDataResponse response = psM.InsertPatientSystem(request);
+            //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/PatientSystems", "POST")]            
+            InsertPatientSystemsDataResponse response = client.Post<InsertPatientSystemsDataResponse>(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/PatientSystems", url, context, version, contractNumber, request.PatientId), request);
+            Assert.IsNotNull(response);
+        }
+        [TestMethod]
+        public void UpdatePatientSystems_Test()
+        {
+            List<PatientSystemData> list = new List<PatientSystemData>();
+            list.Add(new PatientSystemData { Id = "55a014bbd4332720a4bf5093", PatientId = "546d0d0684ac0508e43299d2", Value = " 12345UP ", StatusId = 2, Primary = false, SystemSourceId = "559e8c70d4332320bc076f4d" });
+            list.Add(new PatientSystemData { Id = "55a014bcd4332720a4bf509a", PatientId = "546d0d0684ac0508e43299d2", Value = " ABCFGUP ", StatusId = 2, Primary = false, SystemSourceId = "559e8c70d4332320bc076f4d" });
 
-        //    Assert.IsNotNull(response.PatientSystemId);
-        //}
+            UpdatePatientSystemsDataRequest request = new UpdatePatientSystemsDataRequest
+            {
+                Context = context,
+                ContractNumber = contractNumber,
+                UserId = userId,
+                Version = version,
+                PatientSystemsData = list,
+                PatientId = "546d0d0684ac0508e43299d2"
+            };
 
-        //public void UpdatePatientSystem_Test()
-        //{
-        //    PutUpdatePatientSystemDataRequest request = new PutUpdatePatientSystemDataRequest
-        //    {
-        //        Context = context,
-        //        ContractNumber = contractNumber,
-        //        Id = "5446da60d433230a7c4b41ee",
-        //       DisplayLabel = "ID",
-        //       PatientID = "5446d99f84ac051254108d69",
-        //       SystemID = "222",
-        //       SystemName = "Lamar",
-        //        UserId = userId,
-        //        Version = version,
-        //        DeleteFlag = false
-        //    };
-        //    IPatientSystemDataManager psM = new PatientSystemDataManager { Factory = new PatientSystemRepositoryFactory() };
-        //    PutUpdatePatientSystemDataResponse response = psM.UpdatePatientSystem(request);
+            //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/PatientSystems", "PUT")]        
+            UpdatePatientSystemsDataResponse response = client.Put<UpdatePatientSystemsDataResponse>(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/PatientSystems", url, context, version, contractNumber, request.PatientId), request);
+            Assert.IsNotNull(response);
+        }
 
-        //    Assert.IsNotNull(response);
-        //}
+        [TestMethod]
+        public void DeletePatientSystems_Test()
+        {
+            List<string> list = new List<string>();
+            list.Add("55a01d11d43323224085d1f1");
+            list.Add("55a01ef4d43323224085d1f2");
+
+            DeletePatientSystemsDataRequest request = new DeletePatientSystemsDataRequest
+            {
+                Context = context,
+                ContractNumber = contractNumber,
+                UserId = userId,
+                Version = version,
+                PatientId = "546d0d0684ac0508e43299d2",
+                Ids = "55a01d11d43323224085d1f1,55a01ef4d43323224085d1f2"
+            };
+
+            //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/PatientSystems/{Ids}", "DELETE")]
+            DeletePatientSystemsDataResponse response = client.Delete<DeletePatientSystemsDataResponse>(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/PatientSystems/{5}?UserId={6}", url, context, version, contractNumber, request.PatientId, request.Ids,request.UserId));
+            Assert.IsNotNull(response);
+        }
 
    }
 }

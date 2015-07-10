@@ -20,23 +20,23 @@ namespace Phytel.API.DataDomain.PatientSystem.Test
         {
             GetPatientSystemsDataResponse result = new GetPatientSystemsDataResponse();
             var repo = Factory.GetRepository(RepositoryType.PatientSystem);
-            result.PatientSystems = repo.FindByPatientId(request.PatientId) as List<PatientSystemData>;
+            result.PatientSystemsData = repo.FindByPatientId(request.PatientId) as List<PatientSystemData>;
             return result;
         }
 
-        public DTO.PutPatientSystemDataResponse InsertPatientSystem(DTO.PutPatientSystemDataRequest request)
+        public DTO.InsertPatientSystemsDataRequest InsertPatientSystem(DTO.InsertPatientSystemsDataRequest request)
         {
-            PutPatientSystemDataResponse result = new PutPatientSystemDataResponse();
+            InsertPatientSystemsDataRequest result = new InsertPatientSystemsDataRequest();
             var repo = Factory.GetRepository(RepositoryType.PatientSystem);
-            result.PatientSystemId = repo.Insert(request) as string;
+          //  result.PatientSystemId = repo.Insert(request) as string;
             return result;
         }
 
-        public DTO.PutUpdatePatientSystemDataResponse UpdatePatientSystem(DTO.PutUpdatePatientSystemDataRequest request)
+        public DTO.UpdatePatientSystemsDataRequest UpdatePatientSystem(DTO.UpdatePatientSystemsDataRequest request)
         {
-            PutUpdatePatientSystemDataResponse result = new PutUpdatePatientSystemDataResponse();
+            UpdatePatientSystemsDataRequest result = new UpdatePatientSystemsDataRequest();
             var repo = Factory.GetRepository(RepositoryType.PatientSystem);
-            result.Success = (bool)repo.Update(request);
+          //  result.Success = (bool)repo.Update(request);
             return result;
         }
 
@@ -46,6 +46,29 @@ namespace Phytel.API.DataDomain.PatientSystem.Test
         }
 
         public DTO.UndoDeletePatientSystemsDataResponse UndoDeletePatientSystems(DTO.UndoDeletePatientSystemsDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public List<PatientSystemData> InsertPatientSystems(InsertPatientSystemsDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<PatientSystemData> UpdatePatientSystems(UpdatePatientSystemsDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        List<PatientSystemData> IPatientSystemDataManager.GetPatientSystems(GetPatientSystemsDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public void DeletePatientSystems(DeletePatientSystemsDataRequest request)
         {
             throw new NotImplementedException();
         }

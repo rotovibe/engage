@@ -119,7 +119,7 @@
     <Compile Include="Containers\SearchContainer.cs" />
     <Compile Include="Mappers\AllergyMapper.cs" />
     <Compile Include="Mappers\AllergyMedSearchMapper.cs" />
-    <Compile Include="Mappers\PatientUtilizationMapper.cs" />
+    <Compile Include="Mappers\PatientNoteMapper.cs" />
     <Compile Include="Mappers\MedSuppMapper.cs" />
     <Compile Include="Mappers\GoalsMapper.cs" />
     <Compile Include="MedicationService.cs" />

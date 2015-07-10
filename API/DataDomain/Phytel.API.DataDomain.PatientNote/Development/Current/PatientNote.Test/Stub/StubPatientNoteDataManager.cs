@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Phytel.API.DataDomain.PatientNote.DTO;
 
 namespace Phytel.API.DataDomain.PatientNote.Test.Stubs
 {
@@ -44,7 +45,7 @@ namespace Phytel.API.DataDomain.PatientNote.Test.Stubs
             throw new NotImplementedException();
         }
 
-        public void UpdatePatientNote(DTO.UpdatePatientNoteDataRequest request)
+        public PatientNoteData UpdatePatientNote(DTO.UpdatePatientNoteDataRequest request)
         {
             throw new NotImplementedException();
         }

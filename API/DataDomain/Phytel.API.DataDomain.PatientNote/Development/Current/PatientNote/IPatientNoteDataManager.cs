@@ -16,6 +16,6 @@ namespace Phytel.API.DataDomain.PatientNote
         DeleteNoteByPatientIdDataResponse DeleteNoteByPatientId(DeleteNoteByPatientIdDataRequest request);
         UndoDeletePatientNotesDataResponse UndoDeletePatientNotes(UndoDeletePatientNotesDataRequest request);
         RemoveProgramInPatientNotesDataResponse RemoveProgramInPatientNotes(RemoveProgramInPatientNotesDataRequest request);
-        void UpdatePatientNote(UpdatePatientNoteDataRequest request);
+        PatientNoteData UpdatePatientNote(UpdatePatientNoteDataRequest request);
     }
 }

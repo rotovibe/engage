@@ -18,19 +18,19 @@ namespace Phytel.API.DataDomain.PatientSystem.Test
                     {
                         Id = "52fa6270d433231dd0775022",
                         PatientId = "5325da76d6a4850adcbba656",
-                        SystemId = "121212",
+                       // SystemId = "121212",
                         DisplayLabel = "ID",
-                        SystemName = "Lamar",
-                        DeleteFlag = false
+                      //  SystemName = "Lamar",
+                      //  DeleteFlag = false
                     });
                 dataList.Add(new PatientSystemData
                 {
                     Id = "532b4748d6a4851308856a31",
                     PatientId = "5325da76d6a4850adcbba656",
-                    SystemId = "78956",
+                //    SystemId = "78956",
                     DisplayLabel = "ID",
-                    SystemName = "Maryland",
-                    DeleteFlag = false
+                  //  SystemName = "Maryland",
+                 //   DeleteFlag = false
                 });
                 return dataList;
             }
@@ -44,22 +44,22 @@ namespace Phytel.API.DataDomain.PatientSystem.Test
 
         }
 
-        public object Insert(object newEntity)
-        {
-            PutPatientSystemDataRequest request = newEntity as PutPatientSystemDataRequest;
-            string patientSystemId = null;
-            MEPatientSystem patientSystem = new MEPatientSystem(this.UserId)
-            {
-                PatientID = ObjectId.Parse(request.PatientID),
-                SystemID = request.SystemID,
-                DisplayLabel = request.DisplayLabel,
-                SystemName = request.SystemName,
-                TTLDate = null,
-                DeleteFlag = false
-            };
-            patientSystemId = patientSystem.Id.ToString();
-            return patientSystemId;
-        }
+        //public object Insert(object newEntity)
+        //{
+        //    PutPatientSystemDataRequest request = newEntity as PutPatientSystemDataRequest;
+        //    string patientSystemId = null;
+        //    MEPatientSystem patientSystem = new MEPatientSystem(this.UserId)
+        //    {
+        //        PatientId = ObjectId.Parse(request.PatientID),
+        //      //  SystemID = request.SystemID,
+        //      //  DisplayLabel = request.DisplayLabel,
+        //       // SystemName = request.SystemName,
+        //        TTLDate = null,
+        //        DeleteFlag = false
+        //    };
+        //    patientSystemId = patientSystem.Id.ToString();
+        //    return patientSystemId;
+        //}
 
         public object InsertAll(List<object> entities)
         {
@@ -120,6 +120,12 @@ namespace Phytel.API.DataDomain.PatientSystem.Test
 
 
         public IEnumerable<object> Find(object entity)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public object Insert(object newEntity)
         {
             throw new NotImplementedException();
         }

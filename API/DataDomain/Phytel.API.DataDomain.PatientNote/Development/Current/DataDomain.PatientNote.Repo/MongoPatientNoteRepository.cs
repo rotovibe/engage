@@ -270,8 +270,15 @@ namespace Phytel.API.DataDomain.PatientNote.Repo
                     {
                         uv.Add(MB.Update.Set(MEPatientNote.DurationIdProperty, BsonNull.Value));
                     }
-                    if (pn.ValidatedIdentity != null) uv.Add(MB.Update.Set(MEPatientNote.ValidatedIdentityProperty, pn.ValidatedIdentity));
-                    if (pn.ContactedOn != null) uv.Add(MB.Update.Set(MEPatientNote.ContactedOnProperty, pn.ContactedOn));
+                    uv.Add(MB.Update.Set(MEPatientNote.ValidatedIdentityProperty, pn.ValidatedIdentity));
+                    if (pn.ContactedOn != null)
+                    {
+                        uv.Add(MB.Update.Set(MEPatientNote.ContactedOnProperty, pn.ContactedOn));
+                    }
+                    else
+                    {
+                        uv.Add(MB.Update.Set(MEPatientNote.ContactedOnProperty, BsonNull.Value));
+                    }
                     IMongoUpdate update = MB.Update.Combine(uv);
                     ctx.PatientNotes.Collection.Update(q, update);
 

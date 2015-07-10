@@ -40,7 +40,7 @@ namespace Phytel.API.AppDomain.NG.Service
                 GoalsMapper.Build();
                 AllergyMedSearchMapper.Build();
                 MedSuppMapper.Build();
-                PatientUtilizationMapper.Build();
+                PatientNoteMapper.Build();
                 PatientSystemMapper.Build();
 
                 Plugins.Add(new RequestLogsFeature() {RequiredRoles = new string[] {}});

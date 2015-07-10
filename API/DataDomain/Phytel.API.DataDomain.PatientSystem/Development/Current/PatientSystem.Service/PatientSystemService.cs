@@ -35,8 +35,8 @@ namespace Phytel.API.DataDomain.PatientSystem.Service
             GetPatientSystemsDataResponse response = new GetPatientSystemsDataResponse();
             try
             {
-                RequireUserId(request); 
-                response = Manager.GetPatientSystems(request);
+                RequireUserId(request);
+                response.PatientSystemsData = Manager.GetPatientSystems(request); 
                 response.Version = request.Version;
             }
             catch (Exception ex)
@@ -47,14 +47,14 @@ namespace Phytel.API.DataDomain.PatientSystem.Service
         } 
         #endregion
 
-        #region Insert & Update
-        public PutPatientSystemDataResponse Put(PutPatientSystemDataRequest request)
+        #region POST
+        public InsertPatientSystemsDataResponse Post(InsertPatientSystemsDataRequest request)
         {
-            PutPatientSystemDataResponse response = new PutPatientSystemDataResponse();
+            InsertPatientSystemsDataResponse response = new InsertPatientSystemsDataResponse();
             try
             {
-                RequireUserId(request); 
-                response = Manager.InsertPatientSystem(request);
+                RequireUserId(request);
+                response.PatientSystemsData = Manager.InsertPatientSystems(request); 
                 response.Version = request.Version;
             }
             catch (Exception ex)
@@ -63,14 +63,16 @@ namespace Phytel.API.DataDomain.PatientSystem.Service
             }
             return response;
         }
+        #endregion
 
-        public PutUpdatePatientSystemDataResponse Put(PutUpdatePatientSystemDataRequest request)
+        #region PUT
+        public UpdatePatientSystemsDataResponse Put(UpdatePatientSystemsDataRequest request)
         {
-            PutUpdatePatientSystemDataResponse response = new PutUpdatePatientSystemDataResponse();
+            UpdatePatientSystemsDataResponse response = new UpdatePatientSystemsDataResponse();
             try
             {
                 RequireUserId(request);
-                response = Manager.UpdatePatientSystem(request);
+                response.PatientSystemsData = Manager.UpdatePatientSystems(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
@@ -89,6 +91,22 @@ namespace Phytel.API.DataDomain.PatientSystem.Service
             {
                 RequireUserId(request); 
                 response = Manager.DeletePatientSystemByPatientId(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                RaiseException(response, ex);
+            }
+            return response;
+        }
+
+        public DeletePatientSystemsDataResponse Delete(DeletePatientSystemsDataRequest request)
+        {
+            DeletePatientSystemsDataResponse response = new DeletePatientSystemsDataResponse();
+            try
+            {
+                RequireUserId(request);
+                Manager.DeletePatientSystems(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)

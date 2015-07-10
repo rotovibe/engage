@@ -19,44 +19,88 @@ namespace Phytel.API.DataDomain.PatientSystem
             try
             {
                 var repo = Factory.GetRepository(RepositoryType.PatientSystem);
-                result.PatientSystem = repo.FindByID(request.PatientSystemID) as PatientSystemData;
+                result.PatientSystemData = repo.FindByID(request.PatientSystemID) as PatientSystemData;
                 return result;
             }
             catch (Exception ex) { throw ex; }
         }
 
-        public GetPatientSystemsDataResponse GetPatientSystems(GetPatientSystemsDataRequest request)
+        public List<PatientSystemData> GetPatientSystems(GetPatientSystemsDataRequest request)
         {
-            GetPatientSystemsDataResponse result = new GetPatientSystemsDataResponse();
+            List<PatientSystemData> dataList = null;
             try
             {
                 var repo = Factory.GetRepository(RepositoryType.PatientSystem);
-                result.PatientSystems = repo.FindByPatientId(request.PatientId) as List<PatientSystemData>;
-                return result;
+                dataList = repo.FindByPatientId(request.PatientId) as List<PatientSystemData>;
+                return dataList;
             }
             catch (Exception ex) { throw ex; }
         }
 
-        public PutPatientSystemDataResponse InsertPatientSystem(PutPatientSystemDataRequest request)
+        public List<PatientSystemData> InsertPatientSystems(InsertPatientSystemsDataRequest request)
         {
+            List<PatientSystemData> dataList = null;
             try
             {
-                PutPatientSystemDataResponse result = new PutPatientSystemDataResponse();
-                var repo = Factory.GetRepository(RepositoryType.PatientSystem);
-                result.PatientSystemId = repo.Insert(request) as string;
-                return result;
+                if (request.PatientSystemsData != null && request.PatientSystemsData.Count > 0)
+                {
+                    dataList = new List<PatientSystemData>();
+                    var repo = Factory.GetRepository(RepositoryType.PatientSystem);
+                    request.PatientSystemsData.ForEach(p =>
+                        {
+                            InsertPatientSystemDataRequest insertReq = new InsertPatientSystemDataRequest {
+                                 PatientId = p.PatientId,
+                                 Context = request.Context,
+                                 ContractNumber = request.ContractNumber,
+                                 PatientSystemsData = p,
+                                 UserId = request.UserId,
+                                 Version = request.Version
+                            };
+                            string id = (string)repo.Insert(insertReq);
+                            if (!string.IsNullOrEmpty(id))
+                            {
+                                PatientSystemData result = (PatientSystemData)repo.FindByID(id);
+                                if(result != null)
+                                    dataList.Add(result);
+                            }   
+                        });
+                }
+                return dataList;
             }
             catch (Exception ex) { throw ex; }
         }
 
-        public PutUpdatePatientSystemDataResponse UpdatePatientSystem(PutUpdatePatientSystemDataRequest request)
+        public List<PatientSystemData> UpdatePatientSystems(UpdatePatientSystemsDataRequest request)
         {
-            PutUpdatePatientSystemDataResponse result = new PutUpdatePatientSystemDataResponse();
+            List<PatientSystemData> dataList  = null;
             try
             {
-                var repo = Factory.GetRepository(RepositoryType.PatientSystem);
-                result.Success = (bool)repo.Update(request);
-                return result;
+                if (request.PatientSystemsData != null && request.PatientSystemsData.Count > 0)
+                {
+                    dataList = new List<PatientSystemData>();
+                    var repo = Factory.GetRepository(RepositoryType.PatientSystem);
+                    request.PatientSystemsData.ForEach(p =>
+                        {
+                            UpdatePatientSystemDataRequest updateReq = new UpdatePatientSystemDataRequest
+                            {
+                                 Id  = p.Id,
+                                 PatientId = p.PatientId,
+                                 Context = request.Context,
+                                 ContractNumber = request.ContractNumber,
+                                 PatientSystemsData = p,
+                                 UserId = request.UserId,
+                                 Version = request.Version
+                            };
+                            bool success = (bool)repo.Update(updateReq);
+                            if (success)
+                            {
+                                PatientSystemData result = (PatientSystemData)repo.FindByID(p.Id);
+                                if (result != null)
+                                    dataList.Add(result);
+                            }   
+                        });
+                }
+                return dataList;
             }
             catch (Exception ex) { throw ex; }
         }
@@ -83,6 +127,32 @@ namespace Phytel.API.DataDomain.PatientSystem
                 }
                 response.Success = true;
                 return response;
+            }
+            catch (Exception ex) { throw ex; }
+        }
+
+        public void DeletePatientSystems(DeletePatientSystemsDataRequest request)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(request.Ids))
+                { 
+                    var repo = Factory.GetRepository(RepositoryType.PatientSystem);
+                    string[] Ids = request.Ids.Split(',');
+                    foreach (string id in Ids)
+                    {
+                        DeletePatientSystemByPatientIdDataRequest deleteReq = new DeletePatientSystemByPatientIdDataRequest 
+                        { 
+                            Id = id.Trim(),
+                            PatientId = request.PatientId,
+                            Context = request.Context,
+                            ContractNumber = request.ContractNumber,
+                            UserId = request.UserId,
+                            Version = request.Version 
+                        };
+                        repo.Delete(deleteReq);
+                    }
+                }
             }
             catch (Exception ex) { throw ex; }
         }

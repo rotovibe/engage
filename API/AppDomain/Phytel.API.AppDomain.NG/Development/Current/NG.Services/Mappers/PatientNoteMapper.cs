@@ -5,10 +5,15 @@ using Phytel.API.DataDomain.PatientNote.DTO;
 
 namespace Phytel.API.AppDomain.NG.Service.Mappers
 {
-    public static class PatientUtilizationMapper
+    public static class PatientNoteMapper
     {
         public static void Build()
         {
+
+            //Notes in general.
+            Mapper.CreateMap<PatientNoteData, PatientNote>();
+            Mapper.CreateMap<PatientNote, PatientNoteData>();
+            
             Mapper.CreateMap<PatientUtilizationData, PatientUtilization>()
                 .ForMember(dest => dest.UtilizationSourceId, opt => opt.MapFrom(src => src.SourceId))
                 .ForMember(dest => dest.Text, opt => opt.MapFrom(src => src.Reason));

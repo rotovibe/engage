@@ -10,10 +10,11 @@ namespace Phytel.API.DataDomain.PatientSystem.DTO
     {
         public string Id { get; set; }
         public string PatientId { get; set; }
-        public string SystemId { get; set; }
-        public string SystemName { get; set; }
+        public string SystemSourceId { get; set; }
+        public string SystemSourceName { get; set; }
+        public string Value { get; set; }
         public string DisplayLabel { get; set; }
-        public bool DeleteFlag { get; set; }
+        public int StatusId { get; set; }
+        public bool Primary { get; set; }
     }
-
 }

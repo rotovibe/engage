@@ -7,5 +7,9 @@ namespace Phytel.API.AppDomain.NG
     public interface IPatientSystemEndpointUtil
     {
         List<SystemSourceData> GetSystemSources(GetActiveSystemSourcesRequest request);
+        List<PatientSystemData> GetPatientSystems(GetPatientSystemsRequest request);
+        List<PatientSystemData> InsertPatientSystems(InsertPatientSystemsRequest request);
+        List<PatientSystemData> UpdatePatientSystems(UpdatePatientSystemsRequest request);
+        void DeletePatientSystems(DeletePatientSystemsRequest request);
     }
 }

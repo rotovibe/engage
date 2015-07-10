@@ -1,14 +1,18 @@
+using System.Collections.Generic;
 using Phytel.API.Interface;
 using ServiceStack.ServiceHost;
 
 namespace Phytel.API.DataDomain.PatientSystem.DTO
 {
-    [Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/PatientSystems", "GET")]
-    public class GetPatientSystemsDataRequest : IDataDomainRequest
+    [Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/PatientSystems/{Ids}", "DELETE")]
+    public class DeletePatientSystemsDataRequest : IDataDomainRequest
     {
-        [ApiMember(Name = "PatientId", Description = "ID of the patient to retrieve Patient System Information", ParameterType = "property", DataType = "string", IsRequired = true)]
+        [ApiMember(Name = "PatientId", Description = "Id of the patient whose PatientSystem record needs to be deleted", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string PatientId { get; set; }
         
+        [ApiMember(Name = "Ids", Description = "Comma limited PatientSystem Ids that need to be deleted.", ParameterType = "property", DataType = "string", IsRequired = true)]
+        public string Ids { get; set; }
+
         [ApiMember(Name = "Context", Description = "Product Context requesting the PatientSystem", ParameterType = "property", DataType = "string", IsRequired = false)]
         public string Context { get; set; }
 

@@ -159,6 +159,10 @@
     <Compile Include="Meds\PostInitializeMedicationMapResponse.cs" />
     <Compile Include="Meds\PostPatientMedSuppRequest.cs" />
     <Compile Include="Meds\PostPatientMedSuppResponse.cs" />
+    <Compile Include="PatientSystem\PatientSystem\DeletePatientSystemsRequest.cs" />
+    <Compile Include="PatientSystem\PatientSystem\UpdatePatientSystemsRequest.cs" />
+    <Compile Include="PatientSystem\PatientSystem\DeletePatientSystemsResponse.cs" />
+    <Compile Include="PatientSystem\PatientSystem\UpdatePatientSystemsResponse.cs" />
     <Compile Include="PatientSystem\SystemSource\GetActiveSystemSourcesRequest.cs" />
     <Compile Include="PatientSystem\SystemSource\GetActiveSystemSourcesResponse.cs" />
     <Compile Include="PatientSystem\SystemSource\SystemSource.cs" />
@@ -174,11 +178,11 @@
     <Compile Include="Observation\GetHistoricalPatientObservationsResponse.cs" />
     <Compile Include="Observation\GetCurrentPatientObservationsResponse.cs" />
     <Compile Include="Observation\IPatientObservationRequest.cs" />
-    <Compile Include="PatientSystem\GetPatientSystemsRequest.cs" />
-    <Compile Include="PatientSystem\GetPatientSystemsResponse.cs" />
-    <Compile Include="PatientSystem\PatientSystem.cs" />
-    <Compile Include="PatientSystem\PostPatientSystemRequest.cs" />
-    <Compile Include="PatientSystem\PostPatientSystemResponse.cs" />
+    <Compile Include="PatientSystem\PatientSystem\GetPatientSystemsRequest.cs" />
+    <Compile Include="PatientSystem\PatientSystem\GetPatientSystemsResponse.cs" />
+    <Compile Include="PatientSystem\PatientSystem\PatientSystem.cs" />
+    <Compile Include="PatientSystem\PatientSystem\InsertPatientSystemsRequest.cs" />
+    <Compile Include="PatientSystem\PatientSystem\InsertPatientSystemsResponse.cs" />
     <Compile Include="Patient\GetInitializePatientRequest.cs" />
     <Compile Include="Patient\GetInitializePatientResponse.cs" />
     <Compile Include="Patient\PostDeletePatientRequest.cs" />

@@ -30,12 +30,21 @@ namespace Phytel.API.DataDomain.PatientNote
             return noteId;
         }
 
-        public void UpdatePatientNote(UpdatePatientNoteDataRequest request)
+        public PatientNoteData UpdatePatientNote(UpdatePatientNoteDataRequest request)
         {
+            PatientNoteData result = null; 
             try
             {
                 IMongoPatientNoteRepository repo = Factory.GetRepository(RepositoryType.PatientNote);
-                repo.Update(request);
+                if(request.PatientNoteData != null)
+                { 
+                    bool status = (bool)repo.Update(request);
+                    if (status)
+                    {
+                        result = (PatientNoteData)repo.FindByID(request.PatientNoteData.Id);
+                    }
+                }
+                return result;
             }
             catch (Exception ex)
             {

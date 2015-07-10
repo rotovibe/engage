@@ -8,7 +8,7 @@ using System.ComponentModel;
 namespace Phytel.API.DataDomain.PatientSystem.DTO
 {
     [BsonIgnoreExtraElements(false)]
-    [MongoIndex(Keys = new string[] { PatientIDProperty }, Unique = false)]
+    [MongoIndex(Keys = new string[] { PatientIdProperty }, Unique = false)]
     [MongoIndex(Keys = new string[] { TTLDateProperty }, TimeToLive = 0)]
     public class MEPatientSystem : IMongoEntity<ObjectId>, IMEEntity
     {
@@ -21,10 +21,11 @@ namespace Phytel.API.DataDomain.PatientSystem.DTO
         }
 
         public const string IdProperty = "_id";
-        public const string PatientIDProperty = "pid";
-        public const string SystemIDProperty = "sysid";
-        public const string DisplayLabelProperty = "lbl";
-        public const string SystemNameProperty = "sysn";
+        public const string PatientIdProperty = "pid";
+        public const string SystemSourceIdProperty = "ssid";
+        public const string ValueProperty = "val";
+        public const string StatusProperty = "sts";
+        public const string PrimaryProperty = "pri";
 
         public const string VersionProperty = "v";
         public const string UpdatedByProperty = "uby";
@@ -37,22 +38,27 @@ namespace Phytel.API.DataDomain.PatientSystem.DTO
         [BsonId]
         public ObjectId Id { get; set; }
 
-        [BsonElement(PatientIDProperty)]
+        [BsonElement(PatientIdProperty)]
         [BsonIgnoreIfNull(false)]
-        public ObjectId PatientID { get; set; }
+        public ObjectId PatientId { get; set; }
 
-        [BsonElement(SystemIDProperty)]
+        [BsonElement(SystemSourceIdProperty)]
         [BsonIgnoreIfNull(false)]
-        public string SystemID { get; set; }
+        public ObjectId SystemSourceId { get; set; }
 
-        [BsonElement(DisplayLabelProperty)]
+        [BsonElement(ValueProperty)]
         [BsonIgnoreIfNull(false)]
-        public string DisplayLabel { get; set; }
+        public string Value { get; set; }
 
-        [BsonElement(SystemNameProperty)]
+        [BsonElement(StatusProperty)]
         [BsonIgnoreIfNull(false)]
-        public string SystemName { get; set; }
+        public Status Status { get; set; }
 
+        [BsonElement(PrimaryProperty)]
+        [BsonIgnoreIfNull(false)]
+        public bool Primary { get; set; }
+
+        #region BaseElements
         [BsonExtraElements]
         public BsonDocument ExtraElements { get; set; }
 
@@ -84,7 +90,8 @@ namespace Phytel.API.DataDomain.PatientSystem.DTO
         [BsonIgnoreIfNull(true)]
         [BsonElement(RecordCreatedOnProperty)]
         [BsonDateTimeOptions(Kind = System.DateTimeKind.Utc)]
-        public System.DateTime RecordCreatedOn { get; private set; }
+        public System.DateTime RecordCreatedOn { get; private set; } 
+        #endregion
 
     }
 }
