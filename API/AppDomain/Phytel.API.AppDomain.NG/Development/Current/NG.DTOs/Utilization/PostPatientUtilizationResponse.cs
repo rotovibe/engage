@@ -6,7 +6,7 @@ namespace Phytel.API.AppDomain.NG.DTO.Utilization
 {
     public class PostPatientUtilizationResponse : IDomainResponse
     {
-        public string Id { get; set; }
+        public PatientUtilization Utilization { get; set; }
         public double Version { get; set; }
         public bool Result { get; set; }
         public ResponseStatus Status { get; set; }

@@ -5,7 +5,7 @@ namespace Phytel.API.DataDomain.PatientNote.DTO.Response.Utilization
 {
     public class PutPatientUtilizationDataResponse : IDomainResponse
     {
-        public string Id { get; set; }
+        public PatientUtilizationData Utilization { get; set; }
         public double Version { get; set; }
         public ResponseStatus Status { get; set; }
     }

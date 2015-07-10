@@ -38,25 +38,26 @@ namespace Phytel.API.DataDomain.PatientNote.Repo
                 {
                     var meN = new MEPatientUtilization(this.UserId)
                     {
-                        AdmitDate = data.AdmitDate,
                         DeleteFlag = false,
-                        DischargeDate = data.DischargeDate, // not added
                         OtherDisposition = data.OtherDisposition,
                         OtherLocation = data.OtherLocation,
                         OtherType = data.OtherType,
                         ProgramIds = data.ProgramIds != null ? data.ProgramIds.ConvertAll(ObjectId.Parse) : null,
-                        PSystem = data.PSystem,
+                        PSystem = data.SystemSource,
                         Reason = data.Reason,
                         Version = 1,
                         Admitted = data.Admitted
                     };
 
-                    if (!string.IsNullOrEmpty(data.Disposition)) meN.Disposition = ObjectId.Parse(data.Disposition);
-                    if (!string.IsNullOrEmpty(data.Location)) meN.Location = ObjectId.Parse(data.Location);
+                    if (data.AdmitDate != null) meN.AdmitDate = data.AdmitDate = data.AdmitDate.GetValueOrDefault().ToUniversalTime();
+                    if (data.DischargeDate != null) meN.DischargeDate = data.DischargeDate = data.DischargeDate.GetValueOrDefault().ToUniversalTime();
+
+                    if (!string.IsNullOrEmpty(data.DispositionId)) meN.Disposition = ObjectId.Parse(data.DispositionId);
+                    if (!string.IsNullOrEmpty(data.LocationId)) meN.Location = ObjectId.Parse(data.LocationId);
                     if (!string.IsNullOrEmpty(data.SourceId)) meN.SourceId = ObjectId.Parse(data.SourceId);
-                    if (!string.IsNullOrEmpty(data.VisitType)) meN.VisitType = ObjectId.Parse(data.VisitType);
+                    if (!string.IsNullOrEmpty(data.VisitTypeId)) meN.VisitType = ObjectId.Parse(data.VisitTypeId);
                     if (!string.IsNullOrEmpty(data.PatientId)) meN.PatientId = ObjectId.Parse(data.PatientId);
-                    if (!string.IsNullOrEmpty(data.NoteType)) meN.NoteType = ObjectId.Parse(data.NoteType);
+                    if (!string.IsNullOrEmpty(data.TypeId)) meN.NoteType = ObjectId.Parse(data.TypeId);
 
                     using (Context)
                     {
@@ -70,8 +71,14 @@ namespace Phytel.API.DataDomain.PatientNote.Repo
 
                         noteId = meN.Id.ToString();
                     }
+
+
+                    data.CreatedById = meN.RecordCreatedBy.ToString();
+                    data.CreatedOn = meN.RecordCreatedOn;
+                    data.Id = meN.Id.ToString();
                 }
-                return noteId;
+
+                return data;
             }
             catch (Exception ex)
             {
@@ -157,19 +164,19 @@ namespace Phytel.API.DataDomain.PatientNote.Repo
                 PatientId = meN.PatientId.ToString(),
                 AdmitDate = meN.AdmitDate,
                 DischargeDate = meN.DischargeDate,
-                Disposition = meN.Disposition.ToString(),
-                Location = meN.Location.ToString(),
+                DispositionId = meN.Disposition.ToString(),
+                LocationId = meN.Location.ToString(),
                 OtherDisposition = meN.OtherDisposition,
                 OtherLocation = meN.OtherLocation,
                 OtherType = meN.OtherType,
-                PSystem = meN.PSystem,
+                SystemSource = meN.PSystem,
                 Reason = meN.Reason,
-                VisitType = (meN.VisitType == null) ? null : meN.VisitType.ToString(),
+                VisitTypeId = (meN.VisitType == null) ? null : meN.VisitType.ToString(),
                 ProgramIds = Helper.ConvertToStringList(meN.ProgramIds),
                 SourceId = (meN.SourceId == null) ? null : meN.SourceId.ToString(),
-                NoteType = (meN.NoteType == null) ? null : meN.NoteType.ToString(),
-                RecordCreatedBy = meN.RecordCreatedBy.ToString(),
-                RecordCreatedOn = meN.RecordCreatedOn,
+                TypeId = (meN.NoteType == null) ? null : meN.NoteType.ToString(),
+                CreatedById = meN.RecordCreatedBy.ToString(),
+                CreatedOn = meN.RecordCreatedOn,
                 Admitted = meN.Admitted
             };
 
@@ -198,89 +205,73 @@ namespace Phytel.API.DataDomain.PatientNote.Repo
 
         public object Update(object entity)
         {
-            bool result = false;
             PatientUtilizationData pn = entity as PatientUtilizationData;
             try
             {
+                PatientUtilizationData result;
                 using (PatientNoteMongoContext ctx = new PatientNoteMongoContext(ContractDBName))
                 {
                     var q = MB.Query<MEPatientUtilization>.EQ(b => b.Id, ObjectId.Parse(pn.Id));
 
                     var uv = new List<MB.UpdateBuilder>();
                     uv.Add(MB.Update.Set(MEPatientUtilization.UpdatedByProperty, ObjectId.Parse(this.UserId)));
-                    uv.Add(MB.Update.Set(MEPatientUtilization.AdmittedProperty, pn.Admitted));
                     uv.Add(MB.Update.Set(MEPatientUtilization.LastUpdatedOnProperty, DateTime.UtcNow));
+                    
+                    uv.Add(MB.Update.Set(MEPatientUtilization.AdmittedProperty, pn.Admitted));
                     if (pn.OtherType != null) uv.Add(MB.Update.Set(MEPatientUtilization.OtherTypeProperty, pn.OtherType));
-                    if (pn.AdmitDate != null) uv.Add(MB.Update.Set(MEPatientUtilization.AdmitDateProperty, pn.AdmitDate));
-                    if (pn.DischargeDate != null) uv.Add(MB.Update.Set(MEPatientUtilization.DischargeDateProperty, pn.DischargeDate));
+                    else uv.Add(MB.Update.Set(MEPatientUtilization.OtherTypeProperty, BsonNull.Value));
+
                     if (pn.OtherLocation != null) uv.Add(MB.Update.Set(MEPatientUtilization.OtherLocationProperty, pn.OtherLocation));
+                    else uv.Add(MB.Update.Set(MEPatientUtilization.OtherLocationProperty, BsonNull.Value));
+
                     if (pn.Reason != null) uv.Add(MB.Update.Set(MEPatientUtilization.ReasonProperty, pn.Reason));
+                    else uv.Add(MB.Update.Set(MEPatientUtilization.ReasonProperty, BsonNull.Value));
+
                     if (pn.OtherDisposition != null) uv.Add(MB.Update.Set(MEPatientUtilization.OtherDispositionProperty, pn.OtherDisposition));
-                    if (pn.PSystem != null) uv.Add(MB.Update.Set(MEPatientUtilization.SystemProperty, pn.PSystem));
+                    else uv.Add(MB.Update.Set(MEPatientUtilization.OtherDispositionProperty, BsonNull.Value));
 
-                    if (!string.IsNullOrEmpty(pn.PatientId))
-                    {
-                        uv.Add(MB.Update.Set(MEPatientUtilization.PatientIdProperty, ObjectId.Parse(pn.PatientId)));
-                    }
-                    else
-                    {
-                        uv.Add(MB.Update.Set(MEPatientUtilization.PatientIdProperty, BsonNull.Value));
-                    }
+                    if (pn.SystemSource != null) uv.Add(MB.Update.Set(MEPatientUtilization.SystemProperty, pn.SystemSource));
+                    else uv.Add(MB.Update.Set(MEPatientUtilization.SystemProperty, BsonNull.Value));
 
-                    if (!string.IsNullOrEmpty(pn.VisitType))
-                    {
-                        uv.Add(MB.Update.Set(MEPatientUtilization.VisitTypeProperty, ObjectId.Parse(pn.VisitType)));
-                    }
+                    if (pn.AdmitDate != null) uv.Add(MB.Update.Set(MEPatientUtilization.AdmitDateProperty, pn.AdmitDate));
+                    else uv.Add(MB.Update.Set(MEPatientUtilization.AdmitDateProperty, BsonNull.Value));
+
+                    if (pn.DischargeDate != null) uv.Add(MB.Update.Set(MEPatientUtilization.DischargeDateProperty, pn.DischargeDate));
+                    else uv.Add(MB.Update.Set(MEPatientUtilization.DischargeDateProperty, BsonNull.Value));
+
+                    if (!string.IsNullOrEmpty(pn.PatientId)) uv.Add(MB.Update.Set(MEPatientUtilization.PatientIdProperty, ObjectId.Parse(pn.PatientId)));
+                    else uv.Add(MB.Update.Set(MEPatientUtilization.PatientIdProperty, BsonNull.Value));
+
+                    if (!string.IsNullOrEmpty(pn.VisitTypeId))
+                        uv.Add(MB.Update.Set(MEPatientUtilization.VisitTypeProperty, ObjectId.Parse(pn.VisitTypeId)));
                     else
-                    {
                         uv.Add(MB.Update.Set(MEPatientUtilization.VisitTypeProperty, BsonNull.Value));
-                    }
 
-                    if (!string.IsNullOrEmpty(pn.Location))
-                    {
-                        uv.Add(MB.Update.Set(MEPatientUtilization.LocationProperty, ObjectId.Parse(pn.Location)));
-                    }
+                    if (!string.IsNullOrEmpty(pn.LocationId))
+                        uv.Add(MB.Update.Set(MEPatientUtilization.LocationProperty, ObjectId.Parse(pn.LocationId)));
                     else
-                    {
                         uv.Add(MB.Update.Set(MEPatientUtilization.LocationProperty, BsonNull.Value));
-                    }
 
-                    if (!string.IsNullOrEmpty(pn.Disposition))
-                    {
-                        uv.Add(MB.Update.Set(MEPatientUtilization.DispositionProperty, ObjectId.Parse(pn.Disposition)));
-                    }
+                    if (!string.IsNullOrEmpty(pn.DispositionId))
+                        uv.Add(MB.Update.Set(MEPatientUtilization.DispositionProperty, ObjectId.Parse(pn.DispositionId)));
                     else
-                    {
                         uv.Add(MB.Update.Set(MEPatientUtilization.DispositionProperty, BsonNull.Value));
-                    }
 
                     if (!string.IsNullOrEmpty(pn.SourceId))
-                    {
                         uv.Add(MB.Update.Set(MEPatientUtilization.SourceIdProperty, ObjectId.Parse(pn.SourceId)));
-                    }
                     else
-                    {
                         uv.Add(MB.Update.Set(MEPatientUtilization.SourceIdProperty, BsonNull.Value));
-                    }
 
-                    if (!string.IsNullOrEmpty(pn.NoteType))
-                    {
-                        uv.Add(MB.Update.Set(MEPatientUtilization.NoteTypeProperty, ObjectId.Parse(pn.NoteType)));
-                    }
+                    if (!string.IsNullOrEmpty(pn.TypeId))
+                        uv.Add(MB.Update.Set(MEPatientUtilization.NoteTypeProperty, ObjectId.Parse(pn.TypeId)));
                     else
-                    {
                         uv.Add(MB.Update.Set(MEPatientUtilization.NoteTypeProperty, BsonNull.Value));
-                    }
 
                     if (pn.ProgramIds != null && pn.ProgramIds.Count > 0)
-                    {
                         uv.Add(MB.Update.SetWrapped<List<ObjectId>>(MEPatientUtilization.ProgramsProperty,
                             Helper.ConvertToObjectIdList(pn.ProgramIds)));
-                    }
                     else
-                    {
                         uv.Add(MB.Update.Set(MEPatientUtilization.ProgramsProperty, BsonNull.Value));
-                    }
 
 
                     IMongoUpdate update = MB.Update.Combine(uv);
@@ -292,7 +283,7 @@ namespace Phytel.API.DataDomain.PatientNote.Repo
                         DataAuditType.Update,
                         ContractDBName);
 
-                    result = true;
+                    result = FindByID(pn.Id) as PatientUtilizationData;
                 }
                 return result as object;
             }

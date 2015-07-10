@@ -14,9 +14,9 @@ namespace Phytel.API.AppDomain.NG.Service.Mappers
             // map to patientnote collection
             Mapper.CreateMap<PatientUtilization, PatientNote>()
                 .ForMember(dest => dest.Text, opt => opt.MapFrom(src => src.Reason))
-                .ForMember(dest => dest.TypeId, opt => opt.MapFrom(src => src.NoteType))
-                .ForMember(dest => dest.CreatedOn, opt => opt.MapFrom(src => src.RecordCreatedOn))
-                .ForMember(dest => dest.CreatedById, opt => opt.MapFrom(src => src.RecordCreatedBy))
+                .ForMember(dest => dest.TypeId, opt => opt.MapFrom(src => src.TypeId))
+                .ForMember(dest => dest.CreatedOn, opt => opt.MapFrom(src => src.CreatedOn))
+                .ForMember(dest => dest.CreatedById, opt => opt.MapFrom(src => src.CreatedById))
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.PatientId, opt => opt.MapFrom(src => src.PatientId))
                 .ForMember(dest => dest.ProgramIds, opt => opt.Ignore())

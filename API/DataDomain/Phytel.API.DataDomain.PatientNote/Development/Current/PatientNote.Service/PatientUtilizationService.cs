@@ -14,7 +14,7 @@ namespace Phytel.API.DataDomain.PatientNote.Service
             try
             {
                 RequireUserId(request);
-                response.Id = Manager.InsertPatientUtilization(request.PatientUtilization);
+                response.Utilization = Manager.InsertPatientUtilization(request.PatientUtilization);
             }
             catch (Exception ex)
             {
@@ -29,7 +29,7 @@ namespace Phytel.API.DataDomain.PatientNote.Service
             try
             {
                 RequireUserId(request);
-                Manager.UpdatePatientUtilization(request.PatientUtilization);
+                response.Utilization = Manager.UpdatePatientUtilization(request.PatientUtilization);
             }
             catch (Exception ex)
             {

@@ -18,8 +18,8 @@ namespace Phytel.API.DataDomain.PatientNote.Test
             {
                 AdmitDate = DateTime.UtcNow,
                 DischargeDate = DateTime.UtcNow,
-                Disposition = "disposition",
-                Location = "location",
+                DispositionId = "disposition",
+                LocationId = "location",
                 OtherDisposition = "other disp",
                 OtherLocation = "testotherlocation",
                 OtherType = "12345678912ertyudjgkanh4",
@@ -27,8 +27,8 @@ namespace Phytel.API.DataDomain.PatientNote.Test
                 ProgramIds = new List<string> { "sjfhgry478298988y7482911" },
                 Reason = "test reason",
                 SourceId = "783945768910123erhgy547f",
-                PSystem = "Engage",
-                VisitType = "89rhty7857ty7745tueiop33"
+                SystemSource = "Engage",
+                VisitTypeId = "89rhty7857ty7745tueiop33"
             };
 
             var timestamp = DateTime.Now.TimeOfDay.Hours.ToString() + DateTime.Now.TimeOfDay.Minutes.ToString() +
@@ -38,8 +38,8 @@ namespace Phytel.API.DataDomain.PatientNote.Test
             {
                 AdmitDate = DateTime.UtcNow,
                 DischargeDate = DateTime.UtcNow,
-                Disposition = "disposition" + timestamp,
-                Location = "location" + timestamp,
+                DispositionId = "disposition" + timestamp,
+                LocationId = "location" + timestamp,
                 OtherDisposition = "other disp" + timestamp,
                 OtherLocation = "testotherlocation" + timestamp,
                 OtherType = "12345678912ertyudjgkanh4",
@@ -47,8 +47,8 @@ namespace Phytel.API.DataDomain.PatientNote.Test
                 ProgramIds = new List<string> { "sjfhgry478298988y7482911" },
                 Reason = "test reason" + timestamp,
                 SourceId = "783945768910123erhgy547f",
-                PSystem = "Engage",
-                VisitType = "89rhty7857ty7745tueiop33"
+                SystemSource = "Engage",
+                VisitTypeId = "89rhty7857ty7745tueiop33"
             };
         }
     }

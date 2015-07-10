@@ -11,14 +11,14 @@ namespace Phytel.API.DataDomain.PatientNote.Repo
         {
             // automappings
             Mapper.CreateMap<PatientUtilizationData, MEPatientUtilization>()
-                .ForMember(d => d.VisitType, opt => opt.MapFrom(src => ObjectId.Parse(src.VisitType)))
+                .ForMember(d => d.VisitType, opt => opt.MapFrom(src => ObjectId.Parse(src.VisitTypeId)))
                 .ForMember(d => d.SourceId, opt => opt.MapFrom(src => ObjectId.Parse(src.SourceId)))
                 .ForMember(d => d.PatientId, opt => opt.MapFrom(src => ObjectId.Parse(src.PatientId)))
                 .ForMember(d => d.ProgramIds, opt => opt.MapFrom(src => src.ProgramIds.ConvertAll(id => ObjectId.Parse(id))));
 
             Mapper.CreateMap<MEPatientUtilization, PatientUtilizationData>()
                 .ForMember(d => d.PatientId, opt => opt.MapFrom(src => src.PatientId.ToString()))
-                .ForMember(d => d.VisitType, opt => opt.MapFrom(src => src.VisitType.ToString()))
+                .ForMember(d => d.VisitTypeId, opt => opt.MapFrom(src => src.VisitType.ToString()))
                 .ForMember(d => d.SourceId, opt => opt.MapFrom(src => src.SourceId.ToString()))
                 .ForMember(d => d.PatientId, opt => opt.MapFrom(src => src.PatientId.ToString()))
                 .ForMember(d => d.ProgramIds, opt => opt.MapFrom(src => src.ProgramIds.ConvertAll(id => id.ToString())));

@@ -132,8 +132,8 @@ namespace Phytel.API.AppDomain.NG.Notes
                 PostPatientUtilizationDataResponse ddResponse = client.Post<PostPatientUtilizationDataResponse>(url,
                     ddRequest);
 
-                if (ddResponse == null || ddResponse.Id == null) return result;
-                result.Id = ddResponse.Id;
+                if (ddResponse == null || ddResponse.Utilization == null) return result;
+                result.Utilization = Mapper.Map<PatientUtilization>(ddResponse.Utilization);
                 result.Result = true;
 
                 return result;
@@ -173,7 +173,7 @@ namespace Phytel.API.AppDomain.NG.Notes
                     ddRequest);
 
                 if (ddResponse == null || ddResponse.Status != null) return result;
-                result.Id = ddResponse.Id;
+                result.Utilization = Mapper.Map<PatientUtilization>(ddResponse.Utilization);
                 result.Result = true;
 
                 return result;

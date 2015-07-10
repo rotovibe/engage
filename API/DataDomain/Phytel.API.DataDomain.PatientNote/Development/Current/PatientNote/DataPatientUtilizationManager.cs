@@ -18,13 +18,13 @@ namespace Phytel.API.DataDomain.PatientNote
             Factory = repo;
         }
 
-        public string InsertPatientUtilization(PatientUtilizationData data)
+        public PatientUtilizationData InsertPatientUtilization(PatientUtilizationData data)
         {
             try
             {
                 var repository = Factory.GetRepository(RepositoryType.Utilization);
-                var id = repository.Insert(data).ToString();
-                return id;
+                var pUtil = repository.Insert(data) as PatientUtilizationData;
+                return pUtil;
             }
             catch (Exception ex)
             {
@@ -32,14 +32,13 @@ namespace Phytel.API.DataDomain.PatientNote
             }
         }
 
-        public bool UpdatePatientUtilization(PatientUtilizationData data)
+        public PatientUtilizationData UpdatePatientUtilization(PatientUtilizationData data)
         {
             try
             {
                 var repository = Factory.GetRepository(RepositoryType.Utilization);
-                repository.Update(data);
-                var result = true;
-                return result;
+                var result = repository.Update(data);
+                return result as PatientUtilizationData;
             }
             catch (Exception ex)
             {

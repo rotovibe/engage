@@ -143,7 +143,7 @@ namespace Phytel.API.AppDomain.NG.Service
                     if (string.IsNullOrEmpty(request.Utilization.PatientId))
                         throw new ArgumentException("Missing patientid");
 
-                    if (string.IsNullOrEmpty(request.Utilization.VisitType))
+                    if (string.IsNullOrEmpty(request.Utilization.VisitTypeId))
                         throw new ArgumentException("Missing visittypeid");
 
                     request.UserId = result.UserId;
@@ -189,7 +189,7 @@ namespace Phytel.API.AppDomain.NG.Service
                     if (string.IsNullOrEmpty(request.Utilization.PatientId))
                         throw new ArgumentException("Missing patientid");
 
-                    if (string.IsNullOrEmpty(request.Utilization.VisitType))
+                    if (string.IsNullOrEmpty(request.Utilization.VisitTypeId))
                         throw new ArgumentException("Missing visittypeid");
 
                     request.UserId = result.UserId;

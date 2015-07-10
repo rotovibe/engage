@@ -6,8 +6,8 @@ namespace Phytel.API.DataDomain.PatientNote
 {
     public interface IDataPatientUtilizationManager
     {
-        string InsertPatientUtilization(PatientUtilizationData data);
-        bool UpdatePatientUtilization(PatientUtilizationData data);
+        PatientUtilizationData InsertPatientUtilization(PatientUtilizationData data);
+        PatientUtilizationData UpdatePatientUtilization(PatientUtilizationData data);
         List<PatientUtilizationData> GetPatientUtilizations(string userId);
         PatientUtilizationData GetPatientUtilization(string utilId);
         bool DeletePatientUtilization(string utilId);

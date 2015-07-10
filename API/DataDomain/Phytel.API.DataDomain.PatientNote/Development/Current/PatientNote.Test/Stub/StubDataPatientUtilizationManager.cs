@@ -1,22 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Phytel.API.DataDomain.PatientNote.DTO;
+using Phytel.API.DataDomain.PatientNote.Repo;
 
 namespace Phytel.API.DataDomain.PatientNote.Test.Stub
 {
     public class StubDataPatientUtilizationManager : IDataPatientUtilizationManager
     {
-        public string InsertPatientUtilization(PatientUtilizationData data)
+        public PatientUtilizationData InsertPatientUtilization(PatientUtilizationData data)
         {
-            return "111111111111111111111111";
+            return new PatientUtilizationData();
         }
 
-        public bool UpdatePatientUtilization(PatientUtilizationData data)
+        public PatientUtilizationData UpdatePatientUtilization(PatientUtilizationData data)
         {
-            return true;
+            return new PatientUtilizationData();
         }
 
         public List<PatientUtilizationData> GetPatientUtilizations(string userId)
@@ -34,7 +32,7 @@ namespace Phytel.API.DataDomain.PatientNote.Test.Stub
             return true;
         }
 
-        public Repo.IMongoPatientNoteRepository Repository
+        public IMongoPatientNoteRepository Repository
         {
             get
             {
