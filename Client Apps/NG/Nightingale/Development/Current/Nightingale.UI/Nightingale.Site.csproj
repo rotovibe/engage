@@ -189,6 +189,7 @@
     <Content Include="App\viewmodels\templates\medications.panel.js" />
     <Content Include="App\viewmodels\templates\note.general.edit.js" />
     <Content Include="App\viewmodels\templates\note.touchpoint.edit.js" />
+    <Content Include="App\viewmodels\templates\note.utilization.edit.js" />
     <Content Include="App\viewmodels\templates\patient.status.js" />
     <Content Include="App\viewmodels\templates\patient.systems.js" />
     <Content Include="App\viewmodels\templates\task.panel.js" />
