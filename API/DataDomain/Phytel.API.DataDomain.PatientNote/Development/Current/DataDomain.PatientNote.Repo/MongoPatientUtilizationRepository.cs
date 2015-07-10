@@ -49,8 +49,15 @@ namespace Phytel.API.DataDomain.PatientNote.Repo
                         Admitted = data.Admitted
                     };
 
-                    if (data.AdmitDate != null) meN.AdmitDate = data.AdmitDate = data.AdmitDate.GetValueOrDefault().ToUniversalTime();
-                    if (data.DischargeDate != null) meN.DischargeDate = data.DischargeDate = data.DischargeDate.GetValueOrDefault().ToUniversalTime();
+                    if (data.AdmitDate != null && !data.AdmitDate.Equals(new DateTime())) 
+                        meN.AdmitDate = data.AdmitDate = data.AdmitDate.GetValueOrDefault().ToUniversalTime();
+                    else
+                        data.AdmitDate = null;
+                    
+                    if (data.DischargeDate != null && !data.DischargeDate.Equals(new DateTime()))
+                        meN.DischargeDate = data.DischargeDate = data.DischargeDate.GetValueOrDefault().ToUniversalTime();
+                    else
+                        data.DischargeDate = null;
 
                     if (!string.IsNullOrEmpty(data.DispositionId)) meN.Disposition = ObjectId.Parse(data.DispositionId);
                     if (!string.IsNullOrEmpty(data.LocationId)) meN.Location = ObjectId.Parse(data.LocationId);
@@ -177,7 +184,9 @@ namespace Phytel.API.DataDomain.PatientNote.Repo
                 TypeId = (meN.NoteType == null) ? null : meN.NoteType.ToString(),
                 CreatedById = meN.RecordCreatedBy.ToString(),
                 CreatedOn = meN.RecordCreatedOn,
-                Admitted = meN.Admitted
+                Admitted = meN.Admitted,
+                UpdatedById = (meN.UpdatedBy == null) ? null : meN.UpdatedBy.ToString(),
+                UpdatedOn = meN.LastUpdatedOn
             };
 
             return data;
@@ -233,10 +242,10 @@ namespace Phytel.API.DataDomain.PatientNote.Repo
                     if (pn.SystemSource != null) uv.Add(MB.Update.Set(MEPatientUtilization.SystemProperty, pn.SystemSource));
                     else uv.Add(MB.Update.Set(MEPatientUtilization.SystemProperty, BsonNull.Value));
 
-                    if (pn.AdmitDate != null) uv.Add(MB.Update.Set(MEPatientUtilization.AdmitDateProperty, pn.AdmitDate));
+                    if (pn.AdmitDate != null && !pn.AdmitDate.Equals(new DateTime())) uv.Add(MB.Update.Set(MEPatientUtilization.AdmitDateProperty, pn.AdmitDate));
                     else uv.Add(MB.Update.Set(MEPatientUtilization.AdmitDateProperty, BsonNull.Value));
 
-                    if (pn.DischargeDate != null) uv.Add(MB.Update.Set(MEPatientUtilization.DischargeDateProperty, pn.DischargeDate));
+                    if (pn.DischargeDate != null && !pn.DischargeDate.Equals(new DateTime())) uv.Add(MB.Update.Set(MEPatientUtilization.DischargeDateProperty, pn.DischargeDate));
                     else uv.Add(MB.Update.Set(MEPatientUtilization.DischargeDateProperty, BsonNull.Value));
 
                     if (!string.IsNullOrEmpty(pn.PatientId)) uv.Add(MB.Update.Set(MEPatientUtilization.PatientIdProperty, ObjectId.Parse(pn.PatientId)));

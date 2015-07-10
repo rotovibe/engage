@@ -9,11 +9,15 @@ namespace Phytel.API.AppDomain.NG.Service.Mappers
     {
         public static void Build()
         {
-            Mapper.CreateMap<PatientUtilizationData, PatientUtilization>();
-            Mapper.CreateMap<PatientUtilization, PatientUtilizationData>();
+            Mapper.CreateMap<PatientUtilizationData, PatientUtilization>()
+                .ForMember(dest => dest.UtilizationSourceId, opt => opt.MapFrom(src => src.SourceId))
+                .ForMember(dest => dest.Text, opt => opt.MapFrom(src => src.Reason));
+            Mapper.CreateMap<PatientUtilization, PatientUtilizationData>()
+                .ForMember(dest => dest.SourceId, opt => opt.MapFrom(src => src.UtilizationSourceId))
+                .ForMember(dest => dest.Reason, opt => opt.MapFrom(src => src.Text));
             // map to patientnote collection
             Mapper.CreateMap<PatientUtilization, PatientNote>()
-                .ForMember(dest => dest.Text, opt => opt.MapFrom(src => src.Reason))
+                .ForMember(dest => dest.Text, opt => opt.MapFrom(src => src.Text))
                 .ForMember(dest => dest.TypeId, opt => opt.MapFrom(src => src.TypeId))
                 .ForMember(dest => dest.CreatedOn, opt => opt.MapFrom(src => src.CreatedOn))
                 .ForMember(dest => dest.CreatedById, opt => opt.MapFrom(src => src.CreatedById))

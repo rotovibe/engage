@@ -57,7 +57,7 @@ namespace Phytel.API.DataDomain.PatientNote.Service.Tests
             var serv = new PatientUtilizationService { Manager = new StubDataPatientUtilizationManager() };
 
             var result = serv.Manager.UpdatePatientUtilization(TestInit.NewPatientUtilizationData);
-            Assert.IsTrue(result);
+            Assert.IsNotNull(result);
         }
 
         [TestMethod()]

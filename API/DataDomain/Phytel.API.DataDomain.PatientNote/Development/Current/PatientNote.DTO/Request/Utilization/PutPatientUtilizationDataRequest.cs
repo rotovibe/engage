@@ -5,12 +5,15 @@ using Phytel.API.DataDomain.PatientNote.DTO;
 
 namespace Phytel.API.DataDomain.PatientNote.DTO.Request.Utilization
 {
-    [Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Notes/Utilizations/", "PUT")]
+    [Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Notes/Utilizations/{UtilizationId}", "PUT")]
     public class PutPatientUtilizationDataRequest : IDataDomainRequest
     {
 
         [ApiMember(Name = "PatientId", Description = "Id of the patient", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string PatientId { get; set; }
+
+        [ApiMember(Name = "UtilizationId", Description = "PatientUtilizationId being updated", ParameterType = "path", DataType = "string", IsRequired = true)]
+        public string UtilizationId { get; set; }
 
         [ApiMember(Name = "PatientUtilization", Description = "PatientUtilization object to be updated", ParameterType = "property", DataType = "PatientNoteData", IsRequired = false)]
         public PatientUtilizationData PatientUtilization { get; set; }

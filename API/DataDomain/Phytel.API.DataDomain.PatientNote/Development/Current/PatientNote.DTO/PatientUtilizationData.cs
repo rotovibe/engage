@@ -23,6 +23,8 @@ namespace Phytel.API.DataDomain.PatientNote.DTO
         public string CreatedById { get; set; }
         public DateTime CreatedOn { get; set; }
         public bool Admitted { get; set; }
+        public string UpdatedById { get; set; }
+        public DateTime? UpdatedOn { get; set; }
 
         public PatientUtilizationData(){}
     }

@@ -152,12 +152,13 @@ namespace Phytel.API.AppDomain.NG.Notes
 
                 //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Notes/", "GET")]
                 IRestClient client = new JsonServiceClient();
-                var url = Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Notes/Utilizations/",
+                var url = Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Notes/Utilizations/{5}",
                     DdPatientNoteUrl,
                     "NG",
                     request.Version,
                     request.ContractNumber,
-                    request.PatientId), request.UserId);
+                    request.PatientId,
+                    request.UtilizationId), request.UserId);
 
                 var ddRequest = new PutPatientUtilizationDataRequest
                 {

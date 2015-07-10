@@ -5,13 +5,16 @@ using ServiceStack.ServiceHost;
 namespace Phytel.API.AppDomain.NG.DTO.Utilization
 {
     [Api(Description = "A Request object to insert a patient note.")]
-    [Route("/{Version}/{ContractNumber}/Patient/{PatientId}/Notes/Utilizations", "PUT")]
+    [Route("/{Version}/{ContractNumber}/Patient/{PatientId}/Notes/Utilizations/{UtilizationId}", "PUT")]
     public class PutPatientUtilizationRequest : IAppDomainRequest
     {
         [ApiMember(Name = "PatientId", Description = "Id of the patient", ParameterType = "path", DataType = "string", IsRequired = true)]
         public string PatientId { get; set; }
 
-        [ApiMember(Name = "Utilization", Description = "PatientUtilization being created", ParameterType = "body", DataType = "PatientNote", IsRequired = true)]
+        [ApiMember(Name = "UtilizationId", Description = "PatientUtilizationId being updated", ParameterType = "path", DataType = "string", IsRequired = true)]
+        public string UtilizationId { get; set; }
+
+        [ApiMember(Name = "Utilization", Description = "PatientUtilization being updated", ParameterType = "body", DataType = "PatientNote", IsRequired = true)]
         public PatientUtilization Utilization { get; set; }
         
         public string UserId { get; set; }

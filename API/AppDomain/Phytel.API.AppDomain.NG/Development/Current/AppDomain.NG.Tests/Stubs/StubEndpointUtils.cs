@@ -139,7 +139,7 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
             //    Id = "123456789012345678901234",
             //    EndDate = DateTime.UtcNow,
             //    Name = "sample goal name",
-            //    SourceId = "5325db9cd6a4850adcbba9ca",
+            //    UtilizationSourceId = "5325db9cd6a4850adcbba9ca",
             //    StartDate = DateTime.UtcNow,
             //    StatusId = 1,
             //    TargetDate = DateTime.UtcNow,

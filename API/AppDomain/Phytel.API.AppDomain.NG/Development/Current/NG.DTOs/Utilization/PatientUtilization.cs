@@ -13,16 +13,18 @@ namespace Phytel.API.AppDomain.NG.DTO.Utilization
         public DateTime? DischargeDate { get; set; }
         public string LocationId { get; set; }
         public string OtherLocation { get; set; }
-        public string Reason { get; set; }
+        public string Text { get; set; }
         public string DispositionId { get; set; }
         public string OtherDisposition { get; set; }
-        public string SourceId { get; set; }
+        public string UtilizationSourceId { get; set; }
         public List<string> ProgramIds { get; set; }
         public string SystemSource { get; set; }
         public string TypeId { get; set; }
         public string CreatedById { get; set; }
         public DateTime CreatedOn { get; set; }
         public bool Admitted { get; set; }
+        public string UpdatedById { get; set; }
+        public DateTime? UpdatedOn { get; set; }
 
         public PatientUtilization()
         {
