@@ -94,13 +94,16 @@
             // Check if the datacontext is available, if so require it
             checkDataContext();
 
+			var method = 'POST';
+			var endPoint = null;
             // Create an end point to use	
-			if( type && type.toLowerCase() === 'utilization' ){
+			if( note.type() && note.type().name().toLowerCase() === 'utilization' ){
 				//different endpoint for utilization note type
-				var endPoint = new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'Patient/' + note.PatientId + '/Notes/Utilization/' + note.id() + '/Delete', 'Note');
+				endPoint = new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'Patient/' + note.PatientId + '/Notes/Utilizations/' + note.id(), 'Note');
+				method = 'DELETE';
 			}
 			else{
-				var endPoint = new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'Patient/' + note.patientId() + '/Note/' + note.id() + '/Delete', 'Note');
+				endPoint = new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'Patient/' + note.patientId() + '/Note/' + note.id() + '/Delete', 'Note');
 			}
 			
             // Create a payload from the JS object
@@ -112,7 +115,7 @@
             var query = breeze.EntityQuery
                 .from(endPoint.ResourcePath)
                 .withParameters({
-                    $method: 'POST',
+                    $method: method,
                     $encoding: 'JSON',
                     $data: payload
                 });

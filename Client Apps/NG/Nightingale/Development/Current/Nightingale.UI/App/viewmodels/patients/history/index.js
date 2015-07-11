@@ -27,11 +27,9 @@
 		var activeNoteLoader = ko.computed(function(){
 			var note = activeNote();
 			if( note && note.type() && note.type().name().toLowerCase() === 'utilization' ){				
-				console.log('activeNote changed to: '+ activeNote().type().name() + ' ' + activeNote().id()+ ' ' + activeNote().text());	//here we need to load the note if its utilization type.	
 				//load this note if the type is utilization
 				datacontext.getNote( note.id(), note.patientId(), note.type().name() ).then( noteLoaded );
-				function noteLoaded(data){					
-					//note.text( note.reason() );
+				function noteLoaded(data){										
 				}
 			}			
 		});
