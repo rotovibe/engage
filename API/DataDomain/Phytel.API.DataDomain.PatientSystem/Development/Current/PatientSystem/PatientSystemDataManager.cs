@@ -53,6 +53,7 @@ namespace Phytel.API.DataDomain.PatientSystem
                         // Call the ID generator tool to populate the value.
                         request.PatientSystemsData.Value = "";
                         request.PatientSystemsData.SystemSourceId = Constants.EngageSystemId;
+                        request.UserId = Constants.SystemContactId;
                     }
                     string id = (string)repo.Insert(request);
                     if (!string.IsNullOrEmpty(id))
