@@ -37,11 +37,27 @@ namespace Phytel.API.AppDomain.NG.Allergy
             List<PatientSystem> list = null;
             try
             {
-                List<PatientSystemData> dataList = EndpointUtil.GetPatientSystems(request);
-                if (dataList != null && dataList.Count > 0)
+                GetActiveSystemSourcesRequest ssRequest = new GetActiveSystemSourcesRequest { ContractNumber = request.ContractNumber, UserId = request.UserId, Version = request.Version };
+                List<SystemSourceData> ssData = EndpointUtil.GetSystemSources(ssRequest);
+                if (ssData != null && ssData.Count > 0)
                 {
-                    list = new List<PatientSystem>();
-                    dataList.ForEach(a => list.Add(Mapper.Map<PatientSystem>(a)));
+                    // Get only active system sources.
+                    List<SystemSourceData> activeSystemSources = ssData.FindAll(s => s.StatusId == (int)Status.Active);
+                    if (activeSystemSources.Count > 0)
+                    {
+                        List<PatientSystemData> dataList = EndpointUtil.GetPatientSystems(request);
+                        if (dataList != null && dataList.Count > 0)
+                        {
+                            list = new List<PatientSystem>();
+                            dataList.ForEach(a =>
+                                {
+                                    if (activeSystemSources.Exists(x => x.Id == a.SystemSourceId))
+                                    {
+                                        list.Add(Mapper.Map<PatientSystem>(a));
+                                    }
+                                });
+                        }
+                    }
                 }
                 return list;
             }   
