@@ -43,8 +43,8 @@ namespace Phytel.API.DataDomain.PatientNote.Repo
                         OtherLocation = data.OtherLocation,
                         OtherType = data.OtherType,
                         ProgramIds = data.ProgramIds != null ? data.ProgramIds.ConvertAll(ObjectId.Parse) : null,
-                        PSystem = data.SystemSource,
-                        Reason = data.Reason,
+                        PSystem = data.SystemSource = Trim(data.SystemSource, 50),
+                        Reason = data.Reason = Trim(data.Reason, 5000),
                         Version = 1,
                         Admitted = data.Admitted
                     };
@@ -163,7 +163,7 @@ namespace Phytel.API.DataDomain.PatientNote.Repo
             catch (Exception) { throw; }
         }
 
-        private static PatientUtilizationData MapPatientUtilizationData(MEPatientUtilization meN)
+        private PatientUtilizationData MapPatientUtilizationData(MEPatientUtilization meN)
         {
             var data = new PatientUtilizationData
             {
@@ -176,8 +176,8 @@ namespace Phytel.API.DataDomain.PatientNote.Repo
                 OtherDisposition = meN.OtherDisposition,
                 OtherLocation = meN.OtherLocation,
                 OtherType = meN.OtherType,
-                SystemSource = meN.PSystem,
-                Reason = meN.Reason,
+                SystemSource = Trim(meN.PSystem, 50),
+                Reason = Trim(meN.Reason, 5000),
                 VisitTypeId = (meN.VisitType == null) ? null : meN.VisitType.ToString(),
                 ProgramIds = Helper.ConvertToStringList(meN.ProgramIds),
                 SourceId = (meN.SourceId == null) ? null : meN.SourceId.ToString(),
@@ -233,13 +233,13 @@ namespace Phytel.API.DataDomain.PatientNote.Repo
                     if (pn.OtherLocation != null) uv.Add(MB.Update.Set(MEPatientUtilization.OtherLocationProperty, pn.OtherLocation));
                     else uv.Add(MB.Update.Set(MEPatientUtilization.OtherLocationProperty, BsonNull.Value));
 
-                    if (pn.Reason != null) uv.Add(MB.Update.Set(MEPatientUtilization.ReasonProperty, pn.Reason));
+                    if (pn.Reason != null) uv.Add(MB.Update.Set(MEPatientUtilization.ReasonProperty, Trim(pn.Reason, 5000)));
                     else uv.Add(MB.Update.Set(MEPatientUtilization.ReasonProperty, BsonNull.Value));
 
                     if (pn.OtherDisposition != null) uv.Add(MB.Update.Set(MEPatientUtilization.OtherDispositionProperty, pn.OtherDisposition));
                     else uv.Add(MB.Update.Set(MEPatientUtilization.OtherDispositionProperty, BsonNull.Value));
 
-                    if (pn.SystemSource != null) uv.Add(MB.Update.Set(MEPatientUtilization.SystemProperty, pn.SystemSource));
+                    if (pn.SystemSource != null) uv.Add(MB.Update.Set(MEPatientUtilization.SystemProperty, Trim(pn.SystemSource, 50)));
                     else uv.Add(MB.Update.Set(MEPatientUtilization.SystemProperty, BsonNull.Value));
 
                     if (pn.AdmitDate != null && !pn.AdmitDate.Equals(new DateTime())) uv.Add(MB.Update.Set(MEPatientUtilization.AdmitDateProperty, pn.AdmitDate));
@@ -300,6 +300,16 @@ namespace Phytel.API.DataDomain.PatientNote.Repo
             {
                 throw;
             }
+        }
+
+        public string Trim(string p, int limit)
+        {
+            var val = p;
+            if (!string.IsNullOrEmpty(p) && p.Length > limit)
+            {
+                val = p.Substring(0, limit);
+            }
+            return val;
         }
 
         public void CacheByID(List<string> entityIDs)
