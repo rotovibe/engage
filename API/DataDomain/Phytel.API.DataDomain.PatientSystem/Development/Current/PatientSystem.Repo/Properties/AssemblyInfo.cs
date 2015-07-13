@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("DataDomain.PatientSystem.Repo")]
+[assembly: AssemblyTitle("Phytel.API.DataDomain.PatientSystem.Repo")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Phytel Inc.")]
-[assembly: AssemblyProduct("DataDomain.PatientSystem.Repo")]
+[assembly: AssemblyProduct("Phytel.API.DataDomain.PatientSystem.Repo")]
 [assembly: AssemblyCopyright("Copyright © Phytel Inc. 2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
