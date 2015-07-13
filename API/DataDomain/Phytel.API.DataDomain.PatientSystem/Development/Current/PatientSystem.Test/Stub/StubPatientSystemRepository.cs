@@ -19,7 +19,7 @@ namespace Phytel.API.DataDomain.PatientSystem.Test
                         Id = "52fa6270d433231dd0775022",
                         PatientId = "5325da76d6a4850adcbba656",
                        // SystemId = "121212",
-                        DisplayLabel = "ID",
+                       // DisplayLabel = "ID",
                       //  SystemName = "Lamar",
                       //  DeleteFlag = false
                     });
@@ -28,7 +28,7 @@ namespace Phytel.API.DataDomain.PatientSystem.Test
                     Id = "532b4748d6a4851308856a31",
                     PatientId = "5325da76d6a4850adcbba656",
                 //    SystemId = "78956",
-                    DisplayLabel = "ID",
+                   // DisplayLabel = "ID",
                   //  SystemName = "Maryland",
                  //   DeleteFlag = false
                 });
