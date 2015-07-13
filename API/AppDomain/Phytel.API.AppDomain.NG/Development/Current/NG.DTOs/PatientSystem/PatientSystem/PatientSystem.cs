@@ -11,9 +11,7 @@ namespace Phytel.API.AppDomain.NG.DTO
         public string Id { get; set; }
         public string PatientId { get; set; }
         public string SystemSourceId { get; set; }
-        public string SystemSourceName { get; set; }
         public string Value { get; set; }
-        public string DisplayLabel { get; set; }
         public int StatusId { get; set; }
         public bool Primary { get; set; }
     }
