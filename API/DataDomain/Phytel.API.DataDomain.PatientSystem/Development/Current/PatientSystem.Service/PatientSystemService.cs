@@ -48,6 +48,22 @@ namespace Phytel.API.DataDomain.PatientSystem.Service
         #endregion
 
         #region POST
+        public InsertPatientSystemDataResponse Post(InsertPatientSystemDataRequest request)
+        {
+            InsertPatientSystemDataResponse response = new InsertPatientSystemDataResponse();
+            try
+            {
+                RequireUserId(request);
+                response.PatientSystemData = Manager.InsertPatientSystem(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                RaiseException(response, ex);
+            }
+            return response;
+        }
+
         public InsertPatientSystemsDataResponse Post(InsertPatientSystemsDataRequest request)
         {
             InsertPatientSystemsDataResponse response = new InsertPatientSystemsDataResponse();

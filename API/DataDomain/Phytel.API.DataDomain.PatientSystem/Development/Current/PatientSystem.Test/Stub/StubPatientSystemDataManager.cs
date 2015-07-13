@@ -72,5 +72,11 @@ namespace Phytel.API.DataDomain.PatientSystem.Test
         {
             throw new NotImplementedException();
         }
+
+
+        public PatientSystemData InsertPatientSystem(InsertPatientSystemDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

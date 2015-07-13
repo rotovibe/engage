@@ -37,6 +37,28 @@ namespace Phytel.API.DataDomain.PatientSystem
             catch (Exception ex) { throw ex; }
         }
 
+
+
+        public PatientSystemData InsertPatientSystem(InsertPatientSystemDataRequest request)
+        {
+            PatientSystemData data = null;
+            try
+            {
+                if (request.PatientSystemsData != null)
+                {
+                    data = new PatientSystemData();
+                    var repo = Factory.GetRepository(RepositoryType.PatientSystem);
+                    string id = (string)repo.Insert(request);
+                    if (!string.IsNullOrEmpty(id))
+                    {
+                        data = (PatientSystemData)repo.FindByID(id);
+                    }
+                }
+                return data;
+            }
+            catch (Exception ex) { throw ex; }
+        }
+
         public List<PatientSystemData> InsertPatientSystems(InsertPatientSystemsDataRequest request)
         {
             List<PatientSystemData> dataList = null;

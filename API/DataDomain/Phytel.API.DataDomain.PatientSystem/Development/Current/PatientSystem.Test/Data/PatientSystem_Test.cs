@@ -37,24 +37,25 @@ namespace Phytel.API.DataDomain.PatientSystem.Test
             GetSystemSourcesDataResponse response = client.Get<GetSystemSourcesDataResponse>(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/PatientSystems?UserId={5}", url, context, version, contractNumber, request.PatientId, request.UserId));
             Assert.IsNotNull(response);
         }
-        
-        //public void GetPatientSystemByID()
-        //{
-        //    GetPatientSystemDataRequest request = new GetPatientSystemDataRequest { PatientSystemID = "52f55899072ef709f84e763b" };
-        //    IPatientSystemDataManager psM = new PatientSystemDataManager { Factory = new PatientSystemRepositoryFactory() };
-        //    GetPatientSystemDataResponse response = psM.GetPatientSystem(request);
 
-        //    Assert.IsTrue(response.PatientSystem.SystemId == "7890");
-        //}
+        [TestMethod]
+        public void InsertPatientSystem_Test()
+        {
+            InsertPatientSystemDataRequest request = new InsertPatientSystemDataRequest
+            {
+                Context = context,
+                ContractNumber = contractNumber,
+                UserId = userId,
+                Version = version,
+                PatientSystemsData = new PatientSystemData { PatientId = "5325dad4d6a4850adcbba776", Primary = false, StatusId = 1, SystemSourceId = "559e8c70d4332320bc076f4d", Value = "XCO6744" },
+                PatientId = "546d0d0684ac0508e43299d2"
+            };
 
-        //public void GetPatientSystemsByPatientId_Test()
-        //{
-        //    GetPatientSystemsDataRequest request = new GetPatientSystemsDataRequest { PatientId = "5446d99f84ac051254108d69", Context = context , ContractNumber = contractNumber, UserId = userId, Version = version};
-        //    IPatientSystemDataManager psM = new PatientSystemDataManager { Factory = new PatientSystemRepositoryFactory() };
-        //    GetPatientSystemsDataResponse response = psM.GetPatientSystems(request);
+            //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/PatientSystem", "POST")]         
+            InsertPatientSystemsDataResponse response = client.Post<InsertPatientSystemsDataResponse>(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/PatientSystem", url, context, version, contractNumber, request.PatientId), request);
+            Assert.IsNotNull(response);
+        }
 
-        //    Assert.IsTrue(response.PatientSystems.Count > 0);
-        //}
         [TestMethod]
         public void InsertPatientSystems_Test()
         {
