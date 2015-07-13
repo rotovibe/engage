@@ -81,6 +81,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constants.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="PatientSystem\InsertPatientSystemDataRequest.cs" />
     <Compile Include="PatientSystem\InsertPatientSystemsDataRequest.cs" />

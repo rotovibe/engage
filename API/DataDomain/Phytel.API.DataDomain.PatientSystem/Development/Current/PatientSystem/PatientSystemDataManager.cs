@@ -48,6 +48,12 @@ namespace Phytel.API.DataDomain.PatientSystem
                 {
                     data = new PatientSystemData();
                     var repo = Factory.GetRepository(RepositoryType.PatientSystem);
+                    if (request.IsEngageSystem)
+                    { 
+                        // Call the ID generator tool to populate the value.
+                        request.PatientSystemsData.Value = "";
+                        request.PatientSystemsData.SystemSourceId = Constants.EngageSystemId;
+                    }
                     string id = (string)repo.Insert(request);
                     if (!string.IsNullOrEmpty(id))
                     {
@@ -103,23 +109,27 @@ namespace Phytel.API.DataDomain.PatientSystem
                     var repo = Factory.GetRepository(RepositoryType.PatientSystem);
                     request.PatientSystemsData.ForEach(p =>
                         {
-                            UpdatePatientSystemDataRequest updateReq = new UpdatePatientSystemDataRequest
+                            // Do not allow update of Engage System.
+                            if(!string.Equals(Constants.EngageSystemId, p.SystemSourceId, StringComparison.CurrentCultureIgnoreCase))
                             {
-                                 Id  = p.Id,
-                                 PatientId = p.PatientId,
-                                 Context = request.Context,
-                                 ContractNumber = request.ContractNumber,
-                                 PatientSystemsData = p,
-                                 UserId = request.UserId,
-                                 Version = request.Version
-                            };
-                            bool success = (bool)repo.Update(updateReq);
-                            if (success)
-                            {
-                                PatientSystemData result = (PatientSystemData)repo.FindByID(p.Id);
-                                if (result != null)
-                                    dataList.Add(result);
-                            }   
+                                UpdatePatientSystemDataRequest updateReq = new UpdatePatientSystemDataRequest
+                                {
+                                     Id  = p.Id,
+                                     PatientId = p.PatientId,
+                                     Context = request.Context,
+                                     ContractNumber = request.ContractNumber,
+                                     PatientSystemsData = p,
+                                     UserId = request.UserId,
+                                     Version = request.Version
+                                };
+                                bool success = (bool)repo.Update(updateReq);
+                                if (success)
+                                {
+                                    PatientSystemData result = (PatientSystemData)repo.FindByID(p.Id);
+                                    if (result != null)
+                                        dataList.Add(result);
+                                }   
+                            }
                         });
                 }
                 return dataList;

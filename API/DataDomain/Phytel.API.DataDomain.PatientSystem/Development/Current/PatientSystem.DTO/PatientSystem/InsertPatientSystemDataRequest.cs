@@ -10,6 +10,9 @@ namespace Phytel.API.DataDomain.PatientSystem.DTO
        [ApiMember(Name = "PatientId", Description = "Id of the patient whose PatientSystem record needs to be inserted", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string PatientId { get; set; }
 
+       [ApiMember(Name = "IsEngageSystem", Description = "Deteremines whether the PatientSystem record to be inserted is System or not.", ParameterType = "property", DataType = "bool", IsRequired = true)]
+       public bool IsEngageSystem { get; set; }
+
         [ApiMember(Name = "PatientSystemsData", Description = "PatientSystem object that need to be inserted.", ParameterType = "property", DataType = "PatientSystemData", IsRequired = true)]
         public PatientSystemData PatientSystemsData { get; set; }
 
