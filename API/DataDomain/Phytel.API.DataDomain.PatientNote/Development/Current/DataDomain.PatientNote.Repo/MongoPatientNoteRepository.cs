@@ -271,7 +271,7 @@ namespace Phytel.API.DataDomain.PatientNote.Repo
                         uv.Add(MB.Update.Set(MEPatientNote.DurationIdProperty, BsonNull.Value));
                     }
                     uv.Add(MB.Update.Set(MEPatientNote.ValidatedIdentityProperty, pn.ValidatedIdentity));
-                    if (pn.ContactedOn != null)
+                    if (pn.ContactedOn != null && !pn.ContactedOn.Equals(new DateTime()))
                     {
                         uv.Add(MB.Update.Set(MEPatientNote.ContactedOnProperty, pn.ContactedOn));
                     }
