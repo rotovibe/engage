@@ -60,7 +60,35 @@ namespace Phytel.API.DataDomain.PatientSystem
 
         public object FindByID(string entityID)
         {
-            throw new NotImplementedException();
+            SystemSourceData data = null;
+            if (!string.IsNullOrEmpty(entityID))
+            {
+                try
+                {
+                    using (PatientSystemMongoContext ctx = new PatientSystemMongoContext(ContractDBName))
+                    {
+                        List<IMongoQuery> queries = new List<IMongoQuery>();
+                        queries.Add(Query.EQ(MESystemSource.IdProperty, ObjectId.Parse(entityID)));
+                        queries.Add(Query.EQ(MESystemSource.DeleteFlagProperty, false));
+                        IMongoQuery mQuery = Query.And(queries);
+                        MESystemSource s = ctx.SystemSources.Collection.Find(mQuery).FirstOrDefault();
+                        if (s != null)
+                        {
+                            data = new SystemSourceData
+                            {
+                                Id = s.Id.ToString(),
+                                Field = s.Field,
+                                Name = s.Name,
+                                DisplayLabel = s.DisplayLabel,
+                                Primary = s.Primary,
+                                StatusId = (int)s.Status
+                            };
+                        }
+                    }
+                }
+                catch (Exception) { throw; }
+            }
+            return data;
         }
 
         public Tuple<string, IEnumerable<object>> Select(Interface.APIExpression expression)

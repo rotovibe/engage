@@ -48,11 +48,11 @@ namespace Phytel.API.DataDomain.PatientSystem
                     data = new PatientSystemData();
                     var repo = Factory.GetRepository(RepositoryType.PatientSystem);
                     if (request.IsEngageSystem)
-                    { 
-                        // Call the ID generator tool to populate the value.
-                        request.PatientSystemsData.Value = EngageId.New();
+                    {
                         request.PatientSystemsData.SystemSourceId = Constants.EngageSystemId;
-                        request.UserId = Constants.SystemContactId;
+                        request.PatientSystemsData.Value = EngageId.New();
+                        request.PatientSystemsData.Primary = isSystemPrimary(Constants.EngageSystemId);
+                        request.PatientSystemsData.StatusId = (int)Status.Active;
                     }
                     string id = (string)repo.Insert(request);
                     if (!string.IsNullOrEmpty(id))
@@ -63,6 +63,16 @@ namespace Phytel.API.DataDomain.PatientSystem
                 return data;
             }
             catch (Exception ex) { throw ex; }
+        }
+
+        private bool isSystemPrimary(string id)
+        {
+            bool result = false;
+            var repo = Factory.GetRepository(RepositoryType.SystemSource);
+            SystemSourceData data = repo.FindByID(id) as SystemSourceData;
+            if (data != null)
+                result = data.Primary;
+            return result;
         }
 
         public List<PatientSystemData> InsertPatientSystems(InsertPatientSystemsDataRequest request)
@@ -76,21 +86,26 @@ namespace Phytel.API.DataDomain.PatientSystem
                     var repo = Factory.GetRepository(RepositoryType.PatientSystem);
                     request.PatientSystemsData.ForEach(p =>
                         {
-                            InsertPatientSystemDataRequest insertReq = new InsertPatientSystemDataRequest {
-                                 PatientId = p.PatientId,
-                                 Context = request.Context,
-                                 ContractNumber = request.ContractNumber,
-                                 PatientSystemsData = p,
-                                 UserId = request.UserId,
-                                 Version = request.Version
-                            };
-                            string id = (string)repo.Insert(insertReq);
-                            if (!string.IsNullOrEmpty(id))
+                            // Do not allow inserting of Engage System. 
+                            // Engage System is added automatically after a patient is created or imported which is achieved by the "InsertPatientSystem" method. 
+                            if (!string.Equals(Constants.EngageSystemId, p.SystemSourceId, StringComparison.CurrentCultureIgnoreCase))
                             {
-                                PatientSystemData result = (PatientSystemData)repo.FindByID(id);
-                                if(result != null)
-                                    dataList.Add(result);
-                            }   
+                                InsertPatientSystemDataRequest insertReq = new InsertPatientSystemDataRequest {
+                                     PatientId = p.PatientId,
+                                     Context = request.Context,
+                                     ContractNumber = request.ContractNumber,
+                                     PatientSystemsData = p,
+                                     UserId = request.UserId,
+                                     Version = request.Version
+                                };
+                                string id = (string)repo.Insert(insertReq);
+                                if (!string.IsNullOrEmpty(id))
+                                {
+                                    PatientSystemData result = (PatientSystemData)repo.FindByID(id);
+                                    if(result != null)
+                                        dataList.Add(result);
+                                }
+                            }
                         });
                 }
                 return dataList;

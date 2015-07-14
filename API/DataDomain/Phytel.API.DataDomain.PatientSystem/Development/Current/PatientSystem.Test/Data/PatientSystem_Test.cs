@@ -47,8 +47,9 @@ namespace Phytel.API.DataDomain.PatientSystem.Test
                 ContractNumber = contractNumber,
                 UserId = userId,
                 Version = version,
-                PatientSystemsData = new PatientSystemData { PatientId = "5325dad4d6a4850adcbba776", Primary = false, StatusId = 1, SystemSourceId = "559e8c70d4332320bc076f4d", Value = "XCO6744" },
-                PatientId = "546d0d0684ac0508e43299d2"
+                PatientSystemsData = new PatientSystemData { PatientId = "55a57abd84ac072348fb7664" },
+                PatientId = "55a57abd84ac072348fb7664",
+                IsEngageSystem = true
             };
 
             //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/PatientSystem", "POST")]         
