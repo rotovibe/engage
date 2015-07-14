@@ -155,12 +155,12 @@ BEGIN
 		, pp.[AttributeEndDate]  as [EndDate]
 		, pp.[AssignedOn]
 	FROM 
-		RPT_PatientNote pn
-		left outer join RPT_PatientNoteProgram pnp on pn.MongoId = pnp.MongoPatientNoteId
-		INNER JOIN RPT_PATIENT PT ON pn.MongoPatientId = pt.MongoId
-		LEFT OUTER JOIN RPT_PATIENTSYSTEM PS ON PT.MongoPatientSystemId = PS.MongoId
-		LEFT OUTER JOIN RPT_PATIENTPROGRAM PP ON PP.MongoId = pnp.MongoId
-		INNER JOIN RPT_User u ON pn.MongoRecordCreatedBy = u.MongoId
+		RPT_PatientNote pn with (nolock)
+		left outer join RPT_PatientNoteProgram pnp with (nolock) on pn.MongoId = pnp.MongoPatientNoteId
+		INNER JOIN RPT_PATIENT PT with (nolock) ON pn.MongoPatientId = pt.MongoId
+		LEFT OUTER JOIN RPT_PATIENTSYSTEM PS with (nolock) ON PT.MongoPatientSystemId = PS.MongoId
+		LEFT OUTER JOIN RPT_PATIENTPROGRAM PP with (nolock) ON PP.MongoId = pnp.MongoId
+		INNER JOIN RPT_User u with (nolock) ON pn.MongoRecordCreatedBy = u.MongoId
 	WHERE
 		pn.[Delete] = 'False'	
 END

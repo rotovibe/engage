@@ -373,204 +373,204 @@ BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 	
-	DELETE RPT_CareMember
-	DELETE RPT_CareMemberTypeLookUp
-	DELETE RPT_ContactEmail
-	DELETE RPT_ContactPhone
-	DELETE RPT_ContactAddress
-	DELETE RPT_ContactRecentList
-	DELETE RPT_ContactMode
-	DELETE RPT_ContactLanguage
-	DELETE RPT_ContactWeekDay
-	DELETE RPT_ContactTimeOfDay
+	TRUNCATE TABLE RPT_CareMember
+	TRUNCATE TABLE RPT_CareMemberTypeLookUp
+	TRUNCATE TABLE RPT_ContactEmail
+	TRUNCATE TABLE RPT_ContactPhone
+	TRUNCATE TABLE RPT_ContactAddress
+	TRUNCATE TABLE RPT_ContactRecentList
+	TRUNCATE TABLE RPT_ContactMode
+	TRUNCATE TABLE RPT_ContactLanguage
+	TRUNCATE TABLE RPT_ContactWeekDay
+	TRUNCATE TABLE RPT_ContactTimeOfDay
 	-- todos
-	DELETE RPT_ToDoProgram
-	DELETE RPT_ToDo
+	TRUNCATE TABLE RPT_ToDoProgram
+	TRUNCATE TABLE RPT_ToDo
 	-- patient programs
-	DELETE RPT_SpawnElements
-	DELETE RPT_SpawnElementTypeCode
-	DELETE RPT_PatientProgramAttribute
-	DELETE RPT_PatientProgramResponse
-	DELETE RPT_PatientProgramStep
-	DELETE RPT_PatientProgramAction	
-	DELETE RPT_PatientProgramModule
-	DELETE RPT_PatientProgram	
-	DELETE RPT_PatientNoteProgram
-	DELETE RPT_PatientNote
-	DELETE RPT_PatientProblem
-	DELETE RPT_ObjectiveCategory
-	DELETE RPT_ObjectiveLookUp	
-	DELETE RPT_PatientObservation	
-	DELETE RPT_Observation
-	DELETE RPT_PatientTaskAttributeValue
-	DELETE RPT_PatientTaskAttribute
-	DELETE RPT_PatientTaskBarrier
-	DELETE RPT_PatientTask
+	TRUNCATE TABLE RPT_SpawnElements
+	TRUNCATE TABLE RPT_SpawnElementTypeCode
+	TRUNCATE TABLE RPT_PatientProgramAttribute
+	TRUNCATE TABLE RPT_PatientProgramResponse
+	TRUNCATE TABLE RPT_PatientProgramStep
+	TRUNCATE TABLE RPT_PatientProgramAction	
+	TRUNCATE TABLE RPT_PatientProgramModule
+	TRUNCATE TABLE RPT_PatientProgram	
+	TRUNCATE TABLE RPT_PatientNoteProgram
+	TRUNCATE TABLE RPT_PatientNote
+	TRUNCATE TABLE RPT_PatientProblem
+	TRUNCATE TABLE RPT_ObjectiveCategory
+	TRUNCATE TABLE RPT_ObjectiveLookUp	
+	TRUNCATE TABLE RPT_PatientObservation	
+	TRUNCATE TABLE RPT_Observation
+	TRUNCATE TABLE RPT_PatientTaskAttributeValue
+	TRUNCATE TABLE RPT_PatientTaskAttribute
+	TRUNCATE TABLE RPT_PatientTaskBarrier
+	TRUNCATE TABLE RPT_PatientTask
 	-- patient allergies
-	DELETE RPT_Allergy
-	DELETE RPT_AllergyType
-	DELETE RPT_PatientAllergy
-	DELETE RPT_PatientAllergyReaction
+	TRUNCATE TABLE RPT_Allergy
+	TRUNCATE TABLE RPT_AllergyType
+	TRUNCATE TABLE RPT_PatientAllergy
+	TRUNCATE TABLE RPT_PatientAllergyReaction
 	-- patient medsupps
-	DELETE RPT_PatientMedSuppPhClass
-	DELETE RPT_MedPharmClass
-	DELETE RPT_PatientMedSuppNDC
-	DELETE RPT_PatientMedSupp	
-	DELETE RPT_Medication
-	Delete RPT_MedicationMap
-	Delete RPT_PatientMedFrequency
-	Delete RPT_CustomPatientMedFrequency
+	TRUNCATE TABLE RPT_PatientMedSuppPhClass
+	TRUNCATE TABLE RPT_MedPharmClass
+	TRUNCATE TABLE RPT_PatientMedSuppNDC
+	TRUNCATE TABLE RPT_PatientMedSupp	
+	TRUNCATE TABLE RPT_Medication
+	TRUNCATE TABLE RPT_MedicationMap
+	TRUNCATE TABLE RPT_PatientMedFrequency
+	TRUNCATE TABLE RPT_CustomPatientMedFrequency
 	
 	-- patient goal
-	DELETE RPT_PatientGoalProgram
-	DELETE RPT_PatientGoalFocusArea
-	DELETE RPT_GoalAttributeOption	
-	DELETE RPT_PatientGoalAttributeValue
-	DELETE RPT_PatientGoalAttribute
-	DELETE RPT_GoalAttribute
-	DELETE RPT_PatientInterventionBarrier
-	DELETE RPT_PatientIntervention	
-	DELETE RPT_PatientBarrier	
-	DELETE RPT_PatientGoal
-	DELETE RPT_PatientUser	
-	DELETE RPT_Contact
-	DELETE RPT_PatientSystem
-	DELETE RPT_Patient
-	DELETE RPT_CommTypeCommMode
-	DELETE RPT_ToDoCategoryLookUp	
-	DELETE RPTMongoCategoryLookUp
-	DELETE RPT_SourceLookUp
-	DELETE RPT_BarrierCategoryLookUp
-	DELETE RPT_InterventionCategoryLookUp
-	DELETE RPTMongoTimeZoneLookUp
-	DELETE RPT_ProblemLookUp
-	DELETE RPT_TimesOfDayLookUp
-	DELETE RPT_CommTypeLookUp
-	DELETE RPT_CommModeLookUp
-	DELETE RPT_StateLookUp
-	DELETE RPT_LanguageLookUp
-	DELETE RPT_FocusAreaLookUp
-	DELETE RPT_CodingSystemLookUp
-	DELETE RPT_ObservationTypeLookUp
-	DELETE RPT_AllergyTypeLookUp
-	DELETE RPT_AllergySourceLookUp
-	DELETE RPT_SeverityLookUp
-	DELETE RPT_ReactionLookUp
-	DELETE RPT_MedSupTypeLookUp
-	DELETE RPT_FreqHowOftenLookUp
-	DELETE RPT_FreqWhenLookUp
-	DELETE RPT_NoteTypeLookUp
-	DELETE RPT_UserRecentList
-	DELETE [RPT_User]
+	TRUNCATE TABLE RPT_PatientGoalProgram
+	TRUNCATE TABLE RPT_PatientGoalFocusArea
+	TRUNCATE TABLE RPT_GoalAttributeOption	
+	TRUNCATE TABLE RPT_PatientGoalAttributeValue
+	TRUNCATE TABLE RPT_PatientGoalAttribute
+	TRUNCATE TABLE RPT_GoalAttribute
+	TRUNCATE TABLE RPT_PatientInterventionBarrier
+	TRUNCATE TABLE RPT_PatientIntervention	
+	TRUNCATE TABLE RPT_PatientBarrier	
+	TRUNCATE TABLE RPT_PatientGoal
+	TRUNCATE TABLE RPT_PatientUser	
+	TRUNCATE TABLE RPT_Contact
+	TRUNCATE TABLE RPT_PatientSystem
+	TRUNCATE TABLE RPT_Patient
+	TRUNCATE TABLE RPT_CommTypeCommMode
+	TRUNCATE TABLE RPT_ToDoCategoryLookUp	
+	TRUNCATE TABLE RPTMongoCategoryLookUp
+	TRUNCATE TABLE RPT_SourceLookUp
+	TRUNCATE TABLE RPT_BarrierCategoryLookUp
+	TRUNCATE TABLE RPT_InterventionCategoryLookUp
+	TRUNCATE TABLE RPTMongoTimeZoneLookUp
+	TRUNCATE TABLE RPT_ProblemLookUp
+	TRUNCATE TABLE RPT_TimesOfDayLookUp
+	TRUNCATE TABLE RPT_CommTypeLookUp
+	TRUNCATE TABLE RPT_CommModeLookUp
+	TRUNCATE TABLE RPT_StateLookUp
+	TRUNCATE TABLE RPT_LanguageLookUp
+	TRUNCATE TABLE RPT_FocusAreaLookUp
+	TRUNCATE TABLE RPT_CodingSystemLookUp
+	TRUNCATE TABLE RPT_ObservationTypeLookUp
+	TRUNCATE TABLE RPT_AllergyTypeLookUp
+	TRUNCATE TABLE RPT_AllergySourceLookUp
+	TRUNCATE TABLE RPT_SeverityLookUp
+	TRUNCATE TABLE RPT_ReactionLookUp
+	TRUNCATE TABLE RPT_MedSupTypeLookUp
+	TRUNCATE TABLE RPT_FreqHowOftenLookUp
+	TRUNCATE TABLE RPT_FreqWhenLookUp
+	TRUNCATE TABLE RPT_NoteTypeLookUp
+	TRUNCATE TABLE RPT_UserRecentList
+	TRUNCATE TABLE [RPT_User]
 	
 	--DELETE CohortPatientView	
 	--DELETE CohortPatientViewSearchField
 	
-	DBCC CHECKIDENT ('RPT_CareMember', RESEED, 0) 
-	DBCC CHECKIDENT ('RPT_CareMemberTypeLookUp', RESEED, 0)	
+--	DBCC CHECKIDENT ('RPT_CareMember', RESEED, 0) 
+--	DBCC CHECKIDENT ('RPT_CareMemberTypeLookUp', RESEED, 0)	
 	
-	DBCC CHECKIDENT ('RPT_ContactLanguage', RESEED, 0)
-	DBCC CHECKIDENT ('RPT_ContactWeekDay', RESEED, 0)  
-	DBCC CHECKIDENT ('RPT_ContactTimeOfDay', RESEED, 0)
-	DBCC CHECKIDENT ('RPT_ContactRecentList', RESEED, 0) 
-	DBCC CHECKIDENT ('RPT_ContactMode', RESEED, 0)
-	DBCC CHECKIDENT ('RPT_ContactPhone', RESEED, 0)
-	DBCC CHECKIDENT ('RPT_ContactAddress', RESEED, 0)
-	DBCC CHECKIDENT ('RPT_ContactEmail', RESEED, 0)
+--	DBCC CHECKIDENT ('RPT_ContactLanguage', RESEED, 0)
+--	DBCC CHECKIDENT ('RPT_ContactWeekDay', RESEED, 0)  
+--	DBCC CHECKIDENT ('RPT_ContactTimeOfDay', RESEED, 0)
+--	DBCC CHECKIDENT ('RPT_ContactRecentList', RESEED, 0) 
+--	DBCC CHECKIDENT ('RPT_ContactMode', RESEED, 0)
+--	DBCC CHECKIDENT ('RPT_ContactPhone', RESEED, 0)
+--	DBCC CHECKIDENT ('RPT_ContactAddress', RESEED, 0)
+--	DBCC CHECKIDENT ('RPT_ContactEmail', RESEED, 0)
 	
--- reseed program tables
-	DBCC CHECKIDENT ('RPT_PatientProgram', RESEED, 0)
-	DBCC CHECKIDENT ('RPT_SpawnElements', RESEED, 0)
-	DBCC CHECKIDENT ('RPT_PatientProgramModule', RESEED, 0)
-	DBCC CHECKIDENT ('RPT_PatientProgramAction', RESEED, 0)
-	DBCC CHECKIDENT ('RPT_PatientProgramStep', RESEED, 0)
-	DBCC CHECKIDENT ('RPT_PatientProgramResponse', RESEED, 0)
-	DBCC CHECKIDENT ('RPT_PatientProgramAttribute', RESEED, 0)	
+---- reseed program tables
+--	DBCC CHECKIDENT ('RPT_PatientProgram', RESEED, 0)
+--	DBCC CHECKIDENT ('RPT_SpawnElements', RESEED, 0)
+--	DBCC CHECKIDENT ('RPT_PatientProgramModule', RESEED, 0)
+--	DBCC CHECKIDENT ('RPT_PatientProgramAction', RESEED, 0)
+--	DBCC CHECKIDENT ('RPT_PatientProgramStep', RESEED, 0)
+--	DBCC CHECKIDENT ('RPT_PatientProgramResponse', RESEED, 0)
+--	DBCC CHECKIDENT ('RPT_PatientProgramAttribute', RESEED, 0)	
 	
-	DBCC CHECKIDENT ('RPT_PatientNoteProgram', RESEED, 0)
-	DBCC CHECKIDENT ('RPT_PatientNote', RESEED, 0)
-	DBCC CHECKIDENT ('RPT_PatientProblem', RESEED, 0)
+--	DBCC CHECKIDENT ('RPT_PatientNoteProgram', RESEED, 0)
+--	DBCC CHECKIDENT ('RPT_PatientNote', RESEED, 0)
+--	DBCC CHECKIDENT ('RPT_PatientProblem', RESEED, 0)
 
-	-- allergies
-	DBCC CHECKIDENT ('RPT_AllergyType', RESEED, 0)	
-	DBCC CHECKIDENT ('RPT_Allergy', RESEED, 0)
-	DBCC CHECKIDENT ('RPT_AllergySourceLookUp', RESEED, 0)
-	DBCC CHECKIDENT ('RPT_AllergyTypeLookUp', RESEED, 0)
+--	-- allergies
+--	DBCC CHECKIDENT ('RPT_AllergyType', RESEED, 0)	
+--	DBCC CHECKIDENT ('RPT_Allergy', RESEED, 0)
+--	DBCC CHECKIDENT ('RPT_AllergySourceLookUp', RESEED, 0)
+--	DBCC CHECKIDENT ('RPT_AllergyTypeLookUp', RESEED, 0)
 	
-	DBCC CHECKIDENT ('RPT_PatientMedSuppPhClass', RESEED, 0)
-	DBCC CHECKIDENT ('RPT_PatientMedSuppNDC', RESEED, 0)
-	DBCC CHECKIDENT ('RPT_PatientMedSupp', RESEED, 0)
-	DBCC CHECKIDENT ('RPT_PatientMedSuppPhClass', RESEED, 0)
-	DBCC CHECKIDENT ('RPT_PatientMedSuppNDC', RESEED, 0)
-	DBCC CHECKIDENT ('RPT_PatientMedSupp', RESEED, 0)
-	DBCC CHECKIDENT ('RPT_MedicationMap', RESEED, 0)
-	DBCC CHECKIDENT ('RPT_Medication', RESEED, 0)
-	DBCC CHECKIDENT ('RPT_PatientMedFrequency', RESEED, 0)
-	DBCC CHECKIDENT ('RPT_CustomPatientMedFrequency', RESEED, 0)
-	DBCC CHECKIDENT ('RPT_MedPharmClass', RESEED,0)
+--	DBCC CHECKIDENT ('RPT_PatientMedSuppPhClass', RESEED, 0)
+--	DBCC CHECKIDENT ('RPT_PatientMedSuppNDC', RESEED, 0)
+--	DBCC CHECKIDENT ('RPT_PatientMedSupp', RESEED, 0)
+--	DBCC CHECKIDENT ('RPT_PatientMedSuppPhClass', RESEED, 0)
+--	DBCC CHECKIDENT ('RPT_PatientMedSuppNDC', RESEED, 0)
+--	DBCC CHECKIDENT ('RPT_PatientMedSupp', RESEED, 0)
+--	DBCC CHECKIDENT ('RPT_MedicationMap', RESEED, 0)
+--	DBCC CHECKIDENT ('RPT_Medication', RESEED, 0)
+--	DBCC CHECKIDENT ('RPT_PatientMedFrequency', RESEED, 0)
+--	DBCC CHECKIDENT ('RPT_CustomPatientMedFrequency', RESEED, 0)
+--	DBCC CHECKIDENT ('RPT_MedPharmClass', RESEED,0)
 	
-	DBCC CHECKIDENT ('RPT_AllergyTypeLookUp', RESEED, 0)
-	DBCC CHECKIDENT ('RPT_AllergySourceLookUp', RESEED, 0)
-	DBCC CHECKIDENT ('RPT_SeverityLookUp', RESEED, 0)
-	DBCC CHECKIDENT ('RPT_ReactionLookUp', RESEED, 0)
-	DBCC CHECKIDENT ('RPT_MedSupTypeLookUp', RESEED, 0)
-	DBCC CHECKIDENT ('RPT_FreqHowOftenLookUp', RESEED, 0)
-	DBCC CHECKIDENT ('RPT_FreqWhenLookUp', RESEED, 0)
-	DBCC CHECKIDENT ('RPT_NoteTypeLookUp', RESEED, 0)
+--	DBCC CHECKIDENT ('RPT_AllergyTypeLookUp', RESEED, 0)
+--	DBCC CHECKIDENT ('RPT_AllergySourceLookUp', RESEED, 0)
+--	DBCC CHECKIDENT ('RPT_SeverityLookUp', RESEED, 0)
+--	DBCC CHECKIDENT ('RPT_ReactionLookUp', RESEED, 0)
+--	DBCC CHECKIDENT ('RPT_MedSupTypeLookUp', RESEED, 0)
+--	DBCC CHECKIDENT ('RPT_FreqHowOftenLookUp', RESEED, 0)
+--	DBCC CHECKIDENT ('RPT_FreqWhenLookUp', RESEED, 0)
+--	DBCC CHECKIDENT ('RPT_NoteTypeLookUp', RESEED, 0)
 
-	DBCC CHECKIDENT ('RPT_ObjectiveCategory', RESEED, 0)
-	DBCC CHECKIDENT ('RPT_ObjectiveLookUp', RESEED, 0)
-	DBCC CHECKIDENT ('RPT_PatientObservation', RESEED, 0)
-	DBCC CHECKIDENT ('RPT_Observation', RESEED, 0)
-	DBCC CHECKIDENT ('RPT_PatientTaskAttributeValue', RESEED, 0)
-	DBCC CHECKIDENT ('RPT_PatientTaskAttribute', RESEED, 0)
-	DBCC CHECKIDENT ('RPT_PatientTaskBarrier', RESEED, 0)
-	DBCC CHECKIDENT ('RPT_PatientTask', RESEED, 0)
+--	DBCC CHECKIDENT ('RPT_ObjectiveCategory', RESEED, 0)
+--	DBCC CHECKIDENT ('RPT_ObjectiveLookUp', RESEED, 0)
+--	DBCC CHECKIDENT ('RPT_PatientObservation', RESEED, 0)
+--	DBCC CHECKIDENT ('RPT_Observation', RESEED, 0)
+--	DBCC CHECKIDENT ('RPT_PatientTaskAttributeValue', RESEED, 0)
+--	DBCC CHECKIDENT ('RPT_PatientTaskAttribute', RESEED, 0)
+--	DBCC CHECKIDENT ('RPT_PatientTaskBarrier', RESEED, 0)
+--	DBCC CHECKIDENT ('RPT_PatientTask', RESEED, 0)
 	
-	DBCC CHECKIDENT ('RPT_PatientGoalProgram', RESEED, 0)
-	DBCC CHECKIDENT ('RPT_PatientGoalFocusArea', RESEED, 0)
-	DBCC CHECKIDENT ('RPT_GoalAttributeOption', RESEED, 0)
-	DBCC CHECKIDENT ('RPT_PatientGoalAttributeValue', RESEED, 0)
-	DBCC CHECKIDENT ('RPT_PatientGoalAttribute', RESEED, 0)
-	DBCC CHECKIDENT ('RPT_GoalAttribute', RESEED, 0)
+--	DBCC CHECKIDENT ('RPT_PatientGoalProgram', RESEED, 0)
+--	DBCC CHECKIDENT ('RPT_PatientGoalFocusArea', RESEED, 0)
+--	DBCC CHECKIDENT ('RPT_GoalAttributeOption', RESEED, 0)
+--	DBCC CHECKIDENT ('RPT_PatientGoalAttributeValue', RESEED, 0)
+--	DBCC CHECKIDENT ('RPT_PatientGoalAttribute', RESEED, 0)
+--	DBCC CHECKIDENT ('RPT_GoalAttribute', RESEED, 0)
 	
-	DBCC CHECKIDENT ('RPT_PatientInterventionBarrier', RESEED, 0)
-	DBCC CHECKIDENT ('RPT_PatientIntervention', RESEED, 0)
-	DBCC CHECKIDENT ('RPT_PatientBarrier', RESEED, 0)
-	DBCC CHECKIDENT ('RPT_PatientGoal', RESEED, 0)
-	DBCC CHECKIDENT ('RPT_PatientUser', RESEED, 0)
-	DBCC CHECKIDENT ('RPT_Contact', RESEED, 0)
+--	DBCC CHECKIDENT ('RPT_PatientInterventionBarrier', RESEED, 0)
+--	DBCC CHECKIDENT ('RPT_PatientIntervention', RESEED, 0)
+--	DBCC CHECKIDENT ('RPT_PatientBarrier', RESEED, 0)
+--	DBCC CHECKIDENT ('RPT_PatientGoal', RESEED, 0)
+--	DBCC CHECKIDENT ('RPT_PatientUser', RESEED, 0)
+--	DBCC CHECKIDENT ('RPT_Contact', RESEED, 0)
 	
-	DBCC CHECKIDENT ('RPT_PatientSystem', RESEED, 0)
+--	DBCC CHECKIDENT ('RPT_PatientSystem', RESEED, 0)
 	
-	DBCC CHECKIDENT ('RPT_Patient', RESEED, 0) 
+--	DBCC CHECKIDENT ('RPT_Patient', RESEED, 0) 
 	
-	DBCC CHECKIDENT ('RPT_CommTypeCommMode', RESEED, 0)
-	DBCC CHECKIDENT ('RPTMongoCategoryLookUp', RESEED, 0)
-	DBCC CHECKIDENT ('RPT_SourceLookUp', RESEED, 0)
-	DBCC CHECKIDENT ('RPT_BarrierCategoryLookUp', RESEED, 0)
-	DBCC CHECKIDENT ('RPT_InterventionCategoryLookUp', RESEED, 0)
-	DBCC CHECKIDENT ('RPTMongoTimeZoneLookUp', RESEED, 0)
-	DBCC CHECKIDENT ('RPT_ProblemLookUp', RESEED, 0)
-	DBCC CHECKIDENT ('RPT_TimesOfDayLookUp', RESEED, 0)
-	DBCC CHECKIDENT ('RPT_CommTypeLookUp', RESEED, 0)
-	DBCC CHECKIDENT ('RPT_CommModeLookUp', RESEED, 0)
-	DBCC CHECKIDENT ('RPT_StateLookUp', RESEED, 0)
-	DBCC CHECKIDENT ('RPT_LanguageLookUp', RESEED, 0)
-	DBCC CHECKIDENT ('RPT_FocusAreaLookUp', RESEED, 0)
-	DBCC CHECKIDENT ('RPT_CodingSystemLookUp', RESEED, 0)
-	DBCC CHECKIDENT ('RPT_ObservationTypeLookUp', RESEED, 0)
+--	DBCC CHECKIDENT ('RPT_CommTypeCommMode', RESEED, 0)
+--	DBCC CHECKIDENT ('RPTMongoCategoryLookUp', RESEED, 0)
+--	DBCC CHECKIDENT ('RPT_SourceLookUp', RESEED, 0)
+--	DBCC CHECKIDENT ('RPT_BarrierCategoryLookUp', RESEED, 0)
+--	DBCC CHECKIDENT ('RPT_InterventionCategoryLookUp', RESEED, 0)
+--	DBCC CHECKIDENT ('RPTMongoTimeZoneLookUp', RESEED, 0)
+--	DBCC CHECKIDENT ('RPT_ProblemLookUp', RESEED, 0)
+--	DBCC CHECKIDENT ('RPT_TimesOfDayLookUp', RESEED, 0)
+--	DBCC CHECKIDENT ('RPT_CommTypeLookUp', RESEED, 0)
+--	DBCC CHECKIDENT ('RPT_CommModeLookUp', RESEED, 0)
+--	DBCC CHECKIDENT ('RPT_StateLookUp', RESEED, 0)
+--	DBCC CHECKIDENT ('RPT_LanguageLookUp', RESEED, 0)
+--	DBCC CHECKIDENT ('RPT_FocusAreaLookUp', RESEED, 0)
+--	DBCC CHECKIDENT ('RPT_CodingSystemLookUp', RESEED, 0)
+--	DBCC CHECKIDENT ('RPT_ObservationTypeLookUp', RESEED, 0)
 	
-	DBCC CHECKIDENT ('RPT_UserRecentList', RESEED, 0)
-	DBCC CHECKIDENT ('RPT_User', RESEED, 0)
+--	DBCC CHECKIDENT ('RPT_UserRecentList', RESEED, 0)
+--	DBCC CHECKIDENT ('RPT_User', RESEED, 0)
 	
-	DBCC CHECKIDENT ('RPT_ToDoCategoryLookUp', RESEED, 0)
-	DBCC CHECKIDENT ('RPT_ToDoProgram', RESEED, 0)
-	DBCC CHECKIDENT ('RPT_ToDo', RESEED, 0)
+--	DBCC CHECKIDENT ('RPT_ToDoCategoryLookUp', RESEED, 0)
+--	DBCC CHECKIDENT ('RPT_ToDoProgram', RESEED, 0)
+--	DBCC CHECKIDENT ('RPT_ToDo', RESEED, 0)
 	
-	-- patient allergies
-	DBCC CHECKIDENT ('RPT_PatientAllergy', RESEED, 0)
-	DBCC CHECKIDENT ('RPT_PatientAllergyReaction', RESEED, 0)
+--	-- patient allergies
+--	DBCC CHECKIDENT ('RPT_PatientAllergy', RESEED, 0)
+--	DBCC CHECKIDENT ('RPT_PatientAllergyReaction', RESEED, 0)
 	
 	--DBCC CHECKIDENT ('RPT_CohortPatientView', RESEED, 0)
 	--DBCC CHECKIDENT ('RPT_CohortPatientViewSearchField', RESEED, 0)
@@ -2883,7 +2883,7 @@ GO
 
 /****** Object:  StoredProcedure [dbo].[spPhy_RPT_Flat_TouchPoint_Dim]    Script Date: 06/23/2015 16:35:48 ******/
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[spPhy_RPT_Flat_PatientNotes_Dim]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [dbo].[spPhy_RPT_Flat_PatientNotes_Dim]
+	DROP PROCEDURE [dbo].[spPhy_RPT_Flat_PatientNotes_Dim]
 GO
 
 CREATE PROCEDURE [dbo].[spPhy_RPT_Flat_PatientNotes_Dim]
@@ -2967,16 +2967,15 @@ BEGIN
 		, pp.[AttributeEndDate]  as [EndDate]
 		, pp.[AssignedOn]
 	FROM 
-		RPT_PatientNote pn
-		left outer join RPT_PatientNoteProgram pnp on pn.MongoId = pnp.MongoPatientNoteId
-		INNER JOIN RPT_PATIENT PT ON pn.MongoPatientId = pt.MongoId
-		LEFT OUTER JOIN RPT_PATIENTSYSTEM PS ON PT.MongoPatientSystemId = PS.MongoId
-		LEFT OUTER JOIN RPT_PATIENTPROGRAM PP ON PP.MongoId = pnp.MongoId
-		INNER JOIN RPT_User u ON pn.MongoRecordCreatedBy = u.MongoId
+		RPT_PatientNote pn with (nolock)
+		left outer join RPT_PatientNoteProgram pnp with (nolock) on pn.MongoId = pnp.MongoPatientNoteId
+		INNER JOIN RPT_PATIENT PT with (nolock) ON pn.MongoPatientId = pt.MongoId
+		LEFT OUTER JOIN RPT_PATIENTSYSTEM PS with (nolock) ON PT.MongoPatientSystemId = PS.MongoId
+		LEFT OUTER JOIN RPT_PATIENTPROGRAM PP with (nolock) ON PP.MongoId = pnp.MongoId
+		INNER JOIN RPT_User u with (nolock) ON pn.MongoRecordCreatedBy = u.MongoId
 	WHERE
 		pn.[Delete] = 'False'	
 END
-
 GO
 
 DELETE FROM RPT_SprocNames WHERE SprocName = 'spPhy_RPT_Flat_PatientNotes_Dim';
