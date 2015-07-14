@@ -7,8 +7,8 @@
     <ProjectGuid>{64428B06-18E5-4307-BA78-FB0D238816D8}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DataDomain.PatientNote.Repo</RootNamespace>
-    <AssemblyName>DataDomain.PatientNote.Repo</AssemblyName>
+    <RootNamespace>Phytel.API.DataDomain.PatientSystem.Repo</RootNamespace>
+    <AssemblyName>Phytel.API.DataDomain.PatientSystem.Repo</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>

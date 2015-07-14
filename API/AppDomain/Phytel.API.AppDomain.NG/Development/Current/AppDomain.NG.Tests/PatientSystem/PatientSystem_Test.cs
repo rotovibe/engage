@@ -47,8 +47,8 @@ namespace Phytel.API.AppDomain.NG.Test.PatientSystem
         public void InsertPatientSystems_Test()
         {
             List<DTO.PatientSystem> list = new List<DTO.PatientSystem>();
-            list.Add(new DTO.PatientSystem { PatientId = "5325da9ed6a4850adcbba6ce", Value = " 000987 ", StatusId = 1, Primary = false, SystemSourceId = "559e8c70d4332320bc076f4d" });
-            list.Add(new DTO.PatientSystem { PatientId = "5325da9ed6a4850adcbba6ce", Value = " 005764 ", StatusId = 1, Primary = true, SystemSourceId = "559e8c70d4332320bc076f4d" });
+            list.Add(new DTO.PatientSystem { PatientId = "5325db88d6a4850adcbba98a", Value = " AAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHKKKKKKKKKKKKKKKKKKKKKKKKKKKKLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMNNNNNNNNNNNNNNNNNNNNNNNNNOOOOOOOOOOOOOOOOOOO ", StatusId = 1, Primary = true, SystemSourceId = "559e8c70d4332320bc076f4d" });
+            list.Add(new DTO.PatientSystem { PatientId = "5325db88d6a4850adcbba98a", Value = "  ", StatusId = 1, Primary = true, SystemSourceId = "559e8c70d4332320bc076f4d" });
             
             InsertPatientSystemsRequest request = new InsertPatientSystemsRequest
             {
@@ -56,7 +56,7 @@ namespace Phytel.API.AppDomain.NG.Test.PatientSystem
                 UserId = userId,
                 Version = version,
                 Token = token,
-                PatientId = "5325da9ed6a4850adcbba6ce",
+                PatientId = "5325db88d6a4850adcbba98a",
                 PatientSystems = list
             };
 
@@ -72,8 +72,8 @@ namespace Phytel.API.AppDomain.NG.Test.PatientSystem
         public void UpdatePatientSystems_Test()
         {
             List<DTO.PatientSystem> list = new List<DTO.PatientSystem>();
-            list.Add(new DTO.PatientSystem { Id = "55a038f7d43325251c8fbdb8", PatientId = "5325da9ed6a4850adcbba6ce", Value = " 456HHUPD ", StatusId = 2, Primary = true, SystemSourceId = "559e8c70d4332320bc076f4e" });
-            list.Add(new DTO.PatientSystem { Id = "55a038f8d43325251c8fbdbf", PatientId = "5325da9ed6a4850adcbba6ce", Value = " 009DFUPD ", StatusId = 2, Primary = true, SystemSourceId = "559e8c70d4332320bc076f4f" });
+            //list.Add(new DTO.PatientSystem { Id = "55a56cb9d433253144dabce5", PatientId = "5325db88d6a4850adcbba98a", Value = " aaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbccccccccccccccccccccccccdddddddddddddddddddddeeeeeeeeeeeeeeeeeeeeeeefffffffffffffffffffffgggggggggggggggggghhhhhhhhhhhhhhhiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiijjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjkkkkkkkkkkkkkkkkkkkkkkkkkkkllllllllllllllllllllllllllnnnnnnnnnnnnnnnnnnnmmmmmmmmmmmmmmmmmmmmmmm ", StatusId = 2, Primary = false, SystemSourceId = "559e8c70d4332320bc076f4e" });
+            list.Add(new DTO.PatientSystem { Id = "55a014bbd4332720a4bf5093", PatientId = "546d0d0684ac0508e43299d2", Value = "  ", StatusId = 2, Primary = false, SystemSourceId = "559e8c70d4332320bc076f4f" });
 
             UpdatePatientSystemsRequest request = new UpdatePatientSystemsRequest
             {
@@ -81,7 +81,7 @@ namespace Phytel.API.AppDomain.NG.Test.PatientSystem
                 UserId = userId,
                 Version = version,
                 Token = token,
-                PatientId = "5325da9ed6a4850adcbba6ce",
+                PatientId = "5325db88d6a4850adcbba98a",
                 PatientSystems = list
             };
 
