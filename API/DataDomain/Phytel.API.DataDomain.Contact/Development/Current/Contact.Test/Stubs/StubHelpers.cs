@@ -37,5 +37,11 @@ namespace Phytel.API.DataDomain.Contact.Test.Stubs
         {
             
         }
+
+
+        public string TrimAndLimit(string value, int limit)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
