@@ -46,6 +46,8 @@ namespace Phytel.API.DataDomain.PatientSystem
             {
                 if(data != null)
                 {
+                    if (string.IsNullOrEmpty(data.Value))
+                        throw new ArgumentException("Patient System value is missing");
                     using (PatientSystemMongoContext ctx = new PatientSystemMongoContext(ContractDBName))
                     {
                         MEPatientSystem mePS = new MEPatientSystem(this.UserId)
@@ -161,6 +163,8 @@ namespace Phytel.API.DataDomain.PatientSystem
             {
                 if (data != null)
                 {
+                    if (string.IsNullOrEmpty(data.Value))
+                        throw new ArgumentException("Patient System value is missing");
                     using (PatientSystemMongoContext ctx = new PatientSystemMongoContext(ContractDBName))
                     {
                         var q = MB.Query<MEPatientSystem>.EQ(b => b.Id, ObjectId.Parse(data.Id));
