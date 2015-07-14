@@ -21,6 +21,7 @@ namespace Phytel.API.DataDomain.PatientSystem
         protected readonly TContext Context;
         public string ContractDBName { get; set; }
         public string UserId { get; set; }
+        public IHelpers Helpers { get; set; }
         
         public MongoPatientSystemRepository(IUOWMongo<TContext> uow)
         {
@@ -53,7 +54,7 @@ namespace Phytel.API.DataDomain.PatientSystem
                         MEPatientSystem mePS = new MEPatientSystem(this.UserId)
                             {
                                 PatientId = ObjectId.Parse(data.PatientId),
-                                Value =  !string.IsNullOrEmpty(data.Value)? data.Value.Trim() : null,
+                                Value = Helpers.TrimAndLimit(data.Value, 100),
                                 Status = (Status)data.StatusId,
                                 Primary = data.Primary,
                                 SystemSourceId = ObjectId.Parse(data.SystemSourceId),
@@ -173,14 +174,7 @@ namespace Phytel.API.DataDomain.PatientSystem
                         uv.Add(MB.Update.Set(MEPatientSystem.VersionProperty, request.Version));
                         uv.Add(MB.Update.Set(MEPatientSystem.LastUpdatedOnProperty, System.DateTime.UtcNow));
                         if (!string.IsNullOrEmpty(data.PatientId)) uv.Add(MB.Update.Set(MEPatientSystem.PatientIdProperty, ObjectId.Parse(data.PatientId)));
-                        if (!string.IsNullOrEmpty(data.Value))
-                        {
-                            uv.Add(MB.Update.Set(MEPatientSystem.ValueProperty, data.Value.Trim()));
-                        }
-                        else
-                        {
-                            uv.Add(MB.Update.Set(MEPatientSystem.ValueProperty, BsonNull.Value));
-                        }
+                        uv.Add(MB.Update.Set(MEPatientSystem.ValueProperty, Helpers.TrimAndLimit(data.Value, 100)));
                         if (data.StatusId != 0) uv.Add(MB.Update.Set(MEPatientSystem.StatusProperty, data.StatusId));
                         uv.Add(MB.Update.Set(MEPatientSystem.PrimaryProperty, data.Primary));
                         if (!string.IsNullOrEmpty(data.SystemSourceId)) uv.Add(MB.Update.Set(MEPatientSystem.SystemSourceIdProperty, ObjectId.Parse(data.SystemSourceId)));
