@@ -604,7 +604,7 @@
             .from('fakePath')
             .where('id', '==', note.id())
             .toType('Note')
-            .select('id, text, patientId, createdOn, createdById, typeId, methodId, outcomeId, whoId, sourceId, durationId, contactedOn, validatedIdentity');
+            .select('id, text, patientId, createdOn, createdById, typeId, methodId, outcomeId, whoId, sourceId, durationId, contactedOn, validatedIdentity, admitDate, dischargeDate, systemSource, admitted, visitTypeId, otherType, utilizationSourceId, dispositionId, otherDisposition, locationId, otherLocation');
         var results = manager.executeQueryLocally(noteQuery);
         var unwrappedNote = results[0];
 
@@ -627,7 +627,21 @@
         thisNote.DurationId = unwrappedNote.durationId;
         thisNote.ContactedOn = unwrappedNote.contactedOn;
         thisNote.ValidatedIdentity = unwrappedNote.validatedIdentity;
-        
+        //utilization:
+		thisNote.admitDate =           unwrappedNote.admitDate;      
+		thisNote.dischargeDate =       unwrappedNote.dischargeDate;      
+		thisNote.systemSource =        unwrappedNote.systemSource;       
+		thisNote.admitted =            unwrappedNote.admitted;           
+		thisNote.visitTypeId =         unwrappedNote.visitTypeId;        
+		thisNote.otherType =           unwrappedNote.otherType;          
+		thisNote.utilizationSourceId = unwrappedNote.utilizationSourceId;
+		thisNote.dispositionId =       unwrappedNote.dispositionId;      
+		thisNote.otherDisposition =    unwrappedNote.otherDisposition;   
+		thisNote.locationId =          unwrappedNote.locationId;         
+		thisNote.otherLocation =       unwrappedNote.otherLocation;      
+		
+		
+		
         var totalTime = new Date().getTime() - startTime;
         console.log('Done custom stringifying, it took this long to stringify (in milliseconds) - ', totalTime);
 

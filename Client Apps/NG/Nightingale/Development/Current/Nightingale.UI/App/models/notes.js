@@ -264,6 +264,8 @@ define(['services/session', 'services/dateHelper'],
                 });
 				
 				note.contactedOnErrors = ko.observableArray([]);	//datetimepicker validation errors
+				note.admitDateErrors = ko.observableArray([]);
+				note.dischargeDateErrors = ko.observableArray([]);
 				note.validationErrors = ko.observableArray([]);	
 				note.isValid = ko.computed( function(){
 					var type = note.type();
@@ -273,13 +275,25 @@ define(['services/session', 'services/dateHelper'],
 					var contactedOn = note.contactedOn();
 					var contactedOnErrors = note.contactedOnErrors();
 					var text = note.text();
-					if( !text ){
-						noteErrors.push({ PropName: 'text', Message: 'Content is required' });
-						hasErrors = true;
-					}
+					//utilization:
+					var admitDateErrors = note.admitDateErrors();
+					var admitDate = note.admitDate();
+					var dischargeDateErrors = note.dischargeDateErrors();
+					var dischargeDate = note.dischargeDate();
+					var visitType = note.visitType();
+					var otherType = note.otherType();
+					var disposition = note.disposition();
+					var otherDisposition = note.otherDisposition();
+					var utilizationLocation = note.utilizationLocation();
+					var otherLocation = note.otherLocation()
+										
 					switch( typeName ){
 						case 'touchpoint':
 						{
+							if( !text ){
+								noteErrors.push({ PropName: 'text', Message: 'Content is required' });
+								hasErrors = true;
+							}
 							if( contactedOn ){								
 								if( contactedOnErrors.length > 0 ){	
 									//datetimepicker validation errors:
@@ -293,7 +307,44 @@ define(['services/session', 'services/dateHelper'],
 						}
 						case 'utilization':
 						{
-							//TODO:
+							if( admitDateErrors.length > 0 ){
+								//datetimepicker validation errors
+								ko.utils.arrayForEach( admitDateErrors, function(error){
+									noteErrors.push({ PropName: 'admitDate', Message: 'Visit/Admit Date ' + error.Message});										
+									hasErrors = true;
+								});
+							}
+							if( dischargeDateErrors.length > 0 ){
+								//datetimepicker validation errors
+								ko.utils.arrayForEach( dischargeDateErrors, function(error){
+									noteErrors.push({ PropName: 'dischargeDate', Message: 'Discharge Date ' + error.Message});										
+									hasErrors = true;
+								});
+							}
+							if( admitDateErrors.length == 0 && dischargeDateErrors.length == 0 && admitDate && dischargeDate ){
+								//admitDate - dischargeDate range: both dates exist and valid:
+								if( moment(admitDate).isAfter( moment( dischargeDate ) ) ){
+									noteErrors.push({ PropName: 'admitDate', Message: ' Discharge Date must be on or after: ' + moment( admitDate ).format("MM/DD/YYYY") });
+									noteErrors.push({ PropName: 'dischargeDate', Message: ' Visit/Admit Date must be on or before: ' + moment( dischargeDate ).format("MM/DD/YYYY") });
+									hasErrors = true;
+								}
+							}
+							if( !visitType ){
+								noteErrors.push({ PropName: 'visitType', Message: 'Visit Type is required' });										
+								hasErrors = true;
+							}
+							// else if( visitType.name().toLowerCase() === 'other' && !otherType ){
+								// noteErrors.push({ PropName: 'otherType', Message: 'Other Visit Type is required' });										
+								// hasErrors = true;
+							// }
+							// if( utilizationLocation && utilizationLocation.name().toLowerCase() === 'other' && !otherLocation ){
+								// noteErrors.push({ PropName: 'otherLocation', Message: 'Other Location is required' });										
+								// hasErrors = true;
+							// }
+							// if( disposition && disposition.name().toLowerCase() === 'other' && !otherDisposition ){
+								// noteErrors.push({ PropName: 'otherDisposition', Message: 'Other Disposition is required' });										
+								// hasErrors = true;
+							// } 								
 							break;
 						}
 						case null:						
@@ -303,7 +354,11 @@ define(['services/session', 'services/dateHelper'],
 							hasErrors = true;
 						}
 						default:
-						{							
+						{		
+							if( !text ){
+								noteErrors.push({ PropName: 'text', Message: 'Content is required' });
+								hasErrors = true;
+							}
 							break;
 						}
 					}
@@ -311,31 +366,71 @@ define(['services/session', 'services/dateHelper'],
 					return !hasErrors;
 				});
 				
+				//utilization: 
+				note.showOtherVisitType	= ko.computed( function(){
+					var visitType = note.visitType();
+					var isOther = (!!visitType && visitType.name().toLowerCase() === 'other');
+					if( !isOther ){
+						note.otherType(null);
+					} 
+					return isOther;
+				});
+				//utilization:				 
+				note.showOtherLocation	= ko.computed( function(){
+					var utilizationLocation = note.utilizationLocation();
+					var isOther = (!!utilizationLocation && utilizationLocation.name().toLowerCase() === 'other');
+					if( !isOther ){
+						note.otherLocation(null);
+					}
+					return isOther;
+				});
+				//utilization:
+				note.showOtherDisposition = ko.computed( function(){
+					var disposition = note.disposition();
+					var isOther = (!!disposition && disposition.name().toLowerCase() === 'other');
+					if( !isOther ){
+						note.otherDisposition(null);
+					}
+					return isOther;
+				});
+				 				
 				/**
 				*	for utilization note type: calculate the days from admitDate to discharge ( or until today )
 				*	note: same day (admission = discharge) should calculate to 0 
-				*	@method note.utilizationLength
+				*	@method getUtilizationLength
 				*/
-				note.utilizationLength = ko.computed( function(){
+				note.getUtilizationLength = function(){
 					var admitted = note.admitted();
 					var admitDate = note.admitDate();
 					var dischargeDate = note.dischargeDate();
+					var admitDateErrors = note.admitDateErrors();
+					var dischargeDateErrors = note.dischargeDateErrors();
 					var result = null;
 					if( admitted ){
-						if( moment(admitDate).isValid() ){							
-							if( !moment(dischargeDate).isValid() ){
+						if( moment(admitDate).isValid() && admitDateErrors.length === 0){							
+							if( !dischargeDate ){
 								//days from Visit/Admit Date until today
 								result = moment().diff( admitDate, 'days' );
 							}
-							else{
+							else if( dischargeDateErrors.length === 0 ){
 								//days from Visit/Admit Date until discharge Date
 								result = moment(dischargeDate).diff( admitDate, 'days' );								
 							}
 						}
-						else{
-							result = '-';
-						}
 					}					
+					return result;
+				};
+				note.utilizationLengthStr = ko.computed(function(){
+					var utilizationLength = note.getUtilizationLength();
+					if( utilizationLength === null ){
+						return  '-';
+					}
+					var result = String(utilizationLength);
+					if( utilizationLength === 1 ){
+						result += ' day';	
+					} else if( utilizationLength === 0 || utilizationLength > 1 ){
+						result += ' days';
+					}
 					return result;
 				});
 				note.validationErrorsArray = ko.computed( function(){
@@ -345,6 +440,26 @@ define(['services/session', 'services/dateHelper'],
 					});
 					return thisArray;
 				});
+				/**
+				*	computed. for utilization to allow forcing the datetimepicker control to set the admit/visit date as invalid.
+				*	this is needed when the date is valid but range is wrong.
+				*	@method note.setInvalidStartDate
+				*/
+				note.setInvalidAdmitDate = ko.computed( function(){
+					var validationErrorsArray = note.validationErrorsArray();
+					return (validationErrorsArray && validationErrorsArray.indexOf('admitDate') !== -1);  
+				});
+				
+				/**
+				*	computed. for utilization to allow forcing the datetimepicker control to set the discharge date as invalid.
+				*	this is needed when the date is valid but range is wrong.
+				*	@method note.setInvalidDischargeDate
+				*/
+				note.setInvalidDischargeDate = ko.computed( function(){
+					var validationErrorsArray = note.validationErrorsArray();
+					return (validationErrorsArray && validationErrorsArray.indexOf('dischargeDate') !== -1);  
+				});
+				
 		    }
 
 		    function todoInitializer (todo) {

@@ -67,44 +67,49 @@
 										
 										<div class="row pad-top" data-bind="visible: visitType, with: visitType">
                                             <strong class="span3">Visit Type:</strong>
-											<span data-bind="text: name" class="span3"></span>
-											<div data-bind="visible: (name() && name().toLowerCase() === 'other')">
-												<strong class="span3">Other Type:</strong>
-												<span class="span3" data-bind="text: $parent.otherType" class="span3"></span>
-											</div>
+											<div class="span9">
+												<span data-bind="text: name" ></span>
+												<span data-bind="visible: (name() && name().toLowerCase() === 'other')">
+													<span>&nbsp;</span>
+													<span data-bind="text: (' - ' + $parent.otherType())" ></span>
+												</span>
+											</div>	
                                         </div>
 										<div class="row pad-top" data-bind="visible: admitDate">
                                             <strong class="span3">Visit/Admit Date:</strong>
-                                            <span class="span9" data-bind="DateTime: admitDate"></span>
+                                            <span class="span9" data-bind="DateOrNothing: admitDate"></span>
                                         </div>
-										<div class="row pad-top" data-bind="visible: (admitted === true || admitted === false)">
+										<div class="row pad-top" data-bind="visible: (admitted() === true || admitted() === false)">
                                             <strong class="span3">Admitted:</strong>
                                             <span class="span9" data-bind="text: admitted() ? 'Yes' : 'No' "></span>
                                         </div>
 										<div class="row pad-top" data-bind="visible: dischargeDate">
                                             <strong class="span3">Discharge Date:</strong>
-                                            <span class="span9" data-bind="DateTime: dischargeDate"></span>
+                                            <span class="span9" data-bind="DateOrNothing: dischargeDate"></span>
                                         </div>
-										<div class="row pad-top" data-bind="visible: utilizationLength">
+										<div class="row pad-top" data-bind="visible: utilizationLengthStr && admitted">
                                             <strong class="span3">Length:</strong>
-                                            <span data-bind="text: utilizationLength"></span><span data-bind="text: ((utilizationLength === 1)? ' day' : ' days')"></span>
+                                            <span data-bind="text: utilizationLengthStr"></span>
                                         </div>										
 										<div class="row pad-top" data-bind="visible: utilizationLocation, with: utilizationLocation">
-                                            <strong class="span3">Location:</strong>                                            
-											<span data-bind="text: name" class="span3"></span>											
-											<div data-bind="visible: (name() && name().toLowerCase() === 'other')">
-												<strong class="span3">Other Location:</strong>
-												<span data-bind="text: $parent.otherLocation" class="span3"></span>
-											</div>
+                                            <strong class="span3">Location:</strong> 
+											<div class="span9">
+												<span data-bind="text: name" ></span>											
+												<span data-bind="visible: (name() && name().toLowerCase() === 'other')" >
+													<span>&nbsp;</span>
+													<span data-bind="text: (' - ' + $parent.otherLocation())" ></span>
+												</span>
+											</div>	
                                         </div>
 										<div class="row pad-top" data-bind="visible: disposition, with: disposition">
-                                            <strong class="span3">Disposition:</strong>                                            
-											<span data-bind="text: name" class="span3"></span>
-											<div data-bind="visible: (name() && name().toLowerCase() === 'other')">
-												<strong class="span3">Other Disposition:</strong>
-												<span data-bind="text: $parent.otherDisposition" class="span3"></span>
+                                            <strong class="span3">Disposition:</strong> 
+											<div class="span9">
+												<span data-bind="text: name" ></span>
+												<span data-bind="visible: (name() && name().toLowerCase() === 'other')" >
+													<span>&nbsp;</span>
+													<span data-bind="text: (' - ' + $parent.otherDisposition())" ></span>
+												</span>
 											</div>
-											
                                         </div>
 										<div class="row pad-top" data-bind="visible: utilizationSource, with: utilizationSource">
                                             <strong class="span3">Source:</strong>
@@ -135,7 +140,7 @@
 										<span data-bind="DateTime: createdOn"></span> by <span data-bind="text: createdBy().preferredName"></span>
                                     </div>
 									<div class="row pad-top" data-bind="visible: updatedOn">
-                                        <strong class="span3">updated:</strong>
+                                        <strong class="span3">Updated:</strong>
                                         <span data-bind="DateTime: updatedOn"></span> by <span data-bind="text: (updatedBy()? updatedBy().preferredName : '')"></span>
                                     </div>
                                 </div>

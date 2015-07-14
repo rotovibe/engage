@@ -29,31 +29,37 @@
 
             // If there is no manager, we can't query using breeze
             if (!manager) { throw new Error("[manager] cannot be a null parameter"); }
-
+			var receivingEntityType = '';
             // Check if the datacontext is available, if so require it
-            checkDataContext();
-
+            checkDataContext();			
+			
             // Create an end point to use
 			var endPoint;
 			var method = 'POST'
+			var isInsert = false;
 			if( !isNaN(serializedNote.Id) && Number(serializedNote.Id) < 1 ){
-				//insert: (new notes have negative int id's)				
+				isInsert = true;				
 				if( type && type.toLowerCase() === 'utilization' ){
+					serializedNote.Id = null;
 					//different endpoint for utilization note type
-					endPoint = new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'Patient/' + serializedNote.PatientId + '/Notes/Utilization', 'Note');										
+					endPoint = new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'Patient/' + serializedNote.PatientId + '/Notes/Utilizations', 'Utilization');
+					receivingEntityType = 'Note';
 				}
 				else{
 					endPoint = new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'Patient/' + serializedNote.PatientId + '/Note/Insert', 'Note');					
+					receivingEntityType = 'Note';
 				}
 			}
 			else{
 				//update:				
 				if( type && type.toLowerCase() === 'utilization' ){
 					//different endpoint for utilization note type
-					endPoint = new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'Patient/' + serializedNote.PatientId + '/Notes/Utilization/' + String(serializedNote.Id) , 'PatientNote');	
+					endPoint = new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'Patient/' + serializedNote.PatientId + '/Notes/Utilizations/' + String(serializedNote.Id) , 'Utilization');	
+					receivingEntityType = 'Note';
 				}
 				else{
 					endPoint = new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'Patient/' + serializedNote.PatientId + '/Note/' + String(serializedNote.Id) , 'PatientNote');		
+					receivingEntityType = 'Note';
 				}				
 				method = 'PUT'; 
 			}
@@ -65,17 +71,22 @@
                 // Create a payload from the JS object
                 var payload = {};
 				
-                payload[endPoint.EntityType] = serializedNote;	//insert: "Note" ; update: "PatientNote"
+                payload[endPoint.EntityType] = serializedNote;	//insert Note: "Note" ; update Note: "PatientNote" ; Utilization- insert/update: "Utilization"
                 payload = JSON.stringify(payload);
 
                 // Query to post the results
                 var query = breeze.EntityQuery
-                    .from(endPoint.ResourcePath)
+                    .from(endPoint.ResourcePath).toType('Note')					
                     .withParameters({
                         $method: method,
                         $encoding: 'JSON',
                         $data: payload
                     });
+				
+				//	breeze comment: this call is done for 'Utilization, 'Note' and 'PatientNote' endpoints.
+				//	'Note' and 'PatientNote' endpoints are not returning the whole object. only the id.				
+				//	this is Y in this case we do not delete the observable used to hold the new "note" entity 
+				//	and replace it by the returned (.toType).	
                 
                 //return query.execute().then(saveSucceeded).fail(postFailed);
                 return manager.executeQuery(query).then(saveSucceeded).fail(postFailed);

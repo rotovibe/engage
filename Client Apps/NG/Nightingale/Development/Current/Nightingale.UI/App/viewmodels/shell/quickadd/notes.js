@@ -97,6 +97,11 @@
             // Content area toggling for a note
             self.gnContentOpen = ko.observable(true);
             self.gnLastNotesOpen = ko.observable(true);
+            // Content area toggling for a utilization
+            self.utContentOpen = ko.observable(true);
+            self.utDetailsOpen = ko.observable(true);
+            self.utLastNotesOpen = ko.observable(false);
+			
         };
 
         ctor.prototype.contractProgramsEndPoint = ko.computed(function () {
@@ -253,10 +258,10 @@
 				if (self.newUtilization()) {
                     self.newUtilization().patientId(self.selectedPatient().id());
                     self.isSaving(true);
-                    self.newUtilization().createdById(session.currentUser().userId());
-					//self.newUtilization().text(	self.newUtilization().reason() ); //copy reason into text so it will display in the history notes list as content
-                    self.newUtilization().createdOn(new Date());
-					self.newUtilization().createdById(session.currentUser().userId());
+                    // self.newUtilization().createdById(session.currentUser().userId());
+					// //self.newUtilization().text(	self.newUtilization().reason() ); //copy reason into text so it will display in the history notes list as content
+                    // self.newUtilization().createdOn(new Date());
+					// self.newUtilization().createdById(session.currentUser().userId());
                     datacontext.saveNote(self.newUtilization()).then(saved);                    
                 }
 				function saved() {
@@ -269,6 +274,7 @@
             self.selectedPatient.subscribe(function () {
                 self.cancel();
                 self.cancelTouchPoint();
+				self.cancelUtilization();
                 historyIndex.activeNote(null);
             });
             self.viewDetails = function (sender) {
@@ -306,7 +312,7 @@
 				//TODO: verify validation rules for utilization
 				var hasNewUtilization = self.newUtilization()? true : false;
 				var isSaving = self.isSaving();							
-                return self.newUtilization() && !self.isSaving() && self.newUtilization().text();	
+                return self.newUtilization() && !self.isSaving() && self.newUtilization().isValid();	
             });
             self.createNewNote();
             self.createNewTouchPoint();

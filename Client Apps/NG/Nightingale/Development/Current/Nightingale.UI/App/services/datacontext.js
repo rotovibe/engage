@@ -452,9 +452,35 @@ define(['services/session', 'services/jsonResultsAdapter', 'models/base', 'confi
 		*/
 		function processLookpus(){
 			var promise = Q.all([
-				processFrequencyLookup()
+				processFrequencyLookup(),
+				processNoteLookups(),
 			]);
 			return promise;
+		}
+		
+		/**
+		*	rearrange sorting of note lookups
+		*	@method processNoteLookups
+		*/
+		function processNoteLookups(){
+			datacontext.enums.visitTypes( sortLookupAlphabetic( datacontext.enums.visitTypes, true ));
+			datacontext.enums.utilizationSources( sortLookupAlphabetic( datacontext.enums.utilizationSources, true ));
+			datacontext.enums.dispositions( sortLookupAlphabetic( datacontext.enums.dispositions, true ));
+			datacontext.enums.utilizationLocations( sortLookupAlphabetic( datacontext.enums.utilizationLocations, true ));
+			/**
+			*	sort a lookup alphbetically. if requested, set "other" option as last.
+			*	@method sortLookupAlphabetic
+			*	@param setOtherOptionLast {Boolean} if true: an option with name='Other' will be positioned last.
+			*/
+			function sortLookupAlphabetic( lookupArray, setOtherOptionLast ){
+				return lookupArray.sort( sortFunc );
+				function sortFunc(a,b){
+					if( setOtherOptionLast && a.name().toLowerCase() === 'other' ) return 1;				
+					if( a.name() > b.name() ) return 1;
+					if( b.name() >  a.name()) return -1;
+					return 0;
+				}
+			}
 		}
 		
 		/**
@@ -1117,15 +1143,65 @@ define(['services/session', 'services/jsonResultsAdapter', 'models/base', 'confi
         }
 
         // Save changes to a single contact card
-        function saveNote(note) {
+        function saveNote(note) {			
             // Display a message while saving
-            var message = queryStarted('Note', true, 'Saving');
+            var message = queryStarted('Note', true, 'Saving');			
             var serializedNote = entitySerializer.serializeNote(note, manager);
-            return notesService.saveNote(manager, serializedNote, note.type().name()).then(saveCompleted);
-
-            function saveCompleted(data) {
-                // Replace the id of the note since we had a negative number there
-                note.id(data.Id);
+			var isInsert = false;
+			if( note && note.id() < 0 ){
+				isInsert = true;
+				note.createdById(session.currentUser().userId());
+                note.createdOn(new Date());
+				note.createdById(session.currentUser().userId());
+				note.systemSource( 'Engage' );
+			}
+			var noteType = note.type().name().toLowerCase();
+			switch( noteType ){
+				case 'utilization':
+				{
+					return notesService.saveNote(manager, serializedNote, noteType).then(saveUtilizationCompleted);
+					break;
+				}
+				default:
+				{					
+					return notesService.saveNote(manager, serializedNote, noteType).then(saveNoteCompleted);
+					break;
+				}
+			}
+            function saveUtilizationCompleted( data ){
+				if( isInsert ){
+					//the returned data from Utilization endpoint is the complete Utilization Note object 
+					//	and will be added to the cache (breeze .toType 'Note'). the new entity is not needed anymore:
+					manager.detachEntity(note);
+					queryCompleted(message);
+				}
+				else{					
+					note.entityAspect.acceptChanges();	
+				}
+				
+                // Finally, clear out the message
+                queryCompleted(message);
+                return true;
+			}
+			
+            function saveNoteCompleted( data ) {                
+				if( isInsert ){
+					// 'Note' endpoint does not return the whole object. only the created id. 											
+					// we will keep the new note object in cache:
+					// Replace the id of the note since we had a negative number there
+					note.id( data.Id );	//the insert end point (Note) returns the result obj directly (not inside a property).
+				}
+				else{
+					// Update (PatientNote endpoint)
+					// 'PatientNote' endpoint does not return the whole object. only the created id. under data.PatientNote prop 											
+					if( data.PatientNote.UpdatedOn ){
+						note.updatedOn(data.PatientNote.UpdatedOn);	
+					}	
+					if( data.PatientNote.UpdatedById ){
+						note.updatedById(data.PatientNote.UpdatedById);
+					}	
+				}															
+		
                 // Accept changes
                 note.entityAspect.acceptChanges();
                 // Finally, clear out the message
