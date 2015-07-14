@@ -464,9 +464,17 @@ define(['services/session', 'services/jsonResultsAdapter', 'models/base', 'confi
 		*/
 		function processNoteLookups(){
 			datacontext.enums.visitTypes( sortLookupAlphabetic( datacontext.enums.visitTypes, true ));
-			datacontext.enums.utilizationSources( sortLookupAlphabetic( datacontext.enums.utilizationSources, true ));
+			datacontext.enums.utilizationSources( sortLookupAlphabetic( datacontext.enums.utilizationSources, true ));			
+			// var nullOption = manager.createEntity('UtilizationSource', {id: -1, name: 'None', isDefault: null}, breeze.EntityState.Unchanged);
+			// datacontext.enums.utilizationSources.push( nullOption );
+			
 			datacontext.enums.dispositions( sortLookupAlphabetic( datacontext.enums.dispositions, true ));
+			// nullOption = manager.createEntity('Disposition', {id: -1, name: 'None', isDefault: null}, breeze.EntityState.Unchanged);
+			// datacontext.enums.dispositions.push( nullOption );
+						
 			datacontext.enums.utilizationLocations( sortLookupAlphabetic( datacontext.enums.utilizationLocations, true ));
+			// nullOption = manager.createEntity('UtilizationLocation', {id: -1, name: 'None', isDefault: null}, breeze.EntityState.Unchanged);
+			// datacontext.enums.utilizationLocations.push( nullOption );
 			/**
 			*	sort a lookup alphbetically. if requested, set "other" option as last.
 			*	@method sortLookupAlphabetic
@@ -480,7 +488,7 @@ define(['services/session', 'services/jsonResultsAdapter', 'models/base', 'confi
 					if( b.name() >  a.name()) return -1;
 					return 0;
 				}
-			}
+			}											
 		}
 		
 		/**

@@ -57,10 +57,10 @@
             self.durations = datacontext.enums.noteDurations;
 			//utilization note lookups:
 			self.visitTypes = datacontext.enums.visitTypes;
-			self.utilizationSources = datacontext.enums.utilizationSources;
+			self.utilizationSources = datacontext.enums.utilizationSources;						
 			self.dispositions = datacontext.enums.dispositions;
 			self.utilizationLocations = datacontext.enums.utilizationLocations;
-	
+							
             // TODO: REMOVE THESE ONCE IS DEFAULT IS SET
             self.defaultOutcome = ko.utils.arrayFirst(self.outcomes(), function (outcome) {
                 return outcome.isDefault();
@@ -257,11 +257,7 @@
 			self.saveUtilization = function(){
 				if (self.newUtilization()) {
                     self.newUtilization().patientId(self.selectedPatient().id());
-                    self.isSaving(true);
-                    // self.newUtilization().createdById(session.currentUser().userId());
-					// //self.newUtilization().text(	self.newUtilization().reason() ); //copy reason into text so it will display in the history notes list as content
-                    // self.newUtilization().createdOn(new Date());
-					// self.newUtilization().createdById(session.currentUser().userId());
+                    self.isSaving(true);                    
                     datacontext.saveNote(self.newUtilization()).then(saved);                    
                 }
 				function saved() {
