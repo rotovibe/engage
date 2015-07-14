@@ -39,9 +39,9 @@ namespace Phytel.API.DataDomain.PatientNote.Repo
                     var meN = new MEPatientUtilization(this.UserId)
                     {
                         DeleteFlag = false,
-                        OtherDisposition = data.OtherDisposition,
-                        OtherLocation = data.OtherLocation,
-                        OtherType = data.OtherType,
+                        OtherDisposition = Trim(data.OtherDisposition,100),
+                        OtherLocation = Trim(data.OtherLocation, 100),
+                        OtherType = Trim(data.OtherType, 100),
                         ProgramIds = data.ProgramIds != null ? data.ProgramIds.ConvertAll(ObjectId.Parse) : null,
                         PSystem = data.SystemSource = Trim(data.SystemSource, 50),
                         Reason = data.Reason = Trim(data.Reason, 5000),
@@ -173,9 +173,9 @@ namespace Phytel.API.DataDomain.PatientNote.Repo
                 DischargeDate = meN.DischargeDate,
                 DispositionId = meN.Disposition.ToString(),
                 LocationId = meN.Location.ToString(),
-                OtherDisposition = meN.OtherDisposition,
-                OtherLocation = meN.OtherLocation,
-                OtherType = meN.OtherType,
+                OtherDisposition = Trim(meN.OtherDisposition, 100),
+                OtherLocation = Trim(meN.OtherLocation, 100),
+                OtherType = Trim(meN.OtherType,100),
                 SystemSource = Trim(meN.PSystem, 50),
                 Reason = Trim(meN.Reason, 5000),
                 VisitTypeId = (meN.VisitType == null) ? null : meN.VisitType.ToString(),
@@ -227,16 +227,16 @@ namespace Phytel.API.DataDomain.PatientNote.Repo
                     uv.Add(MB.Update.Set(MEPatientUtilization.LastUpdatedOnProperty, DateTime.UtcNow));
                     
                     uv.Add(MB.Update.Set(MEPatientUtilization.AdmittedProperty, pn.Admitted));
-                    if (pn.OtherType != null) uv.Add(MB.Update.Set(MEPatientUtilization.OtherTypeProperty, pn.OtherType));
+                    if (pn.OtherType != null) uv.Add(MB.Update.Set(MEPatientUtilization.OtherTypeProperty, Trim(pn.OtherType, 100)));
                     else uv.Add(MB.Update.Set(MEPatientUtilization.OtherTypeProperty, BsonNull.Value));
 
-                    if (pn.OtherLocation != null) uv.Add(MB.Update.Set(MEPatientUtilization.OtherLocationProperty, pn.OtherLocation));
+                    if (pn.OtherLocation != null) uv.Add(MB.Update.Set(MEPatientUtilization.OtherLocationProperty, Trim(pn.OtherLocation, 100)));
                     else uv.Add(MB.Update.Set(MEPatientUtilization.OtherLocationProperty, BsonNull.Value));
 
                     if (pn.Reason != null) uv.Add(MB.Update.Set(MEPatientUtilization.ReasonProperty, Trim(pn.Reason, 5000)));
                     else uv.Add(MB.Update.Set(MEPatientUtilization.ReasonProperty, BsonNull.Value));
 
-                    if (pn.OtherDisposition != null) uv.Add(MB.Update.Set(MEPatientUtilization.OtherDispositionProperty, pn.OtherDisposition));
+                    if (pn.OtherDisposition != null) uv.Add(MB.Update.Set(MEPatientUtilization.OtherDispositionProperty, Trim(pn.OtherDisposition, 100)));
                     else uv.Add(MB.Update.Set(MEPatientUtilization.OtherDispositionProperty, BsonNull.Value));
 
                     if (pn.SystemSource != null) uv.Add(MB.Update.Set(MEPatientUtilization.SystemProperty, Trim(pn.SystemSource, 50)));

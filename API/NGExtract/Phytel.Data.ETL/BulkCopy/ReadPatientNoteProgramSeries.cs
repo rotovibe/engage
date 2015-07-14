@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using MongoDB.Bson;
 using Phytel.API.DataDomain.PatientNote.Repo;
-using Phytel.API.DataDomain.PatientObservation.DTO;
 
 namespace Phytel.Data.ETL.BulkCopy
 {

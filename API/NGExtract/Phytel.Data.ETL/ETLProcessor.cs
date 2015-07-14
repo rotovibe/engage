@@ -3017,10 +3017,11 @@ namespace Phytel.Data.ETL
                         {
                             ParameterCollection parms = new ParameterCollection();
                             parms.Add(new Parameter("@MongoID", (string.IsNullOrEmpty(system.Id.ToString()) ? string.Empty : system.Id.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@PatientMongoId", (string.IsNullOrEmpty(system.PatientID.ToString()) ? string.Empty : system.PatientID.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@Label", (string.IsNullOrEmpty(system.DisplayLabel) ? string.Empty : system.DisplayLabel), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@SystemId", (string.IsNullOrEmpty(system.SystemID) ? string.Empty : system.SystemID), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@SystemName", (string.IsNullOrEmpty(system.SystemName) ? string.Empty : system.SystemName), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                            // REFACTOR!!!
+                            //parms.Add(new Parameter("@PatientMongoId", (string.IsNullOrEmpty(system.PatientID.ToString()) ? string.Empty : system.PatientID.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                            //parms.Add(new Parameter("@Label", (string.IsNullOrEmpty(system.DisplayLabel) ? string.Empty : system.DisplayLabel), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                            //parms.Add(new Parameter("@SystemId", (string.IsNullOrEmpty(system.SystemID) ? string.Empty : system.SystemID), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                            //parms.Add(new Parameter("@SystemName", (string.IsNullOrEmpty(system.SystemName) ? string.Empty : system.SystemName), SqlDbType.VarChar, ParameterDirection.Input, 50));
                             parms.Add(new Parameter("@UpdatedBy", (string.IsNullOrEmpty(system.UpdatedBy.ToString()) ? string.Empty : system.UpdatedBy.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
                             parms.Add(new Parameter("@LastUpdatedOn", system.LastUpdatedOn ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
                             parms.Add(new Parameter("@RecordCreatedBy", (string.IsNullOrEmpty(system.RecordCreatedBy.ToString()) ? string.Empty : system.RecordCreatedBy.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));

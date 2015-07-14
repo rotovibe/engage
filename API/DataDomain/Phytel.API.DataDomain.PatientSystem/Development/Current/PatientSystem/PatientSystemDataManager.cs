@@ -1,6 +1,7 @@
 using Phytel.API.DataDomain.PatientSystem.DTO;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace Phytel.API.DataDomain.PatientSystem
 {
@@ -37,8 +38,6 @@ namespace Phytel.API.DataDomain.PatientSystem
             catch (Exception ex) { throw ex; }
         }
 
-
-
         public PatientSystemData InsertPatientSystem(InsertPatientSystemDataRequest request)
         {
             PatientSystemData data = null;
@@ -51,7 +50,7 @@ namespace Phytel.API.DataDomain.PatientSystem
                     if (request.IsEngageSystem)
                     { 
                         // Call the ID generator tool to populate the value.
-                        request.PatientSystemsData.Value = "";
+                        request.PatientSystemsData.Value = EngageId.New();
                         request.PatientSystemsData.SystemSourceId = Constants.EngageSystemId;
                         request.UserId = Constants.SystemContactId;
                     }

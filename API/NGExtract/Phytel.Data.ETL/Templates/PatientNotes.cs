@@ -1,20 +1,15 @@
-﻿using Phytel.API.DataDomain.PatientNote.DTO;
-using System;
+﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using FastMember;
-using MongoDB.Bson;
-using Phytel.API.DataDomain.PatientNote;
+using Phytel.API.DataDomain.PatientNote.Repo;
 using Phytel.Data.ETL.BulkCopy;
 using Phytel.Services.SQLServer;
-using Phytel.API.DataDomain.PatientNote.Repo;
 
 namespace Phytel.Data.ETL.Templates
 {

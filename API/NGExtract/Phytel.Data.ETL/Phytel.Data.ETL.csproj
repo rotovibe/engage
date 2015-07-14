@@ -17,6 +17,7 @@
     <SccProvider>SAK</SccProvider>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -199,7 +200,7 @@
       <Name>DataDomain.PatientGoal</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\DataDomain\Phytel.API.DataDomain.PatientNote\Development\Current\DataDomain.PatientNote.Repo\DataDomain.PatientNote.Repo.csproj">
-      <Project>{bd61e655-5658-49c8-96d8-26822162d008}</Project>
+      <Project>{BD61E655-5658-49C8-96D8-26822162D008}</Project>
       <Name>DataDomain.PatientNote.Repo</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\DataDomain\Phytel.API.DataDomain.PatientNote\Development\Current\PatientNote.DTO\DataDomain.PatientNote.DTO.csproj">

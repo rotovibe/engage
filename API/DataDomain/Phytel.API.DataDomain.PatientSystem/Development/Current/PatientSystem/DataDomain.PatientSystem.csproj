@@ -97,6 +97,7 @@
     <Compile Include="SystemSourceDataManager.cs" />
     <Compile Include="PatientSystemDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="EngageId.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\Common\Phytel.API.Common\Development\Current\Phytel.API.Common.csproj">
