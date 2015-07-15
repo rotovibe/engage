@@ -22,7 +22,7 @@
         });
 
         var groups = ko.observableArray();
-
+		var originalProgramIds = ko.observableArray([]);
         var activeNote = ko.observable();
 		var activeNoteLoader = ko.computed(function(){
 			var note = activeNote();
@@ -196,14 +196,31 @@
 			}
 			var modalEntity = ko.observable(new ModalEntity(activeNote()));
 			var saveOverride = function () {					  
-			  datacontext.saveNote(modalEntity().note);
+			  datacontext.saveNote(modalEntity().note).then( function(){
+				  originalProgramIds.removeAll();
+			  });
 			};
 			var cancelOverride = function () {
-			  var noteCancel = modalEntity().note;
-			  noteCancel.entityAspect.rejectChanges();			  
+				var note = activeNote();
+				note.entityAspect.rejectChanges();
+				//revert to original program ids:	
+				note.programIds.removeAll();
+				var progIds = note.programIds();					
+				if( originalProgramIds().length > 0){
+					ko.utils.arrayPushAll(progIds, originalProgramIds());
+					originalProgramIds.removeAll();	
+				}
+				//clear the entityAspect.entityState back to Unchanged state - to hide this correction (original program id's):
+				note.entityAspect.setUnchanged();			  
 			};
 			var msg = 'Edit ' + activeNote().type().name() + ' Note';				  
 			var modal = new modelConfig.modal(msg, modalEntity, 'viewmodels/patients/notes/index', noteModalShowing, saveOverride, cancelOverride);
+			
+			//keep the original program ids
+			originalProgramIds.removeAll();
+			var progIds = originalProgramIds();
+			ko.utils.arrayPushAll(progIds, activeNote().programIds());
+				
 			noteModalShowing(true);
 			shell.currentModal(modal);				
 		}
