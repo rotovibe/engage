@@ -140,6 +140,10 @@
                                         <strong class="span3">Updated:</strong>
                                         <span data-bind="DateTime: updatedOn"></span> by <span data-bind="text: (updatedBy()? updatedBy().preferredName : '')"></span>
                                     </div>
+									<div class="row pad-top" data-bind="visible: systemSource">
+										<strong class="span3" >System:</strong>
+										<span class="pad-left" data-bind="text: systemSource"></span>
+									</div>
                                 </div>
                             </div>
                         </div>

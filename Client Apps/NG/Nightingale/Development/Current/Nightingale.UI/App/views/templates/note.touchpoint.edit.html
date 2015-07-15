@@ -80,6 +80,10 @@
 					<span class="grey">Updated On:  </span>
 					<span class="pad-left" data-bind="DateTime: updatedOn"></span> by <span data-bind="text: updatedBy().preferredName"></span>
 				</div>
+				<div class="row pad-top" data-bind="if: systemSource">
+					<span class="grey" >System:</span>
+					<span class="pad-left" data-bind="text: systemSource"></span>
+				</div>
 				<div class="line"></div>
 				<div class="line"></div>
             </div>
