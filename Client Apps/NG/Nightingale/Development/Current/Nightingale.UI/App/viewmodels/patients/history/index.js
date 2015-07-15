@@ -188,12 +188,7 @@
 				return true; 
 			});
 		}
-		function editNote(sender){						    
-			if( activeNote().type().name() && activeNote().type().name().toLowerCase() === 'utilization' ){
-				//TODO: this is temporary !! 
-				alert(' edit utilization note - not implemented. ');
-				return;
-			}
+		function editNote(sender){						    			
 			var modalEntity = ko.observable(new ModalEntity(activeNote()));
 			var saveOverride = function () {					  
 			  datacontext.saveNote(modalEntity().note).then( function(){

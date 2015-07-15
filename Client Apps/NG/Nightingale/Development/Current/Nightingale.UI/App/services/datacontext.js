@@ -1154,15 +1154,18 @@ define(['services/session', 'services/jsonResultsAdapter', 'models/base', 'confi
         function saveNote(note) {			
             // Display a message while saving
             var message = queryStarted('Note', true, 'Saving');			
-            var serializedNote = entitySerializer.serializeNote(note, manager);
+            
 			var isInsert = false;
-			if( note && note.id() < 0 ){
+			if( note.id() < 0 ){
 				isInsert = true;
 				note.createdById(session.currentUser().userId());
-                note.createdOn(new Date());
-				note.createdById(session.currentUser().userId());
+                note.createdOn( new Date() );
 				note.systemSource( 'Engage' );
+			}else{
+				note.updatedById( session.currentUser().userId() );
+				note.updatedOn( new Date() );
 			}
+			var serializedNote = entitySerializer.serializeNote(note, manager);
 			var noteType = note.type().name().toLowerCase();
 			switch( noteType ){
 				case 'utilization':
@@ -1181,10 +1184,10 @@ define(['services/session', 'services/jsonResultsAdapter', 'models/base', 'confi
 					//the returned data from Utilization endpoint is the complete Utilization Note object 
 					//	and will be added to the cache (breeze .toType 'Note'). the new entity is not needed anymore:
 					manager.detachEntity(note);
-					queryCompleted(message);
 				}
 				else{					
-					note.entityAspect.acceptChanges();	
+					note.entityAspect.acceptChanges();
+					syncUpdateProps( data.Utilization );
 				}
 				
                 // Finally, clear out the message
@@ -1200,14 +1203,7 @@ define(['services/session', 'services/jsonResultsAdapter', 'models/base', 'confi
 					note.id( data.Id );	//the insert end point (Note) returns the result obj directly (not inside a property).
 				}
 				else{
-					// Update (PatientNote endpoint)
-					// 'PatientNote' endpoint does not return the whole object. only the created id. under data.PatientNote prop 											
-					if( data.PatientNote.UpdatedOn ){
-						note.updatedOn(data.PatientNote.UpdatedOn);	
-					}	
-					if( data.PatientNote.UpdatedById ){
-						note.updatedById(data.PatientNote.UpdatedById);
-					}	
+					syncUpdateProps( data.PatientNote );	
 				}															
 		
                 // Accept changes
@@ -1216,6 +1212,17 @@ define(['services/session', 'services/jsonResultsAdapter', 'models/base', 'confi
                 queryCompleted(message);
                 return true;
             }
+			
+			function syncUpdateProps( returnedNote ){
+				// Update (PatientNote endpoint)
+				// 'PatientNote' endpoint does not return the whole object. only the created id. under data.PatientNote prop 											
+				if( returnedNote.UpdatedOn ){
+					note.updatedOn(returnedNote.UpdatedOn);	
+				}	
+				if( returnedNote.UpdatedById ){
+					note.updatedById(returnedNote.UpdatedById);
+				}
+			}
         }
 
         // Save changes to a single contact card

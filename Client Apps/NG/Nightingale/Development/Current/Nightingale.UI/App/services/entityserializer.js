@@ -599,12 +599,12 @@
 
         // Get the values of the properties of the action
         //var unwrappedNote = ko.toJS(note);        
-//TODO: add utilization props to entity
+
         var noteQuery = breeze.EntityQuery
             .from('fakePath')
             .where('id', '==', note.id())
             .toType('Note')
-            .select('id, text, patientId, createdOn, createdById, typeId, methodId, outcomeId, whoId, sourceId, durationId, contactedOn, validatedIdentity, admitDate, dischargeDate, systemSource, admitted, visitTypeId, otherType, utilizationSourceId, dispositionId, otherDisposition, locationId, otherLocation');
+            .select('id, text, patientId, createdOn, createdById, typeId, methodId, outcomeId, whoId, sourceId, durationId, contactedOn, validatedIdentity, admitDate, dischargeDate, systemSource, admitted, visitTypeId, otherType, utilizationSourceId, dispositionId, otherDisposition, locationId, otherLocation, updatedById, updatedOn');
         var results = manager.executeQueryLocally(noteQuery);
         var unwrappedNote = results[0];
 
@@ -618,7 +618,8 @@
         thisNote.PatientId = unwrappedNote.patientId;
         thisNote.CreatedOn = unwrappedNote.createdOn;
         thisNote.CreatedById = unwrappedNote.createdById;
-
+		thisNote.updatedOn = unwrappedNote.updatedOn;
+        thisNote.updatedById = unwrappedNote.updatedById;
         thisNote.TypeId = unwrappedNote.typeId;
         thisNote.MethodId = unwrappedNote.methodId;
         thisNote.OutcomeId = unwrappedNote.outcomeId;

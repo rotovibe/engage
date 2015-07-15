@@ -134,12 +134,7 @@
 						pSystem: "Engage",
 						admitted: false,
 						typeId: utilizationNoteType.id()
-					}));
-					
-					// visitType: null,	//visitTypeId	defaultVisitType					
-					// utilizationSourceId: defaultUtilizationSource,
-					// disposition: defaultDisposition, //dispositionId					
-					// location: defaultUtilizationLocations,	//utilizationLocationId					
+					}));								
         };
         ctor.prototype.createNewTouchPoint = function () {
             var self = this;
