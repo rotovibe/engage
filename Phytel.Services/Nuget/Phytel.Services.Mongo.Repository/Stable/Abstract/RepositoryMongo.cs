@@ -175,6 +175,15 @@ namespace Phytel.Services.Mongo.Repository
             );
         }
 
+        public WriteConcernResult Update<T, TKey>(IMongoQuery query, IMongoUpdate update, UpdateFlags flags = UpdateFlags.None, int retries = RetryHelper.RETRIES, int retryDelay = RetryHelper.RETRYDELAY) where T : IMongoEntity<TKey>
+        {
+            return
+                RetryHelper.DoWithRetry<WriteConcernResult>(() =>
+                {
+                    return _context.Set<T, TKey>().Collection.Update(query, update, flags);
+                }, retries, retryDelay);
+        }
+
         public long Update<T, TKey>(UpdateBuilder<T> update, Expression<Func<T, bool>> criteria) where T : IMongoEntity<TKey>
         {
             long rvalue = default(long);
