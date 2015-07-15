@@ -2,6 +2,7 @@
 using MongoDB.Driver;
 using MongoDB.Driver.Builders;
 using Phytel.Services.Mongo.Linq;
+using Phytel.Services.Utility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,6 +41,8 @@ namespace Phytel.Services.Mongo.Repository
         WriteConcernResult Remove<T, TKey>(IMongoQuery query) where T : IMongoEntity<TKey>;
 
         void Save<T, TKey>(T entity) where T : IMongoEntity<TKey>;
+
+        WriteConcernResult Update<T, TKey>(IMongoQuery query, IMongoUpdate update, UpdateFlags flags = UpdateFlags.None, int retries = RetryHelper.RETRIES, int retryDelay = RetryHelper.RETRYDELAY) where T : IMongoEntity<TKey>;
 
         long Update<T, TKey>(UpdateBuilder<T> update, Expression<Func<T, bool>> criteria) where T : IMongoEntity<TKey>;
 
