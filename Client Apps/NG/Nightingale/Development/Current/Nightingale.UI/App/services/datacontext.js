@@ -417,10 +417,10 @@ define(['services/session', 'services/jsonResultsAdapter', 'models/base', 'confi
                 lookupsService.getNoteLookup(manager, 'NoteSource', datacontext.enums.noteSources, true);
                 lookupsService.getLookup(manager, 'NoteType', datacontext.enums.noteTypes, true);
 				//utilization note lookups:
-				lookupsService.getLookup(manager, 'VisitType', datacontext.enums.visitTypes, true);
-				lookupsService.getLookup(manager, 'UtilizationSource', datacontext.enums.utilizationSources, true);
-				lookupsService.getLookup(manager, 'Disposition', datacontext.enums.dispositions, true);
-				lookupsService.getLookup(manager, 'UtilizationLocation', datacontext.enums.utilizationLocations, true);
+				lookupsService.getNoteLookup(manager, 'VisitType', datacontext.enums.visitTypes, true);
+				lookupsService.getNoteLookup(manager, 'UtilizationSource', datacontext.enums.utilizationSources, true);
+				lookupsService.getNoteLookup(manager, 'Disposition', datacontext.enums.dispositions, true);
+				lookupsService.getNoteLookup(manager, 'UtilizationLocation', datacontext.enums.utilizationLocations, true);
                 return lookupsService.getNoteLookup(manager, 'NoteDuration', datacontext.enums.noteDurations, true);
             }
         }
@@ -1988,5 +1988,5 @@ define(['services/session', 'services/jsonResultsAdapter', 'models/base', 'confi
 
             return manager.executeQueryLocally(query);
         }
-
+		
     });

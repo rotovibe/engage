@@ -69,9 +69,8 @@
                                             <strong class="span3">Visit Type:</strong>
 											<div class="span9">
 												<span data-bind="text: name" ></span>
-												<span data-bind="visible: (name() && name().toLowerCase() === 'other')">
-													<span>&nbsp;</span>
-													<span data-bind="text: (' - ' + $parent.otherType())" ></span>
+												<span data-bind="visible: $parent.showOtherVisitType && $parent.otherType ">
+													<span class="pad-left" data-bind="text: ('- ' + $parent.otherType())" ></span>
 												</span>
 											</div>	
                                         </div>
@@ -95,9 +94,8 @@
                                             <strong class="span3">Location:</strong> 
 											<div class="span9">
 												<span data-bind="text: name" ></span>											
-												<span data-bind="visible: (name() && name().toLowerCase() === 'other')" >
-													<span>&nbsp;</span>
-													<span data-bind="text: (' - ' + $parent.otherLocation())" ></span>
+												<span data-bind="visible: $parent.showOtherLocation && $parent.otherLocation" >
+													<span class="pad-left" data-bind="text: ('- ' + $parent.otherLocation())" ></span>
 												</span>
 											</div>	
                                         </div>
@@ -105,9 +103,8 @@
                                             <strong class="span3">Disposition:</strong> 
 											<div class="span9">
 												<span data-bind="text: name" ></span>
-												<span data-bind="visible: (name() && name().toLowerCase() === 'other')" >
-													<span>&nbsp;</span>
-													<span data-bind="text: (' - ' + $parent.otherDisposition())" ></span>
+												<span data-bind="visible: $parent.showOtherDisposition && $parent.otherDisposition" >
+													<span class="pad-left" data-bind="text: ('- ' + $parent.otherDisposition())" ></span>
 												</span>
 											</div>
                                         </div>
