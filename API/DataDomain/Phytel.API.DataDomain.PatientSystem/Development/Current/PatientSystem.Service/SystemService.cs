@@ -3,17 +3,17 @@ using Phytel.API.DataDomain.PatientSystem.DTO;
 
 namespace Phytel.API.DataDomain.PatientSystem.Service
 {
-    public class SystemSource : ServiceBase
+    public class SystemService : ServiceBase
     {
-        public ISystemSourceDataManager Manager { get; set; }
+        public ISystemDataManager Manager { get; set; }
 
-        public GetSystemSourcesDataResponse Get(GetSystemSourcesDataRequest request)
+        public GetSystemsDataResponse Get(GetSystemsDataRequest request)
         {
-            GetSystemSourcesDataResponse response = new GetSystemSourcesDataResponse();
+            GetSystemsDataResponse response = new GetSystemsDataResponse();
             try
             {
                 RequireUserId(request);
-                response.SystemSourcesData = Manager.GetSystemSources(request);
+                response.SystemsData = Manager.GetSystems(request);
             }
             catch (Exception ex)
             {

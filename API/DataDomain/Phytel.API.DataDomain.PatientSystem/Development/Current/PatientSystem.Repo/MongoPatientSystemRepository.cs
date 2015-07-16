@@ -48,6 +48,8 @@ namespace Phytel.API.DataDomain.PatientSystem
                 {
                     if (string.IsNullOrEmpty(data.Value) || string.IsNullOrWhiteSpace(data.Value))
                         throw new ArgumentException("Patient System value is missing");
+                    if (data.StatusId == 0)
+                        throw new ArgumentException("Patient System status is missing");
                     using (PatientSystemMongoContext ctx = new PatientSystemMongoContext(ContractDBName))
                     {
                         MEPatientSystem mePS = new MEPatientSystem(this.UserId)
@@ -56,7 +58,8 @@ namespace Phytel.API.DataDomain.PatientSystem
                                 Value = Helper.TrimAndLimit(data.Value, 100),
                                 Status = (Status)data.StatusId,
                                 Primary = data.Primary,
-                                SystemSourceId = ObjectId.Parse(data.SystemSourceId),
+                                SystemId = ObjectId.Parse(data.SystemId),
+                                SystemSource = Helper.TrimAndLimit(data.SystemSource, 50),
                                 DeleteFlag = false
                             };
                         ctx.PatientSystems.Collection.Insert(mePS);
@@ -135,7 +138,12 @@ namespace Phytel.API.DataDomain.PatientSystem
                             Value = mePS.Value,
                             StatusId = (int)mePS.Status,
                             Primary = mePS.Primary,
-                            SystemSourceId = mePS.SystemSourceId.ToString()
+                            SystemId = mePS.SystemId.ToString(),
+                            SystemSource = mePS.SystemSource,
+                            CreatedById = mePS.RecordCreatedBy.ToString(),
+                            CreatedOn = mePS.RecordCreatedOn,
+                            UpdatedById = mePS.UpdatedBy == null ? null : mePS.UpdatedBy.ToString(),
+                            UpdatedOn = mePS.LastUpdatedOn
                         };
                     }
                 }
@@ -165,6 +173,8 @@ namespace Phytel.API.DataDomain.PatientSystem
                 {
                     if (string.IsNullOrEmpty(data.Value) || string.IsNullOrWhiteSpace(data.Value))
                         throw new ArgumentException("Patient System value is missing");
+                    if (data.StatusId == 0)
+                        throw new ArgumentException("Patient System status is missing");
                     using (PatientSystemMongoContext ctx = new PatientSystemMongoContext(ContractDBName))
                     {
                         var q = MB.Query<MEPatientSystem>.EQ(b => b.Id, ObjectId.Parse(data.Id));
@@ -174,9 +184,10 @@ namespace Phytel.API.DataDomain.PatientSystem
                         uv.Add(MB.Update.Set(MEPatientSystem.LastUpdatedOnProperty, System.DateTime.UtcNow));
                         if (!string.IsNullOrEmpty(data.PatientId)) uv.Add(MB.Update.Set(MEPatientSystem.PatientIdProperty, ObjectId.Parse(data.PatientId)));
                         uv.Add(MB.Update.Set(MEPatientSystem.ValueProperty, Helper.TrimAndLimit(data.Value, 100)));
+                        uv.Add(MB.Update.Set(MEPatientSystem.SystemSourceProperty, Helper.TrimAndLimit(data.SystemSource, 50)));
                         if (data.StatusId != 0) uv.Add(MB.Update.Set(MEPatientSystem.StatusProperty, data.StatusId));
                         uv.Add(MB.Update.Set(MEPatientSystem.PrimaryProperty, data.Primary));
-                        if (!string.IsNullOrEmpty(data.SystemSourceId)) uv.Add(MB.Update.Set(MEPatientSystem.SystemSourceIdProperty, ObjectId.Parse(data.SystemSourceId)));
+                        if (!string.IsNullOrEmpty(data.SystemId)) uv.Add(MB.Update.Set(MEPatientSystem.SystemIdProperty, ObjectId.Parse(data.SystemId)));
                         IMongoUpdate update = MB.Update.Combine(uv);
                         WriteConcernResult res = ctx.PatientSystems.Collection.Update(q, update);
                         if (res.Ok == false)
@@ -226,7 +237,12 @@ namespace Phytel.API.DataDomain.PatientSystem
                                 Value = mePS.Value,
                                 StatusId = (int)mePS.Status,
                                 Primary = mePS.Primary,
-                                SystemSourceId = mePS.SystemSourceId.ToString()
+                                SystemId = mePS.SystemId.ToString(),
+                                SystemSource = mePS.SystemSource,
+                                CreatedById = mePS.RecordCreatedBy.ToString(),
+                                CreatedOn = mePS.RecordCreatedOn,
+                                UpdatedById = mePS.UpdatedBy == null ? null : mePS.UpdatedBy.ToString(),
+                                UpdatedOn = mePS.LastUpdatedOn
                             });
                         }
                     }

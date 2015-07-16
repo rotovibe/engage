@@ -15,23 +15,23 @@ namespace Phytel.API.AppDomain.NG
         protected readonly string DDPatientSystemUrl = ConfigurationManager.AppSettings["DDPatientSystemUrl"];
         #endregion
 
-        public List<SystemSourceData> GetSystemSources(GetActiveSystemSourcesRequest request)
+        public List<SystemData> GetSystems(GetActiveSystemsRequest request)
         {
             try
             {
-                List<SystemSourceData> result = null;
+                List<SystemData> result = null;
                 IRestClient client = new JsonServiceClient();
-                //[Route("/{Context}/{Version}/{ContractNumber}/SystemSource", "GET")]
-                var url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/SystemSource",
+                //[Route("/{Context}/{Version}/{ContractNumber}/System", "GET")]
+                var url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/System",
                                     DDPatientSystemUrl,
                                     "NG",
                                     request.Version,
                                     request.ContractNumber), request.UserId);
 
-                GetSystemSourcesDataResponse dataDomainResponse = client.Get<GetSystemSourcesDataResponse>(url);
+                GetSystemsDataResponse dataDomainResponse = client.Get<GetSystemsDataResponse>(url);
                 if (dataDomainResponse != null)
                 {
-                    result = dataDomainResponse.SystemSourcesData;
+                    result = dataDomainResponse.SystemsData;
                 }
                 return result;
             }

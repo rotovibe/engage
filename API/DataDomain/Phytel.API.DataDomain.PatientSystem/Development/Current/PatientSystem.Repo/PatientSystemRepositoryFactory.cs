@@ -11,7 +11,7 @@ namespace Phytel.API.DataDomain.PatientSystem
     public enum RepositoryType
     {
         PatientSystem,
-        SystemSource
+        System
     }
     
     
@@ -41,9 +41,9 @@ namespace Phytel.API.DataDomain.PatientSystem
                             repo = new MongoPatientSystemRepository<PatientSystemMongoContext>(_context) { UserId = _userId, ContractDBName = _contract };
                             break;
                         }
-                    case RepositoryType.SystemSource:
+                    case RepositoryType.System:
                         {
-                            repo = new MongoSystemSourceRepository<PatientSystemMongoContext>(_context) { UserId = _userId, ContractDBName = _contract };
+                            repo = new MongoSystemRepository<PatientSystemMongoContext>(_context) { UserId = _userId, ContractDBName = _contract };
                             break;
                         }
                 }

@@ -78,8 +78,8 @@
     <Compile Include="IPatientSystemRepositoryFactory.cs" />
     <Compile Include="IUOWMongo.cs" />
     <Compile Include="MongoDB\DTO\MEPatientSystem.cs" />
-    <Compile Include="MongoDB\DTO\MESystemSource.cs" />
-    <Compile Include="MongoSystemSystemRepository.cs" />
+    <Compile Include="MongoDB\DTO\MESystem.cs" />
+    <Compile Include="MongoSystemRepository.cs" />
     <Compile Include="MongoPatientSystemRepository.cs" />
     <Compile Include="PatientSystemMongoContext.cs" />
     <Compile Include="PatientSystemRepositoryFactory.cs" />

@@ -34,7 +34,7 @@ namespace Phytel.API.DataDomain.PatientSystem.Test
             };
             //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/PatientSystems", "GET")]
 
-            GetSystemSourcesDataResponse response = client.Get<GetSystemSourcesDataResponse>(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/PatientSystems?UserId={5}", url, context, version, contractNumber, request.PatientId, request.UserId));
+            GetSystemsDataResponse response = client.Get<GetSystemsDataResponse>(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/PatientSystems?UserId={5}", url, context, version, contractNumber, request.PatientId, request.UserId));
             Assert.IsNotNull(response);
         }
 
@@ -61,8 +61,8 @@ namespace Phytel.API.DataDomain.PatientSystem.Test
         public void InsertPatientSystems_Test()
         {
             List<PatientSystemData> list = new List<PatientSystemData>();
-            list.Add(new PatientSystemData { PatientId = "546d0d0684ac0508e43299d2", Value = " 12345 ", StatusId = 1, Primary = false, SystemSourceId = "559e8c70d4332320bc076f4e" });
-            list.Add(new PatientSystemData { PatientId = "546d0d0684ac0508e43299d2", Value = " ABCFG ", StatusId = 1, Primary = true, SystemSourceId = "559e8c70d4332320bc076f4f" });
+            list.Add(new PatientSystemData { PatientId = "546d0d0684ac0508e43299d2", Value = " 12345 ", StatusId = 1, Primary = false, SystemId = "559e8c70d4332320bc076f4e" });
+            list.Add(new PatientSystemData { PatientId = "546d0d0684ac0508e43299d2", Value = " ABCFG ", StatusId = 1, Primary = true, SystemId = "559e8c70d4332320bc076f4f" });
             
             InsertPatientSystemsDataRequest request = new InsertPatientSystemsDataRequest
             {
@@ -82,8 +82,8 @@ namespace Phytel.API.DataDomain.PatientSystem.Test
         public void UpdatePatientSystems_Test()
         {
             List<PatientSystemData> list = new List<PatientSystemData>();
-            list.Add(new PatientSystemData { Id = "55a014bbd4332720a4bf5093", PatientId = "546d0d0684ac0508e43299d2", Value = " 12345UP ", StatusId = 2, Primary = false, SystemSourceId = "559e8c70d4332320bc076f4d" });
-            list.Add(new PatientSystemData { Id = "55a014bcd4332720a4bf509a", PatientId = "546d0d0684ac0508e43299d2", Value = " ABCFGUP ", StatusId = 2, Primary = false, SystemSourceId = "559e8c70d4332320bc076f4d" });
+            list.Add(new PatientSystemData { Id = "55a014bbd4332720a4bf5093", PatientId = "546d0d0684ac0508e43299d2", Value = " 12345UP ", StatusId = 2, Primary = false, SystemId = "559e8c70d4332320bc076f4d" });
+            list.Add(new PatientSystemData { Id = "55a014bcd4332720a4bf509a", PatientId = "546d0d0684ac0508e43299d2", Value = " ABCFGUP ", StatusId = 2, Primary = false, SystemId = "559e8c70d4332320bc076f4d" });
 
             UpdatePatientSystemsDataRequest request = new UpdatePatientSystemsDataRequest
             {

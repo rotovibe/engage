@@ -11,7 +11,7 @@ using ServiceStack.ServiceClient.Web;
 namespace Phytel.API.DataDomain.PatientSystem.Test
 {
     [TestClass]
-    public class SystemSource_Test
+    public class System_Test
     {
         string context = "NG";
         string contractNumber = "InHealth001";
@@ -23,15 +23,15 @@ namespace Phytel.API.DataDomain.PatientSystem.Test
         [TestMethod]
         public void GetSystemSources_Test()
         {
-            GetSystemSourcesDataRequest request = new GetSystemSourcesDataRequest
+            GetSystemsDataRequest request = new GetSystemsDataRequest
             {
                 Context = context,
                 ContractNumber = contractNumber,
                 UserId = userId,
                 Version = version
             };
-            //[Route("/{Context}/{Version}/{ContractNumber}/SystemSource", "GET")]
-            GetSystemSourcesDataResponse response = client.Get<GetSystemSourcesDataResponse>(string.Format("{0}/{1}/{2}/{3}/SystemSource?UserId={4}", url, context, version, contractNumber, request.UserId));
+            //[Route("/{Context}/{Version}/{ContractNumber}/System", "GET")]
+            GetSystemsDataResponse response = client.Get<GetSystemsDataResponse>(string.Format("{0}/{1}/{2}/{3}/System?UserId={4}", url, context, version, contractNumber, request.UserId));
             Assert.IsNotNull(response);
         }
     }

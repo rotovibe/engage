@@ -161,7 +161,7 @@
     <Compile Include="PatientGoalDataManagerTests.cs" />
     <Compile Include="PatientObservationTest.cs" />
     <Compile Include="PatientSystem\PatientSystem_Test.cs" />
-    <Compile Include="PatientSystem\SystemSource_Test.cs" />
+    <Compile Include="PatientSystem\System_Test.cs" />
     <Compile Include="Patient\Contact_Test.cs" />
     <Compile Include="PlanCOR\ActionPlanProcessorTests.cs" />
     <Compile Include="PlanCOR\ModulePlanProcessor_Tests.cs" />

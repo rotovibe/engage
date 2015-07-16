@@ -103,9 +103,9 @@
     <Compile Include="PatientSystem\GetPatientSystemDataResponse.cs" />
     <Compile Include="PatientSystem\PatientSystemData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SystemSource\GetSystemSourcesDataRequest.cs" />
-    <Compile Include="SystemSource\GetSystemSourcesDataResponse.cs" />
-    <Compile Include="SystemSource\SystemSourceData.cs" />
+    <Compile Include="System\GetSystemsDataRequest.cs" />
+    <Compile Include="System\GetSystemsDataResponse.cs" />
+    <Compile Include="System\SystemData.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

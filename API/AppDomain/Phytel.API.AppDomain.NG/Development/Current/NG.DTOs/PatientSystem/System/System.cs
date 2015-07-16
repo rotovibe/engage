@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Phytel.API.AppDomain.NG.DTO
 {
-    public class SystemSource
+    public class System
     {
         public string Id { get; set; }
         public string Name { get; set; }

@@ -4,9 +4,9 @@ using Phytel.API.Interface;
 
 namespace Phytel.API.AppDomain.NG.DTO
 {
-    public class GetActiveSystemSourcesResponse : IDomainResponse
+    public class GetActiveSystemsResponse : IDomainResponse
     {
-        public List<SystemSource> SystemSources { get; set; }
+        public List<System> Systems { get; set; }
         public ResponseStatus Status { get; set; }
         public double Version { get; set; }
     }

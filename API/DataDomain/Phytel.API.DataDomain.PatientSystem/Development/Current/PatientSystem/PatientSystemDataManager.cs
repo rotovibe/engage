@@ -49,10 +49,11 @@ namespace Phytel.API.DataDomain.PatientSystem
                     var repo = Factory.GetRepository(RepositoryType.PatientSystem);
                     if (request.IsEngageSystem)
                     {
-                        request.PatientSystemsData.SystemSourceId = Constants.EngageSystemId;
+                        request.PatientSystemsData.SystemId = Constants.EngageSystemId;
                         request.PatientSystemsData.Value = EngageId.New();
                         request.PatientSystemsData.Primary = isSystemPrimary(Constants.EngageSystemId);
                         request.PatientSystemsData.StatusId = (int)Status.Active;
+                        request.PatientSystemsData.SystemSource = Constants.SystemSource;
                     }
                     string id = (string)repo.Insert(request);
                     if (!string.IsNullOrEmpty(id))
@@ -68,8 +69,8 @@ namespace Phytel.API.DataDomain.PatientSystem
         private bool isSystemPrimary(string id)
         {
             bool result = false;
-            var repo = Factory.GetRepository(RepositoryType.SystemSource);
-            SystemSourceData data = repo.FindByID(id) as SystemSourceData;
+            var repo = Factory.GetRepository(RepositoryType.System);
+            SystemData data = repo.FindByID(id) as SystemData;
             if (data != null)
                 result = data.Primary;
             return result;
@@ -88,7 +89,7 @@ namespace Phytel.API.DataDomain.PatientSystem
                         {
                             // Do not allow inserting of Engage System. 
                             // Engage System is added automatically after a patient is created or imported which is achieved by the "InsertPatientSystem" method. 
-                            if (!string.Equals(Constants.EngageSystemId, p.SystemSourceId, StringComparison.CurrentCultureIgnoreCase))
+                            if (!string.Equals(Constants.EngageSystemId, p.SystemId, StringComparison.CurrentCultureIgnoreCase))
                             {
                                 InsertPatientSystemDataRequest insertReq = new InsertPatientSystemDataRequest {
                                      PatientId = p.PatientId,
@@ -125,7 +126,7 @@ namespace Phytel.API.DataDomain.PatientSystem
                     request.PatientSystemsData.ForEach(p =>
                         {
                             // Do not allow update of Engage System.
-                            if(!string.Equals(Constants.EngageSystemId, p.SystemSourceId, StringComparison.CurrentCultureIgnoreCase))
+                            if(!string.Equals(Constants.EngageSystemId, p.SystemId, StringComparison.CurrentCultureIgnoreCase))
                             {
                                 UpdatePatientSystemDataRequest updateReq = new UpdatePatientSystemDataRequest
                                 {

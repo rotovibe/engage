@@ -10,12 +10,12 @@ namespace Phytel.API.AppDomain.NG.Allergy
     {
         public IPatientSystemEndpointUtil EndpointUtil { get; set; }
 
-        public List<SystemSource> GetActiveSystemSources(GetActiveSystemSourcesRequest request)
+        public List<DTO.System> GetActiveSystems(GetActiveSystemsRequest request)
         {
             try
             {
-                List<SystemSource> result = new List<SystemSource>();
-                List<SystemSourceData> ssData = EndpointUtil.GetSystemSources(request);
+                List<DTO.System> result = new List<DTO.System>();
+                List<SystemData> ssData = EndpointUtil.GetSystems(request);
                 if (ssData != null && ssData.Count > 0)
                 {
                     ssData.ForEach(s => 
@@ -23,7 +23,7 @@ namespace Phytel.API.AppDomain.NG.Allergy
                         // Get only active system sources.
                         if (s.StatusId == (int)Status.Active)
                         {
-                            result.Add(Mapper.Map<SystemSource>(s));
+                            result.Add(Mapper.Map<DTO.System>(s));
                         }
                     });
                 }
@@ -37,13 +37,13 @@ namespace Phytel.API.AppDomain.NG.Allergy
             List<PatientSystem> list = null;
             try
             {
-                GetActiveSystemSourcesRequest ssRequest = new GetActiveSystemSourcesRequest { ContractNumber = request.ContractNumber, UserId = request.UserId, Version = request.Version };
-                List<SystemSourceData> ssData = EndpointUtil.GetSystemSources(ssRequest);
+                GetActiveSystemsRequest ssRequest = new GetActiveSystemsRequest { ContractNumber = request.ContractNumber, UserId = request.UserId, Version = request.Version };
+                List<SystemData> ssData = EndpointUtil.GetSystems(ssRequest);
                 if (ssData != null && ssData.Count > 0)
                 {
-                    // Get only active system sources.
-                    List<SystemSourceData> activeSystemSources = ssData.FindAll(s => s.StatusId == (int)Status.Active);
-                    if (activeSystemSources.Count > 0)
+                    // Get only active systems.
+                    List<SystemData> activeSystems = ssData.FindAll(s => s.StatusId == (int)Status.Active);
+                    if (activeSystems.Count > 0)
                     {
                         List<PatientSystemData> dataList = EndpointUtil.GetPatientSystems(request);
                         if (dataList != null && dataList.Count > 0)
@@ -51,7 +51,7 @@ namespace Phytel.API.AppDomain.NG.Allergy
                             list = new List<PatientSystem>();
                             dataList.ForEach(a =>
                                 {
-                                    if (activeSystemSources.Exists(x => x.Id == a.SystemSourceId))
+                                    if (activeSystems.Exists(x => x.Id == a.SystemId))
                                     {
                                         list.Add(Mapper.Map<PatientSystem>(a));
                                     }

@@ -7,8 +7,8 @@ using Phytel.API.DataDomain.PatientSystem.DTO;
 
 namespace Phytel.API.DataDomain.PatientSystem
 {
-    public interface ISystemSourceDataManager
+    public interface ISystemDataManager
     {
-        List<SystemSourceData> GetSystemSources(GetSystemSourcesDataRequest request);
+        List<SystemData> GetSystems(GetSystemsDataRequest request);
     }
 }

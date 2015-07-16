@@ -10,6 +10,7 @@ using Phytel.API.Interface;
 using System.Linq;
 using ServiceStack.Service;
 using Phytel.API.Common;
+using Phytel.API.DataDomain.PatientSystem.DTO;
 
 namespace Phytel.API.DataDomain.Patient
 {
@@ -395,5 +396,11 @@ namespace Phytel.API.DataDomain.Patient
             catch (Exception ex) { throw ex; }
         }
         #endregion
+
+        //private InsertPatientSystemDataResponse insertPatientSystem(InsertPatientSystemDataRequest request)
+        //{ 
+            
+        
+        //}
     }
 }   

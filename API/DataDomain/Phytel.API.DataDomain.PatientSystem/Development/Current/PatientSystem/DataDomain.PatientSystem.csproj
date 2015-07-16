@@ -91,10 +91,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ISystemSourceDataManager.cs" />
+    <Compile Include="ISystemDataManager.cs" />
     <Compile Include="IPatientSystemDataManager.cs" />
     <Compile Include="PatientSystemContainer.cs" />
-    <Compile Include="SystemSourceDataManager.cs" />
+    <Compile Include="SystemDataManager.cs" />
     <Compile Include="PatientSystemDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="EngageId.cs" />

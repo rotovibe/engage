@@ -8,16 +8,16 @@ namespace Phytel.API.DataDomain.PatientSystem
     public class PatientSystemMongoContext : MongoContext
     {
         private static string COLL_PatientSystemS = "PatientSystem";
-        private static string COLL_SystemSource = "SystemSource";
+        private static string COLL_System = "System";
 
         public PatientSystemMongoContext(string contractDBName)
             : base(ConfigurationManager.AppSettings.Get("PhytelServicesConnName"), contractDBName, true)
         {
             PatientSystems = new MongoSet<MEPatientSystem, ObjectId>(this, COLL_PatientSystemS);
-            SystemSources = new MongoSet<MESystemSource, ObjectId>(this, COLL_SystemSource);
+            Systems = new MongoSet<MESystem, ObjectId>(this, COLL_System);
         }
 
         public MongoSet<MEPatientSystem, ObjectId> PatientSystems { get; private set; }
-        public MongoSet<MESystemSource, ObjectId> SystemSources { get; private set; }
+        public MongoSet<MESystem, ObjectId> Systems { get; private set; }
     }
 }

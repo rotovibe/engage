@@ -25,12 +25,12 @@ namespace Phytel.API.AppDomain.NG.Service
         private const string unknownBrowserType = "Unknown browser";
         private const string unknownUserHostAddress = "Unknown IP";
 
-        #region SystemSource
+        #region System
         
         #region Get
-        public GetActiveSystemSourcesResponse Get(GetActiveSystemSourcesRequest request)
+        public GetActiveSystemsResponse Get(GetActiveSystemsRequest request)
         {
-            GetActiveSystemSourcesResponse response = new GetActiveSystemSourcesResponse();
+            GetActiveSystemsResponse response = new GetActiveSystemsResponse();
             ValidateTokenResponse result = null;
             try
             {
@@ -42,7 +42,7 @@ namespace Phytel.API.AppDomain.NG.Service
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
-                    response.SystemSources = PatientSystemManager.GetActiveSystemSources(request);
+                    response.Systems = PatientSystemManager.GetActiveSystems(request);
                 }
                 else
                     throw new UnauthorizedAccessException();

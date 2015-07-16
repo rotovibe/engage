@@ -16,8 +16,8 @@ namespace Phytel.API.DataDomain.PatientSystem
                 new PatientNoteRepositoryFactory(HostContext.Instance.Items["Contract"].ToString(),
                     HostContext.Instance.Items["UserId"].ToString())).ReusedWithin(ReuseScope.Request);
 
-            container.Register<ISystemSourceDataManager>(c =>
-                new SystemSourceDataManager(c.Resolve<IPatientSystemRepositoryFactory>())).ReusedWithin(ReuseScope.Request);
+            container.Register<ISystemDataManager>(c =>
+                new SystemDataManager(c.Resolve<IPatientSystemRepositoryFactory>())).ReusedWithin(ReuseScope.Request);
 
             container.Register<IPatientSystemDataManager>(c =>
                 new PatientSystemDataManager(c.Resolve<IPatientSystemRepositoryFactory>())).ReusedWithin(ReuseScope.Request);

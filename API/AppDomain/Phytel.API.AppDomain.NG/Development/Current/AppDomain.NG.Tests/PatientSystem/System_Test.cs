@@ -11,7 +11,7 @@ using ServiceStack.ServiceClient.Web;
 namespace Phytel.API.AppDomain.NG.Test.PatientSystem
 {
     //[TestClass]
-    public class SystemSource_Test
+    public class System_Test
     {
         string context = "NG";
         string contractNumber = "InHealth001";
@@ -22,9 +22,9 @@ namespace Phytel.API.AppDomain.NG.Test.PatientSystem
         string token = "559d757a84ac072a88fb1245";
 
         [TestMethod]
-        public void GetActiveSystemSources_Test()
+        public void GetActiveSystems_Test()
         {
-            GetActiveSystemSourcesRequest request = new GetActiveSystemSourcesRequest
+            GetActiveSystemsRequest request = new GetActiveSystemsRequest
             {
                 ContractNumber = contractNumber,
                 UserId = userId,
@@ -35,8 +35,8 @@ namespace Phytel.API.AppDomain.NG.Test.PatientSystem
             JsonServiceClient.HttpWebRequestFilter = x =>
                 x.Headers.Add(string.Format("{0}: {1}", "Token", token));
 
-            //[Route("/{Version}/{ContractNumber}/SystemSource", "GET")]
-            GetActiveSystemSourcesResponse response = client.Get<GetActiveSystemSourcesResponse>(string.Format("{0}/{1}/{2}/SystemSource", url, version, contractNumber));
+            //[Route("/{Version}/{ContractNumber}/System", "GET")]
+            GetActiveSystemsResponse response = client.Get<GetActiveSystemsResponse>(string.Format("{0}/{1}/{2}/System", url, version, contractNumber));
 
             Assert.IsNotNull(response);
         }

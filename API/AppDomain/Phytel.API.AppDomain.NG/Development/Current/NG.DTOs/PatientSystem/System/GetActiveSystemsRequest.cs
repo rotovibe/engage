@@ -4,8 +4,8 @@ using System.Collections.Generic;
 
 namespace Phytel.API.AppDomain.NG.DTO
 {
-    [Route("/{Version}/{ContractNumber}/SystemSource", "GET")]
-    public class GetActiveSystemSourcesRequest : IAppDomainRequest
+    [Route("/{Version}/{ContractNumber}/System", "GET")]
+    public class GetActiveSystemsRequest : IAppDomainRequest
     {
         [ApiMember(Name = "ContractNumber", Description = "Contract parameter will be defined in the route.", ParameterType = "path", DataType = "string", IsRequired = true)]
         public string ContractNumber { get; set; }
@@ -19,6 +19,6 @@ namespace Phytel.API.AppDomain.NG.DTO
         [ApiMember(Name = "UserID", Description = "ID of the user making the request (Internally used ONLY)", ParameterType = "property", DataType = "string", IsRequired = false)]
         public string UserId { get; set; }
 
-        public GetActiveSystemSourcesRequest() { }
+        public GetActiveSystemsRequest() { }
     }
 }

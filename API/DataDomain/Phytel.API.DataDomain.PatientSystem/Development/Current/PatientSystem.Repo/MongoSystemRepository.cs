@@ -10,7 +10,7 @@ using Phytel.API.DataDomain.PatientSystem.Repo;
 
 namespace Phytel.API.DataDomain.PatientSystem
 {
-    public class MongoSystemSourceRepository<TContext> : IMongoPatientSystemRepository where TContext : PatientSystemMongoContext
+    public class MongoSystemRepository<TContext> : IMongoPatientSystemRepository where TContext : PatientSystemMongoContext
     {
         private int _expireDays = Convert.ToInt32(ConfigurationManager.AppSettings["ExpireDays"]);
 
@@ -18,17 +18,17 @@ namespace Phytel.API.DataDomain.PatientSystem
         public string ContractDBName { get; set; }
         public string UserId { get; set; }
         
-        public MongoSystemSourceRepository(IUOWMongo<TContext> uow)
+        public MongoSystemRepository(IUOWMongo<TContext> uow)
         {
             Context = uow.MongoContext;
         }
 
-        public MongoSystemSourceRepository(TContext context)
+        public MongoSystemRepository(TContext context)
         {
             Context = context;
         }
 
-        public MongoSystemSourceRepository(string dbName)
+        public MongoSystemRepository(string dbName)
         {
             ContractDBName = dbName;
         }
@@ -60,7 +60,7 @@ namespace Phytel.API.DataDomain.PatientSystem
 
         public object FindByID(string entityID)
         {
-            SystemSourceData data = null;
+            SystemData data = null;
             if (!string.IsNullOrEmpty(entityID))
             {
                 try
@@ -68,13 +68,13 @@ namespace Phytel.API.DataDomain.PatientSystem
                     using (PatientSystemMongoContext ctx = new PatientSystemMongoContext(ContractDBName))
                     {
                         List<IMongoQuery> queries = new List<IMongoQuery>();
-                        queries.Add(Query.EQ(MESystemSource.IdProperty, ObjectId.Parse(entityID)));
-                        queries.Add(Query.EQ(MESystemSource.DeleteFlagProperty, false));
+                        queries.Add(Query.EQ(MESystem.IdProperty, ObjectId.Parse(entityID)));
+                        queries.Add(Query.EQ(MESystem.DeleteFlagProperty, false));
                         IMongoQuery mQuery = Query.And(queries);
-                        MESystemSource s = ctx.SystemSources.Collection.Find(mQuery).FirstOrDefault();
+                        MESystem s = ctx.Systems.Collection.Find(mQuery).FirstOrDefault();
                         if (s != null)
                         {
-                            data = new SystemSourceData
+                            data = new SystemData
                             {
                                 Id = s.Id.ToString(),
                                 Field = s.Field,
@@ -119,22 +119,22 @@ namespace Phytel.API.DataDomain.PatientSystem
 
         public IEnumerable<object> Find(object entity)
         {
-            GetSystemSourcesDataRequest request = (GetSystemSourcesDataRequest)entity;
-            List<SystemSourceData> dataList = null;
+            GetSystemsDataRequest request = (GetSystemsDataRequest)entity;
+            List<SystemData> dataList = null;
             try
             {
                 using (PatientSystemMongoContext ctx = new PatientSystemMongoContext(ContractDBName))
                 {
                     List<IMongoQuery> queries = new List<IMongoQuery>();
-                    queries.Add(Query.EQ(MESystemSource.DeleteFlagProperty, false));
+                    queries.Add(Query.EQ(MESystem.DeleteFlagProperty, false));
                     IMongoQuery mQuery = Query.And(queries);
-                    List<MESystemSource> meSS = ctx.SystemSources.Collection.Find(mQuery).ToList();
+                    List<MESystem> meSS = ctx.Systems.Collection.Find(mQuery).ToList();
                     if (meSS != null && meSS.Count > 0)
                     {
-                        dataList = new List<SystemSourceData>();
+                        dataList = new List<SystemData>();
                         meSS.ForEach(s =>
                         {
-                            SystemSourceData ssData = new SystemSourceData
+                            SystemData ssData = new SystemData
                             {
                                 Id = s.Id.ToString(),
                                 Field = s.Field,

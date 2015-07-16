@@ -22,10 +22,11 @@ namespace Phytel.API.DataDomain.PatientSystem.DTO
 
         public const string IdProperty = "_id";
         public const string PatientIdProperty = "pid";
-        public const string SystemSourceIdProperty = "ssid";
+        public const string SystemIdProperty = "sid";
         public const string ValueProperty = "val";
         public const string StatusProperty = "sts";
         public const string PrimaryProperty = "pri";
+        public const string SystemSourceProperty = "syssrc";
 
         public const string VersionProperty = "v";
         public const string UpdatedByProperty = "uby";
@@ -42,13 +43,17 @@ namespace Phytel.API.DataDomain.PatientSystem.DTO
         [BsonIgnoreIfNull(false)]
         public ObjectId PatientId { get; set; }
 
-        [BsonElement(SystemSourceIdProperty)]
+        [BsonElement(SystemIdProperty)]
         [BsonIgnoreIfNull(false)]
-        public ObjectId SystemSourceId { get; set; }
+        public ObjectId SystemId { get; set; }
 
         [BsonElement(ValueProperty)]
         [BsonIgnoreIfNull(false)]
         public string Value { get; set; }
+
+        [BsonElement(SystemSourceProperty)]
+        [BsonIgnoreIfNull(false)]
+        public string SystemSource { get; set; }
 
         [BsonElement(StatusProperty)]
         [BsonIgnoreIfNull(false)]

@@ -4,9 +4,9 @@ using System.Collections.Generic;
 
 namespace Phytel.API.DataDomain.PatientSystem.DTO
 {
-    public class GetSystemSourcesDataResponse : IDomainResponse
+    public class GetSystemsDataResponse : IDomainResponse
    {
-        public List<SystemSourceData> SystemSourcesData { get; set; }
+        public List<SystemData> SystemsData { get; set; }
         public double Version { get; set; }
         public ResponseStatus Status { get; set; }
    }

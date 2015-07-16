@@ -9,9 +9,9 @@ namespace Phytel.API.DataDomain.PatientSystem.DTO
 {
     [BsonIgnoreExtraElements(false)]
     [MongoIndex(Keys = new string[] { TTLDateProperty }, TimeToLive = 0)]
-    public class MESystemSource : IMongoEntity<ObjectId>, IMEEntity
+    public class MESystem : IMongoEntity<ObjectId>, IMEEntity
     {
-        public MESystemSource(string userId)
+        public MESystem(string userId)
         {
             Id = ObjectId.GenerateNewId();
             Version = 1.0;

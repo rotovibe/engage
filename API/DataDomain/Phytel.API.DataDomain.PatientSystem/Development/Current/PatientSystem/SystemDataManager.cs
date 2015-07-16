@@ -6,21 +6,21 @@ using System.Collections.Generic;
 
 namespace Phytel.API.DataDomain.PatientSystem
 {
-    public class SystemSourceDataManager : ISystemSourceDataManager
+    public class SystemDataManager : ISystemDataManager
     {
         IPatientSystemRepositoryFactory Factory { get; set; }
 
-        public SystemSourceDataManager(IPatientSystemRepositoryFactory repo)
+        public SystemDataManager(IPatientSystemRepositoryFactory repo)
         {
             Factory = repo;
         }
 
-        public List<SystemSourceData> GetSystemSources(GetSystemSourcesDataRequest request)
+        public List<SystemData> GetSystems(GetSystemsDataRequest request)
         {
             try
             {
-                var repository = Factory.GetRepository(RepositoryType.SystemSource);
-                List<SystemSourceData> list = repository.Find(request) as List<SystemSourceData>;
+                var repository = Factory.GetRepository(RepositoryType.System);
+                List<SystemData> list = repository.Find(request) as List<SystemData>;
                 return list;
             }
             catch (Exception ex)

@@ -163,9 +163,9 @@
     <Compile Include="PatientSystem\PatientSystem\UpdatePatientSystemsRequest.cs" />
     <Compile Include="PatientSystem\PatientSystem\DeletePatientSystemsResponse.cs" />
     <Compile Include="PatientSystem\PatientSystem\UpdatePatientSystemsResponse.cs" />
-    <Compile Include="PatientSystem\SystemSource\GetActiveSystemSourcesRequest.cs" />
-    <Compile Include="PatientSystem\SystemSource\GetActiveSystemSourcesResponse.cs" />
-    <Compile Include="PatientSystem\SystemSource\SystemSource.cs" />
+    <Compile Include="PatientSystem\System\GetActiveSystemsRequest.cs" />
+    <Compile Include="PatientSystem\System\GetActiveSystemsResponse.cs" />
+    <Compile Include="PatientSystem\System\System.cs" />
     <Compile Include="Utilization\GetPatientUtilizationsRequest.cs" />
     <Compile Include="Utilization\GetPatientUtilizationsResponse.cs" />
     <Compile Include="Utilization\GetPatientUtilizationRequest.cs" />

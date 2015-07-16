@@ -10,8 +10,8 @@ namespace Phytel.API.AppDomain.NG.Service.Mappers
         {
             Mapper.CreateMap<PatientSystemData, PatientSystem>();
             Mapper.CreateMap<PatientSystem, PatientSystemData>();
-            Mapper.CreateMap<SystemSourceData, SystemSource>();
-            Mapper.CreateMap<SystemSource, SystemSourceData>();
+            Mapper.CreateMap<SystemData, DTO.System>();
+            Mapper.CreateMap<DTO.System, SystemData>();
         }
     }
 }
