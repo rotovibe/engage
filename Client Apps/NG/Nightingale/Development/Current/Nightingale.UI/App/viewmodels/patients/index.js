@@ -347,8 +347,23 @@
                 }
                 if (selectedPatient().notes.peek()) {
                     ko.utils.arrayForEach(selectedPatient().notes.peek(), function (note) {
-                        if (note.entityAspect.entityState.isAddedModifiedOrDeleted() && note.text()) {
-                            notesHaveChanges = true;
+                        if (note.entityAspect.entityState.isAddedModifiedOrDeleted()) {
+							switch( note.type().name().toLowerCase() ){
+								case 'utilization':{
+									var defaultVisitType = ko.utils.arrayFirst( datacontext.enums.visitTypes(), function (visitType) {
+										return visitType.isDefault();
+									});
+									if( note.visitType() && !defaultVisitType ){
+										notesHaveChanges = true;
+									}
+									break;
+								}
+								default:{
+									if( note.text() ){
+										notesHaveChanges = true;
+									}
+								}
+							}                            
                         }
                     });
                 }

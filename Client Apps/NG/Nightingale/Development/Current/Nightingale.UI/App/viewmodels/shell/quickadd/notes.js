@@ -86,7 +86,7 @@
 			self.defaultDisposition = ko.utils.arrayFirst(self.dispositions(), function (disposition) {
                 return disposition.isDefault();
             });
-			self.defaultUtilizationLocations = ko.utils.arrayFirst(self.utilizationLocations(), function (location) {
+			self.defaultUtilizationLocation = ko.utils.arrayFirst(self.utilizationLocations(), function (location) {
                 return location.isDefault();
             });
 			
@@ -120,7 +120,13 @@
                 return type.name().toLowerCase() === 'general';
             });
             // Set the newNote obs to a new note entity
-            self.newNote(datacontext.createEntity('Note', { id: self.thisNoteId(), patientId: self.selectedPatient().id(), typeId: generalNoteType.id() }));
+            self.newNote(datacontext.createEntity('Note', 
+				{ 
+					id: self.thisNoteId(), 
+					patientId: self.selectedPatient().id(), 
+					typeId: generalNoteType.id(),
+					systemSource: "Engage"	
+				}));
         };
 		ctor.prototype.createNewUtilization = function () {
             var self = this;
@@ -131,9 +137,13 @@
             self.newUtilization(datacontext.createEntity('Note', 
 					{ 	id: self.thisUtilizationId(), 
 						patientId: self.selectedPatient().id(), 										
-						pSystem: "Engage",
 						admitted: false,
-						typeId: utilizationNoteType.id()
+						typeId: utilizationNoteType.id(),
+						visitType: self.defaultVisitType,
+						utilizationSource: self.defaultUtilizationSource,
+						disposition: self.defaultDisposition,
+						location: self.defaultUtilizationLocation,
+						systemSource: "Engage"
 					}));								
         };
         ctor.prototype.createNewTouchPoint = function () {
@@ -142,7 +152,20 @@
             var touchpointNoteType = ko.utils.arrayFirst(self.noteTypes(), function (type) {
                 return type.name().toLowerCase() === 'touchpoint';
             });
-            self.newTouchPoint(datacontext.createEntity('Note', { id: self.thisTouchPointId(), patientId: self.selectedPatient().id(), contactedOn: new moment().format(), outcome: self.defaultOutcome, method: self.defaultMethod, source: self.defaultSource, duration: self.defaultDuration, who: self.defaultWho, typeId: touchpointNoteType.id(), validatedIdentity: false }));
+            self.newTouchPoint(datacontext.createEntity('Note', 
+				{ 
+					id: self.thisTouchPointId(), 
+					patientId: self.selectedPatient().id(), 
+					contactedOn: new moment().format(), 
+					outcome: self.defaultOutcome, 
+					method: self.defaultMethod, 
+					source: self.defaultSource, 
+					duration: self.defaultDuration, 
+					who: self.defaultWho, 
+					typeId: touchpointNoteType.id(), 
+					validatedIdentity: false,
+					systemSource: "Engage"
+				}));
             // If new touch points' date changes
             self.newTouchPointToken = self.newTouchPoint().contactedOn.subscribe(function (newValue) {
                 // If there is no new value,
@@ -322,6 +345,7 @@
                 if (newValue) {
                     self.cancel();
                     self.cancelTouchPoint();
+					self.cancelUtilization();
                 } else {
                 }
             });

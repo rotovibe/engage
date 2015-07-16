@@ -261,7 +261,7 @@ define(['services/session'],
 		        dataProperties: {
 		            id: { dataType: "String", isPartOfKey: true },
 		            name: { dataType: "String" },
-		            isDefault: { dataType: "String" }		            
+		            isDefault: { dataType: "Boolean" }		            
 		        }
 		    });
 			//utilization note:	UtilizationSource	
@@ -271,7 +271,7 @@ define(['services/session'],
 		        dataProperties: {
 		            id: { dataType: "String", isPartOfKey: true },
 		            name: { dataType: "String" },
-		            isDefault: { dataType: "String" }		            
+		            isDefault: { dataType: "Boolean" }		            
 		        }
 		    });
 			//utilization note:	Disposition	
@@ -281,7 +281,7 @@ define(['services/session'],
 		        dataProperties: {
 		            id: { dataType: "String", isPartOfKey: true },
 		            name: { dataType: "String" },
-		            isDefault: { dataType: "String" }	            
+		            isDefault: { dataType: "Boolean" }	            
 		        }
 		    });
 			//utilization note: UtilizationLocation	
@@ -291,7 +291,7 @@ define(['services/session'],
 		        dataProperties: {
 		            id: { dataType: "String", isPartOfKey: true },
 		            name: { dataType: "String" },
-		            isDefault: { dataType: "String" }		            
+		            isDefault: { dataType: "Boolean" }		            
 		        }
 		    });		
 
