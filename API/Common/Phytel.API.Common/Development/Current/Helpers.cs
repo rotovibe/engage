@@ -144,14 +144,13 @@ namespace Phytel.API.Common
 
         public string TrimAndLimit(string value, int limit)
         {
-            var result = value;
             if (!string.IsNullOrEmpty(value))
             {
                 value = value.Trim();
                 if(value.Length > limit)
-                    result = value.Substring(0, limit);
+                    value = value.Substring(0, limit);
             }
-            return result;
+            return value;
         }
 
     }
