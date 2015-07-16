@@ -44,6 +44,22 @@ namespace Phytel.API.DataDomain.PatientSystem.Service
                 RaiseException(response, ex);
             }
             return response;
+        }
+
+        public GetAllPatientSystemDataResponse Get(GetAllPatientSystemDataRequest request)
+        {
+            var response = new GetAllPatientSystemDataResponse();
+            try
+            {
+                RequireUserId(request);
+                response.PatientSystemsData = Manager.GetAllPatientSystems();
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                RaiseException(response, ex);
+            }
+            return response;
         } 
         #endregion
 

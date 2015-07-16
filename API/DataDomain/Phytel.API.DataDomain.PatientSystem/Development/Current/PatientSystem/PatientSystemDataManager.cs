@@ -1,7 +1,9 @@
 using Phytel.API.DataDomain.PatientSystem.DTO;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
+using ServiceStack.Common.Extensions;
 
 namespace Phytel.API.DataDomain.PatientSystem
 {
@@ -36,6 +38,20 @@ namespace Phytel.API.DataDomain.PatientSystem
                 return dataList;
             }
             catch (Exception ex) { throw ex; }
+        }
+
+        public List<PatientSystemData> GetAllPatientSystems()
+        {
+            try
+            {
+                var repo = Factory.GetRepository(RepositoryType.PatientSystem);
+                var dataList = repo.SelectAll().ToList<PatientSystemData>();
+                return dataList;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         public PatientSystemData InsertPatientSystem(InsertPatientSystemDataRequest request)

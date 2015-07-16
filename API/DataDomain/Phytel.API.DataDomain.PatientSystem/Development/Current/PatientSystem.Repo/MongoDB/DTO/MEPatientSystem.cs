@@ -12,6 +12,11 @@ namespace Phytel.API.DataDomain.PatientSystem.DTO
     [MongoIndex(Keys = new string[] { TTLDateProperty }, TimeToLive = 0)]
     public class MEPatientSystem : IMongoEntity<ObjectId>, IMEEntity
     {
+        public MEPatientSystem()
+        {
+            Id = ObjectId.GenerateNewId();
+        }
+
         public MEPatientSystem(string userId)
         {
             Id = ObjectId.GenerateNewId();

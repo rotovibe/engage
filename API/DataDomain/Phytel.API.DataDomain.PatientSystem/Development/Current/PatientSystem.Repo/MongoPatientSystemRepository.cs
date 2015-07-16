@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using AutoMapper;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.Builders;
@@ -159,7 +160,23 @@ namespace Phytel.API.DataDomain.PatientSystem
 
         public IEnumerable<object> SelectAll()
         {
-            throw new NotImplementedException();
+            using (PatientSystemMongoContext ctx = new PatientSystemMongoContext(ContractDBName))
+            {
+                List<IMongoQuery> queries = new List<IMongoQuery>();
+                queries.Add(Query.EQ(MEPatientSystem.DeleteFlagProperty, false));
+                queries.Add(Query.EQ(MEPatientSystem.TTLDateProperty, BsonNull.Value));
+                IMongoQuery mQuery = Query.And(queries);
+
+                List<MEPatientSystem> mePatSys = ctx.PatientSystems.Collection.Find(mQuery).ToList();
+
+                List<PatientSystemData> patSys = null;
+                if (mePatSys != null && mePatSys.Count > 0)
+                {
+                    patSys = mePatSys.Select(a => Mapper.Map<PatientSystemData>(a)).ToList();
+                }
+
+                return patSys;
+            }            
         }
 
         public object Update(object entity)

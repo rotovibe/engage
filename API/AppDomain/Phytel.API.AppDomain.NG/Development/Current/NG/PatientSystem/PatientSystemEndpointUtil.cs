@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Linq;
 using AutoMapper;
 using Phytel.API.AppDomain.NG.DTO;
+using Phytel.API.AppDomain.NG.DTO.Internal;
 using Phytel.API.DataDomain.PatientSystem.DTO;
 using ServiceStack.Service;
 using ServiceStack.ServiceClient.Web;
@@ -148,6 +150,30 @@ namespace Phytel.API.AppDomain.NG
                                     request.Ids), request.UserId);
 
                 DeletePatientSystemsDataResponse dataDomainResponse = client.Delete<DeletePatientSystemsDataResponse>(url);
+            }
+            catch (Exception ex) { throw ex; }
+        }
+
+
+        public List<PatientSystem> GetAllPatientSystems(UpdatePatientsAndSystemsRequest request)
+        {
+            List<PatientSystem> result = null;
+            try
+            {
+                IRestClient client = new JsonServiceClient();
+                //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/PatientSystems", "GET")]
+                var url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/PatientSystems",
+                                    DDPatientSystemUrl,
+                                    "NG",
+                                    request.Version,
+                                    request.ContractNumber), request.UserId);
+
+                GetAllPatientSystemDataResponse dataDomainResponse = client.Get<GetAllPatientSystemDataResponse>(url);
+                if (dataDomainResponse != null)
+                {
+                    result = dataDomainResponse.PatientSystemsData.Select(r => Mapper.Map<PatientSystem>(r)).ToList();
+                }
+                return result;
             }
             catch (Exception ex) { throw ex; }
         }

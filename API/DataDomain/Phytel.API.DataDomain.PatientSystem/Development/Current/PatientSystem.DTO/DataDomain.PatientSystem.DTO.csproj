@@ -83,6 +83,8 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Enums.cs" />
+    <Compile Include="PatientSystem\GetAllPatientSystemDataRequest.cs" />
+    <Compile Include="PatientSystem\GetAllPatientSystemDataResponse.cs" />
     <Compile Include="PatientSystem\InsertPatientSystemDataRequest.cs" />
     <Compile Include="PatientSystem\InsertPatientSystemsDataRequest.cs" />
     <Compile Include="PatientSystem\InsertPatientSystemDataResponse.cs" />
