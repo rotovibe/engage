@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Phytel.API.DataDomain.PatientSystem.DTO
 {
-    public class PatientSystemData
+    public class PatientSystemOldData
     {
         public string Id { get; set; }
         public string PatientId { get; set; }
@@ -19,5 +19,11 @@ namespace Phytel.API.DataDomain.PatientSystem.DTO
         public DateTime CreatedOn { get; set; }
         public string UpdatedById { get; set; }
         public DateTime? UpdatedOn { get; set; }
+
+        #region DeprecatedPropertiesOfPatientSystem.
+        public string SystemID { get; set; }
+        public string DisplayLabel { get; set; }
+        public string SystemName { get; set; }
+        #endregion
     }
 }

@@ -90,6 +90,7 @@
     <Compile Include="PatientSystem\InsertPatientSystemDataResponse.cs" />
     <Compile Include="PatientSystem\InsertPatientSystemsDataResponse.cs" />
     <Compile Include="PatientSystem\DeletePatientSystemsDataRequest.cs" />
+    <Compile Include="PatientSystem\PatientSystemOldData.cs" />
     <Compile Include="PatientSystem\UpdatePatientSystemDataRequest.cs" />
     <Compile Include="PatientSystem\UpdatePatientSystemsDataRequest.cs" />
     <Compile Include="PatientSystem\DeletePatientSystemsDataResponse.cs" />

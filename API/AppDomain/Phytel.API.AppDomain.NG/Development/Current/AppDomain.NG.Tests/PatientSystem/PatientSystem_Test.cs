@@ -32,7 +32,7 @@ namespace Phytel.API.AppDomain.NG.Test.PatientSystem
                 UserId = userId,
                 Version = version,
                 Token = token,
-                PatientId = "5325da9ed6a4850adcbba6ce"
+                PatientId = "5325da75d6a4850adcbba652"
             };
 
             JsonServiceClient.HttpWebRequestFilter = x =>
@@ -47,8 +47,8 @@ namespace Phytel.API.AppDomain.NG.Test.PatientSystem
         public void InsertPatientSystems_Test()
         {
             List<DTO.PatientSystem> list = new List<DTO.PatientSystem>();
-            list.Add(new DTO.PatientSystem { PatientId = "5325db88d6a4850adcbba98a", Value = " AAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHKKKKKKKKKKKKKKKKKKKKKKKKKKKKLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMNNNNNNNNNNNNNNNNNNNNNNNNNOOOOOOOOOOOOOOOOOOO ", StatusId = 1, Primary = true, SystemId = "559e8c70d4332320bc076f4d" });
-            list.Add(new DTO.PatientSystem { PatientId = "5325db88d6a4850adcbba98a", Value = "  ", StatusId = 1, Primary = true, SystemId = "559e8c70d4332320bc076f4d" });
+            list.Add(new DTO.PatientSystem { PatientId = "5325da75d6a4850adcbba652", Value = "O5PWHLHR", StatusId = 1, Primary = false, SystemId = "559e8c70d4332320bc076f4f", SystemSource = "Engage" });
+            //    list.Add(new DTO.PatientSystem { PatientId = "5325da75d6a4850adcbba652", Value = " O5PWHLHR ", StatusId = 2, Primary = false, SystemId = "559e8c70d4332320bc076f4e", SystemSource = "Import" });
             
             InsertPatientSystemsRequest request = new InsertPatientSystemsRequest
             {
@@ -56,7 +56,7 @@ namespace Phytel.API.AppDomain.NG.Test.PatientSystem
                 UserId = userId,
                 Version = version,
                 Token = token,
-                PatientId = "5325db88d6a4850adcbba98a",
+                PatientId = "5325da75d6a4850adcbba652",
                 PatientSystems = list
             };
 
