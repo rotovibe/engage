@@ -110,7 +110,12 @@ namespace Phytel.API.AppDomain.NG
 
         public string UpdatePatientAndSystemsData(UpdatePatientsAndSystemsRequest request)
         {
-            throw new NotImplementedException();
+            var pSys = EndpointUtil.GetAllPatientSystems(request);
+            var sSys = EndpointUtil.GetSystems(Mapper.Map<GetActiveSystemsRequest>(request));
+
+
+
+            return "success";
         }
     }
 }

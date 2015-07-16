@@ -5,6 +5,7 @@ using System.Linq;
 using AutoMapper;
 using Phytel.API.AppDomain.NG.DTO;
 using Phytel.API.AppDomain.NG.DTO.Internal;
+using Phytel.API.AppDomain.NG.DTO.Internal.PatientSystem;
 using Phytel.API.DataDomain.PatientSystem.DTO;
 using ServiceStack.Service;
 using ServiceStack.ServiceClient.Web;
@@ -155,9 +156,9 @@ namespace Phytel.API.AppDomain.NG
         }
 
 
-        public List<PatientSystem> GetAllPatientSystems(UpdatePatientsAndSystemsRequest request)
+        public List<UtilPatientSystem> GetAllPatientSystems(UpdatePatientsAndSystemsRequest request)
         {
-            List<PatientSystem> result = null;
+            List<UtilPatientSystem> result = null;
             try
             {
                 IRestClient client = new JsonServiceClient();
@@ -171,7 +172,7 @@ namespace Phytel.API.AppDomain.NG
                 GetAllPatientSystemDataResponse dataDomainResponse = client.Get<GetAllPatientSystemDataResponse>(url);
                 if (dataDomainResponse != null)
                 {
-                    result = dataDomainResponse.PatientSystemsData.Select(r => Mapper.Map<PatientSystem>(r)).ToList();
+                    result = dataDomainResponse.PatientSystemsData.Select(r => Mapper.Map<UtilPatientSystem>(r)).ToList();
                 }
                 return result;
             }

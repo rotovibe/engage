@@ -128,6 +128,7 @@
     <Compile Include="Goal\PostPatientTaskResponse.cs" />
     <Compile Include="Goal\PostPatientInterventionResponse.cs" />
     <Compile Include="Goal\Task.cs" />
+    <Compile Include="Internal\PatientSystem\UtilPatientSystem.cs" />
     <Compile Include="Internal\UpdatePatientsAndSystemsRequest.cs" />
     <Compile Include="Internal\UpdatePatientsAndSystemsResponse.cs" />
     <Compile Include="LookUp\GetLookUpDetailsRequest.cs" />

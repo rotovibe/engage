@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Phytel.API.AppDomain.NG.DTO
+namespace Phytel.API.AppDomain.NG.DTO.Internal.PatientSystem
 {
-    public class PatientSystem
+    public class UtilPatientSystem
     {
         public string Id { get; set; }
         public string PatientId { get; set; }
@@ -19,5 +19,11 @@ namespace Phytel.API.AppDomain.NG.DTO
         public DateTime CreatedOn { get; set; }
         public string UpdatedById { get; set; }
         public DateTime? UpdatedOn { get; set; }
+
+        #region DeprecatedPropertiesOfPatientSystem.
+        public string SystemID { get; set; }
+        public string DisplayLabel { get; set; }
+        public string SystemName { get; set; }
+        #endregion
     }
 }
