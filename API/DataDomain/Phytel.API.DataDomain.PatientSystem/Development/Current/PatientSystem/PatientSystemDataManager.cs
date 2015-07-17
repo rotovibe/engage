@@ -100,7 +100,7 @@ namespace Phytel.API.DataDomain.PatientSystem
                     {
                         // Do not allow inserting of Engage System. 
                         // Engage System is added automatically after a patient is created or imported which is achieved by the "InsertPatientSystem" method. 
-                        if (!string.Equals(Constants.EngageSystemId, p.SystemId, StringComparison.CurrentCultureIgnoreCase))
+                        if (!string.Equals(Constants.EngageSystemId, p.SystemId, StringComparison.InvariantCultureIgnoreCase))
                         {
                             InsertPatientSystemDataRequest insertReq = new InsertPatientSystemDataRequest
                             {
@@ -138,7 +138,7 @@ namespace Phytel.API.DataDomain.PatientSystem
                     request.PatientSystemsData.ForEach(p =>
                         {
                             // Do not allow update of Engage System.
-                            if(!string.Equals(Constants.EngageSystemId, p.SystemId, StringComparison.CurrentCultureIgnoreCase))
+                            if(!string.Equals(Constants.EngageSystemId, p.SystemId, StringComparison.InvariantCultureIgnoreCase))
                             {
                                 UpdatePatientSystemDataRequest updateReq = new UpdatePatientSystemDataRequest
                                 {
