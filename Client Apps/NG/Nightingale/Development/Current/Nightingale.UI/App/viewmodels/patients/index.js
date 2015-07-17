@@ -54,9 +54,8 @@
         var patientSystemEndPoint = ko.computed(function () {
             if (!session.currentUser()) {
                 return false;
-            }
-            // TODO: Update this end point
-            return new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'PatientSystem', 'PatientSystem');
+            }           
+            return new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'Patient', 'PatientSystem');
         });
 
         var patientAllergyEndPoint = ko.computed(function () {
@@ -90,7 +89,7 @@
             }
             return new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'Patient', 'Goal');
         });
-
+		
         var noteEndPoint = ko.computed(function () {
             if (!session.currentUser()) {
                 return false;
@@ -461,7 +460,7 @@
                 // Go get a list of allergies for the currently selected patient
                 getPatientsAllergies();
                 // Get a list of the patients various systems
-                datacontext.getEntityList(null, patientSystemEndPoint().EntityType, patientSystemEndPoint().ResourcePath + patientId, null, null, true);
+                datacontext.getEntityList(null, patientSystemEndPoint().EntityType, patientSystemEndPoint().ResourcePath + patientId + '/PatientSystems', null, null, true);
 
                 // Go get a list of medications for the currently selected patient
                 getPatientMedications();

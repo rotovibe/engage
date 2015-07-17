@@ -4,10 +4,20 @@
         <a class="edit hover-toggle" href="#" data-bind="click: toggleEditing">Edit</a>
     </div>
     <ul class="accordion-content columns" data-bind="visible: isOpen">
-        <ul class="column" data-bind="foreach: computedPatientSystems">
-            <li class="push2 pad-bottom ellipsis">
-                <span class="ellipsis" data-bind="text: displayLabel, attr: { title: displayLabel }"></span>: <span class="ellipsis" data-bind="text: systemId, attr: { title: systemId }"></span>
-            </li>
-        </ul>
+        <ul class="column">
+			<!-- ko foreach: computedPatientSystems -->
+			<div data-bind="visible: (Number(statusId()) === 1)">
+				<li class="pad-bottom ellipsis">
+						<span data-bind="with: system">
+							<span class="ellipsis" data-bind="text: displayLabel, attr: { title: displayLabel }"></span>
+						</span>
+						: <span class="ellipsis" data-bind="text: value, attr: { title: value }"></span>
+				</li>
+			</div>
+			<!-- /ko -->
+			<li class="grey" data-bind="visible: !isExpanded() && computedPatientSystems().length === 5">
+				<a class="grey" data-bind="clickToggle: isExpanded" href="#">...</a>
+			</li>
+        </ul>		
     </ul>
 </section>

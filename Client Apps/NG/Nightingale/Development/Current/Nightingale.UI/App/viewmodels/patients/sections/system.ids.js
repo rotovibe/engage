@@ -24,18 +24,36 @@
         }
 
         ctor.prototype.activate = function (settings) {
-            var self = this;
-            //self.problems = settings.problems;
+            var self = this;            
             self.selectedPatient = settings.selectedPatient;
             self.patientSystems = self.selectedPatient.patientSystems;
-            // Compute a list of the patients observations that are problems to display
+			self.isExpanded = ko.observable(false);
+            // Compute a list of the patient ids to display
             self.computedPatientSystems = ko.computed(function () {
-                return self.patientSystems();
+				var systemIds = self.patientSystems();
+				var theseIds = [];
+				var limitToFive = (!self.isExpanded());				
+				ko.utils.arrayForEach( systemIds, function(record){					
+					if( Number(record.statusId()) === 1 ){	//only active ids
+						if (theseIds.length < 5 || !limitToFive) {
+							theseIds.push( record );
+						}
+					}						
+				});
+				theseIds.sort( function(a,b){
+					if( a.system().displayLabel() < b.system().displayLabel() ) return -1;
+					if( a.system().displayLabel() > b.system().displayLabel() ) return 1;
+					return 0;
+				});				
+                return theseIds;
             }).extend({ throttle: 15 });
             self.isOpen = ko.observable(false);
+			
             self.patientSystemsModalShowing = ko.observable(false);
             self.savePatientSystems = function () {
-                datacontext.savePatientSystems(self.computedPatientSystems());
+				//TODO: multi ID's
+	alert( 'not implemented.');
+    //            datacontext.savePatientSystems(self.computedPatientSystems());
             };
             self.cancelPatientSystems = function () {
                 ko.utils.arrayForEach(self.computedPatientSystems(), function (patSys) {

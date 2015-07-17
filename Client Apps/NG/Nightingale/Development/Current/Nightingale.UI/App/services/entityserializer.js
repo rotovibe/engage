@@ -802,16 +802,21 @@
             .from('fakePath')
             .where('id', '==', patientSystem.id())
             .toType('PatientSystem')
-            .select('id, patientId, systemId, systemName, displayLabel, deleteFlag');
+            .select('id, patientId, systemId, value, systemSource, statusId, primary, createdById, createdOn, updatedById, updatedOn');
         var results = manager.executeQueryLocally(patientSystemQuery);
         var unwrappedPatSys = results[0];
         
         thisPatSys.Id = unwrappedPatSys.id;
         thisPatSys.PatientId = unwrappedPatSys.patientId;
         thisPatSys.SystemId = unwrappedPatSys.systemId;
-        thisPatSys.SystemName = unwrappedPatSys.systemName;
-        thisPatSys.DisplayLabel = unwrappedPatSys.displayLabel;
-        thisPatSys.DeleteFlag = unwrappedPatSys.deleteFlag;
+        thisPatSys.value = unwrappedPatSys.value;
+        thisPatSys.systemSource = unwrappedPatSys.systemSource;
+        thisPatSys.statusId = unwrappedPatSys.statusId;
+		thisPatSys.primary = unwrappedPatSys.primary;
+		thisPatSys.createdById = unwrappedPatSys.createdById;
+		thisPatSys.createdOn = unwrappedPatSys.createdOn;
+		thisPatSys.updatedById = unwrappedPatSys.updatedById;
+		thisPatSys.updatedOn = unwrappedPatSys.updatedOn;
         
         var totalTime = new Date().getTime() - startTime;
         console.log('Done custom stringifying, it took this long to stringify (in milliseconds) - ', totalTime);

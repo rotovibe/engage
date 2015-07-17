@@ -55,7 +55,6 @@ define(['services/session', 'services/jsonResultsAdapter', 'models/base', 'confi
         
         // Array of messages showing what is loading
         var loadingMessages = ko.observableArray();
-        
         // Object determining whether there are loading messages that are showing
         var loadingMessagesShowing = ko.computed(function () {
             var showing = false;
@@ -289,6 +288,7 @@ define(['services/session', 'services/jsonResultsAdapter', 'models/base', 'confi
             var promise = Q.all([
                 loadUpEnums(),
                 getUserSettings(session.currentUser, '/1.0/' + session.currentUser().contracts()[0].number() + '/settings', apiToken()),
+				getSystems(),
                 getProblemsLookup(),
                 getCohortsLookup(),
                 getContractProgramsLookup(),
@@ -313,6 +313,12 @@ define(['services/session', 'services/jsonResultsAdapter', 'models/base', 'confi
             return promise;
         }
 
+		function getSystems(){
+			if (session.currentUser() && session.currentUser().contracts().length !== 0) {				
+				var endPoint = new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'System', 'System');
+                return getEntityList(null, endPoint.EntityType, endPoint.ResourcePath, null, null, true);
+			}
+		}
         // Get a list of problems lookups
         function getProblemsLookup() {
             if (session.currentUser() && session.currentUser().contracts().length !== 0) {
@@ -643,6 +649,8 @@ define(['services/session', 'services/jsonResultsAdapter', 'models/base', 'confi
             // Set the collections into the enums namespace
             datacontext.getEntityList(datacontext.enums.priorities, 'Priority', 'fakeEndPoint', null, null, false);
 			datacontext.getEntityList(datacontext.enums.patientStatuses, 'PatientStatus', 'fakeEndPoint', null, null, false);
+			datacontext.getEntityList(datacontext.enums.systemStatus, 'SystemStatus', 'fakeEndPoint', null, null, false);			
+			datacontext.getEntityList(datacontext.enums.patientSystemStatus, 'PatientSystemStatus', 'fakeEndPoint', null, null, false);						
             datacontext.getEntityList(datacontext.enums.goalTypes, 'GoalType', 'fakeEndPoint', null, null, false);
             datacontext.getEntityList(datacontext.enums.goalTaskStatuses, 'GoalTaskStatus', 'fakeEndPoint', null, null, false);
             datacontext.getEntityList(datacontext.enums.barrierStatuses, 'BarrierStatus', 'fakeEndPoint', null, null, false);

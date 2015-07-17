@@ -18,6 +18,9 @@
 	
 	enums.patientStatuses = ko.observableArray();
 	enums.patientStatusReasons = ko.observableArray();
+	//patient multi id status
+	enums.patientSystemStatus =  ko.observableArray();	
+	enums.systemStatus =  ko.observableArray();
 	
     enums.daysOfWeek = ko.observableArray([
         new modelConfig.Day('0', 'M', 'Monday'),

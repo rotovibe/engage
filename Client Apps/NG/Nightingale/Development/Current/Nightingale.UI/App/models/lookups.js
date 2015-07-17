@@ -108,6 +108,26 @@ define(['services/session'],
 		        }
 		    });
 			
+			//system status - enum
+			metadataStore.addEntityType({
+				shortName: "SystemStatus",
+				namespace: "Nightingale",
+				dataProperties:{
+					id: { dataType: "String", isPartOfKey: true },
+					name: { dataType: "String" }
+				}
+			});
+			
+			//patient system status - enum (multi id = patient system)
+			metadataStore.addEntityType({
+				shortName: "PatientSystemStatus",
+				namespace: "Nightingale",
+				dataProperties:{
+					id: { dataType: "String", isPartOfKey: true },
+					name: { dataType: "String" }
+				}
+			});
+			
 			//individual status reason - lookup
 			metadataStore.addEntityType({
 		        shortName: "PatientStatusReason",
@@ -414,6 +434,14 @@ define(['services/session'],
 		    manager.createEntity('PatientStatus', { id: 1, name: 'Active'   }).entityAspect.acceptChanges();
 		    manager.createEntity('PatientStatus', { id: 2, name: 'Inactive' }).entityAspect.acceptChanges();
 			manager.createEntity('PatientStatus', { id: 3, name: 'Archived' }).entityAspect.acceptChanges();
+			
+			//enums.systemStatus
+			manager.createEntity('SystemStatus', {id: 1, name: 'Active'		}).entityAspect.acceptChanges();
+			manager.createEntity('SystemStatus', {id: 2, name: 'Inactive'	}).entityAspect.acceptChanges();
+			
+			//enums.patientSystemStatus			
+			manager.createEntity('PatientSystemStatus',  {id: 1, name: 'Active'		}).entityAspect.acceptChanges();
+			manager.createEntity('PatientSystemStatus',  {id: 2, name: 'Inactive'	}).entityAspect.acceptChanges();
 			
             // Types of steps enums
 		    manager.createEntity('StepType', { id: 1, name: 'Radio', path: 'programdesigner/questiontypes/radio.html' }).entityAspect.acceptChanges();

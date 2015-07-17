@@ -429,18 +429,63 @@ define(['services/validatorfactory', 'services/customvalidators', 'services/form
 			        id: { dataType: "String", isPartOfKey: true },
 			        patientId: { dataType: "String" },
 			        systemId: { dataType: "String" },
-			        systemName: { dataType: "String" },
-			        displayLabel: { dataType: "String" },
-			        deleteFlag: { dataType: "Boolean" },
+					value:  { dataType: "String" },
+					systemSource:  { dataType: "String" },
+					statusId:   { dataType: "String" },
+					primary:   { dataType: "Boolean" },
+					createdById: { dataType: "String" },
+					createdOn: { dataType: "DateTime" },
+					updatedById: { dataType: "String" },
+					updatedOn: { dataType: "DateTime" }					
 			    },
 			    navigationProperties: {
 					patient: {
 					    entityTypeName: "Patient", isScalar: true,
 					    associationName: "Patient_PatientSystems", foreignKeyNames: ["patientId"]
-					}
+					},
+					system: {
+						entityTypeName: "System", isScalar: true,
+						associationName: "PatientSystem_System", foreignKeyNames: ["systemId"]
+					},
+					patientSystemStatus: {
+						entityTypeName: "PatientSystemStatus", isScalar: true,
+						associationName: "Patient_PatientSystemStatus", foreignKeyNames: ["statusId"]
+					},
+					createdBy: {
+		                entityTypeName: "CareManager", isScalar: true,
+		                associationName: "PatientSystem_CreatedBy", foreignKeyNames: ["createdById"]
+		            },
+					updatedBy: {
+		                entityTypeName: "CareManager", isScalar: true,
+		                associationName: "PatientSystem_UpdatedBy", foreignKeyNames: ["updatedById"]
+		            }
 				}
 			});
 
+			// System
+			metadataStore.addEntityType({
+			    shortName: "System",
+			    namespace: "Nightingale",
+			    dataProperties: {
+			      id: { dataType: "String", isPartOfKey: true },
+				  name:  { dataType: "String" },
+				  field:  { dataType: "String" },
+				  displayLabel:  { dataType: "String" },
+				  statusId:  { dataType: "String" },
+				  primary: { dataType: "Boolean" }
+				},
+				navigationProperties: {
+					patientSystem: {
+						entityTypeName: "System", isScalar: true,
+						associationName: "Patient_System"
+					},
+					systemStatus: {
+						entityTypeName: "SystemStatus", isScalar: true,
+						associationName: "System_SystemStatus", foreignKeyNames: ["statusId"]
+					}
+				}
+			});
+			
 			//  Register constructor functions for patient
 			metadataStore.registerEntityTypeCtor(
 				'Patient', null, patientInitializer);
