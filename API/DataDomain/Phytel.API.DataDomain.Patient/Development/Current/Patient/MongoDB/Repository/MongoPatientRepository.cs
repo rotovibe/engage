@@ -91,10 +91,8 @@ namespace Phytel.API.DataDomain.Patient
                             Background = pd.Background,
                             ClinicalBackground = pd.ClinicalBackground,
                             Version = request.Version,
-                            UpdatedBy = ObjectId.Parse(this.UserId),
                             TTLDate = null,
                             DeleteFlag = false,
-                            LastUpdatedOn = System.DateTime.UtcNow,
                             System = FormatSystem(pd.System),
                             Status = (Status)pd.StatusId,
                             StatusSystemSource  = pd.StatusSystemSource
