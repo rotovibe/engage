@@ -111,11 +111,20 @@ namespace Phytel.API.AppDomain.NG
         public string UpdatePatientAndSystemsData(UpdatePatientsAndSystemsRequest request)
         {
             var pSys = EndpointUtil.GetAllPatientSystems(request);
-            var sSys = EndpointUtil.GetSystems(Mapper.Map<GetActiveSystemsRequest>(request));
+            pSys.RemoveAll(x => x.SystemID != "000000000000000000000000"); // remove the newly added records
+            var sSys = EndpointUtil.GetSystems(Mapper.Map<GetActiveSystemsRequest>(request)).FirstOrDefault(r => r.Name.Equals("BSDI"));
 
 
+            // 1) update patientsystem
+            // move sysid over to val.
+            // NULLify lbl.
+            // leave sysn for later.
+            // set sid to BSDI _id in system collection.
 
-            return "success";
+            // 2) insert into patientsystem
+            //InsertPatientSystemDataRequest : PaitentId , IsEngageSstem = true
+            
+            return "change to some message";
         }
     }
 }
