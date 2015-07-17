@@ -1,16 +1,17 @@
 /**
 *	editable date and time controls with masking and validation
+*	note the subscriptionTokens are managed per instance of a datetimepicker.
+*	if this is not done the subscriptions of other live instances are cleared when the first one is detached.
 *	@module datetimePicker
 */
 define(['durandal/composition','services/dateHelper', 'services/formatter'], 
 	function(composition, dateHelper, formatter){
-		
-	var subscriptionTokens= [];
-	var self = this;
+			
+	var self = this;	
 	
 	var ctor = function () {		
     };
-
+	
 	ctor.prototype.compositionComplete = function(view, parent){
 		var self = this;
 		self.dateElm = $(view).find("[name='" + self.dateName +"']");
@@ -48,7 +49,7 @@ define(['durandal/composition','services/dateHelper', 'services/formatter'],
 						}
 					}
 				});
-				subscriptionTokens.push(minDateToken);
+				self.subscriptionTokens.push(minDateToken);
 			}
 			 // If there is a datepicker dynoptions with a mindate that is an observable,
 			if (self.dynoptions && self.dynoptions.maxDate && ko.isObservable(self.dynoptions.maxDate)) {
@@ -68,7 +69,7 @@ define(['durandal/composition','services/dateHelper', 'services/formatter'],
 						}
 					}
 				});
-				subscriptionTokens.push(maxDateToken);
+				self.subscriptionTokens.push(maxDateToken);
 			}
 		}		
 		self.timeElm = $(view).find("[name='"+ self.timeName +"']");
@@ -80,6 +81,7 @@ define(['durandal/composition','services/dateHelper', 'services/formatter'],
 	ctor.prototype.activate = function (settings) {
         var self = this;
         self.settings = settings;
+		self.subscriptionTokens = [];	//correct management of tokens per instance of a datetimepicker 
 		//date
 		self.dateName = self.settings.dateName ? self.settings.dateName : 'date';		
 		self.showDate = true;	//self.settings.showDate;
@@ -283,9 +285,10 @@ define(['durandal/composition','services/dateHelper', 'services/formatter'],
 	}
 	ctor.prototype.detached = function() { 
 		var self = this;
-		ko.utils.arrayForEach(subscriptionTokens, function (token) {
+		ko.utils.arrayForEach(self.subscriptionTokens, function (token) {
 			token.dispose();
 		});
+		self.subscriptionTokens = [];	//tokens collection per instance of a datetimepicker 
 		//computed cleanup:
 		self.datetimeWatcher.dispose();
 		self.disableTime.dispose();

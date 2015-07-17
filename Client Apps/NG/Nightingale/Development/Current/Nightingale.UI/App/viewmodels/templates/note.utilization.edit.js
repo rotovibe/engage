@@ -1,5 +1,5 @@
 /**
-*	TODO: when saving - sync the reson on to the text property so it will show in the hist list under 'content'
+*	edit utilization dialog screen
 *	@module	note.utilization.edit
 */
 define(['services/datacontext'],
