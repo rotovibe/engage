@@ -70,7 +70,7 @@ namespace Phytel.API.DataDomain.PatientSystem.Service
             try
             {
                 RequireUserId(request);
-                response.PatientSystemData = Manager.InsertPatientSystem(request);
+                response.Id = Manager.InsertPatientSystem(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
