@@ -142,9 +142,9 @@
 						visitType: self.defaultVisitType,
 						utilizationSource: self.defaultUtilizationSource,
 						disposition: self.defaultDisposition,
-						location: self.defaultUtilizationLocation,
+						utilizationLocation: self.defaultUtilizationLocation,
 						systemSource: "Engage"
-					}));								
+					}));
         };
         ctor.prototype.createNewTouchPoint = function () {
             var self = this;
