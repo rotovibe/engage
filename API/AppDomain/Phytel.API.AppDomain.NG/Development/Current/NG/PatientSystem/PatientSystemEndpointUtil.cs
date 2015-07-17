@@ -172,7 +172,7 @@ namespace Phytel.API.AppDomain.NG
                 GetAllPatientSystemDataResponse dataDomainResponse = client.Get<GetAllPatientSystemDataResponse>(url);
                 if (dataDomainResponse != null)
                 {
-                    result = dataDomainResponse.PatientSystemsData.Select(r => Mapper.Map<UtilPatientSystem>(r)).ToList();
+                    result = dataDomainResponse.PatientSystemsOldData.Select(r => Mapper.Map<UtilPatientSystem>(r)).ToList();
                 }
                 return result;
             }

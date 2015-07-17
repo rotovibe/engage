@@ -11,7 +11,7 @@ namespace Phytel.API.DataDomain.PatientSystem
     {
         GetPatientSystemDataResponse GetPatientSystem(GetPatientSystemDataRequest request);
         List<PatientSystemData> GetPatientSystems(GetPatientSystemsDataRequest request);
-        List<PatientSystemData> GetAllPatientSystems();
+        List<PatientSystemOldData> GetAllPatientSystems();
         List<PatientSystemData> InsertPatientSystems(InsertPatientSystemsDataRequest request);
         string InsertPatientSystem(InsertPatientSystemDataRequest request);
         List<PatientSystemData> UpdatePatientSystems(UpdatePatientSystemsDataRequest request);

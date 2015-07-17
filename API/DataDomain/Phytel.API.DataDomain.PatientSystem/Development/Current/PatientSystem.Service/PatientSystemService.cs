@@ -52,7 +52,7 @@ namespace Phytel.API.DataDomain.PatientSystem.Service
             try
             {
                 RequireUserId(request);
-                response.PatientSystemsData = Manager.GetAllPatientSystems();
+                response.PatientSystemsOldData = Manager.GetAllPatientSystems();
                 response.Version = request.Version;
             }
             catch (Exception ex)

@@ -6,7 +6,7 @@ namespace Phytel.API.DataDomain.PatientSystem.DTO
 {
     public class GetAllPatientSystemDataResponse : IDomainResponse
     {
-        public List<PatientSystemData> PatientSystemsData { get; set; }
+        public List<PatientSystemOldData> PatientSystemsOldData { get; set; }
         public double Version { get; set; }
         public ResponseStatus Status { get; set; }
     }

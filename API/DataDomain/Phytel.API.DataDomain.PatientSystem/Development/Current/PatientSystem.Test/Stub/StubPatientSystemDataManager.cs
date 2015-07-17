@@ -80,7 +80,7 @@ namespace Phytel.API.DataDomain.PatientSystem.Test
         }
 
 
-        public List<PatientSystemData> GetAllPatientSystems()
+        public List<PatientSystemOldData> GetAllPatientSystems()
         {
             throw new NotImplementedException();
         }

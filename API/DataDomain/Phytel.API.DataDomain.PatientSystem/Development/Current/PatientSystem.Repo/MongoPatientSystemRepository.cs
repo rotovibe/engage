@@ -169,10 +169,10 @@ namespace Phytel.API.DataDomain.PatientSystem
 
                 List<MEPatientSystem> mePatSys = ctx.PatientSystems.Collection.Find(mQuery).ToList();
 
-                List<PatientSystemData> patSys = null;
+                List<PatientSystemOldData> patSys = null;
                 if (mePatSys != null && mePatSys.Count > 0)
                 {
-                    patSys = mePatSys.Select(a => Mapper.Map<PatientSystemData>(a)).ToList();
+                    patSys = mePatSys.Select(a => Mapper.Map<PatientSystemOldData>(a)).ToList();
                 }
 
                 return patSys;

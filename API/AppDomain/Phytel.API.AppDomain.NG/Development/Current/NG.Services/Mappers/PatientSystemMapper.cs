@@ -10,8 +10,9 @@ namespace Phytel.API.AppDomain.NG.Service.Mappers
     {
         public static void Build()
         {
-            Mapper.CreateMap<PatientSystemData, UtilPatientSystem>()
-                .ForMember(dest => dest.SystemID, opt => opt.MapFrom(src => src.SystemID));
+            Mapper.CreateMap<PatientSystemOldData, UtilPatientSystem>()
+                .ForMember(dest => dest.SystemID, opt => opt.MapFrom(src => src.SystemID))
+                .ForMember(dest => dest.SystemId, opt => opt.MapFrom(src => src.SystemId));
             Mapper.CreateMap<PatientSystemData, PatientSystem>();
             Mapper.CreateMap<PatientSystem, PatientSystemData>();
             Mapper.CreateMap<SystemData, DTO.System>();

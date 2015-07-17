@@ -40,12 +40,12 @@ namespace Phytel.API.DataDomain.PatientSystem
             catch (Exception ex) { throw ex; }
         }
 
-        public List<PatientSystemData> GetAllPatientSystems()
+        public List<PatientSystemOldData> GetAllPatientSystems()
         {
             try
             {
                 var repo = Factory.GetRepository(RepositoryType.PatientSystem);
-                var dataList = repo.SelectAll().ToList<PatientSystemData>();
+                var dataList = repo.SelectAll().ToList<PatientSystemOldData>();
                 return dataList;
             }
             catch (Exception ex)
@@ -98,26 +98,28 @@ namespace Phytel.API.DataDomain.PatientSystem
                     var repo = Factory.GetRepository(RepositoryType.PatientSystem);
                     request.PatientSystemsData.ForEach(p =>
                     {
-                        // Do not allow inserting of Engage System. 
-                        // Engage System is added automatically after a patient is created or imported which is achieved by the "InsertPatientSystem" method. 
-                        if (!string.Equals(Constants.EngageSystemId, p.SystemId, StringComparison.InvariantCultureIgnoreCase))
+                        if (string.Equals(Constants.EngageSystemId, p.SystemId, StringComparison.InvariantCultureIgnoreCase))
                         {
-                            InsertPatientSystemDataRequest insertReq = new InsertPatientSystemDataRequest
-                            {
-                                PatientId = p.PatientId,
-                                Context = request.Context,
-                                ContractNumber = request.ContractNumber,
-                                PatientSystemsData = p,
-                                UserId = request.UserId,
-                                Version = request.Version
-                            };
-                            string id = (string)repo.Insert(insertReq);
-                            if (!string.IsNullOrEmpty(id))
-                            {
-                                PatientSystemData result = (PatientSystemData)repo.FindByID(id);
-                                if (result != null)
-                                    dataList.Add(result);
-                            }
+                            p.Value = EngageId.New();
+                            p.Primary = isSystemPrimary(Constants.EngageSystemId);
+                            p.StatusId = (int)Status.Active;
+                            p.SystemSource = Constants.SystemSource;
+                        }
+                        InsertPatientSystemDataRequest insertReq = new InsertPatientSystemDataRequest
+                        {
+                            PatientId = p.PatientId,
+                            Context = request.Context,
+                            ContractNumber = request.ContractNumber,
+                            PatientSystemsData = p,
+                            UserId = request.UserId,
+                            Version = request.Version
+                        };
+                        string id = (string)repo.Insert(insertReq);
+                        if (!string.IsNullOrEmpty(id))
+                        {
+                            PatientSystemData result = (PatientSystemData)repo.FindByID(id);
+                            if (result != null)
+                                dataList.Add(result);
                         }
                     });
                 }

@@ -6,6 +6,7 @@ using Phytel.API.AppDomain.NG.Test.Stubs;
 using Phytel.API.AppDomain.NG.DTO;
 using ServiceStack.Service;
 using ServiceStack.ServiceClient.Web;
+using Phytel.API.AppDomain.NG.DTO.Internal;
 
 namespace Phytel.API.AppDomain.NG.Test.PatientSystem
 {
@@ -40,6 +41,26 @@ namespace Phytel.API.AppDomain.NG.Test.PatientSystem
 
             //[Route("/{Version}/{ContractNumber}/Patient/{PatientId}PatientSystems", "GET")]
             GetPatientSystemsResponse response = client.Get<GetPatientSystemsResponse>(string.Format("{0}/{1}/{2}/Patient/{3}/PatientSystems", url, version, contractNumber, request.PatientId));
+            Assert.IsNotNull(response);
+        }
+
+        
+        [TestMethod]
+        public void UpdatePatientsAndSystems_Test()
+        {
+            UpdatePatientsAndSystemsRequest request = new UpdatePatientsAndSystemsRequest
+            {
+                ContractNumber = contractNumber,
+                UserId = userId,
+                Version = version,
+                Token = token
+            };
+
+            JsonServiceClient.HttpWebRequestFilter = x =>
+                x.Headers.Add(string.Format("{0}: {1}", "Token", token));
+
+            //[Route("/{Version}/{ContractNumber}/Internal/PatientSystems/", "GET")]
+            UpdatePatientsAndSystemsResponse response = client.Get<UpdatePatientsAndSystemsResponse>(string.Format("{0}/{1}/{2}/Internal/PatientSystems/", url, version, contractNumber));
             Assert.IsNotNull(response);
         }
 
