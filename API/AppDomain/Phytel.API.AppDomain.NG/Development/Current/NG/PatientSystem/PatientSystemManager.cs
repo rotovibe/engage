@@ -111,14 +111,14 @@ namespace Phytel.API.AppDomain.NG
         {
             int bsdiCount = 0;
             int engageCount = 0;
-
+            #region UpdateExistingPatientSystem
             // Get all PatientSystems to update each record.
             List<PatientSystemOldData> pSys = EndpointUtil.GetAllPatientSystems(request);
             // Remove all the newly added records.
             pSys.RemoveAll(x => string.IsNullOrEmpty(x.OldSystemId));
             if (pSys.Count > 0 && string.Equals(request.ContractNumber, "InHealth001", StringComparison.InvariantCultureIgnoreCase))
             {
-                #region UpdateExistingPatientSystem
+
                 var bsdiSystem = EndpointUtil.GetSystems(Mapper.Map<GetActiveSystemsRequest>(request)).FirstOrDefault(r => r.Name.Equals("BSDI", StringComparison.InvariantCultureIgnoreCase));
                 List<PatientSystem> data = new List<PatientSystem>();
                 pSys.ForEach(p =>
@@ -149,14 +149,15 @@ namespace Phytel.API.AppDomain.NG
                 {
                     bsdiCount = dataList.Count;
                 }
-                #endregion
             }
+            #endregion
 
+            #region InsertEngageSystemForEachPatient
             // Get All patients to add an Engage ID.
             List<Phytel.API.DataDomain.Patient.DTO.PatientData> patients = EndpointUtil.GetAllPatients(request);
             if (patients.Count > 0)
             {
-                #region InsertEngageSystemForEachPatient
+
                 var engageSystem = EndpointUtil.GetSystems(Mapper.Map<GetActiveSystemsRequest>(request)).FirstOrDefault(r => r.Name.Equals("Engage", StringComparison.InvariantCultureIgnoreCase));
                 List<PatientSystem> insertData = new List<PatientSystem>();
                 patients.ForEach(p =>
@@ -182,8 +183,8 @@ namespace Phytel.API.AppDomain.NG
                 {
                     engageCount = engageList.Count;
                 }
-                #endregion
             }
+            #endregion
 
             return string.Format("For {0} contract, migrated data for {1} existing PatientSystem Ids and added engage ids for {2} patients.",request.ContractNumber, bsdiCount, engageCount);
         }
