@@ -185,7 +185,7 @@ namespace Phytel.API.AppDomain.NG
                 #endregion
             }
 
-            return string.Format("For {0} contract, migrated data for {1} existing Ids and added data for {2} Engage Ids.",request.ContractNumber, bsdiCount, engageCount);
+            return string.Format("For {0} contract, migrated data for {1} existing PatientSystem Ids and added engage ids for {2} patients.",request.ContractNumber, bsdiCount, engageCount);
         }
     }
 }
