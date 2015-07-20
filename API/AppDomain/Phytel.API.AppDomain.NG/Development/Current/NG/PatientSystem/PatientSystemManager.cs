@@ -176,7 +176,7 @@ namespace Phytel.API.AppDomain.NG
                     Version = request.Version,
                     PatientSystems = insertData
                 };
-
+                insertRequest.UserId = Constants.SystemContactId; // the requirement says that the engage Id should have createdby user as 'system'.
                 List<PatientSystemData> engageList = EndpointUtil.InsertPatientSystems(insertRequest);
                 if (engageList != null)
                 {

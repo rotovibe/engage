@@ -159,7 +159,7 @@ namespace Phytel.API.DataDomain.Patient
             if (!string.IsNullOrEmpty(result.Id))
             {
                 //Create Engage system record for the newly created patient in PatientSystem collection.
-                insertPatientSystem(result.Id, request);
+                insertEngagePatientSystem(result.Id, request);
             }
             return result;
         }
@@ -233,7 +233,7 @@ namespace Phytel.API.DataDomain.Patient
                             if (!string.IsNullOrEmpty(response.Id))
                             {
                                 //Create Engage system record for the newly created patient in PatientSystem collection.
-                                insertPatientSystem(response.Id, request);
+                                insertEngagePatientSystem(response.Id, request);
                             }
                         }
                         else
@@ -244,7 +244,7 @@ namespace Phytel.API.DataDomain.Patient
                                 if (!string.IsNullOrEmpty(response.Id))
                                 {
                                     //Create Engage system record for the newly created patient in PatientSystem collection.
-                                    insertPatientSystem(response.Id, request);
+                                    insertEngagePatientSystem(response.Id, request);
                                 }
                             }
                             else
@@ -438,7 +438,7 @@ namespace Phytel.API.DataDomain.Patient
         /// </summary>
         /// <param name="request">IDataDomainRequest object</param>
         /// <returns></returns>
-        private void insertPatientSystem(string patientId, IDataDomainRequest request)
+        private void insertEngagePatientSystem(string patientId, IDataDomainRequest request)
         {
             try
             {
@@ -449,7 +449,7 @@ namespace Phytel.API.DataDomain.Patient
                     PatientSystemsData = new PatientSystemData { PatientId = patientId },
                     Context = request.Context,
                     ContractNumber = request.ContractNumber,
-                    UserId = request.UserId,
+                    UserId = Constants.SystemContactId,// the requirement says that the engage Id should have createdby user as 'system'.
                     Version = request.Version
                 };
                 
