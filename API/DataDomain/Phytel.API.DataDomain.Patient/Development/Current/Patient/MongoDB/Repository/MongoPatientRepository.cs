@@ -397,7 +397,32 @@ namespace Phytel.API.DataDomain.Patient
 
         public IEnumerable<object> SelectAll()
         {
-            throw new NotImplementedException();
+            List<PatientData> patients = null;
+            try
+            {
+                using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
+                {
+                    List<IMongoQuery> queries = new List<IMongoQuery>();
+                    queries.Add(Query.EQ(MEPatientUser.DeleteFlagProperty, false));
+                    queries.Add(Query.EQ(MEPatientUser.TTLDateProperty, BsonNull.Value));
+                    IMongoQuery mQuery = Query.And(queries);
+                    List<MEPatient> mePatients = ctx.Patients.Collection.Find(mQuery).ToList();
+                    if (mePatients != null && mePatients.Count > 0)
+                    {
+                        patients = new List<PatientData>();
+                        foreach (MEPatient meP in mePatients)
+                        {
+                            PatientData data = new PatientData
+                            {
+                                Id = meP.Id.ToString(),
+                            };
+                            patients.Add(data);
+                        }
+                    }
+                }
+                return patients;
+            }
+            catch (Exception) { throw; }
         }
 
         public PutPatientPriorityResponse UpdatePriority(PutPatientPriorityRequest request)

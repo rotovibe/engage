@@ -1,5 +1,6 @@
 ﻿using Phytel.API.DataDomain.Patient.DTO;
 using System;
+using System.Collections.Generic;
 namespace Phytel.API.DataDomain.Patient
 {
     public interface IPatientDataManager
@@ -23,5 +24,6 @@ namespace Phytel.API.DataDomain.Patient
         UndoDeletePatientUsersDataResponse UndoDeletePatientUser(UndoDeletePatientUsersDataRequest request);
         UndoDeleteCohortPatientViewDataResponse UndoDeleteCohortPatientView(UndoDeleteCohortPatientViewDataRequest request);
         PutInitializePatientDataResponse InitializePatient(PutInitializePatientDataRequest request);
+        List<PatientData> GetAllPatients(GetAllPatientsDataRequest request);
     }
 }

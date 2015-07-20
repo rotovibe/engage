@@ -5,7 +5,6 @@ using System.Linq;
 using AutoMapper;
 using Phytel.API.AppDomain.NG.DTO;
 using Phytel.API.AppDomain.NG.DTO.Internal;
-using Phytel.API.AppDomain.NG.DTO.Internal.PatientSystem;
 using Phytel.API.DataDomain.PatientSystem.DTO;
 using ServiceStack.Service;
 using ServiceStack.ServiceClient.Web;
@@ -16,6 +15,7 @@ namespace Phytel.API.AppDomain.NG
     {
         #region endpoint addresses
         protected readonly string DDPatientSystemUrl = ConfigurationManager.AppSettings["DDPatientSystemUrl"];
+        protected readonly string DDPatientServiceUrl = ConfigurationManager.AppSettings["DDPatientServiceUrl"];
         #endregion
 
         public List<SystemData> GetSystems(GetActiveSystemsRequest request)
@@ -41,7 +41,28 @@ namespace Phytel.API.AppDomain.NG
             catch (Exception ex) { throw ex; }
         }
 
+        public List<Phytel.API.DataDomain.Patient.DTO.PatientData> GetAllPatients(UpdatePatientsAndSystemsRequest request)
+        {
+            try
+            {
+                List<Phytel.API.DataDomain.Patient.DTO.PatientData> result = null;
+                IRestClient client = new JsonServiceClient();
+                //[Route("/{Context}/{Version}/{ContractNumber}/Patients", "GET")]
+                var url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patients",
+                                    DDPatientServiceUrl,
+                                    "NG",
+                                    request.Version,
+                                    request.ContractNumber), request.UserId);
 
+                Phytel.API.DataDomain.Patient.DTO.GetAllPatientsDataResponse dataDomainResponse = client.Get<Phytel.API.DataDomain.Patient.DTO.GetAllPatientsDataResponse>(url);
+                if (dataDomainResponse != null)
+                {
+                    result = dataDomainResponse.PatientsData;
+                }
+                return result;
+            }
+            catch (Exception ex) { throw ex; }
+        }
         public List<PatientSystemData> GetPatientSystems(GetPatientSystemsRequest request)
         {
             List<PatientSystemData> result = null;
@@ -156,9 +177,9 @@ namespace Phytel.API.AppDomain.NG
         }
 
 
-        public List<UtilPatientSystem> GetAllPatientSystems(UpdatePatientsAndSystemsRequest request)
+        public List<PatientSystemOldData> GetAllPatientSystems(UpdatePatientsAndSystemsRequest request)
         {
-            List<UtilPatientSystem> result = null;
+            List<PatientSystemOldData> result = null;
             try
             {
                 IRestClient client = new JsonServiceClient();
@@ -172,7 +193,7 @@ namespace Phytel.API.AppDomain.NG
                 GetAllPatientSystemDataResponse dataDomainResponse = client.Get<GetAllPatientSystemDataResponse>(url);
                 if (dataDomainResponse != null)
                 {
-                    result = dataDomainResponse.PatientSystemsOldData.Select(r => Mapper.Map<UtilPatientSystem>(r)).ToList();
+                    result = dataDomainResponse.PatientSystemsOldData;
                 }
                 return result;
             }

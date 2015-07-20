@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Phytel.API.AppDomain.NG.DTO;
 using Phytel.API.AppDomain.NG.DTO.Internal;
-using Phytel.API.AppDomain.NG.DTO.Internal.PatientSystem;
 using Phytel.API.DataDomain.PatientSystem.DTO;
 
 namespace Phytel.API.AppDomain.NG.Service.Mappers
@@ -10,9 +9,6 @@ namespace Phytel.API.AppDomain.NG.Service.Mappers
     {
         public static void Build()
         {
-            Mapper.CreateMap<PatientSystemOldData, UtilPatientSystem>()
-                .ForMember(dest => dest.SystemID, opt => opt.MapFrom(src => src.SystemID))
-                .ForMember(dest => dest.SystemId, opt => opt.MapFrom(src => src.SystemId));
             Mapper.CreateMap<PatientSystemData, PatientSystem>();
             Mapper.CreateMap<PatientSystem, PatientSystemData>();
             Mapper.CreateMap<SystemData, DTO.System>();

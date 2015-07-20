@@ -128,7 +128,6 @@
     <Compile Include="Goal\PostPatientTaskResponse.cs" />
     <Compile Include="Goal\PostPatientInterventionResponse.cs" />
     <Compile Include="Goal\Task.cs" />
-    <Compile Include="Internal\PatientSystem\UtilPatientSystem.cs" />
     <Compile Include="Internal\UpdatePatientsAndSystemsRequest.cs" />
     <Compile Include="Internal\UpdatePatientsAndSystemsResponse.cs" />
     <Compile Include="LookUp\GetLookUpDetailsRequest.cs" />
@@ -368,7 +367,9 @@
       <Name>Phytel.API.Interface</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Internal\PatientSystem\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

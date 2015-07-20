@@ -70,10 +70,10 @@ namespace Phytel.API.DataDomain.PatientSystem.DTO
 
         #region DeprecatedPropertiesOfPatientSystem.
         // They should be deleted after 1.3 release.
-        public const string SystemIDProperty = "sysid";
-        [BsonElement(SystemIDProperty)]
+        public const string OldSystemIdProperty = "sysid";
+        [BsonElement(OldSystemIdProperty)]
         [BsonIgnoreIfNull(false)]
-        public string SystemID { get; set; }
+        public string OldSystemId { get; set; }
 
         public const string DisplayLabelProperty = "lbl";
         [BsonElement(DisplayLabelProperty)]

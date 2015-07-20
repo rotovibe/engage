@@ -91,6 +91,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Enums.cs" />
+    <Compile Include="GetAllPatientsDataRequest.cs" />
+    <Compile Include="GetAllPatientsDataResponse.cs" />
     <Compile Include="PutInitializePatientDataRequest.cs" />
     <Compile Include="PutInitializePatientDataResponse.cs" />
     <Compile Include="PutPatientSystemIdDataRequest.cs" />

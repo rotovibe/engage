@@ -107,24 +107,23 @@ namespace Phytel.API.AppDomain.NG
             catch (Exception ex) { throw ex; }
         }
 
-
         public string UpdatePatientAndSystemsData(UpdatePatientsAndSystemsRequest request)
         {
             int bsdiCount = 0;
             int engageCount = 0;
-            var pSys = EndpointUtil.GetAllPatientSystems(request);
-            // Remove all the newly added records.
-            pSys.RemoveAll(x => string.IsNullOrEmpty(x.SystemID));
-            if (pSys.Count > 0)
-            {
-                var bsdiSystem = EndpointUtil.GetSystems(Mapper.Map<GetActiveSystemsRequest>(request)).FirstOrDefault(r => r.Name.Equals("BSDI", StringComparison.InvariantCultureIgnoreCase));
-                var engageSystem = EndpointUtil.GetSystems(Mapper.Map<GetActiveSystemsRequest>(request)).FirstOrDefault(r => r.Name.Equals("Engage", StringComparison.InvariantCultureIgnoreCase));
 
+            // Get all PatientSystems to update each record.
+            List<PatientSystemOldData> pSys = EndpointUtil.GetAllPatientSystems(request);
+            // Remove all the newly added records.
+            pSys.RemoveAll(x => string.IsNullOrEmpty(x.OldSystemId));
+            if (pSys.Count > 0 && string.Equals(request.ContractNumber, "InHealth001", StringComparison.InvariantCultureIgnoreCase))
+            {
                 #region UpdateExistingPatientSystem
+                var bsdiSystem = EndpointUtil.GetSystems(Mapper.Map<GetActiveSystemsRequest>(request)).FirstOrDefault(r => r.Name.Equals("BSDI", StringComparison.InvariantCultureIgnoreCase));
                 List<PatientSystem> data = new List<PatientSystem>();
                 pSys.ForEach(p =>
                     {
-                        data.Add(new PatientSystem 
+                        data.Add(new PatientSystem
                         {
                             Id = p.Id,
                             PatientId = p.PatientId,
@@ -132,7 +131,7 @@ namespace Phytel.API.AppDomain.NG
                             StatusId = (int)Status.Active,
                             SystemId = bsdiSystem.Id,
                             SystemSource = "Import",
-                            Value  = p.SystemID.Trim(),
+                            Value = p.OldSystemId.Trim(),
                         });
                     });
 
@@ -151,15 +150,20 @@ namespace Phytel.API.AppDomain.NG
                     bsdiCount = dataList.Count;
                 }
                 #endregion
+            }
 
+            // Get All patients to add an Engage ID.
+            List<Phytel.API.DataDomain.Patient.DTO.PatientData> patients = EndpointUtil.GetAllPatients(request);
+            if (patients.Count > 0)
+            {
                 #region InsertEngageSystemForEachPatient
-
+                var engageSystem = EndpointUtil.GetSystems(Mapper.Map<GetActiveSystemsRequest>(request)).FirstOrDefault(r => r.Name.Equals("Engage", StringComparison.InvariantCultureIgnoreCase));
                 List<PatientSystem> insertData = new List<PatientSystem>();
-                pSys.ForEach(p =>
+                patients.ForEach(p =>
                     {
-                        data.Add(new PatientSystem 
+                        insertData.Add(new PatientSystem
                         {
-                            PatientId = p.PatientId,
+                            PatientId = p.Id,
                             SystemId = engageSystem.Id,
                         });
                     });
@@ -181,7 +185,7 @@ namespace Phytel.API.AppDomain.NG
                 #endregion
             }
 
-            return string.Format("For {0} contract, migrated data for {1} BSDI Ids and added data for {2} Engage Ids.",request.ContractNumber, bsdiCount, engageCount);
+            return string.Format("For {0} contract, migrated data for {1} existing Ids and added data for {2} Engage Ids.",request.ContractNumber, bsdiCount, engageCount);
         }
     }
 }

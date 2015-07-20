@@ -21,7 +21,7 @@ namespace Phytel.API.DataDomain.PatientSystem.DTO
         public DateTime? UpdatedOn { get; set; }
 
         #region DeprecatedPropertiesOfPatientSystem.
-        public string SystemID { get; set; }
+        public string OldSystemId { get; set; }
         public string DisplayLabel { get; set; }
         public string SystemName { get; set; }
         #endregion

@@ -23,7 +23,7 @@ namespace Phytel.API.DataDomain.PatientSystem.Repo
             Mapper.CreateMap<MEPatientSystem, PatientSystemOldData>()
                 .ForMember(d => d.Id, opt => opt.MapFrom(src => src.Id.ToString()))
                 .ForMember(d => d.SystemId, opt => opt.MapFrom(src => src.SystemId.ToString()))
-                .ForMember(d => d.SystemID, opt => opt.MapFrom(src => src.SystemID));
+                .ForMember(d => d.OldSystemId, opt => opt.MapFrom(src => src.OldSystemId));
 
             return container;
         }

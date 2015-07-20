@@ -137,6 +137,20 @@ namespace Phytel.API.DataDomain.Patient
             }
         }
 
+        public List<PatientData> GetAllPatients(GetAllPatientsDataRequest request)
+        {
+            try
+            {
+                IPatientRepository repo = Factory.GetRepository(request, RepositoryType.Patient);
+                List<PatientData> result = repo.SelectAll() as List<PatientData>;
+                return result;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         public PutPatientDataResponse InsertPatient(PutPatientDataRequest request)
         {
             IPatientRepository repo = Factory.GetRepository(request, RepositoryType.Patient);

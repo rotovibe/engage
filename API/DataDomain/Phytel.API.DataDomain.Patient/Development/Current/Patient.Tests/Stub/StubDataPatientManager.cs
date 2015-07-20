@@ -199,5 +199,11 @@ namespace Phytel.API.DataDomain.Patient.Test.Stub
         {
             throw new NotImplementedException();
         }
+
+
+        public List<PatientData> GetAllPatients(GetAllPatientsDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
