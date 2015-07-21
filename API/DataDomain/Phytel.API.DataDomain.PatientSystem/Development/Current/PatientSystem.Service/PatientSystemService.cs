@@ -98,6 +98,22 @@ namespace Phytel.API.DataDomain.PatientSystem.Service
         #endregion
 
         #region PUT
+        public UpdatePatientSystemDataResponse Put(UpdatePatientSystemDataRequest request)
+        {
+            UpdatePatientSystemDataResponse response = new UpdatePatientSystemDataResponse();
+            try
+            {
+                RequireUserId(request);
+                response.Success = Manager.UpdatePatientSystem(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                RaiseException(response, ex);
+            }
+            return response;
+        } 
+
         public UpdatePatientSystemsDataResponse Put(UpdatePatientSystemsDataRequest request)
         {
             UpdatePatientSystemsDataResponse response = new UpdatePatientSystemsDataResponse();

@@ -154,12 +154,11 @@ namespace Phytel.API.DataDomain.Patient
         public PutPatientDataResponse InsertPatient(PutPatientDataRequest request)
         {
             IPatientRepository repo = Factory.GetRepository(request, RepositoryType.Patient);
-
             PutPatientDataResponse result = repo.Insert(request) as PutPatientDataResponse;
             if (!string.IsNullOrEmpty(result.Id))
             {
                 //Create Engage system record for the newly created patient in PatientSystem collection.
-                insertEngagePatientSystem(result.Id, request);
+                result.EngagePatientSystemId = insertEngagePatientSystem(result.Id, request);
             }
             return result;
         }
@@ -437,9 +436,10 @@ namespace Phytel.API.DataDomain.Patient
         /// Calls PatientSystem data domain to insert an Engage System record for the newly created patient.
         /// </summary>
         /// <param name="request">IDataDomainRequest object</param>
-        /// <returns></returns>
-        private void insertEngagePatientSystem(string patientId, IDataDomainRequest request)
+        /// <returns>Id of the Engage patient system.</returns>
+        private string insertEngagePatientSystem(string patientId, IDataDomainRequest request)
         {
+            string id = null;
             try
             {
                 InsertPatientSystemDataRequest psRequest = new InsertPatientSystemDataRequest
@@ -458,11 +458,16 @@ namespace Phytel.API.DataDomain.Patient
                 //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/PatientSystem", "POST")]
                 string url = Helpers.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/PatientSystem", DDPatientSystemServiceUrl, psRequest.Context, psRequest.Version, psRequest.ContractNumber, psRequest.PatientId), psRequest.UserId);
                 InsertPatientSystemDataResponse dataDomainResponse = client.Post<InsertPatientSystemDataResponse>(url, psRequest as object);
+                if (dataDomainResponse != null && !string.IsNullOrEmpty(dataDomainResponse.Id))
+                {
+                    id = dataDomainResponse.Id;
+                }
             }
             catch (Exception ex)
             {
                 throw ex;
             }
+            return id;
         }
     }
 }   

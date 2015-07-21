@@ -22,7 +22,7 @@ namespace Phytel.API.DataDomain.PatientSystem
             try
             {
                 var repo = Factory.GetRepository(RepositoryType.PatientSystem);
-                result.PatientSystemData = repo.FindByID(request.PatientSystemID) as PatientSystemData;
+                result.PatientSystemData = repo.FindByID(request.Id) as PatientSystemData;
                 return result;
             }
             catch (Exception ex) { throw ex; }
@@ -124,6 +124,31 @@ namespace Phytel.API.DataDomain.PatientSystem
                     });
                 }
                 return dataList;
+            }
+            catch (Exception ex) { throw ex; }
+        }
+
+        public bool UpdatePatientSystem(UpdatePatientSystemDataRequest request)
+        {
+            bool success = false;
+            try
+            {
+                if (request.PatientSystemsData != null)
+                {
+                    var repo = Factory.GetRepository(RepositoryType.PatientSystem);
+                    UpdatePatientSystemDataRequest updateReq = new UpdatePatientSystemDataRequest
+                    {
+                        Id = request.PatientSystemsData.Id,
+                        PatientId = request.PatientSystemsData.PatientId,
+                        Context = request.Context,
+                        ContractNumber = request.ContractNumber,
+                        PatientSystemsData = request.PatientSystemsData,
+                        UserId = request.UserId,
+                        Version = request.Version
+                    };
+                    success = (bool)repo.Update(updateReq);
+                }
+                return success;
             }
             catch (Exception ex) { throw ex; }
         }

@@ -18,5 +18,6 @@ namespace Phytel.API.DataDomain.PatientSystem
         DeletePatientSystemByPatientIdDataResponse DeletePatientSystemByPatientId(DeletePatientSystemByPatientIdDataRequest request);
         UndoDeletePatientSystemsDataResponse UndoDeletePatientSystems(UndoDeletePatientSystemsDataRequest request);
         void DeletePatientSystems(DeletePatientSystemsDataRequest request);
+        bool UpdatePatientSystem(UpdatePatientSystemDataRequest request);
     }
 }
