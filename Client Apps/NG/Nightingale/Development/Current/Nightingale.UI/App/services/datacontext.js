@@ -1924,6 +1924,7 @@ define(['services/session', 'services/jsonResultsAdapter', 'models/base', 'confi
             // serializedAllergies.PatientId = patientId;
             // Go through the observations,
             ko.utils.arrayForEach(allergies, function (allergy) {
+				if( allergy.isValid() && 
                 allergy.entityAspect.acceptChanges();
                 // Serialize it
                 var serializedAllergy = entitySerializer.serializePatientAllergy(allergy, manager);
