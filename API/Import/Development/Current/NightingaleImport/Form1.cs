@@ -1,11 +1,4 @@
-﻿using Phytel.API.Common.CustomObject;
-using Phytel.API.DataDomain.CareMember.DTO;
-using Phytel.API.DataDomain.Contact.DTO;
-using Phytel.API.DataDomain.LookUp.DTO;
-using Phytel.API.DataDomain.Patient.DTO;
-using Phytel.API.DataDomain.PatientSystem.DTO;
-using Phytel.API.DataDomain.Program.DTO;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration;
@@ -18,6 +11,12 @@ using System.Net.Http.Headers;
 using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Windows.Forms;
+using Phytel.API.Common.CustomObject;
+using Phytel.API.DataDomain.CareMember.DTO;
+using Phytel.API.DataDomain.Contact.DTO;
+using Phytel.API.DataDomain.LookUp.DTO;
+using Phytel.API.DataDomain.Patient.DTO;
+using Phytel.API.DataDomain.PatientSystem.DTO;
 
 namespace NightingaleImport
 {
@@ -170,28 +169,58 @@ namespace NightingaleImport
                                 var system = systemsData.Where(s => s.Name.ToLower() == lvi.SubItems[colSysNm].Text.Trim().ToLower()).FirstOrDefault();
                                 if(system != null)
                                 {
-                                    InsertPatientSystemDataRequest psRequest1 = new InsertPatientSystemDataRequest
+                                    PatientSystemData psData = new PatientSystemData 
+                                    { 
+                                        PatientId = responsePatient.Id, 
+                                        Primary = (String.IsNullOrEmpty(lvi.SubItems[colSysPrim].Text)) ? false : Boolean.Parse(lvi.SubItems[colSysPrim].Text.Trim()),
+                                        StatusId = (int)Phytel.API.DataDomain.PatientSystem.DTO.Status.Active,
+                                        SystemId = system.Id,
+                                        SystemSource = "Import",
+                                        Value = (String.IsNullOrEmpty(lvi.SubItems[colSysID].Text)) ? null : lvi.SubItems[colSysID].Text.Trim(),
+                                    };
+                                    InsertPatientSystemDataRequest psRequest = new InsertPatientSystemDataRequest
                                     {
                                         PatientId = responsePatient.Id,
                                         IsEngageSystem = false,
-                                        PatientSystemsData = new PatientSystemData 
-                                        { 
-                                            PatientId = responsePatient.Id, 
-                                            Primary = (String.IsNullOrEmpty(lvi.SubItems[colSysPrim].Text)) ? false : Boolean.Parse(lvi.SubItems[colSysPrim].Text.Trim()),
-                                            StatusId = (int)Phytel.API.DataDomain.PatientSystem.DTO.Status.Active,
-                                            SystemId = system.Id,
-                                            SystemSource = "Import",
-                                            Value = (String.IsNullOrEmpty(lvi.SubItems[colSysID].Text)) ? null : lvi.SubItems[colSysID].Text.Trim(),
-                                        },
+                                        PatientSystemsData = psData,
                                         Version = responsePatient.Version,
                                         Context = patientRequest.Context,
                                         ContractNumber = patientRequest.ContractNumber
                                     };
-                                    InsertPatientSystemDataResponse responsePatientPS = insertPatientSystem(psRequest1);
+                                    InsertPatientSystemDataResponse responsePatientPS = insertPatientSystem(psRequest);
                                     if (string.IsNullOrEmpty(responsePatientPS.Id))
                                     {
                                         throw new Exception("Failed to import the PatientSystem Id provided in the file.");
                                     }
+                                    else
+                                    {
+                                        // If imported patientsystem's primary is set to true, override the EngagePatientSystem's primary field.
+                                        if (psData.Primary)
+                                        {
+                                            GetPatientSystemDataResponse engagePatientSystemResponse = getPatientSystem(new GetPatientSystemDataRequest 
+                                            { 
+                                                Context = context,
+                                                ContractNumber = txtContract.Text,
+                                                Version = version,
+                                                Id = responsePatient.EngagePatientSystemId
+                                            });
+                                            if (engagePatientSystemResponse != null && engagePatientSystemResponse.PatientSystemData != null)
+                                            {
+                                                engagePatientSystemResponse.PatientSystemData.Primary = false;
+                                                UpdatePatientSystemDataRequest updatePDRequest = new UpdatePatientSystemDataRequest 
+                                                {
+                                                    Context = context,
+                                                    ContractNumber = txtContract.Text,
+                                                    Version = version,
+                                                    Id = engagePatientSystemResponse.PatientSystemData.Id,
+                                                    PatientId = engagePatientSystemResponse.PatientSystemData.PatientId,
+                                                    PatientSystemsData = engagePatientSystemResponse.PatientSystemData
+                                                };
+                                                updatePatientSystem(updatePDRequest);
+                                            }
+                                        }
+                                    }
+
                                 }
                             }
                             #endregion
@@ -1036,6 +1065,86 @@ namespace NightingaleImport
             }
 
             return responsePatientPS;
+        }
+
+        private GetPatientSystemDataResponse getPatientSystem(GetPatientSystemDataRequest request)
+        {
+            //[Route("/{Context}/{Version}/{ContractNumber}/PatientSystem/{Id}", "GET")]
+            Uri theUriPS = new Uri(string.Format("{0}/PatientSystem/{1}/{2}/{3}/PatientSystem/{4}?UserId={5}",
+                                                   txtURL.Text,
+                                                   context,
+                                                   version,
+                                                   txtContract.Text,
+                                                   request.Id,
+                                                   _headerUserId));
+            HttpClient client = GetHttpClient(theUriPS);
+
+            DataContractJsonSerializer modesJsonSer = new DataContractJsonSerializer(typeof(GetPatientSystemDataRequest));
+            MemoryStream ms = new MemoryStream();
+            modesJsonSer.WriteObject(ms, request);
+            ms.Position = 0;
+
+            //use a Stream reader to construct the StringContent (Json) 
+            StreamReader modesSr = new StreamReader(ms);
+            StringContent modesContent = new StringContent(modesSr.ReadToEnd(), System.Text.Encoding.UTF8, "application/json");
+
+            //Post the data 
+            var response = client.GetStringAsync(theUriPS);
+            var responseContent = response.Result;
+
+            string modesResponseString = responseContent;
+            GetPatientSystemDataResponse getPatientSystemDataResponse = null;
+
+            using (var memStream = new MemoryStream(Encoding.Unicode.GetBytes(modesResponseString)))
+            {
+                var modesSerializer = new DataContractJsonSerializer(typeof(GetPatientSystemDataResponse));
+                getPatientSystemDataResponse = (GetPatientSystemDataResponse)modesSerializer.ReadObject(memStream);
+            }
+            return getPatientSystemDataResponse;
+        }
+
+        private UpdatePatientSystemDataResponse updatePatientSystem(UpdatePatientSystemDataRequest request)
+        {
+            //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/PatientSystem/{Id}", "PUT")]
+            Uri updateUri = new Uri(string.Format("{0}/PatientSystem/{1}/{2}/{3}/Patient/{4}/PatientSystem/{5}?UserId={6}",
+                                                        txtURL.Text,
+                                                        context,
+                                                        version,
+                                                        txtContract.Text,
+                                                        request.PatientId,
+                                                        request.Id,
+                                                        _headerUserId));
+            HttpClient updateClient = GetHttpClient(updateUri);
+
+            UpdatePatientSystemDataResponse response = null;
+
+            DataContractJsonSerializer updateJsonSer = new DataContractJsonSerializer(typeof(UpdatePatientSystemDataRequest));
+
+            // use the serializer to write the object to a MemoryStream 
+            MemoryStream updateMs = new MemoryStream();
+            updateJsonSer.WriteObject(updateMs, request);
+            updateMs.Position = 0;
+
+
+            //use a Stream reader to construct the StringContent (Json) 
+            StreamReader updateSr = new StreamReader(updateMs);
+
+            StringContent updateContent = new StringContent(updateSr.ReadToEnd(), System.Text.Encoding.UTF8, "application/json");
+
+            //Post the data 
+            var updateResponse = updateClient.PutAsync(updateUri, updateContent);
+            var updateResponseContent = updateResponse.Result.Content;
+
+            string updateResponseString = updateResponseContent.ReadAsStringAsync().Result;
+
+
+            using (var updateMsResponse = new MemoryStream(Encoding.Unicode.GetBytes(updateResponseString)))
+            {
+                var updateSerializer = new DataContractJsonSerializer(typeof(UpdatePatientSystemDataResponse));
+                response = (UpdatePatientSystemDataResponse)updateSerializer.ReadObject(updateMsResponse);
+            }
+
+            return response;
         }
 
         private PutUpdatePatientDataResponse putUpdatePatientServiceCall(PutUpdatePatientDataRequest putUpdatePatient, string patientId)
