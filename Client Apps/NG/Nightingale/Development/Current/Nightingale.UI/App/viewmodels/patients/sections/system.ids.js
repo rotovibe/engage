@@ -53,7 +53,7 @@
             self.savePatientSystems = function () {
 				//TODO: multi ID's
 	alert( 'not implemented.');
-    //            datacontext.savePatientSystems(self.computedPatientSystems());
+    //            datacontext.savePatientSystems(self.computedPatientSystems()); <-- func needs refactoring as well
             };
             self.cancelPatientSystems = function () {
                 ko.utils.arrayForEach(self.computedPatientSystems(), function (patSys) {

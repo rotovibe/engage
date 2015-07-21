@@ -53,6 +53,25 @@
                 // until permissions are added
                 return true;
             });
+				
+			self.primaryIdLabel = ko.observable();
+			self.primaryIdTitle = ko.observable();
+			self.primaryIdValue = ko.observable();			
+			self.primaryId = ko.computed( function(){
+				var patient = self.selectedPatient;
+				var patientSystemIds = self.selectedPatient.patientSystems();
+				var primary = self.selectedPatient.getPrimaryPatientSystem();
+				if(primary){
+					self.primaryIdLabel( primary.system().displayLabel() );
+					self.primaryIdTitle( primary.system().displayLabel() + ': '+ primary.value() );
+					self.primaryIdValue( primary.value() );
+					console.log('the primary is: ' +primary.system().displayLabel() + primary.value() );
+				}
+				else{
+					console.log('no primary');
+				}
+				return primary;
+			});			
         };
 
         ctor.prototype.attached = function () {

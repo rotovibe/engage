@@ -1366,17 +1366,17 @@ define(['services/session', 'services/jsonResultsAdapter', 'models/base', 'confi
                 var thisPatient = patientSystems[0].patient();
                 // Trigger a refresh on anything watching the state of the system id
                 thisPatient.patientSystems.valueHasMutated();
-                thisPatient.displaySystemId(patientSystems[0].systemId());
+                //thisPatient.displaySystemId(patientSystems[0].systemId());
                 // If it was an insert,
                 if (isInsert) {
                     // Find the first patient system that is new
-                    ko.utils.arrayForEach(patientSystems, function (patSys) {
-                        // Set to the returned id
-                        if (patSys.id() < 0) {
-                            patSys.id(data.PatientSystemId);
-                            patSys.entityAspect.acceptChanges();
-                        }
-                    });
+                    // ko.utils.arrayForEach(patientSystems, function (patSys) {
+                        // // Set to the returned id
+                        // if (patSys.id() < 0) {
+                            // patSys.id(data.PatientSystemId);
+                            // patSys.entityAspect.acceptChanges();
+                        // }
+                    // });
                 }
                 thisPatient.entityAspect.acceptChanges();
                 return true;
@@ -1924,7 +1924,6 @@ define(['services/session', 'services/jsonResultsAdapter', 'models/base', 'confi
             // serializedAllergies.PatientId = patientId;
             // Go through the observations,
             ko.utils.arrayForEach(allergies, function (allergy) {
-				if( allergy.isValid() && 
                 allergy.entityAspect.acceptChanges();
                 // Serialize it
                 var serializedAllergy = entitySerializer.serializePatientAllergy(allergy, manager);

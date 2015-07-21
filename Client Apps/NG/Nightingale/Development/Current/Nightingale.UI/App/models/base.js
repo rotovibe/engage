@@ -650,6 +650,13 @@ define(['services/validatorfactory', 'services/customvalidators', 'services/form
 					});
 					patient.patientStatusReason(unknownReason);
 				}				
+				
+				patient.getPrimaryPatientSystem = function(){
+					var primary = ko.utils.arrayFirst( patient.patientSystems(), function(patSys) {
+						return Boolean(patSys.primary());
+					});
+					return primary;
+				}
             }
 
             function careMemberInitializer(careTeam) {

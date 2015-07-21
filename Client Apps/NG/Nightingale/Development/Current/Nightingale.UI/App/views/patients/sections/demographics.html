@@ -27,11 +27,10 @@
                     <span class="grey" data-bind="with: dOB"><span data-bind="text: '(' + $data + ')'" data-phyautomation="dob"></span></span>
                 </div>
             </div>
-            <div class="row">
-                <div class="span4 grey ellipsis" data-bind="text: (displayLabel() || 'ID')"></div>
+            <div class="row" data-bind="visible: $parent.primaryId" >
+                <div class="span4 grey ellipsis" data-bind="text: $parent.primaryIdLabel, attr:{ 'title': $parent.primaryIdTitle }"></div>
                 <div class="span8 ellipsis">
-                    <em class="row grey" data-bind="visible: !displaySystemId()">Unknown</em>
-                    <span class="row" data-bind="visible: displaySystemId, text: displaySystemId, attr: { 'title': displaySystemId }"></span>
+                    <span class="row" data-bind="text: $parent.primaryIdValue, attr: { 'title': $parent.primaryIdValue }"></span>
                 </div>
             </div>
             <div class="row">
