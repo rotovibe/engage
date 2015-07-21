@@ -41,8 +41,8 @@
 					}						
 				});
 				theseIds.sort( function(a,b){
-					if( a.system().displayLabel() < b.system().displayLabel() ) return -1;
-					if( a.system().displayLabel() > b.system().displayLabel() ) return 1;
+					if( a.system().displayLabel().toLowerCase() < b.system().displayLabel().toLowerCase() ) return -1;
+					if( a.system().displayLabel().toLowerCase() > b.system().displayLabel().toLowerCase() ) return 1;
 					return 0;
 				});				
                 return theseIds;
