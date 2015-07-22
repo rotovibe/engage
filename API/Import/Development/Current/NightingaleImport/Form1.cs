@@ -17,6 +17,7 @@ using Phytel.API.DataDomain.Contact.DTO;
 using Phytel.API.DataDomain.LookUp.DTO;
 using Phytel.API.DataDomain.Patient.DTO;
 using Phytel.API.DataDomain.PatientSystem.DTO;
+using Microsoft.VisualBasic.FileIO;
 
 namespace NightingaleImport
 {
@@ -883,25 +884,28 @@ namespace NightingaleImport
                 {
                     filename = openFileDialog1.FileName;
                     textBox1.Text = filename;
-                    string[] attributes;
-                    string[] filelines = File.ReadAllLines(filename);
-                    foreach (string line in filelines)
+                    using (TextFieldParser parser = new TextFieldParser(filename))
                     {
-                        attributes = line.Split(",".ToCharArray());
-                        ListViewItem lvi = new ListViewItem(attributes[colFirstN].Trim());
-                        for (int i = 1; i < attributes.Count(); i++)
+                        parser.TextFieldType = FieldType.Delimited;
+                        parser.SetDelimiters(",");
+                        while (!parser.EndOfData)
                         {
-                            lvi.SubItems.Add(attributes[i].Trim());
-                        }
-                        //Check for required fields
-                        if (lvi.SubItems[colFirstN].Text == "" || lvi.SubItems[colLastN].Text == ""
-                            || lvi.SubItems[colGen].Text == "" || lvi.SubItems[colDB].Text == "")
-                        {
-                            throw new Exception("Required Patient data not found. Check patient: " + line);
-                        }
-                        else
-                        {
-                            listView1.Items.Add(lvi);
+                            string[] line = parser.ReadFields();
+                            ListViewItem lvi = new ListViewItem(line[colFirstN].Trim());
+                            for (int i = 1; i < line.Count(); i++)
+                            {
+                                lvi.SubItems.Add(line[i].Trim());
+                            }
+                            //Check for required fields
+                            if (lvi.SubItems[colFirstN].Text == "" || lvi.SubItems[colLastN].Text == ""
+                                || lvi.SubItems[colGen].Text == "" || lvi.SubItems[colDB].Text == "")
+                            {
+                                throw new Exception("Required Patient data not found. Check patient: " + String.Join(",", line));
+                            }
+                            else
+                            {
+                                listView1.Items.Add(lvi);
+                            }
                         }
                     }
                 }

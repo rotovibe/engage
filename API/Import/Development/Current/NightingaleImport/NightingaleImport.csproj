@@ -37,6 +37,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="PhytelServices">
       <HintPath>..\..\..\..\Common\Phytel.API.Common\Release Candidate\Current\References\PhytelServices.dll</HintPath>
     </Reference>
