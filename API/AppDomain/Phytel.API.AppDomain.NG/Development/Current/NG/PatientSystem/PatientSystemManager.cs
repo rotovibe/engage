@@ -114,40 +114,43 @@ namespace Phytel.API.AppDomain.NG
             #region UpdateExistingPatientSystem
             // Get all PatientSystems to update each record.
             List<PatientSystemOldData> pSys = EndpointUtil.GetAllPatientSystems(request);
-            // Remove all the newly added records.
-            pSys.RemoveAll(x => string.IsNullOrEmpty(x.OldSystemId));
-            if (pSys.Count > 0 && string.Equals(request.ContractNumber, "InHealth001", StringComparison.InvariantCultureIgnoreCase))
+            if (pSys != null && pSys.Count > 0)
             {
+                // Remove all the newly added records.
+                pSys.RemoveAll(x => string.IsNullOrEmpty(x.OldSystemId));
+                if (pSys.Count > 0 && string.Equals(request.ContractNumber, "InHealth001", StringComparison.InvariantCultureIgnoreCase))
+                {
 
-                var bsdiSystem = EndpointUtil.GetSystems(Mapper.Map<GetActiveSystemsRequest>(request)).FirstOrDefault(r => r.Name.Equals("BSDI", StringComparison.InvariantCultureIgnoreCase));
-                List<PatientSystem> data = new List<PatientSystem>();
-                pSys.ForEach(p =>
-                    {
-                        data.Add(new PatientSystem
+                    var bsdiSystem = EndpointUtil.GetSystems(Mapper.Map<GetActiveSystemsRequest>(request)).FirstOrDefault(r => r.Name.Equals("BSDI", StringComparison.InvariantCultureIgnoreCase));
+                    List<PatientSystem> data = new List<PatientSystem>();
+                    pSys.ForEach(p =>
                         {
-                            Id = p.Id,
-                            PatientId = p.PatientId,
-                            Primary = false,
-                            StatusId = (int)Status.Active,
-                            SystemId = bsdiSystem.Id,
-                            SystemSource = "Import",
-                            Value = p.OldSystemId.Trim(),
+                            data.Add(new PatientSystem
+                            {
+                                Id = p.Id,
+                                PatientId = p.PatientId,
+                                Primary = false,
+                                StatusId = (int)Status.Active,
+                                SystemId = bsdiSystem.Id,
+                                SystemSource = "Import",
+                                Value = p.OldSystemId.Trim(),
+                            });
                         });
-                    });
 
-                UpdatePatientSystemsRequest updateRequest = new UpdatePatientSystemsRequest
-                {
-                    ContractNumber = request.ContractNumber,
-                    PatientId = data[0].PatientId,
-                    PatientSystems = data,
-                    UserId = request.UserId,
-                    Version = request.Version
-                };
+                    UpdatePatientSystemsRequest updateRequest = new UpdatePatientSystemsRequest
+                    {
+                        ContractNumber = request.ContractNumber,
+                        PatientId = data[0].PatientId,
+                        PatientSystems = data,
+                        UserId = request.UserId,
+                        Version = request.Version
+                    };
 
-                List<PatientSystemData> dataList = EndpointUtil.UpdatePatientSystems(updateRequest);
-                if (dataList != null)
-                {
-                    bsdiCount = dataList.Count;
+                    List<PatientSystemData> dataList = EndpointUtil.UpdatePatientSystems(updateRequest);
+                    if (dataList != null)
+                    {
+                        bsdiCount = dataList.Count;
+                    }
                 }
             }
             #endregion
