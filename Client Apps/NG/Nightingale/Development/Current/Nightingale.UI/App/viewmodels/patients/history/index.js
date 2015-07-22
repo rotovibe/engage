@@ -185,7 +185,6 @@
 			self.activationData = { note: self.note };
 			self.canSave = ko.computed(function () {
 				return self.note.isValid(); 
-				return true; 
 			});
 		}
 		function editNote(sender){						    			
