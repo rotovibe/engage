@@ -42,10 +42,11 @@ namespace Phytel.API.DataDomain.PatientSystem
 
         public List<PatientSystemOldData> GetAllPatientSystems()
         {
+            List<PatientSystemOldData> dataList = null;
             try
             {
                 var repo = Factory.GetRepository(RepositoryType.PatientSystem);
-                var dataList = repo.SelectAll().ToList<PatientSystemOldData>();
+                dataList = repo.SelectAll() as List<PatientSystemOldData>;
                 return dataList;
             }
             catch (Exception ex)
