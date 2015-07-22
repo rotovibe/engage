@@ -17,12 +17,12 @@ namespace Phytel.API.AppDomain.NG.Test.PatientSystem
     public class PatientSystem_Test
     {
         string context = "NG";
-        string contractNumber = "InHealth001";
+        string contractNumber = "Demo001";
         string userId = "000000000000000000000000";
         double version = 1.0;
         string url = "http://localhost:888/Nightingale";
         IRestClient client = new JsonServiceClient();
-        string token = "54e7970984ac0727006941bd";
+        string token = "55b003a6231e250f18f6b056";
 
         [TestMethod]
         public void GetPatientSystems_Test()
@@ -60,7 +60,7 @@ namespace Phytel.API.AppDomain.NG.Test.PatientSystem
                 x.Headers.Add(string.Format("{0}: {1}", "Token", token));
 
             //[Route("/{Version}/{ContractNumber}/Internal/PatientSystems/", "GET")]
-            UpdatePatientsAndSystemsResponse response = client.Get<UpdatePatientsAndSystemsResponse>(string.Format("{0}/{1}/{2}/Internal/PatientSystems/", url, version, contractNumber));
+            UpdatePatientsAndSystemsResponse response = client.Get<UpdatePatientsAndSystemsResponse>(string.Format("{0}/{1}/{2}/Internal/PatientSystems?UserId={3}", url, version, contractNumber, request.UserId));
             Assert.IsNotNull(response);
         }
 

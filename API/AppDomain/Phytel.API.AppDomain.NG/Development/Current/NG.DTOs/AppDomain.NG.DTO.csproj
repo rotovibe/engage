@@ -162,6 +162,8 @@
     <Compile Include="Meds\PostPatientMedSuppRequest.cs" />
     <Compile Include="Meds\PostPatientMedSuppResponse.cs" />
     <Compile Include="PatientSystem\PatientSystem\DeletePatientSystemsRequest.cs" />
+    <Compile Include="PatientSystem\PatientSystem\InsertPatientSystemRequest.cs" />
+    <Compile Include="PatientSystem\PatientSystem\InsertPatientSystemResponse.cs" />
     <Compile Include="PatientSystem\PatientSystem\UpdatePatientSystemsRequest.cs" />
     <Compile Include="PatientSystem\PatientSystem\DeletePatientSystemsResponse.cs" />
     <Compile Include="PatientSystem\PatientSystem\UpdatePatientSystemsResponse.cs" />

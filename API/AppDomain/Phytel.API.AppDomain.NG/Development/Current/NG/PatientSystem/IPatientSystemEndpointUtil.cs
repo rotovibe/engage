@@ -12,6 +12,7 @@ namespace Phytel.API.AppDomain.NG
         List<PatientSystemData> GetPatientSystems(GetPatientSystemsRequest request);
         List<PatientSystemOldData> GetAllPatientSystems(UpdatePatientsAndSystemsRequest request);
         List<PatientSystemData> InsertPatientSystems(InsertPatientSystemsRequest request);
+        string InsertPatientSystem(InsertPatientSystemDataRequest request);
         List<PatientSystemData> UpdatePatientSystems(UpdatePatientSystemsRequest request);
         void DeletePatientSystems(DeletePatientSystemsRequest request);
         List<PatientData> GetAllPatients(UpdatePatientsAndSystemsRequest request);

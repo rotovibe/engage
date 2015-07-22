@@ -199,5 +199,33 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (Exception ex) { throw ex; }
         }
+
+
+        public string InsertPatientSystem(InsertPatientSystemDataRequest request)
+        {
+            string id = null;
+            try
+            {
+                if (request.PatientSystemsData != null)
+                {
+                    IRestClient client = new JsonServiceClient();
+                    //    [Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/PatientSystem", "POST")]
+                    var url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/PatientSystem",
+                                        DDPatientSystemUrl,
+                                        "NG",
+                                        request.Version,
+                                        request.ContractNumber,
+                                        request.PatientId), request.UserId);
+
+                    InsertPatientSystemDataResponse dataDomainResponse = client.Post<InsertPatientSystemDataResponse>(url, request as object);
+                    if (dataDomainResponse != null)
+                    {
+                        id = dataDomainResponse.Id;
+                    }
+                }
+            }
+            catch (Exception ex) { throw ex; }
+            return id;
+        }
     }
 }

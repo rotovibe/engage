@@ -162,32 +162,28 @@ namespace Phytel.API.AppDomain.NG
             List<Phytel.API.DataDomain.Patient.DTO.PatientData> patients = EndpointUtil.GetAllPatients(request);
             if (patients.Count > 0)
             {
-
-                var engageSystem = EndpointUtil.GetSystems(Mapper.Map<GetActiveSystemsRequest>(request)).FirstOrDefault(r => r.Name.Equals("Engage", StringComparison.InvariantCultureIgnoreCase));
-                List<PatientSystem> insertData = new List<PatientSystem>();
                 patients.ForEach(p =>
+                {
+                    PatientSystemData data = new PatientSystemData 
                     {
-                        insertData.Add(new PatientSystem
-                        {
-                            PatientId = p.Id,
-                            SystemId = engageSystem.Id,
-                        });
-                    });
-
-                InsertPatientSystemsRequest insertRequest = new InsertPatientSystemsRequest
-                {
-                    ContractNumber = request.ContractNumber,
-                    PatientId = insertData[0].PatientId,
-                    UserId = request.UserId,
-                    Version = request.Version,
-                    PatientSystems = insertData
-                };
-                insertRequest.UserId = Constants.SystemContactId; // the requirement says that the engage Id should have createdby user as 'system'.
-                List<PatientSystemData> engageList = EndpointUtil.InsertPatientSystems(insertRequest);
-                if (engageList != null)
-                {
-                    engageCount = engageList.Count;
-                }
+                        PatientId  = p.Id,
+                    };
+                    InsertPatientSystemDataRequest insertReq = new InsertPatientSystemDataRequest 
+                    {
+                        Context = "NG",
+                        ContractNumber = request.ContractNumber,
+                        IsEngageSystem  = true,
+                        PatientId = data.PatientId,
+                        PatientSystemsData = data,
+                        UserId = Constants.SystemContactId, // the requirement says that the engage Id should have createdby user as 'system'.
+                        Version = request.Version
+                    };
+                    string id = EndpointUtil.InsertPatientSystem(insertReq);
+                    if (!string.IsNullOrEmpty(id))
+                    {
+                        engageCount++;
+                    }
+                });
             }
             #endregion
 
