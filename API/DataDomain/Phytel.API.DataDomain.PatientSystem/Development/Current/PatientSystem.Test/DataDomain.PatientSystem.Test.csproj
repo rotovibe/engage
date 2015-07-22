@@ -119,7 +119,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Stub\StubPatientSystemDataManager.cs" />
     <Compile Include="Stub\StubPatientSystemRepository.cs" />
-    <Compile Include="Stub_PatientSystemTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\Interfaces\Development\Current\Phytel.API.Interface\Phytel.API.Interface.csproj">
