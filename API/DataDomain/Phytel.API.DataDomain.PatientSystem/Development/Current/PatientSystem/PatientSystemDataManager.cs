@@ -99,13 +99,6 @@ namespace Phytel.API.DataDomain.PatientSystem
                     var repo = Factory.GetRepository(RepositoryType.PatientSystem);
                     request.PatientSystemsData.ForEach(p =>
                     {
-                        if (string.Equals(Constants.EngageSystemId, p.SystemId, StringComparison.InvariantCultureIgnoreCase))
-                        {
-                            p.Value = EngageId.New();
-                            p.Primary = isSystemPrimary(Constants.EngageSystemId);
-                            p.StatusId = (int)Status.Active;
-                            p.SystemSource = Constants.SystemSource;
-                        }
                         InsertPatientSystemDataRequest insertReq = new InsertPatientSystemDataRequest
                         {
                             PatientId = p.PatientId,
