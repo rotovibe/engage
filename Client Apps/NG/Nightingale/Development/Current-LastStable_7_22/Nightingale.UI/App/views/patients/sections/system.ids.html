@@ -1,0 +1,23 @@
+<section class="accordion hoverable open" data-phyautomation="patients-system-ids-pane">
+    <div class="row line accordion-toggle open">
+        <strong class="ellipsis" data-bind="clickToggle: isOpen">IDs</strong>
+        <!-- temporary: under construction: <a class="edit hover-toggle" href="#" data-bind="click: editSystemIds">Edit</a> -->
+    </div>
+    <ul class="accordion-content columns" data-bind="visible: isOpen">
+        <ul class="column">
+			<!-- ko foreach: computedPatientSystems -->
+			<div data-bind="visible: (Number(statusId()) === 1)">
+				<li class="pad-bottom ellipsis">
+						<span data-bind="with: system">
+							<span class="ellipsis" data-bind="text: displayLabel, attr: { title: (displayLabel() +': '+ $parent.value()) }"></span>
+						</span>
+						: <span class="ellipsis" data-bind="text: value, attr: { title: value }"></span>
+				</li>
+			</div>
+			<!-- /ko -->
+			<li class="grey" data-bind="visible: !isExpanded() && computedPatientSystems().length === 5">
+				<a class="grey" data-bind="clickToggle: isExpanded" href="#">...</a>
+			</li>
+        </ul>		
+    </ul>
+</section>
