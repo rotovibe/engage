@@ -9,6 +9,7 @@ namespace Phytel.API.DataDomain.PatientSystem.DTO
 {
     [BsonIgnoreExtraElements(false)]
     [MongoIndex(Keys = new string[] { TTLDateProperty }, TimeToLive = 0)]
+    [MongoIndex(Keys = new string[] { DeleteFlagProperty, TTLDateProperty})]
     public class MESystem : IMongoEntity<ObjectId>, IMEEntity
     {
         public MESystem(string userId)
