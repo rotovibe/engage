@@ -21,7 +21,7 @@
 	//patient multi id status
 	enums.patientSystemStatus =  ko.observableArray();	
 	enums.systemStatus =  ko.observableArray();
-	
+	enums.systems = ko.observableArray();
     enums.daysOfWeek = ko.observableArray([
         new modelConfig.Day('0', 'M', 'Monday'),
         new modelConfig.Day('1', 'Tu', 'Tuesday'),

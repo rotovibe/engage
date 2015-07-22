@@ -33,6 +33,7 @@ define(['services/session', 'services/jsonResultsAdapter', 'models/base', 'confi
         var programsSaving = ko.observable(false);
         // Monitors whether observations are currently saving to lock functionality
         var observationsSaving = ko.observable(false);
+		var patientSystemsSaving = ko.observable(false);
         // Monitors whether todos are currently saving to lock functionality
         var todosSaving = ko.observable(false);
         // Monitors whether interventions are currently saving to lock functionality
@@ -204,6 +205,7 @@ define(['services/session', 'services/jsonResultsAdapter', 'models/base', 'confi
             initializeEntity: initializeEntity,
             createComplexType: createComplexType,
             getUserByUserToken: getUserByUserToken,
+			getSystemCareManager: getSystemCareManager,
             logOutUserByToken: logOutUserByToken,
             createUserFromSessionUser: createUserFromSessionUser,
             getEventsByUserId: getEventsByUserId,
@@ -241,13 +243,15 @@ define(['services/session', 'services/jsonResultsAdapter', 'models/base', 'confi
             checkIfAllObservationsAreLoadedYet: checkIfAllObservationsAreLoadedYet,
             initializeObservation: initializeObservation,
             saveObservations: saveObservations,
-            savePatientSystems: savePatientSystems,
+            savePatientSystems: savePatientSystems,			
+			deletePatientSystems: deletePatientSystems,		
             //saveBackground: saveBackground,
             getFullSSN: getFullSSN,
             addPatientToRecentList: addPatientToRecentList,
             hasChanges: hasChanges,
             programsSaving: programsSaving,
             observationsSaving: observationsSaving,
+			patientSystemsSaving: patientSystemsSaving,
             todosSaving: todosSaving,
             interventionsSaving: interventionsSaving,
             tasksSaving: tasksSaving,
@@ -316,7 +320,7 @@ define(['services/session', 'services/jsonResultsAdapter', 'models/base', 'confi
 		function getSystems(){
 			if (session.currentUser() && session.currentUser().contracts().length !== 0) {				
 				var endPoint = new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'System', 'System');
-                return getEntityList(null, endPoint.EntityType, endPoint.ResourcePath, null, null, true);
+                return getEntityList(datacontext.enums.systems, endPoint.EntityType, endPoint.ResourcePath, null, null, true);
 			}
 		}
         // Get a list of problems lookups
@@ -1330,58 +1334,81 @@ define(['services/session', 'services/jsonResultsAdapter', 'models/base', 'confi
                 return true;
             }
         }
-
-        function savePatientSystems(patientSystems) {
-            // This is all going to have to be refactored
-            // When we go to the multiple patient id scenario
-            // Since the save call only takes 1 at a time
-            var theseObservations = ko.observableArray();
-            // Is this an insert or update?
-            var isInsert = false;
-            // Display a message while saving
-            var message = queryStarted('System Ids', true, 'Saving');
-            var serializedPatientSystems = [];
-            ko.utils.arrayForEach(patientSystems, function (patSys) {
-                // And if the patSys a date and has changes...
-                if (patSys.systemId() && (patSys.entityAspect.entityState.isAdded() || patSys.entityAspect.entityState.isModified())) {
-                    var canSave = true;
-                    // If you can save,
-                    if (canSave) {
-                        // Accept it's changes
-                        patSys.entityAspect.acceptChanges();
-                        // Serialize it
-                        var serializedPatientSystem = entitySerializer.serializePatientSystem(patSys, manager);
-                        isInsert = serializedPatientSystem.Id < 0;
-                        serializedPatientSystems.push(serializedPatientSystem);
-                    }
-                }
-            });
-            if (serializedPatientSystems.length > 0) {
-                ko.utils.arrayForEach(serializedPatientSystems, function (patSystem) {
-                    return patientsService.savePatientSystem(manager, patSystem, isInsert).then(saveCompleted);
-                });                
+		
+		function savePatientSystems(patientSystems) {
+			var message = queryStarted('System Ids', true, 'Saving');
+			var serializedPatientSystems = [];
+			var isInsert = false;
+			ko.utils.arrayForEach(patientSystems, function (patSys) {
+				if( patSys.isValid() ){
+					var trimmedValue = patSys.value().trim();
+					patSys.value(trimmedValue);
+					patSys.entityAspect.acceptChanges();
+					console.log('savePatientSystems 1: id: '+ patSys.id() +' value: '+ patSys.value() +' primary: '+ String(patSys.primary()));
+					var serializedPatientSystem = entitySerializer.serializePatientSystem(patSys, manager);
+					console.log('savePatientSystems 2: Id: '+ serializedPatientSystem.Id +' value:'+ serializedPatientSystem.value +' primary: '+ String(serializedPatientSystem.primary));
+					serializedPatientSystems.push(serializedPatientSystem);
+					if( patSys.isNew() ){
+						isInsert = true;	//assuming ALL items are for insert or all are for update (not mixed)
+					}
+				}
+			});	
+			if (serializedPatientSystems.length > 0) { 
+				patientSystemsSaving(true);
+                return patientsService.savePatientSystems(manager, serializedPatientSystems, isInsert).then(saveCompleted);                
+            }else {				
+				queryCompleted(message);
+				patientSystemsSaving(false);
+				return Q();	//return a resolved promise.			
             }
-            function saveCompleted(data) {
+            function saveCompleted(data) {				
                 queryCompleted(message);
-                var thisPatient = patientSystems[0].patient();
-                // Trigger a refresh on anything watching the state of the system id
-                thisPatient.patientSystems.valueHasMutated();
-                thisPatient.displaySystemId(patientSystems[0].systemId());
-                // If it was an insert,
-                if (isInsert) {
-                    // Find the first patient system that is new
-                    ko.utils.arrayForEach(patientSystems, function (patSys) {
+				patientSystemsSaving(false);
+                var thisPatient = patientSystems[0].patient();                
+                
+                if (isInsert) {					
+                    //clean up the temporary new ents as the response got new ones into the cache. (.toType)
+                    ko.utils.arrayForEach( patientSystems, function (patSys) {
                         // Set to the returned id
                         if (patSys.id() < 0) {
-                            patSys.id(data.PatientSystemId);
-                            patSys.entityAspect.acceptChanges();
+                            patSys.entityAspect.setDeleted();                            
                         }
                     });
                 }
-                thisPatient.entityAspect.acceptChanges();
+				// Trigger a refresh on anything watching the state of the system id
+                thisPatient.patientSystems.valueHasMutated();                                
                 return true;
             }
-        }
+		}
+
+		function deletePatientSystems(patientSystems) {		
+			var message = queryStarted('System Ids', true, 'Deleting');
+			var thisPatient = null;                
+			var deleteIds = [];			
+			if( patientSystems && patientSystems.length > 0){
+				thisPatient = patientSystems[0].patient();
+				ko.utils.arrayForEach(patientSystems, function (patSys) {
+					deleteIds.push( patSys.id() );
+				});	
+				patientSystemsSaving(true);
+				return patientsService.deletePatientSystems(manager, deleteIds, thisPatient.id()).then(deleteCompleted);                
+            } 
+			else{
+				queryCompleted(message);
+				patientSystemsSaving(false);
+				return Q();	//return a resolved promise.	
+			}
+            function deleteCompleted(data) {
+                queryCompleted(message);  
+				patientSystemsSaving(false);
+				ko.utils.arrayForEach( patientSystems, function(patSys){
+					patSys.entityAspect.setDeleted();	//remove the deleted ents from cache
+				});	
+                // Trigger a refresh on anything watching the state of the system id
+                thisPatient.patientSystems.valueHasMutated();                                
+                return true;            
+			}			
+		}		
 
         /**obsolete: use saveIndividual**  Save changes to a single contact card
         function saveBackground(patient) {
@@ -1567,6 +1594,12 @@ define(['services/session', 'services/jsonResultsAdapter', 'models/base', 'confi
             }
         }
 
+		function getSystemCareManager(){
+			var SystemCareManager = ko.utils.arrayFirst(datacontext.enums.careManagers(), function (caremanager) {
+				return (caremanager.userId()=== '' && caremanager.firstName() === 'System' && caremanager.preferredName() === 'System');
+			});
+			return SystemCareManager;
+		}
 		
 		function getUsercareManagerName(){
 			var thisMatchedCareManager = ko.utils.arrayFirst(datacontext.enums.careManagers(), function (caremanager) {

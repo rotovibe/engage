@@ -4,6 +4,7 @@ define(['services/validatorfactory', 'services/customvalidators', 'services/form
 	function (validatorFactory, customValidators, formatter) {
 
 	    var datacontext;
+		var systemCareManager;
 	    var DT = breeze.DataType;
 	    var Validator = breeze.Validator;
 
@@ -50,8 +51,10 @@ define(['services/validatorfactory', 'services/customvalidators', 'services/form
 		        // If a cancel override function was passed in,
 		        if (cancelOverride) {
 		            // Use it
-		            cancelOverride();
-		            self.Showing(false);
+		            var confirmed = cancelOverride();
+					if( confirmed === undefined || confirmed === true ){
+						self.Showing(false);
+					} 
 		        } else {
                     // If not, use the entities default
 		            var thisEntity = ko.unwrap(self.Entity);
@@ -495,6 +498,8 @@ define(['services/validatorfactory', 'services/customvalidators', 'services/form
 				'Alert', null, alertInitializer);
             metadataStore.registerEntityTypeCtor(
 				'CareMember', null, careMemberInitializer);
+			metadataStore.registerEntityTypeCtor(
+				'PatientSystem', null, patientSystemInitializer);
 
             function patientInitializer(patient) {
                 // Check if a datacontext exists
@@ -649,9 +654,70 @@ define(['services/validatorfactory', 'services/customvalidators', 'services/form
 						return 'Unknown' === reason.name();
 					});
 					patient.patientStatusReason(unknownReason);
-				}				
+				}	
+								
+				patient.canSavePatientSystems = ko.computed(function () {
+					var systemIds = patient.patientSystems();
+					var result = false;
+					var isValid = true;
+					var hasChanges = false;
+					ko.utils.arrayForEach( systemIds, function( record ){
+						if( record.isNew() || record.entityAspect.entityState.name !== 'Unchanged' ){
+							hasChanges = true;
+						}
+						if( !record.isValid() ){
+							isValid = false;
+						}
+					});
+			    	return (isValid && hasChanges);
+			    });
+				
+				patient.getPrimaryPatientSystem = function(){
+					var primary = ko.utils.arrayFirst( patient.patientSystems(), function(patSys) {
+						console.log('getPrimaryPatientSystem: ' + String(patSys.primary()));
+						return Boolean(patSys.primary());
+					});
+					return primary;
+				}
             }
 
+			function patientSystemInitializer( patientSystem ){
+				patientSystem.isDeleted = ko.observable( false );				
+				patientSystem.isNew = ko.observable( false );
+				var systemCareManager = getSystemCareManager();
+				patientSystem.isEditable = ko.observable(false);
+				if( patientSystem.createdById() === systemCareManager.id() ){
+					patientSystem.isEditable(false);
+				} else{
+					patientSystem.isEditable(true);
+				}
+				//TODO: find the system user. if created by system - set isEditable = false
+				patientSystem.validationErrors = ko.observableArray();
+				patientSystem.validationErrorsArray = ko.computed(function () {
+			        var thisArray = [];
+			        ko.utils.arrayForEach(patientSystem.validationErrors(), function (error) {
+			            thisArray.push(error.PropName);
+			        });
+			        return thisArray;
+			    });
+				
+				patientSystem.isValid = ko.computed( function(){
+					var errors = [];					
+					var value = patientSystem.value();	//TODO: trim it
+					var system = patientSystem.system();
+					if( !value ){
+						errors.push({ PropName: 'value', Message: 'Value is required', Id: patientSystem.id() });						
+					} else if ( value.trim().length === 0 ){
+						errors.push({ PropName: 'value', Message: 'Value cannot be blank', Id: patientSystem.id() });
+					}
+					if( !system ){
+						errors.push({ PropName: 'system', Message: 'System is required', Id: patientSystem.id() });
+					}
+					patientSystem.validationErrors( errors );
+					return (errors.length === 0)
+				});
+			}
+			
             function careMemberInitializer(careTeam) {
                 careTeam.genderModel = ko.computed({
                     read: function () {
@@ -716,5 +782,13 @@ define(['services/validatorfactory', 'services/customvalidators', 'services/form
 		    if (!datacontext) {
 		        datacontext = require('services/datacontext');
 		    }
+		}
+		
+		function getSystemCareManager(){
+			if( ! systemCareManager ){
+				checkDataContext();
+				systemCareManager = datacontext.getSystemCareManager();
+			}
+			return systemCareManager;
 		}
 	});
