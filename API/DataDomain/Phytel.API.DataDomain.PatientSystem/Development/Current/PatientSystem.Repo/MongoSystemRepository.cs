@@ -70,6 +70,7 @@ namespace Phytel.API.DataDomain.PatientSystem
                         List<IMongoQuery> queries = new List<IMongoQuery>();
                         queries.Add(Query.EQ(MESystem.IdProperty, ObjectId.Parse(entityID)));
                         queries.Add(Query.EQ(MESystem.DeleteFlagProperty, false));
+                        queries.Add(Query.EQ(MESystem.TTLDateProperty, BsonNull.Value));
                         IMongoQuery mQuery = Query.And(queries);
                         MESystem s = ctx.Systems.Collection.Find(mQuery).FirstOrDefault();
                         if (s != null)
@@ -127,6 +128,7 @@ namespace Phytel.API.DataDomain.PatientSystem
                 {
                     List<IMongoQuery> queries = new List<IMongoQuery>();
                     queries.Add(Query.EQ(MESystem.DeleteFlagProperty, false));
+                    queries.Add(Query.EQ(MESystem.TTLDateProperty, BsonNull.Value));
                     IMongoQuery mQuery = Query.And(queries);
                     List<MESystem> meSS = ctx.Systems.Collection.Find(mQuery).ToList();
                     if (meSS != null && meSS.Count > 0)
