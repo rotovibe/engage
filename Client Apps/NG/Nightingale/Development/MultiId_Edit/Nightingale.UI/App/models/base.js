@@ -703,8 +703,10 @@ define(['services/validatorfactory', 'services/customvalidators', 'services/form
 				
 				patientSystem.isValid = ko.computed( function(){
 					var errors = [];					
-					var value = patientSystem.value();	//TODO: trim it
+					var value = patientSystem.value();
 					var system = patientSystem.system();
+					var isDeleted = patientSystem.isDeleted();
+					if( isDeleted ) { return true; }
 					if( !value ){
 						errors.push({ PropName: 'value', Message: 'Value is required', Id: patientSystem.id() });						
 					} else if ( value.trim().length === 0 ){

@@ -1371,7 +1371,8 @@ define(['services/session', 'services/jsonResultsAdapter', 'models/base', 'confi
                     ko.utils.arrayForEach( patientSystems, function (patSys) {
                         // Set to the returned id
                         if (patSys.id() < 0) {
-                            patSys.entityAspect.setDeleted();                            
+                            patSys.entityAspect.setDeleted();
+							patSys.entityAspect.acceptChanges();
                         }
                     });
                 }
@@ -1402,7 +1403,8 @@ define(['services/session', 'services/jsonResultsAdapter', 'models/base', 'confi
                 queryCompleted(message);  
 				patientSystemsSaving(false);
 				ko.utils.arrayForEach( patientSystems, function(patSys){
-					patSys.entityAspect.setDeleted();	//remove the deleted ents from cache
+					//remove the deleted ents from cache					
+					datacontext.detachEntity(patSys);
 				});	
                 // Trigger a refresh on anything watching the state of the system id
                 thisPatient.patientSystems.valueHasMutated();                                

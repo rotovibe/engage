@@ -16,7 +16,7 @@ define(['services/datacontext', 'services/session', 'models/base', 'viewmodels/s
             var self = this;
             self.patient = ko.observable(selectedPatient);
 			self.canSave = ko.observable();
-			self.activationData = { selectedPatient: self.patient, showing: modalShowing, canSave: self.canSave  };
+			self.activationData = { selectedPatient: self.patient, showing: modalShowing, canSave: self.canSave };
 		}   
 		
 		function systemIdsSortFunc(a,b){
@@ -59,17 +59,14 @@ define(['services/datacontext', 'services/session', 'models/base', 'viewmodels/s
 					
 					if( changes.deleted.length > 0 ){
 						//deletes
-						console.log('deleting patient systems - start');
 						return datacontext.deletePatientSystems( changes.deleted ).then(afterDelete);
 					}
 					else{
 						return afterDelete();
 					}
 					function afterDelete(){
-						console.log('afterDelete');
 						if( changes.updated.length > 0 ){
 							//updates
-							console.log('updating patient systems - start');
 							return datacontext.savePatientSystems( changes.updated ).then( afterUpdate );
 						}
 						else{
@@ -77,10 +74,8 @@ define(['services/datacontext', 'services/session', 'models/base', 'viewmodels/s
 						}
 					}
 					function afterUpdate(){
-						console.log('afterUpdate');
 						if( changes.created.length > 0 ){
 							//inserts					
-							console.log('insert patient systems - start');
 							return datacontext.savePatientSystems( changes.created );					
 						}	
 						else{
@@ -97,8 +92,8 @@ define(['services/datacontext', 'services/session', 'models/base', 'viewmodels/s
 					if( result === true ){	
 						//user approved the cancel action
 						//discard new ones
-						ko.utils.arrayForEach( changes.created, function( patSys ){
-							patSys.entityAspect.setDeleted();
+						ko.utils.arrayForEach( changes.created, function( patSys ){							
+							datacontext.detachEntity(patSys);
 						});
 						//undelete deleted
 						ko.utils.arrayForEach( changes.deleted, function( patSys ){
@@ -108,7 +103,8 @@ define(['services/datacontext', 'services/session', 'models/base', 'viewmodels/s
 						//revert any changes
 						ko.utils.arrayForEach( changes.updated, function( patSys ){
 							patSys.entityAspect.rejectChanges();
-						});								
+						});	
+						self.patientSystems.valueHasMutated();							
 						return true;
 					}
 					else{
@@ -121,20 +117,21 @@ define(['services/datacontext', 'services/session', 'models/base', 'viewmodels/s
 				var updated = [];
 				var created = [];
 				var deleted = [];
-				ko.utils.arrayForEach( self.patientSystems(), function( patSys ){
-					if( patSys.isNew() && !patSys.isDeleted() ){									
-						created.push( patSys );
-					} else if( patSys.isDeleted() ){
-						if( patSys.isNew() ){
-							//added, then deleted: never saved:
-							patSys.entityAspect.setDeleted();	
+				ko.utils.arrayForEach( self.patientSystems(), function( patSys ){					
+					if( patSys.isNew() ){
+						if( !patSys.isDeleted() ){
+							created.push( patSys );
 						}
 						else{
-							deleted.push( patSys );								
-						}						
-					} else if( patSys.entityAspect.entityState.name === 'Modified' ){
+							console.log('processChanges - new and deleted should not be here.');
+						}	
+					}
+					else if( patSys.isDeleted() ){
+						deleted.push( patSys );								
+					}						
+					else if( patSys.entityAspect.entityState.name === 'Modified' ){
 						updated.push( patSys );
-					}											
+					}
 				});					
 				if( created.length || deleted.length || updated.length ){
 					return {created: created, deleted: deleted, updated: updated}
@@ -143,10 +140,10 @@ define(['services/datacontext', 'services/session', 'models/base', 'viewmodels/s
 					return null;
 				}
 			}
-
-            self.editSystemIds = function () {
-				var modalEntity = ko.observable( new ModalEntity( self.patientSystemsModalShowing, self.selectedPatient ) );
-				var modal = new modelConfig.modal('Individual ID', modalEntity, 'viewmodels/templates/patient.systems', self.patientSystemsModalShowing, self.savePatientSystems, self.cancelPatientSystems);
+			self.modalEntityObservable = ko.observable();
+            self.editSystemIds = function () {				
+				self.modalEntityObservable( new ModalEntity( self.patientSystemsModalShowing, self.selectedPatient ) );
+				var modal = new modelConfig.modal('Individual ID', self.modalEntityObservable, 'viewmodels/templates/patient.systems', self.patientSystemsModalShowing, self.savePatientSystems, self.cancelPatientSystems);
                 shell.currentModal(modal);
                 self.patientSystemsModalShowing(true);
                 self.isOpen(true);

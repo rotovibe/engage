@@ -46,7 +46,7 @@ define(['services/datacontext'],
       self.settings = settings;
       self.showing = ko.computed(function () { return true; });
       self.selectedPatient = self.settings.selectedPatient;
-	  self.canSave = self.settings.canSave;// ? self.settings.canSave : false;//true;
+	  self.canSave = self.settings.canSave;
 	  
 	  self.patientSystems = ko.computed( function(){
 		  var result = [];
@@ -131,12 +131,10 @@ define(['services/datacontext'],
 			var validationErrors = self.validationErrors();
 			ko.utils.arrayForEach( validationErrors, function (error) {
 				thisArray.push(error.PropName);
-				console.log('got validation error: ' + error.PropName + ' : ' + error.Message );
 				self.canSave(false);				
 			});
 			if( thisArray.length === 0 ){ 
 				self.canSave(true);
-				console.log(' no validation errors');
 			}	
 			return thisArray;
    	  });
@@ -155,7 +153,6 @@ define(['services/datacontext'],
 				return ( systemIdRecord.primary() && ( systemIdRecord.isDeleted() === false ));
 			});
 			var message = primary ? (primary.system().displayLabel()  +' : ' + primary.value()) : 'no primary';
-			console.log('hasPrimarySelected: ' + message);
 			return primary;
 	  }	
 	  
@@ -186,22 +183,23 @@ define(['services/datacontext'],
 		  });
 		  return patientSystemPropertyHasError || (self.duplicate() && self.duplicate().id() === patientSystemId);
 	  }
+	  
 	  self.clearNewId = function(){
 		  self.newSelectedSystem(null);
-		  self.newPatientSystemIdValue(null);
+		  self.newPatientSystemIdValue(null);		  
 	  }
 	  
 	  self.showCancelNewId = ko.computed(function(){
 			return (self.newSelectedSystem() || self.newPatientSystemIdValue());
 	  });
-	  
+	  // self.newPatientSystem = ko.observable();
       self.createNewId = function () {
         var newId = (self.selectedPatient().patientSystems().length + 1)*-1;
+		console.log('createNewId - newId = ' + newId);
 		var primary = false;
 		if( self.primarySystem && self.primarySystem.id() === self.newSelectedSystem().id() && !self.hasPrimarySelected() ){
 			//user selected a primary system in the added item, and there is no primary item in the list:
-			primary = true;
-			console.log('createNewId - setting as primary! ' + self.newSelectedSystem().displayLabel() + ': '+ self.newPatientSystemIdValue());
+			primary = true;			
 		}		
         var entity = datacontext.createEntity('PatientSystem', 
 						{ 
@@ -215,6 +213,7 @@ define(['services/datacontext'],
 						});
 		if( entity ){
 			entity.isNew(true);			
+			//self.newPatientSystem(entity);
 			self.newSelectedSystem(null);
 			self.newPatientSystemIdValue(null);
 		} else{ 
@@ -225,9 +224,10 @@ define(['services/datacontext'],
 	  self.deletePatientSystemId = function( patientSystem ){
 		  patientSystem.isDeleted(true);
 		  patientSystem.primary(false);
-		  patientSystem.entityAspect.setModified();
-		  	  		  
-		  //patientSystem.entityAspect.setDeleted(); //---> not good since breeze will be deleting it from the collection on the cache right away!		  		  		  
+		  if( !isNaN(patientSystem.id()) && patientSystem.id() < 0 ){
+			  //fresh newly added now deleted before it was saved: completely remove the entity:			  
+			  datacontext.detachEntity(patientSystem);			  
+		  }		  	  		  
 	  }
     };
 
