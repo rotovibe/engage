@@ -1,12 +1,12 @@
-﻿using Phytel.API.Interface;
+using Phytel.API.Interface;
 using ServiceStack.ServiceInterface.ServiceModel;
 using System.Collections.Generic;
 
-namespace Phytel.API.AppDomain.NG.DTO
+namespace Phytel.API.DataDomain.PatientSystem.DTO
 {
-    public class InsertPatientSystemResponse : IDomainResponse
+    public class InsertEngagePatientSystemsDataResponse : IDomainResponse
     {
-        public string Id { get; set; }
+        public List<string> Ids { get; set; }
         public double Version { get; set; }
         public ResponseStatus Status { get; set; }
     }

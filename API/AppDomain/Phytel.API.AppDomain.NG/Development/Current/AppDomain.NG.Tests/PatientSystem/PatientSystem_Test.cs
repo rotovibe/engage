@@ -17,7 +17,7 @@ namespace Phytel.API.AppDomain.NG.Test.PatientSystem
     public class PatientSystem_Test
     {
         string context = "NG";
-        string contractNumber = "Demo001";
+        string contractNumber = "InHealth001";
         string userId = "000000000000000000000000";
         double version = 1.0;
         string url = "http://localhost:888/Nightingale";

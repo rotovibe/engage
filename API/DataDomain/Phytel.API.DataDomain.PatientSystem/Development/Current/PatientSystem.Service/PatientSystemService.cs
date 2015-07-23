@@ -95,6 +95,22 @@ namespace Phytel.API.DataDomain.PatientSystem.Service
             }
             return response;
         }
+
+        public InsertEngagePatientSystemsDataResponse Post(InsertEngagePatientSystemsDataRequest request)
+        {
+            InsertEngagePatientSystemsDataResponse response = new InsertEngagePatientSystemsDataResponse();
+            try
+            {
+                RequireUserId(request);
+                response.Ids = Manager.InsertEngagePatientSystems(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                RaiseException(response, ex);
+            }
+            return response;
+        }
         #endregion
 
         #region PUT

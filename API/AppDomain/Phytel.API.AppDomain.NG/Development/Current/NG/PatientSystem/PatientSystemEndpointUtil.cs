@@ -200,32 +200,28 @@ namespace Phytel.API.AppDomain.NG
             catch (Exception ex) { throw ex; }
         }
 
-
-        public string InsertPatientSystem(InsertPatientSystemDataRequest request)
+        public List<string> InsertEngagePatientSystems(InsertEngagePatientSystemsDataRequest request)
         {
-            string id = null;
+            List<string> result = null;
             try
             {
-                if (request.PatientSystemsData != null)
-                {
-                    IRestClient client = new JsonServiceClient();
-                    //    [Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/PatientSystem", "POST")]
-                    var url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/PatientSystem",
-                                        DDPatientSystemUrl,
-                                        "NG",
-                                        request.Version,
-                                        request.ContractNumber,
-                                        request.PatientId), request.UserId);
+                IRestClient client = new JsonServiceClient();
+                //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/EngagePatientSystems", "POST")]
+                var url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/EngagePatientSystems",
+                                    DDPatientSystemUrl,
+                                    "NG",
+                                    request.Version,
+                                    request.ContractNumber,
+                                    request.PatientId), request.UserId);
 
-                    InsertPatientSystemDataResponse dataDomainResponse = client.Post<InsertPatientSystemDataResponse>(url, request as object);
-                    if (dataDomainResponse != null)
-                    {
-                        id = dataDomainResponse.Id;
-                    }
+                InsertEngagePatientSystemsDataResponse dataDomainResponse = client.Post<InsertEngagePatientSystemsDataResponse>(url, request as object);
+                if (dataDomainResponse != null)
+                {
+                    result = dataDomainResponse.Ids;
                 }
+                return result;
             }
             catch (Exception ex) { throw ex; }
-            return id;
         }
     }
 }

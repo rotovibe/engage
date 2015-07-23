@@ -32,19 +32,19 @@ namespace Phytel.API.AppDomain.NG.Service
             ValidateTokenResponse result = null;
             try
             {
-                if (base.Request != null)
-                {
-                    request.Token = base.Request.Headers["Token"] as string;
-                }
-                result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
-                if (result.UserId.Trim() != string.Empty)
-                {
-                    request.UserId = result.UserId;
+                //if (base.Request != null)
+                //{
+                //    request.Token = base.Request.Headers["Token"] as string;
+                //}
+                //result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                //if (result.UserId.Trim() != string.Empty)
+                //{
+                //    request.UserId = result.UserId;
                     var val = PatientSystemManager.UpdatePatientAndSystemsData(request);
-                    response.Message = val;
-                }
-                else
-                    throw new UnauthorizedAccessException();
+                //    response.Message = val;
+                //}
+                //else
+                //    throw new UnauthorizedAccessException();
             }
             catch (Exception ex)
             {

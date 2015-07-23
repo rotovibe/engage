@@ -13,7 +13,10 @@ namespace Phytel.API.DataDomain.PatientSystem.Test
 
         public DTO.GetPatientSystemDataResponse GetPatientSystem(DTO.GetPatientSystemDataRequest request)
         {
-            throw new NotImplementedException();
+            GetPatientSystemDataResponse result = new GetPatientSystemDataResponse();
+            var repo = Factory.GetRepository(RepositoryType.PatientSystem);
+            result.PatientSystemData = repo.FindByID(request.Id) as PatientSystemData;
+            return result;
         }
 
         public DTO.GetPatientSystemsDataResponse GetPatientSystems(DTO.GetPatientSystemsDataRequest request)
@@ -82,11 +85,20 @@ namespace Phytel.API.DataDomain.PatientSystem.Test
 
         public List<PatientSystemOldData> GetAllPatientSystems()
         {
-            throw new NotImplementedException();
+            List<PatientSystemOldData> result = new List<PatientSystemOldData>();
+            var repo = Factory.GetRepository(RepositoryType.PatientSystem);
+            result = repo.SelectAll() as List<PatientSystemOldData>;
+            return result;
         }
 
 
         public bool UpdatePatientSystem(UpdatePatientSystemDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public List<string> InsertEngagePatientSystems(InsertEngagePatientSystemsDataRequest request)
         {
             throw new NotImplementedException();
         }

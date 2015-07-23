@@ -86,8 +86,10 @@
     <Compile Include="PatientSystem\GetAllPatientSystemDataRequest.cs" />
     <Compile Include="PatientSystem\GetAllPatientSystemDataResponse.cs" />
     <Compile Include="PatientSystem\InsertPatientSystemDataRequest.cs" />
+    <Compile Include="PatientSystem\InsertEngagePatientSystemsDataRequest.cs" />
     <Compile Include="PatientSystem\InsertPatientSystemsDataRequest.cs" />
     <Compile Include="PatientSystem\InsertPatientSystemDataResponse.cs" />
+    <Compile Include="PatientSystem\InsertEngagePatientSystemsDataResponse.cs" />
     <Compile Include="PatientSystem\InsertPatientSystemsDataResponse.cs" />
     <Compile Include="PatientSystem\DeletePatientSystemsDataRequest.cs" />
     <Compile Include="PatientSystem\PatientSystemOldData.cs" />

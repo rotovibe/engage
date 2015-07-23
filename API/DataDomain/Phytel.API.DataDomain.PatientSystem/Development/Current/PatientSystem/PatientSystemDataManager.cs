@@ -122,6 +122,43 @@ namespace Phytel.API.DataDomain.PatientSystem
             catch (Exception ex) { throw ex; }
         }
 
+        public List<string> InsertEngagePatientSystems(InsertEngagePatientSystemsDataRequest request)
+        {
+            List<string> ids = null;
+            try
+            {
+                if (request.PatientSystemsData != null && request.PatientSystemsData.Count > 0)
+                {
+                    ids = new List<string>();
+                    var repo = Factory.GetRepository(RepositoryType.PatientSystem);
+                    request.PatientSystemsData.ForEach(p =>
+                    {
+                        p.SystemId = Constants.EngageSystemId;
+                        p.Value = EngageId.New();
+                        p.Primary = isSystemPrimary(Constants.EngageSystemId);
+                        p.StatusId = (int)Status.Active;
+                        p.SystemSource = Constants.SystemSource;
+                        InsertPatientSystemDataRequest insertReq = new InsertPatientSystemDataRequest
+                        {
+                            PatientId = p.PatientId,
+                            Context = request.Context,
+                            ContractNumber = request.ContractNumber,
+                            PatientSystemsData = p,
+                            UserId = request.UserId,
+                            Version = request.Version
+                        };
+                        string id = (string)repo.Insert(insertReq);
+                        if (!string.IsNullOrEmpty(id))
+                        {
+                            ids.Add(id);
+                        }
+                    });
+                }
+                return ids;
+            }
+            catch (Exception ex) { throw ex; }
+        }
+
         public bool UpdatePatientSystem(UpdatePatientSystemDataRequest request)
         {
             bool success = false;
