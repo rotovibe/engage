@@ -1,35 +1,62 @@
 ﻿<div class="body" data-bind="visible: showing">
 	<div class="pad-vertical">	
-<strong>edit not implemented</Strong>	
+	</div>	
+	<div data-bind="if: validationErrors().length > 0" <="" div="">
+		<div class="row validation-summary">
+			<h3>Please correct the following errors:</h3>
+			<ul data-bind="foreach: validationErrors">
+				<li class="validation-errors">
+					<h5 data-bind="text: Message"></h5>
+				</li>
+			</ul>
+		</div>
 	</div>
-	<!-- <div class="pad-vertical" data-bind="visible: canAddId">
+	<div class="pad-vertical" data-bind="visible: canAddId">
 		<div class="row">
-			<div class="pull-right">
-				<div class="span6 pad-horizontal">
-					<input type="text" size="30" placeholder="ID Value" data-bind="value: newSystemId, valueUpdate: 'afterkeydown'" />
-				</div>
-				<div class="span3 pad-left">
-					<button class="btn color small pull-right" href="#" data-bind="click: createNewId, enable: newSystemId">
-						<i class="icon-plus"></i>
-						<span class="pad-left">Add</span>
-					</button>
-				</div>
+			<div class="span1">&nbsp;</div>
+			<div class="span3">
+				<div data-bind="chsnsingle: { options: systems, value: newSelectedSystem, text: 'displayLabel', label: 'systems' }, 
+								css:{'invalid': (newIdValidationErrorsArray().indexOf('newSystem') !== -1 )}"></div>		
+			</div>
+			<div class="span5">
+				<input type="text" size="30" placeholder="ID Value" data-bind="value: newPatientSystemIdValue, valueUpdate: 'afterkeydown'
+									, css:{'invalid': (newIdValidationErrorsArray().indexOf('newValue') !== -1 )}" />
+			</div>
+			<div class="span2">
+				<button class="btn color small" href="#" data-bind="click: createNewId, enable: canAddNewPatientSystem">
+					<i class="icon-plus"></i>
+					<span class="pad-left">Add</span>
+				</button>
+			</div>
+			<div class="span1">
+				<a href="#" data-bind="click: clearNewId, clickBubble: false, visible: showCancelNewId"><i class="icon-cancel red"></i></a>
 			</div>
 		</div>
 	</div>
 	<div class="pad-vertical">
 		<div>
-			<div class="row">
+			<div class="row pad-top">
 				<div class="span1">
 					<strong>Primary</strong>
 				</div>
 				<div class="span3">
+					<strong>System</strong>
+				</div>
+				<div class="span5">
 					<strong>Value</strong>
 				</div>
 				<div class="span2">
+					<strong>Status</strong>
+				</div>
+				<div class="span1">
 				</div>
 			</div>
-			TODO: missing part here
+			<!-- ko foreach: computedEditSystemIds -->
+				<!-- ko compose: "templates/system.id.edit.html" -->
+				<!-- /ko -->
+			<!-- /ko -->
+			<div class="line"></div>
+			<div class="line"></div>
 		</div>
-	</div> -->
+	</div>
 </div>

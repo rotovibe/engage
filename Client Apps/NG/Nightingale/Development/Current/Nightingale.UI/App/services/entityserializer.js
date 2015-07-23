@@ -806,10 +806,15 @@
         var results = manager.executeQueryLocally(patientSystemQuery);
         var unwrappedPatSys = results[0];
         
-        thisPatSys.Id = unwrappedPatSys.id;
+		if( unwrappedPatSys.id && !isNaN(unwrappedPatSys.id) && unwrappedPatSys.id < 0){
+			thisPatSys.Id = null;
+		}
+		else{
+			thisPatSys.Id = unwrappedPatSys.id;	
+		}        
         thisPatSys.PatientId = unwrappedPatSys.patientId;
         thisPatSys.SystemId = unwrappedPatSys.systemId;
-        thisPatSys.value = unwrappedPatSys.value;
+        thisPatSys.value = unwrappedPatSys.value.trim();
         thisPatSys.systemSource = unwrappedPatSys.systemSource;
         thisPatSys.statusId = unwrappedPatSys.statusId;
 		thisPatSys.primary = unwrappedPatSys.primary;

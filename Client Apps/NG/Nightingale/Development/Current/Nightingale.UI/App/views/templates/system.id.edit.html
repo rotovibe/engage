@@ -1,26 +1,28 @@
 <div class="row pad-top divider">
 	<div class="span1">
-        <div class="radio" data-bind="hoverToggle: 'hover'">
-            <span class="checked">
-                <input type="radio"/>
-            </span>
-        </div>
-	</div>
-	<!-- <div class="span3" data-bind="text: systemName"></div> -->
-	<!-- <div class="span3" data-bind="text: systemName"></div> -->
-	<div class="span3">
-		<input type="text" data-bind="value: systemId, valueUpdate: 'afterkeydown'"/>
-	</div>
-	<!-- <div class="span3">
-		<select data-bind="options: $parent.observationDisplays, value: displayId, optionsText: 'name', optionsValue: 'id'"></select>
-	</div> -->
-	<!-- <div class="span2">
-    <input class="datepicker" readonly="readonly" type="text" data-bind="datepicker: startDate, datepickerOptions: { maxDate: '+0' }, css: { invalid: (validationErrorsArray().indexOf('startDate') !== -1) }" />
+		<div class="radio" data-bind="hoverToggle: 'hover'">
+			<span data-bind="css: { 'checked': primary }" class="checked">
+				<input type="radio" data-bind="click: $parent.setPrimary, clickBubble: false">
+			</span>
+		</div>
 	</div>
 	<div class="span3">
-		<select data-bind="options: $parent.observationStates, value: stateId, optionsText: 'name', optionsValue: 'id', attr: { 'disabled': isNew }"></select>
+		<!-- ko if: isEditable -->
+			<div data-bind="chsnsingle: { options: $parent.systems, value: system, text: 'displayLabel', label: 'systems'}, enable: isEditable, 
+							css: {'invalid': $parent.isInvalidProp($data.id(), 'system')}"></div>		
+		<!-- /ko -->
+		<!-- ko ifnot: isEditable -->		
+			<input type="text" disabled="disabled" data-bind="value: system().displayLabel">			
+		<!-- /ko -->
+	</div> 
+	<div class="span5">
+		<input type="text" data-bind="value: value, valueUpdate: 'afterkeydown', css: { 'invalid': $parent.isInvalidProp($data.id(), 'value') }, enable: isEditable"/>
 	</div>
+	<div class="span2">
+		<div data-bind="chsnsingle: { options: $parent.patientSystemStatuses, value: patientSystemStatus, text: 'name', label: 'patientSystemStatuses' }"></div>
+	</div>
+
 	<div class="span1">
-    <a href="#" data-bind="click: $parent.deleteFocusProblem, clickBubble: false"><i class="icon-cancel red"></i></a>
-	</div> -->
+		<a href="#" data-bind="click: $parent.deletePatientSystemId, clickBubble: false, visible: isEditable"><i class="icon-cancel red"></i></a>
+	</div>
 </div>

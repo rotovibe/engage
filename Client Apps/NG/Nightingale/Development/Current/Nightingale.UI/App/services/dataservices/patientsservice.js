@@ -12,7 +12,8 @@ define(['services/session', 'config.services'],
             deleteIndividual: deleteIndividual,
             addPatientToRecentList: addPatientToRecentList,
             initializeIndividual: initializeIndividual,
-            savePatientSystem: savePatientSystem
+            savePatientSystems: savePatientSystems,
+			deletePatientSystems: deletePatientSystems
         };
         return patientsService;
         
@@ -170,42 +171,79 @@ define(['services/session', 'config.services'],
                 return data.httpResponse.data;
             }
         }
+		
+		function deletePatientSystems(manager, deleteIds, patientId){
+			// If there is no manager, we can't query using breeze
+            if (!manager) { throw new Error("[manager] cannot be a null parameter"); }
 
-        // POST to the server, check the results for entities
-        function savePatientSystem(manager, serializedPatientSystem, isInsert) {
+            // Check if the datacontext is available, if so require it
+            checkDataContext();
+			if (deleteIds) {
+                 var IdsString = deleteIds.join();	//string - comma separated id's. no payLoad.				                
+
+				// Create an end point to use
+				var endPoint = new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'Patient/' + patientId + '/PatientSystems/' + IdsString, 'PatientSystem');
+
+                // Query
+                var query = breeze.EntityQuery
+                    .from(endPoint.ResourcePath)
+                    .withParameters({
+                        $method: 'DELETE',
+                        $encoding: 'JSON'
+                        //$data: payload
+                    });
+
+                return manager.executeQuery(query).then(deleteSucceeded).fail(postFailed);
+            }
+
+            function deleteSucceeded(data) {
+                return data.httpResponse.data;				
+            }
+		}
+		
+        // POST(insert)/PUT(update) to the server, check the results for entities
+        function savePatientSystems(manager, serializedPatientSystems, isInsert) {
 
             // If there is no manager, we can't query using breeze
             if (!manager) { throw new Error("[manager] cannot be a null parameter"); }
 
             // Check if the datacontext is available, if so require it
             checkDataContext();
-
-            // Create an end point to use
-            var endPoint = new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'PatientSystem/Save', 'PatientSystem');
-
+            
             // If there is a contact card,
-            if (serializedPatientSystem) {
-
+            if (serializedPatientSystems && serializedPatientSystems.length) {
+				
+				var patientId = serializedPatientSystems[0].PatientId;
+				// Create an end point to use
+				var endPoint = new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'Patient/' + patientId + '/PatientSystems', 'PatientSystem');
+	
                 // Create a payload from the JS object
                 var payload = {};
 
-                payload.PatientSystem = serializedPatientSystem;
-
+                payload.PatientSystems = serializedPatientSystems;
+				var method = 'PUT'
                 if (isInsert) {
-                    payload.Insert = true;
+                    method = 'POST';
                 }
-
                 payload = JSON.stringify(payload);
 
                 // Query to post the results
                 var query = breeze.EntityQuery
                     .from(endPoint.ResourcePath)
                     .withParameters({
-                        $method: 'POST',
+                        $method: method,
                         $encoding: 'JSON',
                         $data: payload
                     });
-
+				if( isInsert ){
+					query = breeze.EntityQuery
+                    .from(endPoint.ResourcePath).toType('PatientSystem')
+                    .withParameters({
+                        $method: method,
+                        $encoding: 'JSON',
+                        $data: payload
+                    });					
+				}
                 return manager.executeQuery(query).then(saveSucceeded).fail(postFailed);
             }
 

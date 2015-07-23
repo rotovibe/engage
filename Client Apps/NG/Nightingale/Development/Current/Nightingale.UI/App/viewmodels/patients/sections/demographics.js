@@ -65,10 +65,6 @@
 					self.primaryIdLabel( primary.system().displayLabel() );
 					self.primaryIdTitle( primary.system().displayLabel() + ': '+ primary.value() );
 					self.primaryIdValue( primary.value() );
-					console.log('the primary is: ' +primary.system().displayLabel() + primary.value() );
-				}
-				else{
-					console.log('no primary');
 				}
 				return primary;
 			});			
