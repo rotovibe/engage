@@ -231,6 +231,7 @@
 /// <reference path="../app/viewmodels/templates/patient.status.js" />
 /// <reference path="../app/viewmodels/patients/sections/status.js" />
 /// <reference path="../app/viewmodels/templates/note.utilization.edit.js" />
+/// <reference path="../app/viewmodels/patients/notes/index.js" />
  
  / / /   < r e f e r e n c e   p a t h = " b r e e z e . d e b u g . j s "   / >  
  
