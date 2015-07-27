@@ -43,8 +43,9 @@
     </AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Phytel.Services.Security">
-      <HintPath>packages\Phytel.Services.Security.2.0.0.02\lib\net451\Phytel.Services.Security.dll</HintPath>
+    <Reference Include="Phytel.Services.Security, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>packages\Phytel.Services.Security.2.0.0.03\lib\net451\Phytel.Services.Security.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
