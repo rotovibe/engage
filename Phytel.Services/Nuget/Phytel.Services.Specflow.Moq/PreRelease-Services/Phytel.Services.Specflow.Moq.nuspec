@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
   <metadata>
     <id>Phytel.Services.Specflow.Moq</id>
-    <version>1.1.0</version>
+    <version>2.0.0</version>
     <title>Phytel.Services.Specflow.Moq</title>
     <authors>Charles Zipp</authors>
     <owners>Phytel,Inc.</owners>
@@ -11,7 +11,7 @@
     <dependencies>
       <group targetFramework=".NETFramework4.5.1">
         <dependency id="SpecFlow" version="1.9.0" />
-        <dependency id="Moq" version="4.2.1502.0911" />
+        <dependency id="Moq" version="4.2.1507.0118" />
       </group>
     </dependencies>
   </metadata>
