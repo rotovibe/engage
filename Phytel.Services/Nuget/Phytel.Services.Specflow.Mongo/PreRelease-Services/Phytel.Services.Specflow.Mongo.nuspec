@@ -10,9 +10,9 @@
     <description>Extensions for specflow that involve mongo. Includes extension methods for casting TableRow values to bson data types in an expression style, type-safe manner.</description>
     <dependencies>
       <group targetFramework=".NETFramework4.5.1">
+        <dependency id="mongocsharpdriver" version="1.10.0" />
+        <dependency id="Phytel.Services.Specflow.Assist" version="2.0.0.01" />
         <dependency id="SpecFlow" version="1.9.0" />
-        <dependency id="mongocsharpdriver" version="1.9.2" />
-        <dependency id="Phytel.Services.Specflow.Assist" version="1.1.0.03" />
       </group>
     </dependencies>
   </metadata>
