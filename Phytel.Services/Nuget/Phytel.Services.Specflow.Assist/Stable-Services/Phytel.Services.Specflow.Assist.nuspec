@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
   <metadata>
     <id>Phytel.Services.Specflow.Assist</id>
-    <version>1.1.0</version>
+    <version>2.0.0</version>
     <title>Phytel.Services.Specflow.Assist</title>
     <authors>Charles Zipp</authors>
     <owners>Phytel,Inc.</owners>
