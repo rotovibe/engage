@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
   <metadata>
     <id>Phytel.Services.Specflow.Mongo</id>
-    <version>1.1.0</version>
+    <version>2.0.0</version>
     <title>Phytel.Services.Specflow.Mongo</title>
     <authors>Charles Zipp</authors>
     <owners>Phytel,Inc.</owners>
@@ -10,8 +10,8 @@
     <description>Extensions for specflow that involve mongo. Includes extension methods for casting TableRow values to bson data types in an expression style, type-safe manner.</description>
     <dependencies>
       <group targetFramework=".NETFramework4.5.1">
-        <dependency id="mongocsharpdriver" version="1.10.0" />
-        <dependency id="Phytel.Services.Specflow.Assist" version="2.0.0.01" />
+        <dependency id="mongocsharpdriver" version="1.10" />
+        <dependency id="Phytel.Services.Specflow.Assist" version="2.0.0" />
         <dependency id="SpecFlow" version="1.9.0" />
       </group>
     </dependencies>
