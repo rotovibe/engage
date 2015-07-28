@@ -29,6 +29,8 @@ namespace Phytel.API.AppDomain.NG.DTO
         public string ReasonId { get; set; }
         public int StatusId { get; set; }
         public string StatusSystemSource { get; set; }
-
+        public string MaritalStatusId { get; set; }
+        public bool Protected { get; set; }
+        public bool Deceased { get; set; }
     }
 }

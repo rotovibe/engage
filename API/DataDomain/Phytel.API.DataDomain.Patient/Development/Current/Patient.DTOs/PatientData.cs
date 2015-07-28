@@ -22,5 +22,8 @@
         public string ClinicalBackground { get; set; }
         public int? LastFourSSN { get; set; }
         public string FullSSN { get; set; }
+        public string MaritalStatusId { get; set; }
+        public bool Protected { get; set; }
+        public bool Deceased { get; set; }
     }
 }

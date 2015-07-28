@@ -53,7 +53,11 @@ namespace Phytel.API.DataDomain.PatientSystem.Test
 
         public void Delete(object entity)
         {
-            throw new NotImplementedException();
+            DeletePatientSystemByPatientIdDataRequest request = (DeletePatientSystemByPatientIdDataRequest)entity;
+            if (string.IsNullOrEmpty(request.Id))
+            { 
+                //Update the patientsystem object having _id as request.Id
+            }
         }
 
         public void DeleteAll(List<object> entities)
@@ -63,7 +67,13 @@ namespace Phytel.API.DataDomain.PatientSystem.Test
 
         public object FindByID(string entityID)
         {
-            throw new NotImplementedException();
+            PatientSystemData data = null;
+            if(!string.IsNullOrEmpty(entityID))
+            {
+
+                
+            }
+            return data;
         }
 
         public Tuple<string, IEnumerable<object>> Select(Interface.APIExpression expression)

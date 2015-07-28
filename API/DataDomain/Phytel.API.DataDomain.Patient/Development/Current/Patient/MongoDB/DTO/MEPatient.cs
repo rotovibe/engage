@@ -38,6 +38,9 @@ namespace Phytel.API.DataDomain.Patient.DTO
         public const string StatusProperty = "sts";
         public const string StatusSystemSourceProperty = "stssys";
         public const string ReasonProperty = "rsn";
+        public const string ProtectedProperty = "prot";
+        public const string MaritalStatusProperty = "msts";
+        public const string DeceasedProperty = "dec";
         public const string VersionProperty = "v";
         public const string UpdatedByProperty = "uby";
         public const string DeleteFlagProperty = "del";
@@ -116,6 +119,18 @@ namespace Phytel.API.DataDomain.Patient.DTO
         [BsonElement(StatusSystemSourceProperty)]
         [BsonIgnoreIfNull(true)]
         public string StatusSystemSource { get; set; }
+
+        [BsonElement(MaritalStatusProperty)]
+        [BsonIgnoreIfNull(true)]
+        public ObjectId? MaritalStatusId { get; set; }
+
+        [BsonElement(ProtectedProperty)]
+        [BsonIgnoreIfNull(true)]
+        public bool Protected { get; set; }
+
+        [BsonElement(DeceasedProperty)]
+        [BsonIgnoreIfNull(true)]
+        public bool Deceased { get; set; }
 
         [BsonExtraElements]
         public BsonDocument ExtraElements { get; set; }

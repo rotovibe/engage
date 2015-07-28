@@ -95,11 +95,17 @@ namespace Phytel.API.DataDomain.Patient
                             DeleteFlag = false,
                             System = FormatSystem(pd.System),
                             Status = (Status)pd.StatusId,
-                            StatusSystemSource  = pd.StatusSystemSource
+                            StatusSystemSource  = pd.StatusSystemSource,
+                            Protected = pd.Protected,
+                            Deceased = pd.Deceased
                         };
                         if(!string.IsNullOrEmpty(pd.ReasonId))
                         {
                             patient.ReasonId = ObjectId.Parse(pd.ReasonId);
+                        }
+                        if (!string.IsNullOrEmpty(pd.MaritalStatusId))
+                        {
+                            patient.MaritalStatusId = ObjectId.Parse(pd.MaritalStatusId);
                         }
                         ctx.Patients.Collection.Insert(patient);
 
@@ -236,6 +242,9 @@ namespace Phytel.API.DataDomain.Patient
                         System = FormatSystem(mePatient.System),
                         StatusSystemSource = mePatient.StatusSystemSource,
                         ReasonId = mePatient.ReasonId == null ? null : mePatient.ReasonId.ToString(),
+                        MaritalStatusId = mePatient.MaritalStatusId == null ? null : mePatient.MaritalStatusId.ToString(),
+                        Protected = mePatient.Protected,
+                        Deceased = mePatient.Deceased,
                         StatusId = (int)mePatient.Status
                     };
                     if (!string.IsNullOrEmpty(userId))
@@ -383,7 +392,10 @@ namespace Phytel.API.DataDomain.Patient
                                 System = FormatSystem(meP.System),
                                 StatusSystemSource = meP.StatusSystemSource,
                                 ReasonId = meP.ReasonId == null ? null : meP.ReasonId.ToString(),
-                                StatusId = (int)meP.Status
+                                StatusId = (int)meP.Status,
+                                MaritalStatusId = meP.MaritalStatusId == null ? null : meP.MaritalStatusId.ToString(),
+                                Protected = meP.Protected,
+                                Deceased = meP.Deceased,
                             };
                             response.Add(data.Id, data);
                         }
@@ -647,6 +659,16 @@ namespace Phytel.API.DataDomain.Patient
                     {
                         updt.Set(MEPatient.ReasonProperty, BsonNull.Value);
                     }
+                    if (!string.IsNullOrEmpty(request.PatientData.MaritalStatusId))
+                    {
+                        updt.Set(MEPatient.MaritalStatusProperty, ObjectId.Parse(request.PatientData.MaritalStatusId));
+                    }
+                    else
+                    {
+                        updt.Set(MEPatient.MaritalStatusProperty, BsonNull.Value);
+                    }
+                    updt.Set(MEPatient.ProtectedProperty, request.PatientData.Protected);
+                    updt.Set(MEPatient.DeceasedProperty, request.PatientData.Deceased);
                     updt.Set(MEPatient.StatusProperty, request.PatientData.StatusId);
                     if (request.PatientData.StatusSystemSource != null)
                     {

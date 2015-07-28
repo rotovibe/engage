@@ -108,7 +108,10 @@ namespace Phytel.API.AppDomain.NG
                         System = response.Patient.System,
                         ReasonId  = response.Patient.ReasonId,
                         StatusId = response.Patient.StatusId,
-                        StatusSystemSource = response.Patient.StatusSystemSource
+                        StatusSystemSource = response.Patient.StatusSystemSource,
+                        MaritalStatusId = response.Patient.MaritalStatusId,
+                        Protected = response.Patient.Protected,
+                        Deceased = response.Patient.Deceased
                     };
 
                     // Commented this part out, as there is a separate endpoint to get patient systems ids.
@@ -210,7 +213,10 @@ namespace Phytel.API.AppDomain.NG
                         System = request.Patient.System,
                         ReasonId = request.Patient.ReasonId,
                         StatusId = request.Patient.StatusId,
-                        StatusSystemSource = request.Patient.StatusSystemSource
+                        StatusSystemSource = request.Patient.StatusSystemSource,
+                        MaritalStatusId = request.Patient.MaritalStatusId,
+                        Protected = request.Patient.Protected,
+                        Deceased = request.Patient.Deceased
                     };
                     PutUpdatePatientDataResponse dataDomainResponse =
                         client.Put<PutUpdatePatientDataResponse>(url, new PutUpdatePatientDataRequest
