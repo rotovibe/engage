@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
   <metadata>
-    <id>Phytel.Services.Pagination</id>
+    <id>Phytel.Services.API.Pagination</id>
     <version>1.0.0</version>
-    <title>Phytel.Services.Pagination</title>
+    <title>Phytel.Services.API.Pagination</title>
     <authors>Maruthi Turaga</authors>
     <owners>Phytel,Inc.</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -15,6 +15,6 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="..\bin\Phytel.Services.API.Platform.Pagination.dll" target="lib\net451\Phytel.Services.API.Platform.Pagination.dll" />
+    <file src="..\bin\Phytel.Services.API.Pagination.dll" target="lib\net451\Phytel.Services.API.Pagination.dll" />
   </files>
 </package>

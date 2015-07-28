@@ -1,5 +1,5 @@
 ﻿
-namespace Phytel.Services.Pagination
+namespace Phytel.Services.API.Pagination
 {
     public interface IPaginationRequest
     {

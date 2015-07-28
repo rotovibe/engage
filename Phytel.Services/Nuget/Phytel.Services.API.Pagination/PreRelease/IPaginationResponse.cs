@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Phytel.Services.Pagination
+namespace Phytel.Services.API.Pagination
 {
     public interface IPaginationResponse
     {

@@ -2,7 +2,7 @@
 using ServiceStack.Common.Extensions;
 using ServiceStack.ServiceHost;
 
-namespace Phytel.Services.Pagination.Attributes
+namespace Phytel.Services.API.Pagination.Attributes
 {
     public class PaginationRequestFilterAttribute : Attribute, IHasRequestFilter
     {

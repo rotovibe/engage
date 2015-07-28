@@ -1,7 +1,7 @@
 ﻿using System;
 using ServiceStack.ServiceHost;
 
-namespace Phytel.Services.Pagination.Attributes
+namespace Phytel.Services.API.Pagination.Attributes
 {
     public class PaginationResponseFilterAttribute : Attribute, IHasResponseFilter
     {
