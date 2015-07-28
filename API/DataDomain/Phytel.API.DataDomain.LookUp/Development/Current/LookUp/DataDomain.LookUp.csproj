@@ -136,6 +136,7 @@
     <Compile Include="MongoDB\DTO\Note\NoteWho.cs" />
     <Compile Include="MongoDB\DTO\Note\NoteOutcome.cs" />
     <Compile Include="MongoDB\DTO\Note\NoteMethod.cs" />
+    <Compile Include="MongoDB\DTO\Patient\MaritalStatus.cs" />
     <Compile Include="MongoDB\DTO\Patient\Reason.cs" />
     <Compile Include="MongoDB\DTO\Problem.cs" />
     <Compile Include="MongoDB\DTO\ToDo\ToDoCategory.cs" />
