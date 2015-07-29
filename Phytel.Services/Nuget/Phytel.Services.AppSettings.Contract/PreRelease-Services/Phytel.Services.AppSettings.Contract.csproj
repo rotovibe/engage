@@ -47,33 +47,28 @@
       <HintPath>packages\Phytel.API.DataDomain.Contract.DTO.1.1.1.01\lib\net451\Phytel.API.DataDomain.Contract.DTO.dll</HintPath>
     </Reference>
     <Reference Include="Phytel.Services.API">
-      <HintPath>packages\Phytel.Services.API.1.4.0.01\lib\net451\Phytel.Services.API.dll</HintPath>
+      <HintPath>packages\Phytel.Services.API.2.0.0.01\lib\net451\Phytel.Services.API.dll</HintPath>
     </Reference>
-    <Reference Include="Phytel.Services.API.DTO, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>packages\Phytel.Services.API.DTO.1.1.0.01\lib\net451\Phytel.Services.API.DTO.dll</HintPath>
+    <Reference Include="Phytel.Services.API.DTO">
+      <HintPath>packages\Phytel.Services.API.DTO.2.0.0.01\lib\net451\Phytel.Services.API.DTO.dll</HintPath>
     </Reference>
-    <Reference Include="Phytel.Services.API.Filter, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>packages\Phytel.Services.API.Filter.1.1.0.03\lib\net451\Phytel.Services.API.Filter.dll</HintPath>
+    <Reference Include="Phytel.Services.API.Filter">
+      <HintPath>packages\Phytel.Services.API.Filter.2.0.0.01\lib\net451\Phytel.Services.API.Filter.dll</HintPath>
     </Reference>
-    <Reference Include="Phytel.Services.API.Provider, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>packages\Phytel.Services.API.Provider.1.1.0.01\lib\net451\Phytel.Services.API.Provider.dll</HintPath>
+    <Reference Include="Phytel.Services.API.Provider">
+      <HintPath>packages\Phytel.Services.API.Provider.2.0.0.01\lib\net451\Phytel.Services.API.Provider.dll</HintPath>
     </Reference>
     <Reference Include="Phytel.Services.API.Urn">
-      <HintPath>packages\Phytel.Services.API.Urn.1.1.0.01\lib\net451\Phytel.Services.API.Urn.dll</HintPath>
+      <HintPath>packages\Phytel.Services.API.Urn.2.0.0.01\lib\net451\Phytel.Services.API.Urn.dll</HintPath>
     </Reference>
-    <Reference Include="Phytel.Services.AppSettings, Version=1.4.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>packages\Phytel.Services.AppSettings.1.4.2.01\lib\net451\Phytel.Services.AppSettings.dll</HintPath>
+    <Reference Include="Phytel.Services.AppSettings">
+      <HintPath>packages\Phytel.Services.AppSettings.2.0.0.01\lib\net451\Phytel.Services.AppSettings.dll</HintPath>
     </Reference>
-    <Reference Include="Phytel.Services.IOC, Version=1.4.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>packages\Phytel.Services.IOC.1.4.0.01\lib\net451\Phytel.Services.IOC.dll</HintPath>
+    <Reference Include="Phytel.Services.IOC">
+      <HintPath>packages\Phytel.Services.IOC.2.0.0.01\lib\net451\Phytel.Services.IOC.dll</HintPath>
     </Reference>
     <Reference Include="Phytel.Services.Security">
-      <HintPath>packages\Phytel.Services.Security.1.4.0.01\lib\net451\Phytel.Services.Security.dll</HintPath>
+      <HintPath>packages\Phytel.Services.Security.2.0.0.03\lib\net451\Phytel.Services.Security.dll</HintPath>
     </Reference>
     <Reference Include="ServiceStack">
       <HintPath>packages\ServiceStack.3.9.70\lib\net35\ServiceStack.dll</HintPath>
