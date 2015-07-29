@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
   <metadata>
     <id>Phytel.Services.API.Cache</id>
-    <version>1.1.0</version>
+    <version>2.0.0</version>
     <title>Phytel.Services.API.Cache</title>
     <authors>Charles Zipp</authors>
     <owners>Phytel,Inc.</owners>
@@ -10,15 +10,15 @@
     <description>Components to support caching using Mongo in ServiceStack</description>
     <dependencies>
       <group targetFramework=".NETFramework4.5.1">
-        <dependency id="mongocsharpdriver" version="1.9.2" />
-        <dependency id="Phytel.Services.AppSettings" version="1.4.0.01" />
-        <dependency id="Phytel.Services.Dates" version="1.4.0.01" />
-        <dependency id="Phytel.Services.IOC" version="1.4.0.01" />
-        <dependency id="Phytel.Services.Mongo" version="1.4.0.04" />
-        <dependency id="Phytel.Services.Mongo.Repository" version="1.4.0.05" />
-        <dependency id="Phytel.Services.Security" version="1.4.0.01" />
-        <dependency id="Phytel.Services.SQLServer" version="1.4.0.01" />
-        <dependency id="Phytel.Services.Utility" version="1.4.0.01" />
+        <dependency id="mongocsharpdriver" version="1.10.0" />
+        <dependency id="Phytel.Services.AppSettings" version="2.0.0.01" />
+        <dependency id="Phytel.Services.Dates" version="2.0.0.01" />
+        <dependency id="Phytel.Services.IOC" version="2.0.0.01" />
+        <dependency id="Phytel.Services.Mongo" version="2.0.0.01" />
+        <dependency id="Phytel.Services.Mongo.Repository" version="2.0.0.01" />
+        <dependency id="Phytel.Services.Security" version="2.0.0.03" />
+        <dependency id="Phytel.Services.SQLServer" version="2.0.0.02" />
+        <dependency id="Phytel.Services.Utility" version="2.0.0.02" />
         <dependency id="ServiceStack" version="3.9.70" />
         <dependency id="ServiceStack.Common" version="3.9.71" />
         <dependency id="ServiceStack.OrmLite.SqlServer" version="3.9.70" />
