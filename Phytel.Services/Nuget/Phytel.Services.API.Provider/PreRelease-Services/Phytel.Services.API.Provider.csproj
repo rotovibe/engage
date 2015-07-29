@@ -36,9 +36,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Phytel.Services.API.DTO, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>packages\Phytel.Services.API.DTO.1.1.0.02\lib\net451\Phytel.Services.API.DTO.dll</HintPath>
+    <Reference Include="Phytel.Services.API.DTO">
+      <HintPath>packages\Phytel.Services.API.DTO.2.0.0.01\lib\net451\Phytel.Services.API.DTO.dll</HintPath>
     </Reference>
     <Reference Include="ServiceStack">
       <HintPath>packages\ServiceStack.3.9.70\lib\net35\ServiceStack.dll</HintPath>
