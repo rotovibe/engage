@@ -44,20 +44,19 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="MongoDB.Bson">
-      <HintPath>packages\mongocsharpdriver.1.9.2\lib\net35\MongoDB.Bson.dll</HintPath>
+      <HintPath>packages\mongocsharpdriver.1.10.0\lib\net35\MongoDB.Bson.dll</HintPath>
     </Reference>
     <Reference Include="MongoDB.Driver">
-      <HintPath>packages\mongocsharpdriver.1.9.2\lib\net35\MongoDB.Driver.dll</HintPath>
+      <HintPath>packages\mongocsharpdriver.1.10.0\lib\net35\MongoDB.Driver.dll</HintPath>
     </Reference>
-    <Reference Include="Phytel.Services.Mongo, Version=1.4.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>packages\Phytel.Services.Mongo.1.4.0.04\lib\net451\Phytel.Services.Mongo.dll</HintPath>
+    <Reference Include="Phytel.Services.Mongo">
+      <HintPath>packages\Phytel.Services.Mongo.2.0.0.01\lib\net451\Phytel.Services.Mongo.dll</HintPath>
     </Reference>
     <Reference Include="Phytel.Services.Security">
-      <HintPath>packages\Phytel.Services.Security.1.4.0.01\lib\net451\Phytel.Services.Security.dll</HintPath>
+      <HintPath>packages\Phytel.Services.Security.2.0.0.03\lib\net451\Phytel.Services.Security.dll</HintPath>
     </Reference>
     <Reference Include="Phytel.Services.SQLServer">
-      <HintPath>packages\Phytel.Services.SQLServer.1.4.0.01\lib\net451\Phytel.Services.SQLServer.dll</HintPath>
+      <HintPath>packages\Phytel.Services.SQLServer.2.0.0.02\lib\net451\Phytel.Services.SQLServer.dll</HintPath>
     </Reference>
     <Reference Include="Phytel.Services.Utility">
       <HintPath>packages\Phytel.Services.Utility.1.4.0.01\lib\net451\Phytel.Services.Utility.dll</HintPath>
