@@ -1,7 +1,7 @@
 ﻿<div class="body" data-bind="visible: showing">
-	<div class="pad-vertical">	
-	</div>	
-	<div data-bind="if: validationErrors().length > 0" <="" div="">
+	<div class="pad-vertical">
+	</div>
+	<div data-bind="if: validationErrors().length > 0">
 		<div class="row validation-summary">
 			<h3>Please correct the following errors:</h3>
 			<ul data-bind="foreach: validationErrors">
@@ -15,8 +15,8 @@
 		<div class="row">
 			<div class="span1">&nbsp;</div>
 			<div class="span3">
-				<div data-bind="chsnsingle: { options: systems, value: newSelectedSystem, text: 'displayLabel', label: 'systems' }, 
-								css:{'invalid': (newIdValidationErrorsArray().indexOf('newSystem') !== -1 )}"></div>		
+				<div data-bind="chsnsingle: { options: systems, value: newSelectedSystem, text: 'displayLabel', label: 'systems' },
+								css:{'invalid': (newIdValidationErrorsArray().indexOf('newSystem') !== -1 )}"></div>
 			</div>
 			<div class="span5">
 				<input type="text" size="30" placeholder="ID Value" data-bind="value: newPatientSystemIdValue, valueUpdate: 'afterkeydown'

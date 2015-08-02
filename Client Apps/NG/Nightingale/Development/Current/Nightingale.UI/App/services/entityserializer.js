@@ -1,4 +1,4 @@
-﻿define([], 
+﻿define([],
 	function () {
 
     // Function to capitalize the first letter of a string
@@ -11,8 +11,7 @@
         // When the serialization started
         var startTime = new Date().getTime();
 
-        console.log('Starting the serializer', startTime);
-        
+
         // Create an object to hold the unwrapped JSON
         var thisAction = {};
 
@@ -73,7 +72,7 @@
             });
             unwrappedAction.steps.push(unwrappedStep);
         });
-        
+
         // Copy actions properties
         thisAction.Id = unwrappedAction.id;
         thisAction.Name = unwrappedAction.name;
@@ -105,7 +104,7 @@
         ko.utils.arrayForEach(unwrappedAction.spawnElement, function (spawnElement) {
             thisAction.SpawnElement.push({ ElementId: spawnElement.elementId, ElementType: spawnElement.elementType, Tag: spawnElement.tag });
         });
-        
+
         // Go through the steps,
         ko.utils.arrayForEach(unwrappedAction.steps, function (step) {
 
@@ -133,7 +132,7 @@
             newStep.Completed = step.completed;
             newStep.Enabled = step.enabled;
             newStep.Status = step.status;
-            
+
             // Go through the steps,
             ko.utils.arrayForEach(step.responses, function (response) {
 
@@ -144,7 +143,7 @@
                 ko.utils.arrayForEach(response.spawnElement, function (spawnElement) {
                     newResponse.SpawnElement.push({ ElementId: spawnElement.elementId, ElementType: spawnElement.elementType, Tag: spawnElement.tag })
                 });
-                
+
                 // Copy responses properties
                 newResponse.Id = response.id;
                 newResponse.Text = response.text;
@@ -156,7 +155,7 @@
                 newResponse.Order = response.order;
 
                 newStep.Responses.push(newResponse);
-            });        
+            });
             var incrementalTime = new Date().getTime() - startTime;
 
             thisAction.Steps.push(newStep);
@@ -164,7 +163,6 @@
 
         var totalTime = new Date().getTime() - startTime;
 
-        console.log('Done custom stringifying, it took this long to stringify (in milliseconds) - ', totalTime);
 
         return thisAction;
     }
@@ -174,8 +172,7 @@
         // When the serialization started
         var startTime = new Date().getTime();
 
-        console.log('Starting the serializer', startTime);
-        
+
         // Create an object to hold the unwrapped JSON
         var thisContactCard = {};
 
@@ -268,7 +265,6 @@
 
         var totalTime = new Date().getTime() - startTime;
 
-        console.log('Done custom stringifying, it took this long to stringify (in milliseconds) - ', totalTime);
 
         return thisContactCard;
     }
@@ -278,7 +274,6 @@
         // When the serialization started
         var startTime = new Date().getTime();
 
-        console.log('Starting the serializer', startTime);
 
         // Create an object to hold the unwrapped JSON
         var thisGoal = {};
@@ -416,7 +411,6 @@
         // });
 
         var totalTime = new Date().getTime() - startTime;
-        console.log('Done custom stringifying, it took this long to stringify (in milliseconds) - ', totalTime);
 
         return thisGoal;
     }
@@ -426,7 +420,6 @@
         // When the serialization started
         var startTime = new Date().getTime();
 
-        console.log('Starting the serializer', startTime);
 
         // Go get a projection query of this task
         var interventionQuery = breeze.EntityQuery
@@ -455,7 +448,6 @@
         });
 
         var totalTime = new Date().getTime() - startTime;
-        console.log('Done custom stringifying, it took this long to stringify (in milliseconds) - ', totalTime);
 
         return newIntervention;
     }
@@ -465,7 +457,6 @@
         // When the serialization started
         var startTime = new Date().getTime();
 
-        console.log('Starting the serializer', startTime);
 
         // Go get a projection query of this task
         var taskQuery = breeze.EntityQuery
@@ -508,7 +499,6 @@
         });
 
         var totalTime = new Date().getTime() - startTime;
-        console.log('Done custom stringifying, it took this long to stringify (in milliseconds) - ', totalTime);
 
         return newTask;
     }
@@ -540,13 +530,12 @@
     function serializeObservation(observation, manager) {
         // When the serialization started
         var startTime = new Date().getTime();
-        console.log('Starting the serializer', startTime);
-        
+
         // Create an object to hold the unwrapped JSON
         var thisObservation = {};
         thisObservation.Values = [];
 
-        // Create a query to 
+        // Create a query to
         // Get the unwrapped values of the properties of the observation
         var observationQuery = breeze.EntityQuery
             .from('fakePath')
@@ -573,7 +562,7 @@
         thisObservation.DisplayId = unwrappedObservation.displayId;
         thisObservation.StateId = unwrappedObservation.stateId;
         thisObservation.DeleteFlag = unwrappedObservation.deleteFlag;
-        
+
         // Copy any spawn element's that exist on this action
         ko.utils.arrayForEach(observation.values.peek(), function (value) {
             thisObservation.Values.push({ Id: value.id.peek(), Text: value.text.peek(), Value: value.value.peek() });
@@ -589,7 +578,6 @@
         // When the serialization started
         var startTime = new Date().getTime();
 
-        console.log('Starting the serializer', startTime);
 
         // Create an object to hold the unwrapped JSON
         var thisNote = {};
@@ -598,7 +586,7 @@
         thisNote.ProgramIds = [];
 
         // Get the values of the properties of the action
-        //var unwrappedNote = ko.toJS(note);        
+        //var unwrappedNote = ko.toJS(note);
 
         var noteQuery = breeze.EntityQuery
             .from('fakePath')
@@ -612,7 +600,7 @@
         ko.utils.arrayForEach(note.programIds.peek(), function (pid) {
             thisNote.ProgramIds.push(pid.id.peek());
         });
-        
+
         thisNote.Id = unwrappedNote.id;
         thisNote.Text = unwrappedNote.text;
         thisNote.PatientId = unwrappedNote.patientId;
@@ -629,22 +617,21 @@
         thisNote.ContactedOn = unwrappedNote.contactedOn;
         thisNote.ValidatedIdentity = unwrappedNote.validatedIdentity;
         //utilization:
-		thisNote.admitDate =           unwrappedNote.admitDate;      
-		thisNote.dischargeDate =       unwrappedNote.dischargeDate;      
-		thisNote.systemSource =        unwrappedNote.systemSource;       
-		thisNote.admitted =            unwrappedNote.admitted;           
-		thisNote.visitTypeId =         unwrappedNote.visitTypeId;        
-		thisNote.otherType =           unwrappedNote.otherType;          
+		thisNote.admitDate =           unwrappedNote.admitDate;
+		thisNote.dischargeDate =       unwrappedNote.dischargeDate;
+		thisNote.systemSource =        unwrappedNote.systemSource;
+		thisNote.admitted =            unwrappedNote.admitted;
+		thisNote.visitTypeId =         unwrappedNote.visitTypeId;
+		thisNote.otherType =           unwrappedNote.otherType;
 		thisNote.utilizationSourceId = unwrappedNote.utilizationSourceId;
-		thisNote.dispositionId =       unwrappedNote.dispositionId;      
-		thisNote.otherDisposition =    unwrappedNote.otherDisposition;   
-		thisNote.locationId =          unwrappedNote.locationId;         
-		thisNote.otherLocation =       unwrappedNote.otherLocation;      
-		
-		
-		
+		thisNote.dispositionId =       unwrappedNote.dispositionId;
+		thisNote.otherDisposition =    unwrappedNote.otherDisposition;
+		thisNote.locationId =          unwrappedNote.locationId;
+		thisNote.otherLocation =       unwrappedNote.otherLocation;
+
+
+
         var totalTime = new Date().getTime() - startTime;
-        console.log('Done custom stringifying, it took this long to stringify (in milliseconds) - ', totalTime);
 
         return thisNote;
     }
@@ -654,7 +641,6 @@
         // When the serialization started
         var startTime = new Date().getTime();
 
-        console.log('Starting the serializer', startTime);
 
         // Create an object to hold the unwrapped JSON
         var thisToDo = {};
@@ -674,7 +660,7 @@
         ko.utils.arrayForEach(todo.programIds.peek(), function (pid) {
             thisToDo.ProgramIds.push(pid.id.peek());
         });
-        
+
         thisToDo.Id = unwrappedToDo.id;
         thisToDo.Title = unwrappedToDo.title;
         thisToDo.Description = unwrappedToDo.description;
@@ -689,9 +675,8 @@
         thisToDo.CreatedOn = unwrappedToDo.createdOn;
         thisToDo.ClosedDate = unwrappedToDo.closedDate;
         thisToDo.DeleteFlag = unwrappedToDo.deleteFlag;
-        
+
         var totalTime = new Date().getTime() - startTime;
-        console.log('Done custom stringifying, it took this long to stringify (in milliseconds) - ', totalTime);
 
         return thisToDo;
     }
@@ -701,7 +686,6 @@
         // When the serialization started
         var startTime = new Date().getTime();
 
-        console.log('Starting the serializer', startTime);
 
         // Create an object to hold the unwrapped JSON
         var thisCareMember = {};
@@ -727,7 +711,6 @@
         thisCareMember.PreferredName = unwrappedCareMember.preferredName;
 
         var totalTime = new Date().getTime() - startTime;
-        console.log('Done custom stringifying, it took this long to stringify (in milliseconds) - ', totalTime);
 
         return thisCareMember;
     }
@@ -737,7 +720,6 @@
         // When the serialization started
         var startTime = new Date().getTime();
 
-        console.log('Starting the serializer', startTime);
 
         // Create an object to hold the unwrapped JSON
         var thisIndividual = {};
@@ -759,7 +741,7 @@
         thisIndividual.FirstName = unwrappedIndividual.firstName;
         thisIndividual.LastName = unwrappedIndividual.lastName;
         thisIndividual.PreferredName = unwrappedIndividual.preferredName;
-        thisIndividual.Suffix = unwrappedIndividual.suffix;		
+        thisIndividual.Suffix = unwrappedIndividual.suffix;
         thisIndividual.DOB = unwrappedIndividual.dOB;
         thisIndividual.MiddleName = unwrappedIndividual.middleName;
         thisIndividual.Background = unwrappedIndividual.background;
@@ -768,7 +750,7 @@
 		thisIndividual.StatusId = unwrappedIndividual.statusId;
 		thisIndividual.ReasonId = unwrappedIndividual.reasonId;
 		thisIndividual.StatusSystemSource = unwrappedIndividual.statusSystemSource;
-		
+
         if (unwrappedIndividual.fullSSN) {
         // Add it as a parameter
             thisIndividual.FullSSN = unwrappedIndividual.fullSSN;
@@ -784,7 +766,6 @@
         // thisIndividual.PreferredName = unwrappedIndividual.preferredName;
 
         var totalTime = new Date().getTime() - startTime;
-        console.log('Done custom stringifying, it took this long to stringify (in milliseconds) - ', totalTime);
 
         return thisIndividual;
     }
@@ -793,7 +774,6 @@
     function serializePatientSystem(patientSystem, manager) {
         // When the serialization started
         var startTime = new Date().getTime();
-        console.log('Starting the serializer', startTime);
 
         // Create an object to hold the unwrapped JSON
         var thisPatSys = {};
@@ -805,13 +785,13 @@
             .select('id, patientId, systemId, value, systemSource, statusId, primary, createdById, createdOn, updatedById, updatedOn');
         var results = manager.executeQueryLocally(patientSystemQuery);
         var unwrappedPatSys = results[0];
-        
+
 		if( unwrappedPatSys.id && !isNaN(unwrappedPatSys.id) && unwrappedPatSys.id < 0){
 			thisPatSys.Id = null;
 		}
 		else{
-			thisPatSys.Id = unwrappedPatSys.id;	
-		}        
+			thisPatSys.Id = unwrappedPatSys.id;
+		}
         thisPatSys.PatientId = unwrappedPatSys.patientId;
         thisPatSys.SystemId = unwrappedPatSys.systemId;
         thisPatSys.value = unwrappedPatSys.value.trim();
@@ -822,9 +802,8 @@
 		thisPatSys.createdOn = unwrappedPatSys.createdOn;
 		thisPatSys.updatedById = unwrappedPatSys.updatedById;
 		thisPatSys.updatedOn = unwrappedPatSys.updatedOn;
-        
+
         var totalTime = new Date().getTime() - startTime;
-        console.log('Done custom stringifying, it took this long to stringify (in milliseconds) - ', totalTime);
 
         return thisPatSys;
     }
@@ -833,12 +812,11 @@
     function serializePatientAllergy(allergy, manager) {
         // When the serialization started
         var startTime = new Date().getTime();
-        console.log('Starting the serializer', startTime);
-        
+
         // Create an object to hold the unwrapped JSON
         var thisAllergy = {};
 
-        // Create a query to 
+        // Create a query to
         // Get the unwrapped values of the properties of the allergy
         var allergyQuery = breeze.EntityQuery
             .from('fakePath')
@@ -851,9 +829,9 @@
         // Copy actions properties
         thisAllergy.Id = unwrappedObservation.id;
         thisAllergy.AllergyName = unwrappedObservation.allergyName;
-		var startMoment = moment(unwrappedObservation.startDate);        
+		var startMoment = moment(unwrappedObservation.startDate);
         thisAllergy.StartDate = startMoment.isValid()? startMoment.toISOString() : null;
-		var endMoment = moment(unwrappedObservation.endDate);        
+		var endMoment = moment(unwrappedObservation.endDate);
         thisAllergy.EndDate = endMoment.isValid()? endMoment.toISOString() : null;
         thisAllergy.PatientId = unwrappedObservation.patientId;
         thisAllergy.AllergyId = unwrappedObservation.allergyId;
@@ -868,7 +846,7 @@
         if (allergy.isUserCreated()) {
             thisAllergy.IsNewAllergy = true;
         }
-        
+
         thisAllergy.AllergyTypeIds = [];
         ko.utils.arrayForEach(allergy.allergyTypeIds.peek(), function (value) {
             thisAllergy.AllergyTypeIds.push(value.id.peek());
@@ -888,12 +866,11 @@
     function serializePatientMedication(medication, manager) {
         // When the serialization started
         var startTime = new Date().getTime();
-        console.log('Starting the serializer', startTime);
-        
+
         // Create an object to hold the unwrapped JSON
         var thisMedication = {};
 
-        // Create a query to 
+        // Create a query to
         // Get the unwrapped values of the properties of the medication
         var medicationQuery = breeze.EntityQuery
             .from('fakePath')
@@ -906,7 +883,7 @@
         // Copy actions properties
         thisMedication.Id = unwrappedObservation.id;
         thisMedication.Name = unwrappedObservation.name;
-		var startMoment = moment(unwrappedObservation.startDate);                
+		var startMoment = moment(unwrappedObservation.startDate);
         thisMedication.StartDate = startMoment.isValid()? startMoment.toISOString() : null;
 		var endMoment = moment(unwrappedObservation.endDate);
         thisMedication.EndDate = endMoment.isValid()? endMoment.toISOString() : null;
@@ -928,10 +905,10 @@
         thisMedication.PrescribedBy = unwrappedObservation.prescribedBy;
         thisMedication.TypeId = unwrappedObservation.typeId;
         thisMedication.SigCode = unwrappedObservation.sigCode;
-        thisMedication.Reason = unwrappedObservation.reason;        
-        thisMedication.FamilyId = unwrappedObservation.familyId; //a new medicationMap record id        
+        thisMedication.Reason = unwrappedObservation.reason;
+        thisMedication.FamilyId = unwrappedObservation.familyId; //a new medicationMap record id
         thisMedication.RecalculateNDC = medication.recalculateNDC();
-        
+
         thisMedication.NDCs = [];
         ko.utils.arrayForEach(medication.nDCs.peek(), function (value) {
             thisMedication.NDCs.push(value.id.peek());
