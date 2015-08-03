@@ -97,7 +97,7 @@ namespace Phytel.API.DataDomain.Patient
                             Status = (Status)pd.StatusId,
                             StatusSystemSource  = pd.StatusSystemSource,
                             Protected = pd.Protected,
-                            Deceased = pd.Deceased
+                            Deceased = (Deceased)pd.DeceasedId
                         };
                         if(!string.IsNullOrEmpty(pd.ReasonId))
                         {
@@ -244,7 +244,7 @@ namespace Phytel.API.DataDomain.Patient
                         ReasonId = mePatient.ReasonId == null ? null : mePatient.ReasonId.ToString(),
                         MaritalStatusId = mePatient.MaritalStatusId == null ? null : mePatient.MaritalStatusId.ToString(),
                         Protected = mePatient.Protected,
-                        Deceased = mePatient.Deceased,
+                        DeceasedId = (int)mePatient.Deceased,
                         StatusId = (int)mePatient.Status
                     };
                     if (!string.IsNullOrEmpty(userId))
@@ -395,7 +395,7 @@ namespace Phytel.API.DataDomain.Patient
                                 StatusId = (int)meP.Status,
                                 MaritalStatusId = meP.MaritalStatusId == null ? null : meP.MaritalStatusId.ToString(),
                                 Protected = meP.Protected,
-                                Deceased = meP.Deceased,
+                                DeceasedId = (int)meP.Deceased,
                             };
                             response.Add(data.Id, data);
                         }
@@ -668,7 +668,7 @@ namespace Phytel.API.DataDomain.Patient
                         updt.Set(MEPatient.MaritalStatusProperty, BsonNull.Value);
                     }
                     updt.Set(MEPatient.ProtectedProperty, request.PatientData.Protected);
-                    updt.Set(MEPatient.DeceasedProperty, request.PatientData.Deceased);
+                    updt.Set(MEPatient.DeceasedProperty, request.PatientData.DeceasedId);
                     updt.Set(MEPatient.StatusProperty, request.PatientData.StatusId);
                     if (request.PatientData.StatusSystemSource != null)
                     {

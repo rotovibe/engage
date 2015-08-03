@@ -130,7 +130,7 @@ namespace Phytel.API.DataDomain.Patient.DTO
 
         [BsonElement(DeceasedProperty)]
         [BsonIgnoreIfNull(true)]
-        public bool Deceased { get; set; }
+        public Deceased Deceased { get; set; }
 
         [BsonExtraElements]
         public BsonDocument ExtraElements { get; set; }

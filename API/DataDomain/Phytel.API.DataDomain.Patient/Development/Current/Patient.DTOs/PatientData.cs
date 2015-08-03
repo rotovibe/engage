@@ -24,6 +24,6 @@
         public string FullSSN { get; set; }
         public string MaritalStatusId { get; set; }
         public bool Protected { get; set; }
-        public bool Deceased { get; set; }
+        public int DeceasedId { get; set; }
     }
 }
