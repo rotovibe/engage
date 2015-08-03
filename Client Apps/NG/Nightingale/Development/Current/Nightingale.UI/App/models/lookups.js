@@ -107,7 +107,7 @@ define(['services/session'],
 		            name: { dataType: "String" }
 		        }
 		    });
-			
+
 			//system status - enum
 			metadataStore.addEntityType({
 				shortName: "SystemStatus",
@@ -117,7 +117,7 @@ define(['services/session'],
 					name: { dataType: "String" }
 				}
 			});
-			
+
 			//patient system status - enum (multi id = patient system)
 			metadataStore.addEntityType({
 				shortName: "PatientSystemStatus",
@@ -127,7 +127,7 @@ define(['services/session'],
 					name: { dataType: "String" }
 				}
 			});
-			
+
 			//individual status reason - lookup
 			metadataStore.addEntityType({
 		        shortName: "PatientStatusReason",
@@ -136,8 +136,8 @@ define(['services/session'],
 		            id: { dataType: "String", isPartOfKey: true },
 		            name: { dataType: "String" }
 		        }
-		    });			
-			
+		    });
+
 		    // Observation Type
 		    metadataStore.addEntityType({
 		        shortName: "ObservationType",
@@ -274,46 +274,46 @@ define(['services/session'],
 		            isDefault: { dataType: "String" }
 		        }
 		    });
-			//utilization note:	VisitType		
+			//utilization note:	VisitType
 			metadataStore.addEntityType({
 		        shortName: "VisitType",
 		        namespace: "Nightingale",
 		        dataProperties: {
 		            id: { dataType: "String", isPartOfKey: true },
 		            name: { dataType: "String" },
-		            isDefault: { dataType: "Boolean" }		            
+		            isDefault: { dataType: "Boolean" }
 		        }
 		    });
-			//utilization note:	UtilizationSource	
+			//utilization note:	UtilizationSource
 			metadataStore.addEntityType({
 		        shortName: "UtilizationSource",
 		        namespace: "Nightingale",
 		        dataProperties: {
 		            id: { dataType: "String", isPartOfKey: true },
 		            name: { dataType: "String" },
-		            isDefault: { dataType: "Boolean" }		            
+		            isDefault: { dataType: "Boolean" }
 		        }
 		    });
-			//utilization note:	Disposition	
+			//utilization note:	Disposition
 			metadataStore.addEntityType({
 		        shortName: "Disposition",
 		        namespace: "Nightingale",
 		        dataProperties: {
 		            id: { dataType: "String", isPartOfKey: true },
 		            name: { dataType: "String" },
-		            isDefault: { dataType: "Boolean" }	            
+		            isDefault: { dataType: "Boolean" }
 		        }
 		    });
-			//utilization note: UtilizationLocation	
+			//utilization note: UtilizationLocation
 			metadataStore.addEntityType({
 		        shortName: "UtilizationLocation",
 		        namespace: "Nightingale",
 		        dataProperties: {
 		            id: { dataType: "String", isPartOfKey: true },
 		            name: { dataType: "String" },
-		            isDefault: { dataType: "Boolean" }		            
+		            isDefault: { dataType: "Boolean" }
 		        }
-		    });		
+		    });
 
 		    // AllergyType
 		    metadataStore.addEntityType({
@@ -411,6 +411,27 @@ define(['services/session'],
 		            name: { dataType: "String" }
 		        }
 		    });
+
+				// Marital Status for a Patient
+				metadataStore.addEntityType({
+						shortName: "MaritalStatus",
+						namespace: "Nightingale",
+						dataProperties: {
+								id: { dataType: "String", isPartOfKey: true },
+								name: { dataType: "String" }
+						}
+				});
+
+				// Deceased State for a Patient
+				metadataStore.addEntityType({
+						shortName: "Deceased",
+						namespace: "Nightingale",
+						dataProperties: {
+								id: { dataType: "String", isPartOfKey: true },
+								name: { dataType: "String" }
+						}
+				});
+
 		}
 
 	    // Initialize the entity models in the entity manager
@@ -429,20 +450,20 @@ define(['services/session'],
 		    manager.createEntity('Priority', { id: 1, levelName: 'Low', imageSource: '/NightingaleUI/Content/images/priority_low.png', iconClass: 'icon-priority grey' }).entityAspect.acceptChanges();
 		    manager.createEntity('Priority', { id: 2, levelName: 'Medium', imageSource: '/NightingaleUI/Content/images/priority_medium.png', iconClass: 'icon-priority yellow' }).entityAspect.acceptChanges();
 		    manager.createEntity('Priority', { id: 3, levelName: 'High', imageSource: '/NightingaleUI/Content/images/priority_high.png', iconClass: 'icon-priority red' }).entityAspect.acceptChanges();
-			
+
 			//enums.patientStatus
 		    manager.createEntity('PatientStatus', { id: 1, name: 'Active'   }).entityAspect.acceptChanges();
 		    manager.createEntity('PatientStatus', { id: 2, name: 'Inactive' }).entityAspect.acceptChanges();
 			manager.createEntity('PatientStatus', { id: 3, name: 'Archived' }).entityAspect.acceptChanges();
-			
+
 			//enums.systemStatus
 			manager.createEntity('SystemStatus', {id: 1, name: 'Active'		}).entityAspect.acceptChanges();
 			manager.createEntity('SystemStatus', {id: 2, name: 'Inactive'	}).entityAspect.acceptChanges();
-			
-			//enums.patientSystemStatus			
+
+			//enums.patientSystemStatus
 			manager.createEntity('PatientSystemStatus',  {id: 1, name: 'Active'		}).entityAspect.acceptChanges();
 			manager.createEntity('PatientSystemStatus',  {id: 2, name: 'Inactive'	}).entityAspect.acceptChanges();
-			
+
             // Types of steps enums
 		    manager.createEntity('StepType', { id: 1, name: 'Radio', path: 'programdesigner/questiontypes/radio.html' }).entityAspect.acceptChanges();
 		    manager.createEntity('StepType', { id: 2, name: 'Text', path: 'programdesigner/questiontypes/label.html' }).entityAspect.acceptChanges();
@@ -512,6 +533,10 @@ define(['services/session'],
 		    manager.createEntity('MedicationCategory', { id: 1, name: 'Medication' }).entityAspect.acceptChanges();
 		    // manager.createEntity('MedicationCategory', { id: 2, name: 'Supplement' }).entityAspect.acceptChanges();
 
+		    // Deceased enums
+		    manager.createEntity('Deceased', { id: 0, name: 'None' }).entityAspect.acceptChanges();
+		    manager.createEntity('Deceased', { id: 1, name: 'Yes' }).entityAspect.acceptChanges();
+		    manager.createEntity('Deceased', { id: 2, name: 'No' }).entityAspect.acceptChanges();
 		}
 
 		function checkDataContext() {
