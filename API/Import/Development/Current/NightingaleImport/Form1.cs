@@ -79,6 +79,7 @@ namespace NightingaleImport
         private string context = ConfigurationManager.AppSettings.Get("context");
 
         public const string SystemProperty = "Engage";
+        public const string DataSourceProperty = "Import";
         string _headerUserId = "000000000000000000000000";
 
         public Form1()
@@ -176,7 +177,7 @@ namespace NightingaleImport
                                         Primary = (String.IsNullOrEmpty(lvi.SubItems[colSysPrim].Text)) ? false : Boolean.Parse(lvi.SubItems[colSysPrim].Text.Trim()),
                                         StatusId = (int)Phytel.API.DataDomain.PatientSystem.DTO.Status.Active,
                                         SystemId = system.Id,
-                                        SystemSource = "Import",
+                                        SystemSource = DataSourceProperty,
                                         Value = (String.IsNullOrEmpty(lvi.SubItems[colSysID].Text)) ? null : lvi.SubItems[colSysID].Text.Trim(),
                                     };
                                     InsertPatientSystemDataRequest psRequest = new InsertPatientSystemDataRequest
@@ -267,7 +268,8 @@ namespace NightingaleImport
                                 PhoneData phone1 = new PhoneData
                                 {
                                     Number = Convert.ToInt64(lvi.SubItems[colPh1].Text.Replace("-", string.Empty)),
-                                    OptOut = false
+                                    OptOut = false,
+                                    DataSource = DataSourceProperty
                                 };
 
                                 if (String.Compare(lvi.SubItems[colPh1Pref].Text.Trim(), "true", true) == 0)
@@ -298,7 +300,8 @@ namespace NightingaleImport
                                 PhoneData phone2 = new PhoneData
                                 {
                                     Number = Convert.ToInt64(lvi.SubItems[colPh2].Text.Replace("-", string.Empty)),
-                                    OptOut = false
+                                    OptOut = false,
+                                    DataSource = DataSourceProperty
                                 };
 
                                 if (String.Compare(lvi.SubItems[colPh2Pref].Text.Trim(), "true", true) == 0)
