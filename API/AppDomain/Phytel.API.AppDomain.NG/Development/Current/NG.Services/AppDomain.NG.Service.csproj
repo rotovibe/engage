@@ -113,6 +113,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Mappers\PatientContactMapper.cs" />
     <Compile Include="Mappers\PatientSystemMapper.cs" />
     <Compile Include="InternalService.cs" />
     <Compile Include="PatientSystemService.cs" />
@@ -163,6 +164,10 @@
     <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.Allergy\Development\Current\Allergy.DTO\DataDomain.Allergy.DTO.csproj">
       <Project>{404ff84f-c52a-45b1-9966-2f79b52ee03d}</Project>
       <Name>DataDomain.Allergy.DTO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.Contact\Development\Current\Contact.DTO\DataDomain.Contact.DTO.csproj">
+      <Project>{0B6E0ED8-ABE5-4A1D-8E10-0AC54F06D9C4}</Project>
+      <Name>DataDomain.Contact.DTO</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.Medication\Development\Current\Medication.DTO\DataDomain.Medication.DTO.csproj">
       <Project>{006555ba-c927-4ce0-bc5a-7a6a7053d0d5}</Project>

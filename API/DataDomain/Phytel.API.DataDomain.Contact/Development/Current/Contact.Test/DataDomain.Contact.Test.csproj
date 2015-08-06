@@ -98,6 +98,7 @@
     <Compile Include="ContactDataManagerTests.cs" />
     <Compile Include="ContactServiceTests.cs" />
     <Compile Include="ContactTest.cs" />
+    <Compile Include="MongoDB\Repository\PhoneVisitorTests.cs" />
     <Compile Include="MruList_Test.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Stubs\StubHelpers.cs" />

@@ -1,8 +1,7 @@
-﻿using Phytel.API.Common;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using MongoDB.Bson;
+using Phytel.API.Common;
 
 namespace Phytel.API.DataDomain.Contact.Test.Stubs
 {
@@ -18,17 +17,17 @@ namespace Phytel.API.DataDomain.Contact.Test.Stubs
             throw new NotImplementedException();
         }
 
-        public List<MongoDB.Bson.BsonValue> ConvertToBsonValueList(object p)
+        public List<BsonValue> ConvertToBsonValueList(object p)
         {
             throw new NotImplementedException();
         }
 
-        public List<MongoDB.Bson.ObjectId> ConvertToObjectIdList(List<string> stringList)
+        public List<ObjectId> ConvertToObjectIdList(List<string> stringList)
         {
             throw new NotImplementedException();
         }
 
-        public List<string> ConvertToStringList(List<MongoDB.Bson.ObjectId> objectIds)
+        public List<string> ConvertToStringList(List<ObjectId> objectIds)
         {
             throw new NotImplementedException();
         }

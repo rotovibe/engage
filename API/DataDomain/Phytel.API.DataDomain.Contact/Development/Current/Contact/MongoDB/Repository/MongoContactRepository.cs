@@ -1,21 +1,18 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Phytel.API.DataDomain.Contact.DTO;
-using Phytel.API.Interface;
-using MongoDB.Driver;
-using MB = MongoDB.Driver.Builders;
-using MongoDB.Bson;
-using Phytel.API.DataDomain.Contact;
-using MongoDB.Driver.Builders;
-using Phytel.API.Common;
-using Phytel.API.DataAudit;
-using Phytel.API.Common.Audit;
-using ServiceStack.Common;
-using ServiceStack.WebHost.Endpoints;
 using System.Configuration;
+using System.Linq;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
+using MongoDB.Driver;
+using Phytel.API.Common;
+using Phytel.API.Common.Audit;
+using Phytel.API.DataAudit;
+using Phytel.API.DataDomain.Contact.DTO;
+using Phytel.API.DataDomain.Contact.MongoDB.Repository;
+using Phytel.API.Interface;
+using ServiceStack.WebHost.Endpoints;
+using MB = MongoDB.Driver.Builders;
 
 namespace Phytel.API.DataDomain.Contact
 {
@@ -31,43 +28,43 @@ namespace Phytel.API.DataDomain.Contact
                 #region Register ClassMap
                 try
                 {
-                    if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(MEContact)) == false)
-                        MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<MEContact>();
+                    if (BsonClassMap.IsClassMapRegistered(typeof(MEContact)) == false)
+                        BsonClassMap.RegisterClassMap<MEContact>();
                 }
                 catch { }
 
                 try
                 {
-                if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(Address)) == false)
-                    MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<Address>();
+                if (BsonClassMap.IsClassMapRegistered(typeof(Address)) == false)
+                    BsonClassMap.RegisterClassMap<Address>();
                 }
                 catch { }
 
                 try
                 {
-                if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(CommMode)) == false)
-                    MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<CommMode>();
+                if (BsonClassMap.IsClassMapRegistered(typeof(CommMode)) == false)
+                    BsonClassMap.RegisterClassMap<CommMode>();
                 }
                 catch { }
 
                 try
                 {
-                if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(Email)) == false)
-                    MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<Email>();
+                if (BsonClassMap.IsClassMapRegistered(typeof(Email)) == false)
+                    BsonClassMap.RegisterClassMap<Email>();
                 }
                 catch { }
 
                 try
                 {
-                    if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(Language)) == false)
-                        MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<Language>();
+                    if (BsonClassMap.IsClassMapRegistered(typeof(Language)) == false)
+                        BsonClassMap.RegisterClassMap<Language>();
                 }
                 catch { }
 
                 try
                 {
-                    if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(Phone)) == false)
-                        MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<Phone>();
+                    if (BsonClassMap.IsClassMapRegistered(typeof(Phone)) == false)
+                        BsonClassMap.RegisterClassMap<Phone>();
                 }
                 catch { }
 
@@ -98,9 +95,9 @@ namespace Phytel.API.DataDomain.Contact
                     List<IMongoQuery> queries = new List<IMongoQuery>();
                     if (request.PatientId != null)
                     {
-                        queries.Add(Query.EQ(MEContact.PatientIdProperty, ObjectId.Parse(request.PatientId)));
-                        queries.Add(Query.EQ(MEContact.DeleteFlagProperty, false));
-                        IMongoQuery query = Query.And(queries);
+                        queries.Add(MB.Query.EQ(MEContact.PatientIdProperty, ObjectId.Parse(request.PatientId)));
+                        queries.Add(MB.Query.EQ(MEContact.DeleteFlagProperty, false));
+                        IMongoQuery query = MB.Query.And(queries);
                         MEContact mc = ctx.Contacts.Collection.Find(query).FirstOrDefault();
                         if (mc != null)
                         {
@@ -199,24 +196,7 @@ namespace Phytel.API.DataDomain.Contact
                     //Phones
                     if (request.Phones != null && request.Phones.Count > 0)
                     {
-                        List<Phone> mePhones = new List<Phone>();
-                        List<PhoneData> phoneData = request.Phones;
-                        foreach (PhoneData p in phoneData)
-                        {
-                            Phone mePh = new Phone
-                            {
-                                Id = ObjectId.GenerateNewId(),
-                                Number = p.Number,
-                                IsText = p.IsText,
-                                TypeId = ObjectId.Parse(p.TypeId),
-                                PreferredPhone = p.PhonePreferred,
-                                PreferredText = p.TextPreferred,
-                                OptOut = p.OptOut,
-                                DeleteFlag = false
-                            };
-                            mePhones.Add(mePh);
-                        }
-                        meContact.Phones = mePhones;
+                        PhoneVisitor.GetContactPhones(ref request, ref meContact);
                     }
 
                     //Emails
@@ -245,7 +225,7 @@ namespace Phytel.API.DataDomain.Contact
                     AuditHelper.LogDataAudit(this.UserId, 
                                             MongoCollectionName.Contact.ToString(), 
                                             meContact.Id.ToString(), 
-                                            Common.DataAuditType.Insert, 
+                                            DataAuditType.Insert, 
                                             request.ContractNumber);
 
                     //Send back the newly inserted object.
@@ -290,7 +270,7 @@ namespace Phytel.API.DataDomain.Contact
                     AuditHelper.LogDataAudit(this.UserId,
                                             MongoCollectionName.Contact.ToString(),
                                             request.Id.ToString(),
-                                            Common.DataAuditType.Delete,
+                                            DataAuditType.Delete,
                                             request.ContractNumber);
                 }
             }
@@ -313,9 +293,9 @@ namespace Phytel.API.DataDomain.Contact
             using (ContactMongoContext ctx = new ContactMongoContext(_dbName))
             {
                 List<IMongoQuery> queries = new List<IMongoQuery>();
-                queries.Add(Query.EQ(MEContact.IdProperty, ObjectId.Parse(entityID)));
-                queries.Add(Query.EQ(MEContact.DeleteFlagProperty, false));
-                IMongoQuery mQuery = Query.And(queries);
+                queries.Add(MB.Query.EQ(MEContact.IdProperty, ObjectId.Parse(entityID)));
+                queries.Add(MB.Query.EQ(MEContact.DeleteFlagProperty, false));
+                IMongoQuery mQuery = MB.Query.And(queries);
                 MEContact mc = ctx.Contacts.Collection.Find(mQuery).FirstOrDefault();
                 if (mc != null)
                 {
@@ -336,7 +316,7 @@ namespace Phytel.API.DataDomain.Contact
             return contactData;
         }
 
-        public Tuple<string, IEnumerable<object>> Select(Interface.APIExpression expression)
+        public Tuple<string, IEnumerable<object>> Select(APIExpression expression)
         {
             try
             {
@@ -377,13 +357,13 @@ namespace Phytel.API.DataDomain.Contact
                 using (ContactMongoContext ctx = new ContactMongoContext(_dbName))
                 {
                     List<IMongoQuery> queries = new List<IMongoQuery>();
-                    queries.Add(Query.EQ(MEContact.IdProperty, ObjectId.Parse(request.ContactId)));
-                    queries.Add(Query.EQ(MEContact.DeleteFlagProperty, false));
-                    IMongoQuery query = Query.And(queries);
+                    queries.Add(MB.Query.EQ(MEContact.IdProperty, ObjectId.Parse(request.ContactId)));
+                    queries.Add(MB.Query.EQ(MEContact.DeleteFlagProperty, false));
+                    IMongoQuery query = MB.Query.And(queries);
                     MEContact mc = ctx.Contacts.Collection.Find(query).FirstOrDefault();
                     if(mc != null)
                     {
-                        var uv = new List<UpdateBuilder>();
+                        var uv = new List<MB.UpdateBuilder>();
 
                         #region Modes
                         if (request.Modes != null)
@@ -487,7 +467,8 @@ namespace Phytel.API.DataDomain.Contact
                                             PreferredPhone = p.PhonePreferred,
                                             PreferredText = p.TextPreferred,
                                             OptOut = p.OptOut,
-                                            DeleteFlag = false
+                                            DeleteFlag = false,
+                                            DataSource = p.DataSource
                                         };
                                         mePhones.Add(mePh);
                                         updatedPhones.Add(new CleanupIdData { OldId = p.Id, NewId = mePh.Id.ToString() });
@@ -534,7 +515,8 @@ namespace Phytel.API.DataDomain.Contact
                                             PreferredPhone = p.PhonePreferred,
                                             PreferredText = p.TextPreferred,
                                             OptOut = p.OptOut,
-                                            DeleteFlag = false
+                                            DeleteFlag = false,
+                                            DataSource = p.DataSource
                                         };
                                         mePhones.Add(mePh);
                                     } 
@@ -772,7 +754,7 @@ namespace Phytel.API.DataDomain.Contact
                         AuditHelper.LogDataAudit(this.UserId,
                                                 MongoCollectionName.Contact.ToString(),
                                                 request.ContactId,
-                                                Common.DataAuditType.Update,
+                                                DataAuditType.Update,
                                                 request.ContractNumber);
 
                         //set the response
@@ -800,14 +782,14 @@ namespace Phytel.API.DataDomain.Contact
                 using (ContactMongoContext ctx = new ContactMongoContext(_dbName))
                 {
                     List<IMongoQuery> queries = new List<IMongoQuery>();
-                    queries.Add(Query.EQ(MEContact.IdProperty, ObjectId.Parse(request.ContactId)));
-                    queries.Add(Query.EQ(MEContact.DeleteFlagProperty, false));
-                    IMongoQuery query = Query.And(queries);
+                    queries.Add(MB.Query.EQ(MEContact.IdProperty, ObjectId.Parse(request.ContactId)));
+                    queries.Add(MB.Query.EQ(MEContact.DeleteFlagProperty, false));
+                    IMongoQuery query = MB.Query.And(queries);
                     MEContact mc = ctx.Contacts.Collection.Find(query).FirstOrDefault();
 
                     if (mc != null)
                     {
-                        var uv = new List<UpdateBuilder>();
+                        var uv = new List<MB.UpdateBuilder>();
                         uv.Add(MB.Update.SetWrapped<List<ObjectId>>(MEContact.RecentListProperty, lsO));
 
                         // LastUpdatedOn
@@ -821,7 +803,7 @@ namespace Phytel.API.DataDomain.Contact
                         AuditHelpers.LogDataAudit(this.UserId,
                                                 MongoCollectionName.Contact.ToString(),
                                                 request.ContactId,
-                                                Common.DataAuditType.Update,
+                                                DataAuditType.Update,
                                                 request.ContractNumber);
                         result = true;
                     }
@@ -855,9 +837,9 @@ namespace Phytel.API.DataDomain.Contact
             using (ContactMongoContext ctx = new ContactMongoContext(_dbName))
             {
                 List<IMongoQuery> queries = new List<IMongoQuery>();
-                queries.Add(Query.EQ(MEContact.PatientIdProperty, ObjectId.Parse(request.PatientId)));
-                queries.Add(Query.EQ(MEContact.DeleteFlagProperty, false));
-                IMongoQuery mQuery = Query.And(queries);
+                queries.Add(MB.Query.EQ(MEContact.PatientIdProperty, ObjectId.Parse(request.PatientId)));
+                queries.Add(MB.Query.EQ(MEContact.DeleteFlagProperty, false));
+                IMongoQuery mQuery = MB.Query.And(queries);
                 MEContact mc = ctx.Contacts.Collection.Find(mQuery).FirstOrDefault();
                 if (mc != null)
                 {
@@ -897,8 +879,18 @@ namespace Phytel.API.DataDomain.Contact
                         {
                             // Get the ones that are not deleted.
                             if(!mePh.DeleteFlag)
-                            {    
-                                PhoneData phone = new PhoneData { Id = mePh.Id.ToString(), IsText = mePh.IsText, Number = mePh.Number, OptOut = mePh.OptOut, PhonePreferred = mePh.PreferredPhone, TextPreferred = mePh.PreferredText, TypeId = mePh.TypeId.ToString()};
+                            {
+                                PhoneData phone = new PhoneData
+                                {
+                                    Id = mePh.Id.ToString(),
+                                    IsText = mePh.IsText,
+                                    Number = mePh.Number,
+                                    OptOut = mePh.OptOut,
+                                    PhonePreferred = mePh.PreferredPhone,
+                                    TextPreferred = mePh.PreferredText,
+                                    TypeId = mePh.TypeId.ToString(),
+                                    DataSource = mePh.DataSource
+                                };
                                 phones.Add(phone);
                             }
                         }
@@ -962,9 +954,9 @@ namespace Phytel.API.DataDomain.Contact
             using (ContactMongoContext ctx = new ContactMongoContext(_dbName))
             {
                 List<IMongoQuery> queries = new List<IMongoQuery>();
-                queries.Add(Query.EQ(MEContact.ResourceIdProperty, request.SQLUserId));
-                queries.Add(Query.EQ(MEContact.DeleteFlagProperty, false));
-                IMongoQuery mQuery = Query.And(queries);
+                queries.Add(MB.Query.EQ(MEContact.ResourceIdProperty, request.SQLUserId));
+                queries.Add(MB.Query.EQ(MEContact.DeleteFlagProperty, false));
+                IMongoQuery mQuery = MB.Query.And(queries);
                 MEContact mc = ctx.Contacts.Collection.Find(mQuery).FirstOrDefault();
                 if (mc != null)
                 {
@@ -996,9 +988,9 @@ namespace Phytel.API.DataDomain.Contact
             using (ContactMongoContext ctx = new ContactMongoContext(_dbName))
             {
                 List<IMongoQuery> queries = new List<IMongoQuery>();
-                queries.Add(Query.EQ(MEContact.PatientIdProperty, ObjectId.Parse(patientId)));
-                queries.Add(Query.EQ(MEContact.DeleteFlagProperty, false));
-                IMongoQuery mQuery = Query.And(queries);
+                queries.Add(MB.Query.EQ(MEContact.PatientIdProperty, ObjectId.Parse(patientId)));
+                queries.Add(MB.Query.EQ(MEContact.DeleteFlagProperty, false));
+                IMongoQuery mQuery = MB.Query.And(queries);
                 MEContact mc = ctx.Contacts.Collection.Find(mQuery).FirstOrDefault();
                 if (mc != null)
                 {
@@ -1025,9 +1017,9 @@ namespace Phytel.API.DataDomain.Contact
                 {
                     List<IMongoQuery> queries = new List<IMongoQuery>();
                     //queries.Add(Query.NE(MEContact.ResourceIdProperty, BsonNull.Value)); commenting this out, so that System is returned.
-                    queries.Add(Query.EQ(MEContact.PatientIdProperty, BsonNull.Value));
-                    queries.Add(Query.EQ(MEContact.DeleteFlagProperty, false));
-                    IMongoQuery mQuery = Query.And(queries);
+                    queries.Add(MB.Query.EQ(MEContact.PatientIdProperty, BsonNull.Value));
+                    queries.Add(MB.Query.EQ(MEContact.DeleteFlagProperty, false));
+                    IMongoQuery mQuery = MB.Query.And(queries);
                     List<MEContact> meContacts = ctx.Contacts.Collection.Find(mQuery).ToList();
                     if (meContacts != null)
                     {
@@ -1063,9 +1055,9 @@ namespace Phytel.API.DataDomain.Contact
                     List<BsonValue> bsonList = Helper.ConvertToBsonValueList(request.ContactIds);
                     if (bsonList != null)
                     {
-                        queries.Add(Query.In(MEContact.IdProperty, bsonList));
-                        queries.Add(Query.EQ(MEContact.DeleteFlagProperty, false));
-                        IMongoQuery mQuery = Query.And(queries);
+                        queries.Add(MB.Query.In(MEContact.IdProperty, bsonList));
+                        queries.Add(MB.Query.EQ(MEContact.DeleteFlagProperty, false));
+                        IMongoQuery mQuery = MB.Query.And(queries);
                         List<MEContact> meContacts = ctx.Contacts.Collection.Find(mQuery).ToList();
                         if (meContacts != null)
                         {
@@ -1097,9 +1089,9 @@ namespace Phytel.API.DataDomain.Contact
                 using (ContactMongoContext ctx = new ContactMongoContext(_dbName))
                 {
                     List<IMongoQuery> queries = new List<IMongoQuery>();
-                    queries.Add(Query.In(MEContact.RecentListProperty, new List<BsonValue> { BsonValue.Create(ObjectId.Parse(entityId))}));
-                    queries.Add(Query.EQ(MEContact.DeleteFlagProperty, false));
-                    IMongoQuery mQuery = Query.And(queries);
+                    queries.Add(MB.Query.In(MEContact.RecentListProperty, new List<BsonValue> { BsonValue.Create(ObjectId.Parse(entityId))}));
+                    queries.Add(MB.Query.EQ(MEContact.DeleteFlagProperty, false));
+                    IMongoQuery mQuery = MB.Query.And(queries);
                     List<MEContact> meContacts = ctx.Contacts.Collection.Find(mQuery).ToList();
                     if (meContacts != null)
                     {
@@ -1147,7 +1139,7 @@ namespace Phytel.API.DataDomain.Contact
                     AuditHelper.LogDataAudit(this.UserId,
                                             MongoCollectionName.Contact.ToString(),
                                             request.Id.ToString(),
-                                            Common.DataAuditType.UndoDelete,
+                                            DataAuditType.UndoDelete,
                                             request.ContractNumber);
                 }
             }

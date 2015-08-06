@@ -32,7 +32,6 @@ namespace Phytel.API.DataDomain.PatientSystem.DTO
         public const string ValueProperty = "val";
         public const string StatusProperty = "sts";
         public const string PrimaryProperty = "pri";
-        public const string SystemSourceProperty = "syssrc";
 
         public const string VersionProperty = "v";
         public const string UpdatedByProperty = "uby";
@@ -57,6 +56,7 @@ namespace Phytel.API.DataDomain.PatientSystem.DTO
         [BsonIgnoreIfNull(false)]
         public string Value { get; set; }
 
+        public const string SystemSourceProperty = "syssrc";
         [BsonElement(SystemSourceProperty)]
         [BsonIgnoreIfNull(false)]
         public string SystemSource { get; set; }

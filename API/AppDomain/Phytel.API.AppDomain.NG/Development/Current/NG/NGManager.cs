@@ -19,6 +19,7 @@ using System.Linq;
 using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Web.Hosting;
+using AutoMapper;
 using DD = Phytel.API.DataDomain.Program.DTO;
 using Phytel.API.DataDomain.PatientGoal.DTO;
 using Phytel.API.DataDomain.PatientSystem.DTO;
@@ -1306,7 +1307,17 @@ namespace Phytel.API.AppDomain.NG
                             List<Phone> phones = new List<Phone>();
                             foreach (PhoneData ph in phoneData)
                             {
-                                Phone phone = new Phone { Id = ph.Id, TypeId = ph.TypeId, Number = ph.Number, IsText = ph.IsText, PhonePreferred = ph.PhonePreferred, TextPreferred = ph.TextPreferred, OptOut = ph.OptOut };
+                                Phone phone = new Phone
+                                {
+                                    Id = ph.Id,
+                                    TypeId = ph.TypeId,
+                                    Number = ph.Number,
+                                    IsText = ph.IsText,
+                                    PhonePreferred = ph.PhonePreferred,
+                                    TextPreferred = ph.TextPreferred,
+                                    OptOut = ph.OptOut,
+                                    DataSource = ph.DataSource
+                                };
                                 phones.Add(phone);
                             }
                             contact.Phones = phones;
@@ -1376,17 +1387,8 @@ namespace Phytel.API.AppDomain.NG
                     }
                 }
 
-                List<PhoneData> phonesData = null;
-                if (request.Contact.Phones != null)
-                {
-                    List<Phone> phones = request.Contact.Phones;
-                    phonesData = new List<PhoneData>();
-                    foreach (Phone p in phones)
-                    {
-                        PhoneData d = new PhoneData {  Id = p.Id,  IsText = p.IsText, Number = p.Number, OptOut = p.OptOut, PhonePreferred = p.PhonePreferred, TextPreferred = p.TextPreferred, TypeId =  p.TypeId};
-                        phonesData.Add(d);
-                    }
-                }
+                var phonesData = (request.Contact.Phones != null) ? GetPhonesData(request.Contact.Phones) : null;
+
                 List<EmailData> emailsData = null;
                 if (request.Contact.Emails != null)
                 {
@@ -1496,6 +1498,21 @@ namespace Phytel.API.AppDomain.NG
             catch (WebServiceException wse)
             {
                 throw new WebServiceException("AD:PutUpdateContact()::" + wse.Message, wse.InnerException);
+            }
+        }
+
+        public List<PhoneData> GetPhonesData(List<Phone> phonelist)
+        {
+            try
+            {
+                List<PhoneData> phonesData = null;
+                List<Phone> phones = phonelist;
+                phonesData = phones.Select(Mapper.Map<PhoneData>).ToList();
+                return phonesData;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:GetPhonesData()::" + ex.Message, ex.InnerException);
             }
         }
 

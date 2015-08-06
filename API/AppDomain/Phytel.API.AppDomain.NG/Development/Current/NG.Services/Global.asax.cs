@@ -42,6 +42,7 @@ namespace Phytel.API.AppDomain.NG.Service
                 MedSuppMapper.Build();
                 PatientNoteMapper.Build();
                 PatientSystemMapper.Build();
+                PatientContactMapper.Build();
 
                 Plugins.Add(new RequestLogsFeature() {RequiredRoles = new string[] {}});
 
@@ -49,6 +50,11 @@ namespace Phytel.API.AppDomain.NG.Service
                 RequestFilters.Add((req, res, requestDto) =>
                 {
                     HostContext.Instance.Items.Add("Contract", ((IAppDomainRequest) requestDto).ContractNumber);
+                });
+
+                RequestFilters.Add((req, res, requestDto) =>
+                {
+                    var obj = req.ResponseContentType;
                 });
 
                 var emitGlobalHeadersHandler = new CustomActionHandler((httpReq, httpRes) => httpRes.EndRequest());

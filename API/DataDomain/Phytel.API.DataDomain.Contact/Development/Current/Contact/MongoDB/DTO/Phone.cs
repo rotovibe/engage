@@ -6,35 +6,39 @@ namespace Phytel.API.DataDomain.Contact.DTO
     public class Phone
     {
         public const string IDProperty = "_id";
-        public const string NumberProperty = "num";
-        public const string TypeIdProperty = "typeid";
-        public const string IsTextProperty = "istxt";
-        public const string PhonePreferredProperty = "pfph";
-        public const string TextPreferredProperty = "pftxt";
-        public const string OptOutProperty = "oo";
-        public const string DeleteFlagProperty = "del";
-
         [BsonElement(IDProperty)]
         public ObjectId Id { get; set; }
 
+        public const string NumberProperty = "num";
         [BsonElement(NumberProperty)]
         public long Number { get; set; }
 
+        public const string TypeIdProperty = "typeid";
         [BsonElement(TypeIdProperty)]
         public ObjectId TypeId { get; set; }
 
+        public const string IsTextProperty = "istxt";
         [BsonElement(IsTextProperty)]
         public bool IsText { get; set; }
 
+        public const string PhonePreferredProperty = "pfph";
         [BsonElement(PhonePreferredProperty)]
         public bool PreferredPhone { get; set; }
 
+        public const string TextPreferredProperty = "pftxt";
         [BsonElement(TextPreferredProperty)]
         public bool PreferredText { get; set; }
 
+        public const string OptOutProperty = "oo";
         [BsonElement(OptOutProperty)]
         public bool OptOut { get; set; }
 
+        public const string SystemSourceProperty = "dsrc";
+        [BsonElement(SystemSourceProperty)]
+        [BsonIgnoreIfNull(true)]
+        public string DataSource { get; set; }
+
+        public const string DeleteFlagProperty = "del";
         [BsonElement(DeleteFlagProperty)]
         public bool DeleteFlag { get; set; }
     }

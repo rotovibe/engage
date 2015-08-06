@@ -14,5 +14,6 @@ namespace Phytel.API.DataDomain.Contact.DTO
         public bool PhonePreferred { get; set; }
         public bool TextPreferred { get; set; }
         public bool OptOut { get; set; }
+        public string DataSource { get; set; }
     }
 }

@@ -2,9 +2,11 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Phytel.API.AppDomain.NG.DTO;
 using System;
 using System.Collections.Generic;
+using AutoMapper;
 using Phytel.API.AppDomain.NG;
 using Phytel.API.AppDomain.NG.Test.Stubs;
 using MongoDB.Bson;
+using Phytel.API.DataDomain.Contact.DTO;
 
 namespace Phytel.API.AppDomain.NG.Tests
 {
@@ -687,6 +689,27 @@ namespace Phytel.API.AppDomain.NG.Tests
                 PostRemovePatientProgramResponse response = ngm.RemovePatientProgram(request);
                 Assert.IsNotNull(response);
             }
+        }
+
+        [TestMethod()]
+        public void GetPhonesDataTest()
+        {
+            Mapper.CreateMap<Phone, PhoneData>();
+            var ngMgr = new NGManager
+            {
+                EndpointUtils = new StubEndpointUtils(),
+                PlanElementUtils = new StubPlanElementUtils()
+            };
+
+            var list = new List<Phone>
+            {
+                new Phone{ Id = "000000000000000000000000", Number=2146658790, OptOut = false, TextPreferred = true, DataSource = "Engage", IsText=true},
+                new Phone{ Id = "111111111111111111111111", Number=2145553333, OptOut = false, TextPreferred = true, DataSource = "Engage", IsText=true}
+            };
+
+            var lP = ngMgr.GetPhonesData(list);
+            Assert.AreEqual(typeof (Phone).Name, list[0].GetType().Name);
+            Assert.AreEqual("Engage", list[0].DataSource);
         }
     }
 }

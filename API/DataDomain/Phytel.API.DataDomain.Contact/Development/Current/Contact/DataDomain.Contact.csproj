@@ -101,6 +101,7 @@
     <Compile Include="MongoDB\ContactMongoContext.cs" />
     <Compile Include="DataContactManager.cs" />
     <Compile Include="ContactRepositoryFactory.cs" />
+    <Compile Include="MongoDB\Repository\PhoneVisitor.cs" />
     <Compile Include="MRUList.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
