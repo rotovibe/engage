@@ -96,58 +96,56 @@ namespace Phytel.API.DataDomain.PatientNote.Repo
         [BsonIgnoreIfNull(true)]
         public List<ObjectId> ProgramIds { get; set; }
 
-        public const string SystemProperty = "sys";
-        [BsonElement(SystemProperty)]
+        //public const string SystemProperty = "sys";
+        //[BsonElement(SystemProperty)]
+        //[BsonIgnoreIfNull(true)]
+        //public string PSystem { get; set; }
+
+        public const string DataSourceProperty = "dsrc";
+        [BsonElement(DataSourceProperty)]
         [BsonIgnoreIfNull(true)]
-        public string PSystem { get; set; }
-
-        #region Standard IMongoEntity Constants
-
-        public const string VersionProperty = "v";
-        public const string UpdatedByProperty = "uby";
-        public const string DeleteFlagProperty = "del";
-        public const string TTLDateProperty = "ttl";
-        public const string LastUpdatedOnProperty = "uon";
-        public const string RecordCreatedByProperty = "rcby";
-        public const string RecordCreatedOnProperty = "rcon";
-
-        #endregion
+        public string DataSource { get; set; }
 
         #region Standard IMongoEntity Implementation
-
         [BsonExtraElements]
         public BsonDocument ExtraElements { get; set; }
 
+        public const string VersionProperty = "v";
         [BsonElement(VersionProperty)]
         [BsonDefaultValue(1.0)]
         public double Version { get; set; }
 
+        public const string UpdatedByProperty = "uby";
         [BsonElement(UpdatedByProperty)]
         public ObjectId? UpdatedBy { get; set; }
 
+        public const string DeleteFlagProperty = "del";
         [BsonElement(DeleteFlagProperty)]
         [BsonDefaultValue(false)]
         public bool DeleteFlag { get; set; }
 
+        public const string TTLDateProperty = "ttl";
         [BsonElement(TTLDateProperty)]
         [BsonIgnoreIfNull(true)]
         [BsonDateTimeOptions(Kind = System.DateTimeKind.Utc)]
         public DateTime? TTLDate { get; set; }
 
+        public const string LastUpdatedOnProperty = "uon";
         [BsonElement(LastUpdatedOnProperty)]
         [BsonIgnoreIfNull(true)]
         [BsonDateTimeOptions(Kind = System.DateTimeKind.Utc)]
         public DateTime? LastUpdatedOn { get; set; }
 
+        public const string RecordCreatedByProperty = "rcby";
         [BsonIgnoreIfNull(true)]
         [BsonElement(RecordCreatedByProperty)]
         public ObjectId RecordCreatedBy { get; private set; }
 
+        public const string RecordCreatedOnProperty = "rcon";
         [BsonIgnoreIfNull(true)]
         [BsonElement(RecordCreatedOnProperty)]
         [BsonDateTimeOptions(Kind = System.DateTimeKind.Utc)]
         public DateTime RecordCreatedOn { get; private set; }
-
         #endregion
     }
 }

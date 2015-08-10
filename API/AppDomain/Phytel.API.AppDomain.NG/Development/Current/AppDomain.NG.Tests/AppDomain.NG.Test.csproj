@@ -193,6 +193,7 @@
     <Compile Include="Stubs\StubJsonRestClient.cs" />
     <Compile Include="Stubs\StubNGManager.cs" />
     <Compile Include="Stubs\StubElementActivationStrategy.cs" />
+    <Compile Include="Stubs\StubNotesManager.cs" />
     <Compile Include="Stubs\StubPlanElementEndpointUtils.cs" />
     <Compile Include="Stubs\StubPlanElementUtils.cs" />
     <Compile Include="Stubs\StubSecurityManager.cs" />
@@ -200,6 +201,7 @@
     <Compile Include="Stubs\StubProblemActivationRule.cs" />
     <Compile Include="Stubs\StubStepPlanProcessor.cs" />
     <Compile Include="Stubs\StubToDoActivationRule.cs" />
+    <Compile Include="Stubs\StubUtilsManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\Common\Phytel.API.Common\Development\Current\Phytel.API.Common.csproj">

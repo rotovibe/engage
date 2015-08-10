@@ -141,10 +141,10 @@ namespace Phytel.API.AppDomain.NG.Service
                 if (result.UserId.Trim() != string.Empty)
                 {
                     if (string.IsNullOrEmpty(request.Utilization.PatientId))
-                        throw new ArgumentException("Missing patientid");
+                        throw new Exception("Missing patientid");
 
                     if (string.IsNullOrEmpty(request.Utilization.VisitTypeId))
-                        throw new ArgumentException("Missing visittypeid");
+                        throw new Exception("Missing visittypeid");
 
                     request.UserId = result.UserId;
                     response = UtilManager.InsertPatientUtilization(request);

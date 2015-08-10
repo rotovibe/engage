@@ -18,7 +18,7 @@ namespace Phytel.API.AppDomain.NG.DTO.Utilization
         public string OtherDisposition { get; set; }
         public string UtilizationSourceId { get; set; }
         public List<string> ProgramIds { get; set; }
-        public string SystemSource { get; set; }
+        public string DataSource { get; set; }
         public string TypeId { get; set; }
         public string CreatedById { get; set; }
         public DateTime CreatedOn { get; set; }

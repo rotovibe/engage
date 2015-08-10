@@ -18,11 +18,11 @@ namespace Phytel.API.Common.Format
             {
                 httpResponse.StatusCode = (int)HttpStatusCode.InternalServerError;
             }
-            
-            response.Status = new ResponseStatus(ex.ToErrorCode(), ex.Message);
-            response.Status.ErrorCode = ex.ToErrorCode();
-            response.Status.Message = ex.Message;
-            response.Status.StackTrace = ex.StackTrace;
+
+            response.Status = ex.ToResponseStatus(); //new ResponseStatus(ex.ToErrorCode(), ex.Message);
+            //response.Status.ErrorCode = ex.ToErrorCode();
+            //response.Status.Message = ex.Message;
+            //response.Status.StackTrace = ex.StackTrace;
         }
 
         public static string FormatDateOfBirth(string val)

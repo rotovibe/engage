@@ -43,8 +43,8 @@ namespace Phytel.API.DataDomain.PatientNote.Repo
                         OtherLocation = Trim(data.OtherLocation, 100),
                         OtherType = Trim(data.OtherType, 100),
                         ProgramIds = data.ProgramIds != null ? data.ProgramIds.ConvertAll(ObjectId.Parse) : null,
-                        PSystem = data.SystemSource = Trim(data.SystemSource, 50),
-                        Reason = data.Reason = Trim(data.Reason, 5000),
+                        DataSource = data.DataSource = Helper.TrimAndLimit(data.DataSource, 50),
+                        Reason = data.Reason = Helper.TrimAndLimit(data.Reason, 5000),
                         Version = 1,
                         Admitted = data.Admitted
                     };
@@ -173,11 +173,11 @@ namespace Phytel.API.DataDomain.PatientNote.Repo
                 DischargeDate = meN.DischargeDate,
                 DispositionId = meN.Disposition.ToString(),
                 LocationId = meN.Location.ToString(),
-                OtherDisposition = Trim(meN.OtherDisposition, 100),
-                OtherLocation = Trim(meN.OtherLocation, 100),
-                OtherType = Trim(meN.OtherType,100),
-                SystemSource = Trim(meN.PSystem, 50),
-                Reason = Trim(meN.Reason, 5000),
+                OtherDisposition = Helper.TrimAndLimit(meN.OtherDisposition, 100),
+                OtherLocation = Helper.TrimAndLimit(meN.OtherLocation, 100),
+                OtherType = Helper.TrimAndLimit(meN.OtherType, 100),
+                DataSource = Helper.TrimAndLimit(meN.DataSource, 50),
+                Reason = Helper.TrimAndLimit(meN.Reason, 5000),
                 VisitTypeId = (meN.VisitType == null) ? null : meN.VisitType.ToString(),
                 ProgramIds = Helper.ConvertToStringList(meN.ProgramIds),
                 SourceId = (meN.SourceId == null) ? null : meN.SourceId.ToString(),
@@ -239,8 +239,8 @@ namespace Phytel.API.DataDomain.PatientNote.Repo
                     if (pn.OtherDisposition != null) uv.Add(MB.Update.Set(MEPatientUtilization.OtherDispositionProperty, Trim(pn.OtherDisposition, 100)));
                     else uv.Add(MB.Update.Set(MEPatientUtilization.OtherDispositionProperty, BsonNull.Value));
 
-                    if (pn.SystemSource != null) uv.Add(MB.Update.Set(MEPatientUtilization.SystemProperty, Trim(pn.SystemSource, 50)));
-                    else uv.Add(MB.Update.Set(MEPatientUtilization.SystemProperty, BsonNull.Value));
+                    if (pn.DataSource != null) uv.Add(MB.Update.Set(MEPatientUtilization.DataSourceProperty, Trim(pn.DataSource, 50)));
+                    else uv.Add(MB.Update.Set(MEPatientUtilization.DataSourceProperty, BsonNull.Value));
 
                     if (pn.AdmitDate != null && !pn.AdmitDate.Equals(new DateTime())) uv.Add(MB.Update.Set(MEPatientUtilization.AdmitDateProperty, pn.AdmitDate));
                     else uv.Add(MB.Update.Set(MEPatientUtilization.AdmitDateProperty, BsonNull.Value));

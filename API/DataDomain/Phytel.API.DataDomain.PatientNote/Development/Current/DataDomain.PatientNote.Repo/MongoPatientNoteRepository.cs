@@ -55,7 +55,8 @@ namespace Phytel.API.DataDomain.PatientNote.Repo
                         ValidatedIdentity = noteData.ValidatedIdentity,
                         ContactedOn = noteData.ContactedOn,
                         Type = ObjectId.Parse(noteData.TypeId),
-                        DeleteFlag = false
+                        DeleteFlag = false,
+                        DataSource = Helper.TrimAndLimit(noteData.DataSource, 50)
                     };
 
                     if(!string.IsNullOrEmpty(noteData.MethodId))
@@ -78,6 +79,7 @@ namespace Phytel.API.DataDomain.PatientNote.Repo
                     {
                         meN.DurationId = ObjectId.Parse(noteData.DurationId);
                     }
+
                     using (PatientNoteMongoContext ctx = new PatientNoteMongoContext(ContractDBName))
                     {
                         ctx.PatientNotes.Collection.Insert(meN);
@@ -176,7 +178,8 @@ namespace Phytel.API.DataDomain.PatientNote.Repo
                             ValidatedIdentity = meN.ValidatedIdentity,
                             ContactedOn = meN.ContactedOn,
                             UpdatedById = (meN.UpdatedBy == null) ? null : meN.UpdatedBy.ToString(),
-                            UpdatedOn = meN.LastUpdatedOn
+                            UpdatedOn = meN.LastUpdatedOn,
+                            DataSource = meN.DataSource
                         };
                     }
                 }
@@ -279,6 +282,16 @@ namespace Phytel.API.DataDomain.PatientNote.Repo
                     {
                         uv.Add(MB.Update.Set(MEPatientNote.ContactedOnProperty, BsonNull.Value));
                     }
+
+                    if (pn.DataSource != null)
+                    {
+                        uv.Add(MB.Update.Set(MEPatientNote.DataSourceProperty, Helper.TrimAndLimit(pn.DataSource, 50)));
+                    }
+                    else
+                    {
+                        uv.Add(MB.Update.Set(MEPatientNote.DataSourceProperty, BsonNull.Value));
+                    }
+
                     IMongoUpdate update = MB.Update.Combine(uv);
                     ctx.PatientNotes.Collection.Update(q, update);
 
@@ -347,7 +360,8 @@ namespace Phytel.API.DataDomain.PatientNote.Repo
                                 ValidatedIdentity = meN.ValidatedIdentity,
                                 ContactedOn = meN.ContactedOn,
                                 UpdatedById = (meN.UpdatedBy == null) ? null : meN.UpdatedBy.ToString(),
-                                UpdatedOn = meN.LastUpdatedOn
+                                UpdatedOn = meN.LastUpdatedOn,
+                                DataSource = meN.DataSource
                             });
                         }
                     }

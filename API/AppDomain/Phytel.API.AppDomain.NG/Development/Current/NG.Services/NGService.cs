@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using Phytel.API.AppDomain.NG.Notes;
+using ServiceStack.Common.Web;
 
 namespace Phytel.API.AppDomain.NG.Service
 {
@@ -23,6 +24,14 @@ namespace Phytel.API.AppDomain.NG.Service
 
         private const string unknownBrowserType = "Unknown browser";
         private const string unknownUserHostAddress = "Unknown IP";
+
+        // example REST response standard
+        //public HttpResult Get(AppDomainRequest request)
+        //{
+            // to Comply wiht the REST serivces standard. We will specify the HttpResult as the reutrn object for service calls in the future
+            //var res = new HttpResult {Response = response, StatusCode = System.Net.HttpStatusCode.Created};
+            //return ResolveEventArgs;
+        //}
 
         public GetPatientResponse Post(GetPatientRequest request)
         {
@@ -1134,17 +1143,20 @@ namespace Phytel.API.AppDomain.NG.Service
         public PostPatientNoteResponse Post(PostPatientNoteRequest request)
         {
             PostPatientNoteResponse response = new PostPatientNoteResponse();
-            NotesManager ntm = new NotesManager();
             ValidateTokenResponse result = null;
 
             try
             {
-                request.Token = base.Request.Headers["Token"] as string;
+                if (base.Request != null)
+                {
+                    request.Token = base.Request.Headers["Token"] as string;
+                }
+
                 result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
-                    response = ntm.InsertPatientNote(request);
+                    response = NotesManager.InsertPatientNote(request);
                 }
                 else
                     throw new UnauthorizedAccessException();

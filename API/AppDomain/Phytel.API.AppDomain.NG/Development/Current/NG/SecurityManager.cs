@@ -39,7 +39,7 @@ namespace Phytel.API.AppDomain.NG
 
                 return response;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 throw;
             }

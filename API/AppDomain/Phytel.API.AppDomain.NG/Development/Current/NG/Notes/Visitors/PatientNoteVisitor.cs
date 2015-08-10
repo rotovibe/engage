@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Phytel.API.AppDomain.NG.DTO;
+using Phytel.API.Common;
 using Phytel.API.DataDomain.PatientNote.DTO;
-using Phytel.API.Interface;
 using ServiceStack.Service;
 using ServiceStack.ServiceClient.Web;
 
@@ -17,7 +14,7 @@ namespace Phytel.API.AppDomain.NG.Notes.Visitors
         {
             //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Notes/{Count}", "GET")]
             IRestClient client = new JsonServiceClient();
-            var url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Notes/{5}",
+            var url = Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Notes/{5}",
                 DDPatientNoteUrl,
                 "NG",
                 Version,
@@ -48,7 +45,8 @@ namespace Phytel.API.AppDomain.NG.Notes.Visitors
                 ValidatedIdentity = n.ValidatedIdentity,
                 ContactedOn = n.ContactedOn,
                 UpdatedById = n.UpdatedById,
-                UpdatedOn = n.UpdatedOn
+                UpdatedOn = n.UpdatedOn,
+                DataSource = n.DataSource
             }).ToList();
 
             return result;

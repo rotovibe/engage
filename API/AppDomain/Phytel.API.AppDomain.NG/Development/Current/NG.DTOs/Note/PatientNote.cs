@@ -21,5 +21,6 @@ namespace Phytel.API.AppDomain.NG.DTO
         public bool ValidatedIdentity { get; set; }
         public DateTime? UpdatedOn { get; set; }
         public string UpdatedById { get; set; }
+        public string DataSource { get; set; }
     }
 }

@@ -27,7 +27,7 @@ namespace Phytel.API.DataDomain.PatientNote.Test
                 ProgramIds = new List<string> { "sjfhgry478298988y7482911" },
                 Reason = "test reason",
                 SourceId = "783945768910123erhgy547f",
-                SystemSource = "Engage",
+                DataSource = "Engage",
                 VisitTypeId = "89rhty7857ty7745tueiop33"
             };
 
@@ -47,7 +47,7 @@ namespace Phytel.API.DataDomain.PatientNote.Test
                 ProgramIds = new List<string> { "sjfhgry478298988y7482911" },
                 Reason = "test reason" + timestamp,
                 SourceId = "783945768910123erhgy547f",
-                SystemSource = "Engage",
+                DataSource = "Engage",
                 VisitTypeId = "89rhty7857ty7745tueiop33"
             };
         }

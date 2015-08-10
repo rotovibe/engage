@@ -57,7 +57,8 @@ namespace Phytel.API.AppDomain.NG.Notes
                         ValidatedIdentity = n.ValidatedIdentity,
                         ContactedOn = n.ContactedOn,
                         UpdatedById = n.UpdatedById,
-                        UpdatedOn = n.UpdatedOn
+                        UpdatedOn = n.UpdatedOn,
+                        DataSource = n.DataSource
                     };
                 }
                 return result;
@@ -115,18 +116,21 @@ namespace Phytel.API.AppDomain.NG.Notes
                     SourceId = request.Note.SourceId,
                     DurationId = request.Note.DurationId,
                     ContactedOn = request.Note.ContactedOn,
-                    ValidatedIdentity = request.Note.ValidatedIdentity
+                    ValidatedIdentity = request.Note.ValidatedIdentity,
+                    DataSource = request.Note.DataSource
                 };
+
                 InsertPatientNoteDataResponse dataDomainResponse =
                     client.Post<InsertPatientNoteDataResponse>(url, new InsertPatientNoteDataRequest
-                                                                                {
-                                                                                    PatientNote = noteData,
-                                                                                    Context = "NG",
-                                                                                    ContractNumber = request.ContractNumber,
-                                                                                    Version = request.Version,
-                                                                                    UserId = request.UserId,
-                                                                                    PatientId = request.PatientId
-                                                                                } as object);
+                    {
+                        PatientNote = noteData,
+                        Context = "NG",
+                        ContractNumber = request.ContractNumber,
+                        Version = request.Version,
+                        UserId = request.UserId,
+                        PatientId = request.PatientId
+                    } as object);
+
                 if(dataDomainResponse != null && !(string.IsNullOrEmpty(dataDomainResponse.Id)))
                 {
                     response.Id = dataDomainResponse.Id;
@@ -202,7 +206,8 @@ namespace Phytel.API.AppDomain.NG.Notes
                         SourceId = pn.SourceId,
                         DurationId = pn.DurationId,
                         ContactedOn = pn.ContactedOn,
-                        ValidatedIdentity = pn.ValidatedIdentity
+                        ValidatedIdentity = pn.ValidatedIdentity,
+                        DataSource = pn.DataSource
                     };
                     UpdatePatientNoteDataResponse dataDomainResponse =
                         client.Put<UpdatePatientNoteDataResponse>(url, new UpdatePatientNoteDataRequest

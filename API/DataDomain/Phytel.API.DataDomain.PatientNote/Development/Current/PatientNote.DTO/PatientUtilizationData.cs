@@ -25,6 +25,7 @@ namespace Phytel.API.DataDomain.PatientNote.DTO
         public bool Admitted { get; set; }
         public string UpdatedById { get; set; }
         public DateTime? UpdatedOn { get; set; }
+        public string DataSource { get; set; }
 
         public PatientUtilizationData(){}
     }
