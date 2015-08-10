@@ -33,8 +33,8 @@ namespace Phytel.API.DataDomain.Contact.DTO
         [BsonElement(OptOutProperty)]
         public bool OptOut { get; set; }
 
-        public const string SystemSourceProperty = "dsrc";
-        [BsonElement(SystemSourceProperty)]
+        public const string DataSourceProperty = "dsrc";
+        [BsonElement(DataSourceProperty)]
         [BsonIgnoreIfNull(true)]
         public string DataSource { get; set; }
 

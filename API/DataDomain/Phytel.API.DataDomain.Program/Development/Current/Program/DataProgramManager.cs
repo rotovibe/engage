@@ -404,11 +404,11 @@ namespace Phytel.API.DataDomain.Program
             }
         }
 
-        public GetPatientProgramsResponse GetPatientPrograms(GetPatientProgramsRequest request)
+        public GetPatientProgramsDataResponse GetPatientPrograms(GetPatientProgramsDataRequest request)
         {
             try
             {
-                var response = new GetPatientProgramsResponse();
+                var response = new GetPatientProgramsDataResponse();
                 var repo = Factory.GetRepository(request, RepositoryType.PatientProgram);
                 var patientPrograms = repo.FindByPatientId(request.PatientId).Cast<MEPatientProgram>().ToList();
 
@@ -418,12 +418,13 @@ namespace Phytel.API.DataDomain.Program
                     patientPrograms.ForEach(pd => lpi.Add(new ProgramInfo
                     {
                         Id = Convert.ToString(pd.Id),
-                                Name = pd.Name,
+                        Name = pd.Name,
                         PatientId = Convert.ToString(pd.PatientId),
-                                ShortName = pd.ShortName,
+                        ProgramSourceId = (pd.SourceId == null) ? null : pd.SourceId.ToString(),
+                        ShortName = pd.ShortName,
                         Status = (int)pd.Status,
                         ElementState = (int)pd.State,
-                         AttrEndDate = pd.AttributeEndDate
+                        AttrEndDate = pd.AttributeEndDate
                             })
                         );
                         response.programs = lpi;

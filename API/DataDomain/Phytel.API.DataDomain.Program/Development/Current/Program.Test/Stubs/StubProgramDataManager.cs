@@ -90,7 +90,7 @@ namespace Phytel.API.DataDomain.Program.Test.Stubs
             return response;
         }
 
-        public DTO.GetPatientProgramsResponse GetPatientPrograms(DTO.GetPatientProgramsRequest request)
+        public DTO.GetPatientProgramsDataResponse GetPatientPrograms(DTO.GetPatientProgramsDataRequest request)
         {
             throw new NotImplementedException();
         }

@@ -123,16 +123,27 @@ namespace Phytel.API.AppDomain.NG
                     if (pSys.Count > 0)
                     {
                         var bsdiSystem = EndpointUtil.GetSystems(Mapper.Map<GetActiveSystemsRequest>(request)).FirstOrDefault(r => r.Name.Equals("BSDI", StringComparison.InvariantCultureIgnoreCase));
+                        var hicSystem = EndpointUtil.GetSystems(Mapper.Map<GetActiveSystemsRequest>(request)).FirstOrDefault(r => r.Name.Equals("HIC", StringComparison.InvariantCultureIgnoreCase));
                         List<PatientSystem> data = new List<PatientSystem>();
                         pSys.ForEach(p =>
                             {
+                                string systemId = string.Empty;
+                                if (hasHealthyWeightProgramAssigned(p.PatientId, request))
+                                { 
+                                    systemId = bsdiSystem.Id;
+                                }
+                                else
+                                {
+                                    systemId = hicSystem.Id;
+                                }
+
                                 data.Add(new PatientSystem
                                 {
                                     Id = p.Id,
                                     PatientId = p.PatientId,
                                     Primary = false,
                                     StatusId = (int)Status.Active,
-                                    SystemId = bsdiSystem.Id,
+                                    SystemId = systemId,
                                     SystemSource = "Import",
                                     Value = p.OldSystemId.Trim(),
                                 });
@@ -190,6 +201,11 @@ namespace Phytel.API.AppDomain.NG
             #endregion
 
             return string.Format("For {0} contract, migrated data for {1} existing PatientSystem Ids and added engage ids for {2} patients.",request.ContractNumber, bsdiCount, engageCount);
+        }
+
+        private bool hasHealthyWeightProgramAssigned(string patientId, UpdatePatientsAndSystemsRequest request)
+        {
+            return EndpointUtil.HasHealthyWeightProgramAssigned(patientId, request);
         }
     }
 }

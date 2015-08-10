@@ -733,8 +733,8 @@ namespace Phytel.API.AppDomain.NG
                     request.PatientId,
                     request.Token), request.UserId);
 
-                DD.GetPatientProgramsResponse resp =
-                    client.Get<DD.GetPatientProgramsResponse>(url);
+                DD.GetPatientProgramsDataResponse resp =
+                    client.Get<DD.GetPatientProgramsDataResponse>(url);
 
                 if (resp != null)
                 {
@@ -750,7 +750,8 @@ namespace Phytel.API.AppDomain.NG
                             ShortName = p.ShortName,
                             Status = p.Status,
                             ElementState = p.ElementState,
-                             AttrEndDate = p.AttrEndDate
+                            AttrEndDate = p.AttrEndDate,
+                            ProgramSourceId = p.ProgramSourceId
                         }));
 
                         result.Programs = adPs;

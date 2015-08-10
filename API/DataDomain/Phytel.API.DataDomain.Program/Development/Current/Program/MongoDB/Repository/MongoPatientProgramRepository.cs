@@ -79,7 +79,8 @@ namespace Phytel.API.DataDomain.Program
                         Status = (int)nmePP.Status,
                         PatientId = nmePP.PatientId.ToString(),
                         //ProgramState = (int)nmePP.ProgramState, // depricated - Use Element state instead.
-                        ElementState = (int)nmePP.State
+                        ElementState = (int)nmePP.State,
+                        ProgramSourceId = (nmePP.SourceId == null) ? null : nmePP.SourceId.ToString()
                     };
 
                     AuditHelper.LogDataAudit(this.UserId,

@@ -6,6 +6,7 @@ using AutoMapper;
 using Phytel.API.AppDomain.NG.DTO;
 using Phytel.API.AppDomain.NG.DTO.Internal;
 using Phytel.API.DataDomain.PatientSystem.DTO;
+using Phytel.API.DataDomain.Program.DTO;
 using ServiceStack.Service;
 using ServiceStack.ServiceClient.Web;
 
@@ -16,6 +17,7 @@ namespace Phytel.API.AppDomain.NG
         #region endpoint addresses
         protected readonly string DDPatientSystemUrl = ConfigurationManager.AppSettings["DDPatientSystemUrl"];
         protected readonly string DDPatientServiceUrl = ConfigurationManager.AppSettings["DDPatientServiceUrl"];
+        protected readonly string DDProgramServiceUrl = ConfigurationManager.AppSettings["DDProgramServiceUrl"];
         #endregion
 
         public List<SystemData> GetSystems(GetActiveSystemsRequest request)
@@ -104,9 +106,9 @@ namespace Phytel.API.AppDomain.NG
                 List<PatientSystemData> data = new List<PatientSystemData>();
                 request.PatientSystems.ForEach(a => data.Add(Mapper.Map<PatientSystemData>(a)));
 
-                InsertPatientSystemsDataResponse dataDomainResponse = client.Post<InsertPatientSystemsDataResponse>(url, new InsertPatientSystemsDataRequest 
-                    { 
-                        PatientId  = request.PatientId,
+                InsertPatientSystemsDataResponse dataDomainResponse = client.Post<InsertPatientSystemsDataResponse>(url, new InsertPatientSystemsDataRequest
+                    {
+                        PatientId = request.PatientId,
                         PatientSystemsData = data,
                         Context = "NG",
                         ContractNumber = request.ContractNumber,
@@ -139,9 +141,9 @@ namespace Phytel.API.AppDomain.NG
                 List<PatientSystemData> data = new List<PatientSystemData>();
                 request.PatientSystems.ForEach(a => data.Add(Mapper.Map<PatientSystemData>(a)));
 
-                UpdatePatientSystemsDataResponse dataDomainResponse = client.Put<UpdatePatientSystemsDataResponse>(url, new UpdatePatientSystemsDataRequest 
-                    { 
-                        PatientId  = request.PatientId,
+                UpdatePatientSystemsDataResponse dataDomainResponse = client.Put<UpdatePatientSystemsDataResponse>(url, new UpdatePatientSystemsDataRequest
+                    {
+                        PatientId = request.PatientId,
                         PatientSystemsData = data,
                         Context = "NG",
                         ContractNumber = request.ContractNumber,
@@ -218,6 +220,36 @@ namespace Phytel.API.AppDomain.NG
                 if (dataDomainResponse != null)
                 {
                     result = dataDomainResponse.Ids;
+                }
+                return result;
+            }
+            catch (Exception ex) { throw ex; }
+        }
+
+
+        public bool HasHealthyWeightProgramAssigned(string patientId, UpdatePatientsAndSystemsRequest request)
+        {
+            bool result = false;
+            try
+            {
+                IRestClient client = new JsonServiceClient();
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Programs/",
+                    DDProgramServiceUrl,
+                    "NG",
+                    request.Version,
+                    request.ContractNumber,
+                    patientId,
+                    request.Token), request.UserId);
+
+                GetPatientProgramsDataResponse dataDomainResponse = client.Get<GetPatientProgramsDataResponse>(url);
+
+                if (dataDomainResponse != null && dataDomainResponse.programs != null)
+                {
+                    // Check if the programs "BSHSI - Healthy Weight" or "BSHSI - Healthy Weight v2" are assigned to the patient.
+                    if (dataDomainResponse.programs.Exists(p => p.ProgramSourceId == "5330920da38116ac180009d2" || p.ProgramSourceId == "541943a6bdd4dfa5d90002da"))
+                    {
+                        result = true;
+                    }
                 }
                 return result;
             }

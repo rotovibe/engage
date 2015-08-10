@@ -438,7 +438,7 @@ namespace Phytel.API.DataDomain.Program.Tests
                 Stopwatch st = new Stopwatch();
                 st.Start();
                 ProgramDataManager dm = new ProgramDataManager { Factory = new ProgramRepositoryFactory() };
-                IDataDomainRequest request = new GetPatientProgramsRequest { ContractNumber = "InHealth001", Context = "NG", UserId = "user" };
+                IDataDomainRequest request = new GetPatientProgramsDataRequest { ContractNumber = "InHealth001", Context = "NG", UserId = "user" };
                 ProgramAttributeData pad = dm.GetProgramAttributes("535808a7d6a485044cedecd6", request);
                 st.Stop();
                 int seconds = st.Elapsed.Milliseconds;
@@ -454,7 +454,7 @@ namespace Phytel.API.DataDomain.Program.Tests
                 Stopwatch st = new Stopwatch();
                 st.Start();
                 ProgramDataManager dm = new ProgramDataManager { Factory = new ProgramRepositoryFactory() };
-                IDataDomainRequest request = new GetPatientProgramsRequest { ContractNumber = "InHealth001", Context = "NG", UserId = "user" };
+                IDataDomainRequest request = new GetPatientProgramsDataRequest { ContractNumber = "InHealth001", Context = "NG", UserId = "user" };
                 //MEProgram p = dm.getLimitedProgramDetails("5330920da38116ac180009d2", request);
                 st.Stop();
                 int seconds = st.Elapsed.Milliseconds;
