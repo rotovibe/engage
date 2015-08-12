@@ -113,7 +113,8 @@ namespace Phytel.API.DataDomain.PatientNote.Repo
                     var q = MB.Query<MEPatientUtilization>.EQ(b => b.Id, ObjectId.Parse(utilId));
 
                     var uv = new List<MB.UpdateBuilder>();
-                    uv.Add(MB.Update.Set(MEPatientUtilization.TTLDateProperty, DateTime.UtcNow.AddDays(_expireDays)));
+                    // eng-1408
+                    //uv.Add(MB.Update.Set(MEPatientUtilization.TTLDateProperty, DateTime.UtcNow.AddDays(_expireDays)));
                     uv.Add(MB.Update.Set(MEPatientUtilization.LastUpdatedOnProperty, DateTime.UtcNow));
                     uv.Add(MB.Update.Set(MEPatientUtilization.DeleteFlagProperty, true));
                     uv.Add(MB.Update.Set(MEPatientUtilization.UpdatedByProperty, ObjectId.Parse(this.UserId)));
