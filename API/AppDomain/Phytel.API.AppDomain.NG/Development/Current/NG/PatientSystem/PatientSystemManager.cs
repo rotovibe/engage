@@ -177,7 +177,7 @@ namespace Phytel.API.AppDomain.NG
                         }
                     }
                 }
-                result = string.Format("For {0} contract, migrated data for {1} existing PatientSystem Ids. Patients that were not migratred since they had no programs assigend: {2}", request.ContractNumber, migrateCount, string.Join(", ", patientsWithNoPrograms));
+                result = string.Format("For {0} contract, migrated data for {1} existing PatientSystem Ids. Patients that were not migratred since they had no programs assigned: {2}", request.ContractNumber, migrateCount, string.Join(", ", patientsWithNoPrograms));
                 #endregion
             }
             else
