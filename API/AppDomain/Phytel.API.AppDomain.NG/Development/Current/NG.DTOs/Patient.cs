@@ -25,10 +25,10 @@ namespace Phytel.API.AppDomain.NG.DTO
         public string ClinicalBackground { get; set; }
         public int? LastFourSSN { get; set; }
         public string FullSSN { get; set; }
-        public string System { get; set; }
+        public string DataSource { get; set; }
         public string ReasonId { get; set; }
         public int StatusId { get; set; }
-        public string StatusSystemSource { get; set; }
+        public string StatusDataSource { get; set; }
         public string MaritalStatusId { get; set; }
         public bool Protected { get; set; }
         public int DeceasedId { get; set; }

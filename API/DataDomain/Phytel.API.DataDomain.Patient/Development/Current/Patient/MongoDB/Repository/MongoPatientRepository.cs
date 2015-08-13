@@ -93,9 +93,9 @@ namespace Phytel.API.DataDomain.Patient
                             Version = request.Version,
                             TTLDate = null,
                             DeleteFlag = false,
-                            System = FormatSystem(pd.System),
+                            DataSource = FormatSystem(pd.DataSource),
                             Status = (Status)pd.StatusId,
-                            StatusSystemSource  = pd.StatusSystemSource,
+                            StatusDataSource  = pd.StatusDataSource,
                             Protected = pd.Protected,
                             Deceased = (Deceased)pd.DeceasedId
                         };
@@ -239,8 +239,8 @@ namespace Phytel.API.DataDomain.Patient
                         Background = mePatient.Background,
                         ClinicalBackground = mePatient.ClinicalBackground,
                         LastFourSSN = mePatient.LastFourSSN,
-                        System = FormatSystem(mePatient.System),
-                        StatusSystemSource = mePatient.StatusSystemSource,
+                        DataSource = FormatSystem(mePatient.DataSource),
+                        StatusDataSource = mePatient.StatusDataSource,
                         ReasonId = mePatient.ReasonId == null ? null : mePatient.ReasonId.ToString(),
                         MaritalStatusId = mePatient.MaritalStatusId == null ? null : mePatient.MaritalStatusId.ToString(),
                         Protected = mePatient.Protected,
@@ -389,8 +389,8 @@ namespace Phytel.API.DataDomain.Patient
                                 Background = meP.Background,
                                 ClinicalBackground = meP.ClinicalBackground,
                                 LastFourSSN = meP.LastFourSSN,
-                                System = FormatSystem(meP.System),
-                                StatusSystemSource = meP.StatusSystemSource,
+                                DataSource = FormatSystem(meP.DataSource),
+                                StatusDataSource = meP.StatusDataSource,
                                 ReasonId = meP.ReasonId == null ? null : meP.ReasonId.ToString(),
                                 StatusId = (int)meP.Status,
                                 MaritalStatusId = meP.MaritalStatusId == null ? null : meP.MaritalStatusId.ToString(),
@@ -565,12 +565,12 @@ namespace Phytel.API.DataDomain.Patient
                             updt.Set(MEPatient.SuffixProperty, request.PatientData.Suffix);
                     }
 
-                    if (request.PatientData.System != null)
+                    if (request.PatientData.DataSource != null)
                     {
-                        if (request.PatientData.System == "\"\"" || (request.PatientData.System == "\'\'"))
-                            updt.Set(MEPatient.SystemProperty, string.Empty);
+                        if (request.PatientData.DataSource == "\"\"" || (request.PatientData.DataSource == "\'\'"))
+                            updt.Set(MEPatient.DataSourceProperty, string.Empty);
                         else
-                            updt.Set(MEPatient.SystemProperty, request.PatientData.System);
+                            updt.Set(MEPatient.DataSourceProperty, request.PatientData.DataSource);
                     }
 
                     if (request.PatientData.PreferredName != null)
@@ -670,9 +670,9 @@ namespace Phytel.API.DataDomain.Patient
                     updt.Set(MEPatient.ProtectedProperty, request.PatientData.Protected);
                     updt.Set(MEPatient.DeceasedProperty, request.PatientData.DeceasedId);
                     updt.Set(MEPatient.StatusProperty, request.PatientData.StatusId);
-                    if (request.PatientData.StatusSystemSource != null)
+                    if (request.PatientData.StatusDataSource != null)
                     {
-                        updt.Set(MEPatient.StatusSystemSourceProperty, request.PatientData.StatusSystemSource);
+                        updt.Set(MEPatient.StatusDataSourceProperty, request.PatientData.StatusDataSource);
                     }
                     updt.Set(MEPatient.UpdatedByProperty, ObjectId.Parse(this.UserId));
                     updt.Set(MEPatient.VersionProperty, request.Version);

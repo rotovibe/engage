@@ -144,7 +144,7 @@ namespace Phytel.API.AppDomain.NG
                                     Primary = false,
                                     StatusId = (int)Status.Active,
                                     SystemId = systemId,
-                                    SystemSource = "Import",
+                                    DataSource = "Import",
                                     Value = p.OldSystemId.Trim(),
                                 });
                             });

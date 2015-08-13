@@ -69,7 +69,7 @@ namespace Phytel.API.DataDomain.PatientSystem
                         request.PatientSystemsData.Value = EngageId.New();
                         request.PatientSystemsData.Primary = isSystemPrimary(Constants.EngageSystemId);
                         request.PatientSystemsData.StatusId = (int)Status.Active;
-                        request.PatientSystemsData.SystemSource = Constants.SystemSource;
+                        request.PatientSystemsData.DataSource = Constants.DataSource;
                     }
                     id = (string)repo.Insert(request);
                 }
@@ -137,7 +137,7 @@ namespace Phytel.API.DataDomain.PatientSystem
                         p.Value = EngageId.New();
                         p.Primary = isSystemPrimary(Constants.EngageSystemId);
                         p.StatusId = (int)Status.Active;
-                        p.SystemSource = Constants.SystemSource;
+                        p.DataSource = Constants.DataSource;
                         InsertPatientSystemDataRequest insertReq = new InsertPatientSystemDataRequest
                         {
                             PatientId = p.PatientId,

@@ -12,7 +12,7 @@ namespace Phytel.API.DataDomain.PatientSystem.DTO
         public string PatientId { get; set; }
         public string SystemId { get; set; }
         public string Value { get; set; }
-        public string SystemSource { get; set; }
+        public string DataSource { get; set; }
         public int StatusId { get; set; }
         public bool Primary { get; set; }
         public string CreatedById { get; set; }

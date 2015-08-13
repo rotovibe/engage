@@ -56,10 +56,10 @@ namespace Phytel.API.DataDomain.PatientSystem.DTO
         [BsonIgnoreIfNull(false)]
         public string Value { get; set; }
 
-        public const string SystemSourceProperty = "syssrc";
-        [BsonElement(SystemSourceProperty)]
+        public const string DataSourceProperty = "dsrc";
+        [BsonElement(DataSourceProperty)]
         [BsonIgnoreIfNull(false)]
-        public string SystemSource { get; set; }
+        public string DataSource { get; set; }
 
         [BsonElement(StatusProperty)]
         [BsonIgnoreIfNull(false)]

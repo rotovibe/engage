@@ -21,7 +21,7 @@ namespace Phytel.API.DataDomain.PatientSystem.Test
                         Primary = true,
                         StatusId = 1,
                         SystemId = "559e8c70d4332320bc076f4d",
-                        SystemSource = "Engage",
+                        DataSource = "Engage",
                         Value = "455679TYU"
                     });
                 dataList.Add(new PatientSystemData
@@ -31,7 +31,7 @@ namespace Phytel.API.DataDomain.PatientSystem.Test
                     Primary = false,
                     StatusId = 2,
                     SystemId = "559e8c70d4332320bc076f4d",
-                    SystemSource = "Engage",
+                    DataSource = "Engage",
                     Value = "AC567"
                 });
                 return dataList;

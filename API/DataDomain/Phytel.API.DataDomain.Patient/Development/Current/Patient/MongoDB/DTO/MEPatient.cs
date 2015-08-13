@@ -34,9 +34,7 @@ namespace Phytel.API.DataDomain.Patient.DTO
         public const string ClinicalBackgroundProperty = "cbkgrd";
         public const string LastFourSSNProperty = "lssn";
         public const string FullSSNProperty = "fssn";
-        public const string SystemProperty = "sys";
         public const string StatusProperty = "sts";
-        public const string StatusSystemSourceProperty = "stssys";
         public const string ReasonProperty = "rsn";
         public const string ProtectedProperty = "prot";
         public const string MaritalStatusProperty = "msts";
@@ -63,10 +61,6 @@ namespace Phytel.API.DataDomain.Patient.DTO
         [BsonElement(LastNameProperty)]
         [BsonIgnoreIfNull(true)]
         public string LastName { get; set; }
-
-        [BsonElement(SystemProperty)]
-        [BsonIgnoreIfNull(true)]
-        public string System { get; set; }
 
         [BsonElement(SuffixProperty)]
         [BsonIgnoreIfNull(true)]
@@ -116,9 +110,15 @@ namespace Phytel.API.DataDomain.Patient.DTO
         [BsonIgnoreIfNull(true)]
         public ObjectId? ReasonId { get; set; }
 
-        [BsonElement(StatusSystemSourceProperty)]
+        public const string DataSourceProperty = "dsrc";
+        [BsonElement(DataSourceProperty)]
         [BsonIgnoreIfNull(true)]
-        public string StatusSystemSource { get; set; }
+        public string DataSource { get; set; }
+
+        public const string StatusDataSourceProperty = "stsdsrc";
+        [BsonElement(StatusDataSourceProperty)]
+        [BsonIgnoreIfNull(true)]
+        public string StatusDataSource { get; set; }
 
         [BsonElement(MaritalStatusProperty)]
         [BsonIgnoreIfNull(true)]

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Web;
 using Phytel.API.AppDomain.NG.DTO;
 using Phytel.API.AppDomain.NG.DTO.Utilization;
@@ -8,6 +9,7 @@ using Phytel.API.AppDomain.Security.DTO;
 using Phytel.API.Common.Audit;
 using Phytel.API.Common.Format;
 using Phytel.API.DataAudit;
+using ServiceStack.Common.Web;
 using ServiceStack.ServiceClient.Web;
 
 namespace Phytel.API.AppDomain.NG.Service
@@ -18,6 +20,51 @@ namespace Phytel.API.AppDomain.NG.Service
         public IUtilizationManager UtilManager { get; set; }
         public IAuditUtil AuditUtil { get; set; }
         public ICommonFormatterUtil CommonFormatterUtil { get; set; }
+
+        ///// <summary>
+        ///// Example to return a HttpResult object with a decorated response.
+        ///// </summary>
+        ///// <param name="request">GetPatientUtilizationRequest</param>
+        ///// <returns>object</returns>
+        //public object Get(GetPatientUtilizationRequest request)
+        //{
+        //    GetPatientUtilizationResponse response = null;
+        //    ValidateTokenResponse result = null;
+
+        //    try
+        //    {
+        //        request.Token = base.Request.Headers["Token"] as string;
+        //        result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+        //        if (result.UserId.Trim() != string.Empty)
+        //        {
+        //            request.UserId = result.UserId;
+        //            response = UtilManager.GetPatientUtilization(request);
+        //        }
+        //        else
+        //            throw new UnauthorizedAccessException();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+        //        if ((ex is WebServiceException) == false)
+        //            UtilManager.LogException(ex);
+        //    }
+        //    finally
+        //    {
+        //        List<string> patientIds = new List<string>();
+
+        //        if (response.Utilization != null)
+        //            patientIds.Add(response.Utilization.PatientId);
+
+        //        if (result != null)
+        //            AuditHelper.LogAuditData(request, result.SQLUserId, patientIds, HttpContext.Current.Request, request.GetType().Name);
+        //    }
+        //    return new HttpResult(response, HttpStatusCode.OK)
+        //    {
+        //        StatusDescription = "this is really cool!",
+        //        Location = "www.google.com"
+        //    };
+        //}
 
         public GetPatientUtilizationResponse Get(GetPatientUtilizationRequest request)
         {

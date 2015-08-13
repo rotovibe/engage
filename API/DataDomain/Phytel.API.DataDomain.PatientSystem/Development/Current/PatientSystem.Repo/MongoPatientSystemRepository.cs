@@ -60,7 +60,7 @@ namespace Phytel.API.DataDomain.PatientSystem
                                 Status = (Status)data.StatusId,
                                 Primary = data.Primary,
                                 SystemId = ObjectId.Parse(data.SystemId),
-                                SystemSource = Helper.TrimAndLimit(data.SystemSource, 50),
+                                DataSource = Helper.TrimAndLimit(data.DataSource, 50),
                                 DeleteFlag = false
                             };
                         ctx.PatientSystems.Collection.Insert(mePS);
@@ -140,7 +140,7 @@ namespace Phytel.API.DataDomain.PatientSystem
                             StatusId = (int)mePS.Status,
                             Primary = mePS.Primary,
                             SystemId = mePS.SystemId.ToString(),
-                            SystemSource = mePS.SystemSource,
+                            DataSource = mePS.DataSource,
                             CreatedById = mePS.RecordCreatedBy.ToString(),
                             CreatedOn = mePS.RecordCreatedOn,
                             UpdatedById = mePS.UpdatedBy == null ? null : mePS.UpdatedBy.ToString(),
@@ -201,7 +201,10 @@ namespace Phytel.API.DataDomain.PatientSystem
                         uv.Add(MB.Update.Set(MEPatientSystem.LastUpdatedOnProperty, System.DateTime.UtcNow));
                         if (!string.IsNullOrEmpty(data.PatientId)) uv.Add(MB.Update.Set(MEPatientSystem.PatientIdProperty, ObjectId.Parse(data.PatientId)));
                         uv.Add(MB.Update.Set(MEPatientSystem.ValueProperty, Helper.TrimAndLimit(data.Value, 100)));
-                        uv.Add(MB.Update.Set(MEPatientSystem.SystemSourceProperty, Helper.TrimAndLimit(data.SystemSource, 50)));
+
+                        if (!string.IsNullOrEmpty(data.DataSource))
+                            uv.Add(MB.Update.Set(MEPatientSystem.DataSourceProperty, Helper.TrimAndLimit(data.DataSource, 50)));
+                        
                         if (data.StatusId != 0) uv.Add(MB.Update.Set(MEPatientSystem.StatusProperty, data.StatusId));
                         uv.Add(MB.Update.Set(MEPatientSystem.PrimaryProperty, data.Primary));
                         if (!string.IsNullOrEmpty(data.SystemId)) uv.Add(MB.Update.Set(MEPatientSystem.SystemIdProperty, ObjectId.Parse(data.SystemId)));
@@ -255,7 +258,7 @@ namespace Phytel.API.DataDomain.PatientSystem
                                 StatusId = (int)mePS.Status,
                                 Primary = mePS.Primary,
                                 SystemId = mePS.SystemId.ToString(),
-                                SystemSource = mePS.SystemSource,
+                                DataSource = mePS.DataSource,
                                 CreatedById = mePS.RecordCreatedBy.ToString(),
                                 CreatedOn = mePS.RecordCreatedOn,
                                 UpdatedById = mePS.UpdatedBy == null ? null : mePS.UpdatedBy.ToString(),

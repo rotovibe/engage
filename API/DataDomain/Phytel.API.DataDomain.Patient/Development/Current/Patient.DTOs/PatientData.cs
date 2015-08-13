@@ -8,11 +8,11 @@
         public string MiddleName { get; set; }
         public string Suffix { get; set; }
         public string PreferredName { get; set; }
-        public string System { get; set; }
+        public string DataSource { get; set; }
         public string Gender { get; set; }
         public string ReasonId { get; set; }
         public int StatusId { get; set; }
-        public string StatusSystemSource { get; set; }
+        public string StatusDataSource { get; set; }
         public string DOB { get; set; }
         public double Version { get; set; }
         public string DisplayPatientSystemId { get; set; }
