@@ -7,6 +7,9 @@ namespace Phytel.API.AppDomain.NG.DTO.Internal
     [Route("/{Version}/{ContractNumber}/Internal/PatientSystems/", "GET")]
     public class UpdatePatientsAndSystemsRequest : IAppDomainRequest
     {
+        [ApiMember(Name = "Migrate", Description = "Migrate", ParameterType = "path", DataType = "bool", IsRequired = true)]
+        public bool Migrate { get; set; }
+        
         [ApiMember(Name = "ContractNumber", Description = "Contract number", ParameterType = "path", DataType = "string", IsRequired = true)]
         public string ContractNumber { get; set; }
 

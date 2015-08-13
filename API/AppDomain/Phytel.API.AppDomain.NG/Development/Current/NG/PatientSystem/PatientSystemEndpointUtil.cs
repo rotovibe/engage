@@ -227,11 +227,11 @@ namespace Phytel.API.AppDomain.NG
         }
 
 
-        public bool HasHealthyWeightProgramAssigned(string patientId, UpdatePatientsAndSystemsRequest request)
+        public Phytel.API.AppDomain.NG.PatientSystemManager.ProgramStatus HasHealthyWeightProgramAssigned(string patientId, UpdatePatientsAndSystemsRequest request)
         {
-            bool result = false;
             try
             {
+                PatientSystemManager.ProgramStatus status = new PatientSystemManager.ProgramStatus();
                 IRestClient client = new JsonServiceClient();
                 string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Programs/",
                     DDProgramServiceUrl,
@@ -245,13 +245,25 @@ namespace Phytel.API.AppDomain.NG
 
                 if (dataDomainResponse != null && dataDomainResponse.programs != null)
                 {
-                    // Check if the programs "BSHSI - Healthy Weight" or "BSHSI - Healthy Weight v2" are assigned to the patient.
-                    if (dataDomainResponse.programs.Exists(p => p.ProgramSourceId == "5330920da38116ac180009d2" || p.ProgramSourceId == "541943a6bdd4dfa5d90002da"))
+                    if (dataDomainResponse.programs.Count == 0)
                     {
-                        result = true;
+                        status.HasProgramsAssigned = false;
+                    }
+                    else
+                    {
+                        status.HasProgramsAssigned = true;
+                        // Check if the programs "BSHSI - Healthy Weight" or "BSHSI - Healthy Weight v2" are assigned to the patient.
+                        if (dataDomainResponse.programs.Exists(p => p.ProgramSourceId == "5330920da38116ac180009d2" || p.ProgramSourceId == "541943a6bdd4dfa5d90002da"))
+                        {
+                            status.HasHealthyWeightProgramsAssigned = true;
+                        }
+                        else
+                        {
+                            status.HasHealthyWeightProgramsAssigned = false;
+                        }
                     }
                 }
-                return result;
+                return status;
             }
             catch (Exception ex) { throw ex; }
         }

@@ -109,103 +109,124 @@ namespace Phytel.API.AppDomain.NG
 
         public string UpdatePatientAndSystemsData(UpdatePatientsAndSystemsRequest request)
         {
-            int bsdiCount = 0;
+            string result = string.Empty;
+            int migrateCount = 0;
             int engageCount = 0;
-            #region UpdateExistingPatientSystem
-            if(string.Equals(request.ContractNumber, "InHealth001", StringComparison.InvariantCultureIgnoreCase))
+            List<string> patientsWithNoPrograms = new List<string>();
+            if (request.Migrate)
             {
-                // Get all PatientSystems to update each record.
-                List<PatientSystemOldData> pSys = EndpointUtil.GetAllPatientSystems(request);
-                if (pSys != null && pSys.Count > 0)
+                #region UpdateExistingPatientSystem
+                if (string.Equals(request.ContractNumber, "InHealth001", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    // Remove all the newly added records.
-                    pSys.RemoveAll(x => string.IsNullOrEmpty(x.OldSystemId));
-                    if (pSys.Count > 0)
+                    // Get all PatientSystems to update each record.
+                    List<PatientSystemOldData> pSys = EndpointUtil.GetAllPatientSystems(request);
+                    if (pSys != null && pSys.Count > 0)
                     {
-                        var bsdiSystem = EndpointUtil.GetSystems(Mapper.Map<GetActiveSystemsRequest>(request)).FirstOrDefault(r => r.Name.Equals("BSDI", StringComparison.InvariantCultureIgnoreCase));
-                        var hicSystem = EndpointUtil.GetSystems(Mapper.Map<GetActiveSystemsRequest>(request)).FirstOrDefault(r => r.Name.Equals("HIC", StringComparison.InvariantCultureIgnoreCase));
-                        List<PatientSystem> data = new List<PatientSystem>();
-                        pSys.ForEach(p =>
+                        // Remove all the newly added records.
+                        pSys.RemoveAll(x => string.IsNullOrEmpty(x.OldSystemId));
+                        if (pSys.Count > 0)
+                        {
+                            var bsdiSystem = EndpointUtil.GetSystems(Mapper.Map<GetActiveSystemsRequest>(request)).FirstOrDefault(r => r.Name.Equals("BSDI", StringComparison.InvariantCultureIgnoreCase));
+                            var hicSystem = EndpointUtil.GetSystems(Mapper.Map<GetActiveSystemsRequest>(request)).FirstOrDefault(r => r.Name.Equals("HIC", StringComparison.InvariantCultureIgnoreCase));
+                            List<PatientSystem> data = new List<PatientSystem>();
+                            pSys.ForEach(p =>
                             {
                                 string systemId = string.Empty;
-                                if (hasHealthyWeightProgramAssigned(p.PatientId, request))
-                                { 
-                                    systemId = bsdiSystem.Id;
+                                ProgramStatus pStatus = hasHealthyWeightProgramAssigned(p.PatientId, request);
+                                if (pStatus.HasProgramsAssigned)
+                                {
+                                    if (pStatus.HasHealthyWeightProgramsAssigned)
+                                    {
+                                        systemId = bsdiSystem.Id;
+                                    }
+                                    else
+                                    {
+                                        systemId = hicSystem.Id;
+                                    }
+
+                                    data.Add(new PatientSystem
+                                    {
+                                        Id = p.Id,
+                                        PatientId = p.PatientId,
+                                        Primary = false,
+                                        StatusId = (int)Status.Active,
+                                        SystemId = systemId,
+                                        DataSource = "Import",
+                                        Value = p.OldSystemId.Trim(),
+                                    });
                                 }
                                 else
                                 {
-                                    systemId = hicSystem.Id;
+                                    patientsWithNoPrograms.Add(p.PatientId);
                                 }
 
-                                data.Add(new PatientSystem
-                                {
-                                    Id = p.Id,
-                                    PatientId = p.PatientId,
-                                    Primary = false,
-                                    StatusId = (int)Status.Active,
-                                    SystemId = systemId,
-                                    DataSource = "Import",
-                                    Value = p.OldSystemId.Trim(),
-                                });
                             });
-
-                        UpdatePatientSystemsRequest updateRequest = new UpdatePatientSystemsRequest
-                        {
-                            ContractNumber = request.ContractNumber,
-                            PatientId = data[0].PatientId,
-                            PatientSystems = data,
-                            UserId = request.UserId,
-                            Version = request.Version
-                        };
-
-                        List<PatientSystemData> dataList = EndpointUtil.UpdatePatientSystems(updateRequest);
-                        if (dataList != null)
-                        {
-                            bsdiCount = dataList.Count;
+                            UpdatePatientSystemsRequest updateRequest = new UpdatePatientSystemsRequest
+                            {
+                                ContractNumber = request.ContractNumber,
+                                PatientId = data[0].PatientId,
+                                PatientSystems = data,
+                                UserId = request.UserId,
+                                Version = request.Version
+                            };
+                            List<PatientSystemData> dataList = EndpointUtil.UpdatePatientSystems(updateRequest);
+                            if (dataList != null)
+                            {
+                                migrateCount = dataList.Count;
+                            }
                         }
                     }
                 }
+                result = string.Format("For {0} contract, migrated data for {1} existing PatientSystem Ids. Patients that were not migratred since they had no programs assigend: {2}", request.ContractNumber, migrateCount, string.Join(", ", patientsWithNoPrograms));
+                #endregion
             }
-            #endregion
-
-            #region InsertEngageSystemForEachPatient
-            // Get All patients to add an Engage ID.
-            List<Phytel.API.DataDomain.Patient.DTO.PatientData> patients = EndpointUtil.GetAllPatients(request);
-            if (patients.Count > 0)
+            else
             {
-                List<PatientSystemData> insertData = new List<PatientSystemData>();
-                patients.ForEach(p =>
+                #region InsertEngageSystemForEachPatient
+                // Get All patients to add an Engage ID.
+                List<Phytel.API.DataDomain.Patient.DTO.PatientData> patients = EndpointUtil.GetAllPatients(request);
+                if (patients.Count > 0)
                 {
-                    insertData.Add(new PatientSystemData
+                    List<PatientSystemData> insertData = new List<PatientSystemData>();
+                    patients.ForEach(p =>
                     {
-                        PatientId = p.Id,
+                        insertData.Add(new PatientSystemData
+                        {
+                            PatientId = p.Id,
+                        });
                     });
-                });
 
-                InsertEngagePatientSystemsDataRequest insertRequest = new InsertEngagePatientSystemsDataRequest
-                {
-                    ContractNumber = request.ContractNumber,
-                    PatientId = insertData[0].PatientId,
-                    UserId = Constants.SystemContactId,
-                    Version = request.Version,
-                    Context = "NG",
-                    PatientSystemsData = insertData
-                };
-                insertRequest.UserId = Constants.SystemContactId; // the requirement says that the engage Id should have createdby user as 'system'.
-                List<string> engageList = EndpointUtil.InsertEngagePatientSystems(insertRequest);
-                if (engageList != null)
-                {
-                    engageCount = engageList.Count;
+                    InsertEngagePatientSystemsDataRequest insertRequest = new InsertEngagePatientSystemsDataRequest
+                    {
+                        ContractNumber = request.ContractNumber,
+                        PatientId = insertData[0].PatientId,
+                        UserId = Constants.SystemContactId,
+                        Version = request.Version,
+                        Context = "NG",
+                        PatientSystemsData = insertData
+                    };
+                    insertRequest.UserId = Constants.SystemContactId; // the requirement says that the engage Id should have createdby user as 'system'.
+                    List<string> engageList = EndpointUtil.InsertEngagePatientSystems(insertRequest);
+                    if (engageList != null)
+                    {
+                        engageCount = engageList.Count;
+                    }
                 }
+                result = string.Format("For {0} contract, Added engage ids for {1} patients", request.ContractNumber, engageCount);
+                #endregion
             }
-            #endregion
-
-            return string.Format("For {0} contract, migrated data for {1} existing PatientSystem Ids and added engage ids for {2} patients.",request.ContractNumber, bsdiCount, engageCount);
+            return result;
         }
 
-        private bool hasHealthyWeightProgramAssigned(string patientId, UpdatePatientsAndSystemsRequest request)
+        private ProgramStatus hasHealthyWeightProgramAssigned(string patientId, UpdatePatientsAndSystemsRequest request)
         {
             return EndpointUtil.HasHealthyWeightProgramAssigned(patientId, request);
+        }
+
+        public class ProgramStatus
+        {
+            public bool HasProgramsAssigned { get; set; }
+            public bool HasHealthyWeightProgramsAssigned { get; set; }
         }
     }
 }

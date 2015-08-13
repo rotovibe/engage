@@ -16,6 +16,6 @@ namespace Phytel.API.AppDomain.NG
         List<PatientSystemData> UpdatePatientSystems(UpdatePatientSystemsRequest request);
         void DeletePatientSystems(DeletePatientSystemsRequest request);
         List<PatientData> GetAllPatients(UpdatePatientsAndSystemsRequest request);
-        bool HasHealthyWeightProgramAssigned(string patientId, UpdatePatientsAndSystemsRequest request);
+        Phytel.API.AppDomain.NG.PatientSystemManager.ProgramStatus HasHealthyWeightProgramAssigned(string patientId, UpdatePatientsAndSystemsRequest request);
     }
 }
