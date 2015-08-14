@@ -204,10 +204,13 @@ namespace Phytel.API.DataDomain.PatientSystem
 
                         if (!string.IsNullOrEmpty(data.DataSource))
                             uv.Add(MB.Update.Set(MEPatientSystem.DataSourceProperty, Helper.TrimAndLimit(data.DataSource, 50)));
-                        
+                        else
+                            uv.Add(MB.Update.Set(MEPatientSystem.DataSourceProperty, BsonNull.Value));
+
                         if (data.StatusId != 0) uv.Add(MB.Update.Set(MEPatientSystem.StatusProperty, data.StatusId));
                         uv.Add(MB.Update.Set(MEPatientSystem.PrimaryProperty, data.Primary));
                         if (!string.IsNullOrEmpty(data.SystemId)) uv.Add(MB.Update.Set(MEPatientSystem.SystemIdProperty, ObjectId.Parse(data.SystemId)));
+                       
                         IMongoUpdate update = MB.Update.Combine(uv);
                         WriteConcernResult res = ctx.PatientSystems.Collection.Update(q, update);
                         if (res.Ok == false)

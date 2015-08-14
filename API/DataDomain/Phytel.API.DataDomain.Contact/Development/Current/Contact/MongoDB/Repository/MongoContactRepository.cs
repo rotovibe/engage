@@ -468,7 +468,7 @@ namespace Phytel.API.DataDomain.Contact
                                             PreferredText = p.TextPreferred,
                                             OptOut = p.OptOut,
                                             DeleteFlag = false,
-                                            DataSource = p.DataSource
+                                            DataSource = Helper.TrimAndLimit(p.DataSource, 50)
                                         };
                                         mePhones.Add(mePh);
                                         updatedPhones.Add(new CleanupIdData { OldId = p.Id, NewId = mePh.Id.ToString() });
@@ -516,7 +516,7 @@ namespace Phytel.API.DataDomain.Contact
                                             PreferredText = p.TextPreferred,
                                             OptOut = p.OptOut,
                                             DeleteFlag = false,
-                                            DataSource = p.DataSource
+                                            DataSource = Helper.TrimAndLimit(p.DataSource, 50)
                                         };
                                         mePhones.Add(mePh);
                                     } 
@@ -889,7 +889,7 @@ namespace Phytel.API.DataDomain.Contact
                                     PhonePreferred = mePh.PreferredPhone,
                                     TextPreferred = mePh.PreferredText,
                                     TypeId = mePh.TypeId.ToString(),
-                                    DataSource = mePh.DataSource
+                                    DataSource = Helper.TrimAndLimit(mePh.DataSource, 50)
                                 };
                                 phones.Add(phone);
                             }

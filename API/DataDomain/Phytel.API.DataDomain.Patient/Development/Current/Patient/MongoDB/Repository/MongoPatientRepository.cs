@@ -93,9 +93,9 @@ namespace Phytel.API.DataDomain.Patient
                             Version = request.Version,
                             TTLDate = null,
                             DeleteFlag = false,
-                            DataSource = FormatSystem(pd.DataSource),
+                            DataSource = Helper.TrimAndLimit(pd.DataSource, 50),
                             Status = (Status)pd.StatusId,
-                            StatusDataSource  = pd.StatusDataSource,
+                            StatusDataSource  = Helper.TrimAndLimit(pd.StatusDataSource, 50),
                             Protected = pd.Protected,
                             Deceased = (Deceased)pd.DeceasedId
                         };
@@ -570,7 +570,7 @@ namespace Phytel.API.DataDomain.Patient
                         if (request.PatientData.DataSource == "\"\"" || (request.PatientData.DataSource == "\'\'"))
                             updt.Set(MEPatient.DataSourceProperty, string.Empty);
                         else
-                            updt.Set(MEPatient.DataSourceProperty, request.PatientData.DataSource);
+                            updt.Set(MEPatient.DataSourceProperty, Helper.TrimAndLimit(request.PatientData.DataSource, 50));
                     }
 
                     if (request.PatientData.PreferredName != null)
@@ -672,7 +672,7 @@ namespace Phytel.API.DataDomain.Patient
                     updt.Set(MEPatient.StatusProperty, request.PatientData.StatusId);
                     if (request.PatientData.StatusDataSource != null)
                     {
-                        updt.Set(MEPatient.StatusDataSourceProperty, request.PatientData.StatusDataSource);
+                        updt.Set(MEPatient.StatusDataSourceProperty, Helper.TrimAndLimit(request.PatientData.StatusDataSource, 50));
                     }
                     updt.Set(MEPatient.UpdatedByProperty, ObjectId.Parse(this.UserId));
                     updt.Set(MEPatient.VersionProperty, request.Version);
