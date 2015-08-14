@@ -1202,7 +1202,7 @@ namespace Phytel.API.AppDomain.NG.Service
             }
             finally
             {
-                List<string> patientIds = null;
+                List<string> patientIds = new List<string>();
 
                 if (response.Note != null)
                     patientIds.Add(response.Note.PatientId);
