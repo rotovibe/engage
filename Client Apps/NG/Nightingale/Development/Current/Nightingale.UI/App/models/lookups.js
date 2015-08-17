@@ -534,7 +534,6 @@ define(['services/session'],
 		    // manager.createEntity('MedicationCategory', { id: 2, name: 'Supplement' }).entityAspect.acceptChanges();
 
 		    // Deceased enums
-		    manager.createEntity('Deceased', { id: 0, name: 'None' }).entityAspect.acceptChanges();
 		    manager.createEntity('Deceased', { id: 1, name: 'Yes' }).entityAspect.acceptChanges();
 		    manager.createEntity('Deceased', { id: 2, name: 'No' }).entityAspect.acceptChanges();
 		}

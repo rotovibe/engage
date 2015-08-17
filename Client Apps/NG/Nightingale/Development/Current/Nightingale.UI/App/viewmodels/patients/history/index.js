@@ -1,6 +1,6 @@
 ﻿define(['plugins/router', 'services/navigation', 'config.services', 'services/session', 'services/datacontext', 'viewmodels/patients/index', 'viewmodels/shell/shell', 'models/base'],
     function (router, navigation, servicesConfig, session, datacontext, patientsIndex, shell, modelConfig) {
-        
+
         var selectedPatient = ko.computed(function () {
             return patientsIndex.selectedPatient();
         });
@@ -26,12 +26,10 @@
         var activeNote = ko.observable();
 		var activeNoteLoader = ko.computed(function(){
 			var note = activeNote();
-			if( note && note.type() && note.type().name().toLowerCase() === 'utilization' ){				
+			if( note && note.type() && note.type().name().toLowerCase() === 'utilization' ){
 				//load this note if the type is utilization
-				datacontext.getNote( note.id(), note.patientId(), note.type().name() ).then( noteLoaded );
-				function noteLoaded(data){										
-				}
-			}			
+				datacontext.getNote( note.id(), note.patientId(), note.type().name() );
+			}
 		});
         var alphabeticalOrderSort = function (l, r) { return (l.order() == r.order()) ? (l.order() > r.order() ? 1 : -1) : (l.order() > r.order() ? 1 : -1) };
 
@@ -46,9 +44,9 @@
             self.isOpen = ko.observable(data.open);
             self.column = column;
             self.isFullScreen = ko.observable(false);
-			self.showEditButton = ko.computed( function(){ 
-				return data.showEdit? data.showEdit() : false; 
-			});			
+			self.showEditButton = ko.computed( function(){
+				return data.showEdit? data.showEdit() : false;
+			});
         }
 
         function column(name, open, widgets) {
@@ -61,7 +59,7 @@
             self.widgets = ko.observableArray();
             $.each(widgets, function (index, item) {
                 self.widgets.push(new widget(item, self))
-            });			
+            });
         }
 
         var columns = ko.observableArray([
@@ -93,9 +91,9 @@
                 }
             }
         });
-		
+
 		var noteModalShowing = ko.observable(true);
-		
+
         var vm = {
             activate: activate,
             selectedPatient: selectedPatient,
@@ -107,7 +105,7 @@
             setOpenColumn: setOpenColumn,
             minimizeThisColumn: minimizeThisColumn,
             maximizeThisColumn: maximizeThisColumn,
-            toggleFullScreen: toggleFullScreen,			
+            toggleFullScreen: toggleFullScreen,
             groups: groups,
             notes: notes,
             attached: attached,
@@ -117,7 +115,7 @@
         };
 
         return vm;
-        
+
         function getNotes() {
             if (selectedPatient()) {
                 var theseNotes = notes().slice(0).sort(descendingDateSort);
@@ -175,7 +173,7 @@
         }
 
         function setActiveNote(sender) {
-            activeNote(sender);			
+            activeNote(sender);
         }
 		//edit note:
 	    function ModalEntity(note) {
@@ -184,41 +182,46 @@
 			// Object containing parameters to pass to the modal
 			self.activationData = { note: self.note };
 			self.canSave = ko.computed(function () {
-				return self.note.isValid(); 
+				return self.note.isValid();
 			});
 		}
-		function editNote(sender){						    			
+		function editNote(sender){
 			var modalEntity = ko.observable(new ModalEntity(activeNote()));
-			var saveOverride = function () {					  
-			  datacontext.saveNote(modalEntity().note).then( function(){
+			var saveOverride = function () {
+				var thisNote = modalEntity().note;
+				// If there is new content,
+				if (thisNote && thisNote.newContent()) {
+					thisNote.checkAppend();
+				}
+			  datacontext.saveNote(thisNote).then( function(){
 				  originalProgramIds.removeAll();
 			  });
 			};
 			var cancelOverride = function () {
 				var note = activeNote();
 				note.entityAspect.rejectChanges();
-				//revert to original program ids:	
+				//revert to original program ids:
 				note.programIds.removeAll();
-				var progIds = note.programIds();					
+				var progIds = note.programIds();
 				if( originalProgramIds().length > 0){
 					ko.utils.arrayPushAll(progIds, originalProgramIds());
-					originalProgramIds.removeAll();	
+					originalProgramIds.removeAll();
 				}
 				//clear the entityAspect.entityState back to Unchanged state - to hide this correction (original program id's):
-				note.entityAspect.setUnchanged();			  
+				note.entityAspect.setUnchanged();
 			};
-			var msg = 'Edit ' + activeNote().type().name() + ' Note';				  
+			var msg = 'Edit ' + activeNote().type().name() + ' Note';
 			var modal = new modelConfig.modal(msg, modalEntity, 'viewmodels/patients/notes/index', noteModalShowing, saveOverride, cancelOverride);
-			
+
 			//keep the original program ids
 			originalProgramIds.removeAll();
 			var progIds = originalProgramIds();
 			ko.utils.arrayPushAll(progIds, activeNote().programIds());
-				
+
 			noteModalShowing(true);
-			shell.currentModal(modal);				
+			shell.currentModal(modal);
 		}
-		
+
         function setOpenColumn(sender) {
             openColumn(sender);
         }

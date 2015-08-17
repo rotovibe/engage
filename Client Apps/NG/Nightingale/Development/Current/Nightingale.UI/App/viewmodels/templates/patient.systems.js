@@ -6,10 +6,18 @@
 define(['services/datacontext'],
 	function (datacontext) {
 
+    function alphabeticalNameSort (l, r) { return (l.displayLabel().toLowerCase() == r.displayLabel().toLowerCase()) ? (l.displayLabel().toLowerCase() > r.displayLabel().toLowerCase() ? 1 : -1) : (l.displayLabel().toLowerCase() > r.displayLabel().toLowerCase() ? 1 : -1) };
+    var DUPLICATE_MESSAGE = 'This individual id combination of System and Value already exists';
+
 		var ctor = function () {
 			var self = this;
 			self.newSystemId = ko.observable();
-			self.systems = datacontext.enums.systems;
+			self.systems = ko.computed(function(){
+				var systems = datacontext.enums.systems()
+				console.log(systems);
+				var theseSystems = systems.sort(alphabeticalNameSort);
+				return theseSystems;
+			});
 			self.patientSystemStatuses = datacontext.enums.patientSystemStatus;
 
 			self.primarySystem = ko.utils.arrayFirst( self.systems(), function( system ){
@@ -88,7 +96,7 @@ define(['services/datacontext'],
 						return (patSys.isDeleted() === false && patSys.value().trim().toLowerCase() === value.trim().toLowerCase() && patSys.systemId().toLowerCase() === system.id().toLowerCase());
 					});
 					if( dup ){
-						errors.push({PropName: 'newValue', Message: 'this individual id combination of System and Value already exist'});
+						errors.push({PropName: 'newValue', Message: DUPLICATE_MESSAGE });
 						self.duplicate(dup);
 					}
 				}
@@ -114,10 +122,6 @@ define(['services/datacontext'],
 				var patient = self.selectedPatient;
 				var systemIds = self.patientSystems();
 				var errors = [];
-				var newIdErrors = self.newIdValidationErrors();
-				ko.utils.arrayForEach( newIdErrors, function( err ){
-					errors.push( err );
-				});
 				ko.utils.arrayForEach( systemIds, function( patSys ){
 					if( !patSys.isValid() ){
 						isValid = false;
@@ -126,12 +130,8 @@ define(['services/datacontext'],
 						});
 					}
 				});
-				if( self.canAddNewPatientSystem() ){
-					//a new patient system id entered but not added:
-					errors.push({PropName:'', Message:'a new individual id entered but not added. (click add or x to clear)'});
-				}
-				if( !self.hasPrimarySelected() ){
-					errors.push({PropName:'', Message:'a Primary must be selected'});
+				if (self.duplicate()) {
+						errors.push({PropName: 'newValue', Message: DUPLICATE_MESSAGE });
 				}
 				return errors;
 			});
@@ -143,7 +143,8 @@ define(['services/datacontext'],
 				ko.utils.arrayForEach( validationErrors, function (error) {
 					thisArray.push(error.PropName);
 					// if it's new, don't block
-					if (error.PropName !== 'newSystem') {
+					// TODO: Need to refactor this to be compliant with messages
+					if (error.PropName !== 'newSystem' && error.PropName !== 'newValue' && error.PropName !== '') {
 						canSave = false;
 					}
 				});
@@ -186,15 +187,6 @@ define(['services/datacontext'],
 				});
 				return patientSystemPropertyHasError || (self.duplicate() && self.duplicate().id() === patientSystemId);
 			}
-
-			self.clearNewId = function(){
-				self.newSelectedSystem(null);
-				self.newPatientSystemIdValue(null);
-			}
-
-			self.showCancelNewId = ko.computed(function(){
-				return (self.newSelectedSystem() || self.newPatientSystemIdValue());
-			});
 
 			self.createNewId = function () {
 				var newId = (self.selectedPatient().patientSystems().length + 1)*-1;

@@ -676,7 +676,7 @@ observationsLoaded = true;
 					datacontext.getEntityList(datacontext.enums.allergyStatuses, 'AllergyStatus', 'fakeEndPoint', null, null, false);
 					datacontext.getEntityList(datacontext.enums.medicationStatuses, 'MedicationStatus', 'fakeEndPoint', null, null, false);
 					datacontext.getEntityList(datacontext.enums.medicationCategories, 'MedicationCategory', 'fakeEndPoint', null, null, false);
-					datacontext.getEntityList(datacontext.enums.deceasedState, 'Deceased', 'fakeEndPoint', null, null, false);
+					datacontext.getEntityList(datacontext.enums.deceasedStatuses, 'Deceased', 'fakeEndPoint', null, null, false);
 				}
 
 				// Configure the Breeze entity manager to always pass an api key
@@ -1289,7 +1289,6 @@ observationsLoaded = true;
 
 						function saveCompleted(data) {
 								// If data was returned and has a property called success that is true,
-								//note.isNew(false);
 								// Save all of the levels of everything related to a contact card
 								if (data.Id) {
 									careMember.id(data.Id);

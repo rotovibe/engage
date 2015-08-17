@@ -18,8 +18,8 @@
 										</h2>
 								</div>
 						</div>
-						<div class="row" data-bind="if: deceased().name() === 'Yes'">
-							<div class="span4 grey">
+						<div class="row" data-bind="with: deceased()">
+							<div class="span4 grey" data-bind="if: name() === 'Yes'">
 								Deceased
 							</div>
 						</div>
@@ -82,11 +82,11 @@
 					</div>
 					<div class="row">
 						<div class="span5 grey">Protected</div>
-						<div class="span6 filter-toggle" data-bind="text: protected() ? 'Yes' : 'Unknown'"></div>
+						<div class="span6 filter-toggle" data-bind="text: protected() ? 'Yes' : 'No'"></div>
 					</div>
-					<div class="row">
+					<div class="row" data-bind="with: maritalStatus">
 						<div class="span5 grey">Marital Status</div>
-						<div class="span6 filter-toggle" data-bind="text: maritalStatus().name"></div>
+						<div class="span6 filter-toggle" data-bind="text: name()"></div>
 					</div>
 				</div>
 		</div>

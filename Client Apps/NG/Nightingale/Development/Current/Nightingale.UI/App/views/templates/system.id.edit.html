@@ -6,17 +6,11 @@
 			</span>
 		</div>
 	</div>
-	<div class="span3">
-		<!-- ko if: isEditable -->
-			<div data-bind="chsnsingle: { options: $parent.systems, value: system, text: 'displayLabel', label: 'systems'}, enable: isEditable, 
-							css: {'invalid': $parent.isInvalidProp($data.id(), 'system')}"></div>		
-		<!-- /ko -->
-		<!-- ko ifnot: isEditable -->		
-			<input type="text" disabled="disabled" data-bind="value: system().displayLabel">			
-		<!-- /ko -->
-	</div> 
+	<div class="span3" data-bind="with: system">
+		<input type="text" disabled="disabled" data-bind="value: displayLabel">
+	</div>
 	<div class="span5">
-		<input type="text" data-bind="value: value, valueUpdate: 'afterkeydown', css: { 'invalid': $parent.isInvalidProp($data.id(), 'value') }, enable: isEditable"/>
+		<input type="text" data-bind="value: value, valueUpdate: 'afterkeydown', css: { 'invalid': $parent.isInvalidProp($data.id(), 'value') }, enable: isEditable" maxlength="100"/>
 	</div>
 	<div class="span2">
 		<div data-bind="chsnsingle: { options: $parent.patientSystemStatuses, value: patientSystemStatus, text: 'name', label: 'patientSystemStatuses' }"></div>

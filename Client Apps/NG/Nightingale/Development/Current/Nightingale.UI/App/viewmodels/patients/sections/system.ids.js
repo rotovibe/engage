@@ -19,8 +19,10 @@ define(['services/datacontext', 'services/session', 'models/base', 'viewmodels/s
 			}
 
 			function systemIdsSortFunc(a,b){
-				if( a.system().displayLabel().toLowerCase() < b.system().displayLabel().toLowerCase() ) return -1;
-				if( a.system().displayLabel().toLowerCase() > b.system().displayLabel().toLowerCase() ) return 1;
+				if (a.system().displayLabel() && b.system().displayLabel()) {
+					if( a.system().displayLabel() && a.system().displayLabel().toLowerCase() < b.system().displayLabel().toLowerCase() ) return -1;
+					if( b.system().displayLabel() && a.system().displayLabel().toLowerCase() > b.system().displayLabel().toLowerCase() ) return 1;
+				}
 				return 0;
 			};
 
@@ -63,23 +65,23 @@ define(['services/datacontext', 'services/session', 'models/base', 'viewmodels/s
 						else{
 							return afterDelete();
 						}
-						function afterDelete(){
-							if( changes.updated.length > 0 ){
-								//updates
-								return datacontext.savePatientSystems( changes.updated ).then( afterUpdate );
-							}
-							else{
-								return afterUpdate();
-							}
+					}
+					function afterDelete(){
+						if( changes.updated.length > 0 ){
+							//updates
+							return datacontext.savePatientSystems( changes.updated ).then( afterUpdate );
 						}
-						function afterUpdate(){
-							if( changes.created.length > 0 ){
-								//inserts
-								return datacontext.savePatientSystems( changes.created );
-							}
-							else{
-								return Q();
-							}
+						else{
+							return afterUpdate();
+						}
+					}
+					function afterUpdate(){
+						if( changes.created.length > 0 ){
+							//inserts
+							return datacontext.savePatientSystems( changes.created );
+						}
+						else{
+							return Q();
 						}
 					}
 	      };
@@ -142,7 +144,7 @@ define(['services/datacontext', 'services/session', 'models/base', 'viewmodels/s
 				self.modalEntityObservable = ko.observable();
         self.editSystemIds = function () {
 					self.modalEntityObservable( new ModalEntity( self.patientSystemsModalShowing, self.selectedPatient ) );
-					var modal = new modelConfig.modal('Individual ID', self.modalEntityObservable, 'viewmodels/templates/patient.systems', self.patientSystemsModalShowing, self.savePatientSystems, self.cancelPatientSystems);
+					var modal = new modelConfig.modal('Individual IDs', self.modalEntityObservable, 'viewmodels/templates/patient.systems', self.patientSystemsModalShowing, self.savePatientSystems, self.cancelPatientSystems);
           shell.currentModal(modal);
           self.patientSystemsModalShowing(true);
           self.isOpen(true);

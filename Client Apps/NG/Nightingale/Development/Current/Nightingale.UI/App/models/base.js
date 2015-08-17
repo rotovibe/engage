@@ -679,17 +679,24 @@ define(['services/validatorfactory', 'services/customvalidators', 'services/form
 				});
 				patient.getPrimaryPatientSystem = function(){
 					var primaries = ko.utils.arrayFilter(patient.patientSystems(), function (system){
-						return system.primary() === true;
+						return system.primary() === true && system.statusId() !== '2';
 					});
 					primaries = primaries.sort(
 						function (a,b) {
-							var x = a.updatedOn(); var y = b.updatedOn(); if (x == y) { return 0; } if (isNaN(x) || x > y) { return -1; } if (isNaN(y) || x < y) { return 1; }
+							var x = a.createdOn(); var y = b.createdOn(); if (x == y) { return 0; } if (isNaN(x) || x > y) { return -1; } if (isNaN(y) || x < y) { return 1; }
 						});
 					return primaries[0];
 				};
 				patient.minor = ko.computed(function () {
-					return patient.age() < 18;
+					return patient.age() && patient.age() < 18;
 				});
+				// Set the patient defaults, if not already set
+				if (patient.protected() !== true) {
+					patient.protected(false);
+				}
+				if (patient.deceasedId() !== '1') {
+					patient.deceasedId('2');
+				}
 			}
 
 			function patientSystemInitializer( patientSystem ){

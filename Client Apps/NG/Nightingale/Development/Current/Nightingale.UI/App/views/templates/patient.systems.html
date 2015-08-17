@@ -20,16 +20,13 @@
 			</div>
 			<div class="span5">
 				<input type="text" size="30" placeholder="ID Value" data-bind="value: newPatientSystemIdValue, valueUpdate: 'afterkeydown'
-									, css:{'invalid': (newIdValidationErrorsArray().indexOf('newValue') !== -1 )}" />
+									, css:{'invalid': (newIdValidationErrorsArray().indexOf('newValue') !== -1 )}" maxlength="100" />
 			</div>
 			<div class="span2">
 				<button class="btn color small" href="#" data-bind="click: createNewId, enable: canAddNewPatientSystem">
 					<i class="icon-plus"></i>
 					<span class="pad-left">Add</span>
 				</button>
-			</div>
-			<div class="span1">
-				<a href="#" data-bind="click: clearNewId, clickBubble: false, visible: showCancelNewId"><i class="icon-cancel red"></i></a>
 			</div>
 		</div>
 	</div>

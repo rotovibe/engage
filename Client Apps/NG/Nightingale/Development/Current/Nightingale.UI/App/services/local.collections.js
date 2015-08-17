@@ -35,7 +35,7 @@
 		new modelConfig.SomeType('1', 'Unassigned')
 	]);
 	enums.maritalStatuses = ko.observableArray();
-	enums.deceasedState = ko.observableArray();
+	enums.deceasedStatuses = ko.observableArray();
   enums.phoneTypes = ko.observableArray();
   enums.emailTypes = ko.observableArray();
   enums.addressTypes = ko.observableArray();

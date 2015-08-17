@@ -3,21 +3,21 @@
 *	@module notes.index
 */
 define(['services/datacontext'],
-    function (datacontext) {
+	function (datacontext) {
 
-        var ctor = function () {
-            var self = this;
-        };
+		var ctor = function () {
+				var self = this;
+		};
 
-        ctor.prototype.activate = function (settings) {
-            var self = this;
-            self.settings = settings;
-            self.note = self.settings.note;
+		ctor.prototype.activate = function (settings) {
+			var self = this;
+			self.settings = settings;
+			self.note = self.settings.note;
 			self.selectedTemplate = ko.observable();
 			self.showing = ko.computed(function () { return !!self.note.type() });
 			self.noteTypes = datacontext.enums.noteTypes;
 			var type = self.note.type()? 	self.note.type().name().toLowerCase() : null;
-            self.templatePath = ko.computed( function(){
+			self.templatePath = ko.computed( function(){
 				var type = self.note.type();
 				var typeName = type ? type.name().toLowerCase() : null;
 				switch( typeName ){
@@ -45,22 +45,20 @@ define(['services/datacontext'],
 				}
 				return null;
 			});
-            
-            //self.selectedNoteType = ko.observable();
 			self.saveNote = self.settings.saveNote || function () { return false; };
-            self.cancelNote = self.settings.cancelNote || function () { return false; };			                
-            self.canSave = self.settings.canSave ? self.settings.canSave : true;
-            self.showing = self.settings.showing ? self.settings.showing : true;
+			self.cancelNote = self.settings.cancelNote || function () { return false; };
+			self.canSave = self.settings.canSave ? self.settings.canSave : true;
+			self.showing = self.settings.showing ? self.settings.showing : true;
 			self.validationErrors = ko.computed( function(){
 				var currentNote = self.note;
 				var isValid = currentNote.isValid();
 				return currentNote.validationErrors();
 			});
-        };
+		};
 
-        ctor.prototype.attached = function () {
+	ctor.prototype.attached = function () {
 
-        };
+	};
 
-        return ctor;
-    });
+	return ctor;
+});
