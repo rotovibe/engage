@@ -14,7 +14,7 @@ using System.Configuration;
 
 namespace Phytel.API.DataDomain.LookUp
 {
-    public class MongoLookUpRepository<T> : ILookUpRepository<T>
+    public class MongoLookUpRepository: ILookUpRepository
     {
         private string _dbName = string.Empty;
         static readonly string redisClientIPAddress;
@@ -1269,5 +1269,6 @@ namespace Phytel.API.DataDomain.LookUp
         {
             throw new NotImplementedException();
         }
+
     }
 }

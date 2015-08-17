@@ -1,5 +1,6 @@
 using ServiceStack.WebHost.Endpoints;
 using System;
+using Phytel.API.DataDomain.LookUp;
 
 namespace Phytel.API.DataDomain.Patient.Service
 {
@@ -12,8 +13,8 @@ namespace Phytel.API.DataDomain.Patient.Service
 
             public override void Configure(Funq.Container container)
             {
-                //register any dependencies your services use, e.g:
-                //container.Register<ICacheClient>(new MemoryCacheClient());
+                container.RegisterAutoWiredAs<LookUpDataManager, ILookUpDataManager>();
+                container.RegisterAutoWiredAs<LookUpRepositoryFactory, ILookUpRepositoryFactory>();
             }
         }
 
