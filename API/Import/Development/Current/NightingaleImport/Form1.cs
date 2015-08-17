@@ -177,7 +177,7 @@ namespace NightingaleImport
                                         Primary = (String.IsNullOrEmpty(lvi.SubItems[colSysPrim].Text)) ? false : Boolean.Parse(lvi.SubItems[colSysPrim].Text.Trim()),
                                         StatusId = (int)Phytel.API.DataDomain.PatientSystem.DTO.Status.Active,
                                         SystemId = system.Id,
-                                        SystemSource = DataSourceProperty,
+                                        DataSource = DataSourceProperty,
                                         Value = (String.IsNullOrEmpty(lvi.SubItems[colSysID].Text)) ? null : lvi.SubItems[colSysID].Text.Trim(),
                                     };
                                     InsertPatientSystemDataRequest psRequest = new InsertPatientSystemDataRequest
