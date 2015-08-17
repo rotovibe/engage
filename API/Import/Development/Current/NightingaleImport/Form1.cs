@@ -138,9 +138,9 @@ namespace NightingaleImport
                             PreferredName = (String.IsNullOrEmpty(lvi.SubItems[colPrefN].Text)) ? null : lvi.SubItems[colPrefN].Text.Trim(),
                             Gender = lvi.SubItems[colGen].Text.Trim(),
                             DOB = lvi.SubItems[colDB].Text.Trim(),
-                            System = SystemProperty,
+                            DataSource = SystemProperty,
                             StatusId = (int)Phytel.API.DataDomain.Patient.DTO.Status.Active,
-                            StatusSystemSource = SystemProperty,
+                            StatusDataSource = SystemProperty,
                             Background = (String.IsNullOrEmpty(lvi.SubItems[colBkgrnd].Text)) ? null : lvi.SubItems[colBkgrnd].Text.Trim(),
 
                         };
