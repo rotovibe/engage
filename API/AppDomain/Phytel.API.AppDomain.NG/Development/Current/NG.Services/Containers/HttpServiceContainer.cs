@@ -1,5 +1,7 @@
-﻿using Funq;
+﻿using System;
+using Funq;
 using Phytel.API.AppDomain.NG.Allergy;
+using Phytel.API.AppDomain.NG.DTO.Context;
 using Phytel.API.AppDomain.NG.Medication;
 using Phytel.API.AppDomain.NG.Notes;
 using Phytel.API.AppDomain.NG.Observation;
@@ -10,6 +12,7 @@ using Phytel.API.AppDomain.NG.Programs.ProgramAttributes;
 using Phytel.API.Common.Audit;
 using Phytel.API.Common.Format;
 using Phytel.API.DataAudit;
+using ServiceStack.Common;
 
 namespace Phytel.API.AppDomain.NG.Service.Containers
 {
@@ -18,6 +21,13 @@ namespace Phytel.API.AppDomain.NG.Service.Containers
         public static Container Build(Container container)
         {
             //register any dependencies your services use, e.g:
+            container.Register<IServiceContext>(c =>
+                new ServiceContext
+                {
+                    Contract = HostContext.Instance.Items["Contract"].ToString(),
+                    Version = Convert.ToDouble(HostContext.Instance.Items["Version"].ToString())
+                }).ReusedWithin(ReuseScope.Request);
+
             container.RegisterAutoWiredAs<SecurityManager, ISecurityManager>().ReusedWithin(ReuseScope.Request);
             container.RegisterAutoWiredAs<CommonFormatterUtil, ICommonFormatterUtil>().ReusedWithin(ReuseScope.Request);
             container.RegisterAutoWiredAs<EndpointUtils, IEndpointUtils>().ReusedWithin(ReuseScope.Request);

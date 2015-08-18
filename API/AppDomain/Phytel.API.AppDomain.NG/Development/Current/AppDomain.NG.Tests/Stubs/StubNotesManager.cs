@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Phytel.API.AppDomain.NG.DTO.Context;
 using Phytel.API.AppDomain.NG.Notes;
 
 namespace Phytel.API.AppDomain.NG.Test.Stubs
@@ -22,7 +23,7 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
             throw new NotImplementedException();
         }
 
-        public List<DTO.PatientNote> GetAllPatientNotes(DTO.GetAllPatientNotesRequest request)
+        public List<DTO.PatientNote> GetAllPatientNotes(IServiceContext context)
         {
             throw new NotImplementedException();
         }

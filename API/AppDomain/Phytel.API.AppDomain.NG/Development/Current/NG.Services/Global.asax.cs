@@ -50,6 +50,7 @@ namespace Phytel.API.AppDomain.NG.Service
                 RequestFilters.Add((req, res, requestDto) =>
                 {
                     HostContext.Instance.Items.Add("Contract", ((IAppDomainRequest) requestDto).ContractNumber);
+                    HostContext.Instance.Items.Add("Version", ((IAppDomainRequest)requestDto).Version);
                 });
 
                 RequestFilters.Add((req, res, requestDto) =>

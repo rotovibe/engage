@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Phytel.API.AppDomain.NG.DTO;
+using Phytel.API.AppDomain.NG.DTO.Context;
+using Phytel.API.AppDomain.NG.DTO.Note.Context;
 using Phytel.API.AppDomain.NG.Notes;
 using ServiceStack.Service;
 using ServiceStack.ServiceClient.Web;
@@ -66,16 +68,21 @@ namespace Phytel.API.AppDomain.NG.Test
         [TestMethod]
         public void GetAllPatientNotes_Test()
         {
-            GetAllPatientNotesRequest request = new GetAllPatientNotesRequest();
-            request.ContractNumber = "InHealth001";
-            request.UserId = "AD_TestHarness";
-            request.Version = 1;
-            request.PatientId = "52f55877072ef709f84e69b0";
-            request.UserId = "Snehal";
-            request.Count = 10;
+            var context = new ServiceContext
+            {
+                Contract = "InHealth001",
+                UserId = "AD_TestHarness",
+                Version = 1,
+                Tag = new PatientNoteContext
+                {
+                    PatientId = "52f55877072ef709f84e69b0",
+                    UserId = "Snehal",
+                    Count = 10
+                }
+            };
 
             NotesManager gManager = new NotesManager();
-            List<PatientNote> response = gManager.GetAllPatientNotes(request);
+            List<PatientNote> response = gManager.GetAllPatientNotes(context);
 
             Assert.IsNotNull(response);
         }

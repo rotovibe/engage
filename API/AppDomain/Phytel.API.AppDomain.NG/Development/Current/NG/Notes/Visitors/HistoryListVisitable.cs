@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Phytel.API.AppDomain.NG.DTO;
+using Phytel.API.AppDomain.NG.DTO.Context;
+using Phytel.API.AppDomain.NG.DTO.Note.Context;
 
 namespace Phytel.API.AppDomain.NG.Notes.Visitors
 {
@@ -16,14 +18,14 @@ namespace Phytel.API.AppDomain.NG.Notes.Visitors
         private readonly int _count;
         private readonly string _userId;
 
-        public HistoryListVisitable(GetAllPatientNotesRequest request)
+        public HistoryListVisitable(IServiceContext context)
         {
             _histList = new List<PatientNote>();
-            _contractNumber = request.ContractNumber;
-            _version = request.Version;
-            _patientId = request.PatientId;
-            _count = request.Count;
-            _userId = request.UserId;
+            _contractNumber = context.Contract;
+            _version = context.Version;
+            _patientId = ((PatientNoteContext)context.Tag).PatientId;
+            _count = ((PatientNoteContext)context.Tag).Count;
+            _userId = context.UserId;
         }
 
         public void Accept(VisitorBase visitor)
@@ -39,7 +41,7 @@ namespace Phytel.API.AppDomain.NG.Notes.Visitors
 
         public void Modify(ModifierBase modifier)
         {
-            _histList = modifier.Modify(_histList);
+            _histList = modifier.Modify(ref _histList);
         }
 
         public List<PatientNote> GetList()

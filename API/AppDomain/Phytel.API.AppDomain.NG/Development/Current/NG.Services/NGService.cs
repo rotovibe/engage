@@ -9,6 +9,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using Phytel.API.AppDomain.NG.DTO.Context;
+using Phytel.API.AppDomain.NG.DTO.Note.Context;
 using Phytel.API.AppDomain.NG.Notes;
 using ServiceStack.Common.Web;
 
@@ -21,6 +23,7 @@ namespace Phytel.API.AppDomain.NG.Service
         public IAuditUtil AuditUtil { get; set; }
         public INotesManager NotesManager { get; set; }
         public ICommonFormatterUtil CommonFormatterUtil { get; set; }
+        public IServiceContext ServiceContext { get; set; }
 
         private const string unknownBrowserType = "Unknown browser";
         private const string unknownUserHostAddress = "Unknown IP";
@@ -1224,8 +1227,15 @@ namespace Phytel.API.AppDomain.NG.Service
                 result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
-                    request.UserId = result.UserId;
-                    response.Notes = NotesManager.GetAllPatientNotes(request);
+                    ServiceContext.UserId = result.UserId;
+                    ServiceContext.Tag = new PatientNoteContext
+                    {
+                        Count = request.Count,
+                        PatientId = request.PatientId,
+                        UserId = result.UserId
+                    };
+
+                    response.Notes = NotesManager.GetAllPatientNotes(ServiceContext);
                 }
                 else
                     throw new UnauthorizedAccessException();

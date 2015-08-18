@@ -14,15 +14,20 @@ namespace Phytel.API.AppDomain.NG.Notes.Visitors
             Count = take;
         }
 
-        public override List<PatientNote> Modify(List<PatientNote> result)
+        public override List<PatientNote> Modify(ref List<PatientNote> result)
         {
             try
             {
-                List<PatientNote> list = result;
+                // might not be honoring the order by in the reference list, so clone it.
+                List<PatientNote> list = result.ToList();
 
-                if (Count > 0)
-                    list = result.Take(Count).ToList();
-
+                if (result.Count > 0)
+                {
+                    if (Count > 0)
+                    {
+                        list = list.Take(Count).ToList();
+                    }
+                }
                 return list;
             }
             catch (Exception ex)

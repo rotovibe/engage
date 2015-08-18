@@ -114,6 +114,8 @@
     <Compile Include="Allergy\PostAllergyRequest.cs" />
     <Compile Include="Allergy\PostAllergyResponse.cs" />
     <Compile Include="Allergy\PostPatientAllergiesResponse.cs" />
+    <Compile Include="Context\IServiceContext.cs" />
+    <Compile Include="Context\ServiceContext.cs" />
     <Compile Include="Goal\GetTasksRequest.cs" />
     <Compile Include="Goal\GetInterventionsRequest.cs" />
     <Compile Include="Goal\GetTasksResponse.cs" />
@@ -161,6 +163,7 @@
     <Compile Include="Meds\PostInitializeMedicationMapResponse.cs" />
     <Compile Include="Meds\PostPatientMedSuppRequest.cs" />
     <Compile Include="Meds\PostPatientMedSuppResponse.cs" />
+    <Compile Include="Note\Context\PatientNoteContext.cs" />
     <Compile Include="PatientSystem\PatientSystem\DeletePatientSystemsRequest.cs" />
     <Compile Include="PatientSystem\PatientSystem\UpdatePatientSystemsRequest.cs" />
     <Compile Include="PatientSystem\PatientSystem\DeletePatientSystemsResponse.cs" />

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Phytel.API.AppDomain.NG.DTO;
+using Phytel.API.AppDomain.NG.DTO.Context;
 
 namespace Phytel.API.AppDomain.NG.Notes
 {
@@ -8,7 +9,7 @@ namespace Phytel.API.AppDomain.NG.Notes
     {
         IUtilizationManager UtilManager { get; set; }
         PatientNote GetPatientNote(GetPatientNoteRequest request);
-        List<PatientNote> GetAllPatientNotes(GetAllPatientNotesRequest request);
+        List<PatientNote> GetAllPatientNotes(IServiceContext context);
         PostPatientNoteResponse InsertPatientNote(PostPatientNoteRequest request);
         PostDeletePatientNoteResponse DeletePatientNote(PostDeletePatientNoteRequest request);
         UpdatePatientNoteResponse UpdatePatientNote(UpdatePatientNoteRequest request);

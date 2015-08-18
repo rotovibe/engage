@@ -10,6 +10,6 @@ namespace Phytel.API.AppDomain.NG.Notes.Visitors
 {
     public abstract class ModifierBase
     {
-        public abstract List<PatientNote> Modify(List<PatientNote> list);
+        public abstract List<PatientNote> Modify(ref List<PatientNote> list);
     }
 }

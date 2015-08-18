@@ -6,11 +6,11 @@ namespace Phytel.API.AppDomain.NG.Notes.Visitors
 {
     public class OrderModifier : ModifierBase
     {
-        public override List<PatientNote> Modify(List<PatientNote> result)
+        public override List<PatientNote> Modify(ref List<PatientNote> result)
         {
-            var list = result.OrderByDescending(r => r.CreatedOn).ToList();
+            result = result.OrderByDescending(r => r.CreatedOn.Date).ThenByDescending(r => r.CreatedOn.TimeOfDay).ToList();
 
-            return list;
+            return result;
         }
     }
 }

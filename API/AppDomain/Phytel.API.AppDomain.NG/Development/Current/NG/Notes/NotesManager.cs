@@ -9,6 +9,8 @@ using Phytel.API.DataDomain.PatientNote.DTO;
 using ServiceStack.Service;
 using ServiceStack.ServiceClient.Web;
 using System.Linq;
+using Phytel.API.AppDomain.NG.DTO.Context;
+using Phytel.API.AppDomain.NG.DTO.Note.Context;
 
 namespace Phytel.API.AppDomain.NG.Notes
 {
@@ -66,15 +68,15 @@ namespace Phytel.API.AppDomain.NG.Notes
             catch (WebServiceException ex) { throw ex; }
         }
 
-        public List<PatientNote> GetAllPatientNotes(GetAllPatientNotesRequest request)
+        public List<PatientNote> GetAllPatientNotes(IServiceContext context)
         {
             try
             {
-                var hlist = new HistoryListVisitable(request);
+                var hlist = new HistoryListVisitable(context);
                 hlist.Accept(new PatientNoteVisitor());
                 hlist.Accept(new PatientUtilizationVisitor());
                 hlist.Modify(new OrderModifier());
-                hlist.Modify(new TakeModifier(request.Count));
+                hlist.Modify(new TakeModifier(((PatientNoteContext)context.Tag).Count));
                 return hlist.GetList();
             }
             catch (WebServiceException ex)

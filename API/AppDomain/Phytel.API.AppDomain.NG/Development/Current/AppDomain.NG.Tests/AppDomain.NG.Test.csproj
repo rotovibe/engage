@@ -152,6 +152,7 @@
     <Compile Include="MongoDB\Repository\MongoPatientGoalRepositoryTests.cs" />
     <Compile Include="NGService_Tests.cs" />
     <Compile Include="NGUtils_Test.cs" />
+    <Compile Include="Notes\NotesManagerTests.cs" />
     <Compile Include="Notes\Visitors\TakeModifierTests.cs" />
     <Compile Include="Note_Tests.cs" />
     <Compile Include="Goal_Tests.cs" />

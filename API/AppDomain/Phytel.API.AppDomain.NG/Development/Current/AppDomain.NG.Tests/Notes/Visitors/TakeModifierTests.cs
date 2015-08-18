@@ -18,7 +18,7 @@ namespace Phytel.API.AppDomain.NG.Notes.Visitors.Tests
                 new PatientNote {Id = "123456789012345678901233", Text = "test3"}
             };
 
-            var result = takemod.Modify(list);
+            var result = takemod.Modify(ref list);
 
             Assert.AreEqual(2, result.Count);
         }
