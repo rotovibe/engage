@@ -7,7 +7,7 @@ define(['services/datacontext'],
 	function (datacontext) {
 
     function alphabeticalNameSort (l, r) { return (l.displayLabel().toLowerCase() == r.displayLabel().toLowerCase()) ? (l.displayLabel().toLowerCase() > r.displayLabel().toLowerCase() ? 1 : -1) : (l.displayLabel().toLowerCase() > r.displayLabel().toLowerCase() ? 1 : -1) };
-    var DUPLICATE_MESSAGE = 'This individual id combination of System and Value already exists';
+    var DUPLICATE_MESSAGE = 'This individual ID combination of System and Value already exists';
 
 		var ctor = function () {
 			var self = this;

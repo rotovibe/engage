@@ -22,7 +22,7 @@ define(['models/base', 'services/datacontext', 'viewmodels/shell/shell'],
                 self.selectedPatient.entityAspect.rejectChanges();
             }
             self.modal = new modelConfig.modal('Edit Background', self.selectedPatient, 'templates/background.html', self.backgroundModalShowing, self.saveBackground, self.cancelBackground);
-            self.isOpen = ko.observable(true);
+            self.isOpen = ko.observable(false);
             self.isEditing = ko.observable(false);
             self.isExpanded = ko.observable(false);
             self.toggleEditing = function () {

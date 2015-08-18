@@ -8,14 +8,8 @@
     <div class="row">
         <h2 class="span12" data-bind="text: fullName"></h2>
     </div>
-    <div class="row validation-summary" data-bind="if: !isValid()">
-		<h3>Please correct the following errors:</h3>
-        <ul data-bind="foreach: validationErrors">
-            <li class="validation-errors">
-                <h5 data-bind="text: Message"></h5>
-            </li>
-        </ul>
-    </div>
+	<!-- ko compose: "templates/validation.errors.html" -->
+	<!-- /ko -->    
     <div class="row">
         <label class="span6">
             <span>First Name</span>

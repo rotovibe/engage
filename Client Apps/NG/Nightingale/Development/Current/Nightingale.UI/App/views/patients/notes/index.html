@@ -1,15 +1,7 @@
 <div class="body" data-bind="visible: showing">
     <div class="row modal-tab">
-		<div data-bind="if: validationErrors().length > 0"</div>
-			<div class="row validation-summary">
-				<h3>Please correct the following errors:</h3>
-				<ul data-bind="foreach: validationErrors">
-					<li class="validation-errors">
-						<h5 data-bind="text: Message"></h5>
-					</li>
-				</ul>
-			</div>
-		</div>
+		<!-- ko compose: "templates/validation.errors.html" -->
+		<!-- /ko -->
 		<section class="accordion" >
             <!-- <div class="row" data-bind="with: $parent.activeDataType">
                 <h3 data-bind="text: name, attr: { title: name }"></h3>

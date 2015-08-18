@@ -1,16 +1,8 @@
 ﻿<div class="body" data-bind="visible: showing">
 	<div class="pad-vertical">
 	</div>
-	<div data-bind="if: validationErrors().length > 0">
-		<div class="row validation-summary">
-			<h3>Please correct the following errors:</h3>
-			<ul data-bind="foreach: validationErrors">
-				<li class="validation-errors">
-					<h5 data-bind="text: Message"></h5>
-				</li>
-			</ul>
-		</div>
-	</div>
+	<!-- ko compose: "templates/validation.errors.html" -->
+	<!-- /ko -->	
 	<div class="pad-vertical" data-bind="visible: canAddId">
 		<div class="row">
 			<div class="span1">&nbsp;</div>

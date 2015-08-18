@@ -1,15 +1,7 @@
 <form class="simple_form new_note">
 	<div data-bind="with: $parent.newUtilization">
-		<div data-bind="if: !isValid() === 'disabled-for-now'">
-			<div class="row divider validation-summary" >
-				<h3>Please correct the following errors:</h3>
-				<ul data-bind="foreach: validationErrors">
-					<li class="validation-errors">
-						<h5 data-bind="text: Message"></h5>
-					</li>
-				</ul>
-			</div>
-		</div>
+		<!-- ko compose: "templates/validation.errors.html" -->
+		<!-- /ko -->		
 	</div>
 		<div class="row pad accordion divider">
 			<div class="accordion-toggle" data-bind="clickToggle: $parent.utDetailsOpen" >

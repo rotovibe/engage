@@ -19,11 +19,11 @@
 								</div>
 						</div>
 						<div class="row" data-bind="with: deceased()">
-							<div class="span4 grey" data-bind="if: name() === 'Yes'">
+							<div class="span4 grey" data-bind="if: name === 'Yes'">
 								Deceased
 							</div>
 						</div>
-						<div class="row">
+						<div class="row pad-top">
 							<div class="span4 grey">
 								Age
 							</div>
@@ -44,13 +44,13 @@
 								Minor
 							</div>
 						</div>
-						<div class="row" data-bind="visible: $parent.primaryId" >
+						<div class="row pad-top" data-bind="visible: $parent.primaryId" >
 								<div class="span4 grey ellipsis" data-bind="text: $parent.primaryIdLabel, attr:{ 'title': $parent.primaryIdTitle }"></div>
 								<div class="span8 ellipsis">
 										<span class="row" data-bind="text: $parent.primaryIdValue, attr: { 'title': $parent.primaryIdValue }"></span>
 								</div>
 						</div>
-						<div class="row">
+						<div class="row pad-top">
 								<div class="span4 grey">
 										Priority
 								</div>
@@ -60,7 +60,7 @@
 										<!-- /ko -->
 								</div>
 						</div>
-						<div class="row">
+						<div class="row  pad-top">
 								<div class="span4 grey">
 										Flagged
 								</div>
@@ -76,18 +76,19 @@
 						<div class="span5 grey">SSN</div>
 						<div class="span6 filter-toggle" data-bind="text: $data, click: $parents[1].showFullSSN"></div>
 					</div>
-					<div class="row">
-						<div class="span5 grey">System</div>
-						<div class="span6 filter-toggle" data-bind="text: system, attr {title: system}"></div>
-					</div>
-					<div class="row">
+
+					<div class="row pad-top">
 						<div class="span5 grey">Protected</div>
 						<div class="span6 filter-toggle" data-bind="text: protected() ? 'Yes' : 'No'"></div>
 					</div>
-					<div class="row" data-bind="with: maritalStatus">
+					<div class="row pad-top" data-bind="with: maritalStatus">
 						<div class="span5 grey">Marital Status</div>
 						<div class="span6 filter-toggle" data-bind="text: name()"></div>
 					</div>
+					<div class="row pad-top">
+						<div class="span5 grey">System</div>
+						<div class="span6 filter-toggle" data-bind="text: system, attr {title: system}"></div>
+					</div>					
 				</div>
 		</div>
 </section>

@@ -21,7 +21,7 @@ define(['models/base', 'services/datacontext', 'viewmodels/shell/shell'],
                 self.selectedPatient.entityAspect.rejectChanges();
             }
             self.modal = new modelConfig.modal('Edit Status', self.selectedPatient, 'templates/patient.status.html', self.statusModalShowing, self.saveStatus, self.cancelStatus);
-            self.isOpen = ko.observable(true);
+            self.isOpen = ko.observable(false);
             self.isEditing = ko.observable(false);
             self.isExpanded = ko.observable(false);
             self.toggleEditing = function () {
