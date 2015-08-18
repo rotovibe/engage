@@ -253,15 +253,22 @@
 					// Make sure the selected note type is set
 					self.newNote().typeId(self.selectedNoteType().id());
 					datacontext.saveNote(self.newNote()).then(noteSaved);
-					function noteSaved() {
-						self.isShowing(false);
-						self.newNote(null);
-						self.isSaving(false);
-						self.createNewNote();
-					}
+					
 				}
 			};
+			function noteSaved() {
+				self.isShowing(false);
+				self.newNote(null);
+				self.isSaving(false);
+				self.createNewNote();
+			}
 			self.saveTouchPoint = function () {
+				function saved() {
+					self.isShowing(false);
+					self.newTouchPoint(null);
+					self.isSaving(false);
+					self.createNewTouchPoint();
+				}
 				if (self.newTouchPoint()) {
 					self.newTouchPoint().patientId(self.selectedPatient().id());
 					self.isSaving(true);
@@ -270,25 +277,19 @@
 					datacontext.saveNote(self.newTouchPoint()).then(saved);
 
 				}
-				function saved() {
-					self.isShowing(false);
-					self.newTouchPoint(null);
-					self.isSaving(false);
-					self.createNewTouchPoint();
-				}
 			};
 			self.saveUtilization = function(){
-				if (self.newUtilization()) {
-					self.newUtilization().patientId(self.selectedPatient().id());
-					self.isSaving(true);
-					datacontext.saveNote(self.newUtilization()).then(saved);
-				}
 				function saved() {
 					self.isShowing(false);
 					self.newUtilization().clearDirty();
 					self.newUtilization(null);
 					self.isSaving(false);
 					self.createNewUtilization();
+				}
+				if (self.newUtilization()) {
+					self.newUtilization().patientId(self.selectedPatient().id());
+					self.isSaving(true);
+					datacontext.saveNote(self.newUtilization()).then(saved);
 				}
 			};
 			self.selectedPatient.subscribe(function () {
@@ -332,7 +333,7 @@
 				//TODO: verify validation rules for utilization
 				var hasNewUtilization = self.newUtilization()? true : false;
 				var isSaving = self.isSaving();
-				return self.newUtilization() && !self.isSaving() && self.newUtilization().isValid() && self.newUtilization().isDirty();
+				return self.newUtilization() && !self.isSaving() && self.newUtilization().isValid();// && self.newUtilization().isDirty();
 			});
 			self.createNewNote();
 			self.createNewTouchPoint();

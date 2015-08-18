@@ -264,17 +264,17 @@ define(['services/session', 'services/dateHelper'],
 					note.validationErrors = ko.observableArray([]);
 					note.isDirty = ko.observable(false);
 					note.clearDirty = function () {
-						note.isDirty(false);
-						note.propToken.dispose();
+						note.isDirty(false);						
 					};
 					note.watchDirty = function () {
-						note.propToken = note.entityAspect.propertyChanged.subscribe(function (newValue) {
+						var propToken = note.entityAspect.propertyChanged.subscribe(function (newValue) {
 							note.isDirty(true);
+							propToken.dispose();
 						});
 					};
 					note.checkAppend = function () {
 						// Append the new content
-						var append = '\n' + moment().format('MM-DD-YYYY') + ' ';
+						var append = '\n' + moment().format('MM-DD-YYYY h:mm A') + ' ';
 						append += (' ' + session.currentUser().firstName() + ' ' + session.currentUser().lastName());
 						append += (' - ' + note.newContent());
 						note.text(note.text() ? note.text() + append : append);

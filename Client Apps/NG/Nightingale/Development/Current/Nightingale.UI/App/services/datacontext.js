@@ -978,112 +978,112 @@ observationsLoaded = true;
 
 				// Save changes to a single contact card
 				function saveContactCard(contactCard) {
-						// Display a message while saving
-						var message = queryStarted('Contact card', true, 'Saving');
+					// Display a message while saving
+					var message = queryStarted('Contact card', true, 'Saving');
 
-						var serializedContactCard;
-						setTimeout(function () {
-							serializedContactCard = entitySerializer.serializeContactCard(contactCard, manager);
-						}, 50);
-						setTimeout(function () {
-							return contactService.saveContactCard(manager, serializedContactCard).then(saveCompleted);
-						}, 50);
+					var serializedContactCard;
+					setTimeout(function () {
+						serializedContactCard = entitySerializer.serializeContactCard(contactCard, manager);
+					}, 50);
+					setTimeout(function () {
+						return contactService.saveContactCard(manager, serializedContactCard).then(saveCompleted);
+					}, 50);
 
-						function saveCompleted (data) {
-								// If data was returned and has a property called success that is true,
-								if (data) {
-										// Go through the data, find any entities that need to have their Id's cleaned up
-										var updatedPhones = data.UpdatedPhone;
-										var updatedEmails = data.UpdatedEmail;
-										var updatedAddresses = data.UpdatedAddress;
-										// Iterate through the updated phones,
-										if (updatedPhones) {
-											ko.utils.arrayForEach(updatedPhones, function (newPhone) {
-														// Find the first matching phone,
-														var phoneToUpdate = ko.utils.arrayFirst(contactCard.phones(), function (oldPhone) {
-																// Where the id equals the id of the 'newPhone' returned from the server
-																return oldPhone.id() === newPhone.OldId;
-															});
-														// If a phone is found,
-														if (phoneToUpdate) {
-																// Update it's id property
-																phoneToUpdate.id(newPhone.NewId);
-															}
-														});
-										}
-										if (updatedEmails) {
-											ko.utils.arrayForEach(updatedEmails, function (newEmail) {
-														// Find the first matching phone,
-														var emailToUpdate = ko.utils.arrayFirst(contactCard.emails(), function (oldEmail) {
-																// Where the id equals the id of the 'newPhone' returned from the server
-																return oldEmail.id() === newEmail.OldId;
-															});
-														// If a phone is found,
-														if (emailToUpdate) {
-																// Update it's id property
-																emailToUpdate.id(newEmail.NewId);
-															}
-														});
-										}
-										if (updatedAddresses) {
-											ko.utils.arrayForEach(updatedAddresses, function (newAddress) {
-														// Find the first matching phone,
-														var addressToUpdate = ko.utils.arrayFirst(contactCard.addresses(), function (oldAddress) {
-																// Where the id equals the id of the 'newPhone' returned from the server
-																return oldAddress.id() === newAddress.OldId;
-															});
-														// If a phone is found,
-														if (addressToUpdate) {
-																// Update it's id property
-																addressToUpdate.id(newAddress.NewId);
-															}
-														});
-										}
-
-										// Save all of the levels of everything related to a contact card
-										contactCard.entityAspect.acceptChanges();
-
-										// Finally, clear out the message
-										queryCompleted(message);
+					function saveCompleted (data) {
+						// If data was returned and has a property called success that is true,
+						if (data) {
+							// Go through the data, find any entities that need to have their Id's cleaned up
+							var updatedPhones = data.UpdatedPhone;
+							var updatedEmails = data.UpdatedEmail;
+							var updatedAddresses = data.UpdatedAddress;
+							// Iterate through the updated phones,
+							if (updatedPhones) {
+								ko.utils.arrayForEach(updatedPhones, function (newPhone) {
+									// Find the first matching phone,
+									var phoneToUpdate = ko.utils.arrayFirst(contactCard.phones(), function (oldPhone) {
+										// Where the id equals the id of the 'newPhone' returned from the server
+										return oldPhone.id() === newPhone.OldId;
+									});
+									// If a phone is found,
+									if (phoneToUpdate) {
+										// Update it's id property
+										phoneToUpdate.id(newPhone.NewId);
 									}
-								}
+								});
 							}
+							if (updatedEmails) {
+								ko.utils.arrayForEach(updatedEmails, function (newEmail) {
+									// Find the first matching phone,
+									var emailToUpdate = ko.utils.arrayFirst(contactCard.emails(), function (oldEmail) {
+										// Where the id equals the id of the 'newPhone' returned from the server
+										return oldEmail.id() === newEmail.OldId;
+									});
+									// If a phone is found,
+									if (emailToUpdate) {
+											// Update it's id property
+											emailToUpdate.id(newEmail.NewId);
+									}
+								});
+							}
+							if (updatedAddresses) {
+								ko.utils.arrayForEach(updatedAddresses, function (newAddress) {
+									// Find the first matching phone,
+									var addressToUpdate = ko.utils.arrayFirst(contactCard.addresses(), function (oldAddress) {
+										// Where the id equals the id of the 'newPhone' returned from the server
+										return oldAddress.id() === newAddress.OldId;
+									});
+									// If a phone is found,
+									if (addressToUpdate) {
+										// Update it's id property
+										addressToUpdate.id(newAddress.NewId);
+									}
+								});
+							}
+
+							// Save all of the levels of everything related to a contact card
+							contactCard.entityAspect.acceptChanges();
+
+							// Finally, clear out the message
+							queryCompleted(message);
+						}
+					}
+				}
 
 				// Save changes to a single contact card
 				function saveGoal(goal) {
-						// Display a message while saving
-						var message = queryStarted('Goal', true, 'Saving');
+					// Display a message while saving
+					var message = queryStarted('Goal', true, 'Saving');
 
+					// Save all of the levels of everything related to a contact card
+					goal.entityAspect.acceptChanges();
+					var serializedGoal;
+					setTimeout(function () {
+						serializedGoal = entitySerializer.serializeGoal(goal, manager);
+					}, 50);
+					setTimeout(function () {
+						return goalsService.saveGoal(manager, serializedGoal).then(saveCompleted);
+					}, 50);
+
+					function saveCompleted(data) {
+						// If data was returned and has a property called success that is true,
+						goal.isNew(false);
 						// Save all of the levels of everything related to a contact card
 						goal.entityAspect.acceptChanges();
-						var serializedGoal;
-						setTimeout(function () {
-							serializedGoal = entitySerializer.serializeGoal(goal, manager);
-						}, 50);
-						setTimeout(function () {
-							return goalsService.saveGoal(manager, serializedGoal).then(saveCompleted);
-						}, 50);
-
-						function saveCompleted(data) {
-								// If data was returned and has a property called success that is true,
-								goal.isNew(false);
-								// Save all of the levels of everything related to a contact card
-								goal.entityAspect.acceptChanges();
-								// Accept the changes to everything related to a goal
-								ko.utils.arrayForEach(goal.tasks(), function (task) {
-									task.entityAspect.acceptChanges();
-								});
-								ko.utils.arrayForEach(goal.interventions(), function (intervention) {
-									intervention.entityAspect.acceptChanges();
-								});
-								ko.utils.arrayForEach(goal.barriers(), function (barrier) {
-									barrier.isNew(false);
-									barrier.entityAspect.acceptChanges();
-								});
-								// Finally, clear out the message
-								queryCompleted(message);
-							}
-						}
+						// Accept the changes to everything related to a goal
+						ko.utils.arrayForEach(goal.tasks(), function (task) {
+							task.entityAspect.acceptChanges();
+						});
+						ko.utils.arrayForEach(goal.interventions(), function (intervention) {
+							intervention.entityAspect.acceptChanges();
+						});
+						ko.utils.arrayForEach(goal.barriers(), function (barrier) {
+							barrier.isNew(false);
+							barrier.entityAspect.acceptChanges();
+						});
+						// Finally, clear out the message
+						queryCompleted(message);
+					}
+				}
 
 				// Save a type of intervention
 				function saveIntervention(intervention) {
@@ -1136,133 +1136,133 @@ observationsLoaded = true;
 
 				// Save a type of barrier
 				function saveBarrier(barrier) {
-						// Display a message while saving
-						var message = queryStarted('Barrier', true, 'Saving');
-						// Get the patient id from the goal
-						var patientId = barrier.goal().patientId();
+					// Display a message while saving
+					var message = queryStarted('Barrier', true, 'Saving');
+					// Get the patient id from the goal
+					var patientId = barrier.goal().patientId();
 
-						// Save barrier changes so new ones returned are accepted
+					// Save barrier changes so new ones returned are accepted
+					barrier.entityAspect.acceptChanges();
+					var serializedBarrier;
+					serializedBarrier = entitySerializer.serializeBarrier(barrier, manager);
+					return goalsService.saveBarrier(manager, serializedBarrier, patientId).then(saveCompleted);
+
+					function saveCompleted(data) {
+						// Save all of the levels of everything related to a contact card
 						barrier.entityAspect.acceptChanges();
-						var serializedBarrier;
-						serializedBarrier = entitySerializer.serializeBarrier(barrier, manager);
-						return goalsService.saveBarrier(manager, serializedBarrier, patientId).then(saveCompleted);
-
-						function saveCompleted(data) {
-								// Save all of the levels of everything related to a contact card
-								barrier.entityAspect.acceptChanges();
-								// Finally, clear out the message
-								queryCompleted(message);
-							}
-						}
+						// Finally, clear out the message
+						queryCompleted(message);
+					}
+				}
 
 				// Save changes to a single contact card
 				function deleteGoal(goal) {
-						// Display a message while saving
-						var message = queryStarted('Goal', true, 'Deleting');
+					// Display a message while saving
+					var message = queryStarted('Goal', true, 'Deleting');
 
-						return goalsService.deleteGoal(manager, goal).then(deleteCompleted);
+					return goalsService.deleteGoal(manager, goal).then(deleteCompleted);
 
-						function deleteCompleted(data) {
-								// If data was returned and has a property called success that is true,
-								goal.entityAspect.rejectChanges();
-								// Save all of the levels of everything related to a contact card
-								goal.patientId(null);
-								// Clear out the message
-								queryCompleted(message);
-								manager.detachEntity(goal);
-							}
-						}
+					function deleteCompleted(data) {
+						// If data was returned and has a property called success that is true,
+						goal.entityAspect.rejectChanges();
+						// Save all of the levels of everything related to a contact card
+						goal.patientId(null);
+						// Clear out the message
+						queryCompleted(message);
+						manager.detachEntity(goal);
+					}
+				}
 
 				// Save changes to a single contact card
-				function saveNote(note) {
-						// Display a message while saving
-						var message = queryStarted('Note', true, 'Saving');
-
-						var isInsert = false;
-						if( note.id() < 0 ){
-							isInsert = true;
-							note.createdById(session.currentUser().userId());
-							note.createdOn( new Date() );
-							note.systemSource( 'Engage' );
-						}else{
-							note.updatedById( session.currentUser().userId() );
-							note.updatedOn( new Date() );
+				function saveNote(note) {										
+					// Display a message while saving
+					var message = queryStarted('Note', true, 'Saving');
+					var isInsert = false;
+					function saveUtilizationCompleted( data ){
+						if( isInsert ){
+							//the returned data from Utilization endpoint is the complete Utilization Note object
+							//	and will be added to the cache (breeze .toType 'Note'). the new entity is not needed anymore:
+							manager.detachEntity(note);
 						}
-						var serializedNote = entitySerializer.serializeNote(note, manager);
-						var noteType = note.type().name().toLowerCase();
-						switch( noteType ){
-							case 'utilization':
-							{
-								return notesService.saveNote(manager, serializedNote, noteType).then(saveUtilizationCompleted);
-								break;
-							}
-							default:
-							{
-								return notesService.saveNote(manager, serializedNote, noteType).then(saveNoteCompleted);
-								break;
-							}
+						else{
+							note.entityAspect.acceptChanges();
+							syncUpdateProps( data.Utilization );
 						}
-						function saveUtilizationCompleted( data ){
-							if( isInsert ){
-					//the returned data from Utilization endpoint is the complete Utilization Note object
-					//	and will be added to the cache (breeze .toType 'Note'). the new entity is not needed anymore:
-					manager.detachEntity(note);
-				}
-				else{
-					note.entityAspect.acceptChanges();
-					syncUpdateProps( data.Utilization );
-				}
 
-								// Finally, clear out the message
-								queryCompleted(message);
-								return true;
-							}
+						// Finally, clear out the message
+						queryCompleted(message);
+						return true;
+					}
 
-							function saveNoteCompleted( data ) {
-								if( isInsert ){
-					// 'Note' endpoint does not return the whole object. only the created id.
-					// we will keep the new note object in cache:
-					// Replace the id of the note since we had a negative number there
-					note.id( data.Id );	//the insert end point (Note) returns the result obj directly (not inside a property).
-				}
-				else{
-					syncUpdateProps( data.PatientNote );
-				}
+					function saveNoteCompleted( data ) {
+						if( isInsert ){
+							// 'Note' endpoint does not return the whole object. only the created id.
+							// we will keep the new note object in cache:
+							// Replace the id of the note since we had a negative number there
+							note.id( data.Id );	//the insert end point (Note) returns the result obj directly (not inside a property).
+						}
+						else{
+							syncUpdateProps( data.PatientNote );
+						}
 
-								// Accept changes
-								note.entityAspect.acceptChanges();
-								// Finally, clear out the message
-								queryCompleted(message);
-								return true;
-							}
+						// Accept changes
+						note.entityAspect.acceptChanges();
+						// Finally, clear out the message
+						queryCompleted(message);
+						return true;
+					}
+					
+					if( note.id() < 0 ){
+						isInsert = true;
+						note.createdById(session.currentUser().userId());
+						note.createdOn( new Date() );
+						note.systemSource( 'Engage' );
+					}else{
+						note.updatedById( session.currentUser().userId() );
+						note.updatedOn( new Date() );
+					}
+					var serializedNote = entitySerializer.serializeNote(note, manager);
+					var noteType = note.type().name().toLowerCase();
+					switch( noteType ){
+						case 'utilization':
+						{
+							return notesService.saveNote(manager, serializedNote, noteType).then(saveUtilizationCompleted);
+							break;
+						}
+						default:
+						{
+							return notesService.saveNote(manager, serializedNote, noteType).then(saveNoteCompleted);
+							break;
+						}
+					}
+					
 
-							function syncUpdateProps( returnedNote ){
-				// Update (PatientNote endpoint)
-				// 'PatientNote' endpoint does not return the whole object. only the created id. under data.PatientNote prop
-				if( returnedNote.UpdatedOn ){
-					note.updatedOn(returnedNote.UpdatedOn);
+					function syncUpdateProps( returnedNote ){
+						// Update (PatientNote endpoint)
+						// 'PatientNote' endpoint does not return the whole object. only the created id. under data.PatientNote prop
+						if( returnedNote.UpdatedOn ){
+							note.updatedOn(returnedNote.UpdatedOn);
+						}
+						if( returnedNote.UpdatedById ){
+							note.updatedById(returnedNote.UpdatedById);
+						}
+					}
 				}
-				if( returnedNote.UpdatedById ){
-					note.updatedById(returnedNote.UpdatedById);
-				}
-			}
-		}
 
 				// Save changes to a single contact card
 				function deleteNote(note) {
-						// Display a message while saving
-						var message = queryStarted('Note', true, 'Deleting');
-
-						return notesService.deleteNote(manager, note).then(deleteCompleted);
-
-						function deleteCompleted(data) {
-							note.entityAspect.rejectChanges();
-							note.patientId(null);
-							manager.detachEntity(note);
-								// Finally, clear out the message
-								queryCompleted(message);
-							}
-						}
+					function deleteCompleted(data) {
+						note.entityAspect.rejectChanges();
+						note.patientId(null);
+						manager.detachEntity(note);
+						// Finally, clear out the message
+						queryCompleted(message);
+					}
+					
+					// Display a message while saving
+					var message = queryStarted('Note', true, 'Deleting');
+					return notesService.deleteNote(manager, note).then(deleteCompleted);					
+				}
 		/**
 		*	get note by id. initialy intended to load the full object of utilization type note.
 		*	as notes list in history are retrieved through the note endpoint, they are retrieving only some of the utilization props.
@@ -1375,15 +1375,15 @@ observationsLoaded = true;
 				var thisPatient = patientSystems[0].patient();
 
 				if (isInsert) {
-										//clean up the temporary new ents as the response got new ones into the cache. (.toType)
-										ko.utils.arrayForEach( patientSystems, function (patSys) {
-												// Set to the returned id
-												if (patSys.id() < 0) {
-													patSys.entityAspect.setDeleted();
-													patSys.entityAspect.acceptChanges();
-												}
-											});
-									}
+					//clean up the temporary new ents as the response got new ones into the cache. (.toType)
+					ko.utils.arrayForEach( patientSystems, function (patSys) {
+							// Set to the returned id
+							if (patSys.id() < 0) {
+								patSys.entityAspect.setDeleted();
+								patSys.entityAspect.acceptChanges();
+							}
+						});
+				}
 				// Trigger a refresh on anything watching the state of the system id
 				thisPatient.patientSystems.valueHasMutated();
 				return true;
