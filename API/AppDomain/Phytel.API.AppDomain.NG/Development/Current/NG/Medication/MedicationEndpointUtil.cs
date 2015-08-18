@@ -16,7 +16,7 @@ namespace Phytel.API.AppDomain.NG.Medication
         protected readonly string DDMedicationUrl = ConfigurationManager.AppSettings["DDMedicationUrl"];
         #endregion
 
-        #region Medication - Posts
+        #region MedicationMap
         public List<string> GetMedicationNDCs(PostPatientMedSuppRequest request)
         {
             try

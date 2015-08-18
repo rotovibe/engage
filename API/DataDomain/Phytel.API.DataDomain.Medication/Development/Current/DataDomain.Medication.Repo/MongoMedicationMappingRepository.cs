@@ -190,7 +190,8 @@ namespace DataDomain.Medication.Repo
                             MEMedicationMapping.FullNameProperty,
                             MEMedicationMapping.RouteProperty,
                             MEMedicationMapping.StrengthProperty,
-                            MEMedicationMapping.FormProperty).ToList();
+                            MEMedicationMapping.FormProperty,
+                            MEMedicationMapping.CustomProperty).ToList();
                     if (meMMs != null && meMMs.Count > 0)
                     {
                         list = new List<MedicationMapData>();

@@ -15,6 +15,23 @@ namespace Phytel.API.AppDomain.NG.Medication
         public IMedicationEndpointUtil EndpointUtil { get; set; }
         public ISearchManager SearchManager { get; set; }
 
+        #region MedicationMap - Gets
+        public List<MedicationMap> GetMedicationMaps(GetMedicationMapsRequest request)
+        {
+            List<MedicationMap> medMaps = null;
+            try
+            {
+                List<MedicationMapData> data = EndpointUtil.SearchMedicationMap(request);
+                if (data != null)
+                {
+                    medMaps = new List<MedicationMap>();
+                    data.ForEach(a => medMaps.Add(Mapper.Map<MedicationMap>(a)));
+                }
+                return medMaps;
+            }
+            catch (Exception ex) { throw ex; }
+        }
+        #endregion
 
         #region MedicationMap - Posts
         public DTO.MedicationMap InitializeMedicationMap(PostInitializeMedicationMapRequest request)
