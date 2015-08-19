@@ -125,7 +125,7 @@
 				id: self.thisNoteId(),
 				patientId: self.selectedPatient().id(),
 				typeId: generalNoteType.id(),
-				systemSource: "Engage"
+				dataSource: "Engage"
 			}));
 		};
 
@@ -144,7 +144,7 @@
 					utilizationSource: self.defaultUtilizationSource,
 					disposition: self.defaultDisposition,
 					utilizationLocation: self.defaultUtilizationLocation,
-					systemSource: "Engage"
+					dataSource: "Engage"
 				}));
 			self.newUtilization().watchDirty();
 		};
@@ -167,7 +167,7 @@
 				who: self.defaultWho,
 				typeId: touchpointNoteType.id(),
 				validatedIdentity: false,
-				systemSource: "Engage"
+				dataSource: "Engage"
 			}));
 			// If new touch points' date changes
 			self.newTouchPointToken = self.newTouchPoint().contactedOn.subscribe(function (newValue) {

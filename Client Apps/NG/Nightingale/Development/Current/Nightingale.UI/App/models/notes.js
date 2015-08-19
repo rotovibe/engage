@@ -39,7 +39,7 @@ define(['services/session', 'services/dateHelper'],
 						//utilization props:
 						admitDate: { dataType: "DateTime" },
 						dischargeDate: { dataType: "DateTime" },
-						systemSource: { dataType: "String" },
+						dataSource: { dataType: "String" },
 						admitted: { dataType: "Boolean" },
 						visitTypeId: { dataType: "String" },
 						otherType: { dataType: "String" },

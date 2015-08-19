@@ -592,7 +592,7 @@
 						.from('fakePath')
 						.where('id', '==', note.id())
 						.toType('Note')
-						.select('id, text, patientId, createdOn, createdById, typeId, methodId, outcomeId, whoId, sourceId, durationId, contactedOn, validatedIdentity, admitDate, dischargeDate, systemSource, admitted, visitTypeId, otherType, utilizationSourceId, dispositionId, otherDisposition, locationId, otherLocation, updatedById, updatedOn');
+						.select('id, text, patientId, createdOn, createdById, typeId, methodId, outcomeId, whoId, sourceId, durationId, contactedOn, validatedIdentity, admitDate, dischargeDate, dataSource, admitted, visitTypeId, otherType, utilizationSourceId, dispositionId, otherDisposition, locationId, otherLocation, updatedById, updatedOn');
 				var results = manager.executeQueryLocally(noteQuery);
 				var unwrappedNote = results[0];
 
@@ -606,7 +606,7 @@
 				thisNote.PatientId = unwrappedNote.patientId;
 				thisNote.CreatedOn = unwrappedNote.createdOn;
 				thisNote.CreatedById = unwrappedNote.createdById;
-		thisNote.updatedOn = unwrappedNote.updatedOn;
+				thisNote.updatedOn = unwrappedNote.updatedOn;
 				thisNote.updatedById = unwrappedNote.updatedById;
 				thisNote.TypeId = unwrappedNote.typeId;
 				thisNote.MethodId = unwrappedNote.methodId;
@@ -617,19 +617,17 @@
 				thisNote.ContactedOn = unwrappedNote.contactedOn;
 				thisNote.ValidatedIdentity = unwrappedNote.validatedIdentity;
 				//utilization:
-		thisNote.admitDate =           unwrappedNote.admitDate;
-		thisNote.dischargeDate =       unwrappedNote.dischargeDate;
-		thisNote.systemSource =        unwrappedNote.systemSource;
-		thisNote.admitted =            unwrappedNote.admitted;
-		thisNote.visitTypeId =         unwrappedNote.visitTypeId;
-		thisNote.otherType =           unwrappedNote.otherType;
-		thisNote.utilizationSourceId = unwrappedNote.utilizationSourceId;
-		thisNote.dispositionId =       unwrappedNote.dispositionId;
-		thisNote.otherDisposition =    unwrappedNote.otherDisposition;
-		thisNote.locationId =          unwrappedNote.locationId;
-		thisNote.otherLocation =       unwrappedNote.otherLocation;
-
-
+				thisNote.admitDate =           unwrappedNote.admitDate;
+				thisNote.dischargeDate =       unwrappedNote.dischargeDate;
+				thisNote.dataSource =        unwrappedNote.dataSource;
+				thisNote.admitted =            unwrappedNote.admitted;
+				thisNote.visitTypeId =         unwrappedNote.visitTypeId;
+				thisNote.otherType =           unwrappedNote.otherType;
+				thisNote.utilizationSourceId = unwrappedNote.utilizationSourceId;
+				thisNote.dispositionId =       unwrappedNote.dispositionId;
+				thisNote.otherDisposition =    unwrappedNote.otherDisposition;
+				thisNote.locationId =          unwrappedNote.locationId;
+				thisNote.otherLocation =       unwrappedNote.otherLocation;
 
 				var totalTime = new Date().getTime() - startTime;
 
@@ -731,7 +729,7 @@
 					.from('fakePath')
 					.where('id', '==', patient.id())
 					.toType('Patient')
-					.select('id, priority, gender, firstName, lastName, preferredName, suffix, dOB, middleName, background, clinicalBackground, fullSSN, system, statusId, reasonId, statusSystemSource, deceasedId, maritalStatusId, protected');
+					.select('id, priority, gender, firstName, lastName, preferredName, suffix, dOB, middleName, background, clinicalBackground, fullSSN, dataSource, statusId, reasonId, statusDataSource, deceasedId, maritalStatusId, protected');
 			var results = manager.executeQueryLocally(patientQuery);
 			var unwrappedIndividual = results[0];
 
@@ -746,10 +744,10 @@
 			thisIndividual.MiddleName = unwrappedIndividual.middleName;
 			thisIndividual.Background = unwrappedIndividual.background;
 			thisIndividual.ClinicalBackground = unwrappedIndividual.clinicalBackground;
-			thisIndividual.System = unwrappedIndividual.system;
+			thisIndividual.DataSource = unwrappedIndividual.dataSource;
 			thisIndividual.StatusId = unwrappedIndividual.statusId;
 			thisIndividual.ReasonId = unwrappedIndividual.reasonId;
-			thisIndividual.StatusSystemSource = unwrappedIndividual.statusSystemSource;
+			thisIndividual.StatusDataSource = unwrappedIndividual.statusDataSource;
 			thisIndividual.DeceasedId = unwrappedIndividual.deceasedId;
 			thisIndividual.MaritalStatusId = unwrappedIndividual.maritalStatusId;
 			thisIndividual.Protected = unwrappedIndividual.protected;
@@ -775,94 +773,94 @@
 
 		// Serialize a patient system to save it
 		function serializePatientSystem(patientSystem, manager) {
-				// When the serialization started
-				var startTime = new Date().getTime();
+			// When the serialization started
+			var startTime = new Date().getTime();
 
-				// Create an object to hold the unwrapped JSON
-				var thisPatSys = {};
+			// Create an object to hold the unwrapped JSON
+			var thisPatSys = {};
 
-				var patientSystemQuery = breeze.EntityQuery
-						.from('fakePath')
-						.where('id', '==', patientSystem.id())
-						.toType('PatientSystem')
-						.select('id, patientId, systemId, value, systemSource, statusId, primary, createdById, createdOn, updatedById, updatedOn');
-				var results = manager.executeQueryLocally(patientSystemQuery);
-				var unwrappedPatSys = results[0];
+			var patientSystemQuery = breeze.EntityQuery
+					.from('fakePath')
+					.where('id', '==', patientSystem.id())
+					.toType('PatientSystem')
+					.select('id, patientId, systemId, value, dataSource, statusId, primary, createdById, createdOn, updatedById, updatedOn');
+			var results = manager.executeQueryLocally(patientSystemQuery);
+			var unwrappedPatSys = results[0];
 
-		if( unwrappedPatSys.id && !isNaN(unwrappedPatSys.id) && unwrappedPatSys.id < 0){
-			thisPatSys.Id = null;
-		}
-		else{
-			thisPatSys.Id = unwrappedPatSys.id;
-		}
-				thisPatSys.PatientId = unwrappedPatSys.patientId;
-				thisPatSys.SystemId = unwrappedPatSys.systemId;
-				thisPatSys.value = unwrappedPatSys.value.trim();
-				thisPatSys.systemSource = unwrappedPatSys.systemSource;
-				thisPatSys.statusId = unwrappedPatSys.statusId;
-		thisPatSys.primary = unwrappedPatSys.primary;
-		thisPatSys.createdById = unwrappedPatSys.createdById;
-		thisPatSys.createdOn = unwrappedPatSys.createdOn;
-		thisPatSys.updatedById = unwrappedPatSys.updatedById;
-		thisPatSys.updatedOn = unwrappedPatSys.updatedOn;
+			if( unwrappedPatSys.id && !isNaN(unwrappedPatSys.id) && unwrappedPatSys.id < 0){
+				thisPatSys.Id = null;
+			}
+			else{
+				thisPatSys.Id = unwrappedPatSys.id;
+			}
+			thisPatSys.PatientId = unwrappedPatSys.patientId;
+			thisPatSys.SystemId = unwrappedPatSys.systemId;
+			thisPatSys.value = unwrappedPatSys.value.trim();
+			thisPatSys.DataSource = unwrappedPatSys.dataSource;
+			thisPatSys.statusId = unwrappedPatSys.statusId;
+			thisPatSys.primary = unwrappedPatSys.primary;
+			thisPatSys.createdById = unwrappedPatSys.createdById;
+			thisPatSys.createdOn = unwrappedPatSys.createdOn;
+			thisPatSys.updatedById = unwrappedPatSys.updatedById;
+			thisPatSys.updatedOn = unwrappedPatSys.updatedOn;
 
-				var totalTime = new Date().getTime() - startTime;
+			var totalTime = new Date().getTime() - startTime;
 
-				return thisPatSys;
+			return thisPatSys;
 		}
 
 		// Serialize an action to save it
 		function serializePatientAllergy(allergy, manager) {
-				// When the serialization started
-				var startTime = new Date().getTime();
+			// When the serialization started
+			var startTime = new Date().getTime();
 
-				// Create an object to hold the unwrapped JSON
-				var thisAllergy = {};
+			// Create an object to hold the unwrapped JSON
+			var thisAllergy = {};
 
-				// Create a query to
-				// Get the unwrapped values of the properties of the allergy
-				var allergyQuery = breeze.EntityQuery
-						.from('fakePath')
-						.where('id', '==', allergy.id())
-						.toType('PatientAllergy')
-						.select('id, allergyName, startDate, endDate, patientId, statusId, deleteFlag, severityId, allergyId, sourceId, notes, systemName');
-				var results = manager.executeQueryLocally(allergyQuery);
-				var unwrappedObservation = results[0];
+			// Create a query to
+			// Get the unwrapped values of the properties of the allergy
+			var allergyQuery = breeze.EntityQuery
+					.from('fakePath')
+					.where('id', '==', allergy.id())
+					.toType('PatientAllergy')
+					.select('id, allergyName, startDate, endDate, patientId, statusId, deleteFlag, severityId, allergyId, sourceId, notes, systemName');
+			var results = manager.executeQueryLocally(allergyQuery);
+			var unwrappedObservation = results[0];
 
-				// Copy actions properties
-				thisAllergy.Id = unwrappedObservation.id;
-				thisAllergy.AllergyName = unwrappedObservation.allergyName;
-		var startMoment = moment(unwrappedObservation.startDate);
-				thisAllergy.StartDate = startMoment.isValid()? startMoment.toISOString() : null;
-		var endMoment = moment(unwrappedObservation.endDate);
-				thisAllergy.EndDate = endMoment.isValid()? endMoment.toISOString() : null;
-				thisAllergy.PatientId = unwrappedObservation.patientId;
-				thisAllergy.AllergyId = unwrappedObservation.allergyId;
-				thisAllergy.StatusId = unwrappedObservation.statusId;
-				thisAllergy.SourceId = unwrappedObservation.sourceId;
-				thisAllergy.DeleteFlag = unwrappedObservation.deleteFlag;
-				thisAllergy.SeverityId = unwrappedObservation.severityId;
-				thisAllergy.Notes = unwrappedObservation.notes;
-				thisAllergy.SystemName = unwrappedObservation.systemName;
+			// Copy actions properties
+			thisAllergy.Id = unwrappedObservation.id;
+			thisAllergy.AllergyName = unwrappedObservation.allergyName;
+			var startMoment = moment(unwrappedObservation.startDate);
+			thisAllergy.StartDate = startMoment.isValid()? startMoment.toISOString() : null;
+			var endMoment = moment(unwrappedObservation.endDate);
+			thisAllergy.EndDate = endMoment.isValid()? endMoment.toISOString() : null;
+			thisAllergy.PatientId = unwrappedObservation.patientId;
+			thisAllergy.AllergyId = unwrappedObservation.allergyId;
+			thisAllergy.StatusId = unwrappedObservation.statusId;
+			thisAllergy.SourceId = unwrappedObservation.sourceId;
+			thisAllergy.DeleteFlag = unwrappedObservation.deleteFlag;
+			thisAllergy.SeverityId = unwrappedObservation.severityId;
+			thisAllergy.Notes = unwrappedObservation.notes;
+			thisAllergy.SystemName = unwrappedObservation.systemName;
 
-				// If it is a brand new allergy set an isNewAllergy property
-				if (allergy.isUserCreated()) {
-						thisAllergy.IsNewAllergy = true;
-				}
+			// If it is a brand new allergy set an isNewAllergy property
+			if (allergy.isUserCreated()) {
+					thisAllergy.IsNewAllergy = true;
+			}
 
-				thisAllergy.AllergyTypeIds = [];
-				ko.utils.arrayForEach(allergy.allergyTypeIds.peek(), function (value) {
-						thisAllergy.AllergyTypeIds.push(value.id.peek());
-				});
+			thisAllergy.AllergyTypeIds = [];
+			ko.utils.arrayForEach(allergy.allergyTypeIds.peek(), function (value) {
+					thisAllergy.AllergyTypeIds.push(value.id.peek());
+			});
 
-				thisAllergy.ReactionIds = [];
-				ko.utils.arrayForEach(allergy.reactionIds.peek(), function (value) {
-						thisAllergy.ReactionIds.push(value.id.peek());
-				});
+			thisAllergy.ReactionIds = [];
+			ko.utils.arrayForEach(allergy.reactionIds.peek(), function (value) {
+					thisAllergy.ReactionIds.push(value.id.peek());
+			});
 
-				var totalTime = new Date().getTime() - startTime;
+			var totalTime = new Date().getTime() - startTime;
 
-				return thisAllergy;
+			return thisAllergy;
 		}
 
 		// Serialize an action to save it

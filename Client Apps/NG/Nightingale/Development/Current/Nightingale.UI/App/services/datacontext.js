@@ -829,8 +829,8 @@ observationsLoaded = true;
 
 						// Display a message while saving
 						var message = queryStarted('Individual', true, 'Saving');
-						if( patient.isNew() && !patient.system() ){
-							patient.system("Engage");
+						if( patient.isNew() && !patient.dataSource() ){
+							patient.dataSource("Engage");
 						}
 						// Should the individual be inserted or just updated?
 						var insert = patient.isNew();
@@ -1216,7 +1216,7 @@ observationsLoaded = true;
 						isInsert = true;
 						note.createdById(session.currentUser().userId());
 						note.createdOn( new Date() );
-						note.systemSource( 'Engage' );
+						note.dataSource( 'Engage' );
 					}else{
 						note.updatedById( session.currentUser().userId() );
 						note.updatedOn( new Date() );
