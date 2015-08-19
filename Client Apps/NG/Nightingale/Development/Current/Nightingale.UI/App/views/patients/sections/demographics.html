@@ -19,7 +19,7 @@
 								</div>
 						</div>
 						<div class="row" data-bind="with: deceased()">
-							<div class="span4 grey" data-bind="if: name === 'Yes'">
+							<div class="span4 grey" data-bind="if: (name() === 'Yes')">
 								Deceased
 							</div>
 						</div>
@@ -54,17 +54,17 @@
 								<div class="span4 grey">
 										Priority
 								</div>
-								<div class="span8">
+								<div class="span8" style="height: 15.33px;">
 										<!-- ko with : priorityModel -->
 										<img alt="Priority" data-bind="attr: { src: imageSource }" data-phyautomation="priority" />
 										<!-- /ko -->
 								</div>
 						</div>
-						<div class="row  pad-top">
+						<div class="row pad-top">
 								<div class="span4 grey">
 										Flagged
 								</div>
-								<div class="span8">
+								<div class="span8" style="height: 15.33px;">
 										<a href="#" data-bind="click: $parent.toggleFlagged">
 												<i data-bind="attr: { class: (flagged() ? 'red' : 'grey') + ' icon-flag' }" data-phyautomation="flagged"></i>
 										</a>
@@ -81,9 +81,9 @@
 						<div class="span5 grey">Protected</div>
 						<div class="span6 filter-toggle" data-bind="text: protected() ? 'Yes' : 'No'"></div>
 					</div>
-					<div class="row pad-top" data-bind="with: maritalStatus">
-						<div class="span5 grey">Marital Status</div>
-						<div class="span6 filter-toggle" data-bind="text: name()"></div>
+					<div class="row" data-bind="with: maritalStatus">
+						<div class="span5 grey pad-top">Marital Status</div>
+						<div class="span6 filter-toggle pad-top" data-bind="text: name()"></div>
 					</div>
 					<div class="row pad-top">
 						<div class="span5 grey">System</div>
