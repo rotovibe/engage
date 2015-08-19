@@ -271,6 +271,11 @@ define(['services/session', 'services/dateHelper'],
 							note.isDirty(true);
 							propToken.dispose();
 						});
+						//specifically subscribe to the programIds as propertyChanged wont be notified:
+						var programsToken = note.programIds.subscribe(function (newValue) {
+							note.isDirty(true);
+							programsToken.dispose();
+						});
 					};
 					note.checkAppend = function () {
 						// Append the new content
