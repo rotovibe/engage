@@ -458,22 +458,26 @@ namespace Phytel.API.AppDomain.NG
             try
             {
                 GetAllSettingsResponse response = new GetAllSettingsResponse();
-                using (StreamReader r = new StreamReader(HostingEnvironment.MapPath("/Nightingale/settings.json")))
+                IRestClient client = new JsonServiceClient();
+                //[Route("/{Context}/{Version}/{ContractNumber}/Settings", "GET")]
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Settings",
+                                                                        DDLookupServiceUrl,
+                                                                        "NG",
+                                                                        request.Version,
+                                                                        request.ContractNumber), request.UserId);
+
+                GetAllSettingsDataResponse dataDomainResponse = client.Get<GetAllSettingsDataResponse>(url);
+                if (dataDomainResponse != null)
                 {
-                    using (MemoryStream stream1 = new MemoryStream(Encoding.UTF8.GetBytes(r.ReadToEnd())))
-                    {
-                        DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(List<Setting>));
-                        var settings = serializer.ReadObject(stream1) as List<Setting>;
-                        response.Settings = settings;
-                    }
+                    response.Settings = dataDomainResponse.SettingsData;
                 }
                 return response;
             }
-            catch (WebServiceException wse)
+            catch (Exception ex)
             {
-                throw new WebServiceException("AD:GetAllSettings()::" + wse.Message, wse.InnerException);
+                throw ex;
             }
-        } 
+        }
         #endregion
 
         #region Programs

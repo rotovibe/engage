@@ -171,6 +171,8 @@
     <Compile Include="PatientSystem\System\GetActiveSystemsRequest.cs" />
     <Compile Include="PatientSystem\System\GetActiveSystemsResponse.cs" />
     <Compile Include="PatientSystem\System\System.cs" />
+    <Compile Include="Setting\GetAllSettingsRequest.cs" />
+    <Compile Include="Setting\GetAllSettingsResponse.cs" />
     <Compile Include="Utilization\GetPatientUtilizationsRequest.cs" />
     <Compile Include="Utilization\GetPatientUtilizationsResponse.cs" />
     <Compile Include="Utilization\GetPatientUtilizationRequest.cs" />
@@ -304,8 +306,6 @@
     <Compile Include="Program\ObjectiveInfo.cs" />
     <Compile Include="Program\PostPatientToProgramsRequest.cs" />
     <Compile Include="Program\PostPatientToProgramsResponse.cs" />
-    <Compile Include="GetAllSettingsResponse.cs" />
-    <Compile Include="GetAllSettingsRequest.cs" />
     <Compile Include="LookUp\GetAllProblemsResponse.cs" />
     <Compile Include="Patient\GetCohortPatientsRequest.cs" />
     <Compile Include="Patient\GetCohortPatientsResponse.cs" />
