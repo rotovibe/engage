@@ -60,7 +60,8 @@ define(['services/session', 'services/validatorfactory', 'services/customvalidat
 		            optOut: { dataType: "Boolean" },
 		            isText: { dataType: "Boolean" },
 		            phonePreferred: { dataType: "Boolean" },
-		            textPreferred: { dataType: "Boolean" }
+		            textPreferred: { dataType: "Boolean" },
+					dataSource: { dataType: "String"}					
 		        }
 		    });			
 			
@@ -243,7 +244,7 @@ define(['services/session', 'services/validatorfactory', 'services/customvalidat
 		            	// Add a new phone record
 			            var nextId = ((contactCard.phones().length + 1) * -1);
 			            var defaultTypeId = datacontext.enums.phoneTypes()[0].id();
-			            var newPhone = datacontext.createComplexType('Phone', { id: nextId, typeId: defaultTypeId });
+			            var newPhone = datacontext.createComplexType('Phone', { id: nextId, typeId: defaultTypeId, dataSource: "Engage" });
 						newPhone.isFocused(true);
 			            contactCard.phones.push(newPhone);		            	
 		            }					

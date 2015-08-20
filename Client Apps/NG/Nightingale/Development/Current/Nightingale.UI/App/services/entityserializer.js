@@ -253,6 +253,7 @@
 						newPhone.PhonePreferred = phone.phonePreferred.peek();
 						newPhone.TextPreferred = phone.textPreferred.peek();
 						newPhone.TypeId = phone.typeId.peek();
+						newPhone.DataSource = phone.dataSource.peek();
 						thisContactCard.Phones.push(newPhone);
 				});
 
