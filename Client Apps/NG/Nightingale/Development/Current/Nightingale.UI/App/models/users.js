@@ -82,7 +82,7 @@ define(['config.services', 'services/session'],
 				'User', null, userInitializer);
 
 		    function userInitializer(user) {
-		        user.settings = ko.observableArray();
+		        user.settings = ko.observable();//ko.observableArray();
 		        user.recentIndividuals = ko.observableArray();
 		        user.computedRecentIndividuals = ko.computed(function () {
 		        	var theseIndividuals = user.recentIndividuals().slice(0, 5);
