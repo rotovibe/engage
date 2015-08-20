@@ -247,11 +247,10 @@
             });
             // Set the max patient count to the value of settings.TotalPatientCount, if it exists
             if (session.currentUser().settings().length !== 0) {
-                ko.utils.arrayForEach(session.currentUser().settings(), function (setting) {
-                    if (setting.Key === 'TotalPatientCount') {
-                        maxPatientCount(parseInt(setting.Value));
-                    }
-                });
+				var totalPatientCount = datacontext.getSettingsParam('TotalPatientCount');
+				if( totalPatientCount ){
+					maxPatientCount( parseInt( totalPatientCount ) );
+				}                
             }
             // Set initialized true so we don't accidentally re-initialize the view model
             initialized = true;

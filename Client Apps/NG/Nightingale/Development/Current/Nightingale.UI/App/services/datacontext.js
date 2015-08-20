@@ -192,7 +192,22 @@
 				manager.hasChangesChanged.subscribe(function (eventArgs) {
 					hasChanges(eventArgs.hasChanges);
 				});
-
+				
+				function getSettingsParam( key ){
+					var settings = userSettings();
+					var result;
+					if( settings && settings.hasOwnProperty( key ) ){
+						result = settings[key];
+					}
+					return result;
+				}
+				
+				var userSettings = ko.computed( function(){
+					var user = session.currentUser();
+					var settings = user && session.currentUser().settings? session.currentUser().settings(): null;
+					return settings;
+				});
+				
 				var datacontext = {
 					manager: manager,
 					loadingMessages: loadingMessages,
@@ -245,46 +260,47 @@
 					saveObservations: saveObservations,
 					savePatientSystems: savePatientSystems,
 					deletePatientSystems: deletePatientSystems,
-						//saveBackground: saveBackground,
-						getFullSSN: getFullSSN,
-						addPatientToRecentList: addPatientToRecentList,
-						hasChanges: hasChanges,
-						programsSaving: programsSaving,
-						observationsSaving: observationsSaving,
-						patientSystemsSaving: patientSystemsSaving,
-						todosSaving: todosSaving,
-						interventionsSaving: interventionsSaving,
-						tasksSaving: tasksSaving,
-						allergySaving: allergySaving,
-						medicationSaving: medicationSaving,
-						createAlert: createAlert,
-						getToDos: getToDos,
-						getToDosQuery: getToDosQuery,
-						getInterventions: getInterventions,
-						getInterventionsQuery: getInterventionsQuery,
-						getTasks: getTasks,
-						getTasksQuery: getTasksQuery,
-						saveToDo: saveToDo,
-						detachEntity: detachEntity,
-						initializeNewMedication: initializeNewMedication,
-						initializeNewPatientMedication: initializeNewPatientMedication,
-						getPatientMedications: getPatientMedications,
-						getPatientFrequencies: getPatientFrequencies,
-						getRemoteMedicationFields: getRemoteMedicationFields,
-						getPatientMedicationsQuery: getPatientMedicationsQuery,
-						saveMedication: saveMedication,
-						deletePatientMedication: deletePatientMedication,
-						initializeAllergy: initializeAllergy,
-						initializeNewAllergy: initializeNewAllergy,
-						getRemoteAllergies: getRemoteAllergies,
-						saveAllergies: saveAllergies,
-						getPatientAllergies: getPatientAllergies,
-						deletePatientAllergy: deletePatientAllergy,
-						getPatientAllergiesQuery: getPatientAllergiesQuery,
-						singleSort: singleSort
-					};
+					//saveBackground: saveBackground,
+					getFullSSN: getFullSSN,
+					addPatientToRecentList: addPatientToRecentList,
+					hasChanges: hasChanges,
+					programsSaving: programsSaving,
+					observationsSaving: observationsSaving,
+					patientSystemsSaving: patientSystemsSaving,
+					todosSaving: todosSaving,
+					interventionsSaving: interventionsSaving,
+					tasksSaving: tasksSaving,
+					allergySaving: allergySaving,
+					medicationSaving: medicationSaving,
+					createAlert: createAlert,
+					getToDos: getToDos,
+					getToDosQuery: getToDosQuery,
+					getInterventions: getInterventions,
+					getInterventionsQuery: getInterventionsQuery,
+					getTasks: getTasks,
+					getTasksQuery: getTasksQuery,
+					saveToDo: saveToDo,
+					detachEntity: detachEntity,
+					initializeNewMedication: initializeNewMedication,
+					initializeNewPatientMedication: initializeNewPatientMedication,
+					getPatientMedications: getPatientMedications,
+					getPatientFrequencies: getPatientFrequencies,
+					getRemoteMedicationFields: getRemoteMedicationFields,
+					getPatientMedicationsQuery: getPatientMedicationsQuery,
+					saveMedication: saveMedication,
+					deletePatientMedication: deletePatientMedication,
+					initializeAllergy: initializeAllergy,
+					initializeNewAllergy: initializeNewAllergy,
+					getRemoteAllergies: getRemoteAllergies,
+					saveAllergies: saveAllergies,
+					getPatientAllergies: getPatientAllergies,
+					deletePatientAllergy: deletePatientAllergy,
+					getPatientAllergiesQuery: getPatientAllergiesQuery,					
+					getSettingsParam: getSettingsParam, 
+					singleSort: singleSort
+				};
 
-					return datacontext;
+				return datacontext;
 
 				// Go prime the data that will be shared throughout the application
 				function primeData() {
@@ -1942,109 +1958,109 @@ observationsLoaded = true;
 						// return Q.promise(function () {
 						//     return observable(newAllergy);
 						// });
-function initialized(allergy) {
-								// Find the default allergy source
-								var defaultSource = ko.utils.arrayFirst(datacontext.enums.allergySources(), function (src) {
-									return src.isDefault();
-								});
-								// Set default properties on the allergy
-								ko.unwrap(allergy).source(defaultSource);
-								ko.unwrap(allergy).statusId(1);
-								ko.unwrap(allergy).isUserCreated(isNewAllergy);
-								return allergy;
-							}
-						}
+					function initialized(allergy) {
+						// Find the default allergy source
+						var defaultSource = ko.utils.arrayFirst(datacontext.enums.allergySources(), function (src) {
+							return src.isDefault();
+						});
+						// Set default properties on the allergy
+						ko.unwrap(allergy).source(defaultSource);
+						ko.unwrap(allergy).statusId(1);
+						ko.unwrap(allergy).isUserCreated(isNewAllergy);
+						return allergy;
+					}
+				}
 
-						function initializeNewAllergy(allergyName) {
-							allergySaving(true);
-							return allergiesService.initializeNewAllergy(manager, allergyName);
-						}
+				function initializeNewAllergy(allergyName) {
+					allergySaving(true);
+					return allergiesService.initializeNewAllergy(manager, allergyName);
+				}
 
 				// Save changes to a list of allergies
 				function saveAllergies(allergies) {
 					var serializedAllergies = [];
 					var message = queryStarted('Allergy', true, 'Saving');
-						// serializedAllergies.PatientId = patientId;
-						// Go through the observations,
+					// serializedAllergies.PatientId = patientId;
+					// Go through the observations,
+					ko.utils.arrayForEach(allergies, function (allergy) {
+						allergy.entityAspect.acceptChanges();
+							// Serialize it
+							var serializedAllergy = entitySerializer.serializePatientAllergy(allergy, manager);
+							serializedAllergies.push(serializedAllergy);
+						});
+					if (serializedAllergies.length > 0) {
+						allergySaving(true);
+						return allergiesService.saveAllergies(manager, serializedAllergies).then(saveCompleted);
+					} else {
+						return Q.promise(function () {
+							queryCompleted(message);
+							return true;
+						}).then(saveCompleted);
+					}
+
+					function saveCompleted(data) {
+						// After saving, remove the isNew flag
 						ko.utils.arrayForEach(allergies, function (allergy) {
-							allergy.entityAspect.acceptChanges();
-								// Serialize it
-								var serializedAllergy = entitySerializer.serializePatientAllergy(allergy, manager);
-								serializedAllergies.push(serializedAllergy);
-							});
-						if (serializedAllergies.length > 0) {
-							allergySaving(true);
-							return allergiesService.saveAllergies(manager, serializedAllergies).then(saveCompleted);
-						} else {
-							return Q.promise(function () {
-								queryCompleted(message);
-								return true;
-							}).then(saveCompleted);
+							allergy.isNew(false);
+						});
+						allergySaving(false);
+						queryCompleted(message);
+						return data.results;
+					}
+				}
+
+					function deletePatientAllergy(allergy){
+						var message = queryStarted('Allergy', true, 'Deleting');
+						return allergiesService.deletePatientAllergy(manager, allergy).then(deleted).fail(deleteFailed);
+
+						function deleted(data) {
+							// Remove the allergy from cache completely
+							manager.detachEntity(allergy);
+
+							// Finally, clear out the message
+							queryCompleted(message);
+							//setTimeout(function () { location.reload(); }, 2000);
+							return true;
 						}
 
-						function saveCompleted(data) {
-								// After saving, remove the isNew flag
-								ko.utils.arrayForEach(allergies, function (allergy) {
-									allergy.isNew(false);
-								});
-								allergySaving(false);
-								queryCompleted(message);
-								return data.results;
-							}
+						function deleteFailed(error) {
+							var thisAlert = datacontext.createEntity('Alert', { result: 0, reason: 'Delete failed!' });
+							thisAlert.entityAspect.acceptChanges();
+							localCollections.alerts.push(thisAlert);
+							checkForFourOhOne(error);
+							removeLoadingMessage(message);
+							throw new Error('Delete failed');
 						}
+					}
 
-						function deletePatientAllergy(allergy){
-							var message = queryStarted('Allergy', true, 'Deleting');
-							return allergiesService.deletePatientAllergy(manager, allergy).then(deleted).fail(deleteFailed);
+					function getPatientAllergies (observable, params, patientId) {
+						var message = queryStarted('Allergies', true, 'Loading');
+						allergySaving(true);
+						return allergiesService.getPatientAllergies(manager, observable, params, patientId).then(allergiesReturned);
 
-							function deleted(data) {
-								// Remove the allergy from cache completely
-								manager.detachEntity(allergy);
-
-								// Finally, clear out the message
-								queryCompleted(message);
-								//setTimeout(function () { location.reload(); }, 2000);
-								return true;
-							}
-
-							function deleteFailed(error) {
-								var thisAlert = datacontext.createEntity('Alert', { result: 0, reason: 'Delete failed!' });
-								thisAlert.entityAspect.acceptChanges();
-								localCollections.alerts.push(thisAlert);
-								checkForFourOhOne(error);
-								removeLoadingMessage(message);
-								throw new Error('Delete failed');
-							}
+						function allergiesReturned(allergies) {
+							// Finally, clear out the message
+							queryCompleted(message);
+							allergySaving(false);
 						}
+					}
 
-						function getPatientAllergies (observable, params, patientId) {
-							var message = queryStarted('Allergies', true, 'Loading');
-							allergySaving(true);
-							return allergiesService.getPatientAllergies(manager, observable, params, patientId).then(allergiesReturned);
+					function getPatientAllergiesQuery (params, orderstring) {
+						return allergiesService.getPatientAllergiesQuery(manager, params, orderstring);
+					}
 
-							function allergiesReturned(allergies) {
-								// Finally, clear out the message
-								queryCompleted(message);
-								allergySaving(false);
-							}
-						}
+					function getRemoteAllergies(searchterm) {
+						return allergiesService.getRemoteAllergies(manager, searchterm);
+					}
 
-						function getPatientAllergiesQuery (params, orderstring) {
-							return allergiesService.getPatientAllergiesQuery(manager, params, orderstring);
-						}
+					function singleSort (patientId, breezeEntities, type, prop) {
+						var query = breeze.EntityQuery
+						.from(type)
+						.toType(type)
+						.where('patientId', '==', patientId)
+						.orderBy(prop);
 
-						function getRemoteAllergies(searchterm) {
-							return allergiesService.getRemoteAllergies(manager, searchterm);
-						}
+						return manager.executeQueryLocally(query);
+					}
 
-						function singleSort (patientId, breezeEntities, type, prop) {
-							var query = breeze.EntityQuery
-							.from(type)
-							.toType(type)
-							.where('patientId', '==', patientId)
-							.orderBy(prop);
-
-							return manager.executeQueryLocally(query);
-						}
-
-					});
+});

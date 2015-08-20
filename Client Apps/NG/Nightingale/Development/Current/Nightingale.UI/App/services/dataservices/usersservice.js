@@ -79,9 +79,7 @@
                 type: "GET",
                 success: function (data) {
                     // Push all of the settings that are returned into a settings object
-                    $.each(data.Settings, function (index, item) {
-                        userObservable().settings.push(item);
-                    });
+					userObservable().settings(data.Settings);
                     return true;
                 }
             }).fail(loginFailed);

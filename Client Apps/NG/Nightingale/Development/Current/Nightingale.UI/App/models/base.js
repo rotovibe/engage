@@ -22,7 +22,7 @@ define(['services/validatorfactory', 'services/customvalidators', 'services/form
 			self.Operator = op;
 			self.Value = val;
 		}
-
+				
 		// Create a common modal model
 		function modal(title, entity, templatePath, showing, saveOverride, cancelOverride, deleteOverride) {
 			var self = this;
@@ -687,8 +687,10 @@ define(['services/validatorfactory', 'services/customvalidators', 'services/form
 						});
 					return primaries[0];
 				};
-				patient.minor = ko.computed(function () {
-					return patient.age() && patient.age() < 18;
+				
+				patient.minor = ko.computed(function () {					
+					var minorAge = datacontext.getSettingsParam('MinorAge');
+					return patient.age() && patient.age() < minorAge;
 				});
 				// Set the patient defaults, if not already set
 				if (patient.protected() !== true) {
@@ -810,5 +812,5 @@ define(['services/validatorfactory', 'services/customvalidators', 'services/form
 				systemCareManager = datacontext.getSystemCareManager();
 			}
 			return systemCareManager;
-		}
+		}		
 	});
