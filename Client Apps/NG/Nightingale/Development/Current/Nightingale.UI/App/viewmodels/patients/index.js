@@ -246,7 +246,7 @@
                 }
             });
             // Set the max patient count to the value of settings.TotalPatientCount, if it exists
-            if (session.currentUser().settings().length !== 0) {
+            if (session.currentUser().settings()) {
 				var totalPatientCount = datacontext.getSettingsParam('TotalPatientCount');
 				if( totalPatientCount ){
 					maxPatientCount( parseInt( totalPatientCount ) );
