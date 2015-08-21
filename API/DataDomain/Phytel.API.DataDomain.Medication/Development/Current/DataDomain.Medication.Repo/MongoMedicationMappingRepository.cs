@@ -185,13 +185,17 @@ namespace DataDomain.Medication.Repo
                     queries.Add(Query.EQ(MEMedicationMapping.DeleteFlagProperty, false));
                     queries.Add(Query.EQ(MEMedicationMapping.TTLDateProperty, BsonNull.Value));
                     IMongoQuery mQuery = Query.And(queries);
-                    List<MEMedicationMapping> meMMs = ctx.MedicationMaps.Collection.Find(mQuery).SetFields(
-                            MEMedicationMapping.IdProperty,
-                            MEMedicationMapping.FullNameProperty,
-                            MEMedicationMapping.RouteProperty,
-                            MEMedicationMapping.StrengthProperty,
-                            MEMedicationMapping.FormProperty,
-                            MEMedicationMapping.CustomProperty).ToList();
+                    string[] fields = { MEMedicationMapping.IdProperty, MEMedicationMapping.FullNameProperty, MEMedicationMapping.RouteProperty,MEMedicationMapping.StrengthProperty,MEMedicationMapping.FormProperty,MEMedicationMapping.CustomProperty };
+                    List<MEMedicationMapping> meMMs = null;
+                    if (dataRequest.Skip == 0 && dataRequest.Take == 0)
+                    {
+                        meMMs = ctx.MedicationMaps.Collection.Find(mQuery).SetFields(fields).ToList();
+                    }
+                    else
+                    {
+                        meMMs = ctx.MedicationMaps.Collection.Find(mQuery).SetFields(fields).SetSkip(dataRequest.Skip).SetLimit(dataRequest.Take).ToList();
+                    }
+                    
                     if (meMMs != null && meMMs.Count > 0)
                     {
                         list = new List<MedicationMapData>();

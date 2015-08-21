@@ -243,6 +243,8 @@ namespace Phytel.API.AppDomain.NG.Medication
                      Name = request.Name,
                      Route = request.Route,
                      Strength = request.Strength,
+                     Skip = request.Skip,
+                     Take = request.Take,
                      UserId = request.UserId,
                      Version = request.Version
                 } as object);

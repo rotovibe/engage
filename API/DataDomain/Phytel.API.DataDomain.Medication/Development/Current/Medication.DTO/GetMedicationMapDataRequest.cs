@@ -19,6 +19,12 @@ namespace Phytel.API.DataDomain.Medication.DTO
         [ApiMember(Name = "Strength", Description = "Strength of the medication map that is being requested", ParameterType = "property", DataType = "string", IsRequired = false)]
         public string Strength { get; set; }
 
+        [ApiMember(Name = "Skip", Description = "The number of elements to skip before returning the remaining elements..", ParameterType = "Path", DataType = "int", IsRequired = false)]
+        public int Skip { get; set; }
+
+        [ApiMember(Name = "Take", Description = "Number of records to return per request.", ParameterType = "Path", DataType = "int", IsRequired = false)]
+        public int Take { get; set; }
+
         [ApiMember(Name = "UserId", Description = "UserId of the logged in user", ParameterType = "property", DataType = "string", IsRequired = false)]
         public string UserId { get; set; }
 
