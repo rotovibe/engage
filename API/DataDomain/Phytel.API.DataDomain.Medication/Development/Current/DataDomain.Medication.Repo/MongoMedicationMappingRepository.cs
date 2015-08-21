@@ -168,7 +168,7 @@ namespace DataDomain.Medication.Repo
                     List<IMongoQuery> queries = new List<IMongoQuery>();
                     if (!string.IsNullOrEmpty(dataRequest.Name))
                     {
-                        queries.Add(Query.EQ(MEMedicationMapping.FullNameProperty.ToUpper(), dataRequest.Name));
+                        queries.Add(Query.EQ(MEMedicationMapping.FullNameProperty, dataRequest.Name.ToUpper()));
                     }
                     if (!string.IsNullOrEmpty(dataRequest.Route))
                     {
