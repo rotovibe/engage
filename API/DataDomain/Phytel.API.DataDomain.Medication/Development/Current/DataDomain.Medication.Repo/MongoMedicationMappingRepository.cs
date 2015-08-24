@@ -182,6 +182,17 @@ namespace DataDomain.Medication.Repo
                     {
                         queries.Add(Query.EQ(MEMedicationMapping.StrengthProperty, dataRequest.Strength));
                     }
+                    if (dataRequest.Type  != 0)
+                    {
+                        if (dataRequest.Type == 1)
+                        {
+                            queries.Add(Query.EQ(MEMedicationMapping.CustomProperty, false));
+                        }
+                        else if(dataRequest.Type == 2)
+                        {
+                            queries.Add(Query.EQ(MEMedicationMapping.CustomProperty, true));
+                        }
+                    }
                     queries.Add(Query.EQ(MEMedicationMapping.DeleteFlagProperty, false));
                     queries.Add(Query.EQ(MEMedicationMapping.TTLDateProperty, BsonNull.Value));
                     IMongoQuery mQuery = Query.And(queries);
