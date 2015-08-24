@@ -47,6 +47,9 @@
 			self.showEditButton = ko.computed( function(){
 				return data.showEdit? data.showEdit() : false;
 			});
+			self.showDeleteButton = ko.computed( function() {
+				return data.showDelete? data.showDelete(): false;
+			});
         }
 
         function column(name, open, widgets) {
@@ -64,7 +67,7 @@
 
         var columns = ko.observableArray([
             new column('historyList', false, [{ name: 'History', path: 'patients/widgets/history.list.html', open: true }]),
-            new column('details', false, [{ name: 'Details', path: 'patients/widgets/history.detail.html', open: true, showEdit: activeNote }])
+            new column('details', false, [{ name: 'Details', path: 'patients/widgets/history.detail.html', open: true, showEdit: activeNote, showDelete: activeNote }])
         ]);
 
         var computedOpenColumn = ko.computed({
@@ -102,6 +105,7 @@
             activeNote: activeNote,
             setActiveNote: setActiveNote,
 			editClickFunc: editNote,
+			deleteClickFunc: deleteNote,
             setOpenColumn: setOpenColumn,
             minimizeThisColumn: minimizeThisColumn,
             maximizeThisColumn: maximizeThisColumn,
@@ -222,6 +226,20 @@
 			shell.currentModal(modal);
 		}
 
+		function deleteNote() {		
+			var note = activeNote();
+			var thistype = note.type().name();
+			var result = confirm('You are about to delete a ' + thistype + ' note.  Press OK to continue, or cancel to return without deleting.');
+			// If they press OK,
+			if (result === true) {
+				activeNote(null);
+				datacontext.deleteNote( note );
+			}
+			else {
+				return false;
+			}
+		}
+		
         function setOpenColumn(sender) {
             openColumn(sender);
         }
