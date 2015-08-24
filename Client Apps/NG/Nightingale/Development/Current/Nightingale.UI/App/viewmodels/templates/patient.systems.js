@@ -65,7 +65,7 @@ define(['services/datacontext'],
 
 			self.newPatientSystemIdValue = ko.observable();
 			self.newSelectedSystem = ko.observable();
-			self.duplicate = ko.observable();
+			self.addNewDuplicate = ko.observable();
 
 			/**
 			*	validation errors for the add new id area only
@@ -89,15 +89,16 @@ define(['services/datacontext'],
 				if( !system ){
 					errors.push({PropName: 'newSystem', Message: 'a new System is required'});
 				}
-				self.duplicate(null);
+				self.addNewDuplicate(null);
 				if( value && value.trim().length && system ){
 					//verify no dups
 					var dup = ko.utils.arrayFirst( systemIds, function(patSys){
-						return (patSys.isDeleted() === false && patSys.value().trim().toLowerCase() === value.trim().toLowerCase() && patSys.systemId().toLowerCase() === system.id().toLowerCase());
+						return (patSys.isDeleted() === false && patSys.value().trim().toLowerCase() === value.trim().toLowerCase() 
+								&& patSys.systemId().toLowerCase() === system.id().toLowerCase());
 					});
 					if( dup ){
 						errors.push({PropName: 'newValue', Message: DUPLICATE_MESSAGE });
-						self.duplicate(dup);
+						self.addNewDuplicate(dup);
 					}
 				}
 				return errors;
@@ -122,16 +123,39 @@ define(['services/datacontext'],
 				var patient = self.selectedPatient;
 				var systemIds = self.patientSystems();
 				var errors = [];
-				ko.utils.arrayForEach( systemIds, function( patSys ){
+				var duplicates = [];
+				ko.utils.arrayForEach( systemIds, function( patSys, pos ){
+					if( patSys.isDeleted() ) return;
 					if( !patSys.isValid() ){
 						isValid = false;
 						ko.utils.arrayForEach( patSys.validationErrors(), function( err ){
 							errors.push( err );
 						});
 					}
+					var dup = ko.utils.arrayFirst(systemIds, function(sysId, index){
+						return (sysId.isDeleted() === false 
+								&& sysId.systemId().toLowerCase() === patSys.systemId().toLowerCase() 
+								&& sysId.value().trim().toLowerCase() === patSys.value().trim().toLowerCase() && index !== pos); 
+					});
+					if( dup ){
+						duplicates.push( dup );						
+					}						
 				});
-				if (self.duplicate()) {
-						errors.push({PropName: 'newValue', Message: DUPLICATE_MESSAGE });
+				if (self.addNewDuplicate()) {
+					errors.push({PropName: 'newValue', Message: DUPLICATE_MESSAGE });
+				}
+				if( duplicates.length > 0 ){
+					var oneMessage = false;
+					ko.utils.arrayForEach( duplicates, function(dup){
+						//highlight all duplicates. show only one error message: 
+						if( !oneMessage ){
+							oneMessage = true;
+							errors.push({ PropName: 'value', Message: DUPLICATE_MESSAGE, Id: dup.id() });
+						}
+						else{
+							errors.push({ PropName: 'value', Message: '', Id: dup.id() });
+						}											
+					});
 				}
 				return errors;
 			});
@@ -185,7 +209,7 @@ define(['services/datacontext'],
 				var patientSystemPropertyHasError = ko.utils.arrayFirst( self.validationErrors(), function(error){
 					return ( error.Id === patientSystemId && error.PropName === propName );
 				});
-				return patientSystemPropertyHasError || (self.duplicate() && self.duplicate().id() === patientSystemId);
+				return patientSystemPropertyHasError || (self.addNewDuplicate() && self.addNewDuplicate().id() === patientSystemId);
 			}
 
 			self.createNewId = function () {

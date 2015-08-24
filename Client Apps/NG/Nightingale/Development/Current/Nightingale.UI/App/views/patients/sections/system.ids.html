@@ -8,14 +8,13 @@
 			<!-- ko foreach: computedPatientSystemsDisplay -->
 			<div data-bind="visible: (Number(statusId()) === 1)">
 				<li class="pad-bottom ellipsis">
-						<span data-bind="with: system">
-							<span class="ellipsis" data-bind="text: displayLabel, attr: { title: (displayLabel() + ': ' + $parent.value()) }"></span>
-						</span>
-						: <span class="ellipsis" data-bind="text: value, attr: { title: value }"></span>
+					<span data-bind="with: system">
+						<span class="" data-bind="text: displayLabel, attr: { title: (displayLabel() + ': ' + $parent.value()) }" style="overflow: hidden; text-overflow: ellipsis;"></span>
+					</span>: <span class="" data-bind="text: value, attr: { title: value }" style="white-space: pre;"></span>
 				</li>
 			</div>
 			<!-- /ko -->
-			<li class="grey" data-bind="visible: !isExpanded() && computedPatientSystemsDisplay().length === 5">
+			<li class="grey" data-bind="visible: showEllipsis">
 				<a class="grey" data-bind="clickToggle: isExpanded" href="#">...</a>
 			</li>
         </ul>		
