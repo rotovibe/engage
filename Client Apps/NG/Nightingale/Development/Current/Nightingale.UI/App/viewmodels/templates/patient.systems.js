@@ -132,14 +132,19 @@ define(['services/datacontext'],
 							errors.push( err );
 						});
 					}
-					var dup = ko.utils.arrayFirst(systemIds, function(sysId, index){
-						return (sysId.isDeleted() === false 
-								&& sysId.systemId().toLowerCase() === patSys.systemId().toLowerCase() 
-								&& sysId.value().trim().toLowerCase() === patSys.value().trim().toLowerCase() && index !== pos); 
-					});
-					if( dup ){
-						duplicates.push( dup );						
-					}						
+					ko.utils.arrayForEach(systemIds, function(sysId, index){
+						if ( sysId.isDeleted() !== false ){
+							return;
+						}
+						if( index === pos ){
+							return;	//self
+						}
+						if( sysId.systemId().toLowerCase() === patSys.systemId().toLowerCase() 
+							&& sysId.value().trim().toLowerCase() === patSys.value().trim().toLowerCase() ){
+							
+							duplicates.push(sysId);	
+						} 
+					});						
 				});
 				if (self.addNewDuplicate()) {
 					errors.push({PropName: 'newValue', Message: DUPLICATE_MESSAGE });
@@ -213,7 +218,7 @@ define(['services/datacontext'],
 			}
 
 			self.createNewId = function () {
-				var newId = (self.selectedPatient().patientSystems().length + 1)*-1;
+				var newId = (self.selectedPatient().patientSystems().length + 100)*-1;
 				var primary = false;
 				if( self.primarySystem && self.primarySystem.id() === self.newSelectedSystem().id() && !self.hasPrimarySelected() ){
 					//user selected a primary system in the added item, and there is no primary item in the list:
