@@ -16,7 +16,7 @@
  */
  define(['services/session', 'services/jsonResultsAdapter', 'models/base', 'config.services', 'services/dataservices/getentityservice', 'models/programs', 'models/lookups', 'models/contacts', 'models/goals', 'models/notes', 'models/observations', 'models/allergies', 'models/medications', 'services/dataservices/programsservice', 'services/entityfinder', 'services/usercontext', 'services/dataservices/contactservice', 'services/entityserializer', 'services/dataservices/lookupsservice', 'services/dataservices/goalsservice', 'services/dataservices/notesservice', 'services/dataservices/observationsservice', 'services/dataservices/caremembersservice', 'services/dataservices/patientsservice', 'services/dataservices/allergiesservice', 'services/dataservices/medicationsservice', 'services/local.collections'],
  	function (session, jsonResultsAdapter, modelConfig, servicesConfig, getEntityService, stepModelConfig, lookupModelConfig, contactModelConfig, goalModelConfig, notesModelConfig, observationsModelConfig, allergyModelConfig, medicationModelConfig, programsService, entityFinder, usercontext, contactService, entitySerializer, lookupsService, goalsService, notesService, observationsService, careMembersService, patientsService, allergiesService, medicationsService, localCollections) {
-
+	
 				// Object to use for the loading messages
 				function loadingMessage(message, showing) {
 					var self = this;
@@ -194,19 +194,14 @@
 				});
 				
 				function getSettingsParam( key ){
-					var settings = userSettings();
+					var user = session.currentUser();
+					var settings = user && session.currentUser().settings? session.currentUser().settings(): null;
 					var result;
 					if( settings && settings.hasOwnProperty( key ) ){
 						result = settings[key];
 					}
 					return result;
 				}
-				
-				var userSettings = ko.computed( function(){
-					var user = session.currentUser();
-					var settings = user && session.currentUser().settings? session.currentUser().settings(): null;
-					return settings;
-				});
 				
 				var datacontext = {
 					manager: manager,
