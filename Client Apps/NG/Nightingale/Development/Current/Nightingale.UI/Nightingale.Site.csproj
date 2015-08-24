@@ -341,7 +341,6 @@
     <Content Include="Scripts\highcharts\highcharts.js" />
     <Content Include="Scripts\knockout-3.2.0.debug.js" />
     <Content Include="Scripts\knockout-3.2.0.min.js" />
-    <Content Include="Scripts\venn\venn.patients.js" />
     <Content Include="App\test\jasmine-1.2.0.js" />
     <Content Include="App\test\jasmine.console_reporter.js" />
     <Content Include="App\test\phantomjs.exe" />
@@ -885,13 +884,8 @@
     <Content Include="Scripts\jquery\jquery-1.10.2.min.js.map">
       <DependentUpon>jquery-1.10.2.js</DependentUpon>
     </Content>
-    <Content Include="Scripts\venn\numeric.js" />
     <None Include="Scripts\_references.js" />
     <Content Include="Scripts\typeahead-backup.js" />
-    <Content Include="Scripts\venn\color.js" />
-    <Content Include="Scripts\venn\mds.js" />
-    <Content Include="Scripts\venn\underscore.js" />
-    <Content Include="Scripts\venn\venn.js" />
     <Content Include="weyland-config.js" />
     <Content Include="Scripts\chosen\abstract-chosen.coffee" />
     <None Include="Scripts\jquery\olderversion\jquery-1.9.1.intellisense.js" />

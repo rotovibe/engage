@@ -44,13 +44,13 @@ namespace Nightingale.Site
                         .Include("~/Scripts/typeahead.js"));
 
             /** Testing Cody's Venn Diagram stuff **/
-            bundles.Add(new ScriptBundle("~/bundles/venn.js")
-                        .Include("~/Scripts/venn/venn.js")
-                        .Include("~/Scripts/venn/color.js")
-                        .Include("~/Scripts/venn/mds.js")
-                        .Include("~/Scripts/venn/numeric.js")
-                        .Include("~/Scripts/venn/underscore.js")
-                        .Include("~/Scripts/venn/venn.patients.js"));
+            //bundles.Add(new ScriptBundle("~/bundles/venn.js")
+            //            .Include("~/Scripts/venn/venn.js")
+            //            .Include("~/Scripts/venn/color.js")
+            //            .Include("~/Scripts/venn/mds.js")
+            //            .Include("~/Scripts/venn/numeric.js")
+            //            .Include("~/Scripts/venn/underscore.js")
+            //            .Include("~/Scripts/venn/venn.patients.js"));
 
             /** jQuery full calendar plug-in **/
             bundles.Add(new ScriptBundle("~/bundles/fullcalendar.js")
