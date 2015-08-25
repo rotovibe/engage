@@ -219,6 +219,44 @@ namespace Phytel.API.AppDomain.NG.Service
             }
             return response;
         }
+
+        public GetPatientMedSuppsCountResponse Get(GetPatientMedSuppsCountRequest request)
+        {
+            GetPatientMedSuppsCountResponse response = new GetPatientMedSuppsCountResponse();
+            ValidateTokenResponse result = null;
+
+            try
+            {
+                if (base.Request != null)
+                {
+                    request.Token = base.Request.Headers["Token"] as string;
+                }
+                result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                if (result.UserId.Trim() != string.Empty)
+                {
+                    request.UserId = result.UserId;
+                    response.PatientCount = MedicationManager.GetPatientMedSuppsCount(request);
+                }
+                else
+                    throw new UnauthorizedAccessException();
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                if ((ex is WebServiceException) == false)
+                    MedicationManager.LogException(ex);
+            }
+            finally
+            {
+                if (result != null)
+                {
+                    string browser = (base.Request != null) ? base.Request.UserAgent : unknownBrowserType;
+                    string hostAddress = (base.Request != null) ? base.Request.UserHostAddress : unknownUserHostAddress;
+                    AuditUtil.LogAuditData(request, result.SQLUserId, null, browser, hostAddress, request.GetType().Name);
+                }
+            }
+            return response;
+        }
         #endregion
 
         public PutDeleteMedMapResponse Put(PutDeleteMedMapRequest request)

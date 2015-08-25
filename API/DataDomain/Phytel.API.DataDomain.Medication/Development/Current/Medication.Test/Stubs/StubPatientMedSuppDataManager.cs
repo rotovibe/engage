@@ -55,5 +55,10 @@ namespace Phytel.API.DataDomain.Medication
         {
             throw new NotImplementedException();
         }
+
+        public int GetPatientMedSuppsCount(GetPatientMedSuppsCountDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

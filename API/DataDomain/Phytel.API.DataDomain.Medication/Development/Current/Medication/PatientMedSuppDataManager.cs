@@ -138,5 +138,19 @@ namespace Phytel.API.DataDomain.Medication
             }
             catch (Exception ex) { throw ex; }
         }
+
+        public int GetPatientMedSuppsCount(GetPatientMedSuppsCountDataRequest request)
+        {
+            try
+            {
+                int count = 0;
+                {
+                    var repo = MedicationRepositoryFactory.GetMedicationRepository(request, RepositoryType.PatientMedSupp);
+                    count = (int)repo.Search(request);
+                }
+                return count;
+            }
+            catch (Exception ex) { throw ex; }
+        }
     }
 }

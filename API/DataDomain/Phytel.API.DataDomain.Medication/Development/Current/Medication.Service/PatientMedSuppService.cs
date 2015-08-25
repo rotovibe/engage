@@ -7,6 +7,24 @@ namespace Phytel.API.DataDomain.Medication.Service
     {
         public IPatientMedSuppDataManager Manager { get; set; }
 
+        #region Gets
+        public GetPatientMedSuppsCountDataResponse Get(GetPatientMedSuppsCountDataRequest request)
+        {
+            var response = new GetPatientMedSuppsCountDataResponse { Version = request.Version };
+
+            try
+            {
+                RequireUserId(request);
+                response.PatientCount = Manager.GetPatientMedSuppsCount(request);
+            }
+            catch (Exception ex)
+            {
+                RaiseException(response, ex);
+            }
+            return response;
+        } 
+        #endregion
+        
         #region Posts
         public GetPatientMedSuppsDataResponse Post(GetPatientMedSuppsDataRequest request)
         {

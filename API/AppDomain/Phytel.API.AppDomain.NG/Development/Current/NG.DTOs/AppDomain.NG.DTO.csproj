@@ -146,8 +146,10 @@
     <Compile Include="Meds\GetMedicationMapsRequest.cs" />
     <Compile Include="Meds\GetPatientMedFrequenciesRequest.cs" />
     <Compile Include="Meds\GetPatientMedFrequenciesResponse.cs" />
+    <Compile Include="Meds\GetPatientMedSuppsCountRequest.cs" />
     <Compile Include="Meds\GetPatientMedSuppsRequest.cs" />
     <Compile Include="Meds\GetMedicationMapsResponse.cs" />
+    <Compile Include="Meds\GetPatientMedSuppsCountResponse.cs" />
     <Compile Include="Meds\GetPatientMedSuppsResponse.cs" />
     <Compile Include="Meds\Medication.cs" />
     <Compile Include="Meds\MedicationMap.cs" />

@@ -64,6 +64,17 @@ namespace Phytel.API.AppDomain.NG.Medication
         }
         #endregion
 
+        #region PatientMedSupp - Gets
+        public int GetPatientMedSuppsCount(GetPatientMedSuppsCountRequest request)
+        {
+            try
+            {
+                return EndpointUtil.GetPatientMedSuppsCount(request);
+            }
+            catch (Exception ex) { throw ex; }
+        } 
+        #endregion
+
         #region PatientMedSupp - Posts
         public List<PatientMedSupp> GetPatientMedSupps(GetPatientMedSuppsRequest request)
         {
@@ -307,6 +318,5 @@ namespace Phytel.API.AppDomain.NG.Medication
             catch (Exception ex) { throw ex; }
         }
         #endregion
-
     }
 }

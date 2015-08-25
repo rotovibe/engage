@@ -438,7 +438,26 @@ namespace DataDomain.Medication.Repo
 
         public object Search(object request)
         {
-            throw new NotImplementedException();
+            int result = 0;
+            GetPatientMedSuppsCountDataRequest dataRequest = (GetPatientMedSuppsCountDataRequest)request;
+            try
+            {
+                using (MedicationMongoContext ctx = new MedicationMongoContext(ContractDBName))
+                {
+                    List<IMongoQuery> queries = new List<IMongoQuery>();
+                    queries.Add(Query.EQ(MEPatientMedSupp.NameProperty, dataRequest.Name));
+                    queries.Add(Query.EQ(MEPatientMedSupp.RouteProperty, dataRequest.Route));
+                    queries.Add(Query.EQ(MEPatientMedSupp.FormProperty, dataRequest.Form));
+                    queries.Add(Query.EQ(MEPatientMedSupp.StrengthProperty, dataRequest.Strength));
+                    queries.Add(Query.EQ(MEPatientMedSupp.DeleteFlagProperty, false));
+                    queries.Add(Query.EQ(MEPatientMedSupp.TTLDateProperty, BsonNull.Value));
+                    IMongoQuery mQuery = Query.And(queries);
+                    List<MEPatientMedSupp> list = ctx.PatientMedSupps.Collection.Find(mQuery).SetFields(MEPatientMedSupp.PatientIdProperty).ToList();
+                    result = list.Select(s => s.PatientId).Distinct().Count();
+                }
+                return result;
+            }
+            catch (Exception) { throw; }
         }
 
 

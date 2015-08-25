@@ -278,6 +278,39 @@ namespace Phytel.API.AppDomain.NG.Medication
         }
         #endregion
 
+        #region PatientMedSupps - Gets
+        public int GetPatientMedSuppsCount(GetPatientMedSuppsCountRequest request)
+        {
+            int count = 0;
+            try
+            {
+                IRestClient client = new JsonServiceClient();
+                string name = string.IsNullOrEmpty(request.Name) ? null : request.Name.ToUpper();
+                string form = string.IsNullOrEmpty(request.Form) ? null : request.Form.ToUpper();
+                string route = string.IsNullOrEmpty(request.Route) ? null : request.Route.ToUpper();;
+                string strength = request.Strength;
+                //[Route("/{Context}/{Version}/{ContractNumber}/PatientMedSupp", "GET")]
+                var url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/PatientMedSupp?Name={4}&Form={5}&Route={6}&Strength={7}",
+                                    DDMedicationUrl,
+                                    "NG",
+                                    request.Version,
+                                    request.ContractNumber,
+                                    name,
+                                    form,
+                                    route,
+                                    strength), request.UserId);
+
+                GetPatientMedSuppsCountDataResponse dataDomainResponse = client.Get<GetPatientMedSuppsCountDataResponse>(url);
+                if (dataDomainResponse != null)
+                {
+                    count = dataDomainResponse.PatientCount;
+                }
+                return count;
+            }
+            catch (Exception ex) { throw ex; }
+        } 
+        #endregion
+
         #region PatientMedSupps - Posts
         public List<PatientMedSuppData> GetPatientMedSupps(GetPatientMedSuppsRequest request)
         {
