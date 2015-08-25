@@ -5,7 +5,7 @@
     </div>
     <div class="accordion-content columns" data-bind="visible: isOpen">
         <ul class="dotted column">
-            <!-- ko if: primaryCareTeam().length === 0 -->
+            <!-- ko if: canAssignToMe -->
             <li class="row center pad top">
                 <div class="span2">
                     <img alt="Care team image" class="profile-pic" src="/NightingaleUI/Content/images/patient_neutral_small.png" data-phyautomation="gender">
@@ -35,7 +35,7 @@
             <!-- /ko -->
         </ul>
         <ul class="dotted column">
-            <!-- ko if: canReassignToMe() -->
+            <!-- ko if: canReassignToMe -->
             <li class="row center pad top">
                 <div class="span2">
                     <img alt="Care team image" class="profile-pic" src="/NightingaleUI/Content/images/patient_neutral_small.png" data-phyautomation="gender">

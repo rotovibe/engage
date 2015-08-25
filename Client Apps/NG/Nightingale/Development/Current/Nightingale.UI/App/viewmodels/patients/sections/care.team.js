@@ -1,4 +1,8 @@
-﻿define(['models/base', 'services/datacontext', 'services/session', 'viewmodels/shell/shell'],
+﻿/**
+*	manages the care team patient section on the left bar.
+*	@module care.team
+*/
+define(['models/base', 'services/datacontext', 'services/session', 'viewmodels/shell/shell'],
     function (modelConfig, datacontext, session, shell) {
 
         var alphabeticalSort = function (l, r) { return (l.preferredName() == r.preferredName()) ? (l.preferredName() > r.preferredName() ? 1 : -1) : (l.preferredName() > r.preferredName() ? 1 : -1) };
@@ -15,6 +19,7 @@
             self.careMembers = self.selectedPatient.careMembers;
             // The view state of the section (open or not)
             self.isOpen = ko.observable(true);
+			self.initialized = ko.observable(false);
             // Create a list of primary care team members to display in the widget
             self.primaryCareTeam = ko.computed(function () {
                 // Create an empty array to fill with problems
@@ -32,6 +37,25 @@
                 // Return the team
                 return thisCareTeam;
             });
+			
+			self.canAssignToMe = ko.computed( function(){
+				var zerolength = self.primaryCareTeam().length === 0;
+				var isPatientLoaded = self.selectedPatient.isLoaded();
+				return zerolength && isPatientLoaded;
+			}).extend({ throttle: 50 });
+			
+			self.canReassignToMe = ko.computed( function () {
+				var primaryCareTeam = self.primaryCareTeam();
+				var isPatientLoaded = self.selectedPatient.isLoaded();
+				if ( primaryCareTeam.length > 0 && isPatientLoaded ) {
+					// var thisMatchedCareManager = ko.utils.arrayFirst( primaryCareTeam, function (caremanager) {
+					    // return caremanager.contactId() === session.currentUser().userId();
+					// });
+					return ( primaryCareTeam.length > 0 && ( primaryCareTeam[0].contactId() !== session.currentUser().userId() ) );
+				}
+				return false;
+			}).extend({ throttle: 50 });
+		
             // Create a list of secondary care team members
             self.secondaryCareTeam = ko.computed(function () {
                 // Create an empty array to fill with problems
@@ -96,17 +120,6 @@
             self.activationData = { selectedPatient: self.selectedPatient, canSave: self.canSave, saveType: self.saveType };
         }
 
-        ctor.prototype.canReassignToMe = function () {
-            var self = this;
-            if (self.primaryCareTeam().length > 0) {
-                // var thisMatchedCareManager = ko.utils.arrayFirst(datacontext.enums.careManagers(), function (caremanager) {
-                //     return caremanager.id() === session.currentUser().userId();
-                // });
-                return (self.primaryCareTeam().length > 0 && (self.primaryCareTeam()[0].contactId() !== session.currentUser().userId()));
-            }
-            return false;
-        }
-
         ctor.prototype.assignToMe = function () {
             var self = this;
             // Get the care manager type
@@ -167,5 +180,18 @@
         ctor.prototype.attached = function () {
         };
 
+		ctor.prototype.detached = function() {
+			var self = this;
+            //dispose computeds:
+			self.primaryCareTeam.dispose();
+			self.canAssignToMe.dispose();
+			self.canReassignToMe.dispose();
+			self.secondaryCareTeam.dispose();									
+			
+			//dispose subscriptions:
+            // ko.utils.arrayForEach(subscriptionTokens, function (token) {
+                // token.dispose();
+            // });
+        }
         return ctor;
     });

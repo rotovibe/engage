@@ -636,30 +636,30 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
     }
 
     ctor.prototype.detached = function() { 
-      var self = this;		
+		var self = this;		
 		
-        //dispose computeds:
-        //ctor.prototype.freqHowOftens.dispose();
-        ctor.prototype.freqWhens.dispose();
-        ctor.prototype.sources.dispose();
-        ctor.prototype.types.dispose();     
-        ctor.prototype.categories.dispose();
-        ctor.prototype.statuses.dispose();              
-        self.showing.dispose();
-        self.newPatientMedication.dispose();
-        self.trimmedMedication.dispose();
+		//dispose computeds:
+		//ctor.prototype.freqHowOftens.dispose();
+		ctor.prototype.freqWhens.dispose();
+		ctor.prototype.sources.dispose();
+		ctor.prototype.types.dispose();     
+		ctor.prototype.categories.dispose();
+		ctor.prototype.statuses.dispose();              
+		self.showing.dispose();
+		self.newPatientMedication.dispose();
+		self.trimmedMedication.dispose();
 		self.trimmedForm.dispose();
 		self.trimmedRoute.dispose();
 		self.trimmedStrength.dispose();
-        self.canAdd.dispose();
-        self.medicationNameWatcher.dispose();
+		self.canAdd.dispose();
+		self.medicationNameWatcher.dispose();
 		self.medicationParameters.dispose();
-        self.addingNewValue.dispose();
-        self.recalculateNDCWatcher.dispose();
-        //dispose subscriptions:
-        ko.utils.arrayForEach(subscriptionTokens, function (token) {
-            token.dispose();
-        });
+		self.addingNewValue.dispose();
+		self.recalculateNDCWatcher.dispose();
+		//dispose subscriptions:
+		ko.utils.arrayForEach(subscriptionTokens, function (token) {
+			token.dispose();
+		});
     }
     return ctor;
   });

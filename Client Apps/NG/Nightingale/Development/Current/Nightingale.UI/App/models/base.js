@@ -1,5 +1,10 @@
-﻿// Register all of the models in the entity manager (initialize function) and provide other non-entity models
-
+﻿/**
+*	Register entity manager models and initialize functions and provide other non-entity models.
+*	includes entity definitions for: 
+*		Patient, PatientProblem, Problem, Provider, Cohort, Identifier, AllergySearch, MedicationSearch
+*		CareMember, PatientSystem, Alert, System	
+*	@module base
+*/
 define(['services/validatorfactory', 'services/customvalidators', 'services/formatter'],
 	function (validatorFactory, customValidators, formatter) {
 
@@ -240,96 +245,96 @@ define(['services/validatorfactory', 'services/customvalidators', 'services/form
 				}
 			});
 
-							var patientPropertyList = [
-							{
-								// Short name of property
-								name: 'firstName',
-								// Desired display name of property
-								displayName: 'First Name',
-								// Collection of validators
-								validatorsList: [
-									Validator.required(),
-									Validator.maxLength({ maxLength: 20 })
-								]
-							},
-							{
-								// Short name of property
-								name: 'lastName',
-								// Desired display name of property
-								displayName: 'Last Name',
-								// Collection of validators
-								validatorsList: [
-									Validator.required(),
-									Validator.maxLength({ maxLength: 20 })
-								]
-							},
-									{
-										name: 'fullSSN',
-										displayName: 'SSN',
-										validatorsList: [
-						//Validator.required(),
-						customValidators.validators.ssnValidator
-						]
+			var patientPropertyList = [
+				{
+					// Short name of property
+					name: 'firstName',
+					// Desired display name of property
+					displayName: 'First Name',
+					// Collection of validators
+					validatorsList: [
+						Validator.required(),
+						Validator.maxLength({ maxLength: 20 })
+					]
+				},
+				{
+					// Short name of property
+					name: 'lastName',
+					// Desired display name of property
+					displayName: 'Last Name',
+					// Collection of validators
+					validatorsList: [
+						Validator.required(),
+						Validator.maxLength({ maxLength: 20 })
+					]
+				},
+				{
+					name: 'fullSSN',
+					displayName: 'SSN',
+					validatorsList: [
+					//Validator.required(),
+					customValidators.validators.ssnValidator
+					]
+				},
+				{
+					name: 'dOB',
+					displayName: 'DOB',
+					validatorsList: [
+					//Validator.required(),
+					customValidators.validators.dateValidator({minDate: moment().subtract(200, 'year').format('MM/DD/YYYY'), maxDate: 'today'})
+					]
+				}
+
+				// Example of using a custom regex for validation
+				//,
+				//{
+				//    name: 'suffix',
+				//    displayName: 'Suffix',
+				//    validatorsList: [
+				//        customValidators.validators.zipValidator
+				//    ]
+				//}
+			];
+
+			validatorFactory.fixNamesAndRegisterValidators(metadataStore, 'Patient', patientPropertyList);
+
+			// Junction object for Patient <--> Problem
+			metadataStore.addEntityType({
+				shortName: "PatientProblem",
+				namespace: "Nightingale",
+				dataProperties: {
+					iD: { dataType: "String", isPartOfKey: true },
+					patientID: { dataType: "String" },
+					problemID: { dataType: "String" },
+					level: { dataType: "String" }
+				},
+				navigationProperties: {
+					patient: {
+						entityTypeName: "Patient", isScalar: true,
+						associationName: "PatientProblem_Patient", foreignKeyNames: ["patientID"]
 					},
-					{
-						name: 'dOB',
-						displayName: 'DOB',
-						validatorsList: [
-						//Validator.required(),
-						customValidators.validators.dateValidator({minDate: moment().subtract(200, 'year').format('MM/DD/YYYY'), maxDate: 'today'})
-						]
+					problem: {
+						entityTypeName: "Problem", isScalar: true,
+						associationName: "PatientProblem_Problem", foreignKeyNames: ["problemID"]
 					}
+				}
+			});
 
-								// Example of using a custom regex for validation
-								//,
-								//{
-								//    name: 'suffix',
-								//    displayName: 'Suffix',
-								//    validatorsList: [
-								//        customValidators.validators.zipValidator
-								//    ]
-								//}
-								];
-
-								validatorFactory.fixNamesAndRegisterValidators(metadataStore, 'Patient', patientPropertyList);
-
-				// Junction object for Patient <--> Problem
-				metadataStore.addEntityType({
-					shortName: "PatientProblem",
-					namespace: "Nightingale",
-					dataProperties: {
-						iD: { dataType: "String", isPartOfKey: true },
-						patientID: { dataType: "String" },
-						problemID: { dataType: "String" },
-						level: { dataType: "String" }
-					},
-					navigationProperties: {
-						patient: {
-							entityTypeName: "Patient", isScalar: true,
-							associationName: "PatientProblem_Patient", foreignKeyNames: ["patientID"]
-						},
-						problem: {
-							entityTypeName: "Problem", isScalar: true,
-							associationName: "PatientProblem_Problem", foreignKeyNames: ["problemID"]
-						}
+			// Problem for a Patient
+			metadataStore.addEntityType({
+				shortName: "Problem",
+				namespace: "Nightingale",
+				dataProperties: {
+					id: { dataType: "String", isPartOfKey: true },
+					name: { dataType: "String" }
+				},
+				navigationProperties: {
+					patientProblems: {
+						entityTypeName: "PatientProblem", isScalar: false,
+						associationName: "PatientProblem_Problem"
 					}
-				});
-
-				// Problem for a Patient
-				metadataStore.addEntityType({
-					shortName: "Problem",
-					namespace: "Nightingale",
-					dataProperties: {
-						id: { dataType: "String", isPartOfKey: true },
-						name: { dataType: "String" }
-					},
-					navigationProperties: {
-						patientProblems: {
-							entityTypeName: "PatientProblem", isScalar: false,
-							associationName: "PatientProblem_Problem"
-						}
-					}
-				});
+				}
+			});
 
 			// Provider
 			metadataStore.addEntityType({
@@ -347,132 +352,132 @@ define(['services/validatorfactory', 'services/customvalidators', 'services/form
 				}
 			});
 
-				// Cohort
-				metadataStore.addEntityType({
-					shortName: "Cohort",
-					namespace: "Nightingale",
-					dataProperties: {
-						iD: { dataType: "String", isPartOfKey: true },
-						name: { dataType: "String" },
-						sName: { dataType: "String" },
-						description: { dataType: "String" }
-					}
-				});
+			// Cohort
+			metadataStore.addEntityType({
+				shortName: "Cohort",
+				namespace: "Nightingale",
+				dataProperties: {
+					iD: { dataType: "String", isPartOfKey: true },
+					name: { dataType: "String" },
+					sName: { dataType: "String" },
+					description: { dataType: "String" }
+				}
+			});
 
-				// General identifier complex type (for creating collections of ids, such as ContactCard.CommunicationModeIds
-					metadataStore.addEntityType({
-						shortName: "Identifier",
-						namespace: "Nightingale",
-						isComplexType: true,
-						dataProperties: {
-							id: { dataType: "String" }
-						}
-					});
+			// General identifier complex type (for creating collections of ids, such as ContactCard.CommunicationModeIds
+			metadataStore.addEntityType({
+				shortName: "Identifier",
+				namespace: "Nightingale",
+				isComplexType: true,
+				dataProperties: {
+					id: { dataType: "String" }
+				}
+			});
 
-				// Allergy Search
-				metadataStore.addEntityType({
-					shortName: "AllergySearch",
-					namespace: "Nightingale",
-					dataProperties: {
-						id: { dataType: "String", isPartOfKey: true },
-						name: { dataType: "String" },
-						displayName: { dataType: "String" }
-					}
-				});
+			// Allergy Search
+			metadataStore.addEntityType({
+				shortName: "AllergySearch",
+				namespace: "Nightingale",
+				dataProperties: {
+					id: { dataType: "String", isPartOfKey: true },
+					name: { dataType: "String" },
+					displayName: { dataType: "String" }
+				}
+			});
 
-				// Medication Search
-				metadataStore.addEntityType({
-					shortName: "MedicationSearch",
-					namespace: "Nightingale",
-					dataProperties: {
-						id: { dataType: "String", isPartOfKey: true },
-						name: { dataType: "String" },
-						displayName: { dataType: "String" }
-					}
-				});
+			// Medication Search
+			metadataStore.addEntityType({
+				shortName: "MedicationSearch",
+				namespace: "Nightingale",
+				dataProperties: {
+					id: { dataType: "String", isPartOfKey: true },
+					name: { dataType: "String" },
+					displayName: { dataType: "String" }
+				}
+			});
 
 
-				// Care Member complex type
-				metadataStore.addEntityType({
-					shortName: "CareMember",
-					namespace: "Nightingale",
-					dataProperties: {
-						id: { dataType: "String", isPartOfKey: true },
-						gender: { dataType: "String" },
-						preferredName: { dataType: "String" },
-						patientId: { dataType: "String" },
-						contactId: { dataType: "String" },
-						typeId: { dataType: "String" },
-						primary: { dataType: "Boolean" }
+			// Care Member complex type
+			metadataStore.addEntityType({
+				shortName: "CareMember",
+				namespace: "Nightingale",
+				dataProperties: {
+					id: { dataType: "String", isPartOfKey: true },
+					gender: { dataType: "String" },
+					preferredName: { dataType: "String" },
+					patientId: { dataType: "String" },
+					contactId: { dataType: "String" },
+					typeId: { dataType: "String" },
+					primary: { dataType: "Boolean" }
+				},
+				navigationProperties: {
+					patient: {
+						entityTypeName: "Patient", isScalar: true,
+						associationName: "Patient_CareMembers", foreignKeyNames: ["patientId"]
 					},
-					navigationProperties: {
-						patient: {
-							entityTypeName: "Patient", isScalar: true,
-							associationName: "Patient_CareMembers", foreignKeyNames: ["patientId"]
-						},
-						careManager: {
-							entityTypeName: "CareManager", isScalar: true,
-							associationName: "CareManager_CareMembers", foreignKeyNames: ["contactId"]
-						},
-						type: {
-							entityTypeName: "CareMemberType", isScalar: true,
-							associationName: "CareMember_Type", foreignKeyNames: ["typeId"]
-						},
-					}
-				});
-
-				// Alert
-				metadataStore.addEntityType({
-					shortName: "Alert",
-					namespace: "Nightingale",
-					autoGeneratedKeyType: breeze.AutoGeneratedKeyType.Identity,
-					dataProperties: {
-						id: { dataType: "Int64", isPartOfKey: true },
-						result: { dataType: "Int64" },
-						reason: { dataType: "String" }
-					}
-				});
-
-				// Patient System
-				metadataStore.addEntityType({
-					shortName: "PatientSystem",
-					namespace: "Nightingale",
-					dataProperties: {
-						id: { dataType: "String", isPartOfKey: true },
-						patientId: { dataType: "String" },
-						systemId: { dataType: "String" },
-						value: { dataType: "String" },
-						dataSource:  { dataType: "String" },
-						statusId: { dataType: "String" },
-						primary: { dataType: "Boolean" },
-						createdById: { dataType: "String" },
-						createdOn: { dataType: "DateTime" },
-						updatedById: { dataType: "String" },
-						updatedOn: { dataType: "DateTime" }
+					careManager: {
+						entityTypeName: "CareManager", isScalar: true,
+						associationName: "CareManager_CareMembers", foreignKeyNames: ["contactId"]
 					},
-					navigationProperties: {
-						patient: {
-							entityTypeName: "Patient", isScalar: true,
-							associationName: "Patient_PatientSystems", foreignKeyNames: ["patientId"]
-						},
-						system: {
-							entityTypeName: "System", isScalar: true,
-							associationName: "PatientSystem_System", foreignKeyNames: ["systemId"]
-						},
-						patientSystemStatus: {
-							entityTypeName: "PatientSystemStatus", isScalar: true,
-							associationName: "Patient_PatientSystemStatus", foreignKeyNames: ["statusId"]
-						},
-						createdBy: {
-							entityTypeName: "CareManager", isScalar: true,
-							associationName: "PatientSystem_CreatedBy", foreignKeyNames: ["createdById"]
-						},
-						updatedBy: {
-							entityTypeName: "CareManager", isScalar: true,
-							associationName: "PatientSystem_UpdatedBy", foreignKeyNames: ["updatedById"]
-						}
+					type: {
+						entityTypeName: "CareMemberType", isScalar: true,
+						associationName: "CareMember_Type", foreignKeyNames: ["typeId"]
+					},
+				}
+			});
+
+			// Alert
+			metadataStore.addEntityType({
+				shortName: "Alert",
+				namespace: "Nightingale",
+				autoGeneratedKeyType: breeze.AutoGeneratedKeyType.Identity,
+				dataProperties: {
+					id: { dataType: "Int64", isPartOfKey: true },
+					result: { dataType: "Int64" },
+					reason: { dataType: "String" }
+				}
+			});
+
+			// Patient System
+			metadataStore.addEntityType({
+				shortName: "PatientSystem",
+				namespace: "Nightingale",
+				dataProperties: {
+					id: { dataType: "String", isPartOfKey: true },
+					patientId: { dataType: "String" },
+					systemId: { dataType: "String" },
+					value: { dataType: "String" },
+					dataSource:  { dataType: "String" },
+					statusId: { dataType: "String" },
+					primary: { dataType: "Boolean" },
+					createdById: { dataType: "String" },
+					createdOn: { dataType: "DateTime" },
+					updatedById: { dataType: "String" },
+					updatedOn: { dataType: "DateTime" }
+				},
+				navigationProperties: {
+					patient: {
+						entityTypeName: "Patient", isScalar: true,
+						associationName: "Patient_PatientSystems", foreignKeyNames: ["patientId"]
+					},
+					system: {
+						entityTypeName: "System", isScalar: true,
+						associationName: "PatientSystem_System", foreignKeyNames: ["systemId"]
+					},
+					patientSystemStatus: {
+						entityTypeName: "PatientSystemStatus", isScalar: true,
+						associationName: "Patient_PatientSystemStatus", foreignKeyNames: ["statusId"]
+					},
+					createdBy: {
+						entityTypeName: "CareManager", isScalar: true,
+						associationName: "PatientSystem_CreatedBy", foreignKeyNames: ["createdById"]
+					},
+					updatedBy: {
+						entityTypeName: "CareManager", isScalar: true,
+						associationName: "PatientSystem_UpdatedBy", foreignKeyNames: ["updatedById"]
 					}
-				});
+				}
+			});
 
 			// System
 			metadataStore.addEntityType({
@@ -699,6 +704,12 @@ define(['services/validatorfactory', 'services/customvalidators', 'services/form
 				if (patient.deceasedId() !== '1') {
 					patient.deceasedId('2');
 				}
+				/**
+				*	observable to flag the completion of loading a patient data of any kind (todos, care members etc 
+				*		as signaled in viewmodels/patients/index - patientFullyLoaded ).
+				*	@method patient.isLoaded
+				*/
+				patient.isLoaded = ko.observable( false );
 			}
 
 			function patientSystemInitializer( patientSystem ){
