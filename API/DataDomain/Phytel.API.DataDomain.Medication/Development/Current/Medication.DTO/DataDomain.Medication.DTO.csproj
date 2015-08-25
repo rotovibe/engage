@@ -85,6 +85,8 @@
     <Compile Include="DeleteMedSuppsByPatientIdDataRequest.cs" />
     <Compile Include="DeletePatientMedSuppDataResponse.cs" />
     <Compile Include="DeleteMedSuppsByPatientIdDataResponse.cs" />
+    <Compile Include="DeleteMedicationMapsDataRequest.cs" />
+    <Compile Include="DeleteMedicationMapsDataResponse.cs" />
     <Compile Include="DomainResponse.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="GetMedicationNDCsDataRequest.cs" />

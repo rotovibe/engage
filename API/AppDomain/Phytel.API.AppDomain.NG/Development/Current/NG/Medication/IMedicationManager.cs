@@ -15,5 +15,6 @@ namespace Phytel.API.AppDomain.NG.Medication
         List<PatientMedFrequency> GetPatientMedFrequencies(GetPatientMedFrequenciesRequest request);
         void DeleteMedicationMap(PutDeleteMedMapRequest request);
         List<MedicationMap> GetMedicationMaps(GetMedicationMapsRequest request);
+        void DeleteMedicationMaps(DeleteMedicationMapsRequest request);
     }
 }

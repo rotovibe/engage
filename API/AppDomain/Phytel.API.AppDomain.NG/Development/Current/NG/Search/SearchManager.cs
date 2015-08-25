@@ -191,7 +191,7 @@ namespace Phytel.API.AppDomain.NG.Allergy
             vals.Sort((emp1, emp2) => emp1.Text.CompareTo(emp2.Text));
         }
 
-        public void DeleteMedDocuments(PutDeleteMedMapRequest request)
+        public void DeleteMedDocuments(DeleteMedicationMapsRequest request)
         {
             try
             {

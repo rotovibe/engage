@@ -121,15 +121,29 @@ namespace DataDomain.Medication.Repo
 
         public void Delete(object entity)
         {
+            DeleteMedicationMapsDataRequest request = (DeleteMedicationMapsDataRequest)entity;
             try
             {
-                string id = (string)entity;
-                if (!string.IsNullOrEmpty(id))
+                using (MedicationMongoContext ctx = new MedicationMongoContext(ContractDBName))
                 {
-                    Context.MedicationMaps.Collection.Remove(Query<MEMedicationMapping>.EQ(b => b.Id, ObjectId.Parse(id)));
+                    var query = MB.Query<MEMedicationMapping>.EQ(b => b.Id, ObjectId.Parse(request.Id));
+                    var builder = new List<MB.UpdateBuilder>();
+                    builder.Add(MB.Update.Set(MEMedicationMapping.TTLDateProperty, DateTime.UtcNow.AddDays(_expireDays)));
+                    builder.Add(MB.Update.Set(MEMedicationMapping.DeleteFlagProperty, true));
+                    builder.Add(MB.Update.Set(MEMedicationMapping.LastUpdatedOnProperty, DateTime.UtcNow));
+                    builder.Add(MB.Update.Set(MEMedicationMapping.UpdatedByProperty, ObjectId.Parse(this.UserId)));
+
+                    IMongoUpdate update = MB.Update.Combine(builder);
+                    ctx.MedicationMaps.Collection.Update(query, update);
+
+                    AuditHelper.LogDataAudit(this.UserId,
+                                            MongoCollectionName.MedicationMap.ToString(),
+                                            request.Id.ToString(),
+                                            DataAuditType.Delete,
+                                            request.ContractNumber);
                 }
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception) { throw; }
         }
 
         public void DeleteAll(List<object> entities)

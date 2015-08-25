@@ -258,6 +258,24 @@ namespace Phytel.API.AppDomain.NG.Medication
             }
             catch (Exception ex) { throw ex; }
         }
+
+        public void DeleteMedicationMaps(DeleteMedicationMapsRequest request)
+        {
+            try
+            {
+                IRestClient client = new JsonServiceClient();
+                //[Route("/{Context}/{Version}/{ContractNumber}/MedicationMap/{Ids}", "DELETE")]
+                var url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/MedicationMap/{4}",
+                                    DDMedicationUrl,
+                                    "NG",
+                                    request.Version,
+                                    request.ContractNumber,
+                                    request.Ids), request.UserId);
+
+                DeleteMedicationMapsDataResponse dataDomainResponse = client.Delete<DeleteMedicationMapsDataResponse>(url);
+            }
+            catch (Exception ex) { throw ex; }
+        }
         #endregion
 
         #region PatientMedSupps - Posts

@@ -141,6 +141,8 @@
     <Compile Include="Contact\GetRecentPatientsResponse .cs" />
     <Compile Include="Meds\DeletePatientMedSuppRequest.cs" />
     <Compile Include="Meds\DeletePatientMedSuppResponse.cs" />
+    <Compile Include="Meds\DeleteMedicationMapsRequest.cs" />
+    <Compile Include="Meds\DeleteMedicationMapsResponse.cs" />
     <Compile Include="Meds\GetMedicationMapsRequest.cs" />
     <Compile Include="Meds\GetPatientMedFrequenciesRequest.cs" />
     <Compile Include="Meds\GetPatientMedFrequenciesResponse.cs" />

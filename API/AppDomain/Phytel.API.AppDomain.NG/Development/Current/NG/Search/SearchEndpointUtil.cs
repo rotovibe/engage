@@ -174,7 +174,7 @@ namespace Phytel.API.AppDomain.NG.Search
             }
         }
 
-        public bool DeleteMedDocuments(PutDeleteMedMapRequest request)
+        public bool DeleteMedDocuments(DeleteMedicationMapsRequest request)
         {
             try
             {
@@ -186,24 +186,24 @@ namespace Phytel.API.AppDomain.NG.Search
                     request.Version,
                     request.ContractNumber), request.UserId);
 
-                PutDeleteMedsRequest searchRequest =  new PutDeleteMedsRequest
+                if (!string.IsNullOrEmpty(request.Ids))
                 {
-                    Context = "NG",
-                    ContractNumber = request.ContractNumber,
-                    UserId = request.UserId,
-                    Version = request.Version,
-                    MedDocuments = request.MedicationMaps.Select(
-                        map => new MedNameSearchDocData
-                        {
-                            Id = map.Id,
-                            CompositeName = map.FullName,
-                            RouteName = map.Route,
-                            Strength = map.Strength,
-                            DosageFormname = map.Form
-                        }).ToList(),
-                };
-
-                PutDeleteMedsResponse response = client.Put<PutDeleteMedsResponse>(url, searchRequest as object);
+                    List<MedNameSearchDocData> dataList = new List<MedNameSearchDocData>();
+                    string[] Ids = request.Ids.Split(',');
+                    foreach (string id in Ids)
+                    {
+                       dataList.Add(new MedNameSearchDocData { Id  = id.Trim()} ); 
+                    }
+                    PutDeleteMedsRequest searchRequest = new PutDeleteMedsRequest
+                    {
+                        Context = "NG",
+                        ContractNumber = request.ContractNumber,
+                        UserId = request.UserId,
+                        Version = request.Version,
+                        MedDocuments = dataList
+                    };
+                    PutDeleteMedsResponse response = client.Put<PutDeleteMedsResponse>(url, searchRequest as object);
+                }
                 return true;
             }
             catch (Exception ex)

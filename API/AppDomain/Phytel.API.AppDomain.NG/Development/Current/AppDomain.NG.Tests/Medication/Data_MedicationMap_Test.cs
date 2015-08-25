@@ -15,7 +15,7 @@ namespace Phytel.API.AppDomain.NG.Test
         double version = 1.0;
         string url = "http://localhost:888/Nightingale";
         IRestClient client = new JsonServiceClient();
-        string token = "54b81d0b84ac050580839a18";
+        string token = "55d4a5c484ac07221847231c";
 
         [TestMethod]
         public void InitializeMedicationMap_Test()
@@ -40,27 +40,13 @@ namespace Phytel.API.AppDomain.NG.Test
 
 
         [TestMethod]
-        public void DeleteCustomMedications_Test()
+        public void DeleteMedicationMap_Test()
         {
-            List<MedicationMap> medList = new List<MedicationMap>();
-            medList.Add(new MedicationMap { FullName = "LEVOTHYROXINE SODIUM", Route = "INTRAVENOUS", Strength = "TABLET", Form = "0.125 mg/1" });
-            medList.Add(new MedicationMap { FullName = "ASPIRIN", Route = "ORAL", Strength = "325 g/1", Form = "TABLET, CHEWABLE" });
-            medList.Add(new MedicationMap { FullName = "NITROGLYCERIN", Route = "SUBLINGUAL", Strength = "0.4 mg/h", Form = "TABLET, ORALLY DISINTEGRATING" });
-            medList.Add(new MedicationMap { FullName = "NITROGLYCERIN", Route = "SUBLINGUAL", Strength = "0.4 mg/h", Form = "INJECTION, SOLUTION" });
-            
-            PutDeleteMedMapRequest request = new PutDeleteMedMapRequest
-            {
-                ContractNumber = contractNumber,
-                UserId = userId,
-                Version = version,
-                MedicationMaps = medList
-            };
-
             JsonServiceClient.HttpWebRequestFilter = x =>
                 x.Headers.Add(string.Format("{0}: {1}", "Token", token));
 
-            //[Route("/{Version}/{ContractNumber}/MedicationMap/Delete", "PUT")]
-            PutDeleteMedMapResponse response = client.Put<PutDeleteMedMapResponse>(string.Format("{0}/{1}/{2}/MedicationMap/Delete", url, version, contractNumber), request);
+            //[Route("/{Version}/{ContractNumber}/MedicationMap/{Ids}", "DELETE")]
+            DeleteMedicationMapsResponse response = client.Delete<DeleteMedicationMapsResponse>(string.Format("{0}/{1}/{2}/MedicationMap/{3}", url, version, contractNumber,"  55dc968984ac0728842f118b , 55dc96e484ac0728842f1386 "));
 
             Assert.IsNotNull(response);
         }
