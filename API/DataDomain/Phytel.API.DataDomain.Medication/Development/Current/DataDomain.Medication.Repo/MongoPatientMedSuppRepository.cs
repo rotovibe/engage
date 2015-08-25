@@ -445,10 +445,38 @@ namespace DataDomain.Medication.Repo
                 using (MedicationMongoContext ctx = new MedicationMongoContext(ContractDBName))
                 {
                     List<IMongoQuery> queries = new List<IMongoQuery>();
-                    queries.Add(Query.EQ(MEPatientMedSupp.NameProperty, dataRequest.Name));
-                    queries.Add(Query.EQ(MEPatientMedSupp.RouteProperty, dataRequest.Route));
-                    queries.Add(Query.EQ(MEPatientMedSupp.FormProperty, dataRequest.Form));
-                    queries.Add(Query.EQ(MEPatientMedSupp.StrengthProperty, dataRequest.Strength));
+                    if (string.IsNullOrEmpty(dataRequest.Name))
+                    {
+                        queries.Add(Query.EQ(MEPatientMedSupp.NameProperty, BsonNull.Value));
+                    }
+                    else
+                    {
+                        queries.Add(Query.EQ(MEPatientMedSupp.NameProperty, dataRequest.Name));
+                    }
+                    if (string.IsNullOrEmpty(dataRequest.Route))
+                    {
+                        queries.Add(Query.EQ(MEPatientMedSupp.RouteProperty, BsonNull.Value));
+                    }
+                    else
+                    {
+                        queries.Add(Query.EQ(MEPatientMedSupp.RouteProperty, dataRequest.Route));
+                    }
+                    if (string.IsNullOrEmpty(dataRequest.Form))
+                    {
+                        queries.Add(Query.EQ(MEPatientMedSupp.FormProperty, BsonNull.Value));
+                    }
+                    else
+                    {
+                        queries.Add(Query.EQ(MEPatientMedSupp.FormProperty, dataRequest.Form));
+                    }
+                    if (string.IsNullOrEmpty(dataRequest.Strength))
+                    {
+                        queries.Add(Query.EQ(MEPatientMedSupp.StrengthProperty, BsonNull.Value));
+                    }
+                    else
+                    {
+                        queries.Add(Query.EQ(MEPatientMedSupp.StrengthProperty, dataRequest.Strength));
+                    }
                     queries.Add(Query.EQ(MEPatientMedSupp.DeleteFlagProperty, false));
                     queries.Add(Query.EQ(MEPatientMedSupp.TTLDateProperty, BsonNull.Value));
                     IMongoQuery mQuery = Query.And(queries);
