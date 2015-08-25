@@ -6,9 +6,9 @@
       <div class="accordion-content">
 			<div class="row pad-top filter-toggle" data-bind="click: $parent.toggleOpen">
 				<h5 class="grey">Existing Content</h5>
-				<span data-bind="visible: (!($parent.existingContentOpen())), text: '...'"></span>
-				<textarea data-bind="text: text, visible: $parent.existingContentOpen" readonly="readonly" class="pad-top display-only no-scroll" rows="5"></textarea>
+				<span data-bind="visible: (!($parent.existingContentOpen())), text: '...'"></span>				
 			</div>
+			<textarea data-bind="text: text, visible: $parent.existingContentOpen" readonly="readonly" class="pad-top display-only no-scroll" rows="5"></textarea>
 			<div class="row pad-top divider">
 				<h5 class="grey pad-bottom">New Content</h5>
 				<textarea data-bind="value: newContent, valueUpdate: 'afterkeydown', css: { 'invalid': (validationErrorsArray().indexOf('text') !== -1) }" class="string optional" maxlength="5000" type="text" style="height: 150px; resize: both;"></textarea>
