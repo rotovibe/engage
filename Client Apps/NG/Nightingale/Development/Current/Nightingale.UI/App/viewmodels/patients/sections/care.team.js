@@ -8,6 +8,7 @@ define(['models/base', 'services/datacontext', 'services/session', 'viewmodels/s
         var alphabeticalSort = function (l, r) { return (l.preferredName() == r.preferredName()) ? (l.preferredName() > r.preferredName() ? 1 : -1) : (l.preferredName() > r.preferredName() ? 1 : -1) };
 
         var ctor = function () {
+			var self = this;
 			self.isSaving = ko.observable();
         };
         
