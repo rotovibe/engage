@@ -132,54 +132,77 @@ namespace Phytel.API.AppDomain.NG
         {
             try
             {
+                PostCareMemberResponse response = new PostCareMemberResponse();
                 if (request.CareMember == null)
                     throw new Exception("The CareMember property cannot be null in the request.");
 
-                PostCareMemberResponse response = new PostCareMemberResponse();
-                //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/CareMember/Insert", "PUT")]
-                IRestClient client = new JsonServiceClient();
-                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/patient/{4}/CareMember/Insert",
-                                                                                DDCareMemberUrl,
-                                                                                "NG",
-                                                                                request.Version,
-                                                                                request.ContractNumber,
-                                                                                request.PatientId), request.UserId);
-
-                CareMemberData cmData = new CareMemberData
+                if (!atleastOneCareMemberExists(request))
                 {
-                    PatientId = request.CareMember.PatientId,
-                    ContactId = request.CareMember.ContactId,
-                    TypeId = request.CareMember.TypeId,
-                    Primary = request.CareMember.Primary
-                };
-                PutCareMemberDataResponse dataDomainResponse =
-                    client.Put<PutCareMemberDataResponse>(url, new PutCareMemberDataRequest
-                                                                                {
-                                                                                    CareMember = cmData,
-                                                                                    Context = "NG",
-                                                                                    ContractNumber = request.ContractNumber,
-                                                                                    Version = request.Version,
-                                                                                    UserId = request.UserId,
-                                                                                    PatientId = request.PatientId
-                                                                                } as object);
-                if (dataDomainResponse != null && !(string.IsNullOrEmpty(dataDomainResponse.Id)))
-                {
-                    response.Id = dataDomainResponse.Id;
-                    response.Version = dataDomainResponse.Version;
+                    //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/CareMember/Insert", "PUT")]
+                    IRestClient client = new JsonServiceClient();
+                    string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/patient/{4}/CareMember/Insert",
+                                                                                    DDCareMemberUrl,
+                                                                                    "NG",
+                                                                                    request.Version,
+                                                                                    request.ContractNumber,
+                                                                                    request.PatientId), request.UserId);
 
-                    if(request.CareMember.Primary)
+                    CareMemberData cmData = new CareMemberData
                     {
-                        //Upsert the PrimaryCare Manager's ContactId in the CohortPatientView collection.
-                        upsertCohortPatientView(request.PatientId, request.CareMember.ContactId, response.Version, request.ContractNumber, request.UserId);
+                        PatientId = request.CareMember.PatientId,
+                        ContactId = request.CareMember.ContactId,
+                        TypeId = request.CareMember.TypeId,
+                        Primary = request.CareMember.Primary
+                    };
+                    PutCareMemberDataResponse dataDomainResponse =
+                        client.Put<PutCareMemberDataResponse>(url, new PutCareMemberDataRequest
+                                                                                    {
+                                                                                        CareMember = cmData,
+                                                                                        Context = "NG",
+                                                                                        ContractNumber = request.ContractNumber,
+                                                                                        Version = request.Version,
+                                                                                        UserId = request.UserId,
+                                                                                        PatientId = request.PatientId
+                                                                                    } as object);
+                    if (dataDomainResponse != null && !(string.IsNullOrEmpty(dataDomainResponse.Id)))
+                    {
+                        response.Id = dataDomainResponse.Id;
+                        response.Version = dataDomainResponse.Version;
+
+                        if (request.CareMember.Primary)
+                        {
+                            //Upsert the PrimaryCare Manager's ContactId in the CohortPatientView collection.
+                            upsertCohortPatientView(request.PatientId, request.CareMember.ContactId, response.Version, request.ContractNumber, request.UserId);
+                        }
                     }
                 }
-
                 return response;
             }
             catch (WebServiceException ex)
             {
                 throw new WebServiceException("AD:InsertCareMember()::" + ex.Message, ex.InnerException);
             }
+        }
+
+        private bool atleastOneCareMemberExists(PostCareMemberRequest request)
+        {
+            bool result = false;
+            //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/CareMembers", "GET")]
+            IRestClient client = new JsonServiceClient();
+            string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/CareMembers",
+                DDCareMemberUrl,
+                "NG",
+                request.Version,
+                request.ContractNumber,
+                request.PatientId), request.UserId);
+
+            GetAllCareMembersDataResponse ddResponse = client.Get<GetAllCareMembersDataResponse>(url);
+
+            if (ddResponse != null && ddResponse.CareMembers != null && ddResponse.CareMembers.Count > 0)
+            {
+                result = true;
+            }
+            return result;
         }
 
         public PostUpdateCareMemberResponse UpdateCareMember(PostUpdateCareMemberRequest request)
