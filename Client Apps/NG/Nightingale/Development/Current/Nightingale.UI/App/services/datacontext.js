@@ -17,340 +17,340 @@
  define(['services/session', 'services/jsonResultsAdapter', 'models/base', 'config.services', 'services/dataservices/getentityservice', 'models/programs', 'models/lookups', 'models/contacts', 'models/goals', 'models/notes', 'models/observations', 'models/allergies', 'models/medications', 'services/dataservices/programsservice', 'services/entityfinder', 'services/usercontext', 'services/dataservices/contactservice', 'services/entityserializer', 'services/dataservices/lookupsservice', 'services/dataservices/goalsservice', 'services/dataservices/notesservice', 'services/dataservices/observationsservice', 'services/dataservices/caremembersservice', 'services/dataservices/patientsservice', 'services/dataservices/allergiesservice', 'services/dataservices/medicationsservice', 'services/local.collections'],
  	function (session, jsonResultsAdapter, modelConfig, servicesConfig, getEntityService, stepModelConfig, lookupModelConfig, contactModelConfig, goalModelConfig, notesModelConfig, observationsModelConfig, allergyModelConfig, medicationModelConfig, programsService, entityFinder, usercontext, contactService, entitySerializer, lookupsService, goalsService, notesService, observationsService, careMembersService, patientsService, allergiesService, medicationsService, localCollections) {
 	
-				// Object to use for the loading messages
-				function loadingMessage(message, showing) {
-					var self = this;
-					self.Message = ko.observable(message);
-					self.Showing = ko.observable(showing);
+		// Object to use for the loading messages
+		function loadingMessage(message, showing) {
+			var self = this;
+			self.Message = ko.observable(message);
+			self.Showing = ko.observable(showing);
+		}
+
+		// Keep track of whether there are changes inside this manager
+		var hasChanges = ko.observable(false);
+
+		var observationsLoaded = false;
+
+		// Monitors whether programs are currently saving to lock functionality
+		var programsSaving = ko.observable(false);
+		// Monitors whether observations are currently saving to lock functionality
+		var observationsSaving = ko.observable(false);
+		var patientSystemsSaving = ko.observable(false);
+		// Monitors whether todos are currently saving to lock functionality
+		var todosSaving = ko.observable(false);
+		// Monitors whether interventions are currently saving to lock functionality
+		var interventionsSaving = ko.observable(false);
+		// Monitors whether tasks are currently saving to lock functionality
+		var tasksSaving = ko.observable(false);
+		// Monitors whether tasks are currently saving to lock functionality
+		var allergySaving = ko.observable(false);
+		// Monitors whether tasks are currently saving to lock functionality
+		var medicationSaving = ko.observable(false);
+
+
+		// API Token to include in the post / get calls
+		var apiToken = ko.computed(function () {
+			if (!session.currentUser()) {
+				return '527bbc43231e250c4cb93eb6';
+			}
+			return session.currentUser().aPIToken();
+		});
+
+		// Array of messages showing what is loading
+		var loadingMessages = ko.observableArray();
+		// Object determining whether there are loading messages that are showing
+		var loadingMessagesShowing = ko.computed(function () {
+			var showing = false;
+			ko.utils.arrayForEach(loadingMessages(), function (message) {
+				if (message().Showing()) {
+					showing = true;
 				}
+			});
+			return showing;
+		});
 
-				// Keep track of whether there are changes inside this manager
-				var hasChanges = ko.observable(false);
+		var commModesFiltered = false;
 
-				var observationsLoaded = false;
+		function configureCustomHeaders() {
+			var ajaxAdapter = breeze.config.getAdapterInstance("ajax", "jQuery");
+			ajaxAdapter.defaultSettings = {
+				headers: {
+								// any headers that you want to specify.
+								"Token": apiToken()
+							}
+						};
+						var otehrAdapter = breeze.config.initializeAdapterInstance("dataService", "webApi", true);
+						otehrAdapter.defaultSettings = {
+							headers: {
+								// any headers that you want to specify.
+								"Token": apiToken()
+							}
+						};
+						breeze.ajaxpost();
+				//breeze.ajaxpost.configAjaxAdapter(ajaxAdapter);
+			}
 
-				// Monitors whether programs are currently saving to lock functionality
-				var programsSaving = ko.observable(false);
-				// Monitors whether observations are currently saving to lock functionality
-				var observationsSaving = ko.observable(false);
-				var patientSystemsSaving = ko.observable(false);
-				// Monitors whether todos are currently saving to lock functionality
-				var todosSaving = ko.observable(false);
-				// Monitors whether interventions are currently saving to lock functionality
-				var interventionsSaving = ko.observable(false);
-				// Monitors whether tasks are currently saving to lock functionality
-				var tasksSaving = ko.observable(false);
-				// Monitors whether tasks are currently saving to lock functionality
-				var allergySaving = ko.observable(false);
-				// Monitors whether tasks are currently saving to lock functionality
-				var medicationSaving = ko.observable(false);
+			var EntityQuery = breeze.EntityQuery;
+		// The data service is responsible for telling the queries where to query from
+		var ds = new breeze.DataService({
+			adapterName: 'webApi',
+			serviceName: servicesConfig.remoteServiceName,
+			hasServerMetadata: false,
+			jsonResultsAdapter: jsonResultsAdapter
+		});
 
+		// The manager is where all of the entities are stored
+		var manager = configureBreezeManager();
+		var metadataStore = manager.metadataStore;
+		metadataStore.setEntityTypeForResourceName('ProgramsTest', 'Program');
 
-				// API Token to include in the post / get calls
-				var apiToken = ko.computed(function () {
-					if (!session.currentUser()) {
-						return '527bbc43231e250c4cb93eb6';
-					}
-					return session.currentUser().aPIToken();
-				});
+		var getUserByUserToken = usercontext.getUserByUserToken;
+		var logOutUserByToken = usercontext.logOutUserByToken;
+		var getUserSettings = usercontext.getUserSettings;
+		var createUserFromSessionUser = usercontext.createUserFromSessionUser;
+		var getEventsByUserId = usercontext.getEventsByUserId;
+		var getEventById = usercontext.getEventById;
+		var createCalendarMocks = usercontext.createCalendarMocks;
+		var createCalendarEvent = usercontext.createCalendarEvent;
+		var removeCalendarEventById = usercontext.removeCalendarEventById;
 
-				// Array of messages showing what is loading
-				var loadingMessages = ko.observableArray();
-				// Object determining whether there are loading messages that are showing
-				var loadingMessagesShowing = ko.computed(function () {
-					var showing = false;
-					ko.utils.arrayForEach(loadingMessages(), function (message) {
-						if (message().Showing()) {
-							showing = true;
-						}
-					});
-					return showing;
-				});
+		// Get Entity by ID
+		//
+		// Pass in an end-point and an entity type to get data from that end-point
+		// and create an entity in the manager of that type.
+		var getEntityById = function (entityObservable, id, entityType, endpoint, forceRemote) {
+				// If it is a patient, call it an individual in the message
+				entityTypeName = (entityType && entityType === 'Patient') ? 'Individual' : entityType
+				var message = queryStarted(entityTypeName, forceRemote);
+				return getEntityService.getEntityById(manager, message, entityObservable, id, entityType, endpoint, forceRemote)
+				.then(queryCompleted);
+			};
 
-				var commModesFiltered = false;
+		// Check to see if we have this entity locally yet
+		var checkForEntityLocally = function (entityObservable, id, entityType) {
+			var query = breeze.EntityQuery.from(entityType + 's')
+			.where('id', '==', id)
+			.toType(entityType);
+			var p = manager.executeQueryLocally(query);
+			if (p.length > 0) {
+				entityObservable(p[0]);
+			}
+		}
 
-				function configureCustomHeaders() {
-					var ajaxAdapter = breeze.config.getAdapterInstance("ajax", "jQuery");
-					ajaxAdapter.defaultSettings = {
-						headers: {
-										// any headers that you want to specify.
-										"Token": apiToken()
-									}
-								};
-								var otehrAdapter = breeze.config.initializeAdapterInstance("dataService", "webApi", true);
-								otehrAdapter.defaultSettings = {
-									headers: {
-										// any headers that you want to specify.
-										"Token": apiToken()
-									}
-								};
-								breeze.ajaxpost();
-						//breeze.ajaxpost.configAjaxAdapter(ajaxAdapter);
-					}
+		// Get Entity by ID - The way Mel is currently doing it
+		//
+		// Pass in an end-point and an entity type to get data from that end-point
+		// and create an entity in the manager of that type.
+		var getMelsEntityById = function (entityObservable, id, entityType, endpoint, forceRemote, params) {
+				// If it is a patient, call it an individual in the message
+				entityTypeName = (entityType && entityType === 'Patient') ? 'Individual' : entityType
+				var message = queryStarted(entityTypeName, forceRemote);
+				return getEntityService.getMelsEntityById(manager, message, entityObservable, id, entityType, endpoint, forceRemote, params)
+				.then(queryCompleted);
+			};
 
-					var EntityQuery = breeze.EntityQuery;
-				// The data service is responsible for telling the queries where to query from
-				var ds = new breeze.DataService({
-					adapterName: 'webApi',
-					serviceName: servicesConfig.remoteServiceName,
-					hasServerMetadata: false,
-					jsonResultsAdapter: jsonResultsAdapter
-				});
+		// Get List of Entities
+		//
+		// Pass in an end-point and an entity type to get data from that end-point
+		// and create a list of entities in the manager of that type.  Optional parameters
+		// are parentPropertyName and parentPropertyId.  Parent Property Name is the name
+		// of the property and id is the corresponding id.  These are used to find entities
+		// from cache by their parent.
+		var getEntityList = function (entityObservable, entityType, endpoint, parentPropertyName, parentPropertyId, forceRemote, params, orderBy, skipMerge) {
+				// If it is a patient, call it an individual in the message
+				entityTypeName = (entityType && entityType === 'Patient') ? 'Individual' : entityType
+				var message = queryStarted(entityTypeName, forceRemote);
+				return getEntityService.getEntityList(manager, message, entityObservable, entityType, endpoint, parentPropertyName, parentPropertyId, forceRemote, params, orderBy, skipMerge)
+				.then(queryCompleted);
+			};
 
-				// The manager is where all of the entities are stored
-				var manager = configureBreezeManager();
-				var metadataStore = manager.metadataStore;
-				metadataStore.setEntityTypeForResourceName('ProgramsTest', 'Program');
+		// Create Entity
+		//
+		// Pass in a JSON object with the new entities constructor properties
+		function createEntity (entityType, constructorProperties) {
+			return manager.createEntity(entityType, constructorProperties);
+		}
 
-				var getUserByUserToken = usercontext.getUserByUserToken;
-				var logOutUserByToken = usercontext.logOutUserByToken;
-				var getUserSettings = usercontext.getUserSettings;
-				var createUserFromSessionUser = usercontext.createUserFromSessionUser;
-				var getEventsByUserId = usercontext.getEventsByUserId;
-				var getEventById = usercontext.getEventById;
-				var createCalendarMocks = usercontext.createCalendarMocks;
-				var createCalendarEvent = usercontext.createCalendarEvent;
-				var removeCalendarEventById = usercontext.removeCalendarEventById;
+		// Create Entity
+		//
+		// Pass in a JSON object with the new entities constructor properties
+		function initializeEntity(observable, entityType, patientId, goalId) {
+			return goalsService.initializeEntity(manager, observable, entityType, patientId, goalId);
+		}
 
-				// Get Entity by ID
-				//
-				// Pass in an end-point and an entity type to get data from that end-point
-				// and create an entity in the manager of that type.
-				var getEntityById = function (entityObservable, id, entityType, endpoint, forceRemote) {
-						// If it is a patient, call it an individual in the message
-						entityTypeName = (entityType && entityType === 'Patient') ? 'Individual' : entityType
-						var message = queryStarted(entityTypeName, forceRemote);
-						return getEntityService.getEntityById(manager, message, entityObservable, id, entityType, endpoint, forceRemote)
-						.then(queryCompleted);
-					};
+		// Create Entity
+		//
+		// Pass in a JSON object with the new entities constructor properties
+		function createComplexType(entityType, constructorProperties) {
+			var thisEntityType = manager.metadataStore.getEntityType(entityType);
+			var thisEntity = thisEntityType.createInstance(constructorProperties);
+			return thisEntity;
+		}
 
-				// Check to see if we have this entity locally yet
-				var checkForEntityLocally = function (entityObservable, id, entityType) {
-					var query = breeze.EntityQuery.from(entityType + 's')
-					.where('id', '==', id)
-					.toType(entityType);
-					var p = manager.executeQueryLocally(query);
-					if (p.length > 0) {
-						entityObservable(p[0]);
-					}
-				}
+		// Search for entities should be equal to this object
+		var searchForEntities = entityFinder.searchForEntities;
 
-				// Get Entity by ID - The way Mel is currently doing it
-				//
-				// Pass in an end-point and an entity type to get data from that end-point
-				// and create an entity in the manager of that type.
-				var getMelsEntityById = function (entityObservable, id, entityType, endpoint, forceRemote, params) {
-						// If it is a patient, call it an individual in the message
-						entityTypeName = (entityType && entityType === 'Patient') ? 'Individual' : entityType
-						var message = queryStarted(entityTypeName, forceRemote);
-						return getEntityService.getMelsEntityById(manager, message, entityObservable, id, entityType, endpoint, forceRemote, params)
-						.then(queryCompleted);
-					};
+		// Subscribe to changes to our entity manager
+		manager.hasChangesChanged.subscribe(function (eventArgs) {
+			hasChanges(eventArgs.hasChanges);
+		});
+		
+		function getSettingsParam( key ){
+			var user = session.currentUser();
+			var settings = user && session.currentUser().settings? session.currentUser().settings(): null;
+			var result;
+			if( settings && settings.hasOwnProperty( key ) ){
+				result = settings[key];
+			}
+			return result;
+		}
+		
+		var datacontext = {
+			manager: manager,
+			loadingMessages: loadingMessages,
+			loadingMessagesShowing: loadingMessagesShowing,
+			checkForEntityLocally: checkForEntityLocally,
+			getEntityById: getEntityById,
+			getMelsEntityById: getMelsEntityById,
+			getEntityList: getEntityList,
+			createEntity: createEntity,
+			initializeEntity: initializeEntity,
+			createComplexType: createComplexType,
+			getUserByUserToken: getUserByUserToken,
+			getSystemCareManager: getSystemCareManager,
+			logOutUserByToken: logOutUserByToken,
+			createUserFromSessionUser: createUserFromSessionUser,
+			getEventsByUserId: getEventsByUserId,
+			createCalendarMocks: createCalendarMocks,
+			createCalendarEvent: createCalendarEvent,
+			syncCalendarEvents: syncCalendarEvents,
+			getEventById: getEventById,
+			getCalendarEvents: getCalendarEvents,
+			primeData: primeData,
+			saveChangesToPatientProperty: saveChangesToPatientProperty,
+			deleteIndividual: deleteIndividual,
+			saveIndividual: saveIndividual,
+			initializePatient: initializePatient,
+			saveAction: saveAction,
+			repeatAction: repeatAction,
+			getRepeatedAction: getRepeatedAction,
+			removeProgram: removeProgram,
+			savePlanElemAttr: savePlanElemAttr,
+			saveGoal: saveGoal,
+			saveIntervention: saveIntervention,
+			saveTask: saveTask,
+			saveBarrier: saveBarrier,
+			deleteGoal: deleteGoal,
+			saveNote: saveNote,
+			deleteNote: deleteNote,
+			getNote: getNote,
+			saveCareMember: saveCareMember,
+			enums: localCollections.enums,
+			alerts: localCollections.alerts,
+			saveContactCard: saveContactCard,
+			cancelAllChangesToContactCard: cancelAllChangesToContactCard,
+			cancelEntityChanges: cancelEntityChanges,
+			getAllChanges: getAllChanges,
+			searchForEntities: searchForEntities,
+			checkIfAllObservationsAreLoadedYet: checkIfAllObservationsAreLoadedYet,
+			initializeObservation: initializeObservation,
+			saveObservations: saveObservations,
+			savePatientSystems: savePatientSystems,
+			deletePatientSystems: deletePatientSystems,
+			//saveBackground: saveBackground,
+			getFullSSN: getFullSSN,
+			addPatientToRecentList: addPatientToRecentList,
+			hasChanges: hasChanges,
+			programsSaving: programsSaving,
+			observationsSaving: observationsSaving,
+			patientSystemsSaving: patientSystemsSaving,
+			todosSaving: todosSaving,
+			interventionsSaving: interventionsSaving,
+			tasksSaving: tasksSaving,
+			allergySaving: allergySaving,
+			medicationSaving: medicationSaving,
+			createAlert: createAlert,
+			getToDos: getToDos,
+			getToDosQuery: getToDosQuery,
+			getInterventions: getInterventions,
+			getInterventionsQuery: getInterventionsQuery,
+			getTasks: getTasks,
+			getTasksQuery: getTasksQuery,
+			saveToDo: saveToDo,
+			detachEntity: detachEntity,
+			initializeNewMedication: initializeNewMedication,
+			initializeNewPatientMedication: initializeNewPatientMedication,
+			getPatientMedications: getPatientMedications,
+			getPatientFrequencies: getPatientFrequencies,
+			getRemoteMedicationFields: getRemoteMedicationFields,
+			getPatientMedicationsQuery: getPatientMedicationsQuery,
+			saveMedication: saveMedication,
+			deletePatientMedication: deletePatientMedication,
+			initializeAllergy: initializeAllergy,
+			initializeNewAllergy: initializeNewAllergy,
+			getRemoteAllergies: getRemoteAllergies,
+			saveAllergies: saveAllergies,
+			getPatientAllergies: getPatientAllergies,
+			deletePatientAllergy: deletePatientAllergy,
+			getPatientAllergiesQuery: getPatientAllergiesQuery,					
+			getSettingsParam: getSettingsParam, 
+			singleSort: singleSort
+		};
 
-				// Get List of Entities
-				//
-				// Pass in an end-point and an entity type to get data from that end-point
-				// and create a list of entities in the manager of that type.  Optional parameters
-				// are parentPropertyName and parentPropertyId.  Parent Property Name is the name
-				// of the property and id is the corresponding id.  These are used to find entities
-				// from cache by their parent.
-				var getEntityList = function (entityObservable, entityType, endpoint, parentPropertyName, parentPropertyId, forceRemote, params, orderBy, skipMerge) {
-						// If it is a patient, call it an individual in the message
-						entityTypeName = (entityType && entityType === 'Patient') ? 'Individual' : entityType
-						var message = queryStarted(entityTypeName, forceRemote);
-						return getEntityService.getEntityList(manager, message, entityObservable, entityType, endpoint, parentPropertyName, parentPropertyId, forceRemote, params, orderBy, skipMerge)
-						.then(queryCompleted);
-					};
+		return datacontext;
 
-				// Create Entity
-				//
-				// Pass in a JSON object with the new entities constructor properties
-				function createEntity (entityType, constructorProperties) {
-					return manager.createEntity(entityType, constructorProperties);
-				}
+		// Go prime the data that will be shared throughout the application
+		function primeData() {
+			configureCustomHeaders();
+			var promise = Q.all([
+				loadUpEnums(),
+				getUserSettings(session.currentUser, '/1.0/' + session.currentUser().contracts()[0].number() + '/settings', apiToken()),
+				getSystems(),
+				getPatientLookup(),
+				getProblemsLookup(),
+				getCohortsLookup(),
+				getContractProgramsLookup(),
+				getTimesOfDayLookup(),
+				getPatientStatusReasonLookup(),
+				getTimeZonesLookup(),
+				getAllStatesLookup(),
+				getAllLanguagesLookup(),
+				getAllCommModesLookup(),
+				getAllCommTypesLookup(),
+				getNoteLookups(),
+				getGoalLookups(),
+				getMedicationLookups(),
+				getObjectivesLookup(),
+				getObservationTypeLookups(),
+				getCareMemberTypeLookups(),
+				getAllergyLookups(),
+				getAllCareManagers(),
+				getRecentIndividuals(),
+				loadUpMocks()
+				]).then(processLookpus);
+			return promise;
+		}
 
-				// Create Entity
-				//
-				// Pass in a JSON object with the new entities constructor properties
-				function initializeEntity(observable, entityType, patientId, goalId) {
-					return goalsService.initializeEntity(manager, observable, entityType, patientId, goalId);
-				}
+		function getSystems(){
+			if (session.currentUser() && session.currentUser().contracts().length !== 0) {
+				var endPoint = new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'System', 'System');
+				return getEntityList(datacontext.enums.systems, endPoint.EntityType, endPoint.ResourcePath, null, null, true);
+			}
+		}
 
-				// Create Entity
-				//
-				// Pass in a JSON object with the new entities constructor properties
-				function createComplexType(entityType, constructorProperties) {
-					var thisEntityType = manager.metadataStore.getEntityType(entityType);
-					var thisEntity = thisEntityType.createInstance(constructorProperties);
-					return thisEntity;
-				}
+		// Get a list of problems lookups
+		function getProblemsLookup() {
+			if (session.currentUser() && session.currentUser().contracts().length !== 0) {
+				var endPoint = new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'lookup/problems', 'Problem');
+				return getEntityList(null, endPoint.EntityType, endPoint.ResourcePath, null, null, true);
+			}
+		}
 
-				// Search for entities should be equal to this object
-				var searchForEntities = entityFinder.searchForEntities;
-
-				// Subscribe to changes to our entity manager
-				manager.hasChangesChanged.subscribe(function (eventArgs) {
-					hasChanges(eventArgs.hasChanges);
-				});
-				
-				function getSettingsParam( key ){
-					var user = session.currentUser();
-					var settings = user && session.currentUser().settings? session.currentUser().settings(): null;
-					var result;
-					if( settings && settings.hasOwnProperty( key ) ){
-						result = settings[key];
-					}
-					return result;
-				}
-				
-				var datacontext = {
-					manager: manager,
-					loadingMessages: loadingMessages,
-					loadingMessagesShowing: loadingMessagesShowing,
-					checkForEntityLocally: checkForEntityLocally,
-					getEntityById: getEntityById,
-					getMelsEntityById: getMelsEntityById,
-					getEntityList: getEntityList,
-					createEntity: createEntity,
-					initializeEntity: initializeEntity,
-					createComplexType: createComplexType,
-					getUserByUserToken: getUserByUserToken,
-					getSystemCareManager: getSystemCareManager,
-					logOutUserByToken: logOutUserByToken,
-					createUserFromSessionUser: createUserFromSessionUser,
-					getEventsByUserId: getEventsByUserId,
-					createCalendarMocks: createCalendarMocks,
-					createCalendarEvent: createCalendarEvent,
-					syncCalendarEvents: syncCalendarEvents,
-					getEventById: getEventById,
-					getCalendarEvents: getCalendarEvents,
-					primeData: primeData,
-					saveChangesToPatientProperty: saveChangesToPatientProperty,
-					deleteIndividual: deleteIndividual,
-					saveIndividual: saveIndividual,
-					initializePatient: initializePatient,
-					saveAction: saveAction,
-					repeatAction: repeatAction,
-					getRepeatedAction: getRepeatedAction,
-					removeProgram: removeProgram,
-					savePlanElemAttr: savePlanElemAttr,
-					saveGoal: saveGoal,
-					saveIntervention: saveIntervention,
-					saveTask: saveTask,
-					saveBarrier: saveBarrier,
-					deleteGoal: deleteGoal,
-					saveNote: saveNote,
-					deleteNote: deleteNote,
-					getNote: getNote,
-					saveCareMember: saveCareMember,
-					enums: localCollections.enums,
-					alerts: localCollections.alerts,
-					saveContactCard: saveContactCard,
-					cancelAllChangesToContactCard: cancelAllChangesToContactCard,
-					cancelEntityChanges: cancelEntityChanges,
-					getAllChanges: getAllChanges,
-					searchForEntities: searchForEntities,
-					checkIfAllObservationsAreLoadedYet: checkIfAllObservationsAreLoadedYet,
-					initializeObservation: initializeObservation,
-					saveObservations: saveObservations,
-					savePatientSystems: savePatientSystems,
-					deletePatientSystems: deletePatientSystems,
-					//saveBackground: saveBackground,
-					getFullSSN: getFullSSN,
-					addPatientToRecentList: addPatientToRecentList,
-					hasChanges: hasChanges,
-					programsSaving: programsSaving,
-					observationsSaving: observationsSaving,
-					patientSystemsSaving: patientSystemsSaving,
-					todosSaving: todosSaving,
-					interventionsSaving: interventionsSaving,
-					tasksSaving: tasksSaving,
-					allergySaving: allergySaving,
-					medicationSaving: medicationSaving,
-					createAlert: createAlert,
-					getToDos: getToDos,
-					getToDosQuery: getToDosQuery,
-					getInterventions: getInterventions,
-					getInterventionsQuery: getInterventionsQuery,
-					getTasks: getTasks,
-					getTasksQuery: getTasksQuery,
-					saveToDo: saveToDo,
-					detachEntity: detachEntity,
-					initializeNewMedication: initializeNewMedication,
-					initializeNewPatientMedication: initializeNewPatientMedication,
-					getPatientMedications: getPatientMedications,
-					getPatientFrequencies: getPatientFrequencies,
-					getRemoteMedicationFields: getRemoteMedicationFields,
-					getPatientMedicationsQuery: getPatientMedicationsQuery,
-					saveMedication: saveMedication,
-					deletePatientMedication: deletePatientMedication,
-					initializeAllergy: initializeAllergy,
-					initializeNewAllergy: initializeNewAllergy,
-					getRemoteAllergies: getRemoteAllergies,
-					saveAllergies: saveAllergies,
-					getPatientAllergies: getPatientAllergies,
-					deletePatientAllergy: deletePatientAllergy,
-					getPatientAllergiesQuery: getPatientAllergiesQuery,					
-					getSettingsParam: getSettingsParam, 
-					singleSort: singleSort
-				};
-
-				return datacontext;
-
-				// Go prime the data that will be shared throughout the application
-				function primeData() {
-					configureCustomHeaders();
-					var promise = Q.all([
-						loadUpEnums(),
-						getUserSettings(session.currentUser, '/1.0/' + session.currentUser().contracts()[0].number() + '/settings', apiToken()),
-						getSystems(),
-						getPatientLookup(),
-						getProblemsLookup(),
-						getCohortsLookup(),
-						getContractProgramsLookup(),
-						getTimesOfDayLookup(),
-						getPatientStatusReasonLookup(),
-						getTimeZonesLookup(),
-						getAllStatesLookup(),
-						getAllLanguagesLookup(),
-						getAllCommModesLookup(),
-						getAllCommTypesLookup(),
-						getNoteLookups(),
-						getGoalLookups(),
-						getMedicationLookups(),
-						getObjectivesLookup(),
-						getObservationTypeLookups(),
-						getCareMemberTypeLookups(),
-						getAllergyLookups(),
-						getAllCareManagers(),
-						getRecentIndividuals(),
-						loadUpMocks()
-						]).then(processLookpus);
-					return promise;
-				}
-
-				function getSystems(){
-					if (session.currentUser() && session.currentUser().contracts().length !== 0) {
-						var endPoint = new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'System', 'System');
-						return getEntityList(datacontext.enums.systems, endPoint.EntityType, endPoint.ResourcePath, null, null, true);
-					}
-				}
-
-				// Get a list of problems lookups
-				function getProblemsLookup() {
-					if (session.currentUser() && session.currentUser().contracts().length !== 0) {
-						var endPoint = new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'lookup/problems', 'Problem');
-						return getEntityList(null, endPoint.EntityType, endPoint.ResourcePath, null, null, true);
-					}
-				}
-
-				// Get a list of patient lookups
-				function getPatientLookup() {
-					if (session.currentUser() && session.currentUser().contracts().length !== 0) {
-						var endPoint = new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'Lookup/Details/MaritalStatus', 'MaritalStatus');
-						return getEntityList(datacontext.enums.maritalStatuses, endPoint.EntityType, endPoint.ResourcePath, null, null, true);
-					}
-				}
+		// Get a list of patient lookups
+		function getPatientLookup() {
+			if (session.currentUser() && session.currentUser().contracts().length !== 0) {
+				var endPoint = new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'Lookup/Details/MaritalStatus', 'MaritalStatus');
+				return getEntityList(datacontext.enums.maritalStatuses, endPoint.EntityType, endPoint.ResourcePath, null, null, true);
+			}
+		}
 
         // Get a list of cohorts lookups
         function getCohortsLookup() {
@@ -360,122 +360,122 @@
             }
         }
 
-				// Get a list of active contract programs (programs for this contract)
-				function getContractProgramsLookup() {
-					if (session.currentUser() && session.currentUser().contracts().length !== 0) {
-						var endPoint = new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'programs/active', 'ContractProgram');
-						return getEntityList(null, endPoint.EntityType, endPoint.ResourcePath, null, null, true);
-					}
-				}
+		// Get a list of active contract programs (programs for this contract)
+		function getContractProgramsLookup() {
+			if (session.currentUser() && session.currentUser().contracts().length !== 0) {
+				var endPoint = new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'programs/active', 'ContractProgram');
+				return getEntityList(null, endPoint.EntityType, endPoint.ResourcePath, null, null, true);
+			}
+		}
 
-				// Get a list of times of day
-				function getTimesOfDayLookup() {
-					if (session.currentUser() && session.currentUser().contracts().length !== 0) {
-						var endPoint = new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'lookup/timesofdays', 'TimeOfDay');
-						return getEntityList(datacontext.enums.timesOfDay, endPoint.EntityType, endPoint.ResourcePath, null, null, true);
-					}
-				}
+		// Get a list of times of day
+		function getTimesOfDayLookup() {
+			if (session.currentUser() && session.currentUser().contracts().length !== 0) {
+				var endPoint = new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'lookup/timesofdays', 'TimeOfDay');
+				return getEntityList(datacontext.enums.timesOfDay, endPoint.EntityType, endPoint.ResourcePath, null, null, true);
+			}
+		}
 
-				function getPatientStatusReasonLookup() {
-					if( session.currentUser() && session.currentUser().contracts().length !== 0 ) {
-						var endPoint = new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'lookup/Reason', 'PatientStatusReason');
-						return getEntityList(datacontext.enums.patientStatusReasons, endPoint.EntityType, endPoint.ResourcePath, null, null, true);
-					}
-				}
+		function getPatientStatusReasonLookup() {
+			if( session.currentUser() && session.currentUser().contracts().length !== 0 ) {
+				var endPoint = new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'lookup/Reason', 'PatientStatusReason');
+				return getEntityList(datacontext.enums.patientStatusReasons, endPoint.EntityType, endPoint.ResourcePath, null, null, true);
+			}
+		}
 
-				// Get a list of time zones
-				function getTimeZonesLookup() {
-					if (session.currentUser() && session.currentUser().contracts().length !== 0) {
-						var endPoint = new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'lookup/timezones', 'TimeZone');
-						return getEntityList(datacontext.enums.timeZones, endPoint.EntityType, endPoint.ResourcePath, null, null, true, null, 'name');
-					}
-				}
+		// Get a list of time zones
+		function getTimeZonesLookup() {
+			if (session.currentUser() && session.currentUser().contracts().length !== 0) {
+				var endPoint = new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'lookup/timezones', 'TimeZone');
+				return getEntityList(datacontext.enums.timeZones, endPoint.EntityType, endPoint.ResourcePath, null, null, true, null, 'name');
+			}
+		}
 
-				// Get a list of time zones
-				function getObjectivesLookup() {
-					if (session.currentUser() && session.currentUser().contracts().length !== 0) {
-						var endPoint = new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'lookup/objectives', 'ObjectiveLookup');
-						return getEntityList(datacontext.enums.objectives, endPoint.EntityType, endPoint.ResourcePath, null, null, true);
-					}
-				}
+		// Get a list of time zones
+		function getObjectivesLookup() {
+			if (session.currentUser() && session.currentUser().contracts().length !== 0) {
+				var endPoint = new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'lookup/objectives', 'ObjectiveLookup');
+				return getEntityList(datacontext.enums.objectives, endPoint.EntityType, endPoint.ResourcePath, null, null, true);
+			}
+		}
 
-				// Get a list of states
-				function getAllStatesLookup() {
-					if (session.currentUser() && session.currentUser().contracts().length !== 0) {
-						var endPoint = new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'lookup/states', 'State');
-						return getEntityList(datacontext.enums.states, endPoint.EntityType, endPoint.ResourcePath, null, null, true);
-					}
-				}
+		// Get a list of states
+		function getAllStatesLookup() {
+			if (session.currentUser() && session.currentUser().contracts().length !== 0) {
+				var endPoint = new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'lookup/states', 'State');
+				return getEntityList(datacontext.enums.states, endPoint.EntityType, endPoint.ResourcePath, null, null, true);
+			}
+		}
 
-				// Get a list of languages
-				function getAllLanguagesLookup() {
-					if (session.currentUser() && session.currentUser().contracts().length !== 0) {
-						var endPoint = new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'lookup/languages', 'Language');
-						return getEntityList(datacontext.enums.languages, endPoint.EntityType, endPoint.ResourcePath, null, null, true);
-					}
-				}
+		// Get a list of languages
+		function getAllLanguagesLookup() {
+			if (session.currentUser() && session.currentUser().contracts().length !== 0) {
+				var endPoint = new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'lookup/languages', 'Language');
+				return getEntityList(datacontext.enums.languages, endPoint.EntityType, endPoint.ResourcePath, null, null, true);
+			}
+		}
 
-				// Get a list of communication modes
-				function getAllCommModesLookup() {
-					if (session.currentUser() && session.currentUser().contracts().length !== 0) {
-						var endPoint = new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'lookup/commmodes', 'CommunicationMode');
-						return getEntityList(datacontext.enums.communicationModes, endPoint.EntityType, endPoint.ResourcePath, null, null, true).then(filterCommModes);
-					}
-				}
+		// Get a list of communication modes
+		function getAllCommModesLookup() {
+			if (session.currentUser() && session.currentUser().contracts().length !== 0) {
+				var endPoint = new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'lookup/commmodes', 'CommunicationMode');
+				return getEntityList(datacontext.enums.communicationModes, endPoint.EntityType, endPoint.ResourcePath, null, null, true).then(filterCommModes);
+			}
+		}
 
-				// Get a list of communication types
-				function getAllCommTypesLookup() {
-					if (session.currentUser() && session.currentUser().contracts().length !== 0) {
-						var endPoint = new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'lookup/commtypes', 'CommunicationType');
-						return getEntityList(datacontext.enums.communicationTypes, endPoint.EntityType, endPoint.ResourcePath, null, null, true).then(filterCommModes);
-					}
-				}
+		// Get a list of communication types
+		function getAllCommTypesLookup() {
+			if (session.currentUser() && session.currentUser().contracts().length !== 0) {
+				var endPoint = new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'lookup/commtypes', 'CommunicationType');
+				return getEntityList(datacontext.enums.communicationTypes, endPoint.EntityType, endPoint.ResourcePath, null, null, true).then(filterCommModes);
+			}
+		}
 
-				// Get a list of communication types
-				function getAllCareManagers() {
-					if (session.currentUser() && session.currentUser().contracts().length !== 0) {
-						var endPoint = new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'Contact/CareManagers', 'CareManager');
-						return getEntityList(datacontext.enums.careManagers, endPoint.EntityType, endPoint.ResourcePath, null, null, true);
-					}
-				}
+		// Get a list of communication types
+		function getAllCareManagers() {
+			if (session.currentUser() && session.currentUser().contracts().length !== 0) {
+				var endPoint = new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'Contact/CareManagers', 'CareManager');
+				return getEntityList(datacontext.enums.careManagers, endPoint.EntityType, endPoint.ResourcePath, null, null, true);
+			}
+		}
 
-				// Get a list of note lookups
-				function getNoteLookups() {
-					if (session.currentUser()) {
-						lookupsService.getNoteLookup(manager, 'NoteMethod', datacontext.enums.noteMethods, true);
-						lookupsService.getNoteLookup(manager, 'NoteOutcome', datacontext.enums.noteOutcomes, true);
-						lookupsService.getNoteLookup(manager, 'NoteWho', datacontext.enums.noteWhos, true);
-						lookupsService.getNoteLookup(manager, 'NoteSource', datacontext.enums.noteSources, true);
-						lookupsService.getLookup(manager, 'NoteType', datacontext.enums.noteTypes, true);
-						//utilization note lookups:
-						lookupsService.getNoteLookup(manager, 'VisitType', datacontext.enums.visitTypes, true);
-						lookupsService.getNoteLookup(manager, 'UtilizationSource', datacontext.enums.utilizationSources, true);
-						lookupsService.getNoteLookup(manager, 'Disposition', datacontext.enums.dispositions, true);
-						lookupsService.getNoteLookup(manager, 'UtilizationLocation', datacontext.enums.utilizationLocations, true);
-						return lookupsService.getNoteLookup(manager, 'NoteDuration', datacontext.enums.noteDurations, true);
-					}
-				}
+		// Get a list of note lookups
+		function getNoteLookups() {
+			if (session.currentUser()) {
+				lookupsService.getNoteLookup(manager, 'NoteMethod', datacontext.enums.noteMethods, true);
+				lookupsService.getNoteLookup(manager, 'NoteOutcome', datacontext.enums.noteOutcomes, true);
+				lookupsService.getNoteLookup(manager, 'NoteWho', datacontext.enums.noteWhos, true);
+				lookupsService.getNoteLookup(manager, 'NoteSource', datacontext.enums.noteSources, true);
+				lookupsService.getLookup(manager, 'NoteType', datacontext.enums.noteTypes, true);
+				//utilization note lookups:
+				lookupsService.getNoteLookup(manager, 'VisitType', datacontext.enums.visitTypes, true);
+				lookupsService.getNoteLookup(manager, 'UtilizationSource', datacontext.enums.utilizationSources, true);
+				lookupsService.getNoteLookup(manager, 'Disposition', datacontext.enums.dispositions, true);
+				lookupsService.getNoteLookup(manager, 'UtilizationLocation', datacontext.enums.utilizationLocations, true);
+				return lookupsService.getNoteLookup(manager, 'NoteDuration', datacontext.enums.noteDurations, true);
+			}
+		}
 
-				// Get a list of goal lookups
-				function getGoalLookups() {
-					if (session.currentUser()) {
-						lookupsService.getLookup(manager, 'FocusArea', datacontext.enums.focusAreas, true);
-						lookupsService.getLookup(manager, 'Source', datacontext.enums.sources, true);
-						lookupsService.getLookup(manager, 'BarrierCategory', datacontext.enums.barrierCategories, true);
-						lookupsService.getLookup(manager, 'ToDoCategory', datacontext.enums.toDoCategories, true);
-						return lookupsService.getLookup(manager, 'InterventionCategory', datacontext.enums.interventionCategories, true);
-					}
-				}
+		// Get a list of goal lookups
+		function getGoalLookups() {
+			if (session.currentUser()) {
+				lookupsService.getLookup(manager, 'FocusArea', datacontext.enums.focusAreas, true);
+				lookupsService.getLookup(manager, 'Source', datacontext.enums.sources, true);
+				lookupsService.getLookup(manager, 'BarrierCategory', datacontext.enums.barrierCategories, true);
+				lookupsService.getLookup(manager, 'ToDoCategory', datacontext.enums.toDoCategories, true);
+				return lookupsService.getLookup(manager, 'InterventionCategory', datacontext.enums.interventionCategories, true);
+			}
+		}
 
-				// Get a list of medication lookups
-				function getMedicationLookups() {
-					if (session.currentUser()) {
-						lookupsService.getLookup(manager, 'MedSuppType', datacontext.enums.medSuppTypes, true);
-						lookupsService.getLookup(manager, 'FreqHowOften', datacontext.enums.freqHowOftens, true);
-						lookupsService.getLookup(manager, 'Frequency', datacontext.enums.frequency, true);
-						lookupsService.getLookup(manager, 'FreqWhen', datacontext.enums.freqWhens, true);
-					}
-				}
+		// Get a list of medication lookups
+		function getMedicationLookups() {
+			if (session.currentUser()) {
+				lookupsService.getLookup(manager, 'MedSuppType', datacontext.enums.medSuppTypes, true);
+				lookupsService.getLookup(manager, 'FreqHowOften', datacontext.enums.freqHowOftens, true);
+				lookupsService.getLookup(manager, 'Frequency', datacontext.enums.frequency, true);
+				lookupsService.getLookup(manager, 'FreqWhen', datacontext.enums.freqWhens, true);
+			}
+		}
 		/**
 		*	perform operations after lookups are loaded.
 		*	@method processLookpus
@@ -551,729 +551,733 @@
 			}
 		}
 
-				// Get a list of goal lookups
-				function getObservationTypeLookups() {
-					if (session.currentUser()) {
-						return lookupsService.getLookup(manager, 'ObservationType', localCollections.enums.observationTypes, true).then(function () {
-										// Load up the observations
-										checkIfAllObservationsAreLoadedYet();
-										// Get observation states from the server
-										var thisEndPoint = new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'Observation/States', 'ObservationState');
-										return getEntityList(localCollections.enums.observationStates, thisEndPoint.EntityType, thisEndPoint.ResourcePath, null, null, true);
-									});
-					}
-				}
-
-				function checkIfAllObservationsAreLoadedYet() {
-					if (!observationsLoaded) {
-						getAllObservations();
-					}
-				}
-
-				// Have to get these by patient and by type even though they are not specific to the patient
-				function getAllObservations() {
-					observationsService.getObservations(manager);
-						// ko.utils.arrayForEach(enums.observationTypes(), function (type) {
-						//     observationsService.getObservationsByTypeId(manager, type.id());
-						// });
-observationsLoaded = true;
-}
-
-				// Get a list of goal lookups
-				function getCareMemberTypeLookups() {
-					if (session.currentUser()) {
-						return lookupsService.getLookup(manager, 'CareMemberType', localCollections.enums.careMemberTypes, true);
-					}
-				}
-
-				// Get a list of goal lookups
-				// TODO: Remove the False
-				function getAllergyLookups() {
-					if (session.currentUser()) {
-						lookupsService.getLookup(manager, 'AllergyType', localCollections.enums.allergyTypes, true);
-						lookupsService.getLookup(manager, 'Severity', localCollections.enums.severities, true);
-						lookupsService.getNoteLookup(manager, 'AllergySource', localCollections.enums.allergySources, true);
-						return lookupsService.getLookup(manager, 'Reaction', localCollections.enums.reactions, true);
-					}
-				}
-
-				// Filter the communication modes into types
-				function filterCommModes() {
-						// We need both comm types and comm modes, check for them first
-						if (localCollections.enums.communicationModes().length !== 0 && localCollections.enums.communicationTypes().length !== 0 && !commModesFiltered) {
-								// Create place holders for the id's
-								var phoneId = '', emailId = '', addressId = '', textId = '';
-								// Go through each communication modes,
-								ko.utils.arrayForEach(localCollections.enums.communicationModes(), function (mode) {
-										// And if the mode's name is phone,
-										if (mode.name() === 'Phone') {
-												// Set the id to the current mode's id
-												phoneId = mode.id();
-											}
-											else if (mode.name() === 'Email') {
-												emailId = mode.id();
-											}
-											else if (mode.name() === 'Text') {
-												textId = mode.id();
-											}
-											else if (mode.name() === 'Mail') {
-												addressId = mode.id();
-											}
-										});
-								// Go through each communication types,
-								ko.utils.arrayForEach(localCollections.enums.communicationTypes(), function (type) {
-										// Check for phones
-										var thisMode = ko.utils.arrayFirst(type.commModeIds(), function (mode) {
-											return mode.id() === phoneId;
-										});
-										// If there is a mode returned,
-										if (thisMode) {
-												// Add it to the phoneTypes
-												localCollections.enums.phoneTypes.push(type);
-											}
-										// Check for emails
-										var thisMode = ko.utils.arrayFirst(type.commModeIds(), function (mode) {
-											return mode.id() === emailId;
-										});
-										if (thisMode) {
-											localCollections.enums.emailTypes.push(type);
-										}
-										// Check for texts
-										var thisMode = ko.utils.arrayFirst(type.commModeIds(), function (mode) {
-											return mode.id() === textId;
-										});
-										if (thisMode) {
-											localCollections.enums.textTypes.push(type);
-										}
-										// Check for addresses
-										var thisMode = ko.utils.arrayFirst(type.commModeIds(), function (mode) {
-											return mode.id() === addressId;
-										});
-										if (thisMode) {
-											localCollections.enums.addressTypes.push(type);
-										}
-									});
-								// Set commmodes filtered to true so we don't filter them again
-								commModesFiltered = true;
-								return true;
-							}
-							else { return false; }
-						};
-
-				// Go create some mock data for the step model stuff
-				function loadUpMocks() {
-					goalModelConfig.createMocks(manager);
-					var allChangedEntities = getAllChanges();
-					saveAllChangesToEntities(allChangedEntities);
-				}
-
-				// Go create the enums we will use
-				function loadUpEnums() {
-					lookupModelConfig.initializeEnums(manager);
-					usercontext.initializeEnums(manager);
-					// Set the collections into the enums namespace
-					datacontext.getEntityList(datacontext.enums.priorities, 'Priority', 'fakeEndPoint', null, null, false);
-					datacontext.getEntityList(datacontext.enums.patientStatuses, 'PatientStatus', 'fakeEndPoint', null, null, false);
-					datacontext.getEntityList(datacontext.enums.systemStatus, 'SystemStatus', 'fakeEndPoint', null, null, false);
-					datacontext.getEntityList(datacontext.enums.patientSystemStatus, 'PatientSystemStatus', 'fakeEndPoint', null, null, false);
-					datacontext.getEntityList(datacontext.enums.goalTypes, 'GoalType', 'fakeEndPoint', null, null, false);
-					datacontext.getEntityList(datacontext.enums.goalTaskStatuses, 'GoalTaskStatus', 'fakeEndPoint', null, null, false);
-					datacontext.getEntityList(datacontext.enums.barrierStatuses, 'BarrierStatus', 'fakeEndPoint', null, null, false);
-					datacontext.getEntityList(datacontext.enums.interventionStatuses, 'InterventionStatus', 'fakeEndPoint', null, null, false);
-					// Observation stuff (first one is temporary)
-					//datacontext.getEntityList(enums.observationStates, 'ObservationState', 'fakeEndPoint', null, null, false);
-					datacontext.getEntityList(localCollections.enums.observationDisplays, 'ObservationDisplay', 'fakeEndPoint', null, null, false);
-					// datacontext.getEntityList(localCollections.enums.noteTypes, 'NoteType', 'fakeEndPoint', null, null, false);
-					datacontext.getEntityList(datacontext.enums.allergyStatuses, 'AllergyStatus', 'fakeEndPoint', null, null, false);
-					datacontext.getEntityList(datacontext.enums.medicationStatuses, 'MedicationStatus', 'fakeEndPoint', null, null, false);
-					datacontext.getEntityList(datacontext.enums.medicationCategories, 'MedicationCategory', 'fakeEndPoint', null, null, false);
-					datacontext.getEntityList(datacontext.enums.deceasedStatuses, 'Deceased', 'fakeEndPoint', null, null, false);
-				}
-
-				// Configure the Breeze entity manager to always pass an api key
-				function configureBreezeManager() {
-					breeze.NamingConvention.camelCase.setAsDefault();
-					breeze.config.initializeAdapterInstance("ajax", "jQuery", true);
-					var mgr = new breeze.EntityManager({ dataService: ds });
-					// Register the model types in models in the entity manager
-					modelConfig.initialize(mgr.metadataStore);
-					lookupModelConfig.initialize(mgr.metadataStore);
-					stepModelConfig.initialize(mgr.metadataStore);
-					contactModelConfig.initialize(mgr.metadataStore);
-					goalModelConfig.initialize(mgr.metadataStore);
-					notesModelConfig.initialize(mgr.metadataStore);
-					observationsModelConfig.initialize(mgr.metadataStore);
-					allergyModelConfig.initialize(mgr.metadataStore);
-					medicationModelConfig.initialize(mgr.metadataStore);
-					return mgr;
-				}
-
-				// If a query completes, clear the isLoading flag
-				function queryStarted(object, forceRemote, action) {
-					var message;
-						// If there is an action, use that as the action, or else default to loading
-						var thisAction = action ? action : 'Loading';
-						// If it is hitting the server,
-						if (forceRemote) {
-								// Show a message
-								message = ko.observable(new loadingMessage(thisAction + ' ' + object + '...', forceRemote));
-								addLoadingMessage(message);
-							}
-							return message;
-						}
-
-				// If a query completes, clear the isLoading flag
-				function queryCompleted(message, programFlag) {
-					if (programFlag) {
-						programsSaving(false);
-					}
-					removeLoadingMessage(message);
-				}
-
-				// If a query fails, show why
-				function queryFailed(error) {
-
-					checkForFourOhOne(error);
-						// TODO : Show an alert here
-						throw new Error('Could not complete query');
-					}
-
-				// Add a message to the loading message queue
-				function addLoadingMessage(message) {
-					loadingMessages.push(message);
-				}
-
-				// Remove a message from the loading message queue, if it exists in the message queue
-				function removeLoadingMessage(message) {
-					if (loadingMessages.indexOf(message) !== -1) {
-						setTimeout(function () { loadingMessages.remove(message); }, 500);
-					}
-				}
-
-				// Save a single properties new value
-				function saveChangesToPatientProperty(entity, propertyName, propertyValue, parameters) {
-					var message = queryStarted('Individual', true, 'Saving');
-
-						// Create an end point to use
-						var endPoint = new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'patient');
-
-						// Unwrap the entity
-						var unwrappedPatient = ko.unwrap(entity);
-
-						// Get the patient's Id
-						var patientId = unwrappedPatient.id();
-						// Create a full url to use
-						var fullUrl = servicesConfig.remoteServiceName + '/' + endPoint.ResourcePath + patientId + '/' + propertyName;
-
-						// If there is a propertyValue to append, add it (can be zero also)
-						if (propertyValue || propertyValue === 0) {
-								// Add a property on to the full url, if there is a value
-								fullUrl = fullUrl + '/' + propertyValue;
-							}
-
-							var params = { };
-
-							$.each(parameters, function (index, item) {
-								params[item.Property] = item.Value;
+		// Get a list of goal lookups
+		function getObservationTypeLookups() {
+			if (session.currentUser()) {
+				return lookupsService.getLookup(manager, 'ObservationType', localCollections.enums.observationTypes, true).then(function () {
+								// Load up the observations
+								checkIfAllObservationsAreLoadedYet();
+								// Get observation states from the server
+								var thisEndPoint = new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'Observation/States', 'ObservationState');
+								return getEntityList(localCollections.enums.observationStates, thisEndPoint.EntityType, thisEndPoint.ResourcePath, null, null, true);
 							});
+			}
+		}
 
-							return $.ajax({
-								url: fullUrl,
-								cache: false,
-								dataType: 'json',
-								type: "POST",
-								headers: {
-									Token: apiToken()
-								},
-								data: params,
-								success: function (data) {
-									unwrappedPatient.entityAspect.acceptChanges();
-									queryCompleted(message);
-									return entityFinder.searchForEntities(data);
-								}
-							}).fail(saveFailed);
+		function checkIfAllObservationsAreLoadedYet() {
+			if (!observationsLoaded) {
+				getAllObservations();
+			}
+		}
 
-							function saveFailed(error) {
-								checkForFourOhOne(error);
-								var thisAlert = datacontext.createEntity('Alert', { result: '0', reason: 'Save failed!' });
-								thisAlert.entityAspect.acceptChanges();
-								localCollections.alerts.push(thisAlert);
-								removeLoadingMessage(message);
-							}
-						}
+		// Have to get these by patient and by type even though they are not specific to the patient
+		function getAllObservations() {
+			observationsService.getObservations(manager);
+				// ko.utils.arrayForEach(enums.observationTypes(), function (type) {
+				//     observationsService.getObservationsByTypeId(manager, type.id());
+				// });
+			observationsLoaded = true;
+		}
 
-						function deleteIndividual (entity) {
-							var message = queryStarted('Individual', true, 'Deleting');
-							patientsService.deleteIndividual(manager, entity).then(saveCompleted).fail(saveFailed);
+		// Get a list of goal lookups
+		function getCareMemberTypeLookups() {
+			if (session.currentUser()) {
+				return lookupsService.getLookup(manager, 'CareMemberType', localCollections.enums.careMemberTypes, true);
+			}
+		}
 
-							function saveCompleted(data) {
-								// Remove the person from cache completely
-								//entity.entityAspect.setDetached();
-								manager.detachEntity(entity);
-								//entity.entityAspect.acceptChanges();
+		// Get a list of goal lookups
+		// TODO: Remove the False
+		function getAllergyLookups() {
+			if (session.currentUser()) {
+				lookupsService.getLookup(manager, 'AllergyType', localCollections.enums.allergyTypes, true);
+				lookupsService.getLookup(manager, 'Severity', localCollections.enums.severities, true);
+				lookupsService.getNoteLookup(manager, 'AllergySource', localCollections.enums.allergySources, true);
+				return lookupsService.getLookup(manager, 'Reaction', localCollections.enums.reactions, true);
+			}
+		}
 
-								// Finally, clear out the message
-								queryCompleted(message);
-								setTimeout(function () { location.reload(); }, 2000);
-								return true;
-							}
-
-							function saveFailed(error) {
-								var thisAlert = datacontext.createEntity('Alert', { result: 0, reason: 'Delete failed!' });
-								thisAlert.entityAspect.acceptChanges();
-								localCollections.alerts.push(thisAlert);
-								checkForFourOhOne(error);
-								removeLoadingMessage(message);
-								throw new Error('Delete failed');
-							}
-						}
-
-				// Save a single entity
-				function saveIndividual(patient) {
-						// Display a message while saving
-						// var message = queryStarted(entity.entityType.shortName, true, 'Saving');
-
-						// // Create an end point to use
-						// var endPoint = new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'patient', 'Update');
-						//var patientId = entity().id(); 0
-						//var fullUrl = servicesConfig.remoteServiceName + '/' + endPoint.ResourcePath + 'Update';
-
-						// Display a message while saving
-						var message = queryStarted('Individual', true, 'Saving');
-						if( patient.isNew() && !patient.dataSource() ){
-							patient.dataSource("Engage");
-						}
-						// Should the individual be inserted or just updated?
-						var insert = patient.isNew();
-
-						var serializedIndividual;
-						serializedIndividual = entitySerializer.serializeIndividual(patient, manager);
-						return patientsService.saveIndividual(manager, serializedIndividual, insert).then(saveCompleted).fail(saveFailed);
-
-						function saveCompleted(data) {
-								// If there is an outcome returned and it equals zero,
-								if (data.httpResponse.data.Outcome && data.httpResponse.data.Outcome.Result == 0) {
-										// Set patient as a possible duplicate
-										patient.isDuplicate(true);
-									} else {
-										patient.isDuplicate(false);
-										// Else save it all
-										patient.isNew(false);
-										// Save all of the levels of everything related to a patient
-										if (patient.fullSSN()) {
-												// Set the last four SSN value
-												patient.lastFourSSN(patient.fullSSN().substr(patient.fullSSN().length - 4));
-												// Clear the full SSN value
-												patient.fullSSN(null);
-											}
-											patient.entityAspect.acceptChanges();
-											updateTodoPatient(patient);
-											queryCompleted(message);
-											return true;
-										}
-								// Finally, clear out the message
-								queryCompleted(message);
-							}
-
-							function saveFailed(error) {
-								patient.entityAspect.rejectChanges();
-								checkForFourOhOne(error);
-								var thisAlert = datacontext.createEntity('Alert', { result: '0', reason: 'Save failed!' });
-								thisAlert.entityAspect.acceptChanges();
-								localCollections.alerts.push(thisAlert);
-								console.log(error);
-								removeLoadingMessage(message);
-							}
-						}
-
-						function initializePatient(observable) {
-							return patientsService.initializeIndividual(manager, observable).then(initialized);
-							function initialized(data) {
-								return data;
-							}
-						}
-
-						function removeProgram(program, reason) {
-							var message = queryStarted('Program', true, 'Removing');
-
-							return programsService.removeProgram(manager, program.id(), program.name(), program.patientId(), reason).then(queryCompleted(message)).fail(queryFailed);
-						}
-
-				// Save a single action
-				function saveAction(action, serializedAction, programId, patientId) {
-						// Display a message while saving
-						var message = queryStarted('Action', true, 'Saving');
-						programsSaving(true);
-						action.entityAspect.acceptChanges();
-						return programsService.saveActionPost(manager, serializedAction, programId, patientId).then(saveActionCompleted);
-
-						function saveActionCompleted(data) {
-								// Find the action and make sure completedBy didn't change
-								if (data.httpResponse.data && data.httpResponse.data.PlanElems && data.httpResponse.data.PlanElems.Actions) {
-									var thisAction = ko.utils.arrayFirst(data.httpResponse.data.PlanElems.Actions, function (act) {
-										return act.Id === action.id();
-									});
-									action.completedBy(thisAction.CompletedBy);
-								}
-								queryCompleted(message);
-								entityFinder.searchForProblems(data.httpResponse.data);
-								// entityFinder.searchForAnything(data.httpResponse.data);
-								if (data.results) {
-									entityFinder.searchForLocalCollectionEntities(data.results);
-								}
-								programsSaving(false);
-
-								// Save the action and all of it's steps and responses
-								action.entityAspect.acceptChanges();
-								// If the action has been completed,
-								if (action.completed() && action.elementState() !== 5) {
-										// Make sure the state is set to 5
-										action.elementState(5);
+		// Filter the communication modes into types
+		function filterCommModes() {
+				// We need both comm types and comm modes, check for them first
+				if (localCollections.enums.communicationModes().length !== 0 && localCollections.enums.communicationTypes().length !== 0 && !commModesFiltered) {
+						// Create place holders for the id's
+						var phoneId = '', emailId = '', addressId = '', textId = '';
+						// Go through each communication modes,
+						ko.utils.arrayForEach(localCollections.enums.communicationModes(), function (mode) {
+								// And if the mode's name is phone,
+								if (mode.name() === 'Phone') {
+										// Set the id to the current mode's id
+										phoneId = mode.id();
 									}
-								// Else if the element state is 4 (in progress) when saved,
-								else if (action.elementState() === 4) {
-										// Display an alert that progress was saved
-										var thisAlert = datacontext.createEntity('Alert', { result: 'warning', reason: 'Progress saved' });
-										thisAlert.entityAspect.acceptChanges();
-										localCollections.alerts.push(thisAlert);
+									else if (mode.name() === 'Email') {
+										emailId = mode.id();
 									}
-								// Save changes to all of the steps and responses
-								ko.utils.arrayForEach(action.steps(), function (step) {
-									step.entityAspect.acceptChanges();
-									ko.utils.arrayForEach(step.responses(), function (response) {
-										response.entityAspect.acceptChanges();
-									});
+									else if (mode.name() === 'Text') {
+										textId = mode.id();
+									}
+									else if (mode.name() === 'Mail') {
+										addressId = mode.id();
+									}
 								});
-								// Save the action's module
-								action.module().entityAspect.acceptChanges();
-								action.isSaving(false);
-							}
-						}
-
-				// Save a single action
-				function repeatAction(action) {
-						// Display a message while saving
-						var message = queryStarted('Action', true, 'Saving');
-						programsSaving(true);
-
-						var serializedAction = entitySerializer.serializeAction(action, datacontext.manager);
-
-								// Get the id of the patient that this action is for
-								var patientId = action.module().program().patientId();
-
-						// Get the id of the patient that this action is for
-						var programId = action.module().program().id();
-
-						return programsService.repeatAction(manager, serializedAction, programId, patientId).then(repeatActionCompleted);
-
-						function repeatActionCompleted(data) {
-							queryCompleted(message);
-							programsSaving(false);
-							createAlert('warning', 'Action has been repeated!');
-							action.isSaving(false);
-						}
+						// Go through each communication types,
+						ko.utils.arrayForEach(localCollections.enums.communicationTypes(), function (type) {
+								// Check for phones
+								var thisMode = ko.utils.arrayFirst(type.commModeIds(), function (mode) {
+									return mode.id() === phoneId;
+								});
+								// If there is a mode returned,
+								if (thisMode) {
+										// Add it to the phoneTypes
+										localCollections.enums.phoneTypes.push(type);
+									}
+								// Check for emails
+								var thisMode = ko.utils.arrayFirst(type.commModeIds(), function (mode) {
+									return mode.id() === emailId;
+								});
+								if (thisMode) {
+									localCollections.enums.emailTypes.push(type);
+								}
+								// Check for texts
+								var thisMode = ko.utils.arrayFirst(type.commModeIds(), function (mode) {
+									return mode.id() === textId;
+								});
+								if (thisMode) {
+									localCollections.enums.textTypes.push(type);
+								}
+								// Check for addresses
+								var thisMode = ko.utils.arrayFirst(type.commModeIds(), function (mode) {
+									return mode.id() === addressId;
+								});
+								if (thisMode) {
+									localCollections.enums.addressTypes.push(type);
+								}
+							});
+						// Set commmodes filtered to true so we don't filter them again
+						commModesFiltered = true;
+						return true;
 					}
+					else { return false; }
+				};
 
-				// Get an action by which it was repeated from
-				function getRepeatedAction(action) {
-					var repeatedAction = programsService.getRepeatedAction(manager, action);
-					return repeatedAction;
-				}
+		// Go create some mock data for the step model stuff
+		function loadUpMocks() {
+			goalModelConfig.createMocks(manager);
+			var allChangedEntities = getAllChanges();
+			saveAllChangesToEntities(allChangedEntities);
+		}
 
-				function savePlanElemAttr(planElement, programId, patientId) {
-					var message = queryStarted('Assignment', true, 'Saving');
+		// Go create the enums we will use
+		function loadUpEnums() {
+			lookupModelConfig.initializeEnums(manager);
+			usercontext.initializeEnums(manager);
+			// Set the collections into the enums namespace
+			datacontext.getEntityList(datacontext.enums.priorities, 'Priority', 'fakeEndPoint', null, null, false);
+			datacontext.getEntityList(datacontext.enums.patientStatuses, 'PatientStatus', 'fakeEndPoint', null, null, false);
+			datacontext.getEntityList(datacontext.enums.systemStatus, 'SystemStatus', 'fakeEndPoint', null, null, false);
+			datacontext.getEntityList(datacontext.enums.patientSystemStatus, 'PatientSystemStatus', 'fakeEndPoint', null, null, false);
+			datacontext.getEntityList(datacontext.enums.goalTypes, 'GoalType', 'fakeEndPoint', null, null, false);
+			datacontext.getEntityList(datacontext.enums.goalTaskStatuses, 'GoalTaskStatus', 'fakeEndPoint', null, null, false);
+			datacontext.getEntityList(datacontext.enums.barrierStatuses, 'BarrierStatus', 'fakeEndPoint', null, null, false);
+			datacontext.getEntityList(datacontext.enums.interventionStatuses, 'InterventionStatus', 'fakeEndPoint', null, null, false);
+			// Observation stuff (first one is temporary)
+			//datacontext.getEntityList(enums.observationStates, 'ObservationState', 'fakeEndPoint', null, null, false);
+			datacontext.getEntityList(localCollections.enums.observationDisplays, 'ObservationDisplay', 'fakeEndPoint', null, null, false);
+			// datacontext.getEntityList(localCollections.enums.noteTypes, 'NoteType', 'fakeEndPoint', null, null, false);
+			datacontext.getEntityList(datacontext.enums.allergyStatuses, 'AllergyStatus', 'fakeEndPoint', null, null, false);
+			datacontext.getEntityList(datacontext.enums.medicationStatuses, 'MedicationStatus', 'fakeEndPoint', null, null, false);
+			datacontext.getEntityList(datacontext.enums.medicationCategories, 'MedicationCategory', 'fakeEndPoint', null, null, false);
+			datacontext.getEntityList(datacontext.enums.deceasedStatuses, 'Deceased', 'fakeEndPoint', null, null, false);
+		}
 
-					var planElem = { Id: planElement.id(), AssignToId: planElement.assignToId() }
-					return programsService.savePlanElemAttrs(manager, planElem, programId, patientId).then(queryCompleted(message));
-				}
+		// Configure the Breeze entity manager to always pass an api key
+		function configureBreezeManager() {
+			breeze.NamingConvention.camelCase.setAsDefault();
+			breeze.config.initializeAdapterInstance("ajax", "jQuery", true);
+			var mgr = new breeze.EntityManager({ dataService: ds });
+			// Register the model types in models in the entity manager
+			modelConfig.initialize(mgr.metadataStore);
+			lookupModelConfig.initialize(mgr.metadataStore);
+			stepModelConfig.initialize(mgr.metadataStore);
+			contactModelConfig.initialize(mgr.metadataStore);
+			goalModelConfig.initialize(mgr.metadataStore);
+			notesModelConfig.initialize(mgr.metadataStore);
+			observationsModelConfig.initialize(mgr.metadataStore);
+			allergyModelConfig.initialize(mgr.metadataStore);
+			medicationModelConfig.initialize(mgr.metadataStore);
+			return mgr;
+		}
 
-				// Save changes to a single contact card
-				function saveContactCard(contactCard) {
-					// Display a message while saving
-					var message = queryStarted('Contact card', true, 'Saving');
-
-					var serializedContactCard;
-					setTimeout(function () {
-						serializedContactCard = entitySerializer.serializeContactCard(contactCard, manager);
-					}, 50);
-					setTimeout(function () {
-						return contactService.saveContactCard(manager, serializedContactCard).then(saveCompleted);
-					}, 50);
-
-					function saveCompleted (data) {
-						// If data was returned and has a property called success that is true,
-						if (data) {
-							// Go through the data, find any entities that need to have their Id's cleaned up
-							var updatedPhones = data.UpdatedPhone;
-							var updatedEmails = data.UpdatedEmail;
-							var updatedAddresses = data.UpdatedAddress;
-							// Iterate through the updated phones,
-							if (updatedPhones) {
-								ko.utils.arrayForEach(updatedPhones, function (newPhone) {
-									// Find the first matching phone,
-									var phoneToUpdate = ko.utils.arrayFirst(contactCard.phones(), function (oldPhone) {
-										// Where the id equals the id of the 'newPhone' returned from the server
-										return oldPhone.id() === newPhone.OldId;
-									});
-									// If a phone is found,
-									if (phoneToUpdate) {
-										// Update it's id property
-										phoneToUpdate.id(newPhone.NewId);
-									}
-								});
-							}
-							if (updatedEmails) {
-								ko.utils.arrayForEach(updatedEmails, function (newEmail) {
-									// Find the first matching phone,
-									var emailToUpdate = ko.utils.arrayFirst(contactCard.emails(), function (oldEmail) {
-										// Where the id equals the id of the 'newPhone' returned from the server
-										return oldEmail.id() === newEmail.OldId;
-									});
-									// If a phone is found,
-									if (emailToUpdate) {
-											// Update it's id property
-											emailToUpdate.id(newEmail.NewId);
-									}
-								});
-							}
-							if (updatedAddresses) {
-								ko.utils.arrayForEach(updatedAddresses, function (newAddress) {
-									// Find the first matching phone,
-									var addressToUpdate = ko.utils.arrayFirst(contactCard.addresses(), function (oldAddress) {
-										// Where the id equals the id of the 'newPhone' returned from the server
-										return oldAddress.id() === newAddress.OldId;
-									});
-									// If a phone is found,
-									if (addressToUpdate) {
-										// Update it's id property
-										addressToUpdate.id(newAddress.NewId);
-									}
-								});
-							}
-
-							// Save all of the levels of everything related to a contact card
-							contactCard.entityAspect.acceptChanges();
-
-							// Finally, clear out the message
-							queryCompleted(message);
-						}
+		// If a query completes, clear the isLoading flag
+		function queryStarted(object, forceRemote, action) {
+			var message;
+				// If there is an action, use that as the action, or else default to loading
+				var thisAction = action ? action : 'Loading';
+				// If it is hitting the server,
+				if (forceRemote) {
+						// Show a message
+						message = ko.observable(new loadingMessage(thisAction + ' ' + object + '...', forceRemote));
+						addLoadingMessage(message);
 					}
+					return message;
 				}
 
-				// Save changes to a single contact card
-				function saveGoal(goal) {
-					// Display a message while saving
-					var message = queryStarted('Goal', true, 'Saving');
+		// If a query completes, clear the isLoading flag
+		function queryCompleted(message, programFlag) {
+			if (programFlag) {
+				programsSaving(false);
+			}
+			removeLoadingMessage(message);
+		}
+
+		// If a query fails, show why
+		function queryFailed(error) {
+
+			checkForFourOhOne(error);
+				// TODO : Show an alert here
+				throw new Error('Could not complete query');
+			}
+
+		// Add a message to the loading message queue
+		function addLoadingMessage(message) {
+			loadingMessages.push(message);
+		}
+
+		// Remove a message from the loading message queue, if it exists in the message queue
+		function removeLoadingMessage(message) {
+			if (loadingMessages.indexOf(message) !== -1) {
+				setTimeout(function () { loadingMessages.remove(message); }, 500);
+			}
+		}
+
+		// Save a single properties new value
+		function saveChangesToPatientProperty(entity, propertyName, propertyValue, parameters) {
+			var message = queryStarted('Individual', true, 'Saving');
+
+			// Create an end point to use
+			var endPoint = new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'patient');
+
+			// Unwrap the entity
+			var unwrappedPatient = ko.unwrap(entity);
+
+			// Get the patient's Id
+			var patientId = unwrappedPatient.id();
+			// Create a full url to use
+			var fullUrl = servicesConfig.remoteServiceName + '/' + endPoint.ResourcePath + patientId + '/' + propertyName;
+
+			// If there is a propertyValue to append, add it (can be zero also)
+			if (propertyValue || propertyValue === 0) {
+				// Add a property on to the full url, if there is a value
+				fullUrl = fullUrl + '/' + propertyValue;
+			}
+
+			var params = { };
+
+			$.each(parameters, function (index, item) {
+				params[item.Property] = item.Value;
+			});
+
+			return $.ajax({
+				url: fullUrl,
+				cache: false,
+				dataType: 'json',
+				type: "POST",
+				headers: {
+					Token: apiToken()
+				},
+				data: params,
+				success: function (data) {
+					unwrappedPatient.entityAspect.acceptChanges();
+					queryCompleted(message);
+					return entityFinder.searchForEntities(data);
+				}
+			}).fail(saveFailed);
+
+			function saveFailed(error) {
+				checkForFourOhOne(error);
+				var thisAlert = datacontext.createEntity('Alert', { result: '0', reason: 'Save failed!' });
+				thisAlert.entityAspect.acceptChanges();
+				localCollections.alerts.push(thisAlert);
+				removeLoadingMessage(message);
+			}
+		}
+
+		function deleteIndividual (entity) {
+			var message = queryStarted('Individual', true, 'Deleting');
+			
+			function saveCompleted(data) {
+				// Remove the person from cache completely
+				//entity.entityAspect.setDetached();
+				manager.detachEntity(entity);
+				//entity.entityAspect.acceptChanges();
+
+				// Finally, clear out the message
+				queryCompleted(message);
+				setTimeout(function () { location.reload(); }, 2000);
+				return true;
+			}
+
+			function saveFailed(error) {
+				var thisAlert = datacontext.createEntity('Alert', { result: 0, reason: 'Delete failed!' });
+				thisAlert.entityAspect.acceptChanges();
+				localCollections.alerts.push(thisAlert);
+				checkForFourOhOne(error);
+				removeLoadingMessage(message);
+				throw new Error('Delete failed');
+			}
+			
+			patientsService.deleteIndividual(manager, entity).then(saveCompleted).fail(saveFailed);
+		}
+
+		// Save a single entity
+		function saveIndividual(patient) {
+			// Display a message while saving
+			// var message = queryStarted(entity.entityType.shortName, true, 'Saving');
+
+			// // Create an end point to use
+			// var endPoint = new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'patient', 'Update');
+			//var patientId = entity().id(); 0
+			//var fullUrl = servicesConfig.remoteServiceName + '/' + endPoint.ResourcePath + 'Update';
+
+			// Display a message while saving
+			var message = queryStarted('Individual', true, 'Saving');
+			if( patient.isNew() && !patient.dataSource() ){
+				patient.dataSource("Engage");
+			}
+			// Should the individual be inserted or just updated?
+			var insert = patient.isNew();
+
+			var serializedIndividual;
+			serializedIndividual = entitySerializer.serializeIndividual(patient, manager);
+			
+			function saveCompleted(data) {
+				// If there is an outcome returned and it equals zero,
+				if (data.httpResponse.data.Outcome && data.httpResponse.data.Outcome.Result == 0) {
+						// Set patient as a possible duplicate
+						patient.isDuplicate(true);
+				} else {
+					patient.isDuplicate(false);
+					// Else save it all
+					patient.isNew(false);
+					// Save all of the levels of everything related to a patient
+					if (patient.fullSSN()) {
+						// Set the last four SSN value
+						patient.lastFourSSN(patient.fullSSN().substr(patient.fullSSN().length - 4));
+						// Clear the full SSN value
+						patient.fullSSN(null);
+					}
+					patient.entityAspect.acceptChanges();
+					updateTodoPatient(patient);
+					queryCompleted(message);
+					return true;
+				}
+				// Finally, clear out the message
+				queryCompleted(message);
+			}
+
+			function saveFailed(error) {
+				patient.entityAspect.rejectChanges();
+				checkForFourOhOne(error);
+				var thisAlert = datacontext.createEntity('Alert', { result: '0', reason: 'Save failed!' });
+				thisAlert.entityAspect.acceptChanges();
+				localCollections.alerts.push(thisAlert);
+				console.log(error);
+				removeLoadingMessage(message);
+			}
+			
+			return patientsService.saveIndividual(manager, serializedIndividual, insert).then(saveCompleted).fail(saveFailed);
+		}
+
+		function initializePatient(observable) {
+			return patientsService.initializeIndividual(manager, observable).then(initialized);
+			function initialized(data) {
+				return data;
+			}
+		}
+
+		function removeProgram(program, reason) {
+			var message = queryStarted('Program', true, 'Removing');
+
+			return programsService.removeProgram(manager, program.id(), program.name(), program.patientId(), reason).then(queryCompleted(message)).fail(queryFailed);
+		}
+
+		// Save a single action
+		function saveAction(action, serializedAction, programId, patientId) {
+			// Display a message while saving
+			var message = queryStarted('Action', true, 'Saving');
+			programsSaving(true);
+			action.entityAspect.acceptChanges();
+			return programsService.saveActionPost(manager, serializedAction, programId, patientId).then(saveActionCompleted);
+
+			function saveActionCompleted(data) {
+				// Find the action and make sure completedBy didn't change
+				if (data.httpResponse.data && data.httpResponse.data.PlanElems && data.httpResponse.data.PlanElems.Actions) {
+					var thisAction = ko.utils.arrayFirst(data.httpResponse.data.PlanElems.Actions, function (act) {
+						return act.Id === action.id();
+					});
+					action.completedBy(thisAction.CompletedBy);
+				}
+				queryCompleted(message);
+				entityFinder.searchForProblems(data.httpResponse.data);
+				// entityFinder.searchForAnything(data.httpResponse.data);
+				if (data.results) {
+					entityFinder.searchForLocalCollectionEntities(data.results);
+				}
+				programsSaving(false);
+
+				// Save the action and all of it's steps and responses
+				action.entityAspect.acceptChanges();
+				// If the action has been completed,
+				if (action.completed() && action.elementState() !== 5) {
+						// Make sure the state is set to 5
+						action.elementState(5);
+					}
+				// Else if the element state is 4 (in progress) when saved,
+				else if (action.elementState() === 4) {
+						// Display an alert that progress was saved
+						var thisAlert = datacontext.createEntity('Alert', { result: 'warning', reason: 'Progress saved' });
+						thisAlert.entityAspect.acceptChanges();
+						localCollections.alerts.push(thisAlert);
+					}
+				// Save changes to all of the steps and responses
+				ko.utils.arrayForEach(action.steps(), function (step) {
+					step.entityAspect.acceptChanges();
+					ko.utils.arrayForEach(step.responses(), function (response) {
+						response.entityAspect.acceptChanges();
+					});
+				});
+				// Save the action's module
+				action.module().entityAspect.acceptChanges();
+				action.isSaving(false);
+			}
+		}
+
+		// Save a single action
+		function repeatAction(action) {
+			// Display a message while saving
+			var message = queryStarted('Action', true, 'Saving');
+			programsSaving(true);
+
+			var serializedAction = entitySerializer.serializeAction(action, datacontext.manager);
+
+					// Get the id of the patient that this action is for
+					var patientId = action.module().program().patientId();
+
+			// Get the id of the patient that this action is for
+			var programId = action.module().program().id();
+
+			return programsService.repeatAction(manager, serializedAction, programId, patientId).then(repeatActionCompleted);
+
+			function repeatActionCompleted(data) {
+				queryCompleted(message);
+				programsSaving(false);
+				createAlert('warning', 'Action has been repeated!');
+				action.isSaving(false);
+			}
+		}
+
+		// Get an action by which it was repeated from
+		function getRepeatedAction(action) {
+			var repeatedAction = programsService.getRepeatedAction(manager, action);
+			return repeatedAction;
+		}
+
+		function savePlanElemAttr(planElement, programId, patientId) {
+			var message = queryStarted('Assignment', true, 'Saving');
+
+			var planElem = { Id: planElement.id(), AssignToId: planElement.assignToId() }
+			return programsService.savePlanElemAttrs(manager, planElem, programId, patientId).then(queryCompleted(message));
+		}
+
+		// Save changes to a single contact card
+		function saveContactCard(contactCard) {
+			// Display a message while saving
+			var message = queryStarted('Contact card', true, 'Saving');
+
+			var serializedContactCard;
+			setTimeout(function () {
+				serializedContactCard = entitySerializer.serializeContactCard(contactCard, manager);
+			}, 50);
+			
+			function saveCompleted (data) {
+				// If data was returned and has a property called success that is true,
+				if (data) {
+					// Go through the data, find any entities that need to have their Id's cleaned up
+					var updatedPhones = data.UpdatedPhone;
+					var updatedEmails = data.UpdatedEmail;
+					var updatedAddresses = data.UpdatedAddress;
+					// Iterate through the updated phones,
+					if (updatedPhones) {
+						ko.utils.arrayForEach(updatedPhones, function (newPhone) {
+							// Find the first matching phone,
+							var phoneToUpdate = ko.utils.arrayFirst(contactCard.phones(), function (oldPhone) {
+								// Where the id equals the id of the 'newPhone' returned from the server
+								return oldPhone.id() === newPhone.OldId;
+							});
+							// If a phone is found,
+							if (phoneToUpdate) {
+								// Update it's id property
+								phoneToUpdate.id(newPhone.NewId);
+							}
+						});
+					}
+					if (updatedEmails) {
+						ko.utils.arrayForEach(updatedEmails, function (newEmail) {
+							// Find the first matching phone,
+							var emailToUpdate = ko.utils.arrayFirst(contactCard.emails(), function (oldEmail) {
+								// Where the id equals the id of the 'newPhone' returned from the server
+								return oldEmail.id() === newEmail.OldId;
+							});
+							// If a phone is found,
+							if (emailToUpdate) {
+									// Update it's id property
+									emailToUpdate.id(newEmail.NewId);
+							}
+						});
+					}
+					if (updatedAddresses) {
+						ko.utils.arrayForEach(updatedAddresses, function (newAddress) {
+							// Find the first matching phone,
+							var addressToUpdate = ko.utils.arrayFirst(contactCard.addresses(), function (oldAddress) {
+								// Where the id equals the id of the 'newPhone' returned from the server
+								return oldAddress.id() === newAddress.OldId;
+							});
+							// If a phone is found,
+							if (addressToUpdate) {
+								// Update it's id property
+								addressToUpdate.id(newAddress.NewId);
+							}
+						});
+					}
 
 					// Save all of the levels of everything related to a contact card
-					goal.entityAspect.acceptChanges();
-					var serializedGoal;
-					setTimeout(function () {
-						serializedGoal = entitySerializer.serializeGoal(goal, manager);
-					}, 50);
-					setTimeout(function () {
-						return goalsService.saveGoal(manager, serializedGoal).then(saveCompleted);
-					}, 50);
+					contactCard.entityAspect.acceptChanges();
 
-					function saveCompleted(data) {
-						// If data was returned and has a property called success that is true,
-						goal.isNew(false);
-						// Save all of the levels of everything related to a contact card
-						goal.entityAspect.acceptChanges();
-						// Accept the changes to everything related to a goal
-						ko.utils.arrayForEach(goal.tasks(), function (task) {
-							task.entityAspect.acceptChanges();
-						});
-						ko.utils.arrayForEach(goal.interventions(), function (intervention) {
-							intervention.entityAspect.acceptChanges();
-						});
-						ko.utils.arrayForEach(goal.barriers(), function (barrier) {
-							barrier.isNew(false);
-							barrier.entityAspect.acceptChanges();
-						});
-						// Finally, clear out the message
-						queryCompleted(message);
-					}
+					// Finally, clear out the message
+					queryCompleted(message);
 				}
+			}
+			setTimeout(function () {
+				return contactService.saveContactCard(manager, serializedContactCard).then(saveCompleted);
+			}, 50);
 
-				// Save a type of intervention
-				function saveIntervention(intervention) {
-						// Display a message while saving
-						var message = queryStarted('Intervention', true, 'Saving');
+			
+		}
 
-						// Save intervention changes so new ones returned are accepted
-						intervention.entityAspect.acceptChanges();
-						var serializedIntervention;
-						serializedIntervention = entitySerializer.serializeIntervention(intervention, manager);
-						return goalsService.saveIntervention(manager, serializedIntervention, intervention.goal().patientId()).then(saveCompleted);
+		// Save changes to a single contact card
+		function saveGoal(goal) {
+			// Display a message while saving
+			var message = queryStarted('Goal', true, 'Saving');
 
-						function saveCompleted(data) {
-								// Check if we have already added the intervention to the local collection
-								if (localCollections.interventions.indexOf(intervention) === -1) {
-										// If not, add it in
-										localCollections.interventions.push(intervention);
-									}
-								// Save all of the levels of everything related to a contact card
-								intervention.entityAspect.acceptChanges();
-								// Finally, clear out the message
-								queryCompleted(message);
-							}
-						}
-
-				// Save a type of intervention
-				function saveTask(task) {
-						// Display a message while saving
-						var message = queryStarted('Task', true, 'Saving');
-						// Get the patient id from the goal
-						var patientId = task.goal().patientId();
-						// Save all of the levels of everything related to a contact card
-						task.entityAspect.acceptChanges();
-						var serializedTask;
-						serializedTask = entitySerializer.serializeTask(task, manager);
-						return goalsService.saveTask(manager, serializedTask, patientId).then(saveCompleted);
-
-						function saveCompleted(data) {
-								// Check if we have already added the intervention to the local collection
-								if (localCollections.tasks.indexOf(task) === -1) {
-										// If not, add it in
-										localCollections.tasks.push(task);
-									}
-								// Save all of the levels of everything related to a contact card
-								//task.entityAspect.acceptChanges();
-								// Finally, clear out the message
-								queryCompleted(message);
-							}
-						}
-
-				// Save a type of barrier
-				function saveBarrier(barrier) {
-					// Display a message while saving
-					var message = queryStarted('Barrier', true, 'Saving');
-					// Get the patient id from the goal
-					var patientId = barrier.goal().patientId();
-
-					// Save barrier changes so new ones returned are accepted
+			// Save all of the levels of everything related to a contact card
+			goal.entityAspect.acceptChanges();
+			var serializedGoal;
+			setTimeout(function () {
+				serializedGoal = entitySerializer.serializeGoal(goal, manager);
+			}, 50);
+			
+			function saveCompleted(data) {
+				// If data was returned and has a property called success that is true,
+				goal.isNew(false);
+				// Save all of the levels of everything related to a contact card
+				goal.entityAspect.acceptChanges();
+				// Accept the changes to everything related to a goal
+				ko.utils.arrayForEach(goal.tasks(), function (task) {
+					task.entityAspect.acceptChanges();
+				});
+				ko.utils.arrayForEach(goal.interventions(), function (intervention) {
+					intervention.entityAspect.acceptChanges();
+				});
+				ko.utils.arrayForEach(goal.barriers(), function (barrier) {
+					barrier.isNew(false);
 					barrier.entityAspect.acceptChanges();
-					var serializedBarrier;
-					serializedBarrier = entitySerializer.serializeBarrier(barrier, manager);
-					return goalsService.saveBarrier(manager, serializedBarrier, patientId).then(saveCompleted);
+				});
+				// Finally, clear out the message
+				queryCompleted(message);
+			}
+			
+			setTimeout(function () {
+				return goalsService.saveGoal(manager, serializedGoal).then(saveCompleted);
+			}, 50);
+		}
 
-					function saveCompleted(data) {
-						// Save all of the levels of everything related to a contact card
-						barrier.entityAspect.acceptChanges();
-						// Finally, clear out the message
-						queryCompleted(message);
+		// Save a type of intervention
+		function saveIntervention(intervention) {
+				// Display a message while saving
+				var message = queryStarted('Intervention', true, 'Saving');
+
+				// Save intervention changes so new ones returned are accepted
+				intervention.entityAspect.acceptChanges();
+				var serializedIntervention;
+				serializedIntervention = entitySerializer.serializeIntervention(intervention, manager);
+				function saveCompleted(data) {
+					// Check if we have already added the intervention to the local collection
+					if (localCollections.interventions.indexOf(intervention) === -1) {
+							// If not, add it in
+							localCollections.interventions.push(intervention);
+						}
+					// Save all of the levels of everything related to a contact card
+					intervention.entityAspect.acceptChanges();
+					// Finally, clear out the message
+					queryCompleted(message);
+				}
+				return goalsService.saveIntervention(manager, serializedIntervention, intervention.goal().patientId()).then(saveCompleted);
+		}
+
+		// Save a type of intervention
+		function saveTask(task) {
+			// Display a message while saving
+			var message = queryStarted('Task', true, 'Saving');
+			// Get the patient id from the goal
+			var patientId = task.goal().patientId();
+			// Save all of the levels of everything related to a contact card
+			task.entityAspect.acceptChanges();
+			var serializedTask;
+			serializedTask = entitySerializer.serializeTask(task, manager);
+			function saveCompleted(data) {
+				// Check if we have already added the intervention to the local collection
+				if (localCollections.tasks.indexOf(task) === -1) {
+						// If not, add it in
+						localCollections.tasks.push(task);
 					}
+				// Save all of the levels of everything related to a contact card
+				//task.entityAspect.acceptChanges();
+				// Finally, clear out the message
+				queryCompleted(message);
+			}			
+			return goalsService.saveTask(manager, serializedTask, patientId).then(saveCompleted);
+		}
+						
+
+		// Save a type of barrier
+		function saveBarrier(barrier) {
+			// Display a message while saving
+			var message = queryStarted('Barrier', true, 'Saving');
+			// Get the patient id from the goal
+			var patientId = barrier.goal().patientId();
+
+			// Save barrier changes so new ones returned are accepted
+			barrier.entityAspect.acceptChanges();
+			var serializedBarrier;
+			serializedBarrier = entitySerializer.serializeBarrier(barrier, manager);
+			
+			function saveCompleted(data) {
+				// Save all of the levels of everything related to a contact card
+				barrier.entityAspect.acceptChanges();
+				// Finally, clear out the message
+				queryCompleted(message);
+			}
+			return goalsService.saveBarrier(manager, serializedBarrier, patientId).then(saveCompleted);
+		}
+
+		// Save changes to a single contact card
+		function deleteGoal(goal) {
+			// Display a message while saving
+			var message = queryStarted('Goal', true, 'Deleting');
+
+			return goalsService.deleteGoal(manager, goal).then(deleteCompleted);
+
+			function deleteCompleted(data) {
+				// If data was returned and has a property called success that is true,
+				goal.entityAspect.rejectChanges();
+				// Save all of the levels of everything related to a contact card
+				goal.patientId(null);
+				// Clear out the message
+				queryCompleted(message);
+				manager.detachEntity(goal);
+			}
+		}
+
+		// Save changes to a single contact card
+		function saveNote(note) {										
+			// Display a message while saving
+			var message = queryStarted('Note', true, 'Saving');
+			var isInsert = false;
+			function saveUtilizationCompleted( data ){
+				if( isInsert ){
+					//the returned data from Utilization endpoint is the complete Utilization Note object
+					//	and will be added to the cache (breeze .toType 'Note'). the new entity is not needed anymore:
+					manager.detachEntity(note);
+				}
+				else{
+					note.entityAspect.acceptChanges();
+					syncUpdateProps( data.Utilization );
 				}
 
-				// Save changes to a single contact card
-				function deleteGoal(goal) {
-					// Display a message while saving
-					var message = queryStarted('Goal', true, 'Deleting');
+				// Finally, clear out the message
+				queryCompleted(message);
+				return true;
+			}
 
-					return goalsService.deleteGoal(manager, goal).then(deleteCompleted);
-
-					function deleteCompleted(data) {
-						// If data was returned and has a property called success that is true,
-						goal.entityAspect.rejectChanges();
-						// Save all of the levels of everything related to a contact card
-						goal.patientId(null);
-						// Clear out the message
-						queryCompleted(message);
-						manager.detachEntity(goal);
-					}
+			function saveNoteCompleted( data ) {
+				if( isInsert ){
+					// 'Note' endpoint does not return the whole object. only the created id.
+					// we will keep the new note object in cache:
+					// Replace the id of the note since we had a negative number there
+					note.id( data.Id );	//the insert end point (Note) returns the result obj directly (not inside a property).
+				}
+				else{
+					syncUpdateProps( data.PatientNote );
 				}
 
-				// Save changes to a single contact card
-				function saveNote(note) {										
-					// Display a message while saving
-					var message = queryStarted('Note', true, 'Saving');
-					var isInsert = false;
-					function saveUtilizationCompleted( data ){
-						if( isInsert ){
-							//the returned data from Utilization endpoint is the complete Utilization Note object
-							//	and will be added to the cache (breeze .toType 'Note'). the new entity is not needed anymore:
-							manager.detachEntity(note);
-						}
-						else{
-							note.entityAspect.acceptChanges();
-							syncUpdateProps( data.Utilization );
-						}
-
-						// Finally, clear out the message
-						queryCompleted(message);
-						return true;
-					}
-
-					function saveNoteCompleted( data ) {
-						if( isInsert ){
-							// 'Note' endpoint does not return the whole object. only the created id.
-							// we will keep the new note object in cache:
-							// Replace the id of the note since we had a negative number there
-							note.id( data.Id );	//the insert end point (Note) returns the result obj directly (not inside a property).
-						}
-						else{
-							syncUpdateProps( data.PatientNote );
-						}
-
-						// Accept changes
-						note.entityAspect.acceptChanges();
-						// Finally, clear out the message
-						queryCompleted(message);
-						return true;
-					}
-					
-					if( note.id() < 0 ){
-						isInsert = true;
-						note.createdById(session.currentUser().userId());
-						note.createdOn( new Date() );
-						note.dataSource( 'Engage' );
-					}else{
-						note.updatedById( session.currentUser().userId() );
-						note.updatedOn( new Date() );
-					}
-					var serializedNote = entitySerializer.serializeNote(note, manager);
-					var noteType = note.type().name().toLowerCase();
-					switch( noteType ){
-						case 'utilization':
-						{
-							return notesService.saveNote(manager, serializedNote, noteType).then(saveUtilizationCompleted);
-							break;
-						}
-						default:
-						{
-							return notesService.saveNote(manager, serializedNote, noteType).then(saveNoteCompleted);
-							break;
-						}
-					}
-					
-
-					function syncUpdateProps( returnedNote ){
-						// Update (PatientNote endpoint)
-						// 'PatientNote' endpoint does not return the whole object. only the created id. under data.PatientNote prop
-						if( returnedNote.UpdatedOn ){
-							note.updatedOn(returnedNote.UpdatedOn);
-						}
-						if( returnedNote.UpdatedById ){
-							note.updatedById(returnedNote.UpdatedById);
-						}
-					}
+				// Accept changes
+				note.entityAspect.acceptChanges();
+				// Finally, clear out the message
+				queryCompleted(message);
+				return true;
+			}
+			
+			if( note.id() < 0 ){
+				isInsert = true;
+				note.createdById(session.currentUser().userId());
+				note.createdOn( new Date() );
+				note.dataSource( 'Engage' );
+			}else{
+				note.updatedById( session.currentUser().userId() );
+				note.updatedOn( new Date() );
+			}
+			var serializedNote = entitySerializer.serializeNote(note, manager);
+			var noteType = note.type().name().toLowerCase();
+			switch( noteType ){
+				case 'utilization':
+				{
+					return notesService.saveNote(manager, serializedNote, noteType).then(saveUtilizationCompleted);
+					break;
 				}
-
-				// Save changes to a single contact card
-				function deleteNote(note) {
-					function deleteCompleted(data) {
-						note.entityAspect.rejectChanges();
-						note.patientId(null);
-						manager.detachEntity(note);
-						// Finally, clear out the message
-						queryCompleted(message);
-					}
-					
-					// Display a message while saving
-					var message = queryStarted('Note', true, 'Deleting');
-					return notesService.deleteNote(manager, note).then(deleteCompleted);					
+				default:
+				{
+					return notesService.saveNote(manager, serializedNote, noteType).then(saveNoteCompleted);
+					break;
 				}
+			}
+			
+
+			function syncUpdateProps( returnedNote ){
+				// Update (PatientNote endpoint)
+				// 'PatientNote' endpoint does not return the whole object. only the created id. under data.PatientNote prop
+				if( returnedNote.UpdatedOn ){
+					note.updatedOn(returnedNote.UpdatedOn);
+				}
+				if( returnedNote.UpdatedById ){
+					note.updatedById(returnedNote.UpdatedById);
+				}
+			}
+		}
+
+		// Save changes to a single contact card
+		function deleteNote(note) {
+			function deleteCompleted(data) {
+				note.entityAspect.rejectChanges();
+				note.patientId(null);
+				manager.detachEntity(note);
+				// Finally, clear out the message
+				queryCompleted(message);
+			}
+			
+			// Display a message while saving
+			var message = queryStarted('Note', true, 'Deleting');
+			return notesService.deleteNote(manager, note).then(deleteCompleted);					
+		}
 		/**
 		*	get note by id. initialy intended to load the full object of utilization type note.
 		*	as notes list in history are retrieved through the note endpoint, they are retrieving only some of the utilization props.
@@ -1290,47 +1294,47 @@ observationsLoaded = true;
 			}
 		}
 
-				// Save changes to a single contact card
-				function saveCareMember(careMember, saveType) {
-						// Display a message while saving
-						var message = queryStarted('CareMember', true, 'Saving');
+		// Save changes to a single contact card
+		function saveCareMember(careMember, saveType) {
+			// Display a message while saving
+			var message = queryStarted('CareMember', true, 'Saving');
 
-						var serializedCareMember = entitySerializer.serializeCareMember(careMember, manager);
-						return careMembersService.saveCareMember(manager, serializedCareMember, saveType).then(saveCompleted);
+			var serializedCareMember = entitySerializer.serializeCareMember(careMember, manager);
+			return careMembersService.saveCareMember(manager, serializedCareMember, saveType).then(saveCompleted);
 
-						function saveCompleted(data) {
-								// If data was returned and has a property called success that is true,
-								// Save all of the levels of everything related to a contact card
-								if (data.Id) {
-									careMember.id(data.Id);
-								}
-								careMember.entityAspect.acceptChanges();
+			function saveCompleted(data) {
+				// If data was returned and has a property called success that is true,
+				// Save all of the levels of everything related to a contact card
+				if (data.Id) {
+					careMember.id(data.Id);
+				}
+				careMember.entityAspect.acceptChanges();
 
-								// Finally, clear out the message
-								queryCompleted(message);
-								return true;
-							}
-						}
+				// Finally, clear out the message
+				queryCompleted(message);
+				return true;
+			}
+		}
 
-						function initializeObservation(observable, type, observationId, typeId, patientId) {
-							return observationsService.initializeObservation(manager, observable, type, typeId, patientId, observationId).then(initialized);
-							function initialized(data) {
-								return data;
-							}
-						}
+		function initializeObservation(observable, type, observationId, typeId, patientId) {
+			return observationsService.initializeObservation(manager, observable, type, typeId, patientId, observationId).then(initialized);
+			function initialized(data) {
+				return data;
+			}
+		}
 
-				// Save changes to a single contact card
-				function saveObservations(patientId) {
-					var theseObservations = ko.observableArray();
-						// Display a message while saving
-						var message = queryStarted('Observations', true, 'Saving');
-						// Get all observations by patient id
-						getEntityList(theseObservations, 'PatientObservation', 'local', 'patientId', patientId, false);
-						var serializedObservations = [];
-						serializedObservations.PatientId = patientId;
-						// Go through the observations,
-						ko.utils.arrayForEach(theseObservations(), function (observation) {
-							if (observation.needToSave()) {
+		// Save changes to a single contact card
+		function saveObservations(patientId) {
+			var theseObservations = ko.observableArray();
+			// Display a message while saving
+			var message = queryStarted('Observations', true, 'Saving');
+			// Get all observations by patient id
+			getEntityList(theseObservations, 'PatientObservation', 'local', 'patientId', patientId, false);
+			var serializedObservations = [];
+			serializedObservations.PatientId = patientId;
+			// Go through the observations,
+			ko.utils.arrayForEach(theseObservations(), function (observation) {
+				if (observation.needToSave()) {
 					// Accept it's changes (if modified)
 					observation.entityAspect.acceptChanges();
 					// Serialize it
@@ -1340,19 +1344,19 @@ observationsLoaded = true;
 					observation.entityAspect.rejectChanges();
 				}
 			});
-						if (serializedObservations.length > 0) {
-							observationsSaving(true);
-							return observationsService.saveObservations(manager, serializedObservations).then(saveCompleted);
-						} else {
-							queryCompleted(message);
-							observationsSaving(false);
-				return Q();	//return a resolved promise.
-			}
-
-			function saveCompleted(data) {
-				observationsSaving(false);
+			if (serializedObservations.length > 0) {
+				observationsSaving(true);
+					
+				function saveCompleted(data) {
+					observationsSaving(false);
+					queryCompleted(message);
+					return true;
+				}
+				return observationsService.saveObservations(manager, serializedObservations).then(saveCompleted);
+			} else {
 				queryCompleted(message);
-				return true;
+				observationsSaving(false);
+				return Q();	//return a resolved promise.
 			}
 		}
 
@@ -1805,33 +1809,33 @@ observationsLoaded = true;
 			return medicationsService.getPatientMedications(manager, observable, params, patientId).then(medicationReturned);
 
 			function medicationReturned(medication) {
-								// Finally, clear out the message
-								queryCompleted(message);
-								medicationSaving(false);
-							}
-						}
+				// Finally, clear out the message
+				queryCompleted(message);
+				medicationSaving(false);
+			}
+		}
 
-						function getRemoteMedicationFields (medication) {
-							return medicationsService.getRemoteMedicationFields(manager, medication).then(dataReturned);
+		function getRemoteMedicationFields (medication) {
+			return medicationsService.getRemoteMedicationFields(manager, medication).then(dataReturned);
 
-							function dataReturned (data) {
-								return data;
-							}
-						}
+			function dataReturned (data) {
+				return data;
+			}
+		}
 
-						function getPatientMedicationsQuery (params, orderstring) {
-							return medicationsService.getPatientMedicationsQuery(manager, params, orderstring);
-						}
+		function getPatientMedicationsQuery (params, orderstring) {
+			return medicationsService.getPatientMedicationsQuery(manager, params, orderstring);
+		}
 
-						function initializeNewMedication(name){
-							return medicationsService.initializeNewMedication(manager, name);
-						}
+		function initializeNewMedication(name){
+			return medicationsService.initializeNewMedication(manager, name);
+		}
 
 				// Save changes to a list of medications
-				function saveMedication(medication) {
-					var message = queryStarted('Medication', true, 'Saving');
-					trimNewMedicationFields(medication);
-					if(medication.customFrequency()){
+		function saveMedication(medication) {
+			var message = queryStarted('Medication', true, 'Saving');
+			trimNewMedicationFields(medication);
+			if(medication.customFrequency()){
 				//a custom frequency is added - save it first
 				return saveCustomFrequency(medication).then(handleCreateNew);
 			}
@@ -1928,134 +1932,134 @@ observationsLoaded = true;
 			return medicationsService.deletePatientMedication(manager, medication).then(deleted).fail(deleteFailed);
 
 			function deleted(data) {
-								// Remove the medication from cache completely
-								manager.detachEntity(medication);
+				// Remove the medication from cache completely
+				manager.detachEntity(medication);
 
-								// Finally, clear out the message
-								queryCompleted(message);
-								//setTimeout(function () { location.reload(); }, 2000);
-								return true;
-							}
+				// Finally, clear out the message
+				queryCompleted(message);
+				//setTimeout(function () { location.reload(); }, 2000);
+				return true;
+			}
 
-							function deleteFailed(error) {
-								var thisAlert = datacontext.createEntity('Alert', { result: 0, reason: 'Delete failed!' });
-								thisAlert.entityAspect.acceptChanges();
-								localCollections.alerts.push(thisAlert);
-								checkForFourOhOne(error);
-								removeLoadingMessage(message);
-								throw new Error('Delete failed');
-							}
-						}
+			function deleteFailed(error) {
+				var thisAlert = datacontext.createEntity('Alert', { result: 0, reason: 'Delete failed!' });
+				thisAlert.entityAspect.acceptChanges();
+				localCollections.alerts.push(thisAlert);
+				checkForFourOhOne(error);
+				removeLoadingMessage(message);
+				throw new Error('Delete failed');
+			}
+		}
 
-						function initializeAllergy(observable, type, allergyId, patientId, isNewAllergy) {
-							return allergiesService.initializeAllergy(manager, observable, type, patientId, allergyId).then(initialized);
-						// var newAllergy = createEntity('PatientAllergy', { id: -1, name: 'Fake Allergy', patientId: patientId });
-						// return Q.promise(function () {
-						//     return observable(newAllergy);
-						// });
-					function initialized(allergy) {
-						// Find the default allergy source
-						var defaultSource = ko.utils.arrayFirst(datacontext.enums.allergySources(), function (src) {
-							return src.isDefault();
-						});
-						// Set default properties on the allergy
-						ko.unwrap(allergy).source(defaultSource);
-						ko.unwrap(allergy).statusId(1);
-						ko.unwrap(allergy).isUserCreated(isNewAllergy);
-						return allergy;
-					}
-				}
+		function initializeAllergy(observable, type, allergyId, patientId, isNewAllergy) {
+			return allergiesService.initializeAllergy(manager, observable, type, patientId, allergyId).then(initialized);
+			// var newAllergy = createEntity('PatientAllergy', { id: -1, name: 'Fake Allergy', patientId: patientId });
+			// return Q.promise(function () {
+			//     return observable(newAllergy);
+			// });
+			function initialized(allergy) {
+				// Find the default allergy source
+				var defaultSource = ko.utils.arrayFirst(datacontext.enums.allergySources(), function (src) {
+					return src.isDefault();
+				});
+				// Set default properties on the allergy
+				ko.unwrap(allergy).source(defaultSource);
+				ko.unwrap(allergy).statusId(1);
+				ko.unwrap(allergy).isUserCreated(isNewAllergy);
+				return allergy;
+			}
+		}
 
-				function initializeNewAllergy(allergyName) {
-					allergySaving(true);
-					return allergiesService.initializeNewAllergy(manager, allergyName);
-				}
+		function initializeNewAllergy(allergyName) {
+			allergySaving(true);
+			return allergiesService.initializeNewAllergy(manager, allergyName);
+		}
 
-				// Save changes to a list of allergies
-				function saveAllergies(allergies) {
-					var serializedAllergies = [];
-					var message = queryStarted('Allergy', true, 'Saving');
-					// serializedAllergies.PatientId = patientId;
-					// Go through the observations,
-					ko.utils.arrayForEach(allergies, function (allergy) {
-						allergy.entityAspect.acceptChanges();
-							// Serialize it
-							var serializedAllergy = entitySerializer.serializePatientAllergy(allergy, manager);
-							serializedAllergies.push(serializedAllergy);
-						});
-					if (serializedAllergies.length > 0) {
-						allergySaving(true);
-						return allergiesService.saveAllergies(manager, serializedAllergies).then(saveCompleted);
-					} else {
-						return Q.promise(function () {
-							queryCompleted(message);
-							return true;
-						}).then(saveCompleted);
-					}
+		// Save changes to a list of allergies
+		function saveAllergies(allergies) {
+			var serializedAllergies = [];
+			var message = queryStarted('Allergy', true, 'Saving');
+			// serializedAllergies.PatientId = patientId;
+			// Go through the observations,
+			ko.utils.arrayForEach(allergies, function (allergy) {
+				allergy.entityAspect.acceptChanges();
+					// Serialize it
+					var serializedAllergy = entitySerializer.serializePatientAllergy(allergy, manager);
+					serializedAllergies.push(serializedAllergy);
+				});
+			if (serializedAllergies.length > 0) {
+				allergySaving(true);
+				return allergiesService.saveAllergies(manager, serializedAllergies).then(saveCompleted);
+			} else {
+				return Q.promise(function () {
+					queryCompleted(message);
+					return true;
+				}).then(saveCompleted);
+			}
 
-					function saveCompleted(data) {
-						// After saving, remove the isNew flag
-						ko.utils.arrayForEach(allergies, function (allergy) {
-							allergy.isNew(false);
-						});
-						allergySaving(false);
-						queryCompleted(message);
-						return data.results;
-					}
-				}
+			function saveCompleted(data) {
+				// After saving, remove the isNew flag
+				ko.utils.arrayForEach(allergies, function (allergy) {
+					allergy.isNew(false);
+				});
+				allergySaving(false);
+				queryCompleted(message);
+				return data.results;
+			}
+		}
 
-					function deletePatientAllergy(allergy){
-						var message = queryStarted('Allergy', true, 'Deleting');
-						return allergiesService.deletePatientAllergy(manager, allergy).then(deleted).fail(deleteFailed);
+		function deletePatientAllergy(allergy){
+			var message = queryStarted('Allergy', true, 'Deleting');
+			return allergiesService.deletePatientAllergy(manager, allergy).then(deleted).fail(deleteFailed);
 
-						function deleted(data) {
-							// Remove the allergy from cache completely
-							manager.detachEntity(allergy);
+			function deleted(data) {
+				// Remove the allergy from cache completely
+				manager.detachEntity(allergy);
 
-							// Finally, clear out the message
-							queryCompleted(message);
-							//setTimeout(function () { location.reload(); }, 2000);
-							return true;
-						}
+				// Finally, clear out the message
+				queryCompleted(message);
+				//setTimeout(function () { location.reload(); }, 2000);
+				return true;
+			}
 
-						function deleteFailed(error) {
-							var thisAlert = datacontext.createEntity('Alert', { result: 0, reason: 'Delete failed!' });
-							thisAlert.entityAspect.acceptChanges();
-							localCollections.alerts.push(thisAlert);
-							checkForFourOhOne(error);
-							removeLoadingMessage(message);
-							throw new Error('Delete failed');
-						}
-					}
+			function deleteFailed(error) {
+				var thisAlert = datacontext.createEntity('Alert', { result: 0, reason: 'Delete failed!' });
+				thisAlert.entityAspect.acceptChanges();
+				localCollections.alerts.push(thisAlert);
+				checkForFourOhOne(error);
+				removeLoadingMessage(message);
+				throw new Error('Delete failed');
+			}
+		}
 
-					function getPatientAllergies (observable, params, patientId) {
-						var message = queryStarted('Allergies', true, 'Loading');
-						allergySaving(true);
-						return allergiesService.getPatientAllergies(manager, observable, params, patientId).then(allergiesReturned);
+		function getPatientAllergies (observable, params, patientId) {
+			var message = queryStarted('Allergies', true, 'Loading');
+			allergySaving(true);
+			return allergiesService.getPatientAllergies(manager, observable, params, patientId).then(allergiesReturned);
 
-						function allergiesReturned(allergies) {
-							// Finally, clear out the message
-							queryCompleted(message);
-							allergySaving(false);
-						}
-					}
+			function allergiesReturned(allergies) {
+				// Finally, clear out the message
+				queryCompleted(message);
+				allergySaving(false);
+			}
+		}
 
-					function getPatientAllergiesQuery (params, orderstring) {
-						return allergiesService.getPatientAllergiesQuery(manager, params, orderstring);
-					}
+		function getPatientAllergiesQuery (params, orderstring) {
+			return allergiesService.getPatientAllergiesQuery(manager, params, orderstring);
+		}
 
-					function getRemoteAllergies(searchterm) {
-						return allergiesService.getRemoteAllergies(manager, searchterm);
-					}
+		function getRemoteAllergies(searchterm) {
+			return allergiesService.getRemoteAllergies(manager, searchterm);
+		}
 
-					function singleSort (patientId, breezeEntities, type, prop) {
-						var query = breeze.EntityQuery
-						.from(type)
-						.toType(type)
-						.where('patientId', '==', patientId)
-						.orderBy(prop);
+		function singleSort (patientId, breezeEntities, type, prop) {
+			var query = breeze.EntityQuery
+			.from(type)
+			.toType(type)
+			.where('patientId', '==', patientId)
+			.orderBy(prop);
 
-						return manager.executeQueryLocally(query);
-					}
+			return manager.executeQueryLocally(query);
+		}
 
 });
