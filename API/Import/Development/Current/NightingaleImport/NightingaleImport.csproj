@@ -143,6 +143,14 @@
       <Project>{abe948fb-247e-4955-b3ab-b7c93e10a542}</Project>
       <Name>Phytel.API.Interface</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ExplorysImport\ExplorysImport.csproj">
+      <Project>{fb1f6e5e-ecc3-4e24-b45f-a8846c6af8ce}</Project>
+      <Name>ExplorysImport</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NGDataImport\NGDataImport.csproj">
+      <Project>{744454d1-17af-4782-b75c-cd63b386c2a4}</Project>
+      <Name>NGDataImport</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

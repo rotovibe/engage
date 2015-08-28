@@ -719,7 +719,7 @@ namespace NGDataImport
             zoneDefault = responseZone.TimeZone;
 
             //Care Member
-            ///{Context}/{Version}/{txtContract.Text}/Type/{Name}
+            //{Context}/{Version}/{txtContract.Text}/Type/{Name}
             Uri careMemberUri = new Uri(string.Format("{0}/LookUp/{1}/{2}/{3}/Type/CareMemberType?UserId={4}",
                                                     txtURL,
                                                     context,
@@ -758,6 +758,232 @@ namespace NGDataImport
             }
             careMemberLookUp = responsecareMember.LookUpsData;
 
+        }
+
+        public TimeZoneData GetDefaultTimeZone()
+        {
+            Uri zoneUri = new Uri(string.Format("{0}/LookUp/{1}/{2}/{3}/TimeZone/Default?UserId={4}",
+                                                    txtURL,
+                                                    context,
+                                                    version,
+                                                    txtContract,
+                                                    _headerUserId));
+            HttpClient zoneClient = GetHttpClient(zoneUri);
+
+            GetTimeZoneDataRequest zoneRequest = new GetTimeZoneDataRequest
+            {
+                Version = version,
+                Context = context,
+                ContractNumber = txtContract
+            };
+
+            DataContractJsonSerializer zoneJsonSer = new DataContractJsonSerializer(typeof(GetTimeZoneDataRequest));
+            MemoryStream zoneMs = new MemoryStream();
+            zoneJsonSer.WriteObject(zoneMs, zoneRequest);
+            zoneMs.Position = 0;
+
+            //use a Stream reader to construct the StringContent (Json) 
+            StreamReader zoneSr = new StreamReader(zoneMs);
+            StringContent zoneContent = new StringContent(zoneSr.ReadToEnd(), System.Text.Encoding.UTF8, "application/json");
+
+            //Post the data 
+            var zoneResponse = zoneClient.GetStringAsync(zoneUri);
+            var zoneResponseContent = zoneResponse.Result;
+
+            string zoneResponseString = zoneResponseContent;
+            GetTimeZoneDataResponse responseZone = null;
+
+            using (var zoneMsResponse = new MemoryStream(Encoding.Unicode.GetBytes(zoneResponseString)))
+            {
+                var zoneSerializer = new DataContractJsonSerializer(typeof(GetTimeZoneDataResponse));
+                responseZone = (GetTimeZoneDataResponse)zoneSerializer.ReadObject(zoneMsResponse);
+            }
+            return responseZone.TimeZone;
+        }
+
+        public List<IdNamePair> GetModes()
+        {
+            Uri modesUri = new Uri(string.Format("{0}/LookUp/{1}/{2}/{3}/commmodes?UserId={4}",
+                                                    txtURL,
+                                                    context,
+                                                    version,
+                                                    txtContract,
+                                                    _headerUserId));
+            HttpClient modesClient = GetHttpClient(modesUri);
+
+            GetAllCommModesDataRequest modesRequest = new GetAllCommModesDataRequest
+            {
+                Version = version,
+                Context = context,
+                ContractNumber = txtContract
+            };
+
+            DataContractJsonSerializer modesJsonSer = new DataContractJsonSerializer(typeof(GetAllCommModesDataRequest));
+            MemoryStream modesMs = new MemoryStream();
+            modesJsonSer.WriteObject(modesMs, modesRequest);
+            modesMs.Position = 0;
+
+            //use a Stream reader to construct the StringContent (Json) 
+            StreamReader modesSr = new StreamReader(modesMs);
+            StringContent modesContent = new StringContent(modesSr.ReadToEnd(), System.Text.Encoding.UTF8, "application/json");
+
+            //Post the data 
+            var modesResponse = modesClient.GetStringAsync(modesUri);
+            var modesResponseContent = modesResponse.Result;
+
+            string modesResponseString = modesResponseContent;
+            GetAllCommModesDataResponse responseModes = null;
+
+            using (var modesMsResponse = new MemoryStream(Encoding.Unicode.GetBytes(modesResponseString)))
+            {
+                var modesSerializer = new DataContractJsonSerializer(typeof(GetAllCommModesDataResponse));
+                responseModes = (GetAllCommModesDataResponse)modesSerializer.ReadObject(modesMsResponse);
+            }
+            return responseModes.CommModes;
+        }
+        
+        public string GetType(string type)
+        {
+            Uri typesUri = new Uri(string.Format("{0}/LookUp/{1}/{2}/{3}/commtypes?UserId={4}",
+                                                    txtURL,
+                                                    context,
+                                                    version,
+                                                    txtContract,
+                                                    _headerUserId));
+            HttpClient typesClient = GetHttpClient(typesUri);
+
+            GetAllCommTypesDataRequest typesRequest = new GetAllCommTypesDataRequest
+            {
+                Version = version,
+                Context = context,
+                ContractNumber = txtContract
+            };
+
+            DataContractJsonSerializer typesJsonSer = new DataContractJsonSerializer(typeof(GetAllCommTypesDataRequest));
+            MemoryStream typesMs = new MemoryStream();
+            typesJsonSer.WriteObject(typesMs, typesRequest);
+            typesMs.Position = 0;
+
+            //use a Stream reader to construct the StringContent (Json) 
+            StreamReader typesSr = new StreamReader(typesMs);
+            StringContent typesContent = new StringContent(typesSr.ReadToEnd(), System.Text.Encoding.UTF8, "application/json");
+
+            //Post the data 
+            var typesResponse = typesClient.GetStringAsync(typesUri);
+            var typesResponseContent = typesResponse.Result;
+
+            string typesResponseString = typesResponseContent;
+            GetAllCommTypesDataResponse responseTypes = null;
+
+            using (var typesMsResponse = new MemoryStream(Encoding.Unicode.GetBytes(typesResponseString)))
+            {
+                var typesSerializer = new DataContractJsonSerializer(typeof(GetAllCommTypesDataResponse));
+                responseTypes = (GetAllCommTypesDataResponse)typesSerializer.ReadObject(typesMsResponse);
+            }
+            typesLookUp = responseTypes.CommTypes;
+            string t = "";
+            foreach (CommTypeData c in typesLookUp)
+            {
+                if (String.Compare(type, c.Name, true) == 0)
+                {
+                    t = c.Id;
+                }
+            }
+            return t;
+        }
+
+        public string GetState(string state)
+        {
+            Uri statesUri = new Uri(string.Format("{0}/LookUp/{1}/{2}/{3}/states?UserId={4}",
+                                                    txtURL,
+                                                    context,
+                                                    version,
+                                                    txtContract,
+                                                    _headerUserId));
+            HttpClient statesClient = GetHttpClient(statesUri);
+
+            GetAllStatesDataRequest statesRequest = new GetAllStatesDataRequest
+            {
+                Version = version,
+                Context = context,
+                ContractNumber = txtContract
+            };
+
+            DataContractJsonSerializer statesJsonSer = new DataContractJsonSerializer(typeof(GetAllStatesDataRequest));
+            MemoryStream statesMs = new MemoryStream();
+            statesJsonSer.WriteObject(statesMs, statesRequest);
+            statesMs.Position = 0;
+
+            //use a Stream reader to construct the StringContent (Json) 
+            StreamReader statesSr = new StreamReader(statesMs);
+            StringContent statesContent = new StringContent(statesSr.ReadToEnd(), System.Text.Encoding.UTF8, "application/json");
+
+            //Post the data 
+            var statesResponse = statesClient.GetStringAsync(statesUri);
+            var statesResponseContent = statesResponse.Result;
+
+            string statesResponseString = statesResponseContent;
+            GetAllStatesDataResponse responseStates = null;
+
+            using (var statesMsResponse = new MemoryStream(Encoding.Unicode.GetBytes(statesResponseString)))
+            {
+                var statesSerializer = new DataContractJsonSerializer(typeof(GetAllStatesDataResponse));
+                responseStates = (GetAllStatesDataResponse)statesSerializer.ReadObject(statesMsResponse);
+            }
+            statesLookUp = responseStates.States;
+
+            string s = "";
+            foreach (StateData st in statesLookUp)
+            {
+                if ((st.Name == state)
+                    || (st.Code == state))
+                {
+                    s = st.Id;
+                }
+            }
+            return s;
+        }
+
+        public string GetFirstTypeLookUp()
+        {
+            Uri typesUri = new Uri(string.Format("{0}/LookUp/{1}/{2}/{3}/commtypes?UserId={4}",
+                                                    txtURL,
+                                                    context,
+                                                    version,
+                                                    txtContract,
+                                                    _headerUserId));
+            HttpClient typesClient = GetHttpClient(typesUri);
+
+            GetAllCommTypesDataRequest typesRequest = new GetAllCommTypesDataRequest
+            {
+                Version = version,
+                Context = context,
+                ContractNumber = txtContract
+            };
+
+            DataContractJsonSerializer typesJsonSer = new DataContractJsonSerializer(typeof(GetAllCommTypesDataRequest));
+            MemoryStream typesMs = new MemoryStream();
+            typesJsonSer.WriteObject(typesMs, typesRequest);
+            typesMs.Position = 0;
+
+            //use a Stream reader to construct the StringContent (Json) 
+            StreamReader typesSr = new StreamReader(typesMs);
+            StringContent typesContent = new StringContent(typesSr.ReadToEnd(), System.Text.Encoding.UTF8, "application/json");
+
+            //Post the data 
+            var typesResponse = typesClient.GetStringAsync(typesUri);
+            var typesResponseContent = typesResponse.Result;
+
+            string typesResponseString = typesResponseContent;
+            GetAllCommTypesDataResponse responseTypes = null;
+
+            using (var typesMsResponse = new MemoryStream(Encoding.Unicode.GetBytes(typesResponseString)))
+            {
+                var typesSerializer = new DataContractJsonSerializer(typeof(GetAllCommTypesDataResponse));
+                responseTypes = (GetAllCommTypesDataResponse)typesSerializer.ReadObject(typesMsResponse);
+            }
+            typesLookUp = responseTypes.CommTypes;
+            return typesLookUp[0].Id;
         }
 
         private void LoadSystems()
@@ -802,7 +1028,7 @@ namespace NGDataImport
             systemsData = getSystemsDataResponse.SystemsData;
         }
 
-        private PutPatientDataResponse putPatientServiceCall(PutPatientDataRequest putPatientRequest)
+        public PutPatientDataResponse putPatientServiceCall(PutPatientDataRequest putPatientRequest)
         {
             try
             {
@@ -850,7 +1076,7 @@ namespace NGDataImport
             }
         }
 
-        private InsertPatientSystemDataResponse insertPatientSystem(InsertPatientSystemDataRequest request)
+        public InsertPatientSystemDataResponse insertPatientSystem(InsertPatientSystemDataRequest request)
         {
             //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/PatientSystem", "POST")]
             Uri theUriPS = new Uri(string.Format("{0}/PatientSystem/{1}/{2}/{3}/Patient/{4}/PatientSystem?UserId={5}",
@@ -891,7 +1117,7 @@ namespace NGDataImport
             return responsePatientPS;
         }
 
-        private GetPatientSystemDataResponse getPatientSystem(GetPatientSystemDataRequest request)
+        public GetPatientSystemDataResponse getPatientSystem(GetPatientSystemDataRequest request)
         {
             //[Route("/{Context}/{Version}/{ContractNumber}/PatientSystem/{Id}", "GET")]
             Uri theUriPS = new Uri(string.Format("{0}/PatientSystem/{1}/{2}/{3}/PatientSystem/{4}?UserId={5}",
@@ -927,7 +1153,7 @@ namespace NGDataImport
             return getPatientSystemDataResponse;
         }
 
-        private UpdatePatientSystemDataResponse updatePatientSystem(UpdatePatientSystemDataRequest request)
+        public UpdatePatientSystemDataResponse updatePatientSystem(UpdatePatientSystemDataRequest request)
         {
             //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/PatientSystem/{Id}", "PUT")]
             Uri updateUri = new Uri(string.Format("{0}/PatientSystem/{1}/{2}/{3}/Patient/{4}/PatientSystem/{5}?UserId={6}",
@@ -971,7 +1197,7 @@ namespace NGDataImport
             return response;
         }
 
-        private PutUpdatePatientDataResponse putUpdatePatientServiceCall(PutUpdatePatientDataRequest putUpdatePatient, string patientId)
+        public PutUpdatePatientDataResponse putUpdatePatientServiceCall(PutUpdatePatientDataRequest putUpdatePatient, string patientId)
         {
             Uri updateUri = new Uri(string.Format("{0}/Patient/{1}/{2}/{3}/patient?UserId={4}",
                                                         txtURL,
@@ -1012,7 +1238,7 @@ namespace NGDataImport
             return updateResponsePatient;
         }
 
-        private PutContactDataResponse putContactServiceCall(PutContactDataRequest putContactRequest, string patientId)
+        public PutContactDataResponse putContactServiceCall(PutContactDataRequest putContactRequest, string patientId)
         {
             Uri contactUri = new Uri(string.Format("{0}/Contact/{1}/{2}/{3}/patient/contact/{4}?UserId={5}",
                                             txtURL,
@@ -1048,7 +1274,7 @@ namespace NGDataImport
             return responseContact;
         }
 
-        private PutCareMemberDataResponse putCareMemberServiceCall(PutCareMemberDataRequest putCareMemberRequest, string patientId)
+        public PutCareMemberDataResponse putCareMemberServiceCall(PutCareMemberDataRequest putCareMemberRequest, string patientId)
         {
             //Patient
             Uri careMemberUri = new Uri(string.Format("{0}/CareMember/{1}/{2}/{3}/Patient/{4}/CareMember/Insert?UserId={5}",
@@ -1089,7 +1315,7 @@ namespace NGDataImport
             return responseCareMember;
         }
 
-        private GetContactByUserIdDataResponse getContactByUserIdServiceCall(string userId)
+        public GetContactByUserIdDataResponse getContactByUserIdServiceCall(string userId)
         {
             Uri getContactUri = new Uri(string.Format("{0}/Contact/{1}/{2}/{3}/Contact/User/{4}?UserId={5}",
                                                     txtURL,
@@ -1132,7 +1358,7 @@ namespace NGDataImport
             return responseContact;
         }
 
-        private void UpdateCohortPatientView(string patientId, string careMemberContactId)
+        public void UpdateCohortPatientView(string patientId, string careMemberContactId)
         {
             GetCohortPatientViewResponse getResponse = getCohortPatientViewServiceCall(patientId);
 
@@ -1174,7 +1400,7 @@ namespace NGDataImport
             }
         }
 
-        private GetCohortPatientViewResponse getCohortPatientViewServiceCall(string patientId)
+        public GetCohortPatientViewResponse getCohortPatientViewServiceCall(string patientId)
         {
             Uri getCohortUri = new Uri(string.Format("{0}/Patient/{1}/{2}/{3}/patient/{4}/cohortpatientview?UserId={5}",
                                                         txtURL,
@@ -1201,7 +1427,7 @@ namespace NGDataImport
             return responseContact;
         }
 
-        private PutUpdateCohortPatientViewResponse putCohortPatientViewServiceCall(PutUpdateCohortPatientViewRequest request, string patientId)
+        public PutUpdateCohortPatientViewResponse putCohortPatientViewServiceCall(PutUpdateCohortPatientViewRequest request, string patientId)
         {
             Uri cohortPatientUri = new Uri(string.Format("{0}/Patient/{1}/{2}/{3}/patient/{4}/cohortpatientview/update?UserId={5}",
                                                  txtURL,

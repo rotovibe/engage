@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{744454D1-17AF-4782-B75C-CD63B386C2A4}</ProjectGuid>
+    <ProjectGuid>{FB1F6E5E-ECC3-4E24-B45F-A8846C6AF8CE}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NGDataImport</RootNamespace>
-    <AssemblyName>NGDataImport</AssemblyName>
+    <RootNamespace>ExplorysImport</RootNamespace>
+    <AssemblyName>ExplorysImport</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
@@ -35,15 +35,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System" />
-    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Deployment" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.Web" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -51,20 +44,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Importer.cs" />
+    <Compile Include="ExplorysImport.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Common\Phytel.API.Common\Development\Current\Phytel.API.Common.csproj">
       <Project>{25cf3c3f-221f-4a49-b5ef-a8a5fcf9a5ba}</Project>
       <Name>Phytel.API.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\DataDomain\Phytel.API.DataDomain.CareMember\Development\Current\CareMember.DTO\DataDomain.CareMember.DTO.csproj">
-      <Project>{b65577e7-60a6-4553-b1b9-38d6074ac560}</Project>
-      <Name>DataDomain.CareMember.DTO</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\DataDomain\Phytel.API.DataDomain.Contact\Development\Current\Contact.DTO\DataDomain.Contact.DTO.csproj">
       <Project>{0b6e0ed8-abe5-4a1d-8e10-0ac54f06d9c4}</Project>
@@ -74,21 +60,17 @@
       <Project>{4885fe36-03db-47b7-be7e-33260943a9dc}</Project>
       <Name>DataDomain.LookUp.DTO</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\DataDomain\Phytel.API.DataDomain.PatientSystem\Development\Current\PatientSystem.DTO\DataDomain.PatientSystem.DTO.csproj">
-      <Project>{6033a8ea-a3ef-4182-bfdd-4a9826ecf871}</Project>
-      <Name>DataDomain.PatientSystem.DTO</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\..\DataDomain\Phytel.API.DataDomain.Patient\Development\Current\Patient.DTOs\DataDomain.Patient.DTO.csproj">
       <Project>{1b3148a8-fb57-4461-91bc-f1cd38a013b6}</Project>
       <Name>DataDomain.Patient.DTO</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\DataDomain\Phytel.API.DataDomain.Program\Development\Current\Program.DTO\DataDomain.Program.DTO.csproj">
-      <Project>{4e9f9dbf-e01b-4226-9e4f-246149ebbb3f}</Project>
-      <Name>DataDomain.Program.DTO</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\..\Interfaces\Development\Current\Phytel.API.Interface\Phytel.API.Interface.csproj">
       <Project>{abe948fb-247e-4955-b3ab-b7c93e10a542}</Project>
       <Name>Phytel.API.Interface</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NGDataImport\NGDataImport.csproj">
+      <Project>{744454d1-17af-4782-b75c-cd63b386c2a4}</Project>
+      <Name>NGDataImport</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

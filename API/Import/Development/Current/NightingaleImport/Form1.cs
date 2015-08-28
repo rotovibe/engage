@@ -18,6 +18,8 @@ using Phytel.API.DataDomain.LookUp.DTO;
 using Phytel.API.DataDomain.Patient.DTO;
 using Phytel.API.DataDomain.PatientSystem.DTO;
 using Microsoft.VisualBasic.FileIO;
+using NGDataImport;
+using ExplorysImport;
 
 namespace NightingaleImport
 {
@@ -86,6 +88,7 @@ namespace NightingaleImport
         {
             InitializeComponent();
             this.listView1.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.listView1_ColumnClick);
+
         }
 
         public void button1_Click(object sender, EventArgs e)
@@ -108,10 +111,11 @@ namespace NightingaleImport
         {
             try
             {
+                Importer import = new Importer(txtURL.Text, context, version, txtContract.Text, _headerUserId);
                 Guid sqlUserId = getUserId(txtContactID.Text);
                 if (sqlUserId != Guid.Empty)
                 {
-                    GetContactByUserIdDataResponse contactUserResp = getContactByUserIdServiceCall(sqlUserId.ToString());
+                    GetContactByUserIdDataResponse contactUserResp = import.getContactByUserIdServiceCall(sqlUserId.ToString());
 
                     _headerUserId = contactUserResp.Contact.ContactId;
                     if (string.IsNullOrEmpty(_headerUserId))
@@ -155,7 +159,7 @@ namespace NightingaleImport
                         lblStatus.Text = string.Format("Importing '{0} {1}'...", pdata.FirstName, pdata.LastName);
                         lblStatus.Refresh();
 
-                        PutPatientDataResponse responsePatient = putPatientServiceCall(patientRequest);
+                        PutPatientDataResponse responsePatient = import.putPatientServiceCall(patientRequest);
                         if (responsePatient.Id == null)
                         {
                             dictionaryFail.Add(pdata.FirstName + " " + pdata.LastName, string.Format("Message: {0} StackTrace: {1}", responsePatient.Status.Message, responsePatient.Status.StackTrace));
@@ -189,7 +193,7 @@ namespace NightingaleImport
                                         Context = patientRequest.Context,
                                         ContractNumber = patientRequest.ContractNumber
                                     };
-                                    InsertPatientSystemDataResponse responsePatientPS = insertPatientSystem(psRequest);
+                                    InsertPatientSystemDataResponse responsePatientPS = import.insertPatientSystem(psRequest);
                                     if (string.IsNullOrEmpty(responsePatientPS.Id))
                                     {
                                         throw new Exception("Failed to import the PatientSystem Id provided in the file.");
@@ -199,7 +203,7 @@ namespace NightingaleImport
                                         // If imported patientsystem's primary is set to true, override the EngagePatientSystem's primary field.
                                         if (psData.Primary)
                                         {
-                                            GetPatientSystemDataResponse engagePatientSystemResponse = getPatientSystem(new GetPatientSystemDataRequest 
+                                            GetPatientSystemDataResponse engagePatientSystemResponse = import.getPatientSystem(new GetPatientSystemDataRequest 
                                             { 
                                                 Context = context,
                                                 ContractNumber = txtContract.Text,
@@ -218,7 +222,7 @@ namespace NightingaleImport
                                                     PatientId = engagePatientSystemResponse.PatientSystemData.PatientId,
                                                     PatientSystemsData = engagePatientSystemResponse.PatientSystemData
                                                 };
-                                                updatePatientSystem(updatePDRequest);
+                                                import.updatePatientSystem(updatePDRequest);
                                             }
                                         }
                                     }
@@ -505,7 +509,7 @@ namespace NightingaleImport
                                 ContractNumber = patientRequest.ContractNumber
                             };
 
-                            PutContactDataResponse responseContact = putContactServiceCall(contactRequest, responsePatient.Id.ToString());
+                            PutContactDataResponse responseContact = import.putContactServiceCall(contactRequest, responsePatient.Id.ToString());
                             if (responseContact.ContactId == null)
                             {
                                 throw new Exception("Contact card import request failed.");
@@ -519,7 +523,7 @@ namespace NightingaleImport
                                 Guid userIdResponse = getUserId(lvi.SubItems[colCMan].Text);
                                 if (userIdResponse != Guid.Empty)
                                 {
-                                    GetContactByUserIdDataResponse contactByUserIdResponse = getContactByUserIdServiceCall(userIdResponse.ToString());
+                                    GetContactByUserIdDataResponse contactByUserIdResponse = import.getContactByUserIdServiceCall(userIdResponse.ToString());
 
                                     CareMemberData careMember = new CareMemberData
                                     {
@@ -534,12 +538,12 @@ namespace NightingaleImport
                                         PatientId = responsePatient.Id.ToString(),
                                         CareMember = careMember
                                     };
-                                    PutCareMemberDataResponse responseCareMember = putCareMemberServiceCall(careMemberRequest, responsePatient.Id.ToString());
+                                    PutCareMemberDataResponse responseCareMember = import.putCareMemberServiceCall(careMemberRequest, responsePatient.Id.ToString());
                                     if (responseCareMember.Id == null)
                                     {
                                         throw new Exception("Care Member import request failed.");
                                     }
-                                    UpdateCohortPatientView(responsePatient.Id.ToString(), contactByUserIdResponse.Contact.ContactId);
+                                    import.UpdateCohortPatientView(responsePatient.Id.ToString(), contactByUserIdResponse.Contact.ContactId);
                                 }
                             }
 
@@ -985,443 +989,465 @@ namespace NightingaleImport
             }
         }
 
-        private PutPatientDataResponse putPatientServiceCall(PutPatientDataRequest putPatientRequest)
-        {
-            try
-            {
-                //Patient
-                Uri theUri = new Uri(string.Format("{0}/Patient/{1}/{2}/{3}/Patient/Insert?UserId={4}",
-                                                     txtURL.Text,
-                                                     context,
-                                                     version,
-                                                     txtContract.Text,
-                                                     _headerUserId));
+        #region putPatientServiceCall
+        //private PutPatientDataResponse putPatientServiceCall(PutPatientDataRequest putPatientRequest)
+        //{
+        //    try
+        //    {
+        //        //Patient
+        //        Uri theUri = new Uri(string.Format("{0}/Patient/{1}/{2}/{3}/Patient/Insert?UserId={4}",
+        //                                             txtURL.Text,
+        //                                             context,
+        //                                             version,
+        //                                             txtContract.Text,
+        //                                             _headerUserId));
 
-                HttpClient client = GetHttpClient(theUri);
+        //        HttpClient client = GetHttpClient(theUri);
 
-                DataContractJsonSerializer jsonSer = new DataContractJsonSerializer(typeof(PutPatientDataRequest));
+        //        DataContractJsonSerializer jsonSer = new DataContractJsonSerializer(typeof(PutPatientDataRequest));
 
-                // use the serializer to write the object to a MemoryStream 
-                MemoryStream ms = new MemoryStream();
-                jsonSer.WriteObject(ms, putPatientRequest);
-                ms.Position = 0;
-
-
-                //use a Stream reader to construct the StringContent (Json) 
-                StreamReader sr = new StreamReader(ms);
-
-                StringContent theContent = new StringContent(sr.ReadToEnd(), System.Text.Encoding.UTF8, "application/json");
-
-                //Post the data 
-                var response = client.PutAsync(theUri, theContent);
-                var responseContent = response.Result.Content;
-
-                string responseString = responseContent.ReadAsStringAsync().Result;
-                PutPatientDataResponse responsePatient = null;
-
-                using (var msResponse = new MemoryStream(Encoding.Unicode.GetBytes(responseString)))
-                {
-                    var serializer = new DataContractJsonSerializer(typeof(PutPatientDataResponse));
-                    responsePatient = (PutPatientDataResponse)serializer.ReadObject(msResponse);
-                }
-
-                return responsePatient;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        private InsertPatientSystemDataResponse insertPatientSystem(InsertPatientSystemDataRequest request)
-        {
-            //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/PatientSystem", "POST")]
-            Uri theUriPS = new Uri(string.Format("{0}/PatientSystem/{1}/{2}/{3}/Patient/{4}/PatientSystem?UserId={5}",
-                                                   txtURL.Text,
-                                                   context,
-                                                   version,
-                                                   txtContract.Text,
-                                                   request.PatientId,
-                                                   _headerUserId));
-            HttpClient clientPS = GetHttpClient(theUriPS);
-
-            DataContractJsonSerializer jsonSerPS = new DataContractJsonSerializer(typeof(InsertPatientSystemDataRequest));
-
-            // use the serializer to write the object to a MemoryStream 
-            MemoryStream msPS = new MemoryStream();
-            jsonSerPS.WriteObject(msPS, request);
-            msPS.Position = 0;
+        //        // use the serializer to write the object to a MemoryStream 
+        //        MemoryStream ms = new MemoryStream();
+        //        jsonSer.WriteObject(ms, putPatientRequest);
+        //        ms.Position = 0;
 
 
-            //use a Stream reader to construct the StringContent (Json) 
-            StreamReader srPS = new StreamReader(msPS);
+        //        //use a Stream reader to construct the StringContent (Json) 
+        //        StreamReader sr = new StreamReader(ms);
 
-            StringContent theContentPS = new StringContent(srPS.ReadToEnd(), System.Text.Encoding.UTF8, "application/json");
+        //        StringContent theContent = new StringContent(sr.ReadToEnd(), System.Text.Encoding.UTF8, "application/json");
 
-            //Post the data 
-            var responsePS = clientPS.PostAsync(theUriPS, theContentPS);
-            var responseContentPS = responsePS.Result.Content;
+        //        //Post the data 
+        //        var response = client.PutAsync(theUri, theContent);
+        //        var responseContent = response.Result.Content;
 
-            string responseStringPS = responseContentPS.ReadAsStringAsync().Result;
-            InsertPatientSystemDataResponse responsePatientPS = null;
+        //        string responseString = responseContent.ReadAsStringAsync().Result;
+        //        PutPatientDataResponse responsePatient = null;
 
-            using (var msResponsePS = new MemoryStream(Encoding.Unicode.GetBytes(responseStringPS)))
-            {
-                var serializerPS = new DataContractJsonSerializer(typeof(InsertPatientSystemDataResponse));
-                responsePatientPS = (InsertPatientSystemDataResponse)serializerPS.ReadObject(msResponsePS);
-            }
+        //        using (var msResponse = new MemoryStream(Encoding.Unicode.GetBytes(responseString)))
+        //        {
+        //            var serializer = new DataContractJsonSerializer(typeof(PutPatientDataResponse));
+        //            responsePatient = (PutPatientDataResponse)serializer.ReadObject(msResponse);
+        //        }
 
-            return responsePatientPS;
-        }
+        //        return responsePatient;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw ex;
+        //    }
+        //}
+        #endregion
 
-        private GetPatientSystemDataResponse getPatientSystem(GetPatientSystemDataRequest request)
-        {
-            //[Route("/{Context}/{Version}/{ContractNumber}/PatientSystem/{Id}", "GET")]
-            Uri theUriPS = new Uri(string.Format("{0}/PatientSystem/{1}/{2}/{3}/PatientSystem/{4}?UserId={5}",
-                                                   txtURL.Text,
-                                                   context,
-                                                   version,
-                                                   txtContract.Text,
-                                                   request.Id,
-                                                   _headerUserId));
-            HttpClient client = GetHttpClient(theUriPS);
+        #region insertPatientSystem
+        //private InsertPatientSystemDataResponse insertPatientSystem(InsertPatientSystemDataRequest request)
+        //{
+        //    //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/PatientSystem", "POST")]
+        //    Uri theUriPS = new Uri(string.Format("{0}/PatientSystem/{1}/{2}/{3}/Patient/{4}/PatientSystem?UserId={5}",
+        //                                           txtURL.Text,
+        //                                           context,
+        //                                           version,
+        //                                           txtContract.Text,
+        //                                           request.PatientId,
+        //                                           _headerUserId));
+        //    HttpClient clientPS = GetHttpClient(theUriPS);
 
-            DataContractJsonSerializer modesJsonSer = new DataContractJsonSerializer(typeof(GetPatientSystemDataRequest));
-            MemoryStream ms = new MemoryStream();
-            modesJsonSer.WriteObject(ms, request);
-            ms.Position = 0;
+        //    DataContractJsonSerializer jsonSerPS = new DataContractJsonSerializer(typeof(InsertPatientSystemDataRequest));
 
-            //use a Stream reader to construct the StringContent (Json) 
-            StreamReader modesSr = new StreamReader(ms);
-            StringContent modesContent = new StringContent(modesSr.ReadToEnd(), System.Text.Encoding.UTF8, "application/json");
-
-            //Post the data 
-            var response = client.GetStringAsync(theUriPS);
-            var responseContent = response.Result;
-
-            string modesResponseString = responseContent;
-            GetPatientSystemDataResponse getPatientSystemDataResponse = null;
-
-            using (var memStream = new MemoryStream(Encoding.Unicode.GetBytes(modesResponseString)))
-            {
-                var modesSerializer = new DataContractJsonSerializer(typeof(GetPatientSystemDataResponse));
-                getPatientSystemDataResponse = (GetPatientSystemDataResponse)modesSerializer.ReadObject(memStream);
-            }
-            return getPatientSystemDataResponse;
-        }
-
-        private UpdatePatientSystemDataResponse updatePatientSystem(UpdatePatientSystemDataRequest request)
-        {
-            //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/PatientSystem/{Id}", "PUT")]
-            Uri updateUri = new Uri(string.Format("{0}/PatientSystem/{1}/{2}/{3}/Patient/{4}/PatientSystem/{5}?UserId={6}",
-                                                        txtURL.Text,
-                                                        context,
-                                                        version,
-                                                        txtContract.Text,
-                                                        request.PatientId,
-                                                        request.Id,
-                                                        _headerUserId));
-            HttpClient updateClient = GetHttpClient(updateUri);
-
-            UpdatePatientSystemDataResponse response = null;
-
-            DataContractJsonSerializer updateJsonSer = new DataContractJsonSerializer(typeof(UpdatePatientSystemDataRequest));
-
-            // use the serializer to write the object to a MemoryStream 
-            MemoryStream updateMs = new MemoryStream();
-            updateJsonSer.WriteObject(updateMs, request);
-            updateMs.Position = 0;
+        //    // use the serializer to write the object to a MemoryStream 
+        //    MemoryStream msPS = new MemoryStream();
+        //    jsonSerPS.WriteObject(msPS, request);
+        //    msPS.Position = 0;
 
 
-            //use a Stream reader to construct the StringContent (Json) 
-            StreamReader updateSr = new StreamReader(updateMs);
+        //    //use a Stream reader to construct the StringContent (Json) 
+        //    StreamReader srPS = new StreamReader(msPS);
 
-            StringContent updateContent = new StringContent(updateSr.ReadToEnd(), System.Text.Encoding.UTF8, "application/json");
+        //    StringContent theContentPS = new StringContent(srPS.ReadToEnd(), System.Text.Encoding.UTF8, "application/json");
 
-            //Post the data 
-            var updateResponse = updateClient.PutAsync(updateUri, updateContent);
-            var updateResponseContent = updateResponse.Result.Content;
+        //    //Post the data 
+        //    var responsePS = clientPS.PostAsync(theUriPS, theContentPS);
+        //    var responseContentPS = responsePS.Result.Content;
 
-            string updateResponseString = updateResponseContent.ReadAsStringAsync().Result;
+        //    string responseStringPS = responseContentPS.ReadAsStringAsync().Result;
+        //    InsertPatientSystemDataResponse responsePatientPS = null;
+
+        //    using (var msResponsePS = new MemoryStream(Encoding.Unicode.GetBytes(responseStringPS)))
+        //    {
+        //        var serializerPS = new DataContractJsonSerializer(typeof(InsertPatientSystemDataResponse));
+        //        responsePatientPS = (InsertPatientSystemDataResponse)serializerPS.ReadObject(msResponsePS);
+        //    }
+
+        //    return responsePatientPS;
+        //}
+        #endregion
+
+        #region getPatientSystem
+        //private GetPatientSystemDataResponse getPatientSystem(GetPatientSystemDataRequest request)
+        //{
+        //    //[Route("/{Context}/{Version}/{ContractNumber}/PatientSystem/{Id}", "GET")]
+        //    Uri theUriPS = new Uri(string.Format("{0}/PatientSystem/{1}/{2}/{3}/PatientSystem/{4}?UserId={5}",
+        //                                           txtURL.Text,
+        //                                           context,
+        //                                           version,
+        //                                           txtContract.Text,
+        //                                           request.Id,
+        //                                           _headerUserId));
+        //    HttpClient client = GetHttpClient(theUriPS);
+
+        //    DataContractJsonSerializer modesJsonSer = new DataContractJsonSerializer(typeof(GetPatientSystemDataRequest));
+        //    MemoryStream ms = new MemoryStream();
+        //    modesJsonSer.WriteObject(ms, request);
+        //    ms.Position = 0;
+
+        //    //use a Stream reader to construct the StringContent (Json) 
+        //    StreamReader modesSr = new StreamReader(ms);
+        //    StringContent modesContent = new StringContent(modesSr.ReadToEnd(), System.Text.Encoding.UTF8, "application/json");
+
+        //    //Post the data 
+        //    var response = client.GetStringAsync(theUriPS);
+        //    var responseContent = response.Result;
+
+        //    string modesResponseString = responseContent;
+        //    GetPatientSystemDataResponse getPatientSystemDataResponse = null;
+
+        //    using (var memStream = new MemoryStream(Encoding.Unicode.GetBytes(modesResponseString)))
+        //    {
+        //        var modesSerializer = new DataContractJsonSerializer(typeof(GetPatientSystemDataResponse));
+        //        getPatientSystemDataResponse = (GetPatientSystemDataResponse)modesSerializer.ReadObject(memStream);
+        //    }
+        //    return getPatientSystemDataResponse;
+        //}
+        #endregion
+
+        #region updatedPatientSystem
+        //private UpdatePatientSystemDataResponse updatePatientSystem(UpdatePatientSystemDataRequest request)
+        //{
+        //    //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/PatientSystem/{Id}", "PUT")]
+        //    Uri updateUri = new Uri(string.Format("{0}/PatientSystem/{1}/{2}/{3}/Patient/{4}/PatientSystem/{5}?UserId={6}",
+        //                                                txtURL.Text,
+        //                                                context,
+        //                                                version,
+        //                                                txtContract.Text,
+        //                                                request.PatientId,
+        //                                                request.Id,
+        //                                                _headerUserId));
+        //    HttpClient updateClient = GetHttpClient(updateUri);
+
+        //    UpdatePatientSystemDataResponse response = null;
+
+        //    DataContractJsonSerializer updateJsonSer = new DataContractJsonSerializer(typeof(UpdatePatientSystemDataRequest));
+
+        //    // use the serializer to write the object to a MemoryStream 
+        //    MemoryStream updateMs = new MemoryStream();
+        //    updateJsonSer.WriteObject(updateMs, request);
+        //    updateMs.Position = 0;
 
 
-            using (var updateMsResponse = new MemoryStream(Encoding.Unicode.GetBytes(updateResponseString)))
-            {
-                var updateSerializer = new DataContractJsonSerializer(typeof(UpdatePatientSystemDataResponse));
-                response = (UpdatePatientSystemDataResponse)updateSerializer.ReadObject(updateMsResponse);
-            }
+        //    //use a Stream reader to construct the StringContent (Json) 
+        //    StreamReader updateSr = new StreamReader(updateMs);
 
-            return response;
-        }
+        //    StringContent updateContent = new StringContent(updateSr.ReadToEnd(), System.Text.Encoding.UTF8, "application/json");
 
-        private PutUpdatePatientDataResponse putUpdatePatientServiceCall(PutUpdatePatientDataRequest putUpdatePatient, string patientId)
-        {
-            Uri updateUri = new Uri(string.Format("{0}/Patient/{1}/{2}/{3}/patient?UserId={4}",
-                                                        txtURL.Text,
-                                                        context,
-                                                        version,
-                                                        txtContract.Text,
-                                                        _headerUserId));
-            HttpClient updateClient = GetHttpClient(updateUri);
+        //    //Post the data 
+        //    var updateResponse = updateClient.PutAsync(updateUri, updateContent);
+        //    var updateResponseContent = updateResponse.Result.Content;
 
-            PutUpdatePatientDataResponse updateResponsePatient = null;
-
-            DataContractJsonSerializer updateJsonSer = new DataContractJsonSerializer(typeof(PutUpdatePatientDataRequest));
-
-            // use the serializer to write the object to a MemoryStream 
-            MemoryStream updateMs = new MemoryStream();
-            updateJsonSer.WriteObject(updateMs, putUpdatePatient);
-            updateMs.Position = 0;
+        //    string updateResponseString = updateResponseContent.ReadAsStringAsync().Result;
 
 
-            //use a Stream reader to construct the StringContent (Json) 
-            StreamReader updateSr = new StreamReader(updateMs);
+        //    using (var updateMsResponse = new MemoryStream(Encoding.Unicode.GetBytes(updateResponseString)))
+        //    {
+        //        var updateSerializer = new DataContractJsonSerializer(typeof(UpdatePatientSystemDataResponse));
+        //        response = (UpdatePatientSystemDataResponse)updateSerializer.ReadObject(updateMsResponse);
+        //    }
 
-            StringContent updateContent = new StringContent(updateSr.ReadToEnd(), System.Text.Encoding.UTF8, "application/json");
+        //    return response;
+        //}
+        #endregion
 
-            //Post the data 
-            var updateResponse = updateClient.PutAsync(updateUri, updateContent);
-            var updateResponseContent = updateResponse.Result.Content;
+        #region putUpdatePatientServiceCall
+        //private PutUpdatePatientDataResponse putUpdatePatientServiceCall(PutUpdatePatientDataRequest putUpdatePatient, string patientId)
+        //{
+        //    Uri updateUri = new Uri(string.Format("{0}/Patient/{1}/{2}/{3}/patient?UserId={4}",
+        //                                                txtURL.Text,
+        //                                                context,
+        //                                                version,
+        //                                                txtContract.Text,
+        //                                                _headerUserId));
+        //    HttpClient updateClient = GetHttpClient(updateUri);
 
-            string updateResponseString = updateResponseContent.ReadAsStringAsync().Result;
+        //    PutUpdatePatientDataResponse updateResponsePatient = null;
+
+        //    DataContractJsonSerializer updateJsonSer = new DataContractJsonSerializer(typeof(PutUpdatePatientDataRequest));
+
+        //    // use the serializer to write the object to a MemoryStream 
+        //    MemoryStream updateMs = new MemoryStream();
+        //    updateJsonSer.WriteObject(updateMs, putUpdatePatient);
+        //    updateMs.Position = 0;
 
 
-            using (var updateMsResponse = new MemoryStream(Encoding.Unicode.GetBytes(updateResponseString)))
-            {
-                var updateSerializer = new DataContractJsonSerializer(typeof(PutUpdatePatientDataResponse));
-                updateResponsePatient = (PutUpdatePatientDataResponse)updateSerializer.ReadObject(updateMsResponse);
-            }
+        //    //use a Stream reader to construct the StringContent (Json) 
+        //    StreamReader updateSr = new StreamReader(updateMs);
 
-            return updateResponsePatient;
-        }
-        
-        private PutContactDataResponse putContactServiceCall(PutContactDataRequest putContactRequest, string patientId)
-        {
-            Uri contactUri = new Uri(string.Format("{0}/Contact/{1}/{2}/{3}/patient/contact/{4}?UserId={5}",
-                                            txtURL.Text,
-                                            context,
-                                            version,
-                                            txtContract.Text,
-                                            patientId,
-                                            _headerUserId));
-            HttpClient contactClient = GetHttpClient(contactUri);
+        //    StringContent updateContent = new StringContent(updateSr.ReadToEnd(), System.Text.Encoding.UTF8, "application/json");
 
-            DataContractJsonSerializer contactJsonSer = new DataContractJsonSerializer(typeof(PutContactDataRequest));
-            MemoryStream contactMs = new MemoryStream();
-            contactJsonSer.WriteObject(contactMs, putContactRequest);
-            contactMs.Position = 0;
+        //    //Post the data 
+        //    var updateResponse = updateClient.PutAsync(updateUri, updateContent);
+        //    var updateResponseContent = updateResponse.Result.Content;
 
-            //use a Stream reader to construct the StringContent (Json) 
-            StreamReader contactSr = new StreamReader(contactMs);
-            StringContent contactContent = new StringContent(contactSr.ReadToEnd(), System.Text.Encoding.UTF8, "application/json");
+        //    string updateResponseString = updateResponseContent.ReadAsStringAsync().Result;
 
-            //Post the data 
-            var contactResponse = contactClient.PutAsync(contactUri, contactContent);
-            var contactResponseContent = contactResponse.Result.Content;
 
-            string contactResponseString = contactResponseContent.ReadAsStringAsync().Result;
-            PutContactDataResponse responseContact = null;
+        //    using (var updateMsResponse = new MemoryStream(Encoding.Unicode.GetBytes(updateResponseString)))
+        //    {
+        //        var updateSerializer = new DataContractJsonSerializer(typeof(PutUpdatePatientDataResponse));
+        //        updateResponsePatient = (PutUpdatePatientDataResponse)updateSerializer.ReadObject(updateMsResponse);
+        //    }
 
-            using (var contactMsResponse = new MemoryStream(Encoding.Unicode.GetBytes(contactResponseString)))
-            {
-                var contactSerializer = new DataContractJsonSerializer(typeof(PutContactDataResponse));
-                responseContact = (PutContactDataResponse)contactSerializer.ReadObject(contactMsResponse);
-            }
+        //    return updateResponsePatient;
+        //}
+        #endregion
 
-            return responseContact;
-        }
+        #region putContactServiceCall
+        //private PutContactDataResponse putContactServiceCall(PutContactDataRequest putContactRequest, string patientId)
+        //{
+        //    Uri contactUri = new Uri(string.Format("{0}/Contact/{1}/{2}/{3}/patient/contact/{4}?UserId={5}",
+        //                                    txtURL.Text,
+        //                                    context,
+        //                                    version,
+        //                                    txtContract.Text,
+        //                                    patientId,
+        //                                    _headerUserId));
+        //    HttpClient contactClient = GetHttpClient(contactUri);
 
-        private PutCareMemberDataResponse putCareMemberServiceCall(PutCareMemberDataRequest putCareMemberRequest, string patientId)
-        {
-            //Patient
-            Uri careMemberUri = new Uri(string.Format("{0}/CareMember/{1}/{2}/{3}/Patient/{4}/CareMember/Insert?UserId={5}",
-                                                 txtURL.Text,
-                                                 context,
-                                                 version,
-                                                 txtContract.Text,
-                                                 patientId,
-                                                 _headerUserId));
-            HttpClient client = GetHttpClient(careMemberUri);
+        //    DataContractJsonSerializer contactJsonSer = new DataContractJsonSerializer(typeof(PutContactDataRequest));
+        //    MemoryStream contactMs = new MemoryStream();
+        //    contactJsonSer.WriteObject(contactMs, putContactRequest);
+        //    contactMs.Position = 0;
+
+        //    //use a Stream reader to construct the StringContent (Json) 
+        //    StreamReader contactSr = new StreamReader(contactMs);
+        //    StringContent contactContent = new StringContent(contactSr.ReadToEnd(), System.Text.Encoding.UTF8, "application/json");
+
+        //    //Post the data 
+        //    var contactResponse = contactClient.PutAsync(contactUri, contactContent);
+        //    var contactResponseContent = contactResponse.Result.Content;
+
+        //    string contactResponseString = contactResponseContent.ReadAsStringAsync().Result;
+        //    PutContactDataResponse responseContact = null;
+
+        //    using (var contactMsResponse = new MemoryStream(Encoding.Unicode.GetBytes(contactResponseString)))
+        //    {
+        //        var contactSerializer = new DataContractJsonSerializer(typeof(PutContactDataResponse));
+        //        responseContact = (PutContactDataResponse)contactSerializer.ReadObject(contactMsResponse);
+        //    }
+
+        //    return responseContact;
+        //}
+        #endregion
+
+        #region putCareMemberServiceCall
+        //private PutCareMemberDataResponse putCareMemberServiceCall(PutCareMemberDataRequest putCareMemberRequest, string patientId)
+        //{
+        //    //Patient
+        //    Uri careMemberUri = new Uri(string.Format("{0}/CareMember/{1}/{2}/{3}/Patient/{4}/CareMember/Insert?UserId={5}",
+        //                                         txtURL.Text,
+        //                                         context,
+        //                                         version,
+        //                                         txtContract.Text,
+        //                                         patientId,
+        //                                         _headerUserId));
+        //    HttpClient client = GetHttpClient(careMemberUri);
             
-            DataContractJsonSerializer jsonSer = new DataContractJsonSerializer(typeof(PutCareMemberDataRequest));
+        //    DataContractJsonSerializer jsonSer = new DataContractJsonSerializer(typeof(PutCareMemberDataRequest));
 
-            // use the serializer to write the object to a MemoryStream 
-            MemoryStream ms = new MemoryStream();
-            jsonSer.WriteObject(ms, putCareMemberRequest);
-            ms.Position = 0;
+        //    // use the serializer to write the object to a MemoryStream 
+        //    MemoryStream ms = new MemoryStream();
+        //    jsonSer.WriteObject(ms, putCareMemberRequest);
+        //    ms.Position = 0;
 
 
-            //use a Stream reader to construct the StringContent (Json) 
-            StreamReader sr = new StreamReader(ms);
+        //    //use a Stream reader to construct the StringContent (Json) 
+        //    StreamReader sr = new StreamReader(ms);
 
-            StringContent theContent = new StringContent(sr.ReadToEnd(), System.Text.Encoding.UTF8, "application/json");
+        //    StringContent theContent = new StringContent(sr.ReadToEnd(), System.Text.Encoding.UTF8, "application/json");
 
-            //Post the data 
-            var response = client.PutAsync(careMemberUri, theContent);
-            var responseContent = response.Result.Content;
+        //    //Post the data 
+        //    var response = client.PutAsync(careMemberUri, theContent);
+        //    var responseContent = response.Result.Content;
 
-            string responseString = responseContent.ReadAsStringAsync().Result;
-            PutCareMemberDataResponse responseCareMember = null;
+        //    string responseString = responseContent.ReadAsStringAsync().Result;
+        //    PutCareMemberDataResponse responseCareMember = null;
 
-            using (var msResponse = new MemoryStream(Encoding.Unicode.GetBytes(responseString)))
-            {
-                var serializer = new DataContractJsonSerializer(typeof(PutCareMemberDataResponse));
-                responseCareMember = (PutCareMemberDataResponse)serializer.ReadObject(msResponse);
-            }
+        //    using (var msResponse = new MemoryStream(Encoding.Unicode.GetBytes(responseString)))
+        //    {
+        //        var serializer = new DataContractJsonSerializer(typeof(PutCareMemberDataResponse));
+        //        responseCareMember = (PutCareMemberDataResponse)serializer.ReadObject(msResponse);
+        //    }
 
-            return responseCareMember;
-        }
+        //    return responseCareMember;
+        //}
+        #endregion
 
-        private GetContactByUserIdDataResponse getContactByUserIdServiceCall(string userId)
-        {
-            Uri getContactUri = new Uri(string.Format("{0}/Contact/{1}/{2}/{3}/Contact/User/{4}?UserId={5}",
-                                                    txtURL.Text,
-                                                    context,
-                                                    version,
-                                                    txtContract.Text,
-                                                    userId,
-                                                    _headerUserId));
-            HttpClient getContactClient = GetHttpClient(getContactUri);
+        #region getContractByUserId
+        //private GetContactByUserIdDataResponse getContactByUserIdServiceCall(string userId)
+        //{
+        //    Uri getContactUri = new Uri(string.Format("{0}/Contact/{1}/{2}/{3}/Contact/User/{4}?UserId={5}",
+        //                                            txtURL.Text,
+        //                                            context,
+        //                                            version,
+        //                                            txtContract.Text,
+        //                                            userId,
+        //                                            _headerUserId));
+        //    HttpClient getContactClient = GetHttpClient(getContactUri);
 
-            GetContactByUserIdDataRequest getContactRequest = new GetContactByUserIdDataRequest
-            {
-                SQLUserId = userId,
-                Context = context,
-                Version = version,
-                ContractNumber = txtContract.Text
-            };
+        //    GetContactByUserIdDataRequest getContactRequest = new GetContactByUserIdDataRequest
+        //    {
+        //        SQLUserId = userId,
+        //        Context = context,
+        //        Version = version,
+        //        ContractNumber = txtContract.Text
+        //    };
 
-            DataContractJsonSerializer getContactJsonSer = new DataContractJsonSerializer(typeof(GetContactByUserIdDataRequest));
-            MemoryStream getContactMs = new MemoryStream();
-            getContactJsonSer.WriteObject(getContactMs, getContactRequest);
-            getContactMs.Position = 0;
+        //    DataContractJsonSerializer getContactJsonSer = new DataContractJsonSerializer(typeof(GetContactByUserIdDataRequest));
+        //    MemoryStream getContactMs = new MemoryStream();
+        //    getContactJsonSer.WriteObject(getContactMs, getContactRequest);
+        //    getContactMs.Position = 0;
 
-            //use a Stream reader to construct the StringContent (Json) 
-            StreamReader getContactSr = new StreamReader(getContactMs);
-            StringContent getContactContent = new StringContent(getContactSr.ReadToEnd(), System.Text.Encoding.UTF8, "application/json");
+        //    //use a Stream reader to construct the StringContent (Json) 
+        //    StreamReader getContactSr = new StreamReader(getContactMs);
+        //    StringContent getContactContent = new StringContent(getContactSr.ReadToEnd(), System.Text.Encoding.UTF8, "application/json");
 
-            //Post the data 
-            var getContactResponse = getContactClient.GetStringAsync(getContactUri);
-            var getContactResponseContent = getContactResponse.Result;
+        //    //Post the data 
+        //    var getContactResponse = getContactClient.GetStringAsync(getContactUri);
+        //    var getContactResponseContent = getContactResponse.Result;
 
-            string getContactResponseString = getContactResponseContent;
-            GetContactByUserIdDataResponse responseContact = null;
+        //    string getContactResponseString = getContactResponseContent;
+        //    GetContactByUserIdDataResponse responseContact = null;
 
-            using (var getContactMsResponse = new MemoryStream(Encoding.Unicode.GetBytes(getContactResponseString)))
-            {
-                var getContactSerializer = new DataContractJsonSerializer(typeof(GetContactByUserIdDataResponse));
-                responseContact = (GetContactByUserIdDataResponse)getContactSerializer.ReadObject(getContactMsResponse);
-            }
-            return responseContact;
-        }
+        //    using (var getContactMsResponse = new MemoryStream(Encoding.Unicode.GetBytes(getContactResponseString)))
+        //    {
+        //        var getContactSerializer = new DataContractJsonSerializer(typeof(GetContactByUserIdDataResponse));
+        //        responseContact = (GetContactByUserIdDataResponse)getContactSerializer.ReadObject(getContactMsResponse);
+        //    }
+        //    return responseContact;
+        //}
+        #endregion
 
-        private void UpdateCohortPatientView(string patientId, string careMemberContactId)
-        {
-            GetCohortPatientViewResponse getResponse = getCohortPatientViewServiceCall(patientId);
+        #region UpdatedCohortPatientView
+        //private void UpdateCohortPatientView(string patientId, string careMemberContactId)
+        //{
+        //    GetCohortPatientViewResponse getResponse = getCohortPatientViewServiceCall(patientId);
 
-            if (getResponse != null && getResponse.CohortPatientView != null)
-            {
-                CohortPatientViewData cpvd = getResponse.CohortPatientView;
-                // check to see if primary care manager's contactId exists in the searchfield
-                if (!cpvd.SearchFields.Exists(sf => sf.FieldName == "PCM"))
-                {
-                    cpvd.SearchFields.Add(new SearchFieldData
-                    {
-                        Value = careMemberContactId,
-                        Active = true,
-                        FieldName = "PCM"
-                    });
-                }
-                else
-                {
-                    cpvd.SearchFields.ForEach(sf =>
-                    {
-                        if (sf.FieldName == "PCM")
-                        {
-                            sf.Value = careMemberContactId;
-                            sf.Active = true;
-                        }
-                    });
-                }
+        //    if (getResponse != null && getResponse.CohortPatientView != null)
+        //    {
+        //        CohortPatientViewData cpvd = getResponse.CohortPatientView;
+        //        // check to see if primary care manager's contactId exists in the searchfield
+        //        if (!cpvd.SearchFields.Exists(sf => sf.FieldName == "PCM"))
+        //        {
+        //            cpvd.SearchFields.Add(new SearchFieldData
+        //            {
+        //                Value = careMemberContactId,
+        //                Active = true,
+        //                FieldName = "PCM"
+        //            });
+        //        }
+        //        else
+        //        {
+        //            cpvd.SearchFields.ForEach(sf =>
+        //            {
+        //                if (sf.FieldName == "PCM")
+        //                {
+        //                    sf.Value = careMemberContactId;
+        //                    sf.Active = true;
+        //                }
+        //            });
+        //        }
 
-                PutUpdateCohortPatientViewRequest request = new PutUpdateCohortPatientViewRequest
-                    {
-                        CohortPatientView = cpvd,
-                        ContractNumber = txtContract.Text,
-                        PatientID = patientId
-                    };
+        //        PutUpdateCohortPatientViewRequest request = new PutUpdateCohortPatientViewRequest
+        //            {
+        //                CohortPatientView = cpvd,
+        //                ContractNumber = txtContract.Text,
+        //                PatientID = patientId
+        //            };
 
-                PutUpdateCohortPatientViewResponse response = putCohortPatientViewServiceCall(request, patientId);
-                if (string.IsNullOrEmpty(response.CohortPatientViewId))
-                    throw new Exception("Unable to update Cohort Patient View");
-            }
-        }
+        //        PutUpdateCohortPatientViewResponse response = putCohortPatientViewServiceCall(request, patientId);
+        //        if (string.IsNullOrEmpty(response.CohortPatientViewId))
+        //            throw new Exception("Unable to update Cohort Patient View");
+        //    }
+        //}
+        #endregion
 
-        private GetCohortPatientViewResponse getCohortPatientViewServiceCall(string patientId)
-        {
-            Uri getCohortUri = new Uri(string.Format("{0}/Patient/{1}/{2}/{3}/patient/{4}/cohortpatientview?UserId={5}",
-                                                        txtURL.Text,
-                                                        context,
-                                                        version,
-                                                        txtContract.Text,
-                                                        patientId,
-                                                        _headerUserId));
+        #region getCohortPatientView
+        //private GetCohortPatientViewResponse getCohortPatientViewServiceCall(string patientId)
+        //{
+        //    Uri getCohortUri = new Uri(string.Format("{0}/Patient/{1}/{2}/{3}/patient/{4}/cohortpatientview?UserId={5}",
+        //                                                txtURL.Text,
+        //                                                context,
+        //                                                version,
+        //                                                txtContract.Text,
+        //                                                patientId,
+        //                                                _headerUserId));
 
-            HttpClient getCohortClient = GetHttpClient(getCohortUri);
+        //    HttpClient getCohortClient = GetHttpClient(getCohortUri);
 
-            var getCohortResponse = getCohortClient.GetStringAsync(getCohortUri);
-            var getCohortResponseContent = getCohortResponse.Result;
+        //    var getCohortResponse = getCohortClient.GetStringAsync(getCohortUri);
+        //    var getCohortResponseContent = getCohortResponse.Result;
 
-            string getCohortResponseString = getCohortResponseContent;
-            GetCohortPatientViewResponse responseContact = null;
+        //    string getCohortResponseString = getCohortResponseContent;
+        //    GetCohortPatientViewResponse responseContact = null;
 
-            using (var getCohortMsResponse = new MemoryStream(Encoding.Unicode.GetBytes(getCohortResponseString)))
-            {
-                var getContactSerializer = new DataContractJsonSerializer(typeof(GetCohortPatientViewResponse));
-                responseContact = (GetCohortPatientViewResponse)getContactSerializer.ReadObject(getCohortMsResponse);
-            }
+        //    using (var getCohortMsResponse = new MemoryStream(Encoding.Unicode.GetBytes(getCohortResponseString)))
+        //    {
+        //        var getContactSerializer = new DataContractJsonSerializer(typeof(GetCohortPatientViewResponse));
+        //        responseContact = (GetCohortPatientViewResponse)getContactSerializer.ReadObject(getCohortMsResponse);
+        //    }
 
-            return responseContact;
-        }
+        //    return responseContact;
+        //}
+        #endregion
 
-        private PutUpdateCohortPatientViewResponse putCohortPatientViewServiceCall(PutUpdateCohortPatientViewRequest request, string patientId)
-        {
-            Uri cohortPatientUri = new Uri(string.Format("{0}/Patient/{1}/{2}/{3}/patient/{4}/cohortpatientview/update?UserId={5}",
-                                                 txtURL.Text,
-                                                 context,
-                                                 version,
-                                                 txtContract.Text,
-                                                 patientId,
-                                                 _headerUserId));
-            HttpClient client = GetHttpClient(cohortPatientUri);
+        #region putCohortPatientView
+        //private PutUpdateCohortPatientViewResponse putCohortPatientViewServiceCall(PutUpdateCohortPatientViewRequest request, string patientId)
+        //{
+        //    Uri cohortPatientUri = new Uri(string.Format("{0}/Patient/{1}/{2}/{3}/patient/{4}/cohortpatientview/update?UserId={5}",
+        //                                         txtURL.Text,
+        //                                         context,
+        //                                         version,
+        //                                         txtContract.Text,
+        //                                         patientId,
+        //                                         _headerUserId));
+        //    HttpClient client = GetHttpClient(cohortPatientUri);
 
-            DataContractJsonSerializer jsonSer = new DataContractJsonSerializer(typeof(PutUpdateCohortPatientViewRequest));
+        //    DataContractJsonSerializer jsonSer = new DataContractJsonSerializer(typeof(PutUpdateCohortPatientViewRequest));
 
-            // use the serializer to write the object to a MemoryStream 
-            MemoryStream ms = new MemoryStream();
-            jsonSer.WriteObject(ms, request);
-            ms.Position = 0;
+        //    // use the serializer to write the object to a MemoryStream 
+        //    MemoryStream ms = new MemoryStream();
+        //    jsonSer.WriteObject(ms, request);
+        //    ms.Position = 0;
 
-            //use a Stream reader to construct the StringContent (Json) 
-            StreamReader sr = new StreamReader(ms);
+        //    //use a Stream reader to construct the StringContent (Json) 
+        //    StreamReader sr = new StreamReader(ms);
 
-            StringContent theContent = new StringContent(sr.ReadToEnd(), System.Text.Encoding.UTF8, "application/json");
+        //    StringContent theContent = new StringContent(sr.ReadToEnd(), System.Text.Encoding.UTF8, "application/json");
 
-            //Post the data 
-            var response = client.PutAsync(cohortPatientUri, theContent);
-            var responseContent = response.Result.Content;
+        //    //Post the data 
+        //    var response = client.PutAsync(cohortPatientUri, theContent);
+        //    var responseContent = response.Result.Content;
 
-            string responseString = responseContent.ReadAsStringAsync().Result;
-            PutUpdateCohortPatientViewResponse responseCohortPatientView = null;
+        //    string responseString = responseContent.ReadAsStringAsync().Result;
+        //    PutUpdateCohortPatientViewResponse responseCohortPatientView = null;
 
-            using (var msResponse = new MemoryStream(Encoding.Unicode.GetBytes(responseString)))
-            {
-                var serializer = new DataContractJsonSerializer(typeof(PutUpdateCohortPatientViewResponse));
-                responseCohortPatientView = (PutUpdateCohortPatientViewResponse)serializer.ReadObject(msResponse);
-            }
+        //    using (var msResponse = new MemoryStream(Encoding.Unicode.GetBytes(responseString)))
+        //    {
+        //        var serializer = new DataContractJsonSerializer(typeof(PutUpdateCohortPatientViewResponse));
+        //        responseCohortPatientView = (PutUpdateCohortPatientViewResponse)serializer.ReadObject(msResponse);
+        //    }
 
-            return responseCohortPatientView;
-        }
+        //    return responseCohortPatientView;
+        //}
+        #endregion
 
         private HttpClient GetHttpClient(Uri uri)
         {

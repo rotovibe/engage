@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NightingaleImport", "NightingaleImport.csproj", "{CF4474DE-2C81-4C89-B672-644A8BE0A1EC}"
 EndProject
@@ -29,9 +29,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.API.Interface", "..\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.API.Common", "..\..\..\..\Common\Phytel.API.Common\Development\Current\Phytel.API.Common.csproj", "{25CF3C3F-221F-4A49-B5EF-A8A5FCF9A5BA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NGDataImport", "..\NGDataImport\NGDataImport.csproj", "{744454D1-17AF-4782-B75C-CD63B386C2A4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExplorysImport", "..\ExplorysImport\ExplorysImport.csproj", "{FB1F6E5E-ECC3-4E24-B45F-A8846C6AF8CE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExplorysExcelImporter", "..\ExplorysExcelImporter\ExplorysExcelImporter.csproj", "{D4067D17-76B1-46A4-9490-5BE1352ABB83}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 11
+		SccNumberOfProjects = 14
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://hillstfs2013:8080/tfs/phytel
 		SccLocalPath0 = .
@@ -64,6 +70,15 @@ Global
 		SccProjectUniqueName10 = ..\\..\\..\\..\\Common\\Phytel.API.Common\\Development\\Current\\Phytel.API.Common.csproj
 		SccProjectName10 = ../../../../Common/Phytel.API.Common/Development/Current
 		SccLocalPath10 = ..\\..\\..\\..\\Common\\Phytel.API.Common\\Development\\Current
+		SccProjectUniqueName11 = ..\\NGDataImport\\NGDataImport.csproj
+		SccProjectName11 = ../NGDataImport
+		SccLocalPath11 = ..\\NGDataImport
+		SccProjectUniqueName12 = ..\\ExplorysImport\\ExplorysImport.csproj
+		SccProjectName12 = ../ExplorysImport
+		SccLocalPath12 = ..\\ExplorysImport
+		SccProjectUniqueName13 = ..\\ExplorysExcelImporter\\ExplorysExcelImporter.csproj
+		SccProjectName13 = ../ExplorysExcelImporter
+		SccLocalPath13 = ..\\ExplorysExcelImporter
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -131,6 +146,24 @@ Global
 		{25CF3C3F-221F-4A49-B5EF-A8A5FCF9A5BA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{25CF3C3F-221F-4A49-B5EF-A8A5FCF9A5BA}.Test|Any CPU.ActiveCfg = Test|Any CPU
 		{25CF3C3F-221F-4A49-B5EF-A8A5FCF9A5BA}.Test|Any CPU.Build.0 = Test|Any CPU
+		{744454D1-17AF-4782-B75C-CD63B386C2A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{744454D1-17AF-4782-B75C-CD63B386C2A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{744454D1-17AF-4782-B75C-CD63B386C2A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{744454D1-17AF-4782-B75C-CD63B386C2A4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{744454D1-17AF-4782-B75C-CD63B386C2A4}.Test|Any CPU.ActiveCfg = Release|Any CPU
+		{744454D1-17AF-4782-B75C-CD63B386C2A4}.Test|Any CPU.Build.0 = Release|Any CPU
+		{FB1F6E5E-ECC3-4E24-B45F-A8846C6AF8CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB1F6E5E-ECC3-4E24-B45F-A8846C6AF8CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB1F6E5E-ECC3-4E24-B45F-A8846C6AF8CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB1F6E5E-ECC3-4E24-B45F-A8846C6AF8CE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FB1F6E5E-ECC3-4E24-B45F-A8846C6AF8CE}.Test|Any CPU.ActiveCfg = Release|Any CPU
+		{FB1F6E5E-ECC3-4E24-B45F-A8846C6AF8CE}.Test|Any CPU.Build.0 = Release|Any CPU
+		{D4067D17-76B1-46A4-9490-5BE1352ABB83}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4067D17-76B1-46A4-9490-5BE1352ABB83}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4067D17-76B1-46A4-9490-5BE1352ABB83}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4067D17-76B1-46A4-9490-5BE1352ABB83}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D4067D17-76B1-46A4-9490-5BE1352ABB83}.Test|Any CPU.ActiveCfg = Release|Any CPU
+		{D4067D17-76B1-46A4-9490-5BE1352ABB83}.Test|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
