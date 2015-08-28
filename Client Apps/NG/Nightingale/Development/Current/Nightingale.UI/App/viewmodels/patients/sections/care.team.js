@@ -129,7 +129,7 @@ define(['models/base', 'services/datacontext', 'services/session', 'viewmodels/s
             var careMemberType = ko.utils.arrayFirst(datacontext.enums.careMemberTypes(), function (cmType) {
                 return cmType.name() === 'Care Manager';
             });
-            if (careMemberType) {
+            if (!self.isSaving() && careMemberType) {
 				self.isSaving(true);
                 var thisMatchedCareManager = ko.utils.arrayFirst(datacontext.enums.careManagers(), function (caremanager) {
                     return caremanager.id() === session.currentUser().userId();
@@ -148,7 +148,7 @@ define(['models/base', 'services/datacontext', 'services/session', 'viewmodels/s
             var careMemberType = ko.utils.arrayFirst(datacontext.enums.careMemberTypes(), function (cmType) {
                 return cmType.name() === 'Care Manager';
             });
-            if (careMemberType) {
+            if (!self.isSaving() && careMemberType) {
 				self.isSaving(true);
                 var thisMatchedCareManager = ko.utils.arrayFirst(datacontext.enums.careManagers(), function (caremanager) {
                     return caremanager.id() === session.currentUser().userId();
