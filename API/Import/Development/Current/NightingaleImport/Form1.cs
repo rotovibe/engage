@@ -19,7 +19,6 @@ using Phytel.API.DataDomain.Patient.DTO;
 using Phytel.API.DataDomain.PatientSystem.DTO;
 using Microsoft.VisualBasic.FileIO;
 using NGDataImport;
-using ExplorysImport;
 
 namespace NightingaleImport
 {
