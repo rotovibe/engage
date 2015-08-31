@@ -19,8 +19,7 @@ define(['models/base', 'services/datacontext', 'services/session', 'viewmodels/s
             // Get a list of all of the care team
             self.careMembers = self.selectedPatient.careMembers;
             // The view state of the section (open or not)
-            self.isOpen = ko.observable(true);
-			self.initialized = ko.observable(false);
+            self.isOpen = ko.observable(true);			
             // Create a list of primary care team members to display in the widget
             self.primaryCareTeam = ko.computed(function () {
                 // Create an empty array to fill with problems
@@ -123,27 +122,29 @@ define(['models/base', 'services/datacontext', 'services/session', 'viewmodels/s
             self.activationData = { selectedPatient: self.selectedPatient, canSave: self.canSave, saveType: self.saveType };
         }
 
-        ctor.prototype.assignToMe = function () {
-            var self = this;			
+		ctor.prototype.assignToMe = function () {
+			var self = this;
             // Get the care manager type
             var careMemberType = ko.utils.arrayFirst(datacontext.enums.careMemberTypes(), function (cmType) {
                 return cmType.name() === 'Care Manager';
-            });
-            if (!self.isSaving() && careMemberType) {
+            });			
+            if (!self.isSaving() && careMemberType) {				
 				self.isSaving(true);
                 var thisMatchedCareManager = ko.utils.arrayFirst(datacontext.enums.careManagers(), function (caremanager) {
                     return caremanager.id() === session.currentUser().userId();
-                });
+                });				
                 var thisCareMember = datacontext.createEntity('CareMember', { id: -1, patientId: self.selectedPatient.id(), preferredName: thisMatchedCareManager.preferredName(), typeId: careMemberType.id(), gender: 'n', primary: true, contactId: session.currentUser().userId() });
 				function saveCareManagerCompleted() {
-					self.isSaving(false);
+					self.isSaving(false);					
 				}
-                datacontext.saveCareMember(thisCareMember, 'Insert').then( saveCareManagerCompleted );
-            }
+                return datacontext.saveCareMember(thisCareMember, 'Insert').then( saveCareManagerCompleted );
+            } else{
+				console.log('assignToMe blocked since it is currently saving');
+			}
         };
         
         ctor.prototype.reassignToMe = function () {
-            var self = this;
+            
             // Get the care manager type
             var careMemberType = ko.utils.arrayFirst(datacontext.enums.careMemberTypes(), function (cmType) {
                 return cmType.name() === 'Care Manager';
