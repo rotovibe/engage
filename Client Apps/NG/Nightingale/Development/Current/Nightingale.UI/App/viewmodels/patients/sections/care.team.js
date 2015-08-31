@@ -135,7 +135,9 @@ define(['models/base', 'services/datacontext', 'services/session', 'viewmodels/s
                 });				
                 var thisCareMember = datacontext.createEntity('CareMember', { id: -1, patientId: self.selectedPatient.id(), preferredName: thisMatchedCareManager.preferredName(), typeId: careMemberType.id(), gender: 'n', primary: true, contactId: session.currentUser().userId() });
 				function saveCareManagerCompleted() {
-					self.isSaving(false);					
+					setTimeout( function(){
+						self.isSaving(false);	
+					}, 1000);
 				}
                 return datacontext.saveCareMember(thisCareMember, 'Insert').then( saveCareManagerCompleted );
             } else{
@@ -144,7 +146,7 @@ define(['models/base', 'services/datacontext', 'services/session', 'viewmodels/s
         };
         
         ctor.prototype.reassignToMe = function () {
-            
+            var self = this;
             // Get the care manager type
             var careMemberType = ko.utils.arrayFirst(datacontext.enums.careMemberTypes(), function (cmType) {
                 return cmType.name() === 'Care Manager';
