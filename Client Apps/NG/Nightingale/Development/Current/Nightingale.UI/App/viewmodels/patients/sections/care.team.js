@@ -21,10 +21,11 @@ define(['models/base', 'services/datacontext', 'services/session', 'viewmodels/s
             self.isOpen = ko.observable(true);			
             // Create a list of primary care team members to display in the widget
             self.primaryCareTeam = ko.computed(function () {
-                // Create an empty array to fill with problems
+				var careMembers = self.careMembers();	//listen to changes in assigned care members (assignedToMe returns result)
+                // Create an empty array to fill with problems				
                 var thisCareTeam = [];
                 // Sort the team
-                var searchCareTeam = self.careMembers().sort(alphabeticalSort);
+                var searchCareTeam = careMembers.sort(alphabeticalSort);
                 // Create a filtered list of care teams,
                 ko.utils.arrayForEach(searchCareTeam, function (careMember) {
                     // If they are a member of the primary care team,
