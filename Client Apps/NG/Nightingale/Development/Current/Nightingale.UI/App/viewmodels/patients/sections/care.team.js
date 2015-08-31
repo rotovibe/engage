@@ -8,8 +8,7 @@ define(['models/base', 'services/datacontext', 'services/session', 'viewmodels/s
         var alphabeticalSort = function (l, r) { return (l.preferredName() == r.preferredName()) ? (l.preferredName() > r.preferredName() ? 1 : -1) : (l.preferredName() > r.preferredName() ? 1 : -1) };
 
         var ctor = function () {
-			var self = this;
-			self.isSaving = ko.observable();
+			var self = this;			
         };
         
         ctor.prototype.activate = function (settings) {
@@ -37,7 +36,7 @@ define(['models/base', 'services/datacontext', 'services/session', 'viewmodels/s
                 // Return the team
                 return thisCareTeam;
             });
-			
+			self.isSaving = ko.observable(false);
 			self.canAssignToMe = ko.computed( function(){
 				var zerolength = self.primaryCareTeam().length === 0;
 				var isPatientLoaded = self.selectedPatient.isLoaded();
@@ -132,12 +131,9 @@ define(['models/base', 'services/datacontext', 'services/session', 'viewmodels/s
 				self.isSaving(true);
                 var thisMatchedCareManager = ko.utils.arrayFirst(datacontext.enums.careManagers(), function (caremanager) {
                     return caremanager.id() === session.currentUser().userId();
-                });				
+                });											
                 var thisCareMember = datacontext.createEntity('CareMember', { id: -1, patientId: self.selectedPatient.id(), preferredName: thisMatchedCareManager.preferredName(), typeId: careMemberType.id(), gender: 'n', primary: true, contactId: session.currentUser().userId() });
 				function saveCareManagerCompleted() {
-					setTimeout( function(){
-						self.isSaving(false);	
-					}, 1000);
 				}
                 return datacontext.saveCareMember(thisCareMember, 'Insert').then( saveCareManagerCompleted );
             } else{
