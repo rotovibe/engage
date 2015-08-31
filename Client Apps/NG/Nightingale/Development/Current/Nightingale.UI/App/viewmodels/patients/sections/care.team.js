@@ -159,8 +159,7 @@ define(['models/base', 'services/datacontext', 'services/session', 'viewmodels/s
                 thisCareMember.preferredName(thisMatchedCareManager.preferredName());
                 thisCareMember.gender('n');
                 thisCareMember.contactId(thisMatchedCareManager.id());
-				function saveCareManagerCompleted() {
-					self.isSaving(false);
+				function saveCareManagerCompleted() {					
 				}
                 datacontext.saveCareMember(thisCareMember, 'Update').then( saveCareManagerCompleted );
             }
