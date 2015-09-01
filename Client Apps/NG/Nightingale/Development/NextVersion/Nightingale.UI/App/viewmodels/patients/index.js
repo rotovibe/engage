@@ -415,11 +415,13 @@
             }
             var patientId;
             // If there is a current patient and it is equal to the patient you are trying to set to current
-            if (selectedPatient() && selectedPatient() === patient) {
+			//	or if the patient was burst clicked multiple times and the flyout is already locked
+            if (selectedPatient() && selectedPatient() === patient || !patientsListFlyoutOpen() ) {
                 // Then do nothing (this is because we don't want to do anything if
                 // We have already selected our patient.
                 patientsListFlyoutOpen(false);
             } else if (datacontext) {
+				patientsListFlyoutOpen(false);	//lock the flyout list to block multiple burst clicks				
                 if (patient.id) {
                     // Else go choose a new patient
                     patientId = ko.unwrap(patient.id);
@@ -471,8 +473,7 @@
 				allPatientPromises.push( getPatientFrequencies() );
 				
 				Q.all( allPatientPromises ).then( patientFullyLoaded );
-				
-                patientsListFlyoutOpen(false);
+				                
                 router.navigate('#patients/' + patientId, false);
             }
         }
