@@ -8,7 +8,8 @@ define(['services/datacontext'],
 
     function alphabeticalNameSort (l, r) { return (l.displayLabel().toLowerCase() == r.displayLabel().toLowerCase()) ? (l.displayLabel().toLowerCase() > r.displayLabel().toLowerCase() ? 1 : -1) : (l.displayLabel().toLowerCase() > r.displayLabel().toLowerCase() ? 1 : -1) };
     var DUPLICATE_MESSAGE = 'This individual ID combination of System and Value already exists';
-
+	var ADD_DUPLICATE_MESSAGE = 'Can\'t add this individual ID combination of System and Value since it already exists';
+	
 		var ctor = function () {
 			var self = this;
 			self.newSystemId = ko.observable();
@@ -97,7 +98,7 @@ define(['services/datacontext'],
 								&& patSys.systemId().toLowerCase() === system.id().toLowerCase());
 					});
 					if( dup ){
-						errors.push({PropName: 'newValue', Message: DUPLICATE_MESSAGE });
+						errors.push({PropName: 'newValue', Message: ADD_DUPLICATE_MESSAGE });
 						self.addNewDuplicate(dup);
 					}
 				}
@@ -147,7 +148,7 @@ define(['services/datacontext'],
 					});						
 				});
 				if (self.addNewDuplicate()) {
-					errors.push({PropName: 'newValue', Message: DUPLICATE_MESSAGE });
+					errors.push({PropName: 'newValue', Message: ADD_DUPLICATE_MESSAGE });
 				}
 				if( duplicates.length > 0 ){
 					var oneMessage = false;
