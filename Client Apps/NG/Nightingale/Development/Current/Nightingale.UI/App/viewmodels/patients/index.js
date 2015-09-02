@@ -222,7 +222,7 @@
             // Go get a list of cohorts locally
             datacontext.getEntityList(cohortsList, cohortEndPoint().EntityType, cohortEndPoint().ResourcePath, null, null, false, null, 'sName').then(cohortsReturned);
             // On first load show the patients list flyout and open the data column
-            patientsListFlyoutOpen(true);
+            //patientsListFlyoutOpen(true);
             patientDataColumnOpen(true);
             // Subscribe to changes on the selected cohort to get an updated patient list when it changes
             selectedCohortToken = selectedCohort.subscribe(function () {
