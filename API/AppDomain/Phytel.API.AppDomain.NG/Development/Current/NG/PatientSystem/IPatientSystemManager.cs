@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Phytel.API.AppDomain.NG.DTO;
+using Phytel.API.AppDomain.NG.DTO.Context;
 using Phytel.API.AppDomain.NG.DTO.Internal;
 
 namespace Phytel.API.AppDomain.NG
@@ -8,11 +9,12 @@ namespace Phytel.API.AppDomain.NG
     public interface IPatientSystemManager
     {
         void LogException(Exception ex);
-        List<DTO.System> GetActiveSystems(GetActiveSystemsRequest request);
-        string UpdatePatientAndSystemsData(UpdatePatientsAndSystemsRequest request);
-        List<PatientSystem> GetPatientSystems(GetPatientSystemsRequest request);
-        List<PatientSystem> InsertPatientSystems(InsertPatientSystemsRequest request);
-        List<PatientSystem> UpdatePatientSystems(UpdatePatientSystemsRequest request);
+        List<DTO.System> GetActiveSystems(IServiceContext context);
+        string UpdatePatientAndSystemsData(IServiceContext context);
+        List<DTO.PatientSystem> GetPatientSystems(IServiceContext context, string patientId);
+        List<DTO.PatientSystem> InsertPatientSystems(IServiceContext context, string patientId);
+        List<DTO.PatientSystem> UpdatePatientSystems(IServiceContext context, string patientId);
+        void SetPrimaryPatientSystem(IServiceContext context, string patientId, List<DTO.PatientSystem> cList);
         void DeletePatientSystems(DeletePatientSystemsRequest request);
     }
 }

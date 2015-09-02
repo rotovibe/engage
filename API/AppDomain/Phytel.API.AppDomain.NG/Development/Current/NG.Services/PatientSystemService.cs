@@ -1,17 +1,12 @@
-using AutoMapper;
-using Phytel.API.AppDomain.NG.Allergy;
-using Phytel.API.AppDomain.NG.DTO;
-using Phytel.API.AppDomain.Security.DTO;
-using Phytel.API.Common.Audit;
-using Phytel.API.Common.CustomObject;
-using Phytel.API.Common.Format;
-using Phytel.API.DataAudit;
-using ServiceStack.ServiceClient.Web;
-using ServiceStack.ServiceHost;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
+using Phytel.API.AppDomain.NG.DTO;
+using Phytel.API.AppDomain.NG.DTO.Context;
+using Phytel.API.AppDomain.Security.DTO;
+using Phytel.API.Common.Audit;
+using Phytel.API.Common.Format;
+using ServiceStack.ServiceClient.Web;
 
 namespace Phytel.API.AppDomain.NG.Service
 {
@@ -21,6 +16,7 @@ namespace Phytel.API.AppDomain.NG.Service
         public IPatientSystemManager PatientSystemManager { get; set; }
         public IAuditUtil AuditUtil { get; set; }
         public ICommonFormatterUtil CommonFormatterUtil { get; set; }
+        public IServiceContext ServiceContext { get; set; }
 
         private const string unknownBrowserType = "Unknown browser";
         private const string unknownUserHostAddress = "Unknown IP";
@@ -41,8 +37,8 @@ namespace Phytel.API.AppDomain.NG.Service
                 result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
-                    request.UserId = result.UserId;
-                    response.Systems = PatientSystemManager.GetActiveSystems(request);
+                    ServiceContext.UserId = result.UserId;
+                    response.Systems = PatientSystemManager.GetActiveSystems(ServiceContext);
                 }
                 else
                     throw new UnauthorizedAccessException();
@@ -85,8 +81,8 @@ namespace Phytel.API.AppDomain.NG.Service
                 result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
-                    request.UserId = result.UserId;
-                    response.PatientSystems = PatientSystemManager.GetPatientSystems(request);
+                    ServiceContext.UserId = result.UserId;
+                    response.PatientSystems = PatientSystemManager.GetPatientSystems(ServiceContext, request.PatientId);
                 }
                 else
                     throw new UnauthorizedAccessException();
@@ -130,8 +126,9 @@ namespace Phytel.API.AppDomain.NG.Service
                 result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
-                    request.UserId = result.UserId;
-                    response.PatientSystems = PatientSystemManager.InsertPatientSystems(request);
+                    ServiceContext.UserId = result.UserId;
+                    ServiceContext.Tag = request.PatientSystems;
+                    response.PatientSystems = PatientSystemManager.InsertPatientSystems(ServiceContext, request.PatientId);
                 }
                 else
                     throw new UnauthorizedAccessException();
@@ -169,8 +166,9 @@ namespace Phytel.API.AppDomain.NG.Service
                 result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
-                    request.UserId = result.UserId;
-                    response.PatientSystems = PatientSystemManager.UpdatePatientSystems(request);
+                    ServiceContext.UserId = result.UserId;
+                    ServiceContext.Tag = request.PatientSystems;
+                    response.PatientSystems = PatientSystemManager.UpdatePatientSystems(ServiceContext, request.PatientId);
                 }
                 else
                     throw new UnauthorizedAccessException();

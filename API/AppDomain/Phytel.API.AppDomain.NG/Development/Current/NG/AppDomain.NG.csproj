@@ -179,6 +179,10 @@
     <Compile Include="Notes\Visitors\PatientNoteVisitor.cs" />
     <Compile Include="Notes\Visitors\ModifierBase.cs" />
     <Compile Include="Notes\Visitors\VisitorBase.cs" />
+    <Compile Include="PatientSystem\Modifiers\HasPrimaryDesignated.cs" />
+    <Compile Include="PatientSystem\Modifiers\ModifierBase.cs" />
+    <Compile Include="PatientSystem\Modifiers\SetPrimaryFromList.cs" />
+    <Compile Include="PatientSystem\Modifiers\SetSystemsAsNonPrimary.cs" />
     <Compile Include="PatientSystem\PatientSystemEndpointUtil.cs" />
     <Compile Include="PatientSystem\PatientSystemManager.cs" />
     <Compile Include="PatientSystem\IPatientSystemEndpointUtil.cs" />

@@ -17,8 +17,8 @@ namespace Phytel.API.AppDomain.NG.Notes.Visitors
                 ContractNumber = ContractNumber,
                 PatientId = PatientId,
                 UserId = UserId,
-                Version = Version,
-                Count = Count
+                Version = Version//,
+                //Count = Count
             });
 
             if (response.Utilizations != null)

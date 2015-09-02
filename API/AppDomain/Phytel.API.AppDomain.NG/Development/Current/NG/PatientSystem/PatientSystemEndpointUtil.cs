@@ -4,7 +4,9 @@ using System.Configuration;
 using System.Linq;
 using AutoMapper;
 using Phytel.API.AppDomain.NG.DTO;
+using Phytel.API.AppDomain.NG.DTO.Context;
 using Phytel.API.AppDomain.NG.DTO.Internal;
+using Phytel.API.DataDomain.Patient.DTO;
 using Phytel.API.DataDomain.PatientSystem.DTO;
 using Phytel.API.DataDomain.Program.DTO;
 using ServiceStack.Service;
@@ -20,7 +22,7 @@ namespace Phytel.API.AppDomain.NG
         protected readonly string DDProgramServiceUrl = ConfigurationManager.AppSettings["DDProgramServiceUrl"];
         #endregion
 
-        public List<SystemData> GetSystems(GetActiveSystemsRequest request)
+        public List<SystemData> GetSystems(IServiceContext context)
         {
             try
             {
@@ -30,8 +32,8 @@ namespace Phytel.API.AppDomain.NG
                 var url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/System",
                                     DDPatientSystemUrl,
                                     "NG",
-                                    request.Version,
-                                    request.ContractNumber), request.UserId);
+                                    context.Version,
+                                    context.Contract), context.UserId);
 
                 GetSystemsDataResponse dataDomainResponse = client.Get<GetSystemsDataResponse>(url);
                 if (dataDomainResponse != null)
@@ -43,20 +45,20 @@ namespace Phytel.API.AppDomain.NG
             catch (Exception ex) { throw ex; }
         }
 
-        public List<Phytel.API.DataDomain.Patient.DTO.PatientData> GetAllPatients(UpdatePatientsAndSystemsRequest request)
+        public List<PatientData> GetAllPatients(IServiceContext request)
         {
             try
             {
-                List<Phytel.API.DataDomain.Patient.DTO.PatientData> result = null;
+                List<PatientData> result = null;
                 IRestClient client = new JsonServiceClient();
                 //[Route("/{Context}/{Version}/{ContractNumber}/Patients", "GET")]
                 var url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patients",
                                     DDPatientServiceUrl,
                                     "NG",
                                     request.Version,
-                                    request.ContractNumber), request.UserId);
+                                    request.Contract), request.UserId);
 
-                Phytel.API.DataDomain.Patient.DTO.GetAllPatientsDataResponse dataDomainResponse = client.Get<Phytel.API.DataDomain.Patient.DTO.GetAllPatientsDataResponse>(url);
+                GetAllPatientsDataResponse dataDomainResponse = client.Get<GetAllPatientsDataResponse>(url);
                 if (dataDomainResponse != null)
                 {
                     result = dataDomainResponse.PatientsData;
@@ -65,7 +67,7 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (Exception ex) { throw ex; }
         }
-        public List<PatientSystemData> GetPatientSystems(GetPatientSystemsRequest request)
+        public List<PatientSystemData> GetPatientSystems(IServiceContext request, string patientId)
         {
             List<PatientSystemData> result = null;
             try
@@ -76,8 +78,8 @@ namespace Phytel.API.AppDomain.NG
                                     DDPatientSystemUrl,
                                     "NG",
                                     request.Version,
-                                    request.ContractNumber,
-                                    request.PatientId), request.UserId);
+                                    request.Contract,
+                                    patientId), request.UserId);
 
                 GetPatientSystemsDataResponse dataDomainResponse = client.Get<GetPatientSystemsDataResponse>(url);
                 if (dataDomainResponse != null)
@@ -89,7 +91,7 @@ namespace Phytel.API.AppDomain.NG
             catch (Exception ex) { throw ex; }
         }
 
-        public List<PatientSystemData> InsertPatientSystems(InsertPatientSystemsRequest request)
+        public List<PatientSystemData> InsertPatientSystems(IServiceContext context, string patientId)
         {
             List<PatientSystemData> result = null;
             try
@@ -97,23 +99,27 @@ namespace Phytel.API.AppDomain.NG
                 IRestClient client = new JsonServiceClient();
                 //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/PatientSystems", "POST")]
                 var url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/PatientSystems",
-                                    DDPatientSystemUrl,
-                                    "NG",
-                                    request.Version,
-                                    request.ContractNumber,
-                                    request.PatientId), request.UserId);
+                    DDPatientSystemUrl,
+                    "NG",
+                    context.Version,
+                    context.Contract,
+                    patientId), context.UserId);
 
                 List<PatientSystemData> data = new List<PatientSystemData>();
-                request.PatientSystems.ForEach(a => data.Add(Mapper.Map<PatientSystemData>(a)));
 
-                InsertPatientSystemsDataResponse dataDomainResponse = client.Post<InsertPatientSystemsDataResponse>(url, new InsertPatientSystemsDataRequest
+                var systemList = (List<DTO.PatientSystem>) context.Tag;
+                if (systemList != null)
+                    systemList.ForEach(a => data.Add(Mapper.Map<PatientSystemData>(a)));
+
+                InsertPatientSystemsDataResponse dataDomainResponse = client.Post<InsertPatientSystemsDataResponse>(
+                    url, new InsertPatientSystemsDataRequest
                     {
-                        PatientId = request.PatientId,
+                        PatientId = patientId,
                         PatientSystemsData = data,
                         Context = "NG",
-                        ContractNumber = request.ContractNumber,
-                        UserId = request.UserId,
-                        Version = request.Version
+                        ContractNumber = context.Contract,
+                        UserId = context.UserId,
+                        Version = context.Version
                     } as object);
                 if (dataDomainResponse != null)
                 {
@@ -121,10 +127,13 @@ namespace Phytel.API.AppDomain.NG
                 }
                 return result;
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
-        public List<PatientSystemData> UpdatePatientSystems(UpdatePatientSystemsRequest request)
+        public List<PatientSystemData> UpdatePatientSystems(IServiceContext context, string patientId)
         {
             List<PatientSystemData> result = null;
             try
@@ -134,21 +143,25 @@ namespace Phytel.API.AppDomain.NG
                 var url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/PatientSystems",
                                     DDPatientSystemUrl,
                                     "NG",
-                                    request.Version,
-                                    request.ContractNumber,
-                                    request.PatientId), request.UserId);
+                                    context.Version,
+                                    context.Contract,
+                                    patientId), context.UserId);
 
                 List<PatientSystemData> data = new List<PatientSystemData>();
-                request.PatientSystems.ForEach(a => data.Add(Mapper.Map<PatientSystemData>(a)));
+
+                // unpack patientsystems
+                var systemList = (List<DTO.PatientSystem>)context.Tag;
+                if (systemList != null)
+                    systemList.ForEach(a => data.Add(Mapper.Map<PatientSystemData>(a)));
 
                 UpdatePatientSystemsDataResponse dataDomainResponse = client.Put<UpdatePatientSystemsDataResponse>(url, new UpdatePatientSystemsDataRequest
                     {
-                        PatientId = request.PatientId,
+                        PatientId = patientId,
                         PatientSystemsData = data,
                         Context = "NG",
-                        ContractNumber = request.ContractNumber,
-                        UserId = request.UserId,
-                        Version = request.Version
+                        ContractNumber = context.Contract,
+                        UserId = context.UserId,
+                        Version = context.Version
                     } as object);
                 if (dataDomainResponse != null)
                 {
@@ -179,7 +192,7 @@ namespace Phytel.API.AppDomain.NG
         }
 
 
-        public List<PatientSystemOldData> GetAllPatientSystems(UpdatePatientsAndSystemsRequest request)
+        public List<PatientSystemOldData> GetAllPatientSystems(IServiceContext context)
         {
             List<PatientSystemOldData> result = null;
             try
@@ -189,8 +202,8 @@ namespace Phytel.API.AppDomain.NG
                 var url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/PatientSystems",
                                     DDPatientSystemUrl,
                                     "NG",
-                                    request.Version,
-                                    request.ContractNumber), request.UserId);
+                                    context.Version,
+                                    context.Contract), context.UserId);
 
                 GetAllPatientSystemDataResponse dataDomainResponse = client.Get<GetAllPatientSystemDataResponse>(url);
                 if (dataDomainResponse != null)
@@ -227,7 +240,7 @@ namespace Phytel.API.AppDomain.NG
         }
 
 
-        public Phytel.API.AppDomain.NG.PatientSystemManager.ProgramStatus HasHealthyWeightProgramAssigned(string patientId, UpdatePatientsAndSystemsRequest request)
+        public PatientSystemManager.ProgramStatus HasHealthyWeightProgramAssigned(string patientId, IServiceContext context)
         {
             try
             {
@@ -236,10 +249,10 @@ namespace Phytel.API.AppDomain.NG
                 string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Programs/",
                     DDProgramServiceUrl,
                     "NG",
-                    request.Version,
-                    request.ContractNumber,
+                    context.Version,
+                    context.Contract,
                     patientId,
-                    request.Token), request.UserId);
+                    context.Token), context.UserId);
 
                 GetPatientProgramsDataResponse dataDomainResponse = client.Get<GetPatientProgramsDataResponse>(url);
 

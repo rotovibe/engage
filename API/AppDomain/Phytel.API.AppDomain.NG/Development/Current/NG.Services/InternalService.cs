@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using Phytel.API.AppDomain.NG.DTO.Context;
 using Phytel.API.AppDomain.NG.DTO.Internal;
 
 namespace Phytel.API.AppDomain.NG.Service
@@ -22,6 +23,7 @@ namespace Phytel.API.AppDomain.NG.Service
         public IPatientSystemManager PatientSystemManager { get; set; }
         public IAuditUtil AuditUtil { get; set; }
         public ICommonFormatterUtil CommonFormatterUtil { get; set; }
+        public IServiceContext ServiceContext { get; set; }
 
         private const string unknownBrowserType = "Unknown browser";
         private const string unknownUserHostAddress = "Unknown IP";
@@ -39,8 +41,9 @@ namespace Phytel.API.AppDomain.NG.Service
                 result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
-                    request.UserId = result.UserId;
-                    var val = PatientSystemManager.UpdatePatientAndSystemsData(request);
+                    ServiceContext.UserId = result.UserId;
+                    ServiceContext.Tag = request.Migrate;
+                    var val = PatientSystemManager.UpdatePatientAndSystemsData(ServiceContext);
                     response.Message = val;
                 }
                 else
