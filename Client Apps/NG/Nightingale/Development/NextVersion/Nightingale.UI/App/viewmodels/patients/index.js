@@ -414,14 +414,12 @@
                 }
             }
             var patientId;
-            // If there is a current patient and it is equal to the patient you are trying to set to current
-			//	or if the patient was burst clicked multiple times and the flyout is already locked
-            if (selectedPatient() && selectedPatient() === patient || !patientsListFlyoutOpen() ) {
+			patientsListFlyoutOpen(false);
+            // If there is a current patient and it is equal to the patient you are trying to set to current			
+            if ( selectedPatient() && selectedPatient() === patient ) {
                 // Then do nothing (this is because we don't want to do anything if
-                // We have already selected our patient.
-                patientsListFlyoutOpen(false);
-            } else if (datacontext) {
-				patientsListFlyoutOpen(false);	//lock the flyout list to block multiple burst clicks				
+                // We have already selected our patient.                
+            } else if (datacontext) {					
                 if (patient.id) {
                     // Else go choose a new patient
                     patientId = ko.unwrap(patient.id);
