@@ -2,6 +2,9 @@
 define(['config.services', 'services/session', 'services/datacontext', 'models/base', 'viewmodels/shell/shell'],
     function (servicesConfig, session, datacontext, modelConfig, shell) {
 
+		var noResultsMessage =  'No records meet your search criteria';
+		var showNoResultsMessage = ko.observable(false);
+		
         // End point to get the patient details
         var patientEndPoint = ko.computed(function () {
             if (!session.currentUser()) {
@@ -62,7 +65,9 @@ define(['config.services', 'services/session', 'services/datacontext', 'models/b
             cohortFilter: cohortFilter,
             patientsList: patientsList,
             activate: activate,
-            choosePatient: choosePatient
+            choosePatient: choosePatient,
+			showNoResultsMessage: showNoResultsMessage,
+			noResultsMessage: noResultsMessage
         };
 
         return vm;
@@ -96,12 +101,14 @@ define(['config.services', 'services/session', 'services/datacontext', 'models/b
                     cohortFilter(null);
                 }
                 patientsList([]);
+				showNoResultsMessage(false);
                 getPatientsByCohort();
             });
             throttledFilterToken = throttledFilter.subscribe(function (val) {
                 // Get a list of patients by cohort using filter
                 if (selectedCohort()) {
                     patientsList([]);
+					showNoResultsMessage(false);
                     getPatientsByCohort(val);
                 }
             });
@@ -125,11 +132,18 @@ define(['config.services', 'services/session', 'services/datacontext', 'models/b
                 parameters.SearchFilter = searchValue;
             }
             else { parameters.SearchFilter = null; }
+			showNoResultsMessage(false);
             // TODO : Add Skip and Take to the endpoint and pass it down as params
             // TODO : Make sure the service is checking locally first before going out to the server to get these patients
-            datacontext.getEntityList(patientsList, currentCohortsPatientsEndPoint().EntityType, currentCohortsPatientsEndPoint().ResourcePath, null, selectedCohort().iD(), true, parameters);
+            datacontext.getEntityList(patientsList, currentCohortsPatientsEndPoint().EntityType, 
+						currentCohortsPatientsEndPoint().ResourcePath, null, selectedCohort().iD(), true, parameters).then( patientsSearchReturned );
         }
-
+		
+		function patientsSearchReturned(){						
+			if( patientsList().length == 0 ){
+				showNoResultsMessage(true);
+			}
+		}
 
 
     });
