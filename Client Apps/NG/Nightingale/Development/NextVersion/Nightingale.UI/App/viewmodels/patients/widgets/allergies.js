@@ -90,7 +90,7 @@
                 return finalallergies;
             });
             self.activeAllergyColumns = ko.computed(function () {
-                return ['expand','name-small','type','severity-small','status'];
+                return ['expand','name','severity-small','status'];
             });
             self.toggleAllergySort = function (sender) {
                 // If the current column is the one to sort by
