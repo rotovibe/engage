@@ -220,9 +220,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppDomain.NG.Service", "App
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppDomain.NG.Test", "AppDomain\Phytel.API.AppDomain.NG\Release Candidate\Current\AppDomain.NG.Tests\AppDomain.NG.Test.csproj", "{1FCB66F1-56D2-430B-85A7-0D1C26A30FA8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.PatientNote.Repo", "DataDomain\Phytel.API.DataDomain.PatientNote\Release Candidate\Current\DataDomain.PatientNote.Repo\DataDomain.PatientNote.Repo.csproj", "{BD61E655-5658-49C8-96D8-26822162D008}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.PatientSystem.Repo", "DataDomain\Phytel.API.DataDomain.PatientSystem\Release Candidate\Current\PatientSystem.Repo\DataDomain.PatientSystem.Repo.csproj", "{64428B06-18E5-4307-BA78-FB0D238816D8}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 85
+		SccNumberOfProjects = 87
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://hillstfs2013:8080/tfs/phytel
 		SccLocalPath0 = .
@@ -562,6 +566,14 @@ Global
 		SccProjectTopLevelParentUniqueName84 = API_RC.sln
 		SccProjectName84 = AppDomain/Phytel.API.AppDomain.NG/Release\u0020Candidate/Current/AppDomain.NG.Tests
 		SccLocalPath84 = AppDomain\\Phytel.API.AppDomain.NG\\Release\u0020Candidate\\Current\\AppDomain.NG.Tests
+		SccProjectUniqueName85 = DataDomain\\Phytel.API.DataDomain.PatientNote\\Release\u0020Candidate\\Current\\DataDomain.PatientNote.Repo\\DataDomain.PatientNote.Repo.csproj
+		SccProjectTopLevelParentUniqueName85 = API_RC.sln
+		SccProjectName85 = DataDomain/Phytel.API.DataDomain.PatientNote/Release\u0020Candidate/Current/DataDomain.PatientNote.Repo
+		SccLocalPath85 = DataDomain\\Phytel.API.DataDomain.PatientNote\\Release\u0020Candidate\\Current\\DataDomain.PatientNote.Repo
+		SccProjectUniqueName86 = DataDomain\\Phytel.API.DataDomain.PatientSystem\\Release\u0020Candidate\\Current\\PatientSystem.Repo\\DataDomain.PatientSystem.Repo.csproj
+		SccProjectTopLevelParentUniqueName86 = API_RC.sln
+		SccProjectName86 = DataDomain/Phytel.API.DataDomain.PatientSystem/Release\u0020Candidate/Current/PatientSystem.Repo
+		SccLocalPath86 = DataDomain\\Phytel.API.DataDomain.PatientSystem\\Release\u0020Candidate\\Current\\PatientSystem.Repo
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1411,6 +1423,26 @@ Global
 		{1FCB66F1-56D2-430B-85A7-0D1C26A30FA8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1FCB66F1-56D2-430B-85A7-0D1C26A30FA8}.Test|Any CPU.ActiveCfg = Test|Any CPU
 		{1FCB66F1-56D2-430B-85A7-0D1C26A30FA8}.Test|Any CPU.Build.0 = Test|Any CPU
+		{BD61E655-5658-49C8-96D8-26822162D008}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD61E655-5658-49C8-96D8-26822162D008}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD61E655-5658-49C8-96D8-26822162D008}.Mdl|Any CPU.ActiveCfg = Release|Any CPU
+		{BD61E655-5658-49C8-96D8-26822162D008}.Mdl|Any CPU.Build.0 = Release|Any CPU
+		{BD61E655-5658-49C8-96D8-26822162D008}.Model|Any CPU.ActiveCfg = Release|Any CPU
+		{BD61E655-5658-49C8-96D8-26822162D008}.Model|Any CPU.Build.0 = Release|Any CPU
+		{BD61E655-5658-49C8-96D8-26822162D008}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD61E655-5658-49C8-96D8-26822162D008}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BD61E655-5658-49C8-96D8-26822162D008}.Test|Any CPU.ActiveCfg = Release|Any CPU
+		{BD61E655-5658-49C8-96D8-26822162D008}.Test|Any CPU.Build.0 = Release|Any CPU
+		{64428B06-18E5-4307-BA78-FB0D238816D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{64428B06-18E5-4307-BA78-FB0D238816D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{64428B06-18E5-4307-BA78-FB0D238816D8}.Mdl|Any CPU.ActiveCfg = Release|Any CPU
+		{64428B06-18E5-4307-BA78-FB0D238816D8}.Mdl|Any CPU.Build.0 = Release|Any CPU
+		{64428B06-18E5-4307-BA78-FB0D238816D8}.Model|Any CPU.ActiveCfg = Release|Any CPU
+		{64428B06-18E5-4307-BA78-FB0D238816D8}.Model|Any CPU.Build.0 = Release|Any CPU
+		{64428B06-18E5-4307-BA78-FB0D238816D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{64428B06-18E5-4307-BA78-FB0D238816D8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{64428B06-18E5-4307-BA78-FB0D238816D8}.Test|Any CPU.ActiveCfg = Release|Any CPU
+		{64428B06-18E5-4307-BA78-FB0D238816D8}.Test|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1519,5 +1551,7 @@ Global
 		{E9957107-8F2A-4946-834E-629D4235B9B3} = {2FDF8A25-888A-4C5D-9C06-7FCDF0C3C318}
 		{10A4CF5C-5B03-4069-9A7F-5BD0627EF148} = {2FDF8A25-888A-4C5D-9C06-7FCDF0C3C318}
 		{1FCB66F1-56D2-430B-85A7-0D1C26A30FA8} = {2FDF8A25-888A-4C5D-9C06-7FCDF0C3C318}
+		{BD61E655-5658-49C8-96D8-26822162D008} = {5AF7B394-5826-4F7A-871F-60D46BB11348}
+		{64428B06-18E5-4307-BA78-FB0D238816D8} = {B65DC0B4-4013-4BBC-952D-1122F5480535}
 	EndGlobalSection
 EndGlobal
