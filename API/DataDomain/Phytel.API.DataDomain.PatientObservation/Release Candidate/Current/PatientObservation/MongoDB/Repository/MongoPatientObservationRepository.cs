@@ -270,8 +270,22 @@ namespace Phytel.API.DataDomain.PatientObservation
                     if (pord.NonNumericValue != null) uv.Add(MB.Update.Set(MEPatientObservation.NonNumericValueProperty, pord.NonNumericValue));
                     if (pord.Value != null) uv.Add(MB.Update.Set(MEPatientObservation.NumericValueProperty, BsonDouble.Create(pord.Value)));
                     if (pord.Units != null) uv.Add(MB.Update.Set(MEPatientObservation.UnitsProperty, pord.Units));
-                    if (pord.EndDate != null) uv.Add(MB.Update.Set(MEPatientObservation.EndDateProperty, pord.EndDate));
-                    if (pord.StartDate != null) uv.Add(MB.Update.Set(MEPatientObservation.StartDateProperty, pord.StartDate));
+                    if (pord.StartDate != null)
+                    {
+                        uv.Add(MB.Update.Set(MEPatientObservation.StartDateProperty, pord.StartDate));
+                    }
+                    else
+                    {
+                        uv.Add(MB.Update.Set(MEPatientObservation.StartDateProperty, BsonNull.Value));
+                    }
+                    if (pord.EndDate != null)
+                    {
+                        uv.Add(MB.Update.Set(MEPatientObservation.EndDateProperty, pord.EndDate));
+                    }
+                    else
+                    {
+                        uv.Add(MB.Update.Set(MEPatientObservation.EndDateProperty, BsonNull.Value));
+                    }
                     if (pord.DisplayId != 0) uv.Add(MB.Update.Set(MEPatientObservation.DisplayProperty, pord.DisplayId));
                     if (pord.StateId != 0) uv.Add(MB.Update.Set(MEPatientObservation.ObservationStateProperty, pord.StateId));
                     if (pord.Source != null) uv.Add(MB.Update.Set(MEPatientObservation.SourceProperty, pord.Source));
