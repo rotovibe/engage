@@ -78,4 +78,10 @@
 .pointer {
   cursor: pointer; }
 
+.watson-logo {
+  height: 24px;
+  opacity: 100;
+  color: white;
+  margin: 12px 25px; }
+
 /*# sourceMappingURL=dev.css.map */
