@@ -85,6 +85,8 @@
     <Compile Include="DeleteMedSuppsByPatientIdDataRequest.cs" />
     <Compile Include="DeletePatientMedSuppDataResponse.cs" />
     <Compile Include="DeleteMedSuppsByPatientIdDataResponse.cs" />
+    <Compile Include="DeleteMedicationMapsDataRequest.cs" />
+    <Compile Include="DeleteMedicationMapsDataResponse.cs" />
     <Compile Include="DomainResponse.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="GetMedicationNDCsDataRequest.cs" />
@@ -92,9 +94,11 @@
     <Compile Include="DomainRequest.cs" />
     <Compile Include="GetMedicationMapDataRequest.cs" />
     <Compile Include="GetPatientMedFrequenciesDataRequest.cs" />
+    <Compile Include="GetPatientMedSuppsCountDataRequest.cs" />
     <Compile Include="GetPatientMedSuppsDataRequest.cs" />
     <Compile Include="GetMedicationMapDataResponse.cs" />
     <Compile Include="GetPatientMedFrequenciesDataResponse.cs" />
+    <Compile Include="GetPatientMedSuppsCountDataResponse.cs" />
     <Compile Include="GetPatientMedSuppsDataResponse.cs" />
     <Compile Include="MedicationMapData.cs" />
     <Compile Include="PatientMedFrequencyData.cs" />

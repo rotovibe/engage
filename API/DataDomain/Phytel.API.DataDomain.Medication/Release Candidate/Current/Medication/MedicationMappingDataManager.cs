@@ -90,5 +90,30 @@ namespace Phytel.API.DataDomain.Medication
                 throw ex;
             }
         }
+
+        public void DeleteMedicationMaps(DeleteMedicationMapsDataRequest request)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(request.Ids))
+                {
+                    var repo = MedicationRepositoryFactory.GetMedicationRepository(request, RepositoryType.MedicationMapping);
+                    string[] Ids = request.Ids.Split(',');
+                    foreach (string id in Ids)
+                    {
+                        DeleteMedicationMapsDataRequest deleteReq = new DeleteMedicationMapsDataRequest
+                        {
+                            Id = id.Trim(),
+                            Context = request.Context,
+                            ContractNumber = request.ContractNumber,
+                            UserId = request.UserId,
+                            Version = request.Version
+                        };
+                        repo.Delete(deleteReq);
+                    }
+                }
+            }
+            catch (Exception ex) { throw ex; }
+        }
     }
 }   

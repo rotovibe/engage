@@ -9,6 +9,7 @@ namespace Phytel.API.DataDomain.Medication
 {
     public interface IPatientMedSuppDataManager
     {
+        int GetPatientMedSuppsCount(GetPatientMedSuppsCountDataRequest request);
         List<PatientMedSuppData> GetPatientMedSupps(GetPatientMedSuppsDataRequest request);
         PatientMedSuppData SavePatientMedSupps(PutPatientMedSuppDataRequest request);
         DeleteMedSuppsByPatientIdDataResponse DeletePatientMedSupps(DeleteMedSuppsByPatientIdDataRequest request);
