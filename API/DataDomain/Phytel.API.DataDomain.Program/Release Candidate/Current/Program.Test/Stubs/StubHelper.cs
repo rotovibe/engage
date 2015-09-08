@@ -45,5 +45,11 @@ namespace Phytel.API.DataDomain.Program.Test.Stubs
         {
             throw new NotImplementedException();
         }
+
+
+        public string TrimAndLimit(string value, int limit)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

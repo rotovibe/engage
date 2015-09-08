@@ -9,6 +9,7 @@ namespace Phytel.API.DataDomain.Program.DTO
     public class ProgramInfo
     {
         public string Id { get; set; }
+        public string ProgramSourceId { get; set; }
         public string Name { get; set; }
         public string ShortName { get; set; }
         public int Status { get; set; }
