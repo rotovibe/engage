@@ -68,7 +68,7 @@ namespace Phytel.API.AppDomain.Security
                         _objectContext.APISessions.Collection.Insert(session);
                     }
                     else
-                        throw new UnauthorizedAccessException("Login Failed!  Username and/or Password is incorrect");
+                        throw new UnauthorizedAccessException("Login Failed!  Password is incorrect");
 
                     List<ContractInfo> cts = new List<ContractInfo>();
                     cts.Add(new ContractInfo { Number = session.ContractNumber });
@@ -83,7 +83,7 @@ namespace Phytel.API.AppDomain.Security
                                     };
                 }
                 else
-                    throw new UnauthorizedAccessException("Login Failed! Unknown Username/Password");
+                    throw new UnauthorizedAccessException("Login Failed! Incorrect login details like username, apikey or product.");
 
                 return response;
             }
