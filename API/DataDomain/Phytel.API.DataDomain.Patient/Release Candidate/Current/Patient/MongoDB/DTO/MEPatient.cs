@@ -4,6 +4,7 @@ using Phytel.API.Interface;
 using Phytel.Services.Mongo.Linq;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System;
 
 namespace Phytel.API.DataDomain.Patient.DTO
 {
@@ -16,7 +17,7 @@ namespace Phytel.API.DataDomain.Patient.DTO
             Id = ObjectId.GenerateNewId();
             Version = 1.0;
             RecordCreatedBy = ObjectId.Parse(userId);
-            RecordCreatedOn = System.DateTime.UtcNow;
+            RecordCreatedOn = DateTime.UtcNow;
         }
 
         public const string IdProperty = "_id";
@@ -30,8 +31,14 @@ namespace Phytel.API.DataDomain.Patient.DTO
         public const string PreferredNameProperty = "pfn";
         public const string PriorityProperty = "pri";
         public const string BackgroundProperty = "bkgrd";
+        public const string ClinicalBackgroundProperty = "cbkgrd";
         public const string LastFourSSNProperty = "lssn";
         public const string FullSSNProperty = "fssn";
+        public const string StatusProperty = "sts";
+        public const string ReasonProperty = "rsn";
+        public const string ProtectedProperty = "prot";
+        public const string MaritalStatusProperty = "msts";
+        public const string DeceasedProperty = "dec";
         public const string VersionProperty = "v";
         public const string UpdatedByProperty = "uby";
         public const string DeleteFlagProperty = "del";
@@ -83,6 +90,10 @@ namespace Phytel.API.DataDomain.Patient.DTO
         [BsonIgnoreIfNull(true)]
         public string Background { get; set; }
 
+        [BsonElement(ClinicalBackgroundProperty)]
+        [BsonIgnoreIfNull(true)]
+        public string ClinicalBackground { get; set; }
+
         [BsonElement(LastFourSSNProperty)]
         [BsonIgnoreIfNull(true)]
         public int? LastFourSSN { get; set; }
@@ -90,6 +101,36 @@ namespace Phytel.API.DataDomain.Patient.DTO
         [BsonElement(FullSSNProperty)]
         [BsonIgnoreIfNull(true)]
         public string FullSSN { get; set; }
+
+        [BsonElement(StatusProperty)]
+        [BsonIgnoreIfNull(true)]
+        public Status Status { get; set; }
+
+        [BsonElement(ReasonProperty)]
+        [BsonIgnoreIfNull(true)]
+        public ObjectId? ReasonId { get; set; }
+
+        public const string DataSourceProperty = "dsrc";
+        [BsonElement(DataSourceProperty)]
+        [BsonIgnoreIfNull(true)]
+        public string DataSource { get; set; }
+
+        public const string StatusDataSourceProperty = "stsdsrc";
+        [BsonElement(StatusDataSourceProperty)]
+        [BsonIgnoreIfNull(true)]
+        public string StatusDataSource { get; set; }
+
+        [BsonElement(MaritalStatusProperty)]
+        [BsonIgnoreIfNull(true)]
+        public ObjectId? MaritalStatusId { get; set; }
+
+        [BsonElement(ProtectedProperty)]
+        [BsonIgnoreIfNull(true)]
+        public bool Protected { get; set; }
+
+        [BsonElement(DeceasedProperty)]
+        [BsonIgnoreIfNull(true)]
+        public Deceased Deceased { get; set; }
 
         [BsonExtraElements]
         public BsonDocument ExtraElements { get; set; }
@@ -107,12 +148,12 @@ namespace Phytel.API.DataDomain.Patient.DTO
 
         [BsonElement(TTLDateProperty)]
         [BsonIgnoreIfNull(true)]
-        [BsonDateTimeOptions(Kind = System.DateTimeKind.Utc)]
+        [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
         public System.DateTime? TTLDate { get; set; }
 
         [BsonElement(LastUpdatedOnProperty)]
         [BsonIgnoreIfNull(true)]
-        [BsonDateTimeOptions(Kind = System.DateTimeKind.Utc)]
+        [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
         public System.DateTime? LastUpdatedOn { get; set; }
 
         [BsonIgnoreIfNull(true)]
@@ -121,7 +162,7 @@ namespace Phytel.API.DataDomain.Patient.DTO
 
         [BsonIgnoreIfNull(true)]
         [BsonElement(RecordCreatedOnProperty)]
-        [BsonDateTimeOptions(Kind = System.DateTimeKind.Utc)]
+        [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
         public System.DateTime RecordCreatedOn { get; private set; }
     }
 

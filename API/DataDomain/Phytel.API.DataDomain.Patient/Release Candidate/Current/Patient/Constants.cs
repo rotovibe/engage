@@ -18,5 +18,7 @@ namespace Phytel.API.DataDomain.Patient
         public const string PN = "PN";
         public const string Problem = "Problem";
         public const string PCM = "PCM";
+
+        public const string SystemContactId = "5368ff2ad4332316288f3e3e";
     }
 }

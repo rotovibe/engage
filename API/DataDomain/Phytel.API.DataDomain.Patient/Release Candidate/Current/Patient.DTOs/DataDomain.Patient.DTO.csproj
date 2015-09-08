@@ -91,6 +91,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Enums.cs" />
+    <Compile Include="GetAllPatientsDataRequest.cs" />
+    <Compile Include="GetAllPatientsDataResponse.cs" />
     <Compile Include="PutInitializePatientDataRequest.cs" />
     <Compile Include="PutInitializePatientDataResponse.cs" />
     <Compile Include="PutPatientSystemIdDataRequest.cs" />
@@ -117,8 +119,6 @@
     <Compile Include="GetPatientSSNDataResponse.cs" />
     <Compile Include="PutCohortPatientViewDataRequest.cs" />
     <Compile Include="PutCohortPatientViewDataResponse.cs" />
-    <Compile Include="PutPatientBackgroundDataRequest.cs" />
-    <Compile Include="PutPatientBackgroundDataResponse.cs" />
     <Compile Include="PutUpdateCohortPatientViewRequest.cs" />
     <Compile Include="PutUpdateCohortPatientViewResponse.cs" />
     <Compile Include="GetPatientsDataRequest.cs" />
