@@ -17,8 +17,9 @@ namespace Phytel.API.DataDomain.LookUp.Test
             string context = "NG";
             GetProblemDataRequest request = new GetProblemDataRequest { ProblemID = "528a6709d4332317acc50962", Context = context, ContractNumber = contractNumber, Version = version };
 
+            LookUpDataManager lm = new LookUpDataManager { Factory = new LookUpRepositoryFactory() };
             // Act
-            GetProblemDataResponse response = LookUpDataManager.GetProblem(request);
+            GetProblemDataResponse response = lm.GetProblem(request);
 
             // Assert
             Assert.IsTrue(response.Problem.Name == "CKD");
@@ -35,7 +36,8 @@ namespace Phytel.API.DataDomain.LookUp.Test
             GetAllProblemsDataRequest request = new GetAllProblemsDataRequest { Context = context, ContractNumber = contractNumber, Version = version };
 
             // Act
-            GetAllProblemsDataResponse response = LookUpDataManager.GetAllProblems(request);
+            LookUpDataManager lm = new LookUpDataManager { Factory = new LookUpRepositoryFactory() };
+            GetAllProblemsDataResponse response = lm.GetAllProblems(request);
 
             // Assert
             Assert.AreNotEqual(0, response.Problems.Count);
@@ -50,7 +52,8 @@ namespace Phytel.API.DataDomain.LookUp.Test
             string context = "NG";
             SearchProblemsDataRequest request = new SearchProblemsDataRequest { Active = true, Type = "Chronic", Context = context, ContractNumber = contractNumber, Version = version };
             // Act
-            SearchProblemsDataResponse response = LookUpDataManager.SearchProblem(request);
+            LookUpDataManager lm = new LookUpDataManager { Factory = new LookUpRepositoryFactory() };
+            SearchProblemsDataResponse response = lm.SearchProblem(request);
 
             // Assert
             Assert.AreNotEqual(0, response.Problems.Count);
@@ -68,7 +71,8 @@ namespace Phytel.API.DataDomain.LookUp.Test
             GetObjectiveDataRequest request = new GetObjectiveDataRequest { ObjectiveID = "52a0beb9d43323141c9eb26c", Context = context, ContractNumber = contractNumber, Version = version };
 
             // Act
-            GetObjectiveDataResponse response = LookUpDataManager.GetObjectiveByID(request);
+            LookUpDataManager lm = new LookUpDataManager { Factory = new LookUpRepositoryFactory() };
+            GetObjectiveDataResponse response = lm.GetObjectiveByID(request);
 
             // Assert
             Assert.IsTrue(response.Objective.Name == "Reduce Risk Factors");
@@ -88,7 +92,8 @@ namespace Phytel.API.DataDomain.LookUp.Test
             GetCategoryDataRequest request = new GetCategoryDataRequest { CategoryID = "52a0bc5fd4332322b4aed5b7", Context = context, ContractNumber = contractNumber, Version = version };
 
             // Act
-            GetCategoryDataResponse response = LookUpDataManager.GetCategoryByID(request);
+            LookUpDataManager lm = new LookUpDataManager { Factory = new LookUpRepositoryFactory() };
+            GetCategoryDataResponse response = lm.GetCategoryByID(request);
 
             // Assert
             Assert.IsTrue(response.Category.Name == "Process");
@@ -107,7 +112,8 @@ namespace Phytel.API.DataDomain.LookUp.Test
             GetAllCommModesDataRequest request = new GetAllCommModesDataRequest { Context = context, ContractNumber = contractNumber, Version = version };
 
             // Act
-            GetAllCommModesDataResponse response = LookUpDataManager.GetAllCommModes(request);
+            LookUpDataManager lm = new LookUpDataManager { Factory = new LookUpRepositoryFactory() };
+            GetAllCommModesDataResponse response = lm.GetAllCommModes(request);
 
             // Assert
             Assert.AreNotEqual(0, response.CommModes.Count);
@@ -123,7 +129,8 @@ namespace Phytel.API.DataDomain.LookUp.Test
             GetAllStatesDataRequest request = new GetAllStatesDataRequest { Context = context, ContractNumber = contractNumber, Version = version };
 
             // Act
-            GetAllStatesDataResponse response = LookUpDataManager.GetAllStates(request);
+            LookUpDataManager lm = new LookUpDataManager { Factory = new LookUpRepositoryFactory() };
+            GetAllStatesDataResponse response = lm.GetAllStates(request);
 
             // Assert
             Assert.AreNotEqual(0, response.States.Count);
@@ -139,7 +146,8 @@ namespace Phytel.API.DataDomain.LookUp.Test
             GetAllTimesOfDaysDataRequest request = new GetAllTimesOfDaysDataRequest { Context = context, ContractNumber = contractNumber, Version = version };
 
             // Act
-            GetAllTimesOfDaysDataResponse response = LookUpDataManager.GetAllTimesOfDays(request);
+            LookUpDataManager lm = new LookUpDataManager { Factory = new LookUpRepositoryFactory() };
+            GetAllTimesOfDaysDataResponse response = lm.GetAllTimesOfDays(request);
 
             // Assert
             Assert.AreNotEqual(0, response.TimesOfDays.Count);
@@ -155,7 +163,8 @@ namespace Phytel.API.DataDomain.LookUp.Test
             GetAllTimeZonesDataRequest request = new GetAllTimeZonesDataRequest { Context = context, ContractNumber = contractNumber, Version = version };
 
             // Act
-            GetAllTimeZonesDataResponse response = LookUpDataManager.GetAllTimeZones(request);
+            LookUpDataManager lm = new LookUpDataManager { Factory = new LookUpRepositoryFactory() };
+            GetAllTimeZonesDataResponse response = lm.GetAllTimeZones(request);
 
             // Assert
             Assert.AreNotEqual(0, response.TimeZones.Count);
@@ -171,7 +180,8 @@ namespace Phytel.API.DataDomain.LookUp.Test
             GetAllCommTypesDataRequest request = new GetAllCommTypesDataRequest { Context = context, ContractNumber = contractNumber, Version = version };
 
             // Act
-            GetAllCommTypesDataResponse response = LookUpDataManager.GetAllCommTypes(request);
+            LookUpDataManager lm = new LookUpDataManager { Factory = new LookUpRepositoryFactory() };
+            GetAllCommTypesDataResponse response = lm.GetAllCommTypes(request);
 
             // Assert
             Assert.AreNotEqual(0, response.CommTypes.Count);
@@ -187,7 +197,8 @@ namespace Phytel.API.DataDomain.LookUp.Test
             GetAllLanguagesDataRequest request = new GetAllLanguagesDataRequest { Context = context, ContractNumber = contractNumber, Version = version };
 
             // Act
-            GetAllLanguagesDataResponse response = LookUpDataManager.GetAllLanguages(request);
+            LookUpDataManager lm = new LookUpDataManager { Factory = new LookUpRepositoryFactory() };
+            GetAllLanguagesDataResponse response = lm.GetAllLanguages(request);
 
             // Assert
             Assert.AreNotEqual(0, response.Languages.Count);
@@ -203,7 +214,8 @@ namespace Phytel.API.DataDomain.LookUp.Test
             GetTimeZoneDataRequest request = new GetTimeZoneDataRequest { Context = context, ContractNumber = contractNumber, Version = version };
 
             // Act
-            GetTimeZoneDataResponse response = LookUpDataManager.GetDefaultTimeZone(request);
+            LookUpDataManager lm = new LookUpDataManager { Factory = new LookUpRepositoryFactory() };
+            GetTimeZoneDataResponse response = lm.GetDefaultTimeZone(request);
 
             // Assert
             Assert.AreEqual("Central", response.TimeZone.Name);
@@ -220,7 +232,8 @@ namespace Phytel.API.DataDomain.LookUp.Test
             GetLookUpsDataRequest request = new GetLookUpsDataRequest { Context = context, ContractNumber = contractNumber, Version = version, Name = "reaction" };
 
             // Act
-            GetLookUpsDataResponse response = LookUpDataManager.GetLookUpsByType(request);
+            LookUpDataManager lm = new LookUpDataManager { Factory = new LookUpRepositoryFactory() };
+            GetLookUpsDataResponse response = lm.GetLookUpsByType(request);
 
             // Assert
             Assert.IsTrue(response.LookUpsData.Count > 0);
@@ -236,24 +249,12 @@ namespace Phytel.API.DataDomain.LookUp.Test
             GetLookUpDetailsDataRequest request = new GetLookUpDetailsDataRequest { Context = context, ContractNumber = contractNumber, Version = version, Name = "NoteWho" };
 
             // Act
-            GetLookUpDetailsDataResponse response = LookUpDataManager.GetLookUpDetails(request);
+            LookUpDataManager lm = new LookUpDataManager { Factory = new LookUpRepositoryFactory() };
+            GetLookUpDetailsDataResponse response = lm.GetLookUpDetails(request);
 
             // Assert
             Assert.IsTrue(response.LookUpDetailsData.Count > 0);
         }
-
-        [TestMethod]
-        public void CreateRepo()
-        {
-            // Arrange
-            double version = 1.0;
-            string contractNumber = "InHealth001";
-            string context = "NG";
-
-            object repo = LookUpRepositoryFactory<object>.GetLookUpRepository(contractNumber, context, string.Empty);
-            Assert.IsTrue(true);
-        }
-
 
         [TestMethod]
         public void GetAllObjectives_Test()
@@ -265,10 +266,28 @@ namespace Phytel.API.DataDomain.LookUp.Test
             GetAllObjectivesDataRequest request = new GetAllObjectivesDataRequest { Context = context, ContractNumber = contractNumber, Version = version };
 
             // Act
-            GetAllObjectivesDataResponse response = LookUpDataManager.GetAllObjectives(request);
+            LookUpDataManager lm = new LookUpDataManager { Factory = new LookUpRepositoryFactory() };
+            GetAllObjectivesDataResponse response = lm.GetAllObjectives(request);
 
             // Assert
             Assert.AreNotEqual(0, response.ObjectivesData.Count);
+        }
+
+        [TestMethod]
+        public void GetAllSettings_Test()
+        {
+            // Arrange
+            double version = 1.0;
+            string contractNumber = "InHealth001";
+            string context = "NG";
+            GetAllSettingsDataRequest request = new GetAllSettingsDataRequest { Context = context, ContractNumber = contractNumber, Version = version};
+
+            // Act
+            LookUpDataManager lm = new LookUpDataManager { Factory = new LookUpRepositoryFactory() };
+            GetAllSettingsDataResponse response = lm.GetAllSettings(request);
+
+            // Assert
+            Assert.IsTrue(response.SettingsData.Count > 0);
         }
 
     }

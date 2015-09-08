@@ -98,8 +98,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataLookUpManager.cs" />
+    <Compile Include="ILookUpDataManager.cs" />
+    <Compile Include="LookUpDataManager.cs" />
+    <Compile Include="Enums.cs" />
     <Compile Include="ILookUpRepository.cs" />
+    <Compile Include="ILookUpRepositoryFactory.cs" />
     <Compile Include="MongoDB\DTO\Allergy\AllergySource.cs" />
     <Compile Include="MongoDB\DTO\Allergy\AllergyType.cs" />
     <Compile Include="MongoDB\DTO\Allergy\Reaction.cs" />
@@ -109,7 +112,12 @@
     <Compile Include="MongoDB\DTO\MedSupp\MedSuppType.cs" />
     <Compile Include="MongoDB\DTO\MedSupp\FreqHowOften.cs" />
     <Compile Include="MongoDB\DTO\MedSupp\FreqWhen.cs" />
+    <Compile Include="MongoDB\DTO\MESetting.cs" />
     <Compile Include="MongoDB\DTO\Note\NoteType.cs" />
+    <Compile Include="MongoDB\DTO\Note\UtilizationSource.cs" />
+    <Compile Include="MongoDB\DTO\Note\Disposition.cs" />
+    <Compile Include="MongoDB\DTO\Note\UtilizationLocation.cs" />
+    <Compile Include="MongoDB\DTO\Note\VisitType.cs" />
     <Compile Include="MongoDB\DTO\ObservationType.cs" />
     <Compile Include="MongoDB\DTO\Goal\InterventionCategory.cs" />
     <Compile Include="MongoDB\DTO\Goal\BarrierCategory.cs" />
@@ -132,10 +140,13 @@
     <Compile Include="MongoDB\DTO\Note\NoteWho.cs" />
     <Compile Include="MongoDB\DTO\Note\NoteOutcome.cs" />
     <Compile Include="MongoDB\DTO\Note\NoteMethod.cs" />
+    <Compile Include="MongoDB\DTO\Patient\MaritalStatus.cs" />
+    <Compile Include="MongoDB\DTO\Patient\Reason.cs" />
     <Compile Include="MongoDB\DTO\Problem.cs" />
     <Compile Include="MongoDB\DTO\ToDo\ToDoCategory.cs" />
     <Compile Include="MongoDB\BaseClasses\LookUpDetailsBase.cs" />
     <Compile Include="MongoDB\LookUpMongoContext.cs" />
+    <Compile Include="MongoDB\Repository\MongoSettingRepository.cs" />
     <Compile Include="MongoDB\Repository\MongoLookUpRepository.cs" />
     <Compile Include="LookUpRepositoryFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

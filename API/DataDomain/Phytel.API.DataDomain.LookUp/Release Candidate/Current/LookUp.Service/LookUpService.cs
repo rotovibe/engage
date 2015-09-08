@@ -11,6 +11,9 @@ namespace Phytel.API.DataDomain.Patient.Service
 {
     public class LookUpService : ServiceStack.ServiceInterface.Service
     {
+        public ILookUpDataManager LookUpDataManager { get; set; }
+        
+        #region Lookups
         #region Problems
         public GetProblemDataResponse Get(GetProblemDataRequest request)
         {
@@ -73,7 +76,7 @@ namespace Phytel.API.DataDomain.Patient.Service
                 Common.Helper.LogException(int.Parse(aseProcessID), ex);
             }
             return response;
-        } 
+        }
         #endregion
 
         #region Objective
@@ -96,7 +99,7 @@ namespace Phytel.API.DataDomain.Patient.Service
                 Common.Helper.LogException(int.Parse(aseProcessID), ex);
             }
             return response;
-        } 
+        }
         #endregion
 
         #region Category
@@ -119,7 +122,7 @@ namespace Phytel.API.DataDomain.Patient.Service
                 Common.Helper.LogException(int.Parse(aseProcessID), ex);
             }
             return response;
-        } 
+        }
         #endregion
 
         #region Contact Related LookUps
@@ -315,7 +318,7 @@ namespace Phytel.API.DataDomain.Patient.Service
             }
             return response;
         }
-        #endregion  
+        #endregion
 
         #region Program
         public GetAllObjectivesDataResponse Get(GetAllObjectivesDataRequest request)
@@ -337,8 +340,31 @@ namespace Phytel.API.DataDomain.Patient.Service
                 Common.Helper.LogException(int.Parse(aseProcessID), ex);
             }
             return response;
-        } 
+        }
+        #endregion 
         #endregion
 
+        #region Settings
+        public GetAllSettingsDataResponse Get(GetAllSettingsDataRequest request)
+        {
+            GetAllSettingsDataResponse response = new GetAllSettingsDataResponse();
+            try
+            {
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("LookUpDD:Get()::Unauthorized Access");
+
+                response = LookUpDataManager.GetAllSettings(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+            }
+            return response;
+        }
+        #endregion  
     }
 }

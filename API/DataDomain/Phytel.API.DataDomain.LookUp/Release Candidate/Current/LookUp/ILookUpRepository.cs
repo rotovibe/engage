@@ -9,7 +9,7 @@ using Phytel.API.Interface;
 
 namespace Phytel.API.DataDomain.LookUp
 {
-    public interface ILookUpRepository<T> : IRepository<T>
+    public interface ILookUpRepository : IRepository
     {
         object FindProblemByID(string entityID);
         List<ProblemData> GetAllProblems();

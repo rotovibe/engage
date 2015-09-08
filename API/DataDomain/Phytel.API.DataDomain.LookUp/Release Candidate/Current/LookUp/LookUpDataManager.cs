@@ -7,25 +7,23 @@ using Phytel.API.Common.CustomObject;
 
 namespace Phytel.API.DataDomain.LookUp
 {
-    public static class LookUpDataManager
+    public class LookUpDataManager : ILookUpDataManager
     {
+        public ILookUpRepositoryFactory Factory { get; set; }
+        #region Lookups
         #region Problems
-        public static GetProblemDataResponse GetProblem(GetProblemDataRequest request)
+        public GetProblemDataResponse GetProblem(GetProblemDataRequest request)
         {
             GetProblemDataResponse response = new GetProblemDataResponse();
-
-            ILookUpRepository<GetProblemDataResponse> repo = Phytel.API.DataDomain.LookUp.LookUpRepositoryFactory<GetProblemDataResponse>.GetLookUpRepository(request.ContractNumber, request.Context, request.UserId);
-            
+            ILookUpRepository repo = Factory.GetRepository(request, RepositoryType.LookUp);
             response.Problem = repo.FindProblemByID(request.ProblemID) as ProblemData;
             return response;
         }
 
-        public static GetAllProblemsDataResponse GetAllProblems(GetAllProblemsDataRequest request)
+        public GetAllProblemsDataResponse GetAllProblems(GetAllProblemsDataRequest request)
         {
             GetAllProblemsDataResponse response = new GetAllProblemsDataResponse();
-
-            ILookUpRepository<ProblemData> repo = Phytel.API.DataDomain.LookUp.LookUpRepositoryFactory<ProblemData>.GetLookUpRepository(request.ContractNumber, request.Context, request.UserId);
-
+            ILookUpRepository repo = Factory.GetRepository(request, RepositoryType.LookUp);
             List<ProblemData> problems = repo.GetAllProblems();
 
             if (problems != null)
@@ -35,12 +33,10 @@ namespace Phytel.API.DataDomain.LookUp
             return response;
         }
 
-        public static SearchProblemsDataResponse SearchProblem(SearchProblemsDataRequest request)
+        public SearchProblemsDataResponse SearchProblem(SearchProblemsDataRequest request)
         {
-            SearchProblemsDataResponse response = new SearchProblemsDataResponse();
-
-            ILookUpRepository<ProblemData> repo = Phytel.API.DataDomain.LookUp.LookUpRepositoryFactory<ProblemData>.GetLookUpRepository(request.ContractNumber, request.Context, request.UserId);
-
+            SearchProblemsDataResponse response = new SearchProblemsDataResponse(); 
+            ILookUpRepository repo = Factory.GetRepository(request, RepositoryType.LookUp);
             List<ProblemData> problems = repo.SearchProblem(request);
 
             if (problems != null)
@@ -48,42 +44,36 @@ namespace Phytel.API.DataDomain.LookUp
                 response.Problems = problems;
             }
             return response;
-        } 
+        }
         #endregion
 
         #region Objective
-        public static GetObjectiveDataResponse GetObjectiveByID(GetObjectiveDataRequest request)
+        public GetObjectiveDataResponse GetObjectiveByID(GetObjectiveDataRequest request)
         {
             GetObjectiveDataResponse result = new GetObjectiveDataResponse();
-
-            ILookUpRepository<GetObjectiveDataResponse> repo = LookUpRepositoryFactory<GetObjectiveDataResponse>.GetLookUpRepository(request.ContractNumber, request.Context, request.UserId);
-
+            ILookUpRepository repo = Factory.GetRepository(request, RepositoryType.LookUp);
             result.Objective = repo.FindObjectiveByID(request.ObjectiveID) as IdNamePair;
 
             return (result != null ? result : new GetObjectiveDataResponse());
-        } 
+        }
         #endregion
 
         #region Category
-        public static GetCategoryDataResponse GetCategoryByID(GetCategoryDataRequest request)
+        public GetCategoryDataResponse GetCategoryByID(GetCategoryDataRequest request)
         {
             GetCategoryDataResponse result = new GetCategoryDataResponse();
-
-            ILookUpRepository<GetCategoryDataResponse> repo = LookUpRepositoryFactory<GetCategoryDataResponse>.GetLookUpRepository(request.ContractNumber, request.Context, request.UserId);
-
+            ILookUpRepository repo = Factory.GetRepository(request, RepositoryType.LookUp);
             result.Category = repo.FindCategoryByID(request.CategoryID) as IdNamePair;
 
             return (result != null ? result : new GetCategoryDataResponse());
-        } 
+        }
         #endregion
 
         #region Contact Related LookUps
-        public static GetAllCommModesDataResponse GetAllCommModes(GetAllCommModesDataRequest request)
+        public GetAllCommModesDataResponse GetAllCommModes(GetAllCommModesDataRequest request)
         {
             GetAllCommModesDataResponse response = new GetAllCommModesDataResponse();
-
-            ILookUpRepository<IdNamePair> repo = LookUpRepositoryFactory<IdNamePair>.GetLookUpRepository(request.ContractNumber, request.Context, request.UserId);
-
+            ILookUpRepository repo = Factory.GetRepository(request, RepositoryType.LookUp);
             List<IdNamePair> data = repo.GetAllCommModes();
 
             if (data != null)
@@ -93,12 +83,10 @@ namespace Phytel.API.DataDomain.LookUp
             return response;
         }
 
-        public static GetAllStatesDataResponse GetAllStates(GetAllStatesDataRequest request)
+        public GetAllStatesDataResponse GetAllStates(GetAllStatesDataRequest request)
         {
             GetAllStatesDataResponse response = new GetAllStatesDataResponse();
-
-            ILookUpRepository<StateData> repo = LookUpRepositoryFactory<StateData>.GetLookUpRepository(request.ContractNumber, request.Context, request.UserId);
-
+            ILookUpRepository repo = Factory.GetRepository(request, RepositoryType.LookUp); 
             List<StateData> data = repo.GetAllStates();
 
             if (data != null)
@@ -108,12 +96,10 @@ namespace Phytel.API.DataDomain.LookUp
             return response;
         }
 
-        public static GetAllTimesOfDaysDataResponse GetAllTimesOfDays(GetAllTimesOfDaysDataRequest request)
+        public GetAllTimesOfDaysDataResponse GetAllTimesOfDays(GetAllTimesOfDaysDataRequest request)
         {
             GetAllTimesOfDaysDataResponse response = new GetAllTimesOfDaysDataResponse();
-
-            ILookUpRepository<IdNamePair> repo = LookUpRepositoryFactory<IdNamePair>.GetLookUpRepository(request.ContractNumber, request.Context, request.UserId);
-
+            ILookUpRepository repo = Factory.GetRepository(request, RepositoryType.LookUp);
             List<IdNamePair> data = repo.GetAllTimesOfDays();
 
             if (data != null)
@@ -123,12 +109,10 @@ namespace Phytel.API.DataDomain.LookUp
             return response;
         }
 
-        public static GetAllTimeZonesDataResponse GetAllTimeZones(GetAllTimeZonesDataRequest request)
+        public GetAllTimeZonesDataResponse GetAllTimeZones(GetAllTimeZonesDataRequest request)
         {
             GetAllTimeZonesDataResponse response = new GetAllTimeZonesDataResponse();
-
-            ILookUpRepository<TimeZoneData> repo = LookUpRepositoryFactory<TimeZoneData>.GetLookUpRepository(request.ContractNumber, request.Context, request.UserId);
-
+            ILookUpRepository repo = Factory.GetRepository(request, RepositoryType.LookUp);
             List<TimeZoneData> data = repo.GetAllTimeZones();
 
             if (data != null)
@@ -138,12 +122,10 @@ namespace Phytel.API.DataDomain.LookUp
             return response;
         }
 
-        public static GetAllCommTypesDataResponse GetAllCommTypes(GetAllCommTypesDataRequest request)
+        public GetAllCommTypesDataResponse GetAllCommTypes(GetAllCommTypesDataRequest request)
         {
             GetAllCommTypesDataResponse response = new GetAllCommTypesDataResponse();
-
-            ILookUpRepository<CommTypeData> repo = LookUpRepositoryFactory<CommTypeData>.GetLookUpRepository(request.ContractNumber, request.Context, request.UserId);
-
+            ILookUpRepository repo = Factory.GetRepository(request, RepositoryType.LookUp);
             List<CommTypeData> data = repo.GetAllCommTypes();
 
             if (data != null)
@@ -153,12 +135,10 @@ namespace Phytel.API.DataDomain.LookUp
             return response;
         }
 
-        public static GetAllLanguagesDataResponse GetAllLanguages(GetAllLanguagesDataRequest request)
+        public GetAllLanguagesDataResponse GetAllLanguages(GetAllLanguagesDataRequest request)
         {
             GetAllLanguagesDataResponse response = new GetAllLanguagesDataResponse();
-
-            ILookUpRepository<LanguageData> repo = LookUpRepositoryFactory<LanguageData>.GetLookUpRepository(request.ContractNumber, request.Context, request.UserId);
-
+            ILookUpRepository repo = Factory.GetRepository(request, RepositoryType.LookUp);
             List<LanguageData> data = repo.GetAllLanguages();
 
             if (data != null)
@@ -168,12 +148,10 @@ namespace Phytel.API.DataDomain.LookUp
             return response;
         }
 
-        public static GetTimeZoneDataResponse GetDefaultTimeZone(GetTimeZoneDataRequest request)
+        public GetTimeZoneDataResponse GetDefaultTimeZone(GetTimeZoneDataRequest request)
         {
             GetTimeZoneDataResponse response = new GetTimeZoneDataResponse();
-
-            ILookUpRepository<TimeZoneData> repo = LookUpRepositoryFactory<TimeZoneData>.GetLookUpRepository(request.ContractNumber, request.Context, request.UserId);
-
+            ILookUpRepository repo = Factory.GetRepository(request, RepositoryType.LookUp);
             TimeZoneData data = repo.GetDefaultTimeZone();
 
             if (data != null)
@@ -185,12 +163,10 @@ namespace Phytel.API.DataDomain.LookUp
         #endregion
 
         #region Refatored LookUps
-        public static GetLookUpsDataResponse GetLookUpsByType(GetLookUpsDataRequest request)
+        public GetLookUpsDataResponse GetLookUpsByType(GetLookUpsDataRequest request)
         {
             GetLookUpsDataResponse response = new GetLookUpsDataResponse();
-
-            ILookUpRepository<IdNamePair> repo = LookUpRepositoryFactory<IdNamePair>.GetLookUpRepository(request.ContractNumber, request.Context, request.UserId);
-
+            ILookUpRepository repo = Factory.GetRepository(request, RepositoryType.LookUp);
             List<IdNamePair> data = repo.GetLookps(request.Name);
 
             if (data != null)
@@ -200,12 +176,10 @@ namespace Phytel.API.DataDomain.LookUp
             return response;
         }
 
-        public static GetLookUpDetailsDataResponse GetLookUpDetails(GetLookUpDetailsDataRequest request)
+        public GetLookUpDetailsDataResponse GetLookUpDetails(GetLookUpDetailsDataRequest request)
         {
             GetLookUpDetailsDataResponse response = new GetLookUpDetailsDataResponse();
-
-            ILookUpRepository<IdNamePair> repo = LookUpRepositoryFactory<IdNamePair>.GetLookUpRepository(request.ContractNumber, request.Context, request.UserId);
-
+            ILookUpRepository repo = Factory.GetRepository(request, RepositoryType.LookUp);
             List<LookUpDetailsData> data = repo.GetLookUpDetails(request.Name);
 
             if (data != null)
@@ -214,15 +188,13 @@ namespace Phytel.API.DataDomain.LookUp
             }
             return response;
         }
-        #endregion  
+        #endregion
 
         #region Program
-        public static GetAllObjectivesDataResponse GetAllObjectives(GetAllObjectivesDataRequest request)
+        public GetAllObjectivesDataResponse GetAllObjectives(GetAllObjectivesDataRequest request)
         {
             GetAllObjectivesDataResponse response = new GetAllObjectivesDataResponse();
-
-            ILookUpRepository<ObjectiveData> repo = LookUpRepositoryFactory<ObjectiveData>.GetLookUpRepository(request.ContractNumber, request.Context, request.UserId);
-
+            ILookUpRepository repo = Factory.GetRepository(request, RepositoryType.LookUp);
             List<ObjectiveData> data = repo.GetAllObjectives();
 
             if (data != null)
@@ -230,7 +202,29 @@ namespace Phytel.API.DataDomain.LookUp
                 response.ObjectivesData = data;
             }
             return response;
-        } 
+        }
+        #endregion 
+        #endregion
+
+        #region Settings
+        public GetAllSettingsDataResponse GetAllSettings(GetAllSettingsDataRequest request)
+        {
+            GetAllSettingsDataResponse response = new GetAllSettingsDataResponse();
+            ILookUpRepository repo = Factory.GetRepository(request, RepositoryType.Setting);
+            List<MESetting> list = repo.SelectAll() as List<MESetting>;
+            if (list != null && list.Count > 0)
+            {
+               Dictionary<string,string> data = new Dictionary<string,string>();
+               list.ForEach(s => 
+                   {
+                       data.Add(s.Key, s.Value);
+                   });
+
+               response.SettingsData = data;    
+            }
+            return response;
+        }
+
         #endregion
     }
 }   

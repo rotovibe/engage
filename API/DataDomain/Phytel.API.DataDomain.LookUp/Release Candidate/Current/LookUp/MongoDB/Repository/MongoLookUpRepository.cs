@@ -14,7 +14,7 @@ using System.Configuration;
 
 namespace Phytel.API.DataDomain.LookUp
 {
-    public class MongoLookUpRepository<T> : ILookUpRepository<T>
+    public class MongoLookUpRepository: ILookUpRepository
     {
         private string _dbName = string.Empty;
         static readonly string redisClientIPAddress;
@@ -299,6 +299,54 @@ namespace Phytel.API.DataDomain.LookUp
                 if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(Frequency)) == false)
                 {
                     MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<Frequency>();
+                }
+            }
+            catch { }
+            try
+            {
+                if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(VisitType)) == false)
+                {
+                    MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<VisitType>();
+                }
+            }
+            catch { }
+            try
+            {
+                if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(UtilizationSource)) == false)
+                {
+                    MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<UtilizationSource>();
+                }
+            }
+            catch { }
+            try
+            {
+                if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(Disposition)) == false)
+                {
+                    MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<Disposition>();
+                }
+            }
+            catch { }
+            try
+            {
+                if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(UtilizationLocation)) == false)
+                {
+                    MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<UtilizationLocation>();
+                }
+            }
+            catch { }
+            try
+            {
+                if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(Reason)) == false)
+                {
+                    MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<Reason>();
+                }
+            }
+            catch { }
+            try
+            {
+                if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(MaritalStatus)) == false)
+                {
+                    MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<MaritalStatus>();
                 }
             }
             catch { }
@@ -1129,6 +1177,7 @@ namespace Phytel.API.DataDomain.LookUp
                                         lookupList.Add(data);
                                     }       
                                 }
+                                lookupList = lookupList.OrderBy(s => s.Name).ToList();
                             }
                         }
                     }
@@ -1220,5 +1269,6 @@ namespace Phytel.API.DataDomain.LookUp
         {
             throw new NotImplementedException();
         }
+
     }
 }
