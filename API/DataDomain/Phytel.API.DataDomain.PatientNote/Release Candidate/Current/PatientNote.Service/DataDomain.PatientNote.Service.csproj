@@ -92,11 +92,17 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IServiceProxy.cs" />
+    <Compile Include="PatientNoteAppHost.cs" />
+    <Compile Include="Containers\HttpServiceContainer.cs" />
+    <Compile Include="PatientUtilizationService.cs" />
     <Compile Include="PatientNoteService.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ServiceBase.cs" />
+    <Compile Include="ServiceProxy.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -122,6 +128,10 @@
     <ProjectReference Include="..\..\..\..\..\Interfaces\Release Candidate\Current\Phytel.API.Interface\Phytel.API.Interface.csproj">
       <Project>{abe948fb-247e-4955-b3ab-b7c93e10a542}</Project>
       <Name>Phytel.API.Interface</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DataDomain.PatientNote.Repo\DataDomain.PatientNote.Repo.csproj">
+      <Project>{bd61e655-5658-49c8-96d8-26822162d008}</Project>
+      <Name>DataDomain.PatientNote.Repo</Name>
     </ProjectReference>
     <ProjectReference Include="..\PatientNote.DTO\DataDomain.PatientNote.DTO.csproj">
       <Project>{99f4ec29-b099-424e-9757-223e67029001}</Project>

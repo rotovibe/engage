@@ -1,13 +1,15 @@
 using System.Collections.Generic;
+using DataDomain.PatientNote.Repo;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Phytel.API.DataDomain.PatientNote.DTO;
+using Phytel.API.DataDomain.PatientNote.Repo;
 
 namespace Phytel.API.DataDomain.PatientNote.Test
 {
     [TestClass]
     public class PatientNoteTest
     {
-        IPatientNoteDataManager m = new PatientNoteDataManager { Factory = new PatientNoteRepositoryFactory() };
+        IPatientNoteDataManager m = new PatientNoteDataManager(new PatientNoteRepositoryFactory("InHealth001", "123456789012345678901234") );
         
         [TestMethod]
         public void GetPatientNote_Test_Passes()
@@ -53,7 +55,7 @@ namespace Phytel.API.DataDomain.PatientNote.Test
         public void InsertPatientNote_Test()
         {
             PatientNoteData n = new PatientNoteData { Text = "Note D data domain", PatientId = "531f2dcf072ef727c4d2a150", CreatedById = "531f2df5072ef727c4d2a3bc" };
-            PutPatientNoteDataRequest request = new PutPatientNoteDataRequest {
+            InsertPatientNoteDataRequest request = new InsertPatientNoteDataRequest {
                 Version = 1,
                 PatientNote = n
             };

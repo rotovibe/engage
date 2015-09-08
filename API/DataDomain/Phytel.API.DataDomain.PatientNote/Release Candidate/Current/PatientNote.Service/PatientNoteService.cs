@@ -8,27 +8,37 @@ using System.Configuration;
 
 namespace Phytel.API.DataDomain.PatientNote.Service
 {
-    public class PatientNoteService : ServiceStack.ServiceInterface.Service
+    public class PatientNoteService : ServiceBase
     {
         public IPatientNoteDataManager Manager { get; set; }
         
-        public PutPatientNoteDataResponse Put(PutPatientNoteDataRequest request)
+        public InsertPatientNoteDataResponse Post(InsertPatientNoteDataRequest request)
         {
-            PutPatientNoteDataResponse response = new PutPatientNoteDataResponse();
+            InsertPatientNoteDataResponse response = new InsertPatientNoteDataResponse();
             try
             {
-                if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("PatientNoteDD:Put()::Unauthorized Access");
-
+                RequireUserId(request); 
                 response.Id = Manager.InsertPatientNote(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
             {
-                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                RaiseException(response, ex);
+            }
+            return response;
+        }
 
-                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
-                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+        public UpdatePatientNoteDataResponse Put(UpdatePatientNoteDataRequest request)
+        {
+            UpdatePatientNoteDataResponse response = new UpdatePatientNoteDataResponse();
+            try
+            {
+                RequireUserId(request);
+                response.PatientNoteData = Manager.UpdatePatientNote(request);
+            }
+            catch (Exception ex)
+            {
+                RaiseException(response, ex);
             }
             return response;
         }
@@ -38,18 +48,13 @@ namespace Phytel.API.DataDomain.PatientNote.Service
             GetPatientNoteDataResponse response = new GetPatientNoteDataResponse();
             try
             {
-                if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("PatientNoteDD:Get()::Unauthorized Access");
-
+                RequireUserId(request);
                 response.PatientNote = Manager.GetPatientNote(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
             {
-                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
-
-                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
-                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+                RaiseException(response, ex);
             }
             return response;
         }
@@ -59,18 +64,13 @@ namespace Phytel.API.DataDomain.PatientNote.Service
             GetAllPatientNotesDataResponse response = new GetAllPatientNotesDataResponse();
             try
             {
-                if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("PatientNoteDD:Get()::Unauthorized Access");
-
+                RequireUserId(request); 
                 response.PatientNotes = Manager.GetAllPatientNotes(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
             {
-                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
-
-                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
-                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+                RaiseException(response, ex);
             }
             return response;
         }
@@ -80,18 +80,13 @@ namespace Phytel.API.DataDomain.PatientNote.Service
             DeletePatientNoteDataResponse response = new DeletePatientNoteDataResponse();
             try
             {
-                if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("PatientNoteDD:Delete()");
-
+                RequireUserId(request); 
                 response.Deleted = Manager.DeletePatientNote(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
             {
-                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
-
-                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
-                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+                RaiseException(response, ex);
             }
             return response;
         }
@@ -102,18 +97,13 @@ namespace Phytel.API.DataDomain.PatientNote.Service
             DeleteNoteByPatientIdDataResponse response = new DeleteNoteByPatientIdDataResponse();
             try
             {
-                if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("PatientNoteDD:PatientNoteDelete()::Unauthorized Access");
-
+                RequireUserId(request);
                 response = Manager.DeleteNoteByPatientId(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
             {
-                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
-
-                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
-                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+                RaiseException(response, ex);
             }
             return response;
         }
@@ -123,18 +113,13 @@ namespace Phytel.API.DataDomain.PatientNote.Service
             UndoDeletePatientNotesDataResponse response = new UndoDeletePatientNotesDataResponse();
             try
             {
-                if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("PatientNoteDD:PatientNoteUndoDelete()::Unauthorized Access");
-
+                RequireUserId(request); 
                 response = Manager.UndoDeletePatientNotes(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
             {
-                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
-
-                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
-                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+                RaiseException(response, ex);
             }
             return response;
         }
@@ -144,18 +129,13 @@ namespace Phytel.API.DataDomain.PatientNote.Service
             RemoveProgramInPatientNotesDataResponse response = new RemoveProgramInPatientNotesDataResponse();
             try
             {
-                if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("PatientNoteDD:RemoveProgramInPatientNotes()::Unauthorized Access");
-
+                RequireUserId(request);
                 response = Manager.RemoveProgramInPatientNotes(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
             {
-                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
-
-                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
-                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+                RaiseException(response, ex);
             }
             return response;
         }

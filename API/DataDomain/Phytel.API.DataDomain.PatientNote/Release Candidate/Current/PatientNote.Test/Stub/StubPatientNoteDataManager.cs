@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Phytel.API.DataDomain.PatientNote.DTO;
 
 namespace Phytel.API.DataDomain.PatientNote.Test.Stubs
 {
     public class StubPatientNoteDataManager : IPatientNoteDataManager
     {
 
-        public string InsertPatientNote(DTO.PutPatientNoteDataRequest request)
+        public string InsertPatientNote(DTO.InsertPatientNoteDataRequest request)
         {
             throw new NotImplementedException();
         }
@@ -40,6 +41,11 @@ namespace Phytel.API.DataDomain.PatientNote.Test.Stubs
         }
 
         public DTO.RemoveProgramInPatientNotesDataResponse RemoveProgramInPatientNotes(DTO.RemoveProgramInPatientNotesDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+        public PatientNoteData UpdatePatientNote(DTO.UpdatePatientNoteDataRequest request)
         {
             throw new NotImplementedException();
         }

@@ -50,6 +50,21 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ServiceStack, Version=3.9.70.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\packages\ServiceStack.3.9.70\lib\net35\ServiceStack.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack.Common, Version=3.9.71.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\packages\ServiceStack.Common.3.9.70\lib\net35\ServiceStack.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack.Interfaces, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\packages\ServiceStack.Common.3.9.70\lib\net35\ServiceStack.Interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack.ServiceInterface">
+      <HintPath>..\..\..\..\..\packages\ServiceStack.3.9.70\lib\net35\ServiceStack.ServiceInterface.dll</HintPath>
+    </Reference>
     <Reference Include="ServiceStack.Text">
       <HintPath>..\..\..\..\..\packages\ServiceStack.Text.3.9.70\lib\net35\ServiceStack.Text.dll</HintPath>
     </Reference>
@@ -68,9 +83,15 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="DataPatientUtilizationManagerTests.cs" />
+    <Compile Include="Data\Data_PatientNote_Test.cs" />
     <Compile Include="PatientNoteTest.cs" />
+    <Compile Include="PatientUtilizationServiceTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Stub\StubDataPatientUtilizationManager.cs" />
+    <Compile Include="Stub\StubMongoPatientNoteRepository.cs" />
     <Compile Include="Stub\StubPatientNoteDataManager.cs" />
+    <Compile Include="TestInit.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -81,9 +102,17 @@
       <Project>{abe948fb-247e-4955-b3ab-b7c93e10a542}</Project>
       <Name>Phytel.API.Interface</Name>
     </ProjectReference>
+    <ProjectReference Include="..\DataDomain.PatientNote.Repo\DataDomain.PatientNote.Repo.csproj">
+      <Project>{BD61E655-5658-49C8-96D8-26822162D008}</Project>
+      <Name>DataDomain.PatientNote.Repo</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PatientNote.DTO\DataDomain.PatientNote.DTO.csproj">
       <Project>{99f4ec29-b099-424e-9757-223e67029001}</Project>
       <Name>DataDomain.PatientNote.DTO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PatientNote.Service\DataDomain.PatientNote.Service.csproj">
+      <Project>{4B48FF15-A43D-4663-B380-72342C428FBD}</Project>
+      <Name>DataDomain.PatientNote.Service</Name>
     </ProjectReference>
     <ProjectReference Include="..\PatientNote\DataDomain.PatientNote.csproj">
       <Project>{a98ffdeb-2a95-457f-af31-09ac10ff33bb}</Project>

@@ -3,17 +3,14 @@ using ServiceStack.ServiceHost;
 using System.Collections.Generic;
 using Phytel.API.DataDomain.PatientNote.DTO;
 
-namespace Phytel.API.DataDomain.PatientNote.DTO
+namespace Phytel.API.DataDomain.PatientNote.DTO.Request.Utilization
 {
-    [Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Note/Insert", "PUT")]
-    public class PutPatientNoteDataRequest : IDataDomainRequest
+    [Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Notes/Utilizations", "GET")]
+    public class GetAllPatientUtilizationDataRequest : IDataDomainRequest
     {
 
         [ApiMember(Name = "PatientId", Description = "Id of the patient", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string PatientId { get; set; }
-
-        [ApiMember(Name = "PatientNote", Description = "PatientNote object to be inserted", ParameterType = "property", DataType = "PatientNoteData", IsRequired = false)]
-        public PatientNoteData PatientNote { get; set; }
 
         [ApiMember(Name = "UserId", Description = "UserId of the logged in user", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string UserId { get; set; }
