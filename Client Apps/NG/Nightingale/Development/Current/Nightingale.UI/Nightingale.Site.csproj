@@ -256,15 +256,6 @@
     <Content Include="App\views\templates\allergy.status.html" />
     <Content Include="App\views\templates\allergy.edit.html" />
     <Content Include="App\views\templates\validation.errors.html" />
-    <Content Include="Content\dev.css">
-      <DependentUpon>dev.scss</DependentUpon>
-    </Content>
-    <Content Include="Content\dev.min.css">
-      <DependentUpon>dev.css</DependentUpon>
-    </Content>
-    <Content Include="Content\images\PH_IBM Watson Woodmark-01.png" />
-    <Content Include="Content\images\PH_LOGO-01.png" />
-    <Content Include="Content\images\watson_health_cm_logo.png" />
     <Content Include="Properties\PublishProfiles\Azure QA Publish.pubxml.user" />
     <Content Include="Scripts\breeze.ajaxpost2.js" />
     <Content Include="Scripts\breeze.debug.js" />
@@ -833,9 +824,6 @@
     <Content Include="App\viewmodels\patients\sections\problems.list.js" />
     <Content Include="App\viewmodels\patients\medications\index.min.js.map">
       <DependentUpon>index.js</DependentUpon>
-    </Content>
-    <Content Include="Content\dev.css.map">
-      <DependentUpon>dev.css</DependentUpon>
     </Content>
     <None Include="yuidoc_readme.txt" />
     <None Include="Properties\PublishProfiles\Azure QA Publish.pubxml" />
