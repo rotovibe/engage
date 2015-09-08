@@ -63,6 +63,7 @@ define(['config.services', 'services/session', 'services/datacontext', 'models/b
             cohortsList: cohortsList,
             selectedCohort: selectedCohort,
             cohortFilter: cohortFilter,
+			clearCohortFilter: clearCohortFilter,
             patientsList: patientsList,
             activate: activate,
             choosePatient: choosePatient,
@@ -71,6 +72,10 @@ define(['config.services', 'services/session', 'services/datacontext', 'models/b
         };
 
         return vm;
+
+		function clearCohortFilter(){
+			cohortFilter(null);
+		}
 
         function choosePatient (sender) {
             selectedPatient(sender);
