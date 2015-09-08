@@ -170,7 +170,7 @@ namespace Phytel.API.AppDomain.NG
                     Title = request.ToDo.Title,
                     StatusId = request.ToDo.StatusId
                 };
-                if (request.ToDo.StatusId == (int)Status.Met || request.ToDo.StatusId == (int)Status.Abandoned)
+                if (request.ToDo.StatusId == (int)Phytel.API.DataDomain.Scheduling.DTO.Status.Met || request.ToDo.StatusId == (int)Phytel.API.DataDomain.Scheduling.DTO.Status.Abandoned)
                 {
                     data.ClosedDate = DateTime.UtcNow;
                 }

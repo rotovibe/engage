@@ -1,18 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using AutoMapper;
 using Phytel.API.AppDomain.NG.DTO;
+using Phytel.API.AppDomain.NG.DTO.Utilization;
+using Phytel.API.AppDomain.NG.Notes.Visitors;
 using Phytel.API.DataDomain.PatientNote.DTO;
 using ServiceStack.Service;
 using ServiceStack.ServiceClient.Web;
+using System.Linq;
+using Phytel.API.AppDomain.NG.DTO.Context;
+using Phytel.API.AppDomain.NG.DTO.Note.Context;
 
-namespace Phytel.API.AppDomain.NG
+namespace Phytel.API.AppDomain.NG.Notes
 {
-    public class NotesManager : ManagerBase
+    public class NotesManager : ManagerBase, INotesManager
     {
         #region endpoint addresses
         protected static readonly string DDPatientNoteUrl = ConfigurationManager.AppSettings["DDPatientNoteUrl"];
         #endregion
+
+        public IUtilizationManager UtilManager { get; set; }
 
         public PatientNote GetPatientNote(GetPatientNoteRequest request)
         {
@@ -49,65 +57,31 @@ namespace Phytel.API.AppDomain.NG
                         SourceId = n.SourceId,
                         DurationId = n.DurationId,
                         ValidatedIdentity = n.ValidatedIdentity,
-                        ContactedOn = n.ContactedOn
+                        ContactedOn = n.ContactedOn,
+                        UpdatedById = n.UpdatedById,
+                        UpdatedOn = n.UpdatedOn,
+                        DataSource = n.DataSource
                     };
                 }
                 return result;
             }
-            catch (WebServiceException ex)
-            {
-                throw new WebServiceException("AD:GetPatientNote()::" + ex.Message, ex.InnerException);
-            }
+            catch (WebServiceException ex) { throw ex; }
         }
 
-        public List<PatientNote> GetAllPatientNotes(GetAllPatientNotesRequest request)
+        public List<PatientNote> GetAllPatientNotes(IServiceContext context)
         {
             try
             {
-                List<PatientNote> result = null;
-                //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Notes/{Count}", "GET")]
-                IRestClient client = new JsonServiceClient();
-                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Notes/{5}",
-                    DDPatientNoteUrl,
-                    "NG",
-                    request.Version,
-                    request.ContractNumber,
-                    request.PatientId,
-                    request.Count), request.UserId);
-
-                GetAllPatientNotesDataResponse ddResponse = client.Get<GetAllPatientNotesDataResponse>(url);
-
-                if (ddResponse != null && ddResponse.PatientNotes != null && ddResponse.PatientNotes.Count > 0)
-                {
-                    result = new List<PatientNote>();
-                    List<PatientNoteData> dataList = ddResponse.PatientNotes;
-                    foreach (PatientNoteData n in dataList)
-                    {
-                        result.Add(new PatientNote
-                        {
-                            Id = n.Id,
-                            PatientId = n.PatientId,
-                            Text = n.Text,
-                            ProgramIds = n.ProgramIds,
-                            CreatedOn = n.CreatedOn,
-                            CreatedById = n.CreatedById,
-                            TypeId = n.TypeId,
-                            MethodId = n.MethodId,
-                            OutcomeId = n.OutcomeId,
-                            WhoId = n.WhoId,
-                            SourceId = n.SourceId,
-                            DurationId = n.DurationId,
-                            ValidatedIdentity = n.ValidatedIdentity,
-                            ContactedOn = n.ContactedOn
-                        }
-                        );
-                    }
-                }
-                return result;
+                var hlist = new HistoryListVisitable(context);
+                hlist.Accept(new PatientNoteVisitor());
+                hlist.Accept(new PatientUtilizationVisitor());
+                hlist.Modify(new OrderModifier());
+                hlist.Modify(new TakeModifier(((PatientNoteContext)context.Tag).Count));
+                return hlist.GetList();
             }
             catch (WebServiceException ex)
             {
-                throw new WebServiceException("AD:GetAllPatientNotes()::" + ex.Message, ex.InnerException);
+                throw ex;
             }
         }
 
@@ -122,8 +96,9 @@ namespace Phytel.API.AppDomain.NG
 
                 PostPatientNoteResponse response = new PostPatientNoteResponse();
                 //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Note/Insert", "PUT")]
+                //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Note", "POST")]
                 IRestClient client = new JsonServiceClient();
-                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/patient/{4}/note/insert",
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/patient/{4}/note",
                                                                         DDPatientNoteUrl,
                                                                         "NG",
                                                                         request.Version,
@@ -143,18 +118,21 @@ namespace Phytel.API.AppDomain.NG
                     SourceId = request.Note.SourceId,
                     DurationId = request.Note.DurationId,
                     ContactedOn = request.Note.ContactedOn,
-                    ValidatedIdentity = request.Note.ValidatedIdentity
+                    ValidatedIdentity = request.Note.ValidatedIdentity,
+                    DataSource = request.Note.DataSource
                 };
-                PutPatientNoteDataResponse dataDomainResponse =
-                    client.Put<PutPatientNoteDataResponse>(url, new PutPatientNoteDataRequest
-                                                                                {
-                                                                                    PatientNote = noteData,
-                                                                                    Context = "NG",
-                                                                                    ContractNumber = request.ContractNumber,
-                                                                                    Version = request.Version,
-                                                                                    UserId = request.UserId,
-                                                                                    PatientId = request.PatientId
-                                                                                } as object);
+
+                InsertPatientNoteDataResponse dataDomainResponse =
+                    client.Post<InsertPatientNoteDataResponse>(url, new InsertPatientNoteDataRequest
+                    {
+                        PatientNote = noteData,
+                        Context = "NG",
+                        ContractNumber = request.ContractNumber,
+                        Version = request.Version,
+                        UserId = request.UserId,
+                        PatientId = request.PatientId
+                    } as object);
+
                 if(dataDomainResponse != null && !(string.IsNullOrEmpty(dataDomainResponse.Id)))
                 {
                     response.Id = dataDomainResponse.Id;
@@ -163,10 +141,7 @@ namespace Phytel.API.AppDomain.NG
                 
                 return response;
             }
-            catch (WebServiceException ex)
-            {
-                throw new WebServiceException("AD:InsertPatientNote()::" + ex.Message, ex.InnerException);
-            }
+            catch (WebServiceException ex) { throw ex; }
         }
 
         public PostDeletePatientNoteResponse DeletePatientNote(PostDeletePatientNoteRequest request)
@@ -192,10 +167,67 @@ namespace Phytel.API.AppDomain.NG
                 }
                 return response;
             }
-            catch (WebServiceException ex)
+            catch (WebServiceException ex) { throw ex; }
+        }
+
+        public UpdatePatientNoteResponse UpdatePatientNote(UpdatePatientNoteRequest request)
+        {
+            try
             {
-                throw new WebServiceException("AD:DeletePatientNote()::" + ex.Message, ex.InnerException);
+                if (request.PatientNote == null)
+                    throw new Exception("The Note property is null in the request.");
+                else if (string.IsNullOrEmpty(request.PatientNote.Text))
+                    throw new Exception("Note text is a required field.");
+
+                UpdatePatientNoteResponse response = new UpdatePatientNoteResponse();
+                if (request.PatientNote != null)
+                {
+                    PatientNote pn = request.PatientNote;
+                    //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Note/{Id}", "PUT")]
+                    IRestClient client = new JsonServiceClient();
+                    string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Note/{5}",
+                                                                            DDPatientNoteUrl,
+                                                                            "NG",
+                                                                            request.Version,
+                                                                            request.ContractNumber,
+                                                                            pn.PatientId,
+                                                                            pn.Id), request.UserId);
+
+                    PatientNoteData pnData = new PatientNoteData
+                    {
+                        Id = pn.Id,
+                        Text = pn.Text,
+                        ProgramIds = pn.ProgramIds,
+                        CreatedById = request.UserId,
+                        CreatedOn = pn.CreatedOn,
+                        PatientId = pn.PatientId,
+                        TypeId = pn.TypeId,
+                        MethodId = pn.MethodId,
+                        OutcomeId = pn.OutcomeId,
+                        WhoId = pn.WhoId,
+                        SourceId = pn.SourceId,
+                        DurationId = pn.DurationId,
+                        ContactedOn = pn.ContactedOn,
+                        ValidatedIdentity = pn.ValidatedIdentity,
+                        DataSource = pn.DataSource
+                    };
+                    UpdatePatientNoteDataResponse dataDomainResponse =
+                        client.Put<UpdatePatientNoteDataResponse>(url, new UpdatePatientNoteDataRequest
+                        {
+                            Context = "NG",
+                            ContractNumber = request.ContractNumber,
+                            Version = request.Version,
+                            UserId = request.UserId,
+                            PatientNoteData = pnData
+                        } as object);
+                    if (dataDomainResponse != null & dataDomainResponse.PatientNoteData != null)
+                    {
+                        response.PatientNote = Mapper.Map<PatientNote>(dataDomainResponse.PatientNoteData); ;
+                    }
+                }
+                return response;
             }
+            catch (WebServiceException ex) { throw ex; }
         }
     }
 }

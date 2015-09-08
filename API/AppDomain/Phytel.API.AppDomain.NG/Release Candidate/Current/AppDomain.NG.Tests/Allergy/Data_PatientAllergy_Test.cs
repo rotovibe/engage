@@ -103,7 +103,7 @@ namespace Phytel.API.AppDomain.NG.Test
             //    PatientId = "5325da1fd6a4850adcbba54a",
             //    //ReactionIds = new List<string> { "54494b5ad433232a446f7323" },
             //    //SeverityId = "54494a8fd433232a446f7311",
-            //    SourceId = "544e9976d433231d9c0330ae",
+            //    UtilizationSourceId = "544e9976d433231d9c0330ae",
             //    StartDate = DateTime.UtcNow,
             //    StatusId = 2,
             //    SystemName = "Integration",

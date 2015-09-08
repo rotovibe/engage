@@ -9,6 +9,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using Phytel.API.AppDomain.NG.DTO.Context;
+using Phytel.API.AppDomain.NG.DTO.Note.Context;
+using Phytel.API.AppDomain.NG.Notes;
+using ServiceStack.Common.Web;
 
 namespace Phytel.API.AppDomain.NG.Service
 {
@@ -17,10 +21,20 @@ namespace Phytel.API.AppDomain.NG.Service
         public ISecurityManager Security {get; set;}
         public INGManager NGManager {get; set;}
         public IAuditUtil AuditUtil { get; set; }
+        public INotesManager NotesManager { get; set; }
         public ICommonFormatterUtil CommonFormatterUtil { get; set; }
+        public IServiceContext ServiceContext { get; set; }
 
         private const string unknownBrowserType = "Unknown browser";
         private const string unknownUserHostAddress = "Unknown IP";
+
+        // example REST response standard
+        //public HttpResult Get(AppDomainRequest request)
+        //{
+            // to Comply wiht the REST serivces standard. We will specify the HttpResult as the reutrn object for service calls in the future
+            //var res = new HttpResult {Response = response, StatusCode = System.Net.HttpStatusCode.Created};
+            //return ResolveEventArgs;
+        //}
 
         public GetPatientResponse Post(GetPatientRequest request)
         {
@@ -144,90 +158,6 @@ namespace Phytel.API.AppDomain.NG.Service
             return response;
         }
 
-        #region PatientSystem
-        public GetPatientSystemsResponse Get(GetPatientSystemsRequest request)
-        {
-            GetPatientSystemsResponse response = new GetPatientSystemsResponse();
-            ValidateTokenResponse result = null;
-
-            try
-            {
-                request.Token = base.Request.Headers["Token"] as string;
-                result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
-                if (result.UserId.Trim() != string.Empty)
-                {
-                    request.UserId = result.UserId;
-                    response = NGManager.GetPatientSystems(request);
-                }
-                else
-                    throw new UnauthorizedAccessException();
-
-            }
-            catch (Exception ex)
-            {
-                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
-                if ((ex is WebServiceException) == false)
-                    NGManager.LogException(ex);
-            }
-            finally
-            {
-                List<string> patientIds = null;
-
-                if (request.PatientId != null)
-                {
-                    patientIds = new List<string>();
-                    patientIds.Add(request.PatientId);
-                }
-
-                if (result != null)
-                    AuditHelper.LogAuditData(request, result.SQLUserId, patientIds, System.Web.HttpContext.Current.Request, request.GetType().Name);
-            }
-
-            return response;
-        }
-
-        public PostPatientSystemResponse Post(PostPatientSystemRequest request)
-        {
-            PostPatientSystemResponse response = new PostPatientSystemResponse();
-            ValidateTokenResponse result = null;
-
-            try
-            {
-                request.Token = base.Request.Headers["Token"] as string;
-                result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
-                if (result.UserId.Trim() != string.Empty)
-                {
-                    request.UserId = result.UserId;
-                    response = NGManager.SavePatientSystem(request);
-                }
-                else
-                    throw new UnauthorizedAccessException();
-
-            }
-            catch (Exception ex)
-            {
-                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
-                if ((ex is WebServiceException) == false)
-                    NGManager.LogException(ex);
-            }
-            finally
-            {
-                List<string> patientIds = null;
-
-                if (request.PatientSystem != null)
-                {
-                    patientIds = new List<string>();
-                    patientIds.Add(request.PatientSystem.PatientId);
-                }
-
-                if (result != null)
-                    AuditHelper.LogAuditData(request, result.SQLUserId, patientIds, System.Web.HttpContext.Current.Request, request.GetType().Name);
-            }
-
-            return response;
-        } 
-        #endregion
-
         public PostDeletePatientResponse Post(PostDeletePatientRequest request)
         {
             PostDeletePatientResponse response = new PostDeletePatientResponse();
@@ -267,39 +197,6 @@ namespace Phytel.API.AppDomain.NG.Service
             return response;
         }
        
-        // Deprecated - Problems is now in PatientObservations.
-        //public GetAllPatientProblemsResponse Get(GetAllPatientProblemsRequest request)
-        //{
-        //    GetAllPatientProblemsResponse response = new GetAllPatientProblemsResponse();
-        //    ValidateTokenResponse result = null;
-
-        //    try
-        //    {
-        //        request.Token = base.Request.Headers["Token"] as string;
-        //        result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
-        //        if (result.UserId.Trim() != string.Empty)
-        //        {
-        //            request.UserId = result.UserId;
-        //            response.PatientProblems = NGManager.GetPatientProblems(request);
-        //        }
-        //        else
-        //            throw new UnauthorizedAccessException();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
-        //        if ((ex is WebServiceException) == false)
-        //            NGManager.LogException(ex);
-        //    }
-        //    finally
-        //    {
-        //        if(result != null)
-        //            AuditHelper.LogAuditData(request, result.SQLUserId, null, System.Web.HttpContext.Current.Request, request.GetType().Name);               
-        //    }
-            
-        //    return response; 
-        //}
-
         public GetAllProblemsResponse Get(GetAllProblemsRequest request)
         {
             GetAllProblemsResponse response = new GetAllProblemsResponse();
@@ -396,38 +293,6 @@ namespace Phytel.API.AppDomain.NG.Service
             return response; 
         }
 
-        public PutPatientBackgroundResponse Post(PutPatientBackgroundRequest request)
-        {
-            PutPatientBackgroundResponse response = new PutPatientBackgroundResponse();
-            ValidateTokenResponse result = null;
-
-            try
-            {
-                request.Token = base.Request.Headers["Token"] as string;
-                result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
-                if (result.UserId.Trim() != string.Empty)
-                {
-                    request.UserId = result.UserId;
-                    response = NGManager.UpdateBackground(request);
-                }
-                else
-                    throw new UnauthorizedAccessException();
-            }
-            catch (Exception ex)
-            {
-                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
-                if ((ex is WebServiceException) == false)
-                    NGManager.LogException(ex);
-            }
-            finally
-            {
-                if (result != null)
-                    AuditHelper.LogAuditData(request, result.SQLUserId, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
-            }
-
-            return response;
-        }
-
         public PutPatientDetailsUpdateResponse Post(PutPatientDetailsUpdateRequest request)
         {
             PutPatientDetailsUpdateResponse response = new PutPatientDetailsUpdateResponse();
@@ -453,8 +318,14 @@ namespace Phytel.API.AppDomain.NG.Service
             }
             finally
             {
+                List<string> patientIds = null;
+                if (!string.IsNullOrEmpty(response.Id))
+                {
+                    patientIds = new List<string>();
+                    patientIds.Add(response.Id);
+                }
                 if (result != null)
-                    AuditHelper.LogAuditData(request, result.SQLUserId, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
+                    AuditHelper.LogAuditData(request, result.SQLUserId, patientIds, System.Web.HttpContext.Current.Request, request.GetType().Name);
             }
             
             return response; 
@@ -1275,17 +1146,20 @@ namespace Phytel.API.AppDomain.NG.Service
         public PostPatientNoteResponse Post(PostPatientNoteRequest request)
         {
             PostPatientNoteResponse response = new PostPatientNoteResponse();
-            NotesManager ntm = new NotesManager();
             ValidateTokenResponse result = null;
 
             try
             {
-                request.Token = base.Request.Headers["Token"] as string;
+                if (base.Request != null)
+                {
+                    request.Token = base.Request.Headers["Token"] as string;
+                }
+
                 result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
-                    response = ntm.InsertPatientNote(request);
+                    response = NotesManager.InsertPatientNote(request);
                 }
                 else
                     throw new UnauthorizedAccessException();
@@ -1331,7 +1205,7 @@ namespace Phytel.API.AppDomain.NG.Service
             }
             finally
             {
-                List<string> patientIds = null;
+                List<string> patientIds = new List<string>();
 
                 if (response.Note != null)
                     patientIds.Add(response.Note.PatientId);
@@ -1345,7 +1219,6 @@ namespace Phytel.API.AppDomain.NG.Service
         public GetAllPatientNotesResponse Get(GetAllPatientNotesRequest request)
         {
             GetAllPatientNotesResponse response = new GetAllPatientNotesResponse();
-            NotesManager ntm = new NotesManager();
             ValidateTokenResponse result = null;
 
             try
@@ -1354,8 +1227,15 @@ namespace Phytel.API.AppDomain.NG.Service
                 result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
                 if (result.UserId.Trim() != string.Empty)
                 {
-                    request.UserId = result.UserId;
-                    response.Notes = ntm.GetAllPatientNotes(request);
+                    ServiceContext.UserId = result.UserId;
+                    ServiceContext.Tag = new PatientNoteContext
+                    {
+                        Count = request.Count,
+                        PatientId = request.PatientId,
+                        UserId = result.UserId
+                    };
+
+                    response.Notes = NotesManager.GetAllPatientNotes(ServiceContext);
                 }
                 else
                     throw new UnauthorizedAccessException();
@@ -1410,6 +1290,39 @@ namespace Phytel.API.AppDomain.NG.Service
                 if (result != null)
                     AuditHelper.LogAuditData(request, result.SQLUserId, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
             }
+            return response;
+        }
+
+        public UpdatePatientNoteResponse Put(UpdatePatientNoteRequest request)
+        {
+            UpdatePatientNoteResponse response = new UpdatePatientNoteResponse();
+            NotesManager ntm = new NotesManager();
+            ValidateTokenResponse result = null;
+
+            try
+            {
+                request.Token = base.Request.Headers["Token"] as string;
+                result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                if (result.UserId.Trim() != string.Empty)
+                {
+                    request.UserId = result.UserId;
+                    response = ntm.UpdatePatientNote(request);
+                }
+                else
+                    throw new UnauthorizedAccessException();
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                if ((ex is WebServiceException) == false)
+                    NGManager.LogException(ex);
+            }
+            finally
+            {
+                if (result != null)
+                    AuditHelper.LogAuditData(request, result.SQLUserId, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
+            }
+
             return response;
         }
         #endregion

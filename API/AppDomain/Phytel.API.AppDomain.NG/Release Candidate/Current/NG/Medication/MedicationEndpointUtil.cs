@@ -16,7 +16,7 @@ namespace Phytel.API.AppDomain.NG.Medication
         protected readonly string DDMedicationUrl = ConfigurationManager.AppSettings["DDMedicationUrl"];
         #endregion
 
-        #region Medication - Posts
+        #region MedicationMap
         public List<string> GetMedicationNDCs(PostPatientMedSuppRequest request)
         {
             try
@@ -243,6 +243,9 @@ namespace Phytel.API.AppDomain.NG.Medication
                      Name = request.Name,
                      Route = request.Route,
                      Strength = request.Strength,
+                     Type  = request.Type,
+                     Skip = request.Skip,
+                     Take = request.Take,
                      UserId = request.UserId,
                      Version = request.Version
                 } as object);
@@ -255,6 +258,57 @@ namespace Phytel.API.AppDomain.NG.Medication
             }
             catch (Exception ex) { throw ex; }
         }
+
+        public void DeleteMedicationMaps(DeleteMedicationMapsRequest request)
+        {
+            try
+            {
+                IRestClient client = new JsonServiceClient();
+                //[Route("/{Context}/{Version}/{ContractNumber}/MedicationMap/{Ids}", "DELETE")]
+                var url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/MedicationMap/{4}",
+                                    DDMedicationUrl,
+                                    "NG",
+                                    request.Version,
+                                    request.ContractNumber,
+                                    request.Ids), request.UserId);
+
+                DeleteMedicationMapsDataResponse dataDomainResponse = client.Delete<DeleteMedicationMapsDataResponse>(url);
+            }
+            catch (Exception ex) { throw ex; }
+        }
+        #endregion
+
+        #region PatientMedSupps - Gets
+        public int GetPatientMedSuppsCount(GetPatientMedSuppsCountRequest request)
+        {
+            int count = 0;
+            try
+            {
+                IRestClient client = new JsonServiceClient();
+                string name = string.IsNullOrEmpty(request.Name) ? null : request.Name.ToUpper();
+                string form = string.IsNullOrEmpty(request.Form) ? null : request.Form.ToUpper();
+                string route = string.IsNullOrEmpty(request.Route) ? null : request.Route.ToUpper();;
+                string strength = request.Strength;
+                //[Route("/{Context}/{Version}/{ContractNumber}/PatientMedSupp", "GET")]
+                var url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/PatientMedSupp?Name={4}&Form={5}&Route={6}&Strength={7}",
+                                    DDMedicationUrl,
+                                    "NG",
+                                    request.Version,
+                                    request.ContractNumber,
+                                    name,
+                                    form,
+                                    route,
+                                    strength), request.UserId);
+
+                GetPatientMedSuppsCountDataResponse dataDomainResponse = client.Get<GetPatientMedSuppsCountDataResponse>(url);
+                if (dataDomainResponse != null)
+                {
+                    count = dataDomainResponse.PatientCount;
+                }
+                return count;
+            }
+            catch (Exception ex) { throw ex; }
+        } 
         #endregion
 
         #region PatientMedSupps - Posts

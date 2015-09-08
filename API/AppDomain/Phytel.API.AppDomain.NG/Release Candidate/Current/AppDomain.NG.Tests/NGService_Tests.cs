@@ -7,6 +7,7 @@ using Phytel.API.AppDomain.NG.Service;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Phytel.API.AppDomain.NG.Service.Tests.Factories;
 using Phytel.API.AppDomain.NG.DTO;
+using Phytel.API.AppDomain.NG.Notes;
 using Phytel.API.Common.Audit;
 using Phytel.API.AppDomain.NG.Test.Stubs;
 using Phytel.API.Common.Format;
@@ -294,6 +295,30 @@ namespace Phytel.API.AppDomain.NG.Service.Tests
                 PostProgramAttributesChangeResponse response =  ngs.Post(request);
                 Assert.IsNotNull(response);
             }
+        }
+
+        [TestMethod()]
+        public void PostTest()
+        {
+            var service = new NGService
+            {
+                AuditUtil = new StubAuditUtil(),
+                CommonFormatterUtil = new StubCommonFormatterUtil(),
+                NotesManager = new StubNotesManager {UtilManager = new StubUtilsManager()},
+                Security = new StubSecurityManager {}
+            };
+
+            var req = new PostPatientNoteRequest
+            {
+                ContractNumber = "InHealth001",
+                PatientId = "111111111111111111111214",
+                UserId = "1234",
+                Version = 1,
+                Note = new PatientNote {DataSource = "Engage"}
+            };
+
+            var resp = service.Post(req);
+            Assert.IsNotNull(resp);
         }
     }
 }
