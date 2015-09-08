@@ -13,30 +13,33 @@ namespace Phytel.API.DataDomain.PatientSystem.Test
 
         public DTO.GetPatientSystemDataResponse GetPatientSystem(DTO.GetPatientSystemDataRequest request)
         {
-            throw new NotImplementedException();
+            GetPatientSystemDataResponse result = new GetPatientSystemDataResponse();
+            var repo = Factory.GetRepository(RepositoryType.PatientSystem);
+            result.PatientSystemData = repo.FindByID(request.Id) as PatientSystemData;
+            return result;
         }
 
         public DTO.GetPatientSystemsDataResponse GetPatientSystems(DTO.GetPatientSystemsDataRequest request)
         {
             GetPatientSystemsDataResponse result = new GetPatientSystemsDataResponse();
-            IPatientSystemRepository repo = Factory.GetRepository(request, RepositoryType.PatientSystem);
-            result.PatientSystems = repo.FindByPatientId(request.PatientId) as List<PatientSystemData>;
+            var repo = Factory.GetRepository(RepositoryType.PatientSystem);
+            result.PatientSystemsData = repo.FindByPatientId(request.PatientId) as List<PatientSystemData>;
             return result;
         }
 
-        public DTO.PutPatientSystemDataResponse InsertPatientSystem(DTO.PutPatientSystemDataRequest request)
+        public DTO.InsertPatientSystemsDataRequest InsertPatientSystem(DTO.InsertPatientSystemsDataRequest request)
         {
-            PutPatientSystemDataResponse result = new PutPatientSystemDataResponse();
-            IPatientSystemRepository repo = Factory.GetRepository(request, RepositoryType.PatientSystem);
-            result.PatientSystemId = repo.Insert(request) as string;
+            InsertPatientSystemsDataRequest result = new InsertPatientSystemsDataRequest();
+            var repo = Factory.GetRepository(RepositoryType.PatientSystem);
+          //  result.PatientSystemId = repo.Insert(request) as string;
             return result;
         }
 
-        public DTO.PutUpdatePatientSystemDataResponse UpdatePatientSystem(DTO.PutUpdatePatientSystemDataRequest request)
+        public DTO.UpdatePatientSystemsDataRequest UpdatePatientSystem(DTO.UpdatePatientSystemsDataRequest request)
         {
-            PutUpdatePatientSystemDataResponse result = new PutUpdatePatientSystemDataResponse();
-            IPatientSystemRepository repo = Factory.GetRepository(request, RepositoryType.PatientSystem);
-            result.Success = (bool)repo.Update(request);
+            UpdatePatientSystemsDataRequest result = new UpdatePatientSystemsDataRequest();
+            var repo = Factory.GetRepository(RepositoryType.PatientSystem);
+          //  result.Success = (bool)repo.Update(request);
             return result;
         }
 
@@ -46,6 +49,56 @@ namespace Phytel.API.DataDomain.PatientSystem.Test
         }
 
         public DTO.UndoDeletePatientSystemsDataResponse UndoDeletePatientSystems(DTO.UndoDeletePatientSystemsDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public List<PatientSystemData> InsertPatientSystems(InsertPatientSystemsDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<PatientSystemData> UpdatePatientSystems(UpdatePatientSystemsDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        List<PatientSystemData> IPatientSystemDataManager.GetPatientSystems(GetPatientSystemsDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public void DeletePatientSystems(DeletePatientSystemsDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public string InsertPatientSystem(InsertPatientSystemDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public List<PatientSystemOldData> GetAllPatientSystems()
+        {
+            List<PatientSystemOldData> result = new List<PatientSystemOldData>();
+            var repo = Factory.GetRepository(RepositoryType.PatientSystem);
+            result = repo.SelectAll() as List<PatientSystemOldData>;
+            return result;
+        }
+
+
+        public bool UpdatePatientSystem(UpdatePatientSystemDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public List<string> InsertEngagePatientSystems(InsertEngagePatientSystemsDataRequest request)
         {
             throw new NotImplementedException();
         }

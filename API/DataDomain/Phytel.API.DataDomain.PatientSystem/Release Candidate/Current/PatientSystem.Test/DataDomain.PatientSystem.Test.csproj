@@ -113,12 +113,12 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="Data_PatientSystemTest.cs" />
+    <Compile Include="Data\PatientSystem_Test.cs" />
+    <Compile Include="Data\System_Test.cs" />
+    <Compile Include="EngageIdTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Stub\StubPatientSystemDataManager.cs" />
     <Compile Include="Stub\StubPatientSystemRepository.cs" />
-    <Compile Include="Stub\StubPatientSystemRepositoryFactory.cs" />
-    <Compile Include="Stub_PatientSystemTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\Interfaces\Release Candidate\Current\Phytel.API.Interface\Phytel.API.Interface.csproj">
@@ -128,6 +128,10 @@
     <ProjectReference Include="..\PatientSystem.DTO\DataDomain.PatientSystem.DTO.csproj">
       <Project>{6033a8ea-a3ef-4182-bfdd-4a9826ecf871}</Project>
       <Name>DataDomain.PatientSystem.DTO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PatientSystem.Repo\DataDomain.PatientSystem.Repo.csproj">
+      <Project>{64428b06-18e5-4307-ba78-fb0d238816d8}</Project>
+      <Name>DataDomain.PatientSystem.Repo</Name>
     </ProjectReference>
     <ProjectReference Include="..\PatientSystem\DataDomain.PatientSystem.csproj">
       <Project>{bf2f1262-d5cc-41f0-bcfc-7ccdce479795}</Project>

@@ -81,21 +81,36 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constants.cs" />
     <Compile Include="Enums.cs" />
-    <Compile Include="PutUpdatePatientSystemDataRequest.cs" />
-    <Compile Include="PutUpdatePatientSystemDataResponse.cs" />
-    <Compile Include="UndoDeletePatientSystemsDataRequest.cs" />
-    <Compile Include="DeletePatientSystemByPatientIdDataRequest.cs" />
-    <Compile Include="UndoDeletePatientSystemsDataResponse.cs" />
-    <Compile Include="DeletePatientSystemByPatientIdDataResponse.cs" />
-    <Compile Include="GetPatientSystemsDataRequest.cs" />
-    <Compile Include="PutPatientSystemDataResponse.cs" />
-    <Compile Include="PutPatientSystemDataRequest.cs" />
-    <Compile Include="GetPatientSystemDataRequest.cs" />
-    <Compile Include="GetPatientSystemsDataResponse.cs" />
-    <Compile Include="GetPatientSystemDataResponse.cs" />
-    <Compile Include="PatientSystemData.cs" />
+    <Compile Include="PatientSystem\GetAllPatientSystemDataRequest.cs" />
+    <Compile Include="PatientSystem\GetAllPatientSystemDataResponse.cs" />
+    <Compile Include="PatientSystem\InsertPatientSystemDataRequest.cs" />
+    <Compile Include="PatientSystem\InsertEngagePatientSystemsDataRequest.cs" />
+    <Compile Include="PatientSystem\InsertPatientSystemsDataRequest.cs" />
+    <Compile Include="PatientSystem\InsertPatientSystemDataResponse.cs" />
+    <Compile Include="PatientSystem\InsertEngagePatientSystemsDataResponse.cs" />
+    <Compile Include="PatientSystem\InsertPatientSystemsDataResponse.cs" />
+    <Compile Include="PatientSystem\DeletePatientSystemsDataRequest.cs" />
+    <Compile Include="PatientSystem\PatientSystemOldData.cs" />
+    <Compile Include="PatientSystem\UpdatePatientSystemDataRequest.cs" />
+    <Compile Include="PatientSystem\UpdatePatientSystemsDataRequest.cs" />
+    <Compile Include="PatientSystem\DeletePatientSystemsDataResponse.cs" />
+    <Compile Include="PatientSystem\UpdatePatientSystemDataResponse.cs" />
+    <Compile Include="PatientSystem\UpdatePatientSystemsDataResponse.cs" />
+    <Compile Include="PatientSystem\UndoDeletePatientSystemsDataRequest.cs" />
+    <Compile Include="PatientSystem\DeletePatientSystemByPatientIdDataRequest.cs" />
+    <Compile Include="PatientSystem\UndoDeletePatientSystemsDataResponse.cs" />
+    <Compile Include="PatientSystem\DeletePatientSystemByPatientIdDataResponse.cs" />
+    <Compile Include="PatientSystem\GetPatientSystemsDataRequest.cs" />
+    <Compile Include="PatientSystem\GetPatientSystemDataRequest.cs" />
+    <Compile Include="PatientSystem\GetPatientSystemsDataResponse.cs" />
+    <Compile Include="PatientSystem\GetPatientSystemDataResponse.cs" />
+    <Compile Include="PatientSystem\PatientSystemData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="System\GetSystemsDataRequest.cs" />
+    <Compile Include="System\GetSystemsDataResponse.cs" />
+    <Compile Include="System\SystemData.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

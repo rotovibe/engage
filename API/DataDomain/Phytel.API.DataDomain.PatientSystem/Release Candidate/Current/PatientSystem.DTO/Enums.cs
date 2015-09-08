@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace Phytel.API.DataDomain.PatientSystem.DTO
 {
-    public enum RepositoryType
+    public enum Status
     {
-        PatientSystem
+        Active = 1,
+        Inactive = 2
     }
 }

@@ -9,7 +9,7 @@ using System.Web;
 
 namespace Phytel.API.DataDomain.PatientSystem.Service
 {
-    public class PatientSystemService : ServiceStack.ServiceInterface.Service
+    public class PatientSystemService : ServiceBase
     {
         public IPatientSystemDataManager Manager { get; set; }
 
@@ -19,18 +19,13 @@ namespace Phytel.API.DataDomain.PatientSystem.Service
             GetPatientSystemDataResponse response = new GetPatientSystemDataResponse();
             try
             {
-                if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("PatientSystemDD:Get()::Unauthorized Access");
-
+                RequireUserId(request); 
                 response = Manager.GetPatientSystem(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
             {
-                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
-
-                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
-                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+                RaiseException(response, ex);
             }
             return response;
         }
@@ -40,62 +35,113 @@ namespace Phytel.API.DataDomain.PatientSystem.Service
             GetPatientSystemsDataResponse response = new GetPatientSystemsDataResponse();
             try
             {
-                if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("PatientSystemDD:Get()::Unauthorized Access");
-
-                response = Manager.GetPatientSystems(request);
+                RequireUserId(request);
+                response.PatientSystemsData = Manager.GetPatientSystems(request); 
                 response.Version = request.Version;
             }
             catch (Exception ex)
             {
-                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                RaiseException(response, ex);
+            }
+            return response;
+        }
 
-                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
-                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+        public GetAllPatientSystemDataResponse Get(GetAllPatientSystemDataRequest request)
+        {
+            var response = new GetAllPatientSystemDataResponse();
+            try
+            {
+                RequireUserId(request);
+                response.PatientSystemsOldData = Manager.GetAllPatientSystems();
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                RaiseException(response, ex);
             }
             return response;
         } 
         #endregion
 
-        #region Insert & Update
-        public PutPatientSystemDataResponse Put(PutPatientSystemDataRequest request)
+        #region POST
+        public InsertPatientSystemDataResponse Post(InsertPatientSystemDataRequest request)
         {
-            PutPatientSystemDataResponse response = new PutPatientSystemDataResponse();
+            InsertPatientSystemDataResponse response = new InsertPatientSystemDataResponse();
             try
             {
-                if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("PatientSystemDD:Put()::Unauthorized Access");
-
-                response = Manager.InsertPatientSystem(request);
+                RequireUserId(request);
+                response.Id = Manager.InsertPatientSystem(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
             {
-                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
-
-                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
-                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+                RaiseException(response, ex);
             }
             return response;
         }
 
-        public PutUpdatePatientSystemDataResponse Put(PutUpdatePatientSystemDataRequest request)
+        public InsertPatientSystemsDataResponse Post(InsertPatientSystemsDataRequest request)
         {
-            PutUpdatePatientSystemDataResponse response = new PutUpdatePatientSystemDataResponse();
+            InsertPatientSystemsDataResponse response = new InsertPatientSystemsDataResponse();
             try
             {
-                if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("PatientSystemDD:Put()::Unauthorized Access");
-
-                response = Manager.UpdatePatientSystem(request);
+                RequireUserId(request);
+                response.PatientSystemsData = Manager.InsertPatientSystems(request); 
                 response.Version = request.Version;
             }
             catch (Exception ex)
             {
-                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                RaiseException(response, ex);
+            }
+            return response;
+        }
 
-                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
-                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+        public InsertEngagePatientSystemsDataResponse Post(InsertEngagePatientSystemsDataRequest request)
+        {
+            InsertEngagePatientSystemsDataResponse response = new InsertEngagePatientSystemsDataResponse();
+            try
+            {
+                RequireUserId(request);
+                response.Ids = Manager.InsertEngagePatientSystems(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                RaiseException(response, ex);
+            }
+            return response;
+        }
+        #endregion
+
+        #region PUT
+        public UpdatePatientSystemDataResponse Put(UpdatePatientSystemDataRequest request)
+        {
+            UpdatePatientSystemDataResponse response = new UpdatePatientSystemDataResponse();
+            try
+            {
+                RequireUserId(request);
+                response.Success = Manager.UpdatePatientSystem(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                RaiseException(response, ex);
+            }
+            return response;
+        } 
+
+        public UpdatePatientSystemsDataResponse Put(UpdatePatientSystemsDataRequest request)
+        {
+            UpdatePatientSystemsDataResponse response = new UpdatePatientSystemsDataResponse();
+            try
+            {
+                RequireUserId(request);
+                response.PatientSystemsData = Manager.UpdatePatientSystems(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                RaiseException(response, ex);
             }
             return response;
         } 
@@ -107,18 +153,29 @@ namespace Phytel.API.DataDomain.PatientSystem.Service
             DeletePatientSystemByPatientIdDataResponse response = new DeletePatientSystemByPatientIdDataResponse();
             try
             {
-                if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("PatientSystemDD:PatientSystemDelete()::Unauthorized Access");
-
+                RequireUserId(request); 
                 response = Manager.DeletePatientSystemByPatientId(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
             {
-                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                RaiseException(response, ex);
+            }
+            return response;
+        }
 
-                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
-                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+        public DeletePatientSystemsDataResponse Delete(DeletePatientSystemsDataRequest request)
+        {
+            DeletePatientSystemsDataResponse response = new DeletePatientSystemsDataResponse();
+            try
+            {
+                RequireUserId(request);
+                Manager.DeletePatientSystems(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                RaiseException(response, ex);
             }
             return response;
         }
@@ -128,18 +185,13 @@ namespace Phytel.API.DataDomain.PatientSystem.Service
             UndoDeletePatientSystemsDataResponse response = new UndoDeletePatientSystemsDataResponse();
             try
             {
-                if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("PatientSystemDD:PatientSystemUndoDelete()::Unauthorized Access");
-
+                RequireUserId(request); 
                 response = Manager.UndoDeletePatientSystems(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
             {
-                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
-
-                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
-                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+                RaiseException(response, ex);
             }
             return response;
         } 
