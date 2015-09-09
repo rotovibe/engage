@@ -1,5 +1,0 @@
-﻿<nav role="main" data-bind="foreach: navRoutes, css: { open: $parent.showSideBar() }">
-    <a role="menuitem" data-bind="click: $parents[1].setRoute, attr: { href: route }, css: { active: $parent.currentRoute() === $data }">
-        <img data-bind="attr: { src: settings.imageSource }" /><span data-bind="text: settings.content"></span>
-    </a>
-</nav>
