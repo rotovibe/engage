@@ -256,6 +256,10 @@
     <Content Include="App\views\templates\allergy.status.html" />
     <Content Include="App\views\templates\allergy.edit.html" />
     <Content Include="App\views\templates\validation.errors.html" />
+    <Content Include="Content\images\watson_cm_logo_large.png" />
+    <Content Include="Content\images\watson_cm_logo.png" />
+    <Content Include="Content\images\PH_IBM Watson Woodmark-01.png" />
+    <Content Include="Content\images\PH_LOGO-01.png" />
     <Content Include="Properties\PublishProfiles\Azure QA Publish.pubxml.user" />
     <Content Include="Scripts\breeze.ajaxpost2.js" />
     <Content Include="Scripts\breeze.debug.js" />
@@ -923,6 +927,7 @@
     </None>
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
+      <SubType>Designer</SubType>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -962,7 +967,7 @@
     <PreBuildEvent>
     </PreBuildEvent>
   </PropertyGroup>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>
