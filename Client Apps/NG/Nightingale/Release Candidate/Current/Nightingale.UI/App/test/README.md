@@ -1,8 +1,6 @@
 ## Durandal Test Framework
 ### Running the tests
 
-note: phantomjs.exe is needed in app/test folder (it is not in TFS due to IBM regulations)
-
 Run the tests locally using Phantomjs.exe from the commandline:
 
 	phantomjs spec.js
