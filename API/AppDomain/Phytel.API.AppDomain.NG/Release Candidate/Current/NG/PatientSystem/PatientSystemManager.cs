@@ -194,6 +194,7 @@ namespace Phytel.API.AppDomain.NG
                                 UserId = context.UserId,
                                 Version = context.Version
                             };
+                            context.Tag = updateRequest.PatientSystems;
                             List<PatientSystemData> dataList = EndpointUtil.UpdatePatientSystems(context, updateRequest.PatientId);
                             if (dataList != null)
                             {
