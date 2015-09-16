@@ -114,12 +114,13 @@ namespace NightingaleImport
                 Guid sqlUserId = getUserId(txtContactID.Text);
                 if (sqlUserId != Guid.Empty)
                 {
-                    GetContactByUserIdDataResponse contactUserResp = import.getContactByUserIdServiceCall(sqlUserId.ToString());
+                    GetContactByUserIdDataResponse contactUserResp = import.GetContactByUserId(sqlUserId.ToString());
 
                     _headerUserId = contactUserResp.Contact.ContactId;
                     if (string.IsNullOrEmpty(_headerUserId))
                         throw new Exception("Invalid 'Admin User'");
-
+                    import.HeaderUserId = _headerUserId;
+                    
                     Dictionary<string, string> dictionarySucceed = new Dictionary<string, string>();
                     Dictionary<string, string> dictionaryFail = new Dictionary<string, string>();
 
@@ -158,7 +159,7 @@ namespace NightingaleImport
                         lblStatus.Text = string.Format("Importing '{0} {1}'...", pdata.FirstName, pdata.LastName);
                         lblStatus.Refresh();
 
-                        PutPatientDataResponse responsePatient = import.putPatientServiceCall(patientRequest);
+                        PutPatientDataResponse responsePatient = import.InsertPatient(patientRequest);
                         if (responsePatient.Id == null)
                         {
                             dictionaryFail.Add(pdata.FirstName + " " + pdata.LastName, string.Format("Message: {0} StackTrace: {1}", responsePatient.Status.Message, responsePatient.Status.StackTrace));
@@ -192,7 +193,7 @@ namespace NightingaleImport
                                         Context = patientRequest.Context,
                                         ContractNumber = patientRequest.ContractNumber
                                     };
-                                    InsertPatientSystemDataResponse responsePatientPS = import.insertPatientSystem(psRequest);
+                                    InsertPatientSystemDataResponse responsePatientPS = import.InsertPatientSystem(psRequest);
                                     if (string.IsNullOrEmpty(responsePatientPS.Id))
                                     {
                                         throw new Exception("Failed to import the PatientSystem Id provided in the file.");
@@ -202,7 +203,7 @@ namespace NightingaleImport
                                         // If imported patientsystem's primary is set to true, override the EngagePatientSystem's primary field.
                                         if (psData.Primary)
                                         {
-                                            GetPatientSystemDataResponse engagePatientSystemResponse = import.getPatientSystem(new GetPatientSystemDataRequest 
+                                            GetPatientSystemDataResponse engagePatientSystemResponse = import.GetPatientSystem(new GetPatientSystemDataRequest 
                                             { 
                                                 Context = context,
                                                 ContractNumber = txtContract.Text,
@@ -221,7 +222,7 @@ namespace NightingaleImport
                                                     PatientId = engagePatientSystemResponse.PatientSystemData.PatientId,
                                                     PatientSystemsData = engagePatientSystemResponse.PatientSystemData
                                                 };
-                                                import.updatePatientSystem(updatePDRequest);
+                                                import.UpdatePatientSystem(updatePDRequest);
                                             }
                                         }
                                     }
@@ -508,7 +509,7 @@ namespace NightingaleImport
                                 ContractNumber = patientRequest.ContractNumber
                             };
 
-                            PutContactDataResponse responseContact = import.putContactServiceCall(contactRequest, responsePatient.Id.ToString());
+                            PutContactDataResponse responseContact = import.InsertPatientContact(contactRequest, responsePatient.Id.ToString());
                             if (responseContact.ContactId == null)
                             {
                                 throw new Exception("Contact card import request failed.");
@@ -522,7 +523,7 @@ namespace NightingaleImport
                                 Guid userIdResponse = getUserId(lvi.SubItems[colCMan].Text);
                                 if (userIdResponse != Guid.Empty)
                                 {
-                                    GetContactByUserIdDataResponse contactByUserIdResponse = import.getContactByUserIdServiceCall(userIdResponse.ToString());
+                                    GetContactByUserIdDataResponse contactByUserIdResponse = import.GetContactByUserId(userIdResponse.ToString());
 
                                     CareMemberData careMember = new CareMemberData
                                     {
@@ -537,7 +538,7 @@ namespace NightingaleImport
                                         PatientId = responsePatient.Id.ToString(),
                                         CareMember = careMember
                                     };
-                                    PutCareMemberDataResponse responseCareMember = import.putCareMemberServiceCall(careMemberRequest, responsePatient.Id.ToString());
+                                    PutCareMemberDataResponse responseCareMember = import.InsertCareMember(careMemberRequest, responsePatient.Id.ToString());
                                     if (responseCareMember.Id == null)
                                     {
                                         throw new Exception("Care Member import request failed.");

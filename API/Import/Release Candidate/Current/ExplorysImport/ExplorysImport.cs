@@ -79,7 +79,7 @@ namespace ExplorysImport
                                 Patient = patient
                             };
 
-                            PutPatientDataResponse responsePatient = import.putPatientServiceCall(patientRequest);
+                            PutPatientDataResponse responsePatient = import.InsertPatient(patientRequest);
                             #endregion
 
                             
@@ -161,7 +161,7 @@ namespace ExplorysImport
                                     ContractNumber = patientRequest.ContractNumber
                                 };
 
-                                PutContactDataResponse responseContact = import.putContactServiceCall(contactRequest, responsePatient.Id.ToString());
+                                PutContactDataResponse responseContact = import.InsertPatientContact(contactRequest, responsePatient.Id.ToString());
                                 if (responseContact.ContactId == null)
                                 {
                                     throw new Exception("Contact card import request failed.");
