@@ -181,7 +181,7 @@ a.disabled {
     nav.tabs li:not(.active):hover { opacity: 1; }
     nav.tabs a { text-decoration: none !important; vertical-align: middle; }
     nav.tabs img { vertical-align: middle; }
-    .body { min-height: 300px; overflow: auto; max-height: 500px; }
+    .body { min-height: 300px; overflow: auto; }
     .list-items > li { border-bottom: 1px solid gainsboro; padding: 5px 0; }
 }
 
