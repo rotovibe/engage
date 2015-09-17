@@ -102,6 +102,7 @@ a .icon-spin {
     -moz-box-shadow: rgba(0, 0, 0, 0.5) 0 0 5px;
     box-shadow: rgba(0, 0, 0, 0.5) 0 0 5px;
     max-height: 200px;
+    width: 100%;
     overflow-y: auto;
     p {
         margin-bottom: .5em;
@@ -120,8 +121,11 @@ a .icon-spin {
         text-overflow: none !important;
     }
 }
-.tt-large .twitter-typeahead {
+/*.tt-large .twitter-typeahead {
     width: 275px;
+}*/
+.twitter-typeahead {
+      width: 100%;
 }
 .tt-suggestion {
 	max-width: 250px;

@@ -5226,8 +5226,9 @@ div.button {
     background: white;
     border: 1px solid #aaaaaa;
     margin-top: -1px;
-    min-width: 125%;
-    max-width: 150%;
+    width: 100%;
+    /*min-width: 125%;
+    max-width: 150%;*/
     padding: 0 10px;
     z-index: 1010;
     /*&.above-container {
@@ -5890,6 +5891,7 @@ a .icon-spin {
   -moz-box-shadow: rgba(0, 0, 0, 0.5) 0 0 5px;
   box-shadow: rgba(0, 0, 0, 0.5) 0 0 5px;
   max-height: 200px;
+  width: 100%;
   overflow-y: auto; }
   .tt-dropdown-menu p {
     margin-bottom: 0.5em; }
@@ -5905,8 +5907,11 @@ a .icon-spin {
     -o-text-overflow: none !important;
     text-overflow: none !important; }
 
-.tt-large .twitter-typeahead {
-  width: 275px; }
+/*.tt-large .twitter-typeahead {
+    width: 275px;
+}*/
+.twitter-typeahead {
+  width: 100%; }
 
 .tt-suggestion {
   max-width: 250px; }
