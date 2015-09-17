@@ -347,6 +347,7 @@
     <Content Include="Scripts\knockout-3.2.0.min.js" />
     <Content Include="App\test\jasmine-1.2.0.js" />
     <Content Include="App\test\jasmine.console_reporter.js" />
+    <None Include="App\test\phantomjs.exe" />
     <Content Include="App\test\spec.html" />
     <Content Include="App\test\spec.js" />
     <Content Include="App\test\specs\module.details.spec.js" />
