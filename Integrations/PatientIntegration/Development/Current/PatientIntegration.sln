@@ -1,0 +1,52 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.Engage.Integrations.QueueProcess", "Phytel.Engage.Integrations.PatientASEProcess\Phytel.Engage.Integrations.QueueProcess.csproj", "{4E23855F-6225-4E71-BFF5-98B6F5616506}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.Engage.Integrations.ProcessTests", "Phytel.Engage.Integrations.ProcessTests\Phytel.Engage.Integrations.ProcessTests.csproj", "{044A3CDE-040F-4373-915B-B1BA7B8B196A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.Engage.Integrations", "Phytel.Engage.Integrations\Phytel.Engage.Integrations.csproj", "{083F077A-FC9D-470C-9F5C-5059AD808D42}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.Engage.Integrations.DTO", "Phytel.Engage.Integrations.DTO\Phytel.Engage.Integrations.DTO.csproj", "{126D45E4-193C-45AD-9310-9365BA9DE589}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.Engage.Integrations.Repo", "Phytel.Engage.Integrations.Repo\Phytel.Engage.Integrations.Repo.csproj", "{576E9EC8-3B81-42D0-8246-20485A596DCD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.Engage.Integrations.RepoTests", "Phytel.Engage.Integrations.RepoTests\Phytel.Engage.Integrations.RepoTests.csproj", "{F618B005-9DEF-405A-B394-D595EDD2DF96}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4E23855F-6225-4E71-BFF5-98B6F5616506}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4E23855F-6225-4E71-BFF5-98B6F5616506}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4E23855F-6225-4E71-BFF5-98B6F5616506}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4E23855F-6225-4E71-BFF5-98B6F5616506}.Release|Any CPU.Build.0 = Release|Any CPU
+		{044A3CDE-040F-4373-915B-B1BA7B8B196A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{044A3CDE-040F-4373-915B-B1BA7B8B196A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{044A3CDE-040F-4373-915B-B1BA7B8B196A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{044A3CDE-040F-4373-915B-B1BA7B8B196A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{083F077A-FC9D-470C-9F5C-5059AD808D42}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{083F077A-FC9D-470C-9F5C-5059AD808D42}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{083F077A-FC9D-470C-9F5C-5059AD808D42}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{083F077A-FC9D-470C-9F5C-5059AD808D42}.Release|Any CPU.Build.0 = Release|Any CPU
+		{126D45E4-193C-45AD-9310-9365BA9DE589}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{126D45E4-193C-45AD-9310-9365BA9DE589}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{126D45E4-193C-45AD-9310-9365BA9DE589}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{126D45E4-193C-45AD-9310-9365BA9DE589}.Release|Any CPU.Build.0 = Release|Any CPU
+		{576E9EC8-3B81-42D0-8246-20485A596DCD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{576E9EC8-3B81-42D0-8246-20485A596DCD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{576E9EC8-3B81-42D0-8246-20485A596DCD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{576E9EC8-3B81-42D0-8246-20485A596DCD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F618B005-9DEF-405A-B394-D595EDD2DF96}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F618B005-9DEF-405A-B394-D595EDD2DF96}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F618B005-9DEF-405A-B394-D595EDD2DF96}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F618B005-9DEF-405A-B394-D595EDD2DF96}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
