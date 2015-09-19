@@ -17,7 +17,7 @@ namespace Phytel.Engage.Integrations.Repo.RepositoriesTests
         public void Select()
         {
             var cr = new PatientsContractRepository("ORLANDOHEALTH001") { ConnStr = new SQLConnectionProvider() };
-            cr.SelectAll();
+            cr.SelectAll(); 
         }
     }
 }

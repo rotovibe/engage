@@ -16,6 +16,30 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.Engage.Integrations.RepoTests", "Phytel.Engage.Integrations.RepoTests\Phytel.Engage.Integrations.RepoTests.csproj", "{F618B005-9DEF-405A-B394-D595EDD2DF96}"
 EndProject
 Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 7
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = http://hillstfs2013:8080/tfs/phytel
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = Phytel.Engage.Integrations.PatientASEProcess\\Phytel.Engage.Integrations.QueueProcess.csproj
+		SccProjectName1 = Phytel.Engage.Integrations.PatientASEProcess
+		SccLocalPath1 = Phytel.Engage.Integrations.PatientASEProcess
+		SccProjectUniqueName2 = Phytel.Engage.Integrations.ProcessTests\\Phytel.Engage.Integrations.ProcessTests.csproj
+		SccProjectName2 = Phytel.Engage.Integrations.ProcessTests
+		SccLocalPath2 = Phytel.Engage.Integrations.ProcessTests
+		SccProjectUniqueName3 = Phytel.Engage.Integrations\\Phytel.Engage.Integrations.csproj
+		SccProjectName3 = Phytel.Engage.Integrations
+		SccLocalPath3 = Phytel.Engage.Integrations
+		SccProjectUniqueName4 = Phytel.Engage.Integrations.DTO\\Phytel.Engage.Integrations.DTO.csproj
+		SccProjectName4 = Phytel.Engage.Integrations.DTO
+		SccLocalPath4 = Phytel.Engage.Integrations.DTO
+		SccProjectUniqueName5 = Phytel.Engage.Integrations.Repo\\Phytel.Engage.Integrations.Repo.csproj
+		SccProjectName5 = Phytel.Engage.Integrations.Repo
+		SccLocalPath5 = Phytel.Engage.Integrations.Repo
+		SccProjectUniqueName6 = Phytel.Engage.Integrations.RepoTests\\Phytel.Engage.Integrations.RepoTests.csproj
+		SccProjectName6 = Phytel.Engage.Integrations.RepoTests
+		SccLocalPath6 = Phytel.Engage.Integrations.RepoTests
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
