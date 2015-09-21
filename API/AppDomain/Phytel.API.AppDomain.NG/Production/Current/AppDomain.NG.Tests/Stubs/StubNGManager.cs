@@ -184,11 +184,6 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
             throw new NotImplementedException();
         }
 
-        public DTO.PutPatientBackgroundResponse UpdateBackground(DTO.PutPatientBackgroundRequest request)
-        {
-            throw new NotImplementedException();
-        }
-
         public GetRecentPatientsResponse GetRecentPatients(GetRecentPatientsRequest request)
         {
             GetRecentPatientsResponse response = new GetRecentPatientsResponse();
@@ -265,13 +260,7 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
             throw new NotImplementedException();
         }
 
-
-        public GetPatientSystemsResponse GetPatientSystems(GetPatientSystemsRequest request)
-        {
-            throw new NotImplementedException();
-        }
-
-        public PostPatientSystemResponse SavePatientSystem(PostPatientSystemRequest request)
+        public InsertPatientSystemsResponse SavePatientSystem(InsertPatientSystemsRequest request)
         {
             throw new NotImplementedException();
         }

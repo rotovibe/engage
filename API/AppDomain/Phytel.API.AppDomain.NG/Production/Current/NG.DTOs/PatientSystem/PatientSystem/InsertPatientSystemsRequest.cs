@@ -1,16 +1,17 @@
-﻿using Phytel.API.Interface;
+﻿using System.Collections.Generic;
+using Phytel.API.Interface;
 using ServiceStack.ServiceHost;
 
 namespace Phytel.API.AppDomain.NG.DTO
 {
-    [Route("/{Version}/{ContractNumber}/PatientSystem/Save", "POST")]
-    public class PostPatientSystemRequest : IAppDomainRequest
+    [Route("/{Version}/{ContractNumber}/Patient/{PatientId}/PatientSystems", "POST")]
+    public class InsertPatientSystemsRequest : IAppDomainRequest
     {
-        [ApiMember(Name = "PatientSystem", Description = "PatientSystem details that need to be upserted.", ParameterType = "property", DataType = "Patient", IsRequired = true)]
-        public PatientSystem PatientSystem { get; set; }
+        [ApiMember(Name = "PatientId", Description = "Id of the patient whose PatientSystem record needs to be inserted", ParameterType = "property", DataType = "string", IsRequired = true)]
+        public string PatientId { get; set; }
 
-        [ApiMember(Name = "Insert", Description = "Indicates if the action is to create or update a patient system", ParameterType = "path", DataType = "boolean", IsRequired = false)]
-        public bool Insert { get; set; }
+        [ApiMember(Name = "PatientSystems", Description = "List of PatientSystems that need to be inserted.", ParameterType = "property", DataType = "List<PatientSystem>", IsRequired = true)]
+        public List<PatientSystem> PatientSystems { get; set; }
 
         [ApiMember(Name = "Token", Description = "Token parameter", ParameterType = "path", DataType = "string", IsRequired = true)]
         public string Token { get; set; }
@@ -24,6 +25,6 @@ namespace Phytel.API.AppDomain.NG.DTO
         [ApiMember(Name = "UserID", Description = "ID of the user making the request (Internally used ONLY)", ParameterType = "property", DataType = "string", IsRequired = false)]
         public string UserId { get; set; }
 
-        public PostPatientSystemRequest() { }
+        public InsertPatientSystemsRequest() { }
     }
 }

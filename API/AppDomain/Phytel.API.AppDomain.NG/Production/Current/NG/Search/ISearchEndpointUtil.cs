@@ -14,6 +14,6 @@ namespace Phytel.API.AppDomain.NG.Search
         List<object> GetTermSearchResults(IAppDomainRequest e, SearchEnum type, string term);
         void RegisterMedDocument(IAppDomainRequest request, MedNameSearchDoc md);
         void RegisterAllergyDocument(IAppDomainRequest request, IdNamePair ad);
-        bool DeleteMedDocuments(PutDeleteMedMapRequest request);
+        bool DeleteMedDocuments(DeleteMedicationMapsRequest request);
     }
 }

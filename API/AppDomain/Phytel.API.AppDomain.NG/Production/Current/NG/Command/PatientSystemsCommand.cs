@@ -28,8 +28,8 @@ namespace Phytel.API.AppDomain.NG
         {
             try
             {
-                //[Route("/{Context}/{Version}/{ContractNumber}/PatientSystem/Patient/{PatientId}/Delete", "DELETE")]
-                string psUrl = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/PatientSystem/Patient/{4}/Delete",
+                //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/PatientSystem", "DELETE")]
+                string psUrl = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/PatientSystem",
                                                         DDPatientSystemUrl,
                                                         "NG",
                                                         request.Version,

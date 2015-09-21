@@ -4,9 +4,9 @@ using System.Collections.Generic;
 
 namespace Phytel.API.AppDomain.NG.DTO
 {
-    public class PostPatientSystemResponse : IDomainResponse
+    public class InsertPatientSystemsResponse : IDomainResponse
     {
-        public string PatientSystemId { get; set; }
+        public List<PatientSystem> PatientSystems { get; set; }
         public double Version { get; set; }
         public ResponseStatus Status { get; set; }
     }

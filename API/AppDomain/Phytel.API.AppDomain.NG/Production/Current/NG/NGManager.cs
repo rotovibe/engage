@@ -19,6 +19,7 @@ using System.Linq;
 using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Web.Hosting;
+using AutoMapper;
 using DD = Phytel.API.DataDomain.Program.DTO;
 using Phytel.API.DataDomain.PatientGoal.DTO;
 using Phytel.API.DataDomain.PatientSystem.DTO;
@@ -75,19 +76,20 @@ namespace Phytel.API.AppDomain.NG
 
                 if (response != null && response.Patient != null)
                 {
-                    Phytel.API.DataDomain.PatientSystem.DTO.GetPatientSystemDataResponse sysResponse = null;
+                    // Commented this part out, as there is a separate endpoint to get patient systems ids.
+                    //Phytel.API.DataDomain.PatientSystem.DTO.GetPatientSystemDataResponse sysResponse = null;
 
-                    if (string.IsNullOrEmpty(response.Patient.DisplayPatientSystemId) == false)
-                    {
-                        client = new JsonServiceClient();
-                        string patientSystemUrl = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/PatientSystem/{4}",
-                                                                                    DDPatientSystemUrl,
-                                                                                    "NG",
-                                                                                    request.Version,
-                                                                                    request.ContractNumber,
-                                                                                    response.Patient.DisplayPatientSystemId), request.UserId);
-                        sysResponse = client.Get<Phytel.API.DataDomain.PatientSystem.DTO.GetPatientSystemDataResponse>(patientSystemUrl);
-                    }
+                    //if (string.IsNullOrEmpty(response.Patient.DisplayPatientSystemId) == false)
+                    //{
+                    //    client = new JsonServiceClient();
+                    //    string patientSystemUrl = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/PatientSystem/{4}",
+                    //                                                                DDPatientSystemUrl,
+                    //                                                                "NG",
+                    //                                                                request.Version,
+                    //                                                                request.ContractNumber,
+                    //                                                                response.Patient.DisplayPatientSystemId), request.UserId);
+                    //    sysResponse = client.Get<Phytel.API.DataDomain.PatientSystem.DTO.GetPatientSystemDataResponse>(patientSystemUrl);
+                    //}
                     
                     pResponse.Patient = new NG.DTO.Patient
                     {
@@ -102,15 +104,24 @@ namespace Phytel.API.AppDomain.NG
                         Priority = response.Patient.PriorityData,
                         Flagged = Convert.ToInt32(response.Patient.Flagged),
                         Background = response.Patient.Background,
-                        LastFourSSN = response.Patient.LastFourSSN
+                        ClinicalBackground = response.Patient.ClinicalBackground,
+                        LastFourSSN = response.Patient.LastFourSSN,
+                        DataSource = response.Patient.DataSource,
+                        ReasonId  = response.Patient.ReasonId,
+                        StatusId = response.Patient.StatusId,
+                        StatusDataSource = response.Patient.StatusDataSource,
+                        MaritalStatusId = response.Patient.MaritalStatusId,
+                        Protected = response.Patient.Protected,
+                        DeceasedId = response.Patient.DeceasedId
                     };
 
-                    if (sysResponse != null && sysResponse.PatientSystem != null)
-                    {
-                        pResponse.Patient.DisplaySystemId = sysResponse.PatientSystem.SystemId;
-                        pResponse.Patient.DisplaySystemName = sysResponse.PatientSystem.SystemName;
-                        pResponse.Patient.DisplayLabel = sysResponse.PatientSystem.DisplayLabel;
-                    }
+                    // Commented this part out, as there is a separate endpoint to get patient systems ids.
+                    //if (sysResponse != null && sysResponse.PatientSystemData != null)
+                    //{
+                    // //   pResponse.Patient.DisplaySystemId = sysResponse.PatientSystem.SystemId;
+                    // //   pResponse.Patient.DisplaySystemName = sysResponse.PatientSystem.SystemName;
+                    //    pResponse.Patient.DisplayLabel = sysResponse.PatientSystemData.DisplayLabel;
+                    //}
 
 
                     // Add the recently accessed patient to the User's(Contact) recent list. NIGHT-911.
@@ -171,47 +182,6 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        // Deprecated - Problems is not in PatientObservations.
-        //public List<NG.DTO.PatientProblem> GetPatientProblems(NG.DTO.GetAllPatientProblemsRequest request)
-        //{
-        //    try
-        //    {
-        //        if (string.IsNullOrEmpty(request.PatientID))
-        //            throw new ArgumentException("PatientID is null or empty.");
-
-        //        List<Phytel.API.AppDomain.NG.DTO.PatientProblem> response = new List<Phytel.API.AppDomain.NG.DTO.PatientProblem>();
-
-        //        IRestClient client = new JsonServiceClient();
-        //        string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Problems",
-        //                DDPatientProblemServiceUrl,
-        //                "NG",
-        //                request.Version,
-        //                request.ContractNumber,
-        //                request.PatientID), request.UserId);
-
-        //        //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientID}/Problems", "GET")]
-        //        Phytel.API.DataDomain.PatientProblem.DTO.GetAllPatientProblemsDataResponse dataDomainResponse = client.Get<Phytel.API.DataDomain.PatientProblem.DTO.GetAllPatientProblemsDataResponse>(url);
-
-        //        List<Phytel.API.DataDomain.PatientProblem.DTO.PatientProblemData> problems = dataDomainResponse.PatientProblems;
-
-        //        foreach (Phytel.API.DataDomain.PatientProblem.DTO.PatientProblemData p in problems)
-        //        {
-        //            Phytel.API.AppDomain.NG.DTO.PatientProblem pp = new Phytel.API.AppDomain.NG.DTO.PatientProblem();
-        //            pp.ID = p.ID;
-        //            pp.PatientID = p.PatientID;
-        //            pp.ProblemID = p.ProblemID;
-        //            pp.Level = p.Level;
-        //            response.Add(pp);
-        //        }
-
-        //        return response;
-        //    }
-        //    catch (WebServiceException wse)
-        //    {
-        //        throw new WebServiceException("AD:GetPatientProblem()::" + wse.Message, wse.InnerException);
-        //    }
-        //}
-
         public PutPatientDetailsUpdateResponse PutPatientDetailsUpdate(PutPatientDetailsUpdateRequest request)
         {
             try
@@ -238,7 +208,16 @@ namespace Phytel.API.AppDomain.NG
                         DOB = request.Patient.DOB,
                         PriorityData = request.Patient.Priority,
                         Gender = request.Patient.Gender,
-                        FullSSN = request.Patient.FullSSN
+                        FullSSN = request.Patient.FullSSN,
+                        Background = request.Patient.Background,
+                        ClinicalBackground = request.Patient.ClinicalBackground,
+                        DataSource = request.Patient.DataSource,
+                        ReasonId = request.Patient.ReasonId,
+                        StatusId = request.Patient.StatusId,
+                        StatusDataSource = request.Patient.StatusDataSource,
+                        MaritalStatusId = request.Patient.MaritalStatusId,
+                        Protected = request.Patient.Protected,
+                        DeceasedId = request.Patient.DeceasedId
                     };
                     PutUpdatePatientDataResponse dataDomainResponse =
                         client.Put<PutUpdatePatientDataResponse>(url, new PutUpdatePatientDataRequest
@@ -294,42 +273,6 @@ namespace Phytel.API.AppDomain.NG
             catch (WebServiceException wse)
             {
                 throw new WebServiceException("AD:PutPatientFlaggedUpdate()::" + wse.Message, wse.InnerException);
-            }
-        }
-
-        public PutPatientBackgroundResponse UpdateBackground(PutPatientBackgroundRequest request)
-        {
-            try
-            {
-                PutPatientBackgroundResponse response = null;
-                IRestClient client = new JsonServiceClient();
-                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Background",
-                                                                                DDPatientServiceURL,
-                                                                                "NG",
-                                                                                request.Version,
-                                                                                request.ContractNumber,
-                                                                                request.PatientId), request.UserId);
-
-                //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Background", "PUT")]
-                PutPatientBackgroundDataResponse dataDomainResponse =
-                    client.Put<PutPatientBackgroundDataResponse>(url, new PutPatientBackgroundDataRequest
-                                                                                {
-                                                                                    Background = request.Background,
-                                                                                    Context = "NG",
-                                                                                    ContractNumber = request.ContractNumber,
-                                                                                    Version = request.Version,
-                                                                                    UserId = request.UserId,
-                                                                                    PatientId = request.PatientId
-                                                                                } as object);
-                if (dataDomainResponse != null && dataDomainResponse.Success)
-                {
-                    response = new PutPatientBackgroundResponse();
-                }
-                return response;
-            }
-            catch (WebServiceException wse)
-            {
-                throw new WebServiceException("AD:UpdateBackground()::" + wse.Message, wse.InnerException);
             }
         }
 
@@ -427,153 +370,6 @@ namespace Phytel.API.AppDomain.NG
         }
         #endregion
 
-        #region PatientSystem
-        public GetPatientSystemsResponse GetPatientSystems(GetPatientSystemsRequest request)
-        {
-            GetPatientSystemsResponse response = new GetPatientSystemsResponse();
-
-            try
-            {
-                
-                IRestClient client = new JsonServiceClient();
-                //[Route("/{Context}/{Version}/{ContractNumber}/PatientSystem/Patient/{PatientId}", "GET")]
-                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/PatientSystem/Patient/{4}",
-                                                                                            DDPatientSystemUrl,
-                                                                                            "NG",
-                                                                                            request.Version,
-                                                                                            request.ContractNumber,
-                                                                                            request.PatientId), request.UserId);
-
-                GetPatientSystemsDataResponse ddResponse = client.Get<GetPatientSystemsDataResponse>(url);
-                List<PatientSystem> patientSystems = null;
-                if (ddResponse != null && ddResponse.PatientSystems != null && ddResponse.PatientSystems.Count > 0)
-                {
-                    patientSystems = new List<PatientSystem>();
-                    List<PatientSystemData> data = ddResponse.PatientSystems;
-                    data.ForEach(p =>
-                        {
-                            PatientSystem ps = new PatientSystem { 
-                                Id = p.Id, 
-                                DisplayLabel  = p.DisplayLabel,
-                                PatientId = p.PatientId,
-                                SystemId = p.SystemId,
-                                SystemName = p.SystemName,
-                                DeleteFlag  = p.DeleteFlag
-                            };
-                            patientSystems.Add(ps);
-                        });
-                }
-                response.PatientSystems = patientSystems;
-                return response;
-            }
-            catch (WebServiceException wse)
-            {
-                throw new WebServiceException("AD:GetPatientSystems()::" + wse.Message, wse.InnerException);
-            }
-        }
-
-        public PostPatientSystemResponse SavePatientSystem(PostPatientSystemRequest request)
-        {
-            PostPatientSystemResponse response = new PostPatientSystemResponse();
-            try
-            {
-                if (request.PatientSystem != null)
-                {
-                    IRestClient client = new JsonServiceClient();
-                    if (request.Insert)
-                    {
-                        // Call insert method.
-                        //[Route("/{Context}/{Version}/{ContractNumber}/PatientSystem", "PUT")]
-                        string insertUrl = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/PatientSystem",
-                                                                            DDPatientSystemUrl,
-                                                                            "NG",
-                                                                            request.Version,
-                                                                            request.ContractNumber), request.UserId);
-
-                        PutPatientSystemDataResponse ddInsertResponse =
-                            client.Put<PutPatientSystemDataResponse>(insertUrl, new PutPatientSystemDataRequest
-                            {
-                                Context = "NG",
-                                ContractNumber = request.ContractNumber,
-                                UserId = request.UserId,
-                                Version = request.Version,
-                                DisplayLabel = request.PatientSystem.DisplayLabel,
-                                PatientID = request.PatientSystem.PatientId,
-                                SystemID = request.PatientSystem.SystemId,
-                                SystemName = request.PatientSystem.SystemName
-                            } as object);
-                        if (ddInsertResponse != null && !string.IsNullOrEmpty(ddInsertResponse.PatientSystemId))
-                        {
-
-                            response.PatientSystemId = ddInsertResponse.PatientSystemId;
-                            // Call Patient Datadomain to update the patient record with the primary patientsystem Id.
-                            //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/PatientSystem/{PatientSystemId}", "PUT")]
-                            string patientUrl = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/PatientSystem/{5}",
-                                                                            DDPatientServiceURL,
-                                                                            "NG",
-                                                                            request.Version,
-                                                                            request.ContractNumber,
-                                                                            request.PatientSystem.PatientId,
-                                                                            ddInsertResponse.PatientSystemId), request.UserId);
-                                           
-                            PatientData patientData = new PatientData {
-                                 Id  = request.PatientSystem.PatientId,
-                                 DisplayPatientSystemId = ddInsertResponse.PatientSystemId
-                            };
-                            PutPatientSystemIdDataResponse ddPatientResponse =
-                            client.Put<PutPatientSystemIdDataResponse>(patientUrl, new PutPatientSystemIdDataRequest
-                            {
-                                Context = "NG",
-                                ContractNumber = request.ContractNumber,
-                                UserId = request.UserId,
-                                Version = request.Version,
-                                PatientId = request.PatientSystem.PatientId,
-                                PatientSystemId = ddInsertResponse.PatientSystemId
-                            } as object);
-                            if (ddPatientResponse == null && !ddPatientResponse.Success)
-                            {
-                                throw new Exception("Failed to update the PatientSystemId in the Patient collection.");
-                            }
-                        }
-                    }
-                    else
-                    {
-                        // call update method.
-                        //[Route("/{Context}/{Version}/{ContractNumber}/PatientSystem/Update", "PUT")]
-                        string updateUrl = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/PatientSystem/Update",
-                                                                            DDPatientSystemUrl,
-                                                                            "NG",
-                                                                            request.Version,
-                                                                            request.ContractNumber), request.UserId);
-                        PutUpdatePatientSystemDataResponse ddUpdateResponse =
-                        client.Put<PutUpdatePatientSystemDataResponse>(updateUrl, new PutUpdatePatientSystemDataRequest
-                        {
-                            Context = "NG",
-                            ContractNumber = request.ContractNumber,
-                            UserId = request.UserId,
-                            Version = request.Version,
-                            Id = request.PatientSystem.Id,
-                            DeleteFlag = request.PatientSystem.DeleteFlag,
-                            DisplayLabel = request.PatientSystem.DisplayLabel,
-                            PatientID = request.PatientSystem.PatientId,
-                            SystemID = request.PatientSystem.SystemId,
-                            SystemName = request.PatientSystem.SystemName
-                        } as object);
-                        if (ddUpdateResponse != null && ddUpdateResponse.Success)
-                        {
-                            response.PatientSystemId = request.PatientSystem.Id;
-                        }
-                    }
-                }
-                return response;
-            }
-            catch (WebServiceException wse)
-            {
-                throw new WebServiceException("AD:SavePatientSystem()::" + wse.Message, wse.InnerException);
-            }
-        } 
-        #endregion
-
         #region Cohort 
         public List<Phytel.API.AppDomain.NG.DTO.Cohort> GetCohorts(NG.DTO.GetAllCohortsRequest request)
         {
@@ -662,22 +458,26 @@ namespace Phytel.API.AppDomain.NG
             try
             {
                 GetAllSettingsResponse response = new GetAllSettingsResponse();
-                using (StreamReader r = new StreamReader(HostingEnvironment.MapPath("/Nightingale/settings.json")))
+                IRestClient client = new JsonServiceClient();
+                //[Route("/{Context}/{Version}/{ContractNumber}/Settings", "GET")]
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Settings",
+                                                                        DDLookupServiceUrl,
+                                                                        "NG",
+                                                                        request.Version,
+                                                                        request.ContractNumber), request.UserId);
+
+                GetAllSettingsDataResponse dataDomainResponse = client.Get<GetAllSettingsDataResponse>(url);
+                if (dataDomainResponse != null)
                 {
-                    using (MemoryStream stream1 = new MemoryStream(Encoding.UTF8.GetBytes(r.ReadToEnd())))
-                    {
-                        DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(List<Setting>));
-                        var settings = serializer.ReadObject(stream1) as List<Setting>;
-                        response.Settings = settings;
-                    }
+                    response.Settings = dataDomainResponse.SettingsData;
                 }
                 return response;
             }
-            catch (WebServiceException wse)
+            catch (Exception ex)
             {
-                throw new WebServiceException("AD:GetAllSettings()::" + wse.Message, wse.InnerException);
+                throw ex;
             }
-        } 
+        }
         #endregion
 
         #region Programs
@@ -937,8 +737,8 @@ namespace Phytel.API.AppDomain.NG
                     request.PatientId,
                     request.Token), request.UserId);
 
-                DD.GetPatientProgramsResponse resp =
-                    client.Get<DD.GetPatientProgramsResponse>(url);
+                DD.GetPatientProgramsDataResponse resp =
+                    client.Get<DD.GetPatientProgramsDataResponse>(url);
 
                 if (resp != null)
                 {
@@ -954,7 +754,8 @@ namespace Phytel.API.AppDomain.NG
                             ShortName = p.ShortName,
                             Status = p.Status,
                             ElementState = p.ElementState,
-                             AttrEndDate = p.AttrEndDate
+                            AttrEndDate = p.AttrEndDate,
+                            ProgramSourceId = p.ProgramSourceId
                         }));
 
                         result.Programs = adPs;
@@ -1019,8 +820,8 @@ namespace Phytel.API.AppDomain.NG
                 deletePatientProgramCommand.Execute();
 
                 #region InsertANote
-                //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Note/Insert", "PUT")]
-                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/patient/{4}/note/insert",
+                //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Note", "POST")]
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/patient/{4}/note",
                                                                         DDPatientNoteUrl,
                                                                         "NG",
                                                                         request.Version,
@@ -1036,7 +837,7 @@ namespace Phytel.API.AppDomain.NG
                     CreatedOn = DateTime.UtcNow,
                     PatientId = request.PatientId
                 };
-                PutPatientNoteDataResponse noteDDResponse = client.Put<PutPatientNoteDataResponse>(url, new PutPatientNoteDataRequest
+                InsertPatientNoteDataResponse noteDDResponse = client.Post<InsertPatientNoteDataResponse>(url, new InsertPatientNoteDataRequest
                 {
                     PatientNote = noteData,
                     Context = "NG",
@@ -1511,7 +1312,17 @@ namespace Phytel.API.AppDomain.NG
                             List<Phone> phones = new List<Phone>();
                             foreach (PhoneData ph in phoneData)
                             {
-                                Phone phone = new Phone { Id = ph.Id, TypeId = ph.TypeId, Number = ph.Number, IsText = ph.IsText, PhonePreferred = ph.PhonePreferred, TextPreferred = ph.TextPreferred, OptOut = ph.OptOut };
+                                Phone phone = new Phone
+                                {
+                                    Id = ph.Id,
+                                    TypeId = ph.TypeId,
+                                    Number = ph.Number,
+                                    IsText = ph.IsText,
+                                    PhonePreferred = ph.PhonePreferred,
+                                    TextPreferred = ph.TextPreferred,
+                                    OptOut = ph.OptOut,
+                                    DataSource = ph.DataSource
+                                };
                                 phones.Add(phone);
                             }
                             contact.Phones = phones;
@@ -1581,17 +1392,8 @@ namespace Phytel.API.AppDomain.NG
                     }
                 }
 
-                List<PhoneData> phonesData = null;
-                if (request.Contact.Phones != null)
-                {
-                    List<Phone> phones = request.Contact.Phones;
-                    phonesData = new List<PhoneData>();
-                    foreach (Phone p in phones)
-                    {
-                        PhoneData d = new PhoneData {  Id = p.Id,  IsText = p.IsText, Number = p.Number, OptOut = p.OptOut, PhonePreferred = p.PhonePreferred, TextPreferred = p.TextPreferred, TypeId =  p.TypeId};
-                        phonesData.Add(d);
-                    }
-                }
+                var phonesData = (request.Contact.Phones != null) ? GetPhonesData(request.Contact.Phones) : null;
+
                 List<EmailData> emailsData = null;
                 if (request.Contact.Emails != null)
                 {
@@ -1701,6 +1503,21 @@ namespace Phytel.API.AppDomain.NG
             catch (WebServiceException wse)
             {
                 throw new WebServiceException("AD:PutUpdateContact()::" + wse.Message, wse.InnerException);
+            }
+        }
+
+        public List<PhoneData> GetPhonesData(List<Phone> phonelist)
+        {
+            try
+            {
+                List<PhoneData> phonesData = null;
+                List<Phone> phones = phonelist;
+                phonesData = phones.Select(Mapper.Map<PhoneData>).ToList();
+                return phonesData;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:GetPhonesData()::" + ex.Message, ex.InnerException);
             }
         }
 

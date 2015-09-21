@@ -15,6 +15,6 @@ namespace Phytel.API.AppDomain.NG
         void LogException(Exception ex);
         void RegisterAllergyDocumentInSearchIndex(DTO.Allergy allergy, string contractNumber, IAppDomainRequest request);
         void RegisterMedDocumentInSearchIndex(DTO.Medication med, IAppDomainRequest request);
-        void DeleteMedDocuments(PutDeleteMedMapRequest request);
+        void DeleteMedDocuments(DeleteMedicationMapsRequest request);
     }
 }

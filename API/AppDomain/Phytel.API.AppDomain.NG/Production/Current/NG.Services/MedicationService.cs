@@ -20,7 +20,7 @@ namespace Phytel.API.AppDomain.NG.Service
         private const string unknownBrowserType = "Unknown browser";
         private const string unknownUserHostAddress = "Unknown IP";
 
-        #region MedicationMap - Posts
+        #region MedicationMap
         public PostInitializeMedicationMapResponse Post(PostInitializeMedicationMapRequest request)
         {
             PostInitializeMedicationMapResponse response = new PostInitializeMedicationMapResponse();
@@ -44,6 +44,81 @@ namespace Phytel.API.AppDomain.NG.Service
             catch (Exception ex)
             {
                 CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                if ((ex is WebServiceException) == false)
+                    MedicationManager.LogException(ex);
+            }
+            finally
+            {
+                if (result != null)
+                {
+                    string browser = (base.Request != null) ? base.Request.UserAgent : unknownBrowserType;
+                    string hostAddress = (base.Request != null) ? base.Request.UserHostAddress : unknownUserHostAddress;
+                    AuditUtil.LogAuditData(request, result.SQLUserId, null, browser, hostAddress, request.GetType().Name);
+                }
+            }
+            return response;
+        }
+
+        public GetMedicationMapsResponse Get(GetMedicationMapsRequest request)
+        {
+            GetMedicationMapsResponse response = new GetMedicationMapsResponse();
+            ValidateTokenResponse result = null;
+
+            try
+            {
+                if (base.Request != null)
+                {
+                    request.Token = base.Request.Headers["Token"] as string;
+                }
+                result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                if (result.UserId.Trim() != string.Empty)
+                {
+                    request.UserId = result.UserId;
+                    response.MedicationMaps = MedicationManager.GetMedicationMaps(request);
+                }
+                else
+                    throw new UnauthorizedAccessException();
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                if ((ex is WebServiceException) == false)
+                    MedicationManager.LogException(ex);
+            }
+            finally
+            {
+                if (result != null)
+                {
+                    string browser = (base.Request != null) ? base.Request.UserAgent : unknownBrowserType;
+                    string hostAddress = (base.Request != null) ? base.Request.UserHostAddress : unknownUserHostAddress;
+                    AuditUtil.LogAuditData(request, result.SQLUserId, null, browser, hostAddress, request.GetType().Name);
+                }
+            }
+            return response;
+        }
+
+        public DeleteMedicationMapsResponse Delete(DeleteMedicationMapsRequest request)
+        {
+            DeleteMedicationMapsResponse response = new DeleteMedicationMapsResponse();
+            ValidateTokenResponse result = null;
+            try
+            {
+                if (base.Request != null)
+                {
+                    request.Token = base.Request.Headers["Token"] as string;
+                }
+                result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                if (result.UserId.Trim() != string.Empty)
+                {
+                    request.UserId = result.UserId;
+                    MedicationManager.DeleteMedicationMaps(request);
+                }
+                else
+                    throw new UnauthorizedAccessException();
+            }
+            catch (Exception ex)
+            {
+                CommonFormatterUtil.FormatExceptionResponse(response, base.Response, ex);
                 if ((ex is WebServiceException) == false)
                     MedicationManager.LogException(ex);
             }
@@ -140,6 +215,44 @@ namespace Phytel.API.AppDomain.NG.Service
                     string browser = (base.Request != null) ? base.Request.UserAgent : unknownBrowserType;
                     string hostAddress = (base.Request != null) ? base.Request.UserHostAddress : unknownUserHostAddress;
                     AuditUtil.LogAuditData(request, result.SQLUserId, patientIds, browser, hostAddress, request.GetType().Name);
+                }
+            }
+            return response;
+        }
+
+        public GetPatientMedSuppsCountResponse Get(GetPatientMedSuppsCountRequest request)
+        {
+            GetPatientMedSuppsCountResponse response = new GetPatientMedSuppsCountResponse();
+            ValidateTokenResponse result = null;
+
+            try
+            {
+                if (base.Request != null)
+                {
+                    request.Token = base.Request.Headers["Token"] as string;
+                }
+                result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                if (result.UserId.Trim() != string.Empty)
+                {
+                    request.UserId = result.UserId;
+                    response.PatientCount = MedicationManager.GetPatientMedSuppsCount(request);
+                }
+                else
+                    throw new UnauthorizedAccessException();
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                if ((ex is WebServiceException) == false)
+                    MedicationManager.LogException(ex);
+            }
+            finally
+            {
+                if (result != null)
+                {
+                    string browser = (base.Request != null) ? base.Request.UserAgent : unknownBrowserType;
+                    string hostAddress = (base.Request != null) ? base.Request.UserHostAddress : unknownUserHostAddress;
+                    AuditUtil.LogAuditData(request, result.SQLUserId, null, browser, hostAddress, request.GetType().Name);
                 }
             }
             return response;
