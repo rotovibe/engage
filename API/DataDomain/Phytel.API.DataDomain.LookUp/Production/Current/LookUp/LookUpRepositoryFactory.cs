@@ -7,14 +7,30 @@ using Phytel.API.Interface;
 
 namespace Phytel.API.DataDomain.LookUp
 {
-    public abstract class LookUpRepositoryFactory<T>
+    public class LookUpRepositoryFactory : ILookUpRepositoryFactory
     {
-        public static ILookUpRepository<T> GetLookUpRepository(string dbName, string productName, string userId)
+        public ILookUpRepository GetRepository(IDataDomainRequest request, RepositoryType type)
         {
-            ILookUpRepository<T> repo = null;
-            repo = new MongoLookUpRepository<T>(dbName) as ILookUpRepository<T>;
-            repo.UserId = userId;
+            ILookUpRepository repo = null;
+
+            switch (type)
+            {
+                case RepositoryType.LookUp:
+                    {
+                        repo = new MongoLookUpRepository(request.ContractNumber) as ILookUpRepository;
+                        break;
+                    }
+                case RepositoryType.Setting:
+                    {
+                        repo = new MongoSettingRepository(request.ContractNumber) as ILookUpRepository;
+                        break;
+                    }
+            }
+
+            repo.UserId = request.UserId;
             return repo;
         }
+
+
     }
 }
