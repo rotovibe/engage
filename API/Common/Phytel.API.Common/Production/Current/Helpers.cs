@@ -142,5 +142,16 @@ namespace Phytel.API.Common
             Log.LogError(aseAPIURL, processId, ex, LogErrorCode.Error, LogErrorSeverity.High);
         }
 
+        public string TrimAndLimit(string value, int limit)
+        {
+            if (!string.IsNullOrEmpty(value))
+            {
+                value = value.Trim();
+                if(value.Length > limit)
+                    value = value.Substring(0, limit);
+            }
+            return value;
+        }
+
     }
 }

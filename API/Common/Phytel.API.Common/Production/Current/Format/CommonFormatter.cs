@@ -18,8 +18,8 @@ namespace Phytel.API.Common.Format
             {
                 httpResponse.StatusCode = (int)HttpStatusCode.InternalServerError;
             }
-            
-            response.Status = new ResponseStatus(ex.ToErrorCode(), ex.Message);
+
+            response.Status = ex.ToResponseStatus();
             response.Status.ErrorCode = ex.ToErrorCode();
             response.Status.Message = ex.Message;
             response.Status.StackTrace = ex.StackTrace;
