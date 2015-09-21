@@ -60,11 +60,6 @@ namespace Phytel.API.DataDomain.Patient
             throw new NotImplementedException();
         }
 
-        public PutPatientBackgroundDataResponse UpdateBackground(PutPatientBackgroundDataRequest request)
-        {
-            throw new NotImplementedException();
-        }
-
         public object FindByID(string patientId, string userId)
         {
             throw new NotImplementedException();

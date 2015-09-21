@@ -10,6 +10,7 @@ using Phytel.API.Interface;
 using System.Linq;
 using ServiceStack.Service;
 using Phytel.API.Common;
+using Phytel.API.DataDomain.PatientSystem.DTO;
 
 namespace Phytel.API.DataDomain.Patient
 {
@@ -136,11 +137,29 @@ namespace Phytel.API.DataDomain.Patient
             }
         }
 
+        public List<PatientData> GetAllPatients(GetAllPatientsDataRequest request)
+        {
+            try
+            {
+                IPatientRepository repo = Factory.GetRepository(request, RepositoryType.Patient);
+                List<PatientData> result = repo.SelectAll() as List<PatientData>;
+                return result;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         public PutPatientDataResponse InsertPatient(PutPatientDataRequest request)
         {
             IPatientRepository repo = Factory.GetRepository(request, RepositoryType.Patient);
-
             PutPatientDataResponse result = repo.Insert(request) as PutPatientDataResponse;
+            if (!string.IsNullOrEmpty(result.Id))
+            {
+                //Create Engage system record for the newly created patient in PatientSystem collection.
+                result.EngagePatientSystemId = insertEngagePatientSystem(result.Id, request);
+            }
             return result;
         }
 
@@ -167,15 +186,6 @@ namespace Phytel.API.DataDomain.Patient
             IPatientRepository repo = Factory.GetRepository(request, RepositoryType.Patient);
 
             response = repo.UpdateFlagged(request) as PutPatientFlaggedResponse;
-            return response;
-        }
-
-        public PutPatientBackgroundDataResponse UpdatePatientBackground(PutPatientBackgroundDataRequest request)
-        {
-            PutPatientBackgroundDataResponse response = new PutPatientBackgroundDataResponse();
-            IPatientRepository repo = Factory.GetRepository(request, RepositoryType.Patient);
-
-            response = repo.UpdateBackground(request) as PutPatientBackgroundDataResponse;
             return response;
         }
 
@@ -209,36 +219,53 @@ namespace Phytel.API.DataDomain.Patient
         public PutUpdatePatientDataResponse UpdatePatient(PutUpdatePatientDataRequest request)
         {
             PutUpdatePatientDataResponse response = new PutUpdatePatientDataResponse();
-            IPatientRepository repo = Factory.GetRepository(request, RepositoryType.Patient);
-            if (request.PatientData != null)
+            try
             {
-                if (request.Insert)
+                IPatientRepository repo = Factory.GetRepository(request, RepositoryType.Patient);
+                if (request.PatientData != null)
                 {
-                    if (request.InsertDuplicate) // the user has ignored the warning message about a duplicate patient entry.
+                    if (request.Insert)
                     {
-                        response = repo.Update(request) as PutUpdatePatientDataResponse;
-                    }
-                    else
-                    {
-                        if (repo.FindDuplicatePatient(request) == null)
+                        if (request.InsertDuplicate) // the user has ignored the warning message about a duplicate patient entry.
                         {
                             response = repo.Update(request) as PutUpdatePatientDataResponse;
+                            if (!string.IsNullOrEmpty(response.Id))
+                            {
+                                //Create Engage system record for the newly created patient in PatientSystem collection.
+                                insertEngagePatientSystem(response.Id, request);
+                            }
                         }
                         else
                         {
-                            Outcome outcome = new Outcome
+                            if (repo.FindDuplicatePatient(request) == null)
                             {
-                                Result = 0,
-                                Reason = "An individual by the same first name, last name and date of birth already exists."
-                            };
-                            response.Outcome = outcome;
+                                response = repo.Update(request) as PutUpdatePatientDataResponse;
+                                if (!string.IsNullOrEmpty(response.Id))
+                                {
+                                    //Create Engage system record for the newly created patient in PatientSystem collection.
+                                    insertEngagePatientSystem(response.Id, request);
+                                }
+                            }
+                            else
+                            {
+                                Outcome outcome = new Outcome
+                                {
+                                    Result = 0,
+                                    Reason = "An individual by the same first name, last name and date of birth already exists."
+                                };
+                                response.Outcome = outcome;
+                            }
                         }
                     }
+                    else
+                    {
+                        response = repo.Update(request) as PutUpdatePatientDataResponse;
+                    }
                 }
-                else
-                {
-                    response = repo.Update(request) as PutUpdatePatientDataResponse;
-                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
             return response;
         }
@@ -404,5 +431,43 @@ namespace Phytel.API.DataDomain.Patient
             catch (Exception ex) { throw ex; }
         }
         #endregion
+
+        /// <summary>
+        /// Calls PatientSystem data domain to insert an Engage System record for the newly created patient.
+        /// </summary>
+        /// <param name="request">IDataDomainRequest object</param>
+        /// <returns>Id of the Engage patient system.</returns>
+        private string insertEngagePatientSystem(string patientId, IDataDomainRequest request)
+        {
+            string id = null;
+            try
+            {
+                InsertPatientSystemDataRequest psRequest = new InsertPatientSystemDataRequest
+                {
+                    PatientId = patientId,
+                    IsEngageSystem = true,
+                    PatientSystemsData = new PatientSystemData { PatientId = patientId },
+                    Context = request.Context,
+                    ContractNumber = request.ContractNumber,
+                    UserId = Constants.SystemContactId,// the requirement says that the engage Id should have createdby user as 'system'.
+                    Version = request.Version
+                };
+                
+                string DDPatientSystemServiceUrl = ConfigurationManager.AppSettings["DDPatientSystemServiceUrl"];
+                IRestClient client = new JsonServiceClient();
+                //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/PatientSystem", "POST")]
+                string url = Helpers.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/PatientSystem", DDPatientSystemServiceUrl, psRequest.Context, psRequest.Version, psRequest.ContractNumber, psRequest.PatientId), psRequest.UserId);
+                InsertPatientSystemDataResponse dataDomainResponse = client.Post<InsertPatientSystemDataResponse>(url, psRequest as object);
+                if (dataDomainResponse != null && !string.IsNullOrEmpty(dataDomainResponse.Id))
+                {
+                    id = dataDomainResponse.Id;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return id;
+        }
     }
 }   

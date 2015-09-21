@@ -44,11 +44,6 @@ namespace Phytel.API.DataDomain.Patient.Test.Stub
             throw new NotImplementedException();
         }
 
-        public DTO.PutPatientBackgroundDataResponse UpdateBackground(DTO.PutPatientBackgroundDataRequest request)
-        {
-            throw new NotImplementedException();
-        }
-
         public object FindByID(string patientId, string userId)
         {
             throw new NotImplementedException();

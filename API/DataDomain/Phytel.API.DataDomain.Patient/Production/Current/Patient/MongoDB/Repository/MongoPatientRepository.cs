@@ -53,17 +53,21 @@ namespace Phytel.API.DataDomain.Patient
             {
                 //Patient
                 PutPatientDataRequest request = newEntity as PutPatientDataRequest;
+                PatientData pd = request.Patient;
                 MEPatient patient = null;
                 using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
                 {
                     //Does the patient exist?
                     string searchQuery = string.Empty;
-                    searchQuery = string.Format("{0} : /^{1}$/i, {2} : /^{3}$/i, {4} : '{5}', {6} : false, {7} : null", MEPatient.FirstNameProperty, request.FirstName,
-                              MEPatient.LastNameProperty, request.LastName,
-                              MEPatient.DOBProperty, request.DOB,
-                              MEPatient.DeleteFlagProperty,
-                              MEPatient.TTLDateProperty);
-                    string jsonQuery = "{ ";
+                    searchQuery = string.Format("{0} : /^{1}$/i, {2} : /^{3}$/i, {4} : '{5}', {6} : false, {7} : null",
+                        MEPatient.FirstNameProperty,
+                        pd.FirstName,
+                        MEPatient.LastNameProperty, pd.LastName,
+                        MEPatient.DOBProperty, pd.DOB,
+                        MEPatient.DeleteFlagProperty,
+                        MEPatient.TTLDateProperty);
+
+                    var jsonQuery = "{ ";
                     jsonQuery += searchQuery;
                     jsonQuery += " }";
                     QueryDocument query = new QueryDocument(BsonSerializer.Deserialize<BsonDocument>(jsonQuery));
@@ -77,20 +81,32 @@ namespace Phytel.API.DataDomain.Patient
                         patient = new MEPatient(this.UserId)
                         {
                             Id = ObjectId.GenerateNewId(),
-                            FirstName = request.FirstName,
-                            LastName = request.LastName,
-                            MiddleName = request.MiddleName,
-                            Suffix = request.Suffix,
-                            PreferredName = request.PreferredName,
-                            Gender = request.Gender,
-                            DOB = request.DOB,
-                            Background = request.Background,
+                            FirstName = pd.FirstName,
+                            LastName = pd.LastName,
+                            MiddleName = pd.MiddleName,
+                            Suffix = pd.Suffix,
+                            PreferredName = pd.PreferredName,
+                            Gender = pd.Gender,
+                            DOB = pd.DOB,
+                            Background = pd.Background,
+                            ClinicalBackground = pd.ClinicalBackground,
                             Version = request.Version,
-                            UpdatedBy = ObjectId.Parse(this.UserId),
                             TTLDate = null,
                             DeleteFlag = false,
-                            LastUpdatedOn = System.DateTime.UtcNow
+                            DataSource = Helper.TrimAndLimit(pd.DataSource, 50),
+                            Status = (Status)pd.StatusId,
+                            StatusDataSource  = Helper.TrimAndLimit(pd.StatusDataSource, 50),
+                            Protected = pd.Protected,
+                            Deceased = (Deceased)pd.DeceasedId
                         };
+                        if(!string.IsNullOrEmpty(pd.ReasonId))
+                        {
+                            patient.ReasonId = ObjectId.Parse(pd.ReasonId);
+                        }
+                        if (!string.IsNullOrEmpty(pd.MaritalStatusId))
+                        {
+                            patient.MaritalStatusId = ObjectId.Parse(pd.MaritalStatusId);
+                        }
                         ctx.Patients.Collection.Insert(patient);
 
                         List<SearchFieldData> data = new List<SearchFieldData>();
@@ -135,6 +151,16 @@ namespace Phytel.API.DataDomain.Patient
             {
                 throw ex;
             }
+        }
+
+        public string FormatSystem(string p)
+        {
+            var val = p;
+            if (!string.IsNullOrEmpty(p) && p.Length > 50)
+            {
+                val = p.Substring(0, 50);
+            }
+            return val;
         }
 
         public object InsertAll(List<object> entities)
@@ -211,7 +237,15 @@ namespace Phytel.API.DataDomain.Patient
                         PriorityData = (int)mePatient.Priority,
                         DisplayPatientSystemId = mePatient.DisplayPatientSystemId.ToString(),
                         Background = mePatient.Background,
-                        LastFourSSN = mePatient.LastFourSSN
+                        ClinicalBackground = mePatient.ClinicalBackground,
+                        LastFourSSN = mePatient.LastFourSSN,
+                        DataSource = FormatSystem(mePatient.DataSource),
+                        StatusDataSource = mePatient.StatusDataSource,
+                        ReasonId = mePatient.ReasonId == null ? null : mePatient.ReasonId.ToString(),
+                        MaritalStatusId = mePatient.MaritalStatusId == null ? null : mePatient.MaritalStatusId.ToString(),
+                        Protected = mePatient.Protected,
+                        DeceasedId = (int)mePatient.Deceased,
+                        StatusId = (int)mePatient.Status
                     };
                     if (!string.IsNullOrEmpty(userId))
                     {
@@ -339,7 +373,7 @@ namespace Phytel.API.DataDomain.Patient
                         response = new Dictionary<string, PatientData>();
                         foreach (MEPatient meP in mePatients)
                         {
-                            PatientData data = new PatientData 
+                            PatientData data = new PatientData
                             {
                                 Id = meP.Id.ToString(),
                                 PreferredName = meP.PreferredName,
@@ -350,10 +384,18 @@ namespace Phytel.API.DataDomain.Patient
                                 MiddleName = meP.MiddleName,
                                 Suffix = meP.Suffix,
                                 Version = meP.Version,
-                                PriorityData = (int)meP.Priority,
+                                PriorityData = (int) meP.Priority,
                                 DisplayPatientSystemId = meP.DisplayPatientSystemId.ToString(),
                                 Background = meP.Background,
-                                LastFourSSN = meP.LastFourSSN
+                                ClinicalBackground = meP.ClinicalBackground,
+                                LastFourSSN = meP.LastFourSSN,
+                                DataSource = FormatSystem(meP.DataSource),
+                                StatusDataSource = meP.StatusDataSource,
+                                ReasonId = meP.ReasonId == null ? null : meP.ReasonId.ToString(),
+                                StatusId = (int)meP.Status,
+                                MaritalStatusId = meP.MaritalStatusId == null ? null : meP.MaritalStatusId.ToString(),
+                                Protected = meP.Protected,
+                                DeceasedId = (int)meP.Deceased,
                             };
                             response.Add(data.Id, data);
                         }
@@ -367,7 +409,32 @@ namespace Phytel.API.DataDomain.Patient
 
         public IEnumerable<object> SelectAll()
         {
-            throw new NotImplementedException();
+            List<PatientData> patients = null;
+            try
+            {
+                using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
+                {
+                    List<IMongoQuery> queries = new List<IMongoQuery>();
+                    queries.Add(Query.EQ(MEPatientUser.DeleteFlagProperty, false));
+                    queries.Add(Query.EQ(MEPatientUser.TTLDateProperty, BsonNull.Value));
+                    IMongoQuery mQuery = Query.And(queries);
+                    List<MEPatient> mePatients = ctx.Patients.Collection.Find(mQuery).ToList();
+                    if (mePatients != null && mePatients.Count > 0)
+                    {
+                        patients = new List<PatientData>();
+                        foreach (MEPatient meP in mePatients)
+                        {
+                            PatientData data = new PatientData
+                            {
+                                Id = meP.Id.ToString(),
+                            };
+                            patients.Add(data);
+                        }
+                    }
+                }
+                return patients;
+            }
+            catch (Exception) { throw; }
         }
 
         public PutPatientPriorityResponse UpdatePriority(PutPatientPriorityRequest request)
@@ -456,42 +523,6 @@ namespace Phytel.API.DataDomain.Patient
             }
         }
 
-        public PutPatientBackgroundDataResponse UpdateBackground(PutPatientBackgroundDataRequest request)
-        {
-            PutPatientBackgroundDataResponse response = new PutPatientBackgroundDataResponse();
-            response.Success = false;
-            try
-            {
-                using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
-                {
-                    string background = string.Empty;
-                    if (!string.IsNullOrEmpty(request.Background))
-                    {
-                        background = request.Background;
-                    }
-                    
-                    FindAndModifyResult result = ctx.Patients.Collection.FindAndModify(MB.Query.EQ(MEPatient.IdProperty, ObjectId.Parse(request.PatientId)), MB.SortBy.Null,
-                                                new MB.UpdateBuilder()
-                                                .Set(MEPatient.BackgroundProperty, background)
-                                                .Set(MEPatient.UpdatedByProperty, ObjectId.Parse(this.UserId))
-                                                .Set(MEPatient.LastUpdatedOnProperty, DateTime.UtcNow));
-
-                    AuditHelper.LogDataAudit(this.UserId, 
-                                            MongoCollectionName.Patient.ToString(), 
-                                            request.PatientId, 
-                                            Common.DataAuditType.Update, 
-                                            request.ContractNumber);
-
-                    response.Success = true;
-                }
-                return response;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
-
         public object Update(PutUpdatePatientDataRequest request)
         {
             PutUpdatePatientDataResponse response = new PutUpdatePatientDataResponse();
@@ -533,6 +564,15 @@ namespace Phytel.API.DataDomain.Patient
                         else
                             updt.Set(MEPatient.SuffixProperty, request.PatientData.Suffix);
                     }
+
+                    if (request.PatientData.DataSource != null)
+                    {
+                        if (request.PatientData.DataSource == "\"\"" || (request.PatientData.DataSource == "\'\'"))
+                            updt.Set(MEPatient.DataSourceProperty, string.Empty);
+                        else
+                            updt.Set(MEPatient.DataSourceProperty, Helper.TrimAndLimit(request.PatientData.DataSource, 50));
+                    }
+
                     if (request.PatientData.PreferredName != null)
                     {
                         if (request.PatientData.PreferredName == "\"\"" || (request.PatientData.PreferredName == "\'\'"))
@@ -554,11 +594,13 @@ namespace Phytel.API.DataDomain.Patient
                         else
                             updt.Set(MEPatient.DOBProperty, request.PatientData.DOB);
                     }
+
                     if (request.PatientData.DisplayPatientSystemId != null)
                     {
                         if (ObjectId.Parse(request.PatientData.DisplayPatientSystemId) != null)
                             updt.Set(MEPatient.DisplayPatientSystemIdProperty, ObjectId.Parse(request.PatientData.DisplayPatientSystemId));
                     }
+
                     if (request.PatientData.FullSSN != null)
                     {
                         string fullSSN = request.PatientData.FullSSN.Trim().Replace("-", string.Empty);
@@ -601,6 +643,37 @@ namespace Phytel.API.DataDomain.Patient
                     updt.Set(MEPatient.TTLDateProperty, BsonNull.Value);
                     updt.Set(MEPatient.LastUpdatedOnProperty, System.DateTime.UtcNow);
                     updt.Set(MEPatient.PriorityProperty, request.PatientData.PriorityData);
+                    if (request.PatientData.Background != null)
+                    {
+                        updt.Set(MEPatient.BackgroundProperty, request.PatientData.Background);
+                    }
+                    if (request.PatientData.ClinicalBackground != null)
+                    {
+                        updt.Set(MEPatient.ClinicalBackgroundProperty, request.PatientData.ClinicalBackground);
+                    }
+                    if (!string.IsNullOrEmpty(request.PatientData.ReasonId))
+                    {
+                        updt.Set(MEPatient.ReasonProperty, ObjectId.Parse(request.PatientData.ReasonId));
+                    }
+                    else
+                    {
+                        updt.Set(MEPatient.ReasonProperty, BsonNull.Value);
+                    }
+                    if (!string.IsNullOrEmpty(request.PatientData.MaritalStatusId))
+                    {
+                        updt.Set(MEPatient.MaritalStatusProperty, ObjectId.Parse(request.PatientData.MaritalStatusId));
+                    }
+                    else
+                    {
+                        updt.Set(MEPatient.MaritalStatusProperty, BsonNull.Value);
+                    }
+                    updt.Set(MEPatient.ProtectedProperty, request.PatientData.Protected);
+                    updt.Set(MEPatient.DeceasedProperty, request.PatientData.DeceasedId);
+                    updt.Set(MEPatient.StatusProperty, request.PatientData.StatusId);
+                    if (request.PatientData.StatusDataSource != null)
+                    {
+                        updt.Set(MEPatient.StatusDataSourceProperty, Helper.TrimAndLimit(request.PatientData.StatusDataSource, 50));
+                    }
                     updt.Set(MEPatient.UpdatedByProperty, ObjectId.Parse(this.UserId));
                     updt.Set(MEPatient.VersionProperty, request.Version);
 

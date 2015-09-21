@@ -1,5 +1,6 @@
 ﻿using Phytel.API.DataDomain.Patient.DTO;
 using System;
+using System.Collections.Generic;
 namespace Phytel.API.DataDomain.Patient
 {
     public interface IPatientDataManager
@@ -13,7 +14,6 @@ namespace Phytel.API.DataDomain.Patient
         PutPatientDataResponse InsertPatient(PutPatientDataRequest request);
         PutUpdateCohortPatientViewResponse UpdateCohortPatientViewProblem(PutUpdateCohortPatientViewRequest request);
         PutUpdatePatientDataResponse UpdatePatient(PutUpdatePatientDataRequest request);
-        PutPatientBackgroundDataResponse UpdatePatientBackground(PutPatientBackgroundDataRequest request);
         PutPatientSystemIdDataResponse UpdatePatientSystem(PutPatientSystemIdDataRequest request);
         PutPatientFlaggedResponse UpdatePatientFlagged(PutPatientFlaggedRequest request);
         PutPatientPriorityResponse UpdatePatientPriority(PutPatientPriorityRequest request);
@@ -24,5 +24,6 @@ namespace Phytel.API.DataDomain.Patient
         UndoDeletePatientUsersDataResponse UndoDeletePatientUser(UndoDeletePatientUsersDataRequest request);
         UndoDeleteCohortPatientViewDataResponse UndoDeleteCohortPatientView(UndoDeleteCohortPatientViewDataRequest request);
         PutInitializePatientDataResponse InitializePatient(PutInitializePatientDataRequest request);
+        List<PatientData> GetAllPatients(GetAllPatientsDataRequest request);
     }
 }
