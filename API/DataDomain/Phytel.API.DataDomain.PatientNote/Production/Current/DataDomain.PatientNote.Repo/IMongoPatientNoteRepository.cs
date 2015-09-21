@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 using Phytel.API.DataDomain.PatientNote.DTO;
 using Phytel.API.Interface;
 
-namespace Phytel.API.DataDomain.PatientNote
+namespace Phytel.API.DataDomain.PatientNote.Repo
 {
-    public interface IPatientNoteRepository : IRepository
+    public interface IMongoPatientNoteRepository : IRepository
     {
         IEnumerable<object> FindByPatientId(object request);
         void RemoveProgram(object entity, List<string> updatedProgramIds);
