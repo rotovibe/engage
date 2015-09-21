@@ -83,5 +83,21 @@ namespace Phytel.API.DataDomain.Medication.Service
             }
             return response;
         }
+
+        public DeleteMedicationMapsDataResponse Delete(DeleteMedicationMapsDataRequest request)
+        {
+            DeleteMedicationMapsDataResponse response = new DeleteMedicationMapsDataResponse();
+            try
+            {
+                RequireUserId(request);
+                Manager.DeleteMedicationMaps(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                RaiseException(response, ex);
+            }
+            return response;
+        }
     }
 }

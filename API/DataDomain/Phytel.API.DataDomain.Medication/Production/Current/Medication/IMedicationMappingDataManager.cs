@@ -10,5 +10,6 @@ namespace Phytel.API.DataDomain.Medication
         MedicationMapData UpdateMedicationMap(PutMedicationMapDataRequest request);
         List<MedicationMapData> GetMedicationMap(GetMedicationMapDataRequest request);
         List<MedicationMapData> DeleteMedicationMaps(PutDeleteMedMapDataRequest request);
+        void DeleteMedicationMaps(DeleteMedicationMapsDataRequest request);
     }
 }

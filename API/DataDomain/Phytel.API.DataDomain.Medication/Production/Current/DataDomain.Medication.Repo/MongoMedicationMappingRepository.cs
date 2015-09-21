@@ -121,15 +121,29 @@ namespace DataDomain.Medication.Repo
 
         public void Delete(object entity)
         {
+            DeleteMedicationMapsDataRequest request = (DeleteMedicationMapsDataRequest)entity;
             try
             {
-                string id = (string)entity;
-                if (!string.IsNullOrEmpty(id))
+                using (MedicationMongoContext ctx = new MedicationMongoContext(ContractDBName))
                 {
-                    Context.MedicationMaps.Collection.Remove(Query<MEMedicationMapping>.EQ(b => b.Id, ObjectId.Parse(id)));
+                    var query = MB.Query<MEMedicationMapping>.EQ(b => b.Id, ObjectId.Parse(request.Id));
+                    var builder = new List<MB.UpdateBuilder>();
+                    builder.Add(MB.Update.Set(MEMedicationMapping.TTLDateProperty, DateTime.UtcNow.AddDays(_expireDays)));
+                    builder.Add(MB.Update.Set(MEMedicationMapping.DeleteFlagProperty, true));
+                    builder.Add(MB.Update.Set(MEMedicationMapping.LastUpdatedOnProperty, DateTime.UtcNow));
+                    builder.Add(MB.Update.Set(MEMedicationMapping.UpdatedByProperty, ObjectId.Parse(this.UserId)));
+
+                    IMongoUpdate update = MB.Update.Combine(builder);
+                    ctx.MedicationMaps.Collection.Update(query, update);
+
+                    AuditHelper.LogDataAudit(this.UserId,
+                                            MongoCollectionName.MedicationMap.ToString(),
+                                            request.Id.ToString(),
+                                            DataAuditType.Delete,
+                                            request.ContractNumber);
                 }
             }
-            catch (Exception ex) { throw ex; }
+            catch (Exception) { throw; }
         }
 
         public void DeleteAll(List<object> entities)
@@ -168,7 +182,7 @@ namespace DataDomain.Medication.Repo
                     List<IMongoQuery> queries = new List<IMongoQuery>();
                     if (!string.IsNullOrEmpty(dataRequest.Name))
                     {
-                        queries.Add(Query.EQ(MEMedicationMapping.FullNameProperty, dataRequest.Name));
+                        queries.Add(Query.EQ(MEMedicationMapping.FullNameProperty, dataRequest.Name.ToUpper()));
                     }
                     if (!string.IsNullOrEmpty(dataRequest.Route))
                     {
@@ -182,15 +196,31 @@ namespace DataDomain.Medication.Repo
                     {
                         queries.Add(Query.EQ(MEMedicationMapping.StrengthProperty, dataRequest.Strength));
                     }
+                    if (dataRequest.Type  != 0)
+                    {
+                        if (dataRequest.Type == 1)
+                        {
+                            queries.Add(Query.EQ(MEMedicationMapping.CustomProperty, false));
+                        }
+                        else if(dataRequest.Type == 2)
+                        {
+                            queries.Add(Query.EQ(MEMedicationMapping.CustomProperty, true));
+                        }
+                    }
                     queries.Add(Query.EQ(MEMedicationMapping.DeleteFlagProperty, false));
                     queries.Add(Query.EQ(MEMedicationMapping.TTLDateProperty, BsonNull.Value));
                     IMongoQuery mQuery = Query.And(queries);
-                    List<MEMedicationMapping> meMMs = ctx.MedicationMaps.Collection.Find(mQuery).SetFields(
-                            MEMedicationMapping.IdProperty,
-                            MEMedicationMapping.FullNameProperty,
-                            MEMedicationMapping.RouteProperty,
-                            MEMedicationMapping.StrengthProperty,
-                            MEMedicationMapping.FormProperty).ToList();
+                    string[] fields = { MEMedicationMapping.IdProperty, MEMedicationMapping.FullNameProperty, MEMedicationMapping.RouteProperty,MEMedicationMapping.StrengthProperty,MEMedicationMapping.FormProperty,MEMedicationMapping.CustomProperty };
+                    List<MEMedicationMapping> meMMs = null;
+                    if (dataRequest.Skip == 0 && dataRequest.Take == 0)
+                    {
+                        meMMs = ctx.MedicationMaps.Collection.Find(mQuery).SetFields(fields).ToList();
+                    }
+                    else
+                    {
+                        meMMs = ctx.MedicationMaps.Collection.Find(mQuery).SetFields(fields).SetSkip(dataRequest.Skip).SetLimit(dataRequest.Take).ToList();
+                    }
+                    
                     if (meMMs != null && meMMs.Count > 0)
                     {
                         list = new List<MedicationMapData>();
