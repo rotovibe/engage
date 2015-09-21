@@ -34,7 +34,7 @@
       }).extend({ throttle: 50 });
       // self.showActions = self.settings.hasOwnProperty('showActions') ? self.settings.showActions : self.showing;
       // self.saveFocusProblems = self.settings.saveFocusProblems || function () { return false; };
-      // self.cancelFocusProblems = self.settings.cancelFocusProblems || function () { return false; };
+      // self.cancelFocusProblems = self.settings.cancelFocusProblems || function () { return false; };	  	  
     };
 
     ctor.prototype.attached = function () {

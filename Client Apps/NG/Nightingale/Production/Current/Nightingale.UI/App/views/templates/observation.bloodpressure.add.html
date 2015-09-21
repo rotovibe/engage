@@ -1,21 +1,27 @@
-﻿<div class="row pad top" data-bind="with: observation">
+<div class="row pad top" data-bind="with: observation">
     <div class="span2">
         <span data-bind="text: name, attr: { title: name }"></span> <span data-bind="with: units">(<span data-bind="text: $data, attr: { title: $data }"></span>)</span>
     </div>
-    <div class="span4">
+    <div class="span3">
         <div class="row">
             <div class="span6" data-bind="with: $parent.systolicObservationValue">
-                <input type="text" data-bind="value: value, valueUpdate: 'afterkeydown', css: { 'invalid': (!value() && (value() || $parent.startDate())) }">
+                <input type="text" placeholder="Systolic" data-bind="value: value, valueUpdate: 'afterkeydown', css: { 'invalid': ($parent.validationErrorsArray().indexOf('systolic') !== -1) }">
             </div>
             <div class="span6" data-bind="with: $parent.diastolicObservationValue">
-                <input type="text" data-bind="value: value, valueUpdate: 'afterkeydown', css: { 'invalid': (!value() && (value() || $parent.startDate())) }">
+                <input type="text" placeholder="Diastolic" data-bind="value: value, valueUpdate: 'afterkeydown', css: { 'invalid': ($parent.validationErrorsArray().indexOf('diastolic') !== -1) }">
             </div>
         </div>
     </div>
-    <div class="span3">
-        <input class="datepicker" type="text" readonly="readonly" data-bind="datepicker: startDate, datepickerOptions: { maxDate: '+0' }, css: { 'invalid': (($parent.diastolicObservationValue() && $parent.diastolicObservationValue().value() || $parent.systolicObservationValue() && $parent.systolicObservationValue().value()) && !moment(startDate()).isValid()) }" />
+    <div class="span3">        
+		<!-- ko compose: { model: 'viewmodels/templates/datetimepicker', activationData:
+			{
+				observableDateTime: startDate, dateErrors: startDateErrors, showInvalid: setInvalidStartDate, 
+				maxDate: 'today', datepickerOptions:{ maxDate: '+0' }, datepickerDynamicOptions: {}, dateName: 'startDate'
+			}
+		} -->
+		<!-- /ko -->
     </div>
-    <div class="span2">
+    <div class="span3">
         <label>
             <span data-bind="text: $parent.customBPString, attr: { title: $parent.customBPString }"></span>
         </label>

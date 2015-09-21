@@ -1,6 +1,6 @@
 // Register all of the user related models in the entity manager (initialize function) and provide other non-entity models
-define(['services/session'],
-	function (session) {
+define(['services/session', 'services/dateHelper'],
+	function (session, dateHelper) {
 
 	    var datacontext;
 
@@ -94,6 +94,82 @@ define(['services/session'],
 		            }
 		            return thisString;
 		        });
+				
+				allergy.startDateErrors = ko.observableArray([]);	//datetimepicker validation errors 
+				allergy.endDateErrors = ko.observableArray([]);	//datetimepicker validation errors 
+				allergy.validationErrors = ko.observableArray([]);
+				allergy.isValid = ko.computed( function() {
+					var hasErrors = false;
+					var allergyErrors = [];
+					var context = {maxDate: 'today'};
+					var startDate = allergy.startDate();
+					var endDate = allergy.endDate();
+					var startDateErrors = allergy.startDateErrors();
+					var endDateErrors = allergy.endDateErrors();
+					if( startDateErrors.length > 0 ){
+						//datetimepicker validation errors: 
+						ko.utils.arrayForEach( startDateErrors, function(error){
+							allergyErrors.push({ PropName: 'startDate', Message: allergy.allergyName() + ' Start Date ' + error.Message});
+							hasErrors = true;
+						});						
+					}
+					if( endDate ){
+						if( endDateErrors.length > 0 ){						
+							ko.utils.arrayForEach( endDateErrors, function(error){
+								allergyErrors.push({ PropName: 'endDate', Message: allergy.allergyName() + ' End Date ' + error.Message});
+								hasErrors = true;
+							});
+						}						
+						if( startDateErrors.length == 0 && endDateErrors.length == 0 && startDate && endDate ){
+							//startDate - endDate range: both dates exist and valid:
+							if( moment(startDate).isAfter( moment( endDate ) ) ){
+								allergyErrors.push({ PropName: 'endDate', Message: allergy.allergyName() + ' End Date must be on or after: ' + moment( startDate ).format("MM/DD/YYYY") });
+								allergyErrors.push({ PropName: 'startDate', Message: allergy.allergyName() + ' Start Date must be on or before: ' + moment( endDate ).format("MM/DD/YYYY") });
+								hasErrors = true;
+							}
+						}
+					}					
+					allergy.validationErrors(allergyErrors);
+					return !hasErrors;
+				});
+				
+				/**
+				*	computed. tracks for any validation errors and returns a list of the errored property names.
+				*	this will be used in the property field css binding condition for invalid styling.
+				*	@method allergy.validationErrorsArray
+				*/
+			    allergy.validationErrorsArray = ko.computed(function () {
+			        var thisArray = [];
+			        ko.utils.arrayForEach(allergy.validationErrors(), function (error) {
+			            thisArray.push(error.PropName);
+			        });
+			        return thisArray;
+			    });
+				
+				/**
+				*	computed. to allow forcing the datetimepicker control to set the start date as invalid.
+				*	this is needed when the date is valid but range is wrong.
+				*	@method allergy.setInvalidStartDate
+				*/
+				allergy.setInvalidStartDate = ko.computed( function(){
+					var validationErrorsArray = allergy.validationErrorsArray();
+					return (validationErrorsArray && validationErrorsArray.indexOf('startDate') !== -1);  
+				}); 
+								/**
+				*	computed. to allow forcing the datetimepicker control to set the end date as invalid.
+				*	this is needed when the date is valid but range is wrong.
+				*	@method allergy.setInvalidEndDate
+				*/
+
+				allergy.setInvalidEndDate = ko.computed( function(){
+					var validationErrorsArray = allergy.validationErrorsArray();
+					return (validationErrorsArray && validationErrorsArray.indexOf('endDate') !== -1);  
+				});
+				
+				allergy.needToSave = function(){
+					var result = (allergy.entityAspect.entityState.isModified() || allergy.isNew()) && allergy.sourceId();									
+					return result;
+				}
                 allergy.reactionString = ko.computed(function () {
 		            checkDataContext();
 		            var thisString = '';

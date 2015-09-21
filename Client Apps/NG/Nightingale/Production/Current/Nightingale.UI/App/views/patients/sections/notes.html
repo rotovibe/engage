@@ -12,12 +12,7 @@
             <span data-bind="if: !type()">-</span>
         </div>
         <div class="span5 ellipsis" data-bind="text: displayText, attr: { 'title': text }"></div>
-        <div class="span2 grey ellipsis"><span data-bind="with: createdBy"><span data-bind="text: preferredName, attr: { 'title': preferredName }"></span></span></div>
-        <div class="span1">
-            <a href="#" data-bind="click: $parents[1].deleteNote, clickBubble: false">
-                <i class="icon-cancel red"></i>
-            </a>
-        </div>
+        <div class="span3 grey ellipsis"><span data-bind="with: createdBy"><span data-bind="text: preferredName, attr: { 'title': preferredName }"></span></span></div>        
     </div>
     <!-- /ko -->
 </section>

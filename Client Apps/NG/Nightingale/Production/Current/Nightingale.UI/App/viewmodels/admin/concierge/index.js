@@ -28,6 +28,8 @@ define(['viewmodels/shell/shell', 'models/base', 'services/datacontext'],
 
             function indReturned(data) {
                 newPatient().isNew(true);
+				newPatient().statusId('1'); //active										
+				newPatient().statusDataSource('Engage');
                 var modal = new modelConfig.modal('Create Individual', newPatient, 'templates/patient.html', createModalShowing);
                 shell.currentModal(modal);
                 createModalShowing(true);

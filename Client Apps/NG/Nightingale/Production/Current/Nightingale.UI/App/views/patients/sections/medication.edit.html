@@ -54,14 +54,26 @@
         <div class="span2 align-right grey">
             Start Date:
         </div>
-        <div class="span3 pad-left">
-        	<input data-bind="datepicker: startDate, datepickerOptions: { maxDate: '+0' }" type="text" class="datepicker" readonly="readonly">
+        <div class="span3 pad-left"> 
+			<!-- ko compose: { model: 'viewmodels/templates/datetimepicker', activationData:
+				{
+					observableDateTime: startDate, dateErrors: startDateErrors, showInvalid: $parent.setInvalidStartDate, 
+					datepickerOptions:{}, datepickerDynamicOptions: {}, dateName: 'startDate'
+				}
+			} -->
+			<!-- /ko -->			
         </div>
         <div class="span2 align-right grey">
             End Date:
         </div>
-        <div class="span3 pad-left">
-        	<input data-bind="datepicker: endDate, datepickerDynamicOptions: { minDate: startDate }" type="text" class="datepicker" readonly="readonly">
+        <div class="span3 pad-left">        	
+			<!-- ko compose: { model: 'viewmodels/templates/datetimepicker', activationData:
+				{
+					observableDateTime: endDate, dateErrors: endDateErrors, showInvalid: $parent.setInvalidEndDate, 
+					datepickerOptions:{}, datepickerDynamicOptions: {minDate: startDate}, dateName: 'endDate'
+				}
+			} -->
+			<!-- /ko -->
         </div>
     </div>
     <div class="row pad-top divider filters">       

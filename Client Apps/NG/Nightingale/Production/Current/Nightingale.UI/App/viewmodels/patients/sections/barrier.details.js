@@ -35,13 +35,10 @@
                     var thisGoal = barrier.goal();
                     // Remove the barrier from the task list
                     ko.utils.arrayForEach(barrier.goal().tasks(), function (task) {
-                        console.log('Check this tasks barriers - ', task.barrierIds());
                         var thisTaskBarrierId = ko.utils.arrayFirst(task.barrierIds(), function (barId) {
-                            console.log('Check this barrier id - ', barId.id());
                             // If the barrier id is equal to this barrier id,
                             return barId.id() === barrier.id();
-                        });
-                        console.log('Found a related id - ', thisTaskBarrierId);
+                        });s
                         // If a barrier id is returned,
                         if (thisTaskBarrierId) {
                             // Remove it from the list

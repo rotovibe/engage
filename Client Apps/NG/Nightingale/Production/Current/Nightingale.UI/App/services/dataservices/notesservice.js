@@ -16,24 +16,54 @@
         // Create an object to use to reveal functions from this module
         var contactService = {
             saveNote: saveNote,
+						getNote: getNote,
             deleteNote: deleteNote,
             saveToDo: saveToDo,
             getToDos: getToDos,
             getToDosQuery: getToDosQuery
         };
         return contactService;
-        
+
         // POST to the server, check the results for entities
-        function saveNote(manager, serializedNote) {
+        function saveNote(manager, serializedNote, type) {
 
             // If there is no manager, we can't query using breeze
             if (!manager) { throw new Error("[manager] cannot be a null parameter"); }
-
+			var receivingEntityType = '';
             // Check if the datacontext is available, if so require it
             checkDataContext();
 
             // Create an end point to use
-            var endPoint = new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'Patient/' + serializedNote.PatientId + '/Note/Insert', 'Note');
+			var endPoint;
+			var method = 'POST'
+			var isInsert = false;
+			if( !isNaN(serializedNote.Id) && Number(serializedNote.Id) < 1 ){
+				isInsert = true;
+				if( type && type.toLowerCase() === 'utilization' ){
+					serializedNote.Id = null;
+					//different endpoint for utilization note type
+					endPoint = new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'Patient/' + serializedNote.PatientId + '/Notes/Utilizations', 'Utilization');
+					receivingEntityType = 'Note';
+				}
+				else{
+					endPoint = new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'Patient/' + serializedNote.PatientId + '/Note/Insert', 'Note');
+					receivingEntityType = 'Note';
+				}
+			}
+			else{
+				//update:
+				if( type && type.toLowerCase() === 'utilization' ){
+					//different endpoint for utilization note type
+					endPoint = new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'Patient/' + serializedNote.PatientId + '/Notes/Utilizations/' + String(serializedNote.Id) , 'Utilization');
+					receivingEntityType = 'Note';
+				}
+				else{
+					endPoint = new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'Patient/' + serializedNote.PatientId + '/Note/' + String(serializedNote.Id) , 'PatientNote');
+					receivingEntityType = 'Note';
+				}
+				method = 'PUT';
+			}
+
 
             // If there is a contact card,
             if (serializedNote) {
@@ -41,18 +71,23 @@
                 // Create a payload from the JS object
                 var payload = {};
 
-                payload.Note = serializedNote;
+                payload[endPoint.EntityType] = serializedNote;	//insert Note: "Note" ; update Note: "PatientNote" ; Utilization- insert/update: "Utilization"
                 payload = JSON.stringify(payload);
 
                 // Query to post the results
                 var query = breeze.EntityQuery
-                    .from(endPoint.ResourcePath)
+                    .from(endPoint.ResourcePath).toType('Note')
                     .withParameters({
-                        $method: 'POST',
+                        $method: method,
                         $encoding: 'JSON',
                         $data: payload
                     });
-                
+
+				//	breeze comment: this call is done for 'Utilization, 'Note' and 'PatientNote' endpoints.
+				//	'Note' and 'PatientNote' endpoints are not returning the whole object. only the id.
+				//	this is Y in this case we do not delete the observable used to hold the new "note" entity
+				//	and replace it by the returned (.toType).
+
                 //return query.execute().then(saveSucceeded).fail(postFailed);
                 return manager.executeQuery(query).then(saveSucceeded).fail(postFailed);
             }
@@ -70,8 +105,17 @@
             // Check if the datacontext is available, if so require it
             checkDataContext();
 
+			var method = 'POST';
+			var endPoint = null;
             // Create an end point to use
-            var endPoint = new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'Patient/' + note.patientId() + '/Note/' + note.id() + '/Delete', 'Note');
+			if( note.type() && note.type().name().toLowerCase() === 'utilization' ){
+				//different endpoint for utilization note type
+				endPoint = new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'Patient/' + note.PatientId + '/Notes/Utilizations/' + note.id(), 'Note');
+				method = 'DELETE';
+			}
+			else{
+				endPoint = new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'Patient/' + note.patientId() + '/Note/' + note.id() + '/Delete', 'Note');
+			}
 
             // Create a payload from the JS object
             var payload = {};
@@ -82,7 +126,7 @@
             var query = breeze.EntityQuery
                 .from(endPoint.ResourcePath)
                 .withParameters({
-                    $method: 'POST',
+                    $method: method,
                     $encoding: 'JSON',
                     $data: payload
                 });
@@ -93,6 +137,56 @@
                 return data.httpResponse.data;
             }
         }
+		/**
+		*	get note by id. initialy intended to load the full object of utilization type note only.
+		*	as notes list in history are retrieved through the note endpoint, they are retrieving only some of the utilization props.
+		*	@method getNote
+		*	@param manager datacontext manager
+		*	@param id {string}
+		*	@param type {string} the note type name (examples: utilization, general touchpoint etc. )
+		*	@param observable optional. to keep the result
+		*/
+		function getNote( manager, id, patientId, type, observable ){
+			if( type && type.toLowerCase() === 'utilization' ){
+				checkDataContext();
+				// If there is no manager, we can't query using breeze
+				if (!manager) { throw new Error("[manager] cannot be a null parameter"); }
+
+				var endPoint = new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(),
+									'Patient/' + patientId + '/Notes/Utilizations/' + id, 'Note');
+
+				// Query to post the results
+				var query = breeze.EntityQuery
+					.from(endPoint.ResourcePath)
+					.withParameters({
+						$method: 'GET',
+						$encoding: 'JSON'
+					})
+					.toType('Note');
+
+				return manager.executeQuery(query).then(querySucceeded).fail(queryFailed);
+			}
+
+			function querySucceeded(data) {
+				var s = data.results;
+				if (observable) {
+					return observable(s);
+				} else {
+					return s;
+				}
+			}
+
+			function queryFailed(error) {
+				console.log(error);
+				checkDataContext();
+				checkForFourOhOne(error);
+				var messager = 'Failed to load ' + entityType + ' from server.';
+				var thisAlert = datacontext.createEntity('Alert', { result: 0, reason: messager });
+				thisAlert.entityAspect.acceptChanges();
+				datacontext.alerts.push(thisAlert);
+				return false;
+			}
+		}
 
         // POST to the server, check the results for entities
         function saveToDo(manager, serializedToDo, verb) {
@@ -124,7 +218,7 @@
                         $encoding: 'JSON',
                         $data: payload
                     });
-                
+
                 //return query.execute().then(saveSucceeded).fail(postFailed);
                 return manager.executeQuery(query).then(saveSucceeded).fail(postFailed);
             }
@@ -133,14 +227,14 @@
                 if (data.results && data.results.length > 0) {
                     return data.results[0];
                 } else {
-                    return data.httpResponse.data;   
+                    return data.httpResponse.data;
                 }
             }
         }
 
         function postFailed(error) {
             checkDataContext();
-            console.log('Error - ', error);            
+            console.log('Error - ', error);
             var thisAlert = datacontext.createEntity('Alert', { result: 0, reason: 'Save failed!' });
             thisAlert.entityAspect.acceptChanges();
             datacontext.alerts.push(thisAlert);
@@ -185,7 +279,7 @@
                     $data: payload
                 })
                 .toType('ToDo');
-            
+
             return manager.executeQuery(query).then(querySucceeded).fail(queryFailed);
 
             function querySucceeded(data) {
@@ -221,7 +315,7 @@
 
             // If there is an orderBy
             if (orderString) {
-                // Add it                
+                // Add it
                 query = query.orderBy(orderString);
             }
 

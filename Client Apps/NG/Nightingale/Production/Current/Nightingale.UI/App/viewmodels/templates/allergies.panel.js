@@ -70,9 +70,13 @@
             self.toggleSort = data.toggleSort;
             self.canSort = data.canSort ? data.canSort : false;
             self.saveOverride = function () {
-                // Save it
-                datacontext.saveAllergies([self.modalEntity().allergy()], 'Update').then(saveCompleted);
-
+                // Edit Existing Allergy: Save it if its valid. if not - cancel any chages (silently !)
+				if ( self.modalEntity().allergy().isValid() ){
+					datacontext.saveAllergies([self.modalEntity().allergy()], 'Update').then(saveCompleted);	
+				} else{
+					self.cancelOverride()
+				}
+                
                 function saveCompleted() {
                     self.modalEntity().allergy().isNew(false);
                     self.modalEntity().allergy().isUserCreated(false);

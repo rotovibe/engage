@@ -1,11 +1,16 @@
-﻿// Register all of the user related models in the entity manager (initialize function) and provide other non-entity models
-define(['services/session'],
-	function (session) {
+﻿
+/**
+*	
+*	Register all of the user related models in the entity manager (initialize function) and provide other non-entity models
+*	@module contactCard
+*/
+define(['services/session', 'services/validatorfactory', 'services/customvalidators'],
+	function (session, validatorFactory, customValidators) {		
 
 	    var datacontext;
-
 		var DT = breeze.DataType;
-
+		var Validator = breeze.Validator;				
+		
 		// Expose the model module to the requiring modules
 		var contactModels = {
 		    initialize: initialize
@@ -50,15 +55,16 @@ define(['services/session'],
 		        isComplexType: true,
 		        dataProperties: {
 		            id: { dataType: "String" },
-		            number: { dataType: "Int64" },
+		            number: { dataType: "String" },
 		            typeId: { dataType: "String" },
 		            optOut: { dataType: "Boolean" },
 		            isText: { dataType: "Boolean" },
 		            phonePreferred: { dataType: "Boolean" },
-		            textPreferred: { dataType: "Boolean" }
+		            textPreferred: { dataType: "Boolean" },
+					dataSource: { dataType: "String"}					
 		        }
-		    });
-
+		    });			
+			
 		    // Email complex type
 		    metadataStore.addEntityType({
 		        shortName: "Email",
@@ -238,9 +244,10 @@ define(['services/session'],
 		            	// Add a new phone record
 			            var nextId = ((contactCard.phones().length + 1) * -1);
 			            var defaultTypeId = datacontext.enums.phoneTypes()[0].id();
-			            var newPhone = datacontext.createComplexType('Phone', { id: nextId, typeId: defaultTypeId });
+			            var newPhone = datacontext.createComplexType('Phone', { id: nextId, typeId: defaultTypeId, dataSource: "Engage" });
+						newPhone.isFocused(true);
 			            contactCard.phones.push(newPhone);		            	
-		            }
+		            }					
 		        }
 		        contactCard.removePhone = function (phone) {
 		            contactCard.phones.remove(phone);
@@ -522,10 +529,50 @@ define(['services/session'],
 		            });
 		            return returnValue;
 		        });
-
+				
+				//validation:				
+				contactCard.phoneValidationErrors = ko.observableArray([]);				
+				
+				/**
+				*	computed. tracks for any validation errors on all tabs of the contact card.
+				*	@method isValid 
+				*/
+				contactCard.isValid = ko.computed(function(){
+					
+					//TODO: combine logic with other tabs errors										
+					return !hasPhoneErrors();	
+					
+					/**
+					*	validates all phones in the contact card phones collection.					
+					*	@method hasPhoneErrors
+					*/
+					function hasPhoneErrors(){
+						var phoneErrors = [];
+						var errorsFound = false;
+						ko.utils.arrayForEach( contactCard.phones(), function(phone){
+							phone.validate();
+							var isValid = phone.isValid();
+							if( !isValid ){
+								phoneErrors.push({Message: phone.validationMessage()});
+								errorsFound = true;
+							}
+						});
+						contactCard.phoneValidationErrors(phoneErrors);	
+						return errorsFound;
+					}
+				});
+				
+			    contactCard.phoneValidationErrorsArray = ko.computed(function () {
+			        var thisArray = [];
+			        ko.utils.arrayForEach(contactCard.phoneValidationErrors(), function (error) {
+			            thisArray.push(error.PropName + error.Value);
+			        });
+			        return thisArray;
+			    });
+				
 		        // Can the contact card save?  Fake validation goes here
 		        contactCard.canSave = ko.computed(function () {
-		            return true;
+		            return contactCard.isValid();
 		        });
 		        // Method to save changes to the patient
 		        contactCard.saveChanges = function () {
@@ -582,10 +629,41 @@ define(['services/session'],
 		            var thisPhoneNumber = phone.number();
 		            if (thisPhoneNumber) {
 		                thisPhoneNumber = thisPhoneNumber.toString();
-		                return thisPhoneNumber.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
+		                return thisPhoneNumber.replace(/(\d{3})-?(\d{3})-?(\d{4})/, '($1) $2-$3');
 		            }
 		            return null;
 		        });
+				phone.isValid = ko.observable(true);
+				phone.validationMessage = ko.observable();
+				
+				/**
+				*	validate a phone number. include generating error message into phone.validationMessage.
+				*	( note that this works better than breeze custom validation ).
+				*	@method phone.validate
+				*/
+				phone.validate = function(){
+					if( phone.number() && phone.number().match(/^\d{3}-?\d{3}-?\d{4}$/) ){
+						phone.isValid(true);
+						phone.validationMessage(null);
+						return true;
+					}
+					else{
+						phone.isValid(false);
+						var msg;
+						if(phone.number() && phone.number().length > 0){														
+							msg = phone.number() + ' is not a valid Phone Number';
+							if( phone.number().length < 12 ){
+								msg += ' (must have 10 digits)';
+							}
+						}
+						else {
+							msg = 'Phone Number is required';
+						}
+						phone.validationMessage( msg );
+						return false;
+					}
+				}
+				phone.isFocused = ko.observable(false);				
 		    }
 
 		    function emailInitializer(email) {

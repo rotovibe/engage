@@ -1,6 +1,10 @@
 ﻿/**
  * medication.edit manages patientMedication (add/edit) and also adding a new medication (medicationMap).
- *
+ * notes:
+ *		1. the medication name is also used as a typeahead search and this needs to be changed when we will have to redesign for 
+ *			adding multiple medications. the preffered design is to follow allergies so that the search box is a separate tool 
+ *			and not part of the med record binding.
+ *		
  * @module medication.edit
  * @class medication.edit
  */
@@ -172,7 +176,34 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
       self.isCreateNewEnabled = ko.observable(false);	  
       self.isDropdownEnabled = ko.observable(false);
 	  self.isNewMedicationName = ko.observable(false);
-	  self.screenMode = ko.observable(screenModes.NoMedSelected);	
+	  
+		/**
+		*	computed. to allow forcing the datetimepicker control to set the start date as invalid.
+		*	this is needed when the date is valid but range is wrong.
+		*	@method setInvalidStartDate
+		*/
+	  self.setInvalidStartDate = ko.computed( function(){
+			return (!self.newPatientMedication() || self.newPatientMedication() && self.newPatientMedication().validationErrorsArray().indexOf('startDate') !== -1);  
+	  }); 
+		/**
+		*	computed. to allow forcing the datetimepicker control to set the end date as invalid.
+		*	this is needed when the date is valid but range is wrong.
+		*	@method setInvalidEndDate
+		*/
+	  self.setInvalidEndDate = ko.computed( function(){
+			return (!self.newPatientMedication() || self.newPatientMedication() && self.newPatientMedication().validationErrorsArray().indexOf('endDate') !== -1);  
+	  }); 
+	  
+	  if( self.newPatientMedication() && self.newPatientMedication().name() && self.newPatientMedication().canSave() ){
+		//a med is selected, going back to medications screen  
+		self.lastMedName = self.newPatientMedication().name();
+		self.screenMode = ko.observable(screenModes.MedSelected);	  		
+	  }
+	  else{
+		self.lastMedName = '';  
+		self.screenMode = ko.observable(screenModes.NoMedSelected);	
+	  }
+	  
       /**
        * computed - controls if the save will skip and ignor or call the api services
        * the value tracks the screen mode and will allow saving only if a medication 
@@ -212,7 +243,8 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
           return thisValue;
         }
       }).extend({ throttle: 200 });
-      self.medicationBloodhound = new Bloodhound({
+      
+	  self.medicationBloodhound = new Bloodhound({
         datumTokenizer: function (d) {
           return Bloodhound.tokenizers.whitespace(d.name());
         },
@@ -315,9 +347,7 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
         self.dosageForms([]);
         self.strengths([]);            
         self.routes([]);        
-      };
-      
-      self.lastMedName = '';
+      };            
 
       self.ignoreMedicationNameChange = function(currentName, newName){
           //scenarios to ignore the medication name change:
@@ -357,7 +387,6 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
                 if(self.ignoreMedicationNameChange(self.lastMedName, medName)){                    
                     return false; 
                 }	
-				console.log('medication name changed: from:' +self.lastMedName +' to:' + (medName===null? 'null' : medName) )	
                 self.lastMedName = medName;                                 
 				self.screenMode(screenModes.NoMedSelected);
 				self.clearDropdowns();
@@ -386,7 +415,6 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
 													route){
 		    var isCustomValueCreated = null;			
 			if(mode === screenModes.AddNewMedValues){
-				console.log(' evaluating isCreateNewMedication in AddNewMedValues mode.');	
 				isCustomValueCreated = false;
 				if(isAddingNewRouteValue === true && self.isValidCustomOptionValue(route)){
 					isCustomValueCreated = true;			  					 
@@ -401,11 +429,9 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
 					//one or more of the dropdowns route/form/strength is turned to textbox -custom mode and it has a value.
 					//note - some other value could be in a textbox mode but empty.
 					thisMed.isCreateNewMedication(true); 
-					console.log(' isCreateNewMedication = true');			
 				}   
 				else{
 					thisMed.isCreateNewMedication(false);					  
-					console.log(' isCreateNewMedication = false');				  						
 				}
 			}			
 			return isCustomValueCreated;
@@ -490,12 +516,10 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
 			thisForm !== self.initialMedicationValues().form || 
 			thisRoute !== self.initialMedicationValues().route){
 				self.newPatientMedication().recalculateNDC(true);				
-				console.log('recalculateNDC set to true');
 				return true;
 		  }		  
 		  else{
 			  self.newPatientMedication().recalculateNDC(false);
-			  console.log('recalculateNDC set to false');
 			  return false;
 		  }	
 	  }).extend({ throttle: 200 });
@@ -575,7 +599,6 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
             $el.typeahead('val', suggestion.Text.toUpperCase());  //workaround: since typeahead is overriding the text on blur.            			
 			//flag to start a new medication map record                      
 			self.newPatientMedication().isCreateNewMedication(true);
-			console.log('new medication selected: isCreateNewMedication = true');			
 			
             //set the screen state:
             self.screenMode(screenModes.AddNewMed);
@@ -613,31 +636,30 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
     }
 
     ctor.prototype.detached = function() { 
-      var self = this;		
-		//console.log(' medication.edit - detached: isCreateNewMedication=' + self.newPatientMedication().isCreateNewMedication());
+		var self = this;		
 		
-        //dispose computeds:
-        //ctor.prototype.freqHowOftens.dispose();
-        ctor.prototype.freqWhens.dispose();
-        ctor.prototype.sources.dispose();
-        ctor.prototype.types.dispose();     
-        ctor.prototype.categories.dispose();
-        ctor.prototype.statuses.dispose();              
-        self.showing.dispose();
-        self.newPatientMedication.dispose();
-        self.trimmedMedication.dispose();
+		//dispose computeds:
+		//ctor.prototype.freqHowOftens.dispose();
+		ctor.prototype.freqWhens.dispose();
+		ctor.prototype.sources.dispose();
+		ctor.prototype.types.dispose();     
+		ctor.prototype.categories.dispose();
+		ctor.prototype.statuses.dispose();              
+		self.showing.dispose();
+		self.newPatientMedication.dispose();
+		self.trimmedMedication.dispose();
 		self.trimmedForm.dispose();
 		self.trimmedRoute.dispose();
 		self.trimmedStrength.dispose();
-        self.canAdd.dispose();
-        self.medicationNameWatcher.dispose();
+		self.canAdd.dispose();
+		self.medicationNameWatcher.dispose();
 		self.medicationParameters.dispose();
-        self.addingNewValue.dispose();
-        self.recalculateNDCWatcher.dispose();
-        //dispose subscriptions:
-        ko.utils.arrayForEach(subscriptionTokens, function (token) {
-            token.dispose();
-        });
+		self.addingNewValue.dispose();
+		self.recalculateNDCWatcher.dispose();
+		//dispose subscriptions:
+		ko.utils.arrayForEach(subscriptionTokens, function (token) {
+			token.dispose();
+		});
     }
     return ctor;
   });

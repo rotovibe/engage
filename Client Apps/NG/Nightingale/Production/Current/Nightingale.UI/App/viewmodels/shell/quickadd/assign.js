@@ -55,12 +55,13 @@
             self.saveAssign = function () {
                 if (self.selectedProgram()) {
                     self.isSaving(true);
-                    datacontext.saveChangesToPatientProperty(self.selectedPatient, 'Programs', null, [new modelConfig.Parameter('ContractProgramId', self.selectedProgram().id())]).then(programAssigned);
-                    function programAssigned() {
+					function programAssigned() {
                         self.isShowing(false);
                         self.isSaving(false);
                         self.selectedProgram(null);
                     }
+                    datacontext.saveChangesToPatientProperty(self.selectedPatient, 'Programs', null, [new modelConfig.Parameter('ContractProgramId', self.selectedProgram().id())])
+								.then(programAssigned);                    
                 }
             };
             self.canSave = ko.computed(function () {

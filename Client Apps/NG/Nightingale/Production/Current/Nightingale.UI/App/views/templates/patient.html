@@ -1,8 +1,5 @@
 ﻿<div class="body">
     <div class="row" data-bind="visible: isDuplicate">
-<!--         <p>
-            <i class="fa fa-exclamation-triangle"></i> <span>An individual by the same first name, last name and date of birth already exists.  Do you want to continue and create this individual?</span><button data-bind="click: forceSave">Proceed and Create</button>
-        </p> -->
         <span class="errorheader" style="margin-top: 10px; border: 1px solid; background: #fbcbc7; color: #871409; display: block; font-size: 11px; padding: 5px;">
             <a href="#">
                 <i class="icon-warning red"></i>
@@ -11,13 +8,8 @@
     <div class="row">
         <h2 class="span12" data-bind="text: fullName"></h2>
     </div>
-    <div class="row" data-bind="if: !isValid()">
-        <ul data-bind="foreach: validationErrors">
-            <li class="validation-errors">
-                <h5 data-bind="text: Message"></h5>
-            </li>
-        </ul>
-    </div>
+	<!-- ko compose: "templates/validation.errors.html" -->
+	<!-- /ko -->    
     <div class="row">
         <label class="span6">
             <span>First Name</span>
@@ -45,13 +37,19 @@
         </label>
         <label class="span6">
             <span>DOB</span>
-            <input type="text" data-bind="value: dOB, valueUpdate: 'afterkeydown'" placeholder="date of birth" />
+            <input type="text" data-bind="value: dOB, date: dOB, valueUpdate: 'afterkeydown', css: { invalid: (validationErrorsArray().indexOf('dOB') !== -1) }" />
         </label>
     </div>
     <div class="row">
         <label class="span6">
             <span>Override SSN - <span data-bind="with: formattedSSN">(<span data-bind="text: $data"></span>)</span>:</span>
-            <input type="text" data-bind="value: fullSSN" placeholder="full ssn" />
+            <input type="text" data-bind="ssn: fullSSN, value: fullSSN, valueUpdate: 'afterkeydown', css: { invalid: (validationErrorsArray().indexOf('fullSSN') !== -1) }" />
+        </label>
+        <label class="span6">
+        	<div class="row">
+            <span class="span5 line">Protected</span>
+            <div style="padding-top: 2%;" class="span4 line" data-bind="chsnsingle: { options:  $root.protectedStatuses, value: protected, text: 'Name', idValue: 'Id' }"></div>
+          </div>
         </label>
     </div>
     <div class="row">
@@ -71,6 +69,22 @@
                     <img style="vertical-align: middle;" data-bind="attr: { src: imageSource }">
                 </div>
                 <div style="padding-top: 2%;" class="span4 line" data-bind="chsnsingle: { options:  $root.priorities, value:  $parent.priority, text: 'levelName', idValue: 'id' }"></div>
+            </div>
+        </label>
+    </div>
+    <div class="row">
+        <label class="span6">
+            <div class="row">
+                <span class="span5 line">Marital Status</span>
+									<div style="padding-top: 2%;" class="span7 line" data-bind="chsnsingle: { options: $root.maritalStatuses, value: maritalStatusId, text: 'name', idValue: 'id', isCancel: true, caption: 'None Selected' }">
+									</div>
+            </div>
+        </label>
+        <label class="span6">
+            <div class="row">
+                <span class="span5 line">Deceased</span>
+                <div style="padding-top: 2%;" class="span4 line" data-bind="chsnsingle: { options:  $root.deceasedStatuses, value:  deceasedId, text: 'name', idValue: 'id', isCancel: true, caption: 'None Selected' }">
+                </div>
             </div>
         </label>
     </div>

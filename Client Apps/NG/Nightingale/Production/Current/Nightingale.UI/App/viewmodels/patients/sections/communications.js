@@ -114,6 +114,7 @@
                 self.isEditing(!self.isEditing());
                 self.isOpen(true);
             };
+			self.isValid = ko.observable(true);
         };
                 
         ctor.prototype.attached = function () {

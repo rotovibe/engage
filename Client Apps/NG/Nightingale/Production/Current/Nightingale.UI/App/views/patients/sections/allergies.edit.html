@@ -35,10 +35,22 @@
 	        	</div>
 	        </div>
 	        <div class="span2">
-        		<input data-bind="datepicker: startDate, datepickerOptions: { maxDate: '+0' }" type="text" class="datepicker" readonly="readonly">
+				<!-- ko compose: { model: 'viewmodels/templates/datetimepicker', activationData:
+					{
+						observableDateTime: startDate, dateErrors: startDateErrors, showInvalid: setInvalidStartDate, 
+						maxDate: 'today', datepickerOptions:{ maxDate: '+0' }, datepickerDynamicOptions: {}, dateName: 'startDate'
+					}
+				} -->
+				<!-- /ko -->
 	        </div>
 	        <div class="span2">
-        		<input data-bind="datepicker: endDate, datepickerDynamicOptions: { minDate: startDate }" type="text" class="datepicker" readonly="readonly">
+				<!-- ko compose: { model: 'viewmodels/templates/datetimepicker', activationData:
+					{
+						observableDateTime: endDate, dateErrors: endDateErrors, showInvalid: setInvalidEndDate, 
+						maxDate: 'today', datepickerOptions:{maxDate: '+0'}, datepickerDynamicOptions: {minDate: startDate}, dateName: 'endDate'
+					}
+				} -->
+				<!-- /ko -->			        		
 	        </div>
 	        <div class="span2">
                 <div class="span12" data-bind="chsnsingle: { options: $parent.allergyStatuses, value: status, text: 'name', label: 'status' }"></div>

@@ -54,9 +54,8 @@
         var patientSystemEndPoint = ko.computed(function () {
             if (!session.currentUser()) {
                 return false;
-            }
-            // TODO: Update this end point
-            return new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'PatientSystem', 'PatientSystem');
+            }           
+            return new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'Patient', 'PatientSystem');
         });
 
         var patientAllergyEndPoint = ko.computed(function () {
@@ -90,7 +89,7 @@
             }
             return new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'Patient', 'Goal');
         });
-
+		
         var noteEndPoint = ko.computed(function () {
             if (!session.currentUser()) {
                 return false;
@@ -223,7 +222,7 @@
             // Go get a list of cohorts locally
             datacontext.getEntityList(cohortsList, cohortEndPoint().EntityType, cohortEndPoint().ResourcePath, null, null, false, null, 'sName').then(cohortsReturned);
             // On first load show the patients list flyout and open the data column
-            patientsListFlyoutOpen(true);
+            //patientsListFlyoutOpen(true);
             patientDataColumnOpen(true);
             // Subscribe to changes on the selected cohort to get an updated patient list when it changes
             selectedCohortToken = selectedCohort.subscribe(function () {
@@ -247,12 +246,11 @@
                 }
             });
             // Set the max patient count to the value of settings.TotalPatientCount, if it exists
-            if (session.currentUser().settings().length !== 0) {
-                ko.utils.arrayForEach(session.currentUser().settings(), function (setting) {
-                    if (setting.Key === 'TotalPatientCount') {
-                        maxPatientCount(parseInt(setting.Value));
-                    }
-                });
+            if (session.currentUser().settings()) {
+				var totalPatientCount = datacontext.getSettingsParam('TotalPatientCount');
+				if( totalPatientCount ){
+					maxPatientCount( parseInt( totalPatientCount ) );
+				}                
             }
             // Set initialized true so we don't accidentally re-initialize the view model
             initialized = true;
@@ -347,8 +345,23 @@
                 }
                 if (selectedPatient().notes.peek()) {
                     ko.utils.arrayForEach(selectedPatient().notes.peek(), function (note) {
-                        if (note.entityAspect.entityState.isAddedModifiedOrDeleted() && note.text()) {
-                            notesHaveChanges = true;
+                        if (note.entityAspect.entityState.isAddedModifiedOrDeleted()) {
+							switch( note.type().name().toLowerCase() ){
+								case 'utilization':{
+									var defaultVisitType = ko.utils.arrayFirst( datacontext.enums.visitTypes(), function (visitType) {
+										return visitType.isDefault();
+									});
+									if( note.visitType() && !defaultVisitType ){
+										notesHaveChanges = true;
+									}
+									break;
+								}
+								default:{
+									if( note.text() ){
+										notesHaveChanges = true;
+									}
+								}
+							}                            
                         }
                     });
                 }
@@ -401,71 +414,86 @@
                 }
             }
             var patientId;
-            // If there is a current patient and it is equal to the patient you are trying to set to current
-            if (selectedPatient() && selectedPatient() === patient) {
+			patientsListFlyoutOpen(false);
+            // If there is a current patient and it is equal to the patient you are trying to set to current			
+            if ( selectedPatient() && selectedPatient() === patient ) {
                 // Then do nothing (this is because we don't want to do anything if
-                // We have already selected our patient.
-                patientsListFlyoutOpen(false);
-            } else if (datacontext) {
+                // We have already selected our patient.                
+            } else if (datacontext) {					
                 if (patient.id) {
                     // Else go choose a new patient
                     patientId = ko.unwrap(patient.id);
                 } else {
                     patientId = patient;
-                }
-                // Go select a patient by their Id.
-                datacontext.getEntityById(selectedPatient, patientId, patientEndPoint().EntityType, patientEndPoint().ResourcePath, true).then(patientReturned);
-                // Go get a list of goals for the currently selected patient
-                datacontext.getEntityList(null, goalEndPoint().EntityType, goalEndPoint().ResourcePath + patientId + '/Goals', null, null, true, null, null, true);
-                // Go get a list of observations for the currently selected patient
-                datacontext.getEntityList(null, ObservationsEndPoint().EntityType, ObservationsEndPoint().ResourcePath + patientId + '/Observations/Current', null, null, true);
-                // Go get a list of notes for the currently selected patient
-                datacontext.getEntityList(null, noteEndPoint().EntityType, noteEndPoint().ResourcePath + patientId + '/Notes/100', null, null, true);
-                // Go get a list of care members for the currently selected patient
-                datacontext.getEntityList(null, careMemberEndPoint().EntityType, careMemberEndPoint().ResourcePath + patientId + '/CareMembers', null, null, true);
-            }
+                }				
 
+				var allPatientPromises = [];
+					// Go select a patient by their Id.
+					allPatientPromises.push( datacontext.getEntityById(selectedPatient, patientId, patientEndPoint().EntityType, patientEndPoint().ResourcePath, true));
+					// Go get a list of goals for the currently selected patient
+					allPatientPromises.push( datacontext.getEntityList(null, goalEndPoint().EntityType, goalEndPoint().ResourcePath + patientId + '/Goals', null, null, true, null, null, true));
+					// Go get a list of observations for the currently selected patient
+					allPatientPromises.push( datacontext.getEntityList(null, ObservationsEndPoint().EntityType, ObservationsEndPoint().ResourcePath + patientId + '/Observations/Current', null, null, true));
+					// Go get a list of notes for the currently selected patient
+					allPatientPromises.push( datacontext.getEntityList(null, noteEndPoint().EntityType, noteEndPoint().ResourcePath + patientId + '/Notes/100', null, null, true));
+					// Go get a list of care members for the currently selected patient
+					allPatientPromises.push( datacontext.getEntityList(null, careMemberEndPoint().EntityType, careMemberEndPoint().ResourcePath + patientId + '/CareMembers', null, null, true));
+ 
+				Q.all( allPatientPromises ).then( patientReturned ); 				
+            }
+			
             function patientReturned() {
+				var allPatientPromises = [];
                 // If we don't have the patients' programs yet,
                 if (selectedPatient() && selectedPatient().programs() && selectedPatient().programs().length === 0) {
                     // Go get a list of programs for the currently selected patient
-                    datacontext.getEntityList(null, patientProgramEndPoint().EntityType, patientProgramEndPoint().ResourcePath + patientId + '/Programs', null, null, true);
+                    allPatientPromises.push( datacontext.getEntityList(null, patientProgramEndPoint().EntityType, patientProgramEndPoint().ResourcePath + patientId + '/Programs', null, null, true) );
                 }
                 // Go get a list of patients todos
-                getPatientsToDos();
+                allPatientPromises.push( getPatientsToDos() );
                 // Go get a list of patients' interventions
-                getPatientsInterventions();
+                allPatientPromises.push( getPatientsInterventions() );
                 // Go get a list of patients' tasks
-                getPatientsTasks();
+                allPatientPromises.push( getPatientsTasks() );
                 // Add the patient to the recent individuals list
-                datacontext.addPatientToRecentList(selectedPatient());
+                allPatientPromises.push( datacontext.addPatientToRecentList(selectedPatient()) );
                 // Go get a list of contact cards for the currently selected patient
-                datacontext.getEntityList(null, contactCardEndPoint().EntityType, contactCardEndPoint().ResourcePath + patientId + '/Contact', null, null, true);
+                allPatientPromises.push( datacontext.getEntityList(null, contactCardEndPoint().EntityType, contactCardEndPoint().ResourcePath + patientId + '/Contact', null, null, true) );
                 // Go get a list of observations that are of type problem for the currently selected patient
-                datacontext.getEntityList(null, patientProblemEndPoint().EntityType, patientProblemEndPoint().ResourcePath + patientId + '/Observation/Problems', null, null, true);
+                allPatientPromises.push( datacontext.getEntityList(null, patientProblemEndPoint().EntityType, patientProblemEndPoint().ResourcePath + patientId + '/Observation/Problems', null, null, true) );
                 // Go get a list of allergies for the currently selected patient
-                getPatientsAllergies();
+                allPatientPromises.push( getPatientsAllergies() );
                 // Get a list of the patients various systems
-                datacontext.getEntityList(null, patientSystemEndPoint().EntityType, patientSystemEndPoint().ResourcePath + patientId, null, null, true);
+                allPatientPromises.push( datacontext.getEntityList(null, patientSystemEndPoint().EntityType, patientSystemEndPoint().ResourcePath + patientId + '/PatientSystems', null, null, true) );
 
                 // Go get a list of medications for the currently selected patient
-                getPatientMedications();
-
-				getPatientFrequencies();
+                allPatientPromises.push( getPatientMedications() );
+				allPatientPromises.push( getPatientFrequencies() );
 				
-                patientsListFlyoutOpen(false);
+				Q.all( allPatientPromises ).then( patientFullyLoaded );
+				                
                 router.navigate('#patients/' + patientId, false);
             }
         }
+		/**
+		*	after all patient related calls are completed, mark the patient as loaded (they are synched with Q.all ).
+		*	@method patientFullyLoaded
+		*/
+		function patientFullyLoaded(){					
+			selectedPatient().isLoaded(true);			
+		}
 
         function getPatientsToDos() {
             // Calculated thirty days ago
             var thirtyDaysAgo = new Date(new Date().setDate(new Date().getDate()-30));
             thirtyDaysAgo = moment(thirtyDaysAgo).format();
+			
+			var todosPromises = [];
             // Get all open todos
-            datacontext.getToDos(null, { StatusIds: [1,3], PatientId: selectedPatient().id() });
+            todosPromises.push( datacontext.getToDos(null, { StatusIds: [1,3], PatientId: selectedPatient().id() }) );
             // Get recently closed todos
-            datacontext.getToDos(null, { StatusIds: [2,4], PatientId: selectedPatient().id() });
+            todosPromises.push( datacontext.getToDos(null, { StatusIds: [2,4], PatientId: selectedPatient().id() }) );
+			return Q.all( todosPromises );
         }
 
         function getPatientsInterventions() {
@@ -473,34 +501,36 @@
             // var thirtyDaysAgo = new Date(new Date().setDate(new Date().getDate()-30));
             // thirtyDaysAgo = moment(thirtyDaysAgo).format();
             // Get all open todos
-            datacontext.getInterventions(null, { StatusIds: [1,2,3], PatientId: selectedPatient().id() });
+            return datacontext.getInterventions(null, { StatusIds: [1,2,3], PatientId: selectedPatient().id() });
         }
 
         function getPatientsTasks() {
             // Get all open todos
-            datacontext.getTasks(null, { StatusIds: [1,2,3,4], PatientId: selectedPatient().id() });
+            return datacontext.getTasks(null, { StatusIds: [1,2,3,4], PatientId: selectedPatient().id() });
         }
 
         function getPatientsAllergies() {
             // Get all open allergies
             var patientId = selectedPatient().id();
-            datacontext.getPatientAllergies(null, { StatusIds: [1,2] }, patientId);
+            return datacontext.getPatientAllergies(null, { StatusIds: [1,2] }, patientId);
         }
 
         function getPatientMedications() {
             // Get all open medications
             var patientId = selectedPatient().id();
-            datacontext.getPatientMedications(null, { StatusIds: [1,2], CategoryIds: [1,2] }, patientId);
+            return datacontext.getPatientMedications(null, { StatusIds: [1,2], CategoryIds: [1,2] }, patientId);
         }
 		
 		function getPatientFrequencies() {
             // Get all patient specific medication frequencies
             var patientId = selectedPatient().id();
+			var freqPromise = Q();
 			if(!selectedPatient().gotMedicationFrequencies){
 				//remotely load this patient's custom medication frequencies:
-				datacontext.getPatientFrequencies(null, patientId, true);
-				selectedPatient().gotMedicationFrequencies = ko.observable(true);
+				freqPromise = datacontext.getPatientFrequencies(null, patientId, true);
+				selectedPatient().gotMedicationFrequencies = ko.observable(true);				
 			}
+			return freqPromise;
         }
 		
         function togglePatientsColumn() {

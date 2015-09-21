@@ -63,12 +63,6 @@
 /// <reference path="highcharts/highcharts.js" />
 /// <reference path="jquery/jquery-1.10.2.js" />
 /// <reference path="jqueryui/jquery-ui.js" />
-/// <reference path="venn/color.js" />
-/// <reference path="venn/mds.js" />
-/// <reference path="venn/numeric.js" />
-/// <reference path="venn/underscore.js" />
-/// <reference path="venn/venn.js" />
-/// <reference path="venn/venn.patients.js" />
 /// <reference path="../app/test/specs/module.details.spec.js" />
 /// <reference path="../app/test/specs/session.spec.js" />
 /// <reference path="../app/viewmodels/admin/index.js" />
@@ -222,6 +216,16 @@
 /// <reference path="../app/main.js" />
 /// <reference path="../App/viewmodels/patients/sections/dropdown.w.addnew.js" />
 /// <reference path="jquery.timepicker.min.js" />
+/// <reference path="../app/services/datehelper.js" />
+/// <reference path="../app/services/formatter.js" />
+/// <reference path="../app/viewmodels/patients/sections/clinicalbackground.js" />
+/// <reference path="../app/viewmodels/templates/datetimepicker.js" />
+/// <reference path="../app/viewmodels/templates/note.general.edit.js" />
+/// <reference path="../app/viewmodels/templates/note.touchpoint.edit.js" />
+/// <reference path="../app/viewmodels/templates/patient.status.js" />
+/// <reference path="../app/viewmodels/patients/sections/status.js" />
+/// <reference path="../app/viewmodels/templates/note.utilization.edit.js" />
+/// <reference path="../app/viewmodels/patients/notes/index.js" />
  
  / / /   < r e f e r e n c e   p a t h = " b r e e z e . d e b u g . j s "   / >  
  
