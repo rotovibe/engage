@@ -45,12 +45,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Phytel.Services.IOC">
-      <HintPath>..\..\..\..\..\packages\Phytel.Services.IOC.1.3.3.01\lib\net451\Phytel.Services.IOC.dll</HintPath>
-    </Reference>
-    <Reference Include="Phytel.Services.ServiceStack">
-      <HintPath>..\..\..\..\..\packages\Phytel.Services.ServiceStack.1.5.0.01\lib\net451\Phytel.Services.ServiceStack.dll</HintPath>
-    </Reference>
     <Reference Include="ServiceStack, Version=3.9.70.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\packages\ServiceStack.3.9.70\lib\net35\ServiceStack.dll</HintPath>
@@ -105,11 +99,17 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Containers\HttpServiceContainer.cs" />
+    <Compile Include="IServiceProxy.cs" />
+    <Compile Include="PatientSystemAppHost.cs" />
     <Compile Include="PatientSystemService.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="SystemService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ServiceBase.cs" />
+    <Compile Include="ServiceProxy.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -144,9 +144,6 @@
       <Project>{bf2f1262-d5cc-41f0-bcfc-7ccdce479795}</Project>
       <Name>DataDomain.PatientSystem</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
