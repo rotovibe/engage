@@ -10,7 +10,7 @@ namespace Phytel.API.DataDomain.Program
         GetPatientActionDetailsDataResponse GetActionDetails(Phytel.API.DataDomain.Program.DTO.GetPatientActionDetailsDataRequest request);
         GetAllActiveProgramsResponse GetAllActiveContractPrograms(Phytel.API.DataDomain.Program.DTO.GetAllActiveProgramsRequest request);
         GetProgramDetailsSummaryResponse GetPatientProgramDetailsById(Phytel.API.DataDomain.Program.DTO.GetProgramDetailsSummaryRequest request);
-        GetPatientProgramsResponse GetPatientPrograms(Phytel.API.DataDomain.Program.DTO.GetPatientProgramsRequest request);
+        GetPatientProgramsDataResponse GetPatientPrograms(Phytel.API.DataDomain.Program.DTO.GetPatientProgramsDataRequest request);
         GetProgramAttributeResponse GetProgramAttributes(Phytel.API.DataDomain.Program.DTO.GetProgramAttributeRequest request);
         GetProgramResponse GetProgramByID(Phytel.API.DataDomain.Program.DTO.GetProgramRequest request);
         GetProgramByNameResponse GetProgramByName(Phytel.API.DataDomain.Program.DTO.GetProgramByNameRequest request);

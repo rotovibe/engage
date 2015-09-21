@@ -60,7 +60,7 @@ namespace Phytel.API.DataDomain.Program.Tests
             {
                 DateTime? time = Convert.ToDateTime("1/1/1900");
                 StubProgramRepositoryFactory factory = new StubProgramRepositoryFactory();
-                GetPatientProgramsRequest request = new GetPatientProgramsRequest
+                GetPatientProgramsDataRequest request = new GetPatientProgramsDataRequest
                 {
                     ContractNumber = "InHealth001",
                     Context = "NG",
@@ -82,7 +82,7 @@ namespace Phytel.API.DataDomain.Program.Tests
             {
                 DateTime? time = Convert.ToDateTime("1/1/1901");
                 StubProgramRepositoryFactory factory = new StubProgramRepositoryFactory();
-                GetPatientProgramsRequest request = new GetPatientProgramsRequest
+                GetPatientProgramsDataRequest request = new GetPatientProgramsDataRequest
                 {
                     ContractNumber = "InHealth001",
                     Context = "NG",
@@ -104,7 +104,7 @@ namespace Phytel.API.DataDomain.Program.Tests
             {
                 DateTime? time = Convert.ToDateTime("1/1/1999");
                 StubProgramRepositoryFactory factory = new StubProgramRepositoryFactory();
-                GetPatientProgramsRequest request = new GetPatientProgramsRequest
+                GetPatientProgramsDataRequest request = new GetPatientProgramsDataRequest
                 {
                     ContractNumber = "InHealth001",
                     Context = "NG",
@@ -126,7 +126,7 @@ namespace Phytel.API.DataDomain.Program.Tests
             {
                 string ctrl = "123456789011111111112222";
                 StubProgramRepositoryFactory factory = new StubProgramRepositoryFactory();
-                GetPatientProgramsRequest request = new GetPatientProgramsRequest
+                GetPatientProgramsDataRequest request = new GetPatientProgramsDataRequest
                 {
                     ContractNumber = "InHealth001",
                     Context = "NG",
@@ -148,7 +148,7 @@ namespace Phytel.API.DataDomain.Program.Tests
             {
                 string ctrl = "123456789011111111112223";
                 StubProgramRepositoryFactory factory = new StubProgramRepositoryFactory();
-                GetPatientProgramsRequest request = new GetPatientProgramsRequest
+                GetPatientProgramsDataRequest request = new GetPatientProgramsDataRequest
                 {
                     ContractNumber = "InHealth001",
                     Context = "NG",

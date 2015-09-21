@@ -4,7 +4,7 @@ using Phytel.API.Interface;
 
 namespace Phytel.API.DataDomain.Program.DTO
 {
-    public class GetPatientProgramsResponse : IDomainResponse
+    public class GetPatientProgramsDataResponse : IDomainResponse
     {
         public List<ProgramInfo> programs { get; set; }
         public double Version { get; set; }

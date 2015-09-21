@@ -184,9 +184,9 @@ namespace Phytel.API.DataDomain.Program.Service
             return response;
         }
 
-        public GetPatientProgramsResponse Get(GetPatientProgramsRequest request)
+        public GetPatientProgramsDataResponse Get(GetPatientProgramsDataRequest request)
         {
-            GetPatientProgramsResponse response = new GetPatientProgramsResponse();
+            GetPatientProgramsDataResponse response = new GetPatientProgramsDataResponse();
             try
             {
                 if (string.IsNullOrEmpty(request.UserId))

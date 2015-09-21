@@ -19,7 +19,7 @@ namespace Phytel.API.DataDomain.Program.Tests
             {
                 MongoProgramRepository cRepo = new MongoProgramRepository("InHealth001");
                 ProgramRepositoryFactory factory = new ProgramRepositoryFactory();
-                GetPatientProgramsRequest request = new GetPatientProgramsRequest
+                GetPatientProgramsDataRequest request = new GetPatientProgramsDataRequest
                 {
                     ContractNumber = "InHealth001",
                     Context = "NG",
@@ -36,7 +36,7 @@ namespace Phytel.API.DataDomain.Program.Tests
             {
                 MongoPatientProgramRepository cRepo = new MongoPatientProgramRepository("InHealth001");
                 ProgramRepositoryFactory factory = new ProgramRepositoryFactory();
-                GetPatientProgramsRequest request = new GetPatientProgramsRequest
+                GetPatientProgramsDataRequest request = new GetPatientProgramsDataRequest
                 {
                     ContractNumber = "InHealth001",
                     Context = "NG",
@@ -53,7 +53,7 @@ namespace Phytel.API.DataDomain.Program.Tests
             {
                 MongoPatientProgramAttributeRepository cRepo = new MongoPatientProgramAttributeRepository("InHealth001");
                 ProgramRepositoryFactory factory = new ProgramRepositoryFactory();
-                GetPatientProgramsRequest request = new GetPatientProgramsRequest
+                GetPatientProgramsDataRequest request = new GetPatientProgramsDataRequest
                 {
                     ContractNumber = "InHealth001",
                     Context = "NG",
@@ -70,7 +70,7 @@ namespace Phytel.API.DataDomain.Program.Tests
             {
                 MongoPatientProgramResponseRepository cRepo = new MongoPatientProgramResponseRepository("InHealth001");
                 ProgramRepositoryFactory factory = new ProgramRepositoryFactory();
-                GetPatientProgramsRequest request = new GetPatientProgramsRequest
+                GetPatientProgramsDataRequest request = new GetPatientProgramsDataRequest
                 {
                     ContractNumber = "InHealth001",
                     Context = "NG",
@@ -87,7 +87,7 @@ namespace Phytel.API.DataDomain.Program.Tests
             {
                 MongoContractProgramRepository cRepo = new MongoContractProgramRepository("InHealth001");
                 ProgramRepositoryFactory factory = new ProgramRepositoryFactory();
-                GetPatientProgramsRequest request = new GetPatientProgramsRequest
+                GetPatientProgramsDataRequest request = new GetPatientProgramsDataRequest
                 {
                     ContractNumber = "InHealth001",
                     Context = "NG",
@@ -104,7 +104,7 @@ namespace Phytel.API.DataDomain.Program.Tests
             {
                 MongoResponseRepository cRepo = new MongoResponseRepository("InHealth001");
                 ProgramRepositoryFactory factory = new ProgramRepositoryFactory();
-                GetPatientProgramsRequest request = new GetPatientProgramsRequest
+                GetPatientProgramsDataRequest request = new GetPatientProgramsDataRequest
                 {
                     ContractNumber = "InHealth001",
                     Context = "NG",

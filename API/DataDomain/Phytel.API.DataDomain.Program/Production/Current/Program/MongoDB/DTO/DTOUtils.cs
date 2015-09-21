@@ -287,7 +287,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             List<MEPatientProgramResponse> responseList = null;
             try
             {
-                GetPatientProgramsRequest request = new GetPatientProgramsRequest { ContractNumber = contractNumber, Context = "NG", UserId = userId };
+                GetPatientProgramsDataRequest request = new GetPatientProgramsDataRequest { ContractNumber = contractNumber, Context = "NG", UserId = userId };
                 IProgramRepository repo =
                     new ProgramRepositoryFactory().GetRepository(request, RepositoryType.PatientProgramResponse);
 
@@ -326,7 +326,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             List<StepResponse> returnResponseList = new List<StepResponse>();
             try
             {
-                GetPatientProgramsRequest request = new GetPatientProgramsRequest { ContractNumber = contractNumber, Context = "NG", UserId = userId };
+                GetPatientProgramsDataRequest request = new GetPatientProgramsDataRequest { ContractNumber = contractNumber, Context = "NG", UserId = userId };
                 IProgramRepository repo = new ProgramRepositoryFactory().GetRepository(request, RepositoryType.Response);
 
                 ICollection<SelectExpression> selectExpressions = new List<SelectExpression>();
@@ -1235,7 +1235,7 @@ namespace Phytel.API.DataDomain.Program.MongoDB.DTO
             bool result = false;
             try
             {
-                GetPatientProgramsRequest request = new GetPatientProgramsRequest { ContractNumber = contractNumber, Context = "NG", UserId = userId };
+                GetPatientProgramsDataRequest request = new GetPatientProgramsDataRequest { ContractNumber = contractNumber, Context = "NG", UserId = userId };
                 IProgramRepository repo = new ProgramRepositoryFactory().GetRepository(request, RepositoryType.PatientProgramResponse);//.GetPatientProgramStepResponseRepository(new GetPatientProgramsRequest { ContractNumber = contractNumber, Context = "NG", UserId = userId });
 
                 result = (Boolean)repo.Insert(r);
