@@ -9,6 +9,7 @@ namespace Phytel.Engage.Integrations.Repo.Repositories
     public enum RepositoryType
     {
         PatientsContractRepository,
+        XrefContractRepository,
         NotesContractRepository,
         EngageRepository
     }
