@@ -30,6 +30,7 @@ namespace Phytel.Engage.Integrations.Repo.Repositories
             using (var ct = new ContractEntities())
             {
                 #region // older query
+
                 //var query = from ce in ct.ContactEntities
                 //    join rp in ct.ReportPatients on new {ID = ce.ID} equals new {ID = rp.PatientID}
                 //    join ge in ct.C3GroupEntity on rp.SubscriberID equals ge.EntityId
@@ -81,6 +82,7 @@ namespace Phytel.Engage.Integrations.Repo.Repositories
                 //                    pt.PatientStatus
                 //                }).FirstOrDefault().PatientStatus)
                 //    };
+
                 #endregion
 
                 var query = (from ce in ct.ContactEntities
@@ -92,12 +94,12 @@ namespace Phytel.Engage.Integrations.Repo.Repositories
                     from kd in kd_join.DefaultIfEmpty()
                     where
                         ((from x in ct.IntegrationPatientXrefs
-                          where
-                            x.SendingApplication != "ENGAGE"
-                          select new
-                          {
-                              x.PhytelPatientID
-                          }).Distinct()).Contains(new { PhytelPatientID = ce.ID }) &&
+                            where
+                                x.SendingApplication != "ENGAGE"
+                            select new
+                            {
+                                x.PhytelPatientID
+                            }).Distinct()).Contains(new {PhytelPatientID = ce.ID}) &&
 
                         ((from C3ProblemList in ct.C3ProblemList
                             where
@@ -121,7 +123,12 @@ namespace Phytel.Engage.Integrations.Repo.Repositories
                         Suffix = ce.Suffix,
                         Gender = ce.Gender,
                         BirthDate = ce.BirthDate,
-                        SSN = kd.KeyData1,
+                        Ssn = kd.KeyData1,
+                        CareManagerId = rp.CareManagerID,
+                        CareManagerName = rp.CareManagerName,
+                        Phone = rp.Phone,
+                        Priority = rp.Priority,
+                        PCP = rp.ProviderName,
                         CreateDate = ce.CreateDate,
                         UpdateDate = ce.UpdateDate,
                         Status =
