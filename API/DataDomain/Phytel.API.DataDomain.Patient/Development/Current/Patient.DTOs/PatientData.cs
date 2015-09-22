@@ -1,4 +1,6 @@
-﻿namespace Phytel.API.DataDomain.Patient.DTO
+﻿using System;
+
+namespace Phytel.API.DataDomain.Patient.DTO
 {
     public class PatientData
     {
@@ -25,5 +27,8 @@
         public string MaritalStatusId { get; set; }
         public bool Protected { get; set; }
         public int DeceasedId { get; set; }
+        // added for atmosphere integration
+        public DateTime? LastUpdatedOn { get; set; }
+        public DateTime RecordCreatedOn { get; set; }
     }
 }
