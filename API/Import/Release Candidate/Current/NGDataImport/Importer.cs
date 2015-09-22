@@ -49,7 +49,7 @@ namespace NGDataImport
                                                     Version,
                                                     ContractNumber,
                                                     HeaderUserId));
-            HttpClient zoneClient = GetHttpClient(zoneUri);
+            HttpClient zoneClient = getHttpClient(zoneUri);
 
             GetTimeZoneDataRequest zoneRequest = new GetTimeZoneDataRequest
             {
@@ -90,7 +90,7 @@ namespace NGDataImport
                                                     Version,
                                                     ContractNumber,
                                                     HeaderUserId));
-            HttpClient modesClient = GetHttpClient(modesUri);
+            HttpClient modesClient = getHttpClient(modesUri);
 
             GetAllCommModesDataRequest modesRequest = new GetAllCommModesDataRequest
             {
@@ -131,7 +131,7 @@ namespace NGDataImport
                                                     Version,
                                                     ContractNumber,
                                                     HeaderUserId));
-            HttpClient typesClient = GetHttpClient(typesUri);
+            HttpClient typesClient = getHttpClient(typesUri);
 
             GetAllCommTypesDataRequest typesRequest = new GetAllCommTypesDataRequest
             {
@@ -181,7 +181,7 @@ namespace NGDataImport
                                                     Version,
                                                     ContractNumber,
                                                     HeaderUserId));
-            HttpClient statesClient = GetHttpClient(statesUri);
+            HttpClient statesClient = getHttpClient(statesUri);
 
             GetAllStatesDataRequest statesRequest = new GetAllStatesDataRequest
             {
@@ -233,7 +233,7 @@ namespace NGDataImport
                                                     Version,
                                                     ContractNumber,
                                                     HeaderUserId));
-            HttpClient typesClient = GetHttpClient(typesUri);
+            HttpClient typesClient = getHttpClient(typesUri);
 
             GetAllCommTypesDataRequest typesRequest = new GetAllCommTypesDataRequest
             {
@@ -279,7 +279,7 @@ namespace NGDataImport
                                                      ContractNumber,
                                                      HeaderUserId));
 
-                HttpClient client = GetHttpClient(theUri);
+                HttpClient client = getHttpClient(theUri);
 
                 DataContractJsonSerializer jsonSer = new DataContractJsonSerializer(typeof(PutPatientDataRequest));
 
@@ -325,7 +325,7 @@ namespace NGDataImport
                                                    ContractNumber,
                                                    request.PatientId,
                                                    HeaderUserId));
-            HttpClient clientPS = GetHttpClient(theUriPS);
+            HttpClient clientPS = getHttpClient(theUriPS);
 
             DataContractJsonSerializer jsonSerPS = new DataContractJsonSerializer(typeof(InsertPatientSystemDataRequest));
 
@@ -366,7 +366,7 @@ namespace NGDataImport
                                                    ContractNumber,
                                                    request.Id,
                                                    HeaderUserId));
-            HttpClient client = GetHttpClient(theUriPS);
+            HttpClient client = getHttpClient(theUriPS);
 
             DataContractJsonSerializer modesJsonSer = new DataContractJsonSerializer(typeof(GetPatientSystemDataRequest));
             MemoryStream ms = new MemoryStream();
@@ -403,7 +403,7 @@ namespace NGDataImport
                                                         request.PatientId,
                                                         request.Id,
                                                         HeaderUserId));
-            HttpClient updateClient = GetHttpClient(updateUri);
+            HttpClient updateClient = getHttpClient(updateUri);
 
             UpdatePatientSystemDataResponse response = null;
 
@@ -444,7 +444,7 @@ namespace NGDataImport
                                                         Version,
                                                         ContractNumber,
                                                         HeaderUserId));
-            HttpClient updateClient = GetHttpClient(updateUri);
+            HttpClient updateClient = getHttpClient(updateUri);
 
             PutUpdatePatientDataResponse updateResponsePatient = null;
 
@@ -486,7 +486,7 @@ namespace NGDataImport
                                             ContractNumber,
                                             patientId,
                                             HeaderUserId));
-            HttpClient contactClient = GetHttpClient(contactUri);
+            HttpClient contactClient = getHttpClient(contactUri);
 
             DataContractJsonSerializer contactJsonSer = new DataContractJsonSerializer(typeof(PutContactDataRequest));
             MemoryStream contactMs = new MemoryStream();
@@ -523,7 +523,7 @@ namespace NGDataImport
                                                  ContractNumber,
                                                  patientId,
                                                  HeaderUserId));
-            HttpClient client = GetHttpClient(careMemberUri);
+            HttpClient client = getHttpClient(careMemberUri);
 
             DataContractJsonSerializer jsonSer = new DataContractJsonSerializer(typeof(PutCareMemberDataRequest));
 
@@ -563,7 +563,7 @@ namespace NGDataImport
                                                     ContractNumber,
                                                     userId,
                                                     HeaderUserId));
-            HttpClient getContactClient = GetHttpClient(getContactUri);
+            HttpClient getContactClient = getHttpClient(getContactUri);
 
             GetContactByUserIdDataRequest getContactRequest = new GetContactByUserIdDataRequest
             {
@@ -599,7 +599,7 @@ namespace NGDataImport
 
         public void UpdateCohortPatientView(string patientId, string careMemberContactId)
         {
-            GetCohortPatientViewResponse getResponse = GetCohortPatientView(patientId);
+            GetCohortPatientViewResponse getResponse = getCohortPatientView(patientId);
 
             if (getResponse != null && getResponse.CohortPatientView != null)
             {
@@ -633,13 +633,13 @@ namespace NGDataImport
                     PatientID = patientId
                 };
 
-                PutUpdateCohortPatientViewResponse response = UpdateCohortPatientView(request, patientId);
+                PutUpdateCohortPatientViewResponse response = updateCohortPatientView(request, patientId);
                 if (string.IsNullOrEmpty(response.CohortPatientViewId))
                     throw new Exception("Unable to update Cohort Patient View");
             }
         }
 
-        public GetCohortPatientViewResponse GetCohortPatientView(string patientId)
+        private GetCohortPatientViewResponse getCohortPatientView(string patientId)
         {
             Uri getCohortUri = new Uri(string.Format("{0}/Patient/{1}/{2}/{3}/patient/{4}/cohortpatientview?UserId={5}",
                                                         Url,
@@ -649,7 +649,7 @@ namespace NGDataImport
                                                         patientId,
                                                         HeaderUserId));
 
-            HttpClient getCohortClient = GetHttpClient(getCohortUri);
+            HttpClient getCohortClient = getHttpClient(getCohortUri);
 
             var getCohortResponse = getCohortClient.GetStringAsync(getCohortUri);
             var getCohortResponseContent = getCohortResponse.Result;
@@ -666,7 +666,7 @@ namespace NGDataImport
             return responseContact;
         }
 
-        public PutUpdateCohortPatientViewResponse UpdateCohortPatientView(PutUpdateCohortPatientViewRequest request, string patientId)
+        private PutUpdateCohortPatientViewResponse updateCohortPatientView(PutUpdateCohortPatientViewRequest request, string patientId)
         {
             Uri cohortPatientUri = new Uri(string.Format("{0}/Patient/{1}/{2}/{3}/patient/{4}/cohortpatientview/update?UserId={5}",
                                                  Url,
@@ -675,7 +675,7 @@ namespace NGDataImport
                                                  ContractNumber,
                                                  patientId,
                                                  HeaderUserId));
-            HttpClient client = GetHttpClient(cohortPatientUri);
+            HttpClient client = getHttpClient(cohortPatientUri);
 
             DataContractJsonSerializer jsonSer = new DataContractJsonSerializer(typeof(PutUpdateCohortPatientViewRequest));
 
@@ -705,7 +705,7 @@ namespace NGDataImport
             return responseCohortPatientView;
         }
 
-        private HttpClient GetHttpClient(Uri uri)
+        private HttpClient getHttpClient(Uri uri)
         {
             HttpClient client = new HttpClient();
 
