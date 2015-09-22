@@ -1,16 +1,16 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Phytel.API.Interface;
 using ServiceStack.ServiceHost;
 
 namespace Phytel.API.DataDomain.Patient.DTO
 {
-    [Route("/{Context}/{Version}/{ContractNumber}/Patients/Ids", "POST")]
-    public class GetPatientsDataRequest : IDataDomainRequest
+    [Route("/{Context}/{Version}/{ContractNumber}/Patients", "POST")]
+    public class InsertPatientsDataRequest : IDataDomainRequest
     {
-        [ApiMember(Name = "PatientIds", Description = "List of PatientIds", ParameterType = "property", DataType = "List<string>", IsRequired = true)]
-        public List<string> PatientIds { get; set; }
+        [ApiMember(Name = "PatientsData", Description = "List of patients to be inserted", ParameterType = "property", DataType = "List<PatientData>", IsRequired = true)]
+        public List<PatientData> PatientsData { get; set; }
 
-        [ApiMember(Name = "Context", Description = "Product Context requesting the patient", ParameterType = "property", DataType = "string", IsRequired = true)]
+        [ApiMember(Name = "Context", Description = "Product Context creating the patient", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string Context { get; set; }
 
         [ApiMember(Name = "ContractNumber", Description = "Contract Number to retrieve data from", ParameterType = "property", DataType = "string", IsRequired = true)]

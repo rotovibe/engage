@@ -118,8 +118,8 @@ namespace Phytel.API.AppDomain.NG
         private static Dictionary<string, PatientData> getPatients(double version, string contractNumber, string userId, IRestClient client, List<string> patientIds)
         {
             Dictionary<string, PatientData> data = null;
-            //[Route("/{Context}/{Version}/{ContractNumber}/Patients", "POST")]
-            string patientDDURL = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patients",
+            //[Route("/{Context}/{Version}/{ContractNumber}/Patients/Ids", "POST")]
+            string patientDDURL = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patients/Ids",
                                                                             DDPatientServiceURL,
                                                                             "NG",
                                                                             version,

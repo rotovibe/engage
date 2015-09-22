@@ -1583,8 +1583,8 @@ namespace Phytel.API.AppDomain.NG
                     List<string> recentPatientIds = dataDomainResponse.Contact.RecentsList;
                     if (recentPatientIds != null && recentPatientIds.Count > 0)
                     {
-                        //[Route("/{Context}/{Version}/{ContractNumber}/Patients", "POST")]
-                        string patientDDURL = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patients",
+                        //[Route("/{Context}/{Version}/{ContractNumber}/Patients/Ids", "POST")]
+                        string patientDDURL = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patients/Ids",
                                                                                         DDPatientServiceURL,
                                                                                         "NG",
                                                                                         request.Version,

@@ -12,12 +12,12 @@ namespace Phytel.API.DataDomain.Patient.DTO
     [MongoIndex(Keys = new string[] { TTLDateProperty }, TimeToLive=0)]
     public class MEPatient : IMongoEntity<ObjectId>, IMEEntity
     {
-        public MEPatient(string userId)
+        public MEPatient(string userId, DateTime? createdOn)
         {
             Id = ObjectId.GenerateNewId();
             Version = 1.0;
             RecordCreatedBy = ObjectId.Parse(userId);
-            RecordCreatedOn = DateTime.UtcNow;
+            RecordCreatedOn = createdOn == null ? DateTime.UtcNow : (DateTime)createdOn;
         }
 
         public const string IdProperty = "_id";

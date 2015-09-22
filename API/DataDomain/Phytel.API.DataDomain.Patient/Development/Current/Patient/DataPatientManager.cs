@@ -308,6 +308,33 @@ namespace Phytel.API.DataDomain.Patient
             return result;
         }
 
+        public InsertPatientsDataResponse InsertPatients(InsertPatientsDataRequest request)
+        {
+            InsertPatientsDataResponse response = new InsertPatientsDataResponse();
+            if (request.PatientsData != null && request.PatientsData.Count > 0)
+            {
+                Dictionary<string, string> dict = new Dictionary<string, string>();
+                IPatientRepository repo = Factory.GetRepository(request, RepositoryType.Patient);
+                request.PatientsData.ForEach(p =>
+                {
+                    PutPatientDataRequest insertReq = new PutPatientDataRequest { Patient = p, Context = request.Context, ContractNumber = request.ContractNumber, UserId = request.UserId, Version =  request.Version};
+                    PutPatientDataResponse result = repo.Insert(insertReq) as PutPatientDataResponse;
+                    if (!string.IsNullOrEmpty(result.Id))
+                    {
+                        // Create Engage system record for the newly created patient in PatientSystem collection.
+                        result.EngagePatientSystemId = insertEngagePatientSystem(result.Id, insertReq);
+                        // If Atmosphere Id is present in the request object, associate it with the Patient Mongo id.
+                        if(!string.IsNullOrEmpty(p.AtmosphereId))
+                        {
+                            dict.Add(p.AtmosphereId, result.Id);
+                        }
+                    }
+                });
+                response.Ids = dict;
+            }
+            return response;
+        }
+
         #region Delete
         public DeletePatientDataResponse DeletePatient(DeletePatientDataRequest request)
         {

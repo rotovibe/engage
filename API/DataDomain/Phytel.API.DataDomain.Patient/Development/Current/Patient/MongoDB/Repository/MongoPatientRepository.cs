@@ -78,9 +78,8 @@ namespace Phytel.API.DataDomain.Patient
 
                     if (patient == null)
                     {
-                        patient = new MEPatient(this.UserId)
+                        patient = new MEPatient(this.UserId, pd.RecordCreatedOn)
                         {
-                            Id = ObjectId.GenerateNewId(),
                             FirstName = pd.FirstName,
                             LastName = pd.LastName,
                             MiddleName = pd.MiddleName,
@@ -97,7 +96,8 @@ namespace Phytel.API.DataDomain.Patient
                             Status = (Status)pd.StatusId,
                             StatusDataSource  = Helper.TrimAndLimit(pd.StatusDataSource, 50),
                             Protected = pd.Protected,
-                            Deceased = (Deceased)pd.DeceasedId
+                            Deceased = (Deceased)pd.DeceasedId,
+                            LastUpdatedOn = pd.LastUpdatedOn
                         };
                         if(!string.IsNullOrEmpty(pd.ReasonId))
                         {
@@ -873,7 +873,7 @@ namespace Phytel.API.DataDomain.Patient
             PatientData patientData = null;
             try
             {
-                MEPatient meP = new MEPatient(this.UserId)
+                MEPatient meP = new MEPatient(this.UserId, null)
                 {
                     Id = ObjectId.GenerateNewId(),
                     TTLDate = System.DateTime.UtcNow.AddDays(_initializeDays)

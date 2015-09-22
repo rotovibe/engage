@@ -311,6 +311,27 @@ namespace Phytel.API.DataDomain.Patient.Service
             return response;
         }
 
+        public InsertPatientsDataResponse Post(InsertPatientsDataRequest request)
+        {
+            InsertPatientsDataResponse response = new InsertPatientsDataResponse();
+            try
+            {
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("PatientDD:Post()::Unauthorized Access");
+
+                response = PatientManager.InsertPatients(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                CommonFormatterUtil.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Helpers.LogException(int.Parse(aseProcessID), ex);
+            }
+            return response;
+        }
+
         #region Delete
         public DeletePatientDataResponse Delete(DeletePatientDataRequest request)
         {
