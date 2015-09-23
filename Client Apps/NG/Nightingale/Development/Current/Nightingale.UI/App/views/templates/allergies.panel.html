@@ -17,16 +17,34 @@
             <div data-bind="compose: { model: $parent, view: path }, css: cssClass"></div>
         </div>
         <div class="row pad allergydtl muted toggle" data-bind="visible: isExpanded">
+			<div class="row pad-top">
+                <div class="span2">
+                    <strong>Type:</strong>
+                </div>
+                <div class="span10" data-bind="text: typeString"></div>                
+            </div>
             <div class="row pad-top">
                 <div class="span2">
                     <strong>Reaction:</strong>
                 </div>
-                <div class="span2" data-bind="text: reactionString"></div>
+                <div class="span10" data-bind="text: reactionString"></div>                
+            </div>
+			<div class="row pad-top">
                 <div class="span2">
+                    <strong>Source:</strong>
+                </div>
+                <div class="span10" data-bind="text: source().name()"></div>                
+            </div>
+			<div class="row pad-top">
+				<div class="span2">
                     <strong>Start Date:</strong>
                 </div>
-                <div class="span2" data-bind="DateOrDash: startDate"></div>
-            </div>
+                <div class="span3" data-bind="DateOrDash: startDate"></div>
+				<div class="span2">
+                    <strong>End Date:</strong>
+                </div>
+                <div class="span3" data-bind="DateOrDash: endDate"></div>
+			</div>
             <div class="row pad-top">
                 <div class="span2">
                     <strong>Notes</strong>
@@ -34,6 +52,12 @@
                 <div class="span10">
                     <textarea disabled="disabled" data-bind="value: notes"></textarea>
                 </div>
+            </div>
+			<div class="row pad-top">
+                <div class="span2">
+                    <strong>System:</strong>
+                </div>
+                <div class="span10" data-bind="text: systemName"></div>                
             </div>
         </div>
     </div>

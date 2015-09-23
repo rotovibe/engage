@@ -1966,6 +1966,7 @@
 				ko.unwrap(allergy).source(defaultSource);
 				ko.unwrap(allergy).statusId(1);
 				ko.unwrap(allergy).isUserCreated(isNewAllergy);
+				ko.unwrap(allergy).createdOn(new Date());	//back end does not populate the createdOn on initialize.
 				return allergy;
 			}
 		}

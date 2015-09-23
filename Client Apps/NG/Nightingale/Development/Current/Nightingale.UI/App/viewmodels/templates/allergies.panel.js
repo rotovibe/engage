@@ -36,7 +36,7 @@
     		new Column('patient', 'Individual','span2 ellipsis', 'patientDetails.lastName'),
     		new Column('type', 'Type','span3', 'type.name', true),
             new Column('type-small', 'Type','span2', 'type.name', true),
-    		new Column('name', 'Allergy','span4 ellipsis', 'allergyName'),
+    		new Column('name', 'Allergy','span6 ellipsis', 'allergyName'),
             new Column('name-small', 'Allergy','span3 ellipsis', 'allergyName'),
             new Column('severity', 'Severity','span4 ellipsis', 'severity.name'),
             new Column('severity-small', 'Severity','span3 ellipsis', 'severity.name'),
