@@ -563,14 +563,6 @@
     <Content Include="Content\nightingale\application.css" />
     <Content Include="Content\nightingale\controls.css" />
     <Content Include="Content\nightingale\fonts\fontcustom.svg" />
-    <Content Include="Content\nightingale\fonts\thinreg\thinregular.svg" />
-    <Content Include="Content\nightingale\fonts\694015\48d599a6-92b5-4d43-a4ac-8959f6971853.svg" />
-    <Content Include="Content\nightingale\fonts\mediumitl\mediumitalic.svg" />
-    <Content Include="Content\nightingale\fonts\romanreg\romanregular.svg" />
-    <Content Include="Content\nightingale\fonts\romanitl\romanitalic.svg" />
-    <Content Include="Content\nightingale\fonts\mediumreg\mediumregular.svg" />
-    <Content Include="Content\nightingale\fonts\694030\106d386e-54f6-466f-838d-5275f4dfc77f.svg" />
-    <Content Include="Content\nightingale\fonts\boldreg\boldregular.svg" />
     <Content Include="Content\font-awesome\font\fontawesome-webfont.svg" />
     <Content Include="Content\ie10mobile.css" />
     <Content Include="Content\images\address_blue_large.png" />
@@ -740,24 +732,6 @@
       <DependentUpon>bindings.js</DependentUpon>
     </Content>
     <Content Include="App\models\base.js" />
-    <Content Include="Content\nightingale\fonts\thinreg\thinregular.eot" />
-    <Content Include="Content\nightingale\fonts\thinreg\thinregular.woff" />
-    <Content Include="Content\nightingale\fonts\thinreg\thinregular.ttf" />
-    <Content Include="Content\nightingale\fonts\694015\88fcd49a-13c7-4d0c-86b1-ad1e258bd75d.eot" />
-    <Content Include="Content\nightingale\fonts\694015\9a2e4855-380f-477f-950e-d98e8db54eac.woff" />
-    <Content Include="Content\nightingale\fonts\694015\fa82d0ee-4fbd-4cc9-bf9f-226ad1fcbae2.ttf" />
-    <Content Include="Content\nightingale\fonts\mediumitl\mediumitalic.ttf" />
-    <Content Include="Content\nightingale\fonts\mediumitl\mediumitalic.eot" />
-    <Content Include="Content\nightingale\fonts\mediumitl\mediumitalic.woff" />
-    <Content Include="Content\nightingale\fonts\mediumreg\mediumregular.ttf" />
-    <Content Include="Content\nightingale\fonts\mediumreg\mediumregular.eot" />
-    <Content Include="Content\nightingale\fonts\mediumreg\mediumregular.woff" />
-    <Content Include="Content\nightingale\fonts\694030\829d7152-b4c6-4aa7-8bc6-939b51f3801e.eot" />
-    <Content Include="Content\nightingale\fonts\694030\bbbd5ad3-15e0-455a-9b88-4aefc72b0562.woff" />
-    <Content Include="Content\nightingale\fonts\694030\db3007a4-d25e-43b5-ae6a-9053504c9a17.ttf" />
-    <Content Include="Content\nightingale\fonts\boldreg\boldregular.woff" />
-    <Content Include="Content\nightingale\fonts\boldreg\boldregular.ttf" />
-    <Content Include="Content\nightingale\fonts\boldreg\boldregular.eot" />
     <Content Include="App\viewmodels\programdesigner\index.min.js.map">
       <DependentUpon>index.js</DependentUpon>
     </Content>
@@ -778,12 +752,6 @@
     </Content>
     <Content Include="App\viewmodels\templates\observation.add.js" />
     <Content Include="App\views\templates\clinical.dataentry.html" />
-    <Content Include="Content\nightingale\fonts\romanreg\romanregular.eot" />
-    <Content Include="Content\nightingale\fonts\romanreg\romanregular.ttf" />
-    <Content Include="Content\nightingale\fonts\romanreg\romanregular.woff" />
-    <Content Include="Content\nightingale\fonts\romanitl\romanitalic.woff" />
-    <Content Include="Content\nightingale\fonts\romanitl\romanitalic.eot" />
-    <Content Include="Content\nightingale\fonts\romanitl\romanitalic.ttf" />
     <Content Include="Content\nightingale\fonts\fontcustomBACKUP.eot" />
     <Content Include="Content\nightingale\fonts\fontcustomBACKUP.woff" />
     <Content Include="Content\nightingale\fonts\fontcustomBACKUP.ttf" />
@@ -968,7 +936,7 @@
     <PreBuildEvent>
     </PreBuildEvent>
   </PropertyGroup>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>
