@@ -14,7 +14,9 @@
                                         </div>
                                         <div class="row pad-top">
 											<div class="span8">
-												<input data-bind="value: cohortFilter, valueUpdate: 'afterkeydown', disable: !selectedCohort()" placeholder="Search" type="search" data-phyautomation="cohort-patient-search" />
+												<input data-bind="value: cohortFilter, valueUpdate: 'afterkeydown', disable: !selectedCohort()" 
+													placeholder="Search" type="search" data-phyautomation="cohort-patient-search" style="width: 87%;" />
+												<i class="pointer icon-cancel" data-bind="visible: cohortFilter, click: clearCohortFilter"></i>	
 											</div>
                                         </div>
                                     </div>

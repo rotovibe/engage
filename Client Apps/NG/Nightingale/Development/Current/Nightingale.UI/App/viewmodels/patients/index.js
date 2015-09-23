@@ -183,6 +183,7 @@
 			showNoResultsMessage: showNoResultsMessage,
 			noResultsMessage: noResultsMessage,
             cohortFilter: cohortFilter,
+			clearCohortFilter: clearCohortFilter,
             togglePatientsColumn: togglePatientsColumn,
             minimizePatientsDataColumn: minimizePatientsDataColumn,
             maximizePatientsDataColumn: maximizePatientsDataColumn,
@@ -416,6 +417,10 @@
             return true;
         }
 
+		function clearCohortFilter(){
+			cohortFilter(null);
+		}
+		
         function choosePatient(patient) {
             // Check if there are changes to this patient's actions before proceeding
             // And if override parameter is set to true ignore checking for changes
