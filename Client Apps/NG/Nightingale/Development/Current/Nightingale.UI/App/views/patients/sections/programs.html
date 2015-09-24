@@ -5,11 +5,8 @@
 				<div data-bind="if: (elementState() == 5 || elementState() == 6)" class="pull-left">  
 					<i data-bind="css: { 'icon-check': elementState() == 5, 'icon-warning': elementState() == 6 }" ></i>
 				</div>
-                <a href="#" data-bind="text: name, clickBubble: false" >
-				</a>				
-				<span data-bind="if: (stateUpdatedOn && (elementState() == 5 || elementState() == 6))">&nbsp;-&nbsp;
-					<span data-bind="DateOrNothing: stateUpdatedOn"></span>
-				</span>
+                <a href="#" data-bind="text: displayName, clickBubble: false" >
+				</a>								
                 <a data-bind="click: $parent.setActiveProgram, clickBubble: false, css: { 'active': $parent.activeProgram() === $data }, arrowMover: ''" class="icon filter-toggle pull-right" href="#" title="Program Details">
                     <i class="icon-info"></i>
                 </a>
