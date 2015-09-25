@@ -9,16 +9,17 @@ using System.Collections.Generic;
 using Phytel.API.Interface;
 using System.Linq;
 using ServiceStack.Service;
-using Phytel.API.Common;
+using RB = Phytel.API.DataDomain.Patient.Responses.Batch;
 using Phytel.API.DataDomain.PatientSystem.DTO;
 using System.Net;
+
 
 namespace Phytel.API.DataDomain.Patient
 {
     public class PatientDataManager : IPatientDataManager
     {
         public IPatientRepositoryFactory Factory { get; set; }
-        public IHelpers Helpers { get; set; }
+        public Phytel.API.Common.IHelpers Helpers { get; set; }
 
         public GetCohortPatientsDataResponse GetCohortPatients(GetCohortPatientsDataRequest request)
         {
@@ -314,7 +315,7 @@ namespace Phytel.API.DataDomain.Patient
             InsertBatchPatientsDataResponse response = new InsertBatchPatientsDataResponse();
             if (request.PatientsData != null && request.PatientsData.Count > 0)
             {
-                List<HttpObjectResponse<PatientData>> list = new List<HttpObjectResponse<PatientData>>();
+                List<RB.HttpObjectResponse<PatientData>> list = new List<RB.HttpObjectResponse<PatientData>>();
                 IPatientRepository repo = Factory.GetRepository(request, RepositoryType.Patient);
                 request.PatientsData.ForEach(p =>
                 {
@@ -338,7 +339,7 @@ namespace Phytel.API.DataDomain.Patient
                         code = HttpStatusCode.InternalServerError;
                         message = string.Format("AtmosphereId: {0}, Message: {1}, StackTrace: {2}", p.AtmosphereId, ex.Message, ex.StackTrace);
                     }
-                    list.Add(new HttpObjectResponse<PatientData>{ Code = code, Body  = (PatientData)patientData, Message = message});
+                    list.Add(new RB.HttpObjectResponse<PatientData> { Code = code, Body = (PatientData)patientData, Message = message });
                 });
                 response.Responses = list;
             }

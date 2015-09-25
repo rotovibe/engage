@@ -4,7 +4,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using ServiceStack.Common.Extensions;
-using Phytel.API.Common;
 using System.Net;
 
 namespace Phytel.API.DataDomain.PatientSystem
