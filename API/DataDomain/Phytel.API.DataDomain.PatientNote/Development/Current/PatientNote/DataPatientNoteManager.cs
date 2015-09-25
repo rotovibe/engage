@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Net;
 using DataDomain.PatientNote.Repo;
+using Phytel.API.Common;
 using Phytel.API.DataDomain.PatientNote.DTO;
 using Phytel.API.DataDomain.PatientNote.Repo;
 
@@ -28,6 +30,48 @@ namespace Phytel.API.DataDomain.PatientNote
                 throw ex;
             }
             return noteId;
+        }
+
+        public InsertBatchPatientNotesDataResponse InsertBatchPatientNotes(InsertBatchPatientNotesDataRequest request)
+        {
+            InsertBatchPatientNotesDataResponse response = new InsertBatchPatientNotesDataResponse();
+            if (request.PatientNotesData != null && request.PatientNotesData.Count > 0)
+            {
+                List<HttpObjectResponse<PatientNoteData>> list = new List<HttpObjectResponse<PatientNoteData>>();
+                var repo = Factory.GetRepository(RepositoryType.PatientNote);
+                request.PatientNotesData.ForEach(p =>
+                {
+                    InsertPatientNoteDataRequest insertReq = new InsertPatientNoteDataRequest
+                    {
+                        PatientId = p.PatientId,
+                        Context = request.Context,
+                        ContractNumber = request.ContractNumber,
+                        PatientNote = p,
+                        UserId = request.UserId,
+                        Version = request.Version
+                    };
+                    HttpStatusCode code = HttpStatusCode.OK;
+                    PatientNoteData pnData = null;
+                    string message = string.Empty;
+                    try
+                    {
+                        string id = (string)repo.Insert(insertReq);
+                        if (!string.IsNullOrEmpty(id))
+                        {
+                            code = HttpStatusCode.Created;
+                            pnData = new PatientNoteData { Id = id, AtmosphereId = p.AtmosphereId, PatientId = p.PatientId };
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        code = HttpStatusCode.InternalServerError;
+                        message = string.Format("AtmosphereId: {0}, Message: {1}, StackTrace: {2}", p.AtmosphereId, ex.Message, ex.StackTrace);
+                    }
+                    list.Add(new HttpObjectResponse<PatientNoteData> { Code = code, Body = (PatientNoteData)pnData, Message = message });
+                });
+                response.Responses = list;
+            }
+            return response;
         }
 
         public PatientNoteData UpdatePatientNote(UpdatePatientNoteDataRequest request)

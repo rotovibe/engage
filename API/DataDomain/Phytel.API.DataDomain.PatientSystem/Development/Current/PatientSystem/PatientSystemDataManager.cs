@@ -188,7 +188,7 @@ namespace Phytel.API.DataDomain.PatientSystem
                         if (!string.IsNullOrEmpty(id))
                         {
                             code = HttpStatusCode.Created;
-                            psData = new PatientSystemData { Id = id, AtmosphereId = p.AtmosphereId };
+                            psData = new PatientSystemData { Id = id, AtmosphereId = p.AtmosphereId, PatientId = p.PatientId };
                         }
                     }
                     catch (Exception ex)

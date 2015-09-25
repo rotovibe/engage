@@ -25,5 +25,7 @@ namespace Phytel.API.DataDomain.PatientNote.DTO
         public DateTime? UpdatedOn { get; set; }
         public string UpdatedById { get; set; }
         public string DataSource { get; set; }
+        // added for atmosphere integration
+        public string AtmosphereId { get; set; }
     }
 }

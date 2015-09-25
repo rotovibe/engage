@@ -49,5 +49,11 @@ namespace Phytel.API.DataDomain.PatientNote.Test.Stubs
         {
             throw new NotImplementedException();
         }
+
+
+        public InsertBatchPatientNotesDataResponse InsertBatchPatientNotes(InsertBatchPatientNotesDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

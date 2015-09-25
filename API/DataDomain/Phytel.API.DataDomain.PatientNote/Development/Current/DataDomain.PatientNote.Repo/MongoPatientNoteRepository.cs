@@ -47,7 +47,7 @@ namespace Phytel.API.DataDomain.PatientNote.Repo
             {
                 if(noteData != null)
                 {
-                    meN = new MEPatientNote(this.UserId)
+                    meN = new MEPatientNote(this.UserId, noteData.CreatedOn)
                     {
                         PatientId = ObjectId.Parse(noteData.PatientId),
                         Text = noteData.Text,
@@ -56,7 +56,8 @@ namespace Phytel.API.DataDomain.PatientNote.Repo
                         ContactedOn = noteData.ContactedOn,
                         Type = ObjectId.Parse(noteData.TypeId),
                         DeleteFlag = false,
-                        DataSource = Helper.TrimAndLimit(noteData.DataSource, 50)
+                        DataSource = Helper.TrimAndLimit(noteData.DataSource, 50),
+                        LastUpdatedOn = noteData.UpdatedOn
                     };
 
                     if(!string.IsNullOrEmpty(noteData.MethodId))

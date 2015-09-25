@@ -13,12 +13,12 @@ namespace Phytel.API.DataDomain.PatientNote.Repo
     [MongoIndex(Keys = new string[] { PatientIdProperty, DeleteFlagProperty }, Unique = false)]
     public class MEPatientNote : IMongoEntity<ObjectId>, IMEEntity
     {
-        public MEPatientNote(string userId)
+        public MEPatientNote(string userId, DateTime? createdOn)
         {
             Id = ObjectId.GenerateNewId();
             Version = 1.0;
             RecordCreatedBy = ObjectId.Parse(userId);
-            RecordCreatedOn = DateTime.UtcNow;
+            RecordCreatedOn = createdOn == null ? DateTime.UtcNow : (DateTime)createdOn;
         }
 
         public const string IdProperty = "_id";
