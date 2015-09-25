@@ -95,8 +95,8 @@
     <Compile Include="GetAllPatientsDataResponse.cs" />
     <Compile Include="PutInitializePatientDataRequest.cs" />
     <Compile Include="PutInitializePatientDataResponse.cs" />
-    <Compile Include="InsertPatientsDataRequest.cs" />
-    <Compile Include="InsertPatientsDataResponse.cs" />
+    <Compile Include="InsertBatchPatientsDataRequest.cs" />
+    <Compile Include="InsertBatchPatientsDataResponse.cs" />
     <Compile Include="PutPatientSystemIdDataRequest.cs" />
     <Compile Include="PutPatientSystemIdDataResponse.cs" />
     <Compile Include="UndoDeleteCohortPatientViewDataRequest.cs" />

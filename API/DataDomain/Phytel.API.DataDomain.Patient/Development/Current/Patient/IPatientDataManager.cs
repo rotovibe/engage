@@ -25,6 +25,6 @@ namespace Phytel.API.DataDomain.Patient
         UndoDeleteCohortPatientViewDataResponse UndoDeleteCohortPatientView(UndoDeleteCohortPatientViewDataRequest request);
         PutInitializePatientDataResponse InitializePatient(PutInitializePatientDataRequest request);
         List<PatientData> GetAllPatients(GetAllPatientsDataRequest request);
-        InsertPatientsDataResponse InsertPatients(InsertPatientsDataRequest request);
+        InsertBatchPatientsDataResponse InsertBatchPatients(InsertBatchPatientsDataRequest request);
     }
 }

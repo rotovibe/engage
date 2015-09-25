@@ -311,15 +311,15 @@ namespace Phytel.API.DataDomain.Patient.Service
             return response;
         }
 
-        public InsertPatientsDataResponse Post(InsertPatientsDataRequest request)
+        public InsertBatchPatientsDataResponse Post(InsertBatchPatientsDataRequest request)
         {
-            InsertPatientsDataResponse response = new InsertPatientsDataResponse();
+            InsertBatchPatientsDataResponse response = new InsertBatchPatientsDataResponse();
             try
             {
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("PatientDD:Post()::Unauthorized Access");
 
-                response = PatientManager.InsertPatients(request);
+                response = PatientManager.InsertBatchPatients(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)

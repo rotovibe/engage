@@ -4,6 +4,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using ServiceStack.Common.Extensions;
+using Phytel.API.Common;
+using System.Net;
 
 namespace Phytel.API.DataDomain.PatientSystem
 {
@@ -157,6 +159,48 @@ namespace Phytel.API.DataDomain.PatientSystem
                 return ids;
             }
             catch (Exception ex) { throw ex; }
+        }
+
+        public InsertBatchPatientSystemsDataResponse InsertBatchPatientSystems(InsertBatchPatientSystemsDataRequest request)
+        {
+            InsertBatchPatientSystemsDataResponse response = new InsertBatchPatientSystemsDataResponse();
+            if (request.PatientSystemsData != null && request.PatientSystemsData.Count > 0)
+            {
+                List<HttpObjectResponse<PatientSystemData>> list = new List<HttpObjectResponse<PatientSystemData>>();
+                var repo = Factory.GetRepository(RepositoryType.PatientSystem);
+                request.PatientSystemsData.ForEach(p =>
+                {
+                    InsertPatientSystemDataRequest insertReq = new InsertPatientSystemDataRequest
+                    {
+                        PatientId = p.PatientId,
+                        Context = request.Context,
+                        ContractNumber = request.ContractNumber,
+                        PatientSystemsData = p,
+                        UserId = request.UserId,
+                        Version = request.Version
+                    };
+                    HttpStatusCode code = HttpStatusCode.OK;
+                    PatientSystemData psData = null;
+                    string message = string.Empty;
+                    try
+                    { 
+                        string id = (string)repo.Insert(insertReq);
+                        if (!string.IsNullOrEmpty(id))
+                        {
+                            code = HttpStatusCode.Created;
+                            psData = new PatientSystemData { Id = id, AtmosphereId = p.AtmosphereId };
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        code = HttpStatusCode.InternalServerError;
+                        message = string.Format("AtmosphereId: {0}, Message: {1}, StackTrace: {2}", p.AtmosphereId , ex.Message, ex.StackTrace);
+                    }
+                    list.Add(new HttpObjectResponse<PatientSystemData> { Code = code, Body = (PatientSystemData)psData, Message = message });
+                });
+                response.Responses = list;
+            }
+            return response;
         }
 
         public bool UpdatePatientSystem(UpdatePatientSystemDataRequest request)

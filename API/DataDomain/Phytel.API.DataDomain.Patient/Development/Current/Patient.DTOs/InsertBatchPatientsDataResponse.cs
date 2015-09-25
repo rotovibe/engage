@@ -5,7 +5,7 @@ using ServiceStack.ServiceInterface.ServiceModel;
 
 namespace Phytel.API.DataDomain.Patient.DTO
 {
-    public class InsertPatientsDataResponse : IDomainResponse
+    public class InsertBatchPatientsDataResponse : IDomainResponse
     {
         public List<HttpObjectResponse<PatientData>> Responses { get; set; }
         public double Version { get; set; }

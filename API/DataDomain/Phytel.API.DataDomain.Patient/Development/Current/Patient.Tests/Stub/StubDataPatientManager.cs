@@ -207,7 +207,7 @@ namespace Phytel.API.DataDomain.Patient.Test.Stub
         }
 
 
-        public InsertPatientsDataResponse InsertPatients(InsertPatientsDataRequest request)
+        public InsertBatchPatientsDataResponse InsertBatchPatients(InsertBatchPatientsDataRequest request)
         {
             throw new NotImplementedException();
         }

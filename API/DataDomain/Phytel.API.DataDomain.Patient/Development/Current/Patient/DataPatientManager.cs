@@ -309,9 +309,9 @@ namespace Phytel.API.DataDomain.Patient
             return result;
         }
 
-        public InsertPatientsDataResponse InsertPatients(InsertPatientsDataRequest request)
+        public InsertBatchPatientsDataResponse InsertBatchPatients(InsertBatchPatientsDataRequest request)
         {
-            InsertPatientsDataResponse response = new InsertPatientsDataResponse();
+            InsertBatchPatientsDataResponse response = new InsertBatchPatientsDataResponse();
             if (request.PatientsData != null && request.PatientsData.Count > 0)
             {
                 List<HttpObjectResponse<PatientData>> list = new List<HttpObjectResponse<PatientData>>();
@@ -324,19 +324,19 @@ namespace Phytel.API.DataDomain.Patient
                     string message = string.Empty;
                     try
                     {
-                        PutPatientDataResponse result = repo.Insert(insertReq) as PutPatientDataResponse;
-                        if (!string.IsNullOrEmpty(result.Id))
+                        PutPatientDataResponse patientResponse = repo.Insert(insertReq) as PutPatientDataResponse;
+                        if (!string.IsNullOrEmpty(patientResponse.Id))
                         {
                             // Create Engage system record for the newly created patient in PatientSystem collection.
-                            result.EngagePatientSystemId = insertEngagePatientSystem(result.Id, insertReq);
+                            string engageId = insertEngagePatientSystem(patientResponse.Id, insertReq);
                             code = HttpStatusCode.Created;
-                            patientData = new PatientData { Id = result.Id, AtmosphereId = p.AtmosphereId};
+                            patientData = new PatientData { Id = patientResponse.Id, AtmosphereId = p.AtmosphereId, EngagePatientSystemId = engageId };
                         }
                     }
                     catch (Exception ex)
                     {
                         code = HttpStatusCode.InternalServerError;
-                        message = string.Format("Message: {0}, StackTrace: {1} ", ex.Message, ex.StackTrace);
+                        message = string.Format("AtmosphereId: {0}, Message: {1}, StackTrace: {2}", p.AtmosphereId, ex.Message, ex.StackTrace);
                     }
                     list.Add(new HttpObjectResponse<PatientData>{ Code = code, Body  = (PatientData)patientData, Message = message});
                 });

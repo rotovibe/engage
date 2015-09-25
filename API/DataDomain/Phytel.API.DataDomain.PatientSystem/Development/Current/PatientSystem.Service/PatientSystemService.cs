@@ -96,6 +96,22 @@ namespace Phytel.API.DataDomain.PatientSystem.Service
             return response;
         }
 
+        public InsertBatchPatientSystemsDataResponse Post(InsertBatchPatientSystemsDataRequest request)
+        {
+            InsertBatchPatientSystemsDataResponse response = new InsertBatchPatientSystemsDataResponse();
+            try
+            {
+                RequireUserId(request);
+                response = Manager.InsertBatchPatientSystems(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                RaiseException(response, ex);
+            }
+            return response;
+        }
+
         public InsertEngagePatientSystemsDataResponse Post(InsertEngagePatientSystemsDataRequest request)
         {
             InsertEngagePatientSystemsDataResponse response = new InsertEngagePatientSystemsDataResponse();
