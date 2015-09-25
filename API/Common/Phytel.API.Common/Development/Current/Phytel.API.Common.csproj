@@ -122,6 +122,7 @@
     <Compile Include="Audit\DispatchRequest.cs" />
     <Compile Include="Audit\IAuditHelpers.cs" />
     <Compile Include="Audit\IAuditUtil.cs" />
+    <Compile Include="CustomObject\HttpObjectResponse.cs" />
     <Compile Include="CustomObject\IdNamePair.cs" />
     <Compile Include="Data\MongoDataUtil.cs" />
     <Compile Include="Enums.cs" />

@@ -11,6 +11,7 @@ using System.Linq;
 using ServiceStack.Service;
 using Phytel.API.Common;
 using Phytel.API.DataDomain.PatientSystem.DTO;
+using System.Net;
 
 namespace Phytel.API.DataDomain.Patient
 {
@@ -313,24 +314,33 @@ namespace Phytel.API.DataDomain.Patient
             InsertPatientsDataResponse response = new InsertPatientsDataResponse();
             if (request.PatientsData != null && request.PatientsData.Count > 0)
             {
-                Dictionary<string, string> dict = new Dictionary<string, string>();
+                List<HttpObjectResponse<PatientData>> list = new List<HttpObjectResponse<PatientData>>();
                 IPatientRepository repo = Factory.GetRepository(request, RepositoryType.Patient);
                 request.PatientsData.ForEach(p =>
                 {
-                    PutPatientDataRequest insertReq = new PutPatientDataRequest { Patient = p, Context = request.Context, ContractNumber = request.ContractNumber, UserId = request.UserId, Version =  request.Version};
-                    PutPatientDataResponse result = repo.Insert(insertReq) as PutPatientDataResponse;
-                    if (!string.IsNullOrEmpty(result.Id))
+                    PutPatientDataRequest insertReq = new PutPatientDataRequest { Patient = p, Context = request.Context, ContractNumber = request.ContractNumber, UserId = request.UserId, Version = request.Version };
+                    HttpStatusCode code = HttpStatusCode.OK;
+                    PatientData patientData = null;
+                    string message = string.Empty;
+                    try
                     {
-                        // Create Engage system record for the newly created patient in PatientSystem collection.
-                        result.EngagePatientSystemId = insertEngagePatientSystem(result.Id, insertReq);
-                        // If Atmosphere Id is present in the request object, associate it with the Patient Mongo id.
-                        if(!string.IsNullOrEmpty(p.AtmosphereId))
+                        PutPatientDataResponse result = repo.Insert(insertReq) as PutPatientDataResponse;
+                        if (!string.IsNullOrEmpty(result.Id))
                         {
-                            dict.Add(p.AtmosphereId, result.Id);
+                            // Create Engage system record for the newly created patient in PatientSystem collection.
+                            result.EngagePatientSystemId = insertEngagePatientSystem(result.Id, insertReq);
+                            code = HttpStatusCode.Created;
+                            patientData = new PatientData { Id = result.Id, AtmosphereId = p.AtmosphereId};
                         }
                     }
+                    catch (Exception ex)
+                    {
+                        code = HttpStatusCode.InternalServerError;
+                        message = string.Format("Message: {0}, StackTrace: {1} ", ex.Message, ex.StackTrace);
+                    }
+                    list.Add(new HttpObjectResponse<PatientData>{ Code = code, Body  = (PatientData)patientData, Message = message});
                 });
-                response.Ids = dict;
+                response.Responses = list;
             }
             return response;
         }

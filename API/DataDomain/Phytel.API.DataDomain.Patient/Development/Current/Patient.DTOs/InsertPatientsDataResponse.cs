@@ -1,8 +1,7 @@
-﻿using Phytel.API.Interface;
+﻿using System.Collections.Generic;
+using Phytel.API.Common;
+using Phytel.API.Interface;
 using ServiceStack.ServiceInterface.ServiceModel;
-using System.Collections.Generic;
-using System;
-using Phytel.API.DataDomain.Patient.DTO.Responses.Batch;
 
 namespace Phytel.API.DataDomain.Patient.DTO
 {

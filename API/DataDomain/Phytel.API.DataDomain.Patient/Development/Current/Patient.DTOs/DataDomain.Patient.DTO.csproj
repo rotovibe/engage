@@ -99,7 +99,6 @@
     <Compile Include="InsertPatientsDataResponse.cs" />
     <Compile Include="PutPatientSystemIdDataRequest.cs" />
     <Compile Include="PutPatientSystemIdDataResponse.cs" />
-    <Compile Include="Responses\Batch\HttpObjectResponse.cs" />
     <Compile Include="UndoDeleteCohortPatientViewDataRequest.cs" />
     <Compile Include="UndoDeleteCohortPatientViewDataResponse.cs" />
     <Compile Include="UndoDeletePatientUsersDataRequest.cs" />
@@ -144,6 +143,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\Common\Phytel.API.Common\Development\Current\Phytel.API.Common.csproj">
+      <Project>{25cf3c3f-221f-4a49-b5ef-a8a5fcf9a5ba}</Project>
+      <Name>Phytel.API.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\..\Interfaces\Development\Current\Phytel.API.Interface\Phytel.API.Interface.csproj">
       <Project>{abe948fb-247e-4955-b3ab-b7c93e10a542}</Project>
       <Name>Phytel.API.Interface</Name>
