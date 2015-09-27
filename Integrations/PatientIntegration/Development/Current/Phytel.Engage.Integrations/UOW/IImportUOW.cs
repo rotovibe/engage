@@ -1,8 +1,15 @@
+using System.Collections.Generic;
+using Phytel.API.DataDomain.Patient.DTO;
+using Phytel.API.DataDomain.PatientSystem.DTO;
+
 namespace Phytel.Engage.Integrations.UOW
 {
-    public interface IImportUOW<T>
+    public interface IImportUow
     {
-        void Add(T obj);
-        void Commit();
+        List<PatientSystemData> PatientSystems { get; set; }
+        List<PatientData> Patients { get; set; }
+        void Commit(string contract);
+        void LoadPatientSystems(Repo.Repositories.IRepository xrepo);
+        void LoadPatients(Repo.Repositories.IRepository repo);
     }
 }
