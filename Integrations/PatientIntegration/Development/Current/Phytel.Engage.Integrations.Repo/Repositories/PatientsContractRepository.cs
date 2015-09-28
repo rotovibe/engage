@@ -15,20 +15,22 @@ namespace Phytel.Engage.Integrations.Repo.Repositories
         private string _contract;
         private string _connString;
         public ISQLConnectionProvider ConnStr { get; set; }
-        public SqlConnectionStringBuilder connBuilder;
+        public SqlConnectionStringBuilder connStrBuilder;
 
         public PatientsContractRepository(string contract)
         {
             _contract = contract;
             ConnStr = new SQLConnectionProvider();
             _connString = @"data source=azurephyoutreach.cloudapp.net;initial catalog=ORLANDOHEALTH001;persist security info=True;user id=mbobadilla;password=Ju1cy-Fru1t;MultipleActiveResultSets=True;App=EntityFramework";//ConnStr.GetConnectionString(contract);
-            connBuilder = new SqlConnectionStringBuilder(_connString);
+            connStrBuilder = new SqlConnectionStringBuilder(_connString);
+
+
         }
 
         public object SelectAll()
         {
             Dictionary<int, PatientInfo> ptInfo = null;
-            using (var ct = new Phytel.Engage.Integrations.Repo.EF.ContractEntities())
+            using (var ct = new Phytel.Engage.Integrations.Repo.EF.ContractEntities(_connString))
             {
                 var query = (from c3p in ct.C3Patient
                              join ce in ct.ContactEntities on new { PatientID = c3p.PatientID } equals new { PatientID = ce.ID }

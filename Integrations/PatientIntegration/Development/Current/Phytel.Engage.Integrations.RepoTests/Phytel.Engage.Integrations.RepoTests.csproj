@@ -66,6 +66,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Connections\SQLConnectionProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\ContractRepositoryTests.cs" />
     <Compile Include="Repositories\XrefContractRepositoryTests.cs" />

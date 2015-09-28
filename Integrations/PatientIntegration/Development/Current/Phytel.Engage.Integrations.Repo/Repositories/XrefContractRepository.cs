@@ -28,7 +28,7 @@ namespace Phytel.Engage.Integrations.Repo.Repositories
         public object SelectAll()
         {
             List<PatientXref> ptInfo = null;
-            using (var ct = new ContractEntities())
+            using (var ct = new Phytel.Engage.Integrations.Repo.EF.ContractEntities())
             {
                 var query = (from ce in ct.ContactEntities
                     join xf in ct.IntegrationPatientXrefs on new {PhytelPatientID = ce.ID} equals
