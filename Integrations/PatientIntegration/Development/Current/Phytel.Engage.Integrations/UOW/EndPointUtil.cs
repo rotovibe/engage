@@ -19,7 +19,7 @@ namespace Phytel.Engage.Integrations.UOW
             var userid = "5602f0f384ac071c989477cf"; // need to find a valid session id.
             IRestClient client = new JsonServiceClient();
             //"/{Context}/{Version}/{ContractNumber}/Batch/Patients"
-            var url = Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Batch/Patients/", DDPatientServiceUrl, "NG", 1, contract), "userid");
+            var url = Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Batch/Patients/", DDPatientServiceUrl, "NG", 1, contract), userid);
 
             InsertBatchPatientsDataResponse response = client.Post<InsertBatchPatientsDataResponse>(url,
                 new InsertBatchPatientsDataRequest
@@ -27,7 +27,7 @@ namespace Phytel.Engage.Integrations.UOW
                     Context = "NG",
                     ContractNumber = contract,
                     PatientsData = patients as List<PatientData>,
-                    UserId = "userid",
+                    UserId = userid,
                     Version = 1
                 });
 

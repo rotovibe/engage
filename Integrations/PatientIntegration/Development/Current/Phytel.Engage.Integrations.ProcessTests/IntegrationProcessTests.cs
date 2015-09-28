@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Phytel.Engage.Integrations.QueueProcess;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Phytel.API.DataDomain.ASE.DTO.Message;
+using Phytel.Engage.Integrations.QueueProcess;
 
 namespace Phytel.Engage.Integrations.ProcessTests
 {

@@ -16,19 +16,16 @@ namespace Phytel.Engage.Integrations.Repo.Repositories
         private string _connString;
         public ISQLConnectionProvider ConnStr { get; set; }
 
-        public XrefContractRepository(string contract)
+        public XrefContractRepository(string contract, ISQLConnectionProvider conProvider)
         {
             _contract = contract;
-            ConnStr = new SQLConnectionProvider();
-            _connString = ConnStr.GetConnectionString(contract);
-
-            //_sqlConnection = new SqlConnection(_connString);
+            ConnStr = conProvider;
         }
 
         public object SelectAll()
         {
             List<PatientXref> ptInfo = null;
-            using (var ct = new Phytel.Engage.Integrations.Repo.EF.ContractEntities())
+            using (var ct = new ContractEntities(ConnStr.GetConnectionString(_contract)))
             {
                 var query = (from ce in ct.ContactEntities
                     join xf in ct.IntegrationPatientXrefs on new {PhytelPatientID = ce.ID} equals

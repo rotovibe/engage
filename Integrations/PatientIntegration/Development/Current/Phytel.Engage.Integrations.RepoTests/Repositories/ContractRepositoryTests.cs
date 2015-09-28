@@ -16,7 +16,7 @@ namespace Phytel.Engage.Integrations.Repo.RepositoriesTests
         [TestMethod()]
         public void Select()
         {
-            var cr = new PatientsContractRepository("ORLANDOHEALTH001") { ConnStr = new SQLConnectionProvider() };
+            var cr = new PatientsContractRepository("ORLANDOHEALTH001", new SQLConnectionProvider()) { ConnStr = new SQLConnectionProvider() };
             cr.SelectAll(); 
         }
     }

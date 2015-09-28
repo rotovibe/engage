@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
+using Phytel.Engage.Integrations.Repo.Connections;
 
 namespace Phytel.Engage.Integrations.Repo.Repositories
 {
@@ -16,7 +17,7 @@ namespace Phytel.Engage.Integrations.Repo.Repositories
             var ob = types.ToList().Find(r => r.FullName.Equals(_namespace + type.ToString()));
 
             if (ob != null)
-                _repo = (IRepository) Activator.CreateInstance(ob, context);
+                _repo = (IRepository)Activator.CreateInstance(ob, context, new SQLConnectionProvider());
 
             return _repo;
         }

@@ -8,6 +8,7 @@ using Phytel.Engage.Integrations.DTO;
 using Phytel.Engage.Integrations.Repo.Repositories;
 using Phytel.Engage.Integrations.Specifications;
 using Phytel.Engage.Integrations.UOW;
+using Phytel.Engage.Integrations.Repo.Connections;
 
 namespace Phytel.Engage.Integrations.Process.Initialization
 {
@@ -17,6 +18,7 @@ namespace Phytel.Engage.Integrations.Process.Initialization
         {
             var container = new Container();
 
+            container.RegisterAutoWiredAs<SQLConnectionProvider, ISQLConnectionProvider>();
             container.RegisterAutoWiredAs<GetSendingApplicationId, IIntegrationCommand<string, string>>();
 
             container.Register<IImportUow>(

@@ -16,7 +16,7 @@ namespace Phytel.Engage.Integrations.Repo.Repositories.Tests
         [TestMethod()]
         public void SelectAllTest()
         {
-            var cr = new XrefContractRepository("ORLANDOHEALTH001") { ConnStr = new SQLConnectionProvider() };
+            var cr = new XrefContractRepository("ORLANDOHEALTH001", new SQLConnectionProvider());
             var result = cr.SelectAll();
             Assert.AreEqual(typeof(List<PatientXref>), result.GetType());
         }

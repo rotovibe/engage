@@ -1,36 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Common;
-using System.Data.Entity;
-using System.Data.SqlClient;
 using System.Linq;
 using Phytel.Engage.Integrations.Repo.Connections;
 using Phytel.Engage.Integrations.Repo.DTOs;
-using Phytel.Services.SQLServer;
 
 namespace Phytel.Engage.Integrations.Repo.Repositories
 {
     public class PatientsContractRepository : IRepository
     {
         private string _contract;
-        private string _connString;
         public ISQLConnectionProvider ConnStr { get; set; }
-        public SqlConnectionStringBuilder connStrBuilder;
 
-        public PatientsContractRepository(string contract)
+        public PatientsContractRepository(string contract, ISQLConnectionProvider conProvider)
         {
             _contract = contract;
-            ConnStr = new SQLConnectionProvider();
-            _connString = @"data source=azurephyoutreach.cloudapp.net;initial catalog=ORLANDOHEALTH001;persist security info=True;user id=mbobadilla;password=Ju1cy-Fru1t;MultipleActiveResultSets=True;App=EntityFramework";//ConnStr.GetConnectionString(contract);
-            connStrBuilder = new SqlConnectionStringBuilder(_connString);
-
+            ConnStr = conProvider;
 
         }
 
         public object SelectAll()
         {
             Dictionary<int, PatientInfo> ptInfo = null;
-            using (var ct = new Phytel.Engage.Integrations.Repo.EF.ContractEntities(_connString))
+            using (var ct = new ContractEntities(ConnStr.GetConnectionString(_contract)))
             {
                 var query = (from c3p in ct.C3Patient
                              join ce in ct.ContactEntities on new { PatientID = c3p.PatientID } equals new { PatientID = ce.ID }
