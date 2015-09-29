@@ -28,13 +28,13 @@ namespace Phytel.API.DataDomain.PatientNote.Service
             return response;
         }
 
-        public InsertBatchPatientNotesDataResponse Post(InsertBatchPatientNotesDataRequest request)
+        public UpsertBatchPatientNotesDataResponse Post(UpsertBatchPatientNotesDataRequest request)
         {
-            InsertBatchPatientNotesDataResponse response = new InsertBatchPatientNotesDataResponse();
+            UpsertBatchPatientNotesDataResponse response = new UpsertBatchPatientNotesDataResponse();
             try
             {
                 RequireUserId(request);
-                response = Manager.InsertBatchPatientNotes(request);
+                response = Manager.UpsertBatchPatientNotes(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)

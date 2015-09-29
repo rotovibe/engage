@@ -97,7 +97,8 @@ namespace Phytel.API.DataDomain.Patient
                             StatusDataSource  = Helper.TrimAndLimit(pd.StatusDataSource, 50),
                             Protected = pd.Protected,
                             Deceased = (Deceased)pd.DeceasedId,
-                            LastUpdatedOn = pd.LastUpdatedOn
+                            LastUpdatedOn = pd.LastUpdatedOn,
+                            ExternalRecordId = pd.ExternalRecordId
                         };
                         if(!string.IsNullOrEmpty(pd.ReasonId))
                         {
@@ -245,7 +246,8 @@ namespace Phytel.API.DataDomain.Patient
                         MaritalStatusId = mePatient.MaritalStatusId == null ? null : mePatient.MaritalStatusId.ToString(),
                         Protected = mePatient.Protected,
                         DeceasedId = (int)mePatient.Deceased,
-                        StatusId = (int)mePatient.Status
+                        StatusId = (int)mePatient.Status,
+                        ExternalRecordId = mePatient.ExternalRecordId
                     };
                     if (!string.IsNullOrEmpty(userId))
                     {
@@ -396,6 +398,7 @@ namespace Phytel.API.DataDomain.Patient
                                 MaritalStatusId = meP.MaritalStatusId == null ? null : meP.MaritalStatusId.ToString(),
                                 Protected = meP.Protected,
                                 DeceasedId = (int)meP.Deceased,
+                                ExternalRecordId = meP.ExternalRecordId
                             };
                             response.Add(data.Id, data);
                         }
@@ -673,6 +676,14 @@ namespace Phytel.API.DataDomain.Patient
                     if (request.PatientData.StatusDataSource != null)
                     {
                         updt.Set(MEPatient.StatusDataSourceProperty, Helper.TrimAndLimit(request.PatientData.StatusDataSource, 50));
+                    }
+                    if (!string.IsNullOrEmpty(request.PatientData.ExternalRecordId))
+                    {
+                        updt.Set(MEPatient.ExternalRecordIdProperty, request.PatientData.ExternalRecordId);
+                    }
+                    else
+                    {
+                        updt.Set(MEPatient.ExternalRecordIdProperty, BsonNull.Value);
                     }
                     updt.Set(MEPatient.UpdatedByProperty, ObjectId.Parse(this.UserId));
                     updt.Set(MEPatient.VersionProperty, request.Version);

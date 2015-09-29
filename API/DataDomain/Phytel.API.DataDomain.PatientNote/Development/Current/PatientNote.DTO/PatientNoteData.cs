@@ -26,6 +26,6 @@ namespace Phytel.API.DataDomain.PatientNote.DTO
         public string UpdatedById { get; set; }
         public string DataSource { get; set; }
         // added for atmosphere integration
-        public string AtmosphereId { get; set; }
+        public string ExternalRecordId { get; set; }
     }
 }

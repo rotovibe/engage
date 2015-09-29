@@ -30,7 +30,7 @@ namespace Phytel.API.DataDomain.Patient.DTO
         // added for atmosphere integration
         public DateTime? LastUpdatedOn { get; set; }
         public DateTime RecordCreatedOn { get; set; }
-        public string AtmosphereId { get; set; }
+        public string ExternalRecordId { get; set; }
         public string EngagePatientSystemId { get; set; }
     }
 }

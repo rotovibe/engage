@@ -70,6 +70,11 @@ namespace Phytel.API.DataDomain.PatientSystem.DTO
         [BsonIgnoreIfNull(false)]
         public bool Primary { get; set; }
 
+        public const string ExternalRecordIdProperty = "extrid";
+        [BsonElement(ExternalRecordIdProperty)]
+        [BsonIgnoreIfNull(true)]
+        public string ExternalRecordId { get; set; }
+
         #region DeprecatedPropertiesOfPatientSystem.
         // They should be deleted after 1.3 release.
         public const string OldSystemIdProperty = "sysid";

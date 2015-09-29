@@ -331,13 +331,13 @@ namespace Phytel.API.DataDomain.Patient
                             // Create Engage system record for the newly created patient in PatientSystem collection.
                             string engageId = insertEngagePatientSystem(patientResponse.Id, insertReq);
                             code = HttpStatusCode.Created;
-                            patientData = new PatientData { Id = patientResponse.Id, AtmosphereId = p.AtmosphereId, EngagePatientSystemId = engageId };
+                            patientData = new PatientData { Id = patientResponse.Id, ExternalRecordId = p.ExternalRecordId, EngagePatientSystemId = engageId };
                         }
                     }
                     catch (Exception ex)
                     {
                         code = HttpStatusCode.InternalServerError;
-                        message = string.Format("AtmosphereId: {0}, Message: {1}, StackTrace: {2}", p.AtmosphereId, ex.Message, ex.StackTrace);
+                        message = string.Format("ExternalRecordId: {0}, Message: {1}, StackTrace: {2}", p.ExternalRecordId, ex.Message, ex.StackTrace);
                     }
                     list.Add(new HttpObjectResponse<PatientData> { Code = code, Body = (PatientData)patientData, Message = message });
                 });

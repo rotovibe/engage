@@ -132,6 +132,11 @@ namespace Phytel.API.DataDomain.Patient.DTO
         [BsonIgnoreIfNull(true)]
         public Deceased Deceased { get; set; }
 
+        public const string ExternalRecordIdProperty = "extrid";
+        [BsonElement(ExternalRecordIdProperty)]
+        [BsonIgnoreIfNull(true)]
+        public string ExternalRecordId { get; set; }
+
         [BsonExtraElements]
         public BsonDocument ExtraElements { get; set; }
 

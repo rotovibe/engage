@@ -20,6 +20,6 @@ namespace Phytel.API.DataDomain.PatientSystem
         void DeletePatientSystems(DeletePatientSystemsDataRequest request);
         bool UpdatePatientSystem(UpdatePatientSystemDataRequest request);
         List<string> InsertEngagePatientSystems(InsertEngagePatientSystemsDataRequest request);
-        InsertBatchPatientSystemsDataResponse InsertBatchPatientSystems(InsertBatchPatientSystemsDataRequest request);
+        UpsertBatchPatientSystemsDataResponse UpsertBatchPatientSystems(UpsertBatchPatientSystemsDataRequest request);
     }
 }

@@ -445,6 +445,12 @@ namespace Phytel.API.DataDomain.PatientNote.Repo
             }
             catch (Exception ex) { throw ex; }
         }
+
+
+        public object FindByExternalRecordId(string externalRecordId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
 

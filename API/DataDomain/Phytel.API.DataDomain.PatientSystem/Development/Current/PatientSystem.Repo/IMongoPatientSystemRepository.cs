@@ -12,5 +12,6 @@ namespace Phytel.API.DataDomain.PatientSystem
     {
         IEnumerable<object> FindByPatientId(string patientId);
         IEnumerable<object> Find(object entity);
+        object FindByExternalRecordId(string externalRecordId);
     }
 }

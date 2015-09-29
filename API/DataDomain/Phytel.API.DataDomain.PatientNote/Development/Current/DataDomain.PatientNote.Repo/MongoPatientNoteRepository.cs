@@ -57,7 +57,8 @@ namespace Phytel.API.DataDomain.PatientNote.Repo
                         Type = ObjectId.Parse(noteData.TypeId),
                         DeleteFlag = false,
                         DataSource = Helper.TrimAndLimit(noteData.DataSource, 50),
-                        LastUpdatedOn = noteData.UpdatedOn
+                        LastUpdatedOn = noteData.UpdatedOn,
+                        ExternalRecordId = noteData.ExternalRecordId
                     };
 
                     if(!string.IsNullOrEmpty(noteData.MethodId))
@@ -181,7 +182,8 @@ namespace Phytel.API.DataDomain.PatientNote.Repo
                             ContactedOn = meN.ContactedOn,
                             UpdatedById = (meN.UpdatedBy == null) ? null : meN.UpdatedBy.ToString(),
                             UpdatedOn = meN.LastUpdatedOn,
-                            DataSource = meN.DataSource
+                            DataSource = meN.DataSource,
+                            ExternalRecordId = meN.ExternalRecordId
                         };
                     }
                 }
@@ -294,6 +296,14 @@ namespace Phytel.API.DataDomain.PatientNote.Repo
                         uv.Add(MB.Update.Set(MEPatientNote.DataSourceProperty, BsonNull.Value));
                     }
 
+                    if (!string.IsNullOrEmpty(pn.ExternalRecordId))
+                    {
+                        uv.Add(MB.Update.Set(MEPatientNote.ExternalRecordIdProperty, pn.ExternalRecordId));
+                    }
+                    else
+                    {
+                        uv.Add(MB.Update.Set(MEPatientNote.ExternalRecordIdProperty, BsonNull.Value));
+                    }
                     IMongoUpdate update = MB.Update.Combine(uv);
                     ctx.PatientNotes.Collection.Update(q, update);
 
@@ -363,7 +373,8 @@ namespace Phytel.API.DataDomain.PatientNote.Repo
                                 ContactedOn = meN.ContactedOn,
                                 UpdatedById = (meN.UpdatedBy == null) ? null : meN.UpdatedBy.ToString(),
                                 UpdatedOn = meN.LastUpdatedOn,
-                                DataSource = meN.DataSource
+                                DataSource = meN.DataSource,
+                                ExternalRecordId = meN.ExternalRecordId
                             });
                         }
                     }
@@ -465,6 +476,33 @@ namespace Phytel.API.DataDomain.PatientNote.Repo
                 return noteDataList;
             }
             catch (Exception ex) { throw ex; }
+        }
+
+
+        public object FindByExternalRecordId(string externalRecordId)
+        {
+            PatientNoteData data = null;
+            try
+            {
+                using (PatientNoteMongoContext ctx = new PatientNoteMongoContext(ContractDBName))
+                {
+                    List<IMongoQuery> queries = new List<IMongoQuery>();
+                    queries.Add(Query.EQ(MEPatientNote.ExternalRecordIdProperty, externalRecordId));
+                    queries.Add(Query.EQ(MEPatientNote.DeleteFlagProperty, false));
+                    queries.Add(Query.EQ(MEPatientNote.TTLDateProperty, BsonNull.Value));
+                    IMongoQuery mQuery = Query.And(queries);
+                    MEPatientNote mePN = ctx.PatientNotes.Collection.Find(mQuery).FirstOrDefault();
+                    if (mePN != null)
+                    {
+                        data = new PatientNoteData
+                        {
+                            Id = mePN.Id.ToString(),
+                        };
+                    }
+                }
+                return data;
+            }
+            catch (Exception) { throw; }
         }
     }
 }

@@ -51,7 +51,7 @@ namespace Phytel.API.DataDomain.PatientNote.Test.Stubs
         }
 
 
-        public InsertBatchPatientNotesDataResponse InsertBatchPatientNotes(InsertBatchPatientNotesDataRequest request)
+        public UpsertBatchPatientNotesDataResponse UpsertBatchPatientNotes(UpsertBatchPatientNotesDataRequest request)
         {
             throw new NotImplementedException();
         }

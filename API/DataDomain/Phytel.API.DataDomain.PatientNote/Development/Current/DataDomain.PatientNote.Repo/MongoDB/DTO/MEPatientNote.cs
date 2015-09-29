@@ -30,6 +30,11 @@ namespace Phytel.API.DataDomain.PatientNote.Repo
         [BsonIgnoreIfNull(true)]
         public ObjectId PatientId { get; set; }
 
+        public const string ExternalRecordIdProperty = "extrid";
+        [BsonElement(ExternalRecordIdProperty)]
+        [BsonIgnoreIfNull(true)]
+        public string ExternalRecordId { get; set; }
+
         public const string TextProperty = "txt";
         [BsonElement(TextProperty)]
         [BsonIgnoreIfNull(true)]

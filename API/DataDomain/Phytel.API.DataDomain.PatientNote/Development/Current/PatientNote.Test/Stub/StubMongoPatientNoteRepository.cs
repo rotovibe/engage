@@ -83,5 +83,11 @@ namespace Phytel.API.DataDomain.PatientNote.Test.Stub
         {
             throw new NotImplementedException();
         }
+
+
+        public object FindByExternalRecordId(string externalRecordId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
