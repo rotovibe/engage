@@ -21,7 +21,7 @@
             self.actionActions = ko.observableArray([{ text: ko.observable('Repeat') }]);
             self.selectedAction = ko.observable();
             self.selectedHistoricalAction = ko.observable();
-            self.programsSaving = ko.computed(datacontext.programsSaving);
+            self.programsSaving = ko.computed(datacontext.programsSaving);			
         };
 
         ctor.prototype.activate = function (settings) {
@@ -32,6 +32,11 @@
             self.activeActionToken = self.activeAction.subscribe(function () {
                 self.activeTab(self.tabs()[0]);
             });
+			self.disableActionActions = ko.computed( function(){
+				var isSaving = datacontext.programsSaving();
+				var isLoading = self.activeAction().isLoading();
+				return isSaving || isLoading;
+			});
             self.selectedAction.subscribe(function (newValue) {
                 if (newValue && newValue.text() === 'Repeat') {
                     if (self.activeAction().completed() && self.activeAction().module().program().elementStateModel().name() === 'In Progress' && !datacontext.programsSaving()) {
@@ -95,6 +100,15 @@
                 self.activeActionToken.dispose();
             }
         }
-
+		
+		ctor.prototype.detached = function() {
+			self.availableHistoricalActionsComputed.dispose();
+			self.availableHistoricalActions.dispose();
+			self.disableActionActions.dispose();
+			self.programsSaving.dispose();
+			ko.utils.arrayForEach( self.tabs, function( tab ){
+				tab.isActive.dispose();
+			});
+		}
         return ctor;
     });

@@ -555,6 +555,7 @@ define(['config.services', 'services/session', 'services/entityserializer', 'ser
 		            return action.elementState() === 4;
 		        });
 		        action.isSaving = ko.observable(false);
+				action.isLoading = ko.observable(false);
 		        action.saveAction = function () {
 		            setTimeout(function () {
 		                action.isSaving(true);

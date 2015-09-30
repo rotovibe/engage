@@ -93,7 +93,10 @@
             if (activeaction) {
                 var thisAction = activeAction();
                 if (thisAction && thisAction.steps().length === 0) {
-                    getStepsForAction(thisAction);
+					thisAction.isLoading(true);
+                    getStepsForAction(thisAction).then( function(){
+						thisAction.isLoading(false);
+					});
                 }                    
             } else {
             }
@@ -242,7 +245,7 @@
         }
 
         function getStepsForAction(action) {
-            datacontext.getEntityList(null, actionEndPoint().EntityType, genericActionEndPoint().ResourcePath + '/' + selectedPatient().id() + '/Program/' + action.module().program().id() + '/Module/' + action.module().id() + '/Action/' + action.id(), null, null, true);
+            return datacontext.getEntityList(null, actionEndPoint().EntityType, genericActionEndPoint().ResourcePath + '/' + selectedPatient().id() + '/Program/' + action.module().program().id() + '/Module/' + action.module().id() + '/Action/' + action.id(), null, null, true);
         }
 
         function minimizeThisColumn(sender) {
