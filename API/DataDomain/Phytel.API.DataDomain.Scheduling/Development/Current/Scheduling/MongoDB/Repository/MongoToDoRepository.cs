@@ -35,7 +35,7 @@ namespace Phytel.API.DataDomain.Scheduling
             {
                 if (todoData != null)
                 {
-                    meToDo = new METoDo(this.UserId)
+                    meToDo = new METoDo(this.UserId, todoData.CreatedOn)
                     {
                         Status = (Status)todoData.StatusId,
                         Priority = (Priority)todoData.PriorityId,
@@ -43,7 +43,9 @@ namespace Phytel.API.DataDomain.Scheduling
                         Title = todoData.Title,
                         DueDate = todoData.DueDate,
                         ProgramIds = Helper.ConvertToObjectIdList(todoData.ProgramIds),
-                        DeleteFlag = false
+                        DeleteFlag = false,
+                        LastUpdatedOn = todoData.UpdatedOn,
+                        ExternalRecordId = todoData.ExternalRecordId
                     };
 
                     if (!string.IsNullOrEmpty(todoData.AssignedToId))
@@ -162,6 +164,7 @@ namespace Phytel.API.DataDomain.Scheduling
                             StatusId = (int)meToDo.Status,
                             Title = meToDo.Title,
                             UpdatedOn = meToDo.LastUpdatedOn,
+                            ExternalRecordId  = meToDo.ExternalRecordId,
                             DeleteFlag = meToDo.DeleteFlag
                         };
                     }
@@ -274,6 +277,14 @@ namespace Phytel.API.DataDomain.Scheduling
                         else
                         {
                             uv.Add(MB.Update.Set(METoDo.AssignedToProperty, BsonNull.Value));
+                        }
+                        if (!string.IsNullOrEmpty(todoData.ExternalRecordId))
+                        {
+                            uv.Add(MB.Update.Set(METoDo.ExternalRecordIdProperty, todoData.ExternalRecordId));
+                        }
+                        else
+                        {
+                            uv.Add(MB.Update.Set(METoDo.ExternalRecordIdProperty, BsonNull.Value));
                         }
                         uv.Add(MB.Update.Set(METoDo.DeleteFlagProperty, todoData.DeleteFlag));
                         DataAuditType type;
@@ -407,7 +418,8 @@ namespace Phytel.API.DataDomain.Scheduling
                                 StatusId = (int)t.Status,
                                 Title = t.Title,
                                 UpdatedOn = t.LastUpdatedOn, 
-                                DeleteFlag = t.DeleteFlag
+                                DeleteFlag = t.DeleteFlag,
+                                ExternalRecordId = t.ExternalRecordId
                             });
                         }
                     }
@@ -479,6 +491,32 @@ namespace Phytel.API.DataDomain.Scheduling
                 return dataList;
             }
             catch (Exception ex) { throw ex; }
+        }
+
+        public object FindByExternalRecordId(string externalRecordId)
+        {
+            ToDoData data = null;
+            try
+            {
+                using (SchedulingMongoContext ctx = new SchedulingMongoContext(_dbName))
+                {
+                    List<IMongoQuery> queries = new List<IMongoQuery>();
+                    queries.Add(Query.EQ(METoDo.ExternalRecordIdProperty, externalRecordId));
+                    queries.Add(Query.EQ(METoDo.DeleteFlagProperty, false));
+                    queries.Add(Query.EQ(METoDo.TTLDateProperty, BsonNull.Value));
+                    IMongoQuery mQuery = Query.And(queries);
+                    METoDo mePN = ctx.ToDos.Collection.Find(mQuery).FirstOrDefault();
+                    if (mePN != null)
+                    {
+                        data = new ToDoData
+                        {
+                            Id = mePN.Id.ToString(),
+                        };
+                    }
+                }
+                return data;
+            }
+            catch (Exception) { throw; }
         }
     }
 }

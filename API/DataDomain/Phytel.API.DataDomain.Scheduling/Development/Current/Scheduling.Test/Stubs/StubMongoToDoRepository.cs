@@ -117,7 +117,7 @@ namespace Phytel.API.DataDomain.ToDo.Test.Stubs
             {
                 if (todoData != null)
                 {
-                    meToDo = new METoDo(this.UserId)
+                    meToDo = new METoDo(this.UserId, todoData.CreatedOn)
                     {
                         Id = ObjectId.Parse("532b6320a381168abe000877"),
                         Status = (Status)todoData.StatusId,
@@ -128,7 +128,8 @@ namespace Phytel.API.DataDomain.ToDo.Test.Stubs
                         DeleteFlag = false,
                         AssignedToId = ObjectId.Parse(todoData.AssignedToId),
                         SourceId = ObjectId.Parse(todoData.SourceId),
-                        ClosedDate = todoData.ClosedDate
+                        ClosedDate = todoData.ClosedDate,
+                        LastUpdatedOn = todoData.UpdatedOn
                     };
                 }
                 return meToDo.Id.ToString();
@@ -191,7 +192,7 @@ namespace Phytel.API.DataDomain.ToDo.Test.Stubs
             bool result = false;
             if (todoData != null)
             {
-                METoDo meToDo = new METoDo(this.UserId)
+                METoDo meToDo = new METoDo(this.UserId, todoData.CreatedOn)
                 {
                     Status = (Status)todoData.StatusId,
                     Priority = (Priority)todoData.PriorityId,
@@ -212,6 +213,12 @@ namespace Phytel.API.DataDomain.ToDo.Test.Stubs
         }
 
         public void UndoDelete(object entity)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public object FindByExternalRecordId(string externalRecordId)
         {
             throw new NotImplementedException();
         }

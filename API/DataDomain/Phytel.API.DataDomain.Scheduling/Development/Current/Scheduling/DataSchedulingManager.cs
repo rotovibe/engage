@@ -4,6 +4,8 @@ using Phytel.API.DataDomain.Scheduling;
 using System;
 using Phytel.API.Common.Format;
 using System.Collections.Generic;
+using Phytel.API.Common;
+using System.Net;
 
 namespace Phytel.API.DataDomain.Scheduling
 {
@@ -68,6 +70,72 @@ namespace Phytel.API.DataDomain.Scheduling
                 throw ex;
             }
             return response; ;
+        }
+
+        public UpsertBatchPatientToDosDataResponse UpsertBatchPatientToDos(UpsertBatchPatientToDosDataRequest request)
+        {
+            UpsertBatchPatientToDosDataResponse response = new UpsertBatchPatientToDosDataResponse();
+            if (request.PatientToDosData != null && request.PatientToDosData.Count > 0)
+            {
+                List<HttpObjectResponse<ToDoData>> list = new List<HttpObjectResponse<ToDoData>>();
+                ISchedulingRepository repo = Factory.GetRepository(request, RepositoryType.ToDo);
+                request.PatientToDosData.ForEach(p =>
+                {
+                    if (!string.IsNullOrEmpty(p.ExternalRecordId))
+                    {
+                        HttpStatusCode code = HttpStatusCode.OK;
+                        ToDoData todoData = null;
+                        string message = string.Empty;
+                        try
+                        {
+                            ToDoData data = (ToDoData)repo.FindByExternalRecordId(p.ExternalRecordId);
+                            if (data == null)
+                            {
+                                PutInsertToDoDataRequest insertReq = new PutInsertToDoDataRequest
+                                {
+                                    Context = request.Context,
+                                    ContractNumber = request.ContractNumber,
+                                    ToDoData = p,
+                                    UserId = request.UserId,
+                                    Version = request.Version
+                                };
+                                string id = (string)repo.Insert(insertReq);
+                                if (!string.IsNullOrEmpty(id))
+                                {
+                                    code = HttpStatusCode.Created;
+                                    todoData = new ToDoData { Id = id, ExternalRecordId = p.ExternalRecordId, PatientId = p.PatientId };
+                                }
+                            }
+                            else
+                            {
+                                p.Id = data.Id;
+                                PutUpdateToDoDataRequest updateReq = new PutUpdateToDoDataRequest
+                                {
+                                    ToDoData = p,
+                                    Context = request.Context,
+                                    ContractNumber = request.ContractNumber,
+                                    UserId = request.UserId,
+                                    Version = request.Version
+                                };
+                                bool status = (bool)repo.Update(updateReq);
+                                if (status)
+                                {
+                                    code = HttpStatusCode.NoContent;
+                                    todoData = new ToDoData { Id = p.Id, ExternalRecordId = p.ExternalRecordId, PatientId = p.PatientId };
+                                }
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            code = HttpStatusCode.InternalServerError;
+                            message = string.Format("ExternalRecordId: {0}, Message: {1}, StackTrace: {2}", p.ExternalRecordId, ex.Message, ex.StackTrace);
+                        }
+                        list.Add(new HttpObjectResponse<ToDoData> { Code = code, Body = (ToDoData)todoData, Message = message });
+                    }
+                });
+                response.Responses = list;
+            }
+            return response;
         }
 
         public RemoveProgramInToDosDataResponse RemoveProgramInToDos(RemoveProgramInToDosDataRequest request)
@@ -150,7 +218,6 @@ namespace Phytel.API.DataDomain.Scheduling
         }
         #endregion
 
-
         #region Schedule
         public GetScheduleDataResponse GetSchedule(GetScheduleDataRequest request)
         {
@@ -169,6 +236,5 @@ namespace Phytel.API.DataDomain.Scheduling
             }
         }
         #endregion
-
     }
 }   

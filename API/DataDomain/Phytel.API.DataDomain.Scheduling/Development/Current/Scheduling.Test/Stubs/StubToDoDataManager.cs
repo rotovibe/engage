@@ -98,5 +98,11 @@ namespace Phytel.API.DataDomain.Scheduling.Test.Stubs
         {
             throw new NotImplementedException();
         }
+
+
+        public UpsertBatchPatientToDosDataResponse UpsertBatchPatientToDos(UpsertBatchPatientToDosDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

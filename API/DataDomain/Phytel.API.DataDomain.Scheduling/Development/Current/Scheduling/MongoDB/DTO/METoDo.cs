@@ -15,11 +15,11 @@ namespace Phytel.API.DataDomain.Scheduling
     [MongoIndex(Keys = new string[] { PatientIdProperty, DeleteFlagProperty }, Unique = false)]
     public class METoDo : IMongoEntity<ObjectId>, IMEEntity
     {
-        public METoDo(string userId)
+        public METoDo(string userId, DateTime? createdOn)
         {
             Id = ObjectId.GenerateNewId();
             RecordCreatedBy = ObjectId.Parse(userId);
-            RecordCreatedOn = System.DateTime.UtcNow;
+            RecordCreatedOn = createdOn == null ? DateTime.UtcNow : (DateTime)createdOn;
             Version = 1.0;
         }
 
@@ -93,6 +93,11 @@ namespace Phytel.API.DataDomain.Scheduling
         [BsonElement(PriorityProperty)]
         [BsonIgnoreIfNull(true)]
         public Priority Priority { get; set; }
+
+        public const string ExternalRecordIdProperty = "extrid";
+        [BsonElement(ExternalRecordIdProperty)]
+        [BsonIgnoreIfNull(true)]
+        public string ExternalRecordId { get; set; }
 
         #region Standard IMongoEntity Implementation
 

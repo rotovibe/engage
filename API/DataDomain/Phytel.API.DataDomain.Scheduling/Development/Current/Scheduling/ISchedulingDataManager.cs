@@ -11,5 +11,6 @@ namespace Phytel.API.DataDomain.Scheduling
         RemoveProgramInToDosDataResponse RemoveProgramInToDos(RemoveProgramInToDosDataRequest request);
         DeleteToDoByPatientIdDataResponse DeleteToDoByPatientId(DeleteToDoByPatientIdDataRequest request);
         UndoDeletePatientToDosDataResponse UndoDeleteToDos(UndoDeletePatientToDosDataRequest request);
+        UpsertBatchPatientToDosDataResponse UpsertBatchPatientToDos(UpsertBatchPatientToDosDataRequest request);
     }
 }

@@ -24,5 +24,6 @@ namespace Phytel.API.DataDomain.Scheduling.DTO
         public DateTime? UpdatedOn { get; set; }
         public string SourceId { get; set; }
         public bool DeleteFlag { get; set; }
+        public string ExternalRecordId { get; set; }
     }
 }

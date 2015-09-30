@@ -130,5 +130,11 @@ namespace Phytel.API.DataDomain.Scheduling
         {
             throw new NotImplementedException();
         }
+
+
+        public object FindByExternalRecordId(string externalRecordId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
