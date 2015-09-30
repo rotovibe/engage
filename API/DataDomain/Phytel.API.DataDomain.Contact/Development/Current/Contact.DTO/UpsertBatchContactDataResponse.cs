@@ -1,12 +1,13 @@
 using ServiceStack.ServiceInterface.ServiceModel;
 using System.Collections.Generic;
 using Phytel.API.Interface;
+using Phytel.API.Common;
 
 namespace Phytel.API.DataDomain.Contact.DTO
 {
-    public class GetContactByPatientIdDataResponse : IDomainResponse
+    public class UpsertBatchContactDataResponse : IDomainResponse
     {
-        public ContactData Contact { get; set; }
+        public List<HttpObjectResponse<ContactData>> Responses { get; set; }
         public double Version { get; set; }
         public ResponseStatus Status { get; set; }
     }

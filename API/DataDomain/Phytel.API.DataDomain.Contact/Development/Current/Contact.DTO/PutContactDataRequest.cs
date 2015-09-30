@@ -49,6 +49,7 @@ namespace Phytel.API.DataDomain.Contact.DTO
 
         [ApiMember(Name = "Addresses", Description = "List of Addresses being updated", ParameterType = "property", DataType = "List<AddressData>", IsRequired = false)]
         public List<AddressData> Addresses { get; set; }
+
         [ApiMember(Name = "Context", Description = "Product Context requesting the Contact", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string Context { get; set; }
 
