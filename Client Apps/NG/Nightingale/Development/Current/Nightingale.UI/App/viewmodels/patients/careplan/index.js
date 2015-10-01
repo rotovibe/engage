@@ -94,8 +94,10 @@
                 var thisAction = activeAction();
                 if (thisAction && thisAction.steps().length === 0) {
 					thisAction.isLoading(true);
-                    getStepsForAction(thisAction).then( function(){
-						thisAction.isLoading(false);
+                    getStepsForAction(thisAction).then( function(data){
+						if( thisAction.steps().length > 0 ){
+							thisAction.isLoading(false);
+						}
 					});
                 }                    
             } else {
