@@ -29,18 +29,19 @@ define(['services/validatorfactory', 'services/customvalidators', 'services/form
 		}
 				
 		// Create a common modal model
-		function modal(title, entity, templatePath, showing, saveOverride, cancelOverride, deleteOverride) {
+		function modal( modalSettings ){
 			var self = this;
-			self.Title = ko.observable(title);
-			self.Entity = entity;
-			self.TemplatePath = ko.observable(templatePath);
-			self.Showing = showing ? showing : false;
+			self.Title = ko.observable(modalSettings.title);
+			self.Entity = modalSettings.entity;
+			self.TemplatePath = ko.observable(modalSettings.templatePath);
+			self.classOverride = ko.observable(modalSettings.classOverride? modalSettings.classOverride : null);
+			self.Showing = modalSettings.showing ? modalSettings.showing : false;
 					// Method on the modal to save the currently mapped properties
 					self.saveChanges = function () {
 							// If a save override was passed in,
-							if (saveOverride) {
+							if (modalSettings.saveOverride) {
 									// Use that to save.
-									saveOverride();
+									modalSettings.saveOverride();
 									self.Showing(false);
 								} else {
 									// If not, use the entities default ave
@@ -54,9 +55,9 @@ define(['services/validatorfactory', 'services/customvalidators', 'services/form
 					};
 					self.cancelChanges = function () {
 					// If a cancel override function was passed in,
-					if (cancelOverride) {
+					if (modalSettings.cancelOverride) {
 							// Use it
-							var confirmed = cancelOverride();
+							var confirmed = modalSettings.cancelOverride();
 							if( confirmed === undefined || confirmed === true ){
 								self.Showing(false);
 							}
@@ -70,9 +71,9 @@ define(['services/validatorfactory', 'services/customvalidators', 'services/form
 			// Placeholder delete method
 			self.delete = function () {
 					// If a cancel override function was passed in,
-					if (deleteOverride) {
+					if (modalSettings.deleteOverride) {
 							// Use it
-							deleteOverride();
+							modalSettings.deleteOverride();
 							self.Showing(false);
 						} else {
 							self.Showing(false);

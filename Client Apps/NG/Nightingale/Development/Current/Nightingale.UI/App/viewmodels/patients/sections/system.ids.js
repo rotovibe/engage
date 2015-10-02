@@ -148,7 +148,17 @@ define(['services/datacontext', 'services/session', 'models/base', 'viewmodels/s
 			self.modalEntityObservable = ko.observable();
 			self.editSystemIds = function () {
 				self.modalEntityObservable( new ModalEntity( self.patientSystemsModalShowing, self.selectedPatient ) );
-				var modal = new modelConfig.modal('Individual IDs', self.modalEntityObservable, 'viewmodels/templates/patient.systems', self.patientSystemsModalShowing, self.savePatientSystems, self.cancelPatientSystems);
+				var modalSettings = {
+					title: 'Individual IDs',
+					entity: self.modalEntityObservable, 
+					templatePath: 'viewmodels/templates/patient.systems', 
+					showing: self.patientSystemsModalShowing, 
+					saveOverride: self.savePatientSystems, 
+					cancelOverride: self.cancelPatientSystems, 
+					deleteOverride: null, 
+					classOverride: null
+				}
+				var modal = new modelConfig.modal(modalSettings);
 				shell.currentModal(modal);
 				self.patientSystemsModalShowing(true);
 				self.isOpen(true);

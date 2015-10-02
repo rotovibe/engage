@@ -6,7 +6,7 @@
     <main role="application" data-bind="router: { cacheViews: true }">
     </main>
     <!-- ko with: currentModal -->
-    <div id="modal" data-bind="visible: Showing">
+    <div id="modal" data-bind="visible: Showing, css: classOverride">	
         <div class="content" data-bind="with: Entity">
             <header>
                 <h2 class="title">

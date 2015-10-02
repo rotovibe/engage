@@ -10,7 +10,14 @@
 			self.settings = settings;
 			self.selectedPatient = self.settings.selectedPatient;
 			self.editModalShowing = ko.observable(false);
-			self.modal = new modelConfig.modal('Edit Individual', self.selectedPatient, 'templates/patient.html', self.editModalShowing);
+			var modalSettings = {
+				title: 'Edit Individual',
+				entity: self.selectedPatient, 
+				templatePath: 'templates/patient.html', 
+				showing: self.editModalShowing,
+				classOverride: null
+			}
+			self.modal = new modelConfig.modal(modalSettings);
 			self.isOpen = ko.observable(true);
 			self.isEditing = ko.observable(false);
 			self.toggleEditing = function () {

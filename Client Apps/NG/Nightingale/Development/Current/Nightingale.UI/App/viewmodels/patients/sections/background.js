@@ -21,7 +21,17 @@ define(['models/base', 'services/datacontext', 'viewmodels/shell/shell'],
             self.cancelBackground = function () {
                 self.selectedPatient.entityAspect.rejectChanges();
             }
-            self.modal = new modelConfig.modal('Edit Background', self.selectedPatient, 'templates/background.html', self.backgroundModalShowing, self.saveBackground, self.cancelBackground);
+			var modalSettings = {
+				title: 'Edit Background',
+				entity: self.selectedPatient, 
+				templatePath: 'templates/background.html', 
+				showing: self.backgroundModalShowing, 
+				saveOverride: self.saveBackground, 
+				cancelOverride: self.cancelBackground, 
+				deleteOverride: null, 
+				classOverride: null
+			}
+            self.modal = new modelConfig.modal(modalSettings);
             self.isOpen = ko.observable(false);
             self.isEditing = ko.observable(false);
             self.isExpanded = ko.observable(false);

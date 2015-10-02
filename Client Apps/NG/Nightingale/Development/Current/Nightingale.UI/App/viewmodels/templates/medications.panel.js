@@ -99,7 +99,21 @@ define(['services/session', 'services/datacontext', 'config.services', 'viewmode
                 self.modalEntity().medication().isEditing(false);
                 datacontext.cancelEntityChanges(self.modalEntity().medication());
             };
-            self.modal = new modelConfig.modal('Edit Medication', self.modalEntity, 'viewmodels/patients/sections/medication.edit', self.modalShowing, self.saveOverride, self.cancelOverride);
+			var selectedPatientName = '';
+			if (medicationsIndex.selectedPatient()) {
+				selectedPatientName = ' - ' + medicationsIndex.selectedPatient().fullName();
+			}
+			var modalSettings = {
+				title: 'Edit Medication' + selectedPatientName,
+				entity: self.modalEntity, 
+				templatePath: 'viewmodels/patients/sections/medication.edit', 
+				showing: self.modalShowing, 
+				saveOverride: self.saveOverride, 
+				cancelOverride: self.cancelOverride, 
+				deleteOverride: null, 
+				classOverride: 'modal-lg'
+			}
+            self.modal = new modelConfig.modal(modalSettings);
     		// A list of columns to display
     		self.columns = ko.computed(function () {
     			var tempcols = [];

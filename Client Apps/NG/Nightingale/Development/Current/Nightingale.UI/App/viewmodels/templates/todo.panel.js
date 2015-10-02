@@ -137,7 +137,17 @@ define(['services/session', 'services/datacontext', 'config.services', 'viewmode
 					}
 				}	                		
             };
-            self.modal = new modelConfig.modal('Edit To Do', self.modalEntity, 'viewmodels/templates/todo.edit', self.modalShowing, self.saveOverride, self.cancelOverride);
+			var modalSettings = {
+				title: 'Edit To Do',
+				entity: self.modalEntity, 
+				templatePath: 'viewmodels/templates/todo.edit', 
+				showing:self.modalShowing , 
+				saveOverride: self.saveOverride, 
+				cancelOverride: self.cancelOverride, 
+				deleteOverride: null, 
+				classOverride: null
+			}
+            self.modal = new modelConfig.modal(modalSettings);
     		// A list of columns to display
     		self.columns = ko.computed(function () {
     			var tempcols = [];

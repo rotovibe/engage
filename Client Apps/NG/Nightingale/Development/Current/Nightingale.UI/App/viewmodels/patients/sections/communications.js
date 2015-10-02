@@ -93,7 +93,13 @@
                 return communications;
             }).extend({ throttle: 25 });
             // The modal to display for editing
-            self.modal = new modelConfig.modal('Edit Communication Preferences', self.contactCard, 'templates/contactcard.html', self.communicationModalShowing);
+			var modalSettings = {
+				title: 'Edit Communication Preferences',
+				entity: self.contactCard, 
+				templatePath: 'templates/contactcard.html', 
+				showing: self.communicationModalShowing				
+			}
+            self.modal = new modelConfig.modal(modalSettings);
             self.isOpen = ko.observable(true);
             // Why do we need this on the contactCard and in this view model?
             // TODO: I deleted it from the model but I think we can reduce either this one

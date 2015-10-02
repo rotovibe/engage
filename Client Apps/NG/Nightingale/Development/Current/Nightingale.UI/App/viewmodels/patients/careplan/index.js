@@ -73,7 +73,21 @@
             modalEntity().activeDataType(null);
             dataIndex.cancelDataEntry();
         };
-        var modal = new modelConfig.modal('Data Entry', modalEntity, 'viewmodels/templates/clinical.dataentry', modalShowing, saveOverride, cancelOverride);
+		var selectedPatientName = '';
+		if (selectedPatient()) {
+			selectedPatientName = ' - ' + selectedPatient().fullName();
+		}
+		var modalSettings = {
+			title: 'Data Entry' + selectedPatientName,
+			entity: modalEntity, 
+			templatePath: 'viewmodels/templates/clinical.dataentry', 
+			showing: modalShowing, 
+			saveOverride: saveOverride, 
+			cancelOverride: cancelOverride, 
+			deleteOverride: null, 
+			classOverride: null
+		}
+        var modal = new modelConfig.modal(modalSettings);
         function toggleModalShowing() {
             shell.currentModal(modal);
             modalShowing(!modalShowing());

@@ -66,6 +66,7 @@
         ctor.prototype.activate = function (data) {
     		var self = this;
     		self.allergies = data.allergies;
+			self.selectedPatient = data.selectedPatient;
             self.selectedSortColumn = data.selectedSortColumn;
             self.toggleSort = data.toggleSort;
             self.canSort = data.canSort ? data.canSort : false;
@@ -87,7 +88,21 @@
                 datacontext.cancelEntityChanges(self.modalEntity().allergy());
                 patientsIndex.getPatientsAllergies();
             };
-            self.modal = new modelConfig.modal('Edit Allergy', self.modalEntity, 'viewmodels/templates/allergy.edit', self.modalShowing, self.saveOverride, self.cancelOverride);
+			var selectedPatientName = '';
+			if (self.selectedPatient()) {
+				selectedPatientName = ' - ' + self.selectedPatient().fullName();
+			}
+			var modalSettings = {
+				title: 'Edit Allergy' + selectedPatientName,
+				entity: self.modalEntity, 
+				templatePath: 'viewmodels/templates/allergy.edit', 
+				showing: self.modalShowing, 
+				saveOverride: self.saveOverride, 
+				cancelOverride: self.cancelOverride, 
+				deleteOverride: null, 
+				classOverride: 'modal-lg'
+			}
+            self.modal = new modelConfig.modal(modalSettings);
     		// A list of columns to display
     		self.columns = ko.computed(function () {
     			var tempcols = [];

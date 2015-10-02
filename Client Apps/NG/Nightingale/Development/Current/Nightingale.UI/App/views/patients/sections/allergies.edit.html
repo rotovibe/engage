@@ -3,7 +3,7 @@
         <div class="span3">
             <strong>Name</strong>
         </div>
-        <div class="span2">
+        <div class="span3">
             <strong>Type</strong>
         </div>
         <div class="span3">
@@ -12,16 +12,13 @@
         <div class="span3">
             <strong>End Date</strong>
         </div>        
-        <div class="span1">
-            &nbsp;
-        </div>
     </div>
     <!-- ko foreach: newPatientAllergies -->
 	    <div class="row pad-top divider">
 	        <div class="span3">
 	        	<pre data-bind="text: allergyName"></pre>
 	        </div>
-	        <div class="span2">
+	        <div class="span3">
 	        	<!-- ko if: !isUserCreated() -->
 	        	<div class="ellipsis">
 	        		<span data-bind="text: typeString, attr: { title: typeString }"></span>
@@ -32,22 +29,26 @@
 	        	</div>
 	        </div>
 	        <div class="span3">
-				<!-- ko compose: { model: 'viewmodels/templates/datetimepicker', activationData:
-					{
-						observableDateTime: startDate, dateErrors: startDateErrors, showInvalid: setInvalidStartDate, 
-						maxDate: 'today', datepickerOptions:{ maxDate: '+0' }, datepickerDynamicOptions: {}, dateName: 'startDate'
-					}
-				} -->
-				<!-- /ko -->
+				<div class="span7">
+					<!-- ko compose: { model: 'viewmodels/templates/datetimepicker', activationData:
+						{
+							observableDateTime: startDate, dateErrors: startDateErrors, showInvalid: setInvalidStartDate, 
+							maxDate: 'today', datepickerOptions:{ maxDate: '+0' }, datepickerDynamicOptions: {}, dateName: 'startDate'
+						}
+					} -->
+					<!-- /ko -->
+				</div>
 	        </div>
-	        <div class="span3">
-				<!-- ko compose: { model: 'viewmodels/templates/datetimepicker', activationData:
-					{
-						observableDateTime: endDate, dateErrors: endDateErrors, showInvalid: setInvalidEndDate, 
-						maxDate: 'today', datepickerOptions:{maxDate: '+0'}, datepickerDynamicOptions: {minDate: startDate}, dateName: 'endDate'
-					}
-				} -->
-				<!-- /ko -->			        		
+	        <div class="span2">
+				<div class="span10">
+					<!-- ko compose: { model: 'viewmodels/templates/datetimepicker', activationData:
+						{
+							observableDateTime: endDate, dateErrors: endDateErrors, showInvalid: setInvalidEndDate, 
+							maxDate: 'today', datepickerOptions:{maxDate: '+0'}, datepickerDynamicOptions: {minDate: startDate}, dateName: 'endDate'
+						}
+					} -->
+					<!-- /ko -->			        		
+				</div>
 	        </div>	        
 	        <div class="span1 pull-right">
 	            <a href="#" title="Remove" data-bind="click: $parent.removeAllergy">
@@ -75,13 +76,13 @@
                 <div class="span10" data-bind="multiselect: { options: $parent.reactions, values: reactionIds, idValue: 'id', text: 'name', label: 'reactions', stringValue: reactionString }"></div>
 	        </div>
 	        <div class="span3">
-                <div class="span11" data-bind="chsnsingle: { options: $parent.severities, value: severity, text: 'name', label: 'severities' }"></div>
+                <div class="span10" data-bind="chsnsingle: { options: $parent.severities, value: severity, text: 'name', label: 'severities' }"></div>
 	        </div>
 	        <div class="span3">
-	            <div class="span11" data-bind="chsnsingle: { options: $parent.allergySources, value: source, text: 'name', label: 'sources' }"></div>
+	            <div class="span10" data-bind="chsnsingle: { options: $parent.allergySources, value: source, text: 'name', label: 'sources' }"></div>
 	        </div>
 			<div class="span3">
-	            <div class="span11" data-bind="chsnsingle: { options: $parent.allergyStatuses, value: status, text: 'name', label: 'status' }"></div>
+	            <div class="span10" data-bind="chsnsingle: { options: $parent.allergyStatuses, value: status, text: 'name', label: 'status' }"></div>
 	        </div>
 	    </div>
 	    <div class="row pad-top">

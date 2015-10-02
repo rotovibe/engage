@@ -33,7 +33,17 @@
         self.cancelOverride = function () {
             datacontext.cancelEntityChanges(self.modalEntity().program());
         };
-        self.modal = new modelConfig.modal('Individual Attributes', self.modalEntity, 'viewmodels/templates/program.edit', self.modalShowing, self.saveOverride, self.cancelOverride);
+		var modalSettings = {
+			title: 'Individual Attributes',
+			entity: self.modalEntity, 
+			templatePath: 'viewmodels/templates/program.edit', 
+			showing: self.modalShowing, 
+			saveOverride: self.saveOverride, 
+			cancelOverride: self.cancelOverride, 
+			deleteOverride: null, 
+			classOverride: null
+		}
+        self.modal = new modelConfig.modal(modalSettings);
         self.descriptionSectionOpen = ko.observable(false);
         self.individualAttributesSectionOpen = ko.observable(true);
         self.attributesSectionOpen = ko.observable(false);

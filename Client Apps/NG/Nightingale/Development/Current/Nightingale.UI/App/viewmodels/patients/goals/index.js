@@ -103,7 +103,17 @@
           getGoalDetails(goalCancel, true);
       };
       msg = msg ? msg : 'Edit Goal';
-      var modal = new modelConfig.modal(msg, modalEntity, 'viewmodels/templates/goal.edit', goalModalShowing, saveOverride, cancelOverride);
+	  var modalSettings = {
+			title: msg,
+			entity: modalEntity, 
+			templatePath: 'viewmodels/templates/goal.edit', 
+			showing: goalModalShowing, 
+			saveOverride: saveOverride, 
+			cancelOverride: cancelOverride, 
+			deleteOverride: null, 
+			classOverride: null
+		}
+      var modal = new modelConfig.modal(modalSettings);
       goalModalShowing(true);
       shell.currentModal(modal);
     }

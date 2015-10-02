@@ -56,7 +56,17 @@ define(['config.services', 'services/session', 'services/datacontext', 'models/b
                 return false;
             }
         }
-        var modal = new modelConfig.modal('Delete Individual', selectedPatient, 'templates/patient.delete.html', deleteModalShowing, null, null, deleteOverride);
+		var modalSettings = {
+			title: 'Delete Individual',
+			entity: selectedPatient, 
+			templatePath: 'templates/patient.delete.html', 
+			showing: deleteModalShowing, 
+			saveOverride: null, 
+			cancelOverride: null, 
+			deleteOverride: deleteOverride, 
+			classOverride: null
+		}
+        var modal = new modelConfig.modal(modalSettings);
         modal.canDelete(true);
         // Reveal the bindable properties and functions
         var vm = {

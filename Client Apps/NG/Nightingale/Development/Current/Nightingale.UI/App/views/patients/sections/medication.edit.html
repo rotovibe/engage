@@ -20,12 +20,14 @@
                     Name:
                 </div>
                 <div class="span3 pad-left">
+					<div class="row">
                     <!-- ko if: isNew -->
                         <input class="span12" type="text" data-bind="typeahead: { name: 'medications', taOptions: $parent.medicationBloodhound, displayKey: 'DisplayName' }, value: name, valueUpdate: 'afterkeydown', initOptions: { hint: false, highlight: true, minLength: 3, overrideSelected: $parent.overrideSelected }, showResultsCount: $parent.resultsMessage, css: { 'invalid': !$parent.canAdd() }" placeholder="Search Medications" />
                     <!-- /ko -->
                     <!-- ko ifnot: isNew -->
                         <span><pre data-bind="text: name"></pre></span>
                     <!-- /ko -->
+					</div>
                 </div>
                 <div class="span2 align-right grey">
                     Status:

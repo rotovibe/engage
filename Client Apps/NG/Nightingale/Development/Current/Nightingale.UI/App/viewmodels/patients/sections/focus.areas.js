@@ -136,7 +136,15 @@
 
             }
             self.modalEntity = ko.observable(new ModalEntity(self.selectedPatient));
-            self.modal = new modelConfig.modal('Focus Problems', self.modalEntity, 'viewmodels/templates/focusproblems', self.focusProblemModalShowing, self.saveProblemObservations, self.cancelProblemObservations);
+			var modalSettings = {
+				title: 'Focus Problems',
+				entity: self.modalEntity, 
+				templatePath: 'viewmodels/templates/focusproblems', 
+				showing: self.focusProblemModalShowing, 
+				saveOverride: self.saveProblemObservations, 
+				cancelOverride: self.cancelProblemObservations
+			}
+            self.modal = new modelConfig.modal(modalSettings);
             self.isOpen = ko.observable(true);
             self.isFullScreen = ko.observable(false);
             self.toggleEditing = function () {

@@ -215,7 +215,17 @@
 				note.entityAspect.setUnchanged();
 			};
 			var msg = 'Edit ' + activeNote().type().name() + ' Note';
-			var modal = new modelConfig.modal(msg, modalEntity, 'viewmodels/patients/notes/index', noteModalShowing, saveOverride, cancelOverride);
+			var modalSettings = {
+				title: msg,
+				entity: modalEntity, 
+				templatePath: 'viewmodels/patients/notes/index', 
+				showing: noteModalShowing, 
+				saveOverride: saveOverride, 
+				cancelOverride: cancelOverride, 
+				deleteOverride: null, 
+				classOverride: null
+			}
+			var modal = new modelConfig.modal(modalSettings);
 
 			//keep the original program ids
 			originalProgramIds.removeAll();

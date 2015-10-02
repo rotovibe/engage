@@ -49,7 +49,17 @@
         var eventModalShowing = ko.observable(false);
         var eventModalEntity = ko.observable(new EventModalEntity(eventModalShowing));
         function dummyFunction () { console.log('something was done'); }
-        var eventModal = new modelConfig.modal('Event Details', eventModalEntity, 'viewmodels/templates/event.details', eventModalShowing, dummyFunction, dummyFunction);
+		var eventModalSettings = {
+			title: 'Event Details',
+			entity: eventModalEntity, 
+			templatePath: 'templates/event.details', 
+			showing: eventModalShowing, 
+			saveOverride: dummyFunction, 
+			cancelOverride: dummyFunction, 
+			deleteOverride: null, 
+			classOverride: null
+		}
+        var eventModal = new modelConfig.modal(eventModalSettings);
 
         // Columns to override the default sorts
         var selectedTodoSortColumn = ko.observable()
@@ -67,8 +77,17 @@
         function cancelOverride () {
             datacontext.cancelEntityChanges(modalEntity().todo());
         };
-
-        var modal = new modelConfig.modal('Create To Do', modalEntity, 'viewmodels/templates/todo.edit', modalShowing, saveOverride, cancelOverride);
+		var modalSettings = {
+			title: 'Create To Do',
+			entity: modalEntity, 
+			templatePath: 'viewmodels/templates/todo.edit', 
+			showing: modalShowing, 
+			saveOverride: saveOverride, 
+			cancelOverride: cancelOverride, 
+			deleteOverride: null, 
+			classOverride: null
+		}
+        var modal = new modelConfig.modal(modalSettings);
 
         function Event() {
             var self = this;

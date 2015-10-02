@@ -166,7 +166,17 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
         return ctor;
 
         function editEntity (msg, entity, path, saveoverride, canceloverride) {
-            var modal = new modelConfig.modal(msg, entity, path, modalShowing, saveoverride, canceloverride);
+			var modalSettings = {
+				title: msg,
+				entity: entity, 
+				templatePath: path, 
+				showing: modalShowing, 
+				saveOverride: saveoverride, 
+				cancelOverride: canceloverride, 
+				deleteOverride: null, 
+				classOverride: null
+			}
+            var modal = new modelConfig.modal(modalSettings);
             modalShowing(true);
             shell.currentModal(modal);
         }

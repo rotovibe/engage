@@ -20,7 +20,17 @@ define(['models/base', 'services/datacontext', 'viewmodels/shell/shell'],
             self.cancelStatus = function () {
                 self.selectedPatient.entityAspect.rejectChanges();
             }
-            self.modal = new modelConfig.modal('Edit Status', self.selectedPatient, 'templates/patient.status.html', self.statusModalShowing, self.saveStatus, self.cancelStatus);
+			var modalSettings = {
+				title: 'Edit Status',
+				entity: self.selectedPatient, 
+				templatePath: 'templates/patient.status.html', 
+				showing: self.statusModalShowing, 
+				saveOverride: self.saveStatus, 
+				cancelOverride: self.cancelStatus, 
+				deleteOverride: null, 
+				classOverride: null
+			}
+            self.modal = new modelConfig.modal(modalSettings);
             self.isOpen = ko.observable(false);
             self.isEditing = ko.observable(false);
             self.isExpanded = ko.observable(false);

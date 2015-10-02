@@ -35,7 +35,17 @@
             self.modalEntity().activeDataType(null);
             dataIndex.cancelDataEntry();
         };
-        self.modal = new modelConfig.modal('Data Entry', self.modalEntity, 'viewmodels/templates/clinical.dataentry', self.modalShowing, self.saveOverride, self.cancelOverride);
+		var modalSettings = {
+			title: 'Data Entry',
+			entity: self.modalEntity, 
+			templatePath: 'viewmodels/templates/clinical.dataentry', 
+			showing: self.modalShowing, 
+			saveOverride: self.saveOverride, 
+			cancelOverride: self.cancelOverride, 
+			deleteOverride: null, 
+			classOverride: null
+		}
+        self.modal = new modelConfig.modal(modalSettings);
         self.toggleModalShowing = function () {
             shell.currentModal(self.modal);
             self.modalShowing(!self.modalShowing());
