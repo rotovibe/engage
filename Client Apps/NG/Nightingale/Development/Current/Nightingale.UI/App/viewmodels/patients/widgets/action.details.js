@@ -34,7 +34,8 @@
             });
 			self.disableActionActions = ko.computed( function(){
 				var isSaving = datacontext.programsSaving();
-				var isLoading = self.activeAction().isLoading();
+				var activeAction = self.activeAction();
+				var isLoading = activeAction? activeAction.isLoading() : false;
 				return isSaving || isLoading;
 			});
             self.selectedAction.subscribe(function (newValue) {
@@ -102,6 +103,7 @@
         }
 		
 		ctor.prototype.detached = function() {
+			var self = this;
 			self.availableHistoricalActionsComputed.dispose();
 			self.availableHistoricalActions.dispose();
 			self.disableActionActions.dispose();
