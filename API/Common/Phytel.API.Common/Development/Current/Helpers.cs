@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.IO;
 using System.Linq;
 using MongoDB.Bson;
 using Phytel.API.DataDomain.ASE.Common.Enums;
@@ -153,5 +154,42 @@ namespace Phytel.API.Common
             return value;
         }
 
+        public void SerializeObject<T>(T obj, string filePath)
+        {
+            //serialize
+            try
+            {
+                using (Stream stream = File.Open(filePath, FileMode.Create))
+                {
+                    var bformatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+
+                    bformatter.Serialize(stream, obj);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentException("SerializeObject():" + ex.Message);
+            }
+        }
+
+        public object DeserializeObject<T>(string filePath)
+        {
+            try
+            {
+                //deserialize
+                object obj = null;
+                using (Stream stream = File.Open(filePath, FileMode.Open))
+                {
+                    var bformatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+
+                    obj = (T) bformatter.Deserialize(stream);
+                }
+                return obj;
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentException("DeserializeObject():" + ex.Message);
+            }
+        }
     }
 }
