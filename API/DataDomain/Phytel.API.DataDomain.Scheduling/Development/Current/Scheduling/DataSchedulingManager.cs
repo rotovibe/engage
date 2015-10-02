@@ -81,12 +81,17 @@ namespace Phytel.API.DataDomain.Scheduling
                 ISchedulingRepository repo = Factory.GetRepository(request, RepositoryType.ToDo);
                 request.PatientToDosData.ForEach(p =>
                 {
-                    if (!string.IsNullOrEmpty(p.ExternalRecordId))
+                    HttpStatusCode code = HttpStatusCode.OK;
+                    ToDoData todoData = null;
+                    string message = string.Empty;
+                    try
                     {
-                        HttpStatusCode code = HttpStatusCode.OK;
-                        ToDoData todoData = null;
-                        string message = string.Empty;
-                        try
+                        if (string.IsNullOrEmpty(p.ExternalRecordId))
+                        {
+                            code = HttpStatusCode.BadRequest;
+                            message = string.Format("ExternalRecordId is missing for PatientId : {0}", p.PatientId);
+                        }
+                        else
                         {
                             ToDoData data = (ToDoData)repo.FindByExternalRecordId(p.ExternalRecordId);
                             if (data == null)
@@ -125,13 +130,13 @@ namespace Phytel.API.DataDomain.Scheduling
                                 }
                             }
                         }
-                        catch (Exception ex)
-                        {
-                            code = HttpStatusCode.InternalServerError;
-                            message = string.Format("ExternalRecordId: {0}, Message: {1}, StackTrace: {2}", p.ExternalRecordId, ex.Message, ex.StackTrace);
-                        }
-                        list.Add(new HttpObjectResponse<ToDoData> { Code = code, Body = (ToDoData)todoData, Message = message });
                     }
+                    catch (Exception ex)
+                    {
+                        code = HttpStatusCode.InternalServerError;
+                        message = string.Format("ExternalRecordId: {0}, Message: {1}, StackTrace: {2}", p.ExternalRecordId, ex.Message, ex.StackTrace);
+                    }
+                    list.Add(new HttpObjectResponse<ToDoData> { Code = code, Body = (ToDoData)todoData, Message = message });
                 });
                 response.Responses = list;
             }

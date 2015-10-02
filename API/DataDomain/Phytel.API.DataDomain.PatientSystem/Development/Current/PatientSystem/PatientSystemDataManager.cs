@@ -171,12 +171,17 @@ namespace Phytel.API.DataDomain.PatientSystem
                 var repo = Factory.GetRepository(RepositoryType.PatientSystem);
                 request.PatientSystemsData.ForEach(p =>
                 {
-                    if (!string.IsNullOrEmpty(p.ExternalRecordId))
+                    HttpStatusCode code = HttpStatusCode.OK;
+                    PatientSystemData psData = null;
+                    string message = string.Empty;
+                    try
                     {
-                        HttpStatusCode code = HttpStatusCode.OK;
-                        PatientSystemData psData = null;
-                        string message = string.Empty;
-                        try
+                        if (string.IsNullOrEmpty(p.ExternalRecordId))
+                        {
+                            code = HttpStatusCode.BadRequest;
+                            message = string.Format("ExternalRecordId is missing for PatientId : {0}", p.PatientId);
+                        }
+                        else
                         {
                             PatientSystemData data = (PatientSystemData)repo.FindByExternalRecordId(p.ExternalRecordId);
                             if (data == null)
@@ -216,16 +221,16 @@ namespace Phytel.API.DataDomain.PatientSystem
                                 {
                                     code = HttpStatusCode.NoContent;
                                     psData = new PatientSystemData { Id = p.Id, ExternalRecordId = p.ExternalRecordId, PatientId = p.PatientId };
-                                }                        
+                                }
                             }
                         }
-                        catch (Exception ex)
-                        {
-                            code = HttpStatusCode.InternalServerError;
-                            message = string.Format("ExternalRecordId: {0}, Message: {1}, StackTrace: {2}", p.ExternalRecordId, ex.Message, ex.StackTrace);
-                        }
-                        list.Add(new HttpObjectResponse<PatientSystemData> { Code = code, Body = (PatientSystemData)psData, Message = message });
                     }
+                    catch (Exception ex)
+                    {
+                        code = HttpStatusCode.InternalServerError;
+                        message = string.Format("ExternalRecordId: {0}, Message: {1}, StackTrace: {2}", p.ExternalRecordId, ex.Message, ex.StackTrace);
+                    }
+                    list.Add(new HttpObjectResponse<PatientSystemData> { Code = code, Body = (PatientSystemData)psData, Message = message });
                 });
                 response.Responses = list;
             }
