@@ -154,7 +154,7 @@ namespace Phytel.API.Common
             return value;
         }
 
-        public void SerializeObject<T>(T obj, string filePath)
+        public static void SerializeObject<T>(T obj, string filePath)
         {
             //serialize
             try
@@ -172,7 +172,7 @@ namespace Phytel.API.Common
             }
         }
 
-        public object DeserializeObject<T>(string filePath)
+        public static object DeserializeObject<T>(string filePath)
         {
             try
             {
