@@ -2,6 +2,7 @@ input.datepicker {
   @extend .icon-calendar;
   background:url('../images/calendar_grey_small.png') no-repeat right bottom;
   position: relative;
+  min-width: 100px;
   &:before {
     color: $grey-dark;
     position: absolute;
@@ -9,7 +10,7 @@ input.datepicker {
     right: 0;
     top: 50%;
     margin-top: -$grid-padding;
-  }
+  }    
   &.fixed {
     width: 8em;
   }

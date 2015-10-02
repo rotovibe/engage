@@ -1,5 +1,7 @@
+
 #modal {
   $width: 640px;
+  
   background: rgba(white, 0.8);
   /*display: none;*/
   height: 100%;
@@ -11,11 +13,11 @@
   .content {
     @include box-shadow(rgba(black, 0.5) 0 0 30px);
     background: white;
-    left: 15%;    
+    left: 50%;
+    margin-left: -$width / 2;
     position: absolute;
     top: 100px;
-    width: 74%;
-    height: 85%;
+    width: $width;
   }
   header {
     background: $grey-light;
@@ -43,9 +45,10 @@
   }
   .body {
     padding: $grid-padding;
-    height: 89%;
+    
     > .row.modal-tab { 
-      overflow: auto;      
+      overflow: auto;
+      max-height: 400px; 
       min-height: 400px; 
       height: 100%;
     }
@@ -72,5 +75,14 @@
       min-height: 150px;
       max-height: 300px;
     }
+  }
+  
+  &.modal-lg .content{                     
+    $factor: 0.8; 
+    @include sizemodal($factor);        
+  }  
+  &.modal-md .content {      
+    $factor: 0.7; 
+    @include sizemodal($factor);     
   }
 }
