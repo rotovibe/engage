@@ -88,12 +88,9 @@
                 datacontext.cancelEntityChanges(self.modalEntity().allergy());
                 patientsIndex.getPatientsAllergies();
             };
-			var selectedPatientName = '';
-			if (self.selectedPatient()) {
-				selectedPatientName = ' - ' + self.selectedPatient().fullName();
-			}
+
 			var modalSettings = {
-				title: 'Edit Allergy' + selectedPatientName,
+				title: 'Edit Allergy' + ' - ' + self.selectedPatient().fullName(),
 				entity: self.modalEntity, 
 				templatePath: 'viewmodels/templates/allergy.edit', 
 				showing: self.modalShowing, 
@@ -122,6 +119,8 @@
     		self.editAllergy = function (allergy) {
                 // Set the allergy
                 self.modalEntity().allergy(allergy);
+				
+				self.modal.Title('Edit Allergy' + ' - ' + self.selectedPatient().fullName());
                 // Set the current modal
                 shell.currentModal(self.modal);
                 // Show it

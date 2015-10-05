@@ -73,12 +73,9 @@
             modalEntity().activeDataType(null);
             dataIndex.cancelDataEntry();
         };
-		var selectedPatientName = '';
-		if (selectedPatient()) {
-			selectedPatientName = ' - ' + selectedPatient().fullName();
-		}
+
 		var modalSettings = {
-			title: 'Data Entry' + selectedPatientName,
+			title: 'Data Entry' + ' - ' + selectedPatient().fullName(),
 			entity: modalEntity, 
 			templatePath: 'viewmodels/templates/clinical.dataentry', 
 			showing: modalShowing, 
@@ -89,6 +86,8 @@
 		}
         var modal = new modelConfig.modal(modalSettings);
         function toggleModalShowing() {
+			//update the title as the patient name may change:
+			modal.Title('Data Entry' + ' - ' + self.selectedPatient().fullName());
             shell.currentModal(modal);
             modalShowing(!modalShowing());
         }

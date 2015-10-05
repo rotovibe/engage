@@ -33,13 +33,10 @@ define(['plugins/router', 'services/navigation', 'config.services', 'services/se
             cancelDataEntry();
             patientsIndex.getPatientsAllergies();
         };
-        var selectedPatientName = '';
-		if (selectedPatient()) {
-			selectedPatientName = ' - ' + selectedPatient().fullName();
-		}
+
         function toggleModalShowing () {
 			var modalSettings = {
-				title: 'Data Entry' + selectedPatientName,
+				title: 'Data Entry' + ' - ' + selectedPatient().fullName(),
 				entity: modalEntity, 
 				templatePath: 'viewmodels/templates/clinical.dataentry', 
 				showing: modalShowing, 
