@@ -85,7 +85,7 @@
 			saveOverride: saveOverride, 
 			cancelOverride: cancelOverride, 
 			deleteOverride: null, 
-			classOverride: null
+			classOverride: 'modal-lg'
 		}
         var modal = new modelConfig.modal(modalSettings);
         function toggleModalShowing() {
