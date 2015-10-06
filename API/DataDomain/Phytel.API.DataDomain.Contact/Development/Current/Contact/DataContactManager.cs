@@ -313,7 +313,7 @@ namespace Phytel.API.DataDomain.Contact
                                     UserId = request.UserId,
                                     Version = request.Version
                                 };
-                                PutUpdateContactDataResponse updateRes = repo.Update(request) as PutUpdateContactDataResponse;
+                                PutUpdateContactDataResponse updateRes = repo.Update(updateReq) as PutUpdateContactDataResponse;
                                 if (updateRes != null && updateRes.SuccessData)
                                 {
                                     code = HttpStatusCode.NoContent;
