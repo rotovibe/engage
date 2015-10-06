@@ -44,7 +44,7 @@ namespace Phytel.API.AppDomain.NG
                     List<ContactData> contactsData  = getContactDetails(contactIds, request.Version, request.ContractNumber, request.UserId);
                     string pfName = string.Empty;
                     string gender = string.Empty;
-                    var contact = contactsData.Find(a => a.ContactId == n.ContactId);
+                    var contact = contactsData.Find(a => a.Id == n.ContactId);
                     if(contact != null)
                     {
                         pfName  = contact.PreferredName;
@@ -102,7 +102,7 @@ namespace Phytel.API.AppDomain.NG
                     {
                         string pfName = string.Empty;
                         string gender = string.Empty;
-                        var contact = contactsData.Find(a => a.ContactId == n.ContactId);
+                        var contact = contactsData.Find(a => a.Id == n.ContactId);
                         if(contact != null)
                         {
                             pfName  = contact.PreferredName;

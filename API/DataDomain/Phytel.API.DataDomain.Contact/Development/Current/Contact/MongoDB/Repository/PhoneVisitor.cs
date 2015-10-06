@@ -12,21 +12,24 @@ namespace Phytel.API.DataDomain.Contact.MongoDB.Repository
         {
             try
             {
-                List<PhoneData> phoneData = request.Phones;
-                List<Phone> mePhones = phoneData.Select(p => new Phone
+                if (request != null && request.ContactData != null)
                 {
-                    Id = ObjectId.GenerateNewId(),
-                    Number = p.Number,
-                    IsText = p.IsText,
-                    TypeId = ObjectId.Parse(p.TypeId),
-                    PreferredPhone = p.PhonePreferred,
-                    PreferredText = p.TextPreferred,
-                    OptOut = p.OptOut,
-                    DeleteFlag = false,
-                    DataSource = p.DataSource
-                }).ToList();
+                    List<PhoneData> phoneData = request.ContactData.Phones;
+                    List<Phone> mePhones = phoneData.Select(p => new Phone
+                    {
+                        Id = ObjectId.GenerateNewId(),
+                        Number = p.Number,
+                        IsText = p.IsText,
+                        TypeId = ObjectId.Parse(p.TypeId),
+                        PreferredPhone = p.PhonePreferred,
+                        PreferredText = p.TextPreferred,
+                        OptOut = p.OptOut,
+                        DeleteFlag = false,
+                        DataSource = p.DataSource
+                    }).ToList();
 
-                meContact.Phones = mePhones;
+                    meContact.Phones = mePhones;
+                }
             }
             catch (Exception ex)
             {

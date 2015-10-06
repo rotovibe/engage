@@ -275,7 +275,7 @@ namespace Phytel.API.AppDomain.Security
             contactDataResponse = client.Get<GetContactByUserIdDataResponse>(url);
 
             if (contactDataResponse != null && contactDataResponse.Contact != null)
-                returnId = ObjectId.Parse(contactDataResponse.Contact.ContactId);
+                returnId = ObjectId.Parse(contactDataResponse.Contact.Id);
             
             return returnId;
         }

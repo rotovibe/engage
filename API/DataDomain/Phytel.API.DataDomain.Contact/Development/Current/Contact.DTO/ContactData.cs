@@ -9,7 +9,7 @@ namespace Phytel.API.DataDomain.Contact.DTO
 {
     public class ContactData
     {
-        public string ContactId { get; set; }
+        public string Id { get; set; }
         public string PatientId { get; set; }
         public string UserId { get; set; }
         public string FirstName { get; set; }

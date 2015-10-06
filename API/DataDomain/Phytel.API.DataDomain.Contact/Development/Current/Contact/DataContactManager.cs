@@ -5,6 +5,8 @@ using Phytel.API.DataDomain.Contact.DTO;
 using Phytel.API.Interface;
 using MongoDB.Bson;
 using System.Configuration;
+using Phytel.API.Common;
+using System.Net;
 
 namespace Phytel.API.DataDomain.Contact
 {
@@ -63,20 +65,19 @@ namespace Phytel.API.DataDomain.Contact
             return response;
         }
 
-        public PutContactDataResponse InsertContact(PutContactDataRequest request)
+        public string InsertContact(PutContactDataRequest request)
         {
-            PutContactDataResponse response = null;
+            string id = null;
             try
             {
                 IContactRepository repo = Factory.GetRepository(request, RepositoryType.Contact);
-                
-                response = repo.Insert(request) as PutContactDataResponse;
+                id = (string)repo.Insert(request);
             }
             catch (Exception ex)
             {
                 throw ex;
             }
-            return response;
+            return id;
         }
 
         public PutUpdateContactDataResponse UpdateContact(PutUpdateContactDataRequest request)
@@ -180,7 +181,7 @@ namespace Phytel.API.DataDomain.Contact
                 List<ContactWithUpdatedRecentList> contactsWithUpdatedRecentList = null;
                 if (contact != null)
                 {
-                    request.Id = contact.ContactId;
+                    request.Id = contact.Id;
                     repo.Delete(request);
                     response.DeletedId = request.Id;
                     success = true;
@@ -194,7 +195,7 @@ namespace Phytel.API.DataDomain.Contact
                         contactsWithAPatientInRecentList.ForEach(c =>
                         {
                             PutRecentPatientRequest recentPatientRequest = new PutRecentPatientRequest { 
-                                ContactId = c.ContactId,
+                                ContactId = c.Id,
                                 Context = request.Context,
                                 ContractNumber = request.ContractNumber,
                                 UserId = request.UserId,
@@ -259,6 +260,78 @@ namespace Phytel.API.DataDomain.Contact
                 return response;
             }
             catch (Exception ex) { throw ex; }
+        }
+
+        public UpsertBatchContactDataResponse UpsertContacts(UpsertBatchContactDataRequest request)
+        {
+            UpsertBatchContactDataResponse response = new UpsertBatchContactDataResponse();
+            if (request.ContactsData != null && request.ContactsData.Count > 0)
+            {
+                List<HttpObjectResponse<ContactData>> list = new List<HttpObjectResponse<ContactData>>();
+                IContactRepository repo = Factory.GetRepository(request, RepositoryType.Contact);
+                request.ContactsData.ForEach(p =>
+                {
+                    HttpStatusCode code = HttpStatusCode.OK;
+                    ContactData psData = null;
+                    string message = string.Empty;
+                    try
+                    {
+                        if (string.IsNullOrEmpty(p.PatientId))
+                        {
+                            code = HttpStatusCode.BadRequest;
+                            message = string.Format("PatientId is missing for PatientId : {0}", p.PatientId);
+                        }
+                        else
+                        {
+                            ContactData data = (ContactData)repo.GetContactByPatientId(p.PatientId);
+                            if (data == null)
+                            {
+                                PutContactDataRequest insertReq = new PutContactDataRequest
+                                {
+                                    PatientId = p.PatientId,
+                                    Context = request.Context,
+                                    ContractNumber = request.ContractNumber,
+                                    ContactData = p,
+                                    UserId = request.UserId,
+                                    Version = request.Version
+                                };
+                                string id = (string)repo.Insert(insertReq);
+                                if (!string.IsNullOrEmpty(id))
+                                {
+                                    code = HttpStatusCode.Created;
+                                    psData = new ContactData { Id = id, PatientId = p.PatientId };
+                                }
+                            }
+                            else
+                            {
+                                p.Id = data.Id;
+                                PutUpdateContactDataRequest updateReq = new PutUpdateContactDataRequest
+                                {
+                                    ContactData = p,
+                                    Context = request.Context,
+                                    ContractNumber = request.ContractNumber,
+                                    UserId = request.UserId,
+                                    Version = request.Version
+                                };
+                                PutUpdateContactDataResponse updateRes = repo.Update(request) as PutUpdateContactDataResponse;
+                                if (updateRes != null && updateRes.SuccessData)
+                                {
+                                    code = HttpStatusCode.NoContent;
+                                    psData = new ContactData { Id = p.Id, PatientId = p.PatientId };
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        code = HttpStatusCode.InternalServerError;
+                        message = string.Format("PatientId: {0}, Message: {1}, StackTrace: {2}", p.PatientId, ex.Message, ex.StackTrace);
+                    }
+                    list.Add(new HttpObjectResponse<ContactData> { Code = code, Body = (ContactData)psData, Message = message });
+                });
+                response.Responses = list;
+            }
+            return response;
         }
     }
 }   

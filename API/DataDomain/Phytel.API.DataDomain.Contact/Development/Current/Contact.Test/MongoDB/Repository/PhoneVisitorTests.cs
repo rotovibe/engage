@@ -10,10 +10,7 @@ namespace Phytel.API.DataDomain.Contact.MongoDB.Repository.Tests
         [TestMethod()]
         public void GetContactPhonesTest()
         {
-            var req = new PutContactDataRequest
-            {
-                Phones =
-                    new List<PhoneData>
+            ContactData cData = new ContactData { Phones = new List<PhoneData>
                     {
                         new PhoneData
                         {
@@ -26,9 +23,11 @@ namespace Phytel.API.DataDomain.Contact.MongoDB.Repository.Tests
                             OptOut = false,
                             TypeId = "111111111111111111111112"
                         }
-                    }
+                    }};
+            PutContactDataRequest req = new PutContactDataRequest
+            {
+                ContactData = cData
             };
-
             var contact = new MEContact("123456789012345678901234");
 
             PhoneVisitor.GetContactPhones( ref req, ref contact );

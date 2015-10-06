@@ -8,8 +8,9 @@ namespace Phytel.API.DataDomain.Contact
         GetAllCareManagersDataResponse GetCareManagers(GetAllCareManagersDataRequest request);
         ContactData GetContactByPatientId(GetContactByPatientIdDataRequest request);
         ContactData GetContactByUserId(GetContactByUserIdDataRequest request);
-        PutContactDataResponse InsertContact(PutContactDataRequest request);
+        string InsertContact(PutContactDataRequest request);
         SearchContactsDataResponse SearchContacts(SearchContactsDataRequest request);
+        UpsertBatchContactDataResponse UpsertContacts(UpsertBatchContactDataRequest request);
         PutUpdateContactDataResponse UpdateContact(PutUpdateContactDataRequest request);
         PutRecentPatientResponse AddRecentPatient(PutRecentPatientRequest request);
         GetContactByContactIdDataResponse GetContactByContactId(GetContactByContactIdDataRequest request);
