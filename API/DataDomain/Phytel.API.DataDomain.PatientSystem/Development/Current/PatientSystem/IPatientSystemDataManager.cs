@@ -13,7 +13,7 @@ namespace Phytel.API.DataDomain.PatientSystem
         List<PatientSystemData> GetPatientSystems(GetPatientSystemsDataRequest request);
         List<PatientSystemOldData> GetAllPatientSystems();
         List<PatientSystemData> InsertPatientSystems(InsertPatientSystemsDataRequest request);
-        string InsertPatientSystem(InsertPatientSystemDataRequest request);
+        PatientSystemData InsertPatientSystem(InsertPatientSystemDataRequest request);
         List<PatientSystemData> UpdatePatientSystems(UpdatePatientSystemsDataRequest request);
         DeletePatientSystemByPatientIdDataResponse DeletePatientSystemByPatientId(DeletePatientSystemByPatientIdDataRequest request);
         UndoDeletePatientSystemsDataResponse UndoDeletePatientSystems(UndoDeletePatientSystemsDataRequest request);

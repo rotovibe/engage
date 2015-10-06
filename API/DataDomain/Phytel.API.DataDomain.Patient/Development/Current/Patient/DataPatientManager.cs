@@ -160,7 +160,11 @@ namespace Phytel.API.DataDomain.Patient
             if (!string.IsNullOrEmpty(result.Id))
             {
                 //Create Engage system record for the newly created patient in PatientSystem collection.
-                result.EngagePatientSystemId = insertEngagePatientSystem(result.Id, request);
+                PatientSystemData data = insertEngagePatientSystem(result.Id, request);
+                if (data != null)
+                {
+                    result.EngagePatientSystemId = data.Id;
+                }
             }
             return result;
         }
@@ -329,9 +333,14 @@ namespace Phytel.API.DataDomain.Patient
                         if (!string.IsNullOrEmpty(patientResponse.Id))
                         {
                             // Create Engage system record for the newly created patient in PatientSystem collection.
-                            string engageId = insertEngagePatientSystem(patientResponse.Id, insertReq);
+                            PatientSystemData psData = insertEngagePatientSystem(patientResponse.Id, insertReq);
+                            string engageValue = null;
+                            if (psData != null)
+                            {
+                                engageValue = psData.Value;
+                            }
                             code = HttpStatusCode.Created;
-                            patientData = new PatientData { Id = patientResponse.Id, ExternalRecordId = p.ExternalRecordId, EngagePatientSystemId = engageId };
+                            patientData = new PatientData { Id = patientResponse.Id, ExternalRecordId = p.ExternalRecordId, EngagePatientSystemValue = engageValue };   
                         }
                     }
                     catch (Exception ex)
@@ -474,10 +483,10 @@ namespace Phytel.API.DataDomain.Patient
         /// Calls PatientSystem data domain to insert an Engage System record for the newly created patient.
         /// </summary>
         /// <param name="request">IDataDomainRequest object</param>
-        /// <returns>Id of the Engage patient system.</returns>
-        private string insertEngagePatientSystem(string patientId, IDataDomainRequest request)
+        /// <returns>PatientSystemData object.</returns>
+        private PatientSystemData insertEngagePatientSystem(string patientId, IDataDomainRequest request)
         {
-            string id = null;
+            PatientSystemData data = null;
             try
             {
                 InsertPatientSystemDataRequest psRequest = new InsertPatientSystemDataRequest
@@ -496,16 +505,16 @@ namespace Phytel.API.DataDomain.Patient
                 //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/PatientSystem", "POST")]
                 string url = Helpers.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/PatientSystem", DDPatientSystemServiceUrl, psRequest.Context, psRequest.Version, psRequest.ContractNumber, psRequest.PatientId), psRequest.UserId);
                 InsertPatientSystemDataResponse dataDomainResponse = client.Post<InsertPatientSystemDataResponse>(url, psRequest as object);
-                if (dataDomainResponse != null && !string.IsNullOrEmpty(dataDomainResponse.Id))
+                if (dataDomainResponse != null)
                 {
-                    id = dataDomainResponse.Id;
+                    data = dataDomainResponse.PatientSystemData;
                 }
             }
             catch (Exception ex)
             {
                 throw ex;
             }
-            return id;
+            return data;
         }
     }
 }   

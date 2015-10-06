@@ -31,6 +31,6 @@ namespace Phytel.API.DataDomain.Patient.DTO
         public DateTime? LastUpdatedOn { get; set; }
         public DateTime RecordCreatedOn { get; set; }
         public string ExternalRecordId { get; set; }
-        public string EngagePatientSystemId { get; set; }
+        public string EngagePatientSystemValue { get; set; }
     }
 }

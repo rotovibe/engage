@@ -58,9 +58,9 @@ namespace Phytel.API.DataDomain.PatientSystem
             }
         }
 
-        public string InsertPatientSystem(InsertPatientSystemDataRequest request)
+        public PatientSystemData InsertPatientSystem(InsertPatientSystemDataRequest request)
         {
-            string id = null;
+            PatientSystemData result = null;
             try
             {
                 if (request.PatientSystemsData != null)
@@ -74,9 +74,13 @@ namespace Phytel.API.DataDomain.PatientSystem
                         request.PatientSystemsData.StatusId = (int)Status.Active;
                         request.PatientSystemsData.DataSource = Constants.DataSource;
                     }
-                    id = (string)repo.Insert(request);
+                    string id = (string)repo.Insert(request);
+                    if (!string.IsNullOrEmpty(id))
+                    {
+                        result = (PatientSystemData)repo.FindByID(id);
+                    }
                 }
-                return id;
+                return result;
             }
             catch (Exception ex) { throw ex; }
         }
