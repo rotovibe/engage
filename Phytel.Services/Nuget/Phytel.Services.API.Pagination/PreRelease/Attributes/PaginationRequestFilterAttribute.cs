@@ -1,5 +1,4 @@
 ﻿using System;
-using ServiceStack.Common.Extensions;
 using ServiceStack.ServiceHost;
 
 namespace Phytel.Services.API.Pagination.Attributes
@@ -22,8 +21,11 @@ namespace Phytel.Services.API.Pagination.Attributes
             if (request == null)
                 return;
 
-            request.Skip = req.QueryString["skip"].IsEmpty() ? 0 : int.Parse(req.QueryString["skip"]);
-            request.Take = req.QueryString["take"].IsEmpty() ? (int?)null : int.Parse(req.QueryString["take"]);
+            var paginationManager = new PaginationManager();
+
+            request.Take = paginationManager.GetNormalizeTake(requestDto);
+            request.Skip = paginationManager.GetNormalizeSkip(requestDto);
+
         }
     }
 }

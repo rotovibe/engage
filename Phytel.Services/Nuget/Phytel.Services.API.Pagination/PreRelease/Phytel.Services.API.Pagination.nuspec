@@ -9,7 +9,6 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Pagination and Sorting Attributes for a Request and Response DTOs.</description>
     <dependencies>
-      <dependency id="Phytel.Services.API.DTO" version="1.1.0.02" />
       <dependency id="ServiceStack.Common" version="3.9.71" />
       <dependency id="ServiceStack.Text" version="3.9.70" />
     </dependencies>
