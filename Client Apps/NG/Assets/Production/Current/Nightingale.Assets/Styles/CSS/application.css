@@ -4034,8 +4034,7 @@ ul {
     #modal .body > .row.modal-tab {
       overflow: auto;
       max-height: 400px;
-      min-height: 400px;
-      height: 100%; }
+      min-height: 400px; }
   #modal footer {
     background: whitesmoke;
     border-top: 1px solid #e6e6e6;
@@ -4051,188 +4050,18 @@ ul {
   #modal.small .body {
     min-height: 150px;
     max-height: 300px; }
-  @media only screen and (min-width: 1824px), only screen and (min-device-width: 1824px) {
-    #modal.modal-lg .content {
-      margin-left: -729.6px;
-      width: 1459.2px;
-      height: 800px; }
-      #modal.modal-lg .content .body {
-        height: 706px; }
-        #modal.modal-lg .content .body > .row.modal-tab {
-          max-height: 706px; } }
-  @media only screen and (max-width: 1824px) and (min-width: 1280px), only screen and (max-device-width: 1824px) and (min-device-width: 1280px) {
-    #modal.modal-lg .content {
-      margin-left: -729.6px;
-      width: 1459.2px;
-      height: 800px; }
-      #modal.modal-lg .content .body {
-        height: 706px; }
-        #modal.modal-lg .content .body > .row.modal-tab {
-          max-height: 706px; } }
-  @media only screen and (max-width: 1500px) and (min-width: 1280px), only screen and (max-device-width: 1500px) and (min-device-width: 1280px) {
-    #modal.modal-lg .content {
-      margin-left: -600px;
-      width: 1200px;
-      height: 640px; }
-      #modal.modal-lg .content .body {
-        height: 546px; }
-        #modal.modal-lg .content .body > .row.modal-tab {
-          max-height: 546px; } }
-  @media only screen and (max-width: 1280px) and (min-width: 1024px), only screen and (max-device-width: 1280px) and (min-device-width: 1024px) {
-    #modal.modal-lg .content {
-      margin-left: -409.6px;
-      width: 819.2px;
-      height: 640px; }
-      #modal.modal-lg .content .body {
-        height: 546px; }
-        #modal.modal-lg .content .body > .row.modal-tab {
-          max-height: 546px; } }
-  @media handheld, only screen and (max-width: 1024px) and (min-width: 768px) {
-    #modal.modal-lg .content {
-      margin-left: -420px;
-      width: 840px;
-      height: 640px;
-      margin-left: -335px; }
-      #modal.modal-lg .content .body {
-        height: 546px; }
-        #modal.modal-lg .content .body > .row.modal-tab {
-          max-height: 546px; } }
-  @media handheld, only screen and (min-device-pixel-ratio: 2), only screen and (max-width: 768px) and (orientation: portrait) {
-    #modal.modal-lg .content {
-      margin-left: -307.2px;
-      width: 614.4px;
-      height: 512px; }
-      #modal.modal-lg .content .body {
-        height: 418px; }
-        #modal.modal-lg .content .body > .row.modal-tab {
-          max-height: 418px; } }
-  @media handheld, only screen and (min-device-pixel-ratio: 1), only screen and (max-width: 768px) {
-    #modal.modal-lg .content {
-      margin-left: -307.2px;
-      width: 614.4px;
-      height: 512px; }
-      #modal.modal-lg .content .body {
-        height: 418px; }
-        #modal.modal-lg .content .body > .row.modal-tab {
-          max-height: 418px; } }
-  @media handheld, only screen and (min-device-pixel-ratio: 2), only screen and (max-width: 568px) {
-    #modal.modal-lg .content {
-      margin-left: -227.2px;
-      width: 454.4px;
-      height: 384px; }
-      #modal.modal-lg .content .body {
-        height: 290px; }
-        #modal.modal-lg .content .body > .row.modal-tab {
-          max-height: 290px; } }
-  @media handheld, only screen and (min-device-pixel-ratio: 2), only screen and (max-width: 480px) and (min-width: 320px) {
-    #modal.modal-lg .content {
-      margin-left: -192px;
-      width: 384px;
-      height: 256px; }
-      #modal.modal-lg .content .body {
-        height: 162px; }
-        #modal.modal-lg .content .body > .row.modal-tab {
-          max-height: 162px; } }
-  @media handheld, only screen and (min-device-pixel-ratio: 2), only screen and (max-width: 320px) {
-    #modal.modal-lg .content {
-      margin-left: -128px;
-      width: 256px;
-      height: 224px; }
-      #modal.modal-lg .content .body {
-        height: 130px; }
-        #modal.modal-lg .content .body > .row.modal-tab {
-          max-height: 130px; } }
-  @media only screen and (min-width: 1824px), only screen and (min-device-width: 1824px) {
-    #modal.modal-md .content {
-      margin-left: -638.4px;
-      width: 1276.8px;
-      height: 700px; }
-      #modal.modal-md .content .body {
-        height: 606px; }
-        #modal.modal-md .content .body > .row.modal-tab {
-          max-height: 606px; } }
-  @media only screen and (max-width: 1824px) and (min-width: 1280px), only screen and (max-device-width: 1824px) and (min-device-width: 1280px) {
-    #modal.modal-md .content {
-      margin-left: -638.4px;
-      width: 1276.8px;
-      height: 700px; }
-      #modal.modal-md .content .body {
-        height: 606px; }
-        #modal.modal-md .content .body > .row.modal-tab {
-          max-height: 606px; } }
-  @media only screen and (max-width: 1500px) and (min-width: 1280px), only screen and (max-device-width: 1500px) and (min-device-width: 1280px) {
-    #modal.modal-md .content {
-      margin-left: -525px;
-      width: 1050px;
-      height: 560px; }
-      #modal.modal-md .content .body {
-        height: 466px; }
-        #modal.modal-md .content .body > .row.modal-tab {
-          max-height: 466px; } }
-  @media only screen and (max-width: 1280px) and (min-width: 1024px), only screen and (max-device-width: 1280px) and (min-device-width: 1024px) {
-    #modal.modal-md .content {
-      margin-left: -358.4px;
-      width: 716.8px;
-      height: 560px; }
-      #modal.modal-md .content .body {
-        height: 466px; }
-        #modal.modal-md .content .body > .row.modal-tab {
-          max-height: 466px; } }
-  @media handheld, only screen and (max-width: 1024px) and (min-width: 768px) {
-    #modal.modal-md .content {
-      margin-left: -367.5px;
-      width: 735px;
-      height: 560px;
-      margin-left: -335px; }
-      #modal.modal-md .content .body {
-        height: 466px; }
-        #modal.modal-md .content .body > .row.modal-tab {
-          max-height: 466px; } }
-  @media handheld, only screen and (min-device-pixel-ratio: 2), only screen and (max-width: 768px) and (orientation: portrait) {
-    #modal.modal-md .content {
-      margin-left: -268.8px;
-      width: 537.6px;
-      height: 448px; }
-      #modal.modal-md .content .body {
-        height: 354px; }
-        #modal.modal-md .content .body > .row.modal-tab {
-          max-height: 354px; } }
-  @media handheld, only screen and (min-device-pixel-ratio: 1), only screen and (max-width: 768px) {
-    #modal.modal-md .content {
-      margin-left: -268.8px;
-      width: 537.6px;
-      height: 448px; }
-      #modal.modal-md .content .body {
-        height: 354px; }
-        #modal.modal-md .content .body > .row.modal-tab {
-          max-height: 354px; } }
-  @media handheld, only screen and (min-device-pixel-ratio: 2), only screen and (max-width: 568px) {
-    #modal.modal-md .content {
-      margin-left: -198.8px;
-      width: 397.6px;
-      height: 336px; }
-      #modal.modal-md .content .body {
-        height: 242px; }
-        #modal.modal-md .content .body > .row.modal-tab {
-          max-height: 242px; } }
-  @media handheld, only screen and (min-device-pixel-ratio: 2), only screen and (max-width: 480px) and (min-width: 320px) {
-    #modal.modal-md .content {
-      margin-left: -168px;
-      width: 336px;
-      height: 224px; }
-      #modal.modal-md .content .body {
-        height: 130px; }
-        #modal.modal-md .content .body > .row.modal-tab {
-          max-height: 130px; } }
-  @media handheld, only screen and (min-device-pixel-ratio: 2), only screen and (max-width: 320px) {
-    #modal.modal-md .content {
-      margin-left: -112px;
-      width: 224px;
-      height: 196px; }
-      #modal.modal-md .content .body {
-        height: 102px; }
-        #modal.modal-md .content .body > .row.modal-tab {
-          max-height: 102px; } }
+  #modal.modal-lg .content {
+    width: 80%;
+    margin-left: -40%;
+    height: calc(100% - 109px);
+    height: -moz-calc(100% - 109px);
+    height: -webkit-calc(100% - 109px); }
+    #modal.modal-lg .content .body {
+      height: calc(100% - 94px);
+      height: -moz-calc(100% - 94px);
+      height: -webkit-calc(100% - 94px); }
+      #modal.modal-lg .content .body > .row.modal-tab {
+        max-height: 1000%; }
 
 nav.pagination {
   text-align: center; }
