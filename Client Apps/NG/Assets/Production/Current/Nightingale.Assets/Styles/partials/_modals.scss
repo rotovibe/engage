@@ -45,12 +45,11 @@
   }
   .body {
     padding: $grid-padding;
-    
+    max-height: 400px;
     > .row.modal-tab { 
       overflow: auto;
       max-height: 400px; 
       min-height: 400px; 
-      //height: 100%;
     }
   }
   footer {
@@ -83,6 +82,7 @@
     @include modalheight(100%, 109px);    
     .body {
         @include modalheight(100%, 94px);
+        max-height: 1000%;
         > .row.modal-tab{
             max-height: 1000%;
         }

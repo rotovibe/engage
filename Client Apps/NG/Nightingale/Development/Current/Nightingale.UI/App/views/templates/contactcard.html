@@ -32,7 +32,7 @@
     <div class="row pad top">
         <h2 class="span12" data-bind="text: $parent.fullName, attr: { title: $parent.fullName }"></h2>
     </div>
-    <div class="row modal-tab" data-bind="visible: activeTab() === 'general'">
+    <div class="row" data-bind="visible: activeTab() === 'general'">
         <div class="span12">
             <div class="row">
                 <div class="span12">
@@ -113,7 +113,7 @@
             </div>
         </div>
     </div>
-    <div class="row modal-tab" data-bind="visible: activeTab() === 'texts'">
+    <div class="row" data-bind="visible: activeTab() === 'texts'">
         <ul class="list-items">
             <li class="row">
                 <strong class="span2">Preferred?</strong>
@@ -148,7 +148,7 @@
             <!-- /ko -->
         </ul>
     </div>
-    <div class="row modal-tab" data-bind="visible: activeTab() === 'phones'">
+    <div class="row" data-bind="visible: activeTab() === 'phones'">
 		<div class="row validation-summary" data-bind="if: phoneValidationErrors().length > 0">            
 			<ul data-bind="foreach: phoneValidationErrors">
 				<li class="validation-errors">
@@ -222,7 +222,7 @@
             <!-- /ko -->
         </ul>
     </div>
-    <div class="row modal-tab" data-bind="visible: activeTab() === 'emails'">
+    <div class="row" data-bind="visible: activeTab() === 'emails'">
         <ul class="list-items">
             <li class="row">
                 <strong class="span2">Preferred?</strong>
@@ -277,7 +277,7 @@
             <!-- /ko -->
         </ul>
     </div>
-    <div class="row modal-tab" data-bind="visible: activeTab() === 'addresses'">
+    <div class="row" data-bind="visible: activeTab() === 'addresses'">
         <ul class="list-items">
             <li class="row">
                 <strong class="span2">Preferred?</strong>
@@ -332,7 +332,7 @@
             <!-- /ko -->
         </ul>
     </div>
-    <div class="row modal-tab" data-bind="visible: activeTab() === 'languages'">
+    <div class="row" data-bind="visible: activeTab() === 'languages'">
 		<div class="row validation-summary" data-bind="if: languageValidationErrors().length > 0">            
 			<ul data-bind="foreach: languageValidationErrors">
 				<li class="validation-errors">

@@ -4030,7 +4030,8 @@ ul {
       #modal header .close:active {
         opacity: 1; }
   #modal .body {
-    padding: 10px; }
+    padding: 10px;
+    max-height: 400px; }
     #modal .body > .row.modal-tab {
       overflow: auto;
       max-height: 400px;
@@ -4059,7 +4060,8 @@ ul {
     #modal.modal-lg .content .body {
       height: calc(100% - 94px);
       height: -moz-calc(100% - 94px);
-      height: -webkit-calc(100% - 94px); }
+      height: -webkit-calc(100% - 94px);
+      max-height: 1000%; }
       #modal.modal-lg .content .body > .row.modal-tab {
         max-height: 1000%; }
 
