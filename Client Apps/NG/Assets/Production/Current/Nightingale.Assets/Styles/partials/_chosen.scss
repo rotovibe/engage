@@ -48,7 +48,8 @@
     position: relative;
     margin: 0 $opposite-grid-padding;
     max-height: 200px;
-    overflow-x: auto;   
+    overflow-x: auto;
+    overflow-y: scroll;   
     width: auto;
     li {
       @include nowrap;

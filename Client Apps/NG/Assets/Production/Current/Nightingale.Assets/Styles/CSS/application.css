@@ -5260,6 +5260,7 @@ div.button {
     margin: 0 -10px;
     max-height: 200px;
     overflow-x: auto;
+    overflow-y: scroll;
     width: auto; }
     .chosen-container .chosen-results li {
       white-space: nowrap;
