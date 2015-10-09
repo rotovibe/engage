@@ -52,7 +52,7 @@
 		var eventModalSettings = {
 			title: 'Event Details',
 			entity: eventModalEntity, 
-			templatePath: 'templates/event.details', 
+			templatePath: 'viewmodels/templates/event.details', 
 			showing: eventModalShowing, 
 			saveOverride: dummyFunction, 
 			cancelOverride: dummyFunction, 

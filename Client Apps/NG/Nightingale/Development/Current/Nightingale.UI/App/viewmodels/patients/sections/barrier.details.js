@@ -38,7 +38,7 @@
                         var thisTaskBarrierId = ko.utils.arrayFirst(task.barrierIds(), function (barId) {
                             // If the barrier id is equal to this barrier id,
                             return barId.id() === barrier.id();
-                        });s
+                        });
                         // If a barrier id is returned,
                         if (thisTaskBarrierId) {
                             // Remove it from the list
