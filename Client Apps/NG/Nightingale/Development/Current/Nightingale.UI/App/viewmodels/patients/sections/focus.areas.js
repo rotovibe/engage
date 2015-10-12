@@ -1,5 +1,5 @@
-﻿define(['models/base', 'services/datacontext', 'services/session', 'viewmodels/shell/shell', 'viewmodels/patients/data/index'],
-    function (modelConfig, datacontext, session, shell, dataIndex) {
+﻿define(['models/base', 'services/datacontext', 'services/session', 'viewmodels/shell/shell', 'viewmodels/patients/data/index', 'viewmodels/patients/index'],
+    function (modelConfig, datacontext, session, shell, dataIndex, patientsIndex) {
 
         var ctor = function () {
         };
@@ -136,19 +136,20 @@
 
             }
             self.modalEntity = ko.observable(new ModalEntity(self.selectedPatient));
-			var modalSettings = {
-				title: 'Focus Problems' + ' - ' + self.selectedPatient.fullName(),
-				entity: self.modalEntity, 
-				templatePath: 'viewmodels/templates/focusproblems', 
-				showing: self.focusProblemModalShowing, 
-				saveOverride: self.saveProblemObservations, 
-				cancelOverride: self.cancelProblemObservations,
-				classOverride: 'modal-lg'
-			}
-            self.modal = new modelConfig.modal(modalSettings);
+			
             self.isOpen = ko.observable(true);
             self.isFullScreen = ko.observable(false);
             self.toggleEditing = function () {
+				var modalSettings = {
+					title: 'Focus Problems' + ' - ' + patientsIndex.selectedPatient().fullName(),
+					entity: self.modalEntity, 
+					templatePath: 'viewmodels/templates/focusproblems', 
+					showing: self.focusProblemModalShowing, 
+					saveOverride: self.saveProblemObservations, 
+					cancelOverride: self.cancelProblemObservations,
+					classOverride: 'modal-lg'
+				}
+				self.modal = new modelConfig.modal(modalSettings);
                 shell.currentModal(self.modal);
                 self.focusProblemModalShowing(true);
                 self.isOpen(true);
