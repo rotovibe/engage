@@ -142,7 +142,8 @@
 				templatePath: 'viewmodels/templates/focusproblems', 
 				showing: self.focusProblemModalShowing, 
 				saveOverride: self.saveProblemObservations, 
-				cancelOverride: self.cancelProblemObservations
+				cancelOverride: self.cancelProblemObservations,
+				classOverride: 'modal-lg'
 			}
             self.modal = new modelConfig.modal(modalSettings);
             self.isOpen = ko.observable(true);
