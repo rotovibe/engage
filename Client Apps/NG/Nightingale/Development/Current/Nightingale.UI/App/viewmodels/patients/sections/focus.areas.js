@@ -137,7 +137,7 @@
             }
             self.modalEntity = ko.observable(new ModalEntity(self.selectedPatient));
 			var modalSettings = {
-				title: 'Focus Problems',
+				title: 'Focus Problems' + ' - ' + self.selectedPatient.fullName(),
 				entity: self.modalEntity, 
 				templatePath: 'viewmodels/templates/focusproblems', 
 				showing: self.focusProblemModalShowing, 
