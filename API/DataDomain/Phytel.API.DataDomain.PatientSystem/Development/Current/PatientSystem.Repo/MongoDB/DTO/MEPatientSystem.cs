@@ -24,7 +24,7 @@ namespace Phytel.API.DataDomain.PatientSystem.DTO
             Id = ObjectId.GenerateNewId();
             Version = 1.0;
             RecordCreatedBy = ObjectId.Parse(userId);
-            RecordCreatedOn = createdOn == null ? DateTime.UtcNow : (DateTime)createdOn;
+            RecordCreatedOn = createdOn == null || createdOn.Equals(new DateTime()) ? DateTime.UtcNow : (DateTime)createdOn;
         }
 
         public const string IdProperty = "_id";

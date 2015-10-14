@@ -1,17 +1,15 @@
-using Phytel.API.DataDomain.Patient.DTO;
-using System.Data.SqlClient;
-using Phytel.API.DataDomain.Patient;
 using System;
-using System.Configuration;
-using ServiceStack.ServiceClient.Web;
-using Phytel.API.DataDomain.Cohort.DTO;
 using System.Collections.Generic;
-using Phytel.API.Interface;
+using System.Configuration;
 using System.Linq;
-using ServiceStack.Service;
-using Phytel.API.DataDomain.PatientSystem.DTO;
 using System.Net;
 using Phytel.API.Common;
+using Phytel.API.DataDomain.Cohort.DTO;
+using Phytel.API.DataDomain.Patient.DTO;
+using Phytel.API.DataDomain.PatientSystem.DTO;
+using Phytel.API.Interface;
+using ServiceStack.Service;
+using ServiceStack.ServiceClient.Web;
 
 
 namespace Phytel.API.DataDomain.Patient
@@ -321,38 +319,60 @@ namespace Phytel.API.DataDomain.Patient
             {
                 List<HttpObjectResponse<PatientData>> list = new List<HttpObjectResponse<PatientData>>();
                 IPatientRepository repo = Factory.GetRepository(request, RepositoryType.Patient);
-                request.PatientsData.ForEach(p =>
+                BulkInsertResult<PatientData> result = (BulkInsertResult<PatientData>)repo.InsertAll(request.PatientsData.Cast<object>().ToList());
+                if(result.Data.Count > 0)
                 {
-                    PutPatientDataRequest insertReq = new PutPatientDataRequest { Patient = p, Context = request.Context, ContractNumber = request.ContractNumber, UserId = request.UserId, Version = request.Version };
-                    HttpStatusCode code = HttpStatusCode.OK;
-                    PatientData patientData = null;
-                    string message = string.Empty;
-                    try
+                    #region CohortPatientView
+                    List<CohortPatientViewData> cpvList = getMECohortPatientView(result.Data);
+                    IPatientRepository cpvRepo = Factory.GetRepository(request, RepositoryType.CohortPatientView);
+                    cpvRepo.InsertAll(cpvList.Cast<object>().ToList());
+                    #endregion
+
+                    #region Engage Patient System.
+                    //Bulk insert into PatientSystem for Engage id.
+                    List<PatientSystemResult> psResult = insertBatchEngagePatientSystem(result.Data.Select(p => p.Id).ToList(), request);
+                    #endregion
+
+                    #region Get the response formatted
+                    result.Data.ForEach(r =>
                     {
-                        PutPatientDataResponse patientResponse = repo.Insert(insertReq) as PutPatientDataResponse;
-                        if (!string.IsNullOrEmpty(patientResponse.Id))
-                        {
-                            // Create Engage system record for the newly created patient in PatientSystem collection.
-                            PatientSystemData psData = insertEngagePatientSystem(patientResponse.Id, insertReq);
-                            string engageValue = null;
-                            if (psData != null)
-                            {
-                                engageValue = psData.Value;
-                            }
-                            code = HttpStatusCode.Created;
-                            patientData = new PatientData { Id = patientResponse.Id, ExternalRecordId = p.ExternalRecordId, EngagePatientSystemValue = engageValue };   
-                        }
-                    }
-                    catch (Exception ex)
+                        list.Add(new HttpObjectResponse<PatientData> { Code = HttpStatusCode.Created, Body = (PatientData)new PatientData { Id = r.Id, ExternalRecordId = r.ExternalRecordId, EngagePatientSystemValue = psResult.Find(p => p.PatientId == r.Id).Value } });
+                    });
+                    result.ErrorMessages.ForEach(e =>
                     {
-                        code = HttpStatusCode.InternalServerError;
-                        message = string.Format("ExternalRecordId: {0}, Message: {1}, StackTrace: {2}", p.ExternalRecordId, ex.Message, ex.StackTrace);
-                    }
-                    list.Add(new HttpObjectResponse<PatientData> { Code = code, Body = (PatientData)patientData, Message = message });
-                });
+                        list.Add(new HttpObjectResponse<PatientData> { Code = HttpStatusCode.InternalServerError, Message = e });
+                    }); 
+                    #endregion
+                }
                 response.Responses = list;
             }
+            
             return response;
+        }
+
+        private List<CohortPatientViewData> getMECohortPatientView(List<PatientData> patients)
+        {
+            List<CohortPatientViewData> list = new List<CohortPatientViewData>();
+            patients.ForEach(p =>
+            {
+                List<SearchFieldData> data = new List<SearchFieldData>();
+                data.Add(new SearchFieldData { Active = true, FieldName = Constants.FN, Value = p.FirstName });
+                data.Add(new SearchFieldData { Active = true, FieldName = Constants.LN, Value = p.LastName });
+                data.Add(new SearchFieldData { Active = true, FieldName = Constants.G, Value = p.Gender.ToUpper() });
+                data.Add(new SearchFieldData { Active = true, FieldName = Constants.DOB, Value = p.DOB });
+                data.Add(new SearchFieldData { Active = true, FieldName = Constants.MN, Value = p.MiddleName });
+                data.Add(new SearchFieldData { Active = true, FieldName = Constants.SFX, Value = p.Suffix });
+                data.Add(new SearchFieldData { Active = true, FieldName = Constants.PN, Value = p.PreferredName });
+                data.Add(new SearchFieldData { Active = true, FieldName = Constants.PCM }); //value left null on purpose 
+                CohortPatientViewData cpvData = new CohortPatientViewData
+                {
+                    PatientID = p.Id,
+                    LastName = p.LastName,
+                    SearchFields = data,
+                };
+                list.Add(cpvData);
+            });
+            return list;
         }
 
         #region Delete
@@ -515,6 +535,54 @@ namespace Phytel.API.DataDomain.Patient
                 throw ex;
             }
             return data;
+        }
+
+        /// <summary>
+        /// Calls PatientSystem data domain to insert bulk Engage System records for the provided patient ids.
+        /// </summary>
+        /// <param name="request">IDataDomainRequest object</param>
+        /// <returns>List of ids of the engage patient systems inserted.</returns>
+        private List<PatientSystemResult> insertBatchEngagePatientSystem(List<string> patientIds, IDataDomainRequest request)
+        {
+            List<PatientSystemResult> result = null;
+            try
+            {
+                if(patientIds != null && patientIds.Count > 0)
+                {
+                    List<PatientSystemData> psData = new List<PatientSystemData>();
+                    patientIds.ForEach( p => 
+                    {
+                        PatientSystemData data = new PatientSystemData
+                        {
+                            PatientId = p,
+                        };
+                        psData.Add(data);
+                    });
+                    InsertBatchEngagePatientSystemsDataRequest psRequest = new InsertBatchEngagePatientSystemsDataRequest
+                    {
+                        PatientSystemsData = psData,
+                        Context = request.Context,
+                        ContractNumber = request.ContractNumber,
+                        UserId = Constants.SystemContactId,// the requirement says that the engage Id should have createdby user as 'system'.
+                        Version = request.Version
+                    };
+
+                    string DDPatientSystemServiceUrl = ConfigurationManager.AppSettings["DDPatientSystemServiceUrl"];
+                    IRestClient client = new JsonServiceClient();
+                    //[Route("/{Context}/{Version}/{ContractNumber}/Batch/Engage/PatientSystems", "POST")]
+                    string url = Helpers.BuildURL(string.Format("{0}/{1}/{2}/{3}/Batch/Engage/PatientSystems", DDPatientSystemServiceUrl, psRequest.Context, psRequest.Version, psRequest.ContractNumber), psRequest.UserId);
+                    InsertBatchEngagePatientSystemsDataResponse dataDomainResponse = client.Post<InsertBatchEngagePatientSystemsDataResponse>(url, psRequest as object);
+                    if (dataDomainResponse != null)
+                    {
+                        result = dataDomainResponse.Result;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return result;
         }
     }
 }   

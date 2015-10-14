@@ -14,9 +14,7 @@ namespace Phytel.API.AppDomain.NG
         List<PatientSystemOldData> GetAllPatientSystems(IServiceContext context);
         List<PatientData> GetAllPatients(IServiceContext request);
         List<PatientSystemData> InsertPatientSystems(IServiceContext context, string patientId);
-        List<string> InsertEngagePatientSystems(InsertEngagePatientSystemsDataRequest request);
         List<PatientSystemData> UpdatePatientSystems(IServiceContext context, string patientId);
         void DeletePatientSystems(DeletePatientSystemsRequest request);
-        PatientSystemManager.ProgramStatus HasHealthyWeightProgramAssigned(string patientId, IServiceContext context);
     }
 }

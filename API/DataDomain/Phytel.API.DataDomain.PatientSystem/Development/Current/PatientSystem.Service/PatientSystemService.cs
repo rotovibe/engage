@@ -112,13 +112,13 @@ namespace Phytel.API.DataDomain.PatientSystem.Service
             return response;
         }
 
-        public InsertEngagePatientSystemsDataResponse Post(InsertEngagePatientSystemsDataRequest request)
+        public InsertBatchEngagePatientSystemsDataResponse Post(InsertBatchEngagePatientSystemsDataRequest request)
         {
-            InsertEngagePatientSystemsDataResponse response = new InsertEngagePatientSystemsDataResponse();
+            InsertBatchEngagePatientSystemsDataResponse response = new InsertBatchEngagePatientSystemsDataResponse();
             try
             {
                 RequireUserId(request);
-                response.Ids = Manager.InsertEngagePatientSystems(request);
+                response.Result = Manager.InsertEngagePatientSystems(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)

@@ -1,11 +1,10 @@
-using Phytel.API.DataDomain.PatientSystem.DTO;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Threading;
-using ServiceStack.Common.Extensions;
+using System.Configuration;
+using System.Linq;
 using System.Net;
 using Phytel.API.Common;
+using Phytel.API.DataDomain.PatientSystem.DTO;
 
 
 namespace Phytel.API.DataDomain.PatientSystem
@@ -129,41 +128,33 @@ namespace Phytel.API.DataDomain.PatientSystem
             catch (Exception ex) { throw ex; }
         }
 
-        public List<string> InsertEngagePatientSystems(InsertEngagePatientSystemsDataRequest request)
+        public List<PatientSystemResult> InsertEngagePatientSystems(InsertBatchEngagePatientSystemsDataRequest request)
         {
-            List<string> ids = null;
+            List<PatientSystemResult> result = new List<PatientSystemResult>();
             try
             {
                 if (request.PatientSystemsData != null && request.PatientSystemsData.Count > 0)
                 {
-                    ids = new List<string>();
                     var repo = Factory.GetRepository(RepositoryType.PatientSystem);
+                    List<PatientSystemData> psList = new List<PatientSystemData>();
                     request.PatientSystemsData.ForEach(p =>
                     {
-                        p.SystemId = Constants.EngageSystemId;
-                        p.Value = EngageId.New();
-                        p.Primary = isSystemPrimary(Constants.EngageSystemId);
-                        p.StatusId = (int)Status.Active;
-                        p.DataSource = Constants.DataSource;
-                        InsertPatientSystemDataRequest insertReq = new InsertPatientSystemDataRequest
+                        PatientSystemData ps = new PatientSystemData
                         {
+                            DataSource = Constants.DataSource,
                             PatientId = p.PatientId,
-                            Context = request.Context,
-                            ContractNumber = request.ContractNumber,
-                            PatientSystemsData = p,
-                            UserId = request.UserId,
-                            Version = request.Version
+                            Primary = isSystemPrimary(Constants.EngageSystemId),
+                            StatusId = (int)Status.Active,
+                            SystemId = Constants.EngageSystemId,
+                            Value = EngageId.New()
                         };
-                        string id = (string)repo.Insert(insertReq);
-                        if (!string.IsNullOrEmpty(id))
-                        {
-                            ids.Add(id);
-                        }
+                        psList.Add(ps);
                     });
+                    result = (List<PatientSystemResult>)repo.InsertAll(psList.Cast<object>().ToList());
                 }
-                return ids;
             }
             catch (Exception ex) { throw ex; }
+            return result;
         }
 
         public UpsertBatchPatientSystemsDataResponse UpsertBatchPatientSystems(UpsertBatchPatientSystemsDataRequest request)

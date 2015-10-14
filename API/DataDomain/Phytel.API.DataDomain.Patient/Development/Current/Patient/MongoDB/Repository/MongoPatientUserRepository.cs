@@ -34,6 +34,7 @@ namespace Phytel.API.DataDomain.Patient
             #endregion
 
         }
+
         public MongoPatientUserRepository(string contractDBName)
         {
             _dbName = contractDBName;

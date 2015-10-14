@@ -12,6 +12,7 @@ using Phytel.API.DataDomain.Patient.DTO;
 using Phytel.Services;
 using MB = MongoDB.Driver.Builders;
 using MongoDB.Bson.Serialization;
+using System.Net;
 
 namespace Phytel.API.DataDomain.Patient
 {
@@ -154,7 +155,7 @@ namespace Phytel.API.DataDomain.Patient
             }
         }
 
-        public string FormatSystem(string p)
+        private string formatSystem(string p)
         {
             var val = p;
             if (!string.IsNullOrEmpty(p) && p.Length > 50)
@@ -166,7 +167,99 @@ namespace Phytel.API.DataDomain.Patient
 
         public object InsertAll(List<object> entities)
         {
-            throw new NotImplementedException();
+            BulkInsertResult<PatientData> result = new BulkInsertResult<PatientData>();
+            List<PatientData> insertedPatients = new List<PatientData>();
+            List<string> errorMessages = new List<string>();
+            try
+            {
+                using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
+                {
+                    var bulk = ctx.Patients.Collection.InitializeUnorderedBulkOperation();
+                    foreach (PatientData pd in entities)
+                    {
+                        MEPatient patient = new MEPatient(this.UserId, pd.RecordCreatedOn)
+                        {
+                            FirstName = pd.FirstName,
+                            LastName = pd.LastName,
+                            MiddleName = pd.MiddleName,
+                            Suffix = pd.Suffix,
+                            PreferredName = pd.PreferredName,
+                            Gender = pd.Gender,
+                            DOB = pd.DOB,
+                            Background = pd.Background,
+                            ClinicalBackground = pd.ClinicalBackground,
+                            TTLDate = null,
+                            DeleteFlag = false,
+                            DataSource = Helper.TrimAndLimit(pd.DataSource, 50),
+                            Status = (Status)pd.StatusId,
+                            StatusDataSource = Helper.TrimAndLimit(pd.StatusDataSource, 50),
+                            Protected = pd.Protected,
+                            Deceased = (Deceased)pd.DeceasedId,
+                            FullSSN = pd.FullSSN,
+                            LastFourSSN = pd.LastFourSSN,
+                            LastUpdatedOn = pd.LastUpdatedOn,
+                            ExternalRecordId = pd.ExternalRecordId,
+                        };
+                        if (!string.IsNullOrEmpty(pd.ReasonId))
+                        {
+                            patient.ReasonId = ObjectId.Parse(pd.ReasonId);
+                        }
+                        if (!string.IsNullOrEmpty(pd.MaritalStatusId))
+                        {
+                            patient.MaritalStatusId = ObjectId.Parse(pd.MaritalStatusId);
+                        }
+                        bulk.Insert(patient.ToBsonDocument());
+                    }
+                    BulkWriteResult bwr = bulk.Execute();
+                    foreach (InsertRequest u in bwr.ProcessedRequests)
+                    {
+                        PatientData pd = new PatientData
+                        {
+                            Id = u.Document.ToBsonDocument().GetElement(MEPatient.IdProperty).Value.ToString(),
+                            LastName = u.Document.ToBsonDocument().GetElement(MEPatient.LastNameProperty).Value.ToString(),
+                            FirstName = u.Document.ToBsonDocument().GetElement(MEPatient.FirstNameProperty).Value.ToString(),
+                            Gender = u.Document.ToBsonDocument().GetElement(MEPatient.GenderProperty).Value.ToString(),
+                            DOB = u.Document.ToBsonDocument().GetElement(MEPatient.DOBProperty).Value.ToString(),
+                            MiddleName = u.Document.ToBsonDocument().GetElement(MEPatient.MiddleNameProperty).Value.ToString(),
+                            Suffix = u.Document.ToBsonDocument().GetElement(MEPatient.SuffixProperty).Value.ToString(),
+                            PreferredName = u.Document.ToBsonDocument().GetElement(MEPatient.PreferredNameProperty).Value.ToString()
+                        };
+                        insertedPatients.Add(pd);
+                    }
+                }
+                // TODO: Auditing.
+            }
+            catch (BulkWriteException bwEx)
+            {
+                // Get the successfully inserted patient ids.
+                foreach (InsertRequest u in bwEx.Result.ProcessedRequests)
+                {
+                    PatientData pd = new PatientData
+                    {
+                        Id = u.Document.ToBsonDocument().GetElement(MEPatient.IdProperty).Value.ToString(),
+                        LastName = u.Document.ToBsonDocument().GetElement(MEPatient.LastNameProperty).Value.ToString(),
+                        FirstName = u.Document.ToBsonDocument().GetElement(MEPatient.FirstNameProperty).Value.ToString(),
+                        Gender = u.Document.ToBsonDocument().GetElement(MEPatient.GenderProperty).Value.ToString(),
+                        DOB = u.Document.ToBsonDocument().GetElement(MEPatient.DOBProperty).Value.ToString(),
+                        MiddleName = u.Document.ToBsonDocument().GetElement(MEPatient.MiddleNameProperty).Value.ToString(),
+                        Suffix = u.Document.ToBsonDocument().GetElement(MEPatient.SuffixProperty).Value.ToString(),
+                        PreferredName = u.Document.ToBsonDocument().GetElement(MEPatient.PreferredNameProperty).Value.ToString()
+                    };
+                    insertedPatients.Add(pd);
+                }
+                // Get the error messages for the ones that failed.
+                foreach (BulkWriteError er in bwEx.WriteErrors)
+                {
+                    errorMessages.Add(er.Message);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            result.Data = insertedPatients;
+            result.ErrorMessages = errorMessages;
+            return result;
         }
 
         public void Delete(object entity)
@@ -240,7 +333,7 @@ namespace Phytel.API.DataDomain.Patient
                         Background = mePatient.Background,
                         ClinicalBackground = mePatient.ClinicalBackground,
                         LastFourSSN = mePatient.LastFourSSN,
-                        DataSource = FormatSystem(mePatient.DataSource),
+                        DataSource = formatSystem(mePatient.DataSource),
                         StatusDataSource = mePatient.StatusDataSource,
                         ReasonId = mePatient.ReasonId == null ? null : mePatient.ReasonId.ToString(),
                         MaritalStatusId = mePatient.MaritalStatusId == null ? null : mePatient.MaritalStatusId.ToString(),
@@ -391,7 +484,7 @@ namespace Phytel.API.DataDomain.Patient
                                 Background = meP.Background,
                                 ClinicalBackground = meP.ClinicalBackground,
                                 LastFourSSN = meP.LastFourSSN,
-                                DataSource = FormatSystem(meP.DataSource),
+                                DataSource = formatSystem(meP.DataSource),
                                 StatusDataSource = meP.StatusDataSource,
                                 ReasonId = meP.ReasonId == null ? null : meP.ReasonId.ToString(),
                                 StatusId = (int)meP.Status,

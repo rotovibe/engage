@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Phytel.API.Common;
 using Phytel.API.DataDomain.PatientSystem.DTO;
 
 namespace Phytel.API.DataDomain.PatientSystem
@@ -19,7 +20,7 @@ namespace Phytel.API.DataDomain.PatientSystem
         UndoDeletePatientSystemsDataResponse UndoDeletePatientSystems(UndoDeletePatientSystemsDataRequest request);
         void DeletePatientSystems(DeletePatientSystemsDataRequest request);
         bool UpdatePatientSystem(UpdatePatientSystemDataRequest request);
-        List<string> InsertEngagePatientSystems(InsertEngagePatientSystemsDataRequest request);
+        List<PatientSystemResult> InsertEngagePatientSystems(InsertBatchEngagePatientSystemsDataRequest request);
         UpsertBatchPatientSystemsDataResponse UpsertBatchPatientSystems(UpsertBatchPatientSystemsDataRequest request);
     }
 }

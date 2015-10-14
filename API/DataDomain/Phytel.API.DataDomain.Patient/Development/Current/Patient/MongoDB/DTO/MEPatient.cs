@@ -14,10 +14,10 @@ namespace Phytel.API.DataDomain.Patient.DTO
     {
         public MEPatient(string userId, DateTime? createdOn)
         {
-            Id = ObjectId.GenerateNewId();
+            Id = ObjectId.GenerateNewId();  
             Version = 1.0;
             RecordCreatedBy = ObjectId.Parse(userId);
-            RecordCreatedOn = createdOn == null ? DateTime.UtcNow : (DateTime)createdOn;
+            RecordCreatedOn = createdOn == null || createdOn .Equals(new DateTime())? DateTime.UtcNow : (DateTime)createdOn;
         }
 
         public const string IdProperty = "_id";

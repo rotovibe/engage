@@ -10,7 +10,6 @@ namespace Phytel.API.AppDomain.NG
     {
         void LogException(Exception ex);
         List<DTO.System> GetActiveSystems(IServiceContext context);
-        string UpdatePatientAndSystemsData(IServiceContext context);
         List<DTO.PatientSystem> GetPatientSystems(IServiceContext context, string patientId);
         List<DTO.PatientSystem> InsertPatientSystems(IServiceContext context, string patientId);
         List<DTO.PatientSystem> UpdatePatientSystems(IServiceContext context, string patientId);

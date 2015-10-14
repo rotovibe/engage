@@ -22,7 +22,6 @@ namespace Phytel.API.DataDomain.Patient
         public IDTOUtils Utils { get; set; }
 
         private string _dbName = string.Empty;
-
         static MongoCohortPatientViewRepository()
         {
             #region Register ClassMap           
@@ -96,7 +95,40 @@ namespace Phytel.API.DataDomain.Patient
 
         public object InsertAll(List<object> entities)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
+                {
+                    var bulk = ctx.CohortPatientViews.Collection.InitializeUnorderedBulkOperation();
+                    foreach (CohortPatientViewData cpvData in entities)
+                    {
+                        MECohortPatientView meCPV = new MECohortPatientView(this.UserId)
+                        {
+                            PatientID = ObjectId.Parse(cpvData.PatientID),
+                            LastName = cpvData.LastName,
+                            DeleteFlag = false,
+                        };
+                        if (cpvData.SearchFields != null && cpvData.SearchFields.Count > 0)
+                        {
+                            List<SearchField> fields = new List<SearchField>();
+                            foreach (SearchFieldData c in cpvData.SearchFields)
+                            {
+                                fields.Add(new SearchField { Active = c.Active, FieldName = c.FieldName, Value = c.Value });
+                            }
+                            meCPV.SearchFields = fields;
+                        }
+                        bulk.Insert(meCPV.ToBsonDocument());
+                    }
+                    BulkWriteResult bwr = bulk.Execute();
+                }
+                // TODO: Auditing.
+            }
+            catch (Exception ex)
+            {
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Helper.LogException(int.Parse(aseProcessID), ex);
+            }
+            return true;
         }
 
         public void Delete(object entity)

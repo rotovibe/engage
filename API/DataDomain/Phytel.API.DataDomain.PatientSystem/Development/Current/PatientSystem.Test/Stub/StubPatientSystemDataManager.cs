@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Phytel.API.Common;
 using Phytel.API.DataDomain.PatientSystem.DTO;
 
 namespace Phytel.API.DataDomain.PatientSystem.Test
@@ -43,46 +44,6 @@ namespace Phytel.API.DataDomain.PatientSystem.Test
             return result;
         }
 
-        public DTO.DeletePatientSystemByPatientIdDataResponse DeletePatientSystemByPatientId(DTO.DeletePatientSystemByPatientIdDataRequest request)
-        {
-            throw new NotImplementedException();
-        }
-
-        public DTO.UndoDeletePatientSystemsDataResponse UndoDeletePatientSystems(DTO.UndoDeletePatientSystemsDataRequest request)
-        {
-            throw new NotImplementedException();
-        }
-
-
-        public List<PatientSystemData> InsertPatientSystems(InsertPatientSystemsDataRequest request)
-        {
-            throw new NotImplementedException();
-        }
-
-        public List<PatientSystemData> UpdatePatientSystems(UpdatePatientSystemsDataRequest request)
-        {
-            throw new NotImplementedException();
-        }
-
-
-        List<PatientSystemData> IPatientSystemDataManager.GetPatientSystems(GetPatientSystemsDataRequest request)
-        {
-            throw new NotImplementedException();
-        }
-
-
-        public void DeletePatientSystems(DeletePatientSystemsDataRequest request)
-        {
-            throw new NotImplementedException();
-        }
-
-
-        public PatientSystemData InsertPatientSystem(InsertPatientSystemDataRequest request)
-        {
-            throw new NotImplementedException();
-        }
-
-
         public List<PatientSystemOldData> GetAllPatientSystems()
         {
             List<PatientSystemOldData> result = new List<PatientSystemOldData>();
@@ -92,27 +53,55 @@ namespace Phytel.API.DataDomain.PatientSystem.Test
         }
 
 
+        List<PatientSystemData> IPatientSystemDataManager.GetPatientSystems(GetPatientSystemsDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<PatientSystemData> InsertPatientSystems(InsertPatientSystemsDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+        public PatientSystemData InsertPatientSystem(InsertPatientSystemDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<PatientSystemData> UpdatePatientSystems(UpdatePatientSystemsDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+        public DeletePatientSystemByPatientIdDataResponse DeletePatientSystemByPatientId(DeletePatientSystemByPatientIdDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+        public UndoDeletePatientSystemsDataResponse UndoDeletePatientSystems(UndoDeletePatientSystemsDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DeletePatientSystems(DeletePatientSystemsDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
         public bool UpdatePatientSystem(UpdatePatientSystemDataRequest request)
         {
             throw new NotImplementedException();
         }
 
-
-        public List<string> InsertEngagePatientSystems(InsertEngagePatientSystemsDataRequest request)
+        public List<PatientSystemResult> InsertEngagePatientSystems(InsertBatchEngagePatientSystemsDataRequest request)
         {
             throw new NotImplementedException();
         }
-
 
         public UpsertBatchPatientSystemsDataResponse UpsertBatchPatientSystems(UpsertBatchPatientSystemsDataRequest request)
         {
             throw new NotImplementedException();
         }
-
-
-        public UpsertBatchPatientSystemsDataResponse InsertBatchPatientSystems(UpsertBatchPatientSystemsDataRequest request)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
+

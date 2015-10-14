@@ -142,6 +142,12 @@ namespace Phytel.API.Common
             Log.LogError(aseAPIURL, processId, ex, LogErrorCode.Error, LogErrorSeverity.High);
         }
 
+        public static void LogException(int processId, string errorMessage)
+        {
+            string aseAPIURL = ConfigurationManager.AppSettings.Get("ASEAPI");
+            Log.LogError(aseAPIURL, processId, errorMessage, LogErrorCode.Error, LogErrorSeverity.High, string.Empty);
+        }
+
         public static string TrimAndLimit(string value, int limit)
         {
             if (!string.IsNullOrEmpty(value))
