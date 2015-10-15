@@ -126,15 +126,18 @@ namespace Phytel.API.DataDomain.Patient
             try
             {
                 GetPatientsDataResponse response = new GetPatientsDataResponse();
+                Dictionary<string, PatientData> patients = null;
                 IPatientRepository repo = Factory.GetRepository(request, RepositoryType.Patient);
                 List<PatientData> list = repo.Select(request.PatientIds);
                 if (list != null && list.Count > 0)
                 {
+                    patients = new Dictionary<string, PatientData>();
                     list.ForEach( p =>
                     {
-                        response.Patients.Add(p.Id, p);
+                        patients.Add(p.Id, p);
                     });
                 }
+                response.Patients = patients;
                 return response;
             }
             catch (Exception)
