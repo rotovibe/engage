@@ -8,8 +8,8 @@ namespace Phytel.API.DataDomain.PatientSystem.DTO
     [Route("/{Context}/{Version}/{ContractNumber}/Batch/Engage/PatientSystems", "POST")]
     public class InsertBatchEngagePatientSystemsDataRequest : IDataDomainRequest
     {
-        [ApiMember(Name = "PatientSystemsData", Description = "List of PatientSystems that need to be inserted.", ParameterType = "property", DataType = "List<PatientSystemData>", IsRequired = true)]
-        public List<PatientSystemData> PatientSystemsData { get; set; }
+        [ApiMember(Name = "PatientIds", Description = "List of Patient Ids for which Engage Patient system need to be inserted.", ParameterType = "property", DataType = "List<string>", IsRequired = true)]
+        public List<string> PatientIds { get; set; }
 
         [ApiMember(Name = "Context", Description = "Product Context requesting the PatientSystem", ParameterType = "property", DataType = "string", IsRequired = false)]
         public string Context { get; set; }

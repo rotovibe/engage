@@ -146,17 +146,18 @@ namespace Phytel.API.DataDomain.PatientSystem
             BulkInsertResult result = null;
             try
             {
-                if (request.PatientSystemsData != null && request.PatientSystemsData.Count > 0)
+                if (request.PatientIds != null && request.PatientIds.Count > 0)
                 {
                     var repo = Factory.GetRepository(RepositoryType.PatientSystem);
                     List<PatientSystemData> psList = new List<PatientSystemData>();
-                    request.PatientSystemsData.ForEach(p =>
+                    bool status = isSystemPrimary(Constants.EngageSystemId);
+                    request.PatientIds.ForEach(p =>
                     {
                         PatientSystemData ps = new PatientSystemData
                         {
                             DataSource = Constants.DataSource,
-                            PatientId = p.PatientId,
-                            Primary = isSystemPrimary(Constants.EngageSystemId),
+                            PatientId = p,
+                            Primary = status,
                             StatusId = (int)Status.Active,
                             SystemId = Constants.EngageSystemId,
                             Value = EngageId.New()

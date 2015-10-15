@@ -597,18 +597,9 @@ namespace Phytel.API.DataDomain.Patient
             {
                 if(patientIds != null && patientIds.Count > 0)
                 {
-                    List<PatientSystemData> psData = new List<PatientSystemData>();
-                    patientIds.ForEach( p => 
-                    {
-                        PatientSystemData data = new PatientSystemData
-                        {
-                            PatientId = p,
-                        };
-                        psData.Add(data);
-                    });
                     InsertBatchEngagePatientSystemsDataRequest psRequest = new InsertBatchEngagePatientSystemsDataRequest
                     {
-                        PatientSystemsData = psData,
+                        PatientIds = patientIds,
                         Context = request.Context,
                         ContractNumber = request.ContractNumber,
                         UserId = Constants.SystemContactId,// the requirement says that the engage Id should have createdby user as 'system'.
