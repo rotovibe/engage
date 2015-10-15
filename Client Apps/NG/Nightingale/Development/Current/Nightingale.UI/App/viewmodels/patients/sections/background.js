@@ -23,6 +23,7 @@ define(['models/base', 'services/datacontext', 'viewmodels/shell/shell'],
             }
 			var modalSettings = {
 				title: 'Edit Background',
+				showSelectedPatientInTitle: true,
 				entity: self.selectedPatient, 
 				templatePath: 'templates/background.html', 
 				showing: self.backgroundModalShowing, 

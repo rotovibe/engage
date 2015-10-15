@@ -12,7 +12,9 @@ define(['services/validatorfactory', 'services/customvalidators', 'services/form
 		var systemCareManager;
 		var DT = breeze.DataType;
 		var Validator = breeze.Validator;
-
+		var patientsIndex; 		
+		var selectedPatient;
+		
 		// Create a common user model
 		function property(name, value) {
 			var self = this;
@@ -30,8 +32,28 @@ define(['services/validatorfactory', 'services/customvalidators', 'services/form
 				
 		// Create a common modal model
 		function modal( modalSettings ){
-			var self = this;
-			self.Title = ko.observable(modalSettings.title);
+		    var self = this;
+		    self.Title = modalSettings.title;			
+			if( modalSettings.relatedPatientName ){
+				self.Title = ko.computed( function(){
+					var relatedPatientName = modalSettings.relatedPatientName();
+					if( relatedPatientName ){
+						return modalSettings.title + ' - ' + relatedPatientName;
+					}
+					return modalSettings.title;
+				});
+			}
+		    else if ( modalSettings.showSelectedPatientInTitle ) {
+		        checkPatientsIndex();
+		        self.Title = ko.computed(function () {
+		            var title = modalSettings.title;
+		            var patientFullName = selectedPatient && selectedPatient() ? selectedPatient().fullName() : '';
+		            if ( patientFullName ) {
+		                title = title + ' - ' + patientFullName;
+		            }
+		            return title;
+		        });
+		    }
 			self.Entity = modalSettings.entity;
 			self.TemplatePath = ko.observable(modalSettings.templatePath);
 			self.classOverride = ko.observable(modalSettings.classOverride? modalSettings.classOverride : null);
@@ -818,6 +840,15 @@ define(['services/validatorfactory', 'services/customvalidators', 'services/form
 			}
 		}
 
+		function checkPatientsIndex(){
+			if( !patientsIndex ) {
+				patientsIndex = require('viewmodels/patients/index');
+				selectedPatient = ko.computed(function () {
+					return patientsIndex.selectedPatient();
+				});
+			}		
+		}
+		
 		function getSystemCareManager(){
 			if( ! systemCareManager ){
 				checkDataContext();

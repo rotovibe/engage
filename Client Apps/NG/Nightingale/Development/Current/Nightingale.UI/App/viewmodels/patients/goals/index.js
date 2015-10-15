@@ -105,6 +105,7 @@
       msg = msg ? msg : 'Edit Goal';
 	  var modalSettings = {
 			title: msg,
+			showSelectedPatientInTitle: true,
 			entity: modalEntity, 
 			templatePath: 'viewmodels/templates/goal.edit', 
 			showing: goalModalShowing, 

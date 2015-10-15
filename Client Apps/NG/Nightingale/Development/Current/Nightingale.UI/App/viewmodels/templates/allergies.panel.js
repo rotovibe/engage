@@ -90,7 +90,8 @@
             };
 
 			var modalSettings = {
-				title: 'Edit Allergy' + ' - ' + self.selectedPatient().fullName(),
+				title: 'Edit Allergy',
+				showSelectedPatientInTitle: true,
 				entity: self.modalEntity, 
 				templatePath: 'viewmodels/templates/allergy.edit', 
 				showing: self.modalShowing, 
@@ -119,8 +120,6 @@
     		self.editAllergy = function (allergy) {
                 // Set the allergy
                 self.modalEntity().allergy(allergy);
-				
-				self.modal.Title('Edit Allergy' + ' - ' + self.selectedPatient().fullName());
                 // Set the current modal
                 shell.currentModal(self.modal);
                 // Show it

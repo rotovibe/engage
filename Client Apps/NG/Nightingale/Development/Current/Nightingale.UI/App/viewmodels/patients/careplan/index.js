@@ -62,6 +62,7 @@
             self.showDropdown = true;
             self.showActions = false;
             self.canSave = ko.observable(true);
+			self.activationData = { selectedPatient: self.selectedPatient, activeDataType: self.activeDataType, showDropdown: self.showDropdown, showActions: self.showActions };
         }
         var modalShowing = ko.observable(false);
         var modalEntity = ko.observable(new ModalEntity());
@@ -75,7 +76,8 @@
         };
 
 		var modalSettings = {
-			title: 'Data Entry' + ' - ' + selectedPatient().fullName(),
+			title: 'Data Entry',
+			showSelectedPatientInTitle: true,
 			entity: modalEntity, 
 			templatePath: 'viewmodels/templates/clinical.dataentry', 
 			showing: modalShowing, 
@@ -85,9 +87,7 @@
 			classOverride: 'modal-lg'
 		}
         var modal = new modelConfig.modal(modalSettings);
-        function toggleModalShowing() {
-			//update the title as the patient name may change:
-			modal.Title('Data Entry' + ' - ' + self.selectedPatient().fullName());
+        function toggleModalShowing() {			
             shell.currentModal(modal);
             modalShowing(!modalShowing());
         }

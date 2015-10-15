@@ -22,6 +22,7 @@ define(['models/base', 'services/datacontext', 'viewmodels/shell/shell'],
             }
 			var modalSettings = {
 				title: 'Edit Status',
+				showSelectedPatientInTitle: true,
 				entity: self.selectedPatient, 
 				templatePath: 'templates/patient.status.html', 
 				showing: self.statusModalShowing, 

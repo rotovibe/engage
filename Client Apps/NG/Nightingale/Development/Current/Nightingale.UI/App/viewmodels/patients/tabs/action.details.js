@@ -46,6 +46,7 @@
         self.selectedHistoricalAction = settings.selectedHistoricalAction;
 		var modalSettings = {
 			title: 'Individual Attributes',
+			showSelectedPatientInTitle: true,
 			entity: self.modalEntity, 
 			templatePath: 'viewmodels/templates/action.edit', 
 			showing: self.modalShowing, 

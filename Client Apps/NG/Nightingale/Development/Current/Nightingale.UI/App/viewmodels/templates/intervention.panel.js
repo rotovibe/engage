@@ -89,17 +89,7 @@
             self.cancelOverride = function () {
                 datacontext.cancelEntityChanges(self.modalEntity().intervention());
             };
-			var modalSettings = {
-				title: 'Edit Intervention',
-				entity:self.modalEntity , 
-				templatePath: 'viewmodels/templates/intervention.edit', 
-				showing: self.modalShowing, 
-				saveOverride: self.saveOverride, 
-				cancelOverride: self.cancelOverride, 
-				deleteOverride: null, 
-				classOverride: null
-			}
-            self.modal = new modelConfig.modal(modalSettings);
+			
     		// A list of columns to display
     		self.columns = ko.computed(function () {
     			var tempcols = [];
@@ -137,6 +127,19 @@
                 }
 
                 function loadModalCompleted () {
+					var modalSettings = {
+						title: 'Edit Intervention',
+						showSelectedPatientInTitle: true,
+						relatedPatientName: intervention.computedPatient().fullName,
+						entity:self.modalEntity , 
+						templatePath: 'viewmodels/templates/intervention.edit', 
+						showing: self.modalShowing, 
+						saveOverride: self.saveOverride, 
+						cancelOverride: self.cancelOverride, 
+						deleteOverride: null, 
+						classOverride: null
+					}
+					self.modal = new modelConfig.modal(modalSettings);
                     self.modalEntity().intervention(intervention);
                     shell.currentModal(self.modal);
                     self.modalShowing(true);

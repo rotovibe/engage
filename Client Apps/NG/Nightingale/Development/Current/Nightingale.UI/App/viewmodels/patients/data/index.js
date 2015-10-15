@@ -36,7 +36,8 @@ define(['plugins/router', 'services/navigation', 'config.services', 'services/se
 
         function toggleModalShowing () {
 			var modalSettings = {
-				title: 'Data Entry' + ' - ' + selectedPatient().fullName(),
+				title: 'Data Entry',
+				showSelectedPatientInTitle: true,
 				entity: modalEntity, 
 				templatePath: 'viewmodels/templates/clinical.dataentry', 
 				showing: modalShowing, 

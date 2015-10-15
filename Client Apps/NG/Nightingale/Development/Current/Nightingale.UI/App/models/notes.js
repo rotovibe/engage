@@ -490,31 +490,39 @@ define(['services/session', 'services/dateHelper'],
 
 				function todoInitializer (todo) {
 					todo.isNew = ko.observable(false);
-								todo.programString = ko.computed(function () {
-								checkDataContext();
-								var thisString = '';
-								var theseProgramIds = todo.programIds();
-								if (todo.patientId() && todo.patient() && todo.patient().programs()) {
-										var thesePrograms = todo.patient().programs();
-										ko.utils.arrayForEach(theseProgramIds, function (program) {
-												var thisProgram = ko.utils.arrayFirst(thesePrograms, function (programEnum) {
-														return programEnum.id() === program.id();
-												});
-												if (thisProgram) {
-														thisString += thisProgram.name() + ', ';
-												}
-										});
-										// If the string is longer than zero,
-										if (thisString.length > 0) {
-												// Remove the trailing comma and space
-												thisString = thisString.substr(0, thisString.length - 2);
-										}
-								}
-								if (thisString.length === 0) {
-										thisString = 'None';
-								}
-								return thisString;
+					todo.programString = ko.computed(function () {
+						checkDataContext();
+						var thisString = '';
+						var theseProgramIds = todo.programIds();
+						if (todo.patientId() && todo.patient() && todo.patient().programs()) {
+							var thesePrograms = todo.patient().programs();
+							ko.utils.arrayForEach(theseProgramIds, function (program) {
+								var thisProgram = ko.utils.arrayFirst(thesePrograms, function (programEnum) {
+										return programEnum.id() === program.id();
 								});
+								if (thisProgram) {
+										thisString += thisProgram.name() + ', ';
+								}
+							});
+							// If the string is longer than zero,
+							if (thisString.length > 0) {
+								// Remove the trailing comma and space
+								thisString = thisString.substr(0, thisString.length - 2);
+							}
+						}
+						if (thisString.length === 0) {
+								thisString = 'None';
+						}
+						return thisString;
+					});
+					todo.patientName = ko.computed( function(){
+						var patientId = todo.patientId();
+						var patient = todo.patient();
+						if( patientId && patient ){
+							return patient.fullName();
+						}
+						return null;
+					});
 				}
 		}
 

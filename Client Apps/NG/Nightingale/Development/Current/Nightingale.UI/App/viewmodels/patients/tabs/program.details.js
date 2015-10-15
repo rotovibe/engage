@@ -35,6 +35,7 @@
         };
 		var modalSettings = {
 			title: 'Individual Attributes',
+			showSelectedPatientInTitle: true,
 			entity: self.modalEntity, 
 			templatePath: 'viewmodels/templates/program.edit', 
 			showing: self.modalShowing, 

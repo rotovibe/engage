@@ -83,6 +83,7 @@
         function editEntity (msg, entity, path, saveoverride, canceloverride) {
 			var modalSettings = {
 				title: msg,
+				showSelectedPatientInTitle: true,
 				entity: entity, 
 				templatePath: path, 
 				showing: modalShowing, 

@@ -101,6 +101,7 @@ define(['models/base', 'services/datacontext', 'services/session', 'viewmodels/s
             self.modalEntity = ko.observable(new ModalEntity(self.selectedPatient, self.saveType));
 			var modalSettings = {
 				title: 'Edit Care Team',
+				showSelectedPatientInTitle: true,
 				entity: self.modalEntity, 
 				templatePath: 'viewmodels/templates/care.team.edit', 
 				showing: self.editModalShowing, 

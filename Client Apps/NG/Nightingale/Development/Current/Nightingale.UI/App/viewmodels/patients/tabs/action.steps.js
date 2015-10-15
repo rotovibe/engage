@@ -37,6 +37,7 @@
         };
 		var modalSettings = {
 			title: 'Data Entry',
+			showSelectedPatientInTitle: true,
 			entity: self.modalEntity, 
 			templatePath: 'viewmodels/templates/clinical.dataentry', 
 			showing: self.modalShowing, 
@@ -47,9 +48,7 @@
 		}
         self.modal = new modelConfig.modal(modalSettings);
         self.toggleModalShowing = function () {
-			//update the title as the patient name may change:
-			self.modal.Title('Data Entry' + ' - ' + dataIndex.selectedPatient().fullName());
-            shell.currentModal(self.modal);
+			shell.currentModal(self.modal);
             self.modalShowing(!self.modalShowing());
         }
     };

@@ -85,6 +85,7 @@
             };
 			var modalSettings = {
 				title:'Edit Task' ,
+				showSelectedPatientInTitle: true,
 				entity: self.modalEntity, 
 				templatePath: 'viewmodels/templates/task.edit', 
 				showing: self.modalShowing, 

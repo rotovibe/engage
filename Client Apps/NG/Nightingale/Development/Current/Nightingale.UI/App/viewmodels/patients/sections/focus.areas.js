@@ -1,5 +1,5 @@
-﻿define(['models/base', 'services/datacontext', 'services/session', 'viewmodels/shell/shell', 'viewmodels/patients/data/index', 'viewmodels/patients/index'],
-    function (modelConfig, datacontext, session, shell, dataIndex, patientsIndex) {
+﻿define(['models/base', 'services/datacontext', 'services/session', 'viewmodels/shell/shell', 'viewmodels/patients/data/index'],
+    function (modelConfig, datacontext, session, shell, dataIndex) {
 
         var ctor = function () {
         };
@@ -141,7 +141,8 @@
             self.isFullScreen = ko.observable(false);
             self.toggleEditing = function () {
 				var modalSettings = {
-					title: 'Focus Problems' + ' - ' + patientsIndex.selectedPatient().fullName(),
+					title: 'Focus Problems',
+					showSelectedPatientInTitle: true,
 					entity: self.modalEntity, 
 					templatePath: 'viewmodels/templates/focusproblems', 
 					showing: self.focusProblemModalShowing, 

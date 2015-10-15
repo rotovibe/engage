@@ -54,6 +54,7 @@
             };
 			var modalSettings = {
 				title: 'Remove '+ self.activeProgram().name() ,
+				showSelectedPatientInTitle: true,
 				entity: self.modalEntity, 
 				templatePath: 'viewmodels/templates/program.remove', 
 				showing: self.modalShowing, 

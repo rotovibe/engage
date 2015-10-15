@@ -95,6 +95,7 @@
             // The modal to display for editing
 			var modalSettings = {
 				title: 'Edit Communication Preferences',
+				showSelectedPatientInTitle: true,
 				entity: self.contactCard, 
 				templatePath: 'templates/contactcard.html', 
 				showing: self.communicationModalShowing				

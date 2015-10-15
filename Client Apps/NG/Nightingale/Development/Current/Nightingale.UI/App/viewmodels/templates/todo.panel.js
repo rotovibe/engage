@@ -137,17 +137,7 @@ define(['services/session', 'services/datacontext', 'config.services', 'viewmode
 					}
 				}	                		
             };
-			var modalSettings = {
-				title: 'Edit To Do',
-				entity: self.modalEntity, 
-				templatePath: 'viewmodels/templates/todo.edit', 
-				showing:self.modalShowing , 
-				saveOverride: self.saveOverride, 
-				cancelOverride: self.cancelOverride, 
-				deleteOverride: null, 
-				classOverride: null
-			}
-            self.modal = new modelConfig.modal(modalSettings);
+			
     		// A list of columns to display
     		self.columns = ko.computed(function () {
     			var tempcols = [];
@@ -189,7 +179,18 @@ define(['services/session', 'services/datacontext', 'config.services', 'viewmode
 				self.originalProgramIds.removeAll();
 				var progIds = self.originalProgramIds();
 				ko.utils.arrayPushAll(progIds, todo.programIds());
-				
+				var modalSettings = {
+					title: 'Edit To Do',
+					relatedPatientName: todo.patientName,
+					entity: self.modalEntity, 
+					templatePath: 'viewmodels/templates/todo.edit', 
+					showing:self.modalShowing , 
+					saveOverride: self.saveOverride, 
+					cancelOverride: self.cancelOverride, 
+					deleteOverride: null, 
+					classOverride: null
+				}
+				self.modal = new modelConfig.modal(modalSettings);
                 self.modalEntity().todo(todo);
                 shell.currentModal(self.modal);
                 self.modalShowing(true);

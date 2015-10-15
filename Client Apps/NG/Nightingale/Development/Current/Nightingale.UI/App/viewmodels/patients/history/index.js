@@ -217,6 +217,7 @@
 			var msg = 'Edit ' + activeNote().type().name() + ' Note';
 			var modalSettings = {
 				title: msg,
+				showSelectedPatientInTitle: true,
 				entity: modalEntity, 
 				templatePath: 'viewmodels/patients/notes/index', 
 				showing: noteModalShowing, 

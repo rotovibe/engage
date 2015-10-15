@@ -150,6 +150,7 @@ define(['services/datacontext', 'services/session', 'models/base', 'viewmodels/s
 				self.modalEntityObservable( new ModalEntity( self.patientSystemsModalShowing, self.selectedPatient ) );
 				var modalSettings = {
 					title: 'Individual IDs',
+					showSelectedPatientInTitle: true,
 					entity: self.modalEntityObservable, 
 					templatePath: 'viewmodels/templates/patient.systems', 
 					showing: self.patientSystemsModalShowing, 

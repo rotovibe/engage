@@ -101,7 +101,8 @@ define(['services/session', 'services/datacontext', 'config.services', 'viewmode
             };
 
 			var modalSettings = {
-				title: 'Edit Medication' + ' - ' + medicationsIndex.selectedPatient().fullName(),
+				title: 'Edit Medication',
+				showSelectedPatientInTitle: true,
 				entity: self.modalEntity, 
 				templatePath: 'viewmodels/patients/sections/medication.edit', 
 				showing: self.modalShowing, 
@@ -131,8 +132,6 @@ define(['services/session', 'services/datacontext', 'config.services', 'viewmode
                 medication.isEditing(true);
                 // Set the medication
                 self.modalEntity().medication(medication);
-				//update the title as the patient name may change:
-				self.modal.Title('Edit Medication' + ' - ' + medicationsIndex.selectedPatient().fullName());
                 // Set the current modal
                 shell.currentModal(self.modal);
                 // Show it

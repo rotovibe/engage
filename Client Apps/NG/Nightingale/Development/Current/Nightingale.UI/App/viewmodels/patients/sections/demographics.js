@@ -12,6 +12,7 @@
 			self.editModalShowing = ko.observable(false);
 			var modalSettings = {
 				title: 'Edit Individual',
+				showSelectedPatientInTitle: true,
 				entity: self.selectedPatient, 
 				templatePath: 'templates/patient.html', 
 				showing: self.editModalShowing,
