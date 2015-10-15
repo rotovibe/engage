@@ -57,6 +57,19 @@ namespace Phytel.API.DataDomain.PatientSystem
             }
         }
 
+        public List<PatientSystemData> GetPatientSystemsByIds(GetPatientSystemByIdsDataRequest request)
+        {
+            try
+            {
+                var repo = Factory.GetRepository(RepositoryType.PatientSystem);
+                return repo.Select(request.Ids);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         public PatientSystemData InsertPatientSystem(InsertPatientSystemDataRequest request)
         {
             PatientSystemData result = null;
@@ -128,9 +141,9 @@ namespace Phytel.API.DataDomain.PatientSystem
             catch (Exception ex) { throw ex; }
         }
 
-        public List<PatientSystemResult> InsertEngagePatientSystems(InsertBatchEngagePatientSystemsDataRequest request)
+        public BulkInsertResult InsertEngagePatientSystems(InsertBatchEngagePatientSystemsDataRequest request)
         {
-            List<PatientSystemResult> result = new List<PatientSystemResult>();
+            BulkInsertResult result = null;
             try
             {
                 if (request.PatientSystemsData != null && request.PatientSystemsData.Count > 0)
@@ -150,7 +163,7 @@ namespace Phytel.API.DataDomain.PatientSystem
                         };
                         psList.Add(ps);
                     });
-                    result = (List<PatientSystemResult>)repo.InsertAll(psList.Cast<object>().ToList());
+                    result = (BulkInsertResult)repo.InsertAll(psList.Cast<object>().ToList());
                 }
             }
             catch (Exception ex) { throw ex; }

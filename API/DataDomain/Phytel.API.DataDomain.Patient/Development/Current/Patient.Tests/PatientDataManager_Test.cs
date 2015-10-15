@@ -26,8 +26,8 @@ namespace Phytel.API.DataDomain.Patient.Test
                 ContractNumber = "InHealth001",
                 Context = "NG"
             };
-            GetPatientsDataResponse response = pm.GetPatients(request);
-            Assert.IsTrue(response.Patients.Count > 0);
+            List<PatientData> response = pm.GetPatients(request);
+            Assert.IsTrue(response.Count > 0);
         }
 
         [TestMethod()]

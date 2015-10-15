@@ -96,6 +96,22 @@ namespace Phytel.API.DataDomain.PatientSystem.Service
             return response;
         }
 
+        public GetPatientSystemByIdsDataResponse Post(GetPatientSystemByIdsDataRequest request)
+        {
+            GetPatientSystemByIdsDataResponse response = new GetPatientSystemByIdsDataResponse();
+            try
+            {
+                RequireUserId(request);
+                response.PatientSystems = Manager.GetPatientSystemsByIds(request); 
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                RaiseException(response, ex);
+            }
+            return response;
+        }
+
         public UpsertBatchPatientSystemsDataResponse Post(UpsertBatchPatientSystemsDataRequest request)
         {
             UpsertBatchPatientSystemsDataResponse response = new UpsertBatchPatientSystemsDataResponse();

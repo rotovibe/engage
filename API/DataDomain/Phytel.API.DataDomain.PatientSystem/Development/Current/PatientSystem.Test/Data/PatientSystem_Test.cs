@@ -123,24 +123,24 @@ namespace Phytel.API.DataDomain.PatientSystem.Test
             Assert.IsNotNull(response);
         }
 
-        [TestMethod]
-        public void UpsertPatientSystems_Test()
-        {
-            List<PatientSystemData> lPsd = (List<PatientSystemData>)Helpers.DeserializeObject<List<PatientSystemData>>("PatientsSystemExample.txt");
+        //[TestMethod]
+        //public void UpsertPatientSystems_Test()
+        //{
+        //  //  List<PatientSystemData> lPsd = (List<PatientSystemData>)Helpers.DeserializeObject<List<PatientSystemData>>("PatientsSystemExample.txt");
 
-            UpsertBatchPatientSystemsDataRequest request = new UpsertBatchPatientSystemsDataRequest
-            {
-                Context = context,
-                ContractNumber = contractNumber,
-                UserId = userId,
-                Version = version,
-                PatientSystemsData = lPsd
-            };
+        //    UpsertBatchPatientSystemsDataRequest request = new UpsertBatchPatientSystemsDataRequest
+        //    {
+        //        Context = context,
+        //        ContractNumber = contractNumber,
+        //        UserId = userId,
+        //        Version = version,
+        //        PatientSystemsData = lPsd
+        //    };
 
-            //[Route("/{Context}/{Version}/{ContractNumber}/Batch/PatientSystems", "POST")]
-            UpsertBatchPatientSystemsDataResponse response = client.Post<UpsertBatchPatientSystemsDataResponse>(string.Format("{0}/{1}/{2}/{3}/Batch/PatientSystems", url, context, version, contractNumber), request);
-            Assert.IsNotNull(response);
-        }
+        //    //[Route("/{Context}/{Version}/{ContractNumber}/Batch/PatientSystems", "POST")]
+        //    UpsertBatchPatientSystemsDataResponse response = client.Post<UpsertBatchPatientSystemsDataResponse>(string.Format("{0}/{1}/{2}/{3}/Batch/PatientSystems", url, context, version, contractNumber), request);
+        //    Assert.IsNotNull(response);
+        //}
 
    }
 }

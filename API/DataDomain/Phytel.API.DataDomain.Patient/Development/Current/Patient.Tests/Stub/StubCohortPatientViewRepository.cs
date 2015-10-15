@@ -14,7 +14,7 @@ namespace Phytel.API.DataDomain.Patient.Test.Stub
         {
         }
 
-        public DTO.GetPatientsDataResponse Select(string[] patientIds)
+        public List<DTO.PatientData> Select(List<string> patientIds)
         {
             throw new NotImplementedException();
         }
@@ -34,6 +34,11 @@ namespace Phytel.API.DataDomain.Patient.Test.Stub
             throw new NotImplementedException();
         }
 
+        public DTO.PutPatientSystemIdDataResponse UpdatePatientSystem(DTO.PutPatientSystemIdDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
         public object FindByID(string patientId, string userId)
         {
             throw new NotImplementedException();
@@ -45,6 +50,26 @@ namespace Phytel.API.DataDomain.Patient.Test.Stub
         }
 
         public object GetSSN(string patientId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<DTO.PatientUserData> FindPatientUsersByPatientId(string patientId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public DTO.CohortPatientViewData FindCohortPatientViewByPatientId(string patientId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public object Initialize(object newEntity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public object FindDuplicatePatient(DTO.PutUpdatePatientDataRequest request)
         {
             throw new NotImplementedException();
         }
@@ -89,6 +114,11 @@ namespace Phytel.API.DataDomain.Patient.Test.Stub
             throw new NotImplementedException();
         }
 
+        public void UndoDelete(object entity)
+        {
+            throw new NotImplementedException();
+        }
+
         public object Update(object entity)
         {
             throw new NotImplementedException();
@@ -98,165 +128,12 @@ namespace Phytel.API.DataDomain.Patient.Test.Stub
         {
             get
             {
-                return this.userId;
-            }
-            set
-            {
-                this.userId = value;
-            }
-        }
-
-
-        public List<DTO.PatientUserData> FindPatientUsersByPatientId(string patientId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public DTO.CohortPatientViewData FindCohortPatientViewByPatientId(string patientId)
-        {
-            throw new NotImplementedException();
-        }
-
-        DTO.GetPatientsDataResponse IPatientRepository.Select(List<string> patientIds)
-        {
-            throw new NotImplementedException();
-        }
-
-        List<DTO.PatientData> IPatientRepository.Select(string query, string[] filterData, string querySort, int skip, int take)
-        {
-            throw new NotImplementedException();
-        }
-
-        DTO.PutPatientPriorityResponse IPatientRepository.UpdatePriority(DTO.PutPatientPriorityRequest request)
-        {
-            throw new NotImplementedException();
-        }
-
-        DTO.PutPatientFlaggedResponse IPatientRepository.UpdateFlagged(DTO.PutPatientFlaggedRequest request)
-        {
-            throw new NotImplementedException();
-        }
-
-        object IPatientRepository.FindByID(string patientId, string userId)
-        {
-            throw new NotImplementedException();
-        }
-
-        object IPatientRepository.Update(DTO.PutUpdatePatientDataRequest request)
-        {
-            throw new NotImplementedException();
-        }
-
-        object IPatientRepository.GetSSN(string patientId)
-        {
-            throw new NotImplementedException();
-        }
-
-        List<DTO.PatientUserData> IPatientRepository.FindPatientUsersByPatientId(string patientId)
-        {
-            throw new NotImplementedException();
-        }
-
-        DTO.CohortPatientViewData IPatientRepository.FindCohortPatientViewByPatientId(string patientId)
-        {
-            throw new NotImplementedException();
-        }
-
-
-        public void UndoDelete(object entity)
-        {
-            throw new NotImplementedException();
-        }
-
-
-        public object Initialize(object newEntity)
-        {
-            throw new NotImplementedException();
-        }
-
-
-        public object FindDuplicatePatient(DTO.PutUpdatePatientDataRequest request)
-        {
-            throw new NotImplementedException();
-        }
-
-
-        object IPatientRepository.Initialize(object newEntity)
-        {
-            throw new NotImplementedException();
-        }
-
-        object IPatientRepository.FindDuplicatePatient(DTO.PutUpdatePatientDataRequest request)
-        {
-            throw new NotImplementedException();
-        }
-
-        void Interface.IRepository.CacheByID(List<string> entityIDs)
-        {
-            throw new NotImplementedException();
-        }
-
-        void Interface.IRepository.Delete(object entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        void Interface.IRepository.DeleteAll(List<object> entities)
-        {
-            throw new NotImplementedException();
-        }
-
-        object Interface.IRepository.FindByID(string entityID)
-        {
-            throw new NotImplementedException();
-        }
-
-        object Interface.IRepository.Insert(object newEntity)
-        {
-            throw new NotImplementedException();
-        }
-
-        object Interface.IRepository.InsertAll(List<object> entities)
-        {
-            throw new NotImplementedException();
-        }
-
-        Tuple<string, IEnumerable<object>> Interface.IRepository.Select(Interface.APIExpression expression)
-        {
-            throw new NotImplementedException();
-        }
-
-        IEnumerable<object> Interface.IRepository.SelectAll()
-        {
-            throw new NotImplementedException();
-        }
-
-        void Interface.IRepository.UndoDelete(object entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        object Interface.IRepository.Update(object entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        string Interface.IRepository.UserId
-        {
-            get
-            {
                 throw new NotImplementedException();
             }
             set
             {
                 throw new NotImplementedException();
             }
-        }
-
-
-        public DTO.PutPatientSystemIdDataResponse UpdatePatientSystem(DTO.PutPatientSystemIdDataRequest request)
-        {
-            throw new NotImplementedException();
         }
     }
 }

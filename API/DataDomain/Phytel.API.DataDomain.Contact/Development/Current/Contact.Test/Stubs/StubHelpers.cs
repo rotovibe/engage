@@ -7,6 +7,7 @@ namespace Phytel.API.DataDomain.Contact.Test.Stubs
 {
     public class StubHelpers : IHelpers
     {
+
         public string BuildURL(string baseURL, string userId)
         {
             throw new NotImplementedException();
@@ -34,11 +35,20 @@ namespace Phytel.API.DataDomain.Contact.Test.Stubs
 
         public void LogException(int processId, Exception ex)
         {
-            
+            throw new NotImplementedException();
         }
 
-
         public string TrimAndLimit(string value, int limit)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SerializeObject<T>(T obj, string filePath)
+        {
+            throw new NotImplementedException();
+        }
+
+        public object DeserializeObject<T>(string filePath)
         {
             throw new NotImplementedException();
         }

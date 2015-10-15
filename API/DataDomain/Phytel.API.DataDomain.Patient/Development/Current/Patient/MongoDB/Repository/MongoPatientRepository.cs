@@ -167,8 +167,8 @@ namespace Phytel.API.DataDomain.Patient
 
         public object InsertAll(List<object> entities)
         {
-            BulkInsertResult<PatientData> result = new BulkInsertResult<PatientData>();
-            List<PatientData> insertedPatients = new List<PatientData>();
+            BulkInsertResult result = new BulkInsertResult();
+            List<string> insertedIds = new List<string>();
             List<string> errorMessages = new List<string>();
             try
             {
@@ -177,8 +177,9 @@ namespace Phytel.API.DataDomain.Patient
                     var bulk = ctx.Patients.Collection.InitializeUnorderedBulkOperation();
                     foreach (PatientData pd in entities)
                     {
-                        MEPatient patient = new MEPatient(this.UserId, pd.RecordCreatedOn)
+                        MEPatient meP = new MEPatient(this.UserId, pd.RecordCreatedOn)
                         {
+                            //Id = ObjectId.Parse("561ea745d43325133cf09a6d"),
                             FirstName = pd.FirstName,
                             LastName = pd.LastName,
                             MiddleName = pd.MiddleName,
@@ -202,51 +203,21 @@ namespace Phytel.API.DataDomain.Patient
                         };
                         if (!string.IsNullOrEmpty(pd.ReasonId))
                         {
-                            patient.ReasonId = ObjectId.Parse(pd.ReasonId);
+                            meP.ReasonId = ObjectId.Parse(pd.ReasonId);
                         }
                         if (!string.IsNullOrEmpty(pd.MaritalStatusId))
                         {
-                            patient.MaritalStatusId = ObjectId.Parse(pd.MaritalStatusId);
+                            meP.MaritalStatusId = ObjectId.Parse(pd.MaritalStatusId);
                         }
-                        bulk.Insert(patient.ToBsonDocument());
+                        bulk.Insert(meP.ToBsonDocument());
+                        insertedIds.Add(meP.Id.ToString());
                     }
                     BulkWriteResult bwr = bulk.Execute();
-                    foreach (InsertRequest u in bwr.ProcessedRequests)
-                    {
-                        PatientData pd = new PatientData
-                        {
-                            Id = u.Document.ToBsonDocument().GetElement(MEPatient.IdProperty).Value.ToString(),
-                            LastName = u.Document.ToBsonDocument().GetElement(MEPatient.LastNameProperty).Value.ToString(),
-                            FirstName = u.Document.ToBsonDocument().GetElement(MEPatient.FirstNameProperty).Value.ToString(),
-                            Gender = u.Document.ToBsonDocument().GetElement(MEPatient.GenderProperty).Value.ToString(),
-                            DOB = u.Document.ToBsonDocument().GetElement(MEPatient.DOBProperty).Value.ToString(),
-                            MiddleName = u.Document.ToBsonDocument().GetElement(MEPatient.MiddleNameProperty).Value.ToString(),
-                            Suffix = u.Document.ToBsonDocument().GetElement(MEPatient.SuffixProperty).Value.ToString(),
-                            PreferredName = u.Document.ToBsonDocument().GetElement(MEPatient.PreferredNameProperty).Value.ToString()
-                        };
-                        insertedPatients.Add(pd);
-                    }
                 }
                 // TODO: Auditing.
             }
             catch (BulkWriteException bwEx)
             {
-                // Get the successfully inserted patient ids.
-                foreach (InsertRequest u in bwEx.Result.ProcessedRequests)
-                {
-                    PatientData pd = new PatientData
-                    {
-                        Id = u.Document.ToBsonDocument().GetElement(MEPatient.IdProperty).Value.ToString(),
-                        LastName = u.Document.ToBsonDocument().GetElement(MEPatient.LastNameProperty).Value.ToString(),
-                        FirstName = u.Document.ToBsonDocument().GetElement(MEPatient.FirstNameProperty).Value.ToString(),
-                        Gender = u.Document.ToBsonDocument().GetElement(MEPatient.GenderProperty).Value.ToString(),
-                        DOB = u.Document.ToBsonDocument().GetElement(MEPatient.DOBProperty).Value.ToString(),
-                        MiddleName = u.Document.ToBsonDocument().GetElement(MEPatient.MiddleNameProperty).Value.ToString(),
-                        Suffix = u.Document.ToBsonDocument().GetElement(MEPatient.SuffixProperty).Value.ToString(),
-                        PreferredName = u.Document.ToBsonDocument().GetElement(MEPatient.PreferredNameProperty).Value.ToString()
-                    };
-                    insertedPatients.Add(pd);
-                }
                 // Get the error messages for the ones that failed.
                 foreach (BulkWriteError er in bwEx.WriteErrors)
                 {
@@ -255,9 +226,10 @@ namespace Phytel.API.DataDomain.Patient
             }
             catch (Exception ex)
             {
-                throw ex;
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Helper.LogException(int.Parse(aseProcessID), ex);
             }
-            result.Data = insertedPatients;
+            result.ProcessedIds = insertedIds;
             result.ErrorMessages = errorMessages;
             return result;
         }
@@ -450,22 +422,22 @@ namespace Phytel.API.DataDomain.Patient
             throw new NotImplementedException();
         }
 
-        public GetPatientsDataResponse Select(List<string> patientIds)
+        public List<PatientData> Select(List<string> patientIds)
         {
-            Dictionary<string, PatientData> response = null;
-            GetPatientsDataResponse pdResponse = new GetPatientsDataResponse();
+            List<PatientData> pList = null;
             try
             {
                 using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
                 {
                     List<IMongoQuery> queries = new List<IMongoQuery>();
-                    queries.Add(Query.In(MEPatientUser.IdProperty, new BsonArray(Helper.ConvertToObjectIdList(patientIds))));
-                    queries.Add(Query.EQ(MEPatientUser.DeleteFlagProperty, false));
+                    queries.Add(Query.In(MEPatient.IdProperty, new BsonArray(Helper.ConvertToObjectIdList(patientIds))));
+                    queries.Add(Query.EQ(MEPatient.DeleteFlagProperty, false));
+                    queries.Add(Query.EQ(MEPatient.TTLDateProperty, BsonNull.Value));
                     IMongoQuery mQuery = Query.And(queries);
                     List<MEPatient> mePatients = ctx.Patients.Collection.Find(mQuery).ToList();
                     if(mePatients != null && mePatients.Count > 0)
                     {
-                        response = new Dictionary<string, PatientData>();
+                        pList = new List<PatientData>();
                         foreach (MEPatient meP in mePatients)
                         {
                             PatientData data = new PatientData
@@ -493,12 +465,11 @@ namespace Phytel.API.DataDomain.Patient
                                 DeceasedId = (int)meP.Deceased,
                                 ExternalRecordId = meP.ExternalRecordId
                             };
-                            response.Add(data.Id, data);
+                            pList.Add(data);
                         }
                     }   
                 }
-                pdResponse.Patients = response;      
-                return pdResponse;
+                return pList;
             }
             catch (Exception) { throw; }
         }
@@ -511,8 +482,8 @@ namespace Phytel.API.DataDomain.Patient
                 using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
                 {
                     List<IMongoQuery> queries = new List<IMongoQuery>();
-                    queries.Add(Query.EQ(MEPatientUser.DeleteFlagProperty, false));
-                    queries.Add(Query.EQ(MEPatientUser.TTLDateProperty, BsonNull.Value));
+                    queries.Add(Query.EQ(MEPatient.DeleteFlagProperty, false));
+                    queries.Add(Query.EQ(MEPatient.TTLDateProperty, BsonNull.Value));
                     IMongoQuery mQuery = Query.And(queries);
                     List<MEPatient> mePatients = ctx.Patients.Collection.Find(mQuery).ToList();
                     if (mePatients != null && mePatients.Count > 0)

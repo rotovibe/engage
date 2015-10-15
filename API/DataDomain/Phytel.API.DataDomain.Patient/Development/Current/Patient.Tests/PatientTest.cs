@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Phytel.API.Common;
 using Phytel.API.DataDomain.Patient.DTO;
 
 namespace Phytel.API.DataDomain.Patient.Test
@@ -75,5 +76,24 @@ namespace Phytel.API.DataDomain.Patient.Test
 
             Assert.IsNotNull(response);
         }
+
+        //[TestMethod]
+        //public void InsertBatchPatients_Test()
+        //{
+        //    List<PatientData> lPsd = (List<PatientData>)Helpers.DeserializeObject<List<PatientData>>("PatientsExample.txt");
+
+        //    InsertBatchPatientsDataRequest request = new InsertBatchPatientsDataRequest
+        //    {
+        //        Context = context,
+        //        ContractNumber = contractNumber,
+        //        UserId = userId,
+        //        Version = version,
+        //        PatientsData = lPsd
+        //    };
+        //    IPatientDataManager pm = new PatientDataManager { Factory = new PatientRepositoryFactory() };
+        //    InsertBatchPatientsDataResponse response = pm.InsertBatchPatients(request);
+            
+        //    Assert.IsNotNull(response);
+        //}
     }
 }

@@ -85,6 +85,8 @@
     <Compile Include="Enums.cs" />
     <Compile Include="PatientSystem\GetAllPatientSystemDataRequest.cs" />
     <Compile Include="PatientSystem\GetAllPatientSystemDataResponse.cs" />
+    <Compile Include="PatientSystem\GetPatientSystemByIdsDataResponse.cs" />
+    <Compile Include="PatientSystem\GetPatientSystemByIdsDataRequest.cs" />
     <Compile Include="PatientSystem\InsertPatientSystemDataRequest.cs" />
     <Compile Include="PatientSystem\InsertBatchEngagePatientSystemsDataRequest.cs" />
     <Compile Include="PatientSystem\UpsertBatchPatientSystemsDataRequest.cs" />

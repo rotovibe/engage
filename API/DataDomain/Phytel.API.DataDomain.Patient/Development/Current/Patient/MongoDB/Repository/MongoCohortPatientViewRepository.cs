@@ -451,7 +451,7 @@ namespace Phytel.API.DataDomain.Patient
             throw new NotImplementedException();
         }
 
-        public DTO.GetPatientsDataResponse Select(List<string> patientIds)
+        public List<PatientData> Select(List<string> patientIds)
         {
             throw new NotImplementedException();
         }

@@ -84,7 +84,9 @@ namespace Phytel.API.DataDomain.PatientSystem
 
         public object InsertAll(List<object> entities)
         {
-            List<PatientSystemResult> list = new List<PatientSystemResult>();
+            BulkInsertResult result = new BulkInsertResult();
+            List<string> insertedIds = new List<string>();
+            List<string> errorMessages = new List<string>();
             try
             {
                 using (PatientSystemMongoContext ctx = new PatientSystemMongoContext(ContractDBName))
@@ -105,48 +107,18 @@ namespace Phytel.API.DataDomain.PatientSystem
                             LastUpdatedOn = data.UpdatedOn
                         };
                         bulk.Insert(mePS.ToBsonDocument());
+                        insertedIds.Add(mePS.Id.ToString());
                     }
                     BulkWriteResult bwr = bulk.Execute();
-                    foreach (InsertRequest u in bwr.ProcessedRequests)
-                    {
-                        PatientSystemResult ps = new PatientSystemResult 
-                        {
-                            PatientId = u.Document.ToBsonDocument().GetElement(MEPatientSystem.PatientIdProperty).Value.ToString(),
-                            Value = u.Document.ToBsonDocument().GetElement(MEPatientSystem.ValueProperty).Value.ToString()
-                        };
-                        list.Add(ps);
-                    }
                 }
                 // TODO: Auditing.
             }
             catch (BulkWriteException bwEx)
             {
-                // Get the successfully inserted patient ids.
-                //foreach (BulkWriteUpsert u in bwEx.Result.Upserts)
-                //{
-                //    insertedPatientIds.Add(u.Id.ToString());
-                //}
                 // Get the error messages for the ones that failed.
-                //foreach (BulkWriteError er in bwEx.WriteErrors)
-                //{
-                //    string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
-                //    Helper.LogException(int.Parse(aseProcessID), er);
-                //}
-                // Get the successfully inserted patient ids.
-                foreach (InsertRequest u in bwEx.Result.ProcessedRequests)
-                {
-                    PatientSystemResult ps = new PatientSystemResult
-                    {
-                        PatientId = u.Document.ToBsonDocument().GetElement(MEPatientSystem.PatientIdProperty).Value.ToString(),
-                        Value = u.Document.ToBsonDocument().GetElement(MEPatientSystem.ValueProperty).Value.ToString()
-                    };
-                    list.Add(ps);
-                }
-                // Get the error messages for the ones that failed.
-                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
                 foreach (BulkWriteError er in bwEx.WriteErrors)
                 {
-                    Helper.LogException(int.Parse(aseProcessID), er.Message);
+                    errorMessages.Add(er.Message);
                 }
             }
             catch (Exception ex)
@@ -154,7 +126,9 @@ namespace Phytel.API.DataDomain.PatientSystem
                 string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
                 Helper.LogException(int.Parse(aseProcessID), ex);
             }
-            return list;
+            result.ProcessedIds = insertedIds;
+            result.ErrorMessages = errorMessages;
+            return result;
         }
 
         public void Delete(object entity)
@@ -410,6 +384,48 @@ namespace Phytel.API.DataDomain.PatientSystem
                     }
                 }
                 return data;
+            }
+            catch (Exception) { throw; }
+        }
+
+        public List<PatientSystemData> Select(List<string> Ids)
+        {
+            List<PatientSystemData> psList = null;
+            try
+            {
+                using (PatientSystemMongoContext ctx = new PatientSystemMongoContext(ContractDBName))
+                {
+                    List<IMongoQuery> queries = new List<IMongoQuery>();
+                    queries.Add(Query.In(MEPatientSystem.IdProperty, new BsonArray(Helper.ConvertToObjectIdList(Ids))));
+                    queries.Add(Query.EQ(MEPatientSystem.DeleteFlagProperty, false));
+                    queries.Add(Query.EQ(MEPatientSystem.TTLDateProperty, BsonNull.Value));
+                    IMongoQuery mQuery = Query.And(queries);
+                    List<MEPatientSystem> mePatients = ctx.PatientSystems.Collection.Find(mQuery).ToList();
+                    if (mePatients != null && mePatients.Count > 0)
+                    {
+                        psList = new List<PatientSystemData>();
+                        foreach (MEPatientSystem mePS in mePatients)
+                        {
+                            PatientSystemData data = new PatientSystemData
+                            {
+                                Id = mePS.Id.ToString(),
+                                PatientId = mePS.PatientId.ToString(),
+                                Value = mePS.Value,
+                                StatusId = (int)mePS.Status,
+                                Primary = mePS.Primary,
+                                ExternalRecordId = mePS.ExternalRecordId,
+                                SystemId = mePS.SystemId.ToString(),
+                                DataSource = mePS.DataSource,
+                                CreatedById = mePS.RecordCreatedBy.ToString(),
+                                CreatedOn = mePS.RecordCreatedOn,
+                                UpdatedById = mePS.UpdatedBy == null ? null : mePS.UpdatedBy.ToString(),
+                                UpdatedOn = mePS.LastUpdatedOn
+                            };
+                            psList.Add(data);
+                        }
+                    }
+                }
+                return psList;
             }
             catch (Exception) { throw; }
         }

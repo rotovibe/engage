@@ -51,5 +51,16 @@ namespace Phytel.API.DataDomain.Program.Test.Stubs
         {
             throw new NotImplementedException();
         }
+
+
+        public void SerializeObject<T>(T obj, string filePath)
+        {
+            throw new NotImplementedException();
+        }
+
+        public object DeserializeObject<T>(string filePath)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

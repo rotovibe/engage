@@ -159,5 +159,11 @@ namespace Phytel.API.DataDomain.PatientSystem
         {
             throw new NotImplementedException();
         }
+
+
+        public List<PatientSystemData> Select(List<string> Ids)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Phytel.API.DataDomain.Patient.DTO
 {
+    [Serializable]
     public class PatientData
     {
         public string Id { get; set; }
