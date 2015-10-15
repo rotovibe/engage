@@ -151,7 +151,8 @@ namespace Phytel.API.DataDomain.PatientSystem
                     var repo = Factory.GetRepository(RepositoryType.PatientSystem);
                     List<PatientSystemData> psList = new List<PatientSystemData>();
                     bool status = isSystemPrimary(Constants.EngageSystemId);
-                    request.PatientIds.ForEach(p =>
+                    List<string> patientIds = request.PatientIds;
+                    patientIds.ForEach(p =>
                     {
                         PatientSystemData ps = new PatientSystemData
                         {
