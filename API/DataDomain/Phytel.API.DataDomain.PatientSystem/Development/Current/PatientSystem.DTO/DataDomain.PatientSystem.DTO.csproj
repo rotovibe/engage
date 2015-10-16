@@ -89,11 +89,11 @@
     <Compile Include="PatientSystem\GetPatientSystemByIdsDataRequest.cs" />
     <Compile Include="PatientSystem\InsertPatientSystemDataRequest.cs" />
     <Compile Include="PatientSystem\InsertBatchEngagePatientSystemsDataRequest.cs" />
-    <Compile Include="PatientSystem\UpsertBatchPatientSystemsDataRequest.cs" />
+    <Compile Include="PatientSystem\InsertBatchPatientSystemsDataRequest.cs" />
     <Compile Include="PatientSystem\InsertPatientSystemsDataRequest.cs" />
     <Compile Include="PatientSystem\InsertPatientSystemDataResponse.cs" />
     <Compile Include="PatientSystem\InsertBatchEngagePatientSystemsDataResponse.cs" />
-    <Compile Include="PatientSystem\UpsertBatchPatientSystemsDataResponse.cs" />
+    <Compile Include="PatientSystem\InsertBatchPatientSystemsDataResponse.cs" />
     <Compile Include="PatientSystem\InsertPatientSystemsDataResponse.cs" />
     <Compile Include="PatientSystem\DeletePatientSystemsDataRequest.cs" />
     <Compile Include="PatientSystem\PatientSystemOldData.cs" />

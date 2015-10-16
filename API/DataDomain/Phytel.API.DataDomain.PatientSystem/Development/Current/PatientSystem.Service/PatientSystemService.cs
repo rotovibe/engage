@@ -112,13 +112,13 @@ namespace Phytel.API.DataDomain.PatientSystem.Service
             return response;
         }
 
-        public UpsertBatchPatientSystemsDataResponse Post(UpsertBatchPatientSystemsDataRequest request)
+        public InsertBatchPatientSystemsDataResponse Post(InsertBatchPatientSystemsDataRequest request)
         {
-            UpsertBatchPatientSystemsDataResponse response = new UpsertBatchPatientSystemsDataResponse();
+            InsertBatchPatientSystemsDataResponse response = new InsertBatchPatientSystemsDataResponse();
             try
             {
                 RequireUserId(request);
-                response = Manager.UpsertBatchPatientSystems(request);
+                response.Responses = Manager.InsertBatchPatientSystems(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
@@ -134,7 +134,7 @@ namespace Phytel.API.DataDomain.PatientSystem.Service
             try
             {
                 RequireUserId(request);
-                response.Result = Manager.InsertEngagePatientSystems(request);
+                response.Result = Manager.InsertBatchEngagePatientSystems(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)

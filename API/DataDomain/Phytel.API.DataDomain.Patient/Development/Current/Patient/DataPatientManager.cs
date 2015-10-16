@@ -329,34 +329,35 @@ namespace Phytel.API.DataDomain.Patient
                 List<HttpObjectResponse<PatientData>> list = new List<HttpObjectResponse<PatientData>>();
                 IPatientRepository repo = Factory.GetRepository(request, RepositoryType.Patient);
                 BulkInsertResult result = (BulkInsertResult)repo.InsertAll(request.PatientsData.Cast<object>().ToList());
-                if(result != null && result.ProcessedIds != null && result.ProcessedIds.Count > 0)
+                if (result != null)
                 {
-                    // Get the patients that were newly inserted. 
-                    List<PatientData> insertedPatients = repo.Select(result.ProcessedIds);
-                    
-                    if (insertedPatients != null && insertedPatients.Count > 0)
+                    if(result.ProcessedIds != null && result.ProcessedIds.Count > 0)
                     {
-                        List<CohortPatientViewData> cpvList = getMECohortPatientView(insertedPatients);
-                        IPatientRepository cpvRepo = Factory.GetRepository(request, RepositoryType.CohortPatientView);
-                        cpvRepo.InsertAll(cpvList.Cast<object>().ToList());
-
-                        List<string> processedPatientSystemIds = insertBatchEngagePatientSystem(insertedPatients.Select(p => p.Id).ToList(), request);
-                        List<PatientSystemData> insertedPatientSystems = getPatientSystems(processedPatientSystemIds, request);
-                    
-                        insertedPatients.ForEach(r =>
+                        // Get the patients that were newly inserted. 
+                        List<PatientData> insertedPatients = repo.Select(result.ProcessedIds);
+                        if (insertedPatients != null && insertedPatients.Count > 0)
                         {
-                            string engageValue = string.Empty;
-                            var x = insertedPatientSystems.Where(s => s.PatientId == r.Id).FirstOrDefault();
-                            if(x != null)
-                                engageValue = x.Value;
-                            list.Add(new HttpObjectResponse<PatientData> { Code = HttpStatusCode.Created, Body = (PatientData)new PatientData { Id = r.Id, ExternalRecordId = r.ExternalRecordId, EngagePatientSystemValue = engageValue } });
-                        });
+                            List<CohortPatientViewData> cpvList = getMECohortPatientView(insertedPatients);
+                            IPatientRepository cpvRepo = Factory.GetRepository(request, RepositoryType.CohortPatientView);
+                            cpvRepo.InsertAll(cpvList.Cast<object>().ToList());
+
+                            List<string> processedPatientSystemIds = insertBatchEngagePatientSystem(insertedPatients.Select(p => p.Id).ToList(), request);
+                            List<PatientSystemData> insertedPatientSystems = getPatientSystems(processedPatientSystemIds, request);
+
+                            insertedPatients.ForEach(r =>
+                            {
+                                string engageValue = string.Empty;
+                                var x = insertedPatientSystems.Where(s => s.PatientId == r.Id).FirstOrDefault();
+                                if (x != null)
+                                    engageValue = x.Value;
+                                list.Add(new HttpObjectResponse<PatientData> { Code = HttpStatusCode.Created, Body = (PatientData)new PatientData { Id = r.Id, ExternalRecordId = r.ExternalRecordId, EngagePatientSystemValue = engageValue } });
+                            });
+                        }
                     }
                     result.ErrorMessages.ForEach(e =>
                     {
                         list.Add(new HttpObjectResponse<PatientData> { Code = HttpStatusCode.InternalServerError, Message = e });
-                    }); 
-                    
+                    });
                 }
                 response.Responses = list;
             }

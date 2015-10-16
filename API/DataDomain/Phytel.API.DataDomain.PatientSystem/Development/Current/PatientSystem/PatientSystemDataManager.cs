@@ -141,7 +141,7 @@ namespace Phytel.API.DataDomain.PatientSystem
             catch (Exception ex) { throw ex; }
         }
 
-        public BulkInsertResult InsertEngagePatientSystems(InsertBatchEngagePatientSystemsDataRequest request)
+        public BulkInsertResult InsertBatchEngagePatientSystems(InsertBatchEngagePatientSystemsDataRequest request)
         {
             BulkInsertResult result = null;
             try
@@ -172,79 +172,39 @@ namespace Phytel.API.DataDomain.PatientSystem
             return result;
         }
 
-        public UpsertBatchPatientSystemsDataResponse UpsertBatchPatientSystems(UpsertBatchPatientSystemsDataRequest request)
+        public List<HttpObjectResponse<PatientSystemData>> InsertBatchPatientSystems(InsertBatchPatientSystemsDataRequest request)
         {
-            UpsertBatchPatientSystemsDataResponse response = new UpsertBatchPatientSystemsDataResponse();
-            if (request.PatientSystemsData != null && request.PatientSystemsData.Count > 0)
-            {
-                List<HttpObjectResponse<PatientSystemData>> list = new List<HttpObjectResponse<PatientSystemData>>();
-                var repo = Factory.GetRepository(RepositoryType.PatientSystem);
-                request.PatientSystemsData.ForEach(p =>
+            List<HttpObjectResponse<PatientSystemData>> list = null;
+            try
+            { 
+                if (request.PatientSystemsData != null && request.PatientSystemsData.Count > 0)
                 {
-                    HttpStatusCode code = HttpStatusCode.OK;
-                    PatientSystemData psData = null;
-                    string message = string.Empty;
-                    try
+                    list = new List<HttpObjectResponse<PatientSystemData>>();
+                    var repo = Factory.GetRepository(RepositoryType.PatientSystem);
+                    BulkInsertResult result = (BulkInsertResult)repo.InsertAll(request.PatientSystemsData.Cast<object>().ToList());
+                    if (result != null)
                     {
-                        if (string.IsNullOrEmpty(p.ExternalRecordId))
+                        if (result.ProcessedIds != null && result.ProcessedIds.Count > 0)
                         {
-                            code = HttpStatusCode.BadRequest;
-                            message = string.Format("ExternalRecordId is missing for PatientId : {0}", p.PatientId);
-                        }
-                        else
-                        {
-                            PatientSystemData data = (PatientSystemData)repo.FindByExternalRecordId(p.ExternalRecordId);
-                            if (data == null)
+                            // Get the PatientSystems that were newly inserted. 
+                            List<PatientSystemData> insertedPatientSystems = repo.Select(result.ProcessedIds);
+                            if (insertedPatientSystems != null && insertedPatientSystems.Count > 0)
                             {
-                                InsertPatientSystemDataRequest insertReq = new InsertPatientSystemDataRequest
+                                insertedPatientSystems.ForEach(r =>
                                 {
-                                    PatientId = p.PatientId,
-                                    Context = request.Context,
-                                    ContractNumber = request.ContractNumber,
-                                    PatientSystemsData = p,
-                                    UserId = request.UserId,
-                                    Version = request.Version
-                                };
-
-                                string id = (string)repo.Insert(insertReq);
-                                if (!string.IsNullOrEmpty(id))
-                                {
-                                    code = HttpStatusCode.Created;
-                                    psData = new PatientSystemData { Id = id, ExternalRecordId = p.ExternalRecordId, PatientId = p.PatientId };
-                                }
-                            }
-                            else
-                            {
-                                p.Id = data.Id;
-                                UpdatePatientSystemDataRequest updateReq = new UpdatePatientSystemDataRequest
-                                {
-                                    Id = data.Id,
-                                    PatientId = p.PatientId,
-                                    PatientSystemsData = p,
-                                    Context = request.Context,
-                                    ContractNumber = request.ContractNumber,
-                                    UserId = request.UserId,
-                                    Version = request.Version
-                                };
-                                bool status = (bool)repo.Update(updateReq);
-                                if (status)
-                                {
-                                    code = HttpStatusCode.NoContent;
-                                    psData = new PatientSystemData { Id = p.Id, ExternalRecordId = p.ExternalRecordId, PatientId = p.PatientId };
-                                }
+                                    list.Add(new HttpObjectResponse<PatientSystemData> { Code = HttpStatusCode.Created, Body = (PatientSystemData)new PatientSystemData { Id = r.Id, ExternalRecordId = r.ExternalRecordId, PatientId = r.PatientId } });
+                                });
                             }
                         }
+                        result.ErrorMessages.ForEach(e =>
+                        {
+                            list.Add(new HttpObjectResponse<PatientSystemData> { Code = HttpStatusCode.InternalServerError, Message = e });
+                        });
                     }
-                    catch (Exception ex)
-                    {
-                        code = HttpStatusCode.InternalServerError;
-                        message = string.Format("ExternalRecordId: {0}, Message: {1}, StackTrace: {2}", p.ExternalRecordId, ex.Message, ex.StackTrace);
-                    }
-                    list.Add(new HttpObjectResponse<PatientSystemData> { Code = code, Body = (PatientSystemData)psData, Message = message });
-                });
-                response.Responses = list;
+                }
             }
-            return response;
+            catch (Exception ex) { throw ex; }
+            return list;
         }
 
         public bool UpdatePatientSystem(UpdatePatientSystemDataRequest request)

@@ -93,12 +93,12 @@ namespace Phytel.API.DataDomain.PatientSystem.Test
             throw new NotImplementedException();
         }
 
-        public BulkInsertResult InsertEngagePatientSystems(InsertBatchEngagePatientSystemsDataRequest request)
+        public BulkInsertResult InsertBatchEngagePatientSystems(InsertBatchEngagePatientSystemsDataRequest request)
         {
             throw new NotImplementedException();
         }
 
-        public UpsertBatchPatientSystemsDataResponse UpsertBatchPatientSystems(UpsertBatchPatientSystemsDataRequest request)
+        public List<HttpObjectResponse<PatientSystemData>> InsertBatchPatientSystems(InsertBatchPatientSystemsDataRequest request)
         {
             throw new NotImplementedException();
         }

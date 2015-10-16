@@ -4,12 +4,12 @@ using ServiceStack.ServiceHost;
 
 namespace Phytel.API.DataDomain.PatientSystem.DTO
 {
-    [Api("Upserts Patient System Data")]
+    [Api("Inserts Patient System Data in bulk")]
     [Route("/{Context}/{Version}/{ContractNumber}/Batch/PatientSystems", "POST")]
     [Route("/PatientSystems", "POST")]
-    public class UpsertBatchPatientSystemsDataRequest : IDataDomainRequest
+    public class InsertBatchPatientSystemsDataRequest : IDataDomainRequest
     {
-        [ApiMember(Name = "PatientSystemsData", Description = "List of PatientSystems that need to be inserted. If they already exists, update them.", ParameterType = "property", DataType = "List<PatientSystemData>", IsRequired = true)]
+        [ApiMember(Name = "PatientSystemsData", Description = "List of PatientSystems that need to be inserted.", ParameterType = "property", DataType = "List<PatientSystemData>", IsRequired = true)]
         public List<PatientSystemData> PatientSystemsData { get; set; }
 
         [ApiMember(Name = "Context", Description = "Product Context requesting the PatientSystem", ParameterType = "property", DataType = "string", IsRequired = false)]
