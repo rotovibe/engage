@@ -4064,6 +4064,12 @@ ul {
       max-height: 1000%; }
       #modal.modal-lg .content .body > .row.modal-tab {
         max-height: 1000%; }
+  #modal.modal-lg header {
+    overflow: hidden;
+    white-space: nowrap; }
+    #modal.modal-lg header .title {
+      width: 100%;
+      overflow: hidden; }
 
 nav.pagination {
   text-align: center; }

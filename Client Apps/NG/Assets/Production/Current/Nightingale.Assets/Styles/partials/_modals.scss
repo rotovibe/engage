@@ -76,16 +76,26 @@
     }
   }
   
-  &.modal-lg .content{                     
-    width: 80%;
-    margin-left: -40%; 
-    @include modalheight(100%, 109px);    
-    .body {
-        @include modalheight(100%, 94px);
-        max-height: 1000%;
-        > .row.modal-tab{
+  &.modal-lg {
+      .content{                     
+        width: 80%;
+        margin-left: -40%; 
+        @include modalheight(100%, 109px);    
+        .body {
+            @include modalheight(100%, 94px);
             max-height: 1000%;
+            > .row.modal-tab{
+                max-height: 1000%;
+            }
+        }     
+      }
+      header{
+        overflow: hidden;
+        white-space: nowrap;
+        .title{
+            width: 100%;
+            overflow: hidden;
         }
-    }     
+      }
   }
 }
