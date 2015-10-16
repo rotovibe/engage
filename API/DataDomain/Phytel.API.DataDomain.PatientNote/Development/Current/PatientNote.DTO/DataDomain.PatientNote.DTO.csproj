@@ -82,8 +82,8 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="HttpObjectResponse.cs" />
-    <Compile Include="UpsertBatchPatientNotesDataRequest.cs" />
-    <Compile Include="UpsertBatchPatientNotesDataResponse.cs" />
+    <Compile Include="InsertBatchPatientNotesDataRequest.cs" />
+    <Compile Include="InsertBatchPatientNotesDataResponse.cs" />
     <Compile Include="PatientUtilizationData.cs" />
     <Compile Include="PatientNoteData.cs" />
     <Compile Include="Request\Utilization\DeletePatientUtilizationDataRequest.cs" />

@@ -17,6 +17,6 @@ namespace Phytel.API.DataDomain.PatientNote
         UndoDeletePatientNotesDataResponse UndoDeletePatientNotes(UndoDeletePatientNotesDataRequest request);
         RemoveProgramInPatientNotesDataResponse RemoveProgramInPatientNotes(RemoveProgramInPatientNotesDataRequest request);
         PatientNoteData UpdatePatientNote(UpdatePatientNoteDataRequest request);
-        UpsertBatchPatientNotesDataResponse UpsertBatchPatientNotes(UpsertBatchPatientNotesDataRequest request);
+        List<HttpObjectResponse<PatientNoteData>> InsertBatchPatientNotes(InsertBatchPatientNotesDataRequest request);
     }
 }

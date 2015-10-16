@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Linq;
 using DataDomain.PatientNote.Repo;
 using Phytel.API.Common;
 using Phytel.API.DataDomain.PatientNote.DTO;
@@ -32,78 +33,39 @@ namespace Phytel.API.DataDomain.PatientNote
             return noteId;
         }
 
-        public UpsertBatchPatientNotesDataResponse UpsertBatchPatientNotes(UpsertBatchPatientNotesDataRequest request)
+        public List<HttpObjectResponse<PatientNoteData>> InsertBatchPatientNotes(InsertBatchPatientNotesDataRequest request)
         {
-            UpsertBatchPatientNotesDataResponse response = new UpsertBatchPatientNotesDataResponse();
-            if (request.PatientNotesData != null && request.PatientNotesData.Count > 0)
+            List<HttpObjectResponse<PatientNoteData>> list = null;
+            try
             {
-                List<HttpObjectResponse<PatientNoteData>> list = new List<HttpObjectResponse<PatientNoteData>>();
-                var repo = Factory.GetRepository(RepositoryType.PatientNote);
-                request.PatientNotesData.ForEach(p =>
+                if (request.PatientNotesData != null && request.PatientNotesData.Count > 0)
                 {
-                    HttpStatusCode code = HttpStatusCode.OK;
-                    PatientNoteData pnData = null;
-                    string message = string.Empty;
-                    try
+                    list = new List<HttpObjectResponse<PatientNoteData>>();
+                    var repo = Factory.GetRepository(RepositoryType.PatientNote);
+                    BulkInsertResult result = (BulkInsertResult)repo.InsertAll(request.PatientNotesData.Cast<object>().ToList());
+                    if (result != null)
                     {
-                        if (string.IsNullOrEmpty(p.ExternalRecordId))
+                        if (result.ProcessedIds != null && result.ProcessedIds.Count > 0)
                         {
-                            code = HttpStatusCode.BadRequest;
-                            message = string.Format("ExternalRecordId is missing for PatientId : {0}", p.PatientId);
-                        }
-                        else
-                        {
-                            PatientNoteData data = (PatientNoteData)repo.FindByExternalRecordId(p.ExternalRecordId);
-                            if (data == null)
+                            // Get the PatientSystems that were newly inserted. 
+                            List<PatientNoteData> insertedPatientSystems = repo.Select(result.ProcessedIds) as List<PatientNoteData>;
+                            if (insertedPatientSystems != null && insertedPatientSystems.Count > 0)
                             {
-                                InsertPatientNoteDataRequest insertReq = new InsertPatientNoteDataRequest
+                                insertedPatientSystems.ForEach(r =>
                                 {
-                                    PatientId = p.PatientId,
-                                    Context = request.Context,
-                                    ContractNumber = request.ContractNumber,
-                                    PatientNote = p,
-                                    UserId = request.UserId,
-                                    Version = request.Version
-                                };
-                                string id = (string)repo.Insert(insertReq);
-                                if (!string.IsNullOrEmpty(id))
-                                {
-                                    code = HttpStatusCode.Created;
-                                    pnData = new PatientNoteData { Id = id, ExternalRecordId = p.ExternalRecordId, PatientId = p.PatientId };
-                                }
-                            }
-                            else
-                            {
-                                p.Id = data.Id;
-                                UpdatePatientNoteDataRequest updateReq = new UpdatePatientNoteDataRequest
-                                {
-                                    Id = data.Id,
-                                    PatientId = p.PatientId,
-                                    PatientNoteData = p,
-                                    Context = request.Context,
-                                    ContractNumber = request.ContractNumber,
-                                    UserId = request.UserId,
-                                    Version = request.Version
-                                };
-                                bool status = (bool)repo.Update(updateReq);
-                                if (status)
-                                {
-                                    code = HttpStatusCode.NoContent;
-                                    pnData = new PatientNoteData { Id = p.Id, ExternalRecordId = p.ExternalRecordId, PatientId = p.PatientId };
-                                }
+                                    list.Add(new HttpObjectResponse<PatientNoteData> { Code = HttpStatusCode.Created, Body = (PatientNoteData)new PatientNoteData { Id = r.Id, ExternalRecordId = r.ExternalRecordId, PatientId = r.PatientId } });
+                                });
                             }
                         }
+                        result.ErrorMessages.ForEach(e =>
+                        {
+                            list.Add(new HttpObjectResponse<PatientNoteData> { Code = HttpStatusCode.InternalServerError, Message = e });
+                        });
                     }
-                    catch (Exception ex)
-                    {
-                        code = HttpStatusCode.InternalServerError;
-                        message = string.Format("ExternalRecordId: {0}, Message: {1}, StackTrace: {2}", p.ExternalRecordId, ex.Message, ex.StackTrace);
-                    }
-                    list.Add(new HttpObjectResponse<PatientNoteData> { Code = code, Body = (PatientNoteData)pnData, Message = message });
-                });
-                response.Responses = list;
+                }
             }
-            return response;
+            catch (Exception ex) { throw ex; }
+            return list;
         }
 
         public PatientNoteData UpdatePatientNote(UpdatePatientNoteDataRequest request)

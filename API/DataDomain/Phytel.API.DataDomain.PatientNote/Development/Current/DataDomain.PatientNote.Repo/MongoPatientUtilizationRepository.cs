@@ -451,6 +451,12 @@ namespace Phytel.API.DataDomain.PatientNote.Repo
         {
             throw new NotImplementedException();
         }
+
+
+        public IEnumerable<object> Select(List<string> ids)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
 

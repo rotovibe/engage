@@ -102,12 +102,73 @@ namespace Phytel.API.DataDomain.PatientNote.Repo
 
         public object InsertAll(List<object> entities)
         {
+            BulkInsertResult result = new BulkInsertResult();
+            List<string> insertedIds = new List<string>();
+            List<string> errorMessages = new List<string>();
             try
             {
-                throw new NotImplementedException();
-                // code here //
+                using (PatientNoteMongoContext ctx = new PatientNoteMongoContext(ContractDBName))
+                {
+                    var bulk = ctx.PatientNotes.Collection.InitializeUnorderedBulkOperation();
+                    foreach (PatientNoteData data in entities)
+                    {
+                        MEPatientNote meN = new MEPatientNote(this.UserId, data.CreatedOn)
+                        {
+                            PatientId = ObjectId.Parse(data.PatientId),
+                            Text = data.Text,
+                            ProgramIds = Helper.ConvertToObjectIdList(data.ProgramIds),
+                            ValidatedIdentity = data.ValidatedIdentity,
+                            ContactedOn = data.ContactedOn,
+                            Type = ObjectId.Parse(data.TypeId),
+                            DeleteFlag = false,
+                            DataSource = Helper.TrimAndLimit(data.DataSource, 50),
+                            LastUpdatedOn = data.UpdatedOn,
+                            ExternalRecordId = data.ExternalRecordId
+                        };
+
+                        if (!string.IsNullOrEmpty(data.MethodId))
+                        {
+                            meN.MethodId = ObjectId.Parse(data.MethodId);
+                        }
+                        if (!string.IsNullOrEmpty(data.OutcomeId))
+                        {
+                            meN.OutcomeId = ObjectId.Parse(data.OutcomeId);
+                        }
+                        if (!string.IsNullOrEmpty(data.WhoId))
+                        {
+                            meN.WhoId = ObjectId.Parse(data.WhoId);
+                        }
+                        if (!string.IsNullOrEmpty(data.SourceId))
+                        {
+                            meN.SourceId = ObjectId.Parse(data.SourceId);
+                        }
+                        if (!string.IsNullOrEmpty(data.DurationId))
+                        {
+                            meN.DurationId = ObjectId.Parse(data.DurationId);
+                        }
+                        bulk.Insert(meN.ToBsonDocument());
+                        insertedIds.Add(meN.Id.ToString());
+                    }
+                    BulkWriteResult bwr = bulk.Execute();
+                }
+                // TODO: Auditing.
             }
-            catch (Exception) { throw; }
+            catch (BulkWriteException bwEx)
+            {
+                // Get the error messages for the ones that failed.
+                foreach (BulkWriteError er in bwEx.WriteErrors)
+                {
+                    errorMessages.Add(er.Message);
+                }
+            }
+            catch (Exception ex)
+            {
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Helper.LogException(int.Parse(aseProcessID), ex);
+            }
+            result.ProcessedIds = insertedIds;
+            result.ErrorMessages = errorMessages;
+            return result;
         }
 
         public void Delete(object entity)
@@ -501,6 +562,53 @@ namespace Phytel.API.DataDomain.PatientNote.Repo
                     }
                 }
                 return data;
+            }
+            catch (Exception) { throw; }
+        }
+
+        public IEnumerable<object> Select(List<string> ids)
+        {
+            List<PatientNoteData> dataList = null;
+            try
+            {
+                using (PatientNoteMongoContext ctx = new PatientNoteMongoContext(ContractDBName))
+                {
+                    List<IMongoQuery> queries = new List<IMongoQuery>();
+                    queries.Add(Query.In(MEPatientNote.IdProperty, new BsonArray(Helper.ConvertToObjectIdList(ids))));
+                    queries.Add(Query.EQ(MEPatientNote.DeleteFlagProperty, false));
+                    queries.Add(Query.EQ(MEPatientNote.TTLDateProperty, BsonNull.Value));
+                    IMongoQuery mQuery = Query.And(queries);
+                    List<MEPatientNote> meNotes = ctx.PatientNotes.Collection.Find(mQuery).ToList();
+                    if (meNotes != null && meNotes.Count > 0)
+                    {
+                        dataList = new List<PatientNoteData>();
+                        foreach (MEPatientNote meN in meNotes)
+                        {
+                            dataList.Add(new PatientNoteData
+                            {
+                                Id = meN.Id.ToString(),
+                                PatientId = meN.PatientId.ToString(),
+                                Text = meN.Text,
+                                ProgramIds = Helper.ConvertToStringList(meN.ProgramIds),
+                                CreatedOn = meN.RecordCreatedOn,
+                                CreatedById = meN.RecordCreatedBy.ToString(),
+                                TypeId = meN.Type.ToString(),
+                                MethodId = (meN.MethodId == null) ? null : meN.MethodId.ToString(),
+                                OutcomeId = (meN.OutcomeId == null) ? null : meN.OutcomeId.ToString(),
+                                WhoId = (meN.WhoId == null) ? null : meN.WhoId.ToString(),
+                                SourceId = (meN.SourceId == null) ? null : meN.SourceId.ToString(),
+                                DurationId = (meN.DurationId == null) ? null : meN.DurationId.ToString(),
+                                ValidatedIdentity = meN.ValidatedIdentity,
+                                ContactedOn = meN.ContactedOn,
+                                UpdatedById = (meN.UpdatedBy == null) ? null : meN.UpdatedBy.ToString(),
+                                UpdatedOn = meN.LastUpdatedOn,
+                                DataSource = meN.DataSource,
+                                ExternalRecordId = meN.ExternalRecordId
+                            });
+                        }
+                    }
+                }
+                return dataList as IEnumerable<object>;
             }
             catch (Exception) { throw; }
         }

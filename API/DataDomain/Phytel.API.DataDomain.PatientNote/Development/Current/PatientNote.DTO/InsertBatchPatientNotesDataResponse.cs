@@ -5,7 +5,7 @@ using Phytel.API.Common;
 
 namespace Phytel.API.DataDomain.PatientNote.DTO
 {
-    public class UpsertBatchPatientNotesDataResponse : IDomainResponse
+    public class InsertBatchPatientNotesDataResponse : IDomainResponse
     {
         public List<HttpObjectResponse<PatientNoteData>> Responses { get; set; }
         public double Version { get; set; }

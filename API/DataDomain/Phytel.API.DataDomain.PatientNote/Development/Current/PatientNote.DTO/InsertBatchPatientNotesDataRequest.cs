@@ -6,7 +6,7 @@ using Phytel.API.DataDomain.PatientNote.DTO;
 namespace Phytel.API.DataDomain.PatientNote.DTO
 {
     [Route("/{Context}/{Version}/{ContractNumber}/Batch/PatientNotes", "POST")]
-    public class UpsertBatchPatientNotesDataRequest : IDataDomainRequest
+    public class InsertBatchPatientNotesDataRequest : IDataDomainRequest
     {
         [ApiMember(Name = "PatientNotesData", Description = "List of PatientNotes to be inserted, if they exist, update them.", ParameterType = "property", DataType = "List<PatientNoteData>", IsRequired = true)]
         public List<PatientNoteData> PatientNotesData { get; set; }
