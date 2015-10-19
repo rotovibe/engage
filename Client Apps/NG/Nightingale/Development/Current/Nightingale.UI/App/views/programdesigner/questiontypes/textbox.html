@@ -2,8 +2,8 @@
     <!-- ko with: header -->
         <h2 class="pad vertical" data-bind="text: $data"></h2>
     <!-- /ko -->
-    <h3 data-bind="text: question, css: { 'grey': !computedResponse() && !activeStep() }"></h3>
-    <em class="gray" data-bind="text: notes"></em>
+    <h3 data-bind="html: question, css: { 'grey': !computedResponse() && !activeStep() }"></h3>
+    <em class="gray" data-bind="html: notes"></em>
 
     <!-- ko ifnot: $parent.completed() -->
     <!-- ko with: computedResponse -->
