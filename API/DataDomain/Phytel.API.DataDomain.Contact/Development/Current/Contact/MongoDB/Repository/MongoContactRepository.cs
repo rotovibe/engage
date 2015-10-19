@@ -5,6 +5,7 @@ using System.Linq;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
+using MongoDB.Driver.Builders;
 using Phytel.API.Common;
 using Phytel.API.Common.Audit;
 using Phytel.API.DataAudit;
@@ -104,7 +105,7 @@ namespace Phytel.API.DataDomain.Contact
                             throw new ApplicationException("A contact record already exists for the patient.");
                         }
                     }
-                    meContact = new MEContact(this.UserId)
+                    meContact = new MEContact(this.UserId, data.CreatedOn)
                     {
                         Id = ObjectId.GenerateNewId(),
                         FirstName = data.FirstName,
@@ -196,7 +197,7 @@ namespace Phytel.API.DataDomain.Contact
                     //Phones
                     if (data.Phones != null && data.Phones.Count > 0)
                     {
-                        PhoneVisitor.GetContactPhones(ref request, ref meContact);
+                        PhoneVisitor.GetContactPhones(data.Phones, ref meContact);
                     }
 
                     //Emails
@@ -240,12 +241,153 @@ namespace Phytel.API.DataDomain.Contact
 
         public object InsertAll(List<object> entities)
         {
+            BulkInsertResult result = new BulkInsertResult();
+            List<string> insertedIds = new List<string>();
+            List<string> errorMessages = new List<string>();
             try
             {
-                throw new NotImplementedException();
-                // code here //
+                using (ContactMongoContext ctx = new ContactMongoContext(_dbName))
+                {
+                    var bulk = ctx.Contacts.Collection.InitializeUnorderedBulkOperation();
+                    foreach (ContactData data in entities)
+                    {
+                        MEContact meContact = new MEContact(this.UserId, data.CreatedOn)
+                        {
+                            FirstName = data.FirstName,
+                            LastName = data.LastName,
+                            PreferredName = data.PreferredName,
+                            Gender = data.Gender,
+                            ResourceId = data.UserId,
+                            Version = 1.0,
+                            LastUpdatedOn = DateTime.UtcNow,
+                            UpdatedBy = ObjectId.Parse(this.UserId),
+                            DeleteFlag = false
+                        };
+
+                        //PatientId
+                        if (data.PatientId != null)
+                        {
+                            meContact.PatientId = ObjectId.Parse(data.PatientId);
+                        }
+                        //Timezone
+                        if (data.TimeZoneId != null)
+                        {
+                            meContact.TimeZoneId = ObjectId.Parse(data.TimeZoneId);
+                        }
+                        //Modes
+                        if (data.Modes != null && data.Modes.Count > 0)
+                        {
+                            List<CommMode> commModes = new List<CommMode>();
+                            foreach (CommModeData c in data.Modes)
+                            {
+                                commModes.Add(new CommMode { ModeId = ObjectId.Parse(c.ModeId), OptOut = c.OptOut, Preferred = c.Preferred });
+                            }
+                            meContact.Modes = commModes;
+                        }
+
+                        //Weekdays
+                        if (data.WeekDays != null && data.WeekDays.Count > 0)
+                        {
+                            meContact.WeekDays = data.WeekDays;
+                        }
+
+                        //TimesOfDays
+                        if (data.TimesOfDaysId != null && data.TimesOfDaysId.Count > 0)
+                        {
+                            List<ObjectId> ids = new List<ObjectId>();
+                            foreach (string s in data.TimesOfDaysId)
+                            {
+                                ids.Add(ObjectId.Parse(s));
+                            }
+                            meContact.TimesOfDays = ids;
+                        }
+
+                        //Languages
+                        if (data.Languages != null && data.Languages.Count > 0)
+                        {
+                            List<Language> languages = new List<Language>();
+                            foreach (LanguageData c in data.Languages)
+                            {
+                                languages.Add(new Language { LookUpLanguageId = ObjectId.Parse(c.LookUpLanguageId), Preferred = c.Preferred });
+                            }
+                            meContact.Languages = languages;
+                        }
+
+                        //Addresses
+                        if (data.Addresses != null && data.Addresses.Count > 0)
+                        {
+                            List<Address> meAddresses = new List<Address>();
+                            List<AddressData> addressData = data.Addresses;
+                            foreach (AddressData p in addressData)
+                            {
+                                Address me = new Address
+                                {
+                                    Id = ObjectId.GenerateNewId(),
+                                    TypeId = ObjectId.Parse(p.TypeId),
+                                    Line1 = p.Line1,
+                                    Line2 = p.Line2,
+                                    Line3 = p.Line3,
+                                    City = p.City,
+                                    StateId = ObjectId.Parse(p.StateId),
+                                    PostalCode = p.PostalCode,
+                                    Preferred = p.Preferred,
+                                    OptOut = p.OptOut,
+                                    DeleteFlag = false
+                                };
+                                meAddresses.Add(me);
+                            }
+                            meContact.Addresses = meAddresses;
+                        }
+
+                        //Phones
+                        if (data.Phones != null && data.Phones.Count > 0)
+                        {
+                            PhoneVisitor.GetContactPhones(data.Phones, ref meContact);
+                        }
+
+                        //Emails
+                        if (data.Emails != null && data.Emails.Count > 0)
+                        {
+                            List<Email> meEmails = new List<Email>();
+                            List<EmailData> emailData = data.Emails;
+                            foreach (EmailData p in emailData)
+                            {
+                                Email me = new Email
+                                {
+                                    Id = ObjectId.GenerateNewId(),
+                                    Text = p.Text,
+                                    Preferred = p.Preferred,
+                                    TypeId = ObjectId.Parse(p.TypeId),
+                                    OptOut = p.OptOut,
+                                    DeleteFlag = false
+                                };
+                                meEmails.Add(me);
+                            }
+                            meContact.Emails = meEmails;
+                        }
+                        bulk.Insert(meContact.ToBsonDocument());
+                        insertedIds.Add(meContact.Id.ToString());
+                    }
+                    BulkWriteResult bwr = bulk.Execute();
+                }
+                // TODO: Auditing.
             }
-            catch (Exception ex) { throw ex; }
+            catch (BulkWriteException bwEx)
+            {
+                // Get the error messages for the ones that failed.
+                foreach (BulkWriteError er in bwEx.WriteErrors)
+                {
+                    errorMessages.Add(er.Message);
+                }
+            }
+            catch (Exception ex)
+            {
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Helper.LogException(int.Parse(aseProcessID), ex);
+            }
+            result.ProcessedIds = insertedIds;
+            result.ErrorMessages = errorMessages;
+            return result;
         }
 
         public void Delete(object entity)
@@ -1117,7 +1259,6 @@ namespace Phytel.API.DataDomain.Contact
 
         public string UserId { get; set; }
 
-
         public void UndoDelete(object entity)
         {
             UndoDeleteContactDataRequest request = (UndoDeleteContactDataRequest)entity;
@@ -1141,6 +1282,43 @@ namespace Phytel.API.DataDomain.Contact
                                             DataAuditType.UndoDelete,
                                             request.ContractNumber);
                 }
+            }
+            catch (Exception) { throw; }
+        }
+
+        public IEnumerable<object> Select(List<string> ids)
+        {
+            List<ContactData> dataList = null;
+            try
+            {
+                using (ContactMongoContext ctx = new ContactMongoContext(_dbName))
+                {
+                    List<IMongoQuery> queries = new List<IMongoQuery>();
+                    queries.Add(Query.In(MEContact.IdProperty, new BsonArray(Helper.ConvertToObjectIdList(ids))));
+                    queries.Add(Query.EQ(MEContact.DeleteFlagProperty, false));
+                    queries.Add(Query.EQ(MEContact.TTLDateProperty, BsonNull.Value));
+                    IMongoQuery mQuery = Query.And(queries);
+                    List<MEContact> meContacts = ctx.Contacts.Collection.Find(mQuery).ToList();
+                    if (meContacts != null && meContacts.Count > 0)
+                    {
+                        dataList = new List<ContactData>();
+                        foreach (MEContact mc in meContacts)
+                        {
+                            dataList.Add(new ContactData
+                            {
+                                Id = mc.Id.ToString(),
+                                PatientId = mc.PatientId.ToString(),
+                                UserId = (string.IsNullOrEmpty(mc.ResourceId)) ? string.Empty : mc.ResourceId.ToString().Replace("-", string.Empty).ToLower(),
+                                FirstName = mc.FirstName,
+                                MiddleName = mc.MiddleName,
+                                LastName = mc.LastName,
+                                PreferredName = mc.PreferredName,
+                                Gender = mc.Gender
+                            });
+                        }
+                    }
+                }
+                return dataList as IEnumerable<object>;
             }
             catch (Exception) { throw; }
         }

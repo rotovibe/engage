@@ -125,8 +125,8 @@
     <Compile Include="LanguageData.cs" />
     <Compile Include="PhoneData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UpsertBatchContactDataRequest.cs" />
-    <Compile Include="UpsertBatchContactDataResponse.cs" />
+    <Compile Include="InsertBatchContactDataRequest.cs" />
+    <Compile Include="InsertBatchContactDataResponse.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

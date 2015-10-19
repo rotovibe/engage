@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace Phytel.API.DataDomain.Contact.DTO
 {
     [Route("/{Context}/{Version}/{ContractNumber}/Batch/Contacts", "POST")]
-    public class UpsertBatchContactDataRequest : IDataDomainRequest
+    public class InsertBatchContactDataRequest : IDataDomainRequest
     {
         [ApiMember(Name = "ContactsData", Description = "List of Contacts to be inserted, if they exist, update them.", ParameterType = "property", DataType = "List<ContactData>", IsRequired = true)]
         public List<ContactData> ContactsData { get; set; }

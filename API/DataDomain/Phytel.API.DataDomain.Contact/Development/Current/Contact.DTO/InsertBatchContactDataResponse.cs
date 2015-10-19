@@ -5,7 +5,7 @@ using Phytel.API.Common;
 
 namespace Phytel.API.DataDomain.Contact.DTO
 {
-    public class UpsertBatchContactDataResponse : IDomainResponse
+    public class InsertBatchContactDataResponse : IDomainResponse
     {
         public List<HttpObjectResponse<ContactData>> Responses { get; set; }
         public double Version { get; set; }

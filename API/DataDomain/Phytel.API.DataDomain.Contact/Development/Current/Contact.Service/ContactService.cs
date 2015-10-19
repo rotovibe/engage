@@ -99,16 +99,16 @@ namespace Phytel.API.DataDomain.Contact.Service
             return response;
         }
 
-        public UpsertBatchContactDataResponse Post(UpsertBatchContactDataRequest request)
+        public InsertBatchContactDataResponse Post(InsertBatchContactDataRequest request)
         {
-            UpsertBatchContactDataResponse response = new UpsertBatchContactDataResponse();
+            InsertBatchContactDataResponse response = new InsertBatchContactDataResponse();
             response.Version = request.Version;
             try
             {
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("ContactDD:Post()::Unauthorized Access");
 
-                response = Manager.UpsertContacts(request);
+                response.Responses = Manager.InsertBatchContacts(request);
             }
             catch (Exception ex)
             {

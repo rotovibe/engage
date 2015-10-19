@@ -28,9 +28,9 @@ namespace Phytel.API.DataDomain.Contact.MongoDB.Repository.Tests
             {
                 ContactData = cData
             };
-            var contact = new MEContact("123456789012345678901234");
+            var contact = new MEContact("123456789012345678901234", null);
 
-            PhoneVisitor.GetContactPhones( ref req, ref contact );
+            PhoneVisitor.GetContactPhones(cData.Phones, ref contact);
 
             Assert.IsNotNull(contact.Phones);
             Assert.AreEqual(contact.Phones[0].DataSource, "Engage");

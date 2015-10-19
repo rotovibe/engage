@@ -1,5 +1,7 @@
 ﻿using Phytel.API.DataDomain.Contact.DTO;
 using System;
+using System.Collections.Generic;
+using Phytel.API.Common;
 
 namespace Phytel.API.DataDomain.Contact
 {
@@ -10,7 +12,7 @@ namespace Phytel.API.DataDomain.Contact
         ContactData GetContactByUserId(GetContactByUserIdDataRequest request);
         string InsertContact(PutContactDataRequest request);
         SearchContactsDataResponse SearchContacts(SearchContactsDataRequest request);
-        UpsertBatchContactDataResponse UpsertContacts(UpsertBatchContactDataRequest request);
+        List<HttpObjectResponse<ContactData>> InsertBatchContacts(InsertBatchContactDataRequest request);
         PutUpdateContactDataResponse UpdateContact(PutUpdateContactDataRequest request);
         PutRecentPatientResponse AddRecentPatient(PutRecentPatientRequest request);
         GetContactByContactIdDataResponse GetContactByContactId(GetContactByContactIdDataRequest request);

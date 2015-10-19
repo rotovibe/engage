@@ -262,76 +262,39 @@ namespace Phytel.API.DataDomain.Contact
             catch (Exception ex) { throw ex; }
         }
 
-        public UpsertBatchContactDataResponse UpsertContacts(UpsertBatchContactDataRequest request)
+        public List<HttpObjectResponse<ContactData>> InsertBatchContacts(InsertBatchContactDataRequest request)
         {
-            UpsertBatchContactDataResponse response = new UpsertBatchContactDataResponse();
-            if (request.ContactsData != null && request.ContactsData.Count > 0)
+            List<HttpObjectResponse<ContactData>> list = null;
+            try
             {
-                List<HttpObjectResponse<ContactData>> list = new List<HttpObjectResponse<ContactData>>();
-                IContactRepository repo = Factory.GetRepository(request, RepositoryType.Contact);
-                request.ContactsData.ForEach(p =>
+                if (request.ContactsData != null && request.ContactsData.Count > 0)
                 {
-                    HttpStatusCode code = HttpStatusCode.OK;
-                    ContactData psData = null;
-                    string message = string.Empty;
-                    try
+                    list = new List<HttpObjectResponse<ContactData>>();
+                    IContactRepository repo = Factory.GetRepository(request, RepositoryType.Contact);
+                    BulkInsertResult result = (BulkInsertResult)repo.InsertAll(request.ContactsData.Cast<object>().ToList());
+                    if (result != null)
                     {
-                        if (string.IsNullOrEmpty(p.PatientId))
+                        if (result.ProcessedIds != null && result.ProcessedIds.Count > 0)
                         {
-                            code = HttpStatusCode.BadRequest;
-                            message = string.Format("PatientId is missing for PatientId : {0}", p.PatientId);
-                        }
-                        else
-                        {
-                            ContactData data = (ContactData)repo.GetContactByPatientId(p.PatientId);
-                            if (data == null)
+                            // Get the Contacts that were newly inserted. 
+                            List<ContactData> insertedContacts = repo.Select(result.ProcessedIds) as List<ContactData>;
+                            if (insertedContacts != null && insertedContacts.Count > 0)
                             {
-                                PutContactDataRequest insertReq = new PutContactDataRequest
+                                insertedContacts.ForEach(r =>
                                 {
-                                    PatientId = p.PatientId,
-                                    Context = request.Context,
-                                    ContractNumber = request.ContractNumber,
-                                    ContactData = p,
-                                    UserId = request.UserId,
-                                    Version = request.Version
-                                };
-                                string id = (string)repo.Insert(insertReq);
-                                if (!string.IsNullOrEmpty(id))
-                                {
-                                    code = HttpStatusCode.Created;
-                                    psData = new ContactData { Id = id, PatientId = p.PatientId };
-                                }
-                            }
-                            else
-                            {
-                                p.Id = data.Id;
-                                PutUpdateContactDataRequest updateReq = new PutUpdateContactDataRequest
-                                {
-                                    ContactData = p,
-                                    Context = request.Context,
-                                    ContractNumber = request.ContractNumber,
-                                    UserId = request.UserId,
-                                    Version = request.Version
-                                };
-                                PutUpdateContactDataResponse updateRes = repo.Update(updateReq) as PutUpdateContactDataResponse;
-                                if (updateRes != null && updateRes.SuccessData)
-                                {
-                                    code = HttpStatusCode.NoContent;
-                                    psData = new ContactData { Id = p.Id, PatientId = p.PatientId };
-                                }
+                                    list.Add(new HttpObjectResponse<ContactData> { Code = HttpStatusCode.Created, Body = (ContactData)new ContactData { Id = r.Id, PatientId = r.PatientId } });
+                                });
                             }
                         }
+                        result.ErrorMessages.ForEach(e =>
+                        {
+                            list.Add(new HttpObjectResponse<ContactData> { Code = HttpStatusCode.InternalServerError, Message = e });
+                        });
                     }
-                    catch (Exception ex)
-                    {
-                        code = HttpStatusCode.InternalServerError;
-                        message = string.Format("PatientId: {0}, Message: {1}, StackTrace: {2}", p.PatientId, ex.Message, ex.StackTrace);
-                    }
-                    list.Add(new HttpObjectResponse<ContactData> { Code = code, Body = (ContactData)psData, Message = message });
-                });
-                response.Responses = list;
+                }
             }
-            return response;
+            catch (Exception ex) { throw ex; }
+            return list;
         }
     }
 }   
