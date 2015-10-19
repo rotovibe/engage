@@ -18,14 +18,14 @@ namespace Phytel.Engage.Integrations.Repo
         public ContractEntities()
             : base("name=ContractEntities")
         {
-            // Get the ObjectContext related to this DbContext
-            var objectContext = (this as IObjectContextAdapter).ObjectContext;
-
-            // Sets the command timeout for all the commands
-            objectContext.CommandTimeout = 220;
+        // Get the ObjectContext related to this DbContext
+        var objectContext = (this as IObjectContextAdapter).ObjectContext;
+    
+        // Sets the command timeout for all the commands
+        objectContext.CommandTimeout = 120;
         }
-
-
+    
+    
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             throw new UnintentionalCodeFirstException();
@@ -39,5 +39,8 @@ namespace Phytel.Engage.Integrations.Repo
         public virtual DbSet<IntegrationPatientXref> IntegrationPatientXrefs { get; set; }
         public virtual DbSet<C3Patient> C3Patient { get; set; }
         public virtual DbSet<C3ProblemList> C3ProblemList { get; set; }
+        public virtual DbSet<C3NoteAction> C3NoteAction { get; set; }
+        public virtual DbSet<C3NoteCategory> C3NoteCategory { get; set; }
+        public virtual DbSet<C3NotePatient> C3NotePatient { get; set; }
     }
 }

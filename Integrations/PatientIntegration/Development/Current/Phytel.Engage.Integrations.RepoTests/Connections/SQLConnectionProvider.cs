@@ -15,7 +15,7 @@ namespace Phytel.Engage.Integrations.Repo.Connections.Tests
         {
             var pvd = new SQLConnectionProvider();
             var context = "ORLANDOHEALTH001";
-            var connection = pvd.GetConnectionString(context);
+            var connection = pvd.GetConnectionStringEF(context);
         }
     }
 }

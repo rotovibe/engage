@@ -15,6 +15,9 @@
         <EntityTypeShape EntityType="ContractModel.IntegrationPatientXref" Width="1.5" PointX="7.375" PointY="4.75" />
         <EntityTypeShape EntityType="ContractModel.C3Patient" Width="1.5" PointX="0.75" PointY="8.75" />
         <EntityTypeShape EntityType="ContractModel.C3ProblemList" Width="1.5" PointX="7.375" PointY="8.75" />
+        <EntityTypeShape EntityType="ContractModel.C3NoteAction" Width="1.5" PointX="9.375" PointY="4.75" />
+        <EntityTypeShape EntityType="ContractModel.C3NoteCategory" Width="1.5" PointX="9.375" PointY="8.75" />
+        <EntityTypeShape EntityType="ContractModel.C3NotePatient" Width="1.5" PointX="11.375" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

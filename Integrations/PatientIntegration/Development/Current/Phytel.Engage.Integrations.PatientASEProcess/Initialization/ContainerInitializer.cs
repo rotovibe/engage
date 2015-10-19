@@ -25,7 +25,7 @@ namespace Phytel.Engage.Integrations.Process.Initialization
                 c =>
                     new PatientsImportUow
                     {
-                        ServiceEndpoint = new EndPointUtil(),
+                        ServiceEndpoint = new PatientDataDomain(),
                         Patients = new List<PatientData>(),
                         PatientSystems = new List<PatientSystemData>()
                     });
@@ -33,10 +33,8 @@ namespace Phytel.Engage.Integrations.Process.Initialization
             container.RegisterAutoWiredAs<RepositoryFactory, IRepositoryFactory>();
             container.RegisterAutoWiredAs<ApplicableContractProvider, IApplicableContractProvider>();
 
-            container
-                .RegisterAutoWiredAs
-                <IsApplicableContractSpecification<RegistryCompleteMessage>,
-                    IIsApplicableContract<RegistryCompleteMessage>>();
+            container.Register<IIsApplicableContract<RegistryCompleteMessage>>(
+                c => new IsApplicableContractSpecification<RegistryCompleteMessage> { ContractProvider = new ApplicableContractProvider()});
 
             container.RegisterAutoWiredAs<MessageProcessor, IMessageProcessor>();
             

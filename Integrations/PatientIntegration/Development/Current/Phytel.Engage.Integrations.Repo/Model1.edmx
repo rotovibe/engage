@@ -33,6 +33,52 @@
           <Property Name="UpdateDate" Type="datetime" />
           <Property Name="UpdatedBy" Type="int" />
         </EntityType>
+        <EntityType Name="C3NoteAction">
+          <Key>
+            <PropertyRef Name="ActionID" />
+          </Key>
+          <Property Name="ActionID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ActionName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="OrderBy" Type="int" Nullable="false" />
+          <Property Name="Enabled" Type="bit" Nullable="false" />
+          <Property Name="CreateDate" Type="datetime" />
+          <Property Name="UpdateDate" Type="datetime" />
+          <Property Name="CreatedBy" Type="uniqueidentifier" />
+          <Property Name="UpdateBy" Type="uniqueidentifier" />
+        </EntityType>
+        <EntityType Name="C3NoteCategory">
+          <Key>
+            <PropertyRef Name="CategoryId" />
+          </Key>
+          <Property Name="CategoryId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CategoryName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="OrderBy" Type="int" Nullable="false" />
+          <Property Name="Enabled" Type="bit" Nullable="false" />
+          <Property Name="CreateDate" Type="datetime" />
+          <Property Name="UpdateDate" Type="datetime" />
+          <Property Name="CreatedBy" Type="uniqueidentifier" />
+          <Property Name="UpdatedBy" Type="uniqueidentifier" />
+        </EntityType>
+        <EntityType Name="C3NotePatient">
+          <Key>
+            <PropertyRef Name="NoteId" />
+          </Key>
+          <Property Name="NoteId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Note" Type="nvarchar(max)" />
+          <Property Name="ActionID" Type="int" Nullable="false" />
+          <Property Name="CategoryId" Type="int" Nullable="false" />
+          <Property Name="PatientId" Type="int" Nullable="false" />
+          <Property Name="CampaignId" Type="int" Nullable="false" />
+          <Property Name="Enabled" Type="bit" Nullable="false" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="UpdatedDate" Type="datetime" />
+          <Property Name="CreatedBy" Type="nvarchar" MaxLength="255" />
+          <Property Name="CreatedById" Type="uniqueidentifier" />
+          <Property Name="DeletedBy" Type="varchar" MaxLength="255" />
+          <Property Name="DeletedDate" Type="datetime" />
+          <Property Name="DeletedStatus" Type="bit" />
+          <Property Name="CampaignName" Type="varchar" MaxLength="255" />
+        </EntityType>
         <EntityType Name="C3Patient">
           <Key>
             <PropertyRef Name="PatientID" />
@@ -197,6 +243,9 @@
         <EntityContainer Name="ContractModelStoreContainer">
           <EntitySet Name="C3Group" EntityType="Self.C3Group" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="C3GroupEntity" EntityType="Self.C3GroupEntity" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="C3NoteAction" EntityType="Self.C3NoteAction" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="C3NoteCategory" EntityType="Self.C3NoteCategory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="C3NotePatient" EntityType="Self.C3NotePatient" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="C3Patient" EntityType="Self.C3Patient" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="C3ProblemList" EntityType="Self.C3ProblemList" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ContactEntities" EntityType="Self.ContactEntities" Schema="dbo" store:Type="Tables" />
@@ -266,6 +315,9 @@
           <EntitySet Name="IntegrationPatientXrefs" EntityType="ContractModel.IntegrationPatientXref" />
           <EntitySet Name="C3Patient" EntityType="ContractModel.C3Patient" />
           <EntitySet Name="C3ProblemList" EntityType="ContractModel.C3ProblemList" />
+          <EntitySet Name="C3NoteAction" EntityType="ContractModel.C3NoteAction" />
+          <EntitySet Name="C3NoteCategory" EntityType="ContractModel.C3NoteCategory" />
+          <EntitySet Name="C3NotePatient" EntityType="ContractModel.C3NotePatient" />
         </EntityContainer>
         <EntityType Name="C3Group">
           <Key>
@@ -426,6 +478,52 @@
           <Property Name="ProblemDescription" Type="String" MaxLength="128" FixedLength="false" Unicode="false" />
           <Property Name="ProblemTypeID" Type="Int32" />
           <Property Name="ProblemTypeDescription" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="C3NoteAction">
+          <Key>
+            <PropertyRef Name="ActionID" />
+          </Key>
+          <Property Name="ActionID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ActionName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="OrderBy" Type="Int32" Nullable="false" />
+          <Property Name="Enabled" Type="Boolean" Nullable="false" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
+          <Property Name="CreatedBy" Type="Guid" />
+          <Property Name="UpdateBy" Type="Guid" />
+        </EntityType>
+        <EntityType Name="C3NoteCategory">
+          <Key>
+            <PropertyRef Name="CategoryId" />
+          </Key>
+          <Property Name="CategoryId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CategoryName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="OrderBy" Type="Int32" Nullable="false" />
+          <Property Name="Enabled" Type="Boolean" Nullable="false" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
+          <Property Name="CreatedBy" Type="Guid" />
+          <Property Name="UpdatedBy" Type="Guid" />
+        </EntityType>
+        <EntityType Name="C3NotePatient">
+          <Key>
+            <PropertyRef Name="NoteId" />
+          </Key>
+          <Property Name="NoteId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Note" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ActionID" Type="Int32" Nullable="false" />
+          <Property Name="CategoryId" Type="Int32" Nullable="false" />
+          <Property Name="PatientId" Type="Int32" Nullable="false" />
+          <Property Name="CampaignId" Type="Int32" Nullable="false" />
+          <Property Name="Enabled" Type="Boolean" Nullable="false" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdatedDate" Type="DateTime" Precision="3" />
+          <Property Name="CreatedBy" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedById" Type="Guid" />
+          <Property Name="DeletedBy" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="DeletedDate" Type="DateTime" Precision="3" />
+          <Property Name="DeletedStatus" Type="Boolean" />
+          <Property Name="CampaignName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -603,6 +701,55 @@
                 <ScalarProperty Name="ProblemExternalCode" ColumnName="ProblemExternalCode" />
                 <ScalarProperty Name="PatientID" ColumnName="PatientID" />
                 <ScalarProperty Name="ProblemListID" ColumnName="ProblemListID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="C3NoteAction">
+            <EntityTypeMapping TypeName="ContractModel.C3NoteAction">
+              <MappingFragment StoreEntitySet="C3NoteAction">
+                <ScalarProperty Name="UpdateBy" ColumnName="UpdateBy" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="Enabled" ColumnName="Enabled" />
+                <ScalarProperty Name="OrderBy" ColumnName="OrderBy" />
+                <ScalarProperty Name="ActionName" ColumnName="ActionName" />
+                <ScalarProperty Name="ActionID" ColumnName="ActionID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="C3NoteCategory">
+            <EntityTypeMapping TypeName="ContractModel.C3NoteCategory">
+              <MappingFragment StoreEntitySet="C3NoteCategory">
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="Enabled" ColumnName="Enabled" />
+                <ScalarProperty Name="OrderBy" ColumnName="OrderBy" />
+                <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
+                <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="C3NotePatient">
+            <EntityTypeMapping TypeName="ContractModel.C3NotePatient">
+              <MappingFragment StoreEntitySet="C3NotePatient">
+                <ScalarProperty Name="CampaignName" ColumnName="CampaignName" />
+                <ScalarProperty Name="DeletedStatus" ColumnName="DeletedStatus" />
+                <ScalarProperty Name="DeletedDate" ColumnName="DeletedDate" />
+                <ScalarProperty Name="DeletedBy" ColumnName="DeletedBy" />
+                <ScalarProperty Name="CreatedById" ColumnName="CreatedById" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="UpdatedDate" ColumnName="UpdatedDate" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="Enabled" ColumnName="Enabled" />
+                <ScalarProperty Name="CampaignId" ColumnName="CampaignId" />
+                <ScalarProperty Name="PatientId" ColumnName="PatientId" />
+                <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
+                <ScalarProperty Name="ActionID" ColumnName="ActionID" />
+                <ScalarProperty Name="Note" ColumnName="Note" />
+                <ScalarProperty Name="NoteId" ColumnName="NoteId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

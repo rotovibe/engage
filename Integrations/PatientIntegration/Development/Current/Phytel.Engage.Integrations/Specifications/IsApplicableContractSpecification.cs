@@ -10,10 +10,17 @@ namespace Phytel.Engage.Integrations.Specifications
 
         public override bool IsSatisfiedBy(T obj)
         {
+            var result = false;
             try
             {
+                if (ContractProvider == null) throw new Exception("ContractProvider is null.");
+
                 var message = (RegistryCompleteMessage) Convert.ChangeType(obj, typeof (T));
-                var result = ContractProvider.Exists( message.ContractDataBase);
+
+                if (message != null)
+                    result = ContractProvider.Exists(message.ContractDataBase);
+                else
+                    throw new Exception("message is null.");
                 return result;
             }
             catch (Exception ex)

@@ -7,20 +7,20 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Phytel.Engage.Integrations.Repo.EF
+namespace Phytel.Engage.Integrations.Repo
 {
     using System;
     using System.Collections.Generic;
-
-    public class IntegrationPatientXref
+    
+    public partial class C3NoteAction
     {
-        public int ID { get; set; }
-        public string SendingApplication { get; set; }
-        public string ExternalPatientID { get; set; }
-        public int PhytelPatientID { get; set; }
-        public System.DateTime CreateDate { get; set; }
+        public int ActionID { get; set; }
+        public string ActionName { get; set; }
+        public int OrderBy { get; set; }
+        public bool Enabled { get; set; }
+        public Nullable<System.DateTime> CreateDate { get; set; }
         public Nullable<System.DateTime> UpdateDate { get; set; }
-        public Nullable<int> UpdatedBy { get; set; }
-        public string ExternalDisplayPatientId { get; set; }
+        public Nullable<System.Guid> CreatedBy { get; set; }
+        public Nullable<System.Guid> UpdateBy { get; set; }
     }
 }

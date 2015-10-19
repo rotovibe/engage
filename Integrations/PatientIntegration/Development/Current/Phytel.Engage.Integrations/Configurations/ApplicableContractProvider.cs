@@ -1,6 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using System.Reflection;
+using Phytel.Engage.Integrations.DTO;
 
 namespace Phytel.Engage.Integrations.Configurations
 {
@@ -8,23 +11,44 @@ namespace Phytel.Engage.Integrations.Configurations
     {
         public bool Exists(string name)
         {
-            var result = false;
+            try
+            {
+                var result = false;
 
-            var contract = GetContracts().Find(r => r == name);
-            if (!string.IsNullOrEmpty(contract))
-                result = true;
+                var contract = GetContracts().Find(r => r == name);
+                if (!string.IsNullOrEmpty(contract))
+                    result = true;
 
-            return result;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentException("ApplicableContractProvider:Exists()" + ex.Message);
+            }
         }
 
         private static List<string> GetContracts()
         {
-            // load contracts
-            var names = ConfigurationManager.AppSettings["Contracts"];
-            var sNames = names.Split(';');
-            var contracts = sNames.ToList();
+            try
+            {
+                // load contracts
+                var names = ProcConstants.Contracts;
+                
+                if (names == null)
+                    throw new ArgumentException("names is null.");
 
-            return contracts;
+                var sNames = names.Split(';');
+                if (sNames == null)
+                    throw new ArgumentException("sNames is null.");
+
+                var contracts = sNames.ToList();
+
+                return contracts;
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentException("ApplicableContractProvider:GetContracts()" + ex.Message);
+            }
         }
     }
 }

@@ -41,6 +41,15 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'QA|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\QA\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="ASECore, Version=2.2.5.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -110,6 +119,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Phytel.Engage.Integrations.DomainEvents\Phytel.Engage.Integrations.DomainEvents.csproj">
+      <Project>{a17069bb-da81-41fe-8689-66617109bada}</Project>
+      <Name>Phytel.Engage.Integrations.DomainEvents</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Phytel.Engage.Integrations.PatientASEProcess\Phytel.Engage.Integrations.QueueProcess.csproj">
       <Project>{4E23855F-6225-4E71-BFF5-98B6F5616506}</Project>
       <Name>Phytel.Engage.Integrations.QueueProcess</Name>

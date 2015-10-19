@@ -9,9 +9,8 @@ using Phytel.API.DataDomain.PatientSystem.DTO;
 
 namespace Phytel.Engage.Integrations.UOW
 {
-    public interface IEndpointUtil
+    public interface IDataDomain
     {
-        List<HttpObjectResponse<PatientData>> SavePatientInfo<T>(T patients, string contract);
-        List<HttpObjectResponse<PatientSystemData>> SaveSystemPatientInfo(List<PatientSystemData> patientSystems);
+        object Save<T>(T patients, string contract);
     }
 }

@@ -35,6 +35,15 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'QA|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\QA\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="AutoMapper, Version=3.2.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
       <HintPath>..\packages\AutoMapper.3.2.1\lib\net40\AutoMapper.dll</HintPath>
@@ -44,6 +53,7 @@
       <HintPath>..\packages\AutoMapper.3.2.1\lib\net40\AutoMapper.Net4.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="Phytel.API.Interface, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\..\PhytelCode\Phytel.Net\Services\API\Interfaces\Development\Current\Phytel.API.Interface\bin\Debug\Phytel.API.Interface.dll</HintPath>
@@ -114,10 +124,14 @@
     <Compile Include="Specifications\IsApplicableContractSpecification.cs" />
     <Compile Include="Specifications\ISpecification.cs" />
     <Compile Include="Specifications\Specification.cs" />
-    <Compile Include="UOW\EndPointUtil.cs" />
+    <Compile Include="UOW\PatientDataDomain.cs" />
     <Compile Include="UOW\Helper.cs" />
-    <Compile Include="UOW\IEndpointUtil.cs" />
+    <Compile Include="UOW\IDataDomain.cs" />
     <Compile Include="UOW\IImportUOW.cs" />
+    <Compile Include="UOW\ObjMapper.cs" />
+    <Compile Include="UOW\PatientNoteDataDomain.cs" />
+    <Compile Include="UOW\ContactDataDomain.cs" />
+    <Compile Include="UOW\PatientSystemDataDomain.cs" />
     <Compile Include="UOW\PatientsImportUow.cs" />
     <Compile Include="UOW\UOWBase.cs" />
     <Compile Include="PatientInfoUtils.cs" />
@@ -127,6 +141,14 @@
       <Project>{25cf3c3f-221f-4a49-b5ef-a8a5fcf9a5ba}</Project>
       <Name>Phytel.API.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\..\PhytelCode\Phytel.Net\Services\API\DataDomain\Phytel.API.DataDomain.Contact\Development\Current\Contact.DTO\DataDomain.Contact.DTO.csproj">
+      <Project>{0b6e0ed8-abe5-4a1d-8e10-0ac54f06d9c4}</Project>
+      <Name>DataDomain.Contact.DTO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\..\PhytelCode\Phytel.Net\Services\API\DataDomain\Phytel.API.DataDomain.PatientNote\Development\Current\PatientNote.DTO\DataDomain.PatientNote.DTO.csproj">
+      <Project>{99f4ec29-b099-424e-9757-223e67029001}</Project>
+      <Name>DataDomain.PatientNote.DTO</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\..\..\PhytelCode\Phytel.Net\Services\API\DataDomain\Phytel.API.DataDomain.PatientSystem\Development\Current\PatientSystem.DTO\DataDomain.PatientSystem.DTO.csproj">
       <Project>{6033a8ea-a3ef-4182-bfdd-4a9826ecf871}</Project>
       <Name>DataDomain.PatientSystem.DTO</Name>
@@ -134,6 +156,14 @@
     <ProjectReference Include="..\..\..\..\..\..\PhytelCode\Phytel.Net\Services\API\DataDomain\Phytel.API.DataDomain.Patient\Development\Current\Patient.DTOs\DataDomain.Patient.DTO.csproj">
       <Project>{1b3148a8-fb57-4461-91bc-f1cd38a013b6}</Project>
       <Name>DataDomain.Patient.DTO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\..\PhytelCode\Phytel.Net\Services\API\DataDomain\Phytel.API.DataDomain.Patient\Development\Current\Patient\DataDomain.Patient.csproj">
+      <Project>{1536cd0a-6308-4daf-8618-35bba0816997}</Project>
+      <Name>DataDomain.Patient</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Phytel.Engage.Integrations.DomainEvents\Phytel.Engage.Integrations.DomainEvents.csproj">
+      <Project>{a17069bb-da81-41fe-8689-66617109bada}</Project>
+      <Name>Phytel.Engage.Integrations.DomainEvents</Name>
     </ProjectReference>
     <ProjectReference Include="..\Phytel.Engage.Integrations.DTO\Phytel.Engage.Integrations.DTO.csproj">
       <Project>{126d45e4-193c-45ad-9310-9365ba9de589}</Project>
@@ -145,6 +175,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

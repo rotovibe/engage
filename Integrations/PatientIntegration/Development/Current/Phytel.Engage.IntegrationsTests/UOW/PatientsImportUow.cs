@@ -20,28 +20,28 @@ namespace Phytel.Engage.Integrations.UOW.Tests
             var uow = new PatientsImportUow();
             var psys = new List<PatientSystemData>
             {
-                new PatientSystemData{ AtmosphereId = "12345", Value="testing"  },
-                new PatientSystemData{ AtmosphereId = "11111", Value="testing2"  },
-                new PatientSystemData{ AtmosphereId = "12345", Value="testing3"  },
-                new PatientSystemData{ AtmosphereId = "55555", Value="testing4"  },
-                new PatientSystemData{ AtmosphereId = "44444", Value="testing5"  },
-                new PatientSystemData{ AtmosphereId = "44444", Value="testing6"  },
-                new PatientSystemData{ AtmosphereId = "44444", Value="testing7"  },
-                new PatientSystemData{ AtmosphereId = "44444", Value="testing8"  },
-                new PatientSystemData{ AtmosphereId = "44444", Value="testing9"  }
+                new PatientSystemData{ ExternalRecordId = "12345", Value="testing"  },
+                new PatientSystemData{ ExternalRecordId = "11111", Value="testing2"  },
+                new PatientSystemData{ ExternalRecordId = "12345", Value="testing3"  },
+                new PatientSystemData{ ExternalRecordId = "55555", Value="testing4"  },
+                new PatientSystemData{ ExternalRecordId = "44444", Value="testing5"  },
+                new PatientSystemData{ ExternalRecordId = "44444", Value="testing6"  },
+                new PatientSystemData{ ExternalRecordId = "44444", Value="testing7"  },
+                new PatientSystemData{ ExternalRecordId = "44444", Value="testing8"  },
+                new PatientSystemData{ ExternalRecordId = "44444", Value="testing9"  }
             };
 
             var httpReponse = new HttpObjectResponse<PatientData>();
 
-            httpReponse.Body = new PatientData { AtmosphereId = "12345", FirstName = "Mel" };
+            httpReponse.Body = new PatientData { ExternalRecordId = "12345", FirstName = "Mel" };
             httpReponse.Code = System.Net.HttpStatusCode.InternalServerError;
 
             var httpReponse2 = new HttpObjectResponse<PatientData>();
-            httpReponse2.Body = new PatientData { AtmosphereId = "11111", FirstName = "Jenny" };
+            httpReponse2.Body = new PatientData { ExternalRecordId = "11111", FirstName = "Jenny" };
             httpReponse2.Code = System.Net.HttpStatusCode.InternalServerError;
 
             var httpReponse3 = new HttpObjectResponse<PatientData>();
-            httpReponse3.Body = new PatientData { AtmosphereId = "44444", FirstName = "Elise" };
+            httpReponse3.Body = new PatientData { ExternalRecordId = "44444", FirstName = "Elise" };
             httpReponse3.Code = System.Net.HttpStatusCode.OK;
 
             var prsl = new List<HttpObjectResponse<PatientData>>

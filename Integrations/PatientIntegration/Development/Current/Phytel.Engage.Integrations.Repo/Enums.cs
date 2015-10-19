@@ -10,7 +10,7 @@ namespace Phytel.Engage.Integrations.Repo.Repositories
     {
         PatientsContractRepository,
         XrefContractRepository,
-        NotesContractRepository,
+        PatientNotesRepository,
         EngageRepository
     }
 }

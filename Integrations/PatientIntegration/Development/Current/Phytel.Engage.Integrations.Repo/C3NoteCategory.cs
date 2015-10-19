@@ -7,24 +7,20 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Phytel.Engage.Integrations.Repo.EF
+namespace Phytel.Engage.Integrations.Repo
 {
     using System;
     using System.Collections.Generic;
-
-    public class KeyData
+    
+    public partial class C3NoteCategory
     {
-        public int KeyDataID { get; set; }
-        public int OwnerID { get; set; }
-        public string KeyData1 { get; set; }
-        public string CategoryCode { get; set; }
+        public int CategoryId { get; set; }
+        public string CategoryName { get; set; }
+        public int OrderBy { get; set; }
+        public bool Enabled { get; set; }
         public Nullable<System.DateTime> CreateDate { get; set; }
         public Nullable<System.DateTime> UpdateDate { get; set; }
-        public Nullable<int> CreatedBy { get; set; }
-        public Nullable<int> UpdatedBy { get; set; }
-        public Nullable<int> DataSourceID { get; set; }
-        public Nullable<byte> DeleteFlag { get; set; }
-
-        public virtual ContactEntity ContactEntity { get; set; }
+        public Nullable<System.Guid> CreatedBy { get; set; }
+        public Nullable<System.Guid> UpdatedBy { get; set; }
     }
 }
