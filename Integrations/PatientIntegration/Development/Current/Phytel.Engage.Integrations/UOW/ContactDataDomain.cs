@@ -19,7 +19,7 @@ namespace Phytel.Engage.Integrations.UOW
         public object Save<T>(T list, string contract)
         {
             LoggerDomainEvent.Raise(new LogStatus { Message = "4) Sending insert Contact DD request.", Type = LogType.Debug });
-            UpsertBatchContactDataResponse response = null;
+            InsertBatchContactDataResponse response = null;
             try
             {
                 List<HttpObjectResponse<ContactData>> resp = null;
@@ -33,8 +33,8 @@ namespace Phytel.Engage.Integrations.UOW
 
                 try
                 {
-                    response = client.Post<UpsertBatchContactDataResponse>(url,
-                        new UpsertBatchContactDataRequest
+                    response = client.Post<InsertBatchContactDataResponse>(url,
+                        new InsertBatchContactDataRequest
                         {
                             Context = "NG",
                             ContractNumber = contract,
