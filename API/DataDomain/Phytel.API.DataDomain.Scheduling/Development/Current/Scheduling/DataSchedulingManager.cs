@@ -6,6 +6,7 @@ using Phytel.API.Common.Format;
 using System.Collections.Generic;
 using Phytel.API.Common;
 using System.Net;
+using System.Linq;
 
 namespace Phytel.API.DataDomain.Scheduling
 {
@@ -72,75 +73,39 @@ namespace Phytel.API.DataDomain.Scheduling
             return response; ;
         }
 
-        public UpsertBatchPatientToDosDataResponse UpsertBatchPatientToDos(UpsertBatchPatientToDosDataRequest request)
+        public List<HttpObjectResponse<ToDoData>> InsertBatchPatientToDos(InsertBatchPatientToDosDataRequest request)
         {
-            UpsertBatchPatientToDosDataResponse response = new UpsertBatchPatientToDosDataResponse();
-            if (request.PatientToDosData != null && request.PatientToDosData.Count > 0)
+            List<HttpObjectResponse<ToDoData>> list = null;
+            try
             {
-                List<HttpObjectResponse<ToDoData>> list = new List<HttpObjectResponse<ToDoData>>();
-                ISchedulingRepository repo = Factory.GetRepository(request, RepositoryType.ToDo);
-                request.PatientToDosData.ForEach(p =>
+                if (request.PatientToDosData != null && request.PatientToDosData.Count > 0)
                 {
-                    HttpStatusCode code = HttpStatusCode.OK;
-                    ToDoData todoData = null;
-                    string message = string.Empty;
-                    try
+                    list = new List<HttpObjectResponse<ToDoData>>();
+                    ISchedulingRepository repo = Factory.GetRepository(request, RepositoryType.ToDo);
+                    BulkInsertResult result = (BulkInsertResult)repo.InsertAll(request.PatientToDosData.Cast<object>().ToList());
+                    if (result != null)
                     {
-                        if (string.IsNullOrEmpty(p.ExternalRecordId))
+                        if (result.ProcessedIds != null && result.ProcessedIds.Count > 0)
                         {
-                            code = HttpStatusCode.BadRequest;
-                            message = string.Format("ExternalRecordId is missing for PatientId : {0}", p.PatientId);
-                        }
-                        else
-                        {
-                            ToDoData data = (ToDoData)repo.FindByExternalRecordId(p.ExternalRecordId);
-                            if (data == null)
+                            // Get the ToDos that were newly inserted. 
+                            List<ToDoData> insertedToDos = repo.Select(result.ProcessedIds) as List<ToDoData>;
+                            if (insertedToDos != null && insertedToDos.Count > 0)
                             {
-                                PutInsertToDoDataRequest insertReq = new PutInsertToDoDataRequest
+                                insertedToDos.ForEach(r =>
                                 {
-                                    Context = request.Context,
-                                    ContractNumber = request.ContractNumber,
-                                    ToDoData = p,
-                                    UserId = request.UserId,
-                                    Version = request.Version
-                                };
-                                string id = (string)repo.Insert(insertReq);
-                                if (!string.IsNullOrEmpty(id))
-                                {
-                                    code = HttpStatusCode.Created;
-                                    todoData = new ToDoData { Id = id, ExternalRecordId = p.ExternalRecordId, PatientId = p.PatientId };
-                                }
-                            }
-                            else
-                            {
-                                p.Id = data.Id;
-                                PutUpdateToDoDataRequest updateReq = new PutUpdateToDoDataRequest
-                                {
-                                    ToDoData = p,
-                                    Context = request.Context,
-                                    ContractNumber = request.ContractNumber,
-                                    UserId = request.UserId,
-                                    Version = request.Version
-                                };
-                                bool status = (bool)repo.Update(updateReq);
-                                if (status)
-                                {
-                                    code = HttpStatusCode.NoContent;
-                                    todoData = new ToDoData { Id = p.Id, ExternalRecordId = p.ExternalRecordId, PatientId = p.PatientId };
-                                }
+                                    list.Add(new HttpObjectResponse<ToDoData> { Code = HttpStatusCode.Created, Body = (ToDoData)new ToDoData { Id = r.Id, ExternalRecordId = r.ExternalRecordId, PatientId = r.PatientId } });
+                                });
                             }
                         }
+                        result.ErrorMessages.ForEach(e =>
+                        {
+                            list.Add(new HttpObjectResponse<ToDoData> { Code = HttpStatusCode.InternalServerError, Message = e });
+                        });
                     }
-                    catch (Exception ex)
-                    {
-                        code = HttpStatusCode.InternalServerError;
-                        message = string.Format("ExternalRecordId: {0}, Message: {1}, StackTrace: {2}", p.ExternalRecordId, ex.Message, ex.StackTrace);
-                    }
-                    list.Add(new HttpObjectResponse<ToDoData> { Code = code, Body = (ToDoData)todoData, Message = message });
-                });
-                response.Responses = list;
+                }
             }
-            return response;
+            catch (Exception ex) { throw ex; }
+            return list;
         }
 
         public RemoveProgramInToDosDataResponse RemoveProgramInToDos(RemoveProgramInToDosDataRequest request)

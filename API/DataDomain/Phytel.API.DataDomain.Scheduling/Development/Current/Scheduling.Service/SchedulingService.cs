@@ -78,15 +78,15 @@ namespace Phytel.API.DataDomain.Scheduling.Service
             return response;
         }
 
-        public UpsertBatchPatientToDosDataResponse Post(UpsertBatchPatientToDosDataRequest request)
+        public InsertBatchPatientToDosDataResponse Post(InsertBatchPatientToDosDataRequest request)
         {
-            UpsertBatchPatientToDosDataResponse response = new UpsertBatchPatientToDosDataResponse();
+            InsertBatchPatientToDosDataResponse response = new InsertBatchPatientToDosDataResponse();
             try
             {
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("SchedulingDD:Post()::Unauthorized Access");
 
-                response = Manager.UpsertBatchPatientToDos(request);
+                response.Responses = Manager.InsertBatchPatientToDos(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)

@@ -102,5 +102,11 @@ namespace Phytel.API.DataDomain.ToDo.Test.Stubs
         {
             throw new NotImplementedException();
         }
+
+
+        public IEnumerable<object> Select(List<string> ids)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

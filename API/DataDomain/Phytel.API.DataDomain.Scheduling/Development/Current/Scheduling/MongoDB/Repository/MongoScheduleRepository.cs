@@ -136,5 +136,11 @@ namespace Phytel.API.DataDomain.Scheduling
         {
             throw new NotImplementedException();
         }
+
+
+        public IEnumerable<object> Select(List<string> ids)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

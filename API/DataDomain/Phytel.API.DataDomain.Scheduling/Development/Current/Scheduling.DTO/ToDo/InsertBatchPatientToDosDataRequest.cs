@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace Phytel.API.DataDomain.Scheduling.DTO
 {
     [Route("/{Context}/{Version}/{ContractNumber}/Batch/PatientToDos", "POST")]
-    public class UpsertBatchPatientToDosDataRequest : IDataDomainRequest
+    public class InsertBatchPatientToDosDataRequest : IDataDomainRequest
     {
         [ApiMember(Name = "PatientToDosData", Description = "List of PatientToDos to be inserted, if they exist, update them.", ParameterType = "property", DataType = "List<ToDoData>", IsRequired = true)]
         public List<ToDoData> PatientToDosData { get; set; }

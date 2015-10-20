@@ -13,7 +13,8 @@ namespace Phytel.API.DataDomain.Scheduling
         IEnumerable<object> FindToDos(object request);
         IEnumerable<object> FindToDosWithAProgramId(string entityId);
         void RemoveProgram(object entity, List<string> updatedProgramIds);
-        object FindByID(string entityID, bool includeDeletedToDo); 
+        object FindByID(string entityID, bool includeDeletedToDo);
+        IEnumerable<object> Select(List<string> ids);
         object FindByExternalRecordId(string externalRecordId);
     }
 }

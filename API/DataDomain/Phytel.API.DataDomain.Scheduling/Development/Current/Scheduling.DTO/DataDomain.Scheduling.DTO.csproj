@@ -98,8 +98,8 @@
     <Compile Include="ToDo\ToDoData.cs" />
     <Compile Include="ToDo\UndoDeletePatientToDosDataRequest.cs" />
     <Compile Include="ToDo\UndoDeletePatientToDosDataResponse.cs" />
-    <Compile Include="ToDo\UpsertBatchPatientToDosDataRequest.cs" />
-    <Compile Include="ToDo\UpsertBatchPatientToDosDataResponse.cs" />
+    <Compile Include="ToDo\InsertBatchPatientToDosDataRequest.cs" />
+    <Compile Include="ToDo\InsertBatchPatientToDosDataResponse.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

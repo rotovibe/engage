@@ -5,7 +5,7 @@ using Phytel.API.Common;
 
 namespace Phytel.API.DataDomain.Scheduling.DTO
 {
-    public class UpsertBatchPatientToDosDataResponse : IDomainResponse
+    public class InsertBatchPatientToDosDataResponse : IDomainResponse
     {
         public List<HttpObjectResponse<ToDoData>> Responses { get; set; }
         public double Version { get; set; }
