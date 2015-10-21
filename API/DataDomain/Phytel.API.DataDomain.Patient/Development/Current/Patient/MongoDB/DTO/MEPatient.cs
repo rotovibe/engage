@@ -96,7 +96,7 @@ namespace Phytel.API.DataDomain.Patient.DTO
 
         [BsonElement(LastFourSSNProperty)]
         [BsonIgnoreIfNull(true)]
-        public int? LastFourSSN { get; set; }
+        public string LastFourSSN { get; set; }
 
         [BsonElement(FullSSNProperty)]
         [BsonIgnoreIfNull(true)]

@@ -23,7 +23,7 @@ namespace Phytel.API.DataDomain.Patient.DTO
         public bool Flagged { get; set; }
         public string Background { get; set; }
         public string ClinicalBackground { get; set; }
-        public int? LastFourSSN { get; set; }
+        public string LastFourSSN { get; set; }
         public string FullSSN { get; set; }
         public string MaritalStatusId { get; set; }
         public bool Protected { get; set; }

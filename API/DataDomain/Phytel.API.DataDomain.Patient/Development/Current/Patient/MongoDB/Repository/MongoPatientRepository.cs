@@ -379,7 +379,8 @@ namespace Phytel.API.DataDomain.Patient
                 if (mePatient != null)
                 {
                     DataProtector protector = new DataProtector(Services.DataProtector.Store.USE_SIMPLE_STORE);
-                    ssn = protector.Decrypt(mePatient.FullSSN);  
+                    if(!string.IsNullOrEmpty(mePatient.FullSSN))
+                        ssn = protector.Decrypt(mePatient.FullSSN);  
                 }
             }
             return ssn;
@@ -684,12 +685,8 @@ namespace Phytel.API.DataDomain.Patient
                                 if (fullSSN.Length == 9)
                                 {
                                     // Save the last 4 digits in LastFourSSN field.
-                                    int lastFourSSN;
-                                    if (int.TryParse(fullSSN.Substring(5, 4), out lastFourSSN))
-                                    {
-                                        updt.Set(MEPatient.LastFourSSNProperty, lastFourSSN);
-                                    }
-
+                                    string lastFourSSN = fullSSN.Substring(5, 4);
+                                    updt.Set(MEPatient.LastFourSSNProperty, lastFourSSN);
                                     // Save the full SSN in the encrypted form.
                                     DataProtector protector = new DataProtector(Services.DataProtector.Store.USE_SIMPLE_STORE);
                                     string encryptedSSN = protector.Encrypt(fullSSN);
