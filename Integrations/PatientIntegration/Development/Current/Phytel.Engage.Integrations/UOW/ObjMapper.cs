@@ -19,7 +19,7 @@ namespace Phytel.Engage.Integrations.UOW
                 LastName = info.LastName,
                 Suffix = info.Suffix,
                 Gender = info.Gender,
-                DOB = info.BirthDate.ToString(),
+                DOB = info.BirthDate.HasValue ? info.BirthDate.Value.Date.ToString() : string.Empty,
                 // LastFourSSN = info.Ssn.Substring(),
                 LastFourSSN = info.Ssn == null ? 0 : Convert.ToInt32(Strings.Right(info.Ssn, 4)),
                 RecordCreatedOn = info.CreateDate.GetValueOrDefault(),

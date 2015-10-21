@@ -137,8 +137,8 @@ namespace Phytel.Engage.Integrations.UOW
                 cb.Add(new EIntegrationPatientXref
                 {
                     CreateDate = DateTime.Now,
-                    ExternalDisplayPatientId = mongoId,
-                    ExternalPatientID = engageId, //"engageid"
+                    ExternalPatientID = mongoId,
+                    ExternalDisplayPatientId = engageId, //"engageid"
                     PhytelPatientID = Convert.ToInt32(phytelId), //"phytelid"
                     SendingApplication = "Engage"
                 });
