@@ -367,7 +367,7 @@ namespace Phytel.API.DataDomain.Patient
 
         public object GetSSN(string patientId)
         {
-            string ssn = string.Empty;
+            string ssn = null;
             using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
             {
                 IMongoQuery query = Query.And(
