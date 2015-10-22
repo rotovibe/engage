@@ -49,9 +49,11 @@
 			self.showFullSSN = function () {
 				datacontext.getFullSSN(self.selectedPatient.id()).then(ssnReturned);
 				function ssnReturned(data) {
-					if(data.SSN){
+					if(data && data.SSN){
 						var formattedNumber = formatter.formatSeparators(data.SSN.replace( /\D/g, ''), 'XXX-XX-XXXX', '-');
 						alert('Full SSN: ' + formattedNumber);
+					} else{
+						alert('Full SSN is not available'); //1227
 					}
 				}
 			};
