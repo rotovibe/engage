@@ -2,8 +2,8 @@
 define(['services/session', 'services/dateHelper'],
 	function (session, dateHelper) {
 
-			var datacontext;
-
+		var datacontext;
+		var systemCareManager;
 		var DT = breeze.DataType;
 
 		// Expose the model module to the requiring modules
@@ -237,6 +237,14 @@ define(['services/session', 'services/dateHelper'],
 						});
 						return thisMatchedCareManager;
 					});
+					var systemCareManager = getSystemCareManager();
+					//if created by system user make it non editable:
+					note.isEditable = ko.observable(false);
+					if( note.createdById() === systemCareManager.id() ){
+						note.isEditable(false);
+					} else{
+						note.isEditable(true);
+					}
 					note.updatedBy = ko.computed(function () {
 						checkDataContext();
 						var thisMatchedCareManager = ko.utils.arrayFirst(datacontext.enums.careManagers(), function (caremanager) {
@@ -530,5 +538,13 @@ define(['services/session', 'services/dateHelper'],
 				if (!datacontext) {
 						datacontext = require('services/datacontext');
 				}
+		}
+		
+		function getSystemCareManager(){
+			if( ! systemCareManager ){
+				checkDataContext();
+				systemCareManager = datacontext.getSystemCareManager();
+			}
+			return systemCareManager;
 		}
 	});
