@@ -84,7 +84,7 @@ BEGIN
 		,(select CASE WHEN LEN(Value) > 0 THEN Value ELSE NULL END
 			from fn_RPT_GetText_SingleSelect(pt.PatientId, ppt.PatientProgramId, @ProgramSourceId, '5450ff07ac80d37bc00002f6', '543d38bbac80d33fda00002a') )as [Exclusion_Criteria] --*
 		,(select CASE WHEN LEN(Value) > 0 THEN Value ELSE NULL END
-			from fn_RPT_GetPractice_Engage(pt.PatientId, ppt.PatientProgramId, @ProgramSourceId) )as [Practice]			
+			from fn_RPT_GetPractice_Engage(pt.PatientId, ppt.PatientProgramId, @ProgramSourceId, '545cee7a890e9458aa000003', '544efd6fac80d37bc000027b') )as [Practice]		
 		,(select CASE WHEN LEN(Value) > 0 THEN Value ELSE NULL END
 			from fn_RPT_Engage_GetPCP(pt.PatientId, ppt.PatientProgramId, @ProgramSourceId) )as [PCP]
 		,(SELECT TOP 1
@@ -213,7 +213,7 @@ INSERT INTO [RPT_Engage_Enrollment_Info]
 		,(select CASE WHEN LEN(Value) > 0 THEN Value ELSE NULL END
 			from fn_RPT_GetText_SingleSelect(pt.PatientId, ppt.PatientProgramId, @ProgramSourceId, '545c0805ac80d36bd4000089', '543d38bbac80d33fda00002a') )as [Exclusion_Criteria] --*
 		,(select CASE WHEN LEN(Value) > 0 THEN Value ELSE NULL END
-			from fn_RPT_GetPractice_Engage(pt.PatientId, ppt.PatientProgramId, @ProgramSourceId) )as [Practice]
+			from fn_RPT_GetPractice_Engage(pt.PatientId, ppt.PatientProgramId, @ProgramSourceId,'545cee7a890e9458aa000003', '544efd6fac80d37bc000027b') )as [Practice] 
 		,(select CASE WHEN LEN(Value) > 0 THEN Value ELSE NULL END
 			from fn_RPT_Engage_GetPCP(pt.PatientId, ppt.PatientProgramId, @ProgramSourceId) )as [PCP]
 		,(SELECT TOP 1
@@ -344,7 +344,7 @@ INSERT INTO [RPT_Engage_Enrollment_Info]
 			from fn_RPT_GetText_SingleSelect(pt.PatientId, ppt.PatientProgramId, @ProgramSourceId, '55bfa837ac80d31c4c0001ce', '550afd42ac80d36b310005a3')))
 			)as [Exclusion_Criteria] --*
 		,(select CASE WHEN LEN(Value) > 0 THEN Value ELSE NULL END
-			from fn_RPT_GetPractice_Engage(pt.PatientId, ppt.PatientProgramId, @ProgramSourceId) )as [Practice]
+			from fn_RPT_GetPractice_Engage(pt.PatientId, ppt.PatientProgramId, @ProgramSourceId, '55a6a6c8ac80d308d2000255', '544efd6fac80d37bc000027b' ) )as [Practice]
 		,(select CASE WHEN LEN(Value) > 0 THEN Value ELSE NULL END
 			from fn_RPT_Engage_V3_GetPCP(pt.PatientId, ppt.PatientProgramId, @ProgramSourceId) )as [PCP]
 		,(SELECT TOP 1
@@ -357,7 +357,7 @@ INSERT INTO [RPT_Engage_Enrollment_Info]
 			p.PatientId = pt.PatientId
 			AND pp.SourceId = @ProgramSourceId
 			AND pp.PatientProgramId = ppt.PatientProgramId) as [Program_CM]		 	
-		,(SELECT TOP 1 [Enrollment] FROM dbo.fn_RPT_Enrollment(pt.PatientId, ppt.PatientProgramId,@ProgramSourceId,'545c0805ac80d36bd4000089', '54255fa0890e942ba2000001')) as [Enrollment]
+		,(SELECT TOP 1 [Enrollment] FROM dbo.fn_RPT_Enrollment(pt.PatientId, ppt.PatientProgramId,@ProgramSourceId,'55bfa837ac80d31c4c0001ce', '54255fa0890e942ba2000001')) as [Enrollment]
 		,(select CASE WHEN LEN(Value) > 0 THEN Value ELSE NULL END
 			from fn_RPT_GetDate(pt.PatientId, ppt.PatientProgramId, @ProgramSourceId, '55bfa837ac80d31c4c0001ce', '5425620b890e942ba2000005')) as [Program_Completed_Date] --*
 		,(select CASE WHEN LEN(Value) > 0 THEN Value ELSE NULL END
@@ -365,7 +365,7 @@ INSERT INTO [RPT_Engage_Enrollment_Info]
 		,(select CASE WHEN LEN(Value) > 0 THEN Value ELSE NULL END
 			from fn_RPT_GetDate(pt.PatientId, ppt.PatientProgramId, @ProgramSourceId, '55bfa837ac80d31c4c0001ce', '54255ff8890e942ba2000002') ) as [Enrolled_Date] --*
 		,(select CASE WHEN LEN(Value) > 0 THEN [Value] ELSE NULL END
-			from fn_RPT_GetRecentActionCompletedDate(pt.PatientId, ppt.PatientProgramId, @ProgramSourceId, '545c0805ac80d36bd4000089', '54255ff8890e942ba2000002')) as [Enrollment_Action_Completion_Date] --*
+			from fn_RPT_GetRecentActionCompletedDate(pt.PatientId, ppt.PatientProgramId, @ProgramSourceId, '55bfa837ac80d31c4c0001ce', '54255ff8890e942ba2000002')) as [Enrollment_Action_Completion_Date] --*
 		,( select CASE WHEN LEN(Value) > 0 THEN Value ELSE NULL END
 			from fn_RPT_GetDate(pt.PatientId, ppt.PatientProgramId, @ProgramSourceId,'55bfa837ac80d31c4c0001ce', '542561b4890e942ba1000003')) as [Disenroll_Date] --*
 		,( select Market FROM dbo.fn_RPT_DisEnrollmentReason(pt.PatientId,ppt.PatientProgramId,@ProgramSourceId, '55bfa837ac80d31c4c0001ce', '542561ec890e942ba1000004') ) as [Disenroll_Reason] --*
@@ -394,5 +394,3 @@ INSERT INTO [RPT_Engage_Enrollment_Info]
 				
 END
 GO
-
-
