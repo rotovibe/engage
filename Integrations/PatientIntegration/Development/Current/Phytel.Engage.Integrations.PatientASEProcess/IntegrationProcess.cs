@@ -1,5 +1,4 @@
-﻿using System;
-using System.Xml;
+﻿using System.Xml;
 using AutoMapper;
 using Funq;
 using Phytel.API.DataDomain.ASE.Common.Enums;
@@ -9,6 +8,7 @@ using Phytel.ASE.Core;
 using Phytel.Engage.Integrations.Commands;
 using Phytel.Engage.Integrations.DomainEvents;
 using Phytel.Engage.Integrations.DTO;
+using Phytel.Engage.Integrations.Process;
 using Phytel.Engage.Integrations.Process.Initialization;
 using Phytel.Engage.Integrations.Repo.DTO;
 using LogType = Phytel.Engage.Integrations.DomainEvents.LogType;
@@ -26,7 +26,7 @@ namespace Phytel.Engage.Integrations.QueueProcess
             LoggerDomainEvent.Raise(LogStatus.Create("*** Atmosphere Import Start ***" + " contract", true));
             XmlDocument doc = new XmlDocument();
             doc.LoadXml(queueMessage.Body);
-            InitializeContractSettings();
+            AppConfigSettings.Initialize(base.Configuration.SelectNodes("//Phytel.ASE.Process/ProcessConfiguration/appSettings/add"));
 
             var message = Mapper.Map<RegistryCompleteMessage>(doc.DocumentElement);
             _contractName = message.ContractDataBase;
@@ -34,55 +34,6 @@ namespace Phytel.Engage.Integrations.QueueProcess
             LoggerDomainEvent.Raise(LogStatus.Create("Initializing Integration process for : " + message.ContractDataBase  +" contract", true));
             Processor.Process(message);
             LoggerDomainEvent.Raise(LogStatus.Create("Atmosphere Patient Import completed.", true));
-        }
-
-        public void InitializeContractSettings()
-        {
-            //<Phytel.ASE.Process>
-            //<ProcessConfiguration>
-            //<appSettings>
-            //<add key="TakeCount" value="5000" />
-            //<add key="PhytelServicesConnName" value="Phytel" />
-            //<add key="Contracts" value="ORLANDOHEALTH001" />
-            //<add key="DDPatientServiceUrl" value="http://azurePhytelDev.cloudapp.net:59901/Patient" />
-            //<add key="DDPatientSystemUrl" value="http://azurePhytelDev.cloudapp.net:59901/PatientSystem" />
-            //<add key="DDPatientNoteUrl" value="http://azurePhytelDev.cloudapp.net:59901/PatientNote" />
-            //<add key="DDContactServiceUrl" value="http://azurePhytelDev.cloudapp.net:59901/Contact" />    
-            //</appSettings> 
-            //</ProcessConfiguration>
-            //</Phytel.ASE.Process>
-
-            var list = base.Configuration.SelectNodes("//Phytel.ASE.Process/ProcessConfiguration/appSettings/add");
-
-            if (list == null) return;
-            LoggerDomainEvent.Raise(LogStatus.Create("loop through node list.", true));
-            foreach (XmlNode n in list)
-            {
-                LoggerDomainEvent.Raise(LogStatus.Create(n.Name, true));
-                LoggerDomainEvent.Raise(LogStatus.Create(n.Attributes.GetNamedItem("key").Value, true));
-                switch (n.Attributes.GetNamedItem("key").Value)
-                {
-                    case "Contracts":
-                        ProcConstants.Contracts = n.Attributes.GetNamedItem("value").Value;
-                        break;
-                    case "TakeCount":
-                        ProcConstants.TakeCount = Convert.ToInt32(n.Attributes.GetNamedItem("value").Value);
-                        LoggerDomainEvent.Raise(LogStatus.Create("takecount: " + ProcConstants.TakeCount, true));
-                        break;
-                    case "DDPatientServiceUrl":
-                        ProcConstants.DdPatientServiceUrl = n.Attributes.GetNamedItem("value").Value;
-                        break;
-                    case "DDPatientSystemUrl":
-                        ProcConstants.DdPatientSystemUrl = n.Attributes.GetNamedItem("value").Value;
-                        break;
-                    case "DDPatientNoteUrl":
-                        ProcConstants.DdPatientNoteUrl = n.Attributes.GetNamedItem("value").Value;
-                        break;
-                    case "DDContactServiceUrl":
-                        ProcConstants.DdContactServiceUrl = n.Attributes.GetNamedItem("value").Value;
-                        break;
-                }
-            }
         }
 
         public IntegrationProcess()

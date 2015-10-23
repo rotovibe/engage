@@ -76,7 +76,7 @@ namespace Phytel.Engage.Integrations.UOW
                                     Gender = ptInfo.Gender,
                                     LastName = ptInfo.LastName,
                                     MiddleName = ptInfo.MiddleInitial,
-                                    UserId = "000000000000000000000000",
+                                    UserId = API.DataDomain.Patient.Constants.SystemContactId,
                                     PreferredName = ptInfo.FirstName + " " + ptInfo.LastName,
                                     Phones = new List<PhoneData>{new PhoneData{DataSource = "P-Reg", Number = Convert.ToInt64(ptInfo.Phone), TypeId = "52e18c2ed433232028e9e3a6"}}
                                 });

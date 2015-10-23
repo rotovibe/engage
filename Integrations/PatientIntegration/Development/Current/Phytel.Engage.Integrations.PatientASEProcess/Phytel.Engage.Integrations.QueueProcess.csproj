@@ -120,6 +120,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AppConfigSettings.cs" />
     <Compile Include="ProcConstants.cs" />
     <Compile Include="Initialization\ContainerInitializer.cs" />
     <Compile Include="Initialization\IInitializer.cs" />

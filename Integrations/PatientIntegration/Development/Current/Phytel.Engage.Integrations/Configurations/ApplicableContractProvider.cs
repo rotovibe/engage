@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
-using System.Reflection;
 using Phytel.Engage.Integrations.DTO;
 
 namespace Phytel.Engage.Integrations.Configurations
@@ -33,14 +31,7 @@ namespace Phytel.Engage.Integrations.Configurations
             {
                 // load contracts
                 var names = ProcConstants.Contracts;
-                
-                if (names == null)
-                    throw new ArgumentException("names is null.");
-
                 var sNames = names.Split(';');
-                if (sNames == null)
-                    throw new ArgumentException("sNames is null.");
-
                 var contracts = sNames.ToList();
 
                 return contracts;
