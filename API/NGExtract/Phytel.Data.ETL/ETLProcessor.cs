@@ -64,6 +64,7 @@ namespace Phytel.Data.ETL
         private User Users;
         private Medications Meds;
         private MedicationMap MedMap;
+        private Templates.System System;
 
         void Collections_DocColEvent(object sender, ETLEventArgs e)
         {
@@ -115,6 +116,9 @@ namespace Phytel.Data.ETL
 
             MedMap = new MedicationMap { Contract = _contract, ConnectionString = connString };
             MedMap.DocColEvent += Collections_DocColEvent;
+
+            System = new Templates.System { Contract = _contract, ConnectionString = connString };
+            System.DocColEvent += Collections_DocColEvent;
         }
 
         public void Rebuild()
@@ -131,6 +135,7 @@ namespace Phytel.Data.ETL
                 LoadLookUps(_contract);
                 LoadGoalAttributes(_contract);
                 LoadObservations(_contract);
+                System.Export();
                 LoadPatients(_contract);
                 LoadPatientSystems(_contract);
 
@@ -684,6 +689,18 @@ namespace Phytel.Data.ETL
                     throw;
                 }
 
+                try
+                {
+                    if (BsonClassMap.IsClassMapRegistered(typeof(MaritalStatus)) == false)
+                    {
+                        BsonClassMap.RegisterClassMap<MaritalStatus>();
+                    }
+                }
+                catch
+                {
+                    throw;
+                }
+
                 #endregion
             }
             catch (Exception ex)
@@ -926,6 +943,10 @@ namespace Phytel.Data.ETL
                             {
                                 var pnType = new PatientNoteType { Contract = ctr, LookUp = lookup, ConnectionString = connString };
                                 pnType.Export();
+                                break;
+                            }
+                            case LookUpType.MaritalStatus:
+                            {
                                 break;
                             }
                             default:
@@ -3018,17 +3039,23 @@ namespace Phytel.Data.ETL
                             ParameterCollection parms = new ParameterCollection();
                             parms.Add(new Parameter("@MongoID", (string.IsNullOrEmpty(system.Id.ToString()) ? string.Empty : system.Id.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
                             // REFACTOR!!!
-                            //parms.Add(new Parameter("@PatientMongoId", (string.IsNullOrEmpty(system.PatientID.ToString()) ? string.Empty : system.PatientID.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            //parms.Add(new Parameter("@Label", (string.IsNullOrEmpty(system.DisplayLabel) ? string.Empty : system.DisplayLabel), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            //parms.Add(new Parameter("@SystemId", (string.IsNullOrEmpty(system.SystemID) ? string.Empty : system.SystemID), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            //parms.Add(new Parameter("@SystemName", (string.IsNullOrEmpty(system.SystemName) ? string.Empty : system.SystemName), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@PatientMongoId", (string.IsNullOrEmpty(system.PatientId.ToString()) ? string.Empty : system.PatientId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@Label", (string.IsNullOrEmpty(system.DisplayLabel) ? string.Empty : system.DisplayLabel), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@SystemId", (string.IsNullOrEmpty(system.SystemId.ToString()) ? string.Empty : system.SystemId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@SystemName", (string.IsNullOrEmpty(system.SystemName) ? string.Empty : system.SystemName), SqlDbType.VarChar, ParameterDirection.Input, 50));
                             parms.Add(new Parameter("@UpdatedBy", (string.IsNullOrEmpty(system.UpdatedBy.ToString()) ? string.Empty : system.UpdatedBy.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
                             parms.Add(new Parameter("@LastUpdatedOn", system.LastUpdatedOn ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
                             parms.Add(new Parameter("@RecordCreatedBy", (string.IsNullOrEmpty(system.RecordCreatedBy.ToString()) ? string.Empty : system.RecordCreatedBy.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@RecordCreatedOn", system.RecordCreatedOn, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@RecordCreatedOn", (system.RecordCreatedOn != default(DateTime)) ? system.RecordCreatedOn : (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
                             parms.Add(new Parameter("@Version", system.Version, SqlDbType.Float, ParameterDirection.Input, 32));
                             parms.Add(new Parameter("@Delete", (string.IsNullOrEmpty(system.DeleteFlag.ToString()) ? string.Empty : system.DeleteFlag.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
                             parms.Add(new Parameter("@TimeToLive", system.TTLDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@Value", (string.IsNullOrEmpty(system.Value) ? (object)DBNull.Value : system.Value), SqlDbType.VarChar, ParameterDirection.Input, 100));
+                            parms.Add(new Parameter("@DataSource", (string.IsNullOrEmpty(system.DataSource) ? (object)DBNull.Value : system.DataSource), SqlDbType.VarChar, ParameterDirection.Input, 100));
+                            parms.Add(new Parameter("@Status", (string.IsNullOrEmpty(system.Status.ToString()) ? (object)DBNull.Value : system.Status.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@Primary", (string.IsNullOrEmpty(system.Primary.ToString()) ? (object)DBNull.Value : system.Primary.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 100));
+                            parms.Add(new Parameter("@SysId", (string.IsNullOrEmpty(system.SystemId.ToString()) ? string.Empty : system.SystemId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
+
                             if (system.ExtraElements != null)
                                 parms.Add(new Parameter("@ExtraElements", system.ExtraElements.ToString(), SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
                             else

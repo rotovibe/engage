@@ -88,6 +88,7 @@
     <Compile Include="BulkCopy\EMedication.cs" />
     <Compile Include="BulkCopy\ERecentUserList.cs" />
     <Compile Include="BulkCopy\ERecentList.cs" />
+    <Compile Include="BulkCopy\ESystem.cs" />
     <Compile Include="BulkCopy\EWeekDay.cs" />
     <Compile Include="BulkCopy\ETimeOfDay.cs" />
     <Compile Include="BulkCopy\EPhone.cs" />
@@ -116,6 +117,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Templates\Contacts.cs" />
     <Compile Include="Templates\DocumentCollection.cs" />
+    <Compile Include="Templates\System.cs" />
     <Compile Include="Templates\PatientNoteType.cs" />
     <Compile Include="Templates\PatientMedicationFrequency.cs" />
     <Compile Include="Templates\PatientMedSupp.cs" />

@@ -48,7 +48,7 @@ namespace Phytel.Data.ETL.Templates
 
                 OnDocColEvent(new ETLEventArgs
                 {
-                    Message = "[" + Contract + "] PatientNotes():SqlBulkCopy process failure: " + ex.Message + String.Format("Column: {0} contains data with a length greater than: {1}", column, length) + " : " + ex.InnerException,
+                    Message = "[" + Contract + "] "+ bcc.DestinationTableName +" :SqlBulkCopy process failure: " + ex.Message + String.Format("Column: {0} contains data with a length greater than: {1}", column, length) + " : " + ex.InnerException,
                     IsError = true
                 });
             }
