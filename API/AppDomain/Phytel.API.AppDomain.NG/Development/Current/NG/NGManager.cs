@@ -1571,7 +1571,7 @@ namespace Phytel.API.AppDomain.NG
             {
                 IRestClient client = new JsonServiceClient();
                 //[Route("/{Context}/{Version}/{ContractNumber}/Contact/{ContactId}", "GET")]
-                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Contact/{4}",
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Contact/{4}/RecentPatients",
                                                        DDContactServiceUrl,
                                                        "NG",
                                                        request.Version,
