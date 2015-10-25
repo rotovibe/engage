@@ -42,5 +42,8 @@ namespace Phytel.Engage.Integrations.Repo
         public virtual DbSet<C3NoteAction> C3NoteAction { get; set; }
         public virtual DbSet<C3NoteCategory> C3NoteCategory { get; set; }
         public virtual DbSet<C3NotePatient> C3NotePatient { get; set; }
+        public virtual DbSet<Phone> Phones { get; set; }
+        public virtual DbSet<SubscriberEntity> SubscriberEntities { get; set; }
+        public virtual DbSet<CommCategory> CommCategories { get; set; }
     }
 }

@@ -52,10 +52,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ASEAPI.Common">
-      <HintPath>..\..\..\..\..\..\PhytelCode\Phytel.Net\Services\API\Interfaces\Development\Current\References\ASEAPI.Common.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\API\Interfaces\Development\Current\References\ASEAPI.Common.dll</HintPath>
     </Reference>
     <Reference Include="ASECore">
-      <HintPath>..\..\..\..\..\..\PhytelCode\Phytel.Net\Services\API\Interfaces\Development\Current\References\ASECore.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\API\Interfaces\Development\Current\References\ASECore.dll</HintPath>
     </Reference>
     <Reference Include="AutoMapper, Version=3.2.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
       <HintPath>..\packages\AutoMapper.3.2.1\lib\net40\AutoMapper.dll</HintPath>
@@ -74,7 +74,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Phytel.API.DataDomain.ASE.DTO">
-      <HintPath>..\..\..\..\..\..\PhytelCode\Phytel.Net\Services\API\Interfaces\Development\Current\References\Phytel.API.DataDomain.ASE.DTO.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\API\Interfaces\Development\Current\References\Phytel.API.DataDomain.ASE.DTO.dll</HintPath>
     </Reference>
     <Reference Include="ServiceStack, Version=3.9.71.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ServiceStack.3.9.71\lib\net35\ServiceStack.dll</HintPath>
@@ -149,11 +149,11 @@
     <None Include="Properties\SlowCheetah\SlowCheetah.Transforms.targets" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\..\PhytelCode\Phytel.Net\Services\API\DataDomain\Phytel.API.DataDomain.PatientSystem\Development\Current\PatientSystem.DTO\DataDomain.PatientSystem.DTO.csproj">
+    <ProjectReference Include="..\..\..\..\..\..\API\DataDomain\Phytel.API.DataDomain.PatientSystem\Development\Current\PatientSystem.DTO\DataDomain.PatientSystem.DTO.csproj">
       <Project>{6033a8ea-a3ef-4182-bfdd-4a9826ecf871}</Project>
       <Name>DataDomain.PatientSystem.DTO</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\..\PhytelCode\Phytel.Net\Services\API\DataDomain\Phytel.API.DataDomain.Patient\Development\Current\Patient.DTOs\DataDomain.Patient.DTO.csproj">
+    <ProjectReference Include="..\..\..\..\..\..\API\DataDomain\Phytel.API.DataDomain.Patient\Development\Current\Patient.DTOs\DataDomain.Patient.DTO.csproj">
       <Project>{1b3148a8-fb57-4461-91bc-f1cd38a013b6}</Project>
       <Name>DataDomain.Patient.DTO</Name>
     </ProjectReference>

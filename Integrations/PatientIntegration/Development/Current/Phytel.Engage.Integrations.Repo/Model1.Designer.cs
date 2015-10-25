@@ -1,4 +1,4 @@
-﻿// T4 code generation is enabled for model 'C:\Projects\tfs2013\Nightingale\Integrations\PatientIntegration\Development\Current\Phytel.Engage.Integrations.Repo\Model1.edmx'. 
+﻿// T4 code generation is enabled for model 'C:\Projects\Nightingale\Integrations\PatientIntegration\Development\Current\Phytel.Engage.Integrations.Repo\Model1.edmx'. 
 // To enable legacy code generation, change the value of the 'Code Generation Strategy' designer
 // property to 'Legacy ObjectContext'. This property is available in the Properties Window when the model
 // is open in the designer.

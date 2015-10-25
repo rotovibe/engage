@@ -25,6 +25,7 @@ namespace Phytel.Engage.Integrations.UOW
         public List<PatientSystemData> PatientSystems { get; set; }
         public List<PatientNoteData> PatientNotes { get; set; }
         public List<PatientData> Patients { get; set; }
+        public List<PCPPhone> PCPPhones { get; set; }
 
         internal void BulkOperation<T>(List<T> pocos, string contract, IDataDomain domain)
         {
@@ -105,6 +106,20 @@ namespace Phytel.Engage.Integrations.UOW
             catch (Exception ex)
             {
                 LoggerDomainEvent.Raise(LogStatus.Create("UOWBase: LoadPatientSystems():" + ex.Message, false));
+            }
+        }
+
+        public void LoadPcpPhones(Repo.Repositories.IRepository xrepo, List<PCPPhone> pcpPhones)
+        {
+            try
+            {
+                var phnList = xrepo.SelectAll();
+                pcpPhones.AddRange(from xr in (List<PCPPhone>)phnList select xr);
+
+            }
+            catch (Exception ex)
+            {
+                LoggerDomainEvent.Raise(LogStatus.Create("UOWBase: LoadPcpPhones():" + ex.Message, false));
             }
         }
 

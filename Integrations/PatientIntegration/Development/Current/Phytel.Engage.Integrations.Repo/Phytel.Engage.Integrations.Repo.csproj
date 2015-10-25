@@ -112,6 +112,9 @@
     <Compile Include="C3ProblemList.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="CommCategory.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Connections\ISQLConnectionProvider.cs" />
     <Compile Include="Connections\SQLConnectionProvider.cs" />
     <Compile Include="ContactEntity.cs">
@@ -126,6 +129,7 @@
     <Compile Include="DTOs\PatientNote.cs" />
     <Compile Include="DTOs\PatientXref.cs" />
     <Compile Include="ContractEntities.cs" />
+    <Compile Include="DTOs\PCPPhone.cs" />
     <Compile Include="DTOs\SQL\EIntegrationPatientXref.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="IntegrationPatientXref.cs">
@@ -149,16 +153,23 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Model1.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Phone.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReportPatient.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Repositories\PCPPhoneRepository.cs" />
     <Compile Include="Repositories\PatientsContractRepository.cs" />
     <Compile Include="Repositories\IRepository.cs" />
     <Compile Include="Repositories\IRepositoryFactory.cs" />
     <Compile Include="Repositories\PatientNotesRepository.cs" />
     <Compile Include="Repositories\RepositoryFactory.cs" />
     <Compile Include="Repositories\XrefContractRepository.cs" />
+    <Compile Include="SubscriberEntity.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Utils.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -194,11 +205,11 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\..\PhytelCode\Phytel.Net\Services\API\DataDomain\Phytel.API.DataDomain.PatientSystem\Development\Current\PatientSystem.DTO\DataDomain.PatientSystem.DTO.csproj">
+    <ProjectReference Include="..\..\..\..\..\..\API\DataDomain\Phytel.API.DataDomain.PatientSystem\Development\Current\PatientSystem.DTO\DataDomain.PatientSystem.DTO.csproj">
       <Project>{6033A8EA-A3EF-4182-BFDD-4A9826ECF871}</Project>
       <Name>DataDomain.PatientSystem.DTO</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\..\PhytelCode\Phytel.Net\Services\API\DataDomain\Phytel.API.DataDomain.Patient\Development\Current\Patient.DTOs\DataDomain.Patient.DTO.csproj">
+    <ProjectReference Include="..\..\..\..\..\..\API\DataDomain\Phytel.API.DataDomain.Patient\Development\Current\Patient.DTOs\DataDomain.Patient.DTO.csproj">
       <Project>{1B3148A8-FB57-4461-91BC-F1CD38A013B6}</Project>
       <Name>DataDomain.Patient.DTO</Name>
     </ProjectReference>

@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="ContractModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="ContractModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="C3Group">
           <Key>
             <PropertyRef Name="C3GroupId" />
@@ -116,6 +116,7 @@
           <Property Name="CommunicationPreference" Type="varchar" MaxLength="200" />
           <Property Name="OutreachException" Type="bit" />
           <Property Name="Address" Type="varchar" MaxLength="250" />
+          <Property Name="GroupNumber" Type="varchar" MaxLength="512" />
         </EntityType>
         <EntityType Name="C3ProblemList">
           <Key>
@@ -127,6 +128,14 @@
           <Property Name="ProblemDescription" Type="varchar" MaxLength="128" />
           <Property Name="ProblemTypeID" Type="int" />
           <Property Name="ProblemTypeDescription" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="CommCategory">
+          <Key>
+            <PropertyRef Name="CommCategoryID" />
+          </Key>
+          <Property Name="CommCategoryID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CommCategoryCode" Type="varchar" MaxLength="5" Nullable="false" />
+          <Property Name="Description" Type="varchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <EntityType Name="ContactEntities">
           <Key>
@@ -188,6 +197,31 @@
           <Property Name="DataSourceID" Type="int" />
           <Property Name="DeleteFlag" Type="tinyint" />
         </EntityType>
+        <EntityType Name="Phone">
+          <Key>
+            <PropertyRef Name="PhoneID" />
+          </Key>
+          <Property Name="PhoneID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OwnerID" Type="int" Nullable="false" />
+          <Property Name="CountryCode" Type="varchar" MaxLength="3" />
+          <Property Name="AreaCode" Type="varchar" MaxLength="3" />
+          <Property Name="PhoneNumberString" Type="varchar" MaxLength="20" />
+          <Property Name="DialString" Type="varchar" MaxLength="50" />
+          <Property Name="Extension" Type="varchar" MaxLength="8" />
+          <Property Name="ExtDialDelay" Type="int" />
+          <Property Name="CategoryCode" Type="varchar" MaxLength="5" Nullable="false" />
+          <Property Name="PagerPIN" Type="varchar" MaxLength="20" />
+          <Property Name="PagerTypeCode" Type="varchar" MaxLength="5" />
+          <Property Name="Preferred" Type="tinyint" Nullable="false" />
+          <Property Name="CallerIDFlag" Type="tinyint" Nullable="false" />
+          <Property Name="CreateDate" Type="datetime" />
+          <Property Name="UpdateDate" Type="datetime" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="UpdatedBy" Type="int" />
+          <Property Name="DataSourceID" Type="int" />
+          <Property Name="DeleteFlag" Type="tinyint" />
+          <Property Name="PreferenceSourceID" Type="int" />
+        </EntityType>
         <EntityType Name="ReportPatient">
           <Key>
             <PropertyRef Name="ReportPatientId" />
@@ -216,6 +250,29 @@
           <Property Name="CareManagerID" Type="uniqueidentifier" />
           <Property Name="CareManagerName" Type="varchar" MaxLength="100" />
         </EntityType>
+        <EntityType Name="SubscriberEntity">
+          <Key>
+            <PropertyRef Name="SUBSCRIBERENTITYID" />
+          </Key>
+          <Property Name="SUBSCRIBERENTITYID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SUBSCRIBERID" Type="int" Nullable="false" />
+          <Property Name="FACILITYID" Type="int" Nullable="false" />
+          <Property Name="CONTACTENTITYID" Type="int" Nullable="false" />
+          <Property Name="EntityName" Type="varchar" MaxLength="100" />
+          <Property Name="CategoryCode" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="PreferredFlag" Type="int" Nullable="false" />
+          <Property Name="Enable_RC" Type="int" Nullable="false" />
+          <Property Name="Enable_AR" Type="int" Nullable="false" />
+          <Property Name="Enable_TA" Type="int" Nullable="false" />
+          <Property Name="DeleteFlag" Type="int" Nullable="false" />
+          <Property Name="UpdatedBy" Type="int" />
+          <Property Name="UpdateDate" Type="datetime" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="CreateDate" Type="datetime" />
+          <Property Name="TIN" Type="varchar" MaxLength="25" />
+          <Property Name="NPI" Type="varchar" MaxLength="25" />
+          <Property Name="Enable_PS" Type="int" Nullable="false" />
+        </EntityType>
         <Association Name="FK_C3GroupEntity_C3GroupId">
           <End Role="C3Group" Type="Self.C3Group" Multiplicity="1" />
           <End Role="C3GroupEntity" Type="Self.C3GroupEntity" Multiplicity="*" />
@@ -240,6 +297,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Phone_ContactEntities">
+          <End Role="ContactEntities" Type="Self.ContactEntities" Multiplicity="1" />
+          <End Role="Phone" Type="Self.Phone" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ContactEntities">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Phone">
+              <PropertyRef Name="OwnerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="ContractModelStoreContainer">
           <EntitySet Name="C3Group" EntityType="Self.C3Group" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="C3GroupEntity" EntityType="Self.C3GroupEntity" Schema="dbo" store:Type="Tables" />
@@ -248,10 +317,13 @@
           <EntitySet Name="C3NotePatient" EntityType="Self.C3NotePatient" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="C3Patient" EntityType="Self.C3Patient" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="C3ProblemList" EntityType="Self.C3ProblemList" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CommCategory" EntityType="Self.CommCategory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ContactEntities" EntityType="Self.ContactEntities" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="IntegrationPatientXref" EntityType="Self.IntegrationPatientXref" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="KeyData" EntityType="Self.KeyData" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Phone" EntityType="Self.Phone" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ReportPatient" EntityType="Self.ReportPatient" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SubscriberEntity" EntityType="Self.SubscriberEntity" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_C3GroupEntity_C3GroupId" Association="Self.FK_C3GroupEntity_C3GroupId">
             <End Role="C3Group" EntitySet="C3Group" />
             <End Role="C3GroupEntity" EntitySet="C3GroupEntity" />
@@ -259,6 +331,10 @@
           <AssociationSet Name="FK_KeyData_ContactEntities" Association="Self.FK_KeyData_ContactEntities">
             <End Role="ContactEntities" EntitySet="ContactEntities" />
             <End Role="KeyData" EntitySet="KeyData" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Phone_ContactEntities" Association="Self.FK_Phone_ContactEntities">
+            <End Role="ContactEntities" EntitySet="ContactEntities" />
+            <End Role="Phone" EntitySet="Phone" />
           </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -297,6 +373,7 @@
           <Property Name="HL7GUID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="CPTGuid" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="KeyDatas" Relationship="ContractModel.FK_KeyData_ContactEntities" FromRole="ContactEntity" ToRole="KeyData" />
+          <NavigationProperty Name="Phones" Relationship="ContractModel.FK_Phone_ContactEntities" FromRole="ContactEntity" ToRole="Phone" />
         </EntityType>
         <EntityContainer Name="ContractEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="ContactEntities" EntityType="Self.ContactEntity" />
@@ -318,6 +395,13 @@
           <EntitySet Name="C3NoteAction" EntityType="ContractModel.C3NoteAction" />
           <EntitySet Name="C3NoteCategory" EntityType="ContractModel.C3NoteCategory" />
           <EntitySet Name="C3NotePatient" EntityType="ContractModel.C3NotePatient" />
+          <EntitySet Name="Phones" EntityType="ContractModel.Phone" />
+          <EntitySet Name="SubscriberEntities" EntityType="ContractModel.SubscriberEntity" />
+          <AssociationSet Name="FK_Phone_ContactEntities" Association="ContractModel.FK_Phone_ContactEntities">
+            <End Role="ContactEntity" EntitySet="ContactEntities" />
+            <End Role="Phone" EntitySet="Phones" />
+          </AssociationSet>
+          <EntitySet Name="CommCategories" EntityType="ContractModel.CommCategory" />
         </EntityContainer>
         <EntityType Name="C3Group">
           <Key>
@@ -467,6 +551,7 @@
           <Property Name="CommunicationPreference" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
           <Property Name="OutreachException" Type="Boolean" />
           <Property Name="Address" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="GroupNumber" Type="String" MaxLength="512" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="C3ProblemList">
           <Key>
@@ -524,6 +609,75 @@
           <Property Name="DeletedDate" Type="DateTime" Precision="3" />
           <Property Name="DeletedStatus" Type="Boolean" />
           <Property Name="CampaignName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="Phone">
+          <Key>
+            <PropertyRef Name="PhoneID" />
+          </Key>
+          <Property Name="PhoneID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OwnerID" Type="Int32" Nullable="false" />
+          <Property Name="CountryCode" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
+          <Property Name="AreaCode" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
+          <Property Name="PhoneNumberString" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="DialString" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Extension" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="ExtDialDelay" Type="Int32" />
+          <Property Name="CategoryCode" Type="String" Nullable="false" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Name="PagerPIN" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="PagerTypeCode" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Name="Preferred" Type="Byte" Nullable="false" />
+          <Property Name="CallerIDFlag" Type="Byte" Nullable="false" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="UpdatedBy" Type="Int32" />
+          <Property Name="DataSourceID" Type="Int32" />
+          <Property Name="DeleteFlag" Type="Byte" />
+          <NavigationProperty Name="ContactEntity" Relationship="ContractModel.FK_Phone_ContactEntities" FromRole="Phone" ToRole="ContactEntity" />
+          <Property Name="PreferenceSourceID" Type="Int32" />
+        </EntityType>
+        <EntityType Name="SubscriberEntity">
+          <Key>
+            <PropertyRef Name="SUBSCRIBERENTITYID" />
+          </Key>
+          <Property Name="SUBSCRIBERENTITYID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SUBSCRIBERID" Type="Int32" Nullable="false" />
+          <Property Name="FACILITYID" Type="Int32" Nullable="false" />
+          <Property Name="CONTACTENTITYID" Type="Int32" Nullable="false" />
+          <Property Name="EntityName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="CategoryCode" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="PreferredFlag" Type="Int32" Nullable="false" />
+          <Property Name="Enable_RC" Type="Int32" Nullable="false" />
+          <Property Name="Enable_AR" Type="Int32" Nullable="false" />
+          <Property Name="Enable_TA" Type="Int32" Nullable="false" />
+          <Property Name="DeleteFlag" Type="Int32" Nullable="false" />
+          <Property Name="UpdatedBy" Type="Int32" />
+          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <Property Name="TIN" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Name="NPI" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Name="Enable_PS" Type="Int32" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Phone_ContactEntities">
+          <End Type="ContractModel.ContactEntity" Role="ContactEntity" Multiplicity="1" />
+          <End Type="ContractModel.Phone" Role="Phone" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ContactEntity">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Phone">
+              <PropertyRef Name="OwnerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="CommCategory">
+          <Key>
+            <PropertyRef Name="CommCategoryID" />
+          </Key>
+          <Property Name="CommCategoryID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CommCategoryCode" Type="String" Nullable="false" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -656,6 +810,7 @@
           <EntitySetMapping Name="C3Patient">
             <EntityTypeMapping TypeName="ContractModel.C3Patient">
               <MappingFragment StoreEntitySet="C3Patient">
+                <ScalarProperty Name="GroupNumber" ColumnName="GroupNumber" />
                 <ScalarProperty Name="Address" ColumnName="Address" />
                 <ScalarProperty Name="OutreachException" ColumnName="OutreachException" />
                 <ScalarProperty Name="CommunicationPreference" ColumnName="CommunicationPreference" />
@@ -750,6 +905,65 @@
                 <ScalarProperty Name="ActionID" ColumnName="ActionID" />
                 <ScalarProperty Name="Note" ColumnName="Note" />
                 <ScalarProperty Name="NoteId" ColumnName="NoteId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Phones">
+            <EntityTypeMapping TypeName="ContractModel.Phone">
+              <MappingFragment StoreEntitySet="Phone">
+                <ScalarProperty Name="PreferenceSourceID" ColumnName="PreferenceSourceID" />
+                <ScalarProperty Name="DeleteFlag" ColumnName="DeleteFlag" />
+                <ScalarProperty Name="DataSourceID" ColumnName="DataSourceID" />
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="CallerIDFlag" ColumnName="CallerIDFlag" />
+                <ScalarProperty Name="Preferred" ColumnName="Preferred" />
+                <ScalarProperty Name="PagerTypeCode" ColumnName="PagerTypeCode" />
+                <ScalarProperty Name="PagerPIN" ColumnName="PagerPIN" />
+                <ScalarProperty Name="CategoryCode" ColumnName="CategoryCode" />
+                <ScalarProperty Name="ExtDialDelay" ColumnName="ExtDialDelay" />
+                <ScalarProperty Name="Extension" ColumnName="Extension" />
+                <ScalarProperty Name="DialString" ColumnName="DialString" />
+                <ScalarProperty Name="PhoneNumberString" ColumnName="PhoneNumberString" />
+                <ScalarProperty Name="AreaCode" ColumnName="AreaCode" />
+                <ScalarProperty Name="CountryCode" ColumnName="CountryCode" />
+                <ScalarProperty Name="OwnerID" ColumnName="OwnerID" />
+                <ScalarProperty Name="PhoneID" ColumnName="PhoneID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SubscriberEntities">
+            <EntityTypeMapping TypeName="ContractModel.SubscriberEntity">
+              <MappingFragment StoreEntitySet="SubscriberEntity">
+                <ScalarProperty Name="Enable_PS" ColumnName="Enable_PS" />
+                <ScalarProperty Name="NPI" ColumnName="NPI" />
+                <ScalarProperty Name="TIN" ColumnName="TIN" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="DeleteFlag" ColumnName="DeleteFlag" />
+                <ScalarProperty Name="Enable_TA" ColumnName="Enable_TA" />
+                <ScalarProperty Name="Enable_AR" ColumnName="Enable_AR" />
+                <ScalarProperty Name="Enable_RC" ColumnName="Enable_RC" />
+                <ScalarProperty Name="PreferredFlag" ColumnName="PreferredFlag" />
+                <ScalarProperty Name="CategoryCode" ColumnName="CategoryCode" />
+                <ScalarProperty Name="EntityName" ColumnName="EntityName" />
+                <ScalarProperty Name="CONTACTENTITYID" ColumnName="CONTACTENTITYID" />
+                <ScalarProperty Name="FACILITYID" ColumnName="FACILITYID" />
+                <ScalarProperty Name="SUBSCRIBERID" ColumnName="SUBSCRIBERID" />
+                <ScalarProperty Name="SUBSCRIBERENTITYID" ColumnName="SUBSCRIBERENTITYID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CommCategories">
+            <EntityTypeMapping TypeName="ContractModel.CommCategory">
+              <MappingFragment StoreEntitySet="CommCategory">
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="CommCategoryCode" ColumnName="CommCategoryCode" />
+                <ScalarProperty Name="CommCategoryID" ColumnName="CommCategoryID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

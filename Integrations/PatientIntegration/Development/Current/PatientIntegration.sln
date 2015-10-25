@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.Engage.Integrations.QueueProcess", "Phytel.Engage.Integrations.PatientASEProcess\Phytel.Engage.Integrations.QueueProcess.csproj", "{4E23855F-6225-4E71-BFF5-98B6F5616506}"
 EndProject
@@ -17,19 +17,19 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.Engage.Integrations.
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Engage", "Engage", "{6B85F8FA-6A1C-4A70-AB03-110E75DE68EB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Patient.DTO", "..\..\..\..\..\PhytelCode\Phytel.Net\Services\API\DataDomain\Phytel.API.DataDomain.Patient\Development\Current\Patient.DTOs\DataDomain.Patient.DTO.csproj", "{1B3148A8-FB57-4461-91BC-F1CD38A013B6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Patient.DTO", "..\..\..\..\..\API\DataDomain\Phytel.API.DataDomain.Patient\Development\Current\Patient.DTOs\DataDomain.Patient.DTO.csproj", "{1B3148A8-FB57-4461-91BC-F1CD38A013B6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.Engage.IntegrationsTests", "Phytel.Engage.IntegrationsTests\Phytel.Engage.IntegrationsTests.csproj", "{4F521BA6-164E-426D-AED2-CD6DCA498A0B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.PatientSystem.DTO", "..\..\..\..\..\PhytelCode\Phytel.Net\Services\API\DataDomain\Phytel.API.DataDomain.PatientSystem\Development\Current\PatientSystem.DTO\DataDomain.PatientSystem.DTO.csproj", "{6033A8EA-A3EF-4182-BFDD-4A9826ECF871}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.PatientSystem.DTO", "..\..\..\..\..\API\DataDomain\Phytel.API.DataDomain.PatientSystem\Development\Current\PatientSystem.DTO\DataDomain.PatientSystem.DTO.csproj", "{6033A8EA-A3EF-4182-BFDD-4A9826ECF871}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Patient.Service", "..\..\..\..\..\PhytelCode\Phytel.Net\Services\API\DataDomain\Phytel.API.DataDomain.Patient\Development\Current\Patient.Services\DataDomain.Patient.Service.csproj", "{017DC6E8-FB93-4303-AAF9-52E2449F9A34}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Patient.Service", "..\..\..\..\..\API\DataDomain\Phytel.API.DataDomain.Patient\Development\Current\Patient.Services\DataDomain.Patient.Service.csproj", "{017DC6E8-FB93-4303-AAF9-52E2449F9A34}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Patient", "Patient", "{7BBC4F28-A376-4D24-B8B1-5BC46AD2170A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Patient", "..\..\..\..\..\PhytelCode\Phytel.Net\Services\API\DataDomain\Phytel.API.DataDomain.Patient\Development\Current\Patient\DataDomain.Patient.csproj", "{1536CD0A-6308-4DAF-8618-35BBA0816997}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Patient", "..\..\..\..\..\API\DataDomain\Phytel.API.DataDomain.Patient\Development\Current\Patient\DataDomain.Patient.csproj", "{1536CD0A-6308-4DAF-8618-35BBA0816997}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.API.Common", "..\..\..\..\..\PhytelCode\Phytel.Net\Services\API\Common\Phytel.API.Common\Development\Current\Phytel.API.Common.csproj", "{25CF3C3F-221F-4A49-B5EF-A8A5FCF9A5BA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.API.Common", "..\..\..\..\..\API\Common\Phytel.API.Common\Development\Current\Phytel.API.Common.csproj", "{25CF3C3F-221F-4A49-B5EF-A8A5FCF9A5BA}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{3B4D2ED9-90AF-4CB0-84FB-2E88BDA89726}"
 	ProjectSection(SolutionItems) = preProject
@@ -38,17 +38,19 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{3B4D2E
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.PatientNote.DTO", "..\..\..\..\..\PhytelCode\Phytel.Net\Services\API\DataDomain\Phytel.API.DataDomain.PatientNote\Development\Current\PatientNote.DTO\DataDomain.PatientNote.DTO.csproj", "{99F4EC29-B099-424E-9757-223E67029001}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.PatientNote.DTO", "..\..\..\..\..\API\DataDomain\Phytel.API.DataDomain.PatientNote\Development\Current\PatientNote.DTO\DataDomain.PatientNote.DTO.csproj", "{99F4EC29-B099-424E-9757-223E67029001}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Contact.DTO", "..\..\..\..\..\PhytelCode\Phytel.Net\Services\API\DataDomain\Phytel.API.DataDomain.Contact\Development\Current\Contact.DTO\DataDomain.Contact.DTO.csproj", "{0B6E0ED8-ABE5-4A1D-8E10-0AC54F06D9C4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Contact.DTO", "..\..\..\..\..\API\DataDomain\Phytel.API.DataDomain.Contact\Development\Current\Contact.DTO\DataDomain.Contact.DTO.csproj", "{0B6E0ED8-ABE5-4A1D-8E10-0AC54F06D9C4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.Engage.Integrations.DomainEvents", "Phytel.Engage.Integrations.DomainEvents\Phytel.Engage.Integrations.DomainEvents.csproj", "{A17069BB-DA81-41FE-8689-66617109BADA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.API.Interface", "..\..\..\..\..\API\Interfaces\Development\Current\Phytel.API.Interface\Phytel.API.Interface.csproj", "{ABE948FB-247E-4955-B3AB-B7C93E10A542}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 16
+		SccNumberOfProjects = 17
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = http://hillstfs2013:8080/tfs/phytel
+		SccTeamFoundationServer = http://192.168.111.123:8080/tfs/phytel
 		SccLocalPath0 = .
 		SccProjectUniqueName1 = Phytel.Engage.Integrations.PatientASEProcess\\Phytel.Engage.Integrations.QueueProcess.csproj
 		SccProjectName1 = Phytel.Engage.Integrations.PatientASEProcess
@@ -68,40 +70,44 @@ Global
 		SccProjectUniqueName6 = Phytel.Engage.Integrations.RepoTests\\Phytel.Engage.Integrations.RepoTests.csproj
 		SccProjectName6 = Phytel.Engage.Integrations.RepoTests
 		SccLocalPath6 = Phytel.Engage.Integrations.RepoTests
-		SccProjectUniqueName7 = ..\\..\\..\\..\\..\\PhytelCode\\Phytel.Net\\Services\\API\\DataDomain\\Phytel.API.DataDomain.Patient\\Development\\Current\\Patient.DTOs\\DataDomain.Patient.DTO.csproj
+		SccProjectUniqueName7 = ..\\..\\..\\..\\..\\API\\DataDomain\\Phytel.API.DataDomain.Patient\\Development\\Current\\Patient.DTOs\\DataDomain.Patient.DTO.csproj
 		SccProjectTopLevelParentUniqueName7 = PatientIntegration.sln
 		SccProjectName7 = ../../../../../PhytelCode/Phytel.Net/Services/API/DataDomain/Phytel.API.DataDomain.Patient/Development/Current/Patient.DTOs
-		SccLocalPath7 = ..\\..\\..\\..\\..\\PhytelCode\\Phytel.Net\\Services\\API\\DataDomain\\Phytel.API.DataDomain.Patient\\Development\\Current\\Patient.DTOs
+		SccLocalPath7 = ..\\..\\..\\..\\..\\API\\DataDomain\\Phytel.API.DataDomain.Patient\\Development\\Current\\Patient.DTOs
 		SccProjectUniqueName8 = Phytel.Engage.IntegrationsTests\\Phytel.Engage.IntegrationsTests.csproj
 		SccProjectName8 = Phytel.Engage.IntegrationsTests
 		SccLocalPath8 = Phytel.Engage.IntegrationsTests
-		SccProjectUniqueName9 = ..\\..\\..\\..\\..\\PhytelCode\\Phytel.Net\\Services\\API\\DataDomain\\Phytel.API.DataDomain.PatientSystem\\Development\\Current\\PatientSystem.DTO\\DataDomain.PatientSystem.DTO.csproj
+		SccProjectUniqueName9 = ..\\..\\..\\..\\..\\API\\DataDomain\\Phytel.API.DataDomain.PatientSystem\\Development\\Current\\PatientSystem.DTO\\DataDomain.PatientSystem.DTO.csproj
 		SccProjectTopLevelParentUniqueName9 = PatientIntegration.sln
 		SccProjectName9 = ../../../../../PhytelCode/Phytel.Net/Services/API/DataDomain/Phytel.API.DataDomain.PatientSystem/Development/Current/PatientSystem.DTO
-		SccLocalPath9 = ..\\..\\..\\..\\..\\PhytelCode\\Phytel.Net\\Services\\API\\DataDomain\\Phytel.API.DataDomain.PatientSystem\\Development\\Current\\PatientSystem.DTO
-		SccProjectUniqueName10 = ..\\..\\..\\..\\..\\PhytelCode\\Phytel.Net\\Services\\API\\DataDomain\\Phytel.API.DataDomain.Patient\\Development\\Current\\Patient.Services\\DataDomain.Patient.Service.csproj
+		SccLocalPath9 = ..\\..\\..\\..\\..\\API\\DataDomain\\Phytel.API.DataDomain.PatientSystem\\Development\\Current\\PatientSystem.DTO
+		SccProjectUniqueName10 = ..\\..\\..\\..\\..\\API\\DataDomain\\Phytel.API.DataDomain.Patient\\Development\\Current\\Patient.Services\\DataDomain.Patient.Service.csproj
 		SccProjectTopLevelParentUniqueName10 = PatientIntegration.sln
 		SccProjectName10 = ../../../../../PhytelCode/Phytel.Net/Services/API/DataDomain/Phytel.API.DataDomain.Patient/Development/Current/Patient.Services
-		SccLocalPath10 = ..\\..\\..\\..\\..\\PhytelCode\\Phytel.Net\\Services\\API\\DataDomain\\Phytel.API.DataDomain.Patient\\Development\\Current\\Patient.Services
-		SccProjectUniqueName11 = ..\\..\\..\\..\\..\\PhytelCode\\Phytel.Net\\Services\\API\\DataDomain\\Phytel.API.DataDomain.Patient\\Development\\Current\\Patient\\DataDomain.Patient.csproj
+		SccLocalPath10 = ..\\..\\..\\..\\..\\API\\DataDomain\\Phytel.API.DataDomain.Patient\\Development\\Current\\Patient.Services
+		SccProjectUniqueName11 = ..\\..\\..\\..\\..\\API\\DataDomain\\Phytel.API.DataDomain.Patient\\Development\\Current\\Patient\\DataDomain.Patient.csproj
 		SccProjectTopLevelParentUniqueName11 = PatientIntegration.sln
 		SccProjectName11 = ../../../../../PhytelCode/Phytel.Net/Services/API/DataDomain/Phytel.API.DataDomain.Patient/Development/Current/Patient
-		SccLocalPath11 = ..\\..\\..\\..\\..\\PhytelCode\\Phytel.Net\\Services\\API\\DataDomain\\Phytel.API.DataDomain.Patient\\Development\\Current\\Patient
-		SccProjectUniqueName12 = ..\\..\\..\\..\\..\\PhytelCode\\Phytel.Net\\Services\\API\\Common\\Phytel.API.Common\\Development\\Current\\Phytel.API.Common.csproj
+		SccLocalPath11 = ..\\..\\..\\..\\..\\API\\DataDomain\\Phytel.API.DataDomain.Patient\\Development\\Current\\Patient
+		SccProjectUniqueName12 = ..\\..\\..\\..\\..\\API\\Common\\Phytel.API.Common\\Development\\Current\\Phytel.API.Common.csproj
 		SccProjectTopLevelParentUniqueName12 = PatientIntegration.sln
 		SccProjectName12 = ../../../../../PhytelCode/Phytel.Net/Services/API/Common/Phytel.API.Common/Development/Current
-		SccLocalPath12 = ..\\..\\..\\..\\..\\PhytelCode\\Phytel.Net\\Services\\API\\Common\\Phytel.API.Common\\Development\\Current
-		SccProjectUniqueName13 = ..\\..\\..\\..\\..\\PhytelCode\\Phytel.Net\\Services\\API\\DataDomain\\Phytel.API.DataDomain.PatientNote\\Development\\Current\\PatientNote.DTO\\DataDomain.PatientNote.DTO.csproj
+		SccLocalPath12 = ..\\..\\..\\..\\..\\API\\Common\\Phytel.API.Common\\Development\\Current
+		SccProjectUniqueName13 = ..\\..\\..\\..\\..\\API\\DataDomain\\Phytel.API.DataDomain.PatientNote\\Development\\Current\\PatientNote.DTO\\DataDomain.PatientNote.DTO.csproj
 		SccProjectTopLevelParentUniqueName13 = PatientIntegration.sln
 		SccProjectName13 = ../../../../../PhytelCode/Phytel.Net/Services/API/DataDomain/Phytel.API.DataDomain.PatientNote/Development/Current/PatientNote.DTO
-		SccLocalPath13 = ..\\..\\..\\..\\..\\PhytelCode\\Phytel.Net\\Services\\API\\DataDomain\\Phytel.API.DataDomain.PatientNote\\Development\\Current\\PatientNote.DTO
-		SccProjectUniqueName14 = ..\\..\\..\\..\\..\\PhytelCode\\Phytel.Net\\Services\\API\\DataDomain\\Phytel.API.DataDomain.Contact\\Development\\Current\\Contact.DTO\\DataDomain.Contact.DTO.csproj
+		SccLocalPath13 = ..\\..\\..\\..\\..\\API\\DataDomain\\Phytel.API.DataDomain.PatientNote\\Development\\Current\\PatientNote.DTO
+		SccProjectUniqueName14 = ..\\..\\..\\..\\..\\API\\DataDomain\\Phytel.API.DataDomain.Contact\\Development\\Current\\Contact.DTO\\DataDomain.Contact.DTO.csproj
 		SccProjectTopLevelParentUniqueName14 = PatientIntegration.sln
 		SccProjectName14 = ../../../../../PhytelCode/Phytel.Net/Services/API/DataDomain/Phytel.API.DataDomain.Contact/Development/Current/Contact.DTO
-		SccLocalPath14 = ..\\..\\..\\..\\..\\PhytelCode\\Phytel.Net\\Services\\API\\DataDomain\\Phytel.API.DataDomain.Contact\\Development\\Current\\Contact.DTO
+		SccLocalPath14 = ..\\..\\..\\..\\..\\API\\DataDomain\\Phytel.API.DataDomain.Contact\\Development\\Current\\Contact.DTO
 		SccProjectUniqueName15 = Phytel.Engage.Integrations.DomainEvents\\Phytel.Engage.Integrations.DomainEvents.csproj
 		SccProjectName15 = Phytel.Engage.Integrations.DomainEvents
 		SccLocalPath15 = Phytel.Engage.Integrations.DomainEvents
+		SccProjectUniqueName16 = ..\\..\\..\\..\\..\\API\\Interfaces\\Development\\Current\\Phytel.API.Interface\\Phytel.API.Interface.csproj
+		SccProjectTopLevelParentUniqueName16 = PatientIntegration.sln
+		SccProjectName16 = ../../../../../PhytelCode/Phytel.Net/Services/API/Interfaces/Development/Current/Phytel.API.Interface
+		SccLocalPath16 = ..\\..\\..\\..\\..\\API\\Interfaces\\Development\\Current\\Phytel.API.Interface
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -261,18 +267,29 @@ Global
 		{A17069BB-DA81-41FE-8689-66617109BADA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A17069BB-DA81-41FE-8689-66617109BADA}.Test|Any CPU.ActiveCfg = Release|Any CPU
 		{A17069BB-DA81-41FE-8689-66617109BADA}.Test|Any CPU.Build.0 = Release|Any CPU
+		{ABE948FB-247E-4955-B3AB-B7C93E10A542}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ABE948FB-247E-4955-B3AB-B7C93E10A542}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ABE948FB-247E-4955-B3AB-B7C93E10A542}.Model|Any CPU.ActiveCfg = Model|Any CPU
+		{ABE948FB-247E-4955-B3AB-B7C93E10A542}.Model|Any CPU.Build.0 = Model|Any CPU
+		{ABE948FB-247E-4955-B3AB-B7C93E10A542}.QA|Any CPU.ActiveCfg = Model|Any CPU
+		{ABE948FB-247E-4955-B3AB-B7C93E10A542}.QA|Any CPU.Build.0 = Model|Any CPU
+		{ABE948FB-247E-4955-B3AB-B7C93E10A542}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ABE948FB-247E-4955-B3AB-B7C93E10A542}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ABE948FB-247E-4955-B3AB-B7C93E10A542}.Test|Any CPU.ActiveCfg = Test|Any CPU
+		{ABE948FB-247E-4955-B3AB-B7C93E10A542}.Test|Any CPU.Build.0 = Test|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{7BBC4F28-A376-4D24-B8B1-5BC46AD2170A} = {6B85F8FA-6A1C-4A70-AB03-110E75DE68EB}
+		{1B3148A8-FB57-4461-91BC-F1CD38A013B6} = {7BBC4F28-A376-4D24-B8B1-5BC46AD2170A}
 		{6033A8EA-A3EF-4182-BFDD-4A9826ECF871} = {6B85F8FA-6A1C-4A70-AB03-110E75DE68EB}
+		{017DC6E8-FB93-4303-AAF9-52E2449F9A34} = {7BBC4F28-A376-4D24-B8B1-5BC46AD2170A}
+		{7BBC4F28-A376-4D24-B8B1-5BC46AD2170A} = {6B85F8FA-6A1C-4A70-AB03-110E75DE68EB}
+		{1536CD0A-6308-4DAF-8618-35BBA0816997} = {7BBC4F28-A376-4D24-B8B1-5BC46AD2170A}
 		{25CF3C3F-221F-4A49-B5EF-A8A5FCF9A5BA} = {6B85F8FA-6A1C-4A70-AB03-110E75DE68EB}
 		{99F4EC29-B099-424E-9757-223E67029001} = {6B85F8FA-6A1C-4A70-AB03-110E75DE68EB}
 		{0B6E0ED8-ABE5-4A1D-8E10-0AC54F06D9C4} = {6B85F8FA-6A1C-4A70-AB03-110E75DE68EB}
-		{017DC6E8-FB93-4303-AAF9-52E2449F9A34} = {7BBC4F28-A376-4D24-B8B1-5BC46AD2170A}
-		{1B3148A8-FB57-4461-91BC-F1CD38A013B6} = {7BBC4F28-A376-4D24-B8B1-5BC46AD2170A}
-		{1536CD0A-6308-4DAF-8618-35BBA0816997} = {7BBC4F28-A376-4D24-B8B1-5BC46AD2170A}
+		{ABE948FB-247E-4955-B3AB-B7C93E10A542} = {6B85F8FA-6A1C-4A70-AB03-110E75DE68EB}
 	EndGlobalSection
 EndGlobal

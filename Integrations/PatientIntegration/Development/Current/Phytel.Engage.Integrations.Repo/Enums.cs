@@ -11,6 +11,7 @@ namespace Phytel.Engage.Integrations.Repo.Repositories
         PatientsContractRepository,
         XrefContractRepository,
         PatientNotesRepository,
-        EngageRepository
+        EngageRepository,
+        PCPPhoneRepository
     }
 }

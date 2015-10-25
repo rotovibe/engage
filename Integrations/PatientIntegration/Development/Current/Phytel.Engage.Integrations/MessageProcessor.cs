@@ -5,6 +5,7 @@ using Phytel.API.DataDomain.PatientNote.DTO;
 using Phytel.API.DataDomain.PatientSystem.DTO;
 using Phytel.Engage.Integrations.DomainEvents;
 using Phytel.Engage.Integrations.DTO;
+using Phytel.Engage.Integrations.Repo.DTOs;
 using Phytel.Engage.Integrations.Repo.Repositories;
 using Phytel.Engage.Integrations.Specifications;
 using Phytel.Engage.Integrations.UOW;
@@ -36,6 +37,10 @@ namespace Phytel.Engage.Integrations
                 // load patient notes
                 var pnRepo = RepositoryFactory.GetRepository(message.ContractDataBase,RepositoryType.PatientNotesRepository);
                 PatientsUow.LoadPatientNotes(pnRepo, PatientsUow.Patients, PatientsUow.PatientNotes = new List<PatientNoteData>());
+
+                // load pcpRepo
+                var pcpRepo = RepositoryFactory.GetRepository(message.ContractDataBase, RepositoryType.PCPPhoneRepository);
+                PatientsUow.LoadPcpPhones(pcpRepo, PatientsUow.PCPPhones = new List<PCPPhone>());
 
                 PatientsUow.Commit(message.ContractDataBase);
             }

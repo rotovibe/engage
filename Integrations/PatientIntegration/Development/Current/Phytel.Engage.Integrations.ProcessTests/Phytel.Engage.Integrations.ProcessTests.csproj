@@ -53,7 +53,7 @@
   <ItemGroup>
     <Reference Include="ASECore, Version=2.2.5.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\PhytelCode\Phytel.Net\Services\API\Interfaces\Development\Current\References\ASECore.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\API\Interfaces\Development\Current\References\ASECore.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.1.1\lib\net45\EntityFramework.dll</HintPath>
@@ -65,7 +65,7 @@
     </Reference>
     <Reference Include="Phytel.API.DataDomain.ASE.DTO, Version=2.2.5.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\PhytelCode\Phytel.Net\Services\API\Interfaces\Development\Current\References\Phytel.API.DataDomain.ASE.DTO.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\API\Interfaces\Development\Current\References\Phytel.API.DataDomain.ASE.DTO.dll</HintPath>
     </Reference>
     <Reference Include="ServiceStack, Version=3.9.71.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ServiceStack.3.9.71\lib\net35\ServiceStack.dll</HintPath>

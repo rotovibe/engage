@@ -26,7 +26,7 @@ namespace Phytel.Engage.Integrations.QueueProcess
             LoggerDomainEvent.Raise(LogStatus.Create("*** Atmosphere Import Start ***" + " contract", true));
             XmlDocument doc = new XmlDocument();
             doc.LoadXml(queueMessage.Body);
-            AppConfigSettings.Initialize(base.Configuration.SelectNodes("//Phytel.ASE.Process/ProcessConfiguration/appSettings/add"));
+            //AppConfigSettings.Initialize(base.Configuration.SelectNodes("//Phytel.ASE.Process/ProcessConfiguration/appSettings/add"));
 
             var message = Mapper.Map<RegistryCompleteMessage>(doc.DocumentElement);
             _contractName = message.ContractDataBase;
@@ -49,10 +49,10 @@ namespace Phytel.Engage.Integrations.QueueProcess
 
         private void Logger_EtlEvent(object sender, LogStatus e)
         {
-            if (e.Type == LogType.Error)
-                this.LogError("[" + _contractName + "] : " + e.Message, LogErrorCode.Error, LogErrorSeverity.Critical, string.Empty);
-            else
-                this.LogDebug("[" + _contractName + "] : " + e.Message);
+            //if (e.Type == LogType.Error)
+            //    this.LogError("[" + _contractName + "] : " + e.Message, LogErrorCode.Error, LogErrorSeverity.Critical, string.Empty);
+            //else
+            //    this.LogDebug("[" + _contractName + "] : " + e.Message);
         }
 
         private void InitializeMappings()

@@ -17,6 +17,7 @@ namespace Phytel.Engage.Integrations.Repo
         public ContactEntity()
         {
             this.KeyDatas = new HashSet<KeyData>();
+            this.Phones = new HashSet<Phone>();
         }
     
         public int ID { get; set; }
@@ -48,5 +49,6 @@ namespace Phytel.Engage.Integrations.Repo
         public string CPTGuid { get; set; }
     
         public virtual ICollection<KeyData> KeyDatas { get; set; }
+        public virtual ICollection<Phone> Phones { get; set; }
     }
 }

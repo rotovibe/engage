@@ -54,10 +54,6 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.VisualBasic" />
-    <Reference Include="Phytel.API.Interface, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\PhytelCode\Phytel.Net\Services\API\Interfaces\Development\Current\Phytel.API.Interface\bin\Debug\Phytel.API.Interface.dll</HintPath>
-    </Reference>
     <Reference Include="Phytel.Services.Security, Version=1.4.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Phytel.Services.Security.1.4.0.01\lib\net451\Phytel.Services.Security.dll</HintPath>
       <Private>True</Private>
@@ -137,29 +133,33 @@
     <Compile Include="PatientInfoUtils.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\..\PhytelCode\Phytel.Net\Services\API\Common\Phytel.API.Common\Development\Current\Phytel.API.Common.csproj">
+    <ProjectReference Include="..\..\..\..\..\..\API\Common\Phytel.API.Common\Development\Current\Phytel.API.Common.csproj">
       <Project>{25cf3c3f-221f-4a49-b5ef-a8a5fcf9a5ba}</Project>
       <Name>Phytel.API.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\..\PhytelCode\Phytel.Net\Services\API\DataDomain\Phytel.API.DataDomain.Contact\Development\Current\Contact.DTO\DataDomain.Contact.DTO.csproj">
+    <ProjectReference Include="..\..\..\..\..\..\API\DataDomain\Phytel.API.DataDomain.Contact\Development\Current\Contact.DTO\DataDomain.Contact.DTO.csproj">
       <Project>{0b6e0ed8-abe5-4a1d-8e10-0ac54f06d9c4}</Project>
       <Name>DataDomain.Contact.DTO</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\..\PhytelCode\Phytel.Net\Services\API\DataDomain\Phytel.API.DataDomain.PatientNote\Development\Current\PatientNote.DTO\DataDomain.PatientNote.DTO.csproj">
+    <ProjectReference Include="..\..\..\..\..\..\API\DataDomain\Phytel.API.DataDomain.PatientNote\Development\Current\PatientNote.DTO\DataDomain.PatientNote.DTO.csproj">
       <Project>{99f4ec29-b099-424e-9757-223e67029001}</Project>
       <Name>DataDomain.PatientNote.DTO</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\..\PhytelCode\Phytel.Net\Services\API\DataDomain\Phytel.API.DataDomain.PatientSystem\Development\Current\PatientSystem.DTO\DataDomain.PatientSystem.DTO.csproj">
+    <ProjectReference Include="..\..\..\..\..\..\API\DataDomain\Phytel.API.DataDomain.PatientSystem\Development\Current\PatientSystem.DTO\DataDomain.PatientSystem.DTO.csproj">
       <Project>{6033a8ea-a3ef-4182-bfdd-4a9826ecf871}</Project>
       <Name>DataDomain.PatientSystem.DTO</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\..\PhytelCode\Phytel.Net\Services\API\DataDomain\Phytel.API.DataDomain.Patient\Development\Current\Patient.DTOs\DataDomain.Patient.DTO.csproj">
+    <ProjectReference Include="..\..\..\..\..\..\API\DataDomain\Phytel.API.DataDomain.Patient\Development\Current\Patient.DTOs\DataDomain.Patient.DTO.csproj">
       <Project>{1b3148a8-fb57-4461-91bc-f1cd38a013b6}</Project>
       <Name>DataDomain.Patient.DTO</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\..\PhytelCode\Phytel.Net\Services\API\DataDomain\Phytel.API.DataDomain.Patient\Development\Current\Patient\DataDomain.Patient.csproj">
+    <ProjectReference Include="..\..\..\..\..\..\API\DataDomain\Phytel.API.DataDomain.Patient\Development\Current\Patient\DataDomain.Patient.csproj">
       <Project>{1536cd0a-6308-4daf-8618-35bba0816997}</Project>
       <Name>DataDomain.Patient</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\..\API\Interfaces\Development\Current\Phytel.API.Interface\Phytel.API.Interface.csproj">
+      <Project>{abe948fb-247e-4955-b3ab-b7c93e10a542}</Project>
+      <Name>Phytel.API.Interface</Name>
     </ProjectReference>
     <ProjectReference Include="..\Phytel.Engage.Integrations.DomainEvents\Phytel.Engage.Integrations.DomainEvents.csproj">
       <Project>{a17069bb-da81-41fe-8689-66617109bada}</Project>

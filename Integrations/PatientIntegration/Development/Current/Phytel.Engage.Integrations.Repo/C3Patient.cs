@@ -47,5 +47,6 @@ namespace Phytel.Engage.Integrations.Repo
         public string CommunicationPreference { get; set; }
         public Nullable<bool> OutreachException { get; set; }
         public string Address { get; set; }
+        public string GroupNumber { get; set; }
     }
 }
