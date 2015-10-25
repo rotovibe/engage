@@ -28,7 +28,7 @@ namespace Phytel.Engage.Integrations.Repo.Repositories
                 {
                     var query = (from ce in ct.ContactEntities
                         join c3p in ct.C3Patient on new {ID = ce.ID} equals new {ID = c3p.PatientID}
-                        join se in ct.SubscriberEntities on new {ProviderID = Convert.ToInt32(c3p.ProviderID)} equals new {ProviderID = se.SUBSCRIBERID}
+                        join se in ct.SubscriberEntities on new {ProviderID = c3p.ProviderID ?? default(int)} equals new {ProviderID = se.SUBSCRIBERID}
                         join pn in ct.Phones on new {FACILITYID = se.FACILITYID} equals new {FACILITYID = pn.OwnerID}
                         join rp in ct.ReportPatients on new {ID = ce.ID} equals new {ID = rp.PatientID}
                         join pl in ct.C3ProblemList on new {PatientID = ce.ID} equals new {PatientID = pl.PatientID}
@@ -52,9 +52,9 @@ namespace Phytel.Engage.Integrations.Repo.Repositories
                         {
                             PatientID = ce.ID,
                             PCPId = se.CONTACTENTITYID,
-                            PCP_Name = ((from ContactEntities in ct.ContactEntities where ContactEntities.ID == se.CONTACTENTITYID select new{ Name = (ContactEntities.LastName + ", " + ContactEntities.FirstName) }).First().Name),
-                            Facility = ((from ContactEntities in ct.ContactEntities where ContactEntities.ID == se.FACILITYID select new {ContactEntities.Name}).First().Name),
-                            desc = ((from CommCategory in ct.CommCategories where CommCategory.CommCategoryCode == pn.CategoryCode select new {CommCategory.Description }).First().Description),
+                            PCP_Name = ((from ContactEntities in ct.ContactEntities where ContactEntities.ID == se.CONTACTENTITYID select new{ Name = (ContactEntities.LastName + ", " + ContactEntities.FirstName) }).FirstOrDefault().Name),
+                            Facility = ((from ContactEntities in ct.ContactEntities where ContactEntities.ID == se.FACILITYID select new {ContactEntities.Name}).FirstOrDefault().Name),
+                            desc = ((from CommCategory in ct.CommCategories where CommCategory.CommCategoryCode == pn.CategoryCode select new {CommCategory.Description }).FirstOrDefault().Description),
                             Phone = ("(" + pn.AreaCode + ")" + pn.PhoneNumberString)
                         }).Distinct();
 
