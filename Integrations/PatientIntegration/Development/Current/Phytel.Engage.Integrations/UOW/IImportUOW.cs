@@ -13,6 +13,7 @@ namespace Phytel.Engage.Integrations.UOW
         List<PatientNoteData> PatientNotes { get; set; }
         List<PCPPhone> PCPPhones { get; set; } 
         void Commit(string contract);
+        void Initialize(string contractDb);
         void LoadPatientSystems(Repo.Repositories.IRepository xrepo, List<PatientSystemData> systems);
         void LoadPatients(Repo.Repositories.IRepository repo, List<PatientData> pats);
         void LoadPatientNotes(Repo.Repositories.IRepository repo, List<PatientData> pats, List<PatientNoteData> notes);

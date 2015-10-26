@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Text;
 using System.Threading.Tasks;
 using Phytel.API.Common;
 using Phytel.API.DataDomain.Contact.DTO;
@@ -10,6 +11,7 @@ using Phytel.API.DataDomain.Patient.DTO;
 using Phytel.API.DataDomain.PatientNote.DTO;
 using Phytel.API.DataDomain.PatientSystem.DTO;
 using Phytel.Engage.Integrations.DomainEvents;
+using Phytel.Engage.Integrations.Repo.DTOs;
 using Phytel.Engage.Integrations.Repo.DTOs.SQL;
 using Phytel.Engage.Integrations.Repo.Repositories;
 
@@ -17,6 +19,27 @@ namespace Phytel.Engage.Integrations.UOW
 {
     public class PatientsImportUow : UowBase, IImportUow
     {
+        public IRepositoryFactory RepositoryFactory { get; set; }
+
+        public void Initialize(string contractDb)
+        {
+            // load pcpRepo
+            var pcpRepo = RepositoryFactory.GetRepository(contractDb, RepositoryType.PCPPhoneRepository);
+            LoadPcpPhones(pcpRepo, PCPPhones = new List<PCPPhone>());
+
+            // load patient dictionary
+            var repo = RepositoryFactory.GetRepository(contractDb, RepositoryType.PatientsContractRepository);
+            LoadPatients(repo, Patients = new List<PatientData>());
+
+            // load patient xrefs
+            var xrepo = RepositoryFactory.GetRepository(contractDb, RepositoryType.XrefContractRepository);
+            LoadPatientSystems(xrepo, PatientSystems = new List<PatientSystemData>());
+
+            // load patient notes
+            var pnRepo = RepositoryFactory.GetRepository(contractDb, RepositoryType.PatientNotesRepository);
+            LoadPatientNotes(pnRepo, Patients, PatientNotes = new List<PatientNoteData>());
+        }
+
         public void Commit(string contract)
         {
             try 
@@ -24,6 +47,7 @@ namespace Phytel.Engage.Integrations.UOW
                 LoggerDomainEvent.Raise(new LogStatus { Message = "Commit operation started.", Type = LogType.Debug });
 
                 //1) save patients
+                AssignPatientPCPContactInfo(Patients, PCPPhones);
                 BulkOperation(Patients, contract, new PatientDataDomain());
                 LoggerDomainEvent.Raise(new LogStatus { Message = "1) Saved patients - success", Type = LogType.Debug });
 
@@ -51,6 +75,31 @@ namespace Phytel.Engage.Integrations.UOW
             catch (Exception ex)
             {
                 LoggerDomainEvent.Raise(new LogStatus { Message = "PatientsImportUow:Commit(): " + ex.Message, Type = LogType.Error });
+            }
+        }
+
+        private void AssignPatientPCPContactInfo(List<PatientData> Patients, List<PCPPhone> PCPPhones)
+        {
+            try
+            {
+                Patients.ForEach(p =>
+                {
+                    var phones = PCPPhones.FindAll(f => f.PatientID == Convert.ToInt64(p.ExternalRecordId));
+                    StringBuilder sb = new StringBuilder();
+                    if (phones != null && phones.Count > 0)
+                    {
+                        phones.ForEach(
+                            pd =>
+                            {
+                                sb.Append(pd.PCP_Name + " | " + pd.Phone + " | " + pd.Facility + "; ");
+                            });
+                    }
+                    p.ClinicalBackground = sb.ToString();
+                });
+            }
+            catch (Exception ex)
+            {
+                LoggerDomainEvent.Raise(new LogStatus { Message = "PatientsImportUow:AssignPatientPCPContactInfo(): " + ex.Message, Type = LogType.Error });
             }
         }
 

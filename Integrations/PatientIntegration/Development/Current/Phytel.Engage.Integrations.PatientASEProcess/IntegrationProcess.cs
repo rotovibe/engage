@@ -20,20 +20,32 @@ namespace Phytel.Engage.Integrations.QueueProcess
         private IMessageProcessor Processor { get; set; }
         public IIntegrationCommand<string, string> GetSystemIdCommand { get; set; }
         private string _contractName;
+        
 
         public override void Execute(QueueMessage queueMessage)
         {
-            LoggerDomainEvent.Raise(LogStatus.Create("*** Atmosphere Import Start ***" + " contract", true));
             XmlDocument doc = new XmlDocument();
             doc.LoadXml(queueMessage.Body);
-            //AppConfigSettings.Initialize(base.Configuration.SelectNodes("//Phytel.ASE.Process/ProcessConfiguration/appSettings/add"));
-
             var message = Mapper.Map<RegistryCompleteMessage>(doc.DocumentElement);
             _contractName = message.ContractDataBase;
 
+            LoggerDomainEvent.Raise(LogStatus.Create("*** Atmosphere Import Start ***" + " contract", true));
             LoggerDomainEvent.Raise(LogStatus.Create("Initializing Integration process for : " + message.ContractDataBase  +" contract", true));
+            
             Processor.Process(message);
             LoggerDomainEvent.Raise(LogStatus.Create("Atmosphere Patient Import completed.", true));
+        }
+
+        public IntegrationProcess(XmlNodeList nodes)
+        {
+            Container container = new ContainerInitializer().Build();
+            LoggerDomainEvent.Logger.EtlEvent += Logger_EtlEvent;
+
+            GetSystemIdCommand = container.Resolve<IIntegrationCommand<string, string>>();
+            Processor = container.Resolve<IMessageProcessor>();
+
+            InitializeMappings();
+            AppConfigSettings.Initialize(nodes);
         }
 
         public IntegrationProcess()
@@ -45,14 +57,16 @@ namespace Phytel.Engage.Integrations.QueueProcess
             Processor = container.Resolve<IMessageProcessor>();
 
             InitializeMappings();
+            AppConfigSettings.Initialize(base.Configuration.SelectNodes("//Phytel.ASE.Process/ProcessConfiguration/appSettings/add"));
         }
 
         private void Logger_EtlEvent(object sender, LogStatus e)
         {
-            //if (e.Type == LogType.Error)
-            //    this.LogError("[" + _contractName + "] : " + e.Message, LogErrorCode.Error, LogErrorSeverity.Critical, string.Empty);
-            //else
-            //    this.LogDebug("[" + _contractName + "] : " + e.Message);
+            if (string.IsNullOrEmpty(base.QueuePath)) return;
+            if (e.Type == LogType.Error)
+                this.LogError("[" + _contractName + "] : " + e.Message, LogErrorCode.Error, LogErrorSeverity.Critical, string.Empty);
+            else
+                this.LogDebug("[" + _contractName + "] : " + e.Message);
         }
 
         private void InitializeMappings()

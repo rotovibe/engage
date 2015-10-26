@@ -20,6 +20,7 @@ namespace Phytel.Engage.Integrations.Process.Initialization
 
             container.RegisterAutoWiredAs<SQLConnectionProvider, ISQLConnectionProvider>();
             container.RegisterAutoWiredAs<GetSendingApplicationId, IIntegrationCommand<string, string>>();
+            //container.RegisterAutoWiredAs<RepositoryFactory, IRepositoryFactory>();
 
             container.Register<IImportUow>(
                 c =>
@@ -27,10 +28,10 @@ namespace Phytel.Engage.Integrations.Process.Initialization
                     {
                         ServiceEndpoint = new PatientDataDomain(),
                         Patients = new List<PatientData>(),
-                        PatientSystems = new List<PatientSystemData>()
+                        PatientSystems = new List<PatientSystemData>(),
+                         RepositoryFactory = new RepositoryFactory()
                     });
 
-            container.RegisterAutoWiredAs<RepositoryFactory, IRepositoryFactory>();
             container.RegisterAutoWiredAs<ApplicableContractProvider, IApplicableContractProvider>();
 
             container.Register<IIsApplicableContract<RegistryCompleteMessage>>(

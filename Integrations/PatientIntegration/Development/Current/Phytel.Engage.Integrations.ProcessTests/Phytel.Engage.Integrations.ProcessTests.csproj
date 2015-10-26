@@ -55,6 +55,14 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\..\API\Interfaces\Development\Current\References\ASECore.dll</HintPath>
     </Reference>
+    <Reference Include="AutoMapper, Version=3.2.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.3.2.1\lib\net40\AutoMapper.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="AutoMapper.Net4, Version=3.2.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.3.2.1\lib\net40\AutoMapper.Net4.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.1.1\lib\net45\EntityFramework.dll</HintPath>
       <Private>True</Private>
@@ -101,6 +109,8 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -119,13 +129,29 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\..\PhytelCode\Phytel.Net\Services\API\DataDomain\Phytel.API.DataDomain.PatientSystem\Development\Current\PatientSystem.DTO\DataDomain.PatientSystem.DTO.csproj">
+      <Project>{6033A8EA-A3EF-4182-BFDD-4A9826ECF871}</Project>
+      <Name>DataDomain.PatientSystem.DTO</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Phytel.Engage.Integrations.DomainEvents\Phytel.Engage.Integrations.DomainEvents.csproj">
       <Project>{a17069bb-da81-41fe-8689-66617109bada}</Project>
       <Name>Phytel.Engage.Integrations.DomainEvents</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Phytel.Engage.Integrations.DTO\Phytel.Engage.Integrations.DTO.csproj">
+      <Project>{126D45E4-193C-45AD-9310-9365BA9DE589}</Project>
+      <Name>Phytel.Engage.Integrations.DTO</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Phytel.Engage.Integrations.PatientASEProcess\Phytel.Engage.Integrations.QueueProcess.csproj">
       <Project>{4E23855F-6225-4E71-BFF5-98B6F5616506}</Project>
       <Name>Phytel.Engage.Integrations.QueueProcess</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Phytel.Engage.Integrations.Repo\Phytel.Engage.Integrations.Repo.csproj">
+      <Project>{576E9EC8-3B81-42D0-8246-20485A596DCD}</Project>
+      <Name>Phytel.Engage.Integrations.Repo</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Phytel.Engage.Integrations\Phytel.Engage.Integrations.csproj">
+      <Project>{083F077A-FC9D-470C-9F5C-5059AD808D42}</Project>
+      <Name>Phytel.Engage.Integrations</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -161,6 +187,7 @@
     </PropertyGroup>
     <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
   </Target>
+  <Import Project="..\packages\AutoMapper.3.2.1\tools\AutoMapper.targets" Condition="Exists('..\packages\AutoMapper.3.2.1\tools\AutoMapper.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
