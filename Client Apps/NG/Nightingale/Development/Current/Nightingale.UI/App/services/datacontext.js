@@ -1227,7 +1227,7 @@
 				return true;
 			}
 			
-			if( note.id() < 0 ){
+			if( note.id() < 1 ){
 				isInsert = true;
 				note.createdById(session.currentUser().userId());
 				note.createdOn( new Date() );
