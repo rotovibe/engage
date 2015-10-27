@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Xml;
 
-namespace Phytel.Engage.Integrations.Process
+namespace Phytel.Engage.Integrations.DTO.Config
 {
     public static class AppConfigSettings
     {

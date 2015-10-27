@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Reflection;
 using Phytel.API.DataDomain.Patient.DTO;
+using Phytel.API.DataDomain.PatientSystem.DTO;
 using Phytel.Engage.Integrations.DomainEvents;
 using Phytel.Engage.Integrations.DTO;
 using ServiceStack.Service;

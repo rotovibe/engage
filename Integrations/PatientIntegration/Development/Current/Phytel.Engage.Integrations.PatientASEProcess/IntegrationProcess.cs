@@ -8,6 +8,7 @@ using Phytel.ASE.Core;
 using Phytel.Engage.Integrations.Commands;
 using Phytel.Engage.Integrations.DomainEvents;
 using Phytel.Engage.Integrations.DTO;
+using Phytel.Engage.Integrations.DTO.Config;
 using Phytel.Engage.Integrations.Process;
 using Phytel.Engage.Integrations.Process.Initialization;
 using Phytel.Engage.Integrations.Repo.DTO;
@@ -19,6 +20,7 @@ namespace Phytel.Engage.Integrations.QueueProcess
     {
         private IMessageProcessor Processor { get; set; }
         public IIntegrationCommand<string, string> GetSystemIdCommand { get; set; }
+        public ILoggerEvent LogEvent { get; set; }
         private string _contractName;
         
 
@@ -38,7 +40,8 @@ namespace Phytel.Engage.Integrations.QueueProcess
 
         public IntegrationProcess(XmlNodeList nodes)
         {
-            Container container = new ContainerInitializer().Build();
+            Container container = new ContainerInitializer().Build(this);
+            //LoggerDomainEvent.Logger.EtlEvent += LogEvent.Logger_EtlEvent;
             LoggerDomainEvent.Logger.EtlEvent += Logger_EtlEvent;
 
             GetSystemIdCommand = container.Resolve<IIntegrationCommand<string, string>>();
@@ -50,7 +53,10 @@ namespace Phytel.Engage.Integrations.QueueProcess
 
         public IntegrationProcess()
         {
-            Container container = new ContainerInitializer().Build();
+            Container container = new ContainerInitializer().Build(this);
+
+            LogEvent = container.Resolve<ILoggerEvent>();
+            //LoggerDomainEvent.Logger.EtlEvent += LogEvent.Logger_EtlEvent;
             LoggerDomainEvent.Logger.EtlEvent += Logger_EtlEvent;
 
             GetSystemIdCommand = container.Resolve<IIntegrationCommand<string, string>>();
@@ -62,7 +68,6 @@ namespace Phytel.Engage.Integrations.QueueProcess
 
         private void Logger_EtlEvent(object sender, LogStatus e)
         {
-            if (string.IsNullOrEmpty(base.QueuePath)) return;
             if (e.Type == LogType.Error)
                 this.LogError("[" + _contractName + "] : " + e.Message, LogErrorCode.Error, LogErrorSeverity.Critical, string.Empty);
             else

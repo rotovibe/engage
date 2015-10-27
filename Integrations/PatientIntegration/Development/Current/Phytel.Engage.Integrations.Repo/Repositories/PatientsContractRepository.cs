@@ -53,8 +53,8 @@ namespace Phytel.Engage.Integrations.Repo.Repositories
                                     C3ProblemList.PatientID
                                 }).Distinct()).Contains(new {PatientID = ce.ID})
                             && (new int[]{0}).Contains(c3p.PatientStatusID)
-                            //&& (new int[] { 478006,493302,509210,531607,536306,538123,542605,542612,548320,555121}).Contains(ce.ID) // this is for testing!!!!
-                            && (new int[] { 28124, 38424, 509703, 495517, 497800, 577221, 433112, 563706, 567721, 607607 }).Contains(ce.ID) // testing!!!
+                            && (new int[] { 478006,493302,509210,531607,536306,538123,542605,542612,548320,555121}).Contains(ce.ID) // this is for testing!!!!
+                            //&& (new int[] { 28124, 38424, 509703, 495517, 497800, 577221, 433112, 563706, 567721, 607607 }).Contains(ce.ID) // testing!!!
                         select new PatientInfo
                         {
                             SubscriberId = rp.SubscriberID,

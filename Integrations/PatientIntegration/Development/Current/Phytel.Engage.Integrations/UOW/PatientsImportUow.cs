@@ -56,15 +56,10 @@ namespace Phytel.Engage.Integrations.UOW
                 if (pSys != null && pSys.Count > 0) BulkOperation(pSys, contract, new PatientSystemDataDomain());
                 LoggerDomainEvent.Raise(new LogStatus { Message = "2) Saved patientsystems - success", Type = LogType.Debug });
 
-                //3) save integrationpatientxref
-                var atmoXrefList = GetPatientSystemsToRegister(PatientSaveResults, PatientSystemResults);
-                var repo = new RepositoryFactory().GetRepository(contract, RepositoryType.XrefContractRepository);
-                if (atmoXrefList != null && atmoXrefList.Count > 0) repo.Insert(atmoXrefList.ToList());
-                LoggerDomainEvent.Raise(new LogStatus { Message = "3) Register patients in IntegrationPatientXref - success", Type = LogType.Debug });
 
                 //4) save contact info
                 var contactList = GetPatientContactsToRegister(PatientSaveResults);
-                if(contactList != null && contactList.Count > 0) BulkOperation(contactList, contract, new ContactDataDomain());
+                if (contactList != null && contactList.Count > 0) BulkOperation(contactList, contract, new ContactDataDomain());
                 LoggerDomainEvent.Raise(new LogStatus { Message = "4) Saved contact info - success", Type = LogType.Debug });
 
                 //5) save patient notes
@@ -164,36 +159,6 @@ namespace Phytel.Engage.Integrations.UOW
                 LoggerDomainEvent.Raise(new LogStatus { Message = "PatientsImportUow:GetPatientNotesToRegister(): " + ex.Message, Type = LogType.Error });
                 throw new ArgumentException("PatientsImportUow:GetPatientNotesToRegister(): " + ex.Message);
             }
-        }
-
-        public ConcurrentBag<EIntegrationPatientXref> GetPatientSystemsToRegister(List<HttpObjectResponse<PatientData>> pRes, List<HttpObjectResponse<PatientSystemData>> pSystemRes)
-        {
-            var cb = new ConcurrentBag<EIntegrationPatientXref>();
-
-            var psl = pSystemRes.Where(r => r.Code == HttpStatusCode.Created).ToList();
-            var psIds = pSystemRes.Where(r => r.Code == HttpStatusCode.Created).Select(item => item.Body.PatientId).Distinct().ToList();
-
-            Parallel.ForEach(psIds, r =>
-            //foreach(var r in psIds)
-            {
-                var phytelId = pRes.Where(x => x.Body.Id == r).Select(y => y.Body.ExternalRecordId).FirstOrDefault();
-                var mongoId = pRes.Where(x => x.Body.Id == r).Select(y => y.Body.Id).FirstOrDefault();
-                var engageId = pRes.Where(x => x.Body.Id == r).Select(y => y.Body.EngagePatientSystemValue).FirstOrDefault();
-                var httpObjectResponse = psl.FirstOrDefault(x => x.Body.PatientId == r);
-                
-                if (httpObjectResponse == null) return;
-
-                cb.Add(new EIntegrationPatientXref
-                {
-                    CreateDate = DateTime.Now,
-                    ExternalPatientID = mongoId,
-                    ExternalDisplayPatientId = engageId, //"engageid"
-                    PhytelPatientID = Convert.ToInt32(phytelId), //"phytelid"
-                    SendingApplication = "Engage"
-                });
-            });
-
-            return cb;
         }
 
         public List<PatientSystemData> GetPatientSystemsToLoad(List<PatientSystemData> patientSyss, List<HttpObjectResponse<PatientData>> patientResults)

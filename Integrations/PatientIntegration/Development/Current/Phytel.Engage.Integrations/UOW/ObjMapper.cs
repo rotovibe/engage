@@ -21,7 +21,7 @@ namespace Phytel.Engage.Integrations.UOW
                 Gender = info.Gender,
                 DOB = info.BirthDate.HasValue ? info.BirthDate.Value.ToShortDateString() : string.Empty,
                 // LastFourSSN = info.Ssn.Substring(),
-                LastFourSSN = info.Ssn != null ? Strings.Right(info.Ssn, 4) : string.Empty,
+                LastFourSSN = info.Ssn != null ? Strings.Right(info.Ssn, 4) : null,
                 RecordCreatedOn = info.CreateDate.GetValueOrDefault(),
                 LastUpdatedOn = info.UpdateDate.GetValueOrDefault(),
                 StatusId = PatientInfoUtils.GetStatus(info.Status),

@@ -5,6 +5,7 @@ using Phytel.API.DataDomain.PatientSystem.DTO;
 using Phytel.Engage.Integrations.Commands;
 using Phytel.Engage.Integrations.Configurations;
 using Phytel.Engage.Integrations.DTO;
+using Phytel.Engage.Integrations.QueueProcess;
 using Phytel.Engage.Integrations.Repo.Repositories;
 using Phytel.Engage.Integrations.Specifications;
 using Phytel.Engage.Integrations.UOW;
@@ -14,13 +15,15 @@ namespace Phytel.Engage.Integrations.Process.Initialization
 {
     public class ContainerInitializer : IInitializer<Container>
     {
-        public Container Build()
+        public Container Build(IntegrationProcess process)
         {
             var container = new Container();
 
             container.RegisterAutoWiredAs<SQLConnectionProvider, ISQLConnectionProvider>();
             container.RegisterAutoWiredAs<GetSendingApplicationId, IIntegrationCommand<string, string>>();
             //container.RegisterAutoWiredAs<RepositoryFactory, IRepositoryFactory>();
+
+            container.Register<ILoggerEvent>(c => new LoggerEvent { Process = process});
 
             container.Register<IImportUow>(
                 c =>

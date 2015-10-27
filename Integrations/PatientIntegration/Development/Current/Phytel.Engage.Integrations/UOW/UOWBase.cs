@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using System.Net;
 using System.Reflection;
+using System.Threading.Tasks;
 using AutoMapper;
 using Phytel.API.DataDomain.Patient.DTO;
 using Phytel.Engage.Integrations.Extensions;
@@ -12,7 +15,10 @@ using Phytel.API.Common;
 using Phytel.API.DataDomain.PatientNote.DTO;
 using Phytel.Engage.Integrations.DomainEvents;
 using Phytel.Engage.Integrations.DTO;
+using Phytel.Engage.Integrations.DTO.Config;
 using Phytel.Engage.Integrations.Repo.DTO;
+using Phytel.Engage.Integrations.Repo.DTOs.SQL;
+using Phytel.Engage.Integrations.Repo.Repositories;
 
 namespace Phytel.Engage.Integrations.UOW
 {
@@ -39,7 +45,7 @@ namespace Phytel.Engage.Integrations.UOW
                     BatchRequest(pocos, contract, domain);
                 }
                 else
-                    HandleResponse(domain.Save(pocos, contract));
+                    HandleResponse(domain.Save(pocos, contract), contract);
             }
             catch (Exception ex)
             {
@@ -61,7 +67,7 @@ namespace Phytel.Engage.Integrations.UOW
                     var savePatients = pocos.Batch(take).ToList()[i];
 
                     var enumerable = savePatients as IList<T> ?? savePatients.ToList();
-                    HandleResponse(domain.Save(enumerable, contract));
+                    HandleResponse(domain.Save(enumerable, contract), contract);
 
                     count = count + enumerable.Count();
                     LoggerDomainEvent.Raise(LogStatus.Create("Patients saved:" + count, true));
@@ -74,7 +80,7 @@ namespace Phytel.Engage.Integrations.UOW
             }
         }
 
-        public void HandleResponse<T>(T list)
+        public void HandleResponse<T>(T list, string contract)
         {
             try
             {
@@ -86,6 +92,12 @@ namespace Phytel.Engage.Integrations.UOW
                 else if (list.GetType() == typeof (List<HttpObjectResponse<PatientData>>))
                 {
                     PatientSaveResults.AddRange(list as List<HttpObjectResponse<PatientData>>);
+                    
+                    // save integrationpatientxref
+                    var atmoXrefList = GetIntegrationXrefToSave(list as List<HttpObjectResponse<PatientData>>);
+                    var repo = new RepositoryFactory().GetRepository(contract, RepositoryType.XrefContractRepository);
+                    if (atmoXrefList != null && atmoXrefList.Count > 0) repo.Insert(atmoXrefList.ToList());
+                    LoggerDomainEvent.Raise(new LogStatus { Message = "Register patients in IntegrationPatientXref - success", Type = LogType.Debug });
                 }
             }
             catch (Exception ex)
@@ -93,6 +105,66 @@ namespace Phytel.Engage.Integrations.UOW
                 LoggerDomainEvent.Raise(LogStatus.Create("UowBase:HandleResponse(): " + ex.Message, false));
                 throw new ArgumentException("UowBase:HandleResponse(): " + ex.Message);
             }
+        }
+
+        public ConcurrentBag<EIntegrationPatientXref> GetIntegrationXrefToSave(List<HttpObjectResponse<PatientData>> pRes)
+        {
+            var cb = new ConcurrentBag<EIntegrationPatientXref>();
+
+            //var psl = pSystemRes.Where(r => r.Code == HttpStatusCode.Created).ToList();
+            var pIds = pRes.Where(r => r.Code == HttpStatusCode.Created).Select(item => item.Body.Id).Distinct().ToList();
+
+            //Parallel.ForEach(pIds, r =>
+            foreach(var r in pIds)
+            {
+                var phytelId = pRes.Where(x => x.Body.Id == r).Select(y => y.Body.ExternalRecordId).FirstOrDefault();
+                var mongoId = pRes.Where(x => x.Body.Id == r).Select(y => y.Body.Id).FirstOrDefault();
+                var engageId = pRes.Where(x => x.Body.Id == r).Select(y => y.Body.EngagePatientSystemValue).FirstOrDefault();
+                //var httpObjectResponse = psl.FirstOrDefault(x => x.Body.PatientId == r);
+
+               // if (httpObjectResponse == null) return;
+
+                cb.Add(new EIntegrationPatientXref
+                {
+                    CreateDate = DateTime.Now,
+                    ExternalPatientID = mongoId,
+                    ExternalDisplayPatientId = engageId, //"engageid"
+                    PhytelPatientID = Convert.ToInt32(phytelId), //"phytelid"
+                    SendingApplication = "Engage"
+                });
+            }//);
+
+            return cb;
+        }
+
+        public ConcurrentBag<EIntegrationPatientXref> GetPatientSystemsToRegister(List<HttpObjectResponse<PatientData>> pRes, List<HttpObjectResponse<PatientSystemData>> pSystemRes)
+        {
+            var cb = new ConcurrentBag<EIntegrationPatientXref>();
+
+            var psl = pSystemRes.Where(r => r.Code == HttpStatusCode.Created).ToList();
+            var psIds = pSystemRes.Where(r => r.Code == HttpStatusCode.Created).Select(item => item.Body.PatientId).Distinct().ToList();
+
+            Parallel.ForEach(psIds, r =>
+            //foreach(var r in psIds)
+            {
+                var phytelId = pRes.Where(x => x.Body.Id == r).Select(y => y.Body.ExternalRecordId).FirstOrDefault();
+                var mongoId = pRes.Where(x => x.Body.Id == r).Select(y => y.Body.Id).FirstOrDefault();
+                var engageId = pRes.Where(x => x.Body.Id == r).Select(y => y.Body.EngagePatientSystemValue).FirstOrDefault();
+                var httpObjectResponse = psl.FirstOrDefault(x => x.Body.PatientId == r);
+
+                if (httpObjectResponse == null) return;
+
+                cb.Add(new EIntegrationPatientXref
+                {
+                    CreateDate = DateTime.Now,
+                    ExternalPatientID = mongoId,
+                    ExternalDisplayPatientId = engageId, //"engageid"
+                    PhytelPatientID = Convert.ToInt32(phytelId), //"phytelid"
+                    SendingApplication = "Engage"
+                });
+            });
+
+            return cb;
         }
 
         public void LoadPatientSystems(Repo.Repositories.IRepository xrepo, List<PatientSystemData> systems)

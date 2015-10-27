@@ -52,6 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AppConfigSettings.cs" />
     <Compile Include="EngageId.cs" />
     <Compile Include="ProcConstants.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

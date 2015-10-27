@@ -1,7 +1,9 @@
-﻿namespace Phytel.Engage.Integrations.Process.Initialization
+﻿using Phytel.Engage.Integrations.QueueProcess;
+
+namespace Phytel.Engage.Integrations.Process.Initialization
 {
     public interface IInitializer<T>
     {
-        T Build();
+        T Build(IntegrationProcess process);
     }
 }
