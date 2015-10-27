@@ -210,23 +210,23 @@
 			});
 			self.isShowing = self.settings.data.isShowing;
 			self.cancel = function () {
-				self.newNote().entityAspect.rejectChanges();
-				self.createNewNote();
-				self.isShowing(false);
-			};
-			self.cancelTouchPoint = function () {
-				self.newTouchPoint().entityAspect.rejectChanges();
-				// If there is a new touch point subscription,
-				if (self.newTouchPointToken) {
-					// Dispose of it
-					self.newTouchPointToken.dispose();
+				if( self.newNote() ){
+					self.newNote().entityAspect.rejectChanges();
+					self.createNewNote();
 				}
-				self.createNewTouchPoint();
-				self.isShowing(false);
-			};
-			self.cancelUtilization = function () {
-				self.newUtilization().entityAspect.rejectChanges();
-				self.createNewUtilization();
+				if( self.newTouchPoint() ){
+					self.newTouchPoint().entityAspect.rejectChanges();
+					// If there is a new touch point subscription,
+					if (self.newTouchPointToken) {
+						// Dispose of it
+						self.newTouchPointToken.dispose();
+					}
+					self.createNewTouchPoint();
+				}
+				if( self.newUtilization() ){
+					self.newUtilization().entityAspect.rejectChanges();
+					self.createNewUtilization();
+				}
 				self.isShowing(false);
 			};
 
@@ -294,8 +294,6 @@
 			};
 			self.selectedPatient.subscribe(function () {
 				self.cancel();
-				self.cancelTouchPoint();
-				self.cancelUtilization();
 				historyIndex.activeNote(null);
 			});
 			self.viewDetails = function (sender) {
@@ -351,8 +349,6 @@
 			patientIndex.leaving.subscribe(function (newValue) {
 				if (newValue) {
 					self.cancel();
-					self.cancelTouchPoint();
-					self.cancelUtilization();
 				} else {
 				}
 			});
