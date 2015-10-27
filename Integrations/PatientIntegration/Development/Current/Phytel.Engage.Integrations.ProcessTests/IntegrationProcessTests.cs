@@ -25,8 +25,9 @@ namespace Phytel.Engage.Integrations.ProcessTests
             const string body = @"<RegistryComplete contractid=""465"" contractdatabase=""ORLANDOHEALTH001"" runtype=""Daily"" reportdate=""09/11/1012""/>";
             var queMessage = new QueueMessage {Body = body};
             var xmldoc = LoadTextXmlDoc();
-            var nList = xmldoc.DocumentElement.ChildNodes;
-            var proc = new IntegrationProcess(nList);
+            var nList = xmldoc.DocumentElement;
+            var proc = new IntegrationProcess();
+            proc.Configuration = nList;
             proc.Execute(queMessage);
 
             watch.Stop();

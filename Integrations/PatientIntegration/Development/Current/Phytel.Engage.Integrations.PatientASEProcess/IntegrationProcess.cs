@@ -9,7 +9,6 @@ using Phytel.Engage.Integrations.Commands;
 using Phytel.Engage.Integrations.DomainEvents;
 using Phytel.Engage.Integrations.DTO;
 using Phytel.Engage.Integrations.DTO.Config;
-using Phytel.Engage.Integrations.Process;
 using Phytel.Engage.Integrations.Process.Initialization;
 using Phytel.Engage.Integrations.Repo.DTO;
 using LogType = Phytel.Engage.Integrations.DomainEvents.LogType;
@@ -20,12 +19,13 @@ namespace Phytel.Engage.Integrations.QueueProcess
     {
         private IMessageProcessor Processor { get; set; }
         public IIntegrationCommand<string, string> GetSystemIdCommand { get; set; }
-        public ILoggerEvent LogEvent { get; set; }
         private string _contractName;
-        
+        private readonly bool _debug;
 
         public override void Execute(QueueMessage queueMessage)
         {
+            AppConfigSettings.Initialize(base.Configuration.SelectNodes("//Phytel.ASE.Process/ProcessConfiguration/appSettings/add"));
+
             XmlDocument doc = new XmlDocument();
             doc.LoadXml(queueMessage.Body);
             var message = Mapper.Map<RegistryCompleteMessage>(doc.DocumentElement);
@@ -38,36 +38,20 @@ namespace Phytel.Engage.Integrations.QueueProcess
             LoggerDomainEvent.Raise(LogStatus.Create("Atmosphere Patient Import completed.", true));
         }
 
-        public IntegrationProcess(XmlNodeList nodes)
-        {
-            Container container = new ContainerInitializer().Build(this);
-            //LoggerDomainEvent.Logger.EtlEvent += LogEvent.Logger_EtlEvent;
-            LoggerDomainEvent.Logger.EtlEvent += Logger_EtlEvent;
-
-            GetSystemIdCommand = container.Resolve<IIntegrationCommand<string, string>>();
-            Processor = container.Resolve<IMessageProcessor>();
-
-            InitializeMappings();
-            AppConfigSettings.Initialize(nodes);
-        }
-
         public IntegrationProcess()
         {
-            Container container = new ContainerInitializer().Build(this);
-
-            LogEvent = container.Resolve<ILoggerEvent>();
-            //LoggerDomainEvent.Logger.EtlEvent += LogEvent.Logger_EtlEvent;
+            Container container = new ContainerInitializer().Build();
             LoggerDomainEvent.Logger.EtlEvent += Logger_EtlEvent;
 
             GetSystemIdCommand = container.Resolve<IIntegrationCommand<string, string>>();
             Processor = container.Resolve<IMessageProcessor>();
 
             InitializeMappings();
-            AppConfigSettings.Initialize(base.Configuration.SelectNodes("//Phytel.ASE.Process/ProcessConfiguration/appSettings/add"));
         }
 
         private void Logger_EtlEvent(object sender, LogStatus e)
         {
+            //if (_debug) return;
             if (e.Type == LogType.Error)
                 this.LogError("[" + _contractName + "] : " + e.Message, LogErrorCode.Error, LogErrorSeverity.Critical, string.Empty);
             else

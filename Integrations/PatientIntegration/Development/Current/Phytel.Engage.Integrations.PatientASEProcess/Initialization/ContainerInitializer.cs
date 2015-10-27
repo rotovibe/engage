@@ -15,15 +15,13 @@ namespace Phytel.Engage.Integrations.Process.Initialization
 {
     public class ContainerInitializer : IInitializer<Container>
     {
-        public Container Build(IntegrationProcess process)
+        public Container Build()
         {
             var container = new Container();
 
             container.RegisterAutoWiredAs<SQLConnectionProvider, ISQLConnectionProvider>();
             container.RegisterAutoWiredAs<GetSendingApplicationId, IIntegrationCommand<string, string>>();
             //container.RegisterAutoWiredAs<RepositoryFactory, IRepositoryFactory>();
-
-            container.Register<ILoggerEvent>(c => new LoggerEvent { Process = process});
 
             container.Register<IImportUow>(
                 c =>
