@@ -183,7 +183,7 @@ namespace Phytel.API.AppDomain.NG
                         gv.StatusId = gdv.StatusId;
                         gv.Barriers = GoalsUtil.GetChildView(gdv.BarriersData);
                         gv.Tasks = GoalsUtil.GetChildView(gdv.TasksData); ;
-                        gv.Interventions = GoalsUtil.GetChildView(gdv.InterventionsData); ;
+                        gv.Interventions = GoalsUtil.GetChildView(gdv.InterventionsData);
                         result.Add(gv);
                     }
                 }
@@ -769,7 +769,8 @@ namespace Phytel.API.AppDomain.NG
                 TargetDate = pg.TargetDate,
                 TargetValue = pg.TargetValue,
                 TypeId = pg.TypeId,
-                TemplateId = pg.TemplateId
+                TemplateId = pg.TemplateId,
+                Details = pg.Details
             };
             return pgd;
         }

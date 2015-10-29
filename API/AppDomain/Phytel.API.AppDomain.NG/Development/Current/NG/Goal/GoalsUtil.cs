@@ -323,7 +323,8 @@ namespace Phytel.API.AppDomain.NG
                     EndDate = g.EndDate,
                     TargetDate = g.TargetDate,
                     TargetValue = g.TargetValue,
-                    CustomAttributes = GoalsUtil.GetCustomAttributeDetails(g.CustomAttributes, goalAttributesLibrary)
+                    CustomAttributes = GoalsUtil.GetCustomAttributeDetails(g.CustomAttributes, goalAttributesLibrary),
+                    Details = g.Details
                 };
             }
             return goal;

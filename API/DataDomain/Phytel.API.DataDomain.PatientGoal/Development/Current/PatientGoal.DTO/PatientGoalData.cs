@@ -25,5 +25,6 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
         public List<PatientBarrierData> BarriersData { get; set; }
         public List<PatientTaskData> TasksData { get; set; }
         public List<PatientInterventionData> InterventionsData { get; set; }
+        public string Details { get; set; }
     }
 }

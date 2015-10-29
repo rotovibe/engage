@@ -23,5 +23,6 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
         public DateTime? ClosedDate { get; set; }
         public string PatientId { get; set; }
         public bool DeleteFlag { get; set; }
+        public string Details { get; set; }
     }
 }
