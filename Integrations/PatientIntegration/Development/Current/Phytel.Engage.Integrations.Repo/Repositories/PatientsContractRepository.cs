@@ -73,6 +73,7 @@ namespace Phytel.Engage.Integrations.Repo.Repositories
                             PCP = rp.ProviderName,
                             CreateDate = ce.CreateDate,
                             UpdateDate = ce.UpdateDate,
+                            FollowupDueDate = c3p.FollowupDueDate,
                             Status = 
                                 ((from pt in ct.C3Patient
                                     where

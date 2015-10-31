@@ -25,9 +25,10 @@ namespace Phytel.Engage.Integrations.ProcessTests
             const string body = @"<RegistryComplete contractid=""465"" contractdatabase=""ORLANDOHEALTH001"" runtype=""Daily"" reportdate=""09/11/1012""/>";
             var queMessage = new QueueMessage {Body = body};
             var xmldoc = LoadTextXmlDoc();
-            var nList = xmldoc.DocumentElement;
-            var proc = new IntegrationProcess();
-            proc.Configuration = nList;
+            //var nList = xmldoc.DocumentElement.ChildNodes;
+            //var proc = new IntegrationProcess(nList);
+            var proc = new IntegrationProcess{ Debug = true};
+            proc.Configuration = xmldoc.DocumentElement;
             proc.Execute(queMessage);
 
             watch.Stop();
@@ -58,50 +59,64 @@ namespace Phytel.Engage.Integrations.ProcessTests
         {
             XmlDocument xmlDoc = new XmlDocument();
 
-            var root = xmlDoc.CreateElement("AppConfig");
-            xmlDoc.AppendChild(root);
+            //<Phytel.ASE.Process>
+            var aseProcess = xmlDoc.CreateElement("Phytel.ASE.Process");
+            var rootNode = xmlDoc.AppendChild(aseProcess);
+
+            //<ProcessConfiguration>
+            var procConfiguration = xmlDoc.CreateElement("ProcessConfiguration");
+            var procConfig = rootNode.AppendChild(procConfiguration);
+
+            var root = xmlDoc.CreateElement("appSettings");
+            var appConfig = procConfig.AppendChild(root);
 
             //<add key="TakeCount" value="5000" />
             var takeCount = xmlDoc.CreateElement("add");
             takeCount.SetAttribute("key", "TakeCount");
             takeCount.SetAttribute("value", "5000");
-            xmlDoc.DocumentElement.AppendChild(takeCount);
+            appConfig.AppendChild(takeCount);
 
             //<add key="PhytelServicesConnName" value="Phytel" />
             var phytelServicesConnName = xmlDoc.CreateElement("add");
             phytelServicesConnName.SetAttribute("key", "PhytelServicesConnName");
             phytelServicesConnName.SetAttribute("value", "Phytel");
-            xmlDoc.DocumentElement.AppendChild(phytelServicesConnName);
+            appConfig.AppendChild(phytelServicesConnName);
 
             //<add key="Contracts" value="ORLANDOHEALTH001" />
             var contracts = xmlDoc.CreateElement("add");
             contracts.SetAttribute("key", "Contracts");
             contracts.SetAttribute("value", "ORLANDOHEALTH001");
-            xmlDoc.DocumentElement.AppendChild(contracts);
+            appConfig.AppendChild(contracts);
             
             //<add key="DDPatientServiceUrl" value="http://azurePhytelDev.cloudapp.net:59901/Patient" />
             var dDPatientServiceUrl = xmlDoc.CreateElement("add");
             dDPatientServiceUrl.SetAttribute("key", "DDPatientServiceUrl");
             dDPatientServiceUrl.SetAttribute("value", "http://azurePhytelDev.cloudapp.net:59901/Patient");
-            xmlDoc.DocumentElement.AppendChild(dDPatientServiceUrl);
+            appConfig.AppendChild(dDPatientServiceUrl);
 
             //<add key="DDPatientSystemUrl" value="http://azurePhytelDev.cloudapp.net:59901/PatientSystem" />
             var dDPatientSystemUrl = xmlDoc.CreateElement("add");
             dDPatientSystemUrl.SetAttribute("key", "DDPatientSystemUrl");
             dDPatientSystemUrl.SetAttribute("value", "http://azurePhytelDev.cloudapp.net:59901/PatientSystem");
-            xmlDoc.DocumentElement.AppendChild(dDPatientSystemUrl);
+            appConfig.AppendChild(dDPatientSystemUrl);
 
             //<add key="DDPatientNoteUrl" value="http://azurePhytelDev.cloudapp.net:59901/PatientNote" />
             var dPatientSystemUrl = xmlDoc.CreateElement("add");
             dPatientSystemUrl.SetAttribute("key", "DDPatientNoteUrl");
             dPatientSystemUrl.SetAttribute("value", "http://azurePhytelDev.cloudapp.net:59901/PatientNote");
-            xmlDoc.DocumentElement.AppendChild(dPatientSystemUrl);
+            appConfig.AppendChild(dPatientSystemUrl);
 
             //<add key="DDContactServiceUrl" value="http://azurePhytelDev.cloudapp.net:59901/Contact" />   
             var dDContactServiceUrl = xmlDoc.CreateElement("add");
             dDContactServiceUrl.SetAttribute("key", "DDContactServiceUrl");
             dDContactServiceUrl.SetAttribute("value", "http://azurePhytelDev.cloudapp.net:59901/Contact");
-            xmlDoc.DocumentElement.AppendChild(dDContactServiceUrl); 
+            appConfig.AppendChild(dDContactServiceUrl);
+
+            //<add key="DdPatientToDoServiceUrl" value="http://azurePhytelDev.cloudapp.net:59901/Scheduling" /> 
+            var ddPatientToDoServiceUrl = xmlDoc.CreateElement("add");
+            ddPatientToDoServiceUrl.SetAttribute("key", "DdPatientToDoServiceUrl");
+            ddPatientToDoServiceUrl.SetAttribute("value", "http://azurePhytelDev.cloudapp.net:59901/Scheduling");
+            appConfig.AppendChild(ddPatientToDoServiceUrl); 
 
             return xmlDoc;
         }

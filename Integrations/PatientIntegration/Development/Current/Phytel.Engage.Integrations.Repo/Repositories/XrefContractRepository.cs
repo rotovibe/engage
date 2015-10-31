@@ -48,6 +48,7 @@ namespace Phytel.Engage.Integrations.Repo.Repositories
                                  C3ProblemList.ProblemDescription == "ACO BLUE" ||
                                  C3ProblemList.ProblemDescription == "MGDMCARE" ||
                                  C3ProblemList.ProblemDescription.Contains("AVMED") ||
+                                 C3ProblemList.ProblemDescription.Contains("ACO CMS") ||
                                  C3ProblemList.ProblemDescription.StartsWith("CCM "))
                             select new
                             {

@@ -1,24 +1,23 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
 using System.Net;
-using System.Reflection;
 using System.Threading.Tasks;
 using AutoMapper;
-using Phytel.API.DataDomain.Patient.DTO;
-using Phytel.Engage.Integrations.Extensions;
-using Phytel.API.DataDomain.PatientSystem.DTO;
-using Phytel.Engage.Integrations.Repo.DTOs;
 using Phytel.API.Common;
+using Phytel.API.DataDomain.Patient.DTO;
 using Phytel.API.DataDomain.PatientNote.DTO;
+using Phytel.API.DataDomain.PatientSystem.DTO;
+using Phytel.API.DataDomain.Scheduling.DTO;
 using Phytel.Engage.Integrations.DomainEvents;
 using Phytel.Engage.Integrations.DTO;
-using Phytel.Engage.Integrations.DTO.Config;
+using Phytel.Engage.Integrations.Extensions;
 using Phytel.Engage.Integrations.Repo.DTO;
+using Phytel.Engage.Integrations.Repo.DTOs;
 using Phytel.Engage.Integrations.Repo.DTOs.SQL;
 using Phytel.Engage.Integrations.Repo.Repositories;
+using RepositoryType = Phytel.Engage.Integrations.Repo.Repositories.RepositoryType;
 
 namespace Phytel.Engage.Integrations.UOW
 {
@@ -26,12 +25,13 @@ namespace Phytel.Engage.Integrations.UOW
     {
         public IDataDomain ServiceEndpoint { get; set; }
         public Dictionary<int, PatientInfo> PatientDict { get; set; }
-        public List<HttpObjectResponse<PatientData>> PatientSaveResults = new List<HttpObjectResponse<PatientData>>();
-        public List<HttpObjectResponse<PatientSystemData>> PatientSystemResults = new List<HttpObjectResponse<PatientSystemData>>();
+        public List<HttpObjectResponse<PatientData>> PatientSaveResults;
+        public List<HttpObjectResponse<PatientSystemData>> PatientSystemResults;
         public List<PatientSystemData> PatientSystems { get; set; }
         public List<PatientNoteData> PatientNotes { get; set; }
         public List<PatientData> Patients { get; set; }
         public List<PCPPhone> PCPPhones { get; set; }
+        public List<ToDoData> ToDos { get; set; }
 
         internal void BulkOperation<T>(List<T> pocos, string contract, IDataDomain domain)
         {
@@ -58,7 +58,7 @@ namespace Phytel.Engage.Integrations.UOW
         {
             try
             {
-                int take = ProcConstants.TakeCount;
+                var take = ProcConstants.TakeCount;
                 var count = 0;
                 var pages = pocos.Pages(take);
                 for (var i = 0; i <= pages; i++)
@@ -92,12 +92,7 @@ namespace Phytel.Engage.Integrations.UOW
                 else if (list.GetType() == typeof (List<HttpObjectResponse<PatientData>>))
                 {
                     PatientSaveResults.AddRange(list as List<HttpObjectResponse<PatientData>>);
-                    
-                    // save integrationpatientxref
-                    var atmoXrefList = GetIntegrationXrefToSave(list as List<HttpObjectResponse<PatientData>>);
-                    var repo = new RepositoryFactory().GetRepository(contract, RepositoryType.XrefContractRepository);
-                    if (atmoXrefList != null && atmoXrefList.Count > 0) repo.Insert(atmoXrefList.ToList());
-                    LoggerDomainEvent.Raise(new LogStatus { Message = "Register patients in IntegrationPatientXref - success", Type = LogType.Debug });
+                    SaveIntegrationXref(list, contract);
                 }
             }
             catch (Exception ex)
@@ -107,6 +102,15 @@ namespace Phytel.Engage.Integrations.UOW
             }
         }
 
+        private void SaveIntegrationXref<T>(T list, string contract)
+        {
+            // save integrationpatientxref
+            var atmoXrefList = GetIntegrationXrefToSave(list as List<HttpObjectResponse<PatientData>>);
+            var repo = new RepositoryFactory().GetRepository(contract, RepositoryType.XrefContractRepository);
+            if (atmoXrefList != null && atmoXrefList.Count > 0) repo.Insert(atmoXrefList.ToList());
+            LoggerDomainEvent.Raise(new LogStatus{ Message = "Register patients in IntegrationPatientXref - success", Type = LogType.Debug });
+        }
+
         public ConcurrentBag<EIntegrationPatientXref> GetIntegrationXrefToSave(List<HttpObjectResponse<PatientData>> pRes)
         {
             var cb = new ConcurrentBag<EIntegrationPatientXref>();
@@ -114,8 +118,8 @@ namespace Phytel.Engage.Integrations.UOW
             //var psl = pSystemRes.Where(r => r.Code == HttpStatusCode.Created).ToList();
             var pIds = pRes.Where(r => r.Code == HttpStatusCode.Created).Select(item => item.Body.Id).Distinct().ToList();
 
-            //Parallel.ForEach(pIds, r =>
-            foreach(var r in pIds)
+            Parallel.ForEach(pIds, r =>
+            //foreach(var r in pIds)
             {
                 var phytelId = pRes.Where(x => x.Body.Id == r).Select(y => y.Body.ExternalRecordId).FirstOrDefault();
                 var mongoId = pRes.Where(x => x.Body.Id == r).Select(y => y.Body.Id).FirstOrDefault();
@@ -132,7 +136,7 @@ namespace Phytel.Engage.Integrations.UOW
                     PhytelPatientID = Convert.ToInt32(phytelId), //"phytelid"
                     SendingApplication = "Engage"
                 });
-            }//);
+            });
 
             return cb;
         }
@@ -213,15 +217,57 @@ namespace Phytel.Engage.Integrations.UOW
             try
             {
                 var pNotesL = repo.SelectAll();
-                notes.AddRange(
+                var valid =
                     ((List<PatientNote>) pNotesL).Select(
                         pn => new {pn, patient = pats.Find(r => r.ExternalRecordId == pn.PatientId.ToString())})
                         .Where(@t => @t.patient != null)
-                        .Select(@t => ObjMapper.MapPatientNote(@t.patient.Id, @t.pn)));
+                        .Select(@t => ObjMapper.MapPatientNote(@t.patient.Id, @t.pn));
+
+                notes.AddRange(valid);
             }
             catch (Exception ex)
             {
                 LoggerDomainEvent.Raise(LogStatus.Create("UOWBase: LoadPatientNotes():" + ex.Message, false));
+            }
+        }
+
+        public List<ToDoData> ParseToDos(List<HttpObjectResponse<PatientData>> pRes)
+        {
+            try
+            {
+                var list = new List<ToDoData>();
+
+                pRes.ForEach(x =>
+                {
+                    var ptid = Convert.ToInt32(x.Body.ExternalRecordId);
+                    var pt = PatientDict[ptid];
+                    var followUpDate = pt.FollowupDueDate.HasValue ? pt.FollowupDueDate.Value.ToShortDateString() : string.Empty;
+
+                    if (String.IsNullOrEmpty(followUpDate)) return;
+                    var fDate = Convert.ToDateTime(followUpDate).ToUniversalTime();
+                    var val =  fDate > DateTime.UtcNow;
+                    if (val)
+                    {
+                        list.Add(new ToDoData
+                        {
+                            DueDate = fDate,
+                            PatientId = x.Body.Id,
+                            Description = "Follow-up initiated in Coordiante",
+                            Title = "Follow-up Date",
+                            CategoryId = "562a7cf2d43323154c8611aa", // 2 week followup todocategory
+                            PriorityId = 0, // notset
+                            StatusId = 1, // Open
+                            CreatedById = ProcConstants.UserId,
+                            CreatedOn = DateTime.UtcNow
+                        });
+                    }
+                });
+                return list;
+            }
+            catch (Exception ex)
+            {
+                LoggerDomainEvent.Raise(LogStatus.Create("UOWBase: ParseToDos():" + ex.Message, false));
+                throw;
             }
         }
     }

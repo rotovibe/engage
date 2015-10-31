@@ -23,7 +23,7 @@ namespace Phytel.Engage.Integrations.UOW
             try
             {
                 List<HttpObjectResponse<ContactData>> resp = null;
-                var userid = "5602f0f384ac071c989477cf"; // need to find a valid session id.
+                var userid = ProcConstants.UserId; // need to find a valid session id.
                 IRestClient client = new JsonServiceClient();
                 //[Route("/{Context}/{Version}/{ContractNumber}/Batch/Contacts", "POST")]
                 var url =

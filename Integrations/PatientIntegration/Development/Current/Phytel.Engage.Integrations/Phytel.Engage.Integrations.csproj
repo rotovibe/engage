@@ -120,6 +120,7 @@
     <Compile Include="Specifications\IsApplicableContractSpecification.cs" />
     <Compile Include="Specifications\ISpecification.cs" />
     <Compile Include="Specifications\Specification.cs" />
+    <Compile Include="UOW\ToDoDataDomain.cs" />
     <Compile Include="UOW\PatientDataDomain.cs" />
     <Compile Include="UOW\Helper.cs" />
     <Compile Include="UOW\IDataDomain.cs" />
@@ -156,6 +157,10 @@
     <ProjectReference Include="..\..\..\..\..\..\PhytelCode\Phytel.Net\Services\API\DataDomain\Phytel.API.DataDomain.Patient\Development\Current\Patient\DataDomain.Patient.csproj">
       <Project>{1536cd0a-6308-4daf-8618-35bba0816997}</Project>
       <Name>DataDomain.Patient</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\..\PhytelCode\Phytel.Net\Services\API\DataDomain\Phytel.API.DataDomain.Scheduling\Development\Current\Scheduling.DTO\DataDomain.Scheduling.DTO.csproj">
+      <Project>{1E303326-EEC9-42A8-BA50-880AB7AD99B2}</Project>
+      <Name>DataDomain.Scheduling.DTO</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\..\..\PhytelCode\Phytel.Net\Services\API\Interfaces\Development\Current\Phytel.API.Interface\Phytel.API.Interface.csproj">
       <Project>{abe948fb-247e-4955-b3ab-b7c93e10a542}</Project>

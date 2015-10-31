@@ -20,12 +20,11 @@ namespace Phytel.Engage.Integrations.QueueProcess
         private IMessageProcessor Processor { get; set; }
         public IIntegrationCommand<string, string> GetSystemIdCommand { get; set; }
         private string _contractName;
-        private readonly bool _debug;
+        public bool Debug { get; set; }
 
         public override void Execute(QueueMessage queueMessage)
         {
             AppConfigSettings.Initialize(base.Configuration.SelectNodes("//Phytel.ASE.Process/ProcessConfiguration/appSettings/add"));
-
             XmlDocument doc = new XmlDocument();
             doc.LoadXml(queueMessage.Body);
             var message = Mapper.Map<RegistryCompleteMessage>(doc.DocumentElement);
@@ -51,7 +50,7 @@ namespace Phytel.Engage.Integrations.QueueProcess
 
         private void Logger_EtlEvent(object sender, LogStatus e)
         {
-            //if (_debug) return;
+            if (Debug) return;
             if (e.Type == LogType.Error)
                 this.LogError("[" + _contractName + "] : " + e.Message, LogErrorCode.Error, LogErrorSeverity.Critical, string.Empty);
             else
@@ -74,7 +73,10 @@ namespace Phytel.Engage.Integrations.QueueProcess
                 .ForMember(d => d.DataSource, opt => opt.MapFrom(src => "P-Reg"))
                 .ForMember(d => d.PatientId, opt => opt.MapFrom(src => src.PhytelPatientID))
                 .ForMember(d => d.ExternalRecordId, opt => opt.MapFrom(src => src.ID))
-                .ForMember(d => d.StatusId, opt => opt.MapFrom(src => 1));
+                .ForMember(d => d.StatusId, opt => opt.MapFrom(src => 1))
+                .ForMember(d => d.CreatedOn, opt => opt.MapFrom(src => src.CreateDate))
+                .ForMember(d => d.UpdatedById, opt => opt.MapFrom(src => ProcConstants.UserId))
+                .ForMember(d => d.UpdatedOn, opt => opt.MapFrom(src => src.UpdateDate));
         }
     }
 }

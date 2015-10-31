@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
-using System.Reflection;
-using ServiceStack.Service;
-using ServiceStack.ServiceClient.Web;
-using Phytel.API.DataDomain.Patient.DTO;
-using Phytel.API.DataDomain.PatientSystem.DTO;
 using Phytel.API.Common;
+using Phytel.API.DataDomain.PatientSystem.DTO;
 using Phytel.Engage.Integrations.DomainEvents;
 using Phytel.Engage.Integrations.DTO;
+using ServiceStack.Service;
+using ServiceStack.ServiceClient.Web;
 
 namespace Phytel.Engage.Integrations.UOW
 {
@@ -21,7 +18,7 @@ namespace Phytel.Engage.Integrations.UOW
         public object Save<T>(T patientSystems, string contract)
         {
             LoggerDomainEvent.Raise(new LogStatus { Message = "2) Sending insert patientSystem DD request.", Type = LogType.Debug });
-            var userid = "5602f0f384ac071c989477cf"; // need to find a valid session id.
+            var userid = ProcConstants.UserId; // need to find a valid session id.
 
             try
             {
@@ -43,7 +40,7 @@ namespace Phytel.Engage.Integrations.UOW
 
                 InsertBatchPatientSystemsDataResponse dataDomainResponse = client.Post<InsertBatchPatientSystemsDataResponse>(url, (object)request );
 
-                new Helpers().SerializeObject<List<PatientSystemData>>(request.PatientSystemsData, System.Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "\\PatientsSystemExample.txt");
+                new Helpers().SerializeObject<List<PatientSystemData>>(request.PatientSystemsData, Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "\\PatientsSystemExample.txt");
                 //var lPsd = Helpers.DeserializeObject<List<PatientSystemData>>(System.Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "\\PatientsSystemExample.txt");
 
                 var result = dataDomainResponse.Responses;

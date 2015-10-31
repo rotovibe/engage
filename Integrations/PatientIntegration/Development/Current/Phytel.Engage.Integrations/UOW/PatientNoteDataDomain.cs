@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
-using System.Reflection;
 using Phytel.API.Common;
-using Phytel.API.DataDomain.Patient.DTO;
 using Phytel.API.DataDomain.PatientNote.DTO;
 using Phytel.Engage.Integrations.DomainEvents;
 using Phytel.Engage.Integrations.DTO;
@@ -19,7 +16,7 @@ namespace Phytel.Engage.Integrations.UOW
         public object Save<T>(T patientNotes, string contract)
         {
             LoggerDomainEvent.Raise(new LogStatus { Message = "5) Sending insert PatientNotes DD request.", Type = LogType.Debug });
-            var userid = "5602f0f384ac071c989477cf"; // need to find a valid session id.
+            var userid = ProcConstants.UserId; // need to find a valid session id.
             try
             {
                 IRestClient client = new JsonServiceClient();
@@ -39,7 +36,7 @@ namespace Phytel.Engage.Integrations.UOW
                         Version = 1
                     });
 
-                new Helpers().SerializeObject<List<PatientNoteData>>(patientNotes as List<PatientNoteData>, System.Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "\\PatientNotesExample.txt");
+                new Helpers().SerializeObject<List<PatientNoteData>>(patientNotes as List<PatientNoteData>, Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "\\PatientNotesExample.txt");
                 //var lPsd = Helpers.DeserializeObject<List<PatientSystemData>>(System.Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "\\PatientsSystemExample.txt");
 
                 LoggerDomainEvent.Raise(new LogStatus { Message = "5) Success", Type = LogType.Debug });

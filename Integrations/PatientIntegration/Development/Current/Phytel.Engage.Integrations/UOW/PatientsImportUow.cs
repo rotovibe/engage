@@ -46,6 +46,13 @@ namespace Phytel.Engage.Integrations.UOW
             { 
                 LoggerDomainEvent.Raise(new LogStatus { Message = "Commit operation started.", Type = LogType.Debug });
 
+                // initialize save results
+                if(PatientSaveResults != null) PatientSaveResults.Clear();
+                PatientSaveResults = new List<HttpObjectResponse<PatientData>>();
+
+                if (PatientSystemResults != null) PatientSystemResults.Clear();
+                PatientSystemResults = new List<HttpObjectResponse<PatientSystemData>>();
+
                 //1) save patients
                 AssignPatientPCPContactInfo(Patients, PCPPhones);
                 BulkOperation(Patients, contract, new PatientDataDomain());
@@ -56,16 +63,21 @@ namespace Phytel.Engage.Integrations.UOW
                 if (pSys != null && pSys.Count > 0) BulkOperation(pSys, contract, new PatientSystemDataDomain());
                 LoggerDomainEvent.Raise(new LogStatus { Message = "2) Saved patientsystems - success", Type = LogType.Debug });
 
-
-                //4) save contact info
+                //3) save contact info
                 var contactList = GetPatientContactsToRegister(PatientSaveResults);
                 if (contactList != null && contactList.Count > 0) BulkOperation(contactList, contract, new ContactDataDomain());
-                LoggerDomainEvent.Raise(new LogStatus { Message = "4) Saved contact info - success", Type = LogType.Debug });
+                LoggerDomainEvent.Raise(new LogStatus { Message = "3) Saved contact info - success", Type = LogType.Debug });
 
-                //5) save patient notes
+                //4) save patient notes
                 var patientNotesList = GetPatientNotesToRegister(PatientSaveResults, PatientNotes);
                 if (patientNotesList != null && patientNotesList.Count > 0) BulkOperation(patientNotesList, contract, new PatientNoteDataDomain());
-                LoggerDomainEvent.Raise(new LogStatus { Message = "5) Saved Patient notes - success", Type = LogType.Debug });
+                LoggerDomainEvent.Raise(new LogStatus { Message = "4) Saved Patient notes - success", Type = LogType.Debug });
+
+                // 5) save todos from patientnoteslist
+                var toDoList = ParseToDos(PatientSaveResults);
+                if (toDoList != null && toDoList.Count > 0) BulkOperation(toDoList, contract, new ToDoDataDomain());
+                LoggerDomainEvent.Raise(new LogStatus { Message = "5) Saved Patient ToDos - success", Type = LogType.Debug });
+
             }
             catch (Exception ex)
             {
@@ -116,13 +128,14 @@ namespace Phytel.Engage.Integrations.UOW
                                 {
                                     PatientId = mongoPtId,
                                     CreatedOn = ptInfo.CreateDate != null ? Convert.ToDateTime(ptInfo.CreateDate) : default(DateTime),
-                                    FirstName = ptInfo.FirstName,
-                                    Gender = ptInfo.Gender,
-                                    LastName = ptInfo.LastName,
-                                    MiddleName = ptInfo.MiddleInitial,
+                                    //FirstName = ptInfo.FirstName,
+                                    //Gender = ptInfo.Gender,
+                                    //LastName = ptInfo.LastName,
+                                    //MiddleName = ptInfo.MiddleInitial,
                                     UserId = API.DataDomain.Patient.Constants.SystemContactId,
-                                    PreferredName = ptInfo.FirstName + " " + ptInfo.LastName,
-                                    Phones = new List<PhoneData>{new PhoneData{DataSource = "P-Reg", Number = Convert.ToInt64(ptInfo.Phone), TypeId = "52e18c2ed433232028e9e3a6"}}
+                                    //PreferredName = ptInfo.FirstName + " " + ptInfo.LastName,
+                                    Phones = new List<PhoneData>{new PhoneData{DataSource = "P-Reg", Number = Convert.ToInt64(ptInfo.Phone), TypeId = "52e18c2ed433232028e9e3a6"}},
+                                    RecentsList = null
                                 });
                 });
                 return list.ToList();
@@ -168,8 +181,10 @@ namespace Phytel.Engage.Integrations.UOW
                 var pdList = new ConcurrentBag<PatientSystemData>();
                 var patientsIds = patientResults.Where(r => r.Code == HttpStatusCode.Created).Select(item => item.Body.ExternalRecordId).ToList();
 
-                Parallel.ForEach(patientsIds, r =>
+                //Parallel.ForEach(patientsIds, r =>
+                patientsIds.ForEach( r =>
                 {
+                    // find all relevant patient system entries.
                     var pslist = patientSyss.FindAll(x => x.PatientId == r).ToList();
                     var pd = patientResults.Where(x => x.Body.ExternalRecordId == r).Select(p => p.Body).FirstOrDefault();
 

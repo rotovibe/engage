@@ -16,7 +16,8 @@ namespace Phytel.Engage.Integrations.DTO.Config
             //<add key="DDPatientServiceUrl" value="http://azurePhytelDev.cloudapp.net:59901/Patient" />
             //<add key="DDPatientSystemUrl" value="http://azurePhytelDev.cloudapp.net:59901/PatientSystem" />
             //<add key="DDPatientNoteUrl" value="http://azurePhytelDev.cloudapp.net:59901/PatientNote" />
-            //<add key="DDContactServiceUrl" value="http://azurePhytelDev.cloudapp.net:59901/Contact" />    
+            //<add key="DDContactServiceUrl" value="http://azurePhytelDev.cloudapp.net:59901/Contact" /> 
+            //<add key="DdPatientToDoServiceUrl" value="http://azurePhytelDev.cloudapp.net:59901/Scheduling" /> 
             //</appSettings> 
             //</ProcessConfiguration>
             //</Phytel.ASE.Process>
@@ -44,6 +45,9 @@ namespace Phytel.Engage.Integrations.DTO.Config
                         break;
                     case "DDContactServiceUrl":
                         DTO.ProcConstants.DdContactServiceUrl = n.Attributes.GetNamedItem("value").Value;
+                        break;
+                    case "DdPatientToDoServiceUrl":
+                        DTO.ProcConstants.DdPatientToDoServiceUrl = n.Attributes.GetNamedItem("value").Value;
                         break;
                 }
             }
