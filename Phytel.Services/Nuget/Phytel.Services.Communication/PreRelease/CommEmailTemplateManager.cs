@@ -12,7 +12,7 @@ using System.Xml;
 using Phytel.Services;
 using Phytel.Services.Security;
 
-namespace Phytel.Outreach.CommMgr
+namespace Phytel.Services.Communication
 {
     public class CommEmailTemplateManager
     {

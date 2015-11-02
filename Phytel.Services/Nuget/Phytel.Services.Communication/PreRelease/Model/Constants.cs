@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Phytel.Outreach.CommMgr
+namespace Phytel.Services.Communication
 {
     public static class TaskTypeCategory
     {

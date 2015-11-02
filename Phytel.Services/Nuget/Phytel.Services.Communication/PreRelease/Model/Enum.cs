@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Phytel.API.DataDomain.Communication.DTO
+namespace Phytel.Services.Communication
 {
     public enum ScheduleTypes
     {
