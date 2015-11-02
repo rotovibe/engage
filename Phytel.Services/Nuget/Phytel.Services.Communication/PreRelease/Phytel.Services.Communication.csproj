@@ -7,8 +7,8 @@
     <ProjectGuid>{FE528206-5DFA-488E-A579-3C7B527911E4}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Phytel.Services.Comm</RootNamespace>
-    <AssemblyName>Phytel.Services.Comm</AssemblyName>
+    <RootNamespace>Phytel.Services.Communication</RootNamespace>
+    <AssemblyName>Phytel.Services.Communication</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
