@@ -1275,7 +1275,7 @@ namespace Phytel.Services.Communication
             }
         }
 
-        internal void HandleXMlSpecialCharacters(ref string innerText)
+        public void HandleXMlSpecialCharacters(ref string innerText)
         {
             if (!String.IsNullOrEmpty(innerText) && !String.IsNullOrEmpty(innerText.Trim()))
             {
