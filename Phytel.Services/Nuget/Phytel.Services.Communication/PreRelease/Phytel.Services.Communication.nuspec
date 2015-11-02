@@ -15,6 +15,6 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="..\..\bin\Phytel.Services.Communication.dll" target="lib\net451\Phytel.Services.Communication.dll" />
+    <file src="..\bin\Phytel.Services.Communication.dll" target="lib\net451\Phytel.Services.Communication.dll" />
   </files>
 </package>
