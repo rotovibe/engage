@@ -1,5 +1,5 @@
 ﻿
-namespace Phytel.API.DataDomain.Communication.DTO
+namespace Phytel.Services.Communication
 {
     public class ActivityDetail
     {

@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 
-namespace Phytel.API.DataDomain.Communication.DTO
+namespace Phytel.Services.Communication
 {
     public class ActivityMedia
     {
