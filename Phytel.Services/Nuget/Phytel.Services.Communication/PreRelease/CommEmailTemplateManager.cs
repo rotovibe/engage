@@ -19,7 +19,7 @@ namespace Phytel.Services.Communication
         {            
         }
      
-        internal string ProperCase(string input)
+        public string ProperCase(string input)
         {
 
             string pattern = @"\w+|\W+";
@@ -1194,7 +1194,7 @@ namespace Phytel.Services.Communication
             }
         }
 
-        internal void AddMissingObjects(ref Hashtable missingObjects, string missingObjString)
+        public void AddMissingObjects(ref Hashtable missingObjects, string missingObjString)
         {
             if (!missingObjects.ContainsValue(missingObjString))
             {
@@ -1292,7 +1292,7 @@ namespace Phytel.Services.Communication
             }
         }
 
-        internal bool IsAppointmentSpecificMsgEnabled(List<ContractPermission> contractPermissions,  int contactRoleID)
+        public bool IsAppointmentSpecificMsgEnabled(List<ContractPermission> contractPermissions,  int contactRoleID)
         {
             List<ContractPermission> permissionRows = null;
             bool isEnabled = false;
