@@ -148,21 +148,25 @@ namespace ExplorysImport
                                 }
 
                                 //Contact
-                                PutContactDataRequest contactRequest = new PutContactDataRequest
-                                {
+                                ContactData data = new ContactData {
                                     PatientId = responsePatient.Id,
                                     Modes = modes,
                                     TimeZoneId = tZone.Id,
                                     Phones = phones,
                                     Emails = emails,
                                     Addresses = addresses,
+                                };
+                                PutContactDataRequest contactRequest = new PutContactDataRequest
+                                {
+                                    PatientId = responsePatient.Id,
+                                    ContactData = data,
                                     Version = patientRequest.Version,
                                     Context = patientRequest.Context,
                                     ContractNumber = patientRequest.ContractNumber
                                 };
 
                                 PutContactDataResponse responseContact = import.InsertPatientContact(contactRequest, responsePatient.Id.ToString());
-                                if (responseContact.ContactId == null)
+                                if (responseContact.Id == null)
                                 {
                                     throw new Exception("Contact card import request failed.");
                                 }
