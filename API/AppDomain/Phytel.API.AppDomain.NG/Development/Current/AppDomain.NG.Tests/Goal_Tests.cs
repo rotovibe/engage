@@ -155,7 +155,8 @@ namespace Phytel.API.AppDomain.NG.Test
                 StartDate = DateTime.UtcNow,
                 StatusDate = DateTime.UtcNow,
                 StatusId = 1,
-                ClosedDate = DateTime.Parse("2014-10-16T21:50:47.057Z")
+                ClosedDate = DateTime.Parse("2014-10-16T21:50:47.057Z"),
+                Details = "my intervention details"
             };
             request.PatientGoalId = "5440392884ac05070c5682ae";
             request.PatientId = "5325dae6d6a4850adcbba7ae";
@@ -187,7 +188,8 @@ namespace Phytel.API.AppDomain.NG.Test
                 StatusId = 3,
                 ClosedDate = DateTime.UtcNow,
                 TargetDate = DateTime.UtcNow,
-                TargetValue = "new value"
+                TargetValue = "new value",
+                Details = "123 my task details"
             };
             request.PatientGoalId = "543c2eb284ac0509803de12a";
             request.PatientId = "543c2e6b84ac050980224c50";
@@ -213,8 +215,8 @@ namespace Phytel.API.AppDomain.NG.Test
                 Name = "barr 4",
                 PatientGoalId = "543853b184ac050d1cb13183",
                 StatusDate = DateTime.UtcNow,
-                StatusId =  2
-
+                StatusId =  2,
+                Details = "my barrier details 123"
             };
             request.PatientGoalId = "543853b184ac050d1cb13183";
             request.PatientId = "5325db62d6a4850adcbba91e";

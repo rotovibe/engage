@@ -233,7 +233,8 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
                     CreatedById = t.CreatedById,
                     BarrierIds = t.BarrierIds,
                     ClosedDate = t.ClosedDate,
-                    Id = t.Id
+                    Id = t.Id,
+                    Details = t.Details
                 };
                 return pt;
             }
@@ -263,7 +264,8 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
                     AssignedToId = i.AssignedToId,
                     BarrierIds = i.BarrierIds,
                     CategoryId = i.CategoryId,
-                    ClosedDate = i.ClosedDate
+                    ClosedDate = i.ClosedDate,
+                    Details = i.Details
                 };
                 return pi;
             }
@@ -294,7 +296,8 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
                     StartDate = g.StartDate,
                     TargetDate = g.TargetDate,
                     TargetValue = g.TargetValue,
-                    TypeId = g.TypeId
+                    TypeId = g.TypeId,
+                    Details = g.Details
                 };
                 return pg;
             }
@@ -965,7 +968,7 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
                 StartDate = interventionTemplate.StartDate,
                 PatientId = arg.PatientId,
                 StatusDate = interventionTemplate.StatusDate,
-                StatusId = interventionTemplate.StatusId
+                StatusId = interventionTemplate.StatusId                
             };
         }
 

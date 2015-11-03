@@ -129,7 +129,8 @@ namespace Phytel.API.DataDomain.PatientGoal
                             StartDate = b.StartDate,
                             ClosedDate = b.ClosedDate,
                             CreatedById = b.RecordCreatedBy.ToString(),
-                            DeleteFlag = b.DeleteFlag
+                            DeleteFlag = b.DeleteFlag,
+                            Details = b.Details
                         };
                         var mePG = ctx.PatientGoals.Collection.Find(Query.EQ(MEPatientGoal.IdProperty, ObjectId.Parse(interventionData.PatientGoalId))).SetFields(MEPatientGoal.PatientIdProperty, MEPatientGoal.NameProperty).FirstOrDefault();
                         if (mePG != null)
@@ -205,6 +206,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                         uv.Add(MB.Update.Set(MEPatientIntervention.TemplateIdProperty, ObjectId.Parse(pi.TemplateId)));
                     
                     if (pi.Description != null) uv.Add(MB.Update.Set(MEPatientIntervention.DescriptionProperty, pi.Description));
+                    if (pi.Details != null) uv.Add(MB.Update.Set(MEPatientIntervention.DetailProperty, pi.Details));
                     if (pi.StartDate != null)
                     {
                         uv.Add(MB.Update.Set(MEPatientIntervention.StartDateProperty, pi.StartDate));
@@ -339,7 +341,8 @@ namespace Phytel.API.DataDomain.PatientGoal
                                 CreatedById = b.RecordCreatedBy.ToString(),
                                 DeleteFlag = b.DeleteFlag,
                                 GoalName = goalName,
-                                PatientId = patientId
+                                PatientId = patientId,
+                                Details = b.Details
                             };
                             interventionsDataList.Add(interventionData);
                         }
@@ -441,7 +444,8 @@ namespace Phytel.API.DataDomain.PatientGoal
                                 StartDate = b.StartDate,
                                 ClosedDate = b.ClosedDate,
                                 CreatedById = b.RecordCreatedBy.ToString(),
-                                DeleteFlag = b.DeleteFlag
+                                DeleteFlag = b.DeleteFlag,
+                                Details = b.Details
                             };
                             var mePG = ctx.PatientGoals.Collection.Find(Query.EQ(MEPatientGoal.IdProperty, ObjectId.Parse(interventionData.PatientGoalId))).SetFields(MEPatientGoal.PatientIdProperty, MEPatientGoal.NameProperty).FirstOrDefault();
                             if (mePG != null)
@@ -499,7 +503,8 @@ namespace Phytel.API.DataDomain.PatientGoal
                             StartDate = b.StartDate,
                             ClosedDate = b.ClosedDate,
                             CreatedById = b.RecordCreatedBy.ToString(),
-                            DeleteFlag = b.DeleteFlag
+                            DeleteFlag = b.DeleteFlag,
+                            Details = b.Details
                         };
                         var mePG = ctx.PatientGoals.Collection.Find(Query.EQ(MEPatientGoal.IdProperty, ObjectId.Parse(interventionData.PatientGoalId))).SetFields(MEPatientGoal.PatientIdProperty, MEPatientGoal.NameProperty).FirstOrDefault();
                         if (mePG != null)
