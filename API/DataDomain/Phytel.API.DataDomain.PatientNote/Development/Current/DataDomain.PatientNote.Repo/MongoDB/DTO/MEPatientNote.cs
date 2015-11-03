@@ -75,6 +75,11 @@ namespace Phytel.API.DataDomain.PatientNote.Repo
         [BsonIgnoreIfNull(true)]
         public ObjectId? DurationId { get; set; }
 
+        public const string DurationProperty = "dur";
+        [BsonElement(DurationProperty)]
+        [BsonIgnoreIfNull(true)]
+        public int? Duration { get; set; }
+
         public const string ContactedOnProperty = "con";
         [BsonElement(ContactedOnProperty)]
         [BsonIgnoreIfNull(true)]
