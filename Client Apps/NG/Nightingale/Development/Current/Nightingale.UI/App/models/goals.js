@@ -357,15 +357,7 @@ define(['services/session'],
             	barrier.isNew = ko.observable(false);
 				barrier.newDetails = ko.observable();
 				barrier.checkAppend = function () {
-					appendNewDetails( barrier.newDetails, barrier.details );
-					// if( barrier.newDetails() ){
-						// // Append the new details content
-						// var append = '\n' + moment().format('MM-DD-YYYY h:mm A') + ' ';
-						// append += (' ' + session.currentUser().firstName() + ' ' + session.currentUser().lastName());
-						// append += (' - ' + barrier.newDetails());
-						// barrier.details(barrier.details() ? barrier.details() + append : append);
-						// barrier.newDetails('');
-					// }
+					appendNewDetails( barrier.newDetails, barrier.details );					
 				};
 		        barrier.relatedInterventions = ko.computed(function () {
 		            checkDataContext();
@@ -414,12 +406,6 @@ define(['services/session'],
 				goal.newDetails = ko.observable();
 				goal.checkAppend = function () {
 					appendNewDetails( goal.newDetails, goal.details );
-					// // Append the new details content
-					// var append = '\n' + moment().format('MM-DD-YYYY h:mm A') + ' ';
-					// append += (' ' + session.currentUser().firstName() + ' ' + session.currentUser().lastName());
-					// append += (' - ' + goal.newDetails());
-					// goal.details(goal.details() ? goal.details() + append : append);
-					// goal.newDetails('');
 				};
 		        goal.focusAreaString = ko.computed(function () {
 		            checkDataContext();
@@ -470,12 +456,6 @@ define(['services/session'],
 				intervention.newDetails = ko.observable();
 				intervention.checkAppend = function () {
 					appendNewDetails( intervention.newDetails, intervention.details );
-					// // Append the new details content
-					// var append = '\n' + moment().format('MM-DD-YYYY h:mm A') + ' ';
-					// append += (' ' + session.currentUser().firstName() + ' ' + session.currentUser().lastName());
-					// append += (' - ' + intervention.newDetails());
-					// intervention.details(intervention.details() ? intervention.details() + append : append);
-					// intervention.newDetails('');
 				};
 		        intervention.barrierString = ko.computed(function () {
 		            checkDataContext();
@@ -524,12 +504,6 @@ define(['services/session'],
 				task.newDetails = ko.observable();
 				task.checkAppend = function () {
 					appendNewDetails( task.newDetails, task.details );
-					// // Append the new details content
-					// var append = '\n' + moment().format('MM-DD-YYYY h:mm A') + ' ';
-					// append += (' ' + session.currentUser().firstName() + ' ' + session.currentUser().lastName());
-					// append += (' - ' + task.newDetails());
-					// task.details(task.details() ? task.details() + append : append);
-					// task.newDetails('');
 				};
 		        task.barrierString = ko.computed(function () {
 		            checkDataContext();
@@ -660,10 +634,19 @@ define(['services/session'],
 		    }
 		}
 
+		/**
+		*	@param newDetails {observable} 
+		*	@param details {observable} 
+		*	@method appendNewDetails
+		*/
 		function appendNewDetails( newDetails, details ){
 			if( newDetails() ){
-				// Append the new details content
-				var append = '\n' + moment().format('MM-DD-YYYY h:mm A') + ' ';
+				// Append the new details content to details
+				var append = '';
+				if( details() && details().length ){
+					append = '\n'; 
+				}
+				append += moment().format('MM-DD-YYYY h:mm A') + ' ';
 				append += (' ' + session.currentUser().firstName() + ' ' + session.currentUser().lastName());
 				append += (' - ' + newDetails());
 				details(details() ? details() + append : append);

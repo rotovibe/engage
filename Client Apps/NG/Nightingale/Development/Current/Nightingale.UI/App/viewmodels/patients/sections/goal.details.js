@@ -109,6 +109,7 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
         }
 
         function saveBarrier (barrier) {
+			barrier.checkAppend();
             datacontext.saveBarrier(barrier);
         }
 

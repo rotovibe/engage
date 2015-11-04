@@ -73,6 +73,7 @@
             self.toggleSort = data.toggleSort;
             self.canSort = data.canSort ? data.canSort : false;
             self.saveOverride = function () {
+				self.modalEntity().task().checkAppend();
                 datacontext.saveTask(self.modalEntity().task(), 'Update');
 
                 function saveCompleted() {

@@ -183,19 +183,22 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
         }
 
         function save(goal) {
-            // TODO : Call the save goal method
+            goal.checkAppend();
             datacontext.saveGoal(goal);
         }
 
         function saveIntervention (entity) {
+			entity.checkAppend();
             datacontext.saveIntervention(entity);
         }
 
         function saveTask (entity) {
+			entity.checkAppend();
             datacontext.saveTask(entity);
         }
 
         function saveGoal (entity) {
+			entity.checkAppend();
             datacontext.saveGoal(entity);
         }
 
