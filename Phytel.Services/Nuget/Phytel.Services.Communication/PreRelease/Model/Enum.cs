@@ -17,8 +17,8 @@ namespace Phytel.Services.Communication
     {
         NONE = 0,
         PHONE = 1,
-        EMAIL = 2
-
+        EMAIL = 2,
+        TEXT = 3
     }
 
     public enum CommunicationScheduleTypes
