@@ -14,6 +14,19 @@
             self.settings = settings;
             self.task = self.settings.task;
             self.isExpanded = self.task.goal().isExpanded;
+			self.isDetailsExpanded = ko.observable(false);
+			self.hasDetails = ko.computed( function(){
+				var details = self.task.details();
+				return (details != null && details.length > 0);
+			});
+			self.toggleDetailsExpanded = function(){
+				var isOpen = self.isDetailsExpanded();
+				var details = self.task.details();
+				if( !details && !isOpen ){
+					return;
+				}	
+				self.isDetailsExpanded( !self.isDetailsExpanded() );
+			}
             self.editTask = function (task) {
                 // Make sure we have the most current details
                 getGoalDetails(task.goal());
@@ -72,6 +85,7 @@
         }
 
         function saveTask (task) {
+			task.checkAppend();
             datacontext.saveTask(task);
         }
 

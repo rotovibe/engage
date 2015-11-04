@@ -15,6 +15,19 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
             self.goal = self.settings.goal;
             self.selectedPatient = goalsIndex.selectedPatient;
             self.computedGoal = ko.computed(function () { return self.goal; }).extend({ throttle: 60 });
+			self.isGoalDetailsExpanded = ko.observable(false);
+			self.hasDetails = ko.computed( function(){
+				var details = self.goal.details();
+				return (details != null && details.length > 0);
+			});
+			self.toggleGoalDetailsExpanded = function(){
+				var isOpen = self.isGoalDetailsExpanded();
+				var details = self.goal.details();
+				if( !details && !isOpen ){
+					return;
+				}	
+				self.isGoalDetailsExpanded( !self.isGoalDetailsExpanded() );
+			}			
             self.edit = function () {
                 // Edit this goal
                 goalsIndex.editGoal(self.goal, 'Edit Goal');
@@ -91,7 +104,7 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
         };
 
         function save (goal) {
-            // TODO : Call the save goal method
+			goal.checkAppend();			
             datacontext.saveGoal(goal);
         }
 
@@ -137,5 +150,16 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
             });
         }
 
+		ctor.prototype.detached = function() {
+            var self = this;
+			//dispose computeds:
+			self.hasDetails.dispose();
+			self.computedGoal.dispose();
+			
+			//dispose subscriptions:
+            // ko.utils.arrayForEach(subscriptionTokens, function (token) {
+                // token.dispose();
+            // });
+        }
         return ctor;
     });

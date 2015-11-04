@@ -93,9 +93,9 @@
 
     function editGoal(goal, msg) {
       var modalEntity = ko.observable(new ModalEntity(goal));
-      var saveOverride = function () {
-          // TODO : Call the save goal method
-          datacontext.saveGoal(modalEntity().goal);
+      var saveOverride = function () {        
+		modalEntity().goal.checkAppend();		
+        datacontext.saveGoal(modalEntity().goal);
       };
       var cancelOverride = function () {
           var goalCancel = modalEntity().goal;

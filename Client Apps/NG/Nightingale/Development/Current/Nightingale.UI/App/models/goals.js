@@ -30,10 +30,11 @@ define(['services/session'],
 		            targetValue: { dataType: "String" },
 		            startDate: { dataType: "DateTime" },
 		            endDate: { dataType: "DateTime" },
-		            targetDate: { dataType: "DateTime" },
+		            targetDate: { dataType: "DateTime" },					
 		            focusAreaIds: { complexTypeName: "Identifier:#Nightingale", isScalar: false },
 		            programIds: { complexTypeName: "Identifier:#Nightingale", isScalar: false },
-		            customAttributes: { complexTypeName: "Attribute:#Nightingale", isScalar: false }
+		            customAttributes: { complexTypeName: "Attribute:#Nightingale", isScalar: false },
+					details: { dataType: "String" }
 		        },
 		        navigationProperties: {
 		            source: {
@@ -102,7 +103,8 @@ define(['services/session'],
 		            categoryId: { dataType: "String" },
 		            statusId: { dataType: "String" },
 		            patientGoalId: { dataType: "String" },
-		            deleteFlag: { dataType: "Boolean" }
+		            deleteFlag: { dataType: "Boolean" },
+					details: { dataType: "String" }
 		        },
 		        navigationProperties: {
 		            category: {
@@ -139,7 +141,8 @@ define(['services/session'],
 		            patientId: { dataType: "String" },
 		            barrierIds: { complexTypeName: "Identifier:#Nightingale", isScalar: false },
 		            customAttributes: { complexTypeName: "Attribute:#Nightingale", isScalar: false },
-		            deleteFlag: { dataType: "Boolean" }
+		            deleteFlag: { dataType: "Boolean" },
+					details: { dataType: "String" }
 		        },
 		        navigationProperties: {
 		            status: {
@@ -174,7 +177,8 @@ define(['services/session'],
 		            patientId: { dataType: "String" },
                     assignedToId: { dataType: "String" },
 		            barrierIds: { complexTypeName: "Identifier:#Nightingale", isScalar: false },
-		            deleteFlag: { dataType: "Boolean" }
+		            deleteFlag: { dataType: "Boolean" },
+					details: { dataType: "String" }
 		        },
 		        navigationProperties: {
 		            status: {
@@ -351,6 +355,18 @@ define(['services/session'],
 
             function barrierInitializer(barrier) {
             	barrier.isNew = ko.observable(false);
+				barrier.newDetails = ko.observable();
+				barrier.checkAppend = function () {
+					appendNewDetails( barrier.newDetails, barrier.details );
+					// if( barrier.newDetails() ){
+						// // Append the new details content
+						// var append = '\n' + moment().format('MM-DD-YYYY h:mm A') + ' ';
+						// append += (' ' + session.currentUser().firstName() + ' ' + session.currentUser().lastName());
+						// append += (' - ' + barrier.newDetails());
+						// barrier.details(barrier.details() ? barrier.details() + append : append);
+						// barrier.newDetails('');
+					// }
+				};
 		        barrier.relatedInterventions = ko.computed(function () {
 		            checkDataContext();
 		            var interventionList = [];
@@ -395,6 +411,16 @@ define(['services/session'],
 
             function goalInitializer(goal) {
                 goal.isNew = ko.observable(false);
+				goal.newDetails = ko.observable();
+				goal.checkAppend = function () {
+					appendNewDetails( goal.newDetails, goal.details );
+					// // Append the new details content
+					// var append = '\n' + moment().format('MM-DD-YYYY h:mm A') + ' ';
+					// append += (' ' + session.currentUser().firstName() + ' ' + session.currentUser().lastName());
+					// append += (' - ' + goal.newDetails());
+					// goal.details(goal.details() ? goal.details() + append : append);
+					// goal.newDetails('');
+				};
 		        goal.focusAreaString = ko.computed(function () {
 		            checkDataContext();
 		            var thisString = '';
@@ -441,6 +467,16 @@ define(['services/session'],
 		    }
 
 		    function interventionInitializer(intervention) {
+				intervention.newDetails = ko.observable();
+				intervention.checkAppend = function () {
+					appendNewDetails( intervention.newDetails, intervention.details );
+					// // Append the new details content
+					// var append = '\n' + moment().format('MM-DD-YYYY h:mm A') + ' ';
+					// append += (' ' + session.currentUser().firstName() + ' ' + session.currentUser().lastName());
+					// append += (' - ' + intervention.newDetails());
+					// intervention.details(intervention.details() ? intervention.details() + append : append);
+					// intervention.newDetails('');
+				};
 		        intervention.barrierString = ko.computed(function () {
 		            checkDataContext();
 		            var thisString = '';
@@ -485,6 +521,16 @@ define(['services/session'],
 		    }
 
 		    function taskInitializer(task) {
+				task.newDetails = ko.observable();
+				task.checkAppend = function () {
+					appendNewDetails( task.newDetails, task.details );
+					// // Append the new details content
+					// var append = '\n' + moment().format('MM-DD-YYYY h:mm A') + ' ';
+					// append += (' ' + session.currentUser().firstName() + ' ' + session.currentUser().lastName());
+					// append += (' - ' + task.newDetails());
+					// task.details(task.details() ? task.details() + append : append);
+					// task.newDetails('');
+				};
 		        task.barrierString = ko.computed(function () {
 		            checkDataContext();
 		            var thisString = '';
@@ -614,6 +660,17 @@ define(['services/session'],
 		    }
 		}
 
+		function appendNewDetails( newDetails, details ){
+			if( newDetails() ){
+				// Append the new details content
+				var append = '\n' + moment().format('MM-DD-YYYY h:mm A') + ' ';
+				append += (' ' + session.currentUser().firstName() + ' ' + session.currentUser().lastName());
+				append += (' - ' + newDetails());
+				details(details() ? details() + append : append);
+				newDetails('');
+			}
+		}
+		
 		function createMocks(manager) {
 		    //var goalOne = manager.createEntity('Goal', { id: 'goal1', name: 'Improve HDL', patientId: '52f55873072ef709f84e6810' });
 		}

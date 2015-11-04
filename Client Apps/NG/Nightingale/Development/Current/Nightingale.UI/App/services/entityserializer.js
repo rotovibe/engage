@@ -291,7 +291,7 @@
 						.from('fakePath')
 						.where('id', '==', goal.id())
 						.toType('Goal')
-						.select('id, name, patientId, sourceId, typeId, statusId, startDate, endDate, targetValue, targetDate');
+						.select('id, name, patientId, sourceId, typeId, statusId, startDate, endDate, targetValue, targetDate, details');
 				var results = manager.executeQueryLocally(goalQuery);
 				var unwrappedGoal = results[0];
 
@@ -327,7 +327,7 @@
 				thisGoal.EndDate = unwrappedGoal.endDate;
 				thisGoal.TargetValue = unwrappedGoal.targetValue;
 				thisGoal.TargetDate = unwrappedGoal.targetDate;
-
+				thisGoal.Details = unwrappedGoal.details;
 				// ko.utils.arrayForEach(goal.tasks.peek(), function (fulltask) {
 				//     // Go get a projection query of this task
 				//     var taskQuery = breeze.EntityQuery
@@ -427,7 +427,7 @@
 						.from('fakePath')
 						.where('id', '==', intervention.id())
 						.toType('Intervention')
-						.select('id, categoryId, assignedToId, description, statusId, startDate, patientGoalId, patientId, closedDate, deleteFlag');
+						.select('id, categoryId, assignedToId, description, statusId, startDate, patientGoalId, patientId, closedDate, deleteFlag, details');
 				var results = manager.executeQueryLocally(interventionQuery);
 				var thisIntervention = results[0];
 
@@ -443,6 +443,7 @@
 				newIntervention.ClosedDate = thisIntervention.closedDate;
 				newIntervention.PatientGoalId = thisIntervention.patientGoalId;
 				newIntervention.DeleteFlag = thisIntervention.deleteFlag;
+				newIntervention.Details = thisIntervention.details;
 				// newIntervention.PatientId = thisIntervention.patientId;
 				ko.utils.arrayForEach(intervention.barrierIds.peek(), function (barId) {
 						newIntervention.BarrierIds.push(barId.id.peek());
@@ -465,7 +466,7 @@
 						.where('id', '==', task.id())
 						.toType('Task')
 						//.select('id, categoryId, assignedToId, description, statusId, startDate, patientGoalId, patientId');
-						.select('id, description, statusId, targetValue, startDate, targetDate, patientGoalId, patientId, closedDate, statusDate, deleteFlag');
+						.select('id, description, statusId, targetValue, startDate, targetDate, patientGoalId, patientId, closedDate, statusDate, deleteFlag, details');
 				var results = manager.executeQueryLocally(taskQuery);
 				var thisTask = results[0];
 
@@ -483,6 +484,7 @@
 				newTask.PatientGoalId = thisTask.patientGoalId;
 				//newTask.PatientId = thisTask.patientId;
 				newTask.DeleteFlag = thisTask.deleteFlag;
+				newTask.Details = thisTask.details;
 				ko.utils.arrayForEach(task.barrierIds.peek(), function (barId) {
 						newTask.BarrierIds.push(barId.id.peek());
 				});
@@ -512,7 +514,7 @@
 						.from('fakePath')
 						.where('id', '==', barrier.id())
 						.toType('Barrier')
-						.select('id, name, patientGoalId, statusId, categoryId, deleteFlag');
+						.select('id, name, patientGoalId, statusId, categoryId, deleteFlag, details');
 				var results = manager.executeQueryLocally(barrierQuery);
 				var thisBarrier = results[0];
 
@@ -523,7 +525,7 @@
 				newBarrier.StatusId = thisBarrier.statusId;
 				newBarrier.CategoryId = thisBarrier.categoryId;
 				newBarrier.DeleteFlag = thisBarrier.deleteFlag;
-
+				newBarrier.Details = thisBarrier.details;
 				return newBarrier;
 		}
 

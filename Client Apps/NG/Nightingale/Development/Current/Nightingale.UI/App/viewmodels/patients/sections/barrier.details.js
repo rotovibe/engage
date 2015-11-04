@@ -15,6 +15,19 @@
             self.barrier = self.settings.barrier;
             self.computedBarrier = ko.computed(function () { return self.barrier; }).extend({ throttle: 75 });
             self.isExpanded = self.barrier.goal().isExpanded;
+			self.isDetailsExpanded = ko.observable(false);
+			self.hasDetails = ko.computed( function(){
+				var details = self.barrier.details();
+				return (details != null && details.length > 0);
+			});
+			self.toggleDetailsExpanded = function(){
+				var isOpen = self.isDetailsExpanded();
+				var details = self.barrier.details();
+				if( !details && !isOpen ){
+					return;
+				}	
+				self.isDetailsExpanded( !self.isDetailsExpanded() );
+			}
             self.editBarrier = function (barrier) {
             	// Edit this barrier
                 var modalEntity = ko.observable(new ModalEntity(barrier, 'name'));
@@ -97,7 +110,8 @@
             shell.currentModal(modal);
         }
 
-        function saveBarrier (barrier) {
+        function saveBarrier (barrier) {			
+			barrier.checkAppend();			
             datacontext.saveBarrier(barrier);
         }
 

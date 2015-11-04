@@ -14,6 +14,19 @@
             self.settings = settings;
             self.intervention = self.settings.intervention;
             self.isExpanded = self.intervention.goal().isExpanded;
+			self.isDetailsExpanded = ko.observable(false);
+			self.hasDetails = ko.computed( function(){
+				var details = self.intervention.details();
+				return (details != null && details.length > 0);
+			});
+			self.toggleDetailsExpanded = function(){
+				var isOpen = self.isDetailsExpanded();
+				var details = self.intervention.details();
+				if( !details && !isOpen ){
+					return;
+				}	
+				self.isDetailsExpanded( !self.isDetailsExpanded() );
+			}
             self.editIntervention = function (intervention) {
                 // Make sure we have the most up to date goal info
                 getGoalDetails(intervention.goal());
@@ -72,7 +85,8 @@
         }
 
         function saveIntervention(intervention) {
-            // Call the save intervention method
+            // Call the save intervention method			
+			intervention.checkAppend();			
             datacontext.saveIntervention(intervention);
         }
 

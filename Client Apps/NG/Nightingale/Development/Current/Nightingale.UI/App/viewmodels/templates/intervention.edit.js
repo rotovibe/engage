@@ -13,6 +13,10 @@
             self.intervention = ko.unwrap(self.settings.entity);
             // Decides whether we can change status or not
             self.isNew = (self.intervention && self.intervention.goal()) ? self.intervention.goal().isNew : function () { return false; };
+			self.existingDetailsOpen = ko.observable(false);
+			self.toggleOpen = function () {
+				self.existingDetailsOpen(!self.existingDetailsOpen());
+			};
             self.careManagers = ko.computed(function () {
                 var theseCareManagers =  datacontext.enums.careManagers()
                 return theseCareManagers.sort(self.alphabeticalSort);
