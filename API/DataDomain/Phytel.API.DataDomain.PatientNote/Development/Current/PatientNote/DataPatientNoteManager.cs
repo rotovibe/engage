@@ -6,6 +6,7 @@ using DataDomain.PatientNote.Repo;
 using Phytel.API.Common;
 using Phytel.API.DataDomain.PatientNote.DTO;
 using Phytel.API.DataDomain.PatientNote.Repo;
+using Phytel.API.DataAudit;
 
 namespace Phytel.API.DataDomain.PatientNote
 {
@@ -48,10 +49,15 @@ namespace Phytel.API.DataDomain.PatientNote
                         if (result.ProcessedIds != null && result.ProcessedIds.Count > 0)
                         {
                             // Get the PatientSystems that were newly inserted. 
-                            List<PatientNoteData> insertedPatientSystems = repo.Select(result.ProcessedIds) as List<PatientNoteData>;
-                            if (insertedPatientSystems != null && insertedPatientSystems.Count > 0)
+                            List<PatientNoteData> insertedPatientNotes = repo.Select(result.ProcessedIds) as List<PatientNoteData>;
+                            if (insertedPatientNotes != null && insertedPatientNotes.Count > 0)
                             {
-                                insertedPatientSystems.ForEach(r =>
+                                #region DataAudit
+                                List<string> insertedPatientNoteIds = insertedPatientNotes.Select(p => p.Id).ToList();
+                                AuditHelper.LogDataAudit(request.UserId, MongoCollectionName.PatientNote.ToString(), insertedPatientNoteIds, Common.DataAuditType.Insert, request.ContractNumber); 
+                                #endregion
+                                
+                                insertedPatientNotes.ForEach(r =>
                                 {
                                     list.Add(new HttpObjectResponse<PatientNoteData> { Code = HttpStatusCode.Created, Body = (PatientNoteData)new PatientNoteData { Id = r.Id, ExternalRecordId = r.ExternalRecordId, PatientId = r.PatientId } });
                                 });

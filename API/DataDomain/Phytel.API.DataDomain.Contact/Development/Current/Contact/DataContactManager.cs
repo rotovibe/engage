@@ -7,6 +7,7 @@ using MongoDB.Bson;
 using System.Configuration;
 using Phytel.API.Common;
 using System.Net;
+using Phytel.API.DataAudit;
 
 namespace Phytel.API.DataDomain.Contact
 {
@@ -280,6 +281,11 @@ namespace Phytel.API.DataDomain.Contact
                             List<ContactData> insertedContacts = repo.Select(result.ProcessedIds) as List<ContactData>;
                             if (insertedContacts != null && insertedContacts.Count > 0)
                             {
+                                #region DataAudit
+                                List<string> insertedContactIds = insertedContacts.Select(p => p.Id).ToList();
+                                AuditHelper.LogDataAudit(request.UserId, MongoCollectionName.Contact.ToString(), insertedContactIds, Common.DataAuditType.Insert, request.ContractNumber);
+                                #endregion
+                                
                                 insertedContacts.ForEach(r =>
                                 {
                                     list.Add(new HttpObjectResponse<ContactData> { Code = HttpStatusCode.Created, Body = (ContactData)new ContactData { Id = r.Id, PatientId = r.PatientId } });

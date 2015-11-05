@@ -95,6 +95,7 @@ namespace Phytel.API.DataDomain.Patient
 
         public object InsertAll(List<object> entities)
         {
+            List<string> insertedIds = new List<string>();
             try
             {
                 using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
@@ -118,10 +119,11 @@ namespace Phytel.API.DataDomain.Patient
                             meCPV.SearchFields = fields;
                         }
                         bulk.Insert(meCPV.ToBsonDocument());
+                        insertedIds.Add(meCPV.Id.ToString());
                     }
                     BulkWriteResult bwr = bulk.Execute();
                 }
-                // TODO: Auditing.
+                AuditHelper.LogDataAudit(this.UserId, MongoCollectionName.CohortPatientView.ToString(), insertedIds, Common.DataAuditType.Insert, _dbName);
             }
             catch (Exception ex)
             {

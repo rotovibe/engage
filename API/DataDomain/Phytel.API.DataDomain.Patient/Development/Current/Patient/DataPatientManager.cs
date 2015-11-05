@@ -10,6 +10,7 @@ using Phytel.API.DataDomain.PatientSystem.DTO;
 using Phytel.API.Interface;
 using ServiceStack.Service;
 using ServiceStack.ServiceClient.Web;
+using Phytel.API.DataAudit;
 
 
 namespace Phytel.API.DataDomain.Patient
@@ -337,12 +338,26 @@ namespace Phytel.API.DataDomain.Patient
                         List<PatientData> insertedPatients = repo.Select(result.ProcessedIds);
                         if (insertedPatients != null && insertedPatients.Count > 0)
                         {
+                            List<string> insertedPatientIds = insertedPatients.Select(p => p.Id).ToList();
+
+                            #region DataAudit for Patients
+                            AuditHelper.LogDataAudit(request.UserId, MongoCollectionName.Patient.ToString(), insertedPatientIds, Common.DataAuditType.Insert, request.ContractNumber);
+                            #endregion
+
+                            #region BulkInsert CohortPatientView
                             List<CohortPatientViewData> cpvList = getMECohortPatientView(insertedPatients);
                             IPatientRepository cpvRepo = Factory.GetRepository(request, RepositoryType.CohortPatientView);
-                            cpvRepo.InsertAll(cpvList.Cast<object>().ToList());
+                            cpvRepo.InsertAll(cpvList.Cast<object>().ToList()); 
+                            #endregion
 
-                            List<string> processedPatientSystemIds = insertBatchEngagePatientSystem(insertedPatients.Select(p => p.Id).ToList(), request);
+                            #region BulkInsert EngagePatientSystems.
+                            List<string> processedPatientSystemIds = insertBatchEngagePatientSystem(insertedPatientIds, request);
                             List<PatientSystemData> insertedPatientSystems = getPatientSystems(processedPatientSystemIds, request);
+
+                            #region DataAudit for EngagePatientSystems
+                            List<string> insertedPatientSystemIds = insertedPatientSystems.Select(p => p.Id).ToList();
+                            AuditHelper.LogDataAudit(request.UserId, MongoCollectionName.PatientSystem.ToString(), insertedPatientSystemIds, Common.DataAuditType.Insert, request.ContractNumber);
+                            #endregion
 
                             insertedPatients.ForEach(r =>
                             {
@@ -351,7 +366,8 @@ namespace Phytel.API.DataDomain.Patient
                                 if (x != null)
                                     engageValue = x.Value;
                                 list.Add(new HttpObjectResponse<PatientData> { Code = HttpStatusCode.Created, Body = (PatientData)new PatientData { Id = r.Id, ExternalRecordId = r.ExternalRecordId, EngagePatientSystemValue = engageValue } });
-                            });
+                            }); 
+                            #endregion
                         }
                     }
                     result.ErrorMessages.ForEach(e =>

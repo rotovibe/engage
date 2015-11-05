@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using Phytel.API.Common;
 using Phytel.API.DataDomain.PatientSystem.DTO;
+using Phytel.API.DataAudit;
 
 
 namespace Phytel.API.DataDomain.PatientSystem
@@ -190,6 +191,11 @@ namespace Phytel.API.DataDomain.PatientSystem
                             List<PatientSystemData> insertedPatientSystems = repo.Select(result.ProcessedIds);
                             if (insertedPatientSystems != null && insertedPatientSystems.Count > 0)
                             {
+                                #region DataAudit
+                                List<string> insertedPatientSystemIds = insertedPatientSystems.Select(p => p.Id).ToList();
+                                AuditHelper.LogDataAudit(request.UserId, MongoCollectionName.PatientSystem.ToString(), insertedPatientSystemIds, Common.DataAuditType.Insert, request.ContractNumber);
+                                #endregion
+
                                 insertedPatientSystems.ForEach(r =>
                                 {
                                     list.Add(new HttpObjectResponse<PatientSystemData> { Code = HttpStatusCode.Created, Body = (PatientSystemData)new PatientSystemData { Id = r.Id, ExternalRecordId = r.ExternalRecordId, PatientId = r.PatientId } });
