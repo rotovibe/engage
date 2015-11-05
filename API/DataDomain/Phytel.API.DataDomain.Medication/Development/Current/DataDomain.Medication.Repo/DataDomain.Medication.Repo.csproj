@@ -123,9 +123,9 @@
       <Project>{abe948fb-247e-4955-b3ab-b7c93e10a542}</Project>
       <Name>Phytel.API.Interface</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Medication.DTO\Medication.DTO.csproj">
+    <ProjectReference Include="..\Medication.DTO\DataDomain.Medication.DTO.csproj">
       <Project>{006555ba-c927-4ce0-bc5a-7a6a7053d0d5}</Project>
-      <Name>Medication.DTO</Name>
+      <Name>DataDomain.Medication.DTO</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

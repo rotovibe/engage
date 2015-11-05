@@ -1,14 +1,14 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Medication.Service", "Medication.Service\Medication.Service.csproj", "{12D22E0C-BFFF-4F2E-AC47-6B8E50E69861}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Medication.Service", "Medication.Service\DataDomain.Medication.Service.csproj", "{12D22E0C-BFFF-4F2E-AC47-6B8E50E69861}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Medication.Test", "Medication.Test\Medication.Test.csproj", "{B181877E-DD18-412A-B01A-A662764BE6B8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Medication.Test", "Medication.Test\DataDomain.Medication.Test.csproj", "{B181877E-DD18-412A-B01A-A662764BE6B8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Medication", "Medication\Medication.csproj", "{1C19F07A-0F65-4A19-887F-A8DB148D4CA8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Medication", "Medication\DataDomain.Medication.csproj", "{1C19F07A-0F65-4A19-887F-A8DB148D4CA8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Medication.DTO", "Medication.DTO\Medication.DTO.csproj", "{006555BA-C927-4CE0-BC5A-7A6A7053D0D5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Medication.DTO", "Medication.DTO\DataDomain.Medication.DTO.csproj", "{006555BA-C927-4CE0-BC5A-7A6A7053D0D5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.API.Interface", "..\..\..\..\Interfaces\Development\Current\Phytel.API.Interface\Phytel.API.Interface.csproj", "{ABE948FB-247E-4955-B3AB-B7C93E10A542}"
 EndProject
@@ -18,7 +18,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.API.Common", "..\..\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.API.DataAudit", "..\..\..\..\Common\Phytel.API.DataAudit\Development\Current\Phytel.API.DataAudit.csproj", "{AE842695-4DD4-4403-9BE4-8473BCA09580}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Medication.Repository", "DataDomain.Medication.Repo\Medication.Repository.csproj", "{60C6A9F6-D668-4053-8997-8CFE661628DD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Medication.Repo", "DataDomain.Medication.Repo\DataDomain.Medication.Repo.csproj", "{60C6A9F6-D668-4053-8997-8CFE661628DD}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{96185A28-CCA9-4EA7-AD62-038F35DE8FF7}"
 	ProjectSection(SolutionItems) = preProject
@@ -28,6 +28,39 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{96185A
 	EndProjectSection
 EndProject
 Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 9
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = http://hillstfs2013:8080/tfs/phytel
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = Medication.Service\\DataDomain.Medication.Service.csproj
+		SccProjectName1 = Medication.Service
+		SccLocalPath1 = Medication.Service
+		SccProjectUniqueName2 = Medication.Test\\DataDomain.Medication.Test.csproj
+		SccProjectName2 = Medication.Test
+		SccLocalPath2 = Medication.Test
+		SccProjectUniqueName3 = Medication\\DataDomain.Medication.csproj
+		SccProjectName3 = Medication
+		SccLocalPath3 = Medication
+		SccProjectUniqueName4 = Medication.DTO\\DataDomain.Medication.DTO.csproj
+		SccProjectName4 = Medication.DTO
+		SccLocalPath4 = Medication.DTO
+		SccProjectUniqueName5 = ..\\..\\..\\..\\Interfaces\\Development\\Current\\Phytel.API.Interface\\Phytel.API.Interface.csproj
+		SccProjectTopLevelParentUniqueName5 = DataDomain.Medication.sln
+		SccProjectName5 = ../../../../Interfaces/Development/Current/Phytel.API.Interface
+		SccLocalPath5 = ..\\..\\..\\..\\Interfaces\\Development\\Current\\Phytel.API.Interface
+		SccProjectUniqueName6 = ..\\..\\..\\..\\Common\\Phytel.API.Common\\Development\\Current\\Phytel.API.Common.csproj
+		SccProjectTopLevelParentUniqueName6 = DataDomain.Medication.sln
+		SccProjectName6 = ../../../../Common/Phytel.API.Common/Development/Current
+		SccLocalPath6 = ..\\..\\..\\..\\Common\\Phytel.API.Common\\Development\\Current
+		SccProjectUniqueName7 = ..\\..\\..\\..\\Common\\Phytel.API.DataAudit\\Development\\Current\\Phytel.API.DataAudit.csproj
+		SccProjectTopLevelParentUniqueName7 = DataDomain.Medication.sln
+		SccProjectName7 = ../../../../Common/Phytel.API.DataAudit/Development/Current
+		SccLocalPath7 = ..\\..\\..\\..\\Common\\Phytel.API.DataAudit\\Development\\Current
+		SccProjectUniqueName8 = DataDomain.Medication.Repo\\DataDomain.Medication.Repo.csproj
+		SccProjectName8 = DataDomain.Medication.Repo
+		SccLocalPath8 = DataDomain.Medication.Repo
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -73,38 +106,5 @@ Global
 		{ABE948FB-247E-4955-B3AB-B7C93E10A542} = {688504DA-15E9-46D5-B068-020B92F8836D}
 		{25CF3C3F-221F-4A49-B5EF-A8A5FCF9A5BA} = {688504DA-15E9-46D5-B068-020B92F8836D}
 		{AE842695-4DD4-4403-9BE4-8473BCA09580} = {688504DA-15E9-46D5-B068-020B92F8836D}
-	EndGlobalSection
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 9
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = http://192.168.111.123:8080/tfs/phytel
-		SccProjectUniqueName0 = ..\\..\\..\\..\\Interfaces\\Development\\Current\\Phytel.API.Interface\\Phytel.API.Interface.csproj
-		SccProjectTopLevelParentUniqueName0 = Medication.sln
-		SccProjectName0 = ../../../../Interfaces/Development/Current/Phytel.API.Interface
-		SccLocalPath0 = ..\\..\\..\\..\\Interfaces\\Development\\Current\\Phytel.API.Interface
-		SccProjectUniqueName1 = ..\\..\\..\\..\\Common\\Phytel.API.Common\\Development\\Current\\Phytel.API.Common.csproj
-		SccProjectTopLevelParentUniqueName1 = Medication.sln
-		SccProjectName1 = ../../../../Common/Phytel.API.Common/Development/Current
-		SccLocalPath1 = ..\\..\\..\\..\\Common\\Phytel.API.Common\\Development\\Current
-		SccProjectUniqueName2 = ..\\..\\..\\..\\Common\\Phytel.API.DataAudit\\Development\\Current\\Phytel.API.DataAudit.csproj
-		SccProjectTopLevelParentUniqueName2 = Medication.sln
-		SccProjectName2 = ../../../../Common/Phytel.API.DataAudit/Development/Current
-		SccLocalPath2 = ..\\..\\..\\..\\Common\\Phytel.API.DataAudit\\Development\\Current
-		SccLocalPath3 = .
-		SccProjectUniqueName4 = Medication\\Medication.csproj
-		SccProjectName4 = Medication
-		SccLocalPath4 = Medication
-		SccProjectUniqueName5 = Medication.DTO\\Medication.DTO.csproj
-		SccProjectName5 = Medication.DTO
-		SccLocalPath5 = Medication.DTO
-		SccProjectUniqueName6 = DataDomain.Medication.Repo\\Medication.Repository.csproj
-		SccProjectName6 = DataDomain.Medication.Repo
-		SccLocalPath6 = DataDomain.Medication.Repo
-		SccProjectUniqueName7 = Medication.Service\\Medication.Service.csproj
-		SccProjectName7 = Medication.Service
-		SccLocalPath7 = Medication.Service
-		SccProjectUniqueName8 = Medication.Test\\Medication.Test.csproj
-		SccProjectName8 = Medication.Test
-		SccLocalPath8 = Medication.Test
 	EndGlobalSection
 EndGlobal

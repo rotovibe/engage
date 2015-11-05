@@ -155,17 +155,17 @@
       <Project>{d3d050cd-99ac-42dc-94ed-0a49b9b4ccdd}</Project>
       <Name>DataDomain.Search</Name>
     </ProjectReference>
-    <ProjectReference Include="..\DataDomain.Medication.Repo\Medication.Repository.csproj">
+    <ProjectReference Include="..\DataDomain.Medication.Repo\DataDomain.Medication.Repo.csproj">
       <Project>{60C6A9F6-D668-4053-8997-8CFE661628DD}</Project>
-      <Name>Medication.Repository</Name>
+      <Name>DataDomain.Medication.Repo</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Medication.DTO\Medication.DTO.csproj">
+    <ProjectReference Include="..\Medication.DTO\DataDomain.Medication.DTO.csproj">
       <Project>{006555ba-c927-4ce0-bc5a-7a6a7053d0d5}</Project>
-      <Name>Medication.DTO</Name>
+      <Name>DataDomain.Medication.DTO</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Medication\Medication.csproj">
+    <ProjectReference Include="..\Medication\DataDomain.Medication.csproj">
       <Project>{1c19f07a-0f65-4a19-887f-a8db148d4ca8}</Project>
-      <Name>Medication</Name>
+      <Name>DataDomain.Medication</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
