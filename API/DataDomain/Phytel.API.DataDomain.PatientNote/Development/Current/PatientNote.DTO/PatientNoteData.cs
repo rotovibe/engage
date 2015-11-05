@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Phytel.API.DataDomain.PatientNote.DTO
 {
-    [Serializable]
+    
     public class PatientNoteData
     {
         public string Id { get; set; }
