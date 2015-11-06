@@ -12,20 +12,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{52E7DF
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.Services.Communication", "Phytel.Services.Communication\Phytel.Services.Communication.csproj", "{FE528206-5DFA-488E-A579-3C7B527911E4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.Services.Communication.Test", "Phytel.Service.Communication.Test\Phytel.Services.Communication.Test.csproj", "{313ABF49-907B-4AF0-B6CA-244E824ABEA8}"
-EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 3
+		SccNumberOfProjects = 2
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://hillstfs2013.hills.phytel.com:8080/tfs/phytel
 		SccLocalPath0 = .
 		SccProjectUniqueName1 = Phytel.Services.Communication\\Phytel.Services.Communication.csproj
 		SccProjectName1 = Phytel.Services.Communication
 		SccLocalPath1 = Phytel.Services.Communication
-		SccProjectUniqueName2 = Phytel.Service.Communication.Test\\Phytel.Services.Communication.Test.csproj
-		SccProjectName2 = Phytel.Service.Communication.Test
-		SccLocalPath2 = Phytel.Service.Communication.Test
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,10 +31,6 @@ Global
 		{FE528206-5DFA-488E-A579-3C7B527911E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FE528206-5DFA-488E-A579-3C7B527911E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FE528206-5DFA-488E-A579-3C7B527911E4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{313ABF49-907B-4AF0-B6CA-244E824ABEA8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{313ABF49-907B-4AF0-B6CA-244E824ABEA8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{313ABF49-907B-4AF0-B6CA-244E824ABEA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{313ABF49-907B-4AF0-B6CA-244E824ABEA8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
