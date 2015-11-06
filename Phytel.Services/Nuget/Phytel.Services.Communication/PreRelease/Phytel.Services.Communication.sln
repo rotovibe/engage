@@ -12,7 +12,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{52E7DF
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.Services.Communication", "Phytel.Services.Communication\Phytel.Services.Communication.csproj", "{FE528206-5DFA-488E-A579-3C7B527911E4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.Services.Communication.Test", "Phytel.Services.Communication.T\Phytel.Services.Communication.Test.csproj", "{CD00D82B-0774-408B-AF8B-CE3A7D5AE64A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.Services.Communication.Test", "Phytel.Services.Communication.Test\Phytel.Services.Communication.Test.csproj", "{CD00D82B-0774-408B-AF8B-CE3A7D5AE64A}"
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
@@ -23,9 +23,9 @@ Global
 		SccProjectUniqueName1 = Phytel.Services.Communication\\Phytel.Services.Communication.csproj
 		SccProjectName1 = Phytel.Services.Communication
 		SccLocalPath1 = Phytel.Services.Communication
-		SccProjectUniqueName2 = Phytel.Services.Communication.T\\Phytel.Services.Communication.Test.csproj
-		SccProjectName2 = Phytel.Services.Communication.T
-		SccLocalPath2 = Phytel.Services.Communication.T
+		SccProjectUniqueName2 = Phytel.Services.Communication.Test\\Phytel.Services.Communication.Test.csproj
+		SccProjectName2 = Phytel.Services.Communication.Test
+		SccLocalPath2 = Phytel.Services.Communication.Test
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
