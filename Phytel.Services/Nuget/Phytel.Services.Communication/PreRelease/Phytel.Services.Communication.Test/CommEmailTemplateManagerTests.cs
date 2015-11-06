@@ -13,7 +13,14 @@ namespace Phytel.Service.Communication.Test
     [Category("CommEmailTemplateManager")]
     public class CommEmailTemplateManagerTests
     {
-        private CommEmailTemplateManager manager = new CommEmailTemplateManager();
+        private TemplateUtilities _templateUtilities;
+        private CommEmailTemplateManager _manager;
+
+        public CommEmailTemplateManagerTests()
+        {
+            _templateUtilities = new TemplateUtilities();
+            _manager = new CommEmailTemplateManager(_templateUtilities);
+        }
         
         [Test]
         public void TestSpecificAppointmentMsg()
@@ -29,18 +36,18 @@ namespace Phytel.Service.Communication.Test
             permissions.Add(undesired1);
             permissions.Add(undesired2);
 
-            Assert.IsTrue(manager.IsAppointmentSpecificMsgEnabled(permissions, 1), "Expected true");
-            Assert.IsFalse(manager.IsAppointmentSpecificMsgEnabled(permissions, 2), "Expected false");
+            Assert.IsTrue(_manager.IsAppointmentSpecificMsgEnabled(permissions, 1), "Expected true");
+            Assert.IsFalse(_manager.IsAppointmentSpecificMsgEnabled(permissions, 2), "Expected false");
 
         }
 
         private void SpecificAppointmentMsgTestDelegate()
         {
             List<ContractPermission> permissionRows = null;
-            manager.IsAppointmentSpecificMsgEnabled(permissionRows, 1);
+            _manager.IsAppointmentSpecificMsgEnabled(permissionRows, 1);
 
             permissionRows = new List<ContractPermission>();
-            manager.IsAppointmentSpecificMsgEnabled(permissionRows, 1);
+            _manager.IsAppointmentSpecificMsgEnabled(permissionRows, 1);
         }
 
     }

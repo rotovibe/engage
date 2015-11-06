@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Phytel.Service.Communication.Test
+namespace Phytel.Services.Communication.Test
 {
     [TestFixture]
     [Category("TemplateUtilites")]

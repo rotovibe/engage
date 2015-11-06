@@ -6,8 +6,8 @@
     <ProjectGuid>{CD00D82B-0774-408B-AF8B-CE3A7D5AE64A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Phytel.Services.Communication.T</RootNamespace>
-    <AssemblyName>Phytel.Services.Communication.T</AssemblyName>
+    <RootNamespace>Phytel.Services.Communication.Test</RootNamespace>
+    <AssemblyName>Phytel.Services.Communication.Test</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -66,6 +66,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Phytel.Services.Communication\Phytel.Services.Communication.csproj">
+      <Project>{fe528206-5dfa-488e-a579-3c7b527911e4}</Project>
+      <Name>Phytel.Services.Communication</Name>
+    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
