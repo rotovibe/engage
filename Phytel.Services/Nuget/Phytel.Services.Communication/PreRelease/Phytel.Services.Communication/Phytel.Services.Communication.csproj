@@ -53,8 +53,9 @@
   <ItemGroup>
     <Compile Include="CommEmailTemplateManager.cs" />
     <Compile Include="CommTextTemplateManager.cs" />
+    <Compile Include="Model\TextActivityDetail.cs" />
+    <Compile Include="Model\EmailActivityDetail.cs" />
     <Compile Include="Model\ActivityDetail.cs" />
-    <Compile Include="Model\ActivityEmailDetail.cs" />
     <Compile Include="Model\ActivityMedia.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Model\ContractPermission.cs" />
