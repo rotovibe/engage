@@ -9,7 +9,9 @@ namespace Phytel.Services.Communication
     public static class TaskTypeCategory
     {
         public const string AppointmentReminder = "ACAPT";
+        public const string AppointmentResponse = "ACRSP";
         public const string IntroductoryEmail = "ACINT";
+        public const string IntroductoryText = "ACINT";
         public const string OutreachRecall = "ACMOT";
     }
     public static class SendQueueErrorMessage
@@ -76,61 +78,72 @@ namespace Phytel.Services.Communication
         public const string ActivitiesPerBatch = "ActivitiesPerBatch";
         public const string ACTemplateType = "AppointmentReminder";
         public const string OutreachTemplateType = "Outreach";
+        public const string ImagePathSetting = "ImagePath";
+        public const string Enable = "Enable";
+
         public const string EmailAlertNode = BaseNode + "EmailAlert";
         public const string EmailAlertSender = "EmailAlertSender";
         public const string EmailAlertRecipient = "EmailAlertRecipient";
-        
-        public const string ImagePathSetting = "ImagePath";
+
+        #region ModeSpecificTags
+        public const string ModePlaceHolder = "{mode}";
+
         //EmailHeader
-        public const string SendID = "Email/SendID";
-        public const string ActivityID = "Email/ActivityID";
-        public const string EmailContractID = "Email/ContractID";
+        public const string ModeSendID = "{mode}/SendID";
+        public const string ModeActivityID = "{mode}/ActivityID";
+        public const string ModeEmailContractID = "{mode}/ContractID";
 
-        public const string ConfirmationURL = "Email/ConfirmationURL[@Enable='{0}']";
-        public const string OptOutURL = "Email/OptOutURL[@Enable='{0}']";
-        public const string RescheduleURL = "Email/RescheduleURL[@Enable='{0}']";
-        public const string CancelURL = "Email/CancelURL[@Enable='{0}']";
+        public const string ModeConfirmationURL = "{mode}/ConfirmationURL[@Enable='{0}']";
+        public const string ModeOptOutURL = "{mode}/OptOutURL[@Enable='{0}']";
+        public const string ModeRescheduleURL = "{mode}/RescheduleURL[@Enable='{0}']";
+        public const string ModeCancelURL = "{mode}/CancelURL[@Enable='{0}']";
 
-        public const string ImagePath = "Email/ImagePath[@Enable='{0}']";
+        public const string ModeImagePath = "{mode}/ImagePath[@Enable='{0}']";
         //Patient
-        public const string PatientID = "Email/Patient/PatientID";
-        public const string PatientFullName = "Email/Patient/FullName";
-        public const string PatientFirstName = "Email/Patient/FirstName";
-        public const string PatientLastName = "Email/Patient/LastName";
+        public const string ModePatientID = "{mode}/Patient/PatientID";
+        public const string ModePatientFullName = "{mode}/Patient/FullName";
+        public const string ModePatientFirstName = "{mode}/Patient/FirstName";
+        public const string ModePatientLastName = "{mode}/Patient/LastName";
         //Schedule
-        public const string EmailScheduleID = "Email/Schedule/ScheduleID";
-        public const string ScheduleFullName = "Email/Schedule/FullName";
+        public const string ModeScheduleID = "{mode}/Schedule/ScheduleID";
+        public const string ModeScheduleFullName = "{mode}/Schedule/FullName";
+        public const string ModeScheduleDisplayName = "{mode}/Schedule/DisplayName";
 
         //Facility
-        public const string FacilityID = "Email/Facility/FacilityID";
-        public const string FacilityName = "Email/Facility/Name";
-        public const string FacilityAddr1 = "Email/Facility/Addr1";
-        public const string FacilityAddr2 = "Email/Facility/Addr2";
-        public const string FacilityCity = "Email/Facility/City";
-        public const string FacilityState = "Email/Facility/State";
-        public const string FacilityZip = "Email/Facility/Zip";
-        public const string FacilityPhoneNumber = "Email/Facility/PhoneNumber";
-        public const string FacilityLogo = "Email/Facility/FacilityLogo";
-        public const string FacilityURL = "Email/Facility/FacilityURL";
+        public const string ModeFacilityID = "{mode}/Facility/FacilityID";
+        public const string ModeFacilityName = "{mode}/Facility/Name";
+        public const string ModeFacilityAddr1 = "{mode}/Facility/Addr1";
+        public const string ModeFacilityAddr2 = "{mode}/Facility/Addr2";
+        public const string ModeFacilityCity = "{mode}/Facility/City";
+        public const string ModeFacilityState = "{mode}/Facility/State";
+        public const string ModeFacilityZip = "{mode}/Facility/Zip";
+        public const string ModeFacilityPhoneNumber = "{mode}/Facility/PhoneNumber";
+        public const string ModeFacilityLogo = "{mode}/Facility/FacilityLogo";
+        public const string ModeFacilityURL = "{mode}/Facility/FacilityURL";
         //Message
-        public const string MessageType = "Email/Message/Type";
-        public const string ApptDayOfWeek = "Email/Message/DayOfWeek";
-        public const string ApptMonth = "Email/Message/Month";
-        public const string ApptDate = "Email/Message/Date";
-        public const string ApptYear = "Email/Message/Year";
-        public const string ApptTime = "Email/Message/Time";
-        public const string ApptDuration = "Email/Message/Duration";
-        public const string AppointmentSpecificMessage = "Email/Message/AppointmentSpecificMessage";
-        public const string FromEmailAddress = "Email/Message/FromEmailAddress";
-        public const string ReplyToEmailAddress = "Email/Message/ReplyToEmailAddress";
-        public const string ToEmailAddress = "Email/Message/ToEmailAddress";
-        public const string DisplayName = "Email/Message/DisplayName";
-        public const string MessageSubject = "Email/Message/Subject";
-        public const string MessageBody = "Email/Message/Body";
+        public const string ModeMessageType = "{mode}/Message/Type";
+        public const string ModeApptDayOfWeek = "{mode}/Message/DayOfWeek";
+        public const string ModeApptMonth = "{mode}/Message/Month";
+        public const string ModeApptDate = "{mode}/Message/Date";
+        public const string ModeApptYear = "{mode}/Message/Year";
+        public const string ModeApptTime = "{mode}/Message/Time";
+        public const string ModeApptDuration = "{mode}/Message/Duration";
+        public const string ModeAppointmentSpecificMessage = "{mode}/Message/AppointmentSpecificMessage";
+        public const string ModeFromEmailAddress = "{mode}/Message/FromEmailAddress";
+        public const string ModeReplyToEmailAddress = "{mode}/Message/ReplyToEmailAddress";
+        public const string ModeToEmailAddress = "{mode}/Message/ToEmailAddress";
+        public const string ModeDisplayName = "{mode}/Message/DisplayName";
+        public const string ModeMessageSubject = "{mode}/Message/Subject";
+        public const string ModeMessageBody = "{mode}/Message/Body";
+        public const string ModeFromPhoneNumber = "{mode}/Message/TextFromNumber";
+        public const string ModeToPhoneNumber = "{mode}/Message/TextToNumber";
+        public const string ModeHelpPhoneNumber = "{mode}/Message/TextHelpNumber";
+        public const string ModeProviderName = "{mode}/Message/ProviderName";
+        
 
-        public const string Enable = "Enable";
+        public const string ModeContractID = "{mode}/ContractID";
 
-        public const string EmailFacilityID = "Email/Facility/FacilityID";
+        #endregion
 
         public const string EmailDebugNode = BaseNode + "EmailDebug";
         public const string DebugEmail = "IsEmailDebug";
@@ -141,14 +154,22 @@ namespace Phytel.Services.Communication
         public const string ConfirmOptOutURLSettingNode = BaseNode + "ConfirmationURL";
         public const string ConfirmURLSetting = "ConfirmURL";
         public const string OptOutURLSetting = "OptOutURL";
+
         public const string BaseCommURIsNode = BaseNode + "BaseCommURIs";
         public const string BaseCommURI = "CommAppUrl";
         public const string BaseCommunicationURI = "CommDataUrl";
+
+        
     }
 
     public static class EmailAlert
     {
         public const string MissingEmailConfiguration = "Communication Platform - Missing email configuration";
+    }
+
+    public static class TextAlert
+    {
+        public const string MissingEmailConfiguration = "Communication Platform - Missing text configuration";
     }
 
     public static class RegExPatterns
