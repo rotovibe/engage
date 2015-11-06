@@ -13,7 +13,7 @@ namespace Phytel.Services.Communication.Test
     [Category("TemplateUtilites")]
     public class TemplateUtilitesTests
     {
-        private TemplateUtilites _templateUtilities = new TemplateUtilites();
+        private TemplateUtilities _templateUtilities = new TemplateUtilities();
 
         [Test]
         public void TestProperCase()
