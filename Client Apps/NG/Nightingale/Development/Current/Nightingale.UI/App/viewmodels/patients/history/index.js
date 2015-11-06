@@ -215,6 +215,7 @@
 					ko.utils.arrayPushAll(progIds, originalProgramIds());
 					originalProgramIds.removeAll();
 				}
+				note.newContent('');
 				//clear the entityAspect.entityState back to Unchanged state - to hide this correction (original program id's):
 				note.entityAspect.setUnchanged();
 			};
