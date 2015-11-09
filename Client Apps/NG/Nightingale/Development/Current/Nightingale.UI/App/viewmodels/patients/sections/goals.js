@@ -101,6 +101,7 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
                     saveIntervention(intervention);
                 };
                 var cancelOverride = function () {
+					intervention.newDetails(null);
                     cancel(intervention);
                     getGoalDetails(thisGoal);
                 };
@@ -115,6 +116,7 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
                     saveTask(task);
                 };
                 var cancelOverride = function () {
+					task.newDetails(null);
                     datacontext.cancelEntityChanges(task);
                     getGoalDetails(thisGoal);
                 };

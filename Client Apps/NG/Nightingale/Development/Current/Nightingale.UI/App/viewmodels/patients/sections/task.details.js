@@ -36,6 +36,7 @@
                     saveTask(task)
                 };
                 var cancelOverride = function () {
+					task.newDetails(null);
                     cancel(task);
                     getGoalDetails(task.goal());
                 };

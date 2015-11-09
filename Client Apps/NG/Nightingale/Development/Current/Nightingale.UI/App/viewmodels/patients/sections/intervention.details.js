@@ -36,6 +36,7 @@
                     saveIntervention(intervention);
                 };
                 var cancelOverride = function () {
+					intervention.newDetails(null);
                     cancel(intervention);
                     getGoalDetails(intervention.goal());
                 };

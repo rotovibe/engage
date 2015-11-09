@@ -35,6 +35,7 @@
                     saveBarrier(barrier);
                 };
                 var cancelOverride = function () {
+					barrier.newDetails(null);
                     cancel(barrier);
                     getGoalDetails(barrier.goal());
                 };

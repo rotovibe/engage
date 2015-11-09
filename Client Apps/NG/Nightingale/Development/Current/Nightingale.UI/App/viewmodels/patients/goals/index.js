@@ -99,6 +99,7 @@
       };
       var cancelOverride = function () {
           var goalCancel = modalEntity().goal;
+		  goalCancel.newDetails(null);
           goalCancel.entityAspect.rejectChanges();
           getGoalDetails(goalCancel, true);
       };
