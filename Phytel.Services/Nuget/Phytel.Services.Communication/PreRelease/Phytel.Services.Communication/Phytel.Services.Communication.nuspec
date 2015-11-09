@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
   <metadata>
     <id>Phytel.Services.Communication</id>
-    <version>1.0.0</version>
+    <version>1.0.3</version>
     <title>Phytel.Services.Communication</title>
     <authors>Josh Gattis</authors>
     <owners>Phytel,Inc.</owners>
@@ -15,6 +15,6 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="..\bin\Phytel.Services.Communication.dll" target="lib\net451\Phytel.Services.Communication.dll" />
+    <file src="..\..\bin\Phytel.Services.Communication.dll" target="lib\net451\Phytel.Services.Communication.dll" />
   </files>
 </package>
