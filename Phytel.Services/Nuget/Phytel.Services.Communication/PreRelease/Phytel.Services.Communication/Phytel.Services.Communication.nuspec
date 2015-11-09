@@ -10,7 +10,7 @@
     <description>Communication related components</description>
     <dependencies>
       <group targetFramework=".NETFramework4.5.1">
-        <dependency id="Phytel.Services.Security" version="1.4.0.01" />
+        <dependency id="Phytel.Services.Security" version="2.0.0.03" />
       </group>
     </dependencies>
   </metadata>
