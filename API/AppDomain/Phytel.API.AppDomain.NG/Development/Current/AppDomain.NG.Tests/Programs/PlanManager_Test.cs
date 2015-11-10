@@ -203,6 +203,7 @@ namespace Phytel.API.AppDomain.NG.Tests
                                                     PatientGoalId = c.PatientGoalId,
                                                     PatientId = c.PatientId,
                                                     StartDate = c.StartDate,
+                                                    DueDate = c.DueDate,
                                                     StatusDate = c.StatusDate,
                                                     StatusId = c.StatusId,
                                                     Details = c.Details
@@ -364,6 +365,7 @@ namespace Phytel.API.AppDomain.NG.Tests
                                                     PatientGoalId = c.PatientGoalId,
                                                     PatientId = c.PatientId,
                                                     StartDate = c.StartDate,
+                                                    DueDate = c.DueDate,
                                                     StatusDate = c.StatusDate,
                                                     StatusId = c.StatusId,
                                                     Details = c.Details
@@ -533,6 +535,7 @@ namespace Phytel.API.AppDomain.NG.Tests
                                                     PatientGoalId = c.PatientGoalId,
                                                     PatientId = c.PatientId,
                                                     StartDate = c.StartDate,
+                                                    DueDate = c.DueDate,
                                                     StatusDate = c.StatusDate,
                                                     StatusId = c.StatusId,
                                                     Details = c.Details

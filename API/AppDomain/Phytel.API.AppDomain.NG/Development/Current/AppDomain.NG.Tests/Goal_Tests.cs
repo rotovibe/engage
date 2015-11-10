@@ -153,6 +153,7 @@ namespace Phytel.API.AppDomain.NG.Test
                 Description = "int2",
                 PatientGoalId = "5440392884ac05070c5682ae",
                 StartDate = DateTime.UtcNow,
+                DueDate = DateTime.UtcNow.AddDays(10),
                 StatusDate = DateTime.UtcNow,
                 StatusId = 1,
                 ClosedDate = DateTime.Parse("2014-10-16T21:50:47.057Z"),

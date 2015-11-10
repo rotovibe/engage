@@ -127,6 +127,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                             StatusId = ((int)b.Status),
                             StatusDate = b.StatusDate,
                             StartDate = b.StartDate,
+                            DueDate = b.DueDate,
                             ClosedDate = b.ClosedDate,
                             CreatedById = b.RecordCreatedBy.ToString(),
                             DeleteFlag = b.DeleteFlag,
@@ -214,6 +215,14 @@ namespace Phytel.API.DataDomain.PatientGoal
                     else 
                     {
                         uv.Add(MB.Update.Set(MEPatientIntervention.StartDateProperty, BsonNull.Value));
+                    }
+                    if (pi.DueDate != null)
+                    {
+                        uv.Add(MB.Update.Set(MEPatientIntervention.DueDateProperty, pi.DueDate));
+                    }
+                    else
+                    {
+                        uv.Add(MB.Update.Set(MEPatientIntervention.DueDateProperty, BsonNull.Value));
                     }
                     if (pi.StatusDate != null) uv.Add(MB.Update.Set(MEPatientIntervention.StatusDateProperty, pi.StatusDate));
                     if (pi.StatusId != 0) uv.Add(MB.Update.Set(MEPatientIntervention.StatusProperty, pi.StatusId));
@@ -337,6 +346,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                                 StatusId = ((int)b.Status),
                                 StatusDate = b.StatusDate,
                                 StartDate = b.StartDate,
+                                DueDate = b.DueDate,
                                 ClosedDate = b.ClosedDate,
                                 CreatedById = b.RecordCreatedBy.ToString(),
                                 DeleteFlag = b.DeleteFlag,
@@ -441,7 +451,8 @@ namespace Phytel.API.DataDomain.PatientGoal
                                 BarrierIds = Helper.ConvertToStringList(b.BarrierIds),
                                 StatusId = ((int)b.Status),
                                 StatusDate = b.StatusDate,
-                                StartDate = b.StartDate,
+                                StartDate = b.StartDate,                                
+                                DueDate = b.DueDate,
                                 ClosedDate = b.ClosedDate,
                                 CreatedById = b.RecordCreatedBy.ToString(),
                                 DeleteFlag = b.DeleteFlag,
@@ -454,7 +465,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                                 interventionData.GoalName = mePG.Name;
                             }
                             list.Add(interventionData);
-                        }
+                        }         
                     }
                 }
                 return list;
@@ -501,6 +512,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                             StatusId = ((int)b.Status),
                             StatusDate = b.StatusDate,
                             StartDate = b.StartDate,
+                            DueDate = b.DueDate,
                             ClosedDate = b.ClosedDate,
                             CreatedById = b.RecordCreatedBy.ToString(),
                             DeleteFlag = b.DeleteFlag,

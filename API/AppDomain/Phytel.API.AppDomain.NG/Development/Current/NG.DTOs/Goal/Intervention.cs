@@ -19,6 +19,7 @@ namespace Phytel.API.AppDomain.NG.DTO
         public int StatusId { get; set; }
         public DateTime? StatusDate { get; set; }
         public DateTime? StartDate { get; set; }
+        public DateTime? DueDate { get; set; }
         public int StartDateRange { get; set; }
         public DateTime? ClosedDate { get; set; }
         public bool DeleteFlag { get; set; }

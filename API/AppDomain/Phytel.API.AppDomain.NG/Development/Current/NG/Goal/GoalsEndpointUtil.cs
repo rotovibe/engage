@@ -5,6 +5,7 @@ using Phytel.API.Interface;
 using ServiceStack.Service;
 using ServiceStack.ServiceClient.Web;
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Configuration;
 using AD = Phytel.API.AppDomain.NG.DTO;
@@ -235,6 +236,8 @@ namespace Phytel.API.AppDomain.NG
                         i.PatientId = n.PatientId;
                         interventions.Add(i);
                     }
+                    interventions = (List<PatientIntervention>)interventions.OrderByDescending(o => GetDateSortValue(o.DueDate))
+                                    .ThenByDescending(o => GetDateSortValue(o.StartDate)).ToList();        
                 }
             }
             catch
@@ -242,6 +245,11 @@ namespace Phytel.API.AppDomain.NG
                 throw;
             }
             return interventions;
+        }
+
+        private static DateTime? GetDateSortValue(DateTime? DueDate)
+        {
+            return DueDate != null ? DueDate : DateTime.MaxValue;
         }
 
         public static List<PatientTask> GetTasks(GetTasksRequest request)

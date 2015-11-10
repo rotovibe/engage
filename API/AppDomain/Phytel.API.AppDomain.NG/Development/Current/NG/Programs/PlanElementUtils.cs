@@ -958,6 +958,7 @@ namespace Phytel.API.AppDomain.NG
                     StatusId = i.StatusId,
                     StatusDate = i.StatusDate,
                     StartDate = i.StartDate,
+                    DueDate = i.DueDate,
                     PatientId = i.PatientId,
                     PatientGoalId = i.PatientGoalId,
                     Id = i.Id,

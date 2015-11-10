@@ -108,6 +108,7 @@ namespace Phytel.API.AppDomain.NG.Service.Mappers
                                 PatientGoalId = c.PatientGoalId,
                                 PatientId = c.PatientId,
                                 StartDate = c.StartDate,
+                                DueDate = c.DueDate,
                                 StatusDate = c.StatusDate,
                                 StatusId = c.StatusId,
                                 Details = c.Details

@@ -254,6 +254,7 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
                     StatusId = i.StatusId,
                     StatusDate = i.StatusDate,
                     StartDate = i.StartDate,
+                    DueDate = i.DueDate,
                     PatientId = i.PatientId,
                     PatientGoalId = i.PatientGoalId,
                     Id = i.Id,
@@ -966,6 +967,7 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
                 Id = interventionTemplate.Id,
                 Description = interventionTemplate.Description,
                 StartDate = interventionTemplate.StartDate,
+                DueDate = interventionTemplate.DueDate,
                 PatientId = arg.PatientId,
                 StatusDate = interventionTemplate.StatusDate,
                 StatusId = interventionTemplate.StatusId                
