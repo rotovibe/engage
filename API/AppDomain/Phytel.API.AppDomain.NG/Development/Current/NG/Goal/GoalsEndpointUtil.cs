@@ -5,7 +5,6 @@ using Phytel.API.Interface;
 using ServiceStack.Service;
 using ServiceStack.ServiceClient.Web;
 using System;
-using System.Linq;
 using System.Collections.Generic;
 using System.Configuration;
 using AD = Phytel.API.AppDomain.NG.DTO;
@@ -65,7 +64,7 @@ namespace Phytel.API.AppDomain.NG
                     request.ContractNumber,
                     request.PatientId,
                     request.PatientGoalId), request.UserId);
-                
+
                 PutInitializeBarrierDataResponse dataDomainResponse = client.Put<PutInitializeBarrierDataResponse>(
                     url,
                     new PutInitializeBarrierDataRequest() as object);
@@ -236,8 +235,6 @@ namespace Phytel.API.AppDomain.NG
                         i.PatientId = n.PatientId;
                         interventions.Add(i);
                     }
-                    interventions = (List<PatientIntervention>)interventions.OrderByDescending(o => GetDateSortValue(o.DueDate))
-                                    .ThenByDescending(o => GetDateSortValue(o.StartDate)).ToList();        
                 }
             }
             catch
@@ -832,17 +829,17 @@ namespace Phytel.API.AppDomain.NG
 
         private static List<string> GetBarrierIdsForRequest(List<PatientBarrier> list)
         {
-                List<string> barrierIds = new List<string>();
+            List<string> barrierIds = new List<string>();
 
-                if (list != null && list.Count > 0)
+            if (list != null && list.Count > 0)
+            {
+                list.ForEach(t =>
                 {
-                    list.ForEach(t =>
-                    {
-                        barrierIds.Add(t.Id);
-                    });
-                }
+                    barrierIds.Add(t.Id);
+                });
+            }
 
-                return barrierIds;
+            return barrierIds;
         }
 
         public static PatientDetails GetPatientDetails(double version, string contractNumber, string userId, IRestClient client, string patientId)
