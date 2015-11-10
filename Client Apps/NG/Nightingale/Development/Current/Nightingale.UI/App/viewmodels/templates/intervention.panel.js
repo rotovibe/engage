@@ -40,7 +40,7 @@
     		new Column('description', 'Title','span3', 'description'),
             new Column('description-small', 'Title','span2', 'description'),
             new Column('goal', 'Goal','span3', 'goalName'),
-    		new Column('startdate', 'Start Date','span2', 'startDate'),
+    		new Column('duedate', 'Due Date','span2', 'dueDate'),			
     		new Column('assignedto', 'Assigned To','span2', 'assignedTo.preferredName'),
             new Column('closeddate', 'Closed Date','span2', 'closedDate'),
             new Column('closeddate-small', 'Closed Date','span1', 'closedDate'),
@@ -223,12 +223,11 @@
             self.canSaveObservable = ko.observable(true);
             self.canSave = ko.computed({
                 read: function () {
-                    var interventionok = false;
+                    var isValid = false;
                     if (self.intervention()) {
-                        var interventiondesc = !!self.intervention().description();
-                        interventionok = interventiondesc;
+						isValid = self.intervention().isValid();                        
                     }
-                    return interventionok && self.canSaveObservable();
+                    return isValid && self.canSaveObservable();
                 },
                 write: function (newValue) {
                     self.canSaveObservable(newValue);

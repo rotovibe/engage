@@ -94,6 +94,23 @@
                 limit: 25
             });
             self.careManagersBloodhound.initialize();
+			/**
+			*	computed. to allow forcing the datetimepicker control to set the due date as invalid.
+			*	this is needed when the date is valid but range is wrong.
+			*	@method setInvalidDueDate
+			*/
+			self.setInvalidDueDate = ko.computed( function(){				
+				return ( self.intervention && self.intervention.validationErrorsArray().indexOf('dueDate') !== -1);  
+			});
+			/**
+			*	computed. to allow forcing the datetimepicker control to set the start date as invalid.
+			*	this is needed when the date is valid but range is wrong.
+			*	@method setInvalidStartDate
+			*/
+			self.setInvalidStartDate = ko.computed( function(){				
+				return ( self.intervention && self.intervention.validationErrorsArray().indexOf('StartDate') !== -1);  
+			});			
+
         };
 
         ctor.prototype.attached = function () {

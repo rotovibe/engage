@@ -171,6 +171,7 @@ define(['services/session'],
 		            createdById: { dataType: "String" },
 		            categoryId: { dataType: "String" },
 		            startDate: { dataType: "DateTime" },
+					dueDate: { dataType: "DateTime" },
 		            closedDate: { dataType: "DateTime" },
 		            goalName: { dataType: "String" },
 		            patientGoalId: { dataType: "String" },
@@ -498,6 +499,52 @@ define(['services/session'],
 		        	}
 		        	return returnPatient;
 		        });
+				intervention.dueDateErrors = ko.observableArray([]);	//datetimepicker validation errors
+				intervention.startDateErrors = ko.observableArray([]);	//datetimepicker validation errors
+				intervention.validationErrors = ko.observableArray([]);
+				intervention.isValid = ko.computed( function() {
+					var hasErrors = false;
+					var description = intervention.description();
+					var startDate = intervention.startDate();
+					var dueDate = intervention.dueDate();
+					var interventionErrors = [];										
+					var dueDateErrors = intervention.dueDateErrors();
+					var startDateErrors = intervention.startDateErrors();
+					if( !description ){
+						interventionErrors.push({ PropName: 'description', Message: 'Description is required' });
+						hasErrors = true;
+					}
+					if( startDateErrors.length > 0 ){
+						//datetimepicker validation errors:
+						ko.utils.arrayForEach( startDateErrors, function(error){
+							interventionErrors.push({ PropName: 'startDate', Message: 'Start Date ' + error.Message});
+							hasErrors = true;
+						});
+					}
+					if( dueDateErrors.length > 0 ){
+						//datetimepicker validation errors:
+						ko.utils.arrayForEach( dueDateErrors, function(error){
+							interventionErrors.push({ PropName: 'dueDate', Message: 'Due Date ' + error.Message});
+							hasErrors = true;
+						});
+					}					
+					//note: we are deliberately not enforcing any range logic on the dueDate-startDate dates.
+					
+					intervention.validationErrors(interventionErrors)
+					return !hasErrors;
+				});
+				/**
+				*	computed. tracks for any validation errors and returns a list of the errored property names.
+				*	this will be used in the property field css binding condition for invalid styling.
+				*	@method medication.validationErrorsArray
+				*/
+				intervention.validationErrorsArray = ko.computed(function () {
+					var thisArray = [];
+					ko.utils.arrayForEach(intervention.validationErrors(), function (error) {
+						thisArray.push(error.PropName);
+					});
+					return thisArray;
+				});
 		    }
 
 		    function taskInitializer(task) {

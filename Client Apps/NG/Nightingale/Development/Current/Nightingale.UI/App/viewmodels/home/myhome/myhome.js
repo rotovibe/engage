@@ -216,7 +216,7 @@
             params.push(new modelConfig.Parameter('statusId', '2', '!='));
             params.push(new modelConfig.Parameter('statusId', '3', '!='));
             // Either sort by the selected sort or the default
-            orderString = selectedInterventionSortColumn() ? selectedInterventionSortColumn() : 'startDate';
+            orderString = selectedInterventionSortColumn() ? selectedInterventionSortColumn() : 'dueDate desc, startDate desc';
             // Add the second and third orders to the string
             var finalOrderString = orderString + ', category.name, description';
             // Go get the interventions
@@ -228,7 +228,7 @@
         var activeTodoColumns = ko.observableArray(['priority','duedate','title','category','patient']);
 
         // List of columns currently showing
-        var activeInterventionColumns = ko.observableArray(['startdate','description','category','patient','goal']);
+        var activeInterventionColumns = ko.observableArray(['dueDate','description','category','patient','goal']);
 
         // Object containing the options
         var calendarOptions = new CalendarOptionsModel(myEvents, myHeader, false, thisDate, 'basicWeek')

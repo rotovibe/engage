@@ -1,6 +1,8 @@
 ﻿<div class="body" data-bind="with: intervention" style="min-height: 400px;">
     <div class="column">
         <section class="data-set clearfix">
+			<!-- ko compose: "templates/validation.errors.html" -->
+			<!-- /ko -->
             <div class="row pad-top">
                 <div class="span3 align-right">
                     <span class="grey">Description</span>
@@ -23,7 +25,28 @@
                     <span class="grey">Start Date</span>
                 </div>
                 <div class="span6">
-                    <input data-bind="datepicker: startDate, datepickerOptions: { }" type="text" class="datepicker">
+					<!-- ko compose: { model: 'viewmodels/templates/datetimepicker', activationData:
+						{
+							observableDateTime: startDate, dateErrors: startDateErrors, showInvalid: $parent.setInvalidStartDate, 
+							datepickerOptions:{}, datepickerDynamicOptions: {}, dateName: 'startDate'
+						}
+					} -->
+					<!-- /ko -->                    
+                </div>
+                <div class="span3"></div>
+            </div>
+			<div class="row pad-top">
+                <div class="span3 align-right">
+                    <span class="grey">Due Date</span>
+                </div>
+                <div class="span6">
+					<!-- ko compose: { model: 'viewmodels/templates/datetimepicker', activationData:
+						{
+							observableDateTime: dueDate, dateErrors: dueDateErrors, showInvalid: $parent.setInvalidDueDate, 
+							datepickerOptions:{}, datepickerDynamicOptions: {}, dateName: 'dueDate'
+						}
+					} -->
+					<!-- /ko -->                    
                 </div>
                 <div class="span3"></div>
             </div>

@@ -427,7 +427,7 @@
 						.from('fakePath')
 						.where('id', '==', intervention.id())
 						.toType('Intervention')
-						.select('id, categoryId, assignedToId, description, statusId, startDate, patientGoalId, patientId, closedDate, deleteFlag, details');
+						.select('id, categoryId, assignedToId, description, statusId, startDate, dueDate, patientGoalId, patientId, closedDate, deleteFlag, details');
 				var results = manager.executeQueryLocally(interventionQuery);
 				var thisIntervention = results[0];
 
@@ -440,6 +440,7 @@
 				newIntervention.Description = thisIntervention.description;
 				newIntervention.StatusId = thisIntervention.statusId;
 				newIntervention.StartDate = thisIntervention.startDate;
+				newIntervention.DueDate = thisIntervention.dueDate;
 				newIntervention.ClosedDate = thisIntervention.closedDate;
 				newIntervention.PatientGoalId = thisIntervention.patientGoalId;
 				newIntervention.DeleteFlag = thisIntervention.deleteFlag;
