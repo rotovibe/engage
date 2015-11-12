@@ -82,7 +82,9 @@
                 }
             };
             self.cancelOverride = function () {
-                datacontext.cancelEntityChanges(self.modalEntity().task());
+				var task = self.modalEntity().task();
+				task.newDetails(null);
+                datacontext.cancelEntityChanges(task);
             };
 			var modalSettings = {
 				title:'Edit Task' ,

@@ -87,7 +87,9 @@
                 }
             };
             self.cancelOverride = function () {
-                datacontext.cancelEntityChanges(self.modalEntity().intervention());
+				var intervention = self.modalEntity().intervention();
+				intervention.newDetails(null);
+                datacontext.cancelEntityChanges(intervention);
             };
 			
     		// A list of columns to display

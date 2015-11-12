@@ -170,15 +170,19 @@
       // Set a local instance of the goal for performance
       var thisGoal = activeGoal();
       // Reject changes to the entity
+	  thisGoal.newDetails(null);
       thisGoal.entityAspect.rejectChanges();
       // Reject changes to each task, barrier, and intervention
       ko.utils.arrayForEach(thisGoal.tasks(), function (task) {
+		task.newDetails(null);
         task.entityAspect.rejectChanges();
       });
       ko.utils.arrayForEach(thisGoal.barriers(), function (barrier) {
+		barrier.newDetails(null);
         barrier.entityAspect.rejectChanges();
       });
       ko.utils.arrayForEach(thisGoal.interventions(), function (intervention) {
+		intervention.newDetails(null);
         intervention.entityAspect.rejectChanges();
       });
     }
