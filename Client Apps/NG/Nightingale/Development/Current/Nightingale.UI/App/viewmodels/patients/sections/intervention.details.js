@@ -101,17 +101,14 @@
             goalsIndex.getGoalDetails(goal, true);
         }
         
-        function ModalEntity(entity, reqpropname) {
+        function ModalEntity(entity) {
             var self = this;
             self.entity = entity;
             // Object containing parameters to pass to the modal
             self.activationData = { entity: self.entity };
-            // Create a computed property to subscribe to all of
-            // the patients' observations and make sure they are
-            // valid
+            
             self.canSave = ko.computed(function () {
-                var result = self.entity[reqpropname]();
-                // The active goal needs a property passed in from reqpropname
+                var result = self.entity.isValid(); //subscribe to intervention.isValid                
                 return result;
             });
         }
