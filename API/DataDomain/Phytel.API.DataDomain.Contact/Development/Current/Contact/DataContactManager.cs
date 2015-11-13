@@ -8,6 +8,9 @@ using System.Configuration;
 using Phytel.API.Common;
 using System.Net;
 using Phytel.API.DataAudit;
+using ServiceStack.Service;
+using ServiceStack.ServiceClient.Web;
+using Phytel.API.Common.CustomObject;
 
 namespace Phytel.API.DataDomain.Contact
 {
@@ -23,7 +26,7 @@ namespace Phytel.API.DataDomain.Contact
             try
             {
                 IContactRepository repo = Factory.GetRepository(request, RepositoryType.Contact);
-                
+
                 result = repo.FindContactByPatientId(request) as ContactData;
             }
             catch (Exception ex)
@@ -195,7 +198,8 @@ namespace Phytel.API.DataDomain.Contact
                         contactsWithUpdatedRecentList = new List<ContactWithUpdatedRecentList>();
                         contactsWithAPatientInRecentList.ForEach(c =>
                         {
-                            PutRecentPatientRequest recentPatientRequest = new PutRecentPatientRequest { 
+                            PutRecentPatientRequest recentPatientRequest = new PutRecentPatientRequest
+                            {
                                 ContactId = c.Id,
                                 Context = request.Context,
                                 ContractNumber = request.ContractNumber,
@@ -233,14 +237,14 @@ namespace Phytel.API.DataDomain.Contact
                     repo.UndoDelete(request);
                     // Add the deleted contact back into the RecentList of  other contacts(users logged in) who had him/her before the delete action.
                     var undeletedContact = repo.FindByID(request.Id) as ContactData;
-                    if(undeletedContact != null)
+                    if (undeletedContact != null)
                     {
-                        if(request.ContactWithUpdatedRecentLists != null && request.ContactWithUpdatedRecentLists.Count > 0)
+                        if (request.ContactWithUpdatedRecentLists != null && request.ContactWithUpdatedRecentLists.Count > 0)
                         {
                             request.ContactWithUpdatedRecentLists.ForEach(c =>
                             {
-                               var contactData = repo.FindByID(c.ContactId) as ContactData;
-                                if(contactData != null)
+                                var contactData = repo.FindByID(c.ContactId) as ContactData;
+                                if (contactData != null)
                                 {
                                     contactData.RecentsList.Insert(c.PatientIndex, undeletedContact.PatientId);
                                     PutRecentPatientRequest recentPatientRequest = new PutRecentPatientRequest
@@ -270,9 +274,26 @@ namespace Phytel.API.DataDomain.Contact
             {
                 if (request.ContactsData != null && request.ContactsData.Count > 0)
                 {
+                    List<ContactData> contactData = request.ContactsData;
+                    #region Get all the available comm modes in the lookup.
+                    List<IdNamePair> modesLookUp = getAllCommModes(request);
+                    if (modesLookUp != null && modesLookUp.Count > 0)
+                    {
+                        List<CommModeData> commModeData = new List<CommModeData>();
+                        foreach (IdNamePair l in modesLookUp)
+                        {
+                            commModeData.Add(new CommModeData { ModeId = l.Id, OptOut = false, Preferred = false });
+                        }
+                        // Populate default CommModes to the Contact data before inserting.
+                        contactData.ForEach(c => {
+                            c.Modes = commModeData;
+                        });
+                    }
+                    #endregion
+
                     list = new List<HttpObjectResponse<ContactData>>();
                     IContactRepository repo = Factory.GetRepository(request, RepositoryType.Contact);
-                    BulkInsertResult result = (BulkInsertResult)repo.InsertAll(request.ContactsData.Cast<object>().ToList());
+                    BulkInsertResult result = (BulkInsertResult)repo.InsertAll(contactData.Cast<object>().ToList());
                     if (result != null)
                     {
                         if (result.ProcessedIds != null && result.ProcessedIds.Count > 0)
@@ -285,7 +306,7 @@ namespace Phytel.API.DataDomain.Contact
                                 List<string> insertedContactIds = insertedContacts.Select(p => p.Id).ToList();
                                 AuditHelper.LogDataAudit(request.UserId, MongoCollectionName.Contact.ToString(), insertedContactIds, Common.DataAuditType.Insert, request.ContractNumber);
                                 #endregion
-                                
+
                                 insertedContacts.ForEach(r =>
                                 {
                                     list.Add(new HttpObjectResponse<ContactData> { Code = HttpStatusCode.Created, Body = (ContactData)new ContactData { Id = r.Id, PatientId = r.PatientId } });
@@ -302,5 +323,31 @@ namespace Phytel.API.DataDomain.Contact
             catch (Exception ex) { throw ex; }
             return list;
         }
+
+        private List<IdNamePair> getAllCommModes(InsertBatchContactDataRequest request)
+        {
+            List<IdNamePair> response = null;
+            try
+            {
+                response = new List<IdNamePair>();
+                string DDLookupServiceUrl = ConfigurationManager.AppSettings["DDLookupServiceUrl"];
+                IRestClient client = new JsonServiceClient();
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/commmodes",
+                                                                    DDLookupServiceUrl,
+                                                                    "NG",
+                                                                    request.Version,
+                                                                    request.ContractNumber), request.UserId);
+
+                // [Route("/{Context}/{Version}/{ContractNumber}/commmodes", "GET")]
+                Phytel.API.DataDomain.LookUp.DTO.GetAllCommModesDataResponse dataDomainResponse = client.Get<Phytel.API.DataDomain.LookUp.DTO.GetAllCommModesDataResponse>(url);
+                List<IdNamePair> dataList = dataDomainResponse.CommModes;
+                if (dataList != null && dataList.Count > 0)
+                {
+                    response = dataList;
+                }
+            }
+            catch (Exception ex) { throw ex; }
+            return response;
+        }
     }
-}   
+}
