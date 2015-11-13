@@ -331,7 +331,7 @@
 				//TODO: verify validation rules for utilization
 				var hasNewUtilization = self.newUtilization()? true : false;
 				var isSaving = self.isSaving();
-				return self.newUtilization() && !self.isSaving() && self.newUtilization().isValid() && self.newUtilization().visitType();// && self.newUtilization().isDirty();
+				return self.newUtilization() && !self.isSaving() && self.newUtilization().isValid() && self.newUtilization().visitType() && self.newUtilization().isDirty();
 			});
 			self.createNewNote();
 			self.createNewTouchPoint();
