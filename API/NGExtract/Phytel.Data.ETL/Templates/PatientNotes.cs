@@ -69,7 +69,7 @@ namespace Phytel.Data.ETL.Templates
                         parms.Add(new Parameter("@MongoOutcomeId", (string.IsNullOrEmpty(note.OutcomeId.ToString()) ? string.Empty : note.OutcomeId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
                         parms.Add(new Parameter("@MongoWhoId", (string.IsNullOrEmpty(note.WhoId.ToString()) ? string.Empty : note.WhoId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
                         parms.Add(new Parameter("@MongoSourceId", (string.IsNullOrEmpty(note.SourceId.ToString()) ? string.Empty : note.SourceId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                        parms.Add(new Parameter("@MongoDurationId", note.Duration ?? (object)DBNull.Value, SqlDbType.Int, ParameterDirection.Input, 50));
+                        parms.Add(new Parameter("@MongoDurationId", (string.IsNullOrEmpty(note.DurationId.ToString()) ? string.Empty : note.DurationId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
                         parms.Add(new Parameter("@ContactedOn", note.ContactedOn ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
                         parms.Add(new Parameter("@ValidatedIntentity", note.ValidatedIdentity.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
                         // standard fields
