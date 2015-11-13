@@ -67,7 +67,6 @@
   enums.noteWhos = ko.observableArray();
   enums.noteSources = ko.observableArray();
   enums.noteOutcomes = ko.observableArray();
-  enums.noteDurations = ko.observableArray();
 	// Note utilization type lookups
 	enums.visitTypes = ko.observableArray();
 	enums.utilizationSources = ko.observableArray();

@@ -451,8 +451,7 @@
 				lookupsService.getNoteLookup(manager, 'VisitType', datacontext.enums.visitTypes, true);
 				lookupsService.getNoteLookup(manager, 'UtilizationSource', datacontext.enums.utilizationSources, true);
 				lookupsService.getNoteLookup(manager, 'Disposition', datacontext.enums.dispositions, true);
-				lookupsService.getNoteLookup(manager, 'UtilizationLocation', datacontext.enums.utilizationLocations, true);
-				return lookupsService.getNoteLookup(manager, 'NoteDuration', datacontext.enums.noteDurations, true);
+				return lookupsService.getNoteLookup(manager, 'UtilizationLocation', datacontext.enums.utilizationLocations, true);
 			}
 		}
 

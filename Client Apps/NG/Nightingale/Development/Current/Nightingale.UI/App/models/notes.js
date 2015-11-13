@@ -32,7 +32,7 @@ define(['services/session', 'services/dateHelper'],
 						outcomeId: { dataType: "String" },
 						whoId: { dataType: "String" },
 						sourceId: { dataType: "String" },
-						durationId: { dataType: "String" },
+						duration: { dataType: "Int64" },
 						contactedOn: { dataType: "DateTime" },
 						validatedIdentity: { dataType: "Boolean" },
 						programIds: { complexTypeName: "Identifier:#Nightingale", isScalar: false },
@@ -73,11 +73,7 @@ define(['services/session', 'services/dateHelper'],
 						source: {
 							entityTypeName: "NoteSource", isScalar: true,
 							associationName: "Note_Source", foreignKeyNames: ["sourceId"]
-						},
-						duration: {
-							entityTypeName: "NoteDuration", isScalar: true,
-							associationName: "Note_Duration", foreignKeyNames: ["durationId"]
-						},
+						},						
 						//utilization lookups:
 						visitType: {
 							entityTypeName: "VisitType", isScalar: true,
@@ -303,6 +299,7 @@ define(['services/session', 'services/dateHelper'],
 						var contactedOn = note.contactedOn();
 						var contactedOnErrors = note.contactedOnErrors();
 						var text = note.text();
+						var duration = note.duration();
 						//utilization:
 						var admitDateErrors = note.admitDateErrors();
 						var admitDate = note.admitDate();
@@ -315,7 +312,20 @@ define(['services/session', 'services/dateHelper'],
 						var utilizationLocation = note.utilizationLocation();
 						var otherLocation = note.otherLocation();
 						var hasChanges = note.isDirty();
-
+						//function validateDuration(){
+							
+						if( duration && duration > 1440 ){
+							setTimeout( function(){ note.duration(1440); }, 100 ); //auto-correct range violation
+							//noteErrors.push({ PropName: 'duration', Message: 'Duration must be less than or equal to 1440 minutes (24 hours)' });
+							//hasErrors = true;
+						}
+						if( duration !== null && duration < 1 ){										
+							setTimeout( function(){ note.duration(null); }, 100 ); //auto-correct range violation
+							// noteErrors.push({ PropName: 'duration', Message: 'Duration must be greater than 0' });
+							// hasErrors = true;
+						}
+							
+						//}
 						switch( typeName ){
 							case 'touchpoint':
 							{
@@ -358,7 +368,7 @@ define(['services/session', 'services/dateHelper'],
 										hasErrors = true;
 									}
 								}
-								if( !visitType && hasChanges ){
+								if( !visitType ){//&& hasChanges
 									noteErrors.push({ PropName: 'visitType', Message: 'Visit Type is required' });
 									hasErrors = true;
 								}

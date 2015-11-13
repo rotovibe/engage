@@ -16,7 +16,8 @@
 					<div class="span3">
 						<h5 class="grey pad-bottom">Type</h5>
 						<div class="icon-list">
-							<div data-bind="chsnsingle: { options: $parents[1].visitTypes, value: visitType, text: 'name', label: 'visitTypes' }, css: { 'invalid': (validationErrorsArray().indexOf('visitType') !== -1) }"></div>
+							<div data-bind="chsnsingle: { options: $parents[1].visitTypes, value: visitType, text: 'name', label: 'visitTypes' }, 
+											css: { 'invalid': (validationErrorsArray().indexOf('visitType') !== -1) }"></div>
 						</div>
 					</div>
 					<div class="span9" data-bind="visible: showOtherVisitType" >

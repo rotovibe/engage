@@ -1,7 +1,9 @@
 <div class="body" data-bind="visible: showing">
     <div class="row">
-		<!-- ko compose: "templates/validation.errors.html" -->
-		<!-- /ko -->
+		<div data-bind="with: note">
+			<!-- ko compose: "templates/validation.errors.html" -->
+			<!-- /ko -->
+		</div>
 		<section class="accordion" >
             <!-- <div class="row" data-bind="with: $parent.activeDataType">
                 <h3 data-bind="text: name, attr: { title: name }"></h3>

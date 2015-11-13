@@ -1,10 +1,23 @@
 ﻿<form>    
     <div class="row pad accordion divider" data-bind="with: $parent.newNote">
+		<!-- ko compose: "templates/validation.errors.html" -->
+		<!-- /ko -->
         <div class="accordion-toggle" data-bind="clickToggle: $parents[1].gnContentOpen">
             <div class="bold line">Content:
             </div>
         </div>
         <div class="accordion-content" data-bind="visible: $parents[1].gnContentOpen">
+			<div class="row pad-top">
+				<div class="span2">
+                    <h5 class="grey pad-bottom">Duration</h5>
+                </div>
+                <div class="span2">
+                    <input type="text" data-bind="value: duration, valueUpdate: 'afterkeydown', numeric, 
+						attr:{maxlength: 4, max: 1440, min: 1, title:'Duration: enter a number of minutes from 1 to 1440'},
+						css: { 'invalid': (validationErrorsArray().indexOf('duration') !== -1) }"></input>
+                </div>
+				<span class="span2 grey align-left">(minutes)</span>
+			</div>
             <div class="row pad-top">
                 <div class="span12">
                     <label>
