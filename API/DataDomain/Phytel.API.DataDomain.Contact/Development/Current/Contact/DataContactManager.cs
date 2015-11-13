@@ -17,6 +17,7 @@ namespace Phytel.API.DataDomain.Contact
     public class ContactDataManager : IContactDataManager
     {
         protected static readonly int Limit = Convert.ToInt32(ConfigurationManager.AppSettings["RecentLimit"]);
+        protected static readonly string DDLookupServiceUrl = ConfigurationManager.AppSettings["DDLookupServiceUrl"];
 
         public IContactRepositoryFactory Factory { get; set; }
 
@@ -275,22 +276,26 @@ namespace Phytel.API.DataDomain.Contact
                 if (request.ContactsData != null && request.ContactsData.Count > 0)
                 {
                     List<ContactData> contactData = request.ContactsData;
+                    #region Get the default timeZone.
+                    string defaultTimeZoneId = getDefaultTimeZone(request);
+                    #endregion  
                     #region Get all the available comm modes in the lookup.
+                    List<CommModeData> commModeData = new List<CommModeData>();
                     List<IdNamePair> modesLookUp = getAllCommModes(request);
                     if (modesLookUp != null && modesLookUp.Count > 0)
                     {
-                        List<CommModeData> commModeData = new List<CommModeData>();
                         foreach (IdNamePair l in modesLookUp)
                         {
                             commModeData.Add(new CommModeData { ModeId = l.Id, OptOut = false, Preferred = false });
                         }
-                        // Populate default CommModes to the Contact data before inserting.
-                        contactData.ForEach(c => {
-                            c.Modes = commModeData;
-                        });
                     }
                     #endregion
-
+                    // Populate default CommModes and default timeZones to the Contact data before inserting.
+                    contactData.ForEach(c =>
+                    {
+                        c.Modes = commModeData;
+                        c.TimeZoneId = defaultTimeZoneId;
+                    });
                     list = new List<HttpObjectResponse<ContactData>>();
                     IContactRepository repo = Factory.GetRepository(request, RepositoryType.Contact);
                     BulkInsertResult result = (BulkInsertResult)repo.InsertAll(contactData.Cast<object>().ToList());
@@ -324,7 +329,7 @@ namespace Phytel.API.DataDomain.Contact
             return list;
         }
 
-        private List<IdNamePair> getAllCommModes(InsertBatchContactDataRequest request)
+        private List<IdNamePair> getAllCommModes(IDataDomainRequest request)
         {
             List<IdNamePair> response = null;
             try
@@ -348,6 +353,29 @@ namespace Phytel.API.DataDomain.Contact
             }
             catch (Exception ex) { throw ex; }
             return response;
+        }
+
+        private string getDefaultTimeZone(IDataDomainRequest request)
+        {
+            string timeZoneId = null;
+            try
+            {
+                IRestClient client = new JsonServiceClient();
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/TimeZone/Default",
+                                                                        DDLookupServiceUrl,
+                                                                        "NG",
+                                                                        request.Version,
+                                                                        request.ContractNumber), request.UserId);
+
+                //  [Route("/{Context}/{Version}/{ContractNumber}/TimeZone/Default", "GET")]
+                Phytel.API.DataDomain.LookUp.DTO.GetTimeZoneDataResponse dataDomainResponse = client.Get<Phytel.API.DataDomain.LookUp.DTO.GetTimeZoneDataResponse>(url);
+                if (dataDomainResponse != null && dataDomainResponse.TimeZone != null)
+                {
+                    timeZoneId = dataDomainResponse.TimeZone.Id;
+                }
+            }
+            catch (Exception ex) { throw ex; }
+            return timeZoneId;
         }
     }
 }
