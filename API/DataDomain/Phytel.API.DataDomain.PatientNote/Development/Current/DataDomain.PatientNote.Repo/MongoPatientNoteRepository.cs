@@ -58,7 +58,8 @@ namespace Phytel.API.DataDomain.PatientNote.Repo
                         DeleteFlag = false,
                         DataSource = Helper.TrimAndLimit(noteData.DataSource, 50),
                         LastUpdatedOn = noteData.UpdatedOn,
-                        ExternalRecordId = noteData.ExternalRecordId
+                        ExternalRecordId = noteData.ExternalRecordId,
+                        Duration = noteData.Duration,
                     };
 
                     if(!string.IsNullOrEmpty(noteData.MethodId))
@@ -76,11 +77,7 @@ namespace Phytel.API.DataDomain.PatientNote.Repo
                     if(!string.IsNullOrEmpty(noteData.SourceId))
                     {
                         meN.SourceId = ObjectId.Parse(noteData.SourceId);
-                    }
-                    if(!string.IsNullOrEmpty(noteData.DurationId))
-                    {
-                        meN.DurationId = ObjectId.Parse(noteData.DurationId);
-                    }
+                    }                    
 
                     using (PatientNoteMongoContext ctx = new PatientNoteMongoContext(ContractDBName))
                     {
@@ -123,7 +120,8 @@ namespace Phytel.API.DataDomain.PatientNote.Repo
                             DeleteFlag = false,
                             DataSource = Helper.TrimAndLimit(data.DataSource, 50),
                             LastUpdatedOn = data.UpdatedOn,
-                            ExternalRecordId = data.ExternalRecordId
+                            ExternalRecordId = data.ExternalRecordId,
+                            Duration = data.Duration
                         };
 
                         if (!string.IsNullOrEmpty(data.MethodId))
@@ -141,11 +139,7 @@ namespace Phytel.API.DataDomain.PatientNote.Repo
                         if (!string.IsNullOrEmpty(data.SourceId))
                         {
                             meN.SourceId = ObjectId.Parse(data.SourceId);
-                        }
-                        if (!string.IsNullOrEmpty(data.DurationId))
-                        {
-                            meN.DurationId = ObjectId.Parse(data.DurationId);
-                        }
+                        }                        
                         bulk.Insert(meN.ToBsonDocument());
                         insertedIds.Add(meN.Id.ToString());
                     }
@@ -238,7 +232,7 @@ namespace Phytel.API.DataDomain.PatientNote.Repo
                             OutcomeId = (meN.OutcomeId == null) ? null : meN.OutcomeId.ToString(),
                             WhoId = (meN.WhoId == null) ? null : meN.WhoId.ToString(),
                             SourceId = (meN.SourceId == null) ? null : meN.SourceId.ToString(),
-                            DurationId = (meN.DurationId == null) ? null : meN.DurationId.ToString(),
+                            Duration = meN.Duration,
                             ValidatedIdentity = meN.ValidatedIdentity,
                             ContactedOn = meN.ContactedOn,
                             UpdatedById = (meN.UpdatedBy == null) ? null : meN.UpdatedBy.ToString(),
@@ -330,13 +324,13 @@ namespace Phytel.API.DataDomain.PatientNote.Repo
                     {
                         uv.Add(MB.Update.Set(MEPatientNote.OutcomeIdProperty, BsonNull.Value));
                     }
-                    if (pn.DurationId != null)
+                    if (pn.Duration != null)
                     {
-                        uv.Add(MB.Update.Set(MEPatientNote.DurationIdProperty, ObjectId.Parse(pn.DurationId)));
+                        uv.Add(MB.Update.Set(MEPatientNote.DurationProperty, pn.Duration));
                     }
                     else
                     {
-                        uv.Add(MB.Update.Set(MEPatientNote.DurationIdProperty, BsonNull.Value));
+                        uv.Add(MB.Update.Set(MEPatientNote.DurationProperty, BsonNull.Value));
                     }
                     uv.Add(MB.Update.Set(MEPatientNote.ValidatedIdentityProperty, pn.ValidatedIdentity));
                     if (pn.ContactedOn != null && !pn.ContactedOn.Equals(new DateTime()))
@@ -429,7 +423,7 @@ namespace Phytel.API.DataDomain.PatientNote.Repo
                                 OutcomeId = (meN.OutcomeId == null) ? null : meN.OutcomeId.ToString(),
                                 WhoId = (meN.WhoId == null) ? null : meN.WhoId.ToString(),
                                 SourceId = (meN.SourceId == null) ? null : meN.SourceId.ToString(),
-                                DurationId = (meN.DurationId == null) ? null : meN.DurationId.ToString(),
+                                Duration = meN.Duration,
                                 ValidatedIdentity = meN.ValidatedIdentity,
                                 ContactedOn = meN.ContactedOn,
                                 UpdatedById = (meN.UpdatedBy == null) ? null : meN.UpdatedBy.ToString(),
@@ -597,7 +591,7 @@ namespace Phytel.API.DataDomain.PatientNote.Repo
                                 OutcomeId = (meN.OutcomeId == null) ? null : meN.OutcomeId.ToString(),
                                 WhoId = (meN.WhoId == null) ? null : meN.WhoId.ToString(),
                                 SourceId = (meN.SourceId == null) ? null : meN.SourceId.ToString(),
-                                DurationId = (meN.DurationId == null) ? null : meN.DurationId.ToString(),
+                                Duration = meN.Duration,
                                 ValidatedIdentity = meN.ValidatedIdentity,
                                 ContactedOn = meN.ContactedOn,
                                 UpdatedById = (meN.UpdatedBy == null) ? null : meN.UpdatedBy.ToString(),

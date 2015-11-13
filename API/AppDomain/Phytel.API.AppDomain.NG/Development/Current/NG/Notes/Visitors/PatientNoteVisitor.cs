@@ -41,7 +41,7 @@ namespace Phytel.API.AppDomain.NG.Notes.Visitors
                 OutcomeId = n.OutcomeId,
                 WhoId = n.WhoId,
                 SourceId = n.SourceId,
-                DurationId = n.DurationId,
+                Duration = n.Duration,
                 ValidatedIdentity = n.ValidatedIdentity,
                 ContactedOn = n.ContactedOn,
                 UpdatedById = n.UpdatedById,

@@ -54,7 +54,7 @@ namespace Phytel.API.DataDomain.PatientNote.Test
                WhoId = "540f1fc3d4332319883f3e97",
                OutcomeId = "540f1f14d4332319883f3e93",
                SourceId = "540f2091d4332319883f3e9c",
-               DurationId = "540f2174d4332319883f3ea0",
+               Duration = 10,
               ValidatedIdentity = false,
               ContactedOn = DateTime.Now.AddDays(4)
            };
