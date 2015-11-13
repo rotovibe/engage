@@ -14,6 +14,7 @@ define(['services/datacontext'],
 			self.whos = datacontext.enums.noteWhos;
 			self.sources = datacontext.enums.noteSources;
 			self.outcomes = datacontext.enums.noteOutcomes;
+			self.durations = datacontext.enums.noteDurations;
 			self.existingContentOpen = ko.observable(false);
 			self.toggleOpen = function () {
 				self.existingContentOpen(!self.existingContentOpen());

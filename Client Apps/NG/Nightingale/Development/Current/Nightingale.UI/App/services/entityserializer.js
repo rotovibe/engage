@@ -596,7 +596,7 @@
 						.from('fakePath')
 						.where('id', '==', note.id())
 						.toType('Note')
-						.select('id, text, patientId, createdOn, createdById, typeId, methodId, outcomeId, whoId, sourceId, duration, contactedOn, validatedIdentity, admitDate, dischargeDate, dataSource, admitted, visitTypeId, otherType, utilizationSourceId, dispositionId, otherDisposition, locationId, otherLocation, updatedById, updatedOn');
+						.select('id, text, patientId, createdOn, createdById, typeId, methodId, outcomeId, whoId, sourceId, durationId, contactedOn, validatedIdentity, admitDate, dischargeDate, dataSource, admitted, visitTypeId, otherType, utilizationSourceId, dispositionId, otherDisposition, locationId, otherLocation, updatedById, updatedOn');
 				var results = manager.executeQueryLocally(noteQuery);
 				var unwrappedNote = results[0];
 
@@ -617,7 +617,7 @@
 				thisNote.OutcomeId = unwrappedNote.outcomeId;
 				thisNote.WhoId = unwrappedNote.whoId;
 				thisNote.SourceId = unwrappedNote.sourceId;
-				thisNote.Duration = unwrappedNote.duration;
+				thisNote.DurationId = unwrappedNote.durationId;
 				thisNote.ContactedOn = unwrappedNote.contactedOn;
 				thisNote.ValidatedIdentity = unwrappedNote.validatedIdentity;
 				//utilization:

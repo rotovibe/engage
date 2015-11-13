@@ -253,6 +253,16 @@ define(['services/session'],
 		        }
 		    });
 
+		    // NoteDuration
+		    metadataStore.addEntityType({
+		        shortName: "NoteDuration",
+		        namespace: "Nightingale",
+		        dataProperties: {
+		            id: { dataType: "String", isPartOfKey: true },
+		            name: { dataType: "String" },
+		            isDefault: { dataType: "String" }
+		        }
+		    });
 
 		    // NoteType
 		    metadataStore.addEntityType({

@@ -281,16 +281,6 @@ define(['services/formatter', 'services/dateHelper'],
             }
         };
 		
-		ko.bindingHandlers.numeric = {
-			/**
-			*	@param valueAccessor expecting an observable that holds/binds to the number.
-			*	@method numeric.init
-			*/
-			init: function(element, valueAccessor){			
-				blockNonNumeric(element);				
-			}
-		};
-		
 		/**
 		*	masking and validating a social security number (SSN).
 		*	@class ssn social security number
@@ -313,7 +303,13 @@ define(['services/formatter', 'services/dateHelper'],
 					ssn(number);
 				}
 				
-				blockNonNumeric(element);
+				//prevent typing non numerics:
+				$(element).on('keypress', function(e){
+					var key = e.which || e.keyCode;
+					if( (key < 48 || key > 57) && key !== 116 && key !== 8 && key !== 9 && key !== 37 && key !== 39 && key !== 46 && !(key == 118 && e.ctrlKey)){	//exclude 116 (=F5), 8(=bkspc), 9(=tab) , 37,39 (<-, ->), 46(=del), ctrl+V (118) on firefox!
+						e.preventDefault();												
+					}
+				});
 				
 				//mask ssn number to : XXX-XX-XXXX
 				$(element).on('keydown paste', function(e){
@@ -1283,22 +1279,9 @@ define(['services/formatter', 'services/dateHelper'],
             $('.arrow').css('top', top);
         }
 
-		/**
-		*	prevent typing non numerics
-		*	@method	blockNonNumeric
-		*/
-		function blockNonNumeric(element){			
-			$(element).on('keypress', function(e){
-				var key = e.which || e.keyCode;
-				if( (key < 48 || key > 57) && key !== 116 && key !== 8 && key !== 9 && key !== 37 && key !== 39 && key !== 46 && !(key == 118 && e.ctrlKey)){	//exclude 116 (=F5), 8(=bkspc), 9(=tab) , 37,39 (<-, ->), 46(=del), ctrl+V (118) on firefox!
-					e.preventDefault();												
-				}
-			});			
-		}
-		
         function checkDataContext() {
             if (!datacontext) {
                 datacontext = require('services/datacontext');
             }
-        }		
+        }
     });
