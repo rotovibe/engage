@@ -400,6 +400,26 @@ define(['services/session'],
 		            }
 		            return taskList;
 		        });
+				barrier.validationErrors = ko.observableArray([]);
+				barrier.isValid = ko.computed( function() {
+					var hasErrors = false;
+					var barrierErrors = [];
+					var name = barrier.name();
+					if( !name ){
+						barrierErrors.push({ PropName: 'name', Message: 'Description is required' });
+						hasErrors = true;
+					}
+					barrier.validationErrors(barrierErrors);
+					return !hasErrors;	
+				});
+				barrier.validationErrorsArray = ko.computed(function () {
+					var thisArray = [];
+					ko.utils.arrayForEach(barrier.validationErrors(), function (error) {
+						thisArray.push(error.PropName);
+					});
+					return thisArray;
+				});
+				
             }
 
             function goalInitializer(goal) {
@@ -451,6 +471,25 @@ define(['services/session'],
 		            return thisString;
 		        });
 				goal.isLoaded = false;
+				goal.validationErrors = ko.observableArray([]);
+				goal.isValid = ko.computed( function() {
+					var hasErrors = false;
+					var goalErrors = [];
+					var name = goal.name();
+					if( !name ){
+						goalErrors.push({ PropName: 'name', Message: 'Description is required' });
+						hasErrors = true;
+					}
+					goal.validationErrors(goalErrors);
+					return !hasErrors;	
+				});
+				goal.validationErrorsArray = ko.computed(function () {
+					var thisArray = [];
+					ko.utils.arrayForEach(goal.validationErrors(), function (error) {
+						thisArray.push(error.PropName);
+					});
+					return thisArray;
+				});
 		    }
 
 		    function interventionInitializer(intervention) {
@@ -584,6 +623,25 @@ define(['services/session'],
 		        	}
 		        	return returnString;
 		        });
+				task.validationErrors = ko.observableArray([]);
+				task.isValid = ko.computed( function() {
+					var hasErrors = false;
+					var taskErrors = [];
+					var description = task.description();
+					if( !description ){
+						taskErrors.push({ PropName: 'description', Message: 'Description is required' });
+						hasErrors = true;
+					}
+					task.validationErrors(taskErrors);
+					return !hasErrors;	
+				});
+				task.validationErrorsArray = ko.computed(function () {
+					var thisArray = [];
+					ko.utils.arrayForEach(task.validationErrors(), function (error) {
+						thisArray.push(error.PropName);
+					});
+					return thisArray;
+				});
 		    }
 
 		    function attributeInitializer(attribute) {

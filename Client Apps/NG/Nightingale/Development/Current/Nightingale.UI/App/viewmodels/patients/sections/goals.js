@@ -221,7 +221,7 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
             // the patients' observations and make sure they are
             // valid
             self.canSave = ko.computed(function () {
-                var result = self.entity[reqpropname]();
+                var result = self.entity.isValid();
                 // The active goal needs a property passed in from reqpropname
                 return result;
             });

@@ -136,7 +136,7 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
             shell.currentModal(modal);
         }
 
-        function ModalEntity(entity, reqpropname) {
+        function ModalEntity(entity) {
             var self = this;
             self.entity = entity;
             // Object containing parameters to pass to the modal
@@ -145,8 +145,7 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
             // the patients' observations and make sure they are
             // valid
             self.canSave = ko.computed(function () {
-                var result = self.entity[reqpropname]();
-                // The active goal needs a property passed in from reqpropname
+                var result = self.entity.isValid();                
                 return result;
             });
         }
