@@ -19,21 +19,6 @@
                     <div data-bind="chsnsingle: { options: $parent.interventionStatuses, value: status, text: 'name', label: 'interventionstatuses', disabled: $parent.isNew() }"></div>
                 </div>
             </div>
-            <div class="row pad-top">
-                <div class="span3 align-right">
-                    <span class="grey">Start Date</span>
-                </div>
-                <div class="span6">
-					<!-- ko compose: { model: 'viewmodels/templates/datetimepicker', activationData:
-						{
-							observableDateTime: startDate, dateErrors: startDateErrors, showInvalid: $parent.setInvalidStartDate, 
-							datepickerOptions:{}, datepickerDynamicOptions: {}, dateName: 'startDate'
-						}
-					} -->
-					<!-- /ko -->                    
-                </div>
-                <div class="span3"></div>
-            </div>
 			<div class="row pad-top">
                 <div class="span3 align-right">
                     <span class="grey">Due Date</span>
@@ -49,6 +34,22 @@
                 </div>
                 <div class="span3"></div>
             </div>
+            <div class="row pad-top">
+                <div class="span3 align-right">
+                    <span class="grey">Start Date</span>
+                </div>
+                <div class="span6">
+					<!-- ko compose: { model: 'viewmodels/templates/datetimepicker', activationData:
+						{
+							observableDateTime: startDate, dateErrors: startDateErrors, showInvalid: $parent.setInvalidStartDate, 
+							datepickerOptions:{}, datepickerDynamicOptions: {}, dateName: 'startDate'
+						}
+					} -->
+					<!-- /ko -->                    
+                </div>
+                <div class="span3"></div>
+            </div>
+			
             <div class="row pad-top">
                 <div class="span3 align-right">
                     <span class="grey">Category</span>
