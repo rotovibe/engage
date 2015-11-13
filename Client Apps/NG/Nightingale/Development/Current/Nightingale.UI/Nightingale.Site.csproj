@@ -214,6 +214,7 @@
     <Content Include="App\views\templates\clinicalBackground.html" />
     <Content Include="App\views\templates\datetimepicker.html" />
     <Content Include="App\views\templates\event.details.html" />
+    <Content Include="App\views\templates\intervention.duedate.html" />
     <Content Include="App\views\templates\medication.expand.html" />
     <Content Include="App\views\templates\medication.name.html" />
     <Content Include="App\views\templates\medication.strength.html" />
