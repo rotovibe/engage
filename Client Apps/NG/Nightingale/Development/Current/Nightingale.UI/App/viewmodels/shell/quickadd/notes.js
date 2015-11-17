@@ -54,7 +54,6 @@
 			self.whos = datacontext.enums.noteWhos;
 			self.sources = datacontext.enums.noteSources;
 			self.outcomes = datacontext.enums.noteOutcomes;
-			self.durations = datacontext.enums.noteDurations;
 			//utilization note lookups:
 			self.visitTypes = datacontext.enums.visitTypes;
 			self.utilizationSources = datacontext.enums.utilizationSources;
@@ -73,9 +72,6 @@
 			});
 			self.defaultSource = ko.utils.arrayFirst(self.sources(), function (source) {
 				return source.isDefault();
-			});
-			self.defaultDuration = ko.utils.arrayFirst(self.durations(), function (duration) {
-				return duration.isDefault();
 			});
 			self.defaultVisitType = ko.utils.arrayFirst(self.visitTypes(), function (visitType) {
 				return visitType.isDefault();
@@ -127,6 +123,7 @@
 				typeId: generalNoteType.id(),
 				dataSource: "Engage"
 			}));
+			self.newNote().watchDirty();
 		};
 
 		ctor.prototype.createNewUtilization = function () {
@@ -162,8 +159,7 @@
 				contactedOn: new moment().format(),
 				outcome: self.defaultOutcome,
 				method: self.defaultMethod,
-				source: self.defaultSource,
-				duration: self.defaultDuration,
+				source: self.defaultSource,				
 				who: self.defaultWho,
 				typeId: touchpointNoteType.id(),
 				validatedIdentity: false,
@@ -180,6 +176,7 @@
 					}, 100);
 				}
 			});
+			self.newTouchPoint().watchDirty();
 		};
 
 		ctor.prototype.getContractProgramsByCategory = function () {
@@ -314,23 +311,22 @@
 				navigation.setSubRoute(thisSubRoute);
 			};
 			self.canSave = ko.computed(function () {
-				return self.newNote() && !self.isSaving() && self.newNote().text();
+				return self.newNote() && !self.isSaving() && self.newNote().isValid() && self.newNote().isDirty();
 			});
 			self.canSaveTouchPoint = ko.computed(function () {
 				//subscribe to the condition variables: (this fixes a firefox issue)
 				var hasNewTouchPoint = self.newTouchPoint()? true : false;
 				var isSaving = self.isSaving();
-				if(self.newTouchPoint()){
+				if(self.newTouchPoint()){					
 					var text = self.newTouchPoint().text();
 					var contactedOn = self.newTouchPoint().contactedOn();
 				}
 				return self.newTouchPoint() && !self.isSaving() && self.newTouchPoint().text() && self.newTouchPoint().contactedOn();
 			});
 			self.canSaveUtilization = ko.computed(function () {
-				//subscribe to the condition variables: (this fixes a firefox issue)
-				//TODO: verify validation rules for utilization
+				//subscribe to the condition variables: (this fixes a firefox issue)				
 				var hasNewUtilization = self.newUtilization()? true : false;
-				var isSaving = self.isSaving();
+				var isSaving = self.isSaving();				
 				return self.newUtilization() && !self.isSaving() && self.newUtilization().isValid() && self.newUtilization().visitType() && self.newUtilization().isDirty();
 			});
 			self.createNewNote();
@@ -358,4 +354,4 @@
 		};
 
 		return ctor;
-	});
+	});  
