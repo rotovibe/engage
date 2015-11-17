@@ -163,7 +163,7 @@ namespace Phytel.Data.ETL
                 LoadPatientProgramSteps(_contract);
                 LoadPatientProgramResponses(_contract);
                 LoadPatientProgramAttributes(_contract);
-                
+
                 ProcessSpawnElements();
                 ToDos.Export();
 
@@ -1539,6 +1539,7 @@ namespace Phytel.Data.ETL
                                 parms.Add(new Parameter("@BackGround", (string.IsNullOrEmpty(patient.Background) ? string.Empty : patient.Background), SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
                                 parms.Add(new Parameter("@DisplayPatientSystemMongoId", string.Empty, SqlDbType.VarChar, ParameterDirection.Input, 50));
                                 parms.Add(new Parameter("@TTLDate", patient.TTLDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                                parms.Add(new Parameter("@ClinicalBackGround", (string.IsNullOrEmpty(patient.ClinicalBackground) ? string.Empty : patient.ClinicalBackground), SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
 
                                 if (patient.ExtraElements != null)
                                     parms.Add(new Parameter("@ExtraElements", patient.ExtraElements.ToString(), SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
