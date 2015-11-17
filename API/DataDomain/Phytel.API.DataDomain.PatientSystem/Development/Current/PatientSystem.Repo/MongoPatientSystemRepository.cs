@@ -104,7 +104,8 @@ namespace Phytel.API.DataDomain.PatientSystem
                             DataSource = Helper.TrimAndLimit(data.DataSource, 50),
                             DeleteFlag = false,
                             ExternalRecordId = data.ExternalRecordId,
-                            LastUpdatedOn = data.UpdatedOn
+                            LastUpdatedOn = data.UpdatedOn,
+                            UpdatedBy = ParseObjectId(data.UpdatedById)
                         };
                         bulk.Insert(mePS.ToBsonDocument());
                         insertedIds.Add(mePS.Id.ToString());
@@ -129,6 +130,22 @@ namespace Phytel.API.DataDomain.PatientSystem
             result.ProcessedIds = insertedIds;
             result.ErrorMessages = errorMessages;
             return result;
+        }
+
+        private ObjectId? ParseObjectId(string p)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(p)) return null;
+                var val = ObjectId.Parse(p);
+                return val;
+            }
+            catch (Exception ex)
+            {
+                var aseProcessId = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Helper.LogException(int.Parse(aseProcessId), ex);
+                throw ex;
+            }
         }
 
         public void Delete(object entity)
