@@ -311,7 +311,7 @@
 				navigation.setSubRoute(thisSubRoute);
 			};
 			self.canSave = ko.computed(function () {
-				return self.newNote() && !self.isSaving() && self.newNote().isValid() && self.newNote().isDirty();
+				return self.newNote() && !self.isSaving() && self.newNote().isValid();
 			});
 			self.canSaveTouchPoint = ko.computed(function () {
 				//subscribe to the condition variables: (this fixes a firefox issue)
@@ -327,7 +327,7 @@
 				//subscribe to the condition variables: (this fixes a firefox issue)				
 				var hasNewUtilization = self.newUtilization()? true : false;
 				var isSaving = self.isSaving();				
-				return self.newUtilization() && !self.isSaving() && self.newUtilization().isValid() && self.newUtilization().visitType() && self.newUtilization().isDirty();
+				return self.newUtilization() && !self.isSaving() && self.newUtilization().isValid() && self.newUtilization().visitType();
 			});
 			self.createNewNote();
 			self.createNewTouchPoint();

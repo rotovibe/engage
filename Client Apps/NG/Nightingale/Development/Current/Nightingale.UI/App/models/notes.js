@@ -327,9 +327,11 @@ define(['services/session', 'services/dateHelper'],
 						switch( typeName ){
 							case 'touchpoint':
 							{
-								if( !text && hasChanges){
-									noteErrors.push({ PropName: 'text', Message: 'Content is required' });
+								if( !text ){									
 									hasErrors = true;
+									if( hasChanges ){
+										noteErrors.push({ PropName: 'text', Message: 'Content is required' });	
+									}
 								}
 								if( contactedOn ){
 									if( contactedOnErrors.length > 0 ){
@@ -366,9 +368,11 @@ define(['services/session', 'services/dateHelper'],
 										hasErrors = true;
 									}
 								}
-								if( !visitType && hasChanges ){
-									noteErrors.push({ PropName: 'visitType', Message: 'Visit Type is required' });
+								if( !visitType ){									
 									hasErrors = true;
+									if( hasChanges ){
+										noteErrors.push({ PropName: 'visitType', Message: 'Visit Type is required' });	
+									}
 								}
 								// else if( visitType.name().toLowerCase() === 'other' && !otherType ){
 									// noteErrors.push({ PropName: 'otherType', Message: 'Other Visit Type is required' });
@@ -392,9 +396,11 @@ define(['services/session', 'services/dateHelper'],
 							}
 							default:
 							{
-								if( !text && hasChanges ){
-									noteErrors.push({ PropName: 'text', Message: 'Content is required' });
+								if( !text ){									
 									hasErrors = true;
+									if( hasChanges ){
+										noteErrors.push({ PropName: 'text', Message: 'Content is required' });
+									}
 								}
 								break;
 							}
