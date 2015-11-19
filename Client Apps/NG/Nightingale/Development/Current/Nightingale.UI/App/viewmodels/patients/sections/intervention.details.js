@@ -32,10 +32,11 @@
                 getGoalDetails(intervention.goal());
                 // Edit this intervention
                 var modalEntity = ko.observable(new ModalEntity(intervention, 'description'));
-                var saveOverride = function () {
+                var saveOverride = function () {					
                     saveIntervention(intervention);
                 };
                 var cancelOverride = function () {
+					intervention.clearDirty();
 					intervention.newDetails(null);
                     cancel(intervention);
                     getGoalDetails(intervention.goal());
@@ -85,10 +86,13 @@
             shell.currentModal(modal);
         }
 
-        function saveIntervention(intervention) {
+        function saveIntervention(intervention) {			
+			function saved(){
+				intervention.clearDirty();
+			}
             // Call the save intervention method			
 			intervention.checkAppend();			
-            datacontext.saveIntervention(intervention);
+            datacontext.saveIntervention(intervention).then(saved);
         }
 
         function cancel (item) {

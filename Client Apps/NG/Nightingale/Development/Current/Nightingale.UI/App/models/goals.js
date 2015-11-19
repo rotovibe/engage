@@ -493,6 +493,7 @@ define(['services/session'],
 		    }
 
 		    function interventionInitializer(intervention) {
+				intervention.isNew = ko.observable(false);
 				intervention.newDetails = ko.observable();
 				intervention.checkAppend = function () {
 					appendNewDetails( intervention.newDetails, intervention.details );
@@ -538,6 +539,25 @@ define(['services/session'],
 		        	}
 		        	return returnPatient;
 		        });
+				intervention.isDirty = ko.observable(false);
+				intervention.clearDirty = function(){
+					intervention.isDirty(false);
+				};
+				intervention.watchDirty = function () {
+					var propToken = intervention.entityAspect.propertyChanged.subscribe(function (newValue) {
+						intervention.isDirty(true);
+						propToken.dispose();
+					});
+					//specifically subscribe to the barrierIds as propertyChanged wont be notified:
+					var barriersToken = intervention.barrierIds.subscribe(function (newValue) {
+						intervention.isDirty(true);
+						barriersToken.dispose();
+					});
+					var newDetailsToken = intervention.newDetails.subscribe(function (newValue) {
+						intervention.isDirty(true);
+						newDetailsToken.dispose();
+					});
+				};
 				intervention.dueDateErrors = ko.observableArray([]);	//datetimepicker validation errors
 				intervention.startDateErrors = ko.observableArray([]);	//datetimepicker validation errors
 				intervention.validationErrors = ko.observableArray([]);
@@ -549,12 +569,15 @@ define(['services/session'],
 					var interventionErrors = [];										
 					var dueDateErrors = intervention.dueDateErrors();
 					var startDateErrors = intervention.startDateErrors();
+					var hasChanges = intervention.isDirty();
 					if( !description ){
-						interventionErrors.push({ PropName: 'description', Message: 'Description is required' });
 						hasErrors = true;
+						if( hasChanges || !intervention.isNew() ){
+							interventionErrors.push({ PropName: 'description', Message: 'Description is required' });
+						}						
 					}
 					if( startDateErrors.length > 0 ){
-						//datetimepicker validation errors:
+						//datetimepicker validation errors:						
 						ko.utils.arrayForEach( startDateErrors, function(error){
 							interventionErrors.push({ PropName: 'startDate', Message: 'Start Date ' + error.Message});
 							hasErrors = true;

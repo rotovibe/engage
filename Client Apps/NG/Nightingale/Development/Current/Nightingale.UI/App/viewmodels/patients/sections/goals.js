@@ -89,6 +89,8 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
                 self.addEntity('Intervention', goal, startDate, session.currentUser().userId()).then(doSomething);
 
                 function doSomething(intervention) {
+					intervention.isNew(true);
+					intervention.watchDirty();
                     // Show the modal
                     self.editIntervention(intervention, 'Add Intervention');
                 }
@@ -190,6 +192,7 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
         }
 
         function saveIntervention (entity) {
+			entity.isNew(false);
 			entity.checkAppend();
             datacontext.saveIntervention(entity);
         }
