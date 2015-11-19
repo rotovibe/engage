@@ -112,6 +112,7 @@
     <Compile Include="DBScriptGenerator.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="Extensions\Lists.cs" />
+    <Compile Include="Extensions\OrderedDistinct.cs" />
     <Compile Include="IMessageProcessor.cs" />
     <Compile Include="IRepository.cs" />
     <Compile Include="MessageProcessor.cs" />
@@ -120,6 +121,7 @@
     <Compile Include="Specifications\IsApplicableContractSpecification.cs" />
     <Compile Include="Specifications\ISpecification.cs" />
     <Compile Include="Specifications\Specification.cs" />
+    <Compile Include="UOW\Comparer.cs" />
     <Compile Include="UOW\ToDoDataDomain.cs" />
     <Compile Include="UOW\PatientDataDomain.cs" />
     <Compile Include="UOW\Helper.cs" />
@@ -132,6 +134,7 @@
     <Compile Include="UOW\PatientsImportUow.cs" />
     <Compile Include="UOW\UOWBase.cs" />
     <Compile Include="PatientInfoUtils.cs" />
+    <Compile Include="Utils\LogUtil.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\..\API\Common\Phytel.API.Common\Development\Current\Phytel.API.Common.csproj">

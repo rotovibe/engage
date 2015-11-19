@@ -55,7 +55,7 @@ namespace Phytel.Engage.Integrations.Repo.Repositories
                             PCP_Name = ((from ContactEntities in ct.ContactEntities where ContactEntities.ID == se.CONTACTENTITYID select new{ Name = (ContactEntities.LastName + ", " + ContactEntities.FirstName) }).FirstOrDefault().Name),
                             Facility = ((from ContactEntities in ct.ContactEntities where ContactEntities.ID == se.FACILITYID select new {ContactEntities.Name}).FirstOrDefault().Name),
                             desc = ((from CommCategory in ct.CommCategories where CommCategory.CommCategoryCode == pn.CategoryCode select new {CommCategory.Description }).FirstOrDefault().Description),
-                            Phone = ("(" + pn.AreaCode + ")" + pn.PhoneNumberString)
+                            Phone = (pn.AreaCode + pn.PhoneNumberString)
                         }).Distinct();
 
                     ptInfo = query.ToList();

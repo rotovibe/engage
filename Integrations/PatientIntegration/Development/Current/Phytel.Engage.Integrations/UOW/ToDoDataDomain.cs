@@ -14,7 +14,7 @@ namespace Phytel.Engage.Integrations.UOW
 
         public object Save<T>(T patients, string contract)
         {
-            LoggerDomainEvent.Raise(new LogStatus { Message = "1) Sending insert Patient DD request.", Type = LogType.Debug });
+            LoggerDomainEvent.Raise(new LogStatus { Message = "1) Sending insert ToDo DD request.", Type = LogType.Debug });
             var userid = ProcConstants.UserId; // need to find a valid session id.
             try
             {

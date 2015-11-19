@@ -8,6 +8,20 @@ namespace Phytel.Engage.Integrations
 {
     public static class PatientInfoUtils
     {
+        public static DateTime CstConvert(DateTime time)
+        {
+            try
+            {
+                var cstZone = TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time");
+                var cstTime = TimeZoneInfo.ConvertTimeFromUtc(time, cstZone);
+                return cstTime;
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentException("Utils: CstConvert():" + ex.Message);
+            }
+        }
+
         public static int GetDeceased(string p)
         {
             var val = 0;

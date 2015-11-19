@@ -11,7 +11,8 @@ namespace Phytel.Engage.Integrations.UOW
 {
     public class PatientSystemDataDomain : IDataDomain
     {
-        protected readonly string DDPatientSystemUrl = ProcConstants.DdPatientSystemUrl; //ConfigurationManager.OpenExeConfiguration(Assembly.GetExecutingAssembly().Location).AppSettings.Settings["DDPatientSystemUrl"].Value;
+        protected readonly string DDPatientSystemUrl = ProcConstants.DdPatientSystemUrl; 
+        //ConfigurationManager.OpenExeConfiguration(Assembly.GetExecutingAssembly().Location).AppSettings.Settings["DDPatientSystemUrl"].Value;
             //ConfigurationManager.AppSettings[""];
 
         //List<HttpObjectResponse<PatientSystemData>>
@@ -23,11 +24,7 @@ namespace Phytel.Engage.Integrations.UOW
             try
             {
                 IRestClient client = new JsonServiceClient();
-                //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/PatientSystems", "POST")]
-                var url =
-                    Helper.BuildURL(
-                        string.Format("{0}/{1}/{2}/{3}/Batch/PatientSystems", DDPatientSystemUrl, "NG", 1, contract),
-                        userid);
+                var url = Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Batch/PatientSystems", DDPatientSystemUrl, "NG", 1, contract), userid);
 
                 var request = new InsertBatchPatientSystemsDataRequest
                 {
@@ -40,7 +37,7 @@ namespace Phytel.Engage.Integrations.UOW
 
                 InsertBatchPatientSystemsDataResponse dataDomainResponse = client.Post<InsertBatchPatientSystemsDataResponse>(url, (object)request );
 
-                new Helpers().SerializeObject<List<PatientSystemData>>(request.PatientSystemsData, Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "\\PatientsSystemExample.txt");
+                //new Helpers().SerializeObject<List<PatientSystemData>>(request.PatientSystemsData, Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "\\PatientsSystemExample.txt");
                 //var lPsd = Helpers.DeserializeObject<List<PatientSystemData>>(System.Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "\\PatientsSystemExample.txt");
 
                 var result = dataDomainResponse.Responses;

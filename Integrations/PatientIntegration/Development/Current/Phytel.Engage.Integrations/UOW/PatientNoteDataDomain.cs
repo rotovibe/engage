@@ -36,7 +36,7 @@ namespace Phytel.Engage.Integrations.UOW
                         Version = 1
                     });
 
-                new Helpers().SerializeObject<List<PatientNoteData>>(patientNotes as List<PatientNoteData>, Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "\\PatientNotesExample.txt");
+                //new Helpers().SerializeObject<List<PatientNoteData>>(patientNotes as List<PatientNoteData>, Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "\\PatientNotesExample.txt");
                 //var lPsd = Helpers.DeserializeObject<List<PatientSystemData>>(System.Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "\\PatientsSystemExample.txt");
 
                 LoggerDomainEvent.Raise(new LogStatus { Message = "5) Success", Type = LogType.Debug });

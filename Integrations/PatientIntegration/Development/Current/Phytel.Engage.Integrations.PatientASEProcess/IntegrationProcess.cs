@@ -75,7 +75,6 @@ namespace Phytel.Engage.Integrations.QueueProcess
                 .ForMember(d => d.ExternalRecordId, opt => opt.MapFrom(src => src.ID))
                 .ForMember(d => d.StatusId, opt => opt.MapFrom(src => 1))
                 .ForMember(d => d.CreatedOn, opt => opt.MapFrom(src => src.CreateDate))
-                .ForMember(d => d.UpdatedById, opt => opt.MapFrom(src => ProcConstants.UserId))
                 .ForMember(d => d.UpdatedOn, opt => opt.MapFrom(src => src.UpdateDate));
         }
     }

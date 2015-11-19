@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using Phytel.API.Common;
@@ -41,7 +42,7 @@ namespace Phytel.Engage.Integrations.UOW
 
                 if (pocos.Count > 5 && pocos.Count > ProcConstants.TakeCount)
                 {
-                    LoggerDomainEvent.Raise(LogStatus.Create("Handling " + pocos.Count + " records in batches.", true));
+                    LoggerDomainEvent.Raise(LogStatus.Create("[Batch Process]: Handling " + pocos.Count + " records in batches.", true));
                     BatchRequest(pocos, contract, domain);
                 }
                 else
@@ -63,14 +64,22 @@ namespace Phytel.Engage.Integrations.UOW
                 var pages = pocos.Pages(take);
                 for (var i = 0; i <= pages; i++)
                 {
-                    if (count == pocos.Count) break;
-                    var savePatients = pocos.Batch(take).ToList()[i];
+                    try
+                    {
+                        if (count == pocos.Count) break;
+                        var savePatients = pocos.Batch(take).ToList()[i];
 
-                    var enumerable = savePatients as IList<T> ?? savePatients.ToList();
-                    HandleResponse(domain.Save(enumerable, contract), contract);
+                        var enumerable = savePatients as IList<T> ?? savePatients.ToList();
+                        FormatStatusResponse(savePatients.ToList(), "saving");
+                        HandleResponse(domain.Save(enumerable, contract), contract);
 
-                    count = count + enumerable.Count();
-                    LoggerDomainEvent.Raise(LogStatus.Create("Patients saved:" + count, true));
+                        count = count + enumerable.Count();
+                        LoggerDomainEvent.Raise(LogStatus.Create("Patients saved:" + count, true));
+                    }
+                    catch (Exception ex)
+                    {
+                        LoggerDomainEvent.Raise(LogStatus.Create("Failure to save batch ["+ i +"]:" + count + " " + ex.Message, false));
+                    }
                 }
             }
             catch (Exception ex)
@@ -93,12 +102,29 @@ namespace Phytel.Engage.Integrations.UOW
                 {
                     PatientSaveResults.AddRange(list as List<HttpObjectResponse<PatientData>>);
                     SaveIntegrationXref(list, contract);
+                    FormatStatusResponse(list, "saved");
                 }
             }
             catch (Exception ex)
             {
                 LoggerDomainEvent.Raise(LogStatus.Create("UowBase:HandleResponse(): " + ex.Message, false));
                 throw new ArgumentException("UowBase:HandleResponse(): " + ex.Message);
+            }
+        }
+
+        public void FormatStatusResponse<T>(T list, string action)
+        {
+            try
+            {
+                StringBuilder sb = new StringBuilder();
+                var l = list as List<HttpObjectResponse<PatientData>>;
+                l.ForEach(r => sb.Append(r.Body.ExternalRecordId + ", "));
+                LoggerDomainEvent.Raise(LogStatus.Create("[Batch Process]: " + l.Count + " Patients "+ action +"  : (" + sb.ToString() +")", true));
+            }
+            catch (Exception ex)
+            {
+                LoggerDomainEvent.Raise(LogStatus.Create("UowBase:FormatStatusResponse(): " + ex.Message, false));
+                throw new ArgumentException("UowBase:FormatStatusResponse(): " + ex.Message);                
             }
         }
 
@@ -130,7 +156,7 @@ namespace Phytel.Engage.Integrations.UOW
 
                 cb.Add(new EIntegrationPatientXref
                 {
-                    CreateDate = DateTime.Now,
+                    CreateDate = PatientInfoUtils.CstConvert(DateTime.UtcNow),
                     ExternalPatientID = mongoId,
                     ExternalDisplayPatientId = engageId, //"engageid"
                     PhytelPatientID = Convert.ToInt32(phytelId), //"phytelid"
@@ -177,6 +203,15 @@ namespace Phytel.Engage.Integrations.UOW
             {
                 var xrefsDic = xrepo.SelectAll();
                 systems.AddRange(from xr in (List<PatientXref>) xrefsDic select Mapper.Map<PatientSystemData>(xr));
+                foreach (var t in systems)
+                {
+                    t.CreatedOn = t.CreatedOn.ToUniversalTime();
+                    if (t.UpdatedOn.HasValue)
+                    {
+                        t.UpdatedById = ProcConstants.UserId; 
+                        t.UpdatedOn = t.UpdatedOn.Value.ToUniversalTime();
+                    }
+                }
 
             }
             catch (Exception ex)
@@ -190,8 +225,8 @@ namespace Phytel.Engage.Integrations.UOW
             try
             {
                 var phnList = xrepo.SelectAll();
-                pcpPhones.AddRange(from xr in (List<PCPPhone>)phnList select xr);
-
+                var final = ((List<PCPPhone>) phnList).Where(x => x.Phone.Length == 10);
+                pcpPhones.AddRange(from xr in final select xr);
             }
             catch (Exception ex)
             {
@@ -205,6 +240,14 @@ namespace Phytel.Engage.Integrations.UOW
             {
                 PatientDict = repo.SelectAll() as Dictionary<int, PatientInfo>;
                 pats.AddRange((from pt in PatientDict select pt.Value).Select(ObjMapper.MapPatientData));
+
+                foreach (var t in pats)
+                {
+                    t.RecordCreatedOn = t.RecordCreatedOn.ToUniversalTime();
+                    if (!t.LastUpdatedOn.HasValue) continue;
+                    t.UpdatedByProperty = ProcConstants.UserId;
+                    t.LastUpdatedOn = t.LastUpdatedOn.Value.ToUniversalTime();
+                }
             }
             catch (Exception ex)
             {
@@ -244,17 +287,17 @@ namespace Phytel.Engage.Integrations.UOW
                     var followUpDate = pt.FollowupDueDate.HasValue ? pt.FollowupDueDate.Value.ToShortDateString() : string.Empty;
 
                     if (String.IsNullOrEmpty(followUpDate)) return;
-                    var fDate = Convert.ToDateTime(followUpDate).ToUniversalTime();
+                    var fDate = pt.FollowupDueDate.Value;
                     var val =  fDate > DateTime.UtcNow;
                     if (val)
                     {
                         list.Add(new ToDoData
                         {
-                            DueDate = fDate,
+                            DueDate = fDate.AddHours(12) , // add 12hrs to make it land of the middle of the day.
                             PatientId = x.Body.Id,
-                            Description = "Follow-up initiated in Coordiante",
+                            Description = "Follow-up initiated in Coordinate",
                             Title = "Follow-up Date",
-                            CategoryId = "562a7cf2d43323154c8611aa", // 2 week followup todocategory
+                            CategoryId = "562e8f8ad4332315e0a4fffa", //follow up category
                             PriorityId = 0, // notset
                             StatusId = 1, // Open
                             CreatedById = ProcConstants.UserId,

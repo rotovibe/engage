@@ -5,8 +5,10 @@ using System.Reflection;
 using System.Text;
 using Phytel.API.DataDomain.Patient.DTO;
 using Phytel.API.DataDomain.PatientSystem.DTO;
+using Phytel.API.Interface;
 using Phytel.Engage.Integrations.DomainEvents;
 using Phytel.Engage.Integrations.DTO;
+using Phytel.Engage.Integrations.Utils;
 using ServiceStack.Service;
 using ServiceStack.ServiceClient.Web;
 
@@ -38,7 +40,7 @@ namespace Phytel.Engage.Integrations.UOW
                         Version = 1
                     });
 
-                FormatOutputDebug<T>(response);
+                LogUtil.FormatOutputDebug<T>(response);
                 LoggerDomainEvent.Raise(new LogStatus { Message = "1) Success", Type = LogType.Debug });
                 return response.Responses;
             }
@@ -47,21 +49,6 @@ namespace Phytel.Engage.Integrations.UOW
                 LoggerDomainEvent.Raise(new LogStatus { Message = "PatientDataDomain:Save(): " + ex.Message, Type = LogType.Error });
                 throw new ArgumentException("PatientDataDomain:Save(): " + ex.Message);
             }
-        }
-
-        private static void FormatOutputDebug<T>(InsertBatchPatientsDataResponse response)
-        {
-            //Helpers.SerializeObject<List<PatientData>>(patients as List<PatientData>, System.Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "\\PatientsExample.txt");
-            //var lPsd = Helpers.DeserializeObject<List<PatientSystemData>>(System.Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + "\\PatientsSystemExample.txt");
-            StringBuilder sb = new StringBuilder();
-            response.Responses.ForEach(r =>
-            {
-                sb.Append("Id: " + r.Body.Id + " ,");
-                sb.Append("ExternalRecordId: " + r.Body.ExternalRecordId + " ,");
-                sb.Append("EngageId: " + r.Body.EngagePatientSystemValue + " |");
-            });
-
-            LoggerDomainEvent.Raise(new LogStatus {Message = "patient save result: " + sb.ToString(), Type = LogType.Debug});
         }
     }
 }

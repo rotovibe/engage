@@ -11,6 +11,7 @@ using Phytel.API.DataDomain.Patient.DTO;
 using Phytel.API.DataDomain.PatientNote.DTO;
 using Phytel.API.DataDomain.PatientSystem.DTO;
 using Phytel.Engage.Integrations.DomainEvents;
+using Phytel.Engage.Integrations.Extensions;
 using Phytel.Engage.Integrations.Repo.DTOs;
 using Phytel.Engage.Integrations.Repo.DTOs.SQL;
 using Phytel.Engage.Integrations.Repo.Repositories;
@@ -124,19 +125,16 @@ namespace Phytel.Engage.Integrations.UOW
                     
                     if (string.IsNullOrEmpty(ptInfo.Phone)) return;
 
-                    list.Add( new ContactData
-                                {
-                                    PatientId = mongoPtId,
-                                    CreatedOn = ptInfo.CreateDate != null ? Convert.ToDateTime(ptInfo.CreateDate) : default(DateTime),
-                                    //FirstName = ptInfo.FirstName,
-                                    //Gender = ptInfo.Gender,
-                                    //LastName = ptInfo.LastName,
-                                    //MiddleName = ptInfo.MiddleInitial,
-                                    UserId = API.DataDomain.Patient.Constants.SystemContactId,
-                                    //PreferredName = ptInfo.FirstName + " " + ptInfo.LastName,
-                                    Phones = new List<PhoneData>{new PhoneData{DataSource = "P-Reg", Number = Convert.ToInt64(ptInfo.Phone), TypeId = "52e18c2ed433232028e9e3a6"}},
-                                    RecentsList = null
-                                });
+                    if (ptInfo.Phone.Length == 10)
+                    {
+                        list.Add(new ContactData
+                        {
+                            PatientId = mongoPtId,
+                            CreatedOn = ptInfo.CreateDate != null ? Convert.ToDateTime(ptInfo.CreateDate) : default(DateTime),
+                            Phones = new List<PhoneData> {new PhoneData{ DataSource = "P-Reg", Number = Convert.ToInt64(ptInfo.Phone), TypeId = "52e18c2ed433232028e9e3a6"}},
+                            RecentsList = null
+                        });
+                    }
                 });
                 return list.ToList();
             }
@@ -188,9 +186,12 @@ namespace Phytel.Engage.Integrations.UOW
                     var pslist = patientSyss.FindAll(x => x.PatientId == r).ToList();
                     var pd = patientResults.Where(x => x.Body.ExternalRecordId == r).Select(p => p.Body).FirstOrDefault();
 
+
                     // set the mongoid patient on patientsystem.
                     var fPsList = pslist.Select(c => {if (pd != null) c.PatientId = pd.Id; c.Id = null; return c;}).ToList();
-                    fPsList.ForEach(x => pdList.Add(x));
+
+                    var list = fPsList.OrderByDescending(x => x.CreatedOn).OrderedDistinct(new PsDMyEqualityComparer()).ToList();
+                    list.ForEach(x => pdList.Add(x));
 
                     // add a registration for atmosphere
                     pdList.Add(new PatientSystemData

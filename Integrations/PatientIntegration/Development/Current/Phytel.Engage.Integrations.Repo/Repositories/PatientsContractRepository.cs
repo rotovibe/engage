@@ -35,9 +35,10 @@ namespace Phytel.Engage.Integrations.Repo.Repositories
                             equals new {ID = kd.OwnerID, kd.CategoryCode} into kd_join
                         from kd in kd_join.DefaultIfEmpty()
                         where
-                            ((from x in ct.IntegrationPatientXrefs
-                                where x.SendingApplication != "ENGAGE"
-                                select new {x.PhytelPatientID}).Distinct()).Contains(new {PhytelPatientID = ce.ID}) &&
+                            !(from IntegrationPatientXref in ct.IntegrationPatientXrefs where IntegrationPatientXref.SendingApplication == "ENGAGE" select new
+                             {
+                                 IntegrationPatientXref.PhytelPatientID
+                             }).Contains(new { PhytelPatientID = ce.ID }) &&
 
                             ((from C3ProblemList in ct.C3ProblemList
                                 where
@@ -53,7 +54,7 @@ namespace Phytel.Engage.Integrations.Repo.Repositories
                                     C3ProblemList.PatientID
                                 }).Distinct()).Contains(new {PatientID = ce.ID})
                             && (new int[]{0}).Contains(c3p.PatientStatusID)
-                            && (new int[] { 478006,493302,509210,531607,536306,538123,542605,542612,548320,555121}).Contains(ce.ID) // this is for testing!!!!
+                            //&& (new int[] { 478006,493302,509210,531607,536306,538123,542605,542612,548320,555121}).Contains(ce.ID) // this is for testing!!!!
                             //&& (new int[] { 28124, 38424, 509703, 495517, 497800, 577221, 433112, 563706, 567721, 607607 }).Contains(ce.ID) // testing!!!
                         select new PatientInfo
                         {
