@@ -209,6 +209,10 @@ namespace Phytel.API.DataDomain.Patient
                         {
                             meP.MaritalStatusId = ObjectId.Parse(pd.MaritalStatusId);
                         }
+                        if (!string.IsNullOrEmpty(pd.UpdatedByProperty))
+                        {
+                            meP.UpdatedBy = ObjectId.Parse(pd.UpdatedByProperty);
+                        }
                         bulk.Insert(meP.ToBsonDocument());
                         insertedIds.Add(meP.Id.ToString());
                     }
