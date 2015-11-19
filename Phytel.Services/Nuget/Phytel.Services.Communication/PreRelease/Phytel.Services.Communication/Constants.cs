@@ -112,6 +112,7 @@ namespace Phytel.Services.Communication
         //Facility
         public const string ModeFacilityID = "{mode}/Facility/FacilityID";
         public const string ModeFacilityName = "{mode}/Facility/Name";
+        public const string ModeFacilityDisplayName = "{mode}/Facility/DisplayName";
         public const string ModeFacilityAddr1 = "{mode}/Facility/Addr1";
         public const string ModeFacilityAddr2 = "{mode}/Facility/Addr2";
         public const string ModeFacilityCity = "{mode}/Facility/City";

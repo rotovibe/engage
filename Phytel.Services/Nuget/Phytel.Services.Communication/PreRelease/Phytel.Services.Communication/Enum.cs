@@ -108,4 +108,15 @@ namespace Phytel.Services.Communication
         HTML = 2
     }
 
+    public enum CommunicationRequestStatuses
+    {
+        New,
+        InProcess,
+        SentToVendor,
+        AwaitingRetry,
+        VendorError,
+        Failure,
+        Complete
+    }
+
 }

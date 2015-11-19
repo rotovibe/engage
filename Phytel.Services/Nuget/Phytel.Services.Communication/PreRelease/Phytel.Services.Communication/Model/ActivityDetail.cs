@@ -17,20 +17,11 @@ namespace Phytel.Services.Communication
         public string ProviderACDNumber { get; set; }
         public int ActivityID { get; set; }
         public string DeliveryMethod { get; set; }
-        public string ToEmailAddress { get; set; }
         public int TemplateID { get; set; }
         public int CampaignID { get; set; }
         public int ContactRoleID { get; set; }
         public string PatientFirstName { get; set; }
         public string PatientLastName { get; set; }
         public string PatientNameLF { get; set; }
-        public string ProviderFirstName { get; set; }
-        public string ProviderLastName { get; set; }
-        public string ProviderNameLF { get; set; }
-        public string FacilityAddrLine1 { get; set; }
-        public string FacilityAddrLine2 { get; set; }
-        public string FacilityCity { get; set; }
-        public string FacilityState { get; set; }
-        public string FacilityZipCode { get; set; }
     }
 }
