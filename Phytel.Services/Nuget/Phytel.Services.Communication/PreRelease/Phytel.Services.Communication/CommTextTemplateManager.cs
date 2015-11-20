@@ -12,7 +12,7 @@ using System.IO;
 
 namespace Phytel.Services.Communication
 {
-    public class CommTextTemplateManager
+    public class CommTextTemplateManager : ICommTextTemplateManager
     {
         private const string _Mode = "Text";
         private TemplateUtilities _templateUtilities;
@@ -184,7 +184,7 @@ namespace Phytel.Services.Communication
             return results;
         }
 
-        private TemplateResults BuildTextMessage(XmlDocument xdoc, TextActivityDetail textActivityDetail, Hashtable missingObjects)
+        public TemplateResults BuildTextMessage(XmlDocument xdoc, TextActivityDetail textActivityDetail, Hashtable missingObjects)
         {
             TemplateResults results = new TemplateResults(); 
             
@@ -251,11 +251,11 @@ namespace Phytel.Services.Communication
             return results;
         }
 
-        private TemplateResults BuildApptDateTime(XmlDocument xdoc, TextActivityDetail textActivityDetail, Hashtable missingObjects)
+        public TemplateResults BuildApptDateTime(XmlDocument xdoc, TextActivityDetail textActivityDetail, Hashtable missingObjects)
         {
             TemplateResults results = new TemplateResults();
 
-            TemplateResults utilityResults = _templateUtilities.BuildApptDateTime(xdoc, textActivityDetail, missingObjects, _Mode, new string[] { "ScheduleDateTime" });
+            TemplateResults utilityResults = _templateUtilities.BuildApptDateTime(xdoc, textActivityDetail, missingObjects, _Mode, true, new string[] { "ScheduleDateTime" });
             xdoc = utilityResults.PopulatedTemplate;
             missingObjects = utilityResults.MissingObjects;
 
@@ -268,7 +268,7 @@ namespace Phytel.Services.Communication
 
         #region Intro Text Build Template
 
-        private TemplateResults BuildIntroHeader(XmlDocument xdoc, TextActivityDetail textActivityDetail, Hashtable missingObjects)
+        public TemplateResults BuildIntroHeader(XmlDocument xdoc, TextActivityDetail textActivityDetail, Hashtable missingObjects)
         {
             TemplateResults results = new TemplateResults();
 
@@ -281,7 +281,7 @@ namespace Phytel.Services.Communication
             return results;
         }
 
-        private TemplateResults BuildIntroTextPatient(XmlDocument xdoc, TextActivityDetail textActivityDetail, Hashtable missingObjects)
+        public TemplateResults BuildIntroTextPatient(XmlDocument xdoc, TextActivityDetail textActivityDetail, Hashtable missingObjects)
         {
             TemplateResults results = new TemplateResults();
 
@@ -294,7 +294,7 @@ namespace Phytel.Services.Communication
             return results;
         }
 
-        private TemplateResults BuildIntroTextSchedule(XmlDocument xdoc, TextActivityDetail textActivityDetail, List<ActivityMedia> activityMediaList, Hashtable missingObjects)
+        public TemplateResults BuildIntroTextSchedule(XmlDocument xdoc, TextActivityDetail textActivityDetail, List<ActivityMedia> activityMediaList, Hashtable missingObjects)
         {
             TemplateResults results = new TemplateResults(); 
             
@@ -355,7 +355,7 @@ namespace Phytel.Services.Communication
             return results;
         }
 
-        private TemplateResults BuildIntroTextFacility(XmlDocument xdoc, TextActivityDetail textActivityDetail, List<ActivityMedia> activityMediaList, Hashtable missingObjects)
+        public TemplateResults BuildIntroTextFacility(XmlDocument xdoc, TextActivityDetail textActivityDetail, List<ActivityMedia> activityMediaList, Hashtable missingObjects)
         {
             TemplateResults results = new TemplateResults();
 
@@ -374,7 +374,7 @@ namespace Phytel.Services.Communication
             return results;
         }
 
-        private TemplateResults BuildIntroTextMessage(XmlDocument xdoc, TextActivityDetail textActivityDetail, Hashtable missingObjects)
+        public TemplateResults BuildIntroTextMessage(XmlDocument xdoc, TextActivityDetail textActivityDetail, Hashtable missingObjects)
         {
             TemplateResults results = new TemplateResults();
 
@@ -387,11 +387,11 @@ namespace Phytel.Services.Communication
             return results;
         }
 
-        private TemplateResults BuildIntroApptDateTime(XmlDocument xdoc, TextActivityDetail textActivityDetail, Hashtable missingObjects)
+        public TemplateResults BuildIntroApptDateTime(XmlDocument xdoc, TextActivityDetail textActivityDetail, Hashtable missingObjects)
         {
             TemplateResults results = new TemplateResults();
 
-            TemplateResults utilityResults = _templateUtilities.BuildApptDateTime(xdoc, textActivityDetail, missingObjects, _Mode, new string[] { "" });
+            TemplateResults utilityResults = _templateUtilities.BuildApptDateTime(xdoc, textActivityDetail, missingObjects, _Mode, true);
             xdoc = utilityResults.PopulatedTemplate;
             missingObjects = utilityResults.MissingObjects;
 

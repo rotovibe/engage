@@ -4,7 +4,7 @@ namespace Phytel.Services.Communication
     public interface ITemplateUtilities
     {
         System.Collections.Hashtable AddMissingObjects(System.Collections.Hashtable missingObjects, string missingObjString);
-        TemplateResults BuildApptDateTime(System.Xml.XmlDocument xdoc, ActivityDetail activityDetail, System.Collections.Hashtable missingObjects, string mode, string[] requiredObjects = null);
+        TemplateResults BuildApptDateTime(System.Xml.XmlDocument xdoc, ActivityDetail activityDetail, System.Collections.Hashtable missingObjects, string mode, bool shortMonth, string[] requiredObjects = null);
         TemplateResults BuildHeader(System.Xml.XmlDocument xdoc, ActivityDetail activityDetail, System.Collections.Hashtable missingObjects, string mode, string[] requiredObjects = null);
         TemplateResults BuildPatient(System.Xml.XmlDocument xdoc, ActivityDetail activityDetail, System.Collections.Hashtable missingObjects, string mode, string[] requiredObjects = null);
         TemplateResults BuildSchedule(System.Xml.XmlDocument xdoc, ActivityDetail activityDetail, System.Collections.Hashtable missingObjects, string mode, string[] requiredObjects = null);

@@ -13,13 +13,13 @@ using Moq;
 namespace Phytel.Services.Communication.Test
 {
     [TestFixture]
-    [Category("CommEmailTemplateManager")]
-    public class CommEmailTemplateManagerTests
+    [Category("CommTextTemplateManager")]
+    public class CommTextTemplateManagerTests
     {
         #region Private Variables
 
         private ITemplateUtilities _templateUtilities;
-        private ICommEmailTemplateManager _manager;
+        private ICommTextTemplateManager _manager;
         private EmailActivityDetail _emailDetail = new EmailActivityDetail();
         private List<ActivityMedia> _medias = new List<ActivityMedia>();
         private Hashtable _missingObjects = new Hashtable();
@@ -33,7 +33,7 @@ namespace Phytel.Services.Communication.Test
         {
             _templateUtilities = new TemplateUtilities();
             SetUpData();
-            _manager = new CommEmailTemplateManager(_templateUtilities);            
+            _manager = new CommTextTemplateManager(_templateUtilities);            
         }
         
         [Test]

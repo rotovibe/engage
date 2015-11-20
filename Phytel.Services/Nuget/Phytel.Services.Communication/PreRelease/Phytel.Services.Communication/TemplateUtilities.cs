@@ -293,7 +293,7 @@ namespace Phytel.Services.Communication
             return results;
         }
 
-        public TemplateResults BuildApptDateTime(XmlDocument xdoc, ActivityDetail activityDetail, Hashtable missingObjects, string mode, string[] requiredObjects = null)
+        public TemplateResults BuildApptDateTime(XmlDocument xdoc, ActivityDetail activityDetail, Hashtable missingObjects, string mode, bool shortMonth = false, string[] requiredObjects = null)
         {
             TemplateResults results = new TemplateResults();
 
@@ -337,7 +337,7 @@ namespace Phytel.Services.Communication
                 appointmentMonth = apptDateTime.ToString("MMMM");
                 xpath = GetModeSpecificTag(XMLFields.ModeApptMonth, mode);
                 XmlNode appointmentMonthNode = xdoc.SelectSingleNode(xpath);
-                appointmentMonthNode.InnerText = (mode.ToLower() == "text" ? GetShortMonth(appointmentMonth) : appointmentMonth);
+                appointmentMonthNode.InnerText = (shortMonth ? GetShortMonth(appointmentMonth) : appointmentMonth);
                 //appointmentMonthNode.InnerText = appointmentMonth;
 
                 //Appointment Date

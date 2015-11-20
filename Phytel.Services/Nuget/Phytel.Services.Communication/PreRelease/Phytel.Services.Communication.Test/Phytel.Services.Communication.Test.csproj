@@ -50,6 +50,10 @@
       <HintPath>..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Phytel.Services.Security, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Phytel.Services.Security.2.0.0.03\lib\net451\Phytel.Services.Security.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.XML" />
   </ItemGroup>
@@ -66,6 +70,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="CommTextTemplateManagerTests.cs" />
     <Compile Include="CommEmailTemplateManagerTests.cs" />
     <Compile Include="TemplateUtilitiesTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
