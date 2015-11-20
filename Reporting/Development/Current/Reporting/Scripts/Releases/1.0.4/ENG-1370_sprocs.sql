@@ -85,7 +85,7 @@ BEGIN
 		, pp.[AttributeEndDate]  as [EndDate]
 		, pp.[AssignedOn]
 		, pn.LastUpdatedOn
-		, u1.PreferredName
+		, (SELECT PreferredName FROM RPT_User WHERE MongoId = pn.MongoUpdatedBy)
 	FROM 
 		RPT_PatientNote pn with (nolock)
 		left outer join RPT_PatientNoteProgram pnp with (nolock) on pn.MongoId = pnp.MongoPatientNoteId
@@ -93,7 +93,6 @@ BEGIN
 		LEFT OUTER JOIN RPT_PATIENTSYSTEM PS with (nolock) ON PT.MongoPatientSystemId = PS.MongoId
 		LEFT OUTER JOIN RPT_PATIENTPROGRAM PP with (nolock) ON PP.MongoId = pnp.MongoId
 		INNER JOIN RPT_User u with (nolock) ON pn.MongoRecordCreatedBy = u.MongoId
-		LEFT OUTER JOIN RPT_User u1 ON pn.MongoUpdatedBy = u1.MongoId
 	WHERE
 		pn.[Delete] = 'False'	
 END
@@ -191,7 +190,7 @@ BEGIN
 		, pp.[AttributeEndDate]  as [EndDate]
 		, pp.[AssignedOn]
 		, pn.LastUpdatedOn
-		, u1.PreferredName
+		, (SELECT PreferredName FROM RPT_User WHERE MongoId = pn.MongoUpdatedBy)
 	FROM 
 		RPT_PatientNote pn
 		left outer join RPT_PatientNoteProgram pnp on pn.MongoId = pnp.MongoPatientNoteId
@@ -199,7 +198,6 @@ BEGIN
 		LEFT OUTER JOIN RPT_PATIENTSYSTEM PS ON PT.MongoPatientSystemId = PS.MongoId
 		LEFT OUTER JOIN RPT_PATIENTPROGRAM PP ON PP.MongoId = pnp.MongoId
 		INNER JOIN RPT_User u ON pn.MongoRecordCreatedBy = u.MongoId
-		LEFT OUTER JOIN RPT_User u1 ON pn.MongoUpdatedBy = u1.MongoId
 	WHERE
 		pn.[Type] = '54909997d43323251c0a1dfe'
 		and pn.[Delete] = 'False'
