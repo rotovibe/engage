@@ -58,8 +58,9 @@
     <Reference Include="Phytel.Services.SQLServer">
       <HintPath>packages\Phytel.Services.SQLServer.2.0.0.02\lib\net451\Phytel.Services.SQLServer.dll</HintPath>
     </Reference>
-    <Reference Include="Phytel.Services.Utility">
-      <HintPath>packages\Phytel.Services.Utility.1.4.0.01\lib\net451\Phytel.Services.Utility.dll</HintPath>
+    <Reference Include="Phytel.Services.Utility, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\Phytel.Services.Utility.2.0.0.02\lib\net451\Phytel.Services.Utility.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
