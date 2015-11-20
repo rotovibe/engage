@@ -946,9 +946,11 @@ namespace Phytel.Data.ETL
                                 break;
                             }
                             case LookUpType.MaritalStatus:
-                            {
+                                LoadLookUp(lookup, "spPhy_RPT_SaveMaritalStatusLookUp");
                                 break;
-                            }
+                            case LookUpType.Reason:
+                                LoadLookUp(lookup, "spPhy_RPT_SaveStatusReasonLookUp");
+                                break;
                             default:
                                 break;
                         }
@@ -1513,46 +1515,53 @@ namespace Phytel.Data.ETL
                     patients = new ConcurrentBag<MEPatient>(Utils.GetMongoCollectionList(pmctx.Patients.Collection, 1));
                 }
 
-                    Parallel.ForEach(patients, patient =>
-                    //foreach (MEPatient patient in patients.Where(t => !t.DeleteFlag))
-                    {
+                Parallel.ForEach(patients, patient =>
+                //foreach (MEPatient patient in patients.Where(t => !t.DeleteFlag))
+                {
                         try
                         {
-                                ParameterCollection parms = new ParameterCollection();
-                                parms.Add(new Parameter("@MongoID", patient.Id.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                                parms.Add(new Parameter("@FirstName", patient.FirstName ?? (object)DBNull.Value, SqlDbType.VarChar, ParameterDirection.Input, 100));
-                                parms.Add(new Parameter("@MiddleName", patient.MiddleName ?? (object)DBNull.Value, SqlDbType.VarChar, ParameterDirection.Input, 100));
-                                parms.Add(new Parameter("@LastName", patient.LastName ?? (object)DBNull.Value, SqlDbType.VarChar, ParameterDirection.Input, 100));
-                                parms.Add(new Parameter("@PreferredName", patient.PreferredName ?? (object)DBNull.Value, SqlDbType.VarChar, ParameterDirection.Input, 100));
-                                parms.Add(new Parameter("@Suffix", patient.Suffix ?? (object)DBNull.Value, SqlDbType.VarChar, ParameterDirection.Input, 50));
-                                parms.Add(new Parameter("@DateOfBirth", patient.DOB ?? (object)DBNull.Value, SqlDbType.VarChar, ParameterDirection.Input, 50));
-                                parms.Add(new Parameter("@Gender", patient.Gender ?? (object)DBNull.Value, SqlDbType.VarChar, ParameterDirection.Input, 50));
-                                parms.Add(new Parameter("@Priority", patient.Priority, SqlDbType.VarChar, ParameterDirection.Input, 50));
-                                parms.Add(new Parameter("@LSSN", patient.LastFourSSN ?? (object)DBNull.Value, SqlDbType.Int, ParameterDirection.Input, 50));
-                                parms.Add(new Parameter("@FSSN", patient.FullSSN != null ? patient.FullSSN.ToString() : (object)DBNull.Value, SqlDbType.VarChar, ParameterDirection.Input, 100));                            
-                                parms.Add(new Parameter("@Version", patient.Version, SqlDbType.Float, ParameterDirection.Input, 50));
-                                parms.Add(new Parameter("@UpdatedBy", patient.UpdatedBy ?? (object)DBNull.Value, SqlDbType.VarChar, ParameterDirection.Input, 50));
-                                parms.Add(new Parameter("@LastUpdatedOn", patient.LastUpdatedOn ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
-                                parms.Add(new Parameter("@RecordCreatedBy", patient.RecordCreatedBy, SqlDbType.VarChar, ParameterDirection.Input, 50));
-                                parms.Add(new Parameter("@RecordCreatedOn", patient.RecordCreatedOn, SqlDbType.DateTime, ParameterDirection.Input, 50));
-                                parms.Add(new Parameter("@Delete", patient.DeleteFlag, SqlDbType.VarChar, ParameterDirection.Input, 50));
-                                parms.Add(new Parameter("@BackGround", (string.IsNullOrEmpty(patient.Background) ? string.Empty : patient.Background), SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
-                                parms.Add(new Parameter("@DisplayPatientSystemMongoId", string.Empty, SqlDbType.VarChar, ParameterDirection.Input, 50));
-                                parms.Add(new Parameter("@TTLDate", patient.TTLDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
-                                parms.Add(new Parameter("@ClinicalBackGround", (string.IsNullOrEmpty(patient.ClinicalBackground) ? string.Empty : patient.ClinicalBackground), SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
+                            ParameterCollection parms = new ParameterCollection();
+                            parms.Add(new Parameter("@MongoID", patient.Id.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@FirstName", patient.FirstName ?? (object)DBNull.Value, SqlDbType.VarChar, ParameterDirection.Input, 100));
+                            parms.Add(new Parameter("@MiddleName", patient.MiddleName ?? (object)DBNull.Value, SqlDbType.VarChar, ParameterDirection.Input, 100));
+                            parms.Add(new Parameter("@LastName", patient.LastName ?? (object)DBNull.Value, SqlDbType.VarChar, ParameterDirection.Input, 100));
+                            parms.Add(new Parameter("@PreferredName", patient.PreferredName ?? (object)DBNull.Value, SqlDbType.VarChar, ParameterDirection.Input, 100));
+                            parms.Add(new Parameter("@Suffix", patient.Suffix ?? (object)DBNull.Value, SqlDbType.VarChar, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@DateOfBirth", patient.DOB ?? (object)DBNull.Value, SqlDbType.VarChar, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@Gender", patient.Gender ?? (object)DBNull.Value, SqlDbType.VarChar, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@Priority", patient.Priority, SqlDbType.VarChar, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@LSSN", patient.LastFourSSN ?? (object)DBNull.Value, SqlDbType.Int, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@FSSN", patient.FullSSN != null ? patient.FullSSN.ToString() : (object)DBNull.Value, SqlDbType.VarChar, ParameterDirection.Input, 100));
+                            parms.Add(new Parameter("@Version", patient.Version, SqlDbType.Float, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@UpdatedBy", patient.UpdatedBy ?? (object)DBNull.Value, SqlDbType.VarChar, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@LastUpdatedOn", patient.LastUpdatedOn ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@RecordCreatedBy", patient.RecordCreatedBy, SqlDbType.VarChar, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@RecordCreatedOn", patient.RecordCreatedOn, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@Delete", patient.DeleteFlag, SqlDbType.VarChar, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@BackGround", (string.IsNullOrEmpty(patient.Background) ? string.Empty : patient.Background), SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
+                            parms.Add(new Parameter("@DisplayPatientSystemMongoId", string.Empty, SqlDbType.VarChar, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@TTLDate", patient.TTLDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@ClinicalBackGround", (string.IsNullOrEmpty(patient.ClinicalBackground) ? string.Empty : patient.ClinicalBackground), SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
+                            parms.Add(new Parameter("@DataSource", (string.IsNullOrEmpty(patient.DataSource) ? string.Empty : patient.DataSource.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@MongoMaritalStatusId", ((patient.MaritalStatusId == null) ? string.Empty : patient.MaritalStatusId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@Protected", patient.Protected, SqlDbType.VarChar, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@Deceased", (string.IsNullOrEmpty(patient.Deceased.ToString())  ? string.Empty : patient.Deceased.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@Status", (string.IsNullOrEmpty(patient.Status.ToString()) ? string.Empty : patient.Status.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@MongoReasonId", ((patient.ReasonId == null) ? string.Empty : patient.ReasonId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                            parms.Add(new Parameter("@StatusDataSource", (string.IsNullOrEmpty(patient.StatusDataSource) ? string.Empty : patient.StatusDataSource.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
 
-                                if (patient.ExtraElements != null)
-                                    parms.Add(new Parameter("@ExtraElements", patient.ExtraElements.ToString(), SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
-                                else
-                                    parms.Add(new Parameter("@ExtraElements", string.Empty, SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
+                            if (patient.ExtraElements != null)
+                                parms.Add(new Parameter("@ExtraElements", patient.ExtraElements.ToString(), SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
+                            else
+                                parms.Add(new Parameter("@ExtraElements", string.Empty, SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
 
-                                SQLDataService.Instance.ExecuteProcedure(_contract, true, "REPORT", "spPhy_RPT_SavePatient", parms);
+                            SQLDataService.Instance.ExecuteProcedure(_contract, true, "REPORT", "spPhy_RPT_SavePatient", parms);
                         }
                         catch (Exception ex)
                         {
                             OnEtlEvent(new ETLEventArgs { Message = "[" + _contract + "] " + ex.Message + ": " + ex.StackTrace, IsError = true });
                         }
-                    });
+                });
             }
             catch (Exception ex)
             {
