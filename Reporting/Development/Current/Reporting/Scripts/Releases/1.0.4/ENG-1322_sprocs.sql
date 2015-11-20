@@ -311,11 +311,11 @@ AS
 		, pt.Background
 		, pt.ClinicalBackGround
 		, pt.DataSource
-		, (SELECT ms.Name FROM RPT_MaritalStatusLookUp ms where pt.MongoMaritalStatusId = ms.MongoId)
+		, (SELECT DISTINCT ms.Name FROM RPT_MaritalStatusLookUp ms where pt.MongoMaritalStatusId = ms.MongoId)
 		,(CASE WHEN pt.Protected = 'True' THEN 'Yes' WHEN pt.Protected = 'False' THEN 'No' END)
 		, pt.Deceased
 		, pt.[Status]
-		, (SELECT sr.Name FROM RPT_StatusReasonLookUp sr where pt.MongoReasonId = sr.MongoId)
+		, (SELECT DISTINCT sr.Name FROM RPT_StatusReasonLookUp sr where pt.MongoReasonId = sr.MongoId)
 		, pt.StatusDataSource
 		, NULL
 		, (SELECT TOP 1 ps.SystemId FROM RPT_PatientSystem ps with (nolock) WHERE ps.MongoPatientId = pt.MongoId) as SystemId
