@@ -14,7 +14,7 @@
         <dependency id="Phytel.Services.Mongo" version="2.0.0.01" />
         <dependency id="Phytel.Services.Security" version="2.0.0.03" />
         <dependency id="Phytel.Services.SQLServer" version="2.0.0.02" />
-        <dependency id="Phytel.Services.Utility" version="1.4.0.01" />
+        <dependency id="Phytel.Services.Utility" version="2.0.0.02" />
       </group>
     </dependencies>
   </metadata>
