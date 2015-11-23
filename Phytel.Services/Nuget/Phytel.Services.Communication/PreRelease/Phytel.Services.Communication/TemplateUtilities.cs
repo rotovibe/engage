@@ -298,7 +298,6 @@ namespace Phytel.Services.Communication
             TemplateResults results = new TemplateResults();
 
             string appointmentDateTime = string.Empty;
-            string appointmentDuration = string.Empty;
             string activityID = string.Empty; 
             string appointmentDayOfWeek = string.Empty;
             string appointmentMonth = string.Empty;
@@ -309,13 +308,7 @@ namespace Phytel.Services.Communication
 
             activityID = activityDetail.ActivityID.ToString();
             appointmentDateTime = activityDetail.ScheduleDateTime;
-            appointmentDuration = activityDetail.ScheduleDuration.ToString();
-
-            //Set Appointment Duration
-            xpath = GetModeSpecificTag(XMLFields.ModeApptDuration, mode);
-            XmlNode apptDurationNode = xdoc.SelectSingleNode(xpath);
-            apptDurationNode.InnerText = appointmentDuration;
-
+            
             //Appointment date fields
             if ((String.IsNullOrEmpty(appointmentDateTime) || Convert.ToDateTime(appointmentDateTime) < System.DateTime.Now) 
                 && (requiredObjects != null && requiredObjects.Contains("ScheduleDateTime")))

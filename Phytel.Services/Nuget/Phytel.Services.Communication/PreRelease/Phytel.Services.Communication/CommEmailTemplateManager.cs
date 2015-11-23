@@ -403,10 +403,18 @@ namespace Phytel.Services.Communication
         public TemplateResults BuildApptDateTime(XmlDocument xdoc, EmailActivityDetail emailActivityDetail, Hashtable missingObjects)
         {
             TemplateResults results = new TemplateResults();
+            string appointmentDuration = string.Empty;
+            string xpath = string.Empty;
+            appointmentDuration = emailActivityDetail.ScheduleDuration.ToString();
 
             TemplateResults utilityResults = _templateUtilities.BuildApptDateTime(xdoc, emailActivityDetail, missingObjects, _Mode, false, new string[] { "ScheduleDateTime" });
             xdoc = utilityResults.PopulatedTemplate;
             missingObjects = utilityResults.MissingObjects;
+
+            //Set Appointment Duration
+            xpath = _templateUtilities.GetModeSpecificTag(XMLFields.ModeApptDuration, _Mode);
+            XmlNode apptDurationNode = xdoc.SelectSingleNode(xpath);
+            apptDurationNode.InnerText = appointmentDuration;
 
             results.PopulatedTemplate = xdoc;
             results.MissingObjects = missingObjects;

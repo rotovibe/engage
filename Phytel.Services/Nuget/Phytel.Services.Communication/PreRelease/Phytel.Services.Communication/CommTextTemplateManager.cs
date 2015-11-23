@@ -14,10 +14,10 @@ namespace Phytel.Services.Communication
 {
     public class CommTextTemplateManager : ICommTextTemplateManager
     {
-        private const string _Mode = "Text";
-        private TemplateUtilities _templateUtilities;
+        private const string _Mode = "TEXT";
+        private ITemplateUtilities _templateUtilities;
 
-        public CommTextTemplateManager(TemplateUtilities templateUtilities)
+        public CommTextTemplateManager(ITemplateUtilities templateUtilities)
         {
             _templateUtilities = templateUtilities;
         }
@@ -281,7 +281,7 @@ namespace Phytel.Services.Communication
             return results;
         }
 
-        public TemplateResults BuildIntroTextPatient(XmlDocument xdoc, TextActivityDetail textActivityDetail, Hashtable missingObjects)
+        public TemplateResults BuildIntroPatient(XmlDocument xdoc, TextActivityDetail textActivityDetail, Hashtable missingObjects)
         {
             TemplateResults results = new TemplateResults();
 
@@ -294,7 +294,7 @@ namespace Phytel.Services.Communication
             return results;
         }
 
-        public TemplateResults BuildIntroTextSchedule(XmlDocument xdoc, TextActivityDetail textActivityDetail, List<ActivityMedia> activityMediaList, Hashtable missingObjects)
+        public TemplateResults BuildIntroSchedule(XmlDocument xdoc, TextActivityDetail textActivityDetail, List<ActivityMedia> activityMediaList, Hashtable missingObjects)
         {
             TemplateResults results = new TemplateResults(); 
             
@@ -355,7 +355,7 @@ namespace Phytel.Services.Communication
             return results;
         }
 
-        public TemplateResults BuildIntroTextFacility(XmlDocument xdoc, TextActivityDetail textActivityDetail, List<ActivityMedia> activityMediaList, Hashtable missingObjects)
+        public TemplateResults BuildIntroFacility(XmlDocument xdoc, TextActivityDetail textActivityDetail, List<ActivityMedia> activityMediaList, Hashtable missingObjects)
         {
             TemplateResults results = new TemplateResults();
 
@@ -363,12 +363,14 @@ namespace Phytel.Services.Communication
             xdoc = utilityResults.PopulatedTemplate;
             missingObjects = utilityResults.MissingObjects;
 
-            int key = missingObjects.Count-1;                        
-            string value = (string)missingObjects[key];
+            int key = missingObjects.Count-1;
+            if (key > -1)
+            {
+                string value = (string)missingObjects[key];
 
-            if(value.Contains("Facility name"))
-                missingObjects.Remove(key);
-
+                if (value.Contains("Facility name"))
+                    missingObjects.Remove(key);
+            }
             results.PopulatedTemplate = xdoc;
             results.MissingObjects = missingObjects;
             return results;
