@@ -100,6 +100,15 @@ BEGIN
 	DELETE RPT_UserRecentList
 	DELETE [RPT_User]
 	
+	-- Lookups
+	DELETE RPT_NoteDurationLookUp
+	DELETE RPT_NoteMethodLookUp
+	DELETE RPT_NoteOutcomeLookUp
+	DELETE RPT_NoteSourceLookUp
+	DELETE RPT_NoteWhoLookUp
+	DELETE RPT_MaritalStatusLookUp
+	DELETE RPT_StatusReasonLookUp
+	
 	--DELETE CohortPatientView	
 	--DELETE CohortPatientViewSearchField
 	
@@ -210,9 +219,19 @@ BEGIN
 	DBCC CHECKIDENT ('RPT_PatientAllergy', RESEED, 0)
 	DBCC CHECKIDENT ('RPT_PatientAllergyReaction', RESEED, 0)
 	
+	-- lookups
+	DBCC CHECKIDENT ('RPT_NoteDurationLookUp', RESEED, 0)
+	DBCC CHECKIDENT ('RPT_NoteMethodLookUp', RESEED, 0)
+	DBCC CHECKIDENT ('RPT_NoteOutcomeLookUp', RESEED, 0)
+	DBCC CHECKIDENT ('RPT_NoteSourceLookUp', RESEED, 0)
+	DBCC CHECKIDENT ('RPT_NoteWhoLookUp', RESEED, 0)
+	DBCC CHECKIDENT ('RPT_MaritalStatusLookUp', RESEED, 0)
+	DBCC CHECKIDENT ('RPT_StatusReasonLookUp', RESEED, 0)
+	
 	--DBCC CHECKIDENT ('RPT_CohortPatientView', RESEED, 0)
 	--DBCC CHECKIDENT ('RPT_CohortPatientViewSearchField', RESEED, 0)
 END
+
 
 
 GO
