@@ -108,6 +108,13 @@ BEGIN
 	DELETE RPT_NoteWhoLookUp
 	DELETE RPT_MaritalStatusLookUp
 	DELETE RPT_StatusReasonLookUp
+	-- utilization lookups
+	DELETE RPT_VisitTypeLookUp
+	DELETE RPT_UtilizationLocationLookUp
+	DELETE RPT_DispositionLookUp
+	DELETE RPT_UtilizationSourceLookUp
+	
+	DELETE RPT_PatientUtilization
 	
 	--DELETE CohortPatientView	
 	--DELETE CohortPatientViewSearchField
@@ -227,6 +234,13 @@ BEGIN
 	DBCC CHECKIDENT ('RPT_NoteWhoLookUp', RESEED, 0)
 	DBCC CHECKIDENT ('RPT_MaritalStatusLookUp', RESEED, 0)
 	DBCC CHECKIDENT ('RPT_StatusReasonLookUp', RESEED, 0)
+	-- utilization lookups
+	DBCC CHECKIDENT ('RPT_VisitTypeLookUp', RESEED, 0)
+	DBCC CHECKIDENT ('RPT_UtilizationLocationLookUp', RESEED, 0)
+	DBCC CHECKIDENT ('RPT_DispositionLookUp', RESEED, 0)
+	DBCC CHECKIDENT ('RPT_UtilizationSourceLookUp', RESEED, 0)
+	
+	DBCC CHECKIDENT ('RPT_PatientUtilization', RESEED, 0)
 	
 	--DBCC CHECKIDENT ('RPT_CohortPatientView', RESEED, 0)
 	--DBCC CHECKIDENT ('RPT_CohortPatientViewSearchField', RESEED, 0)
