@@ -21,3 +21,11 @@ GO
 ALTER TABLE [dbo].[RPT_Flat_MedicationMap_Dim]
 ALTER COLUMN EndDate datetime NULL
 GO
+
+ALTER TABLE [dbo].[RPT_Medication]
+ALTER COLUMN StartDate datetime NULL
+GO
+
+ALTER TABLE [dbo].[RPT_Medication]
+ALTER COLUMN EndDate datetime NULL
+GO
