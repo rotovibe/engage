@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="MDVCSummaryReport_Sub_HomeVisit" language="groovy" pageWidth="576" pageHeight="842" columnWidth="576" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="d11c8094-9e05-4b82-ab32-bf3dde8f0341">
+	<property name="ireport.zoom" value="1.4641000000000028"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ID_MongoPatientId" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select
+	pn.[text]
+	, cast(pn.contactedon as date) as contactedon
+	, mt.Name as [type]
+	, nout.Name as [outcome]
+	, who.Name as [who]
+from
+	RPT_PatientNote pn
+	INNER JOIN RPT_NoteTypeLookUp nt ON pn.[Type] = nt.MongoId
+	INNER JOIN RPT_NoteMethodLookUp mt ON pn.MongoMethodId = mt.MongoId
+	INNER JOIN rpt_noteoutcomelookup nout ON pn.MongoOutcomeId = nout.MongoId
+	INNER JOIN RPT_notewholookup who ON pn.MongoWhoId = who.MongoId
+where
+	[Type] = '54909997d43323251c0a1dfe'
+	and mongomethodid = '540f1da7d4332319883f3e8c'
+	and mongopatientid = $P{ID_MongoPatientId}
+ORDER BY pn.contactedon DESC]]>
+	</queryString>
+	<field name="text" class="java.lang.String"/>
+	<field name="contactedon" class="java.sql.Date"/>
+	<field name="type" class="java.lang.String"/>
+	<field name="outcome" class="java.lang.String"/>
+	<field name="who" class="java.lang.String"/>
+	<columnHeader>
+		<band height="30" splitType="Stretch">
+			<line>
+				<reportElement positionType="Float" x="0" y="15" width="576" height="1" forecolor="#666666" uuid="7795d6b6-e1d5-47ad-bbc9-6bd830dee834"/>
+			</line>
+			<staticText>
+				<reportElement x="6" y="1" width="110" height="14" uuid="e373e923-2ba6-4bc8-bd42-1641b6de9c67"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Home Visit]]></text>
+			</staticText>
+			<frame>
+				<reportElement mode="Opaque" x="0" y="16" width="576" height="13" backcolor="#F0F0F0" uuid="a79a7156-d9fd-4ea2-ae1a-c1f2614a150b"/>
+				<staticText>
+					<reportElement x="6" y="0" width="35" height="12" uuid="63c05421-b832-4393-81b9-104d728979d7"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[Date]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="51" y="0" width="515" height="12" uuid="ad3c0516-50a0-4078-8e9a-107dca1aef42"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[Description]]></text>
+				</staticText>
+			</frame>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="70" splitType="Stretch">
+			<textField>
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="51" y="0" width="515" height="70" uuid="e6d84fca-b8b8-493f-acc1-1fdbd3b2f085"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{text}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="6" y="0" width="35" height="11" uuid="24e7b84f-aeb5-4315-9934-bee481e38112"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{contactedon}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

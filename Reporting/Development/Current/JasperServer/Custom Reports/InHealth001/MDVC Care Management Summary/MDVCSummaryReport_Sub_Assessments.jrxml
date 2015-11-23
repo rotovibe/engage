@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="MDVCSummaryReport_Sub_Assessments" language="groovy" pageWidth="576" pageHeight="842" columnWidth="576" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="db6125b1-952d-4e40-8426-993a71e36796">
+	<property name="ireport.zoom" value="1.7715610000000022"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ID_MongoPatientId" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select
+ob.description as [assessment]
+,po.NumericValue
+, otl.name
+, COALESCE(po.lastupdatedon, po.recordcreatedon) as [Date]
+from
+	RPT_patientobservation po
+	INNER JOIN RPT_Observation ob ON po.mongoobservationid = ob.mongoid
+	INNER JOIN rpt_Observationtypelookup otl ON ob.[MongoObservationLookUpId] = otl.mongoid
+where
+	otl.MongoId = '552402ded43323192031a507'
+	and po.mongopatientid = $P{ID_MongoPatientId}]]>
+	</queryString>
+	<field name="assessment" class="java.lang.String"/>
+	<field name="NumericValue" class="java.lang.Double"/>
+	<field name="name" class="java.lang.String"/>
+	<field name="Date" class="java.sql.Timestamp"/>
+	<columnHeader>
+		<band height="26" splitType="Stretch">
+			<frame>
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="0" y="14" width="572" height="11" backcolor="#F0F0F0" uuid="00a252a3-0edb-456e-962d-fb665f0d3ede"/>
+				<staticText>
+					<reportElement x="10" y="0" width="65" height="11" uuid="36a1b6b2-2718-445f-9711-2a99819a76b8"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[assessment]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="75" y="0" width="116" height="11" uuid="37b78b62-33a0-4cd5-8db1-e3df16a64a5a"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[NumericValue]]></text>
+				</staticText>
+			</frame>
+			<staticText>
+				<reportElement x="191" y="14" width="95" height="11" uuid="94057ece-195d-4134-bc1c-a2e5799b8b07"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Date]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="8" y="1" width="568" height="13" uuid="3b040db2-0195-4b3a-96d9-7da9f588e8ec"/>
+				<textElement>
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Assessments]]></text>
+			</staticText>
+			<line>
+				<reportElement positionType="Float" x="0" y="13" width="572" height="1" forecolor="#666666" uuid="a683b5c0-e235-4c38-ba8b-6aaf632b1bf2"/>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="11" splitType="Stretch">
+			<textField>
+				<reportElement x="10" y="0" width="65" height="11" uuid="efa31cd2-6f65-4c72-8699-fcc9aa8500e2"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{assessment}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="191" y="0" width="95" height="11" uuid="837a46a5-fb42-4854-8993-6836be05bbed"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Date}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="74" y="0" width="116" height="11" uuid="69c51511-f048-473d-8b09-549f0c9dd1e5"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NumericValue}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

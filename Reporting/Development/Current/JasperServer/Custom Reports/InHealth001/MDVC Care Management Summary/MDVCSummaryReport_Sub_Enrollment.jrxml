@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="MDVCSummaryReport_Sub_Enrollment" language="groovy" pageWidth="576" pageHeight="842" columnWidth="576" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="f50ddb62-a202-490b-a327-7fdc6924de6c">
+	<property name="ireport.zoom" value="1.6105100000000014"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ID_MongoPatientId" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select
+ei.*,
+pp.name as [Name]
+from
+RPT_Engage_Enrollment_Info ei
+INNER JOIN RPT_patientprogram pp ON ei.mongopatientprogramid = pp.mongoid
+where ei.mongopatientid = $P{ID_MongoPatientId}]]>
+	</queryString>
+	<field name="PatientId" class="java.lang.Integer"/>
+	<field name="PatientProgramId" class="java.lang.Integer"/>
+	<field name="Priority" class="java.lang.String"/>
+	<field name="firstName" class="java.lang.String"/>
+	<field name="SystemId" class="java.lang.String"/>
+	<field name="LastName" class="java.lang.String"/>
+	<field name="MiddleName" class="java.lang.String"/>
+	<field name="Suffix" class="java.lang.String"/>
+	<field name="Gender" class="java.lang.String"/>
+	<field name="DateOfBirth" class="java.lang.String"/>
+	<field name="LSSN" class="java.lang.Integer"/>
+	<field name="Assigned_PCM" class="java.lang.String"/>
+	<field name="Exclusion_Criteria" class="java.lang.String"/>
+	<field name="Program_CM" class="java.lang.String"/>
+	<field name="Enrollment" class="java.lang.String"/>
+	<field name="GraduatedFlag" class="java.lang.String"/>
+	<field name="StartDate" class="java.sql.Timestamp"/>
+	<field name="EndDate" class="java.sql.Timestamp"/>
+	<field name="Assigned_Date" class="java.sql.Timestamp"/>
+	<field name="Last_State_Update_Date" class="java.sql.Timestamp"/>
+	<field name="State" class="java.lang.String"/>
+	<field name="Eligibility" class="java.lang.String"/>
+	<field name="Program_Completed_Date" class="java.sql.Date"/>
+	<field name="Re_enrollment_Date" class="java.sql.Date"/>
+	<field name="Enrolled_Date" class="java.sql.Date"/>
+	<field name="Pending_Enrolled_Date" class="java.sql.Date"/>
+	<field name="Enrollment_Action_Completion_Date" class="java.sql.Date"/>
+	<field name="Disenroll_Date" class="java.sql.Date"/>
+	<field name="Disenroll_Reason" class="java.lang.String"/>
+	<field name="Disenroll_Reason_Other" class="java.lang.String"/>
+	<field name="did_not_enroll_date" class="java.sql.Date"/>
+	<field name="did_not_enroll_reason" class="java.lang.String"/>
+	<field name="Practice" class="java.lang.String"/>
+	<field name="PCP" class="java.lang.String"/>
+	<field name="did_not_enroll_reason_other" class="java.lang.String"/>
+	<field name="acuity_score" class="java.lang.String"/>
+	<field name="acuity_date" class="java.sql.Timestamp"/>
+	<field name="MongoPatientId" class="java.lang.String"/>
+	<field name="MongoPatientProgramId" class="java.lang.String"/>
+	<field name="Name" class="java.lang.String"/>
+	<columnHeader>
+		<band height="31" splitType="Stretch">
+			<frame>
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="0" y="18" width="576" height="12" backcolor="#F0F0F0" uuid="4ce04b0c-69be-4ca1-b932-5b99b4e719f2"/>
+			</frame>
+			<staticText>
+				<reportElement x="6" y="19" width="121" height="11" uuid="2fec96ce-e08b-42f8-83df-d92da3f0d038"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="127" y="19" width="100" height="11" uuid="88443f62-9e5f-44dd-94b1-6a9305f3608a"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Assigned_PCM]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="227" y="19" width="100" height="11" uuid="5d3b771b-5525-4646-98f5-a62503c79b70"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Enrollment]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="332" y="19" width="100" height="11" uuid="17264fbd-8a6f-4ee7-a692-04fe90c61a2e"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[StartDate]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="440" y="19" width="100" height="11" uuid="eb98a024-7b4f-4729-b1af-8703edada824"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[EndDate]]></text>
+			</staticText>
+			<line>
+				<reportElement positionType="Float" x="0" y="17" width="576" height="1" forecolor="#666666" uuid="45317bdd-4999-4aa7-85e3-73dae4350d2b"/>
+			</line>
+			<staticText>
+				<reportElement x="6" y="3" width="110" height="14" uuid="6d50ec3e-c9d2-446e-a64e-225098091361"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Program Enrollment]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="12" splitType="Stretch">
+			<textField>
+				<reportElement x="6" y="0" width="121" height="11" uuid="9372da23-b981-4927-99a3-14122a1e59a6"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="128" y="0" width="100" height="11" uuid="cae69596-8358-4519-8bed-27f15068ddcb"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Assigned_PCM}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="228" y="0" width="100" height="11" uuid="2fdf7d28-c46a-4352-af43-113acae8bef1"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Enrollment}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="328" y="0" width="100" height="11" uuid="aad8baac-a65c-4860-a987-56f9d3c44220"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{StartDate}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="428" y="0" width="100" height="11" uuid="35bf9830-e30c-493b-b33f-8fd61c90dd32"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{EndDate}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

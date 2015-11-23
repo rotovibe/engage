@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="subreport_active_medications" language="groovy" pageWidth="576" pageHeight="792" whenNoDataType="NoDataSection" columnWidth="576" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="94706ec6-5168-4b82-a2f7-5a7919eb1456">
+	<property name="ireport.zoom" value="1.6105100000000019"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ID_MongoPatientId" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select
+	pms.mongopatientid,
+	pms.name,
+	pms.category,
+	pms.strength,
+	pms.[route],
+	pms.form,
+	pms.[FreqQuantity],
+	pms.[StartDate],
+	pmf.Name as [Frequency]
+from
+	RPT_PatientMedSupp pms
+	LEFT JOIN RPT_PatientMedFrequency pmf ON pms.MongoFrequencyId = pmf.MongoId
+where
+	[Status] = 'Active'
+	AND mongopatientid = $P{ID_MongoPatientId}]]>
+	</queryString>
+	<field name="mongopatientid" class="java.lang.String"/>
+	<field name="name" class="java.lang.String"/>
+	<field name="category" class="java.lang.String"/>
+	<field name="strength" class="java.lang.String"/>
+	<field name="route" class="java.lang.String"/>
+	<field name="form" class="java.lang.String"/>
+	<field name="FreqQuantity" class="java.lang.String"/>
+	<field name="StartDate" class="java.sql.Timestamp"/>
+	<field name="Frequency" class="java.lang.String"/>
+	<columnHeader>
+		<band height="27" splitType="Stretch">
+			<frame>
+				<reportElement mode="Opaque" x="0" y="15" width="576" height="11" backcolor="#F0F0F0" uuid="fc8ea9c2-cd89-4b8b-990a-0e38028f0439"/>
+				<staticText>
+					<reportElement x="302" y="0" width="38" height="11" uuid="bf6fdb8c-8bac-4b94-8330-e665d1f05bc6"/>
+					<textElement verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[route]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="466" y="0" width="38" height="11" uuid="bb65da31-b014-41eb-8974-d1c82f146818"/>
+					<textElement verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[Freq]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="340" y="0" width="126" height="11" uuid="59c36b41-81eb-44e4-81db-e55467193164"/>
+					<textElement verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[form]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="239" y="0" width="63" height="11" uuid="b3b1e7e6-579a-4fef-8dfa-f0a07fd9d3f1"/>
+					<textElement verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[strength]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="87" y="0" width="152" height="11" uuid="9f439753-5d05-4385-875c-be19d493fc2c"/>
+					<textElement verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[name]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="507" y="0" width="63" height="11" uuid="0b07c54d-53d5-4f9b-a8be-21f58415a82d"/>
+					<textElement verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[StartDate]]></text>
+				</staticText>
+			</frame>
+			<staticText>
+				<reportElement x="6" y="0" width="110" height="14" uuid="94776379-8675-4716-954c-dfcee5e24b66"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Active Medications]]></text>
+			</staticText>
+			<line>
+				<reportElement positionType="Float" x="0" y="14" width="576" height="1" forecolor="#666666" uuid="f82196f5-3568-4052-81f7-5ccda026c587"/>
+			</line>
+			<staticText>
+				<reportElement x="6" y="16" width="64" height="11" uuid="3a16cafc-c83a-4876-a0fd-a6099e9710bc"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Frequency]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="12" splitType="Stretch">
+			<textField>
+				<reportElement x="6" y="0" width="81" height="12" uuid="edd6646c-22c7-4242-88af-9f0ef6e53b18"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Frequency}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="87" y="0" width="152" height="12" uuid="4d8cae95-b0e2-410d-9bf4-b91e5b337af7"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="239" y="0" width="63" height="12" uuid="84cc0946-6032-46ee-a91c-47390ff958ec"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{strength}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="302" y="0" width="38" height="12" uuid="00ceeadf-e4db-41fb-914a-7c54f30d7b3e"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{route}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="340" y="0" width="126" height="12" uuid="2aaa42ea-f7ca-4535-b128-14d83ff8ea59"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{form}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="466" y="0" width="38" height="12" uuid="b08612e8-e0af-4744-93e1-edb67abe4a0c"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{FreqQuantity}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="507" y="0" width="63" height="12" uuid="d23f6012-37ac-4248-ba22-5575acde475a"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{StartDate}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

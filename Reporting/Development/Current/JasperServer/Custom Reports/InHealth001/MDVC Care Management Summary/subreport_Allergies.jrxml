@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="subreport_Allergies" language="groovy" pageWidth="576" pageHeight="842" columnWidth="576" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="ecc880da-ac97-44eb-b6a5-8f9b4ec99306">
+	<property name="ireport.zoom" value="2.593742460100003"/>
+	<property name="ireport.x" value="25"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ID_MongoPatientId" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select
+al.codingsystemcode,
+cs.Name as [System],
+al.name,
+sv.Name as [severity],
+pa.Notes
+from
+	RPT_PatientAllergy pa
+	INNER JOIN RPT_Patient pt ON pa.mongopatientid = pt.mongoid
+	INNER JOIN RPT_Allergy al ON pa.mongoallergyid = al.mongoId
+	INNER JOIN RPT_CodingSystemLookUp cs ON al.codingsystem = cs.mongoId
+	LEFT JOIN RPT_SeverityLookUp sv ON pa.MongoSeverityId = sv.MongoId
+where
+	pa.mongopatientid = $P{ID_MongoPatientId}
+	and pa.statusid = 'Active']]>
+	</queryString>
+	<field name="codingsystemcode" class="java.lang.String"/>
+	<field name="System" class="java.lang.String"/>
+	<field name="name" class="java.lang.String"/>
+	<field name="severity" class="java.lang.String"/>
+	<field name="Notes" class="java.lang.String"/>
+	<columnHeader>
+		<band height="29" splitType="Stretch">
+			<frame>
+				<reportElement mode="Opaque" x="0" y="15" width="576" height="13" backcolor="#F0F0F0" uuid="2b7cd68c-0858-453f-8f1c-918836706eb9"/>
+				<staticText>
+					<reportElement x="6" y="0" width="105" height="12" uuid="1d3ae8fa-ccd9-4d12-8cc6-29a78de4b354"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[Coding System]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="461" y="0" width="115" height="12" uuid="e45bcf47-1b74-4b98-8cd0-de7eee8597f6"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[Notes]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="116" y="0" width="115" height="12" uuid="fd9c4987-1543-4724-b5c2-c377b75fab64"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[System]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="346" y="0" width="115" height="12" uuid="a00f9ae8-58b6-4eb3-9a39-854a9bb5bb82"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[severity]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="231" y="0" width="115" height="12" uuid="6e2be9aa-7cbb-4197-acf4-f5f57bbc95fb"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[name]]></text>
+				</staticText>
+			</frame>
+			<line>
+				<reportElement positionType="Float" x="0" y="14" width="576" height="1" forecolor="#666666" uuid="1749d6de-57ed-45a8-9789-74ee9759b434"/>
+			</line>
+			<staticText>
+				<reportElement x="6" y="0" width="110" height="14" uuid="6b4bcf92-3585-42e2-b014-46a97de2a8eb"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Active Allergies]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="11" splitType="Stretch">
+			<textField>
+				<reportElement x="115" y="0" width="115" height="11" uuid="fe050e44-ef5c-4293-9cc2-f64f547a8021"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{System}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="230" y="0" width="115" height="11" uuid="8285b9ce-4b37-4d97-ad9a-571b33ccf085"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="345" y="0" width="115" height="11" uuid="d15430d6-8ad5-4273-8692-3c55a5ada047"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{severity}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="460" y="0" width="115" height="11" uuid="d852c737-5f3f-4772-8d22-f4725c22031d"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Notes}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="6" y="0" width="110" height="11" uuid="007c3ce0-7c64-4af6-b40b-dbc88841695d"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{codingsystemcode}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

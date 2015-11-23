@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="subreport_Notes" language="groovy" pageWidth="576" pageHeight="842" columnWidth="576" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="8b93a0d5-d3ac-4c7c-beaf-6c2b84e4fa39">
+	<property name="ireport.zoom" value="1.771561000000002"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<subDataset name="dataset1" uuid="08e31c43-1791-4d06-b8b9-7023a1b2c026"/>
+	<parameter name="ID_MongoPatientId" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select
+	pn.MongoPatientId,
+	pn.Text,
+	nt.Name
+from RPT_PatientNote pn
+INNER JOIN RPT_NoteTypeLookUp nt ON pn.Type = nt.mongoid
+where
+ nt.name = 'General'
+ AND pn.MongoPatientId = $P{ID_MongoPatientId}
+ORDER BY pn.ContactedOn DESC]]>
+	</queryString>
+	<field name="MongoPatientId" class="java.lang.String"/>
+	<field name="Text" class="java.lang.String"/>
+	<field name="Name" class="java.lang.String"/>
+	<detail>
+		<band height="12" splitType="Stretch">
+			<textField>
+				<reportElement x="20" y="0" width="556" height="11" uuid="13614fde-1328-41fa-bad5-674fa5a3b273"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Text}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement x="11" y="4" width="4" height="4" uuid="8e7e55d6-b82f-4760-830c-755d81950c07"/>
+			</rectangle>
+		</band>
+	</detail>
+</jasperReport>

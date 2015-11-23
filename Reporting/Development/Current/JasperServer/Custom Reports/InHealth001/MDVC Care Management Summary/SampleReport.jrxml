@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SampleReport" language="groovy" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="c743537e-4134-4584-9ad9-760e6d2fa72f">
+	<property name="ireport.zoom" value="1.1000000000000045"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="72"/>
+	<property name="ireport.jasperserver.reportUnit" value="/organizations/organization_1/organizations/InHealth/Reports/Phytel_Only/Remote/SampleReport"/>
+	<property name="ireport.jasperserver.url" value="https://reporting.phytel.com/jasperserver-pro/services/repository"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\Users\\IBM_ADMIN\\Documents\\IReports\\InHealth\\"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select
+	pt.mongoid as [MongoPatientId],
+	pt.EngageId,
+	pt.[FirstName] + ', ' + pt.[LastName] as [Name],
+	pt.[DateOfBirth],
+	pt.[Gender],
+	pt.Phone_1,
+	pt.phone_2,
+	pt.Email_1,
+	(pt.Address_1 +' '+ pt.Address_2+' '+ pt.Address_3) as [address1],
+	(pt.Address_City + ', ' +pt.Address_State + ' ' +pt.Address_ZIP_Code) as [address2]
+from
+	RPT_PatientInformation pt]]>
+	</queryString>
+	<field name="MongoPatientId" class="java.lang.String"/>
+	<field name="EngageId" class="java.lang.String"/>
+	<field name="Name" class="java.lang.String"/>
+	<field name="DateOfBirth" class="java.lang.String"/>
+	<field name="Gender" class="java.lang.String"/>
+	<field name="Phone_1" class="java.lang.String"/>
+	<field name="phone_2" class="java.lang.String"/>
+	<field name="Email_1" class="java.lang.String"/>
+	<field name="address1" class="java.lang.String"/>
+	<field name="address2" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="149" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="129" width="572" height="19" uuid="2210986c-d7df-4276-bffe-3330082b2319"/>
+				<textElement textAlignment="Center">
+					<font size="13" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Care Management Summary Report]]></text>
+			</staticText>
+			<image>
+				<reportElement x="133" y="7" width="298" height="114" uuid="d02ce12f-8d52-4a8d-9e53-248f4d46e142"/>
+				<imageExpression><![CDATA["C:\\Users\\IBM_ADMIN\\Documents\\IReports\\InHealth\\MDVC_logo.jpg"]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<detail>
+		<band height="581" splitType="Stretch">
+			<frame>
+				<reportElement mode="Opaque" x="0" y="0" width="576" height="106" backcolor="#CCCCCC" uuid="b21605e7-26f5-4da7-9eb7-7bc3580b95ee"/>
+				<textField>
+					<reportElement x="6" y="15" width="186" height="22" uuid="794d0c41-9b48-4e57-9e0a-e6b9d4bbb9ea"/>
+					<textElement>
+						<font size="16" isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{Name}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="4" y="25" width="0" height="0" forecolor="#F0F0F0" uuid="bcab59be-8891-4174-913a-fccfb221116e"/>
+					<textFieldExpression><![CDATA[$F{MongoPatientId}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="197" y="27" width="12" height="12" uuid="b630e0cd-810f-4236-a9c9-cb9f23046552"/>
+					<textElement>
+						<font size="9"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{Gender}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="209" y="27" width="100" height="12" uuid="39e23580-74bf-4050-9aba-4daf5d037764"/>
+					<textElement>
+						<font size="9"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{DateOfBirth}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="509" y="13" width="58" height="14" uuid="4856bffb-df67-4760-8b75-5deff2abd7ba"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Care Team]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="6" y="5" width="100" height="20" uuid="38cb9d94-5ded-4be0-86e2-b9219661f382"/>
+					<textFieldExpression><![CDATA[$F{EngageId}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="456" y="64" width="111" height="14" uuid="848d516d-6468-483d-a127-42558845a3b2"/>
+					<textElement textAlignment="Right">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{Phone_1}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="456" y="73" width="111" height="12" uuid="2026b362-5227-4a3d-a3a4-6a19870774b6"/>
+					<textElement textAlignment="Right">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{phone_2}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="6" y="35" width="186" height="12" uuid="49a8f6dd-9641-4dc9-8d58-0597e79c00ec"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{address1}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="6" y="47" width="186" height="12" uuid="7f504ea1-0f5f-47ee-b324-e5509400d6ae"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{address2}]]></textFieldExpression>
+				</textField>
+			</frame>
+			<line>
+				<reportElement positionType="Float" x="0" y="578" width="572" height="1" uuid="4ec96cd3-03ae-4d55-b4b0-c8c2edd23048"/>
+			</line>
+			<subreport>
+				<reportElement positionType="Float" x="373" y="27" width="196" height="34" isRemoveLineWhenBlank="true" uuid="b9221c73-94db-4ba9-8ad2-0e6fe96bf66f"/>
+				<subreportParameter name="ID_MongoPatientId">
+					<subreportParameterExpression><![CDATA[$F{MongoPatientId}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "subreport_careteam.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement positionType="Float" x="0" y="205" width="576" height="44" isRemoveLineWhenBlank="true" uuid="28f95780-290d-4f68-961b-a8895f0e3fe2"/>
+				<subreportParameter name="ID_MongoPatientId">
+					<subreportParameterExpression><![CDATA[$F{MongoPatientId}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "subreport_Recent_Clinical.jasper"]]></subreportExpression>
+			</subreport>
+			<frame>
+				<reportElement positionType="Float" mode="Transparent" x="331" y="5" width="229" height="22" backcolor="#999999" uuid="c36a5233-4fd3-401b-a850-00aca8bb1986"/>
+			</frame>
+			<subreport>
+				<reportElement positionType="Float" x="0" y="277" width="576" height="44" isRemoveLineWhenBlank="true" uuid="0df7702f-7868-4237-89af-6ec838f5e116"/>
+				<subreportParameter name="ID_MongoPatientId">
+					<subreportParameterExpression><![CDATA[$F{MongoPatientId}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "subreport_active_medications.jasper"]]></subreportExpression>
+			</subreport>
+			<frame>
+				<reportElement positionType="Float" mode="Transparent" x="0" y="182" width="576" height="22" backcolor="#999999" uuid="04734e08-1398-49ae-8e51-ebbca28747a7"/>
+				<staticText>
+					<reportElement x="6" y="8" width="110" height="14" uuid="6f4403fd-3163-4399-b504-6abd1b713037"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Clinical]]></text>
+				</staticText>
+			</frame>
+			<frame>
+				<reportElement positionType="Float" mode="Transparent" x="0" y="254" width="576" height="22" backcolor="#999999" uuid="43b16ee6-d7c2-44c9-8eee-ce248571f21e"/>
+				<staticText>
+					<reportElement x="6" y="7" width="110" height="14" uuid="00fefebe-9b0c-4d94-92ae-243224e35780"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Medications]]></text>
+				</staticText>
+			</frame>
+			<frame>
+				<reportElement positionType="Float" mode="Transparent" x="0" y="327" width="576" height="22" backcolor="#999999" uuid="e366c4f9-c759-4f49-81dd-4f6990955838"/>
+				<staticText>
+					<reportElement x="6" y="6" width="110" height="14" uuid="bbcffe3d-a00b-4741-bd79-450e1c4960db"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Allergies]]></text>
+				</staticText>
+			</frame>
+			<subreport>
+				<reportElement positionType="Float" x="0" y="349" width="576" height="44" isRemoveLineWhenBlank="true" uuid="7387fb54-0d12-45fe-9d46-4c5301508bd3"/>
+				<subreportParameter name="ID_MongoPatientId">
+					<subreportParameterExpression><![CDATA[$F{MongoPatientId}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "subreport_allergies.jasper"]]></subreportExpression>
+			</subreport>
+			<line>
+				<reportElement positionType="Float" x="0" y="204" width="576" height="1" forecolor="#666666" uuid="416ccd67-c662-4d8b-9d12-91f31ea6ac58"/>
+			</line>
+			<line>
+				<reportElement positionType="Float" x="0" y="276" width="576" height="1" forecolor="#666666" uuid="04482d2d-a144-4276-8f58-a384c80320b4"/>
+			</line>
+			<line>
+				<reportElement positionType="Float" x="0" y="348" width="576" height="1" forecolor="#666666" uuid="9d2c3ee8-891f-4fe1-90be-877bcb12c862"/>
+			</line>
+			<line>
+				<reportElement positionType="Float" x="0" y="412" width="286" height="1" forecolor="#666666" uuid="10d5c951-a47a-4935-be7a-9ab38c81b4ff"/>
+			</line>
+			<subreport>
+				<reportElement positionType="Float" x="0" y="415" width="286" height="44" isRemoveLineWhenBlank="true" uuid="3348a5fd-1c59-4f05-8863-d97638efed9e"/>
+				<subreportParameter name="ID_MongoPatientId">
+					<subreportParameterExpression><![CDATA[$F{MongoPatientId}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "subreport_touchpoints.jasper"]]></subreportExpression>
+			</subreport>
+			<frame>
+				<reportElement positionType="Float" mode="Transparent" x="0" y="393" width="286" height="22" backcolor="#999999" uuid="5671b184-fc7c-445b-890b-5281b300fe5b"/>
+				<staticText>
+					<reportElement x="6" y="8" width="110" height="14" uuid="f6c4a87f-1065-4cac-a428-cfa8bc97b105"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Touchpoints]]></text>
+				</staticText>
+			</frame>
+			<line>
+				<reportElement positionType="Float" x="290" y="412" width="286" height="1" forecolor="#666666" uuid="e6683b38-d972-45ca-9e8e-daa466b49a11"/>
+			</line>
+			<frame>
+				<reportElement positionType="Float" mode="Transparent" x="290" y="393" width="286" height="22" backcolor="#999999" uuid="ea1c9670-eb81-456a-b227-478ddd027fe3"/>
+				<staticText>
+					<reportElement x="6" y="8" width="110" height="14" uuid="e8a50c0f-ed75-4833-a7ce-dc0fa0133a93"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Utilization]]></text>
+				</staticText>
+			</frame>
+			<subreport>
+				<reportElement positionType="Float" x="290" y="415" width="286" height="44" isRemoveLineWhenBlank="true" uuid="b7d03ab4-e866-4189-a259-010e41231a3a"/>
+				<subreportParameter name="ID_MongoPatientId">
+					<subreportParameterExpression><![CDATA[$F{MongoPatientId}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "subreport_Utilization.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport isUsingCache="true">
+				<reportElement positionType="Float" x="0" y="133" width="576" height="44" isRemoveLineWhenBlank="true" uuid="c7a5ab03-56f4-42e2-9fdf-fca07ba20892"/>
+				<subreportParameter name="ID_MongoPatientId">
+					<subreportParameterExpression><![CDATA[$F{MongoPatientId}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "subreport_Notes.jasper"]]></subreportExpression>
+			</subreport>
+			<staticText>
+				<reportElement x="6" y="118" width="110" height="14" uuid="edfd0812-396c-44d9-b49e-3d3632d920ed"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Notes]]></text>
+			</staticText>
+			<line>
+				<reportElement positionType="Float" x="0" y="132" width="576" height="1" forecolor="#666666" uuid="5fa12c23-71e7-4407-bdc2-0e3def8f60a6"/>
+			</line>
+			<line>
+				<reportElement positionType="Float" x="0" y="482" width="576" height="1" forecolor="#666666" uuid="9ae4e48b-37b7-4c53-8c7e-cabfe52fbe8e"/>
+			</line>
+			<frame>
+				<reportElement positionType="Float" mode="Transparent" x="0" y="460" width="576" height="22" backcolor="#999999" uuid="cd27721f-fda4-4b71-82fa-ec19901aad2a"/>
+				<staticText>
+					<reportElement x="6" y="7" width="110" height="14" uuid="2e078191-045a-48ce-96fd-b5ad85578771"/>
+					<textElement>
+						<font isBold="true"/>
+					</textElement>
+					<text><![CDATA[Care Opportunities]]></text>
+				</staticText>
+			</frame>
+			<subreport>
+				<reportElement positionType="Float" x="0" y="483" width="576" height="44" isRemoveLineWhenBlank="true" uuid="f6c6d435-cafc-44c9-a9da-bf7b6e3c258e"/>
+				<subreportParameter name="ID_MongoPatientId">
+					<subreportParameterExpression><![CDATA[$F{MongoPatientId}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "MDVCSummaryReport_Sub_ToDo.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

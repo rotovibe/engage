@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="subreport_careteam" language="groovy" pageWidth="286" pageHeight="595" columnWidth="286" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="6437e9b0-ae77-40c4-b135-b9dc72d6652a">
+	<property name="ireport.zoom" value="1.6105100000000017"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ID_MongoPatientId" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select
+cm.MongoPatientId,
+usr.FirstName + ', ' + usr.LastName as [Name],
+pt.Background
+from RPT_CareMember cm
+	INNER JOIN RPT_Patient pt ON cm.MongoPatientId = pt.MongoId
+	INNER JOIN RPT_User usr ON cm.MongoUserId = usr.MongoId
+where
+	cm.MongoPatientId = $P{ID_MongoPatientId}]]>
+	</queryString>
+	<field name="MongoPatientId" class="java.lang.String"/>
+	<field name="Name" class="java.lang.String"/>
+	<field name="Background" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="12" splitType="Stretch">
+			<textField>
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="29" y="0" width="156" height="11" uuid="96b855dd-5dfa-4d51-b2cb-91c004eed77c"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Name}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

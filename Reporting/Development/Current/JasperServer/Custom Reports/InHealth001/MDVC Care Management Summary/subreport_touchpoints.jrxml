@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="subreport_touchpoints" language="groovy" pageWidth="286" pageHeight="842" columnWidth="286" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="85369405-fb84-45a7-89a4-4180ab4d2b72">
+	<property name="ireport.zoom" value="1.7715610000000017"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ID_MongoPatientId" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select
+	pn.MongoPatientId,
+	pn.Text,
+	pn.ContactedOn
+	from RPT_PatientNote pn
+INNER JOIN RPT_NoteTypeLookUp nt ON pn.Type = nt.mongoid
+where
+ nt.name = 'Touchpoint'
+ AND pn.MongoPatientId = $P{ID_MongoPatientId}
+ORDER BY pn.ContactedOn DESC]]>
+	</queryString>
+	<field name="MongoPatientId" class="java.lang.String"/>
+	<field name="Text" class="java.lang.String"/>
+	<field name="ContactedOn" class="java.sql.Timestamp"/>
+	<columnHeader>
+		<band height="12" splitType="Stretch">
+			<frame>
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="0" y="0" width="286" height="11" backcolor="#F0F0F0" uuid="c4606c32-6f2a-4cc3-99ad-1643d61c7e5d"/>
+				<staticText>
+					<reportElement x="206" y="0" width="78" height="11" uuid="6bf611e1-0966-4ac8-bd82-3d186e13e7f8"/>
+					<textElement verticalAlignment="Top">
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[Contacted]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="11" y="0" width="38" height="11" uuid="bab5f2b4-325a-4a3a-8b24-fe3d55a5f3d5"/>
+					<textElement verticalAlignment="Top">
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[Text]]></text>
+				</staticText>
+			</frame>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="11" splitType="Stretch">
+			<textField>
+				<reportElement x="11" y="0" width="194" height="11" uuid="5568b736-0694-49bf-827d-09f449d48842"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Text}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="206" y="0" width="78" height="11" uuid="5914c960-f36b-48f3-b053-2fde6c9de776"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ContactedOn}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

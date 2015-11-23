@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="MDVCSummaryReport_Sub_ToDo" language="groovy" pageWidth="576" pageHeight="842" columnWidth="576" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="56a1a530-75ca-44f2-95a1-785dfc52bebf">
+	<property name="ireport.zoom" value="2.853116706110004"/>
+	<property name="ireport.x" value="28"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ID_MongoPatientId" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select
+td.title as [description],
+td.DueDate as [Due Date]
+from
+RPT_ToDo td
+INNER JOIN RPT_ToDoCategoryLookUp tdc ON tdc.MongoId = td.MongoCategory
+where
+tdc.Name = 'Care Opportunity'
+AND td.Status in ('Open','NotMet')
+AND td.mongopatientid = $P{ID_MongoPatientId}]]>
+	</queryString>
+	<field name="description" class="java.lang.String"/>
+	<field name="Due Date" class="java.sql.Timestamp"/>
+	<columnHeader>
+		<band height="27" splitType="Stretch">
+			<frame>
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="0" y="15" width="576" height="11" backcolor="#F0F0F0" uuid="57af04df-2f3a-436c-a862-26dfa6110b09"/>
+				<staticText>
+					<reportElement x="97" y="0" width="479" height="11" uuid="e0a46682-b52d-4497-b8ab-0367c080c981"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[description]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="10" y="0" width="87" height="11" uuid="6df398e2-51de-435d-9e41-e894ba6bd43b"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[Due Date]]></text>
+				</staticText>
+			</frame>
+			<line>
+				<reportElement positionType="Float" x="0" y="14" width="576" height="1" forecolor="#666666" uuid="1a75409f-2fb6-4672-9abd-ee2f627b62b2"/>
+			</line>
+			<staticText>
+				<reportElement x="6" y="0" width="110" height="14" uuid="79af48c5-6c21-4af9-a700-c0d817b25160"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Care Opportunities]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="12" splitType="Stretch">
+			<textField>
+				<reportElement x="10" y="0" width="87" height="12" uuid="ed1a4817-f1e1-4de1-beb4-c0a788a78731"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Due Date}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="97" y="0" width="479" height="12" uuid="cb86b6c2-37de-4e32-8a1c-ea263cc4701b"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{description}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="16">
+			<staticText>
+				<reportElement positionType="Float" x="10" y="4" width="409" height="12" uuid="bdb28553-1576-4861-8b0f-4c7f66ff6c67"/>
+				<textElement>
+					<font size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Care Opportunities are provided for your consideration and are based upon the initial assessment conducted with the patient.   ]]></text>
+			</staticText>
+		</band>
+	</columnFooter>
+</jasperReport>
