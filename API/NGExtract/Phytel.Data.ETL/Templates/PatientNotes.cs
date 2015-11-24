@@ -47,20 +47,23 @@ namespace Phytel.Data.ETL.Templates
         {
             try
             {
-                OnDocColEvent(new ETLEventArgs { Message = "[" + Contract + "] Loading Patient Notes.", IsError = false });
                 List<EPatientNoteProgram> noteMap = new List<EPatientNoteProgram>();
+
+                #region PatientNotes
+                OnDocColEvent(new ETLEventArgs { Message = "[" + Contract + "] Loading Patient Notes.", IsError = false });
+
                 ConcurrentBag<MEPatientNote> notes;
                 using (PatientNoteMongoContext pnctx = new PatientNoteMongoContext(Contract))
                 {
                     notes = new ConcurrentBag<MEPatientNote>(pnctx.PatientNotes.Collection.FindAllAs<MEPatientNote>().ToList());
                 }
 
-                //Parallel.ForEach(notes, note =>
-                foreach (MEPatientNote note in notes)//.Where(t => !t.DeleteFlag))
+                foreach (MEPatientNote note in notes)
                 {
                     try
                     {
                         ParameterCollection parms = new ParameterCollection();
+                        #region PatientNote fields
                         parms.Add(new Parameter("@MongoID", (string.IsNullOrEmpty(note.Id.ToString()) ? string.Empty : note.Id.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
                         parms.Add(new Parameter("@PatientMongoId", (string.IsNullOrEmpty(note.PatientId.ToString()) ? string.Empty : note.PatientId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
                         parms.Add(new Parameter("@Text", (string.IsNullOrEmpty(note.Text) ? string.Empty : note.Text), SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
@@ -72,7 +75,11 @@ namespace Phytel.Data.ETL.Templates
                         parms.Add(new Parameter("@MongoDurationId", (string.IsNullOrEmpty(note.DurationId.ToString()) ? string.Empty : note.DurationId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
                         parms.Add(new Parameter("@ContactedOn", note.ContactedOn ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
                         parms.Add(new Parameter("@ValidatedIntentity", note.ValidatedIdentity.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                        // standard fields
+                        parms.Add(new Parameter("@Duration", note.Duration ?? (object)DBNull.Value, SqlDbType.Int, ParameterDirection.Input, 50));
+                        parms.Add(new Parameter("@DataSource", (string.IsNullOrEmpty(note.DataSource) ? string.Empty : note.DataSource.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50)); 
+                        #endregion
+                        
+                        #region StandardFields
                         parms.Add(new Parameter("@UpdatedBy", (string.IsNullOrEmpty(note.UpdatedBy.ToString()) ? string.Empty : note.UpdatedBy.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
                         parms.Add(new Parameter("@LastUpdatedOn", note.LastUpdatedOn ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
                         parms.Add(new Parameter("@RecordCreatedBy", (string.IsNullOrEmpty(note.RecordCreatedBy.ToString()) ? string.Empty : note.RecordCreatedBy.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
@@ -83,7 +90,8 @@ namespace Phytel.Data.ETL.Templates
                         if (note.ExtraElements != null)
                             parms.Add(new Parameter("@ExtraElements", note.ExtraElements.ToString(), SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
                         else
-                            parms.Add(new Parameter("@ExtraElements", string.Empty, SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
+                            parms.Add(new Parameter("@ExtraElements", string.Empty, SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue)); 
+                        #endregion
 
                         SQLDataService.Instance.ExecuteScalar(Contract, true, "REPORT", "spPhy_RPT_SavePatientNote", parms);
 
@@ -103,38 +111,22 @@ namespace Phytel.Data.ETL.Templates
                                 });
                             }
                         }
-
-                        #region
-                        ////if (note.ProgramIds != null)
-                        ////{
-                        ////    foreach (ObjectId prg in note.ProgramIds)
-                        ////    {
-                        ////        parms.Clear();
-                        ////        parms.Add(new Parameter("@MongoID", (string.IsNullOrEmpty(prg.ToString()) ? string.Empty : prg.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                        ////        parms.Add(new Parameter("@PatientNoteMongoId", (string.IsNullOrEmpty(note.Id.ToString()) ? string.Empty : note.Id.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                        ////        parms.Add(new Parameter("@UpdatedBy", (string.IsNullOrEmpty(note.UpdatedBy.ToString()) ? string.Empty : note.UpdatedBy.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                        ////        parms.Add(new Parameter("@LastUpdatedOn", note.LastUpdatedOn ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
-                        ////        parms.Add(new Parameter("@RecordCreatedBy", (string.IsNullOrEmpty(note.RecordCreatedBy.ToString()) ? string.Empty : note.RecordCreatedBy.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                        ////        parms.Add(new Parameter("@RecordCreatedOn", note.RecordCreatedOn, SqlDbType.DateTime, ParameterDirection.Input, 50));
-                        ////        parms.Add(new Parameter("@Version", (string.IsNullOrEmpty(note.Version.ToString()) ? string.Empty : note.Version.ToString()), SqlDbType.Float, ParameterDirection.Input, 32));
-
-                        ////        SQLDataService.Instance.ExecuteScalar(Contract, true, "REPORT", "spPhy_RPT_SavePatientNoteProgram", parms);
-                        ////    }
-                        ////}
-                        #endregion
                     }
                     catch (Exception ex)
                     {
-                        OnDocColEvent(new ETLEventArgs { Message = "[" + Contract + "] " + ex.Message + ": " + ex.StackTrace, IsError = true });
+                        OnDocColEvent(new ETLEventArgs { Message = "[" + Contract + "] Error in Loading Patient Notes" + ex.Message + ": " + ex.StackTrace, IsError = true });
                     }
-                }//);
-
+                } 
+                #endregion
+                // Hydrate Program information from PatientNotes into it's own separate table - RPT_PatientNoteProgram
                 SaveSubcollection(noteMap);
             }
             catch (Exception ex)
             {
-                throw ex; //SimpleLog.Log(new ArgumentException("LoadPatientNotes()", ex));
+                throw ex; 
             }
         }
+
+
     }
 }

@@ -951,6 +951,18 @@ namespace Phytel.Data.ETL
                             case LookUpType.Reason:
                                 LoadLookUp(lookup, "spPhy_RPT_SaveStatusReasonLookUp");
                                 break;
+                            case LookUpType.VisitType:
+                                LoadLookUp(lookup, "spPhy_RPT_SaveVisitTypeLookUp");
+                                break;
+                            case LookUpType.UtilizationLocation:
+                                LoadLookUp(lookup, "spPhy_RPT_SaveUtilizationLocationLookUp");
+                                break;
+                            case LookUpType.Disposition:
+                                LoadLookUp(lookup, "spPhy_RPT_SaveDispositionLookUp");
+                                break;
+                            case LookUpType.UtilizationSource:
+                                LoadLookUp(lookup, "spPhy_RPT_SaveUtilizationSourceLookUp");
+                                break;
                             default:
                                 break;
                         }
