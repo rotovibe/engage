@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Phytel.API.Common;
 
 namespace Phytel.API.DataDomain.PatientNote.DTO
 {
     
-    public class PatientNoteData
+    public class PatientNoteData : IAppData
     {
         public string Id { get; set; }
         public string PatientId { get; set; }

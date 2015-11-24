@@ -142,6 +142,7 @@
     <Compile Include="Format\ICommonFormatterUtil.cs" />
     <Compile Include="Helpers.cs" />
     <Compile Include="Helper.cs" />
+    <Compile Include="IAppData.cs" />
     <Compile Include="IHelpers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

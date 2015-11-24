@@ -1,9 +1,10 @@
 ﻿using System;
+using Phytel.API.Common;
 
 namespace Phytel.API.DataDomain.Patient.DTO
 {
     
-    public class PatientData
+    public class PatientData : IAppData
     {
         public string Id { get; set; }
         public string FirstName { get; set; }

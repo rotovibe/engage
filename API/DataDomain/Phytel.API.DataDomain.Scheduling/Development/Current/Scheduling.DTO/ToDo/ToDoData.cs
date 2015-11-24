@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Phytel.API.Common;
 
 namespace Phytel.API.DataDomain.Scheduling.DTO
 {
-    public class ToDoData
+    public class ToDoData : IAppData
     {
         public string Id { get; set; }
         public string CreatedById { get; set; }

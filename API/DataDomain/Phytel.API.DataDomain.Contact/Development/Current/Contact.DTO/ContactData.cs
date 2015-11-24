@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Phytel.API.Common;
 using ServiceStack.ServiceHost;
 
 namespace Phytel.API.DataDomain.Contact.DTO
 {
-    public class ContactData
+    public class ContactData : IAppData
     {
         public string Id { get; set; }
         public string PatientId { get; set; }
@@ -28,6 +29,7 @@ namespace Phytel.API.DataDomain.Contact.DTO
         public List<string> RecentsList { get; set; }
         public DateTime? UpdatedOn { get; set; }
         public DateTime CreatedOn { get; set; }
+        public string ExternalRecordId { get; set; }
     }
 }
 
