@@ -115,6 +115,8 @@ BEGIN
 	DELETE RPT_UtilizationSourceLookUp
 	
 	DELETE RPT_PatientUtilization
+	DELETE RPT_PatientUtilizationProgram
+	DELETE RPT_PatientUtilization_Dim
 	
 	--DELETE CohortPatientView	
 	--DELETE CohortPatientViewSearchField
@@ -241,6 +243,8 @@ BEGIN
 	DBCC CHECKIDENT ('RPT_UtilizationSourceLookUp', RESEED, 0)
 	
 	DBCC CHECKIDENT ('RPT_PatientUtilization', RESEED, 0)
+	DBCC CHECKIDENT ('RPT_PatientUtilizationProgram', RESEED, 0)
+	DBCC CHECKIDENT ('RPT_PatientUtilization_Dim', RESEED, 0)
 	
 	--DBCC CHECKIDENT ('RPT_CohortPatientView', RESEED, 0)
 	--DBCC CHECKIDENT ('RPT_CohortPatientViewSearchField', RESEED, 0)
