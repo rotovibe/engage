@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Phytel.API.Common;
+using Phytel.API.DataDomain.Contact.DTO;
 using Phytel.API.DataDomain.PatientNote.DTO;
 using Phytel.Engage.Integrations.DomainEvents;
 using Phytel.Engage.Integrations.DTO;
+using Phytel.Engage.Integrations.Utils;
 using ServiceStack.Service;
 using ServiceStack.ServiceClient.Web;
 
@@ -16,6 +19,10 @@ namespace Phytel.Engage.Integrations.UOW
         public object Save<T>(T patientNotes, string contract)
         {
             LoggerDomainEvent.Raise(new LogStatus { Message = "5) Sending insert PatientNotes DD request.", Type = LogType.Debug });
+            var l = patientNotes as List<PatientNoteData>;
+            if (l != null)
+                LogUtil.LogExternalRecordId("Save", l.Cast<IAppData>().ToList());
+
             var userid = ProcConstants.UserId; // need to find a valid session id.
             try
             {

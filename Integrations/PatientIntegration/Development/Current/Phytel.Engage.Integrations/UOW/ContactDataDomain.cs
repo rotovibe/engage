@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Linq;
 using System.Reflection;
 using Phytel.API.Common;
 using Phytel.API.DataDomain.Contact.DTO;
 using Phytel.Engage.Integrations.DomainEvents;
 using Phytel.Engage.Integrations.DTO;
+using Phytel.Engage.Integrations.Utils;
 using ServiceStack.Service;
 using ServiceStack.ServiceClient.Web;
 
@@ -19,6 +21,10 @@ namespace Phytel.Engage.Integrations.UOW
         public object Save<T>(T list, string contract)
         {
             LoggerDomainEvent.Raise(new LogStatus { Message = "4) Sending insert Contact DD request.", Type = LogType.Debug });
+            var l = list as List<ContactData>;
+            if (l != null)
+                LogUtil.LogExternalRecordId("Save", l.Cast<IAppData>().ToList());
+
             InsertBatchContactDataResponse response = null;
             try
             {

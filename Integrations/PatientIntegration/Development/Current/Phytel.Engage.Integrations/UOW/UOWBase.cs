@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +19,7 @@ using Phytel.Engage.Integrations.Repo.DTO;
 using Phytel.Engage.Integrations.Repo.DTOs;
 using Phytel.Engage.Integrations.Repo.DTOs.SQL;
 using Phytel.Engage.Integrations.Repo.Repositories;
+using Phytel.Engage.Integrations.Utils;
 using RepositoryType = Phytel.Engage.Integrations.Repo.Repositories.RepositoryType;
 
 namespace Phytel.Engage.Integrations.UOW
@@ -70,7 +72,7 @@ namespace Phytel.Engage.Integrations.UOW
                         var savePatients = pocos.Batch(take).ToList()[i];
 
                         var enumerable = savePatients as IList<T> ?? savePatients.ToList();
-                        FormatStatusResponse(savePatients.ToList(), "saving");
+                        FormatPatientDataStatusResponse(savePatients.ToList(), "saving");
                         HandleResponse(domain.Save(enumerable, contract), contract);
 
                         count = count + enumerable.Count();
@@ -102,7 +104,7 @@ namespace Phytel.Engage.Integrations.UOW
                 {
                     PatientSaveResults.AddRange(list as List<HttpObjectResponse<PatientData>>);
                     SaveIntegrationXref(list, contract);
-                    FormatStatusResponse(list, "saved");
+                    FormatPatientDataStatusResponse(list, "saved");
                 }
             }
             catch (Exception ex)
@@ -112,19 +114,25 @@ namespace Phytel.Engage.Integrations.UOW
             }
         }
 
-        public void FormatStatusResponse<T>(T list, string action)
+        public void FormatPatientDataStatusResponse<T>(T list, string action)
         {
             try
             {
-                StringBuilder sb = new StringBuilder();
-                var l = list as List<HttpObjectResponse<PatientData>>;
-                l.ForEach(r => sb.Append(r.Body.ExternalRecordId + ", "));
-                LoggerDomainEvent.Raise(LogStatus.Create("[Batch Process]: " + l.Count + " Patients "+ action +"  : (" + sb.ToString() +")", true));
+                if (list == null) return;
+                List<PatientData> pData;
+
+                if (list.GetType() == typeof (List<HttpObjectResponse<PatientData>>))
+                    pData = (list as List<HttpObjectResponse<PatientData>>).Select(r => r.Body).ToList();
+                else
+                    pData = list as List<PatientData>;
+
+                if (pData == null) return;
+                LogUtil.LogExternalRecordId(action, pData.Cast<IAppData>().ToList());
             }
             catch (Exception ex)
             {
-                LoggerDomainEvent.Raise(LogStatus.Create("UowBase:FormatStatusResponse(): " + ex.Message, false));
-                throw new ArgumentException("UowBase:FormatStatusResponse(): " + ex.Message);                
+                LoggerDomainEvent.Raise(LogStatus.Create("UowBase:FormatPatientDataStatusResponse(): " + ex.Message, false));
+                throw new ArgumentException("UowBase:FormatPatientDataStatusResponse(): " + ex.Message);
             }
         }
 

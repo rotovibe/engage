@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Linq;
 using System.Reflection;
 using System.Text;
+using Phytel.API.Common;
+using Phytel.API.DataDomain.Contact.DTO;
 using Phytel.API.DataDomain.Patient.DTO;
 using Phytel.API.DataDomain.PatientSystem.DTO;
 using Phytel.API.Interface;
@@ -21,6 +24,7 @@ namespace Phytel.Engage.Integrations.UOW
         public object Save<T>(T patients, string contract)
         {
             LoggerDomainEvent.Raise(new LogStatus { Message = "1) Sending insert Patient DD request.", Type = LogType.Debug });
+
             var userid = ProcConstants.UserId; // need to find a valid session id.
             try
             {
