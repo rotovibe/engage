@@ -745,7 +745,8 @@ define(['services/formatter', 'services/dateHelper'],
 			*/
             init: function (element, valueAccessor, allBindingsAccessor, bindingContext) {
                 // Get the value of the observable binding
-                var observable = valueAccessor();
+                var observable = valueAccessor().observableDateTime;
+				var showDate = valueAccessor().showDate;
 				var initialized = false;
 				//instantiate the timepicker
                 var thisElement = $(element);
@@ -812,14 +813,19 @@ define(['services/formatter', 'services/dateHelper'],
 							}
 						}
 						else{
-							//content cleared or deleted - zero time when the field was empty (12:00 AM will be the time on the observable!)
-							//	note: at this point - we do not invalidate when empty.
-							observable = valueAccessor();
-							observableMoment = moment(observable());
-							if( observableMoment.isValid() && observableMoment.hour() !== 0 || observableMoment.minute() !== 0 ){
-								observableMoment.hour(0);
-								observableMoment.minute(0);
-								observable( observableMoment.toISOString() )
+							//content cleared or deleted
+							if( showDate ){
+								// the time field was emptied. we will set zero time (00:00/ 12:00 AM will be the time on the observable!)
+								//	note: at this point - we do not invalidate when empty.
+								observableMoment = moment(observable());
+								if( observableMoment.isValid() && observableMoment.hour() !== 0 || observableMoment.minute() !== 0 ){
+									observableMoment.hour(0);
+									observableMoment.minute(0);
+									observable( observableMoment.toISOString() )
+								}
+							}
+							else{	//time control only without date, when cleared:
+								observable(null);
 							}
 						}
 					}, 5);
@@ -831,7 +837,6 @@ define(['services/formatter', 'services/dateHelper'],
 				*/
 				function onTimeChange(time){
 					var element = $(this);
-					var observable = valueAccessor();
 					if( !initialized ){
 						//ignore the first time change that is set by init:						
 						initialized = true;
@@ -841,24 +846,25 @@ define(['services/formatter', 'services/dateHelper'],
 					var newMinutes = 0;					
 					if(time){										
 						var timepickerMoment = moment.utc( time );
-						if( !timepickerMoment.isValid() ){
-							//$(this).addClass("invalid");	//TBD
-							//TODO: validation: pass on the validation error.
-						}
-						else{
-							//$(this).removeClass("invalid"); //TBD	
+						if( timepickerMoment.isValid() ){
 							timeMoment = moment().hours( time.getHours() ).minutes( time.getMinutes() );	//timepicker is not DST aware !
 							//timeMoment.utc();	// !!!! issue if the conversion flips a date, we need to know that 
 							newHour = timeMoment.hours();
 							newMinutes = timeMoment.minutes();														
 						}
+						//copy the timepicker time(only) on to the observable datetime value:
+						//note: if the time field has been cleared (time = false) the observable gets a time of 00:00
+						setTimeValue(observable, newHour, newMinutes);
 					}
-						
-					//copy the timepicker time(only) on to the observable datetime value:
-					//note: if the time field has been cleared (time = false) the observable gets a time of 00:00
-					setTimeValue(observable, newHour, newMinutes);										
+					else if( !showDate ){
+						//time control only without date, when cleared:
+						observable(null);
+					}
 				}
-				function setTimeValue(dateObservable, hour, minute){					
+				function setTimeValue(dateObservable, hour, minute){
+					if( !dateObservable() ){
+						dateObservable(moment('1/1/1970').toISOString());
+					}
 					var observableLocalMoment = moment(dateObservable());
 					observableLocalMoment.local();					
 					if(observableLocalMoment.isValid()){
@@ -909,7 +915,7 @@ define(['services/formatter', 'services/dateHelper'],
 				}                
             }
         };
-
+		
         // Timeout binding for hiding alert after x number of seconds
         ko.bindingHandlers.timeOut = {
             init: function (element, valueAccessor, allBindingsAccessor) {

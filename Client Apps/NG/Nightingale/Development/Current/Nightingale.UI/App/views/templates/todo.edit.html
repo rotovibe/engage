@@ -1,12 +1,7 @@
 <div class="body" data-bind="with: todo">	
-    <div class="row" data-bind="if: $parent.hasErrors">
-        <ul data-bind="foreach: $parent.errors">
-            <li class="validation-errors">
-                <h5 data-bind="text: Message"></h5>
-            </li>
-        </ul>
-    </div>
-	<div class="row">
+	<!-- ko compose: "templates/validation.errors.html" -->
+	<!-- /ko --> 
+	<div class="row pad-top">
 		<div class="span2 align-right grey">Category:
 		</div>
 		<div class="span3 pad-left">
@@ -34,9 +29,39 @@
 		<div class="span2 align-right grey">Due Date: 		
 		</div>
 		<div class="span3 pad-left">
-			<input placeholder="due date" size="30" type="text" data-bind="datepicker: dueDate">
+			<!-- <input placeholder="due date" size="30" type="text" data-bind="datepicker: dueDate"> -->
+			<!-- ko compose: { model: 'viewmodels/templates/datetimepicker', activationData:
+				{
+					observableDateTime: dueDate, dateErrors: dueDateErrors, showInvalid: showInvalidDueDate, dateName: 'dueDateDate', timeName: 'dueDateTime',
+					datepickerOptions:{ }, datepickerDynamicOptions: {}, showTime: false, dateCss: 'span12'
+				}
+			} -->
+			<!-- /ko -->
 		</div>
 	</div>
+	<div class="row pad-top">
+        <div class="span2 align-right grey">Start Time:     
+        </div>
+        <div class="span3 pad-left">            
+			<!-- ko compose: { model: 'viewmodels/templates/datetimepicker', activationData:
+				{
+					observableDateTime: startTime, dateErrors: startTimeErrors, timeName: 'startTime', showDate: false,
+					datepickerOptions:{ }, datepickerDynamicOptions: {}, showInvalidTime: showInvalidStartTime, showTime: true, timeCss: 'span12'
+				}
+			} -->
+			<!-- /ko -->
+        </div>
+    </div>
+	<div class="row pad-top">
+        <div class="span2 align-right grey">Duration:     
+        </div>
+        <div class="span2 pad-left">            
+			<input type="text" data-bind="value: duration, valueUpdate: 'afterkeydown', numeric, 
+						attr:{maxlength: 4, max: 1440, min: 1, title:'Duration: enter a number of minutes from 1 to 1440'},
+						css: { 'invalid': (validationErrorsArray().indexOf('duration') !== -1) }"></input>
+        </div>
+		<span class="span2 grey pad-left">(minutes)</span>
+    </div>
 	<div class="row pad-top">
 		<div class="span2 align-right grey">Priority:
 		</div>

@@ -80,7 +80,9 @@ define(['config.services', 'services/session'],
             
 		    metadataStore.registerEntityTypeCtor(
 				'User', null, userInitializer);
-
+			metadataStore.registerEntityTypeCtor(
+				'Event', null, eventInitializer);
+				
 		    function userInitializer(user) {
 		        user.settings = ko.observable();//ko.observableArray();
 		        user.recentIndividuals = ko.observableArray();
@@ -89,6 +91,30 @@ define(['config.services', 'services/session'],
 		        	return theseIndividuals;
 		        }).extend({ throttle: 25 });
 		    }
+			
+			function eventInitializer(event){
+				event.hasTimes = ko.computed( function(){
+					return moment( event.end() ).isValid() && moment( event.start() ).isValid();
+				});
+				event.timeString = function(){				
+					var start = moment( event.start() );
+					var strDate = start.isValid ? start.format("MM/DD/YYYY") : '-';
+					if( event.end() ){					
+						var end = moment( event.end() );					
+						if( end.isValid() && start.isValid() ){
+							var strDate = start.format("MM/DD/YYYY h:mm A");
+							if( start.isSame( end, 'day') ){
+								var endTime = end.format("h:mm A");
+								strDate += ' - ' + endTime;
+							} else{
+								var endTime = end.format("MM/DD/YYYY h:mm A");
+								strDate += ' - ' + endTime;
+							}
+						}					
+					}
+					return strDate;
+				};
+			}
 
 		}
 

@@ -4,6 +4,7 @@ define(['services/session', 'services/dateHelper'],
 
 		var datacontext;
 		var systemCareManager;
+		var userCareManagerName;
 		var DT = breeze.DataType;
 
 		// Expose the model module to the requiring modules
@@ -106,6 +107,8 @@ define(['services/session', 'services/dateHelper'],
 								categoryId: { dataType: "String" },
 								priorityId: { dataType: "Int64" },
 								dueDate: { dataType: "DateTime" },
+								startTime: { dataType: "DateTime" },
+								duration: { dataType: "Int64" },
 								title: { dataType: "String" },
 								description: { dataType: "String" },
 								createdOn: { dataType: "DateTime" },
@@ -545,9 +548,172 @@ define(['services/session', 'services/dateHelper'],
 						}
 						return null;
 					});
+					todo.isDirty = ko.observable(false);
+					todo.clearDirty = function () {
+						todo.isDirty(false);						
+					};
+					todo.watchDirty = function () {
+						var propToken = todo.entityAspect.propertyChanged.subscribe(function (newValue) {
+							todo.isDirty(true);
+							propToken.dispose();
+						});
+						//specifically subscribe to the programIds as propertyChanged wont be notified:
+						var programsToken = todo.programIds.subscribe(function (newValue) {
+							todo.isDirty(true);
+							programsToken.dispose();
+						});
+					};
+					
+					todo.dueDateErrors = ko.observableArray([]);	//datetimepicker validation errors
+					todo.startTimeErrors = ko.observableArray([]);	//datetimepicker validation errors
+					todo.validationErrors = ko.observableArray([]);
+					todo.validationErrorsArray = ko.computed( function(){
+						var thisArray = [];
+						ko.utils.arrayForEach( todo.validationErrors(), function(error){
+							thisArray.push( error.PropName );
+						});
+						return thisArray;
+					});
+					todo.showInvalidStartTime = ko.computed( function(){						
+						var result = false;
+						var validationErrorsArray = todo.validationErrorsArray();
+						result = ( validationErrorsArray.indexOf('startTime') !== -1 );
+						return result;
+					});
+					todo.showInvalidDueDate = ko.computed( function(){
+						var result = false;
+						var validationErrorsArray = todo.validationErrorsArray();
+						result = ( validationErrorsArray.indexOf('dueDate') !== -1 );
+						return result;
+					});
+					todo.isValid = ko.computed( function(){
+						var hasErrors = false;
+						var todoErrors = [];
+						var startTime = todo.startTime();
+						var duration = todo.duration();
+						var dueDate = todo.dueDate();
+						var dueDateErrors = todo.dueDateErrors();
+						var hasChanges = todo.isDirty();
+						var title = todo.title();
+						
+						if( duration && duration > 1440 ){
+							setTimeout( function(){ todo.duration(1440); }, 100 ); //auto-correct range violation
+						}
+						if( duration !== null && duration < 1 ){										
+							setTimeout( function(){ todo.duration(null); }, 100 ); //auto-correct range violation
+						}
+						if( dueDateErrors.length > 0 ){
+							//datetimepicker validation errors
+							ko.utils.arrayForEach( dueDateErrors, function(error){
+								todoErrors.push({ PropName: 'dueDate', Message: 'Due Date ' + error.Message});
+								hasErrors = true;
+							});
+						}
+						if( (startTime || duration) && !dueDate ){
+							hasErrors = true;						
+							todoErrors.push({ PropName: 'dueDate', Message: 'Due Date is required if Start Time / Duration are provided'});
+						}
+						if( duration && !startTime ){
+							hasErrors = true;						
+							todoErrors.push({ PropName: 'startTime', Message: 'Start Time is required if Duration is provided'});						
+						}
+						if( startTime && !duration ){
+							hasErrors = true;							
+							todoErrors.push({ PropName: 'duration', Message: 'Duration is required if Start Time is provided'});							
+						}						
+						if( !title ){									
+							hasErrors = true;
+							if( hasChanges ){
+								todoErrors.push({ PropName: 'title', Message: 'Title is required' });	
+							}
+						}
+						todo.validationErrors(todoErrors);
+						return !hasErrors;
+					});
+					todo.getAsNewEvent = function(){
+						var event = {	//fullcalendar event - plain object
+							id: todo.id(),
+							title: todo.getEventTitle(),
+							// start: todo.dueDate(),
+							// allDay: true,
+							patientId: todo.patientId(),
+							patientName: todo.getEventPatientName(),
+							assignedToName: getUsercareManagerName(),
+							userId: todo.assignedToId(),
+							typeId: 2,
+							isNew: true,
+						}
+						if( todo.startTime() && todo.duration() && todo.dueDate() ){
+							event = updateEventTimes( event, todo.startTime(), todo.duration(), todo.dueDate() );
+						}else{
+							event.start = todo.dueDate();
+							event.allDay = true;
+						}
+						return event;
+					};
+					todo.updateExistingEvent = function( existingEvent ){
+						existingEvent.title(todo.getEventTitle());									
+						existingEvent.patientId(todo.patientId());
+						existingEvent.patientName(todo.getEventPatientName());
+						existingEvent.assignedToName( getUsercareManagerName() );
+						existingEvent.userId(todo.assignedToId());
+						existingEvent.entityAspect.acceptChanges();
+						if( todo.startTime() && todo.duration() && todo.dueDate() ){
+							existingEvent = updateEventTimes( existingEvent, todo.startTime(), todo.duration(), todo.dueDate() );
+						}else{
+							existingEvent.start(todo.dueDate());
+							existingEvent.allDay(true);
+						}
+					};
+					todo.getEventTitle = function(){
+						return (todo.patientDetails() ? todo.patientDetails().fullLastName() + ', ' + todo.patientDetails().fullFirstName() + ' - ' : '') + todo.title();
+					};
+					todo.getEventPatientName = function(){
+						return todo.patientDetails() ? todo.patientDetails().fullLastName() + ', ' + todo.patientDetails().fullFirstName() : '-';
+					};
+					todo.isEvent = function(){
+						//does this todo need to be represented by a calendar event:
+						//	- assigned to current user
+						// 	- not deleted
+						//	- open
+						return (todo && todo.assignedToId() && todo.assignedToId() === session.currentUser().userId()
+							&& !todo.deleteFlag() && moment(todo.dueDate()).isValid()
+							&& (todo.statusId() === 1 || todo.statusId() === 3));
+					};					
 				}
 		}
 
+		function updateEventTimes( theEvent, startTime, duration, dueDate ){
+			if( startTime && duration && dueDate ){
+				var startDateTime = dueDate;
+				var endDateTime = null;
+				
+				//calculate the start datetime by merging dueDate and startTime:
+				var momentStartDate = moment( startDateTime );
+				var momentStartTime = moment( startTime );
+				var momentStartDateTime = dateHelper.setTimeValue(momentStartTime.hour(), momentStartTime.minute(), momentStartDate); 
+				startDateTime = momentStartDateTime.toDate();
+				//calculate the end time by adding duration:
+				endDateTime = momentStartDateTime.clone().add( duration, 'minutes' ).toDate();
+
+				if( theEvent.isNew ){
+					//the event is a simple object. before created the new event props are not yet observables:
+					theEvent.start = startDateTime;
+					theEvent.end = endDateTime;
+					theEvent.allDay = false;
+				} else{
+					//the event props are observables:
+					theEvent.start( startDateTime );
+					theEvent.end( endDateTime );
+					theEvent.allDay( false );	
+				}
+				
+				console.log( 'event start: ' + startDateTime );
+				console.log( 'event end: ' + endDateTime );
+			}
+			return theEvent;
+		}
+		
 		function checkDataContext() {
 				if (!datacontext) {
 						datacontext = require('services/datacontext');
@@ -560,5 +726,13 @@ define(['services/session', 'services/dateHelper'],
 				systemCareManager = datacontext.getSystemCareManager();
 			}
 			return systemCareManager;
+		}
+		
+		function getUsercareManagerName(){
+			if( ! userCareManagerName ){
+				checkDataContext();
+				userCareManagerName = datacontext.getUsercareManagerName();
+			}
+			return userCareManagerName;
 		}
 	}); 

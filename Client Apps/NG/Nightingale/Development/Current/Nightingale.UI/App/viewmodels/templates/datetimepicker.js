@@ -84,12 +84,13 @@ define(['durandal/composition','services/dateHelper', 'services/formatter'],
 		self.subscriptionTokens = [];	//correct management of tokens per instance of a datetimepicker 
 		//date
 		self.dateName = self.settings.dateName ? self.settings.dateName : 'date';		
-		self.showDate = true;	//self.settings.showDate;
+		self.showDate = self.settings.showDate !== undefined ? self.settings.showDate : true;
 		self.dateCss = self.settings.dateCss ? self.settings.dateCss : "";
 		self.observableDateTime = self.settings.observableDateTime;
 		self.emptyDateIsValid = true;
 		self.dateErrors = self.settings.dateErrors;
 		self.showInvalid = self.settings.showInvalid ? self.settings.showInvalid : false;
+		self.showInvalidTime = self.settings.showInvalidTime ? self.settings.showInvalidTime : false;
 		self.isDatepicker = self.settings.isDatepicker !== false ? true : false;
 		self.datepickerOptions = self.settings.datepickerOptions || {};
 		self.dynoptions = self.settings.datepickerDynamicOptions || {};
@@ -103,13 +104,25 @@ define(['durandal/composition','services/dateHelper', 'services/formatter'],
 		
 		//
 		self.dateStr = ko.observable();
+		self.timeStr = ko.observable();
 		if( self.showDate ){
 			var observableMoment = moment( self.observableDateTime() );
 			if( observableMoment.isValid() ){
 				self.dateStr( observableMoment.format('MM/DD/YYYY') );
 			}
 		}
-		self.timeStr = ko.observable();
+		self.isDisableTime = ko.computed( function(){
+			var result = false;			
+			if( self.showTime && self.showDate ){
+				var observableDateTime = self.observableDateTime();
+				result = !observableDateTime;
+			}
+			else if( self.ShowTime ){
+				result = false;
+			}
+			return result;
+		});
+		
 		if( self.showTime && Modernizr.inputtypes.time ){
 			var observableMoment = moment( self.observableDateTime() );
 			if( observableMoment.isValid() ){
@@ -129,10 +142,26 @@ define(['durandal/composition','services/dateHelper', 'services/formatter'],
 		self.disableTime = ko.computed( function(){
 			return !self.observableDateTime();
 		});
-		
+
 		self.datetimeWatcher = ko.computed( function(){
 			var enteredDateStr = self.dateStr();
 			var enteredTimeStr = self.timeStr();
+			if( !self.showDate ){
+				//a time control without related date control got some time value
+				if( enteredTimeStr ){
+					if( !enteredDateStr ){	
+						//seed the datetime value
+						self.dateStr('1/1/1970');
+						enteredDateStr = self.dateStr();
+					}
+				}
+				else{
+					//clear the datetime value
+					self.dateStr(null);
+					enteredDateStr = null;
+					self.observableDateTime(null);
+				}
+			}
 			if( dateHelper.isValidDate(enteredDateStr) ){
 				var observableMoment;
 				var enteredMoment = moment(enteredDateStr);	
@@ -154,7 +183,14 @@ define(['durandal/composition','services/dateHelper', 'services/formatter'],
 							}
 						}
 						else{
-							self.timeStr( observableMoment.format('HH:mm') );							
+							if( self.showDate ){
+								self.timeStr( observableMoment.format('HH:mm') );
+							}
+							else{
+								//time only control, the time was cleared.
+								self.observableDateTime(null);
+								self.timeStr(null);
+							}
 						}
 					}
 					if( needsUpdate ){
@@ -174,11 +210,11 @@ define(['durandal/composition','services/dateHelper', 'services/formatter'],
 				}						
 			}							
 			else{
-				if( self.observableDateTime() && !enteredDateStr ){
+				if( self.observableDateTime() && !enteredDateStr && self.showDate ){
 					self.observableDateTime(null); 	//the date field was cleared
 					self.dateElm.datepicker("setDate", null);
 				}
-			}			
+			}	
 		});
 				
 	};
@@ -238,11 +274,11 @@ define(['durandal/composition','services/dateHelper', 'services/formatter'],
 			if(date){					
 				date = formatter.date.optimizeDate( date );
 				date = formatter.date.optimizeYear( date );
-				console.log('date is blurred ! and optimized to:' + date);
+				//console.log('date is blurred ! and optimized to:' + date);
 				if( date !== element.val() ){
 					element.val(date);
 				}	
-				if( observable() !== date ){	//!dateHelper.isSameDate(moment(observable()), moment(date)) ){						
+				if( observable() !== date ){
 					observable(date);
 				}					
 			}

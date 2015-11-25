@@ -654,7 +654,7 @@
 						.from('fakePath')
 						.where('id', '==', todo.id())
 						.toType('ToDo')
-						.select('id, title, description, patientId, createdById, assignedToId, statusId, categoryId, priorityId, dueDate, createdOn, updatedOn, deleteFlag, closedDate');
+						.select('id, title, description, patientId, createdById, assignedToId, statusId, categoryId, priorityId, dueDate, startTime, duration, createdOn, updatedOn, deleteFlag, closedDate');
 				var results = manager.executeQueryLocally(todoQuery);
 				var unwrappedToDo = results[0];
 
@@ -673,6 +673,8 @@
 				thisToDo.CategoryId = unwrappedToDo.categoryId;
 				thisToDo.PriorityId = unwrappedToDo.priorityId;
 				thisToDo.DueDate = unwrappedToDo.dueDate;
+				thisToDo.StartTime = unwrappedToDo.startTime;
+				thisToDo.Duration = unwrappedToDo.duration;
 				thisToDo.UpdatedOn = unwrappedToDo.updatedOn;
 				thisToDo.CreatedOn = unwrappedToDo.createdOn;
 				thisToDo.ClosedDate = unwrappedToDo.closedDate;

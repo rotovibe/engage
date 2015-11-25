@@ -35,12 +35,16 @@
                     // // Make sure we go to the patient's overview page
                     navigation.indexOverride(0);
                 }
-            };
+            };			
+			self.hasTimes = ko.computed( function(){
+				return self.event && self.event() && self.event().hasTimes(); 
+			});
             self.hasPatient = ko.computed(function () {
                 return !!self.event().patientId();
             });
         };
-
+		
+			
         ctor.prototype.attached = function () {
 
         };

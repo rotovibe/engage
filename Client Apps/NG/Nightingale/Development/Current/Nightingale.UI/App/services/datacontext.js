@@ -14,8 +14,8 @@
  *	@class datacontext
  *
  */
- define(['services/session', 'services/jsonResultsAdapter', 'models/base', 'config.services', 'services/dataservices/getentityservice', 'models/programs', 'models/lookups', 'models/contacts', 'models/goals', 'models/notes', 'models/observations', 'models/allergies', 'models/medications', 'services/dataservices/programsservice', 'services/entityfinder', 'services/usercontext', 'services/dataservices/contactservice', 'services/entityserializer', 'services/dataservices/lookupsservice', 'services/dataservices/goalsservice', 'services/dataservices/notesservice', 'services/dataservices/observationsservice', 'services/dataservices/caremembersservice', 'services/dataservices/patientsservice', 'services/dataservices/allergiesservice', 'services/dataservices/medicationsservice', 'services/local.collections'],
- 	function (session, jsonResultsAdapter, modelConfig, servicesConfig, getEntityService, stepModelConfig, lookupModelConfig, contactModelConfig, goalModelConfig, notesModelConfig, observationsModelConfig, allergyModelConfig, medicationModelConfig, programsService, entityFinder, usercontext, contactService, entitySerializer, lookupsService, goalsService, notesService, observationsService, careMembersService, patientsService, allergiesService, medicationsService, localCollections) {
+ define(['services/session', 'services/jsonResultsAdapter', 'models/base', 'config.services', 'services/dataservices/getentityservice', 'models/programs', 'models/lookups', 'models/contacts', 'models/goals', 'models/notes', 'models/observations', 'models/allergies', 'models/medications', 'services/dataservices/programsservice', 'services/entityfinder', 'services/usercontext', 'services/dataservices/contactservice', 'services/entityserializer', 'services/dataservices/lookupsservice', 'services/dataservices/goalsservice', 'services/dataservices/notesservice', 'services/dataservices/observationsservice', 'services/dataservices/caremembersservice', 'services/dataservices/patientsservice', 'services/dataservices/allergiesservice', 'services/dataservices/medicationsservice', 'services/local.collections', 'services/dateHelper'],
+ 	function (session, jsonResultsAdapter, modelConfig, servicesConfig, getEntityService, stepModelConfig, lookupModelConfig, contactModelConfig, goalModelConfig, notesModelConfig, observationsModelConfig, allergyModelConfig, medicationModelConfig, programsService, entityFinder, usercontext, contactService, entitySerializer, lookupsService, goalsService, notesService, observationsService, careMembersService, patientsService, allergiesService, medicationsService, localCollections, dateHelper) {
 	
 		// Object to use for the loading messages
 		function loadingMessage(message, showing) {
@@ -216,6 +216,7 @@
 			createComplexType: createComplexType,
 			getUserByUserToken: getUserByUserToken,
 			getSystemCareManager: getSystemCareManager,
+			getUsercareManagerName: getUsercareManagerName,
 			logOutUserByToken: logOutUserByToken,
 			createUserFromSessionUser: createUserFromSessionUser,
 			getEventsByUserId: getEventsByUserId,
@@ -1428,48 +1429,27 @@
 					//remove the deleted ents from cache
 					datacontext.detachEntity(patSys);
 				});
-								// Trigger a refresh on anything watching the state of the system id
-								thisPatient.patientSystems.valueHasMutated();
-								return true;
-							}
-						}
+				// Trigger a refresh on anything watching the state of the system id
+				thisPatient.patientSystems.valueHasMutated();
+				return true;
+			}
+		}				
 
-				/**obsolete: use saveIndividual**  Save changes to a single contact card
-				function saveBackground(patient) {
-						// Display a message while saving
-						var message = queryStarted('Background', true, 'Saving');
-						var backgroundString = patient.background();
-						var patientId = patient.id();
+		// Get a patients full SSN for display only
+		function getFullSSN(patientId) {
+			return patientsService.getFullSSN(manager, patientId).then(dataReturned);
 
-						return patientsService.saveBackground(manager, patientId, backgroundString).then(saveCompleted);
+			function dataReturned(data) {
+				return data;
+			}
+		}
 
-						function saveCompleted(data) {
-								// If data was returned and has a property called success that is true,
-								//note.isNew(false);
-								// Save all of the levels of everything related to a contact card
-								patient.entityAspect.acceptChanges();
+		// Cancel changes to a contact card
+		function cancelAllChangesToContactCard(contactCard) {
+			return contactService.cancelAllChangesToContactCard(contactCard);
+		}
 
-								// Finally, clear out the message
-								queryCompleted(message);
-								return true;
-						}
-					} */
-
-				// Get a patients full SSN for display only
-				function getFullSSN(patientId) {
-					return patientsService.getFullSSN(manager, patientId).then(dataReturned);
-
-					function dataReturned(data) {
-						return data;
-					}
-				}
-
-				// Cancel changes to a contact card
-				function cancelAllChangesToContactCard(contactCard) {
-					return contactService.cancelAllChangesToContactCard(contactCard);
-				}
-
-				/**
+		/**
 		*		note: breeze rejectChanges has a known issue with array of complex type:
 		*			regardless of the entityState, all items of the array will be removed,
 		*			even if there were no changes. (https://github.com/Breeze/breeze.js/issues/47)
@@ -1485,171 +1465,161 @@
 			entity.entityAspect.rejectChanges();
 		}
 
-				// Cancel changes to all entities
-				function cancelAllChanges() {
-					manager.rejectChanges();
-				}
+		// Cancel changes to all entities
+		function cancelAllChanges() {
+			manager.rejectChanges();
+		}
 
-				// Gets all changes to all entities
-				function getAllChanges() {
-					return manager.getChanges();
-				}
+		// Gets all changes to all entities
+		function getAllChanges() {
+			return manager.getChanges();
+		}
 
-				// Save all changes to each entity in the array
-				function saveAllChangesToEntities(entities) {
-					ko.utils.arrayForEach(entities, function (entity) {
-						entity.entityAspect.acceptChanges();
-					});
-				}
+		// Save all changes to each entity in the array
+		function saveAllChangesToEntities(entities) {
+			ko.utils.arrayForEach(entities, function (entity) {
+				entity.entityAspect.acceptChanges();
+			});
+		}
 
-				function checkForFourOhOne(error) {
-						// Check if the error status code is a 401
-						if (error.status && error.status === 401) {
-								// Log the user out
-								session.logOff();
-							}
-						}
+		function checkForFourOhOne(error) {
+			// Check if the error status code is a 401
+			if (error.status && error.status === 401) {
+				// Log the user out
+				session.logOff();
+			}
+		}
 
-						function addPatientToRecentList (patient) {
-							patientsService.addPatientToRecentList(patient);
-						}
+		function addPatientToRecentList (patient) {
+			patientsService.addPatientToRecentList(patient);
+		}
 
-						function createAlert(result, reason) {
-						// We use the name result and reason because that is the backend convention, not our choice
-						// Create an alert
-						var thisAlert = datacontext.createEntity('Alert', { result: result, reason: reason });
-						// Accept changes since it doesn't get persisted anyway
-						thisAlert.entityAspect.acceptChanges();
-						// Add it to the enums of alerts
-						localCollections.alerts.push(thisAlert);
+		function createAlert(result, reason) {
+			// We use the name result and reason because that is the backend convention, not our choice
+			// Create an alert
+			var thisAlert = datacontext.createEntity('Alert', { result: result, reason: reason });
+			// Accept changes since it doesn't get persisted anyway
+			thisAlert.entityAspect.acceptChanges();
+			// Add it to the enums of alerts
+			localCollections.alerts.push(thisAlert);
+		}
+
+		function getToDos (observable, params) {
+			var message = queryStarted('ToDos', true, 'Loading');
+			todosSaving(true);
+			return notesService.getToDos(manager, observable, params).then(todosReturned);
+
+			function todosReturned(todos) {
+				// Finally, clear out the message
+				queryCompleted(message);
+				// Make sure each of the todos are in the collection locally
+				ko.utils.arrayForEach(todos, function (todo) {
+					if (localCollections.todos.indexOf(todo) === -1) {
+						// Add it in
+						localCollections.todos.push(todo);
 					}
+				});
+				todosSaving(false);
+			}
+		}
 
-					function getToDos (observable, params) {
-						var message = queryStarted('ToDos', true, 'Loading');
-						todosSaving(true);
-						return notesService.getToDos(manager, observable, params).then(todosReturned);
+		function getToDosQuery (params, orderstring) {
+			return notesService.getToDosQuery(manager, params, orderstring);
+		}
 
-						function todosReturned(todos) {
-								// Finally, clear out the message
-								queryCompleted(message);
-								// Make sure each of the todos are in the collection locally
-								ko.utils.arrayForEach(todos, function (todo) {
-									if (localCollections.todos.indexOf(todo) === -1) {
-												// Add it in
-												localCollections.todos.push(todo);
-											}
-										});
-								todosSaving(false);
+		function getInterventions (observable, params) {
+			var message = queryStarted('Interventions', true, 'Loading');
+			interventionsSaving(true);
+			return goalsService.getInterventions(manager, observable, params).then(interventionsReturned);
+
+			function interventionsReturned(interventions) {
+				// Finally, clear out the message
+				queryCompleted(message);
+				// Make sure each of the interventions are in the collection locally
+				ko.utils.arrayForEach(interventions, function (intervention) {
+					if (localCollections.interventions.indexOf(intervention) === -1) {
+						// Add it in
+						localCollections.interventions.push(intervention);
+					}
+				});
+				interventionsSaving(false);
+			}
+		}
+
+		function getInterventionsQuery (params, orderstring) {
+			return goalsService.getInterventionsQuery(manager, params, orderstring);
+		}
+
+		function getTasks (observable, params) {
+			var message = queryStarted('Tasks', true, 'Loading');
+			tasksSaving(true);
+			return goalsService.getTasks(manager, observable, params).then(tasksReturned);
+
+			function tasksReturned(tasks) {
+				// Finally, clear out the message
+				queryCompleted(message);
+				// Make sure each of the tasks are in the collection locally
+				ko.utils.arrayForEach(tasks, function (task) {
+					if (localCollections.tasks.indexOf(task) === -1) {
+								// Add it in
+								localCollections.tasks.push(task);
 							}
-						}
+						});
+				tasksSaving(false);
+			}
+		}
 
-						function getToDosQuery (params, orderstring) {
-							return notesService.getToDosQuery(manager, params, orderstring);
-						}
+		function getTasksQuery (params, orderstring) {
+			return goalsService.getTasksQuery(manager, params, orderstring);
+		}
 
-						function getInterventions (observable, params) {
-							var message = queryStarted('Interventions', true, 'Loading');
-							interventionsSaving(true);
-							return goalsService.getInterventions(manager, observable, params).then(interventionsReturned);
+		// Save changes to a single contact card
+		function saveToDo(todo, action) {
+			// Display a message while saving
+			var message = queryStarted('ToDo', true, 'Saving');
+			todosSaving(true);
+			todo.entityAspect.acceptChanges();
+			var serializedTodo = entitySerializer.serializeToDo(todo, manager);
+			return notesService.saveToDo(manager, serializedTodo, action).then(saveCompleted);
 
-							function interventionsReturned(interventions) {
-								// Finally, clear out the message
-								queryCompleted(message);
-								// Make sure each of the interventions are in the collection locally
-								ko.utils.arrayForEach(interventions, function (intervention) {
-									if (localCollections.interventions.indexOf(intervention) === -1) {
-												// Add it in
-												localCollections.interventions.push(intervention);
-											}
-										});
-								interventionsSaving(false);
-							}
-						}
+			function saveCompleted(data) {
+				
+				// If it is a new todo,
+				if (todo && todo.id() < 0) {
+						// Remove it so the replacement gets set
+						manager.detachEntity(todo);
+					}
+					if (localCollections.todos.indexOf(data) < 0) {
+						localCollections.todos.push(data);
+					}
+				// Finally, clear out the message
+				queryCompleted(message);
+				todosSaving(false);
+				return data;
+			}
+		}
 
-						function getInterventionsQuery (params, orderstring) {
-							return goalsService.getInterventionsQuery(manager, params, orderstring);
-						}
+		function getSystemCareManager(){
+			var SystemCareManager = ko.utils.arrayFirst(datacontext.enums.careManagers(), function (caremanager) {
+				return (caremanager.userId()=== '' && caremanager.firstName() === 'System' && caremanager.preferredName() === 'System');
+			});
+			return SystemCareManager;
+		}
 
-						function getTasks (observable, params) {
-							var message = queryStarted('Tasks', true, 'Loading');
-							tasksSaving(true);
-							return goalsService.getTasks(manager, observable, params).then(tasksReturned);
+		function getUsercareManagerName(){
+			var thisMatchedCareManager = ko.utils.arrayFirst(datacontext.enums.careManagers(), function (caremanager) {
+				return caremanager.id() === session.currentUser().userId();
+			});
+			return thisMatchedCareManager.preferredName();
+		}
 
-							function tasksReturned(tasks) {
-								// Finally, clear out the message
-								queryCompleted(message);
-								// Make sure each of the tasks are in the collection locally
-								ko.utils.arrayForEach(tasks, function (task) {
-									if (localCollections.tasks.indexOf(task) === -1) {
-												// Add it in
-												localCollections.tasks.push(task);
-											}
-										});
-								tasksSaving(false);
-							}
-						}
-
-						function getTasksQuery (params, orderstring) {
-							return goalsService.getTasksQuery(manager, params, orderstring);
-						}
-
-				// Save changes to a single contact card
-				function saveToDo(todo, action) {
-						// Display a message while saving
-						var message = queryStarted('ToDo', true, 'Saving');
-						todosSaving(true);
-						todo.entityAspect.acceptChanges();
-						var serializedTodo = entitySerializer.serializeToDo(todo, manager);
-						return notesService.saveToDo(manager, serializedTodo, action).then(saveCompleted);
-
-						function saveCompleted(data) {
-								// If it is a new todo,
-								if (todo && todo.id() < 0) {
-										// Remove it so the replacement gets set
-										manager.detachEntity(todo);
-									}
-									if (localCollections.todos.indexOf(data) < 0) {
-										localCollections.todos.push(data);
-									}
-								// Finally, clear out the message
-								queryCompleted(message);
-								todosSaving(false);
-								return data;
-							}
-						}
-
-						function getSystemCareManager(){
-							var SystemCareManager = ko.utils.arrayFirst(datacontext.enums.careManagers(), function (caremanager) {
-								return (caremanager.userId()=== '' && caremanager.firstName() === 'System' && caremanager.preferredName() === 'System');
-							});
-							return SystemCareManager;
-						}
-
-						function getUsercareManagerName(){
-							var thisMatchedCareManager = ko.utils.arrayFirst(datacontext.enums.careManagers(), function (caremanager) {
-								return caremanager.id() === session.currentUser().userId();
-							});
-							return thisMatchedCareManager.preferredName();
-						}
-
-						function getCalendarEvents( theseTodos ){
+		function getCalendarEvents( theseTodos ){
 			//convert todos to calendar events:
 			var userEvents = [];
 			var careManagerName = getUsercareManagerName();
-			ko.utils.arrayForEach(theseTodos, function (todo) {
-				var isEvent = isTodoEvent(todo);
-				if(isEvent){
-					var event = {	//fullcalendar event - plain object	//getNewEvent();
-						id: todo.id(),
-						title: getEventTitle(todo),
-						start: todo.dueDate(),
-						allDay: true,
-						patientId: todo.patientId(),
-						patientName: getEventPatientName(todo),
-						assignedToName: careManagerName,
-						userId: todo.assignedToId(),
-						typeId: 2
-					}
+			ko.utils.arrayForEach(theseTodos, function (todo) {				
+				if( todo.isEvent() ){
+					var event = todo.getAsNewEvent(); //fullcalendar event - plain object					
 					userEvents.push(event);
 				}
 			});
@@ -1659,23 +1629,22 @@
 		/**
 		*	synchronize Event entities based on the given todos.
 		*	the event entities are on client only and they reflect todos and interventions.
-		*	in this function we reflect the given todos on Event entities by creating / updating / deleting accirdingly.
+		*	in this function we reflect the given todos on Event entities by creating / updating / deleting accordingly.
 		*	@method syncCalendarEvents
 		*	@param theseTodos: the current user todos - expected todos assigned to the current user and that are not deleted.
 		*
 		*/
 		function syncCalendarEvents( theseTodos ){
-						// Add /update an event entity for each todo
-						var thisMatchedCareManager = ko.utils.arrayFirst(datacontext.enums.careManagers(), function (caremanager) {
-							return caremanager.id() === session.currentUser().userId();
-						});
-						ko.utils.arrayForEach(theseTodos, function (todo) {
-							syncEventFromTodo(todo);
-						});
+			// Add /update an event entity for each todo
+			var thisMatchedCareManager = ko.utils.arrayFirst(datacontext.enums.careManagers(), function (caremanager) {
+				return caremanager.id() === session.currentUser().userId();
+			});
+			ko.utils.arrayForEach(theseTodos, function (todo) {
+				syncEventFromTodo(todo);
+			});
 
-						function syncEventFromTodo(todo){
-							var isEvent = isTodoEvent(todo);
-							if(isEvent){
+			function syncEventFromTodo(todo){				
+				if( todo.isEvent() ){
 					//the todo should be represented by a calendar event:
 					if(!updateCalendarEventFromTodo(todo)){
 						insertCalendarEventFromTodo(todo);
@@ -1687,68 +1656,19 @@
 			}
 
 			function insertCalendarEventFromTodo(todo){
-				var newEvent = {
-					id: todo.id(),
-					title: getEventTitle(todo),
-					start: todo.dueDate(),
-					allDay: true,
-					patientId: todo.patientId(),
-					patientName: getEventPatientName(todo),
-					assignedToName: thisMatchedCareManager.preferredName(),
-					userId: todo.assignedToId(),
-					typeId: 2
-				};
+				var newEvent = todo.getAsNewEvent();
 				createCalendarEvent(newEvent);
 			}
 
 			function updateCalendarEventFromTodo(todo){
-				var existingEvent = getEventById(todo.id());
+				var existingEvent = getEventById(todo.id());				
 				if(existingEvent){
-					existingEvent.title(getEventTitle(todo));
-					existingEvent.start(todo.dueDate());
-					existingEvent.patientId(todo.patientId());
-					existingEvent.patientName(getEventPatientName(todo));
-					existingEvent.assignedToName(thisMatchedCareManager.preferredName());
-					existingEvent.userId(todo.assignedToId());
-					existingEvent.entityAspect.acceptChanges();
+					existingEvent = todo.updateExistingEvent( existingEvent );					
 					return true;
 				}
 				return false;
 			}
 		}
-
-		function getEventTitle(todo){
-			return (todo.patientDetails() ? todo.patientDetails().fullLastName() + ', ' + todo.patientDetails().fullFirstName() + ' - ' : '') + todo.title();
-		};
-		function getEventPatientName(todo){
-			return todo.patientDetails() ? todo.patientDetails().fullLastName() + ', ' + todo.patientDetails().fullFirstName() : '-';
-		};
-		function isTodoEvent(todo){
-					//does this todo need to be represented by a calendar event:
-					//	- assigned to current user
-					// 	- not deleted
-					//	- open
-					return (todo && todo.assignedToId() && todo.assignedToId() === session.currentUser().userId()
-						&& !todo.deleteFlag() && moment(todo.dueDate()).isValid()
-						&& (todo.statusId() === 1 || todo.statusId() === 3));
-				};
-
-		// function getNewEvent(){
-			// function Event() {
-				// var self = this;
-				// self.id = ko.observable();
-				// self.title = ko.observable();
-				// self.start = ko.observable();
-				// self.allDay = ko.observable(false);
-				// self.url = ko.observable('');
-				// self.patientId = ko.observable('');
-				// self.patientName = ko.observable('');
-				// self.assignedToName = ko.observable('');
-				// self.typeId = ko.observable('');
-				// self.userId = ko.observable();
-			// }
-			// return new Event();
-		// }
 
 				// Update a todo patient's information
 				function updateTodoPatient(patient) {
