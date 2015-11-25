@@ -707,9 +707,6 @@ define(['services/session', 'services/dateHelper'],
 					theEvent.end( endDateTime );
 					theEvent.allDay( false );	
 				}
-				
-				console.log( 'event start: ' + startDateTime );
-				console.log( 'event end: ' + endDateTime );
 			}
 			return theEvent;
 		}
