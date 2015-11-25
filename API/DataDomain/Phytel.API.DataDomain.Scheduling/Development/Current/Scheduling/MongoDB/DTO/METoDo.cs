@@ -33,6 +33,8 @@ namespace Phytel.API.DataDomain.Scheduling
         public const string CatgegoryProperty = "cat";
         public const string PriorityProperty = "pri";
         public const string DueDateProperty = "dd";
+        public const string StartTimeProperty = "sd";
+        public const string DurationProperty = "dur";
         public const string ClosedDateProperty = "cd";
 
         #region Standard IMongoEntity Constants
@@ -77,6 +79,14 @@ namespace Phytel.API.DataDomain.Scheduling
         [BsonElement(DueDateProperty)]
         [BsonIgnoreIfNull(true)]
         public DateTime? DueDate { get; set; }
+
+        [BsonElement(StartTimeProperty)]
+        [BsonIgnoreIfNull(true)]
+        public DateTime? StartTime { get; set; }
+        
+        [BsonElement(DurationProperty)]
+        [BsonIgnoreIfNull(true)]
+        public int? Duration { get; set; }
 
         [BsonElement(ClosedDateProperty)]
         [BsonIgnoreIfNull(true)]

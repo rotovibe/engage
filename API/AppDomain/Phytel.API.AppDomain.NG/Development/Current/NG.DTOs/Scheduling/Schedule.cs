@@ -17,6 +17,8 @@ namespace Phytel.API.AppDomain.NG.DTO.Scheduling
         public int TypeId { get; set; }
         public int PriorityId { get; set; }
         public DateTime? DueDate { get; set; }
+        public DateTime? StartTime { get; set; }
+        public int? Duration { get; set; }
         public int DueDateRange { get; set; }
         public DateTime? ClosedDate { get; set; }
         public List<string> ProgramIds { get; set; }

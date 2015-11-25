@@ -909,6 +909,8 @@ namespace Phytel.API.AppDomain.NG
                     CreatedOn = response.Schedule.CreatedOn,
                     Description = response.Schedule.Description,
                     DueDate = response.Schedule.DueDate,
+                    StartTime = response.Schedule.StartTime,
+                    Duration = response.Schedule.Duration,
                     DueDateRange = response.Schedule.DueDateRange,
                     Id = response.Schedule.Id,
                     PatientId = response.Schedule.PatientId,

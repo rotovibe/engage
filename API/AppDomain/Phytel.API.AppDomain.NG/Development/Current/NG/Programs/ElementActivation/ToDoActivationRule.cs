@@ -59,6 +59,8 @@ namespace Phytel.API.AppDomain.NG.Programs.ElementActivation
                         Description = todoTemp.Description,
                         PriorityId = todoTemp.PriorityId,
                         DueDate = HandleDueDate(todoTemp.DueDateRange),
+                        StartTime = todoTemp.StartTime,
+                        Duration = todoTemp.Duration,
                         PatientId = patientId,
                         ProgramIds = prog,
                         CreatedOn = DateTime.UtcNow

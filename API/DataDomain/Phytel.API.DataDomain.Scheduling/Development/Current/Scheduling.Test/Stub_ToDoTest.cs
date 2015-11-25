@@ -45,6 +45,8 @@ namespace Phytel.API.DataDomain.Scheduling.Test
                 CategoryId = "53f51afed4332316fcdbeba3",
                 Description = "to do description 3.", 
                 DueDate = System.DateTime.UtcNow,
+                StartTime = System.DateTime.UtcNow,
+                Duration = 20,
                 Title = "to do title 3.",
                 PatientId = "5325da01d6a4850adcbba4fa",
                 PriorityId = 0,
@@ -79,6 +81,8 @@ namespace Phytel.API.DataDomain.Scheduling.Test
                 Description = "updated desc",
                 Title = "updated title",
                 DueDate = DateTime.UtcNow,
+                StartTime = System.DateTime.UtcNow,
+                Duration = 20,
                 ClosedDate = DateTime.UtcNow
             };
             PutUpdateToDoDataRequest request = new PutUpdateToDoDataRequest

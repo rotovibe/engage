@@ -42,6 +42,8 @@ namespace Phytel.API.DataDomain.Scheduling
                         Description = todoData.Description,
                         Title = todoData.Title,
                         DueDate = todoData.DueDate,
+                        StartTime = todoData.StartTime,
+                        Duration = todoData.Duration,
                         ProgramIds = Helper.ConvertToObjectIdList(todoData.ProgramIds),
                         DeleteFlag = false,
                         LastUpdatedOn = todoData.UpdatedOn,
@@ -106,6 +108,8 @@ namespace Phytel.API.DataDomain.Scheduling
                             Description = t.Description,
                             Title = t.Title,
                             DueDate = t.DueDate,
+                            StartTime = t.StartTime,
+                            Duration = t.Duration,
                             ProgramIds = Helper.ConvertToObjectIdList(t.ProgramIds),
                             DeleteFlag = false,
                             LastUpdatedOn = t.UpdatedOn,
@@ -222,6 +226,8 @@ namespace Phytel.API.DataDomain.Scheduling
                             CreatedOn = meToDo.RecordCreatedOn,
                             Description = meToDo.Description,
                             DueDate = meToDo.DueDate,
+                            StartTime = meToDo.StartTime,
+                            Duration = meToDo.Duration,
                             Id = meToDo.Id.ToString(),
                             PatientId = meToDo.PatientId == null ? string.Empty : meToDo.PatientId.ToString(),
                             PriorityId = (int)meToDo.Priority,
@@ -301,6 +307,22 @@ namespace Phytel.API.DataDomain.Scheduling
                         else
                         {
                             uv.Add(MB.Update.Set(METoDo.DueDateProperty, BsonNull.Value));
+                        }
+                        if (todoData.StartTime != null)
+                        {
+                            uv.Add(MB.Update.Set(METoDo.StartTimeProperty, todoData.StartTime));
+                        }
+                        else
+                        {
+                            uv.Add(MB.Update.Set(METoDo.StartTimeProperty, BsonNull.Value));
+                        }
+                        if (todoData.Duration != null)
+                        {
+                            uv.Add(MB.Update.Set(METoDo.DurationProperty, todoData.Duration));
+                        }
+                        else
+                        {
+                            uv.Add(MB.Update.Set(METoDo.DurationProperty, BsonNull.Value));
                         }
                         if (todoData.ClosedDate != null)
                         {
@@ -476,6 +498,8 @@ namespace Phytel.API.DataDomain.Scheduling
                                 CreatedOn = t.RecordCreatedOn,
                                 Description = t.Description,
                                 DueDate = t.DueDate,
+                                StartTime = t.StartTime,
+                                Duration = t.Duration,
                                 Id = t.Id.ToString(),
                                 PatientId = t.PatientId == null ? string.Empty : t.PatientId.ToString(),
                                 PriorityId = (int)t.Priority,
@@ -620,6 +644,8 @@ namespace Phytel.API.DataDomain.Scheduling
                                 CreatedOn = t.RecordCreatedOn,
                                 Description = t.Description,
                                 DueDate = t.DueDate,
+                                StartTime = t.StartTime,
+                                Duration = t.Duration
                             });
                         }
                     }
