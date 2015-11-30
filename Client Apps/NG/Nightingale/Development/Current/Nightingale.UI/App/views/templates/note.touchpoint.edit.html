@@ -54,7 +54,7 @@
 					<div class="span3">
 						<h5 class="grey pad-bottom">Duration</h5>
 						<div class="span6"> 
-							<input type="text" data-bind="value: duration, valueUpdate: 'afterkeydown', numeric, 
+							<input type="text" data-bind="value: duration, valueUpdate: 'afterkeydown', numeric: duration, 
 								attr:{maxlength: 4, max: 1440, min: 1, title:'Duration: enter a number of minutes from 1 to 1440'},
 								css: { 'invalid': (validationErrorsArray().indexOf('duration') !== -1)}"></input>						
 						</div>
