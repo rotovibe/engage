@@ -718,7 +718,7 @@ define(['services/validatorfactory', 'services/customvalidators', 'services/form
 				
 				patient.minor = ko.computed(function () {					
 					var minorAge = datacontext.getSettingsParam('MinorAge');
-					return patient.age() && patient.age() < minorAge;
+					return patient.age() !== null && parseInt(patient.age()) >= 0 && patient.age() < minorAge;
 				});
 				// Set the patient defaults, if not already set
 				if (patient.protected() !== true) {
