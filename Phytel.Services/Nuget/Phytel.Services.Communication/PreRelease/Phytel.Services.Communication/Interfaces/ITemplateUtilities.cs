@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Xml;
 namespace Phytel.Services.Communication
 {
     public interface ITemplateUtilities
@@ -11,9 +13,10 @@ namespace Phytel.Services.Communication
         string GetModeSpecificTag(string originalTag, string mode);
         string HandleXMlSpecialCharacters(string innerText);
         string ProperCase(string input);
-        System.Xml.XmlDocument SetCDATAXMlNodeInnerText(System.Xml.XmlNode node, string innerText, System.Xml.XmlDocument xmlDoc);
-        System.Xml.XmlNode SetXMlNodeInnerText(System.Xml.XmlNode originalNode, string innerText);
+        void SetCDATAXMlNodeInnerText(System.Xml.XmlNode node, string innerText, System.Xml.XmlDocument xmlDoc);
+        void SetXMlNodeInnerText(System.Xml.XmlNode originalNode, string innerText);
         bool IsEmailAddressFormatValid(string emailAddress);
         string[] GetCommRequestStatuses();
+        string Transform(XmlDocument xml, TemplateDetail templateDetail, string mode);
     }
 }
