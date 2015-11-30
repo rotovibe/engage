@@ -360,7 +360,7 @@ AS
 		AND pt.[TTLDate] IS NULL
 	-- Update the MINOR column based on the calculated AGE.
 	UPDATE RPT_PatientInformation
-	SET Minor = (CASE WHEN AGE is null THEN 'No' WHEN AGE < 18 THEN 'Yes' WHEN AGE >= 18 THEN 'No' END)
+	SET Minor = (CASE WHEN AGE is null THEN NULL WHEN AGE < 18 THEN 'Yes' WHEN AGE >= 18 THEN 'No' END)
 GO
 
 
