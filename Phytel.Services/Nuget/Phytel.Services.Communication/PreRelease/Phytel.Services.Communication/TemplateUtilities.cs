@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml;
+using System.Xml.Xsl;
 
 namespace Phytel.Services.Communication
 {
@@ -73,73 +75,51 @@ namespace Phytel.Services.Communication
             return missingObjects;
         }
 
-        public XmlNode SetXMlNodeInnerText(XmlNode originalNode, string innerText)
+        public void SetXMlNodeInnerText(XmlNode originalNode, string innerText)
         {
-            try
+            if (originalNode != null)
             {
-                if (originalNode != null)
-                {
-                    //HandleXMlSpecialCharacters(ref innerText);
-                    originalNode.InnerText = innerText;
-                }
-            }
-            catch (XmlException xmlEx)
-            {
-                throw xmlEx;
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
-            return originalNode;
+                string result = string.Empty;
+                result = HandleXMlSpecialCharacters(innerText);
+                originalNode.InnerText = result;
+            }            
         }
 
-        public XmlDocument SetCDATAXMlNodeInnerText(XmlNode node, string innerText, XmlDocument xmlDoc)
+        public void SetCDATAXMlNodeInnerText(XmlNode node, string innerText, XmlDocument xmlDoc)
         {
-            try
+            if (node != null)
             {
-                if (node != null)
+                XmlAttribute isCDATAAttr = node.Attributes["IsCDATA"];
+                if (isCDATAAttr != null && isCDATAAttr.Value.ToString().ToLower() == "true")
                 {
-                    XmlAttribute isCDATAAttr = node.Attributes["IsCDATA"];
-                    if (isCDATAAttr != null && isCDATAAttr.Value.ToString().ToLower() == "true")
-                    {
-                        XmlCDataSection cdata = xmlDoc.CreateCDataSection(innerText);
-                        node.AppendChild(cdata);
-                    }
-                    else
-                    {
-                        HandleXMlSpecialCharacters(innerText);
-                        node.InnerText = innerText;
-                    }
+                    XmlCDataSection cdata = xmlDoc.CreateCDataSection(innerText);
+                    node.AppendChild(cdata);
+                }
+                else
+                {
+                    HandleXMlSpecialCharacters(innerText);
+                    node.InnerText = innerText;
                 }
             }
-            catch (XmlException xmlEx)
-            {
-                throw xmlEx;
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
-            return xmlDoc;
         }
 
         public string HandleXMlSpecialCharacters(string innerText)
         {
+            string result = string.Empty;
             if (!String.IsNullOrEmpty(innerText) && !String.IsNullOrEmpty(innerText.Trim()))
             {
-                //1.& - &amp; 
-                innerText = innerText.Replace("&", "&amp;");
-                //2.< - &lt; 
-                innerText = innerText.Replace("<", "&lt;");
-                //3.> - &gt; 
-                innerText = innerText.Replace(">", "&gt;");
-                //4." - &quot; 
-                innerText = innerText.Replace("\"", "&quot;");
-                //5.' - &apos;
-                innerText = innerText.Replace("'", "&apos;");
+                //1.& - &amp; 2.< - &lt; 3.> - &gt; 4." - &quot; 5.' - &apos;
+                result = innerText.Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;").Replace("\"", "&quot;").Replace("'", "&apos;");
+                ////2.< - &lt; 
+                //innerText = innerText.Replace("<", "&lt;");
+                ////3.> - &gt; 
+                //innerText = innerText.Replace(">", "&gt;");
+                ////4." - &quot; 
+                //innerText = innerText.Replace("\"", "&quot;");
+                ////5.' - &apos;
+                //innerText = innerText.Replace("'", "&apos;");
             }
-            return innerText;
+            return result;
         }
 
         private string GetShortMonth(string month)
@@ -215,25 +195,25 @@ namespace Phytel.Services.Communication
                 //PatientID
                 xpath = GetModeSpecificTag(XMLFields.ModePatientID, mode);
                 XmlNode patientIDNode = xdoc.SelectSingleNode(xpath);
-                patientIDNode.InnerText = patientID;
+                SetXMlNodeInnerText(patientIDNode, patientID);
 
                 //PatientFirstName
                 xpath = GetModeSpecificTag(XMLFields.ModePatientFirstName, mode);
                 XmlNode patientFirstNameNode = xdoc.SelectSingleNode(xpath);
                 patientFirstName = ProperCase(patientFirstName);
-                patientFirstNameNode.InnerText = patientFirstName;
+                SetXMlNodeInnerText(patientFirstNameNode, patientFirstName);
 
                 //PatientLastName
                 xpath = GetModeSpecificTag(XMLFields.ModePatientLastName, mode);
                 XmlNode patientLastNameNode = xdoc.SelectSingleNode(xpath);
                 patientLastName = ProperCase(patientLastName);
-                patientLastNameNode.InnerText = patientLastName;
+                SetXMlNodeInnerText(patientLastNameNode, patientLastName);
 
                 //PatientFullName
                 xpath = GetModeSpecificTag(XMLFields.ModePatientFullName, mode);
                 XmlNode patientNameLFNode = xdoc.SelectSingleNode(xpath);
                 patientNameLF = ProperCase(patientNameLF);
-                patientNameLFNode.InnerText = patientNameLF;
+                SetXMlNodeInnerText(patientNameLFNode, patientNameLF);
             }
 
             results.PopulatedTemplate = xdoc;
@@ -257,17 +237,17 @@ namespace Phytel.Services.Communication
             //SendID
             xpath = GetModeSpecificTag(XMLFields.ModeSendID, mode);
             XmlNode sendIDNode = xdoc.SelectSingleNode(xpath);
-            sendIDNode.InnerText = sendID;
+            SetXMlNodeInnerText(sendIDNode, sendID);
 
             //ActivityID
             xpath = GetModeSpecificTag(XMLFields.ModeActivityID, mode);
             XmlNode activityIDNode = xdoc.SelectSingleNode(xpath);
-            activityIDNode.InnerText = activityID;
+            SetXMlNodeInnerText(activityIDNode, activityID);
 
             //ContractID
             xpath = GetModeSpecificTag(XMLFields.ModeContractID, mode);
             XmlNode contractIDNode = xdoc.SelectSingleNode(xpath);
-            contractIDNode.InnerText = contractID;
+            SetXMlNodeInnerText(contractIDNode, contractID);
 
             results.PopulatedTemplate = xdoc;
             results.MissingObjects = missingObjects;
@@ -286,7 +266,7 @@ namespace Phytel.Services.Communication
             //ScheduleID
             xpath = GetModeSpecificTag(XMLFields.ModeScheduleID, mode);
             XmlNode scheduleIDNode = xdoc.SelectSingleNode(xpath);
-            scheduleIDNode.InnerText = scheduleID;
+            SetXMlNodeInnerText(scheduleIDNode, scheduleID);
 
             results.PopulatedTemplate = xdoc;
             results.MissingObjects = missingObjects;
@@ -324,32 +304,31 @@ namespace Phytel.Services.Communication
                 appointmentDayOfWeek = apptDateTime.DayOfWeek.ToString();
                 xpath = GetModeSpecificTag(XMLFields.ModeApptDayOfWeek, mode);
                 XmlNode apptDayOfWeekNode = xdoc.SelectSingleNode(xpath);
-                apptDayOfWeekNode.InnerText = appointmentDayOfWeek;
+                SetXMlNodeInnerText(apptDayOfWeekNode, appointmentDayOfWeek);
 
                 //Appointment Month
-                appointmentMonth = apptDateTime.ToString("MMMM");
+                appointmentMonth = shortMonth ? apptDateTime.ToString("MMM.") : apptDateTime.ToString("MMMM");
                 xpath = GetModeSpecificTag(XMLFields.ModeApptMonth, mode);
                 XmlNode appointmentMonthNode = xdoc.SelectSingleNode(xpath);
-                appointmentMonthNode.InnerText = (shortMonth ? GetShortMonth(appointmentMonth) : appointmentMonth);
-                //appointmentMonthNode.InnerText = appointmentMonth;
+                SetXMlNodeInnerText(appointmentMonthNode, appointmentMonth);
 
                 //Appointment Date
                 appointmentDate = apptDateTime.Day.ToString();
                 xpath = GetModeSpecificTag(XMLFields.ModeApptDate, mode);
                 XmlNode appointmentDateNode = xdoc.SelectSingleNode(xpath);
-                appointmentDateNode.InnerText = appointmentDate;
+                SetXMlNodeInnerText(appointmentDateNode, appointmentDate);
 
                 //Appointment Year
                 appointmentYear = apptDateTime.Year.ToString();
                 xpath = GetModeSpecificTag(XMLFields.ModeApptYear, mode);
                 XmlNode appointmentYearNode = xdoc.SelectSingleNode(xpath);
-                appointmentYearNode.InnerText = appointmentYear;
+                SetXMlNodeInnerText(appointmentYearNode, appointmentYear);
 
                 //Appointment Time
                 appointmentTime = apptDateTime.ToString("h:mm tt");
                 xpath = GetModeSpecificTag(XMLFields.ModeApptTime, mode);
                 XmlNode appointmentTimeNode = xdoc.SelectSingleNode(xpath);
-                appointmentTimeNode.InnerText = appointmentTime;
+                SetXMlNodeInnerText(appointmentTimeNode, appointmentTime);
             }
             
             results.PopulatedTemplate = xdoc;
@@ -359,16 +338,56 @@ namespace Phytel.Services.Communication
 
         public bool IsEmailAddressFormatValid(string emailAddress)
         {
-            bool result = false;
-
-            result = (!string.IsNullOrEmpty(emailAddress) && Regex.IsMatch(emailAddress.Trim(), RegExPatterns.EmailAddressPatern));
-
-            return result;
+            return (!string.IsNullOrEmpty(emailAddress) && Regex.IsMatch(emailAddress.Trim(), RegExPatterns.EmailAddressPatern));
         }
 
         public string[] GetCommRequestStatuses()
         {
             return Enum.GetNames(typeof(CommunicationRequestStatuses));
+        }
+
+        public string Transform(XmlDocument xml, TemplateDetail templateDetail, string mode)
+        {
+            string body = string.Empty;
+            string xpath = string.Empty;
+
+            body = TransformTemplate(xml, templateDetail, mode);
+            xpath = GetModeSpecificTag(XMLFields.ModeMessageBody, mode);
+            XmlNode bodyNode = xml.SelectSingleNode(xpath);
+            SetXMlNodeInnerText(bodyNode, body);
+            body = HandleXMlSpecialCharacters(body);
+
+            return body;
+        }
+        
+        private string TransformTemplate(XmlDocument xml, TemplateDetail templateDetail, string mode)
+        {
+            string transformedString = string.Empty;
+            int facilityID = 0;
+            if (xml != null)
+            {
+                string xpath = GetModeSpecificTag(XMLFields.ModeFacilityID, mode);
+                XmlNode facilityIDNode = xml.SelectSingleNode(xpath);
+                if (facilityIDNode != null)
+                    facilityID = Convert.ToInt32(facilityIDNode.InnerText.ToString());
+            }
+            if (templateDetail != null)
+            {
+                string xslBody = templateDetail.TemplateXSLBody.ToString().Trim();
+                XmlDocument xslDoc = new XmlDocument();
+                xslDoc.LoadXml(xslBody);
+                XslCompiledTransform xslTransform = new XslCompiledTransform();
+                xslTransform.Load(xslDoc);
+                using (StringWriter sw = new StringWriter())
+                {
+                    using (XmlTextWriter xw = new XmlTextWriter(sw))
+                    {
+                        xslTransform.Transform(xml, null, xw);
+                    }
+                    transformedString = sw.ToString();
+                }
+            }
+            return transformedString;
         }
     }
 }

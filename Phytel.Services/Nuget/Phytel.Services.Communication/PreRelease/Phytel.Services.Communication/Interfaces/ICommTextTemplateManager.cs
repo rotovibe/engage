@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Xml;
 namespace Phytel.Services.Communication
 {
     public interface ICommTextTemplateManager
@@ -15,5 +17,6 @@ namespace Phytel.Services.Communication
         TemplateResults BuildPatient(System.Xml.XmlDocument xdoc, TextActivityDetail textActivityDetail, System.Collections.Hashtable missingObjects);
         TemplateResults BuildSchedule(System.Xml.XmlDocument xdoc, TextActivityDetail textActivityDetail, System.Collections.Generic.List<ActivityMedia> activityMediaList, System.Collections.Hashtable missingObjects);
         TemplateResults BuildTextMessage(System.Xml.XmlDocument xdoc, TextActivityDetail textActivityDetail, System.Collections.Hashtable missingObjects);
+        string Transform(XmlDocument xml, TemplateDetail templateDetail);
     }
 }

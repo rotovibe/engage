@@ -10,6 +10,8 @@ using System.Xml;
 
 using Phytel.Services;
 using Phytel.Services.Security;
+using System.Xml.Xsl;
+using System.IO;
 
 namespace Phytel.Services.Communication
 {
@@ -49,23 +51,23 @@ namespace Phytel.Services.Communication
 
             XmlNode confirmURLNode = xdoc.SelectSingleNode(string.Format(_templateUtilities.GetModeSpecificTag(XMLFields.ModeConfirmationURL, _Mode), "true"));
             confirmURL = BuildURL(confirmURL, queryStrings);
-            xdoc = _templateUtilities.SetCDATAXMlNodeInnerText(confirmURLNode, confirmURL, xdoc);
+            _templateUtilities.SetCDATAXMlNodeInnerText(confirmURLNode, confirmURL, xdoc);
                   
             //OptOutURL
             xpath = _templateUtilities.GetModeSpecificTag(XMLFields.ModeOptOutURL, _Mode);
             XmlNode optOutURLNode = xdoc.SelectSingleNode(string.Format(_templateUtilities.GetModeSpecificTag(XMLFields.ModeOptOutURL, _Mode), "true"));
             optoutURL = BuildURL(optoutURL, queryStrings);
-            xdoc = _templateUtilities.SetCDATAXMlNodeInnerText(optOutURLNode, optoutURL, xdoc);
+            _templateUtilities.SetCDATAXMlNodeInnerText(optOutURLNode, optoutURL, xdoc);
 
             //Reschedule optional
             XmlNode rescheduleURLNode = xdoc.SelectSingleNode(string.Format(_templateUtilities.GetModeSpecificTag(XMLFields.ModeRescheduleURL, _Mode), "true"));
             rescheduleURL = BuildURL(rescheduleURL, queryStrings);
-            xdoc = _templateUtilities.SetCDATAXMlNodeInnerText(rescheduleURLNode, rescheduleURL, xdoc);
+            _templateUtilities.SetCDATAXMlNodeInnerText(rescheduleURLNode, rescheduleURL, xdoc);
 
             //Cancel optional
             XmlNode cancelURLNode = xdoc.SelectSingleNode(string.Format(_templateUtilities.GetModeSpecificTag(XMLFields.ModeCancelURL, _Mode), "true"));
             cancelURL = BuildURL(cancelURL, queryStrings);
-            xdoc = _templateUtilities.SetCDATAXMlNodeInnerText(cancelURLNode, cancelURL, xdoc);
+            _templateUtilities.SetCDATAXMlNodeInnerText(cancelURLNode, cancelURL, xdoc);
 
             results.PopulatedTemplate = xdoc;
             results.MissingObjects = missingObjects;
@@ -114,7 +116,7 @@ namespace Phytel.Services.Communication
                     if (!String.IsNullOrEmpty(scheduleNameLF) && !String.IsNullOrEmpty(scheduleNameLF.Trim()))
                     {
                         scheduleNameLF = _templateUtilities.ProperCase(scheduleNameLF.Trim());
-                        ScheduleNameLFNode.InnerText = scheduleNameLF;
+                        _templateUtilities.SetXMlNodeInnerText(ScheduleNameLFNode, scheduleNameLF);
                     }
                     else
                     {
@@ -168,19 +170,19 @@ namespace Phytel.Services.Communication
             xpath = _templateUtilities.GetModeSpecificTag(XMLFields.ModeFacilityAddr1, _Mode);
             XmlNode facilityAddr1Node = xdoc.SelectSingleNode(xpath);
             facilityAddr1 = _templateUtilities.ProperCase(facilityAddr1);
-            facilityAddr1Node.InnerText = facilityAddr1;
+            _templateUtilities.SetXMlNodeInnerText(facilityAddr1Node, facilityAddr1);
 
             //FacilityAddr2
             xpath = _templateUtilities.GetModeSpecificTag(XMLFields.ModeFacilityAddr2, _Mode);
             XmlNode facilityAddr2Node = xdoc.SelectSingleNode(xpath);
             facilityAddr2 = _templateUtilities.ProperCase(facilityAddr2);
-            facilityAddr2Node.InnerText = facilityAddr2;
+            _templateUtilities.SetXMlNodeInnerText(facilityAddr2Node, facilityAddr2);
 
             //FacilityCity
             xpath = _templateUtilities.GetModeSpecificTag(XMLFields.ModeFacilityCity, _Mode);
             XmlNode facilityCityNode = xdoc.SelectSingleNode(xpath);
             facilityCity = _templateUtilities.ProperCase(facilityCity);
-            facilityCityNode.InnerText = facilityCity;
+            _templateUtilities.SetXMlNodeInnerText(facilityCityNode, facilityCity);
 
             //FacilityState
             xpath = _templateUtilities.GetModeSpecificTag(XMLFields.ModeFacilityState, _Mode);
@@ -189,19 +191,19 @@ namespace Phytel.Services.Communication
             {
                 facilityState = facilityState.ToUpper();
             }
-            facilityStateNode.InnerText = facilityState;
+            _templateUtilities.SetXMlNodeInnerText(facilityStateNode, facilityState);
 
             //FacilityZip
             xpath = _templateUtilities.GetModeSpecificTag(XMLFields.ModeFacilityZip, _Mode);
             XmlNode facilityZipNode = xdoc.SelectSingleNode(xpath);
-            facilityZipNode.InnerText = facilityZip;
+            _templateUtilities.SetXMlNodeInnerText(facilityZipNode, facilityZip);
 
             //Facility phonenumber
             if (!String.IsNullOrEmpty(facilityPhoneNumber) && !String.IsNullOrEmpty(facilityPhoneNumber.Trim()))
             {
                 xpath = _templateUtilities.GetModeSpecificTag(XMLFields.ModeFacilityPhoneNumber, _Mode);
                 XmlNode facilityPhoneNumberNode = xdoc.SelectSingleNode(xpath);
-                facilityPhoneNumberNode.InnerText = String.Format("{0:(###) ###-####}", Convert.ToInt64(facilityPhoneNumber));
+                _templateUtilities.SetXMlNodeInnerText(facilityPhoneNumberNode, String.Format("{0:(###) ###-####}", Convert.ToInt64(facilityPhoneNumber)));
             }
             else
             {
@@ -221,7 +223,7 @@ namespace Phytel.Services.Communication
             if (media != null)
             {
                 facilityLogo = media.Filename;
-                facilityLogoNode.InnerText = facilityLogo;
+                _templateUtilities.SetXMlNodeInnerText(facilityLogoNode, facilityLogo);
             }
             else
             {
@@ -235,7 +237,7 @@ namespace Phytel.Services.Communication
                 if (media != null)
                 {
                     facilityLogo = media.Filename;
-                    facilityLogoNode.InnerText = facilityLogo;
+                    _templateUtilities.SetXMlNodeInnerText(facilityLogoNode, facilityLogo);
                 }
                 else 
                 {
@@ -249,13 +251,13 @@ namespace Phytel.Services.Communication
                     if (media != null && taskTypeCategory != TaskTypeCategory.OutreachRecall)
                     {
                         facilityLogo = media.Filename;
-                        facilityLogoNode.InnerText = facilityLogo;
+                        _templateUtilities.SetXMlNodeInnerText(facilityLogoNode, facilityLogo);
                     }
                     else
                     {
                         //Set enabled to false for Day 1
                         facilityLogoNode.Attributes[XMLFields.Enable].Value = "false";
-                        facilityLogoNode.InnerText = string.Empty;
+                        _templateUtilities.SetXMlNodeInnerText(facilityLogoNode, string.Empty);
                     }
                 }
             }
@@ -271,7 +273,7 @@ namespace Phytel.Services.Communication
             if (media != null)
             {
                 facilityURL = media.Narrative;
-                facilityURLNode.InnerText = facilityURL;
+                _templateUtilities.SetXMlNodeInnerText(facilityURLNode, facilityURL);
             }
             else
             {
@@ -283,13 +285,13 @@ namespace Phytel.Services.Communication
                 if (media != null)
                 {
                     facilityURL = media.Narrative;
-                    facilityURLNode.InnerText = facilityURL;
+                    _templateUtilities.SetXMlNodeInnerText(facilityURLNode, facilityURL);
                 }
                 else
                 {
                     //Set enabled to false for Day 1
                     facilityURLNode.Attributes[XMLFields.Enable].Value = "false";
-                    facilityURLNode.InnerText = string.Empty;
+                    _templateUtilities.SetXMlNodeInnerText(facilityURLNode, string.Empty);
                 }
             }
 
@@ -349,12 +351,12 @@ namespace Phytel.Services.Communication
             {
                 case (int)CampaignTypes.ACDefault:
                     messageType = MessageTypes.AppointmentReminder;
-                    messageTypeNode.InnerText = messageType;
+                    _templateUtilities.SetXMlNodeInnerText(messageTypeNode, messageType);
                     break;
 
                 case (int)CampaignTypes.OutreachDefault:
                     messageType = MessageTypes.OutreachRecall;
-                    messageTypeNode.InnerText = messageType;
+                    _templateUtilities.SetXMlNodeInnerText(messageTypeNode, messageType);
                     break;
             }
 
@@ -371,7 +373,7 @@ namespace Phytel.Services.Communication
             }
             else
             {
-                messageSubjectNode.InnerText = messageType;
+                _templateUtilities.SetXMlNodeInnerText(messageSubjectNode, messageType);
             }
 
             if (messageType != MessageTypes.OutreachRecall)
@@ -379,7 +381,7 @@ namespace Phytel.Services.Communication
                 //Set Appointment Duration
                 xpath = _templateUtilities.GetModeSpecificTag(XMLFields.ModeApptDuration, _Mode);
                 XmlNode apptDurationNode = xdoc.SelectSingleNode(xpath);
-                apptDurationNode.InnerText = appointmentDuration;
+                _templateUtilities.SetXMlNodeInnerText(apptDurationNode, appointmentDuration);
 
                 //Appointment date fields
                 if (String.IsNullOrEmpty(appointmentDateTime) || Convert.ToDateTime(appointmentDateTime) < System.DateTime.Now)
@@ -414,7 +416,7 @@ namespace Phytel.Services.Communication
             //Set Appointment Duration
             xpath = _templateUtilities.GetModeSpecificTag(XMLFields.ModeApptDuration, _Mode);
             XmlNode apptDurationNode = xdoc.SelectSingleNode(xpath);
-            apptDurationNode.InnerText = appointmentDuration;
+            _templateUtilities.SetXMlNodeInnerText(apptDurationNode, appointmentDuration);
 
             results.PopulatedTemplate = xdoc;
             results.MissingObjects = missingObjects;
@@ -518,26 +520,35 @@ namespace Phytel.Services.Communication
                     foreach (ActivityMedia media in mediaRows)
                     {
                         appointmentSpecificMessage = _templateUtilities.ProperCase(media.Narrative);
-                        apptSpecificMsgNode.InnerText = appointmentSpecificMessage;
+                        _templateUtilities.SetXMlNodeInnerText(apptSpecificMsgNode, appointmentSpecificMessage);
                     }
                 }
                 else
                 {
                     //Set enabled to false for Day 1
                     apptSpecificMsgNode.Attributes[XMLFields.Enable].Value = "false";
-                    apptSpecificMsgNode.InnerText = string.Empty;
+                    _templateUtilities.SetXMlNodeInnerText(apptSpecificMsgNode, string.Empty);
                 }
             }
             else
             {
                 //Set enabled to false for Day 1
                 apptSpecificMsgNode.Attributes[XMLFields.Enable].Value = "false";
-                apptSpecificMsgNode.InnerText = string.Empty;
+                _templateUtilities.SetXMlNodeInnerText(apptSpecificMsgNode, string.Empty);
             }
 
             results.PopulatedTemplate = xdoc;
             results.MissingObjects = missingObjects;
             return results;
+        }
+
+        public string Transform(XmlDocument xml, TemplateDetail templateDetail)
+        {
+            string body = string.Empty;
+
+            body = _templateUtilities.Transform(xml, templateDetail, _Mode);
+
+            return body;
         }
 
         #endregion
@@ -553,7 +564,7 @@ namespace Phytel.Services.Communication
             //PatientID
             xpath = _templateUtilities.GetModeSpecificTag(XMLFields.ModePatientID, _Mode);
             XmlNode patientIDNode = xdoc.SelectSingleNode(xpath);
-            patientIDNode.InnerText = emailActivityDetail.PatientID.ToString();
+            _templateUtilities.SetXMlNodeInnerText(patientIDNode, emailActivityDetail.PatientID.ToString());
 
             results.PopulatedTemplate = xdoc;
             results.MissingObjects = missingObjects;
@@ -602,7 +613,7 @@ namespace Phytel.Services.Communication
                 case (int)CampaignTypes.ACDefault:
                 case (int)CampaignTypes.OutreachDefault:
                     messageType = MessageTypes.IntroductoryEmail;
-                    messageTypeNode.InnerText = messageType;
+                    _templateUtilities.SetXMlNodeInnerText(messageTypeNode, messageType);
                     break;
             }
              
@@ -613,11 +624,11 @@ namespace Phytel.Services.Communication
             if (!String.IsNullOrEmpty(facilityName)
                     && !String.IsNullOrEmpty(facilityName.Trim()))
             {
-                messageSubjectNode.InnerText = "A message from " + facilityName;
+                _templateUtilities.SetXMlNodeInnerText(messageSubjectNode, "A message from " + facilityName);
             }
             else
             {
-                messageSubjectNode.InnerText = messageType;
+                _templateUtilities.SetXMlNodeInnerText(messageSubjectNode, messageType);
             }
 
             results.PopulatedTemplate = xdoc;
@@ -693,7 +704,7 @@ namespace Phytel.Services.Communication
             //FacilityID
             xpath = _templateUtilities.GetModeSpecificTag(XMLFields.ModeFacilityID, _Mode);
             XmlNode facilityIDNode = xdoc.SelectSingleNode(xpath);
-            facilityIDNode.InnerText = facilityID;
+            _templateUtilities.SetXMlNodeInnerText(facilityIDNode, facilityID);
 
             //Facility Name
             xpath = _templateUtilities.GetModeSpecificTag(XMLFields.ModeFacilityName, _Mode);
@@ -711,7 +722,7 @@ namespace Phytel.Services.Communication
                 facilityName = media.Narrative;
                 if (!String.IsNullOrEmpty(facilityName) && !String.IsNullOrEmpty(facilityName.Trim()))
                 {
-                    facilityNameNode.InnerText = facilityName.Trim();
+                    _templateUtilities.SetXMlNodeInnerText(facilityNameNode, facilityName.Trim());
                 }
                 else
                 {
@@ -760,7 +771,7 @@ namespace Phytel.Services.Communication
             XmlNode toEmailAddressNode = xdoc.SelectSingleNode(xpath);
             if (_templateUtilities.IsEmailAddressFormatValid(toEmailAddress))
             {
-                toEmailAddressNode.InnerText = toEmailAddress;
+                _templateUtilities.SetXMlNodeInnerText(toEmailAddressNode, toEmailAddress);
             }
             else
             {
@@ -784,7 +795,7 @@ namespace Phytel.Services.Communication
 
             if (!String.IsNullOrEmpty(fromEmailAddress) && !String.IsNullOrEmpty(fromEmailAddress.Trim()))
             {
-                fromEmailAddressNode.InnerText = fromEmailAddress.Trim();
+                _templateUtilities.SetXMlNodeInnerText(fromEmailAddressNode, fromEmailAddress.Trim());
             }
             else
             {
@@ -799,7 +810,7 @@ namespace Phytel.Services.Communication
                     fromEmailAddress = media.Narrative;
                     if (!String.IsNullOrEmpty(fromEmailAddress) && !String.IsNullOrEmpty(fromEmailAddress.Trim()))
                     {
-                        fromEmailAddressNode.InnerText = fromEmailAddress.Trim();
+                        _templateUtilities.SetXMlNodeInnerText(fromEmailAddressNode, fromEmailAddress.Trim());
                     }
                     else
                     {
@@ -833,7 +844,7 @@ namespace Phytel.Services.Communication
             //Facility level reply address
             if (!String.IsNullOrEmpty(replyToEmailAddress) && !String.IsNullOrEmpty(replyToEmailAddress.Trim()))
             {
-                replyToEmailAddressNode.InnerText = replyToEmailAddress.Trim();
+                _templateUtilities.SetXMlNodeInnerText(replyToEmailAddressNode, replyToEmailAddress.Trim());
             }
             //Contract level reply address
             else
@@ -849,7 +860,7 @@ namespace Phytel.Services.Communication
                     replyToEmailAddress = media.Narrative;
                     if (!String.IsNullOrEmpty(replyToEmailAddress) && !String.IsNullOrEmpty(replyToEmailAddress.Trim()))
                     {
-                        replyToEmailAddressNode.InnerText = replyToEmailAddress.Trim();
+                        _templateUtilities.SetXMlNodeInnerText(replyToEmailAddressNode, replyToEmailAddress.Trim());
                     }
                     else
                     {
@@ -868,7 +879,7 @@ namespace Phytel.Services.Communication
             //Default display name to facility name
             xpath = _templateUtilities.GetModeSpecificTag(XMLFields.ModeDisplayName, _Mode);
             XmlNode displayNameNode = xdoc.SelectSingleNode(xpath);
-            displayNameNode.InnerText = facilityName;
+            _templateUtilities.SetXMlNodeInnerText(displayNameNode, facilityName);
 
             //Get Configured Displayname based on ScheduleID override
             media = (from m in activityMediaList
@@ -878,7 +889,7 @@ namespace Phytel.Services.Communication
                      select m).FirstOrDefault();
             if (media != null)
             {
-                displayNameNode.InnerText = media.Narrative;
+                _templateUtilities.SetXMlNodeInnerText(displayNameNode, media.Narrative);
             }
             else
             {
@@ -890,7 +901,7 @@ namespace Phytel.Services.Communication
                          select m).FirstOrDefault();
                 if (media != null)
                 {
-                    displayNameNode.InnerText = media.Narrative;
+                    _templateUtilities.SetXMlNodeInnerText(displayNameNode, media.Narrative);
                 }
                 else
                 {
@@ -902,7 +913,7 @@ namespace Phytel.Services.Communication
                              select m).FirstOrDefault();
                     if (media != null)
                     {
-                        displayNameNode.InnerText = media.Narrative;
+                        _templateUtilities.SetXMlNodeInnerText(displayNameNode, media.Narrative);
                     }
                 }
             }

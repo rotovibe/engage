@@ -9,6 +9,7 @@ using System.Web;
 using System.Xml;
 
 using System.IO;
+using System.Xml.Xsl;
 
 namespace Phytel.Services.Communication
 {
@@ -68,7 +69,7 @@ namespace Phytel.Services.Communication
             //Contact Entities Schedule Name
             xpath = _templateUtilities.GetModeSpecificTag(XMLFields.ModeScheduleFullName, _Mode);
             XmlNode scheduleFullname = xdoc.SelectSingleNode(xpath);
-            scheduleFullname.InnerText = scheduleNameLF;
+            _templateUtilities.SetXMlNodeInnerText(scheduleFullname, scheduleNameLF);
 
             //Schedule Display name
             xpath = _templateUtilities.GetModeSpecificTag(XMLFields.ModeScheduleDisplayName, _Mode);
@@ -89,13 +90,13 @@ namespace Phytel.Services.Communication
                     if (!String.IsNullOrEmpty(scheduleDisplayName) && !String.IsNullOrEmpty(scheduleDisplayName.Trim()))
                     {
                         scheduleDisplayName = _templateUtilities.ProperCase(scheduleDisplayName.Trim());
-                        scheduleDisplayNameNode.InnerText = scheduleDisplayName;
+                        _templateUtilities.SetXMlNodeInnerText(scheduleDisplayNameNode, scheduleDisplayName);
                     }
                     else
                     {
                         //if there is no configured schedule name then default to your provider
                         scheduleDisplayName = "your provider";
-                        scheduleDisplayNameNode.InnerText = scheduleDisplayName;
+                        _templateUtilities.SetXMlNodeInnerText(scheduleDisplayNameNode, scheduleDisplayName);
                     }
                 }
             }
@@ -103,7 +104,7 @@ namespace Phytel.Services.Communication
             {
                 //if there is no configured schedule name then default to your provider
                 scheduleDisplayName = "your provider";
-                scheduleDisplayNameNode.InnerText = scheduleDisplayName;
+                _templateUtilities.SetXMlNodeInnerText(scheduleDisplayNameNode, scheduleDisplayName);
             }
 
             results.PopulatedTemplate = xdoc;
@@ -130,19 +131,19 @@ namespace Phytel.Services.Communication
             //FacilityID
             xpath = _templateUtilities.GetModeSpecificTag(XMLFields.ModeFacilityID, _Mode);
             XmlNode facilityIDNode = xdoc.SelectSingleNode(xpath);
-            facilityIDNode.InnerText = facilityID;
+            _templateUtilities.SetXMlNodeInnerText(facilityIDNode, facilityID);
 
             //Facility ContactEntities Name
             xpath = _templateUtilities.GetModeSpecificTag(XMLFields.ModeFacilityName, _Mode);
             XmlNode facilityNameNode = xdoc.SelectSingleNode(xpath);
-            facilityNameNode.InnerText = facilityFullname;
+            _templateUtilities.SetXMlNodeInnerText(facilityNameNode, facilityFullname);
 
             //Facility phonenumber
             if (!String.IsNullOrEmpty(facilityPhoneNumber) && !String.IsNullOrEmpty(facilityPhoneNumber.Trim()))
             {
                 xpath = _templateUtilities.GetModeSpecificTag(XMLFields.ModeFacilityPhoneNumber, _Mode);
                 XmlNode facilityPhoneNumberNode = xdoc.SelectSingleNode(xpath);
-                facilityPhoneNumberNode.InnerText = String.Format("{0:(###)###-####}", Convert.ToInt64(facilityPhoneNumber));
+                _templateUtilities.SetXMlNodeInnerText(facilityPhoneNumberNode, String.Format("{0:(###)###-####}", Convert.ToInt64(facilityPhoneNumber)));
             }
             else
             {
@@ -165,7 +166,7 @@ namespace Phytel.Services.Communication
                 facilityDisplayName = media.Narrative;
                 if (!String.IsNullOrEmpty(facilityDisplayName) && !String.IsNullOrEmpty(facilityDisplayName.Trim()))
                 {
-                    facilityDisplayNameNode.InnerText = facilityDisplayName.Trim();
+                    _templateUtilities.SetXMlNodeInnerText(facilityDisplayNameNode, facilityDisplayName.Trim());
                 }
                 else
                 {
@@ -212,7 +213,7 @@ namespace Phytel.Services.Communication
             {
                 xpath = _templateUtilities.GetModeSpecificTag(XMLFields.ModeToPhoneNumber, _Mode);
                 XmlNode toPhoneNumberNode = xdoc.SelectSingleNode(xpath);
-                toPhoneNumberNode.InnerText = toTextNumber;
+                _templateUtilities.SetXMlNodeInnerText(toPhoneNumberNode, toTextNumber);
             }
             else
             {
@@ -225,7 +226,7 @@ namespace Phytel.Services.Communication
             {
                 xpath = _templateUtilities.GetModeSpecificTag(XMLFields.ModeFromPhoneNumber, _Mode);
                 XmlNode fromPhoneNumberNode = xdoc.SelectSingleNode(xpath);
-                fromPhoneNumberNode.InnerText = fromTextNumber;
+                _templateUtilities.SetXMlNodeInnerText(fromPhoneNumberNode, fromTextNumber);
             }
             else
             {
@@ -238,7 +239,7 @@ namespace Phytel.Services.Communication
             {
                 xpath = _templateUtilities.GetModeSpecificTag(XMLFields.ModeHelpPhoneNumber, _Mode);
                 XmlNode helpPhoneNumberNode = xdoc.SelectSingleNode(xpath);
-                helpPhoneNumberNode.InnerText = helpTextNumber;
+                _templateUtilities.SetXMlNodeInnerText(helpPhoneNumberNode, helpTextNumber);
             }
             else
             {
@@ -262,6 +263,15 @@ namespace Phytel.Services.Communication
             results.PopulatedTemplate = xdoc;
             results.MissingObjects = missingObjects;
             return results;
+        }
+
+        public string Transform(XmlDocument xml, TemplateDetail templateDetail)
+        {
+            string body = string.Empty;
+
+            body = _templateUtilities.Transform(xml, templateDetail, _Mode);
+
+            return body;
         }
 
         #endregion
@@ -314,7 +324,7 @@ namespace Phytel.Services.Communication
             //Contact Entities Schedule Name
             xpath = _templateUtilities.GetModeSpecificTag(XMLFields.ModeScheduleFullName, _Mode);
             XmlNode scheduleFullname = xdoc.SelectSingleNode(xpath);
-            scheduleFullname.InnerText = scheduleNameLF;
+            _templateUtilities.SetXMlNodeInnerText(scheduleFullname, scheduleNameLF);
 
             //Schedule Display name
             xpath = _templateUtilities.GetModeSpecificTag(XMLFields.ModeScheduleDisplayName, _Mode);
@@ -335,7 +345,7 @@ namespace Phytel.Services.Communication
                     if (!String.IsNullOrEmpty(scheduleDisplayName) && !String.IsNullOrEmpty(scheduleDisplayName.Trim()))
                     {
                         scheduleDisplayName = _templateUtilities.ProperCase(scheduleDisplayName.Trim());
-                        scheduleDisplayNameNode.InnerText = scheduleDisplayName;
+                        _templateUtilities.SetXMlNodeInnerText(scheduleDisplayNameNode, scheduleDisplayName);
                     }
                     else
                     {
@@ -404,6 +414,5 @@ namespace Phytel.Services.Communication
 
         #endregion
 
-     
     }
 }

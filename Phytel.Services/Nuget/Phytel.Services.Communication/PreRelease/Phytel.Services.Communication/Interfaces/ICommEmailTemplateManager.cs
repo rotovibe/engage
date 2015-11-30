@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Xml;
 namespace Phytel.Services.Communication
 {
     public interface ICommEmailTemplateManager
@@ -15,5 +17,6 @@ namespace Phytel.Services.Communication
         TemplateResults BuildSchedule(System.Xml.XmlDocument xdoc, EmailActivityDetail emailActivityDetail, System.Collections.Generic.List<ActivityMedia> activityMediaList, System.Collections.Hashtable missingObjects);
         string BuildURL(string url, System.Collections.Generic.Dictionary<string, string> querystrings);
         bool IsAppointmentSpecificMsgEnabled(System.Collections.Generic.List<ContractPermission> contractPermissions, int contactRoleID);
+        string Transform(XmlDocument xml, TemplateDetail templateDetails);
     }
 }
