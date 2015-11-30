@@ -65,6 +65,7 @@ namespace Phytel.Data.ETL
         private Medications Meds;
         private MedicationMap MedMap;
         private Templates.System System;
+        private Templates.PatientUtilization PatientUtilization;
 
         void Collections_DocColEvent(object sender, ETLEventArgs e)
         {
@@ -119,6 +120,9 @@ namespace Phytel.Data.ETL
 
             System = new Templates.System { Contract = _contract, ConnectionString = connString };
             System.DocColEvent += Collections_DocColEvent;
+
+            PatientUtilization = new Templates.PatientUtilization { Contract = _contract, ConnectionString = connString };
+            PatientUtilization.DocColEvent += Collections_DocColEvent;
         }
 
         public void Rebuild()
@@ -140,6 +144,7 @@ namespace Phytel.Data.ETL
                 LoadPatientSystems(_contract);
 
                 PatientNote.Export();
+                PatientUtilization.Export();
                 LoadPatientObservations(_contract);
                 Contact.Export();
 

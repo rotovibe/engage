@@ -84,6 +84,8 @@
     <Compile Include="BulkCopy\EPatientMedicationFrequency.cs" />
     <Compile Include="BulkCopy\EMedicationFrequency.cs" />
     <Compile Include="BulkCopy\EMedicationMap.cs" />
+    <Compile Include="BulkCopy\EPatientUtilization.cs" />
+    <Compile Include="BulkCopy\EPatientUtilizationProgram.cs" />
     <Compile Include="BulkCopy\EPharmClass.cs" />
     <Compile Include="BulkCopy\EMedication.cs" />
     <Compile Include="BulkCopy\ERecentUserList.cs" />
@@ -117,6 +119,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Templates\Contacts.cs" />
     <Compile Include="Templates\DocumentCollection.cs" />
+    <Compile Include="Templates\PatientUtilization.cs" />
     <Compile Include="Templates\System.cs" />
     <Compile Include="Templates\PatientNoteType.cs" />
     <Compile Include="Templates\PatientMedicationFrequency.cs" />
