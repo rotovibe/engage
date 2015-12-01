@@ -166,6 +166,7 @@
     <Content Include="Assets\Images\letter2.png" />
     <Content Include="Assets\Images\phone2.png" />
     <Content Include="Assets\Images\phone_bg.png" />
+    <Content Include="Assets\Images\Phytel_logotagline_white_onBlue.png" />
     <Content Include="Assets\Images\Recall.png" />
     <Content Include="Assets\Images\red dot.png" />
     <Content Include="Assets\Images\secondary-menu-bg.png" />
@@ -537,7 +538,6 @@
     <Content Include="Assets\Images\module_header_arrow.png" />
     <Content Include="Assets\Images\nav_dropdown_arrow.png" />
     <Content Include="Assets\Images\nav_dropdown_arrow_right.png" />
-    <Content Include="Assets\Images\phytel_logo_black.png" />
     <Content Include="Assets\Images\print.gif" />
     <Content Include="Assets\Images\pulldown-h2.png" />
     <Content Include="Assets\Images\pulldown-h3.png" />
