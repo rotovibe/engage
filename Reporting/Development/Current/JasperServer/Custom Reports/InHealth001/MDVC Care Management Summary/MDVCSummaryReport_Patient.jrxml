@@ -1,16 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="MDVC_Management_Summary" language="groovy" pageWidth="612" pageHeight="792" columnWidth="572" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="c743537e-4134-4584-9ad9-760e6d2fa72f">
-	<property name="ireport.zoom" value="1.2100000000000035"/>
+<!-- Created with Jaspersoft Studio version 6.2.0.final using JasperReports Library version 6.2.0  -->
+<!-- 2015-11-27T23:02:46 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="MDVC_Management_Summary" pageWidth="612" pageHeight="792" columnWidth="572" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" whenResourceMissingType="Empty" uuid="c743537e-4134-4584-9ad9-760e6d2fa72f">
+	<property name="ireport.zoom" value="1.000000000000003"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<property name="ireport.jasperserver.reportUnit" value="/organizations/organization_1/organizations/InHealth/Reports/Phytel_Only/Remote/rpt_MDVC_CM_Summary"/>
-	<property name="ireport.jasperserver.url" value="https://reporting.phytel.com/jasperserver-pro/services/repository"/>
+	<property name="ireport.jasperserver.url" value="https://reporting.phytel.com/jasperserver-pro/"/>
+	<property name="ireport.jasperserver.user" value="mbobadilla"/>
+	<property name="ireport.jasperserver.report.resource" value="/organizations/organization_1/organizations/InHealth/Reports/Phytel_Only/Remote/rpt_MDVC_CM_Summary_files/rpt_MDVC_CM_Summary_jrxml"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="bin\NEW_DATAADAPTER.xml"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageHeight" value="inch"/>
+	<property name="com.jaspersoft.studio.unit.pageWidth" value="inch"/>
+	<property name="com.jaspersoft.studio.unit.topMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.bottomMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.leftMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["C:\\Users\\IBM_ADMIN\\Documents\\IReports\\InHealth\\"]]></defaultValueExpression>
 	</parameter>
 	<parameter name="PCPName" class="java.lang.String"/>
-	<parameter name="Enrollment" class="java.lang.String"/>
-	<parameter name="State" class="java.lang.String"/>
+	<parameter name="Enrollment" class="java.util.Collection">
+		<defaultValueExpression><![CDATA[java.util.Arrays.asList(new String[]{"String1", "String2"})]]></defaultValueExpression>
+	</parameter>
+	<parameter name="State" class="java.util.Collection">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
 	<queryString>
 		<![CDATA[select
 	pt.mongoid as [MongoPatientId],
@@ -33,8 +52,8 @@ from
 	INNER JOIN RPT_Engage_Enrollment_Info eng ON pt.Mongoid = eng.[MongoPatientId]
 where
 	eng.PCP = $P{PCPName}
-	and eng.[State] = $P{State}
-	and eng.Enrollment = $P{Enrollment}]]>
+	and $X{IN,eng.State,State}
+	and $X{IN,eng.Enrollment,Enrollment}]]>
 	</queryString>
 	<field name="MongoPatientId" class="java.lang.String"/>
 	<field name="EngageId" class="java.lang.String"/>
@@ -139,7 +158,7 @@ where
 					</staticText>
 					<image>
 						<reportElement x="220" y="6" width="133" height="51" uuid="b8e51640-a836-4894-8a5d-ce3f53aed238"/>
-						<imageExpression><![CDATA[$P{SUBREPORT_DIR} + "MDVC_logo.jpg"]]></imageExpression>
+						<imageExpression><![CDATA["repo:MDVC_logo.jpg"]]></imageExpression>
 					</image>
 				</elementGroup>
 				<textField>
@@ -163,7 +182,7 @@ where
 					<subreportParameterExpression><![CDATA[$F{MongoPatientId}]]></subreportParameterExpression>
 				</subreportParameter>
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "MDVCSummaryReport_Sub_Risks.jasper"]]></subreportExpression>
+				<subreportExpression><![CDATA["repo:MDVCSummaryReport_Sub_Risks.jrxml"]]></subreportExpression>
 			</subreport>
 			<subreport>
 				<reportElement key="Active Medications" positionType="Float" x="0" y="476" width="572" height="44" isRemoveLineWhenBlank="true" uuid="0df7702f-7868-4237-89af-6ec838f5e116"/>
@@ -171,7 +190,7 @@ where
 					<subreportParameterExpression><![CDATA[$F{MongoPatientId}]]></subreportParameterExpression>
 				</subreportParameter>
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "subreport_active_medications.jasper"]]></subreportExpression>
+				<subreportExpression><![CDATA["repo:subreport_active_medications.jrxml"]]></subreportExpression>
 			</subreport>
 			<subreport>
 				<reportElement key="Home Visit" positionType="Float" x="0" y="147" width="572" height="44" isRemoveLineWhenBlank="true" uuid="22bf5815-58f6-43ff-ade6-066caf15b423"/>
@@ -179,7 +198,7 @@ where
 					<subreportParameterExpression><![CDATA[$F{MongoPatientId}]]></subreportParameterExpression>
 				</subreportParameter>
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "MDVCSummaryReport_Sub_HomeVisit.jasper"]]></subreportExpression>
+				<subreportExpression><![CDATA["repo:MDVCSummaryReport_Sub_HomeVisit.jrxml"]]></subreportExpression>
 			</subreport>
 			<subreport isUsingCache="true">
 				<reportElement key="Enrollment" positionType="Float" x="0" y="194" width="572" height="44" isRemoveLineWhenBlank="true" uuid="c7a5ab03-56f4-42e2-9fdf-fca07ba20892"/>
@@ -187,7 +206,7 @@ where
 					<subreportParameterExpression><![CDATA[$F{MongoPatientId}]]></subreportParameterExpression>
 				</subreportParameter>
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "MDVCSummaryReport_Sub_Enrollment.jasper"]]></subreportExpression>
+				<subreportExpression><![CDATA["repo:MDVCSummaryReport_Sub_Enrollment.jrxml"]]></subreportExpression>
 			</subreport>
 			<subreport>
 				<reportElement key="Assessments" positionType="Float" x="0" y="288" width="572" height="44" isRemoveLineWhenBlank="true" uuid="9dfd899e-d1d3-4c74-be8b-9e376e9c89c1"/>
@@ -195,7 +214,7 @@ where
 					<subreportParameterExpression><![CDATA[$F{MongoPatientId}]]></subreportParameterExpression>
 				</subreportParameter>
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "MDVCSummaryReport_Sub_Assessments.jasper"]]></subreportExpression>
+				<subreportExpression><![CDATA["repo:MDVCSummaryReport_Sub_Assessments.jrxml"]]></subreportExpression>
 			</subreport>
 			<subreport>
 				<reportElement key="Problems" positionType="Float" x="0" y="335" width="572" height="44" isRemoveLineWhenBlank="true" uuid="28f95780-290d-4f68-961b-a8895f0e3fe2"/>
@@ -203,7 +222,7 @@ where
 					<subreportParameterExpression><![CDATA[$F{MongoPatientId}]]></subreportParameterExpression>
 				</subreportParameter>
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "subreport_Recent_Clinical.jasper"]]></subreportExpression>
+				<subreportExpression><![CDATA["repo:subreport_Recent_Clinical.jrxml"]]></subreportExpression>
 			</subreport>
 			<subreport>
 				<reportElement key="Care Plan Goals" positionType="Float" x="0" y="382" width="572" height="44" isRemoveLineWhenBlank="true" uuid="a6d594ab-d2b1-4620-8ef1-5d7ab8f90cbd"/>
@@ -211,7 +230,7 @@ where
 					<subreportParameterExpression><![CDATA[$F{MongoPatientId}]]></subreportParameterExpression>
 				</subreportParameter>
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "MDVCSummaryReport_Sub_Plan_Goals.jasper"]]></subreportExpression>
+				<subreportExpression><![CDATA["repo:MDVCSummaryReport_Sub_Plan_Goals.jrxml"]]></subreportExpression>
 			</subreport>
 			<subreport>
 				<reportElement key="Care Opportunities" positionType="Float" x="0" y="429" width="572" height="44" isRemoveLineWhenBlank="true" uuid="f6c6d435-cafc-44c9-a9da-bf7b6e3c258e"/>
@@ -219,15 +238,17 @@ where
 					<subreportParameterExpression><![CDATA[$F{MongoPatientId}]]></subreportParameterExpression>
 				</subreportParameter>
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "MDVCSummaryReport_Sub_ToDo.jasper"]]></subreportExpression>
+				<subreportExpression><![CDATA["repo:MDVCSummaryReport_Sub_ToDo.jrxml"]]></subreportExpression>
 			</subreport>
 			<subreport>
-				<reportElement key="Active Allergies" positionType="Float" x="0" y="523" width="572" height="87" isRemoveLineWhenBlank="true" uuid="7387fb54-0d12-45fe-9d46-4c5301508bd3"/>
+				<reportElement key="Active Allergies" positionType="Float" x="0" y="523" width="572" height="44" isRemoveLineWhenBlank="true" uuid="7387fb54-0d12-45fe-9d46-4c5301508bd3">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
 				<subreportParameter name="ID_MongoPatientId">
 					<subreportParameterExpression><![CDATA[$F{MongoPatientId}]]></subreportParameterExpression>
 				</subreportParameter>
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "subreport_allergies.jasper"]]></subreportExpression>
+				<subreportExpression><![CDATA["repo:subreport_allergies.jrxml"]]></subreportExpression>
 			</subreport>
 			<elementGroup>
 				<line>
