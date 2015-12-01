@@ -199,7 +199,6 @@ BEGIN
 	INSERT INTO [RPT_PatientUtilization_Dim]
 	(
 		[PatientUtilizationId],
-		[MongoPatientId],
 		[NoteType],
 		[Reason],
 		[VisitType],
@@ -237,15 +236,14 @@ BEGIN
 	)
 	SELECT
 		pn.PatientUtilizationId,
-		PT.MongoId,
 		(SELECT DISTINCT Name FROM RPT_NoteTypeLookUp WHERE MongoId = pn.MongoNoteTypeId) as [NoteType],
 		pn.Reason,
 		(SELECT DISTINCT Name FROM RPT_VisitTypeLookUp nm WHERE nm.MongoId = pn.MongoVisitTypeId) as [VisitType],
 		pn.OtherVisitType,
 		pn.AdmitDate,
-		(CASE WHEN pn.Admitted = 'True' THEN 'Yes' WHEN pn.Admitted = 'False' THEN 'No' END),
+		(CASE WHEN pn.Admitted = 'True' THEN 'Yes' WHEN pn.Admitted = 'False' THEN 'No' END) as Admitted,
 		pn.DischargeDate,
-		(CASE WHEN (pn.AdmitDate IS NULL OR  pn.DischargeDate IS NULL) THEN 1 ELSE DATEDIFF(DAY, pn.DischargeDate, pn.AdmitDate) END), 
+		(CASE WHEN (pn.AdmitDate IS NULL OR  pn.DischargeDate IS NULL) THEN 1 ELSE DATEDIFF(DAY, pn.AdmitDate, pn.DischargeDate) END) as Length, 
 		(SELECT DISTINCT Name FROM RPT_UtilizationLocationLookUp nw WHERE nw.MongoId = pn.MongoLocationId) as [Location],
 		pn.OtherLocation,
 		(SELECT DISTINCT Name FROM RPT_DispositionLookUp ns WHERE ns.MongoId= pn.MongoDispositionId) as [Disposition],
@@ -288,7 +286,7 @@ BEGIN
 		(SELECT PreferredName FROM RPT_User WHERE MongoId = pn.MongoUpdatedBy)
 	FROM 
 		RPT_PatientUtilization pn with (nolock)
-		LEFT OUTER JOIN RPT_PatientUtilizationProgram pnp with (nolock) on pn.MongoId = pnp.PatientUtilizationProgramId
+		LEFT OUTER JOIN RPT_PatientUtilizationProgram pnp with (nolock) on pn.MongoId = pnp.MongoPatientUtilizationId
 		INNER JOIN RPT_PATIENT PT with (nolock) ON pn.MongoPatientId = pt.MongoId
 		LEFT OUTER JOIN RPT_PATIENTSYSTEM PS with (nolock) ON PT.MongoPatientSystemId = PS.MongoId
 		LEFT OUTER JOIN RPT_PATIENTPROGRAM PP with (nolock) ON PP.MongoId = pnp.MongoId
