@@ -4,7 +4,7 @@
     var currentBrand = ko.computed(function() {
       var returnValue;
       var brandName = 'Phytel';
-      var logoLink = '/NightingaleUI/Content/images/phytel_logo.png';
+      var logoLink = '/NightingaleUI/Content/images/phytel_logo_IBM.png';
       var classOverride = 'phytel-logo';
       if (session.currentUser()) {
         if (session.currentUser().contracts()[0].number() === 'Demo001') {

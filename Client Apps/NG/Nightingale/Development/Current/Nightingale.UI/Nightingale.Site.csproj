@@ -260,6 +260,7 @@
     <Content Include="App\views\templates\allergy.status.html" />
     <Content Include="App\views\templates\allergy.edit.html" />
     <Content Include="App\views\templates\validation.errors.html" />
+    <Content Include="Content\images\phytel_logo_IBM.png" />
     <Content Include="Content\images\watson_cm_logo_large.png" />
     <Content Include="Content\images\watson_cm_logo.png" />
     <Content Include="Content\images\PH_IBM Watson Woodmark-01.png" />
@@ -651,7 +652,6 @@
     <Content Include="Content\images\phone_blue_small.png" />
     <Content Include="Content\images\phone_grey_large.png" />
     <Content Include="Content\images\phone_grey_small.png" />
-    <Content Include="Content\images\phytel_logo.png" />
     <Content Include="Content\images\prescription_blue.png" />
     <Content Include="Content\images\prescription_red.png" />
     <Content Include="Content\images\print_blue_large.png" />
