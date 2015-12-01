@@ -92,6 +92,8 @@ namespace Phytel.Data.ETL.Templates
                                 new Parameter("@Title", td.Title ?? string.Empty, SqlDbType.VarChar,ParameterDirection.Input, 500),
                                 new Parameter("@Description", td.Description ?? string.Empty, SqlDbType.VarChar,ParameterDirection.Input, 500),
                                 new Parameter("@DueDate", td.DueDate ?? (object) DBNull.Value, SqlDbType.DateTime,ParameterDirection.Input, 50),
+                                new Parameter("@StartTime", td.StartTime == null ? (object) DBNull.Value : td.StartTime.Value.TimeOfDay, SqlDbType.Time,ParameterDirection.Input, 50),
+                                new Parameter("@Duration", td.Duration ?? (object) DBNull.Value, SqlDbType.Int,ParameterDirection.Input, 50),
                                 new Parameter("@Status", td.Status.ToString() ?? (object) DBNull.Value,SqlDbType.VarChar, ParameterDirection.Input, 50),
                                 new Parameter("@MongoCategory", td.Category.ToString(), SqlDbType.VarChar,ParameterDirection.Input, 50),
                                 new Parameter("@Priority", td.Priority.ToString() ?? (object) DBNull.Value,SqlDbType.VarChar, ParameterDirection.Input, 50),
