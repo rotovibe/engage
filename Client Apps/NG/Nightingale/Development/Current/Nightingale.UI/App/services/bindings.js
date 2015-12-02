@@ -979,6 +979,7 @@ define(['services/formatter', 'services/dateHelper'],
 
                 $(element).fullCalendar({
                     defaultView: viewModel.defaultView,
+					allDayText: 'All day',
                     events: ko.utils.unwrapObservable(viewModel.events),
                     header: viewModel.header,
                     editable: viewModel.editable,

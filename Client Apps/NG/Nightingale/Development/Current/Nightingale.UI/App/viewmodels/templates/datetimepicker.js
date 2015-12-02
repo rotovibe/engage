@@ -101,7 +101,7 @@ define(['durandal/composition','services/dateHelper', 'services/formatter'],
 		self.timeName = self.settings.timeName ? self.settings.timeName : 'time';
 		self.showTime = self.settings.showTime ? self.settings.showTime : false;
 		self.timeCss = self.settings.timeCss ? self.settings.timeCss : "";
-		
+
 		//
 		self.dateStr = ko.observable();
 		self.timeStr = ko.observable();
@@ -152,14 +152,16 @@ define(['durandal/composition','services/dateHelper', 'services/formatter'],
 					if( !enteredDateStr ){	
 						//seed the datetime value
 						self.dateStr('1/1/1970');
-						enteredDateStr = self.dateStr();
+						enteredDateStr = self.dateStr();						
 					}
 				}
 				else{
-					//clear the datetime value
-					self.dateStr(null);
-					enteredDateStr = null;
-					self.observableDateTime(null);
+					if( Modernizr.inputtypes.time ){						
+						//clear the datetime value
+						self.dateStr(null);
+						enteredDateStr = null;
+						self.observableDateTime(null);
+					}
 				}
 			}
 			if( dateHelper.isValidDate(enteredDateStr) ){
