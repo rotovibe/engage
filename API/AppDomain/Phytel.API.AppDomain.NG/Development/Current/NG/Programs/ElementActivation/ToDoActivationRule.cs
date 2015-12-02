@@ -107,7 +107,7 @@ namespace Phytel.API.AppDomain.NG.Programs.ElementActivation
             {
                 var result = false;
                 var todos = EndpointUtil.GetPatientToDos(arg.PatientId, arg.UserId, arg.DomainRequest);
-                var existing = todos.FirstOrDefault(r => r.SourceId == sourceId);
+                var existing = todos.FirstOrDefault(r => r.SourceId == sourceId && (r.StatusId == 1 || r.StatusId == 3) ); // open = 1, NotMet = 3 status
                 if (existing == null) return result;
                 result = true;
                 return result;
