@@ -109,7 +109,6 @@ CREATE TABLE [dbo].[RPT_PatientUtilization](
 	 [MongoRecordCreatedBy] [varchar](50) NULL,
 	 [RecordCreatedOn] [datetime] NULL,
 	 [Version] [float] NULL,
-	 [TTLDate] [datetime] NULL,
 	 [Delete] [varchar](50) NULL
  CONSTRAINT [PK_PatientUtilization] PRIMARY KEY CLUSTERED 
 (
