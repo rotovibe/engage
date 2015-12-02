@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using MongoDB.Bson;
 using Phytel.API.AppDomain.NG.DTO;
 using Phytel.API.AppDomain.NG.PlanCOR;
-using Phytel.API.AppDomain.NG.Programs.ElementActivation;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Phytel.API.AppDomain.NG.Test;
 using Phytel.API.AppDomain.NG.Test.Stubs;
 using Phytel.API.DataDomain.Program.DTO;
 using Program = Phytel.API.AppDomain.NG.DTO.Program;
@@ -193,6 +189,66 @@ namespace Phytel.API.AppDomain.NG.Programs.ElementActivation.Tests
                 todoRule.SetDefaultAssignment(userid, schedule, todoData);
 
                 Assert.AreNotEqual(userid, todoData.AssignedToId);
+            }
+        }
+
+        [TestClass()]
+        public class PatientToDoExistsTest
+        {
+            [TestMethod()]
+            public void PatientToDoExistsTest_true()
+            {
+                var todoRule = new ToDoActivationRule
+                {
+                    EndpointUtil = new EndpointUtils(),
+                    PlanUtils = new StubPlanElementUtils()
+                };
+
+                const string patientId = "5325da76d6a4850adcbba656";
+                const string userId = "1234";
+                const string elemId = "5407527d1e6015290c203d36";
+
+                var eventArg = new PlanElementEventArg
+                {
+                    Action = new Actions(),
+                    DomainRequest =
+                        new AppDomainRequest {Version = 1.0, ContractNumber = "InHealth001", UserId = "1234"},
+                    PatientId = patientId,
+                    UserId = userId,
+                    PlanElement = new PlanElement {Id = ""}
+                };
+
+                var result = todoRule.PatientToDoExists(eventArg, elemId);
+
+                Assert.IsTrue(result);
+            }
+
+            [TestMethod()]
+            public void PatientToDoExistsTest_false()
+            {
+                var todoRule = new ToDoActivationRule
+                {
+                    EndpointUtil = new EndpointUtils(),
+                    PlanUtils = new StubPlanElementUtils()
+                };
+
+                const string patientId = "5325da35d6a4850adcbba58e";
+                const string userId = "1234";
+                const string elemId = "53ff6b92d4332314bcab46e0";
+
+                var eventArg = new PlanElementEventArg
+                {
+                    Action = new Actions(),
+                    DomainRequest =
+                        new AppDomainRequest { Version = 1.0, ContractNumber = "InHealth001", UserId = "1234" },
+                    PatientId = patientId,
+                    UserId = userId,
+                    PlanElement = new PlanElement { Id = "" }
+                };
+
+                var result = todoRule.PatientToDoExists(eventArg, elemId);
+
+                Assert.IsFalse(result);
             }
         }
     }

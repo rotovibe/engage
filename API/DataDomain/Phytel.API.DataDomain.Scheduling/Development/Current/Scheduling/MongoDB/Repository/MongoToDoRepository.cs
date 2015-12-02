@@ -508,14 +508,18 @@ namespace Phytel.API.DataDomain.Scheduling
                                 Title = t.Title,
                                 UpdatedOn = t.LastUpdatedOn, 
                                 DeleteFlag = t.DeleteFlag,
-                                ExternalRecordId = t.ExternalRecordId
+                                ExternalRecordId = t.ExternalRecordId,
+                                SourceId = t.SourceId.ToString()
                             });
                         }
                     }
                 }
                 return todoList;
             }
-            catch (Exception) { throw; }
+            catch (Exception ex)
+            {
+                throw new Exception("DD:MongoToDoRepository:FindToDos()::" + ex.Message, ex.InnerException);
+            }
         }
 
         public void RemoveProgram(object entity, List<string> updatedProgramIds)

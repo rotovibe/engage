@@ -512,6 +512,14 @@ namespace Phytel.API.AppDomain.NG.Tests
                 new AppDomainRequest { Version = 1.0, ContractNumber = "InHealth001", UserId = "1234" });
 
             Assert.IsNull(patientGoal);
+        }
+
+        [TestMethod()]
+        public void GetPatientToDosTest()
+        {
+            EndpointUtils utils = new EndpointUtils();
+            var todos = utils.GetPatientToDos("5325da35d6a4850adcbba58e", "1234",
+                new AppDomainRequest {Version = 1.0, ContractNumber = "InHealth001", UserId = "1234"});
         }    
     }
 }

@@ -43,5 +43,6 @@ namespace Phytel.API.AppDomain.NG.Programs
         PatientIntervention GetOpenNotMetPatientInterventionByTemplateId(string gid, string tempId, string patientId, string userId, IAppDomainRequest req);
         Task GetTaskById(string sid, string userId, IAppDomainRequest req);
         PatientTask GetOpenNotMetPatientTaskByTemplateId(string taskid, string tempId, string patientId, string userId, IAppDomainRequest req);
+        List<ToDoData> GetPatientToDos(string patientId, string userId, IAppDomainRequest req);
     }
 }
