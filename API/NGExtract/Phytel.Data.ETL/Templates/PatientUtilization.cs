@@ -43,7 +43,6 @@ namespace Phytel.Data.ETL.Templates
                     bcc.ColumnMappings.Add("RecordCreatedBy", "MongoRecordCreatedBy");
                     bcc.ColumnMappings.Add("RecordCreatedOn", "RecordCreatedOn");
                     bcc.ColumnMappings.Add("Version", "Version");
-                    bcc.ColumnMappings.Add("TTLDate", "TTLDate");
                     bcc.ColumnMappings.Add("DeleteFlag", "Delete");
 
                     bcc.DestinationTableName = "RPT_PatientUtilization";
@@ -124,7 +123,6 @@ namespace Phytel.Data.ETL.Templates
                             RecordCreatedBy = u.RecordCreatedBy.ToString(),
                             RecordCreatedOn = u.RecordCreatedOn,
                             DeleteFlag = u.DeleteFlag.ToString(),
-                            TTLDate = u.TTLDate,
                             LastUpdatedOn = u.LastUpdatedOn
                         });
 
