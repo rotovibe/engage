@@ -39,7 +39,7 @@ namespace Phytel.Engage.Integrations
                     }
                 default:
                     {
-                        val = 0;
+                        val = 2;
                         break;
                     }
             }
