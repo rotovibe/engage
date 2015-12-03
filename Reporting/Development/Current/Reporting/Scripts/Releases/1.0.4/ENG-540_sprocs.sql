@@ -243,7 +243,10 @@ BEGIN
 		pn.AdmitDate,
 		(CASE WHEN pn.Admitted = 'True' THEN 'Yes' WHEN pn.Admitted = 'False' THEN 'No' END) as Admitted,
 		pn.DischargeDate,
-		(CASE WHEN (pn.AdmitDate IS NULL OR  pn.DischargeDate IS NULL) THEN 1 ELSE DATEDIFF(DAY, pn.AdmitDate, pn.DischargeDate) END) as Length, 
+		(CASE WHEN (pn.AdmitDate IS NULL AND  pn.DischargeDate IS NULL) THEN NULL
+			  WHEN (pn.AdmitDate IS NULL OR  pn.DischargeDate IS NULL) THEN 1
+			  WHEN (pn.AdmitDate IS NOT NULL AND pn.DischargeDate IS NOT NULL)  THEN  DATEDIFF(DAY, pn.AdmitDate, pn.DischargeDate) 
+		 END) as Length, 
 		(SELECT DISTINCT Name FROM RPT_UtilizationLocationLookUp nw WHERE nw.MongoId = pn.MongoLocationId) as [Location],
 		pn.OtherLocation,
 		(SELECT DISTINCT Name FROM RPT_DispositionLookUp ns WHERE ns.MongoId= pn.MongoDispositionId) as [Disposition],
