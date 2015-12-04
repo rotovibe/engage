@@ -146,6 +146,7 @@ GO
 CREATE TABLE [dbo].[RPT_PatientUtilization_Dim](
 	[DimId] [int] IDENTITY(1,1) NOT NULL,
 	[PatientUtilizationId] [int] NULL,
+	[MongoPatientUtilizationId] [varchar](50) NULL,
 	[NoteType] [varchar](100) NULL,
 	[Reason] [varchar](max) NULL,
 	[VisitType] [varchar](100) NULL,
@@ -162,6 +163,7 @@ CREATE TABLE [dbo].[RPT_PatientUtilization_Dim](
 	[DataSource] [varchar](50) NULL,
 	[ProgramName] [varchar](200) NULL,
 	[PatientId] [int] NULL,
+	[MongoPatientId] [varchar](50) NULL,
 	[FirstName] [varchar](200) NULL,
 	[MiddleName] [varchar](200) NULL,
 	[LastName] [varchar](200) NULL,

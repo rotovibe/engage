@@ -199,6 +199,7 @@ BEGIN
 	INSERT INTO [RPT_PatientUtilization_Dim]
 	(
 		[PatientUtilizationId],
+		[MongoPatientUtilizationId],
 		[NoteType],
 		[Reason],
 		[VisitType],
@@ -215,6 +216,7 @@ BEGIN
 		[DataSource],
 		[ProgramName],
 		[PatientId],
+		[MongoPatientId],
 		[FirstName],
 		[MiddleName],
 		[LastName],
@@ -236,6 +238,7 @@ BEGIN
 	)
 	SELECT
 		pn.PatientUtilizationId,
+		pn.MongoId,
 		(SELECT DISTINCT Name FROM RPT_NoteTypeLookUp WHERE MongoId = pn.MongoNoteTypeId) as [NoteType],
 		pn.Reason,
 		(SELECT DISTINCT Name FROM RPT_VisitTypeLookUp nm WHERE nm.MongoId = pn.MongoVisitTypeId) as [VisitType],
@@ -255,6 +258,7 @@ BEGIN
 		pn.DataSource,
 		pp.Name as [ProgramName],
 		PT.PATIENTID,
+		PT.MongoId,
 		PT.FIRSTNAME,
 		PT.MiddleName,
 		PT.LASTNAME,
