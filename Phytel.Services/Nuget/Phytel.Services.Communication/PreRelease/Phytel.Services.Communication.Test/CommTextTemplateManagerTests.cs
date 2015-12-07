@@ -1,13 +1,7 @@
-﻿using NUnit.Framework;
-using Phytel.Services.Communication;
-using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
-using Moq;
+using NUnit.Framework;
 
 namespace Phytel.Services.Communication.Test
 {
@@ -21,9 +15,9 @@ namespace Phytel.Services.Communication.Test
         private ICommTextTemplateManager _manager;
         private TextActivityDetail _textDetail = new TextActivityDetail();
         private List<ActivityMedia> _medias = new List<ActivityMedia>();
-        private Hashtable _missingObjects = new Hashtable();
+        // private Hashtable _missingObjects = new Hashtable(); Not used
         private XmlDocument _xDoc = new XmlDocument();
-        private List<ContractPermission> _contractPermissionList;
+        // private List<ContractPermission> _contractPermissionList; Not used
 
         #endregion
 
@@ -38,18 +32,16 @@ namespace Phytel.Services.Communication.Test
         [Test]
         public void TestBuildHeader()
         {
-            XmlDocument xDoc = new XmlDocument();
-            xDoc = ResetXml(_xDoc);
+            XmlDocument xDoc = ResetXml();
             Hashtable missingObjects = new Hashtable();
-            string expectedTextTemplateXML;
             XmlDocument xDocExpected = new XmlDocument();
             TemplateResults expectedResults = new TemplateResults();
 
-            expectedTextTemplateXML = "<TEXT><SendID>3</SendID><ActivityID>10</ActivityID><ContractID>ABC001</ContractID>" +
-                    "<Patient><PatientID /><FullName /><FirstName /><LastName /></Patient>" +
-                    "<Schedule><ScheduleID /><FullName /><DisplayName /></Schedule>" +
-                    "<Facility><FacilityID /><DisplayName /><Name /><Addr1 /><Addr2 /><City /><State /><Zip /><PhoneNumber /></Facility>" +
-                    "<Message><DayOfWeek /><Month /><Date /><Year /><Time /><DateTime /><TextFromNumber /><TextToNumber /><TextHelpNumber /><Body /></Message></TEXT>";
+            const string expectedTextTemplateXML = "<TEXT><SendID>3</SendID><ActivityID>10</ActivityID><ContractID>ABC001</ContractID>" +
+                                                   "<Patient><PatientID /><FullName /><FirstName /><LastName /></Patient>" +
+                                                   "<Schedule><ScheduleID /><FullName /><DisplayName /></Schedule>" +
+                                                   "<Facility><FacilityID /><DisplayName /><Name /><Addr1 /><Addr2 /><City /><State /><Zip /><PhoneNumber /></Facility>" +
+                                                   "<Message><DayOfWeek /><Month /><Date /><Year /><Time /><DateTime /><TextFromNumber /><TextToNumber /><TextHelpNumber /><Body /></Message></TEXT>";
 
             xDocExpected.LoadXml(expectedTextTemplateXML);
             expectedResults.PopulatedTemplate = xDocExpected;
@@ -58,25 +50,23 @@ namespace Phytel.Services.Communication.Test
             TemplateResults results = _manager.BuildHeader(xDoc, _textDetail, missingObjects);
 
             Assert.AreEqual(expectedResults.PopulatedTemplate, results.PopulatedTemplate);
-            Assert.AreEqual(expectedResults.PopulatedTemplate.InnerXml.ToString(), results.PopulatedTemplate.InnerXml.ToString());
+            Assert.AreEqual(expectedResults.PopulatedTemplate.InnerXml, results.PopulatedTemplate.InnerXml);
             Assert.AreEqual(expectedResults.MissingObjects, results.MissingObjects);
         }
 
         [Test]
         public void TestBuildPatient()
         {
-            XmlDocument xDoc = new XmlDocument();
-            xDoc = ResetXml(_xDoc);
+            XmlDocument xDoc = ResetXml();
             Hashtable missingObjects = new Hashtable();
-            string expectedTextTemplateXML;
             XmlDocument xDocExpected = new XmlDocument();
             TemplateResults expectedResults = new TemplateResults();
 
-            expectedTextTemplateXML = "<TEXT><SendID /><ActivityID /><ContractID />" +
-                    "<Patient><PatientID>20</PatientID><FullName>What Is This</FullName><FirstName>Test</FirstName><LastName>Last</LastName></Patient>" +
-                    "<Schedule><ScheduleID /><FullName /><DisplayName /></Schedule>" +
-                    "<Facility><FacilityID /><DisplayName /><Name /><Addr1 /><Addr2 /><City /><State /><Zip /><PhoneNumber /></Facility>" +
-                    "<Message><DayOfWeek /><Month /><Date /><Year /><Time /><DateTime /><TextFromNumber /><TextToNumber /><TextHelpNumber /><Body /></Message></TEXT>";
+            const string expectedTextTemplateXML = "<TEXT><SendID /><ActivityID /><ContractID />" +
+                                                    "<Patient><PatientID>20</PatientID><FullName>What Is This</FullName><FirstName>Test</FirstName><LastName>Last</LastName></Patient>" +
+                                                    "<Schedule><ScheduleID /><FullName /><DisplayName /></Schedule>" +
+                                                    "<Facility><FacilityID /><DisplayName /><Name /><Addr1 /><Addr2 /><City /><State /><Zip /><PhoneNumber /></Facility>" +
+                                                    "<Message><DayOfWeek /><Month /><Date /><Year /><Time /><DateTime /><TextFromNumber /><TextToNumber /><TextHelpNumber /><Body /></Message></TEXT>";
 
             xDocExpected.LoadXml(expectedTextTemplateXML);
             expectedResults.PopulatedTemplate = xDocExpected;
@@ -85,25 +75,23 @@ namespace Phytel.Services.Communication.Test
             TemplateResults results = _manager.BuildPatient(xDoc, _textDetail, missingObjects);
 
             Assert.AreEqual(expectedResults.PopulatedTemplate, results.PopulatedTemplate);
-            Assert.AreEqual(expectedResults.PopulatedTemplate.InnerXml.ToString(), results.PopulatedTemplate.InnerXml.ToString());
+            Assert.AreEqual(expectedResults.PopulatedTemplate.InnerXml, results.PopulatedTemplate.InnerXml);
             Assert.AreEqual(expectedResults.MissingObjects, results.MissingObjects);
         }
 
         [Test]
         public void TestBuildSchedule()
         {
-            XmlDocument xDoc = new XmlDocument();
-            xDoc = ResetXml(_xDoc);
+            XmlDocument xDoc = ResetXml();
             Hashtable missingObjects = new Hashtable();
-            string expectedTextTemplateXML;
             XmlDocument xDocExpected = new XmlDocument();
             TemplateResults expectedResults = new TemplateResults();
 
-            expectedTextTemplateXML = "<TEXT><SendID /><ActivityID /><ContractID />" +
-                    "<Patient><PatientID /><FullName /><FirstName /><LastName /></Patient>" +
-                    "<Schedule><ScheduleID>30</ScheduleID><FullName>Test Schedule 1</FullName><DisplayName>Test Schedule</DisplayName></Schedule>" +
-                    "<Facility><FacilityID /><DisplayName /><Name /><Addr1 /><Addr2 /><City /><State /><Zip /><PhoneNumber /></Facility>" +
-                    "<Message><DayOfWeek /><Month /><Date /><Year /><Time /><DateTime /><TextFromNumber /><TextToNumber /><TextHelpNumber /><Body /></Message></TEXT>";
+            const string expectedTextTemplateXML =  "<TEXT><SendID /><ActivityID /><ContractID />" +
+                                                    "<Patient><PatientID /><FullName /><FirstName /><LastName /></Patient>" +
+                                                    "<Schedule><ScheduleID>30</ScheduleID><FullName>Test Schedule 1</FullName><DisplayName>Test Schedule</DisplayName></Schedule>" +
+                                                    "<Facility><FacilityID /><DisplayName /><Name /><Addr1 /><Addr2 /><City /><State /><Zip /><PhoneNumber /></Facility>" +
+                                                    "<Message><DayOfWeek /><Month /><Date /><Year /><Time /><DateTime /><TextFromNumber /><TextToNumber /><TextHelpNumber /><Body /></Message></TEXT>";
 
             xDocExpected.LoadXml(expectedTextTemplateXML);
             expectedResults.PopulatedTemplate = xDocExpected;
@@ -112,25 +100,23 @@ namespace Phytel.Services.Communication.Test
             TemplateResults results = _manager.BuildSchedule(xDoc, _textDetail, _medias, missingObjects);
 
             Assert.AreEqual(expectedResults.PopulatedTemplate, results.PopulatedTemplate);
-            Assert.AreEqual(expectedResults.PopulatedTemplate.InnerXml.ToString(), results.PopulatedTemplate.InnerXml.ToString());
+            Assert.AreEqual(expectedResults.PopulatedTemplate.InnerXml, results.PopulatedTemplate.InnerXml);
             Assert.AreEqual(expectedResults.MissingObjects, results.MissingObjects);
         }
 
         [Test]
         public void TestBuildFacility()
         {
-            XmlDocument xDoc = new XmlDocument();
-            xDoc = ResetXml(_xDoc);
+            XmlDocument xDoc = ResetXml();
             Hashtable missingObjects = new Hashtable();
-            string expectedTextTemplateXML;
             XmlDocument xDocExpected = new XmlDocument();
             TemplateResults expectedResults = new TemplateResults();
 
-            expectedTextTemplateXML = "<TEXT><SendID /><ActivityID /><ContractID />" +
-                    "<Patient><PatientID /><FullName /><FirstName /><LastName /></Patient>" +
-                    "<Schedule><ScheduleID /><FullName /><DisplayName /></Schedule>" +
-                    "<Facility><FacilityID>100</FacilityID><DisplayName>narrative</DisplayName><Name>Test Facility</Name><Addr1 /><Addr2 /><City /><State /><Zip /><PhoneNumber>(214)555-1212</PhoneNumber></Facility>" +
-                    "<Message><DayOfWeek /><Month /><Date /><Year /><Time /><DateTime /><TextFromNumber /><TextToNumber /><TextHelpNumber /><Body /></Message></TEXT>";
+            const string expectedTextTemplateXML =  "<TEXT><SendID /><ActivityID /><ContractID />" +
+                                                    "<Patient><PatientID /><FullName /><FirstName /><LastName /></Patient>" +
+                                                    "<Schedule><ScheduleID /><FullName /><DisplayName /></Schedule>" +
+                                                    "<Facility><FacilityID>100</FacilityID><DisplayName>narrative</DisplayName><Name>Test Facility</Name><Addr1 /><Addr2 /><City /><State /><Zip /><PhoneNumber>(214)555-1212</PhoneNumber></Facility>" +
+                                                    "<Message><DayOfWeek /><Month /><Date /><Year /><Time /><DateTime /><TextFromNumber /><TextToNumber /><TextHelpNumber /><Body /></Message></TEXT>";
 
             xDocExpected.LoadXml(expectedTextTemplateXML);
             expectedResults.PopulatedTemplate = xDocExpected;
@@ -139,26 +125,24 @@ namespace Phytel.Services.Communication.Test
             TemplateResults results = _manager.BuildFacility(xDoc, _textDetail, _medias, missingObjects);
 
             Assert.AreEqual(expectedResults.PopulatedTemplate, results.PopulatedTemplate);
-            Assert.AreEqual(expectedResults.PopulatedTemplate.InnerXml.ToString(), results.PopulatedTemplate.InnerXml.ToString());
+            Assert.AreEqual(expectedResults.PopulatedTemplate.InnerXml, results.PopulatedTemplate.InnerXml);
             Assert.AreEqual(expectedResults.MissingObjects, results.MissingObjects);
         }
 
         [Test]
         public void TestBuildText()
         {
-            XmlDocument xDoc = new XmlDocument();
-            xDoc = ResetXml(_xDoc);
+            XmlDocument xDoc = ResetXml();
             Hashtable missingObjects = new Hashtable();
-            string expectedEmailTemplateXML;
             XmlDocument xDocExpected = new XmlDocument();
             TemplateResults expectedResults = new TemplateResults();
 
-            expectedEmailTemplateXML = "<TEXT><SendID /><ActivityID /><ContractID />" +
-                    "<Patient><PatientID /><FullName /><FirstName /><LastName /></Patient>" +
-                    "<Schedule><ScheduleID /><FullName /><DisplayName /></Schedule>" +
-                    "<Facility><FacilityID /><DisplayName /><Name /><Addr1 /><Addr2 /><City /><State /><Zip /><PhoneNumber /></Facility>" +
-                    "<Message><DayOfWeek /><Month /><Date /><Year /><Time /><DateTime />" +
-                    "<TextFromNumber>8175551212</TextFromNumber><TextToNumber>4695551212</TextToNumber><TextHelpNumber>2145551212</TextHelpNumber><Body /></Message></TEXT>";
+            const string expectedEmailTemplateXML = "<TEXT><SendID /><ActivityID /><ContractID />" +
+                                                    "<Patient><PatientID /><FullName /><FirstName /><LastName /></Patient>" +
+                                                    "<Schedule><ScheduleID /><FullName /><DisplayName /></Schedule>" +
+                                                    "<Facility><FacilityID /><DisplayName /><Name /><Addr1 /><Addr2 /><City /><State /><Zip /><PhoneNumber /></Facility>" +
+                                                    "<Message><DayOfWeek /><Month /><Date /><Year /><Time /><DateTime />" +
+                                                    "<TextFromNumber>8175551212</TextFromNumber><TextToNumber>4695551212</TextToNumber><TextHelpNumber>2145551212</TextHelpNumber><Body /></Message></TEXT>";
 
             xDocExpected.LoadXml(expectedEmailTemplateXML);
             expectedResults.PopulatedTemplate = xDocExpected;
@@ -167,25 +151,23 @@ namespace Phytel.Services.Communication.Test
             TemplateResults results = _manager.BuildTextMessage(xDoc, _textDetail, missingObjects); 
 
             Assert.AreEqual(expectedResults.PopulatedTemplate, results.PopulatedTemplate);
-            Assert.AreEqual(expectedResults.PopulatedTemplate.InnerXml.ToString(), results.PopulatedTemplate.InnerXml.ToString());
+            Assert.AreEqual(expectedResults.PopulatedTemplate.InnerXml, results.PopulatedTemplate.InnerXml);
             Assert.AreEqual(expectedResults.MissingObjects, results.MissingObjects);
         }
 
         [Test]
         public void TestBuildApptDateTime()
         {
-            XmlDocument xDoc = new XmlDocument();
-            xDoc = ResetXml(_xDoc);
+            XmlDocument xDoc = ResetXml();
             Hashtable missingObjects = new Hashtable();
-            string expectedEmailTemplateXML;
             XmlDocument xDocExpected = new XmlDocument();
             TemplateResults expectedResults = new TemplateResults();
 
-            expectedEmailTemplateXML = "<TEXT><SendID /><ActivityID /><ContractID />" +
-                    "<Patient><PatientID /><FullName /><FirstName /><LastName /></Patient>" +
-                    "<Schedule><ScheduleID /><FullName /><DisplayName /></Schedule>" +
-                    "<Facility><FacilityID /><DisplayName /><Name /><Addr1 /><Addr2 /><City /><State /><Zip /><PhoneNumber /></Facility>" +
-                    "<Message><DayOfWeek>Friday</DayOfWeek><Month>Nov.</Month><Date>20</Date><Year>2020</Year><Time>8:00 AM</Time><DateTime /><TextFromNumber /><TextToNumber /><TextHelpNumber /><Body /></Message></TEXT>";
+            const string expectedEmailTemplateXML = "<TEXT><SendID /><ActivityID /><ContractID />" +
+                                                    "<Patient><PatientID /><FullName /><FirstName /><LastName /></Patient>" +
+                                                    "<Schedule><ScheduleID /><FullName /><DisplayName /></Schedule>" +
+                                                    "<Facility><FacilityID /><DisplayName /><Name /><Addr1 /><Addr2 /><City /><State /><Zip /><PhoneNumber /></Facility>" +
+                                                    "<Message><DayOfWeek>Friday</DayOfWeek><Month>Nov.</Month><Date>20</Date><Year>2020</Year><Time>8:00 AM</Time><DateTime /><TextFromNumber /><TextToNumber /><TextHelpNumber /><Body /></Message></TEXT>";
 
             xDocExpected.LoadXml(expectedEmailTemplateXML);
             expectedResults.PopulatedTemplate = xDocExpected;
@@ -194,25 +176,23 @@ namespace Phytel.Services.Communication.Test
             TemplateResults results = _manager.BuildApptDateTime(xDoc, _textDetail, missingObjects);
 
             Assert.AreEqual(expectedResults.PopulatedTemplate, results.PopulatedTemplate);
-            Assert.AreEqual(expectedResults.PopulatedTemplate.InnerXml.ToString(), results.PopulatedTemplate.InnerXml.ToString());
+            Assert.AreEqual(expectedResults.PopulatedTemplate.InnerXml, results.PopulatedTemplate.InnerXml);
             Assert.AreEqual(expectedResults.MissingObjects, results.MissingObjects);
         }
 
         [Test]
         public void TestBuildIntroHeader()
         {
-            XmlDocument xDoc = new XmlDocument();
-            xDoc = ResetXml(_xDoc);
+            XmlDocument xDoc = ResetXml();
             Hashtable missingObjects = new Hashtable();
-            string expectedEmailTemplateXML;
             XmlDocument xDocExpected = new XmlDocument();
             TemplateResults expectedResults = new TemplateResults();
 
-            expectedEmailTemplateXML = "<TEXT><SendID>3</SendID><ActivityID>10</ActivityID><ContractID>ABC001</ContractID>" +
-                    "<Patient><PatientID /><FullName /><FirstName /><LastName /></Patient>" +
-                    "<Schedule><ScheduleID /><FullName /><DisplayName /></Schedule>" +
-                    "<Facility><FacilityID /><DisplayName /><Name /><Addr1 /><Addr2 /><City /><State /><Zip /><PhoneNumber /></Facility>" +
-                    "<Message><DayOfWeek /><Month /><Date /><Year /><Time /><DateTime /><TextFromNumber /><TextToNumber /><TextHelpNumber /><Body /></Message></TEXT>";
+            const string expectedEmailTemplateXML = "<TEXT><SendID>3</SendID><ActivityID>10</ActivityID><ContractID>ABC001</ContractID>" +
+                                                    "<Patient><PatientID /><FullName /><FirstName /><LastName /></Patient>" +
+                                                    "<Schedule><ScheduleID /><FullName /><DisplayName /></Schedule>" +
+                                                    "<Facility><FacilityID /><DisplayName /><Name /><Addr1 /><Addr2 /><City /><State /><Zip /><PhoneNumber /></Facility>" +
+                                                    "<Message><DayOfWeek /><Month /><Date /><Year /><Time /><DateTime /><TextFromNumber /><TextToNumber /><TextHelpNumber /><Body /></Message></TEXT>";
 
             xDocExpected.LoadXml(expectedEmailTemplateXML);
             expectedResults.PopulatedTemplate = xDocExpected;
@@ -221,7 +201,7 @@ namespace Phytel.Services.Communication.Test
             TemplateResults results = _manager.BuildIntroHeader(xDoc, _textDetail, missingObjects);
 
             Assert.AreEqual(expectedResults.PopulatedTemplate, results.PopulatedTemplate);
-            Assert.AreEqual(expectedResults.PopulatedTemplate.InnerXml.ToString(), results.PopulatedTemplate.InnerXml.ToString());
+            Assert.AreEqual(expectedResults.PopulatedTemplate.InnerXml, results.PopulatedTemplate.InnerXml);
             Assert.AreEqual(expectedResults.MissingObjects, results.MissingObjects);
         }
 
@@ -229,17 +209,17 @@ namespace Phytel.Services.Communication.Test
         public void TestBuildIntroPatient()
         {
             XmlDocument xDoc = new XmlDocument();
-            xDoc = ResetXml(_xDoc);
+            xDoc = ResetXml();
             Hashtable missingObjects = new Hashtable();
             string expectedEmailTemplateXML;
             XmlDocument xDocExpected = new XmlDocument();
             TemplateResults expectedResults = new TemplateResults();
 
-            expectedEmailTemplateXML = "<TEXT><SendID /><ActivityID /><ContractID />" +
-                    "<Patient><PatientID>20</PatientID><FullName>What Is This</FullName><FirstName>Test</FirstName><LastName>Last</LastName></Patient>" +
-                    "<Schedule><ScheduleID /><FullName /><DisplayName /></Schedule>" +
-                    "<Facility><FacilityID /><DisplayName /><Name /><Addr1 /><Addr2 /><City /><State /><Zip /><PhoneNumber /></Facility>" +
-                    "<Message><DayOfWeek /><Month /><Date /><Year /><Time /><DateTime /><TextFromNumber /><TextToNumber /><TextHelpNumber /><Body /></Message></TEXT>";
+            expectedEmailTemplateXML =  "<TEXT><SendID /><ActivityID /><ContractID />" +
+                                        "<Patient><PatientID>20</PatientID><FullName>What Is This</FullName><FirstName>Test</FirstName><LastName>Last</LastName></Patient>" +
+                                        "<Schedule><ScheduleID /><FullName /><DisplayName /></Schedule>" +
+                                        "<Facility><FacilityID /><DisplayName /><Name /><Addr1 /><Addr2 /><City /><State /><Zip /><PhoneNumber /></Facility>" +
+                                        "<Message><DayOfWeek /><Month /><Date /><Year /><Time /><DateTime /><TextFromNumber /><TextToNumber /><TextHelpNumber /><Body /></Message></TEXT>";
 
             xDocExpected.LoadXml(expectedEmailTemplateXML);
             expectedResults.PopulatedTemplate = xDocExpected;
@@ -248,7 +228,7 @@ namespace Phytel.Services.Communication.Test
             TemplateResults results = _manager.BuildIntroPatient(xDoc, _textDetail, missingObjects);
 
             Assert.AreEqual(expectedResults.PopulatedTemplate, results.PopulatedTemplate);
-            Assert.AreEqual(expectedResults.PopulatedTemplate.InnerXml.ToString(), results.PopulatedTemplate.InnerXml.ToString());
+            Assert.AreEqual(expectedResults.PopulatedTemplate.InnerXml, results.PopulatedTemplate.InnerXml);
             Assert.AreEqual(expectedResults.MissingObjects, results.MissingObjects);
         }
 
@@ -256,17 +236,17 @@ namespace Phytel.Services.Communication.Test
         public void TestBuildIntroSchedule()
         {
             XmlDocument xDoc = new XmlDocument();
-            xDoc = ResetXml(_xDoc);
+            xDoc = ResetXml();
             Hashtable missingObjects = new Hashtable();
             string expectedEmailTemplateXML;
             XmlDocument xDocExpected = new XmlDocument();
             TemplateResults expectedResults = new TemplateResults();
 
-            expectedEmailTemplateXML = "<TEXT><SendID /><ActivityID /><ContractID />" +
-                    "<Patient><PatientID /><FullName /><FirstName /><LastName /></Patient>" +
-                    "<Schedule><ScheduleID>30</ScheduleID><FullName>Test Schedule 1</FullName><DisplayName>Test Schedule</DisplayName></Schedule>" +
-                    "<Facility><FacilityID /><DisplayName /><Name /><Addr1 /><Addr2 /><City /><State /><Zip /><PhoneNumber /></Facility>" +
-                    "<Message><DayOfWeek /><Month /><Date /><Year /><Time /><DateTime /><TextFromNumber /><TextToNumber /><TextHelpNumber /><Body /></Message></TEXT>";
+            expectedEmailTemplateXML =  "<TEXT><SendID /><ActivityID /><ContractID />" +
+                                        "<Patient><PatientID /><FullName /><FirstName /><LastName /></Patient>" +
+                                        "<Schedule><ScheduleID>30</ScheduleID><FullName>Test Schedule 1</FullName><DisplayName>Test Schedule</DisplayName></Schedule>" +
+                                        "<Facility><FacilityID /><DisplayName /><Name /><Addr1 /><Addr2 /><City /><State /><Zip /><PhoneNumber /></Facility>" +
+                                        "<Message><DayOfWeek /><Month /><Date /><Year /><Time /><DateTime /><TextFromNumber /><TextToNumber /><TextHelpNumber /><Body /></Message></TEXT>";
 
             xDocExpected.LoadXml(expectedEmailTemplateXML);
             expectedResults.PopulatedTemplate = xDocExpected;
@@ -275,7 +255,7 @@ namespace Phytel.Services.Communication.Test
             TemplateResults results = _manager.BuildIntroSchedule(xDoc, _textDetail, _medias, missingObjects);
 
             Assert.AreEqual(expectedResults.PopulatedTemplate, results.PopulatedTemplate);
-            Assert.AreEqual(expectedResults.PopulatedTemplate.InnerXml.ToString(), results.PopulatedTemplate.InnerXml.ToString());
+            Assert.AreEqual(expectedResults.PopulatedTemplate.InnerXml, results.PopulatedTemplate.InnerXml);
             Assert.AreEqual(expectedResults.MissingObjects, results.MissingObjects);
         }
 
@@ -283,17 +263,17 @@ namespace Phytel.Services.Communication.Test
         public void TestBuildIntroFacility()
         {
             XmlDocument xDoc = new XmlDocument();
-            xDoc = ResetXml(_xDoc);
+            xDoc = ResetXml();
             Hashtable missingObjects = new Hashtable();
             string expectedEmailTemplateXML;
             XmlDocument xDocExpected = new XmlDocument();
             TemplateResults expectedResults = new TemplateResults();
 
-            expectedEmailTemplateXML = "<TEXT><SendID /><ActivityID /><ContractID />" +
-                    "<Patient><PatientID /><FullName /><FirstName /><LastName /></Patient>" +
-                    "<Schedule><ScheduleID /><FullName /><DisplayName /></Schedule>" +
-                    "<Facility><FacilityID>100</FacilityID><DisplayName>narrative</DisplayName><Name>Test Facility</Name><Addr1 /><Addr2 /><City /><State /><Zip /><PhoneNumber>(214)555-1212</PhoneNumber></Facility>" +
-                    "<Message><DayOfWeek /><Month /><Date /><Year /><Time /><DateTime /><TextFromNumber /><TextToNumber /><TextHelpNumber /><Body /></Message></TEXT>";
+            expectedEmailTemplateXML =  "<TEXT><SendID /><ActivityID /><ContractID />" +
+                                        "<Patient><PatientID /><FullName /><FirstName /><LastName /></Patient>" +
+                                        "<Schedule><ScheduleID /><FullName /><DisplayName /></Schedule>" +
+                                        "<Facility><FacilityID>100</FacilityID><DisplayName>narrative</DisplayName><Name>Test Facility</Name><Addr1 /><Addr2 /><City /><State /><Zip /><PhoneNumber>(214)555-1212</PhoneNumber></Facility>" +
+                                        "<Message><DayOfWeek /><Month /><Date /><Year /><Time /><DateTime /><TextFromNumber /><TextToNumber /><TextHelpNumber /><Body /></Message></TEXT>";
 
             xDocExpected.LoadXml(expectedEmailTemplateXML);
             expectedResults.PopulatedTemplate = xDocExpected;
@@ -302,7 +282,7 @@ namespace Phytel.Services.Communication.Test
             TemplateResults results = _manager.BuildIntroFacility(xDoc, _textDetail, _medias, missingObjects);
 
             Assert.AreEqual(expectedResults.PopulatedTemplate, results.PopulatedTemplate);
-            Assert.AreEqual(expectedResults.PopulatedTemplate.InnerXml.ToString(), results.PopulatedTemplate.InnerXml.ToString());
+            Assert.AreEqual(expectedResults.PopulatedTemplate.InnerXml, results.PopulatedTemplate.InnerXml);
             Assert.AreEqual(expectedResults.MissingObjects, results.MissingObjects);
         }
 
@@ -310,18 +290,18 @@ namespace Phytel.Services.Communication.Test
         public void TestBuildIntroText()
         {
             XmlDocument xDoc = new XmlDocument();
-            xDoc = ResetXml(_xDoc);
+            xDoc = ResetXml();
             Hashtable missingObjects = new Hashtable();
             string expectedEmailTemplateXML;
             XmlDocument xDocExpected = new XmlDocument();
             TemplateResults expectedResults = new TemplateResults();
 
-            expectedEmailTemplateXML = "<TEXT><SendID /><ActivityID /><ContractID />" +
-                    "<Patient><PatientID /><FullName /><FirstName /><LastName /></Patient>" +
-                    "<Schedule><ScheduleID /><FullName /><DisplayName /></Schedule>" +
-                    "<Facility><FacilityID /><DisplayName /><Name /><Addr1 /><Addr2 /><City /><State /><Zip /><PhoneNumber /></Facility>" +
-                    "<Message><DayOfWeek /><Month /><Date /><Year /><Time /><DateTime />" +
-                    "<TextFromNumber>8175551212</TextFromNumber><TextToNumber>4695551212</TextToNumber><TextHelpNumber>2145551212</TextHelpNumber><Body /></Message></TEXT>";
+            expectedEmailTemplateXML =  "<TEXT><SendID /><ActivityID /><ContractID />" +
+                                        "<Patient><PatientID /><FullName /><FirstName /><LastName /></Patient>" +
+                                        "<Schedule><ScheduleID /><FullName /><DisplayName /></Schedule>" +
+                                        "<Facility><FacilityID /><DisplayName /><Name /><Addr1 /><Addr2 /><City /><State /><Zip /><PhoneNumber /></Facility>" +
+                                        "<Message><DayOfWeek /><Month /><Date /><Year /><Time /><DateTime />" +
+                                        "<TextFromNumber>8175551212</TextFromNumber><TextToNumber>4695551212</TextToNumber><TextHelpNumber>2145551212</TextHelpNumber><Body /></Message></TEXT>";
 
             xDocExpected.LoadXml(expectedEmailTemplateXML);
             expectedResults.PopulatedTemplate = xDocExpected;
@@ -330,7 +310,7 @@ namespace Phytel.Services.Communication.Test
             TemplateResults results = _manager.BuildIntroTextMessage(xDoc, _textDetail, missingObjects);
 
             Assert.AreEqual(expectedResults.PopulatedTemplate, results.PopulatedTemplate);
-            Assert.AreEqual(expectedResults.PopulatedTemplate.InnerXml.ToString(), results.PopulatedTemplate.InnerXml.ToString());
+            Assert.AreEqual(expectedResults.PopulatedTemplate.InnerXml, results.PopulatedTemplate.InnerXml);
             Assert.AreEqual(expectedResults.MissingObjects, results.MissingObjects);
         }
 
@@ -367,15 +347,15 @@ namespace Phytel.Services.Communication.Test
             Assert.AreEqual(expectedBody, actualBody);
         }
 
-        private XmlDocument ResetXml(XmlDocument xDoc)
+        private XmlDocument ResetXml()
         {
             XmlDocument result = new XmlDocument();
 
             string originalTextTemplateXML = "<TEXT><SendID /><ActivityID /><ContractID />" +
-                    "<Patient><PatientID /><FullName /><FirstName /><LastName /></Patient>" +
-                    "<Schedule><ScheduleID /><FullName /><DisplayName /></Schedule>" +
-                    "<Facility><FacilityID /><DisplayName /><Name /><Addr1 /><Addr2 /><City /><State /><Zip /><PhoneNumber /></Facility>" +
-                    "<Message><DayOfWeek /><Month /><Date /><Year /><Time /><DateTime /><TextFromNumber /><TextToNumber /><TextHelpNumber /><Body /></Message></TEXT>";
+                                            "<Patient><PatientID /><FullName /><FirstName /><LastName /></Patient>" +
+                                            "<Schedule><ScheduleID /><FullName /><DisplayName /></Schedule>" +
+                                            "<Facility><FacilityID /><DisplayName /><Name /><Addr1 /><Addr2 /><City /><State /><Zip /><PhoneNumber /></Facility>" +
+                                            "<Message><DayOfWeek /><Month /><Date /><Year /><Time /><DateTime /><TextFromNumber /><TextToNumber /><TextHelpNumber /><Body /></Message></TEXT>";
             result.LoadXml(originalTextTemplateXML);
 
             return result;

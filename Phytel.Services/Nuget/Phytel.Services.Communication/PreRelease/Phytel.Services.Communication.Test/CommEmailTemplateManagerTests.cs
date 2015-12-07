@@ -1,13 +1,7 @@
-﻿using NUnit.Framework;
-using Phytel.Services.Communication;
-using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
-using Moq;
+using NUnit.Framework;
 
 namespace Phytel.Services.Communication.Test
 {
@@ -21,8 +15,6 @@ namespace Phytel.Services.Communication.Test
         private ICommEmailTemplateManager _manager;
         private EmailActivityDetail _emailDetail = new EmailActivityDetail();
         private List<ActivityMedia> _medias = new List<ActivityMedia>();
-        private Hashtable _missingObjects = new Hashtable();
-        private XmlDocument _xDoc = new XmlDocument();
         private List<ContractPermission> _contractPermissionList;
 
         #endregion
@@ -38,41 +30,35 @@ namespace Phytel.Services.Communication.Test
         [Test]
         public void TestSpecificAppointmentMsg()
         {
-            Assert.DoesNotThrow(new TestDelegate(SpecificAppointmentMsgTestDelegate));
+            Assert.DoesNotThrow(SpecificAppointmentMsgTestDelegate);
 
-            ContractPermission desired = new ContractPermission(){ChildObjectID = (int)Prompts.AppointmentSpecificMessage,RoleID = 1};
-            ContractPermission undesired1 = new ContractPermission() { ChildObjectID = 1, RoleID = 1 };
-            ContractPermission undesired2 = new ContractPermission() { ChildObjectID = 2, RoleID = 2 };
+            ContractPermission desired = new ContractPermission { ChildObjectID = (int)Prompts.AppointmentSpecificMessage,RoleID = 1};
+            ContractPermission undesired1 = new ContractPermission { ChildObjectID = 1, RoleID = 1 };
+            ContractPermission undesired2 = new ContractPermission { ChildObjectID = 2, RoleID = 2 };
 
-            List<ContractPermission> permissions = new List<ContractPermission>();
-            permissions.Add(desired);
-            permissions.Add(undesired1);
-            permissions.Add(undesired2);
+            List<ContractPermission> permissions = new List<ContractPermission> {desired, undesired1, undesired2};
 
             Assert.IsTrue(_manager.IsAppointmentSpecificMsgEnabled(permissions, 1), "Expected true");
             Assert.IsFalse(_manager.IsAppointmentSpecificMsgEnabled(permissions, 2), "Expected false");
-
         }
 
         [Test]
         public void TestBuildHeader()
         {
-            XmlDocument xDoc = new XmlDocument();
-            xDoc = ResetXml(_xDoc);
+            XmlDocument xDoc = ResetXml();
             Hashtable missingObjects = new Hashtable();
-            string expectedEmailTemplateXML;
             XmlDocument xDocExpected = new XmlDocument();
             TemplateResults expectedResults = new TemplateResults();
 
-            expectedEmailTemplateXML = "<Email><SendID>3</SendID><ActivityID>10</ActivityID><ContractID>ABC001</ContractID>" +
-                    "<ConfirmationURL IsCDATA=\"true\" Enable=\"true\"><![CDATA[yes.com?SendID=GTtixGtfqGkV1kuMvjwjXQ%3d%3d&ContractID=OkVhk6ATD34kP7Wp9Fibkw%3d%3d]]></ConfirmationURL>" +
-                    "<OptOutURL IsCDATA=\"true\" Enable=\"true\" ><![CDATA[no.com?SendID=GTtixGtfqGkV1kuMvjwjXQ%3d%3d&ContractID=OkVhk6ATD34kP7Wp9Fibkw%3d%3d]]></OptOutURL>" +
-                    "<ImagePath IsCDATA=\"true\" Enable=\"true\">https://healthreminder.phytel.com/Email/Global/COMMON/EN/</ImagePath>" +
-                    "<Patient><PatientID /><FullName /><FirstName /><LastName /></Patient>" +
-                    "<Schedule><ScheduleID /><FullName /><FirstName /><LastName /></Schedule>" +
-                    "<Facility><FacilityID /><FacilityLogo Enable=\"true\" /><FacilityURL Enable=\"true\" /><Name /><Addr1 /><Addr2 /><City /><State /><Zip /><PhoneNumber /></Facility>" +
-                    "<Message><Type /><DayOfWeek /><Month /><Date /><Year /><Time /><Duration /><AppointmentSpecificMessage Enable=\"true\" /><FromEmailAddress />" +
-                    "<ReplyToEmailAddress /><ToEmailAddress /><DisplayName /><Subject>Health Reminder from FACILITY_NAME</Subject><Body /></Message></Email>";
+            const string expectedEmailTemplateXML = "<Email><SendID>3</SendID><ActivityID>10</ActivityID><ContractID>ABC001</ContractID>" +
+                                                    "<ConfirmationURL IsCDATA=\"true\" Enable=\"true\"><![CDATA[yes.com?SendID=GTtixGtfqGkV1kuMvjwjXQ%3d%3d&ContractID=OkVhk6ATD34kP7Wp9Fibkw%3d%3d]]></ConfirmationURL>" +
+                                                    "<OptOutURL IsCDATA=\"true\" Enable=\"true\" ><![CDATA[no.com?SendID=GTtixGtfqGkV1kuMvjwjXQ%3d%3d&ContractID=OkVhk6ATD34kP7Wp9Fibkw%3d%3d]]></OptOutURL>" +
+                                                    "<ImagePath IsCDATA=\"true\" Enable=\"true\">https://healthreminder.phytel.com/Email/Global/COMMON/EN/</ImagePath>" +
+                                                    "<Patient><PatientID /><FullName /><FirstName /><LastName /></Patient>" +
+                                                    "<Schedule><ScheduleID /><FullName /><FirstName /><LastName /></Schedule>" +
+                                                    "<Facility><FacilityID /><FacilityLogo Enable=\"true\" /><FacilityURL Enable=\"true\" /><Name /><Addr1 /><Addr2 /><City /><State /><Zip /><PhoneNumber /></Facility>" +
+                                                    "<Message><Type /><DayOfWeek /><Month /><Date /><Year /><Time /><Duration /><AppointmentSpecificMessage Enable=\"true\" /><FromEmailAddress />" +
+                                                    "<ReplyToEmailAddress /><ToEmailAddress /><DisplayName /><Subject>Health Reminder from FACILITY_NAME</Subject><Body /></Message></Email>";
 
             xDocExpected.LoadXml(expectedEmailTemplateXML);
             expectedResults.PopulatedTemplate = xDocExpected;
@@ -81,28 +67,26 @@ namespace Phytel.Services.Communication.Test
             TemplateResults results = _manager.BuildHeader(xDoc, _emailDetail, missingObjects, "yes.com", "no.com");
 
             Assert.AreEqual(expectedResults.PopulatedTemplate, results.PopulatedTemplate);
-            Assert.AreEqual(expectedResults.PopulatedTemplate.InnerXml.ToString(), results.PopulatedTemplate.InnerXml.ToString());
+            Assert.AreEqual(expectedResults.PopulatedTemplate.InnerXml, results.PopulatedTemplate.InnerXml);
             Assert.AreEqual(expectedResults.MissingObjects, results.MissingObjects);
         }
 
         [Test]
         public void TestBuildPatient()
         {
-            XmlDocument xDoc = new XmlDocument();
-            xDoc = ResetXml(_xDoc);
+            XmlDocument xDoc = ResetXml();
             Hashtable missingObjects = new Hashtable();
-            string expectedEmailTemplateXML;
             XmlDocument xDocExpected = new XmlDocument();
             TemplateResults expectedResults = new TemplateResults();
 
-            expectedEmailTemplateXML = "<Email><SendID /><ActivityID /><ContractID />" +
-                    "<ConfirmationURL IsCDATA=\"true\" Enable=\"true\" /><OptOutURL IsCDATA=\"true\" Enable=\"true\" />" +
-                    "<ImagePath IsCDATA=\"true\" Enable=\"true\">https://healthreminder.phytel.com/Email/Global/COMMON/EN/</ImagePath>" +
-                    "<Patient><PatientID>20</PatientID><FullName>What Is This</FullName><FirstName>Test</FirstName><LastName>Last</LastName></Patient>" +
-                    "<Schedule><ScheduleID /><FullName /><FirstName /><LastName /></Schedule>" +
-                    "<Facility><FacilityID /><FacilityLogo Enable=\"true\" /><FacilityURL Enable=\"true\" /><Name /><Addr1 /><Addr2 /><City /><State /><Zip /><PhoneNumber /></Facility>" +
-                    "<Message><Type /><DayOfWeek /><Month /><Date /><Year /><Time /><Duration /><AppointmentSpecificMessage Enable=\"true\" /><FromEmailAddress />" +
-                    "<ReplyToEmailAddress /><ToEmailAddress /><DisplayName /><Subject>Health Reminder from FACILITY_NAME</Subject><Body /></Message></Email>";
+            const string expectedEmailTemplateXML = "<Email><SendID /><ActivityID /><ContractID />" +
+                                                    "<ConfirmationURL IsCDATA=\"true\" Enable=\"true\" /><OptOutURL IsCDATA=\"true\" Enable=\"true\" />" +
+                                                    "<ImagePath IsCDATA=\"true\" Enable=\"true\">https://healthreminder.phytel.com/Email/Global/COMMON/EN/</ImagePath>" +
+                                                    "<Patient><PatientID>20</PatientID><FullName>What Is This</FullName><FirstName>Test</FirstName><LastName>Last</LastName></Patient>" +
+                                                    "<Schedule><ScheduleID /><FullName /><FirstName /><LastName /></Schedule>" +
+                                                    "<Facility><FacilityID /><FacilityLogo Enable=\"true\" /><FacilityURL Enable=\"true\" /><Name /><Addr1 /><Addr2 /><City /><State /><Zip /><PhoneNumber /></Facility>" +
+                                                    "<Message><Type /><DayOfWeek /><Month /><Date /><Year /><Time /><Duration /><AppointmentSpecificMessage Enable=\"true\" /><FromEmailAddress />" +
+                                                    "<ReplyToEmailAddress /><ToEmailAddress /><DisplayName /><Subject>Health Reminder from FACILITY_NAME</Subject><Body /></Message></Email>";
             
             xDocExpected.LoadXml(expectedEmailTemplateXML);
             expectedResults.PopulatedTemplate = xDocExpected;
@@ -111,28 +95,26 @@ namespace Phytel.Services.Communication.Test
             TemplateResults results = _manager.BuildPatient(xDoc, _emailDetail, missingObjects);
 
             Assert.AreEqual(expectedResults.PopulatedTemplate, results.PopulatedTemplate);
-            Assert.AreEqual(expectedResults.PopulatedTemplate.InnerXml.ToString(), results.PopulatedTemplate.InnerXml.ToString());
+            Assert.AreEqual(expectedResults.PopulatedTemplate.InnerXml, results.PopulatedTemplate.InnerXml);
             Assert.AreEqual(expectedResults.MissingObjects, results.MissingObjects);
         }
 
         [Test]
         public void TestBuildSchedule()
         {
-            XmlDocument xDoc = new XmlDocument();
-            xDoc = ResetXml(_xDoc);
+            XmlDocument xDoc = ResetXml();
             Hashtable missingObjects = new Hashtable();
-            string expectedEmailTemplateXML;
             XmlDocument xDocExpected = new XmlDocument();
             TemplateResults expectedResults = new TemplateResults();
 
-            expectedEmailTemplateXML = "<Email><SendID /><ActivityID /><ContractID />" +
-                    "<ConfirmationURL IsCDATA=\"true\" Enable=\"true\" /><OptOutURL IsCDATA=\"true\" Enable=\"true\" />" +
-                    "<ImagePath IsCDATA=\"true\" Enable=\"true\">https://healthreminder.phytel.com/Email/Global/COMMON/EN/</ImagePath>" +
-                    "<Patient><PatientID /><FullName /><FirstName /><LastName /></Patient>" +
-                    "<Schedule><ScheduleID>30</ScheduleID><FullName>Test Schedule</FullName><FirstName /><LastName /></Schedule>" +
-                    "<Facility><FacilityID /><FacilityLogo Enable=\"true\" /><FacilityURL Enable=\"true\" /><Name /><Addr1 /><Addr2 /><City /><State /><Zip /><PhoneNumber /></Facility>" +
-                    "<Message><Type /><DayOfWeek /><Month /><Date /><Year /><Time /><Duration /><AppointmentSpecificMessage Enable=\"true\" /><FromEmailAddress />" +
-                    "<ReplyToEmailAddress /><ToEmailAddress /><DisplayName /><Subject>Health Reminder from FACILITY_NAME</Subject><Body /></Message></Email>";
+            const string expectedEmailTemplateXML = "<Email><SendID /><ActivityID /><ContractID />" +
+                                                    "<ConfirmationURL IsCDATA=\"true\" Enable=\"true\" /><OptOutURL IsCDATA=\"true\" Enable=\"true\" />" +
+                                                    "<ImagePath IsCDATA=\"true\" Enable=\"true\">https://healthreminder.phytel.com/Email/Global/COMMON/EN/</ImagePath>" +
+                                                    "<Patient><PatientID /><FullName /><FirstName /><LastName /></Patient>" +
+                                                    "<Schedule><ScheduleID>30</ScheduleID><FullName>Test Schedule</FullName><FirstName /><LastName /></Schedule>" +
+                                                    "<Facility><FacilityID /><FacilityLogo Enable=\"true\" /><FacilityURL Enable=\"true\" /><Name /><Addr1 /><Addr2 /><City /><State /><Zip /><PhoneNumber /></Facility>" +
+                                                    "<Message><Type /><DayOfWeek /><Month /><Date /><Year /><Time /><Duration /><AppointmentSpecificMessage Enable=\"true\" /><FromEmailAddress />" +
+                                                    "<ReplyToEmailAddress /><ToEmailAddress /><DisplayName /><Subject>Health Reminder from FACILITY_NAME</Subject><Body /></Message></Email>";
 
             xDocExpected.LoadXml(expectedEmailTemplateXML);
             expectedResults.PopulatedTemplate = xDocExpected;
@@ -141,29 +123,27 @@ namespace Phytel.Services.Communication.Test
             TemplateResults results = _manager.BuildSchedule(xDoc, _emailDetail, _medias, missingObjects);
 
             Assert.AreEqual(expectedResults.PopulatedTemplate, results.PopulatedTemplate);
-            Assert.AreEqual(expectedResults.PopulatedTemplate.InnerXml.ToString(), results.PopulatedTemplate.InnerXml.ToString());
+            Assert.AreEqual(expectedResults.PopulatedTemplate.InnerXml, results.PopulatedTemplate.InnerXml);
             Assert.AreEqual(expectedResults.MissingObjects, results.MissingObjects);
         }
 
         [Test]
         public void TestBuildFacility()
         {
-            XmlDocument xDoc = new XmlDocument();
-            xDoc = ResetXml(_xDoc);
+            XmlDocument xDoc = ResetXml();
             Hashtable missingObjects = new Hashtable();
-            string expectedEmailTemplateXML;
             XmlDocument xDocExpected = new XmlDocument();
             TemplateResults expectedResults = new TemplateResults();
 
-            expectedEmailTemplateXML = "<Email><SendID /><ActivityID /><ContractID />" +
-                    "<ConfirmationURL IsCDATA=\"true\" Enable=\"true\" /><OptOutURL IsCDATA=\"true\" Enable=\"true\" />" +
-                    "<ImagePath IsCDATA=\"true\" Enable=\"true\">https://healthreminder.phytel.com/Email/Global/COMMON/EN/</ImagePath>" +
-                    "<Patient><PatientID /><FullName /><FirstName /><LastName /></Patient>" +
-                    "<Schedule><ScheduleID /><FullName /><FirstName /><LastName /></Schedule>" +
-                    "<Facility><FacilityID>100</FacilityID><FacilityLogo Enable=\"true\" >logo.jpg</FacilityLogo><FacilityURL Enable=\"true\" >facility.com</FacilityURL>" +
-                    "<Name>narrative</Name><Addr1>Facility Address</Addr1><Addr2>Facility Address 2</Addr2><City>Dallas</City><State>TX</State><Zip>77777</Zip><PhoneNumber>(214) 555-1212</PhoneNumber></Facility>" +
-                    "<Message><Type /><DayOfWeek /><Month /><Date /><Year /><Time /><Duration /><AppointmentSpecificMessage Enable=\"true\" /><FromEmailAddress />" +
-                    "<ReplyToEmailAddress /><ToEmailAddress /><DisplayName /><Subject>Health Reminder from FACILITY_NAME</Subject><Body /></Message></Email>";
+            const string expectedEmailTemplateXML = "<Email><SendID /><ActivityID /><ContractID />" +
+                                                    "<ConfirmationURL IsCDATA=\"true\" Enable=\"true\" /><OptOutURL IsCDATA=\"true\" Enable=\"true\" />" +
+                                                    "<ImagePath IsCDATA=\"true\" Enable=\"true\">https://healthreminder.phytel.com/Email/Global/COMMON/EN/</ImagePath>" +
+                                                    "<Patient><PatientID /><FullName /><FirstName /><LastName /></Patient>" +
+                                                    "<Schedule><ScheduleID /><FullName /><FirstName /><LastName /></Schedule>" +
+                                                    "<Facility><FacilityID>100</FacilityID><FacilityLogo Enable=\"true\" >logo.jpg</FacilityLogo><FacilityURL Enable=\"true\" >facility.com</FacilityURL>" +
+                                                    "<Name>narrative</Name><Addr1>Facility Address</Addr1><Addr2>Facility Address 2</Addr2><City>Dallas</City><State>TX</State><Zip>77777</Zip><PhoneNumber>(214) 555-1212</PhoneNumber></Facility>" +
+                                                    "<Message><Type /><DayOfWeek /><Month /><Date /><Year /><Time /><Duration /><AppointmentSpecificMessage Enable=\"true\" /><FromEmailAddress />" +
+                                                    "<ReplyToEmailAddress /><ToEmailAddress /><DisplayName /><Subject>Health Reminder from FACILITY_NAME</Subject><Body /></Message></Email>";
 
             xDocExpected.LoadXml(expectedEmailTemplateXML);
             expectedResults.PopulatedTemplate = xDocExpected;
@@ -172,29 +152,27 @@ namespace Phytel.Services.Communication.Test
             TemplateResults results = _manager.BuildFacility(xDoc, _emailDetail, _medias, missingObjects, "ACMOT");
 
             Assert.AreEqual(expectedResults.PopulatedTemplate, results.PopulatedTemplate);
-            Assert.AreEqual(expectedResults.PopulatedTemplate.InnerXml.ToString(), results.PopulatedTemplate.InnerXml.ToString());
+            Assert.AreEqual(expectedResults.PopulatedTemplate.InnerXml, results.PopulatedTemplate.InnerXml);
             Assert.AreEqual(expectedResults.MissingObjects, results.MissingObjects);
         }
 
         [Test]
         public void TestBuildEmail()
         {
-            XmlDocument xDoc = new XmlDocument();
-            xDoc = ResetXml(_xDoc);
+            XmlDocument xDoc = ResetXml();
             Hashtable missingObjects = new Hashtable();
-            string expectedEmailTemplateXML;
             XmlDocument xDocExpected = new XmlDocument();
             TemplateResults expectedResults = new TemplateResults();
 
-            expectedEmailTemplateXML = "<Email><SendID /><ActivityID /><ContractID />" +
-                    "<ConfirmationURL IsCDATA=\"true\" Enable=\"true\" /><OptOutURL IsCDATA=\"true\" Enable=\"true\" />" +
-                    "<ImagePath IsCDATA=\"true\" Enable=\"true\">https://healthreminder.phytel.com/Email/Global/COMMON/EN/</ImagePath>" +
-                    "<Patient><PatientID /><FullName /><FirstName /><LastName /></Patient>" +
-                    "<Schedule><ScheduleID /><FullName /><FirstName /><LastName /></Schedule>" +
-                    "<Facility><FacilityID /><FacilityLogo Enable=\"true\" /><FacilityURL Enable=\"true\" /><Name /><Addr1 /><Addr2 /><City /><State /><Zip /><PhoneNumber /></Facility>" +
-                    "<Message><Type>Health Reminder </Type><DayOfWeek /><Month /><Date /><Year /><Time /><Duration /><AppointmentSpecificMessage Enable=\"true\" /><FromEmailAddress>facility@test.com</FromEmailAddress>" +
-                    "<ReplyToEmailAddress>facilityreply@test.com</ReplyToEmailAddress><ToEmailAddress>test@test.com</ToEmailAddress><DisplayName>facility</DisplayName>" +
-                    "<Subject>Health Reminder from </Subject><Body /></Message></Email>";
+            const string expectedEmailTemplateXML = "<Email><SendID /><ActivityID /><ContractID />" +
+                                                    "<ConfirmationURL IsCDATA=\"true\" Enable=\"true\" /><OptOutURL IsCDATA=\"true\" Enable=\"true\" />" +
+                                                    "<ImagePath IsCDATA=\"true\" Enable=\"true\">https://healthreminder.phytel.com/Email/Global/COMMON/EN/</ImagePath>" +
+                                                    "<Patient><PatientID /><FullName /><FirstName /><LastName /></Patient>" +
+                                                    "<Schedule><ScheduleID /><FullName /><FirstName /><LastName /></Schedule>" +
+                                                    "<Facility><FacilityID /><FacilityLogo Enable=\"true\" /><FacilityURL Enable=\"true\" /><Name /><Addr1 /><Addr2 /><City /><State /><Zip /><PhoneNumber /></Facility>" +
+                                                    "<Message><Type>Health Reminder </Type><DayOfWeek /><Month /><Date /><Year /><Time /><Duration /><AppointmentSpecificMessage Enable=\"true\" /><FromEmailAddress>facility@test.com</FromEmailAddress>" +
+                                                    "<ReplyToEmailAddress>facilityreply@test.com</ReplyToEmailAddress><ToEmailAddress>test@test.com</ToEmailAddress><DisplayName>facility</DisplayName>" +
+                                                    "<Subject>Health Reminder from </Subject><Body /></Message></Email>";
 
             xDocExpected.LoadXml(expectedEmailTemplateXML);
             expectedResults.PopulatedTemplate = xDocExpected;
@@ -203,28 +181,26 @@ namespace Phytel.Services.Communication.Test
             TemplateResults results = _manager.BuildEmailMessage(xDoc, _emailDetail, _medias, missingObjects, 2); 
 
             Assert.AreEqual(expectedResults.PopulatedTemplate, results.PopulatedTemplate);
-            Assert.AreEqual(expectedResults.PopulatedTemplate.InnerXml.ToString(), results.PopulatedTemplate.InnerXml.ToString());
+            Assert.AreEqual(expectedResults.PopulatedTemplate.InnerXml, results.PopulatedTemplate.InnerXml);
             Assert.AreEqual(expectedResults.MissingObjects, results.MissingObjects);
         }
 
         [Test]
         public void TestBuildApptDateTime()
         {
-            XmlDocument xDoc = new XmlDocument();
-            xDoc = ResetXml(_xDoc);
+            XmlDocument xDoc = ResetXml();
             Hashtable missingObjects = new Hashtable();
-            string expectedEmailTemplateXML;
             XmlDocument xDocExpected = new XmlDocument();
             TemplateResults expectedResults = new TemplateResults();
 
-            expectedEmailTemplateXML = "<Email><SendID /><ActivityID /><ContractID />" +
-                    "<ConfirmationURL IsCDATA=\"true\" Enable=\"true\" /><OptOutURL IsCDATA=\"true\" Enable=\"true\" />" +
-                    "<ImagePath IsCDATA=\"true\" Enable=\"true\">https://healthreminder.phytel.com/Email/Global/COMMON/EN/</ImagePath>" +
-                    "<Patient><PatientID /><FullName /><FirstName /><LastName /></Patient>" +
-                    "<Schedule><ScheduleID /><FullName /><FirstName /><LastName /></Schedule>" +
-                    "<Facility><FacilityID /><FacilityLogo Enable=\"true\" /><FacilityURL Enable=\"true\" /><Name /><Addr1 /><Addr2 /><City /><State /><Zip /><PhoneNumber /></Facility>" +
-                    "<Message><Type /><DayOfWeek>Friday</DayOfWeek><Month>November</Month><Date>20</Date><Year>2020</Year><Time>8:00 AM</Time><Duration>60</Duration><AppointmentSpecificMessage Enable=\"true\" /><FromEmailAddress />" +
-                    "<ReplyToEmailAddress /><ToEmailAddress /><DisplayName /><Subject>Health Reminder from FACILITY_NAME</Subject><Body /></Message></Email>";
+            const string expectedEmailTemplateXML = "<Email><SendID /><ActivityID /><ContractID />" +
+                                                    "<ConfirmationURL IsCDATA=\"true\" Enable=\"true\" /><OptOutURL IsCDATA=\"true\" Enable=\"true\" />" +
+                                                    "<ImagePath IsCDATA=\"true\" Enable=\"true\">https://healthreminder.phytel.com/Email/Global/COMMON/EN/</ImagePath>" +
+                                                    "<Patient><PatientID /><FullName /><FirstName /><LastName /></Patient>" +
+                                                    "<Schedule><ScheduleID /><FullName /><FirstName /><LastName /></Schedule>" +
+                                                    "<Facility><FacilityID /><FacilityLogo Enable=\"true\" /><FacilityURL Enable=\"true\" /><Name /><Addr1 /><Addr2 /><City /><State /><Zip /><PhoneNumber /></Facility>" +
+                                                    "<Message><Type /><DayOfWeek>Friday</DayOfWeek><Month>November</Month><Date>20</Date><Year>2020</Year><Time>8:00 AM</Time><Duration>60</Duration><AppointmentSpecificMessage Enable=\"true\" /><FromEmailAddress />" +
+                                                    "<ReplyToEmailAddress /><ToEmailAddress /><DisplayName /><Subject>Health Reminder from FACILITY_NAME</Subject><Body /></Message></Email>";
 
             xDocExpected.LoadXml(expectedEmailTemplateXML);
             expectedResults.PopulatedTemplate = xDocExpected;
@@ -233,29 +209,27 @@ namespace Phytel.Services.Communication.Test
             TemplateResults results = _manager.BuildApptDateTime(xDoc, _emailDetail, missingObjects);
 
             Assert.AreEqual(expectedResults.PopulatedTemplate, results.PopulatedTemplate);
-            Assert.AreEqual(expectedResults.PopulatedTemplate.InnerXml.ToString(), results.PopulatedTemplate.InnerXml.ToString());
+            Assert.AreEqual(expectedResults.PopulatedTemplate.InnerXml, results.PopulatedTemplate.InnerXml);
             Assert.AreEqual(expectedResults.MissingObjects, results.MissingObjects);
         }
 
         [Test]
         public void TestBuildApptSpecificMessage()
         {
-            XmlDocument xDoc = new XmlDocument();
-            xDoc = ResetXml(_xDoc);
+            XmlDocument xDoc = ResetXml();
             Hashtable missingObjects = new Hashtable();
-            string expectedEmailTemplateXML;
             XmlDocument xDocExpected = new XmlDocument();
             TemplateResults expectedResults = new TemplateResults();
 
-            expectedEmailTemplateXML = "<Email><SendID /><ActivityID /><ContractID />" +
-                    "<ConfirmationURL IsCDATA=\"true\" Enable=\"true\" /><OptOutURL IsCDATA=\"true\" Enable=\"true\" />" +
-                    "<ImagePath IsCDATA=\"true\" Enable=\"true\">https://healthreminder.phytel.com/Email/Global/COMMON/EN/</ImagePath>" +
-                    "<Patient><PatientID /><FullName /><FirstName /><LastName /></Patient>" +
-                    "<Schedule><ScheduleID /><FullName /><FirstName /><LastName /></Schedule>" +
-                    "<Facility><FacilityID /><FacilityLogo Enable=\"true\" /><FacilityURL Enable=\"true\" /><Name /><Addr1 /><Addr2 /><City /><State /><Zip /><PhoneNumber /></Facility>" +
-                    "<Message><Type /><DayOfWeek /><Month /><Date /><Year /><Time /><Duration />" +
-                    "<AppointmentSpecificMessage Enable=\"true\" >This Is An Appointment Specific Message.</AppointmentSpecificMessage><FromEmailAddress />" +
-                    "<ReplyToEmailAddress /><ToEmailAddress /><DisplayName /><Subject>Health Reminder from FACILITY_NAME</Subject><Body /></Message></Email>";
+            const string expectedEmailTemplateXML = "<Email><SendID /><ActivityID /><ContractID />" +
+                                                    "<ConfirmationURL IsCDATA=\"true\" Enable=\"true\" /><OptOutURL IsCDATA=\"true\" Enable=\"true\" />" +
+                                                    "<ImagePath IsCDATA=\"true\" Enable=\"true\">https://healthreminder.phytel.com/Email/Global/COMMON/EN/</ImagePath>" +
+                                                    "<Patient><PatientID /><FullName /><FirstName /><LastName /></Patient>" +
+                                                    "<Schedule><ScheduleID /><FullName /><FirstName /><LastName /></Schedule>" +
+                                                    "<Facility><FacilityID /><FacilityLogo Enable=\"true\" /><FacilityURL Enable=\"true\" /><Name /><Addr1 /><Addr2 /><City /><State /><Zip /><PhoneNumber /></Facility>" +
+                                                    "<Message><Type /><DayOfWeek /><Month /><Date /><Year /><Time /><Duration />" +
+                                                    "<AppointmentSpecificMessage Enable=\"true\" >This Is An Appointment Specific Message.</AppointmentSpecificMessage><FromEmailAddress />" +
+                                                    "<ReplyToEmailAddress /><ToEmailAddress /><DisplayName /><Subject>Health Reminder from FACILITY_NAME</Subject><Body /></Message></Email>";
 
             xDocExpected.LoadXml(expectedEmailTemplateXML);
             expectedResults.PopulatedTemplate = xDocExpected;
@@ -264,28 +238,26 @@ namespace Phytel.Services.Communication.Test
             TemplateResults results = _manager.BuildAppointmentSpecificMessage(xDoc, _emailDetail, _medias, missingObjects, 0, _contractPermissionList);
 
             Assert.AreEqual(expectedResults.PopulatedTemplate, results.PopulatedTemplate);
-            Assert.AreEqual(expectedResults.PopulatedTemplate.InnerXml.ToString(), results.PopulatedTemplate.InnerXml.ToString());
+            Assert.AreEqual(expectedResults.PopulatedTemplate.InnerXml, results.PopulatedTemplate.InnerXml);
             Assert.AreEqual(expectedResults.MissingObjects, results.MissingObjects);
         }
 
         [Test]
         public void TestBuildIntroPatient()
         {
-            XmlDocument xDoc = new XmlDocument();
-            xDoc = ResetXml(_xDoc);
+            XmlDocument xDoc = ResetXml();
             Hashtable missingObjects = new Hashtable();
-            string expectedEmailTemplateXML;
             XmlDocument xDocExpected = new XmlDocument();
             TemplateResults expectedResults = new TemplateResults();
 
-            expectedEmailTemplateXML = "<Email><SendID /><ActivityID /><ContractID />" +
-                    "<ConfirmationURL IsCDATA=\"true\" Enable=\"true\" /><OptOutURL IsCDATA=\"true\" Enable=\"true\" />" +
-                    "<ImagePath IsCDATA=\"true\" Enable=\"true\">https://healthreminder.phytel.com/Email/Global/COMMON/EN/</ImagePath>" +
-                    "<Patient><PatientID>20</PatientID><FullName /><FirstName /><LastName /></Patient>" +
-                    "<Schedule><ScheduleID /><FullName /><FirstName /><LastName /></Schedule>" +
-                    "<Facility><FacilityID /><FacilityLogo Enable=\"true\" /><FacilityURL Enable=\"true\" /><Name /><Addr1 /><Addr2 /><City /><State /><Zip /><PhoneNumber /></Facility>" +
-                    "<Message><Type /><DayOfWeek /><Month /><Date /><Year /><Time /><Duration /><AppointmentSpecificMessage Enable=\"true\" /><FromEmailAddress />" +
-                    "<ReplyToEmailAddress /><ToEmailAddress /><DisplayName /><Subject>Health Reminder from FACILITY_NAME</Subject><Body /></Message></Email>";
+            const string expectedEmailTemplateXML = "<Email><SendID /><ActivityID /><ContractID />" +
+                                                    "<ConfirmationURL IsCDATA=\"true\" Enable=\"true\" /><OptOutURL IsCDATA=\"true\" Enable=\"true\" />" +
+                                                    "<ImagePath IsCDATA=\"true\" Enable=\"true\">https://healthreminder.phytel.com/Email/Global/COMMON/EN/</ImagePath>" +
+                                                    "<Patient><PatientID>20</PatientID><FullName /><FirstName /><LastName /></Patient>" +
+                                                    "<Schedule><ScheduleID /><FullName /><FirstName /><LastName /></Schedule>" +
+                                                    "<Facility><FacilityID /><FacilityLogo Enable=\"true\" /><FacilityURL Enable=\"true\" /><Name /><Addr1 /><Addr2 /><City /><State /><Zip /><PhoneNumber /></Facility>" +
+                                                    "<Message><Type /><DayOfWeek /><Month /><Date /><Year /><Time /><Duration /><AppointmentSpecificMessage Enable=\"true\" /><FromEmailAddress />" +
+                                                    "<ReplyToEmailAddress /><ToEmailAddress /><DisplayName /><Subject>Health Reminder from FACILITY_NAME</Subject><Body /></Message></Email>";
 
             xDocExpected.LoadXml(expectedEmailTemplateXML);
             expectedResults.PopulatedTemplate = xDocExpected;
@@ -294,29 +266,27 @@ namespace Phytel.Services.Communication.Test
             TemplateResults results = _manager.BuildIntroPatient(xDoc, _emailDetail, missingObjects);
 
             Assert.AreEqual(expectedResults.PopulatedTemplate, results.PopulatedTemplate);
-            Assert.AreEqual(expectedResults.PopulatedTemplate.InnerXml.ToString(), results.PopulatedTemplate.InnerXml.ToString());
+            Assert.AreEqual(expectedResults.PopulatedTemplate.InnerXml, results.PopulatedTemplate.InnerXml);
             Assert.AreEqual(expectedResults.MissingObjects, results.MissingObjects);
         }
 
         [Test]
         public void TestBuildIntroFacility()
         {
-            XmlDocument xDoc = new XmlDocument();
-            xDoc = ResetXml(_xDoc);
+            XmlDocument xDoc = ResetXml();
             Hashtable missingObjects = new Hashtable();
-            string expectedEmailTemplateXML;
             XmlDocument xDocExpected = new XmlDocument();
             TemplateResults expectedResults = new TemplateResults();
 
-            expectedEmailTemplateXML = "<Email><SendID /><ActivityID /><ContractID />" +
-                    "<ConfirmationURL IsCDATA=\"true\" Enable=\"true\" /><OptOutURL IsCDATA=\"true\" Enable=\"true\" />" +
-                    "<ImagePath IsCDATA=\"true\" Enable=\"true\">https://healthreminder.phytel.com/Email/Global/COMMON/EN/</ImagePath>" +
-                    "<Patient><PatientID /><FullName /><FirstName /><LastName /></Patient>" +
-                    "<Schedule><ScheduleID /><FullName /><FirstName /><LastName /></Schedule>" +
-                    "<Facility><FacilityID>100</FacilityID><FacilityLogo Enable=\"true\" /><FacilityURL Enable=\"true\" />" +
-                    "<Name>narrative</Name><Addr1 /><Addr2 /><City /><State /><Zip /><PhoneNumber /></Facility>" +
-                    "<Message><Type /><DayOfWeek /><Month /><Date /><Year /><Time /><Duration /><AppointmentSpecificMessage Enable=\"true\" /><FromEmailAddress />" +
-                    "<ReplyToEmailAddress /><ToEmailAddress /><DisplayName /><Subject>Health Reminder from FACILITY_NAME</Subject><Body /></Message></Email>";
+            const string expectedEmailTemplateXML = "<Email><SendID /><ActivityID /><ContractID />" +
+                                                    "<ConfirmationURL IsCDATA=\"true\" Enable=\"true\" /><OptOutURL IsCDATA=\"true\" Enable=\"true\" />" +
+                                                    "<ImagePath IsCDATA=\"true\" Enable=\"true\">https://healthreminder.phytel.com/Email/Global/COMMON/EN/</ImagePath>" +
+                                                    "<Patient><PatientID /><FullName /><FirstName /><LastName /></Patient>" +
+                                                    "<Schedule><ScheduleID /><FullName /><FirstName /><LastName /></Schedule>" +
+                                                    "<Facility><FacilityID>100</FacilityID><FacilityLogo Enable=\"true\" /><FacilityURL Enable=\"true\" />" +
+                                                    "<Name>narrative</Name><Addr1 /><Addr2 /><City /><State /><Zip /><PhoneNumber /></Facility>" +
+                                                    "<Message><Type /><DayOfWeek /><Month /><Date /><Year /><Time /><Duration /><AppointmentSpecificMessage Enable=\"true\" /><FromEmailAddress />" +
+                                                    "<ReplyToEmailAddress /><ToEmailAddress /><DisplayName /><Subject>Health Reminder from FACILITY_NAME</Subject><Body /></Message></Email>";
 
             xDocExpected.LoadXml(expectedEmailTemplateXML);
             expectedResults.PopulatedTemplate = xDocExpected;
@@ -325,29 +295,27 @@ namespace Phytel.Services.Communication.Test
             TemplateResults results = _manager.BuildIntroFacility(xDoc, _emailDetail, _medias, missingObjects);
 
             Assert.AreEqual(expectedResults.PopulatedTemplate, results.PopulatedTemplate);
-            Assert.AreEqual(expectedResults.PopulatedTemplate.InnerXml.ToString(), results.PopulatedTemplate.InnerXml.ToString());
+            Assert.AreEqual(expectedResults.PopulatedTemplate.InnerXml, results.PopulatedTemplate.InnerXml);
             Assert.AreEqual(expectedResults.MissingObjects, results.MissingObjects);
         }
 
         [Test]
         public void TestBuildIntroEmail()
         {
-            XmlDocument xDoc = new XmlDocument();
-            xDoc = ResetXml(_xDoc);
+            XmlDocument xDoc = ResetXml();
             Hashtable missingObjects = new Hashtable();
-            string expectedEmailTemplateXML;
             XmlDocument xDocExpected = new XmlDocument();
             TemplateResults expectedResults = new TemplateResults();
 
-            expectedEmailTemplateXML = "<Email><SendID /><ActivityID /><ContractID />" +
-                    "<ConfirmationURL IsCDATA=\"true\" Enable=\"true\" /><OptOutURL IsCDATA=\"true\" Enable=\"true\" />" +
-                    "<ImagePath IsCDATA=\"true\" Enable=\"true\">https://healthreminder.phytel.com/Email/Global/COMMON/EN/</ImagePath>" +
-                    "<Patient><PatientID /><FullName /><FirstName /><LastName /></Patient>" +
-                    "<Schedule><ScheduleID /><FullName /><FirstName /><LastName /></Schedule>" +
-                    "<Facility><FacilityID /><FacilityLogo Enable=\"true\" /><FacilityURL Enable=\"true\" /><Name /><Addr1 /><Addr2 /><City /><State /><Zip /><PhoneNumber /></Facility>" +
-                    "<Message><Type>IntroductoryEmail</Type><DayOfWeek /><Month /><Date /><Year /><Time /><Duration /><AppointmentSpecificMessage Enable=\"true\" /><FromEmailAddress>facility@test.com</FromEmailAddress>" +
-                    "<ReplyToEmailAddress>facilityreply@test.com</ReplyToEmailAddress><ToEmailAddress>test@test.com</ToEmailAddress><DisplayName>facility</DisplayName>" +
-                    "<Subject>IntroductoryEmail</Subject><Body /></Message></Email>";
+            const string expectedEmailTemplateXML = "<Email><SendID /><ActivityID /><ContractID />" +
+                                                    "<ConfirmationURL IsCDATA=\"true\" Enable=\"true\" /><OptOutURL IsCDATA=\"true\" Enable=\"true\" />" +
+                                                    "<ImagePath IsCDATA=\"true\" Enable=\"true\">https://healthreminder.phytel.com/Email/Global/COMMON/EN/</ImagePath>" +
+                                                    "<Patient><PatientID /><FullName /><FirstName /><LastName /></Patient>" +
+                                                    "<Schedule><ScheduleID /><FullName /><FirstName /><LastName /></Schedule>" +
+                                                    "<Facility><FacilityID /><FacilityLogo Enable=\"true\" /><FacilityURL Enable=\"true\" /><Name /><Addr1 /><Addr2 /><City /><State /><Zip /><PhoneNumber /></Facility>" +
+                                                    "<Message><Type>IntroductoryEmail</Type><DayOfWeek /><Month /><Date /><Year /><Time /><Duration /><AppointmentSpecificMessage Enable=\"true\" /><FromEmailAddress>facility@test.com</FromEmailAddress>" +
+                                                    "<ReplyToEmailAddress>facilityreply@test.com</ReplyToEmailAddress><ToEmailAddress>test@test.com</ToEmailAddress><DisplayName>facility</DisplayName>" +
+                                                    "<Subject>IntroductoryEmail</Subject><Body /></Message></Email>";
 
             xDocExpected.LoadXml(expectedEmailTemplateXML);
             expectedResults.PopulatedTemplate = xDocExpected;
@@ -356,7 +324,7 @@ namespace Phytel.Services.Communication.Test
             TemplateResults results = _manager.BuildIntroEmailMessage(xDoc, _emailDetail, _medias, missingObjects, 2);
 
             Assert.AreEqual(expectedResults.PopulatedTemplate, results.PopulatedTemplate);
-            Assert.AreEqual(expectedResults.PopulatedTemplate.InnerXml.ToString(), results.PopulatedTemplate.InnerXml.ToString());
+            Assert.AreEqual(expectedResults.PopulatedTemplate.InnerXml, results.PopulatedTemplate.InnerXml);
             Assert.AreEqual(expectedResults.MissingObjects, results.MissingObjects);
         }
 
@@ -555,7 +523,7 @@ namespace Phytel.Services.Communication.Test
             _manager.IsAppointmentSpecificMsgEnabled(permissionRows, 1);
         }
 
-        private XmlDocument ResetXml(XmlDocument xDoc)
+        private XmlDocument ResetXml()
         {
             XmlDocument result = new XmlDocument();
 
@@ -714,9 +682,7 @@ namespace Phytel.Services.Communication.Test
                 RoleID = 0
             };
             _contractPermissionList.Add(contractpermission);
-
             
         }
-
     }
 }

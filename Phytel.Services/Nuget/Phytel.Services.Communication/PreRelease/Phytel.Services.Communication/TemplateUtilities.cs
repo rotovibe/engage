@@ -77,12 +77,9 @@ namespace Phytel.Services.Communication
 
         public void SetXMlNodeInnerText(XmlNode originalNode, string innerText)
         {
-            if (originalNode != null)
-            {
-                string result = string.Empty;
-                result = HandleXMlSpecialCharacters(innerText);
-                originalNode.InnerText = result;
-            }            
+            if (originalNode == null) return;
+            var result = HandleXMlSpecialCharacters(innerText);
+            originalNode.InnerText = result;
         }
 
         public void SetCDATAXMlNodeInnerText(XmlNode node, string innerText, XmlDocument xmlDoc)

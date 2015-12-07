@@ -1,14 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections;
-using System.Globalization;
+using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.Web;
 using System.Xml;
-
-using Phytel.Services;
 using Phytel.Services.Security;
 using System.Xml.Xsl;
 using System.IO;
@@ -38,23 +33,24 @@ namespace Phytel.Services.Communication
             string xpath = string.Empty;            
 
             sendID = emailActivityDetail.SendID.ToString();
-            contractID = emailActivityDetail.ContractNumber.ToString();
+            contractID = emailActivityDetail.ContractNumber;
             
             TemplateResults utilityResults = _templateUtilities.BuildHeader(xdoc, emailActivityDetail, missingObjects, _Mode);
             xdoc = utilityResults.PopulatedTemplate;
             missingObjects = utilityResults.MissingObjects;
 
             //ConfirmURL
-            Dictionary<string, string> queryStrings = new Dictionary<string, string>();
-            queryStrings.Add("SendID", sendID);
-            queryStrings.Add("ContractID", contractID);
+            Dictionary<string, string> queryStrings = new Dictionary<string, string>
+            {
+                {"SendID", sendID},
+                {"ContractID", contractID}
+            };
 
             XmlNode confirmURLNode = xdoc.SelectSingleNode(string.Format(_templateUtilities.GetModeSpecificTag(XMLFields.ModeConfirmationURL, _Mode), "true"));
             confirmURL = BuildURL(confirmURL, queryStrings);
             _templateUtilities.SetCDATAXMlNodeInnerText(confirmURLNode, confirmURL, xdoc);
                   
             //OptOutURL
-            xpath = _templateUtilities.GetModeSpecificTag(XMLFields.ModeOptOutURL, _Mode);
             XmlNode optOutURLNode = xdoc.SelectSingleNode(string.Format(_templateUtilities.GetModeSpecificTag(XMLFields.ModeOptOutURL, _Mode), "true"));
             optoutURL = BuildURL(optoutURL, queryStrings);
             _templateUtilities.SetCDATAXMlNodeInnerText(optOutURLNode, optoutURL, xdoc);
@@ -78,7 +74,7 @@ namespace Phytel.Services.Communication
         {
             TemplateResults results = new TemplateResults();
 
-            TemplateResults utilityResults = _templateUtilities.BuildPatient(xdoc, emailActivityDetail, missingObjects, _Mode, new string[] { "PatientName" });
+            TemplateResults utilityResults = _templateUtilities.BuildPatient(xdoc, emailActivityDetail, missingObjects, _Mode, new[] { "PatientName" });
             xdoc = utilityResults.PopulatedTemplate;
             missingObjects = utilityResults.MissingObjects;
 
@@ -108,12 +104,12 @@ namespace Phytel.Services.Communication
                             && m.LanguagePreferenceCode == "EN"
                             select m).ToList();
 
-            if (mediaRows != null && mediaRows.Count > 0)
+            if (mediaRows.Count > 0)
             {
                 foreach (ActivityMedia media in mediaRows)
                 {
                     scheduleNameLF = media.Narrative;
-                    if (!String.IsNullOrEmpty(scheduleNameLF) && !String.IsNullOrEmpty(scheduleNameLF.Trim()))
+                    if (!string.IsNullOrWhiteSpace(scheduleNameLF))
                     {
                         scheduleNameLF = _templateUtilities.ProperCase(scheduleNameLF.Trim());
                         _templateUtilities.SetXMlNodeInnerText(ScheduleNameLFNode, scheduleNameLF);
@@ -187,7 +183,7 @@ namespace Phytel.Services.Communication
             //FacilityState
             xpath = _templateUtilities.GetModeSpecificTag(XMLFields.ModeFacilityState, _Mode);
             XmlNode facilityStateNode = xdoc.SelectSingleNode(xpath);
-            if (!String.IsNullOrEmpty(facilityState) && !String.IsNullOrEmpty(facilityState.Trim()))
+            if (!string.IsNullOrWhiteSpace(facilityState))
             {
                 facilityState = facilityState.ToUpper();
             }
@@ -199,11 +195,12 @@ namespace Phytel.Services.Communication
             _templateUtilities.SetXMlNodeInnerText(facilityZipNode, facilityZip);
 
             //Facility phonenumber
-            if (!String.IsNullOrEmpty(facilityPhoneNumber) && !String.IsNullOrEmpty(facilityPhoneNumber.Trim()))
+            if (!string.IsNullOrWhiteSpace(facilityPhoneNumber))
             {
                 xpath = _templateUtilities.GetModeSpecificTag(XMLFields.ModeFacilityPhoneNumber, _Mode);
                 XmlNode facilityPhoneNumberNode = xdoc.SelectSingleNode(xpath);
-                _templateUtilities.SetXMlNodeInnerText(facilityPhoneNumberNode, String.Format("{0:(###) ###-####}", Convert.ToInt64(facilityPhoneNumber)));
+                if (facilityPhoneNumberNode != null)
+                    facilityPhoneNumberNode.InnerText = String.Format("{0:(###) ###-####}", Convert.ToInt64(facilityPhoneNumber));
             }
             else
             {
@@ -214,11 +211,9 @@ namespace Phytel.Services.Communication
             //Facility Logo
             xpath = _templateUtilities.GetModeSpecificTag(XMLFields.ModeFacilityLogo, _Mode);
             XmlNode facilityLogoNode = xdoc.SelectSingleNode(xpath);
-            media = (from m in activityMediaList
-                     where m.OwnerID == emailActivityDetail.FacilityID
-                        && m.CategoryCode == "LOGO"
-                        && m.OwnerCode == "EMAIL"
-                        select m).FirstOrDefault();
+            media = activityMediaList.FirstOrDefault(m => m.OwnerID == emailActivityDetail.FacilityID
+                                                          && m.CategoryCode == "LOGO"
+                                                          && m.OwnerCode == "EMAIL");
             //Facility level
             if (media != null)
             {
@@ -228,12 +223,10 @@ namespace Phytel.Services.Communication
             else
             {
                 //Contract level
-                media = (from m in activityMediaList
-                            where m.OwnerID == -1
-                            && m.CategoryCode == "LOGO"
-                            && m.OwnerCode == "EMAIL"
-                            && !m.Filename.Contains("GLOBAL")
-                            select m).FirstOrDefault();
+                media = activityMediaList.FirstOrDefault(m => m.OwnerID == -1
+                                                              && m.CategoryCode == "LOGO"
+                                                              && m.OwnerCode == "EMAIL"
+                                                              && !m.Filename.Contains("GLOBAL"));
                 if (media != null)
                 {
                     facilityLogo = media.Filename;
@@ -242,12 +235,10 @@ namespace Phytel.Services.Communication
                 else 
                 {
                     //Phytelmaster level
-                    media = (from m in activityMediaList
-                                where m.OwnerID == -1
-                                && m.CategoryCode == "LOGO"
-                                && m.OwnerCode == "EMAIL"
-                                && !m.Filename.Contains("GLOBAL")
-                                select m).FirstOrDefault();
+                    media = activityMediaList.FirstOrDefault(m => m.OwnerID == -1
+                                                                  && m.CategoryCode == "LOGO"
+                                                                  && m.OwnerCode == "EMAIL"
+                                                                  && !m.Filename.Contains("GLOBAL"));
                     if (media != null && taskTypeCategory != TaskTypeCategory.OutreachRecall)
                     {
                         facilityLogo = media.Filename;
@@ -265,11 +256,9 @@ namespace Phytel.Services.Communication
             // Facility URL
             xpath = _templateUtilities.GetModeSpecificTag(XMLFields.ModeFacilityURL, _Mode);
             XmlNode facilityURLNode = xdoc.SelectSingleNode(xpath);
-            media = (from m in activityMediaList
-                     where m.OwnerID == emailActivityDetail.FacilityID
-                        && m.CategoryCode == "URL"
-                        && m.OwnerCode == "EMAIL"
-                        select m).FirstOrDefault();
+            media = activityMediaList.FirstOrDefault(m => m.OwnerID == emailActivityDetail.FacilityID
+                                                          && m.CategoryCode == "URL"
+                                                          && m.OwnerCode == "EMAIL");
             if (media != null)
             {
                 facilityURL = media.Narrative;
@@ -277,11 +266,9 @@ namespace Phytel.Services.Communication
             }
             else
             {
-                media = (from m in activityMediaList
-                            where m.OwnerID == -1
-                            && m.CategoryCode == "URL"
-                            && m.OwnerCode == "EMAIL"
-                            select m).FirstOrDefault();
+                media = activityMediaList.FirstOrDefault(m => m.OwnerID == -1
+                                                              && m.CategoryCode == "URL"
+                                                              && m.OwnerCode == "EMAIL");
                 if (media != null)
                 {
                     facilityURL = media.Narrative;
@@ -300,54 +287,41 @@ namespace Phytel.Services.Communication
             return results;
         }
 
-        public TemplateResults BuildEmailMessage(XmlDocument xdoc, EmailActivityDetail emailActivityDetail, List<ActivityMedia> activityMediaList, Hashtable missingObjects, int campaignID)
+        public TemplateResults BuildEmailMessage(XmlDocument xdoc, EmailActivityDetail emailActivityDetail, List<ActivityMedia> activityMediaList, Hashtable missingObjects, int campaignId)
         {
             TemplateResults results = new TemplateResults();
 
-            string appointmentDateTime = string.Empty;
-            string appointmentDuration = string.Empty;
-            string messageSubject = string.Empty;
-            string activityID = string.Empty;
+            // string messageSubject = string.Empty; Not used.
             string messageType = string.Empty;
             string patientFirstName = string.Empty;
             string patientLastName = string.Empty;
             string facilityName = string.Empty;
-            
-            string xpath = string.Empty;
 
             TemplateResults emailResults = BuildEmailBase(xdoc, emailActivityDetail, activityMediaList, missingObjects);
             xdoc = emailResults.PopulatedTemplate;
             missingObjects = emailResults.MissingObjects;
-            
-            xpath = _templateUtilities.GetModeSpecificTag(XMLFields.ModeFacilityName, _Mode);
-            XmlNode facilityNameNode = xdoc.SelectSingleNode(xpath);
+
+            XmlNode facilityNameNode = xdoc.SelectSingleNode(_templateUtilities.GetModeSpecificTag(XMLFields.ModeFacilityName, _Mode));            
             if (facilityNameNode != null)
             {
-                facilityName = facilityNameNode.InnerText.ToString();
+                facilityName = facilityNameNode.InnerText;
             }
 
-            xpath = _templateUtilities.GetModeSpecificTag(XMLFields.ModePatientFirstName, _Mode);
-            XmlNode patientFirstNameNode = xdoc.SelectSingleNode(xpath);
+            XmlNode patientFirstNameNode = xdoc.SelectSingleNode(_templateUtilities.GetModeSpecificTag(XMLFields.ModePatientFirstName, _Mode));
             if (patientFirstNameNode != null)
             {
-                patientFirstName = patientFirstNameNode.InnerText.ToString();
+                patientFirstName = patientFirstNameNode.InnerText;
             }
 
-            xpath = _templateUtilities.GetModeSpecificTag(XMLFields.ModePatientLastName, _Mode);
-            XmlNode patientLastNameNode = xdoc.SelectSingleNode(xpath);
+            XmlNode patientLastNameNode = xdoc.SelectSingleNode(_templateUtilities.GetModeSpecificTag(XMLFields.ModePatientLastName, _Mode));
             if (patientLastNameNode != null)
             {
-                patientLastName = patientLastNameNode.InnerText.ToString();
+                patientLastName = patientLastNameNode.InnerText;
             }
 
-            activityID = emailActivityDetail.ActivityID.ToString();
-            appointmentDateTime = emailActivityDetail.ScheduleDateTime;
-            appointmentDuration = emailActivityDetail.ScheduleDuration.ToString();
-
             //MessageType
-            xpath = _templateUtilities.GetModeSpecificTag(XMLFields.ModeMessageType, _Mode);
-            XmlNode messageTypeNode = xdoc.SelectSingleNode(xpath);
-            switch (campaignID) 
+            XmlNode messageTypeNode = xdoc.SelectSingleNode(_templateUtilities.GetModeSpecificTag(XMLFields.ModeMessageType, _Mode));
+            switch (campaignId) 
             {
                 case (int)CampaignTypes.ACDefault:
                     messageType = MessageTypes.AppointmentReminder;
@@ -362,9 +336,8 @@ namespace Phytel.Services.Communication
 
             //Subject 
             //Don't set inner text via SetXMlNodeInnerText as facilityname XML characters will be decoded again
-            xpath = _templateUtilities.GetModeSpecificTag(XMLFields.ModeMessageSubject, _Mode);
-            XmlNode messageSubjectNode = xdoc.SelectSingleNode(xpath);
-            if (!String.IsNullOrEmpty(messageSubjectNode.InnerText))
+            XmlNode messageSubjectNode = xdoc.SelectSingleNode(_templateUtilities.GetModeSpecificTag(XMLFields.ModeMessageSubject, _Mode));
+            if (messageSubjectNode != null && !string.IsNullOrEmpty(messageSubjectNode.InnerText))
             {
                 messageSubjectNode.InnerText = messageSubjectNode.InnerText
                     .Replace("FACILITY_NAME", facilityName)
@@ -379,14 +352,13 @@ namespace Phytel.Services.Communication
             if (messageType != MessageTypes.OutreachRecall)
             {
                 //Set Appointment Duration
-                xpath = _templateUtilities.GetModeSpecificTag(XMLFields.ModeApptDuration, _Mode);
-                XmlNode apptDurationNode = xdoc.SelectSingleNode(xpath);
-                _templateUtilities.SetXMlNodeInnerText(apptDurationNode, appointmentDuration);
+                XmlNode apptDurationNode = xdoc.SelectSingleNode(_templateUtilities.GetModeSpecificTag(XMLFields.ModeApptDuration, _Mode));
+                _templateUtilities.SetXMlNodeInnerText(apptDurationNode, emailActivityDetail.ScheduleDuration.ToString());
 
                 //Appointment date fields
-                if (String.IsNullOrEmpty(appointmentDateTime) || Convert.ToDateTime(appointmentDateTime) < System.DateTime.Now)
+                if (string.IsNullOrEmpty(emailActivityDetail.ScheduleDateTime) || Convert.ToDateTime(emailActivityDetail.ScheduleDateTime) < DateTime.Now)
                 {
-                    string missingObjString = "Appointment Datetime " + activityID;
+                    string missingObjString = "Appointment Datetime " + emailActivityDetail.ActivityID;
                     missingObjects = _templateUtilities.AddMissingObjects(missingObjects, missingObjString);
                 }
                 else
@@ -409,7 +381,7 @@ namespace Phytel.Services.Communication
             string xpath = string.Empty;
             appointmentDuration = emailActivityDetail.ScheduleDuration.ToString();
 
-            TemplateResults utilityResults = _templateUtilities.BuildApptDateTime(xdoc, emailActivityDetail, missingObjects, _Mode, false, new string[] { "ScheduleDateTime" });
+            TemplateResults utilityResults = _templateUtilities.BuildApptDateTime(xdoc, emailActivityDetail, missingObjects, _Mode, false, new[] { "ScheduleDateTime" });
             xdoc = utilityResults.PopulatedTemplate;
             missingObjects = utilityResults.MissingObjects;
 
@@ -424,117 +396,96 @@ namespace Phytel.Services.Communication
         }
 
         public TemplateResults BuildAppointmentSpecificMessage(XmlDocument xdoc, EmailActivityDetail emailActivityDetail, List<ActivityMedia> activityMediaList, Hashtable missingObjects, 
-            int contactRoleID, List<ContractPermission> contractPermissionRecords)
+            int contactRoleId, List<ContractPermission> contractPermissionRecords)
         {
             TemplateResults results = new TemplateResults();
 
             int contractLookUp = -1;
-            List<ActivityMedia> mediaRows = null;
-            string xpath = string.Empty;
-            string appointmentSpecificMessage = string.Empty;
 
             //Appointment specific message
-            xpath = _templateUtilities.GetModeSpecificTag(XMLFields.ModeAppointmentSpecificMessage, _Mode);
-            XmlNode apptSpecificMsgNode = xdoc.SelectSingleNode(xpath);
-            string activityID = string.Empty;
-            string strMediaFilter = string.Empty;
+            XmlNode apptSpecificMsgNode = xdoc.SelectSingleNode(_templateUtilities.GetModeSpecificTag(XMLFields.ModeAppointmentSpecificMessage, _Mode));
 
-            string facilityID = string.Empty;
-            string scheduleID = string.Empty;
-            string patientId = string.Empty;
-
-            activityID = emailActivityDetail.ActivityID.ToString();
-            facilityID = emailActivityDetail.FacilityID.ToString();
-            scheduleID = emailActivityDetail.RecipientSchedID.ToString();
-            patientId = emailActivityDetail.PatientID.ToString();
-
-            if (IsAppointmentSpecificMsgEnabled(contractPermissionRecords, contactRoleID))
+            if (IsAppointmentSpecificMsgEnabled(contractPermissionRecords, contactRoleId))
             {
                 //First get based on email scheduleid
-                mediaRows = (from m in activityMediaList
-                            where m.OwnerID == emailActivityDetail.PatientID
-                            && m.CategoryCode == "TTC"
-                            && m.OwnerCode == "EMAIL"
-                            && m.LanguagePreferenceCode == "EN"
-                            && m.FacilityID == emailActivityDetail.RecipientSchedID
-                            select m).ToList();
+                List<ActivityMedia> mediaRows = activityMediaList.Where(m => m.OwnerID == emailActivityDetail.PatientID
+                                                                             && m.CategoryCode == "TTC"
+                                                                             && m.OwnerCode == "EMAIL"
+                                                                             && m.LanguagePreferenceCode == "EN"
+                                                                             && m.FacilityID == emailActivityDetail.RecipientSchedID).ToList();
               
                 //If not available for schedule get based on facilityid
-                if (mediaRows == null || mediaRows.Count == 0)
+                if (mediaRows.Count == 0)
                 {
-                    mediaRows = (from m in activityMediaList
-                                    where m.OwnerID == emailActivityDetail.PatientID
-                                    && m.CategoryCode == "TTC"
-                                    && m.OwnerCode == "EMAIL"
-                                    && m.LanguagePreferenceCode == "EN"
-                                    && m.FacilityID == emailActivityDetail.FacilityID
-                                    select m).ToList();
+                    mediaRows = activityMediaList.Where(m => m.OwnerID == emailActivityDetail.PatientID
+                                                             && m.CategoryCode == "TTC"
+                                                             && m.OwnerCode == "EMAIL"
+                                                             && m.LanguagePreferenceCode == "EN"
+                                                             && m.FacilityID == emailActivityDetail.FacilityID).ToList();
                   
                     //Finally get based on contract
-                    if (mediaRows == null || mediaRows.Count == 0)
+                    if (mediaRows.Count == 0)
                     {
-                        mediaRows = (from m in activityMediaList
-                                        where m.OwnerID == emailActivityDetail.PatientID
-                                        && m.CategoryCode == "TTC"
-                                        && m.OwnerCode == "EMAIL"
-                                        && m.LanguagePreferenceCode == "EN"
-                                        && m.FacilityID == contractLookUp
-                                        select m).ToList();
+                        mediaRows = activityMediaList.Where(m => m.OwnerID == emailActivityDetail.PatientID
+                                                                 && m.CategoryCode == "TTC"
+                                                                 && m.OwnerCode == "EMAIL"
+                                                                 && m.LanguagePreferenceCode == "EN"
+                                                                 && m.FacilityID == contractLookUp).ToList();
 
                         //First get based on scheduleid for email template
-                        if (mediaRows == null || mediaRows.Count == 0)
+                        if (mediaRows.Count == 0)
                         {
-                            mediaRows = (from m in activityMediaList
-                                            where m.OwnerID == emailActivityDetail.PatientID
-                                            && m.CategoryCode == "TTC"
-                                            && m.LanguagePreferenceCode == "EN"
-                                            && m.FacilityID == emailActivityDetail.RecipientSchedID
-                                            select m).ToList();
+                            mediaRows = activityMediaList.Where(m => m.OwnerID == emailActivityDetail.PatientID
+                                                                     && m.CategoryCode == "TTC"
+                                                                     && m.LanguagePreferenceCode == "EN"
+                                                                     && m.FacilityID == emailActivityDetail.RecipientSchedID).ToList();
 
                             //First get based on scheduleid for email template
-                            if (mediaRows == null || mediaRows.Count == 0)
+                            if (mediaRows.Count == 0)
                             {
-                                mediaRows = (from m in activityMediaList
-                                                where m.OwnerID == emailActivityDetail.PatientID
-                                                && m.CategoryCode == "TTC"
-                                                && m.LanguagePreferenceCode == "EN"
-                                                && m.FacilityID == emailActivityDetail.FacilityID
-                                                select m).ToList();
+                                mediaRows = activityMediaList.Where(m => m.OwnerID == emailActivityDetail.PatientID
+                                                                         && m.CategoryCode == "TTC"
+                                                                         && m.LanguagePreferenceCode == "EN"
+                                                                         && m.FacilityID == emailActivityDetail.FacilityID).ToList();
 
                                 //First get based on scheduleid for email template
-                                if (mediaRows == null || mediaRows.Count == 0)
+                                if (mediaRows.Count == 0)
                                 {
-                                    mediaRows = (from m in activityMediaList
-                                                    where m.OwnerID == emailActivityDetail.PatientID
-                                                    && m.CategoryCode == "TTC"
-                                                    && m.LanguagePreferenceCode == "EN"
-                                                    && m.FacilityID == contractLookUp
-                                                    select m).ToList();                                   
+                                    mediaRows = activityMediaList.Where(m => m.OwnerID == emailActivityDetail.PatientID
+                                                                             && m.CategoryCode == "TTC"
+                                                                             && m.LanguagePreferenceCode == "EN"
+                                                                             && m.FacilityID == contractLookUp).ToList();
                                 }
                             }
                         }
                     }
                 }
-                if (mediaRows != null && mediaRows.Count > 0)
+                if (mediaRows.Count > 0)
                 {
                     foreach (ActivityMedia media in mediaRows)
                     {
-                        appointmentSpecificMessage = _templateUtilities.ProperCase(media.Narrative);
+                        string appointmentSpecificMessage = _templateUtilities.ProperCase(media.Narrative);
                         _templateUtilities.SetXMlNodeInnerText(apptSpecificMsgNode, appointmentSpecificMessage);
                     }
                 }
                 else
                 {
                     //Set enabled to false for Day 1
-                    apptSpecificMsgNode.Attributes[XMLFields.Enable].Value = "false";
-                    _templateUtilities.SetXMlNodeInnerText(apptSpecificMsgNode, string.Empty);
+                    if (apptSpecificMsgNode != null)
+                    {
+                        apptSpecificMsgNode.Attributes[XMLFields.Enable].Value = "false";
+                        _templateUtilities.SetXMlNodeInnerText(apptSpecificMsgNode, string.Empty);
+                    }
                 }
             }
             else
             {
                 //Set enabled to false for Day 1
-                apptSpecificMsgNode.Attributes[XMLFields.Enable].Value = "false";
-                _templateUtilities.SetXMlNodeInnerText(apptSpecificMsgNode, string.Empty);
+                if (apptSpecificMsgNode != null)
+                {
+                    apptSpecificMsgNode.Attributes[XMLFields.Enable].Value = "false";
+                    _templateUtilities.SetXMlNodeInnerText(apptSpecificMsgNode, string.Empty);
+                }
             }
 
             results.PopulatedTemplate = xdoc;
@@ -544,10 +495,7 @@ namespace Phytel.Services.Communication
 
         public string Transform(XmlDocument xml, TemplateDetail templateDetail)
         {
-            string body = string.Empty;
-
-            body = _templateUtilities.Transform(xml, templateDetail, _Mode);
-
+            var body = _templateUtilities.Transform(xml, templateDetail, _Mode);
             return body;
         }
 
@@ -559,12 +507,9 @@ namespace Phytel.Services.Communication
         {
             TemplateResults results = new TemplateResults();
 
-            string xpath = string.Empty;
-
             //PatientID
-            xpath = _templateUtilities.GetModeSpecificTag(XMLFields.ModePatientID, _Mode);
-            XmlNode patientIDNode = xdoc.SelectSingleNode(xpath);
-            _templateUtilities.SetXMlNodeInnerText(patientIDNode, emailActivityDetail.PatientID.ToString());
+            XmlNode patientIdNode = xdoc.SelectSingleNode(_templateUtilities.GetModeSpecificTag(XMLFields.ModePatientID, _Mode));
+            _templateUtilities.SetXMlNodeInnerText(patientIdNode, emailActivityDetail.PatientID.ToString());
 
             results.PopulatedTemplate = xdoc;
             results.MissingObjects = missingObjects;
@@ -588,7 +533,6 @@ namespace Phytel.Services.Communication
         {
             TemplateResults results = new TemplateResults();
 
-            string messageSubject = string.Empty;
             string messageType = string.Empty;
             string facilityName = string.Empty;
             
@@ -596,18 +540,14 @@ namespace Phytel.Services.Communication
             xdoc = utilityResults.PopulatedTemplate;
             missingObjects = utilityResults.MissingObjects;
 
-            string xpath = string.Empty;
-            
-            xpath = _templateUtilities.GetModeSpecificTag(XMLFields.ModeFacilityName, _Mode);
-            XmlNode facilityNameNode = xdoc.SelectSingleNode(xpath);
+            XmlNode facilityNameNode = xdoc.SelectSingleNode(_templateUtilities.GetModeSpecificTag(XMLFields.ModeFacilityName, _Mode));
             if (facilityNameNode != null)
             {
-                facilityName = facilityNameNode.InnerText.ToString();
+                facilityName = facilityNameNode.InnerText;
             }
-                        
+
             //MessageType
-            xpath = _templateUtilities.GetModeSpecificTag(XMLFields.ModeMessageType, _Mode);
-            XmlNode messageTypeNode = xdoc.SelectSingleNode(xpath);
+            XmlNode messageTypeNode = xdoc.SelectSingleNode(_templateUtilities.GetModeSpecificTag(XMLFields.ModeMessageType, _Mode));
             switch (campaignID)
             {
                 case (int)CampaignTypes.ACDefault:
@@ -616,13 +556,11 @@ namespace Phytel.Services.Communication
                     _templateUtilities.SetXMlNodeInnerText(messageTypeNode, messageType);
                     break;
             }
-             
+
             //Subject 
             //Don't set inner text via SetXMlNodeInnerText as facilityname XML characters will be decoded again
-            xpath = _templateUtilities.GetModeSpecificTag(XMLFields.ModeMessageSubject, _Mode);
-            XmlNode messageSubjectNode = xdoc.SelectSingleNode(xpath);
-            if (!String.IsNullOrEmpty(facilityName)
-                    && !String.IsNullOrEmpty(facilityName.Trim()))
+            XmlNode messageSubjectNode = xdoc.SelectSingleNode(_templateUtilities.GetModeSpecificTag(XMLFields.ModeMessageSubject, _Mode));
+            if (!string.IsNullOrWhiteSpace(facilityName))
             {
                 _templateUtilities.SetXMlNodeInnerText(messageSubjectNode, "A message from " + facilityName);
             }
@@ -644,14 +582,11 @@ namespace Phytel.Services.Communication
         {
             DataProtector dataProtector = new DataProtector(DataProtector.Store.USE_SIMPLE_STORE);
 
-            string stringToEncrypt = string.Empty;
-            string encryptedString = string.Empty;
-            string key = string.Empty;
             int i = 0;
             foreach (KeyValuePair<string, string> queryString in querystrings)
             {
-                encryptedString = dataProtector.Encrypt(queryString.Value.ToString());
-                key = queryString.Key.ToString();
+                string encryptedString = dataProtector.Encrypt(queryString.Value);
+                string key = queryString.Key;
                 if (i == 0)
                 {
                     url = url + "?" + key + "=" + HttpUtility.UrlEncode(encryptedString);
@@ -665,19 +600,18 @@ namespace Phytel.Services.Communication
             return url;
         }
 
-        public bool IsAppointmentSpecificMsgEnabled(List<ContractPermission> contractPermissions, int contactRoleID)
+        public bool IsAppointmentSpecificMsgEnabled(List<ContractPermission> contractPermissions, int contactRoleId)
         {
-            List<ContractPermission> permissionRows = null;
             bool isEnabled = false;
             try
             {
                 if (contractPermissions != null && contractPermissions.Count > 0)
                 {
-                    permissionRows = (from cp in contractPermissions
-                                        where cp.ChildObjectID == (int)Prompts.AppointmentSpecificMessage
-                                        && cp.RoleID == contactRoleID
-                                        select cp).ToList();
-                    if (permissionRows != null && permissionRows.Count > 0)
+                    List<ContractPermission> permissionRows =
+                        contractPermissions.Where(cp => cp.ChildObjectID == (int) Prompts.AppointmentSpecificMessage 
+                        && cp.RoleID == contactRoleId).ToList();
+
+                    if (permissionRows.Count > 0)
                     {
                         isEnabled = true;
                     }
@@ -694,45 +628,34 @@ namespace Phytel.Services.Communication
         {
             TemplateResults results = new TemplateResults();
 
-            string facilityID = string.Empty;
-            string facilityName = string.Empty;
-            ActivityMedia media = null;
-            string xpath = string.Empty;
-
-            facilityID = emailActivityDetail.FacilityID.ToString();
-
             //FacilityID
-            xpath = _templateUtilities.GetModeSpecificTag(XMLFields.ModeFacilityID, _Mode);
-            XmlNode facilityIDNode = xdoc.SelectSingleNode(xpath);
-            _templateUtilities.SetXMlNodeInnerText(facilityIDNode, facilityID);
+            XmlNode facilityIdNode = xdoc.SelectSingleNode(_templateUtilities.GetModeSpecificTag(XMLFields.ModeFacilityID, _Mode));
+            _templateUtilities.SetXMlNodeInnerText(facilityIdNode, emailActivityDetail.FacilityID.ToString());
 
             //Facility Name
-            xpath = _templateUtilities.GetModeSpecificTag(XMLFields.ModeFacilityName, _Mode);
-            XmlNode facilityNameNode = xdoc.SelectSingleNode(xpath);
-            //check for email override
-            media = (from m in activityMediaList
-                     where m.OwnerID == emailActivityDetail.FacilityID
-                     && m.CategoryCode == "SNOVR"
-                     && m.OwnerCode == "EMAIL"
-                     && m.LanguagePreferenceCode == "EN"
-                     select m).FirstOrDefault();
+            XmlNode facilityNameNode = xdoc.SelectSingleNode(_templateUtilities.GetModeSpecificTag(XMLFields.ModeFacilityName, _Mode));
 
+            //Check for email override
+            ActivityMedia media = activityMediaList.FirstOrDefault(m => m.OwnerID == emailActivityDetail.FacilityID
+                                                                        && m.CategoryCode == "SNOVR"
+                                                                        && m.OwnerCode == "EMAIL"
+                                                                        && m.LanguagePreferenceCode == "EN");
             if (media != null)
             {
-                facilityName = media.Narrative;
-                if (!String.IsNullOrEmpty(facilityName) && !String.IsNullOrEmpty(facilityName.Trim()))
+                string facilityName = media.Narrative;
+                if (!string.IsNullOrWhiteSpace(facilityName))
                 {
                     _templateUtilities.SetXMlNodeInnerText(facilityNameNode, facilityName.Trim());
                 }
                 else
                 {
-                    string missingObjString = "Facility name " + facilityID;
+                    string missingObjString = "Facility name " + emailActivityDetail.FacilityID;
                     missingObjects = _templateUtilities.AddMissingObjects(missingObjects, missingObjString);
                 }
             }
             else
             {
-                string missingObjString = "Facility name " + facilityID;
+                string missingObjString = "Facility name " + emailActivityDetail.FacilityID;
                 missingObjects = _templateUtilities.AddMissingObjects(missingObjects, missingObjString);
             }
 
@@ -745,175 +668,150 @@ namespace Phytel.Services.Communication
         {
             TemplateResults results = new TemplateResults();
 
-            string toEmailAddress = string.Empty;
             string fromEmailAddress = string.Empty;
             string replyToEmailAddress = string.Empty;
-            string activityID = string.Empty;
-            string facilityID = string.Empty;
             string facilityName = string.Empty;
 
-            ActivityMedia media = null;
-            string xpath = string.Empty;
-
-            xpath = _templateUtilities.GetModeSpecificTag(XMLFields.ModeFacilityName, _Mode);
-            XmlNode facilityNameNode = xdoc.SelectSingleNode(xpath);
+            //FacilityName
+            XmlNode facilityNameNode = xdoc.SelectSingleNode(_templateUtilities.GetModeSpecificTag(XMLFields.ModeFacilityName, _Mode));
             if (facilityNameNode != null)
             {
-                facilityName = facilityNameNode.InnerText.ToString();
+                facilityName = facilityNameNode.InnerText;
             }
 
-            activityID = emailActivityDetail.ActivityID.ToString();
-            toEmailAddress = emailActivityDetail.ToEmailAddress;
-            facilityID = emailActivityDetail.FacilityID.ToString();
-
             //ToEmailAddress
-            xpath = _templateUtilities.GetModeSpecificTag(XMLFields.ModeToEmailAddress, _Mode);
-            XmlNode toEmailAddressNode = xdoc.SelectSingleNode(xpath);
-            if (_templateUtilities.IsEmailAddressFormatValid(toEmailAddress))
+            XmlNode toEmailAddressNode = xdoc.SelectSingleNode(_templateUtilities.GetModeSpecificTag(XMLFields.ModeToEmailAddress, _Mode));
+            if (_templateUtilities.IsEmailAddressFormatValid(emailActivityDetail.ToEmailAddress))
             {
-                _templateUtilities.SetXMlNodeInnerText(toEmailAddressNode, toEmailAddress);
+                if (toEmailAddressNode != null) toEmailAddressNode.InnerText = emailActivityDetail.ToEmailAddress;
             }
             else
             {
-                string missingObjString = "ToEmailAddress" + activityID;
+                string missingObjString = "ToEmailAddress" + emailActivityDetail.ActivityID;
                 missingObjects = _templateUtilities.AddMissingObjects(missingObjects, missingObjString);
             }
 
             //FromEmailAddress
-            xpath = _templateUtilities.GetModeSpecificTag(XMLFields.ModeFromEmailAddress, _Mode);
-            XmlNode fromEmailAddressNode = xdoc.SelectSingleNode(xpath);
-            media = (from m in activityMediaList
-                     where m.OwnerID == emailActivityDetail.FacilityID
-                        && m.CategoryCode == "EMAIL"
-                        && m.OwnerCode == "EMAIL"
-                     select m).FirstOrDefault();
+            XmlNode fromEmailAddressNode = xdoc.SelectSingleNode(_templateUtilities.GetModeSpecificTag(XMLFields.ModeFromEmailAddress, _Mode));
+            ActivityMedia media = activityMediaList.FirstOrDefault(m => m.OwnerID == emailActivityDetail.FacilityID
+                                                                        && m.CategoryCode == "EMAIL"
+                                                                        && m.OwnerCode == "EMAIL");
             if (media != null)
             {
                 //Set default reply email address
                 fromEmailAddress = media.Narrative;
             }
 
-            if (!String.IsNullOrEmpty(fromEmailAddress) && !String.IsNullOrEmpty(fromEmailAddress.Trim()))
+            if (!string.IsNullOrWhiteSpace(fromEmailAddress))
             {
                 _templateUtilities.SetXMlNodeInnerText(fromEmailAddressNode, fromEmailAddress.Trim());
             }
             else
             {
                 //Get Configured Displayname based on Contract override
-                media = (from m in activityMediaList
-                         where m.OwnerID == -1
-                         && m.CategoryCode == "EMAIL"
-                         && m.OwnerCode == "EMAIL"
-                         select m).FirstOrDefault();
+                media = activityMediaList.FirstOrDefault(m => m.OwnerID == -1
+                                                              && m.CategoryCode == "EMAIL"
+                                                              && m.OwnerCode == "EMAIL");
                 if (media != null)
                 {
                     fromEmailAddress = media.Narrative;
-                    if (!String.IsNullOrEmpty(fromEmailAddress) && !String.IsNullOrEmpty(fromEmailAddress.Trim()))
+                    if (!string.IsNullOrWhiteSpace(fromEmailAddress))
                     {
                         _templateUtilities.SetXMlNodeInnerText(fromEmailAddressNode, fromEmailAddress.Trim());
                     }
                     else
                     {
-                        string missingObjString = "From Email Address not configured at facility" + facilityID + " and contract level ";
+                        string missingObjString = "From Email Address not configured at facility" + emailActivityDetail.FacilityID + " and contract level ";
                         missingObjects = _templateUtilities.AddMissingObjects(missingObjects, missingObjString);
                     }
                 }
                 else
                 {
-                    string missingObjString = "From Email Address not configured at facility" + facilityID + " and contract level ";
+                    string missingObjString = "From Email Address not configured at facility" + emailActivityDetail.FacilityID + " and contract level ";
                     missingObjects = _templateUtilities.AddMissingObjects(missingObjects, missingObjString);
                 }
             }
 
             //ReplyToEmailAddress
-            xpath = _templateUtilities.GetModeSpecificTag(XMLFields.ModeReplyToEmailAddress, _Mode);
-            XmlNode replyToEmailAddressNode = xdoc.SelectSingleNode(xpath);
+            XmlNode replyToEmailAddressNode = xdoc.SelectSingleNode(_templateUtilities.GetModeSpecificTag(XMLFields.ModeReplyToEmailAddress, _Mode));
 
             //Get reply address at facility level
-            media = (from m in activityMediaList
-                     where m.OwnerID == emailActivityDetail.FacilityID
-                        && m.CategoryCode == "REPLY"
-                        && m.OwnerCode == "EMAIL"
-                     select m).FirstOrDefault();
-
+            media = activityMediaList.FirstOrDefault(m => m.OwnerID == emailActivityDetail.FacilityID
+                                                          && m.CategoryCode == "REPLY"
+                                                          && m.OwnerCode == "EMAIL");
             if (media != null)
             {
                 replyToEmailAddress = media.Narrative;
             }
 
             //Facility level reply address
-            if (!String.IsNullOrEmpty(replyToEmailAddress) && !String.IsNullOrEmpty(replyToEmailAddress.Trim()))
+            if (!string.IsNullOrWhiteSpace(replyToEmailAddress))
             {
-                _templateUtilities.SetXMlNodeInnerText(replyToEmailAddressNode, replyToEmailAddress.Trim());
+                if (replyToEmailAddressNode != null) replyToEmailAddressNode.InnerText = replyToEmailAddress.Trim();
             }
+
             //Contract level reply address
             else
             {
                 //Get Configured Displayname based on Contract override
-                media = (from m in activityMediaList
-                         where m.OwnerID == -1
-                         && m.CategoryCode == "REPLY"
-                         && m.OwnerCode == "EMAIL"
-                         select m).FirstOrDefault();
+                media = activityMediaList.FirstOrDefault(m => m.OwnerID == -1
+                                                              && m.CategoryCode == "REPLY"
+                                                              && m.OwnerCode == "EMAIL");
                 if (media != null)
                 {
                     replyToEmailAddress = media.Narrative;
-                    if (!String.IsNullOrEmpty(replyToEmailAddress) && !String.IsNullOrEmpty(replyToEmailAddress.Trim()))
+                    if (!string.IsNullOrWhiteSpace(replyToEmailAddress))
                     {
                         _templateUtilities.SetXMlNodeInnerText(replyToEmailAddressNode, replyToEmailAddress.Trim());
                     }
                     else
                     {
-                        string missingObjString = "Reply Email Address not configured at facility" + facilityID + " and contract level ";
+                        string missingObjString = "Reply Email Address not configured at facility" + emailActivityDetail.FacilityID + " and contract level ";
                         missingObjects = _templateUtilities.AddMissingObjects(missingObjects, missingObjString);
                     }
                 }
                 else
                 {
-                    string missingObjString = "Reply Email Address not configured at facility" + facilityID + " and contract level ";
+                    string missingObjString = "Reply Email Address not configured at facility" + emailActivityDetail.FacilityID + " and contract level ";
                     missingObjects = _templateUtilities.AddMissingObjects(missingObjects, missingObjString);
                 }
             }
 
             //DisplayName
             //Default display name to facility name
-            xpath = _templateUtilities.GetModeSpecificTag(XMLFields.ModeDisplayName, _Mode);
-            XmlNode displayNameNode = xdoc.SelectSingleNode(xpath);
-            _templateUtilities.SetXMlNodeInnerText(displayNameNode, facilityName);
+            XmlNode displayNameNode = xdoc.SelectSingleNode(_templateUtilities.GetModeSpecificTag(XMLFields.ModeDisplayName, _Mode));
+            if (displayNameNode != null)
+            {
+                displayNameNode.InnerText = facilityName;
 
-            //Get Configured Displayname based on ScheduleID override
-            media = (from m in activityMediaList
-                     where m.OwnerID == emailActivityDetail.RecipientSchedID
-                        && m.CategoryCode == "NAME"
-                        && m.OwnerCode == "EMAIL"
-                     select m).FirstOrDefault();
-            if (media != null)
-            {
-                _templateUtilities.SetXMlNodeInnerText(displayNameNode, media.Narrative);
-            }
-            else
-            {
-                //Get Configured Displayname based on FacilityID override
-                media = (from m in activityMediaList
-                         where m.OwnerID == emailActivityDetail.FacilityID
-                            && m.CategoryCode == "NAME"
-                            && m.OwnerCode == "EMAIL"
-                         select m).FirstOrDefault();
+                //Get Configured Displayname based on ScheduleID override
+                media = activityMediaList.FirstOrDefault(m => m.OwnerID == emailActivityDetail.RecipientSchedID
+                                                              && m.CategoryCode == "NAME"
+                                                              && m.OwnerCode == "EMAIL");
                 if (media != null)
                 {
                     _templateUtilities.SetXMlNodeInnerText(displayNameNode, media.Narrative);
                 }
                 else
                 {
-                    //Get Configured Displayname based on Contract override
-                    media = (from m in activityMediaList
-                             where m.OwnerID == -1
-                             && m.CategoryCode == "NAME"
-                             && m.OwnerCode == "EMAIL"
-                             select m).FirstOrDefault();
+                    //Get Configured Displayname based on FacilityID override
+                    media = activityMediaList.FirstOrDefault(m => m.OwnerID == emailActivityDetail.FacilityID
+                                                                  && m.CategoryCode == "NAME"
+                                                                  && m.OwnerCode == "EMAIL");
                     if (media != null)
                     {
                         _templateUtilities.SetXMlNodeInnerText(displayNameNode, media.Narrative);
+                    }
+                    else
+                    {
+                        //Get Configured Displayname based on Contract override
+                        media = activityMediaList.FirstOrDefault(m => m.OwnerID == -1
+                                                                      && m.CategoryCode == "NAME"
+                                                                      && m.OwnerCode == "EMAIL");     
+                        if (media != null)
+                        {
+                            _templateUtilities.SetXMlNodeInnerText(displayNameNode, media.Narrative);
+                        }
                     }
                 }
             }
@@ -922,7 +820,6 @@ namespace Phytel.Services.Communication
             results.MissingObjects = missingObjects;
             return results;
         }
-
         #endregion
     }
 }
