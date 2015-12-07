@@ -5,7 +5,7 @@ GO
 CREATE PROCEDURE [dbo].[spPhy_RPT_Flat_Latest_PatientObservations]
 AS
 BEGIN
-	DELETE FROM [RPT_Flat_Latest_PatientObservations]
+	TRUNCATE TABLE [RPT_Flat_Latest_PatientObservations]
 
 	INSERT INTO [RPT_Flat_Latest_PatientObservations]
 	(
