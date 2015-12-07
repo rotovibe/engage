@@ -20,7 +20,9 @@ CREATE TABLE [dbo].[RPT_Flat_Latest_PatientObservations](
 ) ON [PRIMARY]
 GO
 
-DELETE FROM RPT_SprocNames WHERE SprocName = 'spPhy_RPT_Flat_Latest_PatientObservations';
-GO
-INSERT INTO RPT_SprocNames (SprocName, Prerequire) VALUES ('spPhy_RPT_Flat_Latest_PatientObservations', 'false');
+IF NOT EXISTS (SELECT * FROM [dbo].[RPT_SprocNames] WHERE SprocName = 'spPhy_RPT_Flat_Latest_PatientObservations')
+BEGIN
+	INSERT INTO [dbo].[RPT_SprocNames]([SprocName],[Prerequire],[Description])
+	VALUES ('spPhy_RPT_Flat_Latest_PatientObservations', 0, null)	
+END
 GO
