@@ -78,7 +78,7 @@ namespace Phytel.Services.Communication.Harness.Managers
             return _testViewModel;
         }
 
-        public TestViewModel BuildIntroTextMesssage_Test(TestViewModel testViewModel)
+        public TestViewModel BuildIntroTextMessage_Test(TestViewModel testViewModel)
         {
             var missingObjects = new Hashtable();
             TemplateResults results = _manager.BuildIntroTextMessage(ResetXml(), testViewModel.TextActivityDetail, missingObjects);

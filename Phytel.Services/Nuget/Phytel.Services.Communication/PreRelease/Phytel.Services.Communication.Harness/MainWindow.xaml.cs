@@ -162,6 +162,7 @@ namespace Phytel.Services.Communication.Harness
                 TextFromNumber = "8175551212",
                 PhoneNumber = "2145551212",
                 ScheduleDateTime = "11/20/2020 08:00:00 AM",
+                ScheduleName = "Schedule Name",
                 RecipientSchedID = 30,
                 ScheduleDuration = 60,
                 FacilityName = "Name",
