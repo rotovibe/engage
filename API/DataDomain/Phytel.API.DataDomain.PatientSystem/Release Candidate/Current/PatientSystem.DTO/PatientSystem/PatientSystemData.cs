@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Phytel.API.Common;
 
 namespace Phytel.API.DataDomain.PatientSystem.DTO
 {
-    public class PatientSystemData
+    public class PatientSystemData : IAppData
     {
         public string Id { get; set; }
         public string PatientId { get; set; }
@@ -19,5 +20,7 @@ namespace Phytel.API.DataDomain.PatientSystem.DTO
         public DateTime CreatedOn { get; set; }
         public string UpdatedById { get; set; }
         public DateTime? UpdatedOn { get; set; }
+        // added for atmosphere integration
+        public string ExternalRecordId { get; set; }
     }
 }

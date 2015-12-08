@@ -45,6 +45,15 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'QA|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\QA\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="ServiceStack">
       <HintPath>..\..\..\..\..\packages\ServiceStack.3.9.70\lib\net35\ServiceStack.dll</HintPath>
@@ -85,11 +94,15 @@
     <Compile Include="Enums.cs" />
     <Compile Include="PatientSystem\GetAllPatientSystemDataRequest.cs" />
     <Compile Include="PatientSystem\GetAllPatientSystemDataResponse.cs" />
+    <Compile Include="PatientSystem\GetPatientSystemByIdsDataResponse.cs" />
+    <Compile Include="PatientSystem\GetPatientSystemByIdsDataRequest.cs" />
     <Compile Include="PatientSystem\InsertPatientSystemDataRequest.cs" />
-    <Compile Include="PatientSystem\InsertEngagePatientSystemsDataRequest.cs" />
+    <Compile Include="PatientSystem\InsertBatchEngagePatientSystemsDataRequest.cs" />
+    <Compile Include="PatientSystem\InsertBatchPatientSystemsDataRequest.cs" />
     <Compile Include="PatientSystem\InsertPatientSystemsDataRequest.cs" />
     <Compile Include="PatientSystem\InsertPatientSystemDataResponse.cs" />
-    <Compile Include="PatientSystem\InsertEngagePatientSystemsDataResponse.cs" />
+    <Compile Include="PatientSystem\InsertBatchEngagePatientSystemsDataResponse.cs" />
+    <Compile Include="PatientSystem\InsertBatchPatientSystemsDataResponse.cs" />
     <Compile Include="PatientSystem\InsertPatientSystemsDataResponse.cs" />
     <Compile Include="PatientSystem\DeletePatientSystemsDataRequest.cs" />
     <Compile Include="PatientSystem\PatientSystemOldData.cs" />
@@ -116,6 +129,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\Common\Phytel.API.Common\Release Candidate\Current\Phytel.API.Common.csproj">
+      <Project>{25cf3c3f-221f-4a49-b5ef-a8a5fcf9a5ba}</Project>
+      <Name>Phytel.API.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\..\Interfaces\Release Candidate\Current\Phytel.API.Interface\Phytel.API.Interface.csproj">
       <Project>{abe948fb-247e-4955-b3ab-b7c93e10a542}</Project>
       <Name>Phytel.API.Interface</Name>

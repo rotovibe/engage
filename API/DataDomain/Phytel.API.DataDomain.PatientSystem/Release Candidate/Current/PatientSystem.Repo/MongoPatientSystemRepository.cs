@@ -53,7 +53,7 @@ namespace Phytel.API.DataDomain.PatientSystem
                         throw new ArgumentException("Patient System status is missing");
                     using (PatientSystemMongoContext ctx = new PatientSystemMongoContext(ContractDBName))
                     {
-                        MEPatientSystem mePS = new MEPatientSystem(this.UserId)
+                        MEPatientSystem mePS = new MEPatientSystem(this.UserId,data.CreatedOn)
                             {
                                 PatientId = ObjectId.Parse(data.PatientId),
                                 Value = Helper.TrimAndLimit(data.Value, 100),
@@ -61,7 +61,9 @@ namespace Phytel.API.DataDomain.PatientSystem
                                 Primary = data.Primary,
                                 SystemId = ObjectId.Parse(data.SystemId),
                                 DataSource = Helper.TrimAndLimit(data.DataSource, 50),
-                                DeleteFlag = false
+                                DeleteFlag = false,
+                                ExternalRecordId = data.ExternalRecordId,
+                                LastUpdatedOn = data.UpdatedOn
                             };
                         ctx.PatientSystems.Collection.Insert(mePS);
                         AuditHelper.LogDataAudit(this.UserId, 
@@ -82,7 +84,68 @@ namespace Phytel.API.DataDomain.PatientSystem
 
         public object InsertAll(List<object> entities)
         {
-            throw new NotImplementedException();
+            BulkInsertResult result = new BulkInsertResult();
+            List<string> insertedIds = new List<string>();
+            List<string> errorMessages = new List<string>();
+            try
+            {
+                using (PatientSystemMongoContext ctx = new PatientSystemMongoContext(ContractDBName))
+                {
+                    var bulk = ctx.PatientSystems.Collection.InitializeUnorderedBulkOperation();
+                    foreach (PatientSystemData data in entities)
+                    {
+                        MEPatientSystem mePS = new MEPatientSystem(this.UserId, data.CreatedOn)
+                        {
+                            PatientId = ObjectId.Parse(data.PatientId),
+                            Value = Helper.TrimAndLimit(data.Value, 100),
+                            Status = (Status)data.StatusId,
+                            Primary = data.Primary,
+                            SystemId = ObjectId.Parse(data.SystemId),
+                            DataSource = Helper.TrimAndLimit(data.DataSource, 50),
+                            DeleteFlag = false,
+                            ExternalRecordId = data.ExternalRecordId,
+                            LastUpdatedOn = data.UpdatedOn,
+                            UpdatedBy = ParseObjectId(data.UpdatedById)
+                        };
+                        bulk.Insert(mePS.ToBsonDocument());
+                        insertedIds.Add(mePS.Id.ToString());
+                    }
+                    BulkWriteResult bwr = bulk.Execute();
+                }
+                // TODO: Auditing.
+            }
+            catch (BulkWriteException bwEx)
+            {
+                // Get the error messages for the ones that failed.
+                foreach (BulkWriteError er in bwEx.WriteErrors)
+                {
+                    errorMessages.Add(er.Message);
+                }
+            }
+            catch (Exception ex)
+            {
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Helper.LogException(int.Parse(aseProcessID), ex);
+            }
+            result.ProcessedIds = insertedIds;
+            result.ErrorMessages = errorMessages;
+            return result;
+        }
+
+        private ObjectId? ParseObjectId(string p)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(p)) return null;
+                var val = ObjectId.Parse(p);
+                return val;
+            }
+            catch (Exception ex)
+            {
+                var aseProcessId = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Helper.LogException(int.Parse(aseProcessId), ex);
+                throw ex;
+            }
         }
 
         public void Delete(object entity)
@@ -139,6 +202,7 @@ namespace Phytel.API.DataDomain.PatientSystem
                             Value = mePS.Value,
                             StatusId = (int)mePS.Status,
                             Primary = mePS.Primary,
+                            ExternalRecordId = mePS.ExternalRecordId,
                             SystemId = mePS.SystemId.ToString(),
                             DataSource = mePS.DataSource,
                             CreatedById = mePS.RecordCreatedBy.ToString(),
@@ -207,6 +271,11 @@ namespace Phytel.API.DataDomain.PatientSystem
                         else
                             uv.Add(MB.Update.Set(MEPatientSystem.DataSourceProperty, BsonNull.Value));
 
+                        if (!string.IsNullOrEmpty(data.ExternalRecordId))
+                            uv.Add(MB.Update.Set(MEPatientSystem.ExternalRecordIdProperty, data.ExternalRecordId));
+                        else
+                            uv.Add(MB.Update.Set(MEPatientSystem.ExternalRecordIdProperty, BsonNull.Value));
+
                         if (data.StatusId != 0) uv.Add(MB.Update.Set(MEPatientSystem.StatusProperty, data.StatusId));
                         uv.Add(MB.Update.Set(MEPatientSystem.PrimaryProperty, data.Primary));
                         if (!string.IsNullOrEmpty(data.SystemId)) uv.Add(MB.Update.Set(MEPatientSystem.SystemIdProperty, ObjectId.Parse(data.SystemId)));
@@ -260,6 +329,7 @@ namespace Phytel.API.DataDomain.PatientSystem
                                 Value = mePS.Value,
                                 StatusId = (int)mePS.Status,
                                 Primary = mePS.Primary,
+                                ExternalRecordId = mePS.ExternalRecordId,
                                 SystemId = mePS.SystemId.ToString(),
                                 DataSource = mePS.DataSource,
                                 CreatedById = mePS.RecordCreatedBy.ToString(),
@@ -306,6 +376,75 @@ namespace Phytel.API.DataDomain.PatientSystem
         public IEnumerable<object> Find(object newEntity)
         {
             throw new NotImplementedException();
+        }
+
+
+        public object FindByExternalRecordId(string externalRecordId)
+        {
+            PatientSystemData data = null;
+            try
+            {
+                using (PatientSystemMongoContext ctx = new PatientSystemMongoContext(ContractDBName))
+                {
+                    List<IMongoQuery> queries = new List<IMongoQuery>();
+                    queries.Add(Query.EQ(MEPatientSystem.ExternalRecordIdProperty, externalRecordId));
+                    queries.Add(Query.EQ(MEPatientSystem.DeleteFlagProperty, false));
+                    queries.Add(Query.EQ(MEPatientSystem.TTLDateProperty, BsonNull.Value));
+                    IMongoQuery mQuery = Query.And(queries);
+                    MEPatientSystem mePS = ctx.PatientSystems.Collection.Find(mQuery).FirstOrDefault();
+                    if (mePS != null)
+                    {
+                        data = new PatientSystemData
+                        {
+                            Id = mePS.Id.ToString(),
+                        };
+                    }
+                }
+                return data;
+            }
+            catch (Exception) { throw; }
+        }
+
+        public List<PatientSystemData> Select(List<string> Ids)
+        {
+            List<PatientSystemData> psList = null;
+            try
+            {
+                using (PatientSystemMongoContext ctx = new PatientSystemMongoContext(ContractDBName))
+                {
+                    List<IMongoQuery> queries = new List<IMongoQuery>();
+                    queries.Add(Query.In(MEPatientSystem.IdProperty, new BsonArray(Helper.ConvertToObjectIdList(Ids))));
+                    queries.Add(Query.EQ(MEPatientSystem.DeleteFlagProperty, false));
+                    queries.Add(Query.EQ(MEPatientSystem.TTLDateProperty, BsonNull.Value));
+                    IMongoQuery mQuery = Query.And(queries);
+                    List<MEPatientSystem> mePatients = ctx.PatientSystems.Collection.Find(mQuery).ToList();
+                    if (mePatients != null && mePatients.Count > 0)
+                    {
+                        psList = new List<PatientSystemData>();
+                        foreach (MEPatientSystem mePS in mePatients)
+                        {
+                            PatientSystemData data = new PatientSystemData
+                            {
+                                Id = mePS.Id.ToString(),
+                                PatientId = mePS.PatientId.ToString(),
+                                Value = mePS.Value,
+                                StatusId = (int)mePS.Status,
+                                Primary = mePS.Primary,
+                                ExternalRecordId = mePS.ExternalRecordId,
+                                SystemId = mePS.SystemId.ToString(),
+                                DataSource = mePS.DataSource,
+                                CreatedById = mePS.RecordCreatedBy.ToString(),
+                                CreatedOn = mePS.RecordCreatedOn,
+                                UpdatedById = mePS.UpdatedBy == null ? null : mePS.UpdatedBy.ToString(),
+                                UpdatedOn = mePS.LastUpdatedOn
+                            };
+                            psList.Add(data);
+                        }
+                    }
+                }
+                return psList;
+            }
+            catch (Exception) { throw; }
         }
     }
 }

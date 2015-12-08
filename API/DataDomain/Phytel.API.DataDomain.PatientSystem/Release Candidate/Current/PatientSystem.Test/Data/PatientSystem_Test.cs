@@ -4,13 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Phytel.API.Common;
 using Phytel.API.DataDomain.PatientSystem.DTO;
 using ServiceStack.Service;
 using ServiceStack.ServiceClient.Web;
 
 namespace Phytel.API.DataDomain.PatientSystem.Test
 {
-    //[TestClass]
+    [TestClass]
     public class PatientSystem_Test
     {
         string context = "NG";
@@ -121,6 +122,25 @@ namespace Phytel.API.DataDomain.PatientSystem.Test
             DeletePatientSystemsDataResponse response = client.Delete<DeletePatientSystemsDataResponse>(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/PatientSystems/{5}?UserId={6}", url, context, version, contractNumber, request.PatientId, request.Ids,request.UserId));
             Assert.IsNotNull(response);
         }
+
+        //[TestMethod]
+        //public void UpsertPatientSystems_Test()
+        //{
+        //  //  List<PatientSystemData> lPsd = (List<PatientSystemData>)Helpers.DeserializeObject<List<PatientSystemData>>("PatientsSystemExample.txt");
+
+        //    UpsertBatchPatientSystemsDataRequest request = new UpsertBatchPatientSystemsDataRequest
+        //    {
+        //        Context = context,
+        //        ContractNumber = contractNumber,
+        //        UserId = userId,
+        //        Version = version,
+        //        PatientSystemsData = lPsd
+        //    };
+
+        //    //[Route("/{Context}/{Version}/{ContractNumber}/Batch/PatientSystems", "POST")]
+        //    UpsertBatchPatientSystemsDataResponse response = client.Post<UpsertBatchPatientSystemsDataResponse>(string.Format("{0}/{1}/{2}/{3}/Batch/PatientSystems", url, context, version, contractNumber), request);
+        //    Assert.IsNotNull(response);
+        //}
 
    }
 }

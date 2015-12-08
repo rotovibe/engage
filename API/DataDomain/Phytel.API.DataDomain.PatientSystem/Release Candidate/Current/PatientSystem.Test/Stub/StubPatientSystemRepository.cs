@@ -124,5 +124,17 @@ namespace Phytel.API.DataDomain.PatientSystem.Test
         {
             throw new NotImplementedException();
         }
+
+
+        public object FindByExternalRecordId(string externalRecordId)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public List<PatientSystemData> Select(List<string> Ids)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

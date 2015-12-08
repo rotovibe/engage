@@ -1,12 +1,13 @@
 using Phytel.API.Interface;
 using ServiceStack.ServiceInterface.ServiceModel;
 using System.Collections.Generic;
+using Phytel.API.Common;
 
 namespace Phytel.API.DataDomain.PatientSystem.DTO
 {
-    public class InsertEngagePatientSystemsDataResponse : IDomainResponse
+    public class InsertBatchEngagePatientSystemsDataResponse : IDomainResponse
     {
-        public List<string> Ids { get; set; }
+        public BulkInsertResult Result { get; set; }
         public double Version { get; set; }
         public ResponseStatus Status { get; set; }
     }

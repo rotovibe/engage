@@ -153,5 +153,17 @@ namespace Phytel.API.DataDomain.PatientSystem
             }
             catch (Exception) { throw; }
         }
+
+
+        public object FindByExternalRecordId(string externalRecordId)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public List<PatientSystemData> Select(List<string> Ids)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
