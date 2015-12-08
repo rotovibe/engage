@@ -61,6 +61,11 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
         [BsonIgnoreIfNull(true)]
         public DateTime? ClosedDate { get; set; }
 
+        public const string DueDateProperty = "dd";
+        [BsonElement(DueDateProperty)]
+        [BsonIgnoreIfNull(true)]
+        public DateTime? DueDate { get; set; }
+
         #region Standard IMongoEntity Implementation
         [BsonExtraElements]
         public BsonDocument ExtraElements { get; set; }
