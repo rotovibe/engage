@@ -72,7 +72,12 @@ namespace Phytel.API.DataAudit
                 MongoDatabase db = Phytel.Services.MongoService.Instance.GetDatabase(contract, true);
 
                 IMongoQuery query = Query.EQ(entityKeyField, ObjectId.Parse(entityId));
-                return db.GetCollection(collectionName).FindOne(query).ToJson();
+                //return db.GetCollection(collectionName).FindOne(query).ToJson();
+                var x = db.GetCollection(collectionName).FindOne(query);
+                if (x != null)
+                    return x.ToJson();
+                else
+                    return null;
             }
             catch (Exception)
             {

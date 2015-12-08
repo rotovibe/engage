@@ -53,6 +53,15 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'QA|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\QA\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;Debug</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="ASEAPI.Common">
       <HintPath>References\ASEAPI.Common.dll</HintPath>
@@ -122,6 +131,8 @@
     <Compile Include="Audit\DispatchRequest.cs" />
     <Compile Include="Audit\IAuditHelpers.cs" />
     <Compile Include="Audit\IAuditUtil.cs" />
+    <Compile Include="CustomObject\BulkInsertResult.cs" />
+    <Compile Include="CustomObject\HttpObjectResponse.cs" />
     <Compile Include="CustomObject\IdNamePair.cs" />
     <Compile Include="Data\MongoDataUtil.cs" />
     <Compile Include="Enums.cs" />
@@ -131,6 +142,7 @@
     <Compile Include="Format\ICommonFormatterUtil.cs" />
     <Compile Include="Helpers.cs" />
     <Compile Include="Helper.cs" />
+    <Compile Include="IAppData.cs" />
     <Compile Include="IHelpers.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
