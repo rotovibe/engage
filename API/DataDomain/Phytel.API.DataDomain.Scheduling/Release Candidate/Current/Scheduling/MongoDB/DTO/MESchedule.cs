@@ -32,6 +32,8 @@ namespace Phytel.API.DataDomain.Scheduling
         public const string CatgegoryProperty = "cat";
         public const string PriorityProperty = "pri";
         public const string DueDateProperty = "dd";
+        public const string StartTimeProperty = "sd";
+        public const string DurationProperty = "dur";
         public const string DueDateRangeProperty = "ddr";
         public const string ClosedDateProperty = "cd";
         public const string SchedulingTypeProperty = "type";
@@ -78,6 +80,14 @@ namespace Phytel.API.DataDomain.Scheduling
         [BsonElement(DueDateRangeProperty)]
         [BsonIgnoreIfNull(true)]
         public int DueDateRange { get; set; }
+
+        [BsonElement(StartTimeProperty)]
+        [BsonIgnoreIfNull(true)]
+        public DateTime? StartTime { get; set; }
+
+        [BsonElement(DurationProperty)]
+        [BsonIgnoreIfNull(true)]
+        public int? Duration { get; set; }
 
         [BsonElement(ClosedDateProperty)]
         [BsonIgnoreIfNull(true)]

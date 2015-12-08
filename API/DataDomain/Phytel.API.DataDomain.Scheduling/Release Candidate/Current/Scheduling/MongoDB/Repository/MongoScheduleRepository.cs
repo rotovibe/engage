@@ -66,6 +66,8 @@ namespace Phytel.API.DataDomain.Scheduling
                             CreatedOn = meSch.RecordCreatedOn,
                             Description = meSch.Description,
                             DueDate = meSch.DueDate,
+                            StartTime = meSch.StartTime,
+                            Duration = meSch.Duration,
                             DueDateRange = meSch.DueDateRange,
                             Id = meSch.Id.ToString(),
                             PatientId = meSch.PatientId.ToString() ?? null,
@@ -127,6 +129,18 @@ namespace Phytel.API.DataDomain.Scheduling
 
 
         public object FindByID(string entityID, bool includeDeletedToDo)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public object FindByExternalRecordId(string externalRecordId)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public IEnumerable<object> Select(List<string> ids)
         {
             throw new NotImplementedException();
         }

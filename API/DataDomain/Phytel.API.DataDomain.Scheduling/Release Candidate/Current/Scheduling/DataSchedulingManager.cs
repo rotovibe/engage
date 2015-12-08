@@ -4,6 +4,10 @@ using Phytel.API.DataDomain.Scheduling;
 using System;
 using Phytel.API.Common.Format;
 using System.Collections.Generic;
+using Phytel.API.Common;
+using System.Net;
+using System.Linq;
+using Phytel.API.DataAudit;
 
 namespace Phytel.API.DataDomain.Scheduling
 {
@@ -68,6 +72,46 @@ namespace Phytel.API.DataDomain.Scheduling
                 throw ex;
             }
             return response; ;
+        }
+
+        public List<HttpObjectResponse<ToDoData>> InsertBatchPatientToDos(InsertBatchPatientToDosDataRequest request)
+        {
+            List<HttpObjectResponse<ToDoData>> list = null;
+            try
+            {
+                if (request.PatientToDosData != null && request.PatientToDosData.Count > 0)
+                {
+                    list = new List<HttpObjectResponse<ToDoData>>();
+                    ISchedulingRepository repo = Factory.GetRepository(request, RepositoryType.ToDo);
+                    BulkInsertResult result = (BulkInsertResult)repo.InsertAll(request.PatientToDosData.Cast<object>().ToList());
+                    if (result != null)
+                    {
+                        if (result.ProcessedIds != null && result.ProcessedIds.Count > 0)
+                        {
+                            // Get the ToDos that were newly inserted. 
+                            List<ToDoData> insertedToDos = repo.Select(result.ProcessedIds) as List<ToDoData>;
+                            if (insertedToDos != null && insertedToDos.Count > 0)
+                            {
+                                #region DataAudit
+                                List<string> insertedPatientToDoIds = insertedToDos.Select(p => p.Id).ToList();
+                                AuditHelper.LogDataAudit(request.UserId, MongoCollectionName.ToDo.ToString(), insertedPatientToDoIds, Common.DataAuditType.Insert, request.ContractNumber);
+                                #endregion
+
+                                insertedToDos.ForEach(r =>
+                                {
+                                    list.Add(new HttpObjectResponse<ToDoData> { Code = HttpStatusCode.Created, Body = (ToDoData)new ToDoData { Id = r.Id, ExternalRecordId = r.ExternalRecordId, PatientId = r.PatientId } });
+                                });
+                            }
+                        }
+                        result.ErrorMessages.ForEach(e =>
+                        {
+                            list.Add(new HttpObjectResponse<ToDoData> { Code = HttpStatusCode.InternalServerError, Message = e });
+                        });
+                    }
+                }
+            }
+            catch (Exception ex) { throw ex; }
+            return list;
         }
 
         public RemoveProgramInToDosDataResponse RemoveProgramInToDos(RemoveProgramInToDosDataRequest request)
@@ -150,7 +194,6 @@ namespace Phytel.API.DataDomain.Scheduling
         }
         #endregion
 
-
         #region Schedule
         public GetScheduleDataResponse GetSchedule(GetScheduleDataRequest request)
         {
@@ -169,6 +212,5 @@ namespace Phytel.API.DataDomain.Scheduling
             }
         }
         #endregion
-
     }
 }   

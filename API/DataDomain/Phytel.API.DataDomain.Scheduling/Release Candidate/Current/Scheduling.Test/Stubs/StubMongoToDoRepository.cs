@@ -31,6 +31,8 @@ namespace Phytel.API.DataDomain.ToDo.Test.Stubs
                 CreatedOn = DateTime.UtcNow,
                 Description = "test description",
                 DueDate = DateTime.UtcNow,
+                StartTime = DateTime.UtcNow,
+                Duration = 20,
                 Id = "532b6320a381168abe000877",
                 PatientId = "532b645fa381168abe0009e9",
                 PriorityId = (int)Priority.High,
@@ -55,6 +57,8 @@ namespace Phytel.API.DataDomain.ToDo.Test.Stubs
                 CreatedOn = DateTime.UtcNow,
                 Description = "test description",
                 DueDate = DateTime.UtcNow,
+                StartTime = DateTime.UtcNow,
+                Duration = 20,
                 Id = "532b6320a381168abe000877",
                 PatientId = "532b645fa381168abe0009e9",
                 PriorityId = (int)Priority.High,
@@ -84,6 +88,8 @@ namespace Phytel.API.DataDomain.ToDo.Test.Stubs
                 CreatedOn = DateTime.UtcNow,
                 Description = "test description",
                 DueDate = DateTime.UtcNow,
+                StartTime = DateTime.UtcNow,
+                Duration = 20,
                 Id = "532b6320a381168abe000877",
                 PatientId = "532b645fa381168abe0009e9",
                 PriorityId = (int)Priority.High,
@@ -117,7 +123,7 @@ namespace Phytel.API.DataDomain.ToDo.Test.Stubs
             {
                 if (todoData != null)
                 {
-                    meToDo = new METoDo(this.UserId)
+                    meToDo = new METoDo(this.UserId, todoData.CreatedOn)
                     {
                         Id = ObjectId.Parse("532b6320a381168abe000877"),
                         Status = (Status)todoData.StatusId,
@@ -125,10 +131,13 @@ namespace Phytel.API.DataDomain.ToDo.Test.Stubs
                         Description = todoData.Description,
                         Title = todoData.Title,
                         DueDate = todoData.DueDate,
+                        StartTime = meToDo.StartTime,
+                        Duration = meToDo.Duration,
                         DeleteFlag = false,
                         AssignedToId = ObjectId.Parse(todoData.AssignedToId),
                         SourceId = ObjectId.Parse(todoData.SourceId),
-                        ClosedDate = todoData.ClosedDate
+                        ClosedDate = todoData.ClosedDate,
+                        LastUpdatedOn = todoData.UpdatedOn
                     };
                 }
                 return meToDo.Id.ToString();
@@ -163,6 +172,8 @@ namespace Phytel.API.DataDomain.ToDo.Test.Stubs
                 CreatedOn = DateTime.UtcNow,
                 Description = "test description",
                 DueDate = DateTime.UtcNow,
+                StartTime = DateTime.UtcNow,
+                Duration = 20,
                 Id = "532b6320a381168abe000877",
                 PatientId = "532b645fa381168abe0009e9",
                 PriorityId = (int)Priority.High,
@@ -191,13 +202,15 @@ namespace Phytel.API.DataDomain.ToDo.Test.Stubs
             bool result = false;
             if (todoData != null)
             {
-                METoDo meToDo = new METoDo(this.UserId)
+                METoDo meToDo = new METoDo(this.UserId, todoData.CreatedOn)
                 {
                     Status = (Status)todoData.StatusId,
                     Priority = (Priority)todoData.PriorityId,
                     Description = todoData.Description,
                     Title = todoData.Title,
                     DueDate = todoData.DueDate,
+                    StartTime = todoData.StartTime,
+                    Duration = todoData.Duration,
                     ClosedDate = todoData.ClosedDate
                 };
             }
@@ -212,6 +225,18 @@ namespace Phytel.API.DataDomain.ToDo.Test.Stubs
         }
 
         public void UndoDelete(object entity)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public object FindByExternalRecordId(string externalRecordId)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public IEnumerable<object> Select(List<string> ids)
         {
             throw new NotImplementedException();
         }

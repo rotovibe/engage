@@ -98,5 +98,10 @@ namespace Phytel.API.DataDomain.Scheduling.Test.Stubs
         {
             throw new NotImplementedException();
         }
+
+        public List<Phytel.API.Common.HttpObjectResponse<ToDoData>> InsertBatchPatientToDos(InsertBatchPatientToDosDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
