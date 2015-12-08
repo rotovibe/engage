@@ -24,5 +24,6 @@ namespace Phytel.API.AppDomain.NG.DTO
         public List<PatientBarrier> Barriers { get; set; }
         public List<PatientTask>  Tasks{ get; set; }
         public List<PatientIntervention> Interventions { get; set; }
+        public string Details { get; set; }
     }
 }

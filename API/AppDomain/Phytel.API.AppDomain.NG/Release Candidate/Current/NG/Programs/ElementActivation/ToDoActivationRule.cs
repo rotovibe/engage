@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Phytel.API.AppDomain.NG.DTO;
 using Phytel.API.AppDomain.NG.DTO.Scheduling;
 using Phytel.API.AppDomain.NG.PlanCOR;
@@ -29,70 +30,90 @@ namespace Phytel.API.AppDomain.NG.Programs.ElementActivation
                 Schedule todoTemp = null;
                 ToDoData todo = null;
 
-                try
+                if (!PatientToDoExists(arg, pe.ElementId))
                 {
-                    // get template todo from schedule endpoint
-                    todoTemp = EndpointUtil.GetScheduleToDoById(pe.ElementId, userId, arg.DomainRequest);
-                }
-                catch(Exception ex)
-                {
-                    throw new ArgumentException(ex.Message);
-                }
-
-                var prog = new System.Collections.Generic.List<string>();
-                if (arg.Program != null)
-                    prog.Add(arg.Program.Id);
-
-                string patientId = null;
-                if (arg.Program != null)
-                    patientId = arg.Program.PatientId;
-
-                try
-                {
-                    todo = new ToDoData
+                    try
                     {
-                        SourceId = todoTemp.Id,
-                        Title = todoTemp.Title,
-                        CategoryId = todoTemp.CategoryId,
-                        CreatedById = userId,
-                        StatusId = todoTemp.StatusId,
-                        Description = todoTemp.Description,
-                        PriorityId = todoTemp.PriorityId,
-                        DueDate = HandleDueDate(todoTemp.DueDateRange),
-                        PatientId = patientId,
-                        ProgramIds = prog,
-                        CreatedOn = DateTime.UtcNow
-                    };
-
-                    SetDefaultAssignment(userId, todoTemp, todo);
-
-                    // modified for ENG-709
-                    if (todo.StatusId == 2 || todo.StatusId == 4)
+                        // get template todo from schedule endpoint
+                        todoTemp = EndpointUtil.GetScheduleToDoById(pe.ElementId, userId, arg.DomainRequest);
+                    }
+                    catch (Exception ex)
                     {
-                        todo.ClosedDate = DateTime.UtcNow;
+                        throw new ArgumentException(ex.Message);
+                    }
+
+                    var prog = new System.Collections.Generic.List<string>();
+                    if (arg.Program != null)
+                        prog.Add(arg.Program.Id);
+
+                    string patientId = null;
+                    if (arg.Program != null)
+                        patientId = arg.Program.PatientId;
+
+                    try
+                    {
+                        todo = new ToDoData
+                        {
+                            SourceId = todoTemp.Id,
+                            Title = todoTemp.Title,
+                            CategoryId = todoTemp.CategoryId,
+                            CreatedById = userId,
+                            StatusId = todoTemp.StatusId,
+                            Description = todoTemp.Description,
+                            PriorityId = todoTemp.PriorityId,
+                            DueDate = HandleDueDate(todoTemp.DueDateRange),
+                            StartTime = todoTemp.StartTime,
+                            Duration = todoTemp.Duration,
+                            PatientId = patientId,
+                            ProgramIds = prog,
+                            CreatedOn = DateTime.UtcNow
+                        };
+
+                        SetDefaultAssignment(userId, todoTemp, todo);
+
+                        // modified for ENG-709
+                        if (todo.StatusId == 2 || todo.StatusId == 4)
+                        {
+                            todo.ClosedDate = DateTime.UtcNow;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new ArgumentException("ToDoData Hydration Error." + ex.Message);
+                    }
+
+                    try
+                    {
+                        // register new todo
+                        var result = EndpointUtil.PutInsertToDo(todo, arg.UserId, arg.DomainRequest);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception(ex.Message, ex.InnerException);
                     }
                 }
-                catch (Exception ex)
-                {
-                    throw new ArgumentException("ToDoData Hydration Error." + ex.Message);
-                }
-
-                try
-                {
-                    // register new todo
-                    var result = EndpointUtil.PutInsertToDo(todo, arg.UserId, arg.DomainRequest);
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception(ex.Message, ex.InnerException);
-                }
-
-                var spawnType = new SpawnType { Type = _alertType.ToString()};
+                var spawnType = new SpawnType {Type = _alertType.ToString()};
                 return spawnType;
             }
             catch (Exception ex)
             {
                 throw new Exception("AD:ToDoActivationRule:Execute()::" + ex.Message, ex.InnerException);
+            }
+        }
+
+        public bool PatientToDoExists(PlanElementEventArg arg, string sourceId)
+        {
+            try
+            {
+                var todos = EndpointUtil.GetPatientToDos(arg.PatientId, arg.UserId, arg.DomainRequest);
+                if (todos == null) return false;
+                var existing = todos.FirstOrDefault(r => r.SourceId == sourceId && (r.StatusId == 1 || r.StatusId == 3)); // open = 1, NotMet = 3 status
+                if (existing == null) return false;
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:ToDoActivationRule:PatientToDoExists()::" + ex.Message, ex.InnerException);
             }
         }
 

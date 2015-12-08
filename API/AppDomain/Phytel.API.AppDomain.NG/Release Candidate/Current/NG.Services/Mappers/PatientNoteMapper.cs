@@ -33,7 +33,7 @@ namespace Phytel.API.AppDomain.NG.Service.Mappers
                 .ForMember(dest => dest.OutcomeId, opt => opt.Ignore())
                 .ForMember(dest => dest.WhoId, opt => opt.Ignore())
                 .ForMember(dest => dest.SourceId, opt => opt.Ignore())
-                .ForMember(dest => dest.DurationId, opt => opt.Ignore())
+                .ForMember(dest => dest.Duration, opt => opt.Ignore())
                 .ForMember(dest => dest.ContactedOn, opt => opt.Ignore())
                 .ForMember(dest => dest.ValidatedIdentity, opt => opt.Ignore())
                 .ForMember(dest => dest.UpdatedOn, opt => opt.Ignore())

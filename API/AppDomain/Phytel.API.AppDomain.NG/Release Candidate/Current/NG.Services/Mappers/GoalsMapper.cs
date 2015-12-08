@@ -54,7 +54,8 @@ namespace Phytel.API.AppDomain.NG.Service.Mappers
                                 Name = c.Name,
                                 PatientGoalId = c.PatientGoalId,
                                 StatusDate = c.StatusDate,
-                                StatusId = c.StatusId
+                                StatusId = c.StatusId,
+                                Details = c.Details
                             })))
                 .ForMember(d => d.Tasks,
                     opt => opt.MapFrom(src => src.TasksData.ConvertAll(
@@ -88,6 +89,7 @@ namespace Phytel.API.AppDomain.NG.Service.Mappers
                                 StatusId = c.StatusId,
                                 TargetDate = c.TargetDate,
                                 TargetValue = c.TargetValue,
+                                Details = c.Details
                             })))
                 .ForMember(d => d.Interventions,
                     opt => opt.MapFrom(src => src.InterventionsData.ConvertAll(
@@ -106,8 +108,10 @@ namespace Phytel.API.AppDomain.NG.Service.Mappers
                                 PatientGoalId = c.PatientGoalId,
                                 PatientId = c.PatientId,
                                 StartDate = c.StartDate,
+                                DueDate = c.DueDate,
                                 StatusDate = c.StatusDate,
-                                StatusId = c.StatusId
+                                StatusId = c.StatusId,
+                                Details = c.Details
                             })));
         }
     }

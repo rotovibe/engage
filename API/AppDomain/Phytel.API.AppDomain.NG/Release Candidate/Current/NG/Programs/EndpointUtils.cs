@@ -885,7 +885,7 @@ namespace Phytel.API.AppDomain.NG
         {
             try
             {
-                var request = new GetScheduleDataRequest();
+                var request = new GetScheduleDataRequest(); 
 
                 IRestClient client = new JsonServiceClient();
 
@@ -909,6 +909,8 @@ namespace Phytel.API.AppDomain.NG
                     CreatedOn = response.Schedule.CreatedOn,
                     Description = response.Schedule.Description,
                     DueDate = response.Schedule.DueDate,
+                    StartTime = response.Schedule.StartTime,
+                    Duration = response.Schedule.Duration,
                     DueDateRange = response.Schedule.DueDateRange,
                     Id = response.Schedule.Id,
                     PatientId = response.Schedule.PatientId,
@@ -952,5 +954,31 @@ namespace Phytel.API.AppDomain.NG
                 throw new Exception("AD:PlanElementEndpointUtil:PutInsertToDo()::" + ex.Message, ex.InnerException);
             }
         }
+
+        public List<ToDoData> GetPatientToDos(string patientId, string userId, IAppDomainRequest req)
+        {
+            try
+            {
+                var request = new GetToDosDataRequest();
+                request.PatientId = patientId;
+                request.UserId = userId;
+                request.PatientId = patientId;
+                IRestClient client = new JsonServiceClient();
+
+                //{Context}/{Version}/{ContractNumber}/Scheduling/ToDos
+                var url = Common.Helper.BuildURL(string.Format(@"{0}/{1}/{2}/{3}/Scheduling/ToDos",
+                    DDSchedulingUrl,
+                    "NG",
+                    req.Version,
+                    req.ContractNumber), userId);
+
+                var response = client.Post<GetToDosDataResponse>(url, request);
+                return response.ToDos;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:PlanElementEndpointUtil:GetPatientToDos()::" + ex.Message, ex.InnerException);
+            }
+        }    
     }
 }

@@ -55,7 +55,7 @@ namespace Phytel.API.AppDomain.NG.Notes
                         OutcomeId = n.OutcomeId,
                         WhoId = n.WhoId,
                         SourceId = n.SourceId,
-                        DurationId = n.DurationId,
+                        Duration = n.Duration,
                         ValidatedIdentity = n.ValidatedIdentity,
                         ContactedOn = n.ContactedOn,
                         UpdatedById = n.UpdatedById,
@@ -116,7 +116,7 @@ namespace Phytel.API.AppDomain.NG.Notes
                     OutcomeId = request.Note.OutcomeId,
                     WhoId = request.Note.WhoId,
                     SourceId = request.Note.SourceId,
-                    DurationId = request.Note.DurationId,
+                    Duration = request.Note.Duration,
                     ContactedOn = request.Note.ContactedOn,
                     ValidatedIdentity = request.Note.ValidatedIdentity,
                     DataSource = request.Note.DataSource
@@ -206,7 +206,7 @@ namespace Phytel.API.AppDomain.NG.Notes
                         OutcomeId = pn.OutcomeId,
                         WhoId = pn.WhoId,
                         SourceId = pn.SourceId,
-                        DurationId = pn.DurationId,
+                        Duration = pn.Duration,
                         ContactedOn = pn.ContactedOn,
                         ValidatedIdentity = pn.ValidatedIdentity,
                         DataSource = pn.DataSource

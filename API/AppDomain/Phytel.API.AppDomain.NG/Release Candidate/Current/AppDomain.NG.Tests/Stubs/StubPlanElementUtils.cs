@@ -233,7 +233,8 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
                     CreatedById = t.CreatedById,
                     BarrierIds = t.BarrierIds,
                     ClosedDate = t.ClosedDate,
-                    Id = t.Id
+                    Id = t.Id,
+                    Details = t.Details
                 };
                 return pt;
             }
@@ -253,6 +254,7 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
                     StatusId = i.StatusId,
                     StatusDate = i.StatusDate,
                     StartDate = i.StartDate,
+                    DueDate = i.DueDate,
                     PatientId = i.PatientId,
                     PatientGoalId = i.PatientGoalId,
                     Id = i.Id,
@@ -263,7 +265,8 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
                     AssignedToId = i.AssignedToId,
                     BarrierIds = i.BarrierIds,
                     CategoryId = i.CategoryId,
-                    ClosedDate = i.ClosedDate
+                    ClosedDate = i.ClosedDate,
+                    Details = i.Details
                 };
                 return pi;
             }
@@ -294,7 +297,8 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
                     StartDate = g.StartDate,
                     TargetDate = g.TargetDate,
                     TargetValue = g.TargetValue,
-                    TypeId = g.TypeId
+                    TypeId = g.TypeId,
+                    Details = g.Details
                 };
                 return pg;
             }
@@ -963,9 +967,10 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
                 Id = interventionTemplate.Id,
                 Description = interventionTemplate.Description,
                 StartDate = interventionTemplate.StartDate,
+                DueDate = interventionTemplate.DueDate,
                 PatientId = arg.PatientId,
                 StatusDate = interventionTemplate.StatusDate,
-                StatusId = interventionTemplate.StatusId
+                StatusId = interventionTemplate.StatusId                
             };
         }
 

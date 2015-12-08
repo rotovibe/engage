@@ -1279,7 +1279,7 @@ namespace Phytel.API.AppDomain.NG
                         ContactData cd = dataDomainResponse.Contact;
                         contact = new Contact
                         {
-                            Id = cd.ContactId,
+                            Id = cd.Id,
                             PatientId = cd.PatientId,
                             UserId = cd.UserId,
                             FirstName = cd.FirstName,
@@ -1439,19 +1439,21 @@ namespace Phytel.API.AppDomain.NG
                                                                                 "NG",
                                                                                 request.Version,
                                                                                 request.ContractNumber), request.UserId);
-
+                ContactData cData = new ContactData {
+                    Id = request.Contact.Id,
+                    Modes = modesData,
+                    Phones = phonesData,
+                    Emails = emailsData,
+                    Addresses = addressesData,
+                    WeekDays = request.Contact.WeekDays,
+                    TimesOfDaysId = request.Contact.TimesOfDaysId,
+                    Languages = languagesData,
+                    TimeZoneId = request.Contact.TimeZoneId,
+                };
                 PutUpdateContactDataResponse dataDomainResponse =
                     client.Put<PutUpdateContactDataResponse>(url, new PutUpdateContactDataRequest
                                                                                 {
-                                                                                   ContactId = request.Contact.Id,
-                                                                                   Modes = modesData,
-                                                                                   Phones = phonesData,
-                                                                                   Emails = emailsData,
-                                                                                   Addresses = addressesData,
-                                                                                   WeekDays = request.Contact.WeekDays,
-                                                                                   TimesOfDaysId = request.Contact.TimesOfDaysId,
-                                                                                   Languages = languagesData,
-                                                                                   TimeZoneId = request.Contact.TimeZoneId,
+                                                                                   ContactData = cData,
                                                                                    Context = "NG",
                                                                                    ContractNumber = request.ContractNumber,
                                                                                    Version = request.Version,
@@ -1546,7 +1548,7 @@ namespace Phytel.API.AppDomain.NG
                     {
                         contactList.Add(new Contact 
                         {   
-                            Id = cd.ContactId,
+                            Id = cd.Id,
                             UserId = cd.UserId,
                             PreferredName = cd.PreferredName,
                             FirstName = cd.FirstName,
@@ -1583,8 +1585,8 @@ namespace Phytel.API.AppDomain.NG
                     List<string> recentPatientIds = dataDomainResponse.Contact.RecentsList;
                     if (recentPatientIds != null && recentPatientIds.Count > 0)
                     {
-                        //[Route("/{Context}/{Version}/{ContractNumber}/Patients", "POST")]
-                        string patientDDURL = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patients",
+                        //[Route("/{Context}/{Version}/{ContractNumber}/Patients/Ids", "POST")]
+                        string patientDDURL = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patients/Ids",
                                                                                         DDPatientServiceURL,
                                                                                         "NG",
                                                                                         request.Version,
@@ -1624,7 +1626,7 @@ namespace Phytel.API.AppDomain.NG
                         }
                     }
                     response = new GetRecentPatientsResponse();
-                    response.ContactId = dataDomainResponse.Contact.ContactId;
+                    response.ContactId = dataDomainResponse.Contact.Id;
                     response.Limit = dataDomainResponse.Limit;
                     response.Patients = patients;
                     response.Version = dataDomainResponse.Version;
@@ -1954,12 +1956,12 @@ namespace Phytel.API.AppDomain.NG
                                                                                 contractNumber,
                                                                                 patientId), userId);
 
+                ContactData contactData = new ContactData { TimeZoneId = defaultTimeZone, Modes = commModeData, PatientId = patientId };
                 PutContactDataResponse dataDomainResponse =
                     client.Put<PutContactDataResponse>(url, new PutContactDataRequest
                                                             {
                                                                 PatientId = patientId,
-                                                                TimeZoneId = defaultTimeZone,
-                                                                Modes = commModeData,
+                                                                ContactData = contactData,
                                                                 Context = context,
                                                                 ContractNumber = contractNumber,
                                                                 Version = version,
@@ -1967,10 +1969,10 @@ namespace Phytel.API.AppDomain.NG
 
                                                             } as object);
 
-                if (dataDomainResponse != null && !string.IsNullOrEmpty(dataDomainResponse.ContactId))
+                if (dataDomainResponse != null && !string.IsNullOrEmpty(dataDomainResponse.Id))
                 {
                     newContact = new Contact();
-                    newContact.Id = dataDomainResponse.ContactId;
+                    newContact.Id = dataDomainResponse.Id;
                     newContact.PatientId = patientId;
                     newContact.TimeZoneId = defaultTimeZone;
                     newContact.Modes = commMode;

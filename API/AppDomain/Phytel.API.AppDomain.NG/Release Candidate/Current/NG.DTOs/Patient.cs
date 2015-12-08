@@ -23,7 +23,7 @@ namespace Phytel.API.AppDomain.NG.DTO
         public int Flagged { get; set; }
         public string Background { get; set; }
         public string ClinicalBackground { get; set; }
-        public int? LastFourSSN { get; set; }
+        public string LastFourSSN { get; set; }
         public string FullSSN { get; set; }
         public string DataSource { get; set; }
         public string ReasonId { get; set; }

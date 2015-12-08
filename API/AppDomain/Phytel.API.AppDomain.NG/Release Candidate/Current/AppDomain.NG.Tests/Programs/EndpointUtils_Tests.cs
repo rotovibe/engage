@@ -359,7 +359,8 @@ namespace Phytel.API.AppDomain.NG.Tests
                                             Name = c.Name,
                                             PatientGoalId = c.PatientGoalId,
                                             StatusDate = c.StatusDate,
-                                            StatusId = c.StatusId
+                                            StatusId = c.StatusId,
+                                            Details = c.Details
                                         })))
                             .ForMember(d => d.Tasks,
                                 opt => opt.MapFrom(src => src.TasksData.ConvertAll(
@@ -393,6 +394,7 @@ namespace Phytel.API.AppDomain.NG.Tests
                                             StatusId = c.StatusId,
                                             TargetDate = c.TargetDate,
                                             TargetValue = c.TargetValue,
+                                            Details = c.Details
                                         })))
                             .ForMember(d => d.Interventions,
                                 opt => opt.MapFrom(src => src.InterventionsData.ConvertAll(
@@ -411,8 +413,10 @@ namespace Phytel.API.AppDomain.NG.Tests
                                             PatientGoalId = c.PatientGoalId,
                                             PatientId = c.PatientId,
                                             StartDate = c.StartDate,
+                                            DueDate = c.DueDate,
                                             StatusDate = c.StatusDate,
-                                            StatusId = c.StatusId
+                                            StatusId = c.StatusId,
+                                            Details = c.Details
                                         })));
             #endregion
 
@@ -442,7 +446,8 @@ namespace Phytel.API.AppDomain.NG.Tests
                                             Name = c.Name,
                                             PatientGoalId = c.PatientGoalId,
                                             StatusDate = c.StatusDate,
-                                            StatusId = c.StatusId
+                                            StatusId = c.StatusId,
+                                            Details = c.Details
                                         })))
                             .ForMember(d => d.Tasks,
                                 opt => opt.MapFrom(src => src.TasksData.ConvertAll(
@@ -476,6 +481,7 @@ namespace Phytel.API.AppDomain.NG.Tests
                                             StatusId = c.StatusId,
                                             TargetDate = c.TargetDate,
                                             TargetValue = c.TargetValue,
+                                            Details = c.Details
                                         })))
                             .ForMember(d => d.Interventions,
                                 opt => opt.MapFrom(src => src.InterventionsData.ConvertAll(
@@ -494,8 +500,10 @@ namespace Phytel.API.AppDomain.NG.Tests
                                             PatientGoalId = c.PatientGoalId,
                                             PatientId = c.PatientId,
                                             StartDate = c.StartDate,
+                                            DueDate = c.DueDate,
                                             StatusDate = c.StatusDate,
-                                            StatusId = c.StatusId
+                                            StatusId = c.StatusId,
+                                            Details = c.Details
                                         })));
             #endregion
 
@@ -504,6 +512,14 @@ namespace Phytel.API.AppDomain.NG.Tests
                 new AppDomainRequest { Version = 1.0, ContractNumber = "InHealth001", UserId = "1234" });
 
             Assert.IsNull(patientGoal);
+        }
+
+        [TestMethod()]
+        public void GetPatientToDosTest()
+        {
+            EndpointUtils utils = new EndpointUtils();
+            var todos = utils.GetPatientToDos("5325da35d6a4850adcbba58e", "1234",
+                new AppDomainRequest {Version = 1.0, ContractNumber = "InHealth001", UserId = "1234"});
         }    
     }
 }

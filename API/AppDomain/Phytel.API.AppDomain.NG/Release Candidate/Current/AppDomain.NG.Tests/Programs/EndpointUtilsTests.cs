@@ -15,5 +15,11 @@ namespace Phytel.API.AppDomain.NG.Tests
         {
             Assert.Fail();
         }
+
+        [TestMethod()]
+        public void GetPatientToDosTest()
+        {
+            Assert.Fail();
+        }
     }
 }
