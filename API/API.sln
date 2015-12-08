@@ -274,13 +274,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.PatientNote.Repo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.PatientSystem.Repo", "DataDomain\Phytel.API.DataDomain.PatientSystem\Development\Current\PatientSystem.Repo\DataDomain.PatientSystem.Repo.csproj", "{64428B06-18E5-4307-BA78-FB0D238816D8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.API.Interface", "Interfaces\Production\Current\Phytel.API.Interface\Phytel.API.Interface.csproj", "{9B5F1B70-58ED-4465-84F9-3945647670ED}"
-EndProject
-Project("{F088123C-0E9E-452A-89E6-6BA2F21D5CAC}") = "EngageDataDomainModel", "DataDomain\EngageDataDomainModel\EngageDataDomainModel.modelproj", "{6C55E18D-2A7E-442A-B415-583DDCA610BD}"
-EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 95
+		SccNumberOfProjects = 93
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://192.168.111.123:8080/tfs/phytel
 		SccLocalPath0 = .
@@ -652,13 +648,6 @@ Global
 		SccProjectTopLevelParentUniqueName92 = API.sln
 		SccProjectName92 = DataDomain/Phytel.API.DataDomain.PatientSystem/Development/Current/PatientSystem.Repo
 		SccLocalPath92 = DataDomain\\Phytel.API.DataDomain.PatientSystem\\Development\\Current\\PatientSystem.Repo
-		SccProjectUniqueName93 = Interfaces\\Production\\Current\\Phytel.API.Interface\\Phytel.API.Interface.csproj
-		SccProjectTopLevelParentUniqueName93 = API.sln
-		SccProjectName93 = Interfaces/Production/Current/Phytel.API.Interface
-		SccLocalPath93 = Interfaces\\Production\\Current\\Phytel.API.Interface
-		SccProjectUniqueName94 = DataDomain\\EngageDataDomainModel\\EngageDataDomainModel.modelproj
-		SccProjectName94 = DataDomain/EngageDataDomainModel
-		SccLocalPath94 = DataDomain\\EngageDataDomainModel
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1402,22 +1391,6 @@ Global
 		{64428B06-18E5-4307-BA78-FB0D238816D8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{64428B06-18E5-4307-BA78-FB0D238816D8}.Test|Any CPU.ActiveCfg = Release|Any CPU
 		{64428B06-18E5-4307-BA78-FB0D238816D8}.Test|Any CPU.Build.0 = Release|Any CPU
-		{9B5F1B70-58ED-4465-84F9-3945647670ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9B5F1B70-58ED-4465-84F9-3945647670ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9B5F1B70-58ED-4465-84F9-3945647670ED}.Model|Any CPU.ActiveCfg = Model|Any CPU
-		{9B5F1B70-58ED-4465-84F9-3945647670ED}.Model|Any CPU.Build.0 = Model|Any CPU
-		{9B5F1B70-58ED-4465-84F9-3945647670ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9B5F1B70-58ED-4465-84F9-3945647670ED}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9B5F1B70-58ED-4465-84F9-3945647670ED}.Test|Any CPU.ActiveCfg = Test|Any CPU
-		{9B5F1B70-58ED-4465-84F9-3945647670ED}.Test|Any CPU.Build.0 = Test|Any CPU
-		{6C55E18D-2A7E-442A-B415-583DDCA610BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6C55E18D-2A7E-442A-B415-583DDCA610BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6C55E18D-2A7E-442A-B415-583DDCA610BD}.Model|Any CPU.ActiveCfg = Release|Any CPU
-		{6C55E18D-2A7E-442A-B415-583DDCA610BD}.Model|Any CPU.Build.0 = Release|Any CPU
-		{6C55E18D-2A7E-442A-B415-583DDCA610BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6C55E18D-2A7E-442A-B415-583DDCA610BD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6C55E18D-2A7E-442A-B415-583DDCA610BD}.Test|Any CPU.ActiveCfg = Release|Any CPU
-		{6C55E18D-2A7E-442A-B415-583DDCA610BD}.Test|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1536,6 +1509,5 @@ Global
 		{783646E5-BB09-4083-A115-E7753CE11E29} = {F59D966C-C273-4097-8F91-066E284C39EB}
 		{BD61E655-5658-49C8-96D8-26822162D008} = {5AF7B394-5826-4F7A-871F-60D46BB11348}
 		{64428B06-18E5-4307-BA78-FB0D238816D8} = {B65DC0B4-4013-4BBC-952D-1122F5480535}
-		{9B5F1B70-58ED-4465-84F9-3945647670ED} = {BE4D6E45-ED2C-41A4-839C-AC49756E4166}
 	EndGlobalSection
 EndGlobal
