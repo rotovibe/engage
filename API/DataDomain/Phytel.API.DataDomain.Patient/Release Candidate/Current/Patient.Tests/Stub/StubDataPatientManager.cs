@@ -26,11 +26,10 @@ namespace Phytel.API.DataDomain.Patient.Test.Stub
             throw new NotImplementedException();
         }
 
-        public DTO.GetPatientsDataResponse GetPatients(DTO.GetPatientsDataRequest request)
+        public List<PatientData> GetPatients(DTO.GetPatientsDataRequest request)
         {
-            GetPatientsDataResponse response = new GetPatientsDataResponse();
             IPatientRepository repo = Factory.GetRepository(request, RepositoryType.Patient);
-            response = repo.Select(request.PatientIds);
+            List<PatientData> response = repo.Select(request.PatientIds);
             return response;
         }
 
@@ -202,6 +201,12 @@ namespace Phytel.API.DataDomain.Patient.Test.Stub
 
 
         public List<PatientData> GetAllPatients(GetAllPatientsDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public InsertBatchPatientsDataResponse InsertBatchPatients(InsertBatchPatientsDataRequest request)
         {
             throw new NotImplementedException();
         }

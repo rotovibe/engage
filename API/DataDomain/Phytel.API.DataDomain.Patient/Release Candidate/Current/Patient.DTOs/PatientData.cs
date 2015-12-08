@@ -1,6 +1,10 @@
-﻿namespace Phytel.API.DataDomain.Patient.DTO
+﻿using System;
+using Phytel.API.Common;
+
+namespace Phytel.API.DataDomain.Patient.DTO
 {
-    public class PatientData
+    
+    public class PatientData : IAppData
     {
         public string Id { get; set; }
         public string FirstName { get; set; }
@@ -20,10 +24,16 @@
         public bool Flagged { get; set; }
         public string Background { get; set; }
         public string ClinicalBackground { get; set; }
-        public int? LastFourSSN { get; set; }
+        public string LastFourSSN { get; set; }
         public string FullSSN { get; set; }
         public string MaritalStatusId { get; set; }
         public bool Protected { get; set; }
         public int DeceasedId { get; set; }
+        // added for atmosphere integration
+        public DateTime? LastUpdatedOn { get; set; }
+        public DateTime RecordCreatedOn { get; set; }
+        public string ExternalRecordId { get; set; }
+        public string EngagePatientSystemValue { get; set; }
+        public string UpdatedByProperty {get; set; }
     }
 }

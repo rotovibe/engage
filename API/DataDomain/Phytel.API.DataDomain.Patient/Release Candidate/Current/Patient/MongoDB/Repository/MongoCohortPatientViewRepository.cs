@@ -22,7 +22,6 @@ namespace Phytel.API.DataDomain.Patient
         public IDTOUtils Utils { get; set; }
 
         private string _dbName = string.Empty;
-
         static MongoCohortPatientViewRepository()
         {
             #region Register ClassMap           
@@ -96,7 +95,42 @@ namespace Phytel.API.DataDomain.Patient
 
         public object InsertAll(List<object> entities)
         {
-            throw new NotImplementedException();
+            List<string> insertedIds = new List<string>();
+            try
+            {
+                using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
+                {
+                    var bulk = ctx.CohortPatientViews.Collection.InitializeUnorderedBulkOperation();
+                    foreach (CohortPatientViewData cpvData in entities)
+                    {
+                        MECohortPatientView meCPV = new MECohortPatientView(this.UserId)
+                        {
+                            PatientID = ObjectId.Parse(cpvData.PatientID),
+                            LastName = cpvData.LastName,
+                            DeleteFlag = false,
+                        };
+                        if (cpvData.SearchFields != null && cpvData.SearchFields.Count > 0)
+                        {
+                            List<SearchField> fields = new List<SearchField>();
+                            foreach (SearchFieldData c in cpvData.SearchFields)
+                            {
+                                fields.Add(new SearchField { Active = c.Active, FieldName = c.FieldName, Value = c.Value });
+                            }
+                            meCPV.SearchFields = fields;
+                        }
+                        bulk.Insert(meCPV.ToBsonDocument());
+                        insertedIds.Add(meCPV.Id.ToString());
+                    }
+                    BulkWriteResult bwr = bulk.Execute();
+                }
+                AuditHelper.LogDataAudit(this.UserId, MongoCollectionName.CohortPatientView.ToString(), insertedIds, Common.DataAuditType.Insert, _dbName);
+            }
+            catch (Exception ex)
+            {
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Helper.LogException(int.Parse(aseProcessID), ex);
+            }
+            return true;
         }
 
         public void Delete(object entity)
@@ -419,7 +453,7 @@ namespace Phytel.API.DataDomain.Patient
             throw new NotImplementedException();
         }
 
-        public DTO.GetPatientsDataResponse Select(List<string> patientIds)
+        public List<PatientData> Select(List<string> patientIds)
         {
             throw new NotImplementedException();
         }
