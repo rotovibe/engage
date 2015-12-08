@@ -2785,7 +2785,8 @@ header[role=banner] a:hover, header[role=navigation] a:hover {
 
 input.datepicker {
   background: url(../../images/calendar_grey_small.png) no-repeat right bottom;
-  position: relative; }
+  position: relative;
+  min-width: 100px; }
   input.datepicker:before {
     color: #777777;
     position: absolute;
@@ -4029,7 +4030,8 @@ ul {
       #modal header .close:active {
         opacity: 1; }
   #modal .body {
-    padding: 10px; }
+    padding: 10px;
+    max-height: 400px; }
     #modal .body > .row.modal-tab {
       overflow: auto;
       max-height: 400px;
@@ -4049,6 +4051,25 @@ ul {
   #modal.small .body {
     min-height: 150px;
     max-height: 300px; }
+  #modal.modal-lg .content {
+    width: 80%;
+    margin-left: -40%;
+    height: calc(100% - 109px);
+    height: -moz-calc(100% - 109px);
+    height: -webkit-calc(100% - 109px); }
+    #modal.modal-lg .content .body {
+      height: calc(100% - 94px);
+      height: -moz-calc(100% - 94px);
+      height: -webkit-calc(100% - 94px);
+      max-height: 1000%; }
+      #modal.modal-lg .content .body > .row.modal-tab {
+        max-height: 1000%; }
+  #modal.modal-lg header {
+    overflow: hidden;
+    white-space: nowrap; }
+    #modal.modal-lg header .title {
+      width: 100%;
+      overflow: hidden; }
 
 nav.pagination {
   text-align: center; }
@@ -5225,8 +5246,9 @@ div.button {
     background: white;
     border: 1px solid #aaaaaa;
     margin-top: -1px;
-    min-width: 125%;
-    max-width: 150%;
+    width: 100%;
+    /*min-width: 125%;
+    max-width: 150%;*/
     padding: 0 10px;
     z-index: 1010;
     /*&.above-container {
@@ -5244,6 +5266,7 @@ div.button {
     margin: 0 -10px;
     max-height: 200px;
     overflow-x: auto;
+    overflow-y: auto;
     width: auto; }
     .chosen-container .chosen-results li {
       white-space: nowrap;
@@ -5889,6 +5912,7 @@ a .icon-spin {
   -moz-box-shadow: rgba(0, 0, 0, 0.5) 0 0 5px;
   box-shadow: rgba(0, 0, 0, 0.5) 0 0 5px;
   max-height: 200px;
+  width: 100%;
   overflow-y: auto; }
   .tt-dropdown-menu p {
     margin-bottom: 0.5em; }
@@ -5904,17 +5928,18 @@ a .icon-spin {
     -o-text-overflow: none !important;
     text-overflow: none !important; }
 
-.tt-large .twitter-typeahead {
-  width: 275px; }
+/*.tt-large .twitter-typeahead {
+    width: 275px;
+}*/
+.twitter-typeahead {
+  width: 100%; }
 
-.tt-suggestion {
-  max-width: 250px; }
-  .tt-suggestion p {
-    white-space: nowrap !important;
-    overflow: hidden;
-    -ms-text-overflow: ellipsis;
-    -o-text-overflow: ellipsis;
-    text-overflow: ellipsis; }
+.tt-suggestion p {
+  white-space: nowrap !important;
+  overflow: hidden;
+  -ms-text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  text-overflow: ellipsis; }
 
 textarea.display-only {
   border-style: none;
@@ -5988,8 +6013,7 @@ a.disabled {
   vertical-align: middle; }
 #modal .body {
   min-height: 300px;
-  overflow: auto;
-  max-height: 500px; }
+  overflow: auto; }
 #modal .list-items > li {
   border-bottom: 1px solid gainsboro;
   padding: 5px 0; }

@@ -10,6 +10,7 @@ define(['services/session', 'services/validatorfactory', 'services/customvalidat
 	    var datacontext;
 		var DT = breeze.DataType;
 		var Validator = breeze.Validator;				
+		var LANGUAGE_ALREADY_EXIST = 'laguage already exist';
 		
 		// Expose the model module to the requiring modules
 		var contactModels = {
@@ -291,7 +292,25 @@ define(['services/session', 'services/validatorfactory', 'services/customvalidat
 		            contactCard.addresses.remove(address);
 		        }
 		        contactCard.newLanguage = ko.observable(null);
+				contactCard.languageValidationErrors = ko.observableArray([]);
+				contactCard.canAddLanguage = ko.computed( function(){
+					var newLanguage = contactCard.newLanguage();
+					var languages = contactCard.languages();
+					var alreadyExist = false;
+					var errors = [];
+					if( newLanguage ){
+						ko.utils.arrayForEach( languages, function( language ){
+							if( language.name() === newLanguage.name() ){
+								alreadyExist = true;
+								errors.push({Message: LANGUAGE_ALREADY_EXIST});
+							}
+						});						
+					}
+					contactCard.languageValidationErrors(errors);
+					return ( newLanguage && !alreadyExist );
+				});
 		        contactCard.addLanguage = function () {
+					if( !contactCard.canAddLanguage() ) return;
 		            // Add a language here
 		            checkDataContext();
 		            var thisLanguage = contactCard.newLanguage();
@@ -531,36 +550,36 @@ define(['services/session', 'services/validatorfactory', 'services/customvalidat
 		        });
 				
 				//validation:				
-				contactCard.phoneValidationErrors = ko.observableArray([]);				
+				contactCard.phoneValidationErrors = ko.observableArray([]);								
 				
 				/**
 				*	computed. tracks for any validation errors on all tabs of the contact card.
 				*	@method isValid 
 				*/
 				contactCard.isValid = ko.computed(function(){
-					
+										
 					//TODO: combine logic with other tabs errors										
-					return !hasPhoneErrors();	
-					
-					/**
-					*	validates all phones in the contact card phones collection.					
-					*	@method hasPhoneErrors
-					*/
-					function hasPhoneErrors(){
-						var phoneErrors = [];
-						var errorsFound = false;
-						ko.utils.arrayForEach( contactCard.phones(), function(phone){
-							phone.validate();
-							var isValid = phone.isValid();
-							if( !isValid ){
-								phoneErrors.push({Message: phone.validationMessage()});
-								errorsFound = true;
-							}
-						});
-						contactCard.phoneValidationErrors(phoneErrors);	
-						return errorsFound;
-					}
+					return !hasPhoneErrors();											
 				});
+				
+				/**
+				*	validates all phones in the contact card phones collection.					
+				*	@method hasPhoneErrors
+				*/
+				function hasPhoneErrors(){
+					var phoneErrors = [];
+					var errorsFound = false;
+					ko.utils.arrayForEach( contactCard.phones(), function(phone){
+						phone.validate();
+						var isValid = phone.isValid();
+						if( !isValid ){
+							phoneErrors.push({Message: phone.validationMessage()});
+							errorsFound = true;
+						}
+					});
+					contactCard.phoneValidationErrors(phoneErrors);	
+					return errorsFound;
+				}
 				
 			    contactCard.phoneValidationErrorsArray = ko.computed(function () {
 			        var thisArray = [];

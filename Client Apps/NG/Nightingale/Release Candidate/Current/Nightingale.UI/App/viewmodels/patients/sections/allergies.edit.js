@@ -5,6 +5,8 @@
       var self = this;
     };
 
+	var descendingDateSort = function (l, r) { return (l.createdOn() == r.createdOn()) ? (l.createdOn() < r.createdOn() ? 1 : -1) : (l.createdOn() < r.createdOn() ? 1 : -1) };
+	
     ctor.prototype.allergyTypes = ko.computed(datacontext.enums.allergyTypes);
     ctor.prototype.severities = ko.computed(datacontext.enums.severities);
     ctor.prototype.reactions = ko.computed(datacontext.enums.reactions);
@@ -30,7 +32,7 @@
           // If the item has a type, return if it matches problem, else if there is no type return false
           return !item.deleteFlag() && item.isNew();
         });
-        return filteredPatAllergies;
+        return filteredPatAllergies.sort(descendingDateSort);
       }).extend({ throttle: 50 });
       // self.showActions = self.settings.hasOwnProperty('showActions') ? self.settings.showActions : self.showing;
       // self.saveFocusProblems = self.settings.saveFocusProblems || function () { return false; };

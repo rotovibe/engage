@@ -12,7 +12,9 @@ define(['services/validatorfactory', 'services/customvalidators', 'services/form
 		var systemCareManager;
 		var DT = breeze.DataType;
 		var Validator = breeze.Validator;
-
+		var patientsIndex; 		
+		var selectedPatient;
+		
 		// Create a common user model
 		function property(name, value) {
 			var self = this;
@@ -29,18 +31,39 @@ define(['services/validatorfactory', 'services/customvalidators', 'services/form
 		}
 				
 		// Create a common modal model
-		function modal(title, entity, templatePath, showing, saveOverride, cancelOverride, deleteOverride) {
-			var self = this;
-			self.Title = ko.observable(title);
-			self.Entity = entity;
-			self.TemplatePath = ko.observable(templatePath);
-			self.Showing = showing ? showing : false;
+		function modal( modalSettings ){
+		    var self = this;
+		    self.Title = modalSettings.title;			
+			if( modalSettings.relatedPatientName ){
+				self.Title = ko.computed( function(){
+					var relatedPatientName = modalSettings.relatedPatientName();
+					if( relatedPatientName ){
+						return modalSettings.title + ' - ' + relatedPatientName;
+					}
+					return modalSettings.title;
+				});
+			}
+		    else if ( modalSettings.showSelectedPatientInTitle ) {
+		        checkPatientsIndex();
+		        self.Title = ko.computed(function () {
+		            var title = modalSettings.title;
+		            var patientFullName = selectedPatient && selectedPatient() ? selectedPatient().fullName() : '';
+		            if ( patientFullName ) {
+		                title = title + ' - ' + patientFullName;
+		            }
+		            return title;
+		        });
+		    }
+			self.Entity = modalSettings.entity;
+			self.TemplatePath = ko.observable(modalSettings.templatePath);
+			self.classOverride = ko.observable(modalSettings.classOverride? modalSettings.classOverride : null);
+			self.Showing = modalSettings.showing ? modalSettings.showing : false;
 					// Method on the modal to save the currently mapped properties
 					self.saveChanges = function () {
 							// If a save override was passed in,
-							if (saveOverride) {
+							if (modalSettings.saveOverride) {
 									// Use that to save.
-									saveOverride();
+									modalSettings.saveOverride();
 									self.Showing(false);
 								} else {
 									// If not, use the entities default ave
@@ -54,9 +77,9 @@ define(['services/validatorfactory', 'services/customvalidators', 'services/form
 					};
 					self.cancelChanges = function () {
 					// If a cancel override function was passed in,
-					if (cancelOverride) {
+					if (modalSettings.cancelOverride) {
 							// Use it
-							var confirmed = cancelOverride();
+							var confirmed = modalSettings.cancelOverride();
 							if( confirmed === undefined || confirmed === true ){
 								self.Showing(false);
 							}
@@ -70,9 +93,9 @@ define(['services/validatorfactory', 'services/customvalidators', 'services/form
 			// Placeholder delete method
 			self.delete = function () {
 					// If a cancel override function was passed in,
-					if (deleteOverride) {
+					if (modalSettings.deleteOverride) {
 							// Use it
-							deleteOverride();
+							modalSettings.deleteOverride();
 							self.Showing(false);
 						} else {
 							self.Showing(false);
@@ -695,7 +718,7 @@ define(['services/validatorfactory', 'services/customvalidators', 'services/form
 				
 				patient.minor = ko.computed(function () {					
 					var minorAge = datacontext.getSettingsParam('MinorAge');
-					return patient.age() && patient.age() < minorAge;
+					return patient.age() !== null && parseInt(patient.age()) >= 0 && patient.age() < minorAge;
 				});
 				// Set the patient defaults, if not already set
 				if (patient.protected() !== true) {
@@ -817,6 +840,15 @@ define(['services/validatorfactory', 'services/customvalidators', 'services/form
 			}
 		}
 
+		function checkPatientsIndex(){
+			if( !patientsIndex ) {
+				patientsIndex = require('viewmodels/patients/index');
+				selectedPatient = ko.computed(function () {
+					return patientsIndex.selectedPatient();
+				});
+			}		
+		}
+		
 		function getSystemCareManager(){
 			if( ! systemCareManager ){
 				checkDataContext();

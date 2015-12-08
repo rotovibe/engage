@@ -281,6 +281,51 @@ define(['services/formatter', 'services/dateHelper'],
             }
         };
 		
+		ko.bindingHandlers.numeric = {
+			/**
+			*	@param valueAccessor expecting an observable that holds/binds to the number.
+			*	@method numeric.init
+			*/
+			init: function(element, valueAccessor){
+				var observableNumber = valueAccessor();				
+				blockNonNumeric(element);
+				$(element).on('keydown paste change', function(e){				
+					var key = e.which || e.keyCode;							
+					if( e.type == 'paste' ){ 
+						e.preventDefault(); 
+					}
+					if( e.type == 'keydown' && key == 190 ){ 
+						e.preventDefault(); 
+					}							
+					var position = element.selectionStart;
+					var type = e.type;
+					setTimeout( function(){	
+						var number = $(element).val();
+						var newNumber = number;								
+						if( isNaN(+number) || number.match(/\D/) ){							
+							//clean out non numeric	chars:
+							newNumber = number.replace(/\D/,'');												
+							if( observableNumber ){
+								$(element).val(newNumber);
+								observableNumber( newNumber );
+							}						
+						}
+						//fix cursor position as the observable binding update changes it:
+						if( key === 46 || (key === 8 && position-1 < newNumber.length)){	//46=delete or 8=bkspc not on last char: return the cursor to its original position
+							if( key == 8 ){ 
+								position = position > 0? position -1 : position; 
+							}
+							element.setSelectionRange(position, position);
+						}
+						else if( key >= 48 && key <= 57  && position < newNumber.length ){	//digit added in the middle
+							element.setSelectionRange(position +1, position +1);
+						}						
+					}, 5);	
+				});
+	
+			}
+		};
+		
 		/**
 		*	masking and validating a social security number (SSN).
 		*	@class ssn social security number
@@ -303,13 +348,7 @@ define(['services/formatter', 'services/dateHelper'],
 					ssn(number);
 				}
 				
-				//prevent typing non numerics:
-				$(element).on('keypress', function(e){
-					var key = e.which || e.keyCode;
-					if( (key < 48 || key > 57) && key !== 116 && key !== 8 && key !== 9 && key !== 37 && key !== 39 && key !== 46 && !(key == 118 && e.ctrlKey)){	//exclude 116 (=F5), 8(=bkspc), 9(=tab) , 37,39 (<-, ->), 46(=del), ctrl+V (118) on firefox!
-						e.preventDefault();												
-					}
-				});
+				blockNonNumeric(element);
 				
 				//mask ssn number to : XXX-XX-XXXX
 				$(element).on('keydown paste', function(e){
@@ -741,7 +780,8 @@ define(['services/formatter', 'services/dateHelper'],
 			*/
             init: function (element, valueAccessor, allBindingsAccessor, bindingContext) {
                 // Get the value of the observable binding
-                var observable = valueAccessor();
+                var observable = valueAccessor().observableDateTime;
+				var showDate = valueAccessor().showDate;
 				var initialized = false;
 				//instantiate the timepicker
                 var thisElement = $(element);
@@ -808,14 +848,19 @@ define(['services/formatter', 'services/dateHelper'],
 							}
 						}
 						else{
-							//content cleared or deleted - zero time when the field was empty (12:00 AM will be the time on the observable!)
-							//	note: at this point - we do not invalidate when empty.
-							observable = valueAccessor();
-							observableMoment = moment(observable());
-							if( observableMoment.isValid() && observableMoment.hour() !== 0 || observableMoment.minute() !== 0 ){
-								observableMoment.hour(0);
-								observableMoment.minute(0);
-								observable( observableMoment.toISOString() )
+							//content cleared or deleted
+							if( showDate ){
+								// the time field was emptied. we will set zero time (00:00/ 12:00 AM will be the time on the observable!)
+								//	note: at this point - we do not invalidate when empty.
+								observableMoment = moment(observable());
+								if( observableMoment.isValid() && observableMoment.hour() !== 0 || observableMoment.minute() !== 0 ){
+									observableMoment.hour(0);
+									observableMoment.minute(0);
+									observable( observableMoment.toISOString() )
+								}
+							}
+							else{	//time control only without date, when cleared:
+								observable(null);
 							}
 						}
 					}, 5);
@@ -827,7 +872,6 @@ define(['services/formatter', 'services/dateHelper'],
 				*/
 				function onTimeChange(time){
 					var element = $(this);
-					var observable = valueAccessor();
 					if( !initialized ){
 						//ignore the first time change that is set by init:						
 						initialized = true;
@@ -837,24 +881,25 @@ define(['services/formatter', 'services/dateHelper'],
 					var newMinutes = 0;					
 					if(time){										
 						var timepickerMoment = moment.utc( time );
-						if( !timepickerMoment.isValid() ){
-							//$(this).addClass("invalid");	//TBD
-							//TODO: validation: pass on the validation error.
-						}
-						else{
-							//$(this).removeClass("invalid"); //TBD	
+						if( timepickerMoment.isValid() ){
 							timeMoment = moment().hours( time.getHours() ).minutes( time.getMinutes() );	//timepicker is not DST aware !
 							//timeMoment.utc();	// !!!! issue if the conversion flips a date, we need to know that 
 							newHour = timeMoment.hours();
 							newMinutes = timeMoment.minutes();														
 						}
+						//copy the timepicker time(only) on to the observable datetime value:
+						//note: if the time field has been cleared (time = false) the observable gets a time of 00:00
+						setTimeValue(observable, newHour, newMinutes);
 					}
-						
-					//copy the timepicker time(only) on to the observable datetime value:
-					//note: if the time field has been cleared (time = false) the observable gets a time of 00:00
-					setTimeValue(observable, newHour, newMinutes);										
+					else if( !showDate ){
+						//time control only without date, when cleared:
+						observable(null);
+					}
 				}
-				function setTimeValue(dateObservable, hour, minute){					
+				function setTimeValue(dateObservable, hour, minute){
+					if( !dateObservable() ){
+						dateObservable(moment('1/1/1970').toISOString());
+					}
 					var observableLocalMoment = moment(dateObservable());
 					observableLocalMoment.local();					
 					if(observableLocalMoment.isValid()){
@@ -905,7 +950,7 @@ define(['services/formatter', 'services/dateHelper'],
 				}                
             }
         };
-
+		
         // Timeout binding for hiding alert after x number of seconds
         ko.bindingHandlers.timeOut = {
             init: function (element, valueAccessor, allBindingsAccessor) {
@@ -934,6 +979,7 @@ define(['services/formatter', 'services/dateHelper'],
 
                 $(element).fullCalendar({
                     defaultView: viewModel.defaultView,
+					allDayText: 'All day',
                     events: ko.utils.unwrapObservable(viewModel.events),
                     header: viewModel.header,
                     editable: viewModel.editable,
@@ -1279,9 +1325,22 @@ define(['services/formatter', 'services/dateHelper'],
             $('.arrow').css('top', top);
         }
 
+		/**
+		*	prevent typing non numerics
+		*	@method	blockNonNumeric
+		*/
+		function blockNonNumeric(element){			
+			$(element).on('keypress', function(e){
+				var key = e.which || e.keyCode;
+				if ((key < 48 || key > 57) && key !== 116 && key !== 8 && key !== 9 && key !== 37 && key !== 39 && key !== 46 && !(key == 118 && e.ctrlKey)) {	//exclude 116 (=F5), 8(=bkspc), 9(=tab) , 37,39 (<-, ->), 46(=del), ctrl+V (118) on firefox!
+					e.preventDefault();												
+				}
+			});														
+		}
+
         function checkDataContext() {
             if (!datacontext) {
                 datacontext = require('services/datacontext');
             }
-        }
-    });
+        }		
+    }); 

@@ -33,9 +33,20 @@ define(['plugins/router', 'services/navigation', 'config.services', 'services/se
             cancelDataEntry();
             patientsIndex.getPatientsAllergies();
         };
-        
+
         function toggleModalShowing () {
-            var modal = new modelConfig.modal('Data Entry', modalEntity, 'viewmodels/templates/clinical.dataentry', modalShowing, saveAllData, cancelOverride);
+			var modalSettings = {
+				title: 'Data Entry',
+				showSelectedPatientInTitle: true,
+				entity: modalEntity, 
+				templatePath: 'viewmodels/templates/clinical.dataentry', 
+				showing: modalShowing, 
+				saveOverride: saveAllData, 
+				cancelOverride: cancelOverride, 
+				deleteOverride: null, 
+				classOverride: 'modal-lg'
+			}
+            var modal = new modelConfig.modal(modalSettings);
             shell.currentModal(modal);
             modalShowing(!modalShowing());
         }

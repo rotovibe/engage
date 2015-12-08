@@ -99,7 +99,18 @@ define(['models/base', 'services/datacontext', 'services/session', 'viewmodels/s
             };
             self.editModalShowing = ko.observable(false);
             self.modalEntity = ko.observable(new ModalEntity(self.selectedPatient, self.saveType));
-            self.modal = new modelConfig.modal('Edit Care Team', self.modalEntity, 'viewmodels/templates/care.team.edit', self.editModalShowing, self.saveOverride, self.cancelOverride);
+			var modalSettings = {
+				title: 'Edit Care Team',
+				showSelectedPatientInTitle: true,
+				entity: self.modalEntity, 
+				templatePath: 'viewmodels/templates/care.team.edit', 
+				showing: self.editModalShowing, 
+				saveOverride: self.saveOverride, 
+				cancelOverride: self.cancelOverride, 
+				deleteOverride: null, 
+				classOverride: null
+			}
+            self.modal = new modelConfig.modal(modalSettings);
         };
 
         function ModalEntity(patient, savetype) {
