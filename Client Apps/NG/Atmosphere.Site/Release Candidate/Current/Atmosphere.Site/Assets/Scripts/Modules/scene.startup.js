@@ -88,14 +88,14 @@ var startup = function () {
                 cursor: 'pointer'
             };
 
-            $('#MarqueeNews').SetScroller(scrollOptions);
-            $('#MarqueeQuotes').SetScroller(scrollOptions);
+ //           $('#MarqueeNews').SetScroller(scrollOptions);
+ //           $('#MarqueeQuotes').SetScroller(scrollOptions);
         });
     };
 
     return {
         init: init,
-        renderTicker: renderTicker
+        //renderTicker: renderTicker
     };
 } ();
 

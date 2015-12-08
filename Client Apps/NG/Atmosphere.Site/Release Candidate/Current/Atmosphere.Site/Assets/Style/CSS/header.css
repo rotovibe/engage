@@ -4,7 +4,8 @@
 {
     position: absolute;
     top: 0;
-    background: url(../../Images/phytel_logo_black.png) 0% 0% no-repeat;
+    background: url(../../Images/Phytel_logotagline_white_onBlue.png) 0% 0% no-repeat;
+    background-size: contain;
     width: 220px;
     height: 26px;
     padding: 7px 0 2px 116px;
