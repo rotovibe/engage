@@ -20,5 +20,6 @@ namespace Phytel.API.DataDomain.Contact
         IAuditHelpers AuditHelpers { get; set; }
         object GetContactByPatientId(string patientId);
         IEnumerable<object> FindContactsWithAPatientInRecentList(string entityId);
+        IEnumerable<object> Select(List<string> ids);
     }
 }

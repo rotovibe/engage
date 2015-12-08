@@ -114,6 +114,10 @@
       <Project>{abe948fb-247e-4955-b3ab-b7c93e10a542}</Project>
       <Name>Phytel.API.Interface</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\..\Phytel.API.DataDomain.LookUp\Release Candidate\Current\LookUp.DTO\DataDomain.LookUp.DTO.csproj">
+      <Project>{4885fe36-03db-47b7-be7e-33260943a9dc}</Project>
+      <Name>DataDomain.LookUp.DTO</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Contact.DTO\DataDomain.Contact.DTO.csproj">
       <Project>{0b6e0ed8-abe5-4a1d-8e10-0ac54f06d9c4}</Project>
       <Name>DataDomain.Contact.DTO</Name>
