@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Phytel.API.Common;
 using Phytel.API.DataDomain.PatientNote.DTO;
 
 namespace Phytel.API.DataDomain.PatientNote
@@ -17,5 +18,6 @@ namespace Phytel.API.DataDomain.PatientNote
         UndoDeletePatientNotesDataResponse UndoDeletePatientNotes(UndoDeletePatientNotesDataRequest request);
         RemoveProgramInPatientNotesDataResponse RemoveProgramInPatientNotes(RemoveProgramInPatientNotesDataRequest request);
         PatientNoteData UpdatePatientNote(UpdatePatientNoteDataRequest request);
+        List<HttpObjectResponse<PatientNoteData>> InsertBatchPatientNotes(InsertBatchPatientNotesDataRequest request);
     }
 }

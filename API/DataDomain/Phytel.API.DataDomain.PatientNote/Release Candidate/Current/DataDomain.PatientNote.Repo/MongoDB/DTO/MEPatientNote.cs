@@ -13,12 +13,12 @@ namespace Phytel.API.DataDomain.PatientNote.Repo
     [MongoIndex(Keys = new string[] { PatientIdProperty, DeleteFlagProperty }, Unique = false)]
     public class MEPatientNote : IMongoEntity<ObjectId>, IMEEntity
     {
-        public MEPatientNote(string userId)
+        public MEPatientNote(string userId, DateTime? createdOn)
         {
             Id = ObjectId.GenerateNewId();
             Version = 1.0;
             RecordCreatedBy = ObjectId.Parse(userId);
-            RecordCreatedOn = DateTime.UtcNow;
+            RecordCreatedOn = createdOn == null || createdOn.Equals(new DateTime()) ? DateTime.UtcNow : (DateTime)createdOn;
         }
 
         public const string IdProperty = "_id";
@@ -29,6 +29,11 @@ namespace Phytel.API.DataDomain.PatientNote.Repo
         [BsonElement(PatientIdProperty)]
         [BsonIgnoreIfNull(true)]
         public ObjectId PatientId { get; set; }
+
+        public const string ExternalRecordIdProperty = "extrid";
+        [BsonElement(ExternalRecordIdProperty)]
+        [BsonIgnoreIfNull(true)]
+        public string ExternalRecordId { get; set; }
 
         public const string TextProperty = "txt";
         [BsonElement(TextProperty)]
@@ -69,6 +74,11 @@ namespace Phytel.API.DataDomain.PatientNote.Repo
         [BsonElement(DurationIdProperty)]
         [BsonIgnoreIfNull(true)]
         public ObjectId? DurationId { get; set; }
+
+        public const string DurationProperty = "dur";
+        [BsonElement(DurationProperty)]
+        [BsonIgnoreIfNull(true)]
+        public int? Duration { get; set; }
 
         public const string ContactedOnProperty = "con";
         [BsonElement(ContactedOnProperty)]

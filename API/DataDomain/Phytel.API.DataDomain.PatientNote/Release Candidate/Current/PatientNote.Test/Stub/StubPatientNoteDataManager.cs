@@ -3,49 +3,54 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Phytel.API.Common;
 using Phytel.API.DataDomain.PatientNote.DTO;
 
 namespace Phytel.API.DataDomain.PatientNote.Test.Stubs
 {
     public class StubPatientNoteDataManager : IPatientNoteDataManager
     {
-
-        public string InsertPatientNote(DTO.InsertPatientNoteDataRequest request)
+        public string InsertPatientNote(InsertPatientNoteDataRequest request)
         {
             throw new NotImplementedException();
         }
 
-        public DTO.PatientNoteData GetPatientNote(DTO.GetPatientNoteDataRequest request)
+        public PatientNoteData GetPatientNote(GetPatientNoteDataRequest request)
         {
             throw new NotImplementedException();
         }
 
-        public List<DTO.PatientNoteData> GetAllPatientNotes(DTO.GetAllPatientNotesDataRequest request)
+        public List<PatientNoteData> GetAllPatientNotes(GetAllPatientNotesDataRequest request)
         {
             throw new NotImplementedException();
         }
 
-        public bool DeletePatientNote(DTO.DeletePatientNoteDataRequest request)
+        public bool DeletePatientNote(DeletePatientNoteDataRequest request)
         {
             throw new NotImplementedException();
         }
 
-        public DTO.DeleteNoteByPatientIdDataResponse DeleteNoteByPatientId(DTO.DeleteNoteByPatientIdDataRequest request)
+        public DeleteNoteByPatientIdDataResponse DeleteNoteByPatientId(DeleteNoteByPatientIdDataRequest request)
         {
             throw new NotImplementedException();
         }
 
-        public DTO.UndoDeletePatientNotesDataResponse UndoDeletePatientNotes(DTO.UndoDeletePatientNotesDataRequest request)
+        public UndoDeletePatientNotesDataResponse UndoDeletePatientNotes(UndoDeletePatientNotesDataRequest request)
         {
             throw new NotImplementedException();
         }
 
-        public DTO.RemoveProgramInPatientNotesDataResponse RemoveProgramInPatientNotes(DTO.RemoveProgramInPatientNotesDataRequest request)
+        public RemoveProgramInPatientNotesDataResponse RemoveProgramInPatientNotes(RemoveProgramInPatientNotesDataRequest request)
         {
             throw new NotImplementedException();
         }
 
-        public PatientNoteData UpdatePatientNote(DTO.UpdatePatientNoteDataRequest request)
+        public PatientNoteData UpdatePatientNote(UpdatePatientNoteDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<HttpObjectResponse<PatientNoteData>> InsertBatchPatientNotes(InsertBatchPatientNotesDataRequest request)
         {
             throw new NotImplementedException();
         }

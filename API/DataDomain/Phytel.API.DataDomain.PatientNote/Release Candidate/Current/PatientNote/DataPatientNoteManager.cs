@@ -1,8 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Net;
+using System.Linq;
 using DataDomain.PatientNote.Repo;
+using Phytel.API.Common;
 using Phytel.API.DataDomain.PatientNote.DTO;
 using Phytel.API.DataDomain.PatientNote.Repo;
+using Phytel.API.DataAudit;
 
 namespace Phytel.API.DataDomain.PatientNote
 {
@@ -28,6 +32,46 @@ namespace Phytel.API.DataDomain.PatientNote
                 throw ex;
             }
             return noteId;
+        }
+
+        public List<HttpObjectResponse<PatientNoteData>> InsertBatchPatientNotes(InsertBatchPatientNotesDataRequest request)
+        {
+            List<HttpObjectResponse<PatientNoteData>> list = null;
+            try
+            {
+                if (request.PatientNotesData != null && request.PatientNotesData.Count > 0)
+                {
+                    list = new List<HttpObjectResponse<PatientNoteData>>();
+                    var repo = Factory.GetRepository(RepositoryType.PatientNote);
+                    BulkInsertResult result = (BulkInsertResult)repo.InsertAll(request.PatientNotesData.Cast<object>().ToList());
+                    if (result != null)
+                    {
+                        if (result.ProcessedIds != null && result.ProcessedIds.Count > 0)
+                        {
+                            // Get the PatientSystems that were newly inserted. 
+                            List<PatientNoteData> insertedPatientNotes = repo.Select(result.ProcessedIds) as List<PatientNoteData>;
+                            if (insertedPatientNotes != null && insertedPatientNotes.Count > 0)
+                            {
+                                #region DataAudit
+                                List<string> insertedPatientNoteIds = insertedPatientNotes.Select(p => p.Id).ToList();
+                                AuditHelper.LogDataAudit(request.UserId, MongoCollectionName.PatientNote.ToString(), insertedPatientNoteIds, Common.DataAuditType.Insert, request.ContractNumber); 
+                                #endregion
+                                
+                                insertedPatientNotes.ForEach(r =>
+                                {
+                                    list.Add(new HttpObjectResponse<PatientNoteData> { Code = HttpStatusCode.Created, Body = (PatientNoteData)new PatientNoteData { Id = r.Id, ExternalRecordId = r.ExternalRecordId, PatientId = r.PatientId } });
+                                });
+                            }
+                        }
+                        result.ErrorMessages.ForEach(e =>
+                        {
+                            list.Add(new HttpObjectResponse<PatientNoteData> { Code = HttpStatusCode.InternalServerError, Message = e });
+                        });
+                    }
+                }
+            }
+            catch (Exception ex) { throw ex; }
+            return list;
         }
 
         public PatientNoteData UpdatePatientNote(UpdatePatientNoteDataRequest request)
