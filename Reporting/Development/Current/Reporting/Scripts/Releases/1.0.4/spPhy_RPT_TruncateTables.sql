@@ -100,7 +100,12 @@ BEGIN
 	DELETE RPT_UserRecentList
 	DELETE [RPT_User]
 	
-	-- Lookups
+	DELETE RPT_PatientUtilization
+	DELETE RPT_PatientUtilizationProgram
+
+	--Delete the lookup columns in the end due to it's dependencies on base tables.
+
+	-- Notes Lookups
 	DELETE RPT_NoteDurationLookUp
 	DELETE RPT_NoteMethodLookUp
 	DELETE RPT_NoteOutcomeLookUp
@@ -108,17 +113,13 @@ BEGIN
 	DELETE RPT_NoteWhoLookUp
 	DELETE RPT_MaritalStatusLookUp
 	DELETE RPT_StatusReasonLookUp
-	-- utilization lookups
+	-- Utilization lookups
 	DELETE RPT_VisitTypeLookUp
 	DELETE RPT_UtilizationLocationLookUp
 	DELETE RPT_DispositionLookUp
 	DELETE RPT_UtilizationSourceLookUp
-	
-	DELETE RPT_PatientUtilization
-	DELETE RPT_PatientUtilizationProgram
-	
-	--DELETE CohortPatientView	
-	--DELETE CohortPatientViewSearchField
+
+	-- Resetting the Identity columns.
 	
 	DBCC CHECKIDENT ('RPT_CareMember', RESEED, 0) 
 	DBCC CHECKIDENT ('RPT_CareMemberTypeLookUp', RESEED, 0)	
@@ -227,6 +228,9 @@ BEGIN
 	DBCC CHECKIDENT ('RPT_PatientAllergy', RESEED, 0)
 	DBCC CHECKIDENT ('RPT_PatientAllergyReaction', RESEED, 0)
 	
+	DBCC CHECKIDENT ('RPT_PatientUtilization', RESEED, 0)
+	DBCC CHECKIDENT ('RPT_PatientUtilizationProgram', RESEED, 0)
+
 	-- lookups
 	DBCC CHECKIDENT ('RPT_NoteDurationLookUp', RESEED, 0)
 	DBCC CHECKIDENT ('RPT_NoteMethodLookUp', RESEED, 0)
@@ -240,12 +244,7 @@ BEGIN
 	DBCC CHECKIDENT ('RPT_UtilizationLocationLookUp', RESEED, 0)
 	DBCC CHECKIDENT ('RPT_DispositionLookUp', RESEED, 0)
 	DBCC CHECKIDENT ('RPT_UtilizationSourceLookUp', RESEED, 0)
-	
-	DBCC CHECKIDENT ('RPT_PatientUtilization', RESEED, 0)
-	DBCC CHECKIDENT ('RPT_PatientUtilizationProgram', RESEED, 0)
-	
-	--DBCC CHECKIDENT ('RPT_CohortPatientView', RESEED, 0)
-	--DBCC CHECKIDENT ('RPT_CohortPatientViewSearchField', RESEED, 0)
+
 END
 
 
