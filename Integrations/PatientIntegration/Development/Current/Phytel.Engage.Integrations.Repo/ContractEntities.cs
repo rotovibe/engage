@@ -9,7 +9,7 @@ namespace Phytel.Engage.Integrations.Repo
     {
         public ContractEntities(string connectionString) : base(connectionString)
         {
-            this.Database.CommandTimeout = 120;
+            this.Database.CommandTimeout = 0;
         }
     }
 }

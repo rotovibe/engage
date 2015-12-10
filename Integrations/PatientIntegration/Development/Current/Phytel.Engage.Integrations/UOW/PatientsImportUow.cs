@@ -132,7 +132,8 @@ namespace Phytel.Engage.Integrations.UOW
                             PatientId = mongoPtId,
                             CreatedOn = ptInfo.CreateDate != null ? Convert.ToDateTime(ptInfo.CreateDate) : default(DateTime),
                             Phones = new List<PhoneData> {new PhoneData{ DataSource = "P-Reg", Number = Convert.ToInt64(ptInfo.Phone), TypeId = "52e18c2ed433232028e9e3a6"}},
-                            RecentsList = null
+                            RecentsList = null,
+                            ExternalRecordId = id
                         });
                     }
                 });

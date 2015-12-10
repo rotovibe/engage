@@ -18,6 +18,7 @@ namespace Phytel.Engage.Integrations.Repo
         {
             this.KeyDatas = new HashSet<KeyData>();
             this.Phones = new HashSet<Phone>();
+            this.PatientPersonalPhysicians = new HashSet<PatientPersonalPhysician>();
         }
     
         public int ID { get; set; }
@@ -50,5 +51,6 @@ namespace Phytel.Engage.Integrations.Repo
     
         public virtual ICollection<KeyData> KeyDatas { get; set; }
         public virtual ICollection<Phone> Phones { get; set; }
+        public virtual ICollection<PatientPersonalPhysician> PatientPersonalPhysicians { get; set; }
     }
 }

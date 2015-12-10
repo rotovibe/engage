@@ -7,6 +7,7 @@ using FastMember;
 using Phytel.API.DataDomain.Patient.DTO;
 using Phytel.API.DataDomain.PatientSystem.DTO;
 using Phytel.Engage.Integrations.DomainEvents;
+using Phytel.Engage.Integrations.Repo.Bridge;
 using Phytel.Engage.Integrations.Repo.Connections;
 using Phytel.Engage.Integrations.Repo.DTO;
 using Phytel.Engage.Integrations.Repo.DTOs.SQL;
@@ -17,11 +18,13 @@ namespace Phytel.Engage.Integrations.Repo.Repositories
     {
         private readonly string _contract;
         public ISQLConnectionProvider ConnStr { get; set; }
+        public IQueryImplementation Implementor { get; set; }
 
-        public XrefContractRepository(string contract, ISQLConnectionProvider conProvider)
+        public XrefContractRepository(string contract, ISQLConnectionProvider conProvider, IQueryImplementation implementor)
         {
             _contract = contract;
             ConnStr = conProvider;
+            Implementor = implementor;
         }
 
         public object SelectAll()
@@ -29,42 +32,7 @@ namespace Phytel.Engage.Integrations.Repo.Repositories
             List<PatientXref> ptInfo = null;
             using (var ct = new ContractEntities(ConnStr.GetConnectionStringEF(_contract)))
             {
-                var query = (from ce in ct.ContactEntities
-                    join xf in ct.IntegrationPatientXrefs on new {PhytelPatientID = ce.ID} equals
-                        new {PhytelPatientID = xf.PhytelPatientID}
-                    where
-                        ((from x in ct.IntegrationPatientXrefs
-                            where
-                                x.SendingApplication != "ENGAGE"
-                            select new
-                            {
-                                x.PhytelPatientID
-                            }).Distinct()).Contains(new {PhytelPatientID = ce.ID}) &&
-
-                        ((from C3ProblemList in ct.C3ProblemList
-                            where
-                                C3ProblemList.PatientID == ce.ID &&
-                                (C3ProblemList.ProblemDescription == "ACO CIGN" ||
-                                 C3ProblemList.ProblemDescription == "ACO BLUE" ||
-                                 C3ProblemList.ProblemDescription == "MGDMCARE" ||
-                                 C3ProblemList.ProblemDescription.Contains("AVMED") ||
-                                 C3ProblemList.ProblemDescription.Contains("ACO CMS") ||
-                                 C3ProblemList.ProblemDescription.StartsWith("CCM "))
-                            select new
-                            {
-                                C3ProblemList.PatientID
-                            }).Distinct()).Contains(new {PatientID = ce.ID})
-                    select new PatientXref
-                    {
-                        ID = xf.ID,
-                        PhytelPatientID = (int?) xf.PhytelPatientID,
-                        ExternalDisplayPatientId = xf.ExternalDisplayPatientId,
-                        ExternalPatientID = xf.ExternalPatientID,
-                        SendingApplication = xf.SendingApplication,
-                        CreateDate = xf.CreateDate,
-                        UpdateDate = xf.UpdateDate,
-                        UpdatedBy = xf.UpdatedBy
-                    });
+                var query = Implementor.GetPatientXrefQuery(ct);
 
                 ptInfo = query.ToList();
             }

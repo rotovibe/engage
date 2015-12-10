@@ -62,7 +62,7 @@ namespace Phytel.Engage.Integrations.UOW
                 DataSource = _dataSource,
                 CreatedOn = n.CreatedDate.GetValueOrDefault(),
                 CreatedById = Constants.SystemContactId,
-                TypeId = GetNoteType(Convert.ToInt32(n.ActionID))// get note type
+                TypeId = GetNoteType(Convert.ToInt32(n.ActionID), n.CategoryId)// get note type
             };
 
             if (!pnote.TypeId.Equals("54909997d43323251c0a1dfe")) return pnote;
@@ -100,13 +100,67 @@ namespace Phytel.Engage.Integrations.UOW
             return pnote;
         }
 
-        private static string GetNoteType(int actionId)
+        private static string GetNoteType(int actionId, int categoryId)
         {
-            const string general = "54909992d43323251c0a1dfd";
+            //1	Campaign Follow-up
+            //2	Left Message
+            //3	Spoke to Patient
+            //4	Spoke with Care Giver
+            //5	Other
+
             const string touchpoint = "54909997d43323251c0a1dfe";
-            var val = actionId == 5 ? general : touchpoint;
+            // refactor this
+            var val = actionId == 5 ? SetNoteTypeForGeneral(categoryId) : touchpoint;
+
+
 
             return val;
+        }
+
+        private static string SetNoteTypeForGeneral(int categoryId)
+        {
+            var noteTypeId = string.Empty;
+            const string general = "54909992d43323251c0a1dfd";
+            const string carePlanUpdate = "54ca6880d433231b90768691";
+            const string assessment = "54ca6885d433231b90768692";
+            const string chartReview = "5490999bd43323251c0a1dff";
+
+            switch (categoryId)
+            {
+                case 1: //1	Campaigns 
+                case 13: //13 Referral
+                case 2: //2	Other
+                case 4: //4	Appointment Scheduling
+                    noteTypeId = general;
+                    break;
+
+                case 3: //3	Adherence – Meds/Treatment
+                case 6: //6	Care Planning
+                case 7: //7	Care/Service Coordination
+                case 8: //8	Education/Self Care
+                case 9: //9	Emotional Support
+                case 10: //10 Medication Reconciliation
+                case 12: //12 Patient Feedback
+                case 14: //14 Service Feedback
+                case 15: //15 TCM – Care Coordination
+                case 16: //16 TCM – Care Planning
+                case 17: //17 TCM – Education/Self Mgt
+                    noteTypeId = carePlanUpdate;
+                    break;
+
+                case 18: //18 TCM – Health Status
+                case 19: //19 TCM – Needs Assessment
+                case 5: //5	Assessment – Health Status
+                    noteTypeId = assessment;
+                    break;
+
+                case 20: //20 Visit Preparation
+                case 11: //11 Obtain Medical Records
+                    noteTypeId = chartReview;
+                    break;
+            }
+
+            return noteTypeId;
         }
     }
 }

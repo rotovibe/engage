@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ServiceStack.Common;
 
 namespace Phytel.Engage.Integrations
 {
@@ -28,7 +29,7 @@ namespace Phytel.Engage.Integrations
             //None = 0,
             //Yes = 1,
             //No = 2
-            if (!p.Equals("Deceased")) return val;
+            if (p.IsNullOrEmpty()) return val;
 
             switch (p)
             {

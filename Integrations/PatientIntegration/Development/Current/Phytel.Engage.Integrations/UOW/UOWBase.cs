@@ -233,7 +233,9 @@ namespace Phytel.Engage.Integrations.UOW
             try
             {
                 var phnList = xrepo.SelectAll();
-                var final = ((List<PCPPhone>) phnList).Where(x => x.Phone.Length == 10);
+                if (phnList == null) return;
+                var final = ((List<PCPPhone>) phnList).Where(x => x.Phone != null && x.Phone.Length == 10);
+                if (final == null) return;
                 pcpPhones.AddRange(from xr in final select xr);
             }
             catch (Exception ex)
@@ -309,7 +311,8 @@ namespace Phytel.Engage.Integrations.UOW
                             PriorityId = 0, // notset
                             StatusId = 1, // Open
                             CreatedById = ProcConstants.UserId,
-                            CreatedOn = DateTime.UtcNow
+                            CreatedOn = DateTime.UtcNow,
+                            ExternalRecordId = x.Body.ExternalRecordId
                         });
                     }
                 });

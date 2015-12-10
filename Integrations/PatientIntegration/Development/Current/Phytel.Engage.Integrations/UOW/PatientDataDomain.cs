@@ -1,14 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using Phytel.API.Common;
-using Phytel.API.DataDomain.Contact.DTO;
 using Phytel.API.DataDomain.Patient.DTO;
-using Phytel.API.DataDomain.PatientSystem.DTO;
-using Phytel.API.Interface;
 using Phytel.Engage.Integrations.DomainEvents;
 using Phytel.Engage.Integrations.DTO;
 using Phytel.Engage.Integrations.Utils;
@@ -19,7 +11,7 @@ namespace Phytel.Engage.Integrations.UOW
 {
     public class PatientDataDomain : IDataDomain
     {
-        protected readonly string DDPatientServiceUrl = ProcConstants.DdPatientServiceUrl; //ConfigurationManager.OpenExeConfiguration(Assembly.GetExecutingAssembly().Location).AppSettings.Settings["DDPatientServiceUrl"].Value; //ConfigurationManager.AppSettings[""];
+        protected readonly string DDPatientServiceUrl = ProcConstants.DdPatientServiceUrl;
 
         public object Save<T>(T patients, string contract)
         {

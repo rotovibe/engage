@@ -45,5 +45,7 @@ namespace Phytel.Engage.Integrations.Repo
         public virtual DbSet<Phone> Phones { get; set; }
         public virtual DbSet<SubscriberEntity> SubscriberEntities { get; set; }
         public virtual DbSet<CommCategory> CommCategories { get; set; }
+        public virtual DbSet<PatientRegistryHdr> PatientRegistryHdrs { get; set; }
+        public virtual DbSet<PatientPersonalPhysician> PatientPersonalPhysicians { get; set; }
     }
 }
