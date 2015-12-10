@@ -35,6 +35,32 @@ namespace Phytel.Services.Communication.Harness.Model
             }
         }
 
+        private TemplateDetail _templateDetail;
+
+        public TemplateDetail TemplateDetail
+        {
+            get { return _templateDetail; }
+            set
+            {
+                if(value == _templateDetail) return;
+                _templateDetail = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private string _transformResult;
+
+        public string TransformResult
+        {
+            get { return _transformResult; }
+            set
+            {
+                if(value == _transformResult) return;
+                _transformResult = value;
+                OnPropertyChanged();
+            }
+        }
+
         private List<ActivityMedia> _emailActivityMedia;
         public List<ActivityMedia> EmailActivityMedia
         {

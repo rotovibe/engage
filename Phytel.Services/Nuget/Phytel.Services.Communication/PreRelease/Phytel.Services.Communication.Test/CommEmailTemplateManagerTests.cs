@@ -141,7 +141,7 @@ namespace Phytel.Services.Communication.Test
                                                     "<Patient><PatientID /><FullName /><FirstName /><LastName /></Patient>" +
                                                     "<Schedule><ScheduleID /><FullName /><FirstName /><LastName /></Schedule>" +
                                                     "<Facility><FacilityID>100</FacilityID><FacilityLogo Enable=\"true\" >logo.jpg</FacilityLogo><FacilityURL Enable=\"true\" >facility.com</FacilityURL>" +
-                                                    "<Name>narrative</Name><Addr1>Facility Address</Addr1><Addr2>Facility Address 2</Addr2><City>Dallas</City><State>TX</State><Zip>77777</Zip><PhoneNumber>(214) 555-1212</PhoneNumber></Facility>" +
+                                                    "<Name>Facility Name</Name><Addr1>Facility Address</Addr1><Addr2>Facility Address 2</Addr2><City>Dallas</City><State>TX</State><Zip>77777</Zip><PhoneNumber>(214) 555-1212</PhoneNumber></Facility>" +
                                                     "<Message><Type /><DayOfWeek /><Month /><Date /><Year /><Time /><Duration /><AppointmentSpecificMessage Enable=\"true\" /><FromEmailAddress />" +
                                                     "<ReplyToEmailAddress /><ToEmailAddress /><DisplayName /><Subject>Health Reminder from FACILITY_NAME</Subject><Body /></Message></Email>";
 
@@ -284,7 +284,7 @@ namespace Phytel.Services.Communication.Test
                                                     "<Patient><PatientID /><FullName /><FirstName /><LastName /></Patient>" +
                                                     "<Schedule><ScheduleID /><FullName /><FirstName /><LastName /></Schedule>" +
                                                     "<Facility><FacilityID>100</FacilityID><FacilityLogo Enable=\"true\" /><FacilityURL Enable=\"true\" />" +
-                                                    "<Name>narrative</Name><Addr1 /><Addr2 /><City /><State /><Zip /><PhoneNumber /></Facility>" +
+                                                    "<Name>Facility Name</Name><Addr1 /><Addr2 /><City /><State /><Zip /><PhoneNumber /></Facility>" +
                                                     "<Message><Type /><DayOfWeek /><Month /><Date /><Year /><Time /><Duration /><AppointmentSpecificMessage Enable=\"true\" /><FromEmailAddress />" +
                                                     "<ReplyToEmailAddress /><ToEmailAddress /><DisplayName /><Subject>Health Reminder from FACILITY_NAME</Subject><Body /></Message></Email>";
 
@@ -381,7 +381,7 @@ namespace Phytel.Services.Communication.Test
                         "<Patient><PatientID>20</PatientID><FullName>What Is This</FullName><FirstName>Test</FirstName><LastName>Last</LastName></Patient>" +
                         "<Schedule><ScheduleID>30</ScheduleID><FullName>Test Schedule</FullName><FirstName /><LastName /></Schedule>" +
                         "<Facility><FacilityID>100</FacilityID><FacilityLogo Enable=\"true\" >logo.jpg</FacilityLogo><FacilityURL Enable=\"true\" >facility.com</FacilityURL>" +
-                        "<Name>narrative</Name><Addr1>Facility Address</Addr1><Addr2>Facility Address 2</Addr2><City>Dallas</City><State>TX</State><Zip>77777</Zip><PhoneNumber>(214) 555-1212</PhoneNumber></Facility>" +
+                        "<Name>Facility Name</Name><Addr1>Facility Address</Addr1><Addr2>Facility Address 2</Addr2><City>Dallas</City><State>TX</State><Zip>77777</Zip><PhoneNumber>(214) 555-1212</PhoneNumber></Facility>" +
                         "<Message><Type>Health Reminder </Type><DayOfWeek>Friday</DayOfWeek><Month>November</Month><Date>20</Date><Year>2020</Year><Time>8:00 AM</Time><Duration>60</Duration><AppointmentSpecificMessage Enable=\"true\" />" +
                         "<FromEmailAddress>facility@test.com</FromEmailAddress><ReplyToEmailAddress>facilityreply@test.com</ReplyToEmailAddress><ToEmailAddress>test@test.com</ToEmailAddress>" +
                         "<DisplayName>facility</DisplayName><Subject>Health Reminder from </Subject><Body /></Message></Email>";
@@ -602,7 +602,7 @@ namespace Phytel.Services.Communication.Test
                 CategoryCode = "SNOVR",
                 OwnerCode = "EMAIL",
                 LanguagePreferenceCode = "EN",
-                Narrative = "narrative"
+                Narrative = "Facility Name"
             };
 
             ActivityMedia facilityLogo = new ActivityMedia

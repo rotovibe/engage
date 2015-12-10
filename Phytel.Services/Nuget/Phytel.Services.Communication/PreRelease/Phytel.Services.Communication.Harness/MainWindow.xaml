@@ -37,7 +37,7 @@
                     <RowDefinition Height="3*"/>
                 </Grid.RowDefinitions>
 
-                <TabControl Grid.Row="0" Margin="10,23,9.6,0" Grid.RowSpan="2">
+                <TabControl Grid.Row="0" Margin="10" Grid.RowSpan="2">
                     <TabItem Header="EMAIL">
                         <ScrollViewer VerticalScrollBarVisibility = "Auto">
                             <Grid>
@@ -60,13 +60,12 @@
                                                 <ComboBoxItem>BuildIntroPatient_Test</ComboBoxItem>
                                                 <ComboBoxItem>BuildPatient_Test</ComboBoxItem>
                                                 <ComboBoxItem>BuildSchedule_Test</ComboBoxItem>
-                                                <!--<ComboBoxItem>EmailTransform_Test</ComboBoxItem>-->
+                                                <ComboBoxItem>EmailTransform_Test</ComboBoxItem>
                                             </ComboBox>
                                             <StackPanel Orientation="Horizontal">
                                                 <Button Name="TestEmailBtn" Margin="4" Padding="6" Click="Call_Email_Test_Method_Click" IsEnabled="False">Run Test</Button>
                                                 <Button Name="ResetEmailDataBtn" Margin="4" Padding="6" Click="Reset_Email_Data_Click">Reset</Button>
                                             </StackPanel>
-                                            
                                         </StackPanel>
                                     </StackPanel>
                                 </Border>
@@ -177,11 +176,11 @@
                                                 <ComboBoxItem>BuildPatient_Test</ComboBoxItem>
                                                 <ComboBoxItem>BuildSchedule_Test</ComboBoxItem>
                                                 <ComboBoxItem>BuildTextMessage_Test</ComboBoxItem>
-                                                <!--<ComboBoxItem>TextTransform_Test</ComboBoxItem>-->
+                                                <ComboBoxItem>TextTransform_Test</ComboBoxItem>
                                             </ComboBox>
                                             <StackPanel Orientation="Horizontal">
                                                 <Button Name="TestTextBtn" Margin="4" Padding="6" Click="Call_Text_Test_Method_Click" IsEnabled="False">Run Test</Button>
-                                                <Button Name="ResetTextDataBtn" Margin="4" Padding="6" Click="ResetTextDataBtn_Click">Reset</Button>
+                                                <Button Name="ResetTextDataBtn" Margin="4" Padding="6" Click="Reset_Text_Data_Click">Reset</Button>
                                             </StackPanel>
                                         </StackPanel>
                                     </StackPanel>
@@ -213,7 +212,7 @@
                                     <Label Margin="0,4,0,4" Grid.Row="1" Grid.Column="0" Content="Schedule ID:"/>
                                     <TextBox Text="{Binding TextActivityDetail.RecipientSchedID}" Grid.Row="1" Grid.Column="1" Margin="0,4,4,4" />
                                     <Label Margin="0,4,0,4" Grid.Row="2" Grid.Column="0" Content="Patient ID:"/>
-                                    <TextBox Text="{Binding TextActivityDetail.CampaignID}" Grid.Row="2" Grid.Column="1" Margin="0,4,4,4" />
+                                    <TextBox Text="{Binding TextActivityDetail.PatientID}" Grid.Row="2" Grid.Column="1" Margin="0,4,4,4" />
                                     <Label Margin="0,4,0,4" Grid.Row="3" Grid.Column="0" Content="Send ID:"/>
                                     <TextBox Text="{Binding TextActivityDetail.SendID}" Grid.Row="3" Grid.Column="1" Margin="0,4,4,4" />
                                     <Label Margin="0,4,0,4" Grid.Row="4" Grid.Column="0" Content="Template ID:"/>
@@ -227,7 +226,7 @@
                                     <Label Margin="0,4,0,4" Grid.Row="0" Grid.Column="2" Content="Activity ID:"/>
                                     <TextBox Text="{Binding TextActivityDetail.ActivityID}" Grid.Row="0" Grid.Column="3" Margin="0,4,4,4" />
                                     <Label Margin="0,4,0,4" Grid.Row="1" Grid.Column="2" Content="Campaign ID:"/>
-                                    <TextBox Text="{Binding TextActivityDetail.PatientID}" Grid.Row="1" Grid.Column="3" Margin="0,4,4,4" />
+                                    <TextBox Text="{Binding TextActivityDetail.CampaignID}" Grid.Row="1" Grid.Column="3" Margin="0,4,4,4" />
                                     <Label Margin="0,4,0,4" Grid.Row="2" Grid.Column="2" Content="First Name:"/>
                                     <TextBox Text="{Binding TextActivityDetail.PatientFirstName}" Grid.Row="2" Grid.Column="3" Margin="0,4,4,4" />
                                     <Label Margin="0,4,0,4" Grid.Row="3" Grid.Column="2" Content="Last Name:"/>
@@ -394,9 +393,9 @@
                                 <Label Margin="0,4,0,4" Grid.Row="8" Grid.Column="4" Content="Owner Code:"/>
                                 <TextBox Text="{Binding ScheduleName.OwnerCode}" Grid.Row="8" Grid.Column="5" Margin="0,4,4,4" />
                                 <Label Margin="0,4,0,4" Grid.Row="9" Grid.Column="4" Content="Language Preference Code:"/>
-                                <TextBox Text="{Binding ScheduleName.LanguagePreferenceCode}" Grid.Row="4" Grid.Column="5" Margin="0,4,4,4" />
+                                <TextBox Text="{Binding ScheduleName.LanguagePreferenceCode}" Grid.Row="9" Grid.Column="5" Margin="0,4,4,4" />
                                 <Label Margin="0,4,0,4" Grid.Row="10" Grid.Column="4" Content="Narrative:"/>
-                                <TextBox Text="{Binding ScheduleName.Narrative}" Grid.Row="9" Grid.Column="5" Margin="0,4,4,4" />
+                                <TextBox Text="{Binding ScheduleName.Narrative}" Grid.Row="10" Grid.Column="5" Margin="0,4,4,4" />
                                 <!-- Schedule Name - end-->
 
                                 <!-- Appointment Specific Message - begin-->
@@ -485,101 +484,6 @@
                                 <Label Margin="0,4,0,4" Grid.Row="5" Grid.Column="2" Content="Narrative:"/>
                                 <TextBox Text="{Binding TextScheduleName.Narrative}" Grid.Row="5" Grid.Column="3" Margin="0,4,4,4" />
                                 <!-- Facility URL - end-->
-
-                                <!-- Facility Email Address - begin-->
-                                <!--<Border Grid.Column="4" Grid.Row="0" Grid.ColumnSpan="2" Background="BlanchedAlmond" CornerRadius="3" Margin="4">
-                                    <Label VerticalAlignment="Center" HorizontalAlignment="Center">Facility Email Address</Label>
-                                </Border>
-                                <Label Margin="0,4,0,4" Grid.Row="1" Grid.Column="4" Content="Owner ID:"/>
-                                <TextBox MinWidth="68" Text="{Binding EmailActivityDetail.FacilityID}" Grid.Row="1" Grid.Column="5" Margin="0,4,4,4" />
-                                <Label Margin="0,4,0,4" Grid.Row="2" Grid.Column="4" Content="Category Code:"/>
-                                <TextBox Text="{Binding FacilityEmailAddress.CategoryCode}" Grid.Row="2" Grid.Column="5" Margin="0,4,4,4" />
-                                <Label Margin="0,4,0,4" Grid.Row="3" Grid.Column="4" Content="Owner Code:"/>
-                                <TextBox Text="{Binding FacilityEmailAddress.OwnerCode}" Grid.Row="3" Grid.Column="5" Margin="0,4,4,4" />
-                                <Label Margin="0,4,0,4" Grid.Row="4" Grid.Column="4" Content="Narrative:"/>
-                                <TextBox Text="{Binding FacilityEmailAddress.Narrative}" Grid.Row="4" Grid.Column="5" Margin="0,4,4,4" />-->
-                                <!-- Facility Email Address - end-->
-
-                                <!-- Facility Reply Address - begin-->
-                                <!--<Border Grid.Column="6" Grid.Row="0" Grid.ColumnSpan="2" Background="BlanchedAlmond" CornerRadius="3" Margin="4">
-                                    <Label VerticalAlignment="Center" HorizontalAlignment="Center">Facility Reply Address</Label>
-                                </Border>
-                                <Label Margin="0,4,0,4" Grid.Row="1" Grid.Column="6" Content="Owner ID:"/>
-                                <TextBox MinWidth="68" Text="{Binding EmailActivityDetail.FacilityID}" Grid.Row="1" Grid.Column="7" Margin="0,4,4,4" />
-                                <Label Margin="0,4,0,4" Grid.Row="2" Grid.Column="6" Content="Category Code:"/>
-                                <TextBox Text="{Binding FacilityReplyAddress.CategoryCode}" Grid.Row="2" Grid.Column="7" Margin="0,4,4,4" />
-                                <Label Margin="0,4,0,4" Grid.Row="3" Grid.Column="6" Content="Owner Code:"/>
-                                <TextBox Text="{Binding FacilityReplyAddress.OwnerCode}" Grid.Row="3" Grid.Column="7" Margin="0,4,4,4" />
-                                <Label Margin="0,4,0,4" Grid.Row="4" Grid.Column="6" Content="Narrative:"/>
-                                <TextBox Text="{Binding FacilityReplyAddress.Narrative}" Grid.Row="4" Grid.Column="7" Margin="0,4,4,4" />-->
-                                <!-- Facility Reply Address - end-->
-
-                                <!-- Second row -->
-
-                                <!-- Facility Display Name - begin-->
-                                <!--<Border Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="2" Background="BlanchedAlmond" CornerRadius="3" Margin="4">
-                                    <Label VerticalAlignment="Center" HorizontalAlignment="Center">Facility Display Name</Label>
-                                </Border>
-                                <Label Margin="0,4,0,4" Grid.Row="6" Grid.Column="0" Content="Owner ID:"/>
-                                <TextBox MinWidth="68" Text="{Binding EmailActivityDetail.FacilityID}" Grid.Row="6" Grid.Column="1" Margin="0,4,4,4" />
-                                <Label Margin="0,4,0,4" Grid.Row="7" Grid.Column="0" Content="Category Code:"/>
-                                <TextBox Text="{Binding FacilityDisplayName.CategoryCode}" Grid.Row="7" Grid.Column="1" Margin="0,4,4,4" />
-                                <Label Margin="0,4,0,4" Grid.Row="8" Grid.Column="0" Content="Owner Code:"/>
-                                <TextBox Text="{Binding FacilityDisplayName.OwnerCode}" Grid.Row="8" Grid.Column="1" Margin="0,4,4,4" />
-                                <Label Margin="0,4,0,4" Grid.Row="9" Grid.Column="0" Content="Narrative:"/>
-                                <TextBox Text="{Binding FacilityDisplayName.Narrative}" Grid.Row="9" Grid.Column="1" Margin="0,4,4,4" />-->
-                                <!-- Facility Display Name - end-->
-
-                                <!-- Facility Name - begin-->
-                                <!--<Border Grid.Column="2" Grid.Row="5" Grid.ColumnSpan="2" Background="BlanchedAlmond" CornerRadius="3" Margin="4">
-                                    <Label VerticalAlignment="Center" HorizontalAlignment="Center">Facility Name</Label>
-                                </Border>
-                                <Label Margin="0,4,0,4" Grid.Row="6" Grid.Column="2" Content="Owner ID:"/>
-                                <TextBox MinWidth="68" Text="{Binding EmailActivityDetail.FacilityID}" Grid.Row="6" Grid.Column="3" Margin="0,4,4,4" />
-                                <Label Margin="0,4,0,4" Grid.Row="7" Grid.Column="2" Content="Category Code:"/>
-                                <TextBox Text="{Binding FacilityName.CategoryCode}" Grid.Row="7" Grid.Column="3" Margin="0,4,4,4" />
-                                <Label Margin="0,4,0,4" Grid.Row="8" Grid.Column="2" Content="Owner Code:"/>
-                                <TextBox Text="{Binding FacilityName.OwnerCode}" Grid.Row="8" Grid.Column="3" Margin="0,4,4,4" />
-                                <Label Margin="0,4,0,4" Grid.Row="9" Grid.Column="2" Content="Language Preference Code:"/>
-                                <TextBox Text="{Binding FacilityName.LanguagePreferenceCode}" Grid.Row="9" Grid.Column="3" Margin="0,4,4,4" />
-                                <Label Margin="0,4,0,4" Grid.Row="10" Grid.Column="2" Content="Narrative:"/>
-                                <TextBox Text="{Binding FacilityName.Narrative}" Grid.Row="10" Grid.Column="3" Margin="0,4,4,4" />-->
-                                <!-- Facility Name - end-->
-
-                                <!-- Schedule Name - begin-->
-                                <!--<Border Grid.Column="4" Grid.Row="5" Grid.ColumnSpan="2" Background="BlanchedAlmond" CornerRadius="3" Margin="4">
-                                    <Label VerticalAlignment="Center" HorizontalAlignment="Center">Schedule Name</Label>
-                                </Border>
-                                <Label Margin="0,4,0,4" Grid.Row="6" Grid.Column="4" Content="Owner ID:"/>
-                                <TextBox MinWidth="68" Text="{Binding EmailActivityDetail.RecipientSchedID}" Grid.Row="6" Grid.Column="5" Margin="0,4,4,4" />
-                                <Label Margin="0,4,0,4" Grid.Row="7" Grid.Column="4" Content="Category Code:"/>
-                                <TextBox Text="{Binding ScheduleName.CategoryCode}" Grid.Row="7" Grid.Column="5" Margin="0,4,4,4" />
-                                <Label Margin="0,4,0,4" Grid.Row="8" Grid.Column="4" Content="Owner Code:"/>
-                                <TextBox Text="{Binding ScheduleName.OwnerCode}" Grid.Row="8" Grid.Column="5" Margin="0,4,4,4" />
-                                <Label Margin="0,4,0,4" Grid.Row="9" Grid.Column="4" Content="Language Preference Code:"/>
-                                <TextBox Text="{Binding ScheduleName.LanguagePreferenceCode}" Grid.Row="4" Grid.Column="5" Margin="0,4,4,4" />
-                                <Label Margin="0,4,0,4" Grid.Row="10" Grid.Column="4" Content="Narrative:"/>
-                                <TextBox Text="{Binding ScheduleName.Narrative}" Grid.Row="9" Grid.Column="5" Margin="0,4,4,4" />-->
-                                <!-- Schedule Name - end-->
-
-                                <!-- Appointment Specific Message - begin-->
-                                <!--<Border Grid.Column="6" Grid.Row="5" Grid.ColumnSpan="2" Background="BlanchedAlmond" CornerRadius="3" Margin="4">
-                                    <Label VerticalAlignment="Center" HorizontalAlignment="Center">Appointment Specific Message</Label>
-                                </Border>
-                                <Label Margin="0,4,0,4" Grid.Row="6" Grid.Column="6" Content="Owner ID:"/>
-                                <TextBox MinWidth="68" Text="{Binding EmailActivityDetail.PatientID}" Grid.Row="6" Grid.Column="7" Margin="0,4,4,4" />
-                                <Label Margin="0,4,0,4" Grid.Row="7" Grid.Column="6" Content="Category Code:"/>
-                                <TextBox Text="{Binding AppointmentSpecificMessage.CategoryCode}" Grid.Row="7" Grid.Column="7" Margin="0,4,4,4" />
-                                <Label Margin="0,4,0,4" Grid.Row="8" Grid.Column="6" Content="Owner Code:"/>
-                                <TextBox Text="{Binding AppointmentSpecificMessage.OwnerCode}" Grid.Row="8" Grid.Column="7" Margin="0,4,4,4" />
-                                <Label Margin="0,4,0,4" Grid.Row="9" Grid.Column="6" Content="Language Preference Code:"/>
-                                <TextBox Text="{Binding AppointmentSpecificMessage.LanguagePreferenceCode}" Grid.Row="9" Grid.Column="7" Margin="0,4,4,4" />
-                                <Label Margin="0,4,0,4" Grid.Row="10" Grid.Column="6" Content="Facility ID:"/>
-                                <TextBox Text="{Binding EmailActivityDetail.FacilityID}" Grid.Row="10" Grid.Column="7" Margin="0,4,4,4" />
-                                <Label Margin="0,4,0,4" Grid.Row="11" Grid.Column="6" Content="Narrative:"/>
-                                <TextBox Text="{Binding AppointmentSpecificMessage.Narrative}" Grid.Row="11" Grid.Column="7" Margin="0,4,4,4" />-->
-                                <!-- Appointment Specific Message - end-->
-
                             </Grid>
                         </ScrollViewer>
                     </TabItem>
@@ -590,26 +494,30 @@
                         <ColumnDefinition Width="2*"/>
                         <ColumnDefinition Width="1*"/>
                     </Grid.ColumnDefinitions>
-                    <Grid Column="0" Margin="10,10,0,10">
-                        <Border Background="White" CornerRadius="8">
+                    <Grid Column="0" Margin="10,10,10,10">
+                        <Border Background="White" CornerRadius="8" Padding="10">
                             <ScrollViewer VerticalScrollBarVisibility = "Auto" HorizontalScrollBarVisibility="Auto">
-                                <Label Name="XmlDocLbl" Content=""></Label>
+                                <TextBox Name="XmlDocTb" Text=""></TextBox>
                             </ScrollViewer>
                         </Border>
                     </Grid>
-                    <Grid Column="1"  Margin="10,10,10,10">
+                    <GridSplitter Grid.Column="0" Width="3" Background="SteelBlue"></GridSplitter>
+                    <Grid Column="1" Margin="10,10,10,10">
                         <Border Background="White" CornerRadius="8" Padding="10">
-                            <ListBox Name="MissingObjectsLb" BorderThickness="0" Padding="10">
-                                <ListBox.ItemContainerStyle>
-                                    <Style TargetType="ListBoxItem">
-                                        <Style.Resources>
-                                            <Style TargetType="Border">
-                                                <Setter Property="CornerRadius" Value="5"/>
-                                            </Style>
-                                        </Style.Resources>
-                                    </Style>
-                                </ListBox.ItemContainerStyle>
-                            </ListBox>
+                            <Grid>
+                                <ListBox Visibility="Collapsed" Name="MissingObjectsLb" BorderThickness="0" Padding="10">
+                                    <ListBox.ItemContainerStyle>
+                                        <Style TargetType="ListBoxItem">
+                                            <Style.Resources>
+                                                <Style TargetType="Border">
+                                                    <Setter Property="CornerRadius" Value="5"/>
+                                                </Style>
+                                            </Style.Resources>
+                                        </Style>
+                                    </ListBox.ItemContainerStyle>
+                                </ListBox>
+                                <WebBrowser Name="TestBrowser"></WebBrowser>
+                            </Grid>
                         </Border>
                     </Grid>
                 </Grid>

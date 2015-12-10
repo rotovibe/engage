@@ -115,7 +115,7 @@ namespace Phytel.Services.Communication.Test
             const string expectedTextTemplateXML =  "<TEXT><SendID /><ActivityID /><ContractID />" +
                                                     "<Patient><PatientID /><FullName /><FirstName /><LastName /></Patient>" +
                                                     "<Schedule><ScheduleID /><FullName /><DisplayName /></Schedule>" +
-                                                    "<Facility><FacilityID>100</FacilityID><DisplayName>narrative</DisplayName><Name>Test Facility</Name><Addr1 /><Addr2 /><City /><State /><Zip /><PhoneNumber>(214)555-1212</PhoneNumber></Facility>" +
+                                                    "<Facility><FacilityID>100</FacilityID><DisplayName>Facility Name</DisplayName><Name>Test Facility</Name><Addr1 /><Addr2 /><City /><State /><Zip /><PhoneNumber>(214)555-1212</PhoneNumber></Facility>" +
                                                     "<Message><DayOfWeek /><Month /><Date /><Year /><Time /><DateTime /><TextFromNumber /><TextToNumber /><TextHelpNumber /><Body /></Message></TEXT>";
 
             xDocExpected.LoadXml(expectedTextTemplateXML);
@@ -272,7 +272,7 @@ namespace Phytel.Services.Communication.Test
             expectedEmailTemplateXML =  "<TEXT><SendID /><ActivityID /><ContractID />" +
                                         "<Patient><PatientID /><FullName /><FirstName /><LastName /></Patient>" +
                                         "<Schedule><ScheduleID /><FullName /><DisplayName /></Schedule>" +
-                                        "<Facility><FacilityID>100</FacilityID><DisplayName>narrative</DisplayName><Name>Test Facility</Name><Addr1 /><Addr2 /><City /><State /><Zip /><PhoneNumber>(214)555-1212</PhoneNumber></Facility>" +
+                                        "<Facility><FacilityID>100</FacilityID><DisplayName>Facility Name</DisplayName><Name>Test Facility</Name><Addr1 /><Addr2 /><City /><State /><Zip /><PhoneNumber>(214)555-1212</PhoneNumber></Facility>" +
                                         "<Message><DayOfWeek /><Month /><Date /><Year /><Time /><DateTime /><TextFromNumber /><TextToNumber /><TextHelpNumber /><Body /></Message></TEXT>";
 
             xDocExpected.LoadXml(expectedEmailTemplateXML);
@@ -419,7 +419,7 @@ namespace Phytel.Services.Communication.Test
                 CategoryCode = "SNOVR",
                 OwnerCode = "TEXT",
                 LanguagePreferenceCode = "EN",
-                Narrative = "narrative"
+                Narrative = "Facility Name"
             };
 
             ActivityMedia scheduleDisplayName = new ActivityMedia

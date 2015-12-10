@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Security.Policy;
@@ -30,8 +31,10 @@ namespace Phytel.Services.Communication.Harness
 
         public void InitializeEmailTestData()
         {
-            XmlDocLbl.Content = "";
+            XmlDocTb.Text = "";
             MissingObjectsLb.Items.Clear();
+            TestBrowser.NavigateToString(" ");
+            _testViewModel.TemplateDetail = new TemplateDetail();
             var media = new List<ActivityMedia>();
             _testViewModel.EmailActivityDetail = new EmailActivityDetail
             {
@@ -142,8 +145,9 @@ namespace Phytel.Services.Communication.Harness
 
         public void InitializeTextTestData()
         {
-            XmlDocLbl.Content = "";
+            XmlDocTb.Text = "";
             MissingObjectsLb.Items.Clear();
+            TestBrowser.NavigateToString(" ");
             var media = new List<ActivityMedia>();
             _testViewModel.TextActivityDetail = new TextActivityDetail
             {
@@ -200,7 +204,7 @@ namespace Phytel.Services.Communication.Harness
             InitializeEmailTestData();
         }
 
-        private void ResetTextDataBtn_Click(object sender, RoutedEventArgs e)
+        private void Reset_Text_Data_Click(object sender, RoutedEventArgs e)
         {
             InitializeTextTestData();
         }
@@ -209,12 +213,28 @@ namespace Phytel.Services.Communication.Harness
         {            
             MissingObjectsLb.Items.Clear();
             string selectedMethod = TestEmailMethodCb.Text;
+            if (selectedMethod == "EmailTransform_Test")
+            {
+                _testViewModel.TemplateDetail.TemplateXMLBody = XmlDocTb.Text;
+            }
             object[] parameters = { _testViewModel };
             TestViewModel results = Invoke<CommEmailTemplateManagerViewTest>(selectedMethod, parameters);
-            XmlDocLbl.Content = results.XmlDocString;
-            foreach (var mo in results.MissingObjects.Values)
+            if (selectedMethod == "EmailTransform_Test")
             {
-                MissingObjectsLb.Items.Add(mo);
+                XmlDocTb.Text = results.TemplateDetail.TemplateXMLBody;
+                MissingObjectsLb.Visibility = Visibility.Collapsed;
+                TestBrowser.Visibility = Visibility.Visible;             
+                TestBrowser.NavigateToString(System.Net.WebUtility.HtmlDecode(results.TransformResult));
+            }
+            else
+            {
+                MissingObjectsLb.Visibility = Visibility.Visible;
+                TestBrowser.Visibility = Visibility.Collapsed;
+                XmlDocTb.Text = results.XmlDocString;
+                foreach (var mo in results.MissingObjects.Values)
+                {
+                    MissingObjectsLb.Items.Add(mo);
+                }
             }
         }
 
@@ -222,12 +242,28 @@ namespace Phytel.Services.Communication.Harness
         {
             MissingObjectsLb.Items.Clear();
             string selectedMethod = TestTextMethodCb.Text;
+            if (selectedMethod == "TextTransform_Test")
+            {
+                _testViewModel.TemplateDetail.TemplateXMLBody = XmlDocTb.Text;
+            }
             object[] parameters = { _testViewModel };
             TestViewModel results = Invoke<CommTextTemplateManagerViewTest>(selectedMethod, parameters);
-            XmlDocLbl.Content = results.XmlDocString;
-            foreach (var mo in results.MissingObjects.Values)
+            if (selectedMethod == "TextTransform_Test")
             {
-                MissingObjectsLb.Items.Add(mo);
+                XmlDocTb.Text = results.TemplateDetail.TemplateXMLBody;
+                MissingObjectsLb.Visibility = Visibility.Collapsed;
+                TestBrowser.Visibility = Visibility.Visible;
+                TestBrowser.NavigateToString(System.Net.WebUtility.HtmlDecode(results.TransformResult));
+            }
+            else
+            {
+                MissingObjectsLb.Visibility = Visibility.Visible;
+                TestBrowser.Visibility = Visibility.Collapsed;
+                XmlDocTb.Text = results.XmlDocString;
+                foreach (var mo in results.MissingObjects.Values)
+                {
+                    MissingObjectsLb.Items.Add(mo);
+                }
             }
         }
 
@@ -244,6 +280,7 @@ namespace Phytel.Services.Communication.Harness
         private void TestEmailMethodCb_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             ComboBoxItem typeItem = (ComboBoxItem)TestEmailMethodCb.SelectedItem;
+            if(typeItem.Content.ToString() == "EmailTransform_Test") { InitializeEmailTestData(); }
             TestEmailBtn.IsEnabled = !string.IsNullOrEmpty(typeItem.Content.ToString());
         }
 
