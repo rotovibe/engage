@@ -13,11 +13,15 @@ namespace Phytel.Engage.Integrations
 
         public void Process(RegistryCompleteMessage message)
         {
-            LoggerDomainEvent.Raise(LogStatus.Create("Initializing Entity records from Atmosphere...", true));
-
             try
             {
-                if (!IsApplicableContract.IsSatisfiedBy(message)) return;
+                if (!IsApplicableContract.IsSatisfiedBy(message))
+                {
+                    LoggerDomainEvent.Raise(LogStatus.Create("Integration for this contract is not registered. Closing import process.", true));
+                    return;
+                }
+
+                LoggerDomainEvent.Raise(LogStatus.Create("Initializing Entity records from Atmosphere...", true));
                 PatientsUow.Initialize(message.ContractDataBase);
                 PatientsUow.Commit(message.ContractDataBase);
             }
