@@ -52,7 +52,18 @@
                     console.log(error);
                 }
             };
-            self.modal = new modelConfig.modal('Remove ' + self.activeProgram().name(), self.modalEntity, 'viewmodels/templates/program.remove', self.modalShowing, null, self.cancelOverride, self.deleteOverride);
+			var modalSettings = {
+				title: 'Remove '+ self.activeProgram().name() ,
+				showSelectedPatientInTitle: true,
+				entity: self.modalEntity, 
+				templatePath: 'viewmodels/templates/program.remove', 
+				showing: self.modalShowing, 
+				saveOverride: null, 
+				cancelOverride: self.cancelOverride, 
+				deleteOverride: self.deleteOverride, 
+				classOverride: null
+			}
+            self.modal = new modelConfig.modal(modalSettings);
             self.modal.canDelete(true);
             self.modal.deleteText('Remove');
             self.selectedAction.subscribe(function (newValue) {
@@ -66,7 +77,17 @@
                 self.activeTab(self.tabs()[0]);
                 if (self.activeProgram()) {
                     self.modalEntity().program(self.activeProgram());
-                    self.modal = new modelConfig.modal('Remove ' + self.activeProgram().name(), self.modalEntity, 'viewmodels/templates/program.remove', self.modalShowing, null, self.cancelOverride, self.deleteOverride);
+					var modalSettings = {
+						title: 'Remove '+ self.activeProgram().name() ,
+						entity: self.modalEntity, 
+						templatePath: 'viewmodels/templates/program.remove', 
+						showing: self.modalShowing, 
+						saveOverride: null, 
+						cancelOverride: self.cancelOverride, 
+						deleteOverride: self.deleteOverride, 
+						classOverride: null
+					}
+                    self.modal = new modelConfig.modal(modalSettings);
                     self.modal.canDelete(true);
                     self.modal.deleteText('Remove');
                 }

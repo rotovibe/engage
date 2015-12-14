@@ -11,6 +11,10 @@
             var self = this;
             self.settings = settings;
             self.task = ko.unwrap(self.settings.entity);
+			self.existingDetailsOpen = ko.observable(false);
+			self.toggleOpen = function () {
+				self.existingDetailsOpen(!self.existingDetailsOpen());
+			};
             self.goalTaskStatuses = datacontext.enums.goalTaskStatuses;
             // Decides whether we can change status or not
             self.isNew = (self.task && self.task.goal()) ? self.task.goal().isNew : function () { return false; };

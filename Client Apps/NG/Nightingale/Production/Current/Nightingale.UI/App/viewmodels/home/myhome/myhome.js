@@ -4,7 +4,7 @@
         function CalendarOptionsModel(events, header, editable, viewDate, defaultView) {
             var self = this;
             // Set the events equal to an observableArray of unwrapped events
-            self.events = events;
+            self.events = events;			
             self.header = header;
             self.editable = editable;
             self.viewDate = viewDate || ko.observable(new Date());
@@ -49,7 +49,17 @@
         var eventModalShowing = ko.observable(false);
         var eventModalEntity = ko.observable(new EventModalEntity(eventModalShowing));
         function dummyFunction () { console.log('something was done'); }
-        var eventModal = new modelConfig.modal('Event Details', eventModalEntity, 'viewmodels/templates/event.details', eventModalShowing, dummyFunction, dummyFunction);
+		var eventModalSettings = {
+			title: 'Event Details',
+			entity: eventModalEntity, 
+			templatePath: 'viewmodels/templates/event.details', 
+			showing: eventModalShowing, 
+			saveOverride: dummyFunction, 
+			cancelOverride: dummyFunction, 
+			deleteOverride: null, 
+			classOverride: null
+		}
+        var eventModal = new modelConfig.modal(eventModalSettings);
 
         // Columns to override the default sorts
         var selectedTodoSortColumn = ko.observable()
@@ -62,13 +72,24 @@
                 // todo.isNew(false);
                 // localCollections.todos.push(newTodo());
 				var dummy = myToDos().length;
+				todo.clearDirty();
             }
         };
         function cancelOverride () {
             datacontext.cancelEntityChanges(modalEntity().todo());
+			modalEntity().todo().clearDirty();
         };
-
-        var modal = new modelConfig.modal('Create To Do', modalEntity, 'viewmodels/templates/todo.edit', modalShowing, saveOverride, cancelOverride);
+		var modalSettings = {
+			title: 'Create To Do',
+			entity: modalEntity, 
+			templatePath: 'viewmodels/templates/todo.edit', 
+			showing: modalShowing, 
+			saveOverride: saveOverride, 
+			cancelOverride: cancelOverride, 
+			deleteOverride: null, 
+			classOverride: null
+		}
+        var modal = new modelConfig.modal(modalSettings);
 
         function Event() {
             var self = this;
@@ -197,7 +218,7 @@
             params.push(new modelConfig.Parameter('statusId', '2', '!='));
             params.push(new modelConfig.Parameter('statusId', '3', '!='));
             // Either sort by the selected sort or the default
-            orderString = selectedInterventionSortColumn() ? selectedInterventionSortColumn() : 'startDate';
+            orderString = selectedInterventionSortColumn() ? selectedInterventionSortColumn() : 'dueDate desc, startDate desc';
             // Add the second and third orders to the string
             var finalOrderString = orderString + ', category.name, description';
             // Go get the interventions
@@ -209,10 +230,10 @@
         var activeTodoColumns = ko.observableArray(['priority','duedate','title','category','patient']);
 
         // List of columns currently showing
-        var activeInterventionColumns = ko.observableArray(['startdate','description','category','patient','goal']);
+        var activeInterventionColumns = ko.observableArray(['dueDate','description','category','patient','goal']);
 
         // Object containing the options
-        var calendarOptions = new CalendarOptionsModel(myEvents, myHeader, false, thisDate, 'basicWeek')
+        var calendarOptions = new CalendarOptionsModel(myEvents, myHeader, false, thisDate, 'agendaWeek')
 
         // Reveal the bindable properties and functions
         var vm = {
@@ -390,6 +411,7 @@
         function addToDo () {
             newTodo(datacontext.createEntity('ToDo', { id: -1, statusId: 1, priorityId: 0, createdById: session.currentUser().userId(), assignedToId: session.currentUser().userId() }));
             newTodo().isNew(true);
+			newTodo().watchDirty();
             modalEntity().todo(newTodo());
             shell.currentModal(modal);
             modalShowing(true);
@@ -434,10 +456,8 @@
             self.canSave = ko.computed({
                 read: function () {
                     var todook = false;
-                    if (self.todo()) {
-                        var todotitle = !!self.todo().title();
-                        var todostatus = !!self.todo().status();
-                        todook = todotitle && todostatus;
+                    if (self.todo()) {                        
+						todook = self.todo().isValid();
                     }
                     return todook && self.canSaveObservable();
                 },

@@ -63,7 +63,10 @@
 				}
 				method = 'PUT';
 			}
-
+            
+			function saveSucceeded(data) {
+                return data.httpResponse.data;
+            }
 
             // If there is a contact card,
             if (serializedNote) {
@@ -90,10 +93,6 @@
 
                 //return query.execute().then(saveSucceeded).fail(postFailed);
                 return manager.executeQuery(query).then(saveSucceeded).fail(postFailed);
-            }
-
-            function saveSucceeded(data) {
-                return data.httpResponse.data;
             }
         }
 

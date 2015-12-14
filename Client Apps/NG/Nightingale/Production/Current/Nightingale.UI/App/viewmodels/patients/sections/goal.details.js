@@ -15,6 +15,19 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
             self.goal = self.settings.goal;
             self.selectedPatient = goalsIndex.selectedPatient;
             self.computedGoal = ko.computed(function () { return self.goal; }).extend({ throttle: 60 });
+			self.isGoalDetailsExpanded = ko.observable(false);
+			self.hasDetails = ko.computed( function(){
+				var details = self.goal.details();
+				return (details != null && details.length > 0);
+			});
+			self.toggleGoalDetailsExpanded = function(){
+				var isOpen = self.isGoalDetailsExpanded();
+				var details = self.goal.details();
+				if( !details && !isOpen ){
+					return;
+				}	
+				self.isGoalDetailsExpanded( !self.isGoalDetailsExpanded() );
+			}			
             self.edit = function () {
                 // Edit this goal
                 goalsIndex.editGoal(self.goal, 'Edit Goal');
@@ -91,11 +104,12 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
         };
 
         function save (goal) {
-            // TODO : Call the save goal method
+			goal.checkAppend();			
             datacontext.saveGoal(goal);
         }
 
         function saveBarrier (barrier) {
+			barrier.checkAppend();
             datacontext.saveBarrier(barrier);
         }
 
@@ -108,12 +122,21 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
         };
 
         function editEntity (msg, entity, path, saveoverride, canceloverride) {
-            var modal = new modelConfig.modal(msg, entity, path, modalShowing, saveoverride, canceloverride);
+			var modalSettings = {
+				title: msg,
+				showSelectedPatientInTitle: true,
+				entity: entity, 
+				templatePath: path, 
+				showing: modalShowing, 
+				saveOverride: saveoverride, 
+				cancelOverride: canceloverride
+			}
+            var modal = new modelConfig.modal(modalSettings);
             modalShowing(true);
             shell.currentModal(modal);
         }
 
-        function ModalEntity(entity, reqpropname) {
+        function ModalEntity(entity) {
             var self = this;
             self.entity = entity;
             // Object containing parameters to pass to the modal
@@ -122,11 +145,21 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
             // the patients' observations and make sure they are
             // valid
             self.canSave = ko.computed(function () {
-                var result = self.entity[reqpropname]();
-                // The active goal needs a property passed in from reqpropname
+                var result = self.entity.isValid();                
                 return result;
             });
         }
 
+		ctor.prototype.detached = function() {
+            var self = this;
+			//dispose computeds:
+			self.hasDetails.dispose();
+			self.computedGoal.dispose();
+			
+			//dispose subscriptions:
+            // ko.utils.arrayForEach(subscriptionTokens, function (token) {
+                // token.dispose();
+            // });
+        }
         return ctor;
     });

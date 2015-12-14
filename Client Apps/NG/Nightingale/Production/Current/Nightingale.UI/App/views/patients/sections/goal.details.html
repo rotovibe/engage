@@ -79,10 +79,26 @@
                 <div class="span6" data-bind="DateOrDash: endDate">
                 </div>
             </div>
+						
             <div data-bind="foreach: customAttributes().sort($parent.alphabeticalOrderSort)">
                 <div data-bind="compose: displayPath">
                 </div>
             </div>
+			<div class="row pad-bottom filter-toggle" data-bind="click: $parent.toggleGoalDetailsExpanded">
+				<div class="span6 grey">
+                    Details
+				</div>
+				<span class="span6" data-bind="visible: (!$parent.hasDetails()), text: '-'"></span>                  				
+            </div>
+			<div class="row pad-bottom" data-bind="visible: details">
+				<!-- ko ifnot: $parent.isGoalDetailsExpanded -->
+					<textarea class="span12 display-only no-scroll muted" style="height: 6.5em;" rows="5" data-bind="text: details, attr:{ 'title': details }, visible: details" readonly="readonly"></textarea>
+					<a class="grey" data-bind="click: $parent.toggleGoalDetailsExpanded, visible: details" href="#">...</a>
+				<!-- /ko -->
+				<!-- ko if: $parent.isGoalDetailsExpanded -->
+					<textarea class="span12 display-only muted" data-bind="text: details, autoHeight: details, attr:{ 'title': details }" readonly="readonly"></textarea>
+				<!-- /ko -->
+			</div>
             <div class="row">
                 <div class="pull-left">
                     <a class="edit_goal icon-outset" href="#" data-bind="click: $parent.edit"><i class="icon-edit"></i>Edit</a>

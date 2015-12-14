@@ -13,6 +13,10 @@
             self.intervention = ko.unwrap(self.settings.entity);
             // Decides whether we can change status or not
             self.isNew = (self.intervention && self.intervention.goal()) ? self.intervention.goal().isNew : function () { return false; };
+			self.existingDetailsOpen = ko.observable(false);
+			self.toggleOpen = function () {
+				self.existingDetailsOpen(!self.existingDetailsOpen());
+			};
             self.careManagers = ko.computed(function () {
                 var theseCareManagers =  datacontext.enums.careManagers()
                 return theseCareManagers.sort(self.alphabeticalSort);
@@ -90,6 +94,23 @@
                 limit: 25
             });
             self.careManagersBloodhound.initialize();
+			/**
+			*	computed. to allow forcing the datetimepicker control to set the due date as invalid.
+			*	this is needed when the date is valid but range is wrong.
+			*	@method setInvalidDueDate
+			*/
+			self.setInvalidDueDate = ko.computed( function(){				
+				return ( self.intervention && self.intervention.validationErrorsArray().indexOf('dueDate') !== -1);  
+			});
+			/**
+			*	computed. to allow forcing the datetimepicker control to set the start date as invalid.
+			*	this is needed when the date is valid but range is wrong.
+			*	@method setInvalidStartDate
+			*/
+			self.setInvalidStartDate = ko.computed( function(){				
+				return ( self.intervention && self.intervention.validationErrorsArray().indexOf('StartDate') !== -1);  
+			});			
+
         };
 
         ctor.prototype.attached = function () {

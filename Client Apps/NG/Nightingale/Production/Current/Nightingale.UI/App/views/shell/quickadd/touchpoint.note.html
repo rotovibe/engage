@@ -1,4 +1,8 @@
 ﻿<form class="simple_form new_note">
+	<div data-bind="with: $parent.newTouchPoint"> 
+		<!-- ko compose: "templates/validation.errors.html" -->
+		<!-- /ko -->		
+	</div>
     <div class="row pad top accordion divider">
         <div class="accordion-toggle" data-bind="clickToggle: $parent.tpDetailsOpen">
             <div class="row">
@@ -43,15 +47,13 @@
                 <div class="span6">
 			        <h5 class="grey pad-bottom">Date/Time of Contact</h5>
                 	<div class="row">
-					    <div class="span6">
-					        <input data-bind="datepicker: contactedOn, datepickerOptions: {  }" type="text">
-					    </div>
-					    <div class="span6">						
-							<!-- ko if: Modernizr.inputtypes.time -->
-								<input data-bind="timepicker: contactedOn, attr: { 'disabled': !contactedOn() }" type="time" style="height: 20px; width: 100%">
-							<!-- /ko -->
-							<!-- ko ifnot: Modernizr.inputtypes.time -->
-								<input data-bind="jqtimepicker: contactedOn, attr: { 'disabled': !contactedOn() }" type="text" style="height: 20px; width: 100%">
+					    <div>					        							
+							<!-- ko compose: { model: 'viewmodels/templates/datetimepicker', activationData:
+								{
+									observableDateTime: contactedOn, dateErrors: contactedOnErrors, dateName: 'contactedOnDate', timeName: 'contactedOnTime',
+									datepickerOptions:{ }, datepickerDynamicOptions: {}, showTime: true, dateCss: 'span6', timeCss: 'span6'
+								}
+							} -->
 							<!-- /ko -->
 					    </div>
 					</div>
@@ -73,9 +75,12 @@
                 <div class="span2">
                     <h5 class="grey pad-bottom">Duration</h5>
                 </div>
-                <div class="span4">
-                    <div data-bind="chsnsingle: { options: $parents[1].durations, value: duration, text: 'name', label: 'durations' }"></div>
+                <div class="span2">
+                    <input type="text" data-bind="value: duration, valueUpdate: 'afterkeydown', numeric: duration, 
+						attr:{maxlength: 4, max: 1440, min: 1, title:'Duration: enter a number of minutes from 1 to 1440'},
+						css: { 'invalid': (validationErrorsArray().indexOf('duration') !== -1) }"></input>
                 </div>
+				<span class="span2 grey align-left">(minutes)</span>
                 <div class="span6">
                     <label class="control-group">
 					    <div class="checker" data-bind="hoverToggle: 'hover'">
@@ -129,7 +134,7 @@
     </div>
     <div class="position bottom right">
         <div class="pad vertical">
-            <button data-bind="click: $parent.cancelTouchPoint" class="cancel">Cancel</button>
+            <button data-bind="click: $parent.cancel" class="cancel">Cancel</button>
             <input data-bind="click: $parent.saveTouchPoint, enable: $parent.canSaveTouchPoint" type="submit" value="Save">
         </div>
     </div>

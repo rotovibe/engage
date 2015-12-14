@@ -14,6 +14,19 @@
             self.settings = settings;
             self.task = self.settings.task;
             self.isExpanded = self.task.goal().isExpanded;
+			self.isDetailsExpanded = ko.observable(false);
+			self.hasDetails = ko.computed( function(){
+				var details = self.task.details();
+				return (details != null && details.length > 0);
+			});
+			self.toggleDetailsExpanded = function(){
+				var isOpen = self.isDetailsExpanded();
+				var details = self.task.details();
+				if( !details && !isOpen ){
+					return;
+				}	
+				self.isDetailsExpanded( !self.isDetailsExpanded() );
+			}
             self.editTask = function (task) {
                 // Make sure we have the most current details
                 getGoalDetails(task.goal());
@@ -23,6 +36,7 @@
                     saveTask(task)
                 };
                 var cancelOverride = function () {
+					task.newDetails(null);
                     cancel(task);
                     getGoalDetails(task.goal());
                 };
@@ -55,12 +69,24 @@
         };
 
         function editEntity (msg, entity, path, saveoverride, canceloverride) {
-            var modal = new modelConfig.modal(msg, entity, path, modalShowing, saveoverride, canceloverride);
+			var modalSettings = {
+				title: msg,
+				showSelectedPatientInTitle: true,
+				entity: entity, 
+				templatePath: path, 
+				showing: modalShowing, 
+				saveOverride: saveoverride, 
+				cancelOverride: canceloverride, 
+				deleteOverride: null, 
+				classOverride: null
+			}
+            var modal = new modelConfig.modal(modalSettings);            
             modalShowing(true);
             shell.currentModal(modal);
         }
 
         function saveTask (task) {
+			task.checkAppend();
             datacontext.saveTask(task);
         }
 

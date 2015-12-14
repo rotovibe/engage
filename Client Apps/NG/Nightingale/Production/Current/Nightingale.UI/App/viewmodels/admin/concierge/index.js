@@ -30,7 +30,14 @@ define(['viewmodels/shell/shell', 'models/base', 'services/datacontext'],
                 newPatient().isNew(true);
 				newPatient().statusId('1'); //active										
 				newPatient().statusDataSource('Engage');
-                var modal = new modelConfig.modal('Create Individual', newPatient, 'templates/patient.html', createModalShowing);
+				var modalSettings = {
+					title: 'Create Individual',
+					entity: newPatient, 
+					templatePath: 'templates/patient.html', 
+					showing: createModalShowing 
+					//saveOverride, cancelOverride, deleteOverride, classOverride
+				}
+                var modal = new modelConfig.modal(modalSettings);
                 shell.currentModal(modal);
                 createModalShowing(true);
                 var editingToken = createModalShowing.subscribe(function () {

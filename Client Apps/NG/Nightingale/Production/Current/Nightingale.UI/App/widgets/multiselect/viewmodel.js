@@ -1,4 +1,10 @@
-﻿define(['durandal/composition'], function (composition) {
+﻿/*
+*	a widget control for multiselect.
+*
+*	@module	multiselect
+*/
+
+define(['durandal/composition'], function (composition) {
 
     var datacontext;
 
@@ -10,6 +16,7 @@
         self.settings = settings;
         self.canClose = ko.observable(false);
         self.showing = ko.observable(false);
+		self.isInFocus = ko.observable(false);	//used for closing the chosen-drop options box when blur. the focus is bound to the input box.
         self.options = self.settings.options;
         self.selectedValues = self.settings.values;
         self.isRequired = self.settings.isRequired;
@@ -40,6 +47,7 @@
             return 'Choose...';
         });
         self.selectOption = function (sender) {
+			self.stopClosing();	//prevent the chosen-drop from closing		
             checkDataContext();
             // Use array first here to see if it is a duplicate
             var foundComplexType = ko.utils.arrayFirst(self.selectedValues(), function (selectedValue) {
@@ -59,10 +67,22 @@
                 thisComplexType = datacontext.createComplexType('Identifier', theseParameters);
                 self.selectedValues.push(thisComplexType);
             }
+			//since the selection of an option is also a blur (lost focus) on the input box of the control,
+			//we need to keep the focus on the control so the chosen-drop will stay open:
+			self.isInFocus(true);						
         };
-        self.checkClosing = ko.computed(function () {
-            if (self.canClose()) { self.showing(false); }
-        }).extend({ throttle: 1000 });
+		/*
+		*	computed to track the blur (lost focus) of the multiselect in order to close the chosen-drop if it is visible (showing).
+		*	@method inFocusTracker
+		*/
+		self.inFocusTracker = ko.computed( function(){			
+			var isInFocus = self.isInFocus();
+			var showing = self.showing();
+			if( !isInFocus && showing ){								
+				self.startClosing();
+			}			
+		});
+
         self.isDisabled = ko.computed(function () {
             var thisState = false;
             if (self.settings.disabled) {
@@ -82,20 +102,45 @@
         }
     };
 
+	/*
+	*	close the chosen-drop after a blur. the closing is delayed by a timeout since when clicking to select an option, 
+	*	we have a temporary short lost focus event, and we do not want it to close. this is corrected by the selectOption 
+	*	function as it calls stopClosing to reset canClose(false) and sets the focus back isInFocus(true) during this delay.
+	*	the isInFocus is bound to the input element in the control, as other elements will not track it very well.
+	*	@method startClosing
+	*/
     ctor.prototype.startClosing = function () {
         var self = this;
-        self.canClose(false);
         self.canClose(true);
+		setTimeout( function(){
+			if( self.canClose() ){
+				self.showing(false);
+			}	
+		}, 200);        
     };
 
     ctor.prototype.stopClosing = function () {
         var self = this;
-        self.canClose(false);
+        self.canClose(false);	
     };
 
     ctor.prototype.attached = function () {
     };
 
+	ctor.prototype.detached = function() {
+		var self = this;
+		self.isInvalid.dispose();
+		self.isDisabled.dispose();
+		self.inFocusTracker.dispose();
+		self.computedLabel.dispose();	
+		ko.utils.arrayForEach(self.computedOptions, function (item) {
+			item.thisText.dispose();
+		});
+		self.computedOptions.dispose();
+		// ko.utils.arrayForEach(subscriptionTokens, function (token) {
+			// token.dispose();
+		// });
+	}
     return ctor;
     
     function checkDataContext() {

@@ -15,6 +15,19 @@
             self.barrier = self.settings.barrier;
             self.computedBarrier = ko.computed(function () { return self.barrier; }).extend({ throttle: 75 });
             self.isExpanded = self.barrier.goal().isExpanded;
+			self.isDetailsExpanded = ko.observable(false);
+			self.hasDetails = ko.computed( function(){
+				var details = self.barrier.details();
+				return (details != null && details.length > 0);
+			});
+			self.toggleDetailsExpanded = function(){
+				var isOpen = self.isDetailsExpanded();
+				var details = self.barrier.details();
+				if( !details && !isOpen ){
+					return;
+				}	
+				self.isDetailsExpanded( !self.isDetailsExpanded() );
+			}
             self.editBarrier = function (barrier) {
             	// Edit this barrier
                 var modalEntity = ko.observable(new ModalEntity(barrier, 'name'));
@@ -22,6 +35,7 @@
                     saveBarrier(barrier);
                 };
                 var cancelOverride = function () {
+					barrier.newDetails(null);
                     cancel(barrier);
                     getGoalDetails(barrier.goal());
                 };
@@ -38,7 +52,7 @@
                         var thisTaskBarrierId = ko.utils.arrayFirst(task.barrierIds(), function (barId) {
                             // If the barrier id is equal to this barrier id,
                             return barId.id() === barrier.id();
-                        });s
+                        });
                         // If a barrier id is returned,
                         if (thisTaskBarrierId) {
                             // Remove it from the list
@@ -81,12 +95,24 @@
         };
 
         function editEntity (msg, entity, path, saveoverride, canceloverride) {
-            var modal = new modelConfig.modal(msg, entity, path, modalShowing, saveoverride, canceloverride);
+			var modalSettings = {
+				title: msg,
+				showSelectedPatientInTitle: true,
+				entity: entity, 
+				templatePath: path, 
+				showing: modalShowing, 
+				saveOverride: saveoverride, 
+				cancelOverride: canceloverride, 
+				deleteOverride: null, 
+				classOverride: null
+			}
+            var modal = new modelConfig.modal(modalSettings);
             modalShowing(true);
             shell.currentModal(modal);
         }
 
-        function saveBarrier (barrier) {
+        function saveBarrier (barrier) {			
+			barrier.checkAppend();			
             datacontext.saveBarrier(barrier);
         }
 

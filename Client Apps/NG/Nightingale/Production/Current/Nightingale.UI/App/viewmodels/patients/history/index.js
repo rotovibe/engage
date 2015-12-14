@@ -45,6 +45,8 @@
             self.column = column;
             self.isFullScreen = ko.observable(false);
 			self.showEditButton = ko.computed( function(){
+				var item = data.contentItem;	//reevaluate when the content entity changes
+				var hasContentItem = data.contentItem? data.contentItem() : false;
 				return data.showEdit? data.showEdit() : false;
 			});
 			self.showDeleteButton = ko.computed( function() {
@@ -64,10 +66,12 @@
                 self.widgets.push(new widget(item, self))
             });
         }
-
+		function isShowEditButton(){			
+			return activeNote && activeNote() && activeNote().isEditable();			
+		}
         var columns = ko.observableArray([
             new column('historyList', false, [{ name: 'History', path: 'patients/widgets/history.list.html', open: true }]),
-            new column('details', false, [{ name: 'Details', path: 'patients/widgets/history.detail.html', open: true, showEdit: activeNote, showDelete: activeNote }])
+            new column('details', false, [{ name: 'Details', path: 'patients/widgets/history.detail.html', open: true, showEdit: isShowEditButton, showDelete: isShowEditButton, contentItem: activeNote }])
         ]);
 
         var computedOpenColumn = ko.computed({
@@ -211,11 +215,23 @@
 					ko.utils.arrayPushAll(progIds, originalProgramIds());
 					originalProgramIds.removeAll();
 				}
+				note.newContent('');
 				//clear the entityAspect.entityState back to Unchanged state - to hide this correction (original program id's):
 				note.entityAspect.setUnchanged();
 			};
 			var msg = 'Edit ' + activeNote().type().name() + ' Note';
-			var modal = new modelConfig.modal(msg, modalEntity, 'viewmodels/patients/notes/index', noteModalShowing, saveOverride, cancelOverride);
+			var modalSettings = {
+				title: msg,
+				showSelectedPatientInTitle: true,
+				entity: modalEntity, 
+				templatePath: 'viewmodels/patients/notes/index', 
+				showing: noteModalShowing, 
+				saveOverride: saveOverride, 
+				cancelOverride: cancelOverride, 
+				deleteOverride: null, 
+				classOverride: null
+			}
+			var modal = new modelConfig.modal(modalSettings);
 
 			//keep the original program ids
 			originalProgramIds.removeAll();

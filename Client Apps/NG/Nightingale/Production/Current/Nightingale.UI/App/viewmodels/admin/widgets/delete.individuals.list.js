@@ -2,6 +2,10 @@
 define(['config.services', 'services/session', 'services/datacontext', 'models/base', 'viewmodels/shell/shell'],
     function (servicesConfig, session, datacontext, modelConfig, shell) {
 
+		var noResultsMessage =  'No records meet your search criteria';
+		var showNoResultsMessage = ko.observable(false);
+		var maxPatientCount = ko.observable(50);
+		
         // End point to get the patient details
         var patientEndPoint = ko.computed(function () {
             if (!session.currentUser()) {
@@ -18,16 +22,19 @@ define(['config.services', 'services/session', 'services/datacontext', 'models/b
             }
             return new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'cohorts', 'Cohort');
         });
-
+		
+		var cohortPatientsSkip = ko.observable(0);
+		
         // End point to grab the patients from the current cohort
         var currentCohortsPatientsEndPoint = ko.computed(function () {
             var currentUser = session.currentUser();
             if (!currentUser) {
                 return '';
             }
-            return new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'cohortpatients', 'Patient', { Skip: 0, Take: 5000 });
+            return new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'cohortpatients', 'Patient', { Skip: cohortPatientsSkip(), Take: maxPatientCount() });
         });
-
+		
+		var canLoadMoreCohortPatients = ko.observable(false);
         var cohortsList = ko.observableArray();
         var selectedCohort = ko.observable();
         var cohortFilter = ko.observable();
@@ -53,19 +60,38 @@ define(['config.services', 'services/session', 'services/datacontext', 'models/b
                 return false;
             }
         }
-        var modal = new modelConfig.modal('Delete Individual', selectedPatient, 'templates/patient.delete.html', deleteModalShowing, null, null, deleteOverride);
+		var modalSettings = {
+			title: 'Delete Individual',
+			entity: selectedPatient, 
+			templatePath: 'templates/patient.delete.html', 
+			showing: deleteModalShowing, 
+			saveOverride: null, 
+			cancelOverride: null, 
+			deleteOverride: deleteOverride, 
+			classOverride: null
+		}
+        var modal = new modelConfig.modal(modalSettings);
         modal.canDelete(true);
         // Reveal the bindable properties and functions
         var vm = {
             cohortsList: cohortsList,
             selectedCohort: selectedCohort,
             cohortFilter: cohortFilter,
+			clearCohortFilter: clearCohortFilter,
             patientsList: patientsList,
             activate: activate,
-            choosePatient: choosePatient
+            choosePatient: choosePatient,
+			showNoResultsMessage: showNoResultsMessage,
+			canLoadMoreCohortPatients: canLoadMoreCohortPatients,
+			loadMoreCohortPatients: loadMoreCohortPatients,
+			noResultsMessage: noResultsMessage
         };
 
         return vm;
+
+		function clearCohortFilter(){
+			cohortFilter(null);
+		}
 
         function choosePatient (sender) {
             selectedPatient(sender);
@@ -91,20 +117,33 @@ define(['config.services', 'services/session', 'services/datacontext', 'models/b
             datacontext.getEntityList(cohortsList, cohortEndPoint().EntityType, cohortEndPoint().ResourcePath, null, null, false, null, 'sName').then(cohortsReturned);
             // Subscribe to changes on the selected cohort to get an updated patient list when it changes
             selectedCohortToken = selectedCohort.subscribe(function () {
+				canLoadMoreCohortPatients(false);
+				showNoResultsMessage(false);
+                cohortPatientsSkip(0);
                 // If there is a filter when the cohort changes, clear it
                 if (cohortFilter()) {
                     cohortFilter(null);
                 }
-                patientsList([]);
+                patientsList([]);				
                 getPatientsByCohort();
             });
             throttledFilterToken = throttledFilter.subscribe(function (val) {
                 // Get a list of patients by cohort using filter
                 if (selectedCohort()) {
-                    patientsList([]);
+					canLoadMoreCohortPatients(false);
+					showNoResultsMessage(false);
+                    cohortPatientsSkip(0);
+                    patientsList([]);					
                     getPatientsByCohort(val);
                 }
             });
+			// Set the max patient count to the value of settings.TotalPatientCount, if it exists
+            if (session.currentUser().settings()) {
+				var totalPatientCount = datacontext.getSettingsParam('TotalPatientCount');
+				if( totalPatientCount ){
+					maxPatientCount( parseInt( totalPatientCount ) );
+				}                
+            }
             // Set initialized true so we don't accidentally re-initialize the view model
             initialized = true;
             return true;
@@ -125,11 +164,47 @@ define(['config.services', 'services/session', 'services/datacontext', 'models/b
                 parameters.SearchFilter = searchValue;
             }
             else { parameters.SearchFilter = null; }
+			showNoResultsMessage(false);
             // TODO : Add Skip and Take to the endpoint and pass it down as params
             // TODO : Make sure the service is checking locally first before going out to the server to get these patients
-            datacontext.getEntityList(patientsList, currentCohortsPatientsEndPoint().EntityType, currentCohortsPatientsEndPoint().ResourcePath, null, selectedCohort().iD(), true, parameters);
+            datacontext.getEntityList(patientsList, currentCohortsPatientsEndPoint().EntityType, 
+						currentCohortsPatientsEndPoint().ResourcePath, null, selectedCohort().iD(), true, parameters).then( calculateSkipTake );
+        }
+		
+		function calculateSkipTake() {
+            var totalRecordsShowing = patientsList().length;			
+			if( totalRecordsShowing == 0 ){
+				showNoResultsMessage(true);
+			}
+            var maxPossibleRecordsShowing = cohortPatientsSkip() === 0 ? maxPatientCount() : cohortPatientsSkip() + maxPatientCount();
+            // If max possible records showing is greater than the total records that are showing,
+            if (maxPossibleRecordsShowing > totalRecordsShowing) {
+                // Then don't show the load more button
+                canLoadMoreCohortPatients(false);
+            } else {
+                // Else, show the load more button
+                canLoadMoreCohortPatients(true);
+            }
+            // Always reset the skip after getting more records
+            cohortPatientsSkip(maxPossibleRecordsShowing);
         }
 
-
+		function loadMoreCohortPatients() {
+            var parameters = {};
+            var filter = cohortFilter();
+            // Create an object to hold the parameters
+            var parameters = currentCohortsPatientsEndPoint().Parameters;
+            // If a search value is passed in
+            if (filter) {
+                // Add a filter parameter onto parameters
+                parameters.SearchFilter = filter;
+            } else { parameters.SearchFilter = null; }
+            var newPatients = ko.observableArray();
+            datacontext.getEntityList(newPatients, currentCohortsPatientsEndPoint().EntityType, currentCohortsPatientsEndPoint().ResourcePath, null, selectedCohort().iD(), true, parameters)
+                .then(function () {
+                    patientsList.push.apply(patientsList, newPatients());
+                    calculateSkipTake();
+                });
+        }
 
     });

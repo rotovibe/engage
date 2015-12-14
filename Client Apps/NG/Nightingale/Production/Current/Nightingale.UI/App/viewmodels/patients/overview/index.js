@@ -282,7 +282,7 @@
             if (selectedpatient && initialized()) {
                 theseviews = [
                     new View('Closed Intervention List', [ new modelConfig.Parameter('goal.patientId', selectedpatient.id(), '=='), new modelConfig.Parameter('statusId', '1', '!=')], ['status-small','closeddate','description-small','category','goal','assignedto'], 'closedDate desc'),
-                    new View('Open Intervention List', [ new modelConfig.Parameter('goal.patientId', selectedpatient.id(), '=='), new modelConfig.Parameter('statusId', '1', '==')], ['startdate','description','category','goal','assignedto'],'startDate')
+                    new View('Open Intervention List', [ new modelConfig.Parameter('goal.patientId', selectedpatient.id(), '=='), new modelConfig.Parameter('statusId', '1', '==')], ['dueDate','description','category','goal','assignedto'],'dueDate desc')
                 ]
             } else {
             }

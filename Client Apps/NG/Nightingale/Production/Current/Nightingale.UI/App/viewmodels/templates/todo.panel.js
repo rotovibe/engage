@@ -88,6 +88,7 @@ define(['services/session', 'services/datacontext', 'config.services', 'viewmode
 
                 function saveCompleted() {
                     self.modalEntity().todo().isNew(false);
+					self.modalEntity().todo().clearDirty();
                     self.modalEntity().todo().entityAspect.acceptChanges();
 					self.originalProgramIds.removeAll();
                 }
@@ -100,7 +101,7 @@ define(['services/session', 'services/datacontext', 'config.services', 'viewmode
 			*	@method	cancelOverride 
 			*/
 			self.cancelOverride = function () {				
-				if(self.modalEntity().todo().entityAspect.entityState.isAddedModifiedOrDeleted()){					
+				if(self.modalEntity().todo().entityAspect.entityState.isAddedModifiedOrDeleted()){
 					datacontext.cancelEntityChanges(self.modalEntity().todo());					
 					
 					/**	
@@ -135,9 +136,10 @@ define(['services/session', 'services/datacontext', 'config.services', 'viewmode
 					if(!self.modalEntity().todo().assignedToId()){
 						self.modalEntity().todo().assignedTo(null);
 					}
+					self.modalEntity().todo().clearDirty();					
 				}	                		
             };
-            self.modal = new modelConfig.modal('Edit To Do', self.modalEntity, 'viewmodels/templates/todo.edit', self.modalShowing, self.saveOverride, self.cancelOverride);
+			
     		// A list of columns to display
     		self.columns = ko.computed(function () {
     			var tempcols = [];
@@ -179,7 +181,19 @@ define(['services/session', 'services/datacontext', 'config.services', 'viewmode
 				self.originalProgramIds.removeAll();
 				var progIds = self.originalProgramIds();
 				ko.utils.arrayPushAll(progIds, todo.programIds());
-				
+				var modalSettings = {
+					title: 'Edit To Do',
+					relatedPatientName: todo.patientName,
+					entity: self.modalEntity, 
+					templatePath: 'viewmodels/templates/todo.edit', 
+					showing:self.modalShowing , 
+					saveOverride: self.saveOverride, 
+					cancelOverride: self.cancelOverride, 
+					deleteOverride: null, 
+					classOverride: null
+				}
+				self.modal = new modelConfig.modal(modalSettings);
+				todo.watchDirty();	
                 self.modalEntity().todo(todo);
                 shell.currentModal(self.modal);
                 self.modalShowing(true);
@@ -268,10 +282,8 @@ define(['services/session', 'services/datacontext', 'config.services', 'viewmode
 					var isShowing = modalShowing();
 					var todo = self.todo();
 					if(!isShowing) return false;
-                    if (todo) {
-                        var todotitle = !!todo.title();
-                        var todostatus = !!todo.status();
-                        todook = todotitle && todostatus;
+                    if (todo) {                        
+                        todook = todo.isValid();
                     }
                     return todook && self.canSaveObservable();
                 },

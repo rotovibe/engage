@@ -48,6 +48,7 @@
                 self.newTodo(datacontext.createEntity('ToDo', { id: -2, statusId: 1, priorityId: 0, createdById: session.currentUser().userId(), assignedToId: session.currentUser().userId(), patientId: patientId }));                
             }
             self.newTodo().isNew(true);
+			self.newTodo().watchDirty();
         };
 
         ctor.prototype.activate = function (settings) {
@@ -69,6 +70,7 @@
             self.isShowing = self.settings.data.isShowing;
             self.cancel = function () {
                 self.newTodo().entityAspect.rejectChanges();
+				self.newTodo().clearDirty();
                 self.createNewTodo();
                 self.isShowing(false);
             };
@@ -83,24 +85,14 @@
                     });
                 }
                 return computedPrograms;
-            });
-            self.errors = ko.computed(function () {
-                var errorlist = [];
-                // Make sure it has a title
-                var thistitle = self.newTodo() ? self.newTodo().title() : '';
-                if (!thistitle) {
-                    errorlist.push(new ErrorMsg("'Title' is required"));
-                }
-                return errorlist;
-            });
-            self.hasErrors = ko.computed(function () {
-                return self.errors().length > 0;
-            });
+            });			
+            
             self.startDate = ko.observable(new moment());
             self.save = function () {
                 datacontext.saveToDo(self.newTodo(), 'Insert').then(saveCompleted);
 
                 function saveCompleted(todo) {
+					todo.clearDirty();
                     todo.isNew(false);
                     self.isShowing(false);
                     todo.entityAspect.acceptChanges();
@@ -113,7 +105,7 @@
             });
             self.canSave = ko.computed({
                 read: function () {
-                    return self.newTodo() && !self.isSaving() && self.newTodo().title() && self.savable() && !datacontext.todosSaving();
+                    return self.newTodo() && !self.isSaving() && self.newTodo().isValid() && self.savable() && !datacontext.todosSaving();
                 },
                 write: function (newValue) {
                     self.savable(newValue);

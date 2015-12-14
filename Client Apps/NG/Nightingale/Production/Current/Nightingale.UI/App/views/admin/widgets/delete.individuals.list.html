@@ -14,7 +14,9 @@
                                         </div>
                                         <div class="row pad-top">
 											<div class="span8">
-												<input data-bind="value: cohortFilter, valueUpdate: 'afterkeydown', disable: !selectedCohort()" placeholder="Search" type="search" data-phyautomation="cohort-patient-search" />
+												<input data-bind="value: cohortFilter, valueUpdate: 'afterkeydown', disable: !selectedCohort()" 
+													placeholder="Search" type="search" data-phyautomation="cohort-patient-search" style="width: 87%;" />
+												<i class="pointer icon-cancel" data-bind="visible: cohortFilter, click: clearCohortFilter"></i>	
 											</div>
                                         </div>
                                     </div>
@@ -29,15 +31,18 @@
                                                         <span class="line grey pad horizontal" data-bind="with: dOB"><span data-bind="text: '(' + $data + ')', attr: { 'title': $data }" data-phyautomation="dob"></span></span>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <!-- /ko -->
-                                            <!--<div class="row" data-bind="visible: canLoadMoreCohortPatients">
+                                            </div>											
+                                            <!-- /ko -->											
+                                            <div class="row" data-bind="visible: canLoadMoreCohortPatients">
                                                 <div class="push2 span8">
                                                     <button class="small" data-bind="click: loadMoreCohortPatients">
                                                         Load more patients...
                                                     </button>
                                                 </div>
-                                            </div>-->
+                                            </div>
+											<div class="row" data-bind="visible: showNoResultsMessage">
+												<span data-bind="text: noResultsMessage"></span>
+											</div>
                                         </div>
                                     </div>
                                 </div>

@@ -434,6 +434,23 @@ define(['config.services', 'services/session', 'services/entityserializer', 'ser
 	                });
 	                return !firstClosed;
 		        });
+				
+				/**
+				*	concatenating the end date if it is populated to the program name.
+				*	@method displayName
+				*/
+				program.displayName = ko.computed( function(){					
+					var name = program.name();
+					var endDate = program.attrEndDate();
+					var elementState = program.elementState();
+					if ( endDate && elementState == 5 || elementState == 6){
+						var theMoment = moment( endDate );
+						if( theMoment.isValid() ){
+							name = name +' - ' + theMoment.format('MM/DD/YYYY');	
+						}						
+					}
+					return name;
+				});
 		    };
 
 		    function moduleInitializer(module) {
@@ -538,6 +555,7 @@ define(['config.services', 'services/session', 'services/entityserializer', 'ser
 		            return action.elementState() === 4;
 		        });
 		        action.isSaving = ko.observable(false);
+				action.isLoading = ko.observable(false);
 		        action.saveAction = function () {
 		            setTimeout(function () {
 		                action.isSaving(true);

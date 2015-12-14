@@ -1,11 +1,19 @@
 ﻿<div class="body" data-bind="with: event">
 	<div class="column">
 		<div class="row pad-top">
-			<div class="span3 align-left">
-				<span>Date:
-				</span>
-			</div>
-  			<div class="span9" data-bind="DateOrNothing: start"></div>
+		
+			<!-- ko if ($parent.hasTimes) -->
+				<div class="span3 align-left">
+					<span>Date and Time: </span>
+				</div>
+				<div class="span9" data-bind="text: timeString()"></div>
+			<!-- /ko -->			
+			<!-- ko ifnot ($parent.hasTimes) -->
+				<div class="span3 align-left">
+					<span>Date: </span>
+				</div>
+				<div class="span9" data-bind="DateOrNothing: start"></div>
+			<!-- /ko -->
 		</div>
 	</div>
 	<div class="row pad-top">

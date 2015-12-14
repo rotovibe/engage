@@ -73,6 +73,7 @@
             self.toggleSort = data.toggleSort;
             self.canSort = data.canSort ? data.canSort : false;
             self.saveOverride = function () {
+				self.modalEntity().task().checkAppend();
                 datacontext.saveTask(self.modalEntity().task(), 'Update');
 
                 function saveCompleted() {
@@ -81,9 +82,22 @@
                 }
             };
             self.cancelOverride = function () {
-                datacontext.cancelEntityChanges(self.modalEntity().task());
+				var task = self.modalEntity().task();
+				task.newDetails(null);
+                datacontext.cancelEntityChanges(task);
             };
-            self.modal = new modelConfig.modal('Edit Task', self.modalEntity, 'viewmodels/templates/task.edit', self.modalShowing, self.saveOverride, self.cancelOverride);
+			var modalSettings = {
+				title:'Edit Task' ,
+				showSelectedPatientInTitle: true,
+				entity: self.modalEntity, 
+				templatePath: 'viewmodels/templates/task.edit', 
+				showing: self.modalShowing, 
+				saveOverride: self.saveOverride, 
+				cancelOverride: self.cancelOverride, 
+				deleteOverride: null, 
+				classOverride: null
+			}
+            self.modal = new modelConfig.modal(modalSettings);
     		// A list of columns to display
     		self.columns = ko.computed(function () {
     			var tempcols = [];

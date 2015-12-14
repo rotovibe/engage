@@ -291,7 +291,7 @@
 						.from('fakePath')
 						.where('id', '==', goal.id())
 						.toType('Goal')
-						.select('id, name, patientId, sourceId, typeId, statusId, startDate, endDate, targetValue, targetDate');
+						.select('id, name, patientId, sourceId, typeId, statusId, startDate, endDate, targetValue, targetDate, details');
 				var results = manager.executeQueryLocally(goalQuery);
 				var unwrappedGoal = results[0];
 
@@ -327,7 +327,7 @@
 				thisGoal.EndDate = unwrappedGoal.endDate;
 				thisGoal.TargetValue = unwrappedGoal.targetValue;
 				thisGoal.TargetDate = unwrappedGoal.targetDate;
-
+				thisGoal.Details = unwrappedGoal.details;
 				// ko.utils.arrayForEach(goal.tasks.peek(), function (fulltask) {
 				//     // Go get a projection query of this task
 				//     var taskQuery = breeze.EntityQuery
@@ -427,7 +427,7 @@
 						.from('fakePath')
 						.where('id', '==', intervention.id())
 						.toType('Intervention')
-						.select('id, categoryId, assignedToId, description, statusId, startDate, patientGoalId, patientId, closedDate, deleteFlag');
+						.select('id, categoryId, assignedToId, description, statusId, startDate, dueDate, patientGoalId, patientId, closedDate, deleteFlag, details');
 				var results = manager.executeQueryLocally(interventionQuery);
 				var thisIntervention = results[0];
 
@@ -440,9 +440,11 @@
 				newIntervention.Description = thisIntervention.description;
 				newIntervention.StatusId = thisIntervention.statusId;
 				newIntervention.StartDate = thisIntervention.startDate;
+				newIntervention.DueDate = thisIntervention.dueDate;
 				newIntervention.ClosedDate = thisIntervention.closedDate;
 				newIntervention.PatientGoalId = thisIntervention.patientGoalId;
 				newIntervention.DeleteFlag = thisIntervention.deleteFlag;
+				newIntervention.Details = thisIntervention.details;
 				// newIntervention.PatientId = thisIntervention.patientId;
 				ko.utils.arrayForEach(intervention.barrierIds.peek(), function (barId) {
 						newIntervention.BarrierIds.push(barId.id.peek());
@@ -465,7 +467,7 @@
 						.where('id', '==', task.id())
 						.toType('Task')
 						//.select('id, categoryId, assignedToId, description, statusId, startDate, patientGoalId, patientId');
-						.select('id, description, statusId, targetValue, startDate, targetDate, patientGoalId, patientId, closedDate, statusDate, deleteFlag');
+						.select('id, description, statusId, targetValue, startDate, targetDate, patientGoalId, patientId, closedDate, statusDate, deleteFlag, details');
 				var results = manager.executeQueryLocally(taskQuery);
 				var thisTask = results[0];
 
@@ -483,6 +485,7 @@
 				newTask.PatientGoalId = thisTask.patientGoalId;
 				//newTask.PatientId = thisTask.patientId;
 				newTask.DeleteFlag = thisTask.deleteFlag;
+				newTask.Details = thisTask.details;
 				ko.utils.arrayForEach(task.barrierIds.peek(), function (barId) {
 						newTask.BarrierIds.push(barId.id.peek());
 				});
@@ -512,7 +515,7 @@
 						.from('fakePath')
 						.where('id', '==', barrier.id())
 						.toType('Barrier')
-						.select('id, name, patientGoalId, statusId, categoryId, deleteFlag');
+						.select('id, name, patientGoalId, statusId, categoryId, deleteFlag, details');
 				var results = manager.executeQueryLocally(barrierQuery);
 				var thisBarrier = results[0];
 
@@ -523,7 +526,7 @@
 				newBarrier.StatusId = thisBarrier.statusId;
 				newBarrier.CategoryId = thisBarrier.categoryId;
 				newBarrier.DeleteFlag = thisBarrier.deleteFlag;
-
+				newBarrier.Details = thisBarrier.details;
 				return newBarrier;
 		}
 
@@ -593,7 +596,7 @@
 						.from('fakePath')
 						.where('id', '==', note.id())
 						.toType('Note')
-						.select('id, text, patientId, createdOn, createdById, typeId, methodId, outcomeId, whoId, sourceId, durationId, contactedOn, validatedIdentity, admitDate, dischargeDate, dataSource, admitted, visitTypeId, otherType, utilizationSourceId, dispositionId, otherDisposition, locationId, otherLocation, updatedById, updatedOn');
+						.select('id, text, patientId, createdOn, createdById, typeId, methodId, outcomeId, whoId, sourceId, duration, contactedOn, validatedIdentity, admitDate, dischargeDate, dataSource, admitted, visitTypeId, otherType, utilizationSourceId, dispositionId, otherDisposition, locationId, otherLocation, updatedById, updatedOn');
 				var results = manager.executeQueryLocally(noteQuery);
 				var unwrappedNote = results[0];
 
@@ -614,7 +617,7 @@
 				thisNote.OutcomeId = unwrappedNote.outcomeId;
 				thisNote.WhoId = unwrappedNote.whoId;
 				thisNote.SourceId = unwrappedNote.sourceId;
-				thisNote.DurationId = unwrappedNote.durationId;
+				thisNote.Duration = unwrappedNote.duration;
 				thisNote.ContactedOn = unwrappedNote.contactedOn;
 				thisNote.ValidatedIdentity = unwrappedNote.validatedIdentity;
 				//utilization:
@@ -651,7 +654,7 @@
 						.from('fakePath')
 						.where('id', '==', todo.id())
 						.toType('ToDo')
-						.select('id, title, description, patientId, createdById, assignedToId, statusId, categoryId, priorityId, dueDate, createdOn, updatedOn, deleteFlag, closedDate');
+						.select('id, title, description, patientId, createdById, assignedToId, statusId, categoryId, priorityId, dueDate, startTime, duration, createdOn, updatedOn, deleteFlag, closedDate');
 				var results = manager.executeQueryLocally(todoQuery);
 				var unwrappedToDo = results[0];
 
@@ -670,6 +673,8 @@
 				thisToDo.CategoryId = unwrappedToDo.categoryId;
 				thisToDo.PriorityId = unwrappedToDo.priorityId;
 				thisToDo.DueDate = unwrappedToDo.dueDate;
+				thisToDo.StartTime = unwrappedToDo.startTime;
+				thisToDo.Duration = unwrappedToDo.duration;
 				thisToDo.UpdatedOn = unwrappedToDo.updatedOn;
 				thisToDo.CreatedOn = unwrappedToDo.createdOn;
 				thisToDo.ClosedDate = unwrappedToDo.closedDate;
@@ -945,4 +950,4 @@
 
 		return entitySerializer;
 
-});
+}); 

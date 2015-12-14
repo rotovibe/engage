@@ -1,11 +1,15 @@
-﻿<div class="row pad top" data-bind="with: observation">
+﻿<div class="row pad" data-bind="with: observation">
     <div class="span2">
-        <span data-bind="text: name, attr: { title: name }"></span> <span data-bind="with: units">(<span data-bind="text: $data, attr: { title: $data }"></span>)</span>
+        <span data-bind="text: name, attr: { title: name }"></span>
     </div>
     <div class="span2">
         <input type="text" data-bind="value: computedValue().value, valueUpdate: 'afterkeydown', css: { 'invalid': (validationErrorsArray().indexOf('value') !== -1) }">
     </div>
-    <div class="span3">
+	<div class="span1">
+		<span data-bind="with: units">(<span data-bind="text: $data, attr: { title: $data }"></span>)</span>
+		&nbsp;
+	</div>
+    <div class="span2">
 		<!-- ko compose: { model: 'viewmodels/templates/datetimepicker', activationData:
 			{
 				observableDateTime: startDate, dateErrors: startDateErrors, showInvalid: setInvalidStartDate, 

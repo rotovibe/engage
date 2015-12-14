@@ -9,6 +9,8 @@
 
         var throttledFilterToken = {};
 
+		var noResultsMessage =  'No records meet your search criteria';
+		
        // var isComposed = ko.observable(false);
 
         // Track whether the user can leave the patients pages and whether they are
@@ -27,6 +29,7 @@
         var cohortPatientsSkip = ko.observable(0);
         // Flag whether additional patients can be loaded in cohorts flyout
         var canLoadMoreCohortPatients = ko.observable(false);
+		var showNoResultsMessage = ko.observable(false);
         var currentCohortsPatientsEndPoint = ko.computed(function () {
             if (!session.currentUser()) {
                 return false;
@@ -177,7 +180,10 @@
             patientsListFlyoutOpen: patientsListFlyoutOpen,
             patientDataColumnOpen: patientDataColumnOpen,
             canLoadMoreCohortPatients: canLoadMoreCohortPatients,
+			showNoResultsMessage: showNoResultsMessage,
+			noResultsMessage: noResultsMessage,
             cohortFilter: cohortFilter,
+			clearCohortFilter: clearCohortFilter,
             togglePatientsColumn: togglePatientsColumn,
             minimizePatientsDataColumn: minimizePatientsDataColumn,
             maximizePatientsDataColumn: maximizePatientsDataColumn,
@@ -228,6 +234,7 @@
             selectedCohortToken = selectedCohort.subscribe(function () {
                 // Get a list of patients by cohort
                 canLoadMoreCohortPatients(false);
+				showNoResultsMessage(false);
                 cohortPatientsSkip(0);
                 // If there is a filter when the cohort changes, clear it
                 if (cohortFilter()) {
@@ -240,6 +247,7 @@
                 // Get a list of patients by cohort using filter
                 if (selectedCohort()) {
                     canLoadMoreCohortPatients(false);
+					showNoResultsMessage(false);
                     cohortPatientsSkip(0);
                     patientsList([]);
                     getPatientsByCohort(val);
@@ -270,13 +278,18 @@
                 // Add a filter parameter onto parameters
                 parameters.SearchFilter = searchValue;
             } else { parameters.SearchFilter = null; }
+			
+			showNoResultsMessage(false);
             // TODO : Add Skip and Take to the endpoint and pass it down as params
             // TODO : Make sure the service is checking locally first before going out to the server to get these patients
             datacontext.getEntityList(patientsList, currentCohortsPatientsEndPoint().EntityType, currentCohortsPatientsEndPoint().ResourcePath, null, selectedCohort().iD(), true, parameters).then(calculateSkipTake);
         }
 
         function calculateSkipTake() {
-            var totalRecordsShowing = patientsList().length;
+            var totalRecordsShowing = patientsList().length;			
+			if( totalRecordsShowing == 0 ){
+				showNoResultsMessage(true);
+			}
             var maxPossibleRecordsShowing = cohortPatientsSkip() === 0 ? maxPatientCount() : cohortPatientsSkip() + maxPatientCount();
             // If max possible records showing is greater than the total records that are showing,
             if (maxPossibleRecordsShowing > totalRecordsShowing) {
@@ -404,6 +417,10 @@
             return true;
         }
 
+		function clearCohortFilter(){
+			cohortFilter(null);
+		}
+		
         function choosePatient(patient) {
             // Check if there are changes to this patient's actions before proceeding
             // And if override parameter is set to true ignore checking for changes

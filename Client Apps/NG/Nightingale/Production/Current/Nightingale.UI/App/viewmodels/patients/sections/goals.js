@@ -89,6 +89,8 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
                 self.addEntity('Intervention', goal, startDate, session.currentUser().userId()).then(doSomething);
 
                 function doSomething(intervention) {
+					intervention.isNew(true);
+					intervention.watchDirty();
                     // Show the modal
                     self.editIntervention(intervention, 'Add Intervention');
                 }
@@ -101,6 +103,7 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
                     saveIntervention(intervention);
                 };
                 var cancelOverride = function () {
+					intervention.newDetails(null);
                     cancel(intervention);
                     getGoalDetails(thisGoal);
                 };
@@ -115,6 +118,7 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
                     saveTask(task);
                 };
                 var cancelOverride = function () {
+					task.newDetails(null);
                     datacontext.cancelEntityChanges(task);
                     getGoalDetails(thisGoal);
                 };
@@ -166,25 +170,40 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
         return ctor;
 
         function editEntity (msg, entity, path, saveoverride, canceloverride) {
-            var modal = new modelConfig.modal(msg, entity, path, modalShowing, saveoverride, canceloverride);
+			var modalSettings = {
+				title: msg,
+				showSelectedPatientInTitle: true,
+				entity: entity, 
+				templatePath: path, 
+				showing: modalShowing, 
+				saveOverride: saveoverride, 
+				cancelOverride: canceloverride, 
+				deleteOverride: null, 
+				classOverride: null
+			}
+            var modal = new modelConfig.modal(modalSettings);
             modalShowing(true);
             shell.currentModal(modal);
         }
 
         function save(goal) {
-            // TODO : Call the save goal method
+            goal.checkAppend();
             datacontext.saveGoal(goal);
         }
 
         function saveIntervention (entity) {
+			entity.isNew(false);
+			entity.checkAppend();
             datacontext.saveIntervention(entity);
         }
 
         function saveTask (entity) {
+			entity.checkAppend();
             datacontext.saveTask(entity);
         }
 
         function saveGoal (entity) {
+			entity.checkAppend();
             datacontext.saveGoal(entity);
         }
 
@@ -205,7 +224,7 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
             // the patients' observations and make sure they are
             // valid
             self.canSave = ko.computed(function () {
-                var result = self.entity[reqpropname]();
+                var result = self.entity.isValid();
                 // The active goal needs a property passed in from reqpropname
                 return result;
             });

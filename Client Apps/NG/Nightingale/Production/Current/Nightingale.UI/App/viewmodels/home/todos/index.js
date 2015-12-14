@@ -17,7 +17,7 @@ define(['services/session', 'services/datacontext', 'config.services', 'models/b
         // Calculated thirty days ago
         var thirtyDaysAgo = new Date(new Date().setDate(new Date().getDate()-30));
         thirtyDaysAgo = moment(thirtyDaysAgo).format();
-
+			
         // Which views (filters) are available
         var views = ko.observableArray([
             new View(
@@ -28,8 +28,8 @@ define(['services/session', 'services/datacontext', 'config.services', 'models/b
                     new modelConfig.Parameter('assignedToId', session.currentUser().userId(), '!='),
                     new modelConfig.Parameter('statusId', '1', '==')
                 ],
-                ['startdate','description','category','patient','goal'],
-                'startDate'
+                ['duedate','description','category','patient','goal'],
+                'dueDate desc, startDate desc'
             ),
             new View(
                 'interventions',
@@ -59,8 +59,8 @@ define(['services/session', 'services/datacontext', 'config.services', 'models/b
                     new modelConfig.Parameter('assignedToId', session.currentUser().userId(), '=='),
                     new modelConfig.Parameter('statusId', '1', '==')
                 ],
-                ['startdate','description','category','patient','goal'],
-                'startDate'
+                ['duedate','description','category','patient','goal'],
+                'dueDate desc, startDate desc'
             ),
             new View(
                 'todos',
@@ -328,7 +328,7 @@ define(['services/session', 'services/datacontext', 'config.services', 'models/b
             var theseInterventions = [];
             //Subscribe to localcollection todos
             var allInterventions = localCollections.interventions();
-            var selectedview = selectedView();
+            var selectedview = selectedView();			
             var params = [];
             var orderString = '';
             if (selectedview && selectedview.type() === 'interventions') {

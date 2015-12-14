@@ -10,7 +10,15 @@
 			self.settings = settings;
 			self.selectedPatient = self.settings.selectedPatient;
 			self.editModalShowing = ko.observable(false);
-			self.modal = new modelConfig.modal('Edit Individual', self.selectedPatient, 'templates/patient.html', self.editModalShowing);
+			var modalSettings = {
+				title: 'Edit Individual',
+				showSelectedPatientInTitle: true,
+				entity: self.selectedPatient, 
+				templatePath: 'templates/patient.html', 
+				showing: self.editModalShowing,
+				classOverride: null
+			}
+			self.modal = new modelConfig.modal(modalSettings);
 			self.isOpen = ko.observable(true);
 			self.isEditing = ko.observable(false);
 			self.toggleEditing = function () {
@@ -41,9 +49,11 @@
 			self.showFullSSN = function () {
 				datacontext.getFullSSN(self.selectedPatient.id()).then(ssnReturned);
 				function ssnReturned(data) {
-					if(data.SSN){
+					if(data && data.SSN){
 						var formattedNumber = formatter.formatSeparators(data.SSN.replace( /\D/g, ''), 'XXX-XX-XXXX', '-');
 						alert('Full SSN: ' + formattedNumber);
+					} else{
+						alert('Full SSN is not available'); //1227
 					}
 				}
 			};

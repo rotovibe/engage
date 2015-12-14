@@ -11,14 +11,14 @@
 #ui-datepicker-div {display: none;}
 
 .module > img {
-    white-space: nowrap; overflow: hidden; -ms-text-overflow: ellipsis; -o-text-overflow: ellipsis; text-overflow: ellipsis; vertical-align: middle; 
+    white-space: nowrap; overflow: hidden; -ms-text-overflow: ellipsis; -o-text-overflow: ellipsis; text-overflow: ellipsis; vertical-align: middle;
 }
 
 /* line 42, ../../../app/assets/stylesheets/partials/_toggles.sass */
-.filter-toggle.dirty { 
-    background-color: #416c81; 
-    opacity: 0.80; 
-    filter: alpha(opacity=1); 
+.filter-toggle.dirty {
+    background-color: #416c81;
+    opacity: 0.80;
+    filter: alpha(opacity=1);
     -moz-opacity: 0.80;
 }
 
@@ -319,17 +319,17 @@ main[role=application] > div .widget header h1 + .options { margin-left: inherit
     border-color: black;
     box-shadow:0 0 3px black;
 }
-.tt-dropdown-menu .tt-cursor p {	
+.tt-dropdown-menu .tt-cursor p {
 	white-space: normal !important;
     overflow: visible !important;
-    -ms-text-overflow: none !important; 
+    -ms-text-overflow: none !important;
     -o-text-overflow: none !important;
     text-overflow: none !important;
 }
 
  textarea.display-only {
-    border-style: none; 
-    border-color: Transparent; 
+    border-style: none;
+    border-color: Transparent;
     overflow: auto;
     opacity: 1 !important;
  }
@@ -345,7 +345,7 @@ input.invalid, textarea.invalid {
     box-shadow:0 0 3px #FF0000;
 }
 
-.validation-errors {    
+.validation-errors {
     border-color:#FF0000;
     box-shadow:0 0 3px #FF0000;
 }
@@ -439,9 +439,9 @@ li.strong > a { font-weight: 700; }
 
 /*
 
-main[role=application] section[data-type="fixed"] > .column .widget > .content .body > .content, 
-main[role=application] section[data-type="flex"] > .column .widget > .content .body > .content, 
-main[role=application] section[data-type="full"] > .column .widget > .content .body > .content, 
+main[role=application] section[data-type="fixed"] > .column .widget > .content .body > .content,
+main[role=application] section[data-type="flex"] > .column .widget > .content .body > .content,
+main[role=application] section[data-type="full"] > .column .widget > .content .body > .content,
 main[role=application] section.highlights > .column .widget > .content .body > .content { position: absolute; top: 0; bottom: 0; left: 0; right: 0; overflow: auto; padding: 10px; }*/
 /*
 .table-cell {
@@ -452,3 +452,10 @@ main[role=application] section.highlights > .column .widget > .content .body > .
 
 /* line 40, /home/ubuntu/workspace/Nightingale/app/assets/stylesheets/partials/_header.sass */
 header[role=banner] .user-menu .dropdown-content > div { height: 20px; line-height: 20px; }
+
+.watson-logo {
+  height: 24px;
+  opacity: 100;
+  color: white;
+  margin: 12px 25px;
+}

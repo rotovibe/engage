@@ -1,8 +1,12 @@
 <div data-bind="foreach: computedPrograms">
     <section class="accordion" data-bind="css: { 'open': isOpen() }">
-        <div class="row accordion-toggle" data-bind="click: $parent.toggleOpen">
-            <h2 class="span12 ellipsis">
-                <a href="#" data-bind="text: name, clickBubble: false" ></a>
+        <div class="row accordion-toggle" data-bind="click: $parent.toggleOpen">			
+			<h2 class="span12 ellipsis">
+				<div data-bind="if: (elementState() == 5 || elementState() == 6)" class="pull-left">  
+					<i data-bind="css: { 'icon-check': elementState() == 5, 'icon-warning': elementState() == 6 }" ></i>
+				</div>
+                <a href="#" data-bind="text: displayName, clickBubble: false" >
+				</a>								
                 <a data-bind="click: $parent.setActiveProgram, clickBubble: false, css: { 'active': $parent.activeProgram() === $data }, arrowMover: ''" class="icon filter-toggle pull-right" href="#" title="Program Details">
                     <i class="icon-info"></i>
                 </a>

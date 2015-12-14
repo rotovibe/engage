@@ -14,15 +14,30 @@
             self.settings = settings;
             self.intervention = self.settings.intervention;
             self.isExpanded = self.intervention.goal().isExpanded;
+			self.isDetailsExpanded = ko.observable(false);
+			self.hasDetails = ko.computed( function(){
+				var details = self.intervention.details();
+				return (details != null && details.length > 0);
+			});
+			self.toggleDetailsExpanded = function(){
+				var isOpen = self.isDetailsExpanded();
+				var details = self.intervention.details();
+				if( !details && !isOpen ){
+					return;
+				}	
+				self.isDetailsExpanded( !self.isDetailsExpanded() );
+			}
             self.editIntervention = function (intervention) {
                 // Make sure we have the most up to date goal info
                 getGoalDetails(intervention.goal());
                 // Edit this intervention
                 var modalEntity = ko.observable(new ModalEntity(intervention, 'description'));
-                var saveOverride = function () {
+                var saveOverride = function () {					
                     saveIntervention(intervention);
                 };
                 var cancelOverride = function () {
+					intervention.clearDirty();
+					intervention.newDetails(null);
                     cancel(intervention);
                     getGoalDetails(intervention.goal());
                 };
@@ -55,14 +70,29 @@
         };
 
         function editIntervention (msg, entity, path, saveoverride, canceloverride) {
-            var modal = new modelConfig.modal(msg, entity, path, modalShowing, saveoverride, canceloverride);
+			var modalSettings = {
+				title: msg,
+				showSelectedPatientInTitle: true,
+				entity: entity, 
+				templatePath: path, 
+				showing: modalShowing, 
+				saveOverride: saveoverride, 
+				cancelOverride: canceloverride, 
+				deleteOverride: null, 
+				classOverride: null
+			}
+            var modal = new modelConfig.modal(modalSettings);
             modalShowing(true);
             shell.currentModal(modal);
         }
 
-        function saveIntervention(intervention) {
-            // Call the save intervention method
-            datacontext.saveIntervention(intervention);
+        function saveIntervention(intervention) {			
+			function saved(){
+				intervention.clearDirty();
+			}
+            // Call the save intervention method			
+			intervention.checkAppend();			
+            datacontext.saveIntervention(intervention).then(saved);
         }
 
         function cancel (item) {
@@ -75,17 +105,14 @@
             goalsIndex.getGoalDetails(goal, true);
         }
         
-        function ModalEntity(entity, reqpropname) {
+        function ModalEntity(entity) {
             var self = this;
             self.entity = entity;
             // Object containing parameters to pass to the modal
             self.activationData = { entity: self.entity };
-            // Create a computed property to subscribe to all of
-            // the patients' observations and make sure they are
-            // valid
+            
             self.canSave = ko.computed(function () {
-                var result = self.entity[reqpropname]();
-                // The active goal needs a property passed in from reqpropname
+                var result = self.entity.isValid(); //subscribe to intervention.isValid                
                 return result;
             });
         }

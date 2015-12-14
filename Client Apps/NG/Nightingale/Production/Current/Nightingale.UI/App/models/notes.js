@@ -2,8 +2,9 @@
 define(['services/session', 'services/dateHelper'],
 	function (session, dateHelper) {
 
-			var datacontext;
-
+		var datacontext;
+		var systemCareManager;
+		var userCareManagerName;
 		var DT = breeze.DataType;
 
 		// Expose the model module to the requiring modules
@@ -32,7 +33,7 @@ define(['services/session', 'services/dateHelper'],
 						outcomeId: { dataType: "String" },
 						whoId: { dataType: "String" },
 						sourceId: { dataType: "String" },
-						durationId: { dataType: "String" },
+						duration: { dataType: "Int64" },
 						contactedOn: { dataType: "DateTime" },
 						validatedIdentity: { dataType: "Boolean" },
 						programIds: { complexTypeName: "Identifier:#Nightingale", isScalar: false },
@@ -73,11 +74,7 @@ define(['services/session', 'services/dateHelper'],
 						source: {
 							entityTypeName: "NoteSource", isScalar: true,
 							associationName: "Note_Source", foreignKeyNames: ["sourceId"]
-						},
-						duration: {
-							entityTypeName: "NoteDuration", isScalar: true,
-							associationName: "Note_Duration", foreignKeyNames: ["durationId"]
-						},
+						},						
 						//utilization lookups:
 						visitType: {
 							entityTypeName: "VisitType", isScalar: true,
@@ -110,6 +107,8 @@ define(['services/session', 'services/dateHelper'],
 								categoryId: { dataType: "String" },
 								priorityId: { dataType: "Int64" },
 								dueDate: { dataType: "DateTime" },
+								startTime: { dataType: "DateTime" },
+								duration: { dataType: "Int64" },
 								title: { dataType: "String" },
 								description: { dataType: "String" },
 								createdOn: { dataType: "DateTime" },
@@ -237,6 +236,14 @@ define(['services/session', 'services/dateHelper'],
 						});
 						return thisMatchedCareManager;
 					});
+					var systemCareManager = getSystemCareManager();
+					//if created by system user make it non editable:
+					note.isEditable = ko.observable(false);
+					if( note.createdById() === systemCareManager.id() ){
+						note.isEditable(false);
+					} else{
+						note.isEditable(true);
+					}
 					note.updatedBy = ko.computed(function () {
 						checkDataContext();
 						var thisMatchedCareManager = ko.utils.arrayFirst(datacontext.enums.careManagers(), function (caremanager) {
@@ -295,12 +302,13 @@ define(['services/session', 'services/dateHelper'],
 						var contactedOn = note.contactedOn();
 						var contactedOnErrors = note.contactedOnErrors();
 						var text = note.text();
+						var duration = note.duration();
 						//utilization:
 						var admitDateErrors = note.admitDateErrors();
 						var admitDate = note.admitDate();
 						var dischargeDateErrors = note.dischargeDateErrors();
 						var dischargeDate = note.dischargeDate();
-						var visitType = note.visitType();
+						var visitType = note.visitType();						
 						var otherType = note.otherType();
 						var disposition = note.disposition();
 						var otherDisposition = note.otherDisposition();
@@ -308,12 +316,25 @@ define(['services/session', 'services/dateHelper'],
 						var otherLocation = note.otherLocation();
 						var hasChanges = note.isDirty();
 
+						if( duration && duration > 1440 ){
+							setTimeout( function(){ note.duration(1440); }, 100 ); //auto-correct range violation
+							//noteErrors.push({ PropName: 'duration', Message: 'Duration must be less than or equal to 1440 minutes (24 hours)' });
+							//hasErrors = true;
+						}
+						if( duration !== null && duration < 1 ){										
+							setTimeout( function(){ note.duration(null); }, 100 ); //auto-correct range violation
+							// noteErrors.push({ PropName: 'duration', Message: 'Duration must be greater than 0' });
+							// hasErrors = true;
+						}
+
 						switch( typeName ){
 							case 'touchpoint':
 							{
-								if( !text ){
-									noteErrors.push({ PropName: 'text', Message: 'Content is required' });
+								if( !text ){									
 									hasErrors = true;
+									if( hasChanges ){
+										noteErrors.push({ PropName: 'text', Message: 'Content is required' });	
+									}
 								}
 								if( contactedOn ){
 									if( contactedOnErrors.length > 0 ){
@@ -350,9 +371,11 @@ define(['services/session', 'services/dateHelper'],
 										hasErrors = true;
 									}
 								}
-								if( !visitType && hasChanges ){
-									noteErrors.push({ PropName: 'visitType', Message: 'Visit Type is required' });
+								if( !visitType ){									
 									hasErrors = true;
+									if( hasChanges ){
+										noteErrors.push({ PropName: 'visitType', Message: 'Visit Type is required' });	
+									}
 								}
 								// else if( visitType.name().toLowerCase() === 'other' && !otherType ){
 									// noteErrors.push({ PropName: 'otherType', Message: 'Other Visit Type is required' });
@@ -376,9 +399,11 @@ define(['services/session', 'services/dateHelper'],
 							}
 							default:
 							{
-								if( !text ){
-									noteErrors.push({ PropName: 'text', Message: 'Content is required' });
+								if( !text ){									
 									hasErrors = true;
+									if( hasChanges ){
+										noteErrors.push({ PropName: 'text', Message: 'Content is required' });
+									}
 								}
 								break;
 							}
@@ -490,37 +515,221 @@ define(['services/session', 'services/dateHelper'],
 
 				function todoInitializer (todo) {
 					todo.isNew = ko.observable(false);
-								todo.programString = ko.computed(function () {
-								checkDataContext();
-								var thisString = '';
-								var theseProgramIds = todo.programIds();
-								if (todo.patientId() && todo.patient() && todo.patient().programs()) {
-										var thesePrograms = todo.patient().programs();
-										ko.utils.arrayForEach(theseProgramIds, function (program) {
-												var thisProgram = ko.utils.arrayFirst(thesePrograms, function (programEnum) {
-														return programEnum.id() === program.id();
-												});
-												if (thisProgram) {
-														thisString += thisProgram.name() + ', ';
-												}
-										});
-										// If the string is longer than zero,
-										if (thisString.length > 0) {
-												// Remove the trailing comma and space
-												thisString = thisString.substr(0, thisString.length - 2);
-										}
-								}
-								if (thisString.length === 0) {
-										thisString = 'None';
-								}
-								return thisString;
+					todo.programString = ko.computed(function () {
+						checkDataContext();
+						var thisString = '';
+						var theseProgramIds = todo.programIds();
+						if (todo.patientId() && todo.patient() && todo.patient().programs()) {
+							var thesePrograms = todo.patient().programs();
+							ko.utils.arrayForEach(theseProgramIds, function (program) {
+								var thisProgram = ko.utils.arrayFirst(thesePrograms, function (programEnum) {
+										return programEnum.id() === program.id();
 								});
+								if (thisProgram) {
+										thisString += thisProgram.name() + ', ';
+								}
+							});
+							// If the string is longer than zero,
+							if (thisString.length > 0) {
+								// Remove the trailing comma and space
+								thisString = thisString.substr(0, thisString.length - 2);
+							}
+						}
+						if (thisString.length === 0) {
+								thisString = 'None';
+						}
+						return thisString;
+					});
+					todo.patientName = ko.computed( function(){
+						var patientId = todo.patientId();
+						var patient = todo.patient();
+						if( patientId && patient ){
+							return patient.fullName();
+						}
+						return null;
+					});
+					todo.isDirty = ko.observable(false);
+					todo.clearDirty = function () {
+						todo.isDirty(false);						
+					};
+					todo.watchDirty = function () {
+						var propToken = todo.entityAspect.propertyChanged.subscribe(function (newValue) {
+							todo.isDirty(true);
+							propToken.dispose();
+						});
+						//specifically subscribe to the programIds as propertyChanged wont be notified:
+						var programsToken = todo.programIds.subscribe(function (newValue) {
+							todo.isDirty(true);
+							programsToken.dispose();
+						});
+					};
+					
+					todo.dueDateErrors = ko.observableArray([]);	//datetimepicker validation errors
+					todo.startTimeErrors = ko.observableArray([]);	//datetimepicker validation errors
+					todo.validationErrors = ko.observableArray([]);
+					todo.validationErrorsArray = ko.computed( function(){
+						var thisArray = [];
+						ko.utils.arrayForEach( todo.validationErrors(), function(error){
+							thisArray.push( error.PropName );
+						});
+						return thisArray;
+					});
+					todo.showInvalidStartTime = ko.computed( function(){						
+						var result = false;
+						var validationErrorsArray = todo.validationErrorsArray();
+						result = ( validationErrorsArray.indexOf('startTime') !== -1 );
+						return result;
+					});
+					todo.showInvalidDueDate = ko.computed( function(){
+						var result = false;
+						var validationErrorsArray = todo.validationErrorsArray();
+						result = ( validationErrorsArray.indexOf('dueDate') !== -1 );
+						return result;
+					});
+					todo.isValid = ko.computed( function(){
+						var hasErrors = false;
+						var todoErrors = [];
+						var startTime = todo.startTime();
+						var duration = todo.duration();
+						var dueDate = todo.dueDate();
+						var dueDateErrors = todo.dueDateErrors();
+						var hasChanges = todo.isDirty();
+						var title = todo.title();
+						
+						if( duration && duration > 1440 ){
+							setTimeout( function(){ todo.duration(1440); }, 100 ); //auto-correct range violation
+						}
+						if( duration !== null && duration < 1 ){										
+							setTimeout( function(){ todo.duration(null); }, 100 ); //auto-correct range violation
+						}
+						if( dueDateErrors.length > 0 ){
+							//datetimepicker validation errors
+							ko.utils.arrayForEach( dueDateErrors, function(error){
+								todoErrors.push({ PropName: 'dueDate', Message: 'Due Date ' + error.Message});
+								hasErrors = true;
+							});
+						}
+						if( (startTime || duration) && !dueDate ){
+							hasErrors = true;						
+							todoErrors.push({ PropName: 'dueDate', Message: 'Due Date is required if Start Time / Duration are provided'});
+						}
+						if( duration && !startTime ){
+							hasErrors = true;						
+							todoErrors.push({ PropName: 'startTime', Message: 'Start Time is required if Duration is provided'});						
+						}
+						if( startTime && !duration ){
+							hasErrors = true;							
+							todoErrors.push({ PropName: 'duration', Message: 'Duration is required if Start Time is provided'});							
+						}						
+						if( !title ){									
+							hasErrors = true;
+							if( hasChanges ){
+								todoErrors.push({ PropName: 'title', Message: 'Title is required' });	
+							}
+						}
+						todo.validationErrors(todoErrors);
+						return !hasErrors;
+					});
+					todo.getAsNewEvent = function(){
+						var event = {	//fullcalendar event - plain object
+							id: todo.id(),
+							title: todo.getEventTitle(),
+							// start: todo.dueDate(),
+							// allDay: true,
+							patientId: todo.patientId(),
+							patientName: todo.getEventPatientName(),
+							assignedToName: getUsercareManagerName(),
+							userId: todo.assignedToId(),
+							typeId: 2,
+							isNew: true,
+						}
+						if( todo.startTime() && todo.duration() && todo.dueDate() ){
+							event = updateEventTimes( event, todo.startTime(), todo.duration(), todo.dueDate() );
+						}else{
+							event.start = todo.dueDate();
+							event.allDay = true;
+						}
+						return event;
+					};
+					todo.updateExistingEvent = function( existingEvent ){
+						existingEvent.title(todo.getEventTitle());									
+						existingEvent.patientId(todo.patientId());
+						existingEvent.patientName(todo.getEventPatientName());
+						existingEvent.assignedToName( getUsercareManagerName() );
+						existingEvent.userId(todo.assignedToId());
+						existingEvent.entityAspect.acceptChanges();
+						if( todo.startTime() && todo.duration() && todo.dueDate() ){
+							existingEvent = updateEventTimes( existingEvent, todo.startTime(), todo.duration(), todo.dueDate() );
+						}else{
+							existingEvent.start(todo.dueDate());
+							existingEvent.allDay(true);
+						}
+					};
+					todo.getEventTitle = function(){
+						return (todo.patientDetails() ? todo.patientDetails().fullLastName() + ', ' + todo.patientDetails().fullFirstName() + ' - ' : '') + todo.title();
+					};
+					todo.getEventPatientName = function(){
+						return todo.patientDetails() ? todo.patientDetails().fullLastName() + ', ' + todo.patientDetails().fullFirstName() : '-';
+					};
+					todo.isEvent = function(){
+						//does this todo need to be represented by a calendar event:
+						//	- assigned to current user
+						// 	- not deleted
+						//	- open
+						return (todo && todo.assignedToId() && todo.assignedToId() === session.currentUser().userId()
+							&& !todo.deleteFlag() && moment(todo.dueDate()).isValid()
+							&& (todo.statusId() === 1 || todo.statusId() === 3));
+					};					
 				}
 		}
 
+		function updateEventTimes( theEvent, startTime, duration, dueDate ){
+			if( startTime && duration && dueDate ){
+				var startDateTime = dueDate;
+				var endDateTime = null;
+				
+				//calculate the start datetime by merging dueDate and startTime:
+				var momentStartDate = moment( startDateTime );
+				var momentStartTime = moment( startTime );
+				var momentStartDateTime = dateHelper.setTimeValue(momentStartTime.hour(), momentStartTime.minute(), momentStartDate); 
+				startDateTime = momentStartDateTime.toDate();
+				//calculate the end time by adding duration:
+				endDateTime = momentStartDateTime.clone().add( duration, 'minutes' ).toDate();
+
+				if( theEvent.isNew ){
+					//the event is a simple object. before created the new event props are not yet observables:
+					theEvent.start = startDateTime;
+					theEvent.end = endDateTime;
+					theEvent.allDay = false;
+				} else{
+					//the event props are observables:
+					theEvent.start( startDateTime );
+					theEvent.end( endDateTime );
+					theEvent.allDay( false );	
+				}
+			}
+			return theEvent;
+		}
+		
 		function checkDataContext() {
 				if (!datacontext) {
 						datacontext = require('services/datacontext');
 				}
 		}
-	});
+		
+		function getSystemCareManager(){
+			if( ! systemCareManager ){
+				checkDataContext();
+				systemCareManager = datacontext.getSystemCareManager();
+			}
+			return systemCareManager;
+		}
+		
+		function getUsercareManagerName(){
+			if( ! userCareManagerName ){
+				checkDataContext();
+				userCareManagerName = datacontext.getUsercareManagerName();
+			}
+			return userCareManagerName;
+		}
+	}); 

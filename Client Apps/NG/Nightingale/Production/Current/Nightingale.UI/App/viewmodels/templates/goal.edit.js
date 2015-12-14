@@ -11,6 +11,10 @@
             var self = this;
             self.settings = settings;
             self.goal = self.settings.goal;
+			self.existingDetailsOpen = ko.observable(false);
+			self.toggleOpen = function () {
+				self.existingDetailsOpen(!self.existingDetailsOpen());
+			};
             self.focusAreas = datacontext.enums.focusAreas;
             self.sources = datacontext.enums.sources;
             self.goalTaskStatuses = datacontext.enums.goalTaskStatuses;            

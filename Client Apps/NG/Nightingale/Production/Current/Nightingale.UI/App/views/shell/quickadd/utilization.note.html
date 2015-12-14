@@ -1,7 +1,7 @@
 <form class="simple_form new_note">
 	<div data-bind="with: $parent.newUtilization">
 		<!-- ko compose: "templates/validation.errors.html" -->
-		<!-- /ko -->		
+		<!-- /ko -->	 	
 	</div>
 		<div class="row pad accordion divider">
 			<div class="accordion-toggle" data-bind="clickToggle: $parent.utDetailsOpen" >
@@ -16,7 +16,8 @@
 					<div class="span3">
 						<h5 class="grey pad-bottom">Type</h5>
 						<div class="icon-list">
-							<div data-bind="chsnsingle: { options: $parents[1].visitTypes, value: visitType, text: 'name', label: 'visitTypes' }, css: { 'invalid': (validationErrorsArray().indexOf('visitType') !== -1) }"></div>
+							<div data-bind="chsnsingle: { options: $parents[1].visitTypes, value: visitType, text: 'name', label: 'visitTypes' }, 
+											css: { 'invalid': (validationErrorsArray().indexOf('visitType') !== -1) }"></div>
 						</div>
 					</div>
 					<div class="span9" data-bind="visible: showOtherVisitType" >
@@ -63,14 +64,14 @@
 				</div>
 			</div>
 		</div>
-			<div class="row pad-top">
-				<div class="span3">
-					<h5 class="grey pad-bottom">Location</h5>
-					<div class="icon-list">
-						<div data-bind="chsnsingle: { options: $parents[1].utilizationLocations, value: utilizationLocation, text: 'name', label: 'utilizationLocations', isCancel: true}"></div>
-					</div>
-				</div>
-				<div class="span9" data-bind="visible: showOtherLocation" >
+			<div class="row pad-top">			
+				<h5 class="grey pad-bottom">Location</h5>
+				<div class="icon-list span6">
+					<div data-bind="chsnsingle: { options: $parents[1].utilizationLocations, value: utilizationLocation, text: 'name', label: 'utilizationLocations', isCancel: true}"></div>
+				</div>				
+			</div>
+			<div class="row" data-bind="visible: showOtherLocation" >
+				<div class="pad-top">
 					<h5 class="grey pad-bottom">Other Location</h5>
 					<input data-bind="value: otherLocation, valueUpdate: 'afterkeydown', css: { 'invalid': (validationErrorsArray().indexOf('otherLocation') !== -1) }"
 						maxlength="100" type="text"/>
@@ -152,7 +153,7 @@
 		</div>
 		<div class="position bottom right">
 				<div class="pad vertical">
-						<button data-bind="click: $parent.cancelUtilization" class="cancel">Cancel</button>
+						<button data-bind="click: $parent.cancel" class="cancel">Cancel</button>
 						<input data-bind="click: $parent.saveUtilization, enable: $parent.canSaveUtilization" type="submit" value="Save">
 				</div>
 		</div>

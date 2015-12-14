@@ -62,6 +62,7 @@
             self.showDropdown = true;
             self.showActions = false;
             self.canSave = ko.observable(true);
+			self.activationData = { selectedPatient: self.selectedPatient, activeDataType: self.activeDataType, showDropdown: self.showDropdown, showActions: self.showActions };
         }
         var modalShowing = ko.observable(false);
         var modalEntity = ko.observable(new ModalEntity());
@@ -73,8 +74,20 @@
             modalEntity().activeDataType(null);
             dataIndex.cancelDataEntry();
         };
-        var modal = new modelConfig.modal('Data Entry', modalEntity, 'viewmodels/templates/clinical.dataentry', modalShowing, saveOverride, cancelOverride);
-        function toggleModalShowing() {
+
+		var modalSettings = {
+			title: 'Data Entry',
+			showSelectedPatientInTitle: true,
+			entity: modalEntity, 
+			templatePath: 'viewmodels/templates/clinical.dataentry', 
+			showing: modalShowing, 
+			saveOverride: saveOverride, 
+			cancelOverride: cancelOverride, 
+			deleteOverride: null, 
+			classOverride: 'modal-lg'
+		}
+        var modal = new modelConfig.modal(modalSettings);
+        function toggleModalShowing() {			
             shell.currentModal(modal);
             modalShowing(!modalShowing());
         }
@@ -93,7 +106,12 @@
             if (activeaction) {
                 var thisAction = activeAction();
                 if (thisAction && thisAction.steps().length === 0) {
-                    getStepsForAction(thisAction);
+					thisAction.isLoading(true);
+                    getStepsForAction(thisAction).then( function(data){
+						if( thisAction.steps().length > 0 ){
+							thisAction.isLoading(false);
+						}
+					});
                 }                    
             } else {
             }
@@ -242,7 +260,7 @@
         }
 
         function getStepsForAction(action) {
-            datacontext.getEntityList(null, actionEndPoint().EntityType, genericActionEndPoint().ResourcePath + '/' + selectedPatient().id() + '/Program/' + action.module().program().id() + '/Module/' + action.module().id() + '/Action/' + action.id(), null, null, true);
+            return datacontext.getEntityList(null, actionEndPoint().EntityType, genericActionEndPoint().ResourcePath + '/' + selectedPatient().id() + '/Program/' + action.module().program().id() + '/Module/' + action.module().id() + '/Action/' + action.id(), null, null, true);
         }
 
         function minimizeThisColumn(sender) {

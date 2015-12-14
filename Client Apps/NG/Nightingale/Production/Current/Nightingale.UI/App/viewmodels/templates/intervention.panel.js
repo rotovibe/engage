@@ -40,7 +40,7 @@
     		new Column('description', 'Title','span3', 'description'),
             new Column('description-small', 'Title','span2', 'description'),
             new Column('goal', 'Goal','span3', 'goalName'),
-    		new Column('startdate', 'Start Date','span2', 'startDate'),
+    		new Column('duedate', 'Due Date','span2', 'dueDate'),			
     		new Column('assignedto', 'Assigned To','span2', 'assignedTo.preferredName'),
             new Column('closeddate', 'Closed Date','span2', 'closedDate'),
             new Column('closeddate-small', 'Closed Date','span1', 'closedDate'),
@@ -87,9 +87,11 @@
                 }
             };
             self.cancelOverride = function () {
-                datacontext.cancelEntityChanges(self.modalEntity().intervention());
+				var intervention = self.modalEntity().intervention();
+				intervention.newDetails(null);
+                datacontext.cancelEntityChanges(intervention);
             };
-            self.modal = new modelConfig.modal('Edit Intervention', self.modalEntity, 'viewmodels/templates/intervention.edit', self.modalShowing, self.saveOverride, self.cancelOverride);
+			
     		// A list of columns to display
     		self.columns = ko.computed(function () {
     			var tempcols = [];
@@ -127,6 +129,19 @@
                 }
 
                 function loadModalCompleted () {
+					var modalSettings = {
+						title: 'Edit Intervention',
+						showSelectedPatientInTitle: true,
+						relatedPatientName: intervention.computedPatient().fullName,
+						entity:self.modalEntity , 
+						templatePath: 'viewmodels/templates/intervention.edit', 
+						showing: self.modalShowing, 
+						saveOverride: self.saveOverride, 
+						cancelOverride: self.cancelOverride, 
+						deleteOverride: null, 
+						classOverride: null
+					}
+					self.modal = new modelConfig.modal(modalSettings);
                     self.modalEntity().intervention(intervention);
                     shell.currentModal(self.modal);
                     self.modalShowing(true);
@@ -210,12 +225,11 @@
             self.canSaveObservable = ko.observable(true);
             self.canSave = ko.computed({
                 read: function () {
-                    var interventionok = false;
+                    var isValid = false;
                     if (self.intervention()) {
-                        var interventiondesc = !!self.intervention().description();
-                        interventionok = interventiondesc;
+						isValid = self.intervention().isValid();                        
                     }
-                    return interventionok && self.canSaveObservable();
+                    return isValid && self.canSaveObservable();
                 },
                 write: function (newValue) {
                     self.canSaveObservable(newValue);

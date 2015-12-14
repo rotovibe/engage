@@ -10,6 +10,10 @@
         ctor.prototype.activate = function (settings) {
             var self = this;
             self.settings = settings;
+			self.existingDetailsOpen = ko.observable(false);
+			self.toggleOpen = function () {
+				self.existingDetailsOpen(!self.existingDetailsOpen());
+			};
             self.barrier = self.settings.entity;
             // Decides whether we can change status or not
             self.isNew = self.barrier.goal().isNew;            

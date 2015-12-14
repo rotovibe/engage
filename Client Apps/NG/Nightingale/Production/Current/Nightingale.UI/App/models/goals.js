@@ -30,10 +30,11 @@ define(['services/session'],
 		            targetValue: { dataType: "String" },
 		            startDate: { dataType: "DateTime" },
 		            endDate: { dataType: "DateTime" },
-		            targetDate: { dataType: "DateTime" },
+		            targetDate: { dataType: "DateTime" },					
 		            focusAreaIds: { complexTypeName: "Identifier:#Nightingale", isScalar: false },
 		            programIds: { complexTypeName: "Identifier:#Nightingale", isScalar: false },
-		            customAttributes: { complexTypeName: "Attribute:#Nightingale", isScalar: false }
+		            customAttributes: { complexTypeName: "Attribute:#Nightingale", isScalar: false },
+					details: { dataType: "String" }
 		        },
 		        navigationProperties: {
 		            source: {
@@ -102,7 +103,8 @@ define(['services/session'],
 		            categoryId: { dataType: "String" },
 		            statusId: { dataType: "String" },
 		            patientGoalId: { dataType: "String" },
-		            deleteFlag: { dataType: "Boolean" }
+		            deleteFlag: { dataType: "Boolean" },
+					details: { dataType: "String" }
 		        },
 		        navigationProperties: {
 		            category: {
@@ -139,7 +141,8 @@ define(['services/session'],
 		            patientId: { dataType: "String" },
 		            barrierIds: { complexTypeName: "Identifier:#Nightingale", isScalar: false },
 		            customAttributes: { complexTypeName: "Attribute:#Nightingale", isScalar: false },
-		            deleteFlag: { dataType: "Boolean" }
+		            deleteFlag: { dataType: "Boolean" },
+					details: { dataType: "String" }
 		        },
 		        navigationProperties: {
 		            status: {
@@ -168,13 +171,15 @@ define(['services/session'],
 		            createdById: { dataType: "String" },
 		            categoryId: { dataType: "String" },
 		            startDate: { dataType: "DateTime" },
+					dueDate: { dataType: "DateTime" },
 		            closedDate: { dataType: "DateTime" },
 		            goalName: { dataType: "String" },
 		            patientGoalId: { dataType: "String" },
 		            patientId: { dataType: "String" },
                     assignedToId: { dataType: "String" },
 		            barrierIds: { complexTypeName: "Identifier:#Nightingale", isScalar: false },
-		            deleteFlag: { dataType: "Boolean" }
+		            deleteFlag: { dataType: "Boolean" },
+					details: { dataType: "String" }
 		        },
 		        navigationProperties: {
 		            status: {
@@ -351,6 +356,10 @@ define(['services/session'],
 
             function barrierInitializer(barrier) {
             	barrier.isNew = ko.observable(false);
+				barrier.newDetails = ko.observable();
+				barrier.checkAppend = function () {
+					appendNewDetails( barrier.newDetails, barrier.details );					
+				};
 		        barrier.relatedInterventions = ko.computed(function () {
 		            checkDataContext();
 		            var interventionList = [];
@@ -391,10 +400,34 @@ define(['services/session'],
 		            }
 		            return taskList;
 		        });
+				barrier.validationErrors = ko.observableArray([]);
+				barrier.isValid = ko.computed( function() {
+					var hasErrors = false;
+					var barrierErrors = [];
+					var name = barrier.name();
+					if( !name ){
+						barrierErrors.push({ PropName: 'name', Message: 'Description is required' });
+						hasErrors = true;
+					}
+					barrier.validationErrors(barrierErrors);
+					return !hasErrors;	
+				});
+				barrier.validationErrorsArray = ko.computed(function () {
+					var thisArray = [];
+					ko.utils.arrayForEach(barrier.validationErrors(), function (error) {
+						thisArray.push(error.PropName);
+					});
+					return thisArray;
+				});
+				
             }
 
             function goalInitializer(goal) {
                 goal.isNew = ko.observable(false);
+				goal.newDetails = ko.observable();
+				goal.checkAppend = function () {
+					appendNewDetails( goal.newDetails, goal.details );
+				};
 		        goal.focusAreaString = ko.computed(function () {
 		            checkDataContext();
 		            var thisString = '';
@@ -438,9 +471,33 @@ define(['services/session'],
 		            return thisString;
 		        });
 				goal.isLoaded = false;
+				goal.validationErrors = ko.observableArray([]);
+				goal.isValid = ko.computed( function() {
+					var hasErrors = false;
+					var goalErrors = [];
+					var name = goal.name();
+					if( !name ){
+						goalErrors.push({ PropName: 'name', Message: 'Description is required' });
+						hasErrors = true;
+					}
+					goal.validationErrors(goalErrors);
+					return !hasErrors;	
+				});
+				goal.validationErrorsArray = ko.computed(function () {
+					var thisArray = [];
+					ko.utils.arrayForEach(goal.validationErrors(), function (error) {
+						thisArray.push(error.PropName);
+					});
+					return thisArray;
+				});
 		    }
 
 		    function interventionInitializer(intervention) {
+				intervention.isNew = ko.observable(false);
+				intervention.newDetails = ko.observable();
+				intervention.checkAppend = function () {
+					appendNewDetails( intervention.newDetails, intervention.details );
+				};
 		        intervention.barrierString = ko.computed(function () {
 		            checkDataContext();
 		            var thisString = '';
@@ -482,9 +539,81 @@ define(['services/session'],
 		        	}
 		        	return returnPatient;
 		        });
+				intervention.isDirty = ko.observable(false);
+				intervention.clearDirty = function(){
+					intervention.isDirty(false);
+				};
+				intervention.watchDirty = function () {
+					var propToken = intervention.entityAspect.propertyChanged.subscribe(function (newValue) {
+						intervention.isDirty(true);
+						propToken.dispose();
+					});
+					//specifically subscribe to the barrierIds as propertyChanged wont be notified:
+					var barriersToken = intervention.barrierIds.subscribe(function (newValue) {
+						intervention.isDirty(true);
+						barriersToken.dispose();
+					});
+					var newDetailsToken = intervention.newDetails.subscribe(function (newValue) {
+						intervention.isDirty(true);
+						newDetailsToken.dispose();
+					});
+				};
+				intervention.dueDateErrors = ko.observableArray([]);	//datetimepicker validation errors
+				intervention.startDateErrors = ko.observableArray([]);	//datetimepicker validation errors
+				intervention.validationErrors = ko.observableArray([]);
+				intervention.isValid = ko.computed( function() {
+					var hasErrors = false;
+					var description = intervention.description();
+					var startDate = intervention.startDate();
+					var dueDate = intervention.dueDate();
+					var interventionErrors = [];										
+					var dueDateErrors = intervention.dueDateErrors();
+					var startDateErrors = intervention.startDateErrors();
+					var hasChanges = intervention.isDirty();
+					if( !description ){
+						hasErrors = true;
+						if( hasChanges || !intervention.isNew() ){
+							interventionErrors.push({ PropName: 'description', Message: 'Description is required' });
+						}						
+					}
+					if( startDateErrors.length > 0 ){
+						//datetimepicker validation errors:						
+						ko.utils.arrayForEach( startDateErrors, function(error){
+							interventionErrors.push({ PropName: 'startDate', Message: 'Start Date ' + error.Message});
+							hasErrors = true;
+						});
+					}
+					if( dueDateErrors.length > 0 ){
+						//datetimepicker validation errors:
+						ko.utils.arrayForEach( dueDateErrors, function(error){
+							interventionErrors.push({ PropName: 'dueDate', Message: 'Due Date ' + error.Message});
+							hasErrors = true;
+						});
+					}					
+					//note: we are deliberately not enforcing any range logic on the dueDate-startDate dates.
+					
+					intervention.validationErrors(interventionErrors)
+					return !hasErrors;
+				});
+				/**
+				*	computed. tracks for any validation errors and returns a list of the errored property names.
+				*	this will be used in the property field css binding condition for invalid styling.
+				*	@method medication.validationErrorsArray
+				*/
+				intervention.validationErrorsArray = ko.computed(function () {
+					var thisArray = [];
+					ko.utils.arrayForEach(intervention.validationErrors(), function (error) {
+						thisArray.push(error.PropName);
+					});
+					return thisArray;
+				});
 		    }
 
 		    function taskInitializer(task) {
+				task.newDetails = ko.observable();
+				task.checkAppend = function () {
+					appendNewDetails( task.newDetails, task.details );
+				};
 		        task.barrierString = ko.computed(function () {
 		            checkDataContext();
 		            var thisString = '';
@@ -517,6 +646,25 @@ define(['services/session'],
 		        	}
 		        	return returnString;
 		        });
+				task.validationErrors = ko.observableArray([]);
+				task.isValid = ko.computed( function() {
+					var hasErrors = false;
+					var taskErrors = [];
+					var description = task.description();
+					if( !description ){
+						taskErrors.push({ PropName: 'description', Message: 'Description is required' });
+						hasErrors = true;
+					}
+					task.validationErrors(taskErrors);
+					return !hasErrors;	
+				});
+				task.validationErrorsArray = ko.computed(function () {
+					var thisArray = [];
+					ko.utils.arrayForEach(task.validationErrors(), function (error) {
+						thisArray.push(error.PropName);
+					});
+					return thisArray;
+				});
 		    }
 
 		    function attributeInitializer(attribute) {
@@ -614,6 +762,26 @@ define(['services/session'],
 		    }
 		}
 
+		/**
+		*	@param newDetails {observable} 
+		*	@param details {observable} 
+		*	@method appendNewDetails
+		*/
+		function appendNewDetails( newDetails, details ){
+			if( newDetails() ){
+				// Append the new details content to details
+				var append = '';
+				if( details() && details().length ){
+					append = '\n'; 
+				}
+				append += moment().format('MM-DD-YYYY h:mm A') + ' ';
+				append += (' ' + session.currentUser().firstName() + ' ' + session.currentUser().lastName());
+				append += (' - ' + newDetails());
+				details(details() ? details() + append : append);
+				newDetails('');
+			}
+		}
+		
 		function createMocks(manager) {
 		    //var goalOne = manager.createEntity('Goal', { id: 'goal1', name: 'Improve HDL', patientId: '52f55873072ef709f84e6810' });
 		}
