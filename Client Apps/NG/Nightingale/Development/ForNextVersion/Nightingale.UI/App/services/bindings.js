@@ -1118,7 +1118,9 @@ define(['services/formatter', 'services/dateHelper'],
                 var thisValue = ko.unwrap(valueAccessor());
                 var $el = $(element);
                 var height = $el.parent().height() - $el.prev('.fixed').outerHeight();
-                $el.css('height', (height + "px"));
+				if( height > 0 ){
+					$el.css('height', (height + "px"));
+				}
             }
         };
 
