@@ -14,12 +14,12 @@ namespace Phytel.API.DataDomain.Contact.DTO
     [MongoIndex(Keys = new string[] { ResourceIdProperty, PatientIdProperty, DeleteFlagProperty }, Unique = false)]
     public class MEContact : IMongoEntity<ObjectId>, IMEEntity
     {
-        public MEContact(string userId)
+        public MEContact(string userId, DateTime? createdOn)
         {
             Id = ObjectId.GenerateNewId();
             Version = 1.0;
             RecordCreatedBy = ObjectId.Parse(userId);
-            RecordCreatedOn = DateTime.UtcNow;
+            RecordCreatedOn = createdOn == null || createdOn.Equals(new DateTime()) ? DateTime.UtcNow : (DateTime)createdOn;
         }
 
         public const string IdProperty = "_id";

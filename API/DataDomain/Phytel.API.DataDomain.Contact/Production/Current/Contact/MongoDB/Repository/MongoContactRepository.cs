@@ -5,6 +5,7 @@ using System.Linq;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
+using MongoDB.Driver.Builders;
 using Phytel.API.Common;
 using Phytel.API.Common.Audit;
 using Phytel.API.DataAudit;
@@ -84,18 +85,18 @@ namespace Phytel.API.DataDomain.Contact
         /// <returns>Id of the newly inserted contact.</returns>
         public object Insert(object newEntity)
         {
-            PutContactDataResponse response = null;
+            string id = null;
             PutContactDataRequest request = newEntity as PutContactDataRequest;
+            ContactData data = request.ContactData;
             MEContact meContact = null;
             try
             {
-                
                 using (ContactMongoContext ctx = new ContactMongoContext(_dbName))
                 {
                     List<IMongoQuery> queries = new List<IMongoQuery>();
-                    if (request.PatientId != null)
+                    if (data.PatientId != null)
                     {
-                        queries.Add(MB.Query.EQ(MEContact.PatientIdProperty, ObjectId.Parse(request.PatientId)));
+                        queries.Add(MB.Query.EQ(MEContact.PatientIdProperty, ObjectId.Parse(data.PatientId)));
                         queries.Add(MB.Query.EQ(MEContact.DeleteFlagProperty, false));
                         IMongoQuery query = MB.Query.And(queries);
                         MEContact mc = ctx.Contacts.Collection.Find(query).FirstOrDefault();
@@ -104,14 +105,14 @@ namespace Phytel.API.DataDomain.Contact
                             throw new ApplicationException("A contact record already exists for the patient.");
                         }
                     }
-                    meContact = new MEContact(this.UserId)
+                    meContact = new MEContact(this.UserId, data.CreatedOn)
                     {
                         Id = ObjectId.GenerateNewId(),
-                        FirstName = request.FirstName,
-                        LastName = request.LastName, 
-                        PreferredName = request.PreferredName,
-                        Gender = request.Gender,
-                        ResourceId = request.ResourceId,
+                        FirstName = data.FirstName,
+                        LastName = data.LastName, 
+                        PreferredName = data.PreferredName,
+                        Gender = data.Gender,
+                        ResourceId = data.UserId,
                         Version = request.Version,
                         LastUpdatedOn = DateTime.UtcNow,
                         UpdatedBy = ObjectId.Parse(this.UserId),
@@ -119,20 +120,20 @@ namespace Phytel.API.DataDomain.Contact
                     };
                     
                     //PatientId
-                    if (request.PatientId != null)
+                    if (data.PatientId != null)
                     {
-                        meContact.PatientId = ObjectId.Parse(request.PatientId);
+                        meContact.PatientId = ObjectId.Parse(data.PatientId);
                     }
                     //Timezone
-                    if (request.TimeZoneId != null)
+                    if (data.TimeZoneId != null)
                     {
-                        meContact.TimeZoneId = ObjectId.Parse(request.TimeZoneId);
+                        meContact.TimeZoneId = ObjectId.Parse(data.TimeZoneId);
                     }
                     //Modes
-                    if (request.Modes != null && request.Modes.Count > 0)
+                    if (data.Modes != null && data.Modes.Count > 0)
                     {
                         List<CommMode> commModes = new List<CommMode>();
-                        foreach (CommModeData c in request.Modes)
+                        foreach (CommModeData c in data.Modes)
                         {
                             commModes.Add(new CommMode { ModeId = ObjectId.Parse(c.ModeId), OptOut = c.OptOut, Preferred = c.Preferred });
                         }
@@ -140,16 +141,16 @@ namespace Phytel.API.DataDomain.Contact
                     }
 
                     //Weekdays
-                    if (request.WeekDays != null && request.WeekDays.Count > 0)
+                    if (data.WeekDays != null && data.WeekDays.Count > 0)
                     {
-                        meContact.WeekDays = request.WeekDays;
+                        meContact.WeekDays = data.WeekDays;
                     }
 
                     //TimesOfDays
-                    if (request.TimesOfDaysId != null && request.TimesOfDaysId.Count > 0)
+                    if (data.TimesOfDaysId != null && data.TimesOfDaysId.Count > 0)
                     {
                         List<ObjectId> ids = new List<ObjectId>();
-                        foreach (string s in request.TimesOfDaysId)
+                        foreach (string s in data.TimesOfDaysId)
                         {
                             ids.Add(ObjectId.Parse(s));
                         }
@@ -157,10 +158,10 @@ namespace Phytel.API.DataDomain.Contact
                     }
 
                     //Languages
-                    if (request.Languages != null && request.Languages.Count > 0)
+                    if (data.Languages != null && data.Languages.Count > 0)
                     {
                         List<Language> languages = new List<Language>();
-                        foreach (LanguageData c in request.Languages)
+                        foreach (LanguageData c in data.Languages)
                         {
                             languages.Add(new Language { LookUpLanguageId = ObjectId.Parse(c.LookUpLanguageId), Preferred = c.Preferred });
                         }
@@ -168,10 +169,10 @@ namespace Phytel.API.DataDomain.Contact
                     }
 
                     //Addresses
-                    if (request.Addresses != null && request.Addresses.Count > 0)
+                    if (data.Addresses != null && data.Addresses.Count > 0)
                     {
                         List<Address> meAddresses = new List<Address>();
-                        List<AddressData> addressData = request.Addresses;
+                        List<AddressData> addressData = data.Addresses;
                         foreach (AddressData p in addressData)
                         {
                             Address me = new Address
@@ -194,16 +195,16 @@ namespace Phytel.API.DataDomain.Contact
                     }
 
                     //Phones
-                    if (request.Phones != null && request.Phones.Count > 0)
+                    if (data.Phones != null && data.Phones.Count > 0)
                     {
-                        PhoneVisitor.GetContactPhones(ref request, ref meContact);
+                        PhoneVisitor.GetContactPhones(data.Phones, ref meContact);
                     }
 
                     //Emails
-                    if (request.Emails != null && request.Emails.Count > 0)
+                    if (data.Emails != null && data.Emails.Count > 0)
                     {
                         List<Email> meEmails = new List<Email>();
-                        List<EmailData> emailData = request.Emails;
+                        List<EmailData> emailData = data.Emails;
                         foreach (EmailData p in emailData)
                         {
                             Email me = new Email
@@ -228,26 +229,165 @@ namespace Phytel.API.DataDomain.Contact
                                             DataAuditType.Insert, 
                                             request.ContractNumber);
 
-                    //Send back the newly inserted object.
-                    response = new PutContactDataResponse();
-                    response.ContactId = meContact.Id.ToString();
+                    id = meContact.Id.ToString();
                 }
             }
             catch (Exception ex)
             {
                 throw ex;
             }
-            return response;
+            return id;
         }
 
         public object InsertAll(List<object> entities)
         {
+            BulkInsertResult result = new BulkInsertResult();
+            List<string> insertedIds = new List<string>();
+            List<string> errorMessages = new List<string>();
             try
             {
-                throw new NotImplementedException();
-                // code here //
+                using (ContactMongoContext ctx = new ContactMongoContext(_dbName))
+                {
+                    var bulk = ctx.Contacts.Collection.InitializeUnorderedBulkOperation();
+                    foreach (ContactData data in entities)
+                    {
+                        MEContact meContact = new MEContact(this.UserId, data.CreatedOn)
+                        {
+                            FirstName = data.FirstName,
+                            LastName = data.LastName,
+                            PreferredName = data.PreferredName,
+                            Gender = data.Gender,
+                            ResourceId = data.UserId,
+                            Version = 1.0,
+                            LastUpdatedOn = DateTime.UtcNow,
+                            UpdatedBy = ObjectId.Parse(this.UserId),
+                            DeleteFlag = false
+                        };
+
+                        //PatientId
+                        if (data.PatientId != null)
+                        {
+                            meContact.PatientId = ObjectId.Parse(data.PatientId);
+                        }
+                        //Timezone
+                        if (data.TimeZoneId != null)
+                        {
+                            meContact.TimeZoneId = ObjectId.Parse(data.TimeZoneId);
+                        }
+                        //Modes
+                        if (data.Modes != null && data.Modes.Count > 0)
+                        {
+                            List<CommMode> commModes = new List<CommMode>();
+                            foreach (CommModeData c in data.Modes)
+                            {
+                                commModes.Add(new CommMode { ModeId = ObjectId.Parse(c.ModeId), OptOut = c.OptOut, Preferred = c.Preferred });
+                            }
+                            meContact.Modes = commModes;
+                        }
+
+                        //Weekdays
+                        if (data.WeekDays != null && data.WeekDays.Count > 0)
+                        {
+                            meContact.WeekDays = data.WeekDays;
+                        }
+
+                        //TimesOfDays
+                        if (data.TimesOfDaysId != null && data.TimesOfDaysId.Count > 0)
+                        {
+                            List<ObjectId> ids = new List<ObjectId>();
+                            foreach (string s in data.TimesOfDaysId)
+                            {
+                                ids.Add(ObjectId.Parse(s));
+                            }
+                            meContact.TimesOfDays = ids;
+                        }
+
+                        //Languages
+                        if (data.Languages != null && data.Languages.Count > 0)
+                        {
+                            List<Language> languages = new List<Language>();
+                            foreach (LanguageData c in data.Languages)
+                            {
+                                languages.Add(new Language { LookUpLanguageId = ObjectId.Parse(c.LookUpLanguageId), Preferred = c.Preferred });
+                            }
+                            meContact.Languages = languages;
+                        }
+
+                        //Addresses
+                        if (data.Addresses != null && data.Addresses.Count > 0)
+                        {
+                            List<Address> meAddresses = new List<Address>();
+                            List<AddressData> addressData = data.Addresses;
+                            foreach (AddressData p in addressData)
+                            {
+                                Address me = new Address
+                                {
+                                    Id = ObjectId.GenerateNewId(),
+                                    TypeId = ObjectId.Parse(p.TypeId),
+                                    Line1 = p.Line1,
+                                    Line2 = p.Line2,
+                                    Line3 = p.Line3,
+                                    City = p.City,
+                                    StateId = ObjectId.Parse(p.StateId),
+                                    PostalCode = p.PostalCode,
+                                    Preferred = p.Preferred,
+                                    OptOut = p.OptOut,
+                                    DeleteFlag = false
+                                };
+                                meAddresses.Add(me);
+                            }
+                            meContact.Addresses = meAddresses;
+                        }
+
+                        //Phones
+                        if (data.Phones != null && data.Phones.Count > 0)
+                        {
+                            PhoneVisitor.GetContactPhones(data.Phones, ref meContact);
+                        }
+
+                        //Emails
+                        if (data.Emails != null && data.Emails.Count > 0)
+                        {
+                            List<Email> meEmails = new List<Email>();
+                            List<EmailData> emailData = data.Emails;
+                            foreach (EmailData p in emailData)
+                            {
+                                Email me = new Email
+                                {
+                                    Id = ObjectId.GenerateNewId(),
+                                    Text = p.Text,
+                                    Preferred = p.Preferred,
+                                    TypeId = ObjectId.Parse(p.TypeId),
+                                    OptOut = p.OptOut,
+                                    DeleteFlag = false
+                                };
+                                meEmails.Add(me);
+                            }
+                            meContact.Emails = meEmails;
+                        }
+                        bulk.Insert(meContact.ToBsonDocument());
+                        insertedIds.Add(meContact.Id.ToString());
+                    }
+                    BulkWriteResult bwr = bulk.Execute();
+                }
+                // TODO: Auditing.
             }
-            catch (Exception ex) { throw ex; }
+            catch (BulkWriteException bwEx)
+            {
+                // Get the error messages for the ones that failed.
+                foreach (BulkWriteError er in bwEx.WriteErrors)
+                {
+                    errorMessages.Add(er.Message);
+                }
+            }
+            catch (Exception ex)
+            {
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Helper.LogException(int.Parse(aseProcessID), ex);
+            }
+            result.ProcessedIds = insertedIds;
+            result.ErrorMessages = errorMessages;
+            return result;
         }
 
         public void Delete(object entity)
@@ -301,7 +441,7 @@ namespace Phytel.API.DataDomain.Contact
                 {
                     contactData = new ContactData
                     {
-                        ContactId = mc.Id.ToString(),
+                        Id = mc.Id.ToString(),
                         PatientId = mc.PatientId.ToString(),
                         UserId = (string.IsNullOrEmpty(mc.ResourceId)) ? string.Empty : mc.ResourceId.ToString().Replace("-", string.Empty).ToLower(),
                         FirstName = mc.FirstName,
@@ -351,13 +491,14 @@ namespace Phytel.API.DataDomain.Contact
             try
             {
                 PutUpdateContactDataRequest request = entity as PutUpdateContactDataRequest;
-                if (request.ContactId == null)
+                ContactData data = request.ContactData;
+                if (data.Id == null)
                     throw new ArgumentException("ContactId is missing from the DataDomain request.");
 
                 using (ContactMongoContext ctx = new ContactMongoContext(_dbName))
                 {
                     List<IMongoQuery> queries = new List<IMongoQuery>();
-                    queries.Add(MB.Query.EQ(MEContact.IdProperty, ObjectId.Parse(request.ContactId)));
+                    queries.Add(MB.Query.EQ(MEContact.IdProperty, ObjectId.Parse(data.Id)));
                     queries.Add(MB.Query.EQ(MEContact.DeleteFlagProperty, false));
                     IMongoQuery query = MB.Query.And(queries);
                     MEContact mc = ctx.Contacts.Collection.Find(query).FirstOrDefault();
@@ -366,13 +507,13 @@ namespace Phytel.API.DataDomain.Contact
                         var uv = new List<MB.UpdateBuilder>();
 
                         #region Modes
-                        if (request.Modes != null)
+                        if (data.Modes != null)
                         {
                             List<CommMode> meModes = null;
-                            if (request.Modes.Count != 0)
+                            if (data.Modes.Count != 0)
                             {
                                 meModes = new List<CommMode>();
-                                List<CommModeData> modeData = request.Modes;
+                                List<CommModeData> modeData = data.Modes;
                                 foreach (CommModeData m in modeData)
                                 {
                                     CommMode meM = new CommMode
@@ -390,13 +531,13 @@ namespace Phytel.API.DataDomain.Contact
                         #endregion
 
                         #region WeekDays
-                        if (request.WeekDays != null)
+                        if (data.WeekDays != null)
                         {
                             List<int> weekDays = null;
-                            if (request.WeekDays.Count != 0)
+                            if (data.WeekDays.Count != 0)
                             {
                                 weekDays = new List<int>();
-                                weekDays = request.WeekDays;
+                                weekDays = data.WeekDays;
                             }
                             uv.Add(MB.Update.SetWrapped<List<int>>(MEContact.WeekDaysProperty, weekDays));
 
@@ -404,14 +545,14 @@ namespace Phytel.API.DataDomain.Contact
                         #endregion
 
                         #region TimesOfDays
-                        if (request.TimesOfDaysId != null)
+                        if (data.TimesOfDaysId != null)
                         {
                             List<ObjectId> timesOfDays = null;
                             // if nothing is selected
-                            if (request.TimesOfDaysId.Count != 0)
+                            if (data.TimesOfDaysId.Count != 0)
                             {
                                 timesOfDays = new List<ObjectId>();
-                                List<string> times = request.TimesOfDaysId;
+                                List<string> times = data.TimesOfDaysId;
                                 foreach (string s in times)
                                 {
                                     timesOfDays.Add(ObjectId.Parse(s));
@@ -422,13 +563,13 @@ namespace Phytel.API.DataDomain.Contact
                         #endregion
 
                         #region Languages
-                        if (request.Languages != null)
+                        if (data.Languages != null)
                         {
                             List<Language> meLanguages = null;
-                            if (request.Languages.Count != 0)
+                            if (data.Languages.Count != 0)
                             {
                                 meLanguages = new List<Language>();
-                                List<LanguageData> languageData = request.Languages;
+                                List<LanguageData> languageData = data.Languages;
                                 foreach (LanguageData l in languageData)
                                 {
                                     Language meL = new Language
@@ -445,17 +586,17 @@ namespace Phytel.API.DataDomain.Contact
                         #endregion
                         
                         #region Phone&Text(softdeletes)
-                        if (request.Phones != null)
+                        if (data.Phones != null)
                         {
                             List<Phone> mePhones = null;
                             List<Phone> existingPhones = mc.Phones;
                             if (existingPhones == null)
                             {
                                 // Add all the new phones that are sent in the request with the newly generated ObjectId.
-                                if (request.Phones.Count != 0)
+                                if (data.Phones.Count != 0)
                                 {
                                     mePhones = new List<Phone>();
-                                    List<PhoneData> phoneData = request.Phones;
+                                    List<PhoneData> phoneData = data.Phones;
                                     foreach (PhoneData p in phoneData)
                                     {
                                         Phone mePh = new Phone
@@ -479,7 +620,7 @@ namespace Phytel.API.DataDomain.Contact
                             {
                                 mePhones = new List<Phone>();
                                 // Set deleteflag == true for the existing 
-                                if (request.Phones.Count == 0)
+                                if (data.Phones.Count == 0)
                                 {
                                     foreach (Phone mePh in existingPhones)
                                     {
@@ -489,7 +630,7 @@ namespace Phytel.API.DataDomain.Contact
                                 }
                                 else
                                 {
-                                    List<PhoneData> phoneData = request.Phones;
+                                    List<PhoneData> phoneData = data.Phones;
                                     foreach(PhoneData p in phoneData )
                                     {
                                         // Check if it was a new insert.
@@ -543,17 +684,17 @@ namespace Phytel.API.DataDomain.Contact
                         #endregion
 
                         #region Emails(softdeletes)
-                        if (request.Emails != null)
+                        if (data.Emails != null)
                         {
                             List<Email> meEmails = null;
                             List<Email> existingEmails = mc.Emails;
                             if (existingEmails == null)
                             {
                                 // Add all the new emails that are sent in the request with the newly generated ObjectId.
-                                if (request.Emails.Count != 0)
+                                if (data.Emails.Count != 0)
                                 {
                                     meEmails = new List<Email>();
-                                    List<EmailData> emailData = request.Emails;
+                                    List<EmailData> emailData = data.Emails;
                                     foreach (EmailData p in emailData)
                                     {
                                         Email me = new Email
@@ -574,7 +715,7 @@ namespace Phytel.API.DataDomain.Contact
                             {
                                 meEmails = new List<Email>();
                                 // Set deleteflag == true for the existing 
-                                if (request.Emails.Count == 0)
+                                if (data.Emails.Count == 0)
                                 {
                                     foreach (Email me in existingEmails)
                                     {
@@ -584,7 +725,7 @@ namespace Phytel.API.DataDomain.Contact
                                 }
                                 else
                                 {
-                                    List<EmailData> emailData = request.Emails;
+                                    List<EmailData> emailData = data.Emails;
                                     foreach (EmailData p in emailData)
                                     {
                                         // Check if it was a new insert.
@@ -635,17 +776,17 @@ namespace Phytel.API.DataDomain.Contact
                         #endregion
 
                         #region Addresses(softdeletes)
-                        if (request.Addresses != null)
+                        if (data.Addresses != null)
                         {
                             List<Address> meAddresses = null;
                             List<Address> existingAddresses = mc.Addresses;
                             if (existingAddresses == null)
                             {
                                 // Add all the new addresses that are sent in the request with the newly generated ObjectId.
-                                if (request.Addresses.Count != 0)
+                                if (data.Addresses.Count != 0)
                                 {
                                     meAddresses = new List<Address>();
-                                    List<AddressData> addressData = request.Addresses;
+                                    List<AddressData> addressData = data.Addresses;
                                     foreach (AddressData p in addressData)
                                     {
                                         Address me = new Address
@@ -671,7 +812,7 @@ namespace Phytel.API.DataDomain.Contact
                             {
                                 meAddresses = new List<Address>();
                                 // Set deleteflag == true for the existing 
-                                if (request.Addresses.Count == 0)
+                                if (data.Addresses.Count == 0)
                                 {
                                     foreach (Address me in existingAddresses)
                                     {
@@ -681,7 +822,7 @@ namespace Phytel.API.DataDomain.Contact
                                 }
                                 else
                                 {
-                                    List<AddressData> addressData = request.Addresses;
+                                    List<AddressData> addressData = data.Addresses;
                                     foreach (AddressData p in addressData)
                                     {
                                         // Check if it was a new insert.
@@ -737,9 +878,9 @@ namespace Phytel.API.DataDomain.Contact
                         #endregion
 
                         // TimeZone
-                        if (!string.IsNullOrEmpty(request.TimeZoneId))
+                        if (!string.IsNullOrEmpty(data.TimeZoneId))
                         {
-                            uv.Add(MB.Update.Set(MEContact.TimeZoneProperty, ObjectId.Parse(request.TimeZoneId)));
+                            uv.Add(MB.Update.Set(MEContact.TimeZoneProperty, ObjectId.Parse(data.TimeZoneId)));
                         } 
 
                         // LastUpdatedOn
@@ -753,7 +894,7 @@ namespace Phytel.API.DataDomain.Contact
 
                         AuditHelper.LogDataAudit(this.UserId,
                                                 MongoCollectionName.Contact.ToString(),
-                                                request.ContactId,
+                                                data.Id,
                                                 DataAuditType.Update,
                                                 request.ContractNumber);
 
@@ -844,7 +985,7 @@ namespace Phytel.API.DataDomain.Contact
                 if (mc != null)
                 {
                     contactData = new ContactData { 
-                        ContactId = mc.Id.ToString(),
+                        Id = mc.Id.ToString(),
                         PatientId = mc.PatientId.ToString(),
                         UserId = (string.IsNullOrEmpty(mc.ResourceId)) ? string.Empty : mc.ResourceId.ToString().Replace("-", string.Empty).ToLower(),
                         FirstName = mc.FirstName,
@@ -962,7 +1103,7 @@ namespace Phytel.API.DataDomain.Contact
                 {
                     contactData = new ContactData
                     {
-                        ContactId = mc.Id.ToString(),
+                        Id = mc.Id.ToString(),
                         PatientId = mc.PatientId.ToString(),
                         UserId = (string.IsNullOrEmpty(mc.ResourceId)) ? string.Empty : mc.ResourceId.ToString().Replace("-", string.Empty).ToLower(),
                         FirstName = mc.FirstName,
@@ -996,7 +1137,7 @@ namespace Phytel.API.DataDomain.Contact
                 {
                     contactData = new ContactData
                     {
-                        ContactId = mc.Id.ToString(),
+                        Id = mc.Id.ToString(),
                         PatientId = mc.PatientId.ToString(),
                         FirstName = mc.FirstName,
                         LastName = mc.LastName
@@ -1028,7 +1169,7 @@ namespace Phytel.API.DataDomain.Contact
                         {
                             ContactData contactData = new ContactData
                             {
-                               ContactId = c.Id.ToString(),
+                               Id = c.Id.ToString(),
                                UserId = (string.IsNullOrEmpty(c.ResourceId)) ? string.Empty : c.ResourceId.ToString().Replace("-", string.Empty).ToLower(),
                                PreferredName = c.PreferredName,
                                FirstName = c.FirstName,
@@ -1066,7 +1207,7 @@ namespace Phytel.API.DataDomain.Contact
                             {
                                 ContactData contactData = new ContactData
                                 {
-                                    ContactId = c.Id.ToString(),
+                                    Id = c.Id.ToString(),
                                     Gender = c.Gender,
                                     PreferredName = c.PreferredName
                                 };
@@ -1100,7 +1241,7 @@ namespace Phytel.API.DataDomain.Contact
                         {
                             ContactData contactData = new ContactData
                             {
-                                ContactId = c.Id.ToString(),
+                                Id = c.Id.ToString(),
                                 PatientId = c.PatientId.ToString(),
                                 RecentsList = c.RecentList != null ? c.RecentList.ConvertAll(r => r.ToString()) : null,
                                 FirstName = c.FirstName,
@@ -1117,7 +1258,6 @@ namespace Phytel.API.DataDomain.Contact
         }
 
         public string UserId { get; set; }
-
 
         public void UndoDelete(object entity)
         {
@@ -1142,6 +1282,43 @@ namespace Phytel.API.DataDomain.Contact
                                             DataAuditType.UndoDelete,
                                             request.ContractNumber);
                 }
+            }
+            catch (Exception) { throw; }
+        }
+
+        public IEnumerable<object> Select(List<string> ids)
+        {
+            List<ContactData> dataList = null;
+            try
+            {
+                using (ContactMongoContext ctx = new ContactMongoContext(_dbName))
+                {
+                    List<IMongoQuery> queries = new List<IMongoQuery>();
+                    queries.Add(Query.In(MEContact.IdProperty, new BsonArray(Helper.ConvertToObjectIdList(ids))));
+                    queries.Add(Query.EQ(MEContact.DeleteFlagProperty, false));
+                    queries.Add(Query.EQ(MEContact.TTLDateProperty, BsonNull.Value));
+                    IMongoQuery mQuery = Query.And(queries);
+                    List<MEContact> meContacts = ctx.Contacts.Collection.Find(mQuery).ToList();
+                    if (meContacts != null && meContacts.Count > 0)
+                    {
+                        dataList = new List<ContactData>();
+                        foreach (MEContact mc in meContacts)
+                        {
+                            dataList.Add(new ContactData
+                            {
+                                Id = mc.Id.ToString(),
+                                PatientId = mc.PatientId.ToString(),
+                                UserId = (string.IsNullOrEmpty(mc.ResourceId)) ? string.Empty : mc.ResourceId.ToString().Replace("-", string.Empty).ToLower(),
+                                FirstName = mc.FirstName,
+                                MiddleName = mc.MiddleName,
+                                LastName = mc.LastName,
+                                PreferredName = mc.PreferredName,
+                                Gender = mc.Gender
+                            });
+                        }
+                    }
+                }
+                return dataList as IEnumerable<object>;
             }
             catch (Exception) { throw; }
         }

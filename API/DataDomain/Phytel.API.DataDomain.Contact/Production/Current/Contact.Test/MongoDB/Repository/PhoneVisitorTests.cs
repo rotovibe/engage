@@ -10,10 +10,7 @@ namespace Phytel.API.DataDomain.Contact.MongoDB.Repository.Tests
         [TestMethod()]
         public void GetContactPhonesTest()
         {
-            var req = new PutContactDataRequest
-            {
-                Phones =
-                    new List<PhoneData>
+            ContactData cData = new ContactData { Phones = new List<PhoneData>
                     {
                         new PhoneData
                         {
@@ -26,12 +23,14 @@ namespace Phytel.API.DataDomain.Contact.MongoDB.Repository.Tests
                             OptOut = false,
                             TypeId = "111111111111111111111112"
                         }
-                    }
+                    }};
+            PutContactDataRequest req = new PutContactDataRequest
+            {
+                ContactData = cData
             };
+            var contact = new MEContact("123456789012345678901234", null);
 
-            var contact = new MEContact("123456789012345678901234");
-
-            PhoneVisitor.GetContactPhones( ref req, ref contact );
+            PhoneVisitor.GetContactPhones(cData.Phones, ref contact);
 
             Assert.IsNotNull(contact.Phones);
             Assert.AreEqual(contact.Phones[0].DataSource, "Engage");

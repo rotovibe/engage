@@ -8,25 +8,27 @@ namespace Phytel.API.DataDomain.Contact.MongoDB.Repository
 {
     public static class PhoneVisitor
     {
-        public static void GetContactPhones(ref PutContactDataRequest request, ref MEContact meContact)
+        public static void GetContactPhones(List<PhoneData> phoneData, ref MEContact meContact)
         {
             try
             {
-                List<PhoneData> phoneData = request.Phones;
-                List<Phone> mePhones = phoneData.Select(p => new Phone
+                if (phoneData != null)
                 {
-                    Id = ObjectId.GenerateNewId(),
-                    Number = p.Number,
-                    IsText = p.IsText,
-                    TypeId = ObjectId.Parse(p.TypeId),
-                    PreferredPhone = p.PhonePreferred,
-                    PreferredText = p.TextPreferred,
-                    OptOut = p.OptOut,
-                    DeleteFlag = false,
-                    DataSource = p.DataSource
-                }).ToList();
+                    List<Phone> mePhones = phoneData.Select(p => new Phone
+                    {
+                        Id = ObjectId.GenerateNewId(),
+                        Number = p.Number,
+                        IsText = p.IsText,
+                        TypeId = ObjectId.Parse(p.TypeId),
+                        PreferredPhone = p.PhonePreferred,
+                        PreferredText = p.TextPreferred,
+                        OptOut = p.OptOut,
+                        DeleteFlag = false,
+                        DataSource = p.DataSource
+                    }).ToList();
 
-                meContact.Phones = mePhones;
+                    meContact.Phones = mePhones;
+                }
             }
             catch (Exception ex)
             {
