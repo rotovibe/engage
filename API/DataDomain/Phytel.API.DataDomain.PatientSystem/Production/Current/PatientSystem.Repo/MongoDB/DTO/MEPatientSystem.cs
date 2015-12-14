@@ -4,6 +4,7 @@ using Phytel.API.Interface;
 using Phytel.Services.Mongo.Linq;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System;
 
 namespace Phytel.API.DataDomain.PatientSystem.DTO
 {
@@ -18,12 +19,12 @@ namespace Phytel.API.DataDomain.PatientSystem.DTO
             Id = ObjectId.GenerateNewId();
         }
 
-        public MEPatientSystem(string userId)
+        public MEPatientSystem(string userId, DateTime? createdOn)
         {
             Id = ObjectId.GenerateNewId();
             Version = 1.0;
             RecordCreatedBy = ObjectId.Parse(userId);
-            RecordCreatedOn = System.DateTime.UtcNow;
+            RecordCreatedOn = createdOn == null || createdOn.Equals(new DateTime()) ? DateTime.UtcNow : (DateTime)createdOn;
         }
 
         public const string IdProperty = "_id";
@@ -68,6 +69,11 @@ namespace Phytel.API.DataDomain.PatientSystem.DTO
         [BsonElement(PrimaryProperty)]
         [BsonIgnoreIfNull(false)]
         public bool Primary { get; set; }
+
+        public const string ExternalRecordIdProperty = "extrid";
+        [BsonElement(ExternalRecordIdProperty)]
+        [BsonIgnoreIfNull(true)]
+        public string ExternalRecordId { get; set; }
 
         #region DeprecatedPropertiesOfPatientSystem.
         // They should be deleted after 1.3 release.

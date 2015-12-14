@@ -1,9 +1,12 @@
-using Phytel.API.DataDomain.PatientSystem.DTO;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Threading;
-using ServiceStack.Common.Extensions;
+using System.Configuration;
+using System.Linq;
+using System.Net;
+using Phytel.API.Common;
+using Phytel.API.DataDomain.PatientSystem.DTO;
+using Phytel.API.DataAudit;
+
 
 namespace Phytel.API.DataDomain.PatientSystem
 {
@@ -55,9 +58,22 @@ namespace Phytel.API.DataDomain.PatientSystem
             }
         }
 
-        public string InsertPatientSystem(InsertPatientSystemDataRequest request)
+        public List<PatientSystemData> GetPatientSystemsByIds(GetPatientSystemByIdsDataRequest request)
         {
-            string id = null;
+            try
+            {
+                var repo = Factory.GetRepository(RepositoryType.PatientSystem);
+                return repo.Select(request.Ids);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public PatientSystemData InsertPatientSystem(InsertPatientSystemDataRequest request)
+        {
+            PatientSystemData result = null;
             try
             {
                 if (request.PatientSystemsData != null)
@@ -71,9 +87,13 @@ namespace Phytel.API.DataDomain.PatientSystem
                         request.PatientSystemsData.StatusId = (int)Status.Active;
                         request.PatientSystemsData.DataSource = Constants.DataSource;
                     }
-                    id = (string)repo.Insert(request);
+                    string id = (string)repo.Insert(request);
+                    if (!string.IsNullOrEmpty(id))
+                    {
+                        result = (PatientSystemData)repo.FindByID(id);
+                    }
                 }
-                return id;
+                return result;
             }
             catch (Exception ex) { throw ex; }
         }
@@ -122,41 +142,75 @@ namespace Phytel.API.DataDomain.PatientSystem
             catch (Exception ex) { throw ex; }
         }
 
-        public List<string> InsertEngagePatientSystems(InsertEngagePatientSystemsDataRequest request)
+        public BulkInsertResult InsertBatchEngagePatientSystems(InsertBatchEngagePatientSystemsDataRequest request)
         {
-            List<string> ids = null;
+            BulkInsertResult result = null;
             try
             {
-                if (request.PatientSystemsData != null && request.PatientSystemsData.Count > 0)
+                if (request.PatientIds != null && request.PatientIds.Count > 0)
                 {
-                    ids = new List<string>();
                     var repo = Factory.GetRepository(RepositoryType.PatientSystem);
-                    request.PatientSystemsData.ForEach(p =>
+                    List<PatientSystemData> psList = new List<PatientSystemData>();
+                    bool status = isSystemPrimary(Constants.EngageSystemId);
+                    List<string> patientIds = request.PatientIds;
+                    patientIds.ForEach(p =>
                     {
-                        p.SystemId = Constants.EngageSystemId;
-                        p.Value = EngageId.New();
-                        p.Primary = isSystemPrimary(Constants.EngageSystemId);
-                        p.StatusId = (int)Status.Active;
-                        p.DataSource = Constants.DataSource;
-                        InsertPatientSystemDataRequest insertReq = new InsertPatientSystemDataRequest
+                        PatientSystemData ps = new PatientSystemData
                         {
-                            PatientId = p.PatientId,
-                            Context = request.Context,
-                            ContractNumber = request.ContractNumber,
-                            PatientSystemsData = p,
-                            UserId = request.UserId,
-                            Version = request.Version
+                            DataSource = Constants.DataSource,
+                            PatientId = p,
+                            Primary = status,
+                            StatusId = (int)Status.Active,
+                            SystemId = Constants.EngageSystemId,
+                            Value = EngageId.New()
                         };
-                        string id = (string)repo.Insert(insertReq);
-                        if (!string.IsNullOrEmpty(id))
-                        {
-                            ids.Add(id);
-                        }
+                        psList.Add(ps);
                     });
+                    result = (BulkInsertResult)repo.InsertAll(psList.Cast<object>().ToList());
                 }
-                return ids;
             }
             catch (Exception ex) { throw ex; }
+            return result;
+        }
+
+        public List<HttpObjectResponse<PatientSystemData>> InsertBatchPatientSystems(InsertBatchPatientSystemsDataRequest request)
+        {
+            List<HttpObjectResponse<PatientSystemData>> list = null;
+            try
+            { 
+                if (request.PatientSystemsData != null && request.PatientSystemsData.Count > 0)
+                {
+                    list = new List<HttpObjectResponse<PatientSystemData>>();
+                    var repo = Factory.GetRepository(RepositoryType.PatientSystem);
+                    BulkInsertResult result = (BulkInsertResult)repo.InsertAll(request.PatientSystemsData.Cast<object>().ToList());
+                    if (result != null)
+                    {
+                        if (result.ProcessedIds != null && result.ProcessedIds.Count > 0)
+                        {
+                            // Get the PatientSystems that were newly inserted. 
+                            List<PatientSystemData> insertedPatientSystems = repo.Select(result.ProcessedIds);
+                            if (insertedPatientSystems != null && insertedPatientSystems.Count > 0)
+                            {
+                                #region DataAudit
+                                List<string> insertedPatientSystemIds = insertedPatientSystems.Select(p => p.Id).ToList();
+                                AuditHelper.LogDataAudit(request.UserId, MongoCollectionName.PatientSystem.ToString(), insertedPatientSystemIds, Common.DataAuditType.Insert, request.ContractNumber);
+                                #endregion
+
+                                insertedPatientSystems.ForEach(r =>
+                                {
+                                    list.Add(new HttpObjectResponse<PatientSystemData> { Code = HttpStatusCode.Created, Body = (PatientSystemData)new PatientSystemData { Id = r.Id, ExternalRecordId = r.ExternalRecordId, PatientId = r.PatientId } });
+                                });
+                            }
+                        }
+                        result.ErrorMessages.ForEach(e =>
+                        {
+                            list.Add(new HttpObjectResponse<PatientSystemData> { Code = HttpStatusCode.InternalServerError, Message = e });
+                        });
+                    }
+                }
+            }
+            catch (Exception ex) { throw ex; }
+            return list;
         }
 
         public bool UpdatePatientSystem(UpdatePatientSystemDataRequest request)

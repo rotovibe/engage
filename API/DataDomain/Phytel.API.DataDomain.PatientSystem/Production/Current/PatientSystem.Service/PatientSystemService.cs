@@ -70,7 +70,7 @@ namespace Phytel.API.DataDomain.PatientSystem.Service
             try
             {
                 RequireUserId(request);
-                response.Id = Manager.InsertPatientSystem(request);
+                response.PatientSystemData = Manager.InsertPatientSystem(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
@@ -96,13 +96,45 @@ namespace Phytel.API.DataDomain.PatientSystem.Service
             return response;
         }
 
-        public InsertEngagePatientSystemsDataResponse Post(InsertEngagePatientSystemsDataRequest request)
+        public GetPatientSystemByIdsDataResponse Post(GetPatientSystemByIdsDataRequest request)
         {
-            InsertEngagePatientSystemsDataResponse response = new InsertEngagePatientSystemsDataResponse();
+            GetPatientSystemByIdsDataResponse response = new GetPatientSystemByIdsDataResponse();
             try
             {
                 RequireUserId(request);
-                response.Ids = Manager.InsertEngagePatientSystems(request);
+                response.PatientSystems = Manager.GetPatientSystemsByIds(request); 
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                RaiseException(response, ex);
+            }
+            return response;
+        }
+
+        public InsertBatchPatientSystemsDataResponse Post(InsertBatchPatientSystemsDataRequest request)
+        {
+            InsertBatchPatientSystemsDataResponse response = new InsertBatchPatientSystemsDataResponse();
+            try
+            {
+                RequireUserId(request);
+                response.Responses = Manager.InsertBatchPatientSystems(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                RaiseException(response, ex);
+            }
+            return response;
+        }
+
+        public InsertBatchEngagePatientSystemsDataResponse Post(InsertBatchEngagePatientSystemsDataRequest request)
+        {
+            InsertBatchEngagePatientSystemsDataResponse response = new InsertBatchEngagePatientSystemsDataResponse();
+            try
+            {
+                RequireUserId(request);
+                response.Result = Manager.InsertBatchEngagePatientSystems(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
