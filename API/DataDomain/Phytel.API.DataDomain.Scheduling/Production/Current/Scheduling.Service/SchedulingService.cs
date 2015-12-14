@@ -78,6 +78,27 @@ namespace Phytel.API.DataDomain.Scheduling.Service
             return response;
         }
 
+        public InsertBatchPatientToDosDataResponse Post(InsertBatchPatientToDosDataRequest request)
+        {
+            InsertBatchPatientToDosDataResponse response = new InsertBatchPatientToDosDataResponse();
+            try
+            {
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("SchedulingDD:Post()::Unauthorized Access");
+
+                response.Responses = Manager.InsertBatchPatientToDos(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+            }
+            return response;
+        }
+
         public RemoveProgramInToDosDataResponse Put(RemoveProgramInToDosDataRequest request)
         {
             RemoveProgramInToDosDataResponse response = new RemoveProgramInToDosDataResponse();

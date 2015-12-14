@@ -35,15 +35,19 @@ namespace Phytel.API.DataDomain.Scheduling
             {
                 if (todoData != null)
                 {
-                    meToDo = new METoDo(this.UserId)
+                    meToDo = new METoDo(this.UserId, todoData.CreatedOn)
                     {
                         Status = (Status)todoData.StatusId,
                         Priority = (Priority)todoData.PriorityId,
                         Description = todoData.Description,
                         Title = todoData.Title,
                         DueDate = todoData.DueDate,
+                        StartTime = todoData.StartTime,
+                        Duration = todoData.Duration,
                         ProgramIds = Helper.ConvertToObjectIdList(todoData.ProgramIds),
-                        DeleteFlag = false
+                        DeleteFlag = false,
+                        LastUpdatedOn = todoData.UpdatedOn,
+                        ExternalRecordId = todoData.ExternalRecordId
                     };
 
                     if (!string.IsNullOrEmpty(todoData.AssignedToId))
@@ -87,7 +91,74 @@ namespace Phytel.API.DataDomain.Scheduling
 
         public object InsertAll(List<object> entities)
         {
-            throw new NotImplementedException();
+            BulkInsertResult result = new BulkInsertResult();
+            List<string> insertedIds = new List<string>();
+            List<string> errorMessages = new List<string>();
+            try
+            {
+                using (SchedulingMongoContext ctx = new SchedulingMongoContext(_dbName))
+                {
+                    var bulk = ctx.ToDos.Collection.InitializeUnorderedBulkOperation();
+                    foreach (ToDoData t in entities)
+                    {
+                        METoDo meToDo = new METoDo(this.UserId, t.CreatedOn)
+                        {
+                            Status = (Status)t.StatusId,
+                            Priority = (Priority)t.PriorityId,
+                            Description = t.Description,
+                            Title = t.Title,
+                            DueDate = t.DueDate,
+                            StartTime = t.StartTime,
+                            Duration = t.Duration,
+                            ProgramIds = Helper.ConvertToObjectIdList(t.ProgramIds),
+                            DeleteFlag = false,
+                            LastUpdatedOn = t.UpdatedOn,
+                            ExternalRecordId = t.ExternalRecordId
+                        };
+
+                        if (!string.IsNullOrEmpty(t.AssignedToId))
+                        {
+                            meToDo.AssignedToId = ObjectId.Parse(t.AssignedToId);
+                        }
+                        if (!string.IsNullOrEmpty(t.CategoryId))
+                        {
+                            meToDo.Category = ObjectId.Parse(t.CategoryId);
+                        }
+                        if (!string.IsNullOrEmpty(t.PatientId))
+                        {
+                            meToDo.PatientId = ObjectId.Parse(t.PatientId);
+                        }
+                        if (!string.IsNullOrEmpty(t.SourceId))
+                        {
+                            meToDo.SourceId = ObjectId.Parse(t.SourceId);
+                        }
+                        if (t.ClosedDate != null)
+                        {
+                            meToDo.ClosedDate = t.ClosedDate;
+                        }
+                        bulk.Insert(meToDo.ToBsonDocument());
+                        insertedIds.Add(meToDo.Id.ToString());
+                    }
+                    BulkWriteResult bwr = bulk.Execute();
+                }
+                // TODO: Auditing.
+            }
+            catch (BulkWriteException bwEx)
+            {
+                // Get the error messages for the ones that failed.
+                foreach (BulkWriteError er in bwEx.WriteErrors)
+                {
+                    errorMessages.Add(er.Message);
+                }
+            }
+            catch (Exception ex)
+            {
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Helper.LogException(int.Parse(aseProcessID), ex);
+            }
+            result.ProcessedIds = insertedIds;
+            result.ErrorMessages = errorMessages;
+            return result;
         }
 
         public void Delete(object entity)
@@ -155,6 +226,8 @@ namespace Phytel.API.DataDomain.Scheduling
                             CreatedOn = meToDo.RecordCreatedOn,
                             Description = meToDo.Description,
                             DueDate = meToDo.DueDate,
+                            StartTime = meToDo.StartTime,
+                            Duration = meToDo.Duration,
                             Id = meToDo.Id.ToString(),
                             PatientId = meToDo.PatientId == null ? string.Empty : meToDo.PatientId.ToString(),
                             PriorityId = (int)meToDo.Priority,
@@ -162,6 +235,7 @@ namespace Phytel.API.DataDomain.Scheduling
                             StatusId = (int)meToDo.Status,
                             Title = meToDo.Title,
                             UpdatedOn = meToDo.LastUpdatedOn,
+                            ExternalRecordId  = meToDo.ExternalRecordId,
                             DeleteFlag = meToDo.DeleteFlag
                         };
                     }
@@ -234,6 +308,22 @@ namespace Phytel.API.DataDomain.Scheduling
                         {
                             uv.Add(MB.Update.Set(METoDo.DueDateProperty, BsonNull.Value));
                         }
+                        if (todoData.StartTime != null)
+                        {
+                            uv.Add(MB.Update.Set(METoDo.StartTimeProperty, todoData.StartTime));
+                        }
+                        else
+                        {
+                            uv.Add(MB.Update.Set(METoDo.StartTimeProperty, BsonNull.Value));
+                        }
+                        if (todoData.Duration != null)
+                        {
+                            uv.Add(MB.Update.Set(METoDo.DurationProperty, todoData.Duration));
+                        }
+                        else
+                        {
+                            uv.Add(MB.Update.Set(METoDo.DurationProperty, BsonNull.Value));
+                        }
                         if (todoData.ClosedDate != null)
                         {
                             uv.Add(MB.Update.Set(METoDo.ClosedDateProperty, todoData.ClosedDate));
@@ -274,6 +364,14 @@ namespace Phytel.API.DataDomain.Scheduling
                         else
                         {
                             uv.Add(MB.Update.Set(METoDo.AssignedToProperty, BsonNull.Value));
+                        }
+                        if (!string.IsNullOrEmpty(todoData.ExternalRecordId))
+                        {
+                            uv.Add(MB.Update.Set(METoDo.ExternalRecordIdProperty, todoData.ExternalRecordId));
+                        }
+                        else
+                        {
+                            uv.Add(MB.Update.Set(METoDo.ExternalRecordIdProperty, BsonNull.Value));
                         }
                         uv.Add(MB.Update.Set(METoDo.DeleteFlagProperty, todoData.DeleteFlag));
                         DataAuditType type;
@@ -400,6 +498,8 @@ namespace Phytel.API.DataDomain.Scheduling
                                 CreatedOn = t.RecordCreatedOn,
                                 Description = t.Description,
                                 DueDate = t.DueDate,
+                                StartTime = t.StartTime,
+                                Duration = t.Duration,
                                 Id = t.Id.ToString(),
                                 PatientId = t.PatientId == null ? string.Empty : t.PatientId.ToString(),
                                 PriorityId = (int)t.Priority,
@@ -407,14 +507,19 @@ namespace Phytel.API.DataDomain.Scheduling
                                 StatusId = (int)t.Status,
                                 Title = t.Title,
                                 UpdatedOn = t.LastUpdatedOn, 
-                                DeleteFlag = t.DeleteFlag
+                                DeleteFlag = t.DeleteFlag,
+                                ExternalRecordId = t.ExternalRecordId,
+                                SourceId = t.SourceId.ToString()
                             });
                         }
                     }
                 }
                 return todoList;
             }
-            catch (Exception) { throw; }
+            catch (Exception ex)
+            {
+                throw new Exception("DD:MongoToDoRepository:FindToDos()::" + ex.Message, ex.InnerException);
+            }
         }
 
         public void RemoveProgram(object entity, List<string> updatedProgramIds)
@@ -479,6 +584,79 @@ namespace Phytel.API.DataDomain.Scheduling
                 return dataList;
             }
             catch (Exception ex) { throw ex; }
+        }
+
+        public object FindByExternalRecordId(string externalRecordId)
+        {
+            ToDoData data = null;
+            try
+            {
+                using (SchedulingMongoContext ctx = new SchedulingMongoContext(_dbName))
+                {
+                    List<IMongoQuery> queries = new List<IMongoQuery>();
+                    queries.Add(Query.EQ(METoDo.ExternalRecordIdProperty, externalRecordId));
+                    queries.Add(Query.EQ(METoDo.DeleteFlagProperty, false));
+                    queries.Add(Query.EQ(METoDo.TTLDateProperty, BsonNull.Value));
+                    IMongoQuery mQuery = Query.And(queries);
+                    METoDo mePN = ctx.ToDos.Collection.Find(mQuery).FirstOrDefault();
+                    if (mePN != null)
+                    {
+                        data = new ToDoData
+                        {
+                            Id = mePN.Id.ToString(),
+                        };
+                    }
+                }
+                return data;
+            }
+            catch (Exception) { throw; }
+        }
+
+        public IEnumerable<object> Select(List<string> ids)
+        {
+            List<ToDoData> dataList = null;
+            try
+            {
+                using (SchedulingMongoContext ctx = new SchedulingMongoContext(_dbName))
+                {
+                    List<IMongoQuery> queries = new List<IMongoQuery>();
+                    queries.Add(Query.In(METoDo.IdProperty, new BsonArray(Helper.ConvertToObjectIdList(ids))));
+                    queries.Add(Query.EQ(METoDo.DeleteFlagProperty, false));
+                    queries.Add(Query.EQ(METoDo.TTLDateProperty, BsonNull.Value));
+                    IMongoQuery mQuery = Query.And(queries);
+                    List<METoDo> meToDos = ctx.ToDos.Collection.Find(mQuery).ToList();
+                    if (meToDos != null && meToDos.Count > 0)
+                    {
+                        dataList = new List<ToDoData>();
+                        foreach (METoDo t in meToDos)
+                        {
+                            dataList.Add(new ToDoData
+                            {
+                                Id = t.Id.ToString(),
+                                PatientId = t.PatientId == null ? string.Empty : t.PatientId.ToString(),
+                                PriorityId = (int)t.Priority,
+                                ProgramIds = Helper.ConvertToStringList(t.ProgramIds),
+                                StatusId = (int)t.Status,
+                                Title = t.Title,
+                                UpdatedOn = t.LastUpdatedOn,
+                                ExternalRecordId = t.ExternalRecordId,
+                                DeleteFlag = t.DeleteFlag,
+                                AssignedToId = t.AssignedToId == null ? string.Empty : t.AssignedToId.ToString(),
+                                CategoryId = t.Category.ToString(),
+                                ClosedDate = t.ClosedDate,
+                                CreatedById = t.RecordCreatedBy.ToString(),
+                                CreatedOn = t.RecordCreatedOn,
+                                Description = t.Description,
+                                DueDate = t.DueDate,
+                                StartTime = t.StartTime,
+                                Duration = t.Duration
+                            });
+                        }
+                    }
+                }
+                return dataList as IEnumerable<object>;
+            }
+            catch (Exception) { throw; }
         }
     }
 }

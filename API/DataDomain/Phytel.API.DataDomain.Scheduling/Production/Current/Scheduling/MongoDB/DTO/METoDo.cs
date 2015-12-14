@@ -15,11 +15,11 @@ namespace Phytel.API.DataDomain.Scheduling
     [MongoIndex(Keys = new string[] { PatientIdProperty, DeleteFlagProperty }, Unique = false)]
     public class METoDo : IMongoEntity<ObjectId>, IMEEntity
     {
-        public METoDo(string userId)
+        public METoDo(string userId, DateTime? createdOn)
         {
             Id = ObjectId.GenerateNewId();
             RecordCreatedBy = ObjectId.Parse(userId);
-            RecordCreatedOn = System.DateTime.UtcNow;
+            RecordCreatedOn = createdOn == null || createdOn.Equals(new DateTime()) ? DateTime.UtcNow : (DateTime)createdOn;
             Version = 1.0;
         }
 
@@ -33,6 +33,8 @@ namespace Phytel.API.DataDomain.Scheduling
         public const string CatgegoryProperty = "cat";
         public const string PriorityProperty = "pri";
         public const string DueDateProperty = "dd";
+        public const string StartTimeProperty = "sd";
+        public const string DurationProperty = "dur";
         public const string ClosedDateProperty = "cd";
 
         #region Standard IMongoEntity Constants
@@ -78,6 +80,14 @@ namespace Phytel.API.DataDomain.Scheduling
         [BsonIgnoreIfNull(true)]
         public DateTime? DueDate { get; set; }
 
+        [BsonElement(StartTimeProperty)]
+        [BsonIgnoreIfNull(true)]
+        public DateTime? StartTime { get; set; }
+        
+        [BsonElement(DurationProperty)]
+        [BsonIgnoreIfNull(true)]
+        public int? Duration { get; set; }
+
         [BsonElement(ClosedDateProperty)]
         [BsonIgnoreIfNull(true)]
         public DateTime? ClosedDate { get; set; }
@@ -93,6 +103,11 @@ namespace Phytel.API.DataDomain.Scheduling
         [BsonElement(PriorityProperty)]
         [BsonIgnoreIfNull(true)]
         public Priority Priority { get; set; }
+
+        public const string ExternalRecordIdProperty = "extrid";
+        [BsonElement(ExternalRecordIdProperty)]
+        [BsonIgnoreIfNull(true)]
+        public string ExternalRecordId { get; set; }
 
         #region Standard IMongoEntity Implementation
 
