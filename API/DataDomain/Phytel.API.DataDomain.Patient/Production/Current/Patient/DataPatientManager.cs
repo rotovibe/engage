@@ -1,23 +1,24 @@
-using Phytel.API.DataDomain.Patient.DTO;
-using System.Data.SqlClient;
-using Phytel.API.DataDomain.Patient;
 using System;
-using System.Configuration;
-using ServiceStack.ServiceClient.Web;
-using Phytel.API.DataDomain.Cohort.DTO;
 using System.Collections.Generic;
-using Phytel.API.Interface;
+using System.Configuration;
 using System.Linq;
-using ServiceStack.Service;
+using System.Net;
 using Phytel.API.Common;
+using Phytel.API.DataDomain.Cohort.DTO;
+using Phytel.API.DataDomain.Patient.DTO;
 using Phytel.API.DataDomain.PatientSystem.DTO;
+using Phytel.API.Interface;
+using ServiceStack.Service;
+using ServiceStack.ServiceClient.Web;
+using Phytel.API.DataAudit;
+
 
 namespace Phytel.API.DataDomain.Patient
 {
     public class PatientDataManager : IPatientDataManager
     {
         public IPatientRepositoryFactory Factory { get; set; }
-        public IHelpers Helpers { get; set; }
+        public Phytel.API.Common.IHelpers Helpers { get; set; }
 
         public GetCohortPatientsDataResponse GetCohortPatients(GetCohortPatientsDataRequest request)
         {
@@ -125,11 +126,20 @@ namespace Phytel.API.DataDomain.Patient
         {
             try
             {
+                GetPatientsDataResponse response = new GetPatientsDataResponse();
+                Dictionary<string, PatientData> patients = null;
                 IPatientRepository repo = Factory.GetRepository(request, RepositoryType.Patient);
-
-                GetPatientsDataResponse result = repo.Select(request.PatientIds);
-
-                return result;
+                List<PatientData> list = repo.Select(request.PatientIds);
+                if (list != null && list.Count > 0)
+                {
+                    patients = new Dictionary<string, PatientData>();
+                    list.ForEach( p =>
+                    {
+                        patients.Add(p.Id, p);
+                    });
+                }
+                response.Patients = patients;
+                return response;
             }
             catch (Exception)
             {
@@ -158,7 +168,11 @@ namespace Phytel.API.DataDomain.Patient
             if (!string.IsNullOrEmpty(result.Id))
             {
                 //Create Engage system record for the newly created patient in PatientSystem collection.
-                result.EngagePatientSystemId = insertEngagePatientSystem(result.Id, request);
+                PatientSystemData data = insertEngagePatientSystem(result.Id, request);
+                if (data != null)
+                {
+                    result.EngagePatientSystemId = data.Id;
+                }
             }
             return result;
         }
@@ -308,6 +322,124 @@ namespace Phytel.API.DataDomain.Patient
             return result;
         }
 
+        public InsertBatchPatientsDataResponse InsertBatchPatients(InsertBatchPatientsDataRequest request)
+        {
+            InsertBatchPatientsDataResponse response = new InsertBatchPatientsDataResponse();
+            if (request.PatientsData != null && request.PatientsData.Count > 0)
+            {
+                List<HttpObjectResponse<PatientData>> list = new List<HttpObjectResponse<PatientData>>();
+                IPatientRepository repo = Factory.GetRepository(request, RepositoryType.Patient);
+                BulkInsertResult result = (BulkInsertResult)repo.InsertAll(request.PatientsData.Cast<object>().ToList());
+                if (result != null)
+                {
+                    if(result.ProcessedIds != null && result.ProcessedIds.Count > 0)
+                    {
+                        // Get the patients that were newly inserted. 
+                        List<PatientData> insertedPatients = repo.Select(result.ProcessedIds);
+                        if (insertedPatients != null && insertedPatients.Count > 0)
+                        {
+                            List<string> insertedPatientIds = insertedPatients.Select(p => p.Id).ToList();
+
+                            #region DataAudit for Patients
+                            AuditHelper.LogDataAudit(request.UserId, MongoCollectionName.Patient.ToString(), insertedPatientIds, Common.DataAuditType.Insert, request.ContractNumber);
+                            #endregion
+
+                            #region BulkInsert CohortPatientView
+                            List<CohortPatientViewData> cpvList = getMECohortPatientView(insertedPatients);
+                            IPatientRepository cpvRepo = Factory.GetRepository(request, RepositoryType.CohortPatientView);
+                            cpvRepo.InsertAll(cpvList.Cast<object>().ToList()); 
+                            #endregion
+
+                            #region BulkInsert EngagePatientSystems.
+                            List<string> processedPatientSystemIds = insertBatchEngagePatientSystem(insertedPatientIds, request);
+                            List<PatientSystemData> insertedPatientSystems = getPatientSystems(processedPatientSystemIds, request);
+
+                            #region DataAudit for EngagePatientSystems
+                            List<string> insertedPatientSystemIds = insertedPatientSystems.Select(p => p.Id).ToList();
+                            AuditHelper.LogDataAudit(request.UserId, MongoCollectionName.PatientSystem.ToString(), insertedPatientSystemIds, Common.DataAuditType.Insert, request.ContractNumber);
+                            #endregion
+
+                            insertedPatients.ForEach(r =>
+                            {
+                                string engageValue = string.Empty;
+                                var x = insertedPatientSystems.Where(s => s.PatientId == r.Id).FirstOrDefault();
+                                if (x != null)
+                                    engageValue = x.Value;
+                                list.Add(new HttpObjectResponse<PatientData> { Code = HttpStatusCode.Created, Body = (PatientData)new PatientData { Id = r.Id, ExternalRecordId = r.ExternalRecordId, EngagePatientSystemValue = engageValue } });
+                            }); 
+                            #endregion
+                        }
+                    }
+                    result.ErrorMessages.ForEach(e =>
+                    {
+                        list.Add(new HttpObjectResponse<PatientData> { Code = HttpStatusCode.InternalServerError, Message = e });
+                    });
+                }
+                response.Responses = list;
+            }
+            
+            return response;
+        }
+
+        private List<PatientSystemData> getPatientSystems(List<string> processedPatientSystemIds, IDataDomainRequest request)
+        {
+            List<PatientSystemData> psData = new List<PatientSystemData>();
+            try
+            {
+                if (processedPatientSystemIds != null && processedPatientSystemIds.Count > 0)
+                {
+                    GetPatientSystemByIdsDataRequest psRequest = new GetPatientSystemByIdsDataRequest
+                    {
+                        Ids = processedPatientSystemIds,
+                        Context = request.Context,
+                        ContractNumber = request.ContractNumber,
+                        UserId = request.UserId,
+                        Version = request.Version
+                    };
+
+                    string DDPatientSystemServiceUrl = ConfigurationManager.AppSettings["DDPatientSystemServiceUrl"];
+                    IRestClient client = new JsonServiceClient();
+                    //[Route("/{Context}/{Version}/{ContractNumber}/PatientSystems/Ids", "POST")]
+                    string url = Helpers.BuildURL(string.Format("{0}/{1}/{2}/{3}/PatientSystems/Ids", DDPatientSystemServiceUrl, psRequest.Context, psRequest.Version, psRequest.ContractNumber), psRequest.UserId);
+                    GetPatientSystemByIdsDataResponse dataDomainResponse = client.Post<GetPatientSystemByIdsDataResponse>(url, psRequest as object);
+                    if (dataDomainResponse != null)
+                    {
+                        psData = dataDomainResponse.PatientSystems;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return psData;
+        }
+
+        private List<CohortPatientViewData> getMECohortPatientView(List<PatientData> patients)
+        {
+            List<CohortPatientViewData> list = new List<CohortPatientViewData>();
+            foreach(var p in patients)
+            { 
+                List<SearchFieldData> data = new List<SearchFieldData>();
+                data.Add(new SearchFieldData { Active = true, FieldName = Constants.FN, Value = p.FirstName });
+                data.Add(new SearchFieldData { Active = true, FieldName = Constants.LN, Value = p.LastName });
+                data.Add(new SearchFieldData { Active = true, FieldName = Constants.G, Value = p.Gender.ToUpper() });
+                data.Add(new SearchFieldData { Active = true, FieldName = Constants.DOB, Value = p.DOB });
+                data.Add(new SearchFieldData { Active = true, FieldName = Constants.MN, Value = p.MiddleName });
+                data.Add(new SearchFieldData { Active = true, FieldName = Constants.SFX, Value = p.Suffix });
+                data.Add(new SearchFieldData { Active = true, FieldName = Constants.PN, Value = p.PreferredName });
+                data.Add(new SearchFieldData { Active = true, FieldName = Constants.PCM }); //value left null on purpose 
+                CohortPatientViewData cpvData = new CohortPatientViewData
+                {
+                    PatientID = p.Id,
+                    LastName = p.LastName,
+                    SearchFields = data,
+                };
+                list.Add(cpvData);
+            };
+            return list;
+        }
+
         #region Delete
         public DeletePatientDataResponse DeletePatient(DeletePatientDataRequest request)
         {
@@ -436,10 +568,10 @@ namespace Phytel.API.DataDomain.Patient
         /// Calls PatientSystem data domain to insert an Engage System record for the newly created patient.
         /// </summary>
         /// <param name="request">IDataDomainRequest object</param>
-        /// <returns>Id of the Engage patient system.</returns>
-        private string insertEngagePatientSystem(string patientId, IDataDomainRequest request)
+        /// <returns>PatientSystemData object.</returns>
+        private PatientSystemData insertEngagePatientSystem(string patientId, IDataDomainRequest request)
         {
-            string id = null;
+            PatientSystemData data = null;
             try
             {
                 InsertPatientSystemDataRequest psRequest = new InsertPatientSystemDataRequest
@@ -458,16 +590,55 @@ namespace Phytel.API.DataDomain.Patient
                 //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/PatientSystem", "POST")]
                 string url = Helpers.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/PatientSystem", DDPatientSystemServiceUrl, psRequest.Context, psRequest.Version, psRequest.ContractNumber, psRequest.PatientId), psRequest.UserId);
                 InsertPatientSystemDataResponse dataDomainResponse = client.Post<InsertPatientSystemDataResponse>(url, psRequest as object);
-                if (dataDomainResponse != null && !string.IsNullOrEmpty(dataDomainResponse.Id))
+                if (dataDomainResponse != null)
                 {
-                    id = dataDomainResponse.Id;
+                    data = dataDomainResponse.PatientSystemData;
                 }
             }
             catch (Exception ex)
             {
                 throw ex;
             }
-            return id;
+            return data;
+        }
+
+        /// <summary>
+        /// Calls PatientSystem data domain to insert bulk Engage System records for the provided patient ids.
+        /// </summary>
+        /// <param name="request">IDataDomainRequest object</param>
+        /// <returns>List of ids of the engage patient systems inserted.</returns>
+        private List<string> insertBatchEngagePatientSystem(List<string> patientIds, IDataDomainRequest request)
+        {
+            List<string> ids = null;
+            try
+            {
+                if(patientIds != null && patientIds.Count > 0)
+                {
+                    InsertBatchEngagePatientSystemsDataRequest psRequest = new InsertBatchEngagePatientSystemsDataRequest
+                    {
+                        PatientIds = patientIds,
+                        Context = request.Context,
+                        ContractNumber = request.ContractNumber,
+                        UserId = Constants.SystemContactId,// the requirement says that the engage Id should have createdby user as 'system'.
+                        Version = request.Version
+                    };
+
+                    string DDPatientSystemServiceUrl = ConfigurationManager.AppSettings["DDPatientSystemServiceUrl"];
+                    IRestClient client = new JsonServiceClient();
+                    //[Route("/{Context}/{Version}/{ContractNumber}/Batch/Engage/PatientSystems", "POST")]
+                    string url = Helpers.BuildURL(string.Format("{0}/{1}/{2}/{3}/Batch/Engage/PatientSystems", DDPatientSystemServiceUrl, psRequest.Context, psRequest.Version, psRequest.ContractNumber), psRequest.UserId);
+                    InsertBatchEngagePatientSystemsDataResponse dataDomainResponse = client.Post<InsertBatchEngagePatientSystemsDataResponse>(url, psRequest as object);
+                    if (dataDomainResponse != null && dataDomainResponse.Result != null)
+                    {
+                        ids = dataDomainResponse.Result.ProcessedIds;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return ids;
         }
     }
 }   

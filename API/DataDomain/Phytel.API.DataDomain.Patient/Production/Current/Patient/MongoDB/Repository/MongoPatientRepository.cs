@@ -12,6 +12,7 @@ using Phytel.API.DataDomain.Patient.DTO;
 using Phytel.Services;
 using MB = MongoDB.Driver.Builders;
 using MongoDB.Bson.Serialization;
+using System.Net;
 
 namespace Phytel.API.DataDomain.Patient
 {
@@ -78,9 +79,8 @@ namespace Phytel.API.DataDomain.Patient
 
                     if (patient == null)
                     {
-                        patient = new MEPatient(this.UserId)
+                        patient = new MEPatient(this.UserId, pd.RecordCreatedOn)
                         {
-                            Id = ObjectId.GenerateNewId(),
                             FirstName = pd.FirstName,
                             LastName = pd.LastName,
                             MiddleName = pd.MiddleName,
@@ -97,7 +97,9 @@ namespace Phytel.API.DataDomain.Patient
                             Status = (Status)pd.StatusId,
                             StatusDataSource  = Helper.TrimAndLimit(pd.StatusDataSource, 50),
                             Protected = pd.Protected,
-                            Deceased = (Deceased)pd.DeceasedId
+                            Deceased = (Deceased)pd.DeceasedId,
+                            LastUpdatedOn = pd.LastUpdatedOn,
+                            ExternalRecordId = pd.ExternalRecordId
                         };
                         if(!string.IsNullOrEmpty(pd.ReasonId))
                         {
@@ -153,7 +155,7 @@ namespace Phytel.API.DataDomain.Patient
             }
         }
 
-        public string FormatSystem(string p)
+        private string formatSystem(string p)
         {
             var val = p;
             if (!string.IsNullOrEmpty(p) && p.Length > 50)
@@ -165,7 +167,75 @@ namespace Phytel.API.DataDomain.Patient
 
         public object InsertAll(List<object> entities)
         {
-            throw new NotImplementedException();
+            BulkInsertResult result = new BulkInsertResult();
+            List<string> insertedIds = new List<string>();
+            List<string> errorMessages = new List<string>();
+            try
+            {
+                using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
+                {
+                    var bulk = ctx.Patients.Collection.InitializeUnorderedBulkOperation();
+                    foreach (PatientData pd in entities)
+                    {
+                        MEPatient meP = new MEPatient(this.UserId, pd.RecordCreatedOn)
+                        {
+                            //Id = ObjectId.Parse("561ea745d43325133cf09a6d"),
+                            FirstName = pd.FirstName,
+                            LastName = pd.LastName,
+                            MiddleName = pd.MiddleName,
+                            Suffix = pd.Suffix,
+                            PreferredName = pd.PreferredName,
+                            Gender = pd.Gender,
+                            DOB = pd.DOB,
+                            Background = pd.Background,
+                            ClinicalBackground = pd.ClinicalBackground,
+                            TTLDate = null,
+                            DeleteFlag = false,
+                            DataSource = Helper.TrimAndLimit(pd.DataSource, 50),
+                            Status = (Status)pd.StatusId,
+                            StatusDataSource = Helper.TrimAndLimit(pd.StatusDataSource, 50),
+                            Protected = pd.Protected,
+                            Deceased = (Deceased)pd.DeceasedId,
+                            FullSSN = pd.FullSSN,
+                            LastFourSSN = pd.LastFourSSN,
+                            LastUpdatedOn = pd.LastUpdatedOn,
+                            ExternalRecordId = pd.ExternalRecordId,
+                        };
+                        if (!string.IsNullOrEmpty(pd.ReasonId))
+                        {
+                            meP.ReasonId = ObjectId.Parse(pd.ReasonId);
+                        }
+                        if (!string.IsNullOrEmpty(pd.MaritalStatusId))
+                        {
+                            meP.MaritalStatusId = ObjectId.Parse(pd.MaritalStatusId);
+                        }
+                        if (!string.IsNullOrEmpty(pd.UpdatedByProperty))
+                        {
+                            meP.UpdatedBy = ObjectId.Parse(pd.UpdatedByProperty);
+                        }
+                        bulk.Insert(meP.ToBsonDocument());
+                        insertedIds.Add(meP.Id.ToString());
+                    }
+                    BulkWriteResult bwr = bulk.Execute();
+                }
+                // TODO: Auditing.
+            }
+            catch (BulkWriteException bwEx)
+            {
+                // Get the error messages for the ones that failed.
+                foreach (BulkWriteError er in bwEx.WriteErrors)
+                {
+                    errorMessages.Add(er.Message);
+                }
+            }
+            catch (Exception ex)
+            {
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Helper.LogException(int.Parse(aseProcessID), ex);
+            }
+            result.ProcessedIds = insertedIds;
+            result.ErrorMessages = errorMessages;
+            return result;
         }
 
         public void Delete(object entity)
@@ -239,13 +309,14 @@ namespace Phytel.API.DataDomain.Patient
                         Background = mePatient.Background,
                         ClinicalBackground = mePatient.ClinicalBackground,
                         LastFourSSN = mePatient.LastFourSSN,
-                        DataSource = FormatSystem(mePatient.DataSource),
+                        DataSource = formatSystem(mePatient.DataSource),
                         StatusDataSource = mePatient.StatusDataSource,
                         ReasonId = mePatient.ReasonId == null ? null : mePatient.ReasonId.ToString(),
                         MaritalStatusId = mePatient.MaritalStatusId == null ? null : mePatient.MaritalStatusId.ToString(),
                         Protected = mePatient.Protected,
                         DeceasedId = (int)mePatient.Deceased,
-                        StatusId = (int)mePatient.Status
+                        StatusId = (int)mePatient.Status,
+                        ExternalRecordId = mePatient.ExternalRecordId
                     };
                     if (!string.IsNullOrEmpty(userId))
                     {
@@ -300,7 +371,7 @@ namespace Phytel.API.DataDomain.Patient
 
         public object GetSSN(string patientId)
         {
-            string ssn = string.Empty;
+            string ssn = null;
             using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
             {
                 IMongoQuery query = Query.And(
@@ -312,7 +383,8 @@ namespace Phytel.API.DataDomain.Patient
                 if (mePatient != null)
                 {
                     DataProtector protector = new DataProtector(Services.DataProtector.Store.USE_SIMPLE_STORE);
-                    ssn = protector.Decrypt(mePatient.FullSSN);  
+                    if(!string.IsNullOrEmpty(mePatient.FullSSN))
+                        ssn = protector.Decrypt(mePatient.FullSSN);  
                 }
             }
             return ssn;
@@ -355,22 +427,22 @@ namespace Phytel.API.DataDomain.Patient
             throw new NotImplementedException();
         }
 
-        public GetPatientsDataResponse Select(List<string> patientIds)
+        public List<PatientData> Select(List<string> patientIds)
         {
-            Dictionary<string, PatientData> response = null;
-            GetPatientsDataResponse pdResponse = new GetPatientsDataResponse();
+            List<PatientData> pList = null;
             try
             {
                 using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
                 {
                     List<IMongoQuery> queries = new List<IMongoQuery>();
-                    queries.Add(Query.In(MEPatientUser.IdProperty, new BsonArray(Helper.ConvertToObjectIdList(patientIds))));
-                    queries.Add(Query.EQ(MEPatientUser.DeleteFlagProperty, false));
+                    queries.Add(Query.In(MEPatient.IdProperty, new BsonArray(Helper.ConvertToObjectIdList(patientIds))));
+                    queries.Add(Query.EQ(MEPatient.DeleteFlagProperty, false));
+                    queries.Add(Query.EQ(MEPatient.TTLDateProperty, BsonNull.Value));
                     IMongoQuery mQuery = Query.And(queries);
                     List<MEPatient> mePatients = ctx.Patients.Collection.Find(mQuery).ToList();
                     if(mePatients != null && mePatients.Count > 0)
                     {
-                        response = new Dictionary<string, PatientData>();
+                        pList = new List<PatientData>();
                         foreach (MEPatient meP in mePatients)
                         {
                             PatientData data = new PatientData
@@ -389,20 +461,20 @@ namespace Phytel.API.DataDomain.Patient
                                 Background = meP.Background,
                                 ClinicalBackground = meP.ClinicalBackground,
                                 LastFourSSN = meP.LastFourSSN,
-                                DataSource = FormatSystem(meP.DataSource),
+                                DataSource = formatSystem(meP.DataSource),
                                 StatusDataSource = meP.StatusDataSource,
                                 ReasonId = meP.ReasonId == null ? null : meP.ReasonId.ToString(),
                                 StatusId = (int)meP.Status,
                                 MaritalStatusId = meP.MaritalStatusId == null ? null : meP.MaritalStatusId.ToString(),
                                 Protected = meP.Protected,
                                 DeceasedId = (int)meP.Deceased,
+                                ExternalRecordId = meP.ExternalRecordId
                             };
-                            response.Add(data.Id, data);
+                            pList.Add(data);
                         }
                     }   
                 }
-                pdResponse.Patients = response;      
-                return pdResponse;
+                return pList;
             }
             catch (Exception) { throw; }
         }
@@ -415,8 +487,8 @@ namespace Phytel.API.DataDomain.Patient
                 using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
                 {
                     List<IMongoQuery> queries = new List<IMongoQuery>();
-                    queries.Add(Query.EQ(MEPatientUser.DeleteFlagProperty, false));
-                    queries.Add(Query.EQ(MEPatientUser.TTLDateProperty, BsonNull.Value));
+                    queries.Add(Query.EQ(MEPatient.DeleteFlagProperty, false));
+                    queries.Add(Query.EQ(MEPatient.TTLDateProperty, BsonNull.Value));
                     IMongoQuery mQuery = Query.And(queries);
                     List<MEPatient> mePatients = ctx.Patients.Collection.Find(mQuery).ToList();
                     if (mePatients != null && mePatients.Count > 0)
@@ -617,12 +689,8 @@ namespace Phytel.API.DataDomain.Patient
                                 if (fullSSN.Length == 9)
                                 {
                                     // Save the last 4 digits in LastFourSSN field.
-                                    int lastFourSSN;
-                                    if (int.TryParse(fullSSN.Substring(5, 4), out lastFourSSN))
-                                    {
-                                        updt.Set(MEPatient.LastFourSSNProperty, lastFourSSN);
-                                    }
-
+                                    string lastFourSSN = fullSSN.Substring(5, 4);
+                                    updt.Set(MEPatient.LastFourSSNProperty, lastFourSSN);
                                     // Save the full SSN in the encrypted form.
                                     DataProtector protector = new DataProtector(Services.DataProtector.Store.USE_SIMPLE_STORE);
                                     string encryptedSSN = protector.Encrypt(fullSSN);
@@ -673,6 +741,14 @@ namespace Phytel.API.DataDomain.Patient
                     if (request.PatientData.StatusDataSource != null)
                     {
                         updt.Set(MEPatient.StatusDataSourceProperty, Helper.TrimAndLimit(request.PatientData.StatusDataSource, 50));
+                    }
+                    if (!string.IsNullOrEmpty(request.PatientData.ExternalRecordId))
+                    {
+                        updt.Set(MEPatient.ExternalRecordIdProperty, request.PatientData.ExternalRecordId);
+                    }
+                    else
+                    {
+                        updt.Set(MEPatient.ExternalRecordIdProperty, BsonNull.Value);
                     }
                     updt.Set(MEPatient.UpdatedByProperty, ObjectId.Parse(this.UserId));
                     updt.Set(MEPatient.VersionProperty, request.Version);
@@ -873,7 +949,7 @@ namespace Phytel.API.DataDomain.Patient
             PatientData patientData = null;
             try
             {
-                MEPatient meP = new MEPatient(this.UserId)
+                MEPatient meP = new MEPatient(this.UserId, null)
                 {
                     Id = ObjectId.GenerateNewId(),
                     TTLDate = System.DateTime.UtcNow.AddDays(_initializeDays)

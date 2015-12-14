@@ -34,13 +34,14 @@ namespace Phytel.API.DataDomain.Patient
             #endregion
 
         }
+
         public MongoPatientUserRepository(string contractDBName)
         {
             _dbName = contractDBName;
         }
 
 
-        public GetPatientsDataResponse Select(List<string> patientIds)
+        public List<PatientData> Select(List<string> patientIds)
         {
             throw new NotImplementedException();
         }

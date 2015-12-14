@@ -150,5 +150,10 @@ namespace Phytel.API.DataDomain.Patient.Test.Stub
         {
             throw new NotImplementedException();
         }
+
+        List<PatientData> IPatientRepository.Select(List<string> patientIds)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
