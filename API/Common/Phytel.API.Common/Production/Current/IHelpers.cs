@@ -10,5 +10,7 @@ namespace Phytel.API.Common
         System.Collections.Generic.List<string> ConvertToStringList(System.Collections.Generic.List<MongoDB.Bson.ObjectId> objectIds);
         void LogException(int processId, Exception ex);
         string TrimAndLimit(string value, int limit);
+        void SerializeObject<T>(T obj, string filePath);
+        object DeserializeObject<T>(string filePath);
     }
 }
