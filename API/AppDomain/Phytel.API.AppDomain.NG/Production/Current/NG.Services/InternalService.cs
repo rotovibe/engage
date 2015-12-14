@@ -27,45 +27,5 @@ namespace Phytel.API.AppDomain.NG.Service
 
         private const string unknownBrowserType = "Unknown browser";
         private const string unknownUserHostAddress = "Unknown IP";
-
-        public UpdatePatientsAndSystemsResponse Get(UpdatePatientsAndSystemsRequest request)
-        {
-            UpdatePatientsAndSystemsResponse response = new UpdatePatientsAndSystemsResponse();
-            ValidateTokenResponse result = null;
-            try
-            {
-                if (base.Request != null)
-                {
-                    request.Token = base.Request.Headers["Token"] as string;
-                }
-                result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
-                if (result.UserId.Trim() != string.Empty)
-                {
-                    ServiceContext.UserId = result.UserId;
-                    ServiceContext.Tag = request.Migrate;
-                    var val = PatientSystemManager.UpdatePatientAndSystemsData(ServiceContext);
-                    response.Message = val;
-                }
-                else
-                    throw new UnauthorizedAccessException();
-            }
-            catch (Exception ex)
-            {
-                CommonFormatterUtil.FormatExceptionResponse(response, base.Response, ex);
-                if ((ex is WebServiceException) == false)
-                    PatientSystemManager.LogException(ex);
-            }
-            finally
-            {
-                if (result != null)
-                {
-                    string browser = (base.Request != null) ? base.Request.UserAgent : unknownBrowserType;
-                    string hostAddress = (base.Request != null) ? base.Request.UserHostAddress : unknownUserHostAddress;
-                    AuditUtil.LogAuditData(request, result.SQLUserId, null, browser, hostAddress, request.GetType().Name);
-                }
-            }
-
-            return response;
-        }
     }
 }

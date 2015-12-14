@@ -16,7 +16,7 @@ namespace Phytel.API.AppDomain.NG.DTO
         public string OutcomeId { get; set; }
         public string WhoId { get; set; }
         public string SourceId { get; set; }
-        public string DurationId { get; set; }
+        public int? Duration { get; set; }
         public DateTime? ContactedOn { get; set; }
         public bool ValidatedIdentity { get; set; }
         public DateTime? UpdatedOn { get; set; }

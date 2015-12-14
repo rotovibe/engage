@@ -64,7 +64,7 @@ namespace Phytel.API.AppDomain.NG
                     request.ContractNumber,
                     request.PatientId,
                     request.PatientGoalId), request.UserId);
-                
+
                 PutInitializeBarrierDataResponse dataDomainResponse = client.Put<PutInitializeBarrierDataResponse>(
                     url,
                     new PutInitializeBarrierDataRequest() as object);
@@ -183,7 +183,7 @@ namespace Phytel.API.AppDomain.NG
                         gv.StatusId = gdv.StatusId;
                         gv.Barriers = GoalsUtil.GetChildView(gdv.BarriersData);
                         gv.Tasks = GoalsUtil.GetChildView(gdv.TasksData); ;
-                        gv.Interventions = GoalsUtil.GetChildView(gdv.InterventionsData); ;
+                        gv.Interventions = GoalsUtil.GetChildView(gdv.InterventionsData);
                         result.Add(gv);
                     }
                 }
@@ -242,6 +242,11 @@ namespace Phytel.API.AppDomain.NG
                 throw;
             }
             return interventions;
+        }
+
+        private static DateTime? GetDateSortValue(DateTime? DueDate)
+        {
+            return DueDate != null ? DueDate : DateTime.MaxValue;
         }
 
         public static List<PatientTask> GetTasks(GetTasksRequest request)
@@ -769,7 +774,8 @@ namespace Phytel.API.AppDomain.NG
                 TargetDate = pg.TargetDate,
                 TargetValue = pg.TargetValue,
                 TypeId = pg.TypeId,
-                TemplateId = pg.TemplateId
+                TemplateId = pg.TemplateId,
+                Details = pg.Details
             };
             return pgd;
         }
@@ -823,17 +829,17 @@ namespace Phytel.API.AppDomain.NG
 
         private static List<string> GetBarrierIdsForRequest(List<PatientBarrier> list)
         {
-                List<string> barrierIds = new List<string>();
+            List<string> barrierIds = new List<string>();
 
-                if (list != null && list.Count > 0)
+            if (list != null && list.Count > 0)
+            {
+                list.ForEach(t =>
                 {
-                    list.ForEach(t =>
-                    {
-                        barrierIds.Add(t.Id);
-                    });
-                }
+                    barrierIds.Add(t.Id);
+                });
+            }
 
-                return barrierIds;
+            return barrierIds;
         }
 
         public static PatientDetails GetPatientDetails(double version, string contractNumber, string userId, IRestClient client, string patientId)

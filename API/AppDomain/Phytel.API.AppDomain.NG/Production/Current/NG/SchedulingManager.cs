@@ -118,8 +118,8 @@ namespace Phytel.API.AppDomain.NG
         private static Dictionary<string, PatientData> getPatients(double version, string contractNumber, string userId, IRestClient client, List<string> patientIds)
         {
             Dictionary<string, PatientData> data = null;
-            //[Route("/{Context}/{Version}/{ContractNumber}/Patients", "POST")]
-            string patientDDURL = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patients",
+            //[Route("/{Context}/{Version}/{ContractNumber}/Patients/Ids", "POST")]
+            string patientDDURL = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patients/Ids",
                                                                             DDPatientServiceURL,
                                                                             "NG",
                                                                             version,
@@ -164,6 +164,8 @@ namespace Phytel.API.AppDomain.NG
                     CategoryId = request.ToDo.CategoryId,
                     Description = request.ToDo.Description,
                     DueDate = request.ToDo.DueDate,
+                    StartTime = request.ToDo.StartTime,
+                    Duration = request.ToDo.Duration,
                     PatientId = request.ToDo.PatientId,
                     PriorityId = request.ToDo.PriorityId,
                     ProgramIds = request.ToDo.ProgramIds,
@@ -223,6 +225,8 @@ namespace Phytel.API.AppDomain.NG
                     CategoryId = request.ToDo.CategoryId,
                     Description = request.ToDo.Description,
                     DueDate = request.ToDo.DueDate,
+                    StartTime = request.ToDo.StartTime,
+                    Duration = request.ToDo.Duration,
                     PatientId = request.ToDo.PatientId,
                     PriorityId = request.ToDo.PriorityId,
                     ProgramIds = request.ToDo.ProgramIds,
@@ -272,6 +276,8 @@ namespace Phytel.API.AppDomain.NG
                     CreatedOn = toDoData.CreatedOn,
                     Description = toDoData.Description,
                     DueDate = toDoData.DueDate,
+                    StartTime = toDoData.StartTime,
+                    Duration = toDoData.Duration,
                     Id = toDoData.Id,
                     PatientId = toDoData.PatientId,
                     PriorityId = toDoData.PriorityId,

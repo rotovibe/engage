@@ -340,5 +340,11 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
                     ex.InnerException);
             }
         }
+
+
+        public List<ToDoData> GetPatientToDos(string patientId, string userId, IAppDomainRequest req)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

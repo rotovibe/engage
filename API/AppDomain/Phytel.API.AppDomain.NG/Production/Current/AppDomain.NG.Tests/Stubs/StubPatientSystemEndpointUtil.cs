@@ -81,15 +81,5 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
         {
             throw new NotImplementedException();
         }
-
-        public PatientSystemManager.ProgramStatus HasHealthyWeightProgramAssigned(string patientId, IServiceContext context)
-        {
-            throw new NotImplementedException();
-        }
-
-        public List<string> InsertEngagePatientSystems(InsertEngagePatientSystemsDataRequest request)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
