@@ -83,5 +83,17 @@ namespace Phytel.API.DataDomain.PatientNote.Test.Stub
         {
             throw new NotImplementedException();
         }
+
+
+        public object FindByExternalRecordId(string externalRecordId)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public IEnumerable<object> Select(List<string> ids)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

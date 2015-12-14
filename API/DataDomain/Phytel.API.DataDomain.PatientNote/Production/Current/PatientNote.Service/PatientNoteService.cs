@@ -28,6 +28,22 @@ namespace Phytel.API.DataDomain.PatientNote.Service
             return response;
         }
 
+        public InsertBatchPatientNotesDataResponse Post(InsertBatchPatientNotesDataRequest request)
+        {
+            InsertBatchPatientNotesDataResponse response = new InsertBatchPatientNotesDataResponse();
+            try
+            {
+                RequireUserId(request);
+                response.Responses = Manager.InsertBatchPatientNotes(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                RaiseException(response, ex);
+            }
+            return response;
+        }
+
         public UpdatePatientNoteDataResponse Put(UpdatePatientNoteDataRequest request)
         {
             UpdatePatientNoteDataResponse response = new UpdatePatientNoteDataResponse();
