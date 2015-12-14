@@ -71,7 +71,7 @@ namespace Phytel.API.DataDomain.PatientGoal.Test
                 Context = "NG",
                 ContractNumber = "InHealth001",
                 PatientGoalId = "5304fffcd6a4850f149fb4fb",
-                Barrier = new PatientBarrierData {  Id = "53050042d6a4850f149fb504", Name = "name changed", StatusId = 2},
+                Barrier = new PatientBarrierData {  Id = "53050042d6a4850f149fb504", Name = "name changed", StatusId = 2, Details="this barrier details 123"},
                 BarrierIdsList = barrierIds
             };
 

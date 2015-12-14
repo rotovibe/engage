@@ -122,7 +122,8 @@ namespace Phytel.API.DataDomain.PatientGoal
                             CategoryId = b.CategoryId == null ? null : b.CategoryId.ToString(),
                             StatusId = ((int)b.Status),
                             StatusDate = b.StatusDate,
-                            DeleteFlag = b.DeleteFlag
+                            DeleteFlag = b.DeleteFlag,
+                            Details = b.Details
                         };
                     }
                 }
@@ -177,6 +178,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                     uv.Add(MB.Update.Set(MEPatientBarrier.VersionProperty, pbr.Version));
                     uv.Add(MB.Update.Set(MEPatientBarrier.LastUpdatedOnProperty, System.DateTime.UtcNow));
                     if (pb.Name != null) uv.Add(MB.Update.Set(MEPatientBarrier.NameProperty, pb.Name));
+                    if (pb.Details != null) uv.Add(MB.Update.Set(MEPatientBarrier.DetailProperty, pb.Details));
                     if (pb.PatientGoalId != null) uv.Add(MB.Update.Set(MEPatientBarrier.PatientGoalIdProperty, ObjectId.Parse(pb.PatientGoalId)));
                     if (pb.StatusId != 0) uv.Add(MB.Update.Set(MEPatientBarrier.StatusProperty, pb.StatusId));
                     if (pb.StatusDate != null) uv.Add(MB.Update.Set(MEPatientBarrier.StatusDateProperty, pb.StatusDate));
@@ -279,7 +281,8 @@ namespace Phytel.API.DataDomain.PatientGoal
                                 CategoryId = b.CategoryId == null ? null : b.CategoryId.ToString(),
                                 StatusId = ((int)b.Status),
                                 StatusDate = b.StatusDate,
-                                DeleteFlag = b.DeleteFlag
+                                DeleteFlag = b.DeleteFlag,
+                                Details = b.Details
                             };
                             barriersDataList.Add(barrierData);
                         }

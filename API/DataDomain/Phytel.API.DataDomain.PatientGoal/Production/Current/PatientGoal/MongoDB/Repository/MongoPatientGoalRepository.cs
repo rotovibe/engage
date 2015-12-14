@@ -136,7 +136,8 @@ namespace Phytel.API.DataDomain.PatientGoal
                             EndDate = mePG.EndDate,
                             TargetDate = mePG.TargetDate,
                             TargetValue = mePG.TargetValue,
-                            CustomAttributes = DTOUtil.GetCustomAttributeIdAndValues(mePG.Attributes)
+                            CustomAttributes = DTOUtil.GetCustomAttributeIdAndValues(mePG.Attributes),
+                            Details = mePG.Details
                         };
                     }
                 }
@@ -174,7 +175,8 @@ namespace Phytel.API.DataDomain.PatientGoal
                             EndDate = mePG.EndDate,
                             TargetDate = mePG.TargetDate,
                             TargetValue = mePG.TargetValue,
-                            CustomAttributes = DTOUtil.GetCustomAttributeIdAndValues(mePG.Attributes)
+                            CustomAttributes = DTOUtil.GetCustomAttributeIdAndValues(mePG.Attributes),
+                            Details = mePG.Details
                         };
                     }
                 }
@@ -255,7 +257,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                         uv.Add(MB.Update.Set(MEPatientGoal.TargetDateProperty, BsonNull.Value));
                     }
                     if (pt.CustomAttributes != null) { uv.Add(MB.Update.SetWrapped<List<MAttribute>>(MEPatientGoal.AttributesProperty, DTOUtil.GetAttributes(pt.CustomAttributes))); }
-                    
+                    if (pt.Details != null) uv.Add(MB.Update.Set(MEPatientGoal.DetailProperty, pt.Details));
                     IMongoUpdate update = MB.Update.Combine(uv);
                     ctx.PatientGoals.Collection.Update(q, update);
 
@@ -344,7 +346,6 @@ namespace Phytel.API.DataDomain.PatientGoal
                                 FocusAreaIds = Helper.ConvertToStringList(b.FocusAreaIds),
                                 Name = b.Name,
                                 StatusId = ((int)b.Status)
-
                             };
                             goalsViewDataList.Add(goalViewData);
                         }

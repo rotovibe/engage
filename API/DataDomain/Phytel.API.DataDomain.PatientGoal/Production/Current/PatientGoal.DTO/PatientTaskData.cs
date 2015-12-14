@@ -25,5 +25,6 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
         public List<CustomAttributeData> CustomAttributes { get; set; }
         public DateTime? ClosedDate { get; set; }
         public bool DeleteFlag { get; set; }
+        public string Details { get; set; }
     }
 }

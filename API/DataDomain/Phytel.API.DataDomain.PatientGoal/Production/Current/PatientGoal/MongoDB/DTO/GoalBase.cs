@@ -38,5 +38,10 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
         [BsonElement(StartDateRangeProperty)]
         [BsonIgnoreIfNull(true)]
         public int StartDateRange { get; set; }
+
+        public const string DetailProperty = "dtl";
+        [BsonElement(DetailProperty)]
+        [BsonIgnoreIfNull(true)]
+        public string Details { get; set; }
     }
 }
