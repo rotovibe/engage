@@ -28,6 +28,7 @@ namespace Phytel.API.DataDomain.Scheduling
         public const string AssignedToProperty = "ato";
         public const string DescriptionProperty = "desc";
         public const string TitleProperty = "t";
+        public const string LoweredTitleProperty = "lt";
         public const string ProgramProperty = "prog";
         public const string StatusProperty = "sts";
         public const string CatgegoryProperty = "cat";
@@ -36,6 +37,8 @@ namespace Phytel.API.DataDomain.Scheduling
         public const string StartTimeProperty = "sd";
         public const string DurationProperty = "dur";
         public const string ClosedDateProperty = "cd";
+
+        public const string DefaultSort = "-dd"; //duedate desc
 
         #region Standard IMongoEntity Constants
         public const string ExtraElementsProperty = "ex";
@@ -71,6 +74,10 @@ namespace Phytel.API.DataDomain.Scheduling
         [BsonElement(TitleProperty)]
         [BsonIgnoreIfNull(true)]
         public string Title { get; set; }
+
+        [BsonElement(LoweredTitleProperty)]
+        [BsonIgnoreIfNull(true)]
+        public string LoweredTitle { get; set; }    //this is here to shadow the Title property in lowercase. it is required to allow case insensitive sorting in mongo db.
 
         [BsonElement(ProgramProperty)]
         [BsonIgnoreIfNull(true)]

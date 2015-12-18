@@ -135,6 +135,7 @@
     <Compile Include="CustomObject\HttpObjectResponse.cs" />
     <Compile Include="CustomObject\IdNamePair.cs" />
     <Compile Include="Data\MongoDataUtil.cs" />
+    <Compile Include="Data\MongoSortingUtils.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="Extensions\LinqExtensions.cs" />
     <Compile Include="Format\CommonFormatterUtil.cs" />

@@ -50,7 +50,7 @@ namespace Phytel.API.DataDomain.Scheduling.Test.Stubs
 
                 ISchedulingRepository repo = Factory.GetRepository(request, RepositoryType.ToDo);
                 repo.UserId = request.UserId;
-                result.ToDos = (List<ToDoData>)repo.FindToDos(request);
+                result = repo.FindToDos(request);
                 return result;
             }
             catch (Exception ex)

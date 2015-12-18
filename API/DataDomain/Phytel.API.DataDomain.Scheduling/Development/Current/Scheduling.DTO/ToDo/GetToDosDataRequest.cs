@@ -6,7 +6,7 @@ using ServiceStack.ServiceHost;
 namespace Phytel.API.DataDomain.Scheduling.DTO
 {
     [Route("/{Context}/{Version}/{ContractNumber}/Scheduling/ToDos", "POST")]
-    public class GetToDosDataRequest : IDataDomainRequest
+    public class GetToDosDataRequest : IDataDomainRequest, ISortableRequest
     {
         [ApiMember(Name = "AssignedToId", Description = "AssignedToId is the Id to which ToDo is assigned to.", ParameterType = "property", DataType = "string", IsRequired = false)]
         public string AssignedToId { get; set; }
@@ -19,7 +19,7 @@ namespace Phytel.API.DataDomain.Scheduling.DTO
 
         [ApiMember(Name = "FromDate", Description = "Get the Todos having ClosedDate greater than or equal to FromDate.", ParameterType = "property", DataType = "DateTime", IsRequired = false)]
         public DateTime? FromDate { get; set; }
-
+        
         [ApiMember(Name = "StatusIds", Description = "List of ToDo Status ids.", ParameterType = "property", DataType = "List<int>", IsRequired = false)]
         public List<int> StatusIds { get; set; }
         
@@ -34,5 +34,14 @@ namespace Phytel.API.DataDomain.Scheduling.DTO
 
         [ApiMember(Name = "Version", Description = "Version of the API being called", ParameterType = "property", DataType = "double", IsRequired = false)]
         public double Version { get; set; }
+
+        [ApiMember(Name = "Skip", Description = "Skip - records to skip. used with Take", ParameterType = "property", DataType = "int", IsRequired = false)]
+        public int Skip { get; set; }
+
+        [ApiMember(Name = "Take", Description = "Take - number of records. used with Skip.", ParameterType = "property", DataType = "int", IsRequired = false)]
+        public int Take { get; set; }
+
+        [ApiMember(Name = "Sort", Description = "Sort by mongo entity property name. to define sort direction prepend +/- for asc/desc ", ParameterType = "property", DataType = "string", IsRequired = false)]
+        public string Sort { get; set; }
     }
 }

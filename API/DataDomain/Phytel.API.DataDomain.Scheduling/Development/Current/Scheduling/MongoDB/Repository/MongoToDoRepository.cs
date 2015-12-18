@@ -10,6 +10,7 @@ using MB = MongoDB.Driver.Builders;
 using MongoDB.Driver.Builders;
 using System.Linq;
 using System.Configuration;
+using System.Reflection;
 
 namespace Phytel.API.DataDomain.Scheduling
 {
@@ -41,6 +42,7 @@ namespace Phytel.API.DataDomain.Scheduling
                         Priority = (Priority)todoData.PriorityId,
                         Description = todoData.Description,
                         Title = todoData.Title,
+                        LoweredTitle = todoData.Title != null ? todoData.Title.ToLower() : null,
                         DueDate = todoData.DueDate,
                         StartTime = todoData.StartTime,
                         Duration = todoData.Duration,
@@ -49,7 +51,7 @@ namespace Phytel.API.DataDomain.Scheduling
                         LastUpdatedOn = todoData.UpdatedOn,
                         ExternalRecordId = todoData.ExternalRecordId
                     };
-
+                    
                     if (!string.IsNullOrEmpty(todoData.AssignedToId))
                     {
                         meToDo.AssignedToId = ObjectId.Parse(todoData.AssignedToId);
@@ -107,6 +109,7 @@ namespace Phytel.API.DataDomain.Scheduling
                             Priority = (Priority)t.PriorityId,
                             Description = t.Description,
                             Title = t.Title,
+                            LoweredTitle = t.Title != null ? t.Title.ToLower() : null,
                             DueDate = t.DueDate,
                             StartTime = t.StartTime,
                             Duration = t.Duration,
@@ -438,8 +441,10 @@ namespace Phytel.API.DataDomain.Scheduling
             catch (Exception) { throw; }
         }
 
-        public IEnumerable<object> FindToDos(object request)
+        //public IEnumerable<object> FindToDos(object request)
+        public GetToDosDataResponse FindToDos(object request)
         {
+            GetToDosDataResponse response = new GetToDosDataResponse();
             List<ToDoData> todoList = null;
             GetToDosDataRequest dataRequest = (GetToDosDataRequest)request;
             try
@@ -480,10 +485,16 @@ namespace Phytel.API.DataDomain.Scheduling
                     {
                         queries.Add(Query.GTE(METoDo.ClosedDateProperty, dataRequest.FromDate));
                     }
-
+                    
                     IMongoQuery mQuery = Query.And(queries);
-                    List<METoDo> meToDos = null;
-                    meToDos = ctx.ToDos.Collection.Find(mQuery).ToList();
+                    MongoCursor<METoDo> cToDos = ctx.ToDos.Collection.Find(mQuery);               
+                    List<METoDo> meToDos = null;                   
+                    SortByBuilder sortBy = MongoSortingUtils.GetSortByBuilder( dataRequest.Sort, typeof(METoDo) );                             
+                    cToDos = cToDos.SetSortOrder(sortBy);                                        
+                    cToDos = (MongoCursor<METoDo>) MongoSortingUtils.ApplySkipTake(cToDos, dataRequest);
+                    response.TotalCount = cToDos.Count();
+                    meToDos = cToDos.ToList();  //query now                    
+                                                            
                     if (meToDos != null && meToDos.Count > 0)
                     {
                         todoList = new List<ToDoData>();
@@ -514,7 +525,8 @@ namespace Phytel.API.DataDomain.Scheduling
                         }
                     }
                 }
-                return todoList;
+                response.ToDos = todoList;
+                return response;
             }
             catch (Exception ex)
             {

@@ -17,8 +17,10 @@ namespace Phytel.API.DataDomain.ToDo.Test.Stubs
         {
         }
         
-        public IEnumerable<object> FindToDos(object request)
+        //public IEnumerable<object> FindToDos(object request)
+        public GetToDosDataResponse FindToDos(object request)
         {
+            GetToDosDataResponse response = new GetToDosDataResponse();
             List<ToDoData> todoList = null;
             GetToDosDataRequest dataRequest = (GetToDosDataRequest)request;
             todoList = new List<ToDoData>();
@@ -41,7 +43,9 @@ namespace Phytel.API.DataDomain.ToDo.Test.Stubs
                 UpdatedOn = DateTime.UtcNow,
                 DeleteFlag = true
             });
-            return todoList;
+            response.ToDos = todoList;
+            response.TotalCount = 1;
+            return response;
         }
 
 
@@ -130,6 +134,7 @@ namespace Phytel.API.DataDomain.ToDo.Test.Stubs
                         Priority = (Priority)todoData.PriorityId,
                         Description = todoData.Description,
                         Title = todoData.Title,
+                        LoweredTitle = todoData.Title != null ? todoData.Title.ToLower() : null,
                         DueDate = todoData.DueDate,
                         StartTime = meToDo.StartTime,
                         Duration = meToDo.Duration,
@@ -208,6 +213,7 @@ namespace Phytel.API.DataDomain.ToDo.Test.Stubs
                     Priority = (Priority)todoData.PriorityId,
                     Description = todoData.Description,
                     Title = todoData.Title,
+                    LoweredTitle = todoData.Title != null ? todoData.Title.ToLower() : null,
                     DueDate = todoData.DueDate,
                     StartTime = todoData.StartTime,
                     Duration = todoData.Duration,

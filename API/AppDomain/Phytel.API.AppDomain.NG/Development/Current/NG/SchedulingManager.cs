@@ -19,12 +19,13 @@ namespace Phytel.API.AppDomain.NG
         protected static readonly string DDPatientServiceURL = ConfigurationManager.AppSettings["DDPatientServiceUrl"];
         protected static readonly string DDSchedulingUrl = ConfigurationManager.AppSettings["DDSchedulingUrl"];
         #endregion
-
-        public List<ToDo> GetToDos(GetToDosRequest request)
+        
+        public GetToDosResponse GetToDos(GetToDosRequest request)    
         {
             try
             {
-                List<ToDo> result = null;
+                GetToDosResponse response = new GetToDosResponse();
+                List<ToDo> toDosResult = null;
                 //[Route("/{Context}/{Version}/{ContractNumber}/Scheduling/ToDos", "POST")]
                 IRestClient client = new JsonServiceClient();
                 string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Scheduling/ToDos",
@@ -44,13 +45,16 @@ namespace Phytel.API.AppDomain.NG
                         CreatedById = request.CreatedById,
                         PatientId = request.PatientId,
                         StatusIds = request.StatusIds,
-                        FromDate = request.FromDate
-                        
+                        FromDate = request.FromDate,
+                        Skip = request.Skip,
+                        Take = request.Take,
+                        Sort = request.Sort
                     } as object);
 
                 if (ddResponse != null && ddResponse.ToDos != null)
                 {
-                    result = new List<ToDo>();
+                    response.TotalCount = ddResponse.TotalCount;
+                    toDosResult = new List<ToDo>();
                     List<ToDoData> dataList = ddResponse.ToDos;
                     var distintPatients = dataList.GroupBy(p => p.PatientId).Select(grp => grp.FirstOrDefault()).ToList();
                     List<string> patientIds = distintPatients.Select(p => p.PatientId).ToList();
@@ -76,10 +80,11 @@ namespace Phytel.API.AppDomain.NG
                                 };
                             }
                         }
-                        result.Add(toDo);
+                        toDosResult.Add(toDo);
                     }
                 }
-                return result;
+                response.ToDos = toDosResult;
+                return response;
             }
             catch (WebServiceException ex)
             {

@@ -9,8 +9,8 @@ using Phytel.API.Interface;
 namespace Phytel.API.DataDomain.Scheduling
 {
     public interface ISchedulingRepository : IRepository
-    {
-        IEnumerable<object> FindToDos(object request);
+    {        
+        GetToDosDataResponse FindToDos(object request);
         IEnumerable<object> FindToDosWithAProgramId(string entityId);
         void RemoveProgram(object entity, List<string> updatedProgramIds);
         object FindByID(string entityID, bool includeDeletedToDo);
