@@ -1,22 +1,15 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Web;
 using System.Xml;
-
-using System.IO;
-using System.Xml.Xsl;
 
 namespace Phytel.Services.Communication
 {
     public class CommTextTemplateManager : ICommTextTemplateManager
     {
-        private const string _Mode = "TEXT";
-        private ITemplateUtilities _templateUtilities;
+        private const string Mode = "TEXT";
+        private readonly ITemplateUtilities _templateUtilities;
 
         public CommTextTemplateManager(ITemplateUtilities templateUtilities)
         {
@@ -29,7 +22,7 @@ namespace Phytel.Services.Communication
         {
             TemplateResults results = new TemplateResults();
 
-            TemplateResults utilityResults = _templateUtilities.BuildHeader(xdoc, textActivityDetail, missingObjects, _Mode);
+            TemplateResults utilityResults = _templateUtilities.BuildHeader(xdoc, textActivityDetail, missingObjects, Mode);
             xdoc = utilityResults.PopulatedTemplate;
             missingObjects = utilityResults.MissingObjects;
 
@@ -42,7 +35,7 @@ namespace Phytel.Services.Communication
         {
             TemplateResults results = new TemplateResults();
 
-            TemplateResults utilityResults = _templateUtilities.BuildPatient(xdoc, textActivityDetail, missingObjects, _Mode, new string[] { "PatientName" });
+            TemplateResults utilityResults = _templateUtilities.BuildPatient(xdoc, textActivityDetail, missingObjects, Mode, new[] { "PatientName" });
             xdoc = utilityResults.PopulatedTemplate;
             missingObjects = utilityResults.MissingObjects;
 
@@ -58,36 +51,33 @@ namespace Phytel.Services.Communication
             string scheduleNameLF = string.Empty;
             string scheduleDisplayName = string.Empty;
             string xpath = string.Empty;
-            List<ActivityMedia> mediaRows = null;
 
-            scheduleNameLF = textActivityDetail.ScheduleName.ToString();
+            scheduleNameLF = textActivityDetail.ScheduleName;
 
-            TemplateResults utilityResults = _templateUtilities.BuildSchedule(xdoc, textActivityDetail, missingObjects, _Mode);
+            TemplateResults utilityResults = _templateUtilities.BuildSchedule(xdoc, textActivityDetail, missingObjects, Mode);
             xdoc = utilityResults.PopulatedTemplate;
             missingObjects = utilityResults.MissingObjects;
 
             //Contact Entities Schedule Name
-            xpath = _templateUtilities.GetModeSpecificTag(XMLFields.ModeScheduleFullName, _Mode);
+            xpath = _templateUtilities.GetModeSpecificTag(XMLFields.ModeScheduleFullName, Mode);
             XmlNode scheduleFullname = xdoc.SelectSingleNode(xpath);
             _templateUtilities.SetXMlNodeInnerText(scheduleFullname, scheduleNameLF);
 
             //Schedule Display name
-            xpath = _templateUtilities.GetModeSpecificTag(XMLFields.ModeScheduleDisplayName, _Mode);
+            xpath = _templateUtilities.GetModeSpecificTag(XMLFields.ModeScheduleDisplayName, Mode);
             XmlNode scheduleDisplayNameNode = xdoc.SelectSingleNode(xpath);
-            mediaRows = (from m in activityMediaList
-                         where m.OwnerID == textActivityDetail.RecipientSchedID
-                            && m.CategoryCode == "SCOVR"
-                            && m.OwnerCode == "TEXT"
-                            && m.LanguagePreferenceCode == "EN"
-                         select m).ToList();
-
+            List<ActivityMedia> mediaRows =
+                activityMediaList.Where(m => m.OwnerID == textActivityDetail.RecipientSchedID
+                                             && m.CategoryCode == "SCOVR"
+                                             && m.OwnerCode == "TEXT"
+                                             && m.LanguagePreferenceCode == "EN").ToList();
             //Check to see if there is any records
-            if (mediaRows != null && mediaRows.Count > 0)
+            if (mediaRows.Count > 0)
             {
-                foreach (ActivityMedia media in mediaRows)
+                foreach (var media in mediaRows)
                 {
-                    scheduleDisplayName = media.Narrative.ToString();
-                    if (!String.IsNullOrEmpty(scheduleDisplayName) && !String.IsNullOrEmpty(scheduleDisplayName.Trim()))
+                    scheduleDisplayName = media.Narrative;
+                    if (!string.IsNullOrEmpty(scheduleDisplayName) && !string.IsNullOrEmpty(scheduleDisplayName.Trim()))
                     {
                         scheduleDisplayName = _templateUtilities.ProperCase(scheduleDisplayName.Trim());
                         _templateUtilities.SetXMlNodeInnerText(scheduleDisplayNameNode, scheduleDisplayName);
@@ -116,34 +106,26 @@ namespace Phytel.Services.Communication
         {
             TemplateResults results = new TemplateResults();
 
-            string facilityID = string.Empty;
-            string facilityPhoneNumber = string.Empty;
-            string facilityFullname = string.Empty;
-            string facilityDisplayName = string.Empty;
-
-            ActivityMedia media = null;
-            string xpath = string.Empty;
-            
-            facilityID = textActivityDetail.FacilityID.ToString();
-            facilityPhoneNumber = textActivityDetail.ProviderACDNumber.ToString();
-            facilityFullname = textActivityDetail.FacilityName.ToString();
+            string facilityID = textActivityDetail.FacilityID.ToString();
+            string facilityPhoneNumber = textActivityDetail.ProviderACDNumber;
+            string facilityFullname = textActivityDetail.FacilityName;
             
             //FacilityID
-            xpath = _templateUtilities.GetModeSpecificTag(XMLFields.ModeFacilityID, _Mode);
+            string xpath = _templateUtilities.GetModeSpecificTag(XMLFields.ModeFacilityID, Mode);
             XmlNode facilityIDNode = xdoc.SelectSingleNode(xpath);
             _templateUtilities.SetXMlNodeInnerText(facilityIDNode, facilityID);
 
             //Facility ContactEntities Name
-            xpath = _templateUtilities.GetModeSpecificTag(XMLFields.ModeFacilityName, _Mode);
+            xpath = _templateUtilities.GetModeSpecificTag(XMLFields.ModeFacilityName, Mode);
             XmlNode facilityNameNode = xdoc.SelectSingleNode(xpath);
             _templateUtilities.SetXMlNodeInnerText(facilityNameNode, facilityFullname);
 
             //Facility phonenumber
-            if (!String.IsNullOrEmpty(facilityPhoneNumber) && !String.IsNullOrEmpty(facilityPhoneNumber.Trim()))
+            if (!string.IsNullOrEmpty(facilityPhoneNumber) && !string.IsNullOrEmpty(facilityPhoneNumber.Trim()))
             {
-                xpath = _templateUtilities.GetModeSpecificTag(XMLFields.ModeFacilityPhoneNumber, _Mode);
+                xpath = _templateUtilities.GetModeSpecificTag(XMLFields.ModeFacilityPhoneNumber, Mode);
                 XmlNode facilityPhoneNumberNode = xdoc.SelectSingleNode(xpath);
-                _templateUtilities.SetXMlNodeInnerText(facilityPhoneNumberNode, String.Format("{0:(###)###-####}", Convert.ToInt64(facilityPhoneNumber)));
+                _templateUtilities.SetXMlNodeInnerText(facilityPhoneNumberNode, string.Format("{0:(###)###-####}", Convert.ToInt64(facilityPhoneNumber)));
             }
             else
             {
@@ -152,19 +134,18 @@ namespace Phytel.Services.Communication
             }
 
             //Facility Display name
-            xpath = _templateUtilities.GetModeSpecificTag(XMLFields.ModeFacilityDisplayName, _Mode);
+            xpath = _templateUtilities.GetModeSpecificTag(XMLFields.ModeFacilityDisplayName, Mode);
             XmlNode facilityDisplayNameNode = xdoc.SelectSingleNode(xpath);
+
             //check for email override
-            media = (from m in activityMediaList
-                     where m.OwnerID == textActivityDetail.FacilityID
-                        && m.CategoryCode == "SNOVR"
-                        && m.OwnerCode == "TEXT"
-                        && m.LanguagePreferenceCode == "EN"
-                     select m).FirstOrDefault();
+            ActivityMedia media = activityMediaList.FirstOrDefault(m => m.OwnerID == textActivityDetail.FacilityID
+                                                                        && m.CategoryCode == "SNOVR"
+                                                                        && m.OwnerCode == "TEXT"
+                                                                        && m.LanguagePreferenceCode == "EN");
             if (media != null)
             {
-                facilityDisplayName = media.Narrative;
-                if (!String.IsNullOrEmpty(facilityDisplayName) && !String.IsNullOrEmpty(facilityDisplayName.Trim()))
+                string facilityDisplayName = media.Narrative;
+                if (!string.IsNullOrEmpty(facilityDisplayName) && !string.IsNullOrEmpty(facilityDisplayName.Trim()))
                 {
                     _templateUtilities.SetXMlNodeInnerText(facilityDisplayNameNode, facilityDisplayName.Trim());
                 }
@@ -187,31 +168,20 @@ namespace Phytel.Services.Communication
 
         public TemplateResults BuildTextMessage(XmlDocument xdoc, TextActivityDetail textActivityDetail, Hashtable missingObjects)
         {
-            TemplateResults results = new TemplateResults(); 
-            
-            string appointmentDateTime = string.Empty;
-            string activityID = string.Empty;
-            string facilityID = string.Empty;
-            string scheduleID = string.Empty;
-            string patientId = string.Empty;
-            string toTextNumber = string.Empty;
-            string fromTextNumber = string.Empty;
-            string helpTextNumber = string.Empty;
-            string xpath = string.Empty;
+            TemplateResults results = new TemplateResults();
 
-            activityID = textActivityDetail.ActivityID.ToString();
-            appointmentDateTime = textActivityDetail.ScheduleDateTime.ToString();
-            facilityID = textActivityDetail.FacilityID.ToString();
-            scheduleID = textActivityDetail.RecipientSchedID.ToString();
-            patientId = textActivityDetail.PatientID.ToString();
-            fromTextNumber = textActivityDetail.TextFromNumber.ToString(); //this is the short code or long code
-            toTextNumber = textActivityDetail.PhoneNumber.ToString(); //this is the patient mobile number
-            helpTextNumber = textActivityDetail.ProviderACDNumber.ToString(); // this is the number that will be used for help and in the message
+            string xpath;
+
+            string activityID = textActivityDetail.ActivityID.ToString();
+            string patientId = textActivityDetail.PatientID.ToString();
+            string fromTextNumber = textActivityDetail.TextFromNumber;
+            string toTextNumber = textActivityDetail.PhoneNumber;
+            string helpTextNumber = textActivityDetail.ProviderACDNumber;
 
             //Patient To phone number
-            if (!String.IsNullOrEmpty(toTextNumber) && !String.IsNullOrEmpty(toTextNumber.Trim()))
+            if (!string.IsNullOrEmpty(toTextNumber) && !string.IsNullOrEmpty(toTextNumber.Trim()))
             {
-                xpath = _templateUtilities.GetModeSpecificTag(XMLFields.ModeToPhoneNumber, _Mode);
+                xpath = _templateUtilities.GetModeSpecificTag(XMLFields.ModeToPhoneNumber, Mode);
                 XmlNode toPhoneNumberNode = xdoc.SelectSingleNode(xpath);
                 _templateUtilities.SetXMlNodeInnerText(toPhoneNumberNode, toTextNumber);
             }
@@ -222,9 +192,9 @@ namespace Phytel.Services.Communication
             }
 
             //Text From number
-            if (!String.IsNullOrEmpty(fromTextNumber) && !String.IsNullOrEmpty(fromTextNumber.Trim()))
+            if (!string.IsNullOrEmpty(fromTextNumber) && !string.IsNullOrEmpty(fromTextNumber.Trim()))
             {
-                xpath = _templateUtilities.GetModeSpecificTag(XMLFields.ModeFromPhoneNumber, _Mode);
+                xpath = _templateUtilities.GetModeSpecificTag(XMLFields.ModeFromPhoneNumber, Mode);
                 XmlNode fromPhoneNumberNode = xdoc.SelectSingleNode(xpath);
                 _templateUtilities.SetXMlNodeInnerText(fromPhoneNumberNode, fromTextNumber);
             }
@@ -235,9 +205,9 @@ namespace Phytel.Services.Communication
             }
 
             //Help number
-            if (!String.IsNullOrEmpty(helpTextNumber) && !String.IsNullOrEmpty(helpTextNumber.Trim()))
+            if (!string.IsNullOrEmpty(helpTextNumber) && !string.IsNullOrEmpty(helpTextNumber.Trim()))
             {
-                xpath = _templateUtilities.GetModeSpecificTag(XMLFields.ModeHelpPhoneNumber, _Mode);
+                xpath = _templateUtilities.GetModeSpecificTag(XMLFields.ModeHelpPhoneNumber, Mode);
                 XmlNode helpPhoneNumberNode = xdoc.SelectSingleNode(xpath);
                 _templateUtilities.SetXMlNodeInnerText(helpPhoneNumberNode, helpTextNumber);
             }
@@ -256,7 +226,7 @@ namespace Phytel.Services.Communication
         {
             TemplateResults results = new TemplateResults();
 
-            TemplateResults utilityResults = _templateUtilities.BuildApptDateTime(xdoc, textActivityDetail, missingObjects, _Mode, true, new string[] { "ScheduleDateTime" });
+            TemplateResults utilityResults = _templateUtilities.BuildApptDateTime(xdoc, textActivityDetail, missingObjects, Mode, true, new string[] { "ScheduleDateTime" });
             xdoc = utilityResults.PopulatedTemplate;
             missingObjects = utilityResults.MissingObjects;
 
@@ -267,10 +237,7 @@ namespace Phytel.Services.Communication
 
         public string Transform(XmlDocument xml, TemplateDetail templateDetail)
         {
-            string body = string.Empty;
-
-            body = _templateUtilities.Transform(xml, templateDetail, _Mode);
-
+            var body = _templateUtilities.Transform(xml, templateDetail, Mode);
             return body;
         }
 
@@ -312,37 +279,34 @@ namespace Phytel.Services.Communication
             string scheduleNameLF = string.Empty;
             string scheduleDisplayName = string.Empty;
             string xpath = string.Empty;
-            List<ActivityMedia> mediaRows = null;
 
             scheduleID = textActivityDetail.RecipientSchedID.ToString();
-            scheduleNameLF = textActivityDetail.ScheduleName.ToString();
+            scheduleNameLF = textActivityDetail.ScheduleName;
 
-            TemplateResults utilityResults = _templateUtilities.BuildSchedule(xdoc, textActivityDetail, missingObjects, _Mode);
+            TemplateResults utilityResults = _templateUtilities.BuildSchedule(xdoc, textActivityDetail, missingObjects, Mode);
             xdoc = utilityResults.PopulatedTemplate;
             missingObjects = utilityResults.MissingObjects;
 
             //Contact Entities Schedule Name
-            xpath = _templateUtilities.GetModeSpecificTag(XMLFields.ModeScheduleFullName, _Mode);
+            xpath = _templateUtilities.GetModeSpecificTag(XMLFields.ModeScheduleFullName, Mode);
             XmlNode scheduleFullname = xdoc.SelectSingleNode(xpath);
             _templateUtilities.SetXMlNodeInnerText(scheduleFullname, scheduleNameLF);
 
             //Schedule Display name
-            xpath = _templateUtilities.GetModeSpecificTag(XMLFields.ModeScheduleDisplayName, _Mode);
+            xpath = _templateUtilities.GetModeSpecificTag(XMLFields.ModeScheduleDisplayName, Mode);
             XmlNode scheduleDisplayNameNode = xdoc.SelectSingleNode(xpath);
-            mediaRows = (from m in activityMediaList
-                         where m.OwnerID == textActivityDetail.RecipientSchedID
-                            && m.CategoryCode == "SCOVR"
-                            && m.OwnerCode == "TEXT"
-                            && m.LanguagePreferenceCode == "EN"
-                         select m).ToList();
-
+            List<ActivityMedia> mediaRows =
+                activityMediaList.Where(m => m.OwnerID == textActivityDetail.RecipientSchedID
+                                             && m.CategoryCode == "SCOVR"
+                                             && m.OwnerCode == "TEXT"
+                                             && m.LanguagePreferenceCode == "EN").ToList();
             //Check to see if there is any records
-            if (mediaRows != null && mediaRows.Count > 0)
+            if (mediaRows.Count > 0)
             {
-                foreach (ActivityMedia media in mediaRows)
+                foreach (var media in mediaRows)
                 {
                     scheduleDisplayName = media.Narrative;
-                    if (!String.IsNullOrEmpty(scheduleDisplayName) && !String.IsNullOrEmpty(scheduleDisplayName.Trim()))
+                    if (!string.IsNullOrEmpty(scheduleDisplayName) && !string.IsNullOrEmpty(scheduleDisplayName.Trim()))
                     {
                         scheduleDisplayName = _templateUtilities.ProperCase(scheduleDisplayName.Trim());
                         _templateUtilities.SetXMlNodeInnerText(scheduleDisplayNameNode, scheduleDisplayName);
@@ -403,7 +367,7 @@ namespace Phytel.Services.Communication
         {
             TemplateResults results = new TemplateResults();
 
-            TemplateResults utilityResults = _templateUtilities.BuildApptDateTime(xdoc, textActivityDetail, missingObjects, _Mode, true);
+            TemplateResults utilityResults = _templateUtilities.BuildApptDateTime(xdoc, textActivityDetail, missingObjects, Mode, true);
             xdoc = utilityResults.PopulatedTemplate;
             missingObjects = utilityResults.MissingObjects;
 

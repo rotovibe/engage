@@ -50,7 +50,7 @@
                                         <StackPanel VerticalAlignment="Center" Margin="20,6">
                                             <Label FontSize="18" Content="Select Test Method (EMAIL):"/>
                                             <ComboBox Name="TestEmailMethodCb" Margin="4" FontSize="14" MinWidth="240" MaxWidth="340" HorizontalAlignment="Left" SelectionChanged="TestEmailMethodCb_SelectionChanged">
-                                                <!--<ComboBoxItem>BuildApptSpecificMessage_Test</ComboBoxItem>-->
+                                                <ComboBoxItem>BuildApptSpecificMessage_Test</ComboBoxItem>
                                                 <ComboBoxItem>BuildApptDateTime_Test</ComboBoxItem>
                                                 <ComboBoxItem>BuildEmail_Test</ComboBoxItem>
                                                 <ComboBoxItem>BuildFacility_Test</ComboBoxItem>
@@ -165,7 +165,7 @@
                                         <StackPanel VerticalAlignment="Center" Margin="20,6">
                                             <Label FontSize="18" Content="Select Test Method (TEXT):"/>
                                             <ComboBox Name="TestTextMethodCb" Margin="4" FontSize="14" MinWidth="240" MaxWidth="340" HorizontalAlignment="Left" SelectionChanged="TestTextMethodCb_SelectionChanged">
-                                                <ComboBoxItem>BuildApptDateTime_Test</ComboBoxItem>
+                                                <!--<ComboBoxItem>BuildApptDateTime_Test</ComboBoxItem>-->
                                                 <ComboBoxItem>BuildFacility_Test</ComboBoxItem>
                                                 <ComboBoxItem>BuildHeader_Test</ComboBoxItem>
                                                 <ComboBoxItem>BuildIntroFacility_Test</ComboBoxItem>
@@ -299,7 +299,7 @@
                                     <Label VerticalAlignment="Center" HorizontalAlignment="Center">Facility Logo</Label>
                                 </Border>
                                 <Label Margin="0,4,0,4" Grid.Row="1" Grid.Column="0" Content="Owner ID:"/>
-                                <TextBox MinWidth="68" Text="{Binding EmailActivityDetail.FacilityID}" Grid.Row="1" Grid.Column="1" Margin="0,4,4,4" />
+                                <TextBox MinWidth="68" Text="{Binding FacilityLogo.OwnerID}" Grid.Row="1" Grid.Column="1" Margin="0,4,4,4" />
                                 <Label Margin="0,4,0,4" Grid.Row="2" Grid.Column="0" Content="Category Code:"/>
                                 <TextBox Text="{Binding FacilityLogo.CategoryCode}" Grid.Row="2" Grid.Column="1" Margin="0,4,4,4" />
                                 <Label Margin="0,4,0,4" Grid.Row="3" Grid.Column="0" Content="Owner Code:"/>
@@ -313,7 +313,7 @@
                                     <Label VerticalAlignment="Center" HorizontalAlignment="Center">Facility URL</Label>
                                 </Border>
                                 <Label Margin="0,4,0,4" Grid.Row="1" Grid.Column="2" Content="Owner ID:"/>
-                                <TextBox MinWidth="68" Text="{Binding EmailActivityDetail.FacilityID}" Grid.Row="1" Grid.Column="3" Margin="0,4,4,4" />
+                                <TextBox MinWidth="68" Text="{Binding FacilityUrl.OwnerID}" Grid.Row="1" Grid.Column="3" Margin="0,4,4,4" />
                                 <Label Margin="0,4,0,4" Grid.Row="2" Grid.Column="2" Content="Category Code:"/>
                                 <TextBox Text="{Binding FacilityUrl.CategoryCode}" Grid.Row="2" Grid.Column="3" Margin="0,4,4,4" />
                                 <Label Margin="0,4,0,4" Grid.Row="3" Grid.Column="2" Content="Owner Code:"/>
@@ -327,7 +327,7 @@
                                     <Label VerticalAlignment="Center" HorizontalAlignment="Center">Facility Email Address</Label>
                                 </Border>
                                 <Label Margin="0,4,0,4" Grid.Row="1" Grid.Column="4" Content="Owner ID:"/>
-                                <TextBox MinWidth="68" Text="{Binding EmailActivityDetail.FacilityID}" Grid.Row="1" Grid.Column="5" Margin="0,4,4,4" />
+                                <TextBox MinWidth="68" Text="{Binding FacilityEmailAddress.OwnerID}" Grid.Row="1" Grid.Column="5" Margin="0,4,4,4" />
                                 <Label Margin="0,4,0,4" Grid.Row="2" Grid.Column="4" Content="Category Code:"/>
                                 <TextBox Text="{Binding FacilityEmailAddress.CategoryCode}" Grid.Row="2" Grid.Column="5" Margin="0,4,4,4" />
                                 <Label Margin="0,4,0,4" Grid.Row="3" Grid.Column="4" Content="Owner Code:"/>
@@ -341,7 +341,7 @@
                                     <Label VerticalAlignment="Center" HorizontalAlignment="Center">Facility Reply Address</Label>
                                 </Border>
                                 <Label Margin="0,4,0,4" Grid.Row="1" Grid.Column="6" Content="Owner ID:"/>
-                                <TextBox MinWidth="68" Text="{Binding EmailActivityDetail.FacilityID}" Grid.Row="1" Grid.Column="7" Margin="0,4,4,4" />
+                                <TextBox MinWidth="68" Text="{Binding FacilityReplyAddress.OwnerID}" Grid.Row="1" Grid.Column="7" Margin="0,4,4,4" />
                                 <Label Margin="0,4,0,4" Grid.Row="2" Grid.Column="6" Content="Category Code:"/>
                                 <TextBox Text="{Binding FacilityReplyAddress.CategoryCode}" Grid.Row="2" Grid.Column="7" Margin="0,4,4,4" />
                                 <Label Margin="0,4,0,4" Grid.Row="3" Grid.Column="6" Content="Owner Code:"/>
@@ -357,7 +357,7 @@
                                     <Label VerticalAlignment="Center" HorizontalAlignment="Center">Facility Display Name</Label>
                                 </Border>
                                 <Label Margin="0,4,0,4" Grid.Row="6" Grid.Column="0" Content="Owner ID:"/>
-                                <TextBox MinWidth="68" Text="{Binding EmailActivityDetail.FacilityID}" Grid.Row="6" Grid.Column="1" Margin="0,4,4,4" />
+                                <TextBox MinWidth="68" Text="{Binding FacilityDisplayName.OwnerID}" Grid.Row="6" Grid.Column="1" Margin="0,4,4,4" />
                                 <Label Margin="0,4,0,4" Grid.Row="7" Grid.Column="0" Content="Category Code:"/>
                                 <TextBox Text="{Binding FacilityDisplayName.CategoryCode}" Grid.Row="7" Grid.Column="1" Margin="0,4,4,4" />
                                 <Label Margin="0,4,0,4" Grid.Row="8" Grid.Column="0" Content="Owner Code:"/>
@@ -371,7 +371,7 @@
                                     <Label VerticalAlignment="Center" HorizontalAlignment="Center">Facility Name</Label>
                                 </Border>
                                 <Label Margin="0,4,0,4" Grid.Row="6" Grid.Column="2" Content="Owner ID:"/>
-                                <TextBox MinWidth="68" Text="{Binding EmailActivityDetail.FacilityID}" Grid.Row="6" Grid.Column="3" Margin="0,4,4,4" />
+                                <TextBox MinWidth="68" Text="{Binding FacilityName.OwnerID}" Grid.Row="6" Grid.Column="3" Margin="0,4,4,4" />
                                 <Label Margin="0,4,0,4" Grid.Row="7" Grid.Column="2" Content="Category Code:"/>
                                 <TextBox Text="{Binding FacilityName.CategoryCode}" Grid.Row="7" Grid.Column="3" Margin="0,4,4,4" />
                                 <Label Margin="0,4,0,4" Grid.Row="8" Grid.Column="2" Content="Owner Code:"/>
@@ -387,7 +387,7 @@
                                     <Label VerticalAlignment="Center" HorizontalAlignment="Center">Schedule Name</Label>
                                 </Border>
                                 <Label Margin="0,4,0,4" Grid.Row="6" Grid.Column="4" Content="Owner ID:"/>
-                                <TextBox MinWidth="68" Text="{Binding EmailActivityDetail.RecipientSchedID}" Grid.Row="6" Grid.Column="5" Margin="0,4,4,4" />
+                                <TextBox MinWidth="68" Text="{Binding ScheduleName.OwnerID}" Grid.Row="6" Grid.Column="5" Margin="0,4,4,4" />
                                 <Label Margin="0,4,0,4" Grid.Row="7" Grid.Column="4" Content="Category Code:"/>
                                 <TextBox Text="{Binding ScheduleName.CategoryCode}" Grid.Row="7" Grid.Column="5" Margin="0,4,4,4" />
                                 <Label Margin="0,4,0,4" Grid.Row="8" Grid.Column="4" Content="Owner Code:"/>
@@ -403,7 +403,7 @@
                                     <Label VerticalAlignment="Center" HorizontalAlignment="Center">Appointment Specific Message</Label>
                                 </Border>
                                 <Label Margin="0,4,0,4" Grid.Row="6" Grid.Column="6" Content="Owner ID:"/>
-                                <TextBox MinWidth="68" Text="{Binding EmailActivityDetail.PatientID}" Grid.Row="6" Grid.Column="7" Margin="0,4,4,4" />
+                                <TextBox MinWidth="68" Text="{Binding AppointmentSpecificMessage.OwnerID}" Grid.Row="6" Grid.Column="7" Margin="0,4,4,4" />
                                 <Label Margin="0,4,0,4" Grid.Row="7" Grid.Column="6" Content="Category Code:"/>
                                 <TextBox Text="{Binding AppointmentSpecificMessage.CategoryCode}" Grid.Row="7" Grid.Column="7" Margin="0,4,4,4" />
                                 <Label Margin="0,4,0,4" Grid.Row="8" Grid.Column="6" Content="Owner Code:"/>

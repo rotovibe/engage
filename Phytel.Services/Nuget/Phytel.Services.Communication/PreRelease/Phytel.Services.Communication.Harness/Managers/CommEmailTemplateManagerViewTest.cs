@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
 using Phytel.Services.Communication.Harness.Model;
 
@@ -14,7 +10,6 @@ namespace Phytel.Services.Communication.Harness.Managers
     {
         private readonly TestViewModel _testViewModel;
         private readonly ICommEmailTemplateManager _manager;        
-        //private List<ContractPermission> _contractPermissionList;
 
         public CommEmailTemplateManagerViewTest()
         {
@@ -262,6 +257,17 @@ namespace Phytel.Services.Communication.Harness.Managers
             testViewModel.TransformResult = _manager.Transform(xml, testViewModel.TemplateDetail);
 
             return testViewModel;            
+        }
+
+        public TestViewModel BuildApptSpecificMessage_Test(TestViewModel testViewModel)
+        {
+            var missingObjects = new Hashtable();
+            TemplateResults results = _manager.BuildAppointmentSpecificMessage(ResetXml(),
+                testViewModel.EmailActivityDetail,
+                testViewModel.EmailActivityMedia, missingObjects, 0, testViewModel.ContractPermissions);
+            _testViewModel.XmlDocString = FormatXml(results.PopulatedTemplate);
+            _testViewModel.MissingObjects = results.MissingObjects;
+            return _testViewModel;
         }
 
         // Utility methods

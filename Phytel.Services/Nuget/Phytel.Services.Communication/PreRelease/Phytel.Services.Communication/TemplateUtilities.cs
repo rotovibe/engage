@@ -287,7 +287,7 @@ namespace Phytel.Services.Communication
             appointmentDateTime = activityDetail.ScheduleDateTime;
             
             //Appointment date fields
-            if ((String.IsNullOrEmpty(appointmentDateTime) || Convert.ToDateTime(appointmentDateTime) < System.DateTime.Now) 
+            if ((string.IsNullOrEmpty(appointmentDateTime) || Convert.ToDateTime(appointmentDateTime) < DateTime.Now) 
                 && (requiredObjects != null && requiredObjects.Contains("ScheduleDateTime")))
             {
                 string missingObjString = "Appointment Datetime " + activityID;

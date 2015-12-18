@@ -85,6 +85,19 @@ namespace Phytel.Services.Communication.Harness.Model
             }
         }
 
+        private List<ContractPermission> _contractPermissions;
+
+        public List<ContractPermission> ContractPermissions
+        {
+            get { return _contractPermissions; }
+            set
+            {
+                if(value == _contractPermissions) return;
+                _contractPermissions = value;
+                OnPropertyChanged();
+            }
+        }
+
         // Missing Objects
         public Hashtable MissingObjects { get; set; }
 
@@ -119,7 +132,7 @@ namespace Phytel.Services.Communication.Harness.Model
         private ActivityMedia _facilityLogo;
         public ActivityMedia FacilityLogo
         {
-            get { return _facilityName; }
+            get { return _facilityLogo; }
             set
             {
                 if (value == _facilityLogo) return;

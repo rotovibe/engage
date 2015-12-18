@@ -59,6 +59,7 @@ namespace Phytel.Services.Communication.Harness
                 RecipientSchedID = 30,
                 ScheduleDuration = 60,
                 ScheduleDateTime = "11/20/2020 08:00:00 AM",
+                TaskTypeCategory = TaskTypeCategory.OutreachRecall
             };
 
             _testViewModel.FacilityName = new ActivityMedia
@@ -139,6 +140,14 @@ namespace Phytel.Services.Communication.Harness
             media.Add(_testViewModel.AppointmentSpecificMessage);
 
             _testViewModel.EmailActivityMedia = media;
+
+            _testViewModel.ContractPermissions = new List<ContractPermission>();
+            ContractPermission contractpermission = new ContractPermission
+            {
+                ChildObjectID = (int)Prompts.AppointmentSpecificMessage,
+                RoleID = 0
+            };
+            _testViewModel.ContractPermissions.Add(contractpermission);
 
             DataContext = _testViewModel;
         }
