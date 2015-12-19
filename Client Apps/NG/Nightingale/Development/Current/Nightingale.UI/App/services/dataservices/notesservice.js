@@ -289,8 +289,7 @@
 				if(observableTotalCount){					
 					var count = data.httpResponse.data.TotalCount;					
 					if( count != undefined ){
-						observableTotalCount(count);
-						console.log('TotalCount=' + count );
+						observableTotalCount(count);						
 					}					
 				}
                 if (observable) {

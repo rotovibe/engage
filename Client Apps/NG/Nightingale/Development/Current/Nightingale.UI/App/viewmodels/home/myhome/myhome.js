@@ -247,8 +247,7 @@
 			if( locked ){
 				return [];
 			}
-			if( backendSort() !== lastSort() ){
-				console.log(' sort has changed:' + backendSort() );
+			if( backendSort() !== lastSort() ){				
 				lastSort( backendSort() );
 				todosTop(0);
 				todosBottom(0);
@@ -256,8 +255,7 @@
 				//canLoadPrevTodos(false);				
 				maxToToDosLoaded(false);
 				lockTodos(true);
-				clearTodosCacheAndLoad();
-				printDebugCache('after clearTodosCacheAndLoad():');
+				clearTodosCacheAndLoad();				
 				theseTodos = [];
 			}
 			else{
@@ -572,10 +570,8 @@
 			// }
 		// }
 		
-		function loadMoreTodos(){			
-			//printDebugCache('loadMoreTodos: start:');
-			//checkTrimLowerCache(); TODO
-			//printDebugCache('loadMoreTodos: after trim:');
+		function loadMoreTodos(){						
+			//checkTrimLowerCache(); TODO			
 			var params = { 
 						StatusIds: [1,3], 
 						AssignedToId: session.currentUser().userId(), 
@@ -586,9 +582,9 @@
 			return datacontext.getToDos(null, params, todosTotalCount).then( calculateTopSkipTake );
 		}
 		
-		function printDebugCache( funcStep ){
-			console.log( funcStep + ' todosTop=' + todosTop() + ' todosBottom=' + todosBottom() + ' myToDos().length= '+myToDos().length + 'total todos cache: ' + localCollections.todos().length);
-		}
+		// function printDebugCache( funcStep ){
+			// console.log( funcStep + ' todosTop=' + todosTop() + ' todosBottom=' + todosBottom() + ' myToDos().length= '+myToDos().length + 'total todos cache: ' + localCollections.todos().length);
+		// }
 		
 		//TODO in next stories - manage the cache
 		// function loadPrevTodos(){
@@ -635,8 +631,7 @@
 			}
 			else{				
 				maxToToDosLoaded(true);
-			}			
-			printDebugCache( 'calculateTopSkipTake:' );
+			}						
 		}
 		
 		function generateCalendarEvents(){
