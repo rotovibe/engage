@@ -213,7 +213,7 @@
 			if( localCount > todosTop() ){
 				todosTop( localCount );
 			}
-			if( localCount < maxTodosInCache ){
+			if( localCount < maxTodosInCache && localCount < todosTotalCount() ){
 				canLoadMoreTodos(true);
 				maxToToDosLoaded(false);
 			}
