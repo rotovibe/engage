@@ -36,10 +36,10 @@
         var maxPatientCount = ko.observable(20);
         var cohortPatientsSkip = ko.observable(0);
 		//new paging
-		var maxTodosInCache = 200;//400;	//TODO: new parameter?
+		var maxTodosInCache = 400;	//TODO: new parameter?
 		var todosTop = ko.observable(0);
 		var todosBottom = ko.observable(0);
-		var todosTake = ko.observable(50); //TODO: new parameter?
+		var todosTake = ko.observable(100); //TODO: new parameter?
 		var todosTotalCount = ko.observable(0);
 		var canLoadMoreTodos = ko.observable(false);
 		//var canLoadPrevTodos = ko.observable(false);
