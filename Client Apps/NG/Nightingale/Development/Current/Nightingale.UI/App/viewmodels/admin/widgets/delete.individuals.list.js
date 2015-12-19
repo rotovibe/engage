@@ -108,7 +108,13 @@ define(['config.services', 'services/session', 'services/datacontext', 'models/b
         function activate() {
             if (!initialized) {
                 initializeViewModel();
-            }
+            } 
+			else{
+				setTimeout( function(){
+					//trigger the hight calculation setHeightFromPrev
+					patientsList.valueHasMutated();
+				}, 200);
+			}
             return true;
         }
 

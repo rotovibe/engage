@@ -41,21 +41,21 @@ define(['services/session', 'services/datacontext', 'config.services', 'viewmode
 
         // All the available columns
     	var allColumns = [
-            new Column('priority', 'Priority', 'span2', 'priority.id'),
+            new Column('priority', 'Priority', 'span2', 'priority.id', 'Priority'),
     		new Column('status', 'Status', 'span2', 'status.id'),
-            new Column('priority-small', 'Priority', 'span1', 'priority.id'),
+            new Column('priority-small', 'Priority', 'span1', 'priority.id', 'Priority'),
             new Column('status-small', 'Status', 'span1', 'status.id'),
     		new Column('patient', 'Individual','span2', 'patientDetails.lastName'),
     		new Column('category', 'Category','span2', 'category.name'),
             new Column('category-small', 'Category','span1', 'category.name'),
-    		new Column('title', 'Title','span4', 'title'),
-            new Column('title-small', 'Title','span3', 'title'),
-    		new Column('duedate', 'Due Date','span2', 'dueDate'),
+    		new Column('title', 'Title','span4', 'title', 'Title'),
+            new Column('title-small', 'Title','span3', 'title', 'Title'),
+    		new Column('duedate', 'Due Date','span2', 'dueDate', 'DueDate'),
     		new Column('assignedto', 'Assigned To','span2', 'assignedTo.preferredName'),
-            new Column('closedon', 'Date','span2', 'closedDate'),
-            new Column('closedon-small', 'Date','span1', 'closedDate'),
-            new Column('updatedon', 'Date','span2', 'updatedOn'),
-            new Column('updatedon-small', 'Date', 'span1', 'updatedOn')
+            new Column('closedon', 'Date','span2', 'closedDate', 'ClosedDate'),
+            new Column('closedon-small', 'Date','span1', 'closedDate', 'ClosedDate'),
+            new Column('updatedon', 'Date','span2', 'updatedOn', 'UpdatedOn'),
+            new Column('updatedon-small', 'Date', 'span1', 'updatedOn', 'UpdatedOn')
     	];
         
         var patientEndPoint = ko.computed(function () {
@@ -79,6 +79,11 @@ define(['services/session', 'services/datacontext', 'config.services', 'viewmode
             self.selectedSortColumn = data.selectedSortColumn;
             self.toggleSort = data.toggleSort;
             self.canSort = data.canSort ? data.canSort : false;
+			self.loadMoreTodos = data.loadMoreTodos;
+			self.canLoadMoreTodos = data.canLoadMoreTodos;
+			// self.loadPrevTodos = data.loadPrevTodos;
+			// self.canLoadPrevTodos = data.canLoadPrevTodos;
+			self.maxToToDosLoaded = data.maxToToDosLoaded;
             self.saveOverride = function () {
                 // If patient has been removed - clear all associated programs:
                 if (self.modalEntity().todo() && self.modalEntity().todo().programIds().length > 0 && !self.modalEntity().todo().patientId()) {                    
@@ -256,7 +261,7 @@ define(['services/session', 'services/datacontext', 'config.services', 'viewmode
     		return match;
     	}
 
-    	function Column(name, displayname, cssclass, sortprop) {
+    	function Column(name, displayname, cssclass, sortprop, backendSort) {
     		var self = this;
     		self.name = name;
     		self.displayName = displayname;
@@ -268,6 +273,7 @@ define(['services/session', 'services/datacontext', 'config.services', 'viewmode
             }
     		self.cssClass = cssclass;
             self.sortProperty = sortprop;
+			self.backendSort = backendSort;
     	}
 
     	return ctor;

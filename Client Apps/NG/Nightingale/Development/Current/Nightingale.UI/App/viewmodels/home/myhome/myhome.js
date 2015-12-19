@@ -35,6 +35,17 @@
         var selectedCohortToken;
         var maxPatientCount = ko.observable(20);
         var cohortPatientsSkip = ko.observable(0);
+		//new paging
+		var maxTodosInCache = 200;//400;	//TODO: new parameter?
+		var todosTop = ko.observable(0);
+		var todosBottom = ko.observable(0);
+		var todosTake = ko.observable(50); //TODO: new parameter?
+		var todosTotalCount = ko.observable(0);
+		var canLoadMoreTodos = ko.observable(false);
+		//var canLoadPrevTodos = ko.observable(false);
+		var maxToToDosLoaded = ko.observable(false);
+		var lockTodos = ko.observable(false);
+		
         var fullScreenWidget = ko.observable();
 
         var leftColumnOpen = ko.observable();
@@ -62,7 +73,9 @@
         var eventModal = new modelConfig.modal(eventModalSettings);
 
         // Columns to override the default sorts
-        var selectedTodoSortColumn = ko.observable()
+        var selectedTodoSortColumn = ko.observable();
+		var backendSort = ko.observable('-DueDate'); //default todo sort
+		var lastSort = ko.observable( backendSort() );
         var selectedInterventionSortColumn = ko.observable();
 
         function saveOverride () {
@@ -104,7 +117,8 @@
             self.typeId = ko.observable('');
         }
 
-        // Toggle the active sort
+        // Toggle the active sort.
+        //  note: the 3'rd click on a sort field is clearing the sort (!)
         function toggleTodoSort(sender) {
             // If the current column is the one to sort by
             if (selectedTodoSortColumn() && selectedTodoSortColumn().indexOf(sender.sortProperty) !== -1) {
@@ -112,13 +126,24 @@
                 if (selectedTodoSortColumn() && selectedTodoSortColumn().substr(selectedTodoSortColumn().length - 4, 4) === 'desc' ) {
                     // Clear the sort column, as it should be undone
                     selectedTodoSortColumn(null);
+					backendSort(null);
                 } else {
                     // Else set it as the sort column
                     selectedTodoSortColumn(sender.sortProperty + ' desc');
+					if( sender.backendSort ){
+						backendSort('-'+ sender.backendSort);
+					}else{
+						backendSort(null);
+					}
                 }
             } else {
                 // Else set it as the new sort column
                 selectedTodoSortColumn(sender.sortProperty);
+				if( sender.backendSort ){
+					backendSort(sender.backendSort);
+				}else{
+					backendSort(null);
+				}
             }
         }
 
@@ -175,16 +200,32 @@
         var patientsList = ko.observableArray();
 		
 		var updateCalendarEvents = function( theseTodos ){			
+            //TODO: separate the events from todos as they need to be sorted by dueDate range per calendar view.
 			myEvents.removeAll();
-			var events = datacontext.getCalendarEvents(theseTodos);
+			var events = datacontext.getCalendarEvents(theseTodos);	//translate todos to events
 			ko.utils.arrayPushAll(myEvents, events);
 			myEvents.valueHasMutated();
-			datacontext.syncCalendarEvents(theseTodos);
+			datacontext.syncCalendarEvents(theseTodos);	//sync Event entities from given todos
 		};
+		
+		function manageTodoPaging( localCount ){
+			//localCount - the number of Current User ToDos on local cache
+			if( localCount > todosTop() ){
+				todosTop( localCount );
+			}
+			if( localCount < maxTodosInCache ){
+				canLoadMoreTodos(true);
+				maxToToDosLoaded(false);
+			}
+			else{
+				canLoadMoreTodos(false);
+				maxToToDosLoaded(true);
+			}
+		}
 		
 		var refreshMyTodos = function(){						           
             // Either sort by the selected sort or the default
-			var selectedSortCol = selectedTodoSortColumn();
+			var selectedSortCol = selectedTodoSortColumn();					
             var orderString = selectedSortCol ? selectedSortCol : 'dueDate desc';			
             // Add the second and third orders to the string
             orderString = orderString + ', category.name, title';
@@ -201,11 +242,44 @@
             var allTodos = localCollections.todos();
 			//Subscribe to sorting
 			var selectedSortCol = selectedTodoSortColumn();			
-			//refresh from local query
-			theseTodos = refreshMyTodos();			
+			var bSort = backendSort? backendSort() : null;
+			var locked = lockTodos();
+			if( locked ){
+				return [];
+			}
+			if( backendSort() !== lastSort() ){
+				console.log(' sort has changed:' + backendSort() );
+				lastSort( backendSort() );
+				todosTop(0);
+				todosBottom(0);
+				canLoadMoreTodos(false);
+				//canLoadPrevTodos(false);				
+				maxToToDosLoaded(false);
+				lockTodos(true);
+				clearTodosCacheAndLoad();
+				printDebugCache('after clearTodosCacheAndLoad():');
+				theseTodos = [];
+			}
+			else{
+				//refresh from local query
+				theseTodos = refreshMyTodos();
+				manageTodoPaging(theseTodos.length);	
+			}			
             return theseTodos;
+			
         }).extend({ throttle: 50 });
 
+		var todosShowingText = ko.computed( function(){
+			var showing = ' showing ';
+			var totalCount = todosTotalCount();
+			var todos = myToDos? myToDos(): null;
+			showing = todos.length + ' showing'
+			if( todos.length < totalCount ) {
+				showing += ' out of ' + totalCount;
+			}
+			return showing;
+		});
+		
         // My interventions
         var myInterventions = ko.computed(function () {
             var theseInterventions = [];
@@ -249,6 +323,12 @@
             calendarOptions: calendarOptions,
             title: 'Home',
             myToDos: myToDos,
+			todosShowingText: todosShowingText,
+			canLoadMoreTodos: canLoadMoreTodos,
+			loadMoreTodos: loadMoreTodos,
+			//canLoadPrevTodos: canLoadPrevTodos,
+			//loadPrevTodos: loadPrevTodos,
+			maxToToDosLoaded: maxToToDosLoaded,
             myInterventions: myInterventions,
             activeTodoColumns: activeTodoColumns,
             activeInterventionColumns: activeInterventionColumns,
@@ -349,6 +429,12 @@
             // Go get a list of cohorts locally
             datacontext.getEntityList(cohortsList, cohortEndPoint().EntityType, cohortEndPoint().ResourcePath, null, null, false, null, 'sName').then(cohortsReturned);
             // Get my todos
+			todosTop(0);
+			todosBottom(0);
+			canLoadMoreTodos(false);
+			//canLoadPrevTodos(false);
+			maxToToDosLoaded(false);
+			lockTodos(false);
             getCurrentUserToDos().then(generateCalendarEvents);			
 			
             // Get my Interventions
@@ -419,7 +505,7 @@
 
         function getCurrentUserToDos(local, orderString) {
             // Go get a list of my todos			
-			if(local){
+			if(local){				
 				var params = []
 				params.push( new modelConfig.Parameter('assignedToId', session.currentUser().userId(), '==') );
                 params.push( new modelConfig.Parameter('statusId', '2', '!=') );
@@ -429,16 +515,133 @@
 				// Filter out the new todos
 				theseTodos = ko.utils.arrayFilter(theseTodos, function (todo) {
 					return !todo.isNew();
-				});
+				});				
 				return theseTodos;
 			}
 			else{
-				return datacontext.getToDos(null, { StatusIds: [1,3], AssignedToId: session.currentUser().userId() });
+				return loadMoreTodos()				
 			}            
         }
 		
+		//TODO in next stories - manage the cache
+		// function checkTrimLowerCache(){
+			// if( myToDos().length + todosTake() > maxTodosInCache ){				
+				// var removeTodos = [];
+				// var trimmingPoint = todosBottom() + todosTake();
+				// for( var i = todosBottom(); i < trimmingPoint ; i++ ){
+					// if( !todo.isNew() ){
+						// removeTodos.push( myToDos()[i] );
+					// }
+				// }	
+				// todosBottom( todosBottom() + removeTodos.length );	
+				// ko.utils.arrayForEach( removeTodos, function(todo){										
+					// datacontext.detachEntity( todo );								
+				// });
+			// }
+		// }
+		
+		function clearTodosCacheAndLoad(){
+			var todos = getCurrentUserToDos(true);
+			setTimeout( function(){
+				//localCollections.todos.removeAll();
+				ko.utils.arrayForEach( todos, function(todo){
+					localCollections.todos.remove(todo);
+					// todo.entityAspect.setDeleted();
+					// todo.entityAspect.acceptChanges();
+					datacontext.detachEntity(todo);
+				});
+				lockTodos(false);
+				loadMoreTodos();	//load first block with the new sort
+			}, 200);						
+						
+		}
+		
+		// function checkTrimUpperCache(){
+			// if( myToDos().length + todosTake() > maxTodosInCache ){				
+				// var removeTodos = [];
+				// var trimmingPoint = myToDos().length - todosTake() -1;
+				// for( var i = myToDos().length-1 ; i > trimmingPoint ; i-- ){
+					// if( !todo.isNew() ){
+						// removeTodos.push( myToDos()[i] );
+					// }
+				// }	
+				// todosTop( todosTop() - removeTodos.length );
+				// ko.utils.arrayForEach( removeTodos, function(todo){										
+					// datacontext.detachEntity( todo );								
+				// });					
+			// }
+		// }
+		
+		function loadMoreTodos(){			
+			//printDebugCache('loadMoreTodos: start:');
+			//checkTrimLowerCache(); TODO
+			//printDebugCache('loadMoreTodos: after trim:');
+			var params = { 
+						StatusIds: [1,3], 
+						AssignedToId: session.currentUser().userId(), 
+						Skip: todosTop(), 
+						Take: todosTake(), 
+						Sort: backendSort() 
+			};
+			return datacontext.getToDos(null, params, todosTotalCount).then( calculateTopSkipTake );
+		}
+		
+		function printDebugCache( funcStep ){
+			console.log( funcStep + ' todosTop=' + todosTop() + ' todosBottom=' + todosBottom() + ' myToDos().length= '+myToDos().length + 'total todos cache: ' + localCollections.todos().length);
+		}
+		
+		//TODO in next stories - manage the cache
+		// function loadPrevTodos(){
+			// printDebugCache('loadPrevTodos: start:');			
+			// checkTrimUpperCache();
+			// printDebugCache('loadPrevTodos: after trim:');
+			// if(todosBottom() - todosTake() < 0){ console.log('error: todosBottom() - todosTake() < 0'); }
+			// var params = { 
+						// StatusIds: [1,3], 
+						// AssignedToId: session.currentUser().userId(), 
+						// Skip: todosBottom() - todosTake(), 
+						// Take: todosTake(), 
+						// Sort: backendSort() 
+			// };
+			// return datacontext.getToDos(null, params, todosTotalCount).then( calculateBottomSkipTake );		
+		// }
+		
+		// function calculateBottomSkipTake(){			
+			// var nextBottom = todosBottom() - todosTake();
+			// todosBottom( nextBottom );
+			// if( nextBottom > 0 ){
+				// todosTop(nextSkip);
+				// //canLoadPrevTodos(true);
+			// }
+			// else{
+				// todosBottom(0);
+				// //canLoadPrevTodos(false);
+			// }
+			// printDebugCache('calculateBottomSkipTake:');
+		// }
+		
+		function calculateTopSkipTake(){
+			var skipped = todosTop();
+			var nextSkip = skipped + todosTake();
+			if( nextSkip < todosTotalCount() && nextSkip < maxTodosInCache ){
+				todosTop(nextSkip);		
+				canLoadMoreTodos(true);
+			}	
+			else{
+				canLoadMoreTodos(false);
+			}				
+			if( nextSkip < maxTodosInCache ){			
+				maxToToDosLoaded(false);
+			}
+			else{				
+				maxToToDosLoaded(true);
+			}			
+			printDebugCache( 'calculateTopSkipTake:' );
+		}
+		
 		function generateCalendarEvents(){
 			//after the current user todos loaded: get them locally
+			//TODO: will have to get todos by DueDate date range			
 			var theseTodos = getCurrentUserToDos( true );
 			//create calendar event entities to reflect these todos:
             datacontext.syncCalendarEvents(theseTodos);

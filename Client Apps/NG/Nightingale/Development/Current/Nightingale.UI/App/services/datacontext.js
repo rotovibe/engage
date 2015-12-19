@@ -1504,14 +1504,15 @@
 			localCollections.alerts.push(thisAlert);
 		}
 
-		function getToDos (observable, params) {
+		function getToDos (observable, params, observableTotalCount) {
 			var message = queryStarted('ToDos', true, 'Loading');
 			todosSaving(true);
-			return notesService.getToDos(manager, observable, params).then(todosReturned);
+			return notesService.getToDos(manager, observable, params, observableTotalCount).then(todosReturned);
 
 			function todosReturned(todos) {
 				// Finally, clear out the message
 				queryCompleted(message);
+				//TODO: manage the size of the localCollections.todo 
 				// Make sure each of the todos are in the collection locally
 				ko.utils.arrayForEach(todos, function (todo) {
 					if (localCollections.todos.indexOf(todo) === -1) {
@@ -1522,7 +1523,17 @@
 				todosSaving(false);
 			}
 		}
-
+		
+		/**
+		*	clear all the todos from the cache
+		*	@method clearToDos
+		*/
+		function clearToDos(){
+			ko.utils.arrayForEach( localCollections.todos, function( todo ) {
+				manager.detachEntity(todo);		
+			}); 	
+		}
+		
 		function getToDosQuery (params, orderstring) {
 			return notesService.getToDosQuery(manager, params, orderstring);
 		}
@@ -1611,6 +1622,13 @@
 				return caremanager.id() === session.currentUser().userId();
 			});
 			return thisMatchedCareManager.preferredName();
+		}
+		
+		function getUserCareManager(){
+			var thisMatchedCareManager = ko.utils.arrayFirst(datacontext.enums.careManagers(), function (caremanager) {
+				return caremanager.id() === session.currentUser().userId();
+			});
+			return thisMatchedCareManager;
 		}
 
 		function getCalendarEvents( theseTodos ){
