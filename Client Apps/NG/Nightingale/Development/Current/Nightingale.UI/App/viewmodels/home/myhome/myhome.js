@@ -219,7 +219,9 @@
 			}
 			else{
 				canLoadMoreTodos(false);
-				maxToToDosLoaded(true);
+				if( localCount >= maxTodosInCache ){
+					maxToToDosLoaded(true);
+				}
 			}
 		}
 		
@@ -626,7 +628,7 @@
 			else{
 				canLoadMoreTodos(false);
 			}				
-			if( nextSkip < maxTodosInCache ){			
+			if( todosTotalCount() < maxTodosInCache ){			
 				maxToToDosLoaded(false);
 			}
 			else{				
