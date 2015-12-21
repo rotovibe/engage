@@ -38,20 +38,20 @@ define(['services/session', 'services/datacontext', 'config.services', 'viewmode
 			*/
 			self.originalProgramIds = ko.observableArray([]);
     	}
-
+		
         // All the available columns
     	var allColumns = [
             new Column('priority', 'Priority', 'span2', 'priority.id', 'Priority'),
     		new Column('status', 'Status', 'span2', 'status.id'),
             new Column('priority-small', 'Priority', 'span1', 'priority.id', 'Priority'),
             new Column('status-small', 'Status', 'span1', 'status.id'),
-    		new Column('patient', 'Individual','span2', 'patientDetails.lastName'),
-    		new Column('category', 'Category','span2', 'category.name'),
-            new Column('category-small', 'Category','span1', 'category.name'),
+    		new Column('patient', 'Individual','span2', 'patientDetails.lastName', true),
+    		new Column('category', 'Category','span2', 'category.name', true ),
+            new Column('category-small', 'Category','span1', 'category.name', true ),
     		new Column('title', 'Title','span4', 'title', 'Title'),
             new Column('title-small', 'Title','span3', 'title', 'Title'),
     		new Column('duedate', 'Due Date','span2', 'dueDate', 'DueDate'),
-    		new Column('assignedto', 'Assigned To','span2', 'assignedTo.preferredName'),
+    		new Column('assignedto', 'Assigned To','span2', 'assignedTo.preferredName', true),
             new Column('closedon', 'Date','span2', 'closedDate', 'ClosedDate'),
             new Column('closedon-small', 'Date','span1', 'closedDate', 'ClosedDate'),
             new Column('updatedon', 'Date','span2', 'updatedOn', 'UpdatedOn'),
@@ -71,14 +71,34 @@ define(['services/session', 'services/datacontext', 'config.services', 'viewmode
                 return false;
             }
             return new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'Patient', 'Program');
-        });
-    	
+        });    	
+		
         ctor.prototype.activate = function (data) {
     		var self = this;
     		self.todos = data.todos;
             self.selectedSortColumn = data.selectedSortColumn;
             self.toggleSort = data.toggleSort;
             self.canSort = data.canSort ? data.canSort : false;
+			self.isBackendSort = data.isBackendSort ? data.isBackendSort : false;							
+			//dont allow sorting on category name and individual name since this view's data has backend sorting. 
+			//	for now - backend sorting cannot sort on related collections properties as category name in a todo query.
+			var column = findColumnByName('assignedto');
+			if( column ){
+				column.backendSort = !self.isBackendSort;
+			}
+			column = findColumnByName('patient');
+			if( column ){
+				column.backendSort = !self.isBackendSort;;
+			}
+			column = findColumnByName('category');
+			if( column ){
+				column.backendSort = !self.isBackendSort;;
+			}
+			column = findColumnByName('category-small');
+			if( column ){
+				column.backendSort = !self.isBackendSort;;
+			}
+			
 			self.loadMoreTodos = data.loadMoreTodos;
 			self.canLoadMoreTodos = data.canLoadMoreTodos;
 			// self.loadPrevTodos = data.loadPrevTodos;
