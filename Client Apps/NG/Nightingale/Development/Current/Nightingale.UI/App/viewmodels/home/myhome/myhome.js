@@ -30,7 +30,7 @@
         }
 
         var newTodo = ko.observable();
-
+		var todosLoading = ko.computed(datacontext.todosSaving).extend({ throttle: 50 });
         var initialized = false;
         var selectedCohortToken;
         var maxPatientCount = ko.observable(20);
@@ -225,6 +225,12 @@
 			}
 		}
 		
+		var todosReloading = ko.computed( function(){
+			var locked = lockTodos? lockTodos(): false;
+			var todosSaving = todosSaving ? todosSaving(): false;
+			return (locked || todosSaving);
+		}).extend({ throttle: 50 });
+		
 		var refreshMyTodos = function(){						           
             // Either sort by the selected sort or the default
 			var selectedSortCol = selectedTodoSortColumn();					
@@ -273,10 +279,16 @@
 			var showing = ' showing ';
 			var totalCount = todosTotalCount();
 			var todos = myToDos? myToDos(): null;
-			showing = todos.length + ' showing'
-			if( todos.length < totalCount ) {
-				showing += ' out of ' + totalCount;
+			var reloading = todosReloading ? todosReloading() : false;
+			if( reloading ){
+				showing = 'Loading...';
 			}
+			else{
+				showing = todos.length + ' showing'
+				if( todos.length < totalCount ) {
+					showing += ' out of ' + totalCount;
+				}	
+			}			
 			return showing;
 		});
 		
@@ -329,6 +341,7 @@
 			//canLoadPrevTodos: canLoadPrevTodos,
 			//loadPrevTodos: loadPrevTodos,
 			maxToToDosLoaded: maxToToDosLoaded,
+			todosReloading: todosReloading,
             myInterventions: myInterventions,
             activeTodoColumns: activeTodoColumns,
             activeInterventionColumns: activeInterventionColumns,
@@ -546,11 +559,9 @@
 				//localCollections.todos.removeAll();
 				ko.utils.arrayForEach( todos, function(todo){
 					localCollections.todos.remove(todo);
-					// todo.entityAspect.setDeleted();
-					// todo.entityAspect.acceptChanges();
 					datacontext.detachEntity(todo);
 				});
-				lockTodos(false);
+				
 				loadMoreTodos();	//load first block with the new sort
 			}, 200);						
 						
@@ -573,7 +584,8 @@
 		// }
 		
 		function loadMoreTodos(){						
-			//checkTrimLowerCache(); TODO			
+			//checkTrimLowerCache(); TODO
+			canLoadMoreTodos(false);
 			var params = { 
 						StatusIds: [1,3], 
 						AssignedToId: session.currentUser().userId(), 
@@ -581,7 +593,7 @@
 						Take: todosTake(), 
 						Sort: backendSort() 
 			};
-			return datacontext.getToDos(null, params, todosTotalCount).then( calculateTopSkipTake );
+			return datacontext.getToDos(null, params, todosTotalCount).then( todosReturned );
 		}
 		
 		// function printDebugCache( funcStep ){
@@ -618,7 +630,8 @@
 			// printDebugCache('calculateBottomSkipTake:');
 		// }
 		
-		function calculateTopSkipTake(){
+		function todosReturned(){
+			lockTodos(false);
 			var skipped = todosTop();
 			var nextSkip = skipped + todosTake();
 			if( nextSkip < todosTotalCount() && nextSkip < maxTodosInCache ){

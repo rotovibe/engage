@@ -79,7 +79,8 @@ define(['services/session', 'services/datacontext', 'config.services', 'viewmode
             self.selectedSortColumn = data.selectedSortColumn;
             self.toggleSort = data.toggleSort;
             self.canSort = data.canSort ? data.canSort : false;
-			self.isBackendSort = data.isBackendSort ? data.isBackendSort : false;							
+			self.isBackendSort = data.isBackendSort ? data.isBackendSort : false;
+			self.todosReloading = data.todosReloading ? data.todosReloading : false;
 			//dont allow sorting on category name and individual name since this view's data has backend sorting. 
 			//	for now - backend sorting cannot sort on related collections properties as category name in a todo query.
 			var column = findColumnByName('assignedto');

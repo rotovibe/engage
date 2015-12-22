@@ -23,17 +23,19 @@
             </div>
         </div>
     </div>
-	<div data-bind="visible: canLoadMoreTodos">
-		<div class="row divider">
-			<button class="small" data-bind="click: loadMoreTodos">Load more...</button>
+	<div data-bind="visible: !todosReloading()">
+		<div data-bind="visible: canLoadMoreTodos">
+			<div class="row divider">
+				<button class="small" data-bind="click: loadMoreTodos">Load more...</button>
+			</div>
+		</div>
+		<div data-bind="visible: maxToToDosLoaded">
+			<div class="row divider">
+				<em>... cannot load more (try selecting a different sort)</em>
+			</div>
+		</div>
+		<div class="row" data-bind="visible: computedTodos().length === 0">
+			<em>No data meets your filter criteria</em>
 		</div>
 	</div>
-	<div data-bind="visible: maxToToDosLoaded">
-		<div class="row divider">
-			<em>... cannot load more (try selecting a different sort)</em>
-		</div>
-	</div>
-    <div class="row" data-bind="visible: computedTodos().length === 0">
-        <em>No data meets your filter criteria</em>
-    </div>
 </div>
