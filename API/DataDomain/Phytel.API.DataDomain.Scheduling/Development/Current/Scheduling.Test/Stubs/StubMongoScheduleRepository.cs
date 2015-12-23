@@ -16,7 +16,6 @@ namespace Phytel.API.DataDomain.ToDo.Test.Stubs
         {
         }
         
-        //public IEnumerable<object> FindToDos(object request)
         public GetToDosDataResponse FindToDos(object request)
         {
             throw new NotImplementedException();

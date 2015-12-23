@@ -25,8 +25,7 @@ namespace Phytel.API.DataDomain.Scheduling
 
                 ISchedulingRepository repo = Factory.GetRepository(request, RepositoryType.ToDo);
                 repo.UserId = request.UserId;
-                result = (GetToDosDataResponse)repo.FindToDos(request);
-                //result.ToDos = (List<ToDoData>)repo.FindToDos(request);
+                result = (GetToDosDataResponse)repo.FindToDos(request);                
                 return result;
             }
             catch (Exception ex)

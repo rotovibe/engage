@@ -292,6 +292,9 @@ namespace Phytel.API.DataDomain.Scheduling
                         uv.Add(MB.Update.Set(METoDo.VersionProperty, request.Version));
                         uv.Add(MB.Update.Set(METoDo.LastUpdatedOnProperty, System.DateTime.UtcNow));
                         uv.Add(MB.Update.Set(METoDo.TitleProperty, todoData.Title));
+                        if( !string.IsNullOrEmpty(todoData.Title)){
+                            uv.Add(MB.Update.Set(METoDo.LoweredTitleProperty, todoData.Title.ToLower()));
+                        }                        
                         uv.Add(MB.Update.Set(METoDo.StatusProperty, (Status)todoData.StatusId));
                         uv.Add(MB.Update.Set(METoDo.PriorityProperty, (Priority)todoData.PriorityId));
 
@@ -441,7 +444,6 @@ namespace Phytel.API.DataDomain.Scheduling
             catch (Exception) { throw; }
         }
 
-        //public IEnumerable<object> FindToDos(object request)
         public GetToDosDataResponse FindToDos(object request)
         {
             GetToDosDataResponse response = new GetToDosDataResponse();
@@ -481,6 +483,7 @@ namespace Phytel.API.DataDomain.Scheduling
                     {
                         queries.Add(Query.In(METoDo.StatusProperty, new BsonArray(dataRequest.StatusIds)));
                     }
+                    
                     if (dataRequest.FromDate != null)
                     {
                         queries.Add(Query.GTE(METoDo.ClosedDateProperty, dataRequest.FromDate));
