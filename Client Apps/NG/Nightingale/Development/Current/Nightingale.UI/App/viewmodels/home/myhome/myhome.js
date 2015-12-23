@@ -40,7 +40,7 @@
 		var todosTop = ko.observable(0);
 		var todosBottom = ko.observable(0);
 		var todosTake = ko.observable(100); //TODO: new parameter?
-		var todosTotalCount = ko.observable(0);
+		var todosTotalCount = ko.computed( localCollections.counters.todos.openAssignedToMe.total ).extend({ throttle: 50 });
 		var canLoadMoreTodos = ko.observable(false);
 		//var canLoadPrevTodos = ko.observable(false);
 		var maxToToDosLoaded = ko.observable(false);
@@ -518,18 +518,8 @@
 
         function getCurrentUserToDos(local, orderString) {
             // Go get a list of my todos			
-			if(local){				
-				var params = []
-				params.push( new modelConfig.Parameter('assignedToId', session.currentUser().userId(), '==') );
-                params.push( new modelConfig.Parameter('statusId', '2', '!=') );
-                params.push( new modelConfig.Parameter('statusId', '4', '!=') );
-					
-				var theseTodos = datacontext.getToDosQuery( params, orderString);	
-				// Filter out the new todos
-				theseTodos = ko.utils.arrayFilter(theseTodos, function (todo) {
-					return !todo.isNew();
-				});				
-				return theseTodos;
+			if(local){	
+				return datacontext.getToDosLocalOpenAssignedToMe(orderString);				
 			}
 			else{
 				return loadMoreTodos()				
@@ -586,14 +576,7 @@
 		function loadMoreTodos(){						
 			//checkTrimLowerCache(); TODO
 			canLoadMoreTodos(false);
-			var params = { 
-						StatusIds: [1,3], 
-						AssignedToId: session.currentUser().userId(), 
-						Skip: todosTop(), 
-						Take: todosTake(), 
-						Sort: backendSort() 
-			};
-			return datacontext.getToDos(null, params, todosTotalCount).then( todosReturned );
+			return datacontext.getToDosRemoteOpenAssignedToMe( todosTop(), todosTake(), backendSort() ).then( todosReturned );
 		}
 		
 		// function printDebugCache( funcStep ){
@@ -631,7 +614,7 @@
 		// }
 		
 		function todosReturned(){
-			lockTodos(false);
+			lockTodos(false);		
 			var skipped = todosTop();
 			var nextSkip = skipped + todosTake();
 			if( nextSkip < todosTotalCount() && nextSkip < maxTodosInCache ){

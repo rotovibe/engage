@@ -271,6 +271,8 @@
 			createAlert: createAlert,
 			getToDos: getToDos,
 			getToDosQuery: getToDosQuery,
+			getToDosRemoteOpenAssignedToMe: getToDosRemoteOpenAssignedToMe,
+			getToDosLocalOpenAssignedToMe: getToDosLocalOpenAssignedToMe,
 			getInterventions: getInterventions,
 			getInterventionsQuery: getInterventionsQuery,
 			getTasks: getTasks,
@@ -1537,7 +1539,36 @@
 		function getToDosQuery (params, orderstring) {
 			return notesService.getToDosQuery(manager, params, orderstring);
 		}
-
+		
+		function getToDosRemoteOpenAssignedToMe( skip, take, sort ){
+			var params = { 
+						StatusIds: [1,3], 
+						AssignedToId: session.currentUser().userId(), 
+						Skip: skip, //todosTop(), 
+						Take: take, //todosTake(), 
+						Sort: sort	//backendSort() 
+			};
+			var total = ko.observable();
+			return getToDos(null, params, total).then( function(){
+				localCollections.counters.todos.openAssignedToMe.total( total() );
+			});
+		}
+		
+		function getToDosLocalOpenAssignedToMe(orderString){
+			var params = []
+			params.push( new modelConfig.Parameter('assignedToId', session.currentUser().userId(), '==') );
+			params.push( new modelConfig.Parameter('statusId', '2', '!=') );
+			params.push( new modelConfig.Parameter('statusId', '4', '!=') );
+				
+			var theseTodos = getToDosQuery( params, orderString);	
+			// Filter out the new todos
+			theseTodos = ko.utils.arrayFilter(theseTodos, function (todo) {
+				return !todo.isNew();
+			});	
+			localCollections.counters.todos.openAssignedToMe.local( theseTodos.length );
+			return theseTodos;
+		}
+		
 		function getInterventions (observable, params) {
 			var message = queryStarted('Interventions', true, 'Loading');
 			interventionsSaving(true);
@@ -1583,7 +1614,7 @@
 		function getTasksQuery (params, orderstring) {
 			return goalsService.getTasksQuery(manager, params, orderstring);
 		}
-
+		
 		// Save changes to a single contact card
 		function saveToDo(todo, action) {
 			// Display a message while saving
@@ -1597,19 +1628,29 @@
 				
 				// If it is a new todo,
 				if (todo && todo.id() < 0) {
-						// Remove it so the replacement gets set
-						manager.detachEntity(todo);
-					}
-					if (localCollections.todos.indexOf(data) < 0) {
-						localCollections.todos.push(data);
-					}
+					// Remove it so the replacement gets set
+					manager.detachEntity(todo);
+				}
+				if (localCollections.todos.indexOf(data) < 0) {
+					localCollections.todos.push(data);					
+				}				
+				var count = 0;
+				if( todo.id() < 0 ){
+					count= +1;
+				}
+				if( todo.deleteFlag() ){
+					count = -1;
+				}			
+				if( todo.assignedToId() == session.currentUser().userId() && ( todo.statusId() == 1 || todo.statusId() == 3 ) ){
+					localCollections.counters.todos.openAssignedToMe.total( localCollections.counters.todos.openAssignedToMe.total() + count );
+				} 
 				// Finally, clear out the message
 				queryCompleted(message);
 				todosSaving(false);
 				return data;
 			}
-		}
-
+		}		
+		
 		function getSystemCareManager(){
 			var SystemCareManager = ko.utils.arrayFirst(datacontext.enums.careManagers(), function (caremanager) {
 				return (caremanager.userId()=== '' && caremanager.firstName() === 'System' && caremanager.preferredName() === 'System');
