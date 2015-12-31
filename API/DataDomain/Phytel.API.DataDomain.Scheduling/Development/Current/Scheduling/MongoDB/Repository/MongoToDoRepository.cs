@@ -471,6 +471,14 @@ namespace Phytel.API.DataDomain.Scheduling
                             }
                         }
                     }
+                    if (!string.IsNullOrEmpty(dataRequest.NotAssignedToId))
+                    {
+                        ObjectId nto;
+                        if (ObjectId.TryParse(dataRequest.NotAssignedToId, out nto))
+                        {
+                            queries.Add(Query.NE(METoDo.AssignedToProperty, nto));
+                        }
+                    }
                     if (!string.IsNullOrEmpty(dataRequest.CreatedById))
                     {
                         queries.Add(Query.EQ(METoDo.RecordCreatedByProperty, ObjectId.Parse(dataRequest.CreatedById)));
@@ -483,7 +491,25 @@ namespace Phytel.API.DataDomain.Scheduling
                     {
                         queries.Add(Query.In(METoDo.StatusProperty, new BsonArray(dataRequest.StatusIds)));
                     }
-                    
+                    if (dataRequest.PriorityIds != null && dataRequest.PriorityIds.Count > 0)
+                    {
+                        queries.Add(Query.In(METoDo.PriorityProperty, new BsonArray(dataRequest.PriorityIds))); //integer values (not object ids)
+                    }
+                    if (dataRequest.CategoryIds != null && dataRequest.CategoryIds.Count > 0)
+                    {
+                        List<BsonValue> categories = new List<BsonValue>();
+                        foreach( string categoryId in dataRequest.CategoryIds ){
+                            if (categoryId.Length > 0)
+                            {
+                                categories.Add(BsonValue.Create(ObjectId.Parse(categoryId)));
+                            }
+                            else
+                            {
+                                categories.Add(BsonNull.Value); //empty string => include null categories ( not set )
+                            }
+                        }
+                        queries.Add(Query.In(METoDo.CatgegoryProperty, categories));
+                    }
                     if (dataRequest.FromDate != null)
                     {
                         queries.Add(Query.GTE(METoDo.ClosedDateProperty, dataRequest.FromDate));

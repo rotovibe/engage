@@ -11,6 +11,9 @@ namespace Phytel.API.DataDomain.Scheduling.DTO
         [ApiMember(Name = "AssignedToId", Description = "AssignedToId is the Id to which ToDo is assigned to.", ParameterType = "property", DataType = "string", IsRequired = false)]
         public string AssignedToId { get; set; }
 
+        [ApiMember(Name = "NotAssignedToId", Description = "NotAssignedToId is the Id to which ToDo is NOT assigned to.", ParameterType = "property", DataType = "string", IsRequired = false)]
+        public string NotAssignedToId { get; set; }
+
         [ApiMember(Name = "CreatedById", Description = "CreatedById is the Id of the user who created the ToDo.", ParameterType = "property", DataType = "string", IsRequired = false)]
         public string CreatedById { get; set; }
 
@@ -22,6 +25,12 @@ namespace Phytel.API.DataDomain.Scheduling.DTO
         
         [ApiMember(Name = "StatusIds", Description = "List of ToDo Status ids.", ParameterType = "property", DataType = "List<int>", IsRequired = false)]
         public List<int> StatusIds { get; set; }
+        
+        [ApiMember(Name = "PriorityIds", Description = "List of ToDo Priority ids.", ParameterType = "property", DataType = "List<int>", IsRequired = false)]
+        public List<int> PriorityIds { get; set; }
+
+        [ApiMember(Name = "CategoryIds", Description = "List of ToDo Category ids.", ParameterType = "property", DataType = "List<int>", IsRequired = false)]
+        public List<string> CategoryIds { get; set; }
         
         [ApiMember(Name = "UserId", Description = "UserId of the logged in user", ParameterType = "property", DataType = "string", IsRequired = false)]
         public string UserId { get; set; }
