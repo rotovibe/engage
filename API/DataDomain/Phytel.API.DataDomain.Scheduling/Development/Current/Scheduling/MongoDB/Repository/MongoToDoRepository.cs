@@ -477,6 +477,7 @@ namespace Phytel.API.DataDomain.Scheduling
                         if (ObjectId.TryParse(dataRequest.NotAssignedToId, out nto))
                         {
                             queries.Add(Query.NE(METoDo.AssignedToProperty, nto));
+                            queries.Add(Query.NE(METoDo.AssignedToProperty, BsonNull.Value));   //excluding assigned to id also excludes all unassigned
                         }
                     }
                     if (!string.IsNullOrEmpty(dataRequest.CreatedById))
