@@ -14,6 +14,6 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="..\..\bin\Phytel.Services.API.Pagination.dll" target="lib\net451\Phytel.Services.API.Pagination.dll" />
+    <file src="..\bin\Phytel.Services.API.Pagination.dll" target="lib\net451\Phytel.Services.API.Pagination.dll" />
   </files>
 </package>
