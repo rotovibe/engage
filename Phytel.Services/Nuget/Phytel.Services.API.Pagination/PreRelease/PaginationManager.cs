@@ -2,6 +2,10 @@
 {
     public class PaginationManager : IPaginationManager
     {
+        private const int DEFAULT_MAX = 2000;
+
+        private const int DEFAULT = 100;
+
         public int GetNormalizeSkip(object requestDto)
         {
             int normalizedSkip = 0;
@@ -27,9 +31,20 @@
             {
                 var take = request.Take;
 
-                if (take != null && take.Value > 0)
+                if (take != null)
                 {
-                    normalizedTake = take;
+                    if (take.Value > 0 && take.Value <= DEFAULT_MAX)
+                    {
+                        normalizedTake = take;
+                    }
+                    else
+                    {
+                        normalizedTake = DEFAULT_MAX;
+                    }
+                }
+                else
+                {
+                    normalizedTake = DEFAULT;
                 }
             }
 
