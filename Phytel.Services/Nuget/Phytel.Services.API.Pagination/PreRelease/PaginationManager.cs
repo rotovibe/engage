@@ -33,7 +33,7 @@
 
                 if (take != null)
                 {
-                    if (take.Value > 0 && take.Value <= DEFAULT_MAX)
+                    if (take.Value >= 0 && take.Value <= DEFAULT_MAX)
                     {
                         normalizedTake = take;
                     }
