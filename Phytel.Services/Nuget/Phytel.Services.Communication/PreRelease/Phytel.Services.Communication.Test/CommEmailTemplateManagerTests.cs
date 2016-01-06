@@ -351,13 +351,13 @@ namespace Phytel.Services.Communication.Test
                 "table id=&quot;content&quot; style=&quot;border-collapse: collapse;width:100%;&quot;&gt;&lt;tr&gt;&lt;td style=&quot;text-align:left;" +
                 "padding:0px 50px 0px 50px;&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td style=&quot;margin: 0px 0px 5px 0px;&quot;&" +
                 "gt;													Dear Test,&lt;br /&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&" +
-                "quot;margin: 0px 0px 15px 0px;&quot;&gt;&lt;br /&gt;This is a courtesy message from narrative.&lt;br /&gt;&lt;" +
+                "quot;margin: 0px 0px 15px 0px;&quot;&gt;&lt;br /&gt;This is a courtesy message from Facility Name.&lt;br /&gt;&lt;" +
                 "br /&gt;													  As our patient, we care about you and strive to give you the highest quality healthcare possible.  " +
                 "We have some important information that is pertinent to maintaining your health.&lt;br /&gt;&lt;br /&gt;													  " +
                 "Please call our office at (214) 555-1212 to retrieve your health information.  Please &lt;u&gt;do not&lt;/u&gt; reply to this email.  " +
                 "To ensure your privacy, we would like to verify your identity over the phone prior to discussing any of your personal health information.&lt;br /&gt;&" +
                 "lt;br /&gt;&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td style=&quot;padding-right:50px;float:right&quot;&" +
-                "gt;													  Sincerely,&lt;br /&gt;&lt;br /&gt;narrative " +
+                "gt;													  Sincerely,&lt;br /&gt;&lt;br /&gt;Facility Name " +
                 "Staff											&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;br /&gt;&lt;/td&gt;&" +
                 "lt;/tr&gt;&lt;/table&gt;&lt;table id=&quot;divider_bottom&quot; style=&quot;text-align:center;width:100%;height: 16px;" +
                 "margin: 0px 0px 5px 0px;&quot;&gt;&lt;tr&gt;&lt;td style=&quot;text-align:center;&quot;&gt;&lt;img alt=&quot;&" +
