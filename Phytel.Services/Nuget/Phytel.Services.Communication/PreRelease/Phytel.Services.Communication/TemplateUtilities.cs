@@ -386,5 +386,114 @@ namespace Phytel.Services.Communication
             }
             return transformedString;
         }
+
+        public CommTextResult BuildCommTextResult(XmlNode call)
+        {
+            CommTextResult commTextResult = new CommTextResult();
+            string mode = "TEXT";
+            string xpath = string.Empty;
+
+            //SendID
+            xpath = GetModeSpecificTag(XMLFields.ModeSendID, mode);
+            XmlNode sendIDNode = call.SelectSingleNode(xpath);
+            if (sendIDNode != null)
+            {
+                if (!String.IsNullOrEmpty(sendIDNode.InnerText)
+                    && !String.IsNullOrEmpty(sendIDNode.InnerText.Trim()))
+                    commTextResult.SendID = Convert.ToInt32(sendIDNode.InnerText);
+            }
+
+            //ContractNumber
+            xpath = GetModeSpecificTag(XMLFields.ModeContractID, mode);
+            XmlNode contractIDNode = call.SelectSingleNode(xpath);
+            if (contractIDNode != null)
+            {
+                if (!String.IsNullOrEmpty(contractIDNode.InnerText)
+                    && !String.IsNullOrEmpty(contractIDNode.InnerText.Trim()))
+                    commTextResult.ContractNumber = contractIDNode.InnerText;
+            }
+
+            //FacilityID
+            commTextResult.FacilityID = int.MaxValue;
+            xpath = GetModeSpecificTag(XMLFields.ModeFacilityID, mode);
+            XmlNode facilityIDNode = call.SelectSingleNode(xpath);
+            if (facilityIDNode != null)
+            {
+                if (!String.IsNullOrEmpty(facilityIDNode.InnerText)
+                    && !String.IsNullOrEmpty(facilityIDNode.InnerText.Trim()))
+                    commTextResult.FacilityID = Convert.ToInt32(facilityIDNode.InnerText);
+            }
+
+            //FacilityID
+            xpath = GetModeSpecificTag(XMLFields.ModeFacilityName, mode);
+            XmlNode facilityNameNode = call.SelectSingleNode(xpath);
+            if (facilityNameNode != null)
+            {
+                if (!String.IsNullOrEmpty(facilityNameNode.InnerText)
+                    && !String.IsNullOrEmpty(facilityNameNode.InnerText.Trim()))
+                    commTextResult.FacilityName = facilityNameNode.InnerText;
+            }
+
+            //ActivityID
+            commTextResult.ActivityID = int.MaxValue;
+            xpath = GetModeSpecificTag(XMLFields.ModeActivityID, mode);
+            XmlNode activityIDNode = call.SelectSingleNode(xpath);
+            if (activityIDNode != null)
+            {
+                if (!String.IsNullOrEmpty(activityIDNode.InnerText)
+                    && !String.IsNullOrEmpty(activityIDNode.InnerText.Trim()))
+                    commTextResult.ActivityID = Convert.ToInt32(activityIDNode.InnerText);
+            }
+
+            //ScheduleID
+            commTextResult.ScheduleID = int.MaxValue;
+            xpath = GetModeSpecificTag(XMLFields.ModeScheduleID, mode);
+            XmlNode scheduleIDNode = call.SelectSingleNode(xpath);
+            if (scheduleIDNode != null)
+            {
+                if (!String.IsNullOrEmpty(scheduleIDNode.InnerText)
+                    && !String.IsNullOrEmpty(scheduleIDNode.InnerText.Trim()))
+                    commTextResult.ScheduleID = Convert.ToInt32(scheduleIDNode.InnerText);
+            }
+
+            //From Number
+            xpath = GetModeSpecificTag(XMLFields.ModeFromPhoneNumber, mode);
+            XmlNode fromNumberNode = call.SelectSingleNode(xpath);
+            if (fromNumberNode != null)
+            {
+                if (!String.IsNullOrEmpty(fromNumberNode.InnerText)
+                    && !String.IsNullOrEmpty(fromNumberNode.InnerText.Trim()))
+                    commTextResult.FromNumber = fromNumberNode.InnerText;
+            }
+
+            //To Number
+            xpath = GetModeSpecificTag(XMLFields.ModeToPhoneNumber, mode);
+            XmlNode toNumberNode = call.SelectSingleNode(xpath);
+            if (toNumberNode != null)
+            {
+                if (!String.IsNullOrEmpty(toNumberNode.InnerText)
+                    && !String.IsNullOrEmpty(toNumberNode.InnerText.Trim()))
+                    commTextResult.ToNumber = toNumberNode.InnerText;
+            }
+
+            commTextResult.CallDistributorTimeOfCall = DateTime.MaxValue;
+            commTextResult.CallDuration = long.MaxValue;
+            commTextResult.NotifySender = int.MaxValue;
+            commTextResult.TaskComplete = int.MaxValue;
+            commTextResult.Inprocess = int.MaxValue;
+            commTextResult.Retries = int.MaxValue;
+            commTextResult.RetryCount = int.MaxValue;
+            commTextResult.RetryInterval = int.MaxValue;
+            commTextResult.ActivityRetryCount = int.MaxValue;
+            commTextResult.UnsuccessfulCount = int.MaxValue;
+            commTextResult.UnsuccessfulLimit = int.MaxValue;
+            commTextResult.UnsuccessfulRetryInterval = int.MaxValue;
+            commTextResult.ActivityStatusDate = DateTime.MaxValue;
+            commTextResult.ContractID = int.MaxValue;
+            commTextResult.CommStartDateTime = DateTime.MaxValue;
+            commTextResult.CommStopDateTime = DateTime.MaxValue;
+        
+            return commTextResult;
+        }
     }
 }
