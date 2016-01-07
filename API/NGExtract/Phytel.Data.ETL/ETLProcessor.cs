@@ -1618,7 +1618,7 @@ namespace Phytel.Data.ETL
                             parms.Add(new Parameter("@UpdatedBy", (string.IsNullOrEmpty(bar.UpdatedBy.ToString()) ? string.Empty : bar.UpdatedBy.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
                             parms.Add(new Parameter("@Version", (string.IsNullOrEmpty(bar.Version.ToString()) ? string.Empty : bar.Version.ToString()), SqlDbType.Float, ParameterDirection.Input, 32));
                             parms.Add(new Parameter("@Name", (string.IsNullOrEmpty(bar.Name) ? string.Empty : bar.Name), SqlDbType.VarChar, ParameterDirection.Input, 500));
-                            parms.Add(new Parameter("@Details", (string.IsNullOrEmpty(bar.Details) ? (object)DBNull.Value : bar.Details), SqlDbType.VarChar, ParameterDirection.Input, 5000));
+                            //parms.Add(new Parameter("@Details", (string.IsNullOrEmpty(bar.Details) ? (object)DBNull.Value : bar.Details), SqlDbType.VarChar, ParameterDirection.Input, 5000));
                             if (bar.ExtraElements != null)
                                 parms.Add(new Parameter("@ExtraElements", bar.ExtraElements.ToString(), SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
                             else
@@ -1676,7 +1676,7 @@ namespace Phytel.Data.ETL
                             parms.Add(new Parameter("@Version", goal.Version.ToString(), SqlDbType.Float, ParameterDirection.Input, 32));
                             parms.Add(new Parameter("@Delete", goal.DeleteFlag.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
                             parms.Add(new Parameter("@TimeToLive", goal.TTLDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@Details", (string.IsNullOrEmpty(goal.Details) ? (object)DBNull.Value : goal.Details), SqlDbType.VarChar, ParameterDirection.Input, 5000));
+                            //parms.Add(new Parameter("@Details", (string.IsNullOrEmpty(goal.Details) ? (object)DBNull.Value : goal.Details), SqlDbType.VarChar, ParameterDirection.Input, 5000));
                             if (goal.ExtraElements != null)
                                 parms.Add(new Parameter("@ExtraElements", goal.ExtraElements.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 5000));
                             else
@@ -1814,7 +1814,7 @@ namespace Phytel.Data.ETL
                                 // new fields
                                 parms.Add(new Parameter("@ClosedDate", intervention.ClosedDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
                                 parms.Add(new Parameter("@TemplateId", (string.IsNullOrEmpty(intervention.TemplateId.ToString()) ? string.Empty : intervention.TemplateId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                                parms.Add(new Parameter("@Details", (string.IsNullOrEmpty(intervention.Details) ? (object)DBNull.Value : intervention.Details), SqlDbType.VarChar, ParameterDirection.Input, 5000));
+                                //parms.Add(new Parameter("@Details", (string.IsNullOrEmpty(intervention.Details) ? (object)DBNull.Value : intervention.Details), SqlDbType.VarChar, ParameterDirection.Input, 5000));
                                 SQLDataService.Instance.ExecuteScalar(_contract, true, "REPORT", "spPhy_RPT_SavePatientIntervention", parms);
                             
                                 if (intervention.BarrierIds != null)
@@ -3146,7 +3146,7 @@ namespace Phytel.Data.ETL
                             // ENG-763, 848, 849 new fields
                             parms.Add(new Parameter("@ClosedDate", task.ClosedDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
                             parms.Add(new Parameter("@TemplateId", (string.IsNullOrEmpty(task.TemplateId.ToString()) ? string.Empty : task.TemplateId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                            parms.Add(new Parameter("@Details", (string.IsNullOrEmpty(task.Details) ? (object)DBNull.Value : task.Details), SqlDbType.VarChar, ParameterDirection.Input, 5000));
+                            //parms.Add(new Parameter("@Details", (string.IsNullOrEmpty(task.Details) ? (object)DBNull.Value : task.Details), SqlDbType.VarChar, ParameterDirection.Input, 5000));
                             SQLDataService.Instance.ExecuteScalar(_contract, true, "REPORT", "spPhy_RPT_SavePatientTask", parms);
 
                             if (task.Attributes != null)
