@@ -80,6 +80,8 @@ namespace Phytel.Services.Communication
         public const string OutreachTemplateType = "Outreach";
         public const string ImagePathSetting = "ImagePath";
         public const string Enable = "Enable";
+        public const string CommRequestId = "CommRequestId";
+        public const string CommRequestSource = "CommRequestSource";
 
         public const string EmailAlertNode = BaseNode + "EmailAlert";
         public const string EmailAlertSender = "EmailAlertSender";
