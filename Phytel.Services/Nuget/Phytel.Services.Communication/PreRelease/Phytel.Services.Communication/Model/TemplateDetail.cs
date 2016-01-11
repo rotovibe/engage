@@ -12,5 +12,6 @@ namespace Phytel.Services.Communication
         public string Description { get; set; }
         public string TemplateXMLBody { get; set; }
         public string TemplateXSLBody { get; set; }
+        public string TemplateXSLSubject { get; set; }
     }
 }
