@@ -5,5 +5,6 @@ namespace Phytel.Services.API.Pagination
     {
         int? Take { get; set; }
         int Skip { get; set; }
+        bool InlineCount { get; set; }
     }
 }
