@@ -272,7 +272,7 @@
 			getToDos: getToDos,
 			getToDosQuery: getToDosQuery,
 			getToDosRemoteOpenAssignedToMe: getToDosRemoteOpenAssignedToMe,
-			getToDosLocalOpenAssignedToMe: getToDosLocalOpenAssignedToMe,
+			getLocalTodos: getLocalTodos,
 			getInterventions: getInterventions,
 			getInterventionsQuery: getInterventionsQuery,
 			getTasks: getTasks,
@@ -1536,36 +1536,31 @@
 			}); 	
 		}
 		
-		function getToDosQuery (params, orderstring) {
-			return notesService.getToDosQuery(manager, params, orderstring);
+		function getToDosQuery (params, orderstring, take) {
+			return notesService.getToDosQuery(manager, params, orderstring, take);
 		}
 		
-		function getToDosRemoteOpenAssignedToMe( skip, take, sort ){
+		function getToDosRemoteOpenAssignedToMe( observable, skip, take, sort ){
 			var params = { 
 						StatusIds: [1,3], 
 						AssignedToId: session.currentUser().userId(), 
-						Skip: skip, //todosTop(), 
-						Take: take, //todosTake(), 
-						Sort: sort	//backendSort() 
+						Skip: skip,
+						Take: take,
+						Sort: sort
 			};
+			localCollections.counters.todos.openAssignedToMe.total(0);
 			var total = ko.observable();
-			return getToDos(null, params, total).then( function(){
+			return getToDos(observable, params, total).then( function(){
 				localCollections.counters.todos.openAssignedToMe.total( total() );
 			});
 		}
 		
-		function getToDosLocalOpenAssignedToMe(orderString){
-			var params = []
-			params.push( new modelConfig.Parameter('assignedToId', session.currentUser().userId(), '==') );
-			params.push( new modelConfig.Parameter('statusId', '2', '!=') );
-			params.push( new modelConfig.Parameter('statusId', '4', '!=') );
-				
-			var theseTodos = getToDosQuery( params, orderString);	
+		function getLocalTodos( params, orderString ){
+			var theseTodos = getToDosQuery( params, orderString );
 			// Filter out the new todos
 			theseTodos = ko.utils.arrayFilter(theseTodos, function (todo) {
 				return !todo.isNew();
-			});	
-			localCollections.counters.todos.openAssignedToMe.local( theseTodos.length );
+			});				
 			return theseTodos;
 		}
 		
@@ -1642,7 +1637,7 @@
 					count = -1;
 				}			
 				if( todo.assignedToId() == session.currentUser().userId() && ( todo.statusId() == 1 || todo.statusId() == 3 ) ){
-					localCollections.counters.todos.openAssignedToMe.total( localCollections.counters.todos.openAssignedToMe.total() + count );
+					localCollections.counters.todos.openAssignedToMe.total( localCollections.counters.todos.openAssignedToMe.total() + count );					
 				} 
 				// Finally, clear out the message
 				queryCompleted(message);

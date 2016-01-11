@@ -19,8 +19,7 @@
 	</div> -->
     <div data-bind="foreach: computedTodos">
         <div class="row divider" data-bind="foreach: $parent.columns">
-            <div class="ellipsis" data-bind="compose: { model: $parent, view: path }, css: cssClass">
-            </div>
+            <div class="ellipsis" data-bind="compose: { model: $parent, view: path }, css: cssClass"></div>
         </div>
     </div>
 	<div data-bind="visible: !todosReloading()">
@@ -34,7 +33,7 @@
 				<em>... cannot load more (try selecting a different sort)</em>
 			</div>
 		</div>
-		<div class="row" data-bind="visible: computedTodos().length === 0">
+		<div class="row" data-bind="visible: noDataFound()">
 			<em>No data meets your filter criteria</em>
 		</div>
 	</div>

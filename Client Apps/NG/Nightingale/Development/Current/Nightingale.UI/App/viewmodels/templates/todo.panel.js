@@ -81,6 +81,7 @@ define(['services/session', 'services/datacontext', 'config.services', 'viewmode
             self.canSort = data.canSort ? data.canSort : false;
 			self.isBackendSort = data.isBackendSort ? data.isBackendSort : false;
 			self.todosReloading = data.todosReloading ? data.todosReloading : ko.observable(false);
+			
 			//dont allow sorting on category name and individual name since this view's data has backend sorting. 
 			//	for now - backend sorting cannot sort on related collections properties as category name in a todo query.
 			var column = findColumnByName('assignedto');
@@ -240,6 +241,9 @@ define(['services/session', 'services/datacontext', 'config.services', 'viewmode
                 //return temparray.sort(self.descendingDateSort);
                 return finalTodos;
     		});
+			self.noDataFound = ko.computed( function(){
+				return (!self.todosReloading() && self.computedTodos().length == 0);
+			});
     	}
 
         /**
@@ -269,7 +273,8 @@ define(['services/session', 'services/datacontext', 'config.services', 'viewmode
             patientProgramEndPoint.dispose();
             //self.modalEntity().canSave.dispose(); remarked: causes timing issues
             self.columns.dispose();
-            self.computedTodos.dispose();			
+            self.computedTodos.dispose();
+			self.noDataFound.dispose();	
         };
 
     	function findColumnByName(name) {

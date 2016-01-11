@@ -105,9 +105,10 @@
     var alerts = ko.observableArray();
 	
 	var counters = { 
-		todos: { openAssignedToMe: { 
-					total: ko.observable(0),
-					local: ko.observable(0) } 
+		todos: { 
+					openAssignedToMe: { 
+						total: ko.observable(0)
+					}
 				} 
 	};
     var localcollections = {

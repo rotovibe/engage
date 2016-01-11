@@ -244,7 +244,7 @@
                 datacontext = require('services/datacontext');
             }
         }
-
+		
         function getToDos (manager, observable, params, observableTotalCount) {
             checkDataContext();
             // If there is no manager, we can't query using breeze
@@ -264,9 +264,12 @@
 
             payload.PatientId = params.PatientId;
             payload.AssignedToId = params.AssignedToId;
+			payload.NotAssignedToId = params.NotAssignedToId;	//=> where AssignedToId != value && AssignedToId != null
             payload.CreatedById = params.CreatedById;
             payload.FromDate = params.FromDate;
             payload.StatusIds = params.StatusIds;
+			payload.CategoryIds = params.CategoryIds;
+			payload.PriorityIds = params.PriorityIds;
 			payload.Skip = params.Skip;
 			payload.Take = params.Take;
 			payload.Sort = params.Sort;
@@ -326,7 +329,7 @@
                 // Add it
                 query = query.orderBy(orderString);
             }
-
+			
             // Create a predicate array
             var preds = [];
 

@@ -193,8 +193,8 @@
             return thistitle;
         });
 
-        // My todos
-        var myToDos = ko.computed(function () {
+        var myToDos = ko.observableArray([]);
+        var myToDosUpdater = ko.computed(function () {
             var theseTodos = [];
             //Subscribe to localcollection todos
             var allTodos = localCollections.todos();
@@ -228,8 +228,9 @@
                     return !todo.isNew() && !todo.deleteFlag();
                 });
             }
+			myToDos(theseTodos);
             return theseTodos;
-        }).extend({ throttle: 50 });
+        }).extend({ throttle: 10 });
 
         // Reset all the filters to default state
         function resetTodoFilters () {
@@ -257,11 +258,35 @@
         }
 
         // Force refresh todos from the server
-        function refreshTodoView() {
+        function refreshTodoView() {			
             // Get the patients' todos
             patientsIndex.getPatientsToDos();
         }
 
+		/**
+		*	clear all todos from localCollections and breeze cache.
+		*	@method	clearTodosCacheAndLoad
+		*/
+		function clearTodosCacheAndLoad(){
+			//assign empty array so todos wount be referenced from ko data binding of the views that had them showing.
+			myToDos([]);
+			var todos = localCollections.todos();
+			//empty the collection. the todos should be cleaned out by garbage collector.
+			localCollections.todos([]);
+			return setTimeout( function(){
+				//short delay to allow the ko data binding to release references to these todos, before removing them: 
+				if( todos && todos.length > 0 ){					
+					ko.utils.arrayForEach( todos, function(todo){						
+						if( todo ){
+							//remove from breeze cache:
+							todo.entityAspect.setDeleted();
+							todo.entityAspect.acceptChanges();							
+						}						
+					});					
+				}
+				patientsIndex.getPatientsToDos();
+			}, 50);
+		}
 /// #Todo region
 
 
@@ -673,22 +698,27 @@
 
         return vm;
 
-        function activate() {
+        function activate() {			
             if (!initialized()) {
                 initializeViewModel();
                 initialized(true);
             }
+			if( selectedPatient() ){
+				clearTodosCacheAndLoad();
+			}
             return true;
         }
 
         function detached() {
-            // selectedPatient.dispose();
-            // todoViews.dispose();
-            // todosSaving.dispose();
-            // todoCategories.dispose();
-            // activeTodoFilters.dispose();
-            // activeTodoColumns.dispose();
-            // computedTodoTitle.dispose();
+            console.log('patients/index detached.');
+            myToDosUpdater.dispose();
+            selectedPatient.dispose();
+            todoViews.dispose();
+            todosSaving.dispose();
+            todoCategories.dispose();
+            activeTodoFilters.dispose();
+            activeTodoColumns.dispose();
+            computedTodoTitle.dispose();
             // myToDos.dispose();
             // interventionViews.dispose();
             // interventionsSaving.dispose();
@@ -703,9 +733,9 @@
             // activeTaskColumns.dispose();
             // computedTaskTitle.dispose();
             // myTasks.dispose();
-            // ko.utils.arrayForEach(subscriptionTokens, function (token) {
-            //     token.dispose();
-            // });
+            ko.utils.arrayForEach(subscriptionTokens, function (token) {
+                token.dispose();
+            });
         }
 
         function toggleHeaderOpen (sender, widgetOpen) {

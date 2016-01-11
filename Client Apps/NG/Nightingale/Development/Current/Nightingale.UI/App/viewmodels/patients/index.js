@@ -10,6 +10,7 @@
         var throttledFilterToken = {};
 
 		var noResultsMessage =  'No records meet your search criteria';
+		var subscriptionTokens = [];
 		
        // var isComposed = ko.observable(false);
 
@@ -145,7 +146,7 @@
             return patientsRoute && patientsRoute.isActive();
         });
 
-        router.activeInstruction.subscribe(function (oldvalue) {
+        var routerInstructionToken = router.activeInstruction.subscribe(function (oldvalue) {
             var oldRoute = oldvalue && oldvalue.fragment ? oldvalue.fragment.substr(0, 8) : '';
             if (hasChanges() && oldRoute === 'patients') {
                 // If they can leave but aren't already,
@@ -176,6 +177,8 @@
             }
         }, null, 'beforeChange');
 
+		subscriptionTokens.push( routerInstructionToken );
+		
         var vm = {
             patientsListFlyoutOpen: patientsListFlyoutOpen,
             patientDataColumnOpen: patientDataColumnOpen,
@@ -200,6 +203,7 @@
             selectedCohort: selectedCohort,
             activate: activate,
             deactivate: deactivate,
+			detached: detached,
             navigation: navigation,
             title: 'Individual',
             canDeactivate: canDeactivate,
@@ -243,6 +247,7 @@
                 patientsList([]);
                 getPatientsByCohort();
             });
+			subscriptionTokens.push( selectedCohortToken );
             throttledFilterToken = throttledFilter.subscribe(function (val) {
                 // Get a list of patients by cohort using filter
                 if (selectedCohort()) {
@@ -253,6 +258,8 @@
                     getPatientsByCohort(val);
                 }
             });
+			subscriptionTokens.push( throttledFilterToken );
+			
             // Set the max patient count to the value of settings.TotalPatientCount, if it exists
             if (session.currentUser().settings()) {
 				var totalPatientCount = datacontext.getSettingsParam('TotalPatientCount');
@@ -435,7 +442,10 @@
             // If there is a current patient and it is equal to the patient you are trying to set to current			
             if ( selectedPatient() && selectedPatient() === patient ) {
                 // Then do nothing (this is because we don't want to do anything if
-                // We have already selected our patient.                
+                // We have already selected our patient.
+				if(datacontext){
+					getPatientsToDos();	//always reload since we clean the todos cache in other views when resorting or filtering
+				}	
             } else if (datacontext) {					
                 if (patient.id) {
                     // Else go choose a new patient
@@ -509,7 +519,7 @@
             // Get all open todos
             todosPromises.push( datacontext.getToDos(null, { StatusIds: [1,3], PatientId: selectedPatient().id() }) );
             // Get recently closed todos
-            todosPromises.push( datacontext.getToDos(null, { StatusIds: [2,4], PatientId: selectedPatient().id() }) );
+            todosPromises.push( datacontext.getToDos(null, { StatusIds: [2,4], PatientId: selectedPatient().id() })); //FromDate thirtyDaysAgo is missing ?! (, FromDate: thirtyDaysAgo)
 			return Q.all( todosPromises );
         }
 
@@ -639,4 +649,12 @@
         
         //#endregion
 
+		function detached(){
+			console.log('patients/index detached.');
+            myToDosUpdater.dispose();
+			
+			ko.utils.arrayForEach(subscriptionTokens, function (token) {
+                token.dispose();
+            });			
+		}
     });
