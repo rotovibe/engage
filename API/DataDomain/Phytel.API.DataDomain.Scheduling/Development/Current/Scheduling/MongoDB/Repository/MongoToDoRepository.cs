@@ -466,8 +466,9 @@ namespace Phytel.API.DataDomain.Scheduling
                         {
                             // Fix for bug  - ENG-1068, UI sends AssignedToId = -1 to query on all unassigned ToDos.
                             if (string.Compare(dataRequest.AssignedToId, "-1", true) == 0)
-                            {
-                                queries.Add(Query.EQ(METoDo.AssignedToProperty, BsonNull.Value));
+                            {                                
+                                //queries.Add(Query.Or(Query.EQ(METoDo.AssignedToProperty, BsonNull.Value), Query.EQ(METoDo.AssignedToProperty, BsonString.Empty)));
+                                queries.Add(Query.In(METoDo.AssignedToProperty, new BsonArray { BsonNull.Value, BsonString.Empty }));
                             }
                         }
                     }
@@ -475,9 +476,8 @@ namespace Phytel.API.DataDomain.Scheduling
                     {
                         ObjectId nto;
                         if (ObjectId.TryParse(dataRequest.NotAssignedToId, out nto))
-                        {
-                            queries.Add(Query.NE(METoDo.AssignedToProperty, nto));
-                            queries.Add(Query.NE(METoDo.AssignedToProperty, BsonNull.Value));   //excluding assigned to id also excludes all unassigned
+                        {                            
+                            queries.Add(Query.NotIn(METoDo.AssignedToProperty, new BsonArray { nto, BsonNull.Value, BsonString.Empty }));                         
                         }
                     }
                     if (!string.IsNullOrEmpty(dataRequest.CreatedById))
