@@ -340,6 +340,9 @@ namespace Phytel.API.AppDomain.NG
                 INGCommand deletePatientNoteCommand = new PatientNotesCommand(request, client);
                 uow.Execute(deletePatientNoteCommand);
 
+                INGCommand deletePatientUtilizationsCommand = new PatientUtilizationsCommand(request, client);
+                uow.Execute(deletePatientUtilizationsCommand);
+
                 INGCommand deletePatientSystemCommand = new PatientSystemsCommand(request, client);
                 uow.Execute(deletePatientSystemCommand);
 
