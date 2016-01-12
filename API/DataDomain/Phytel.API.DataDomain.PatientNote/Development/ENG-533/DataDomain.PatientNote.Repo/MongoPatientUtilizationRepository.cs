@@ -105,28 +105,26 @@ namespace Phytel.API.DataDomain.PatientNote.Repo
 
         public void Delete(object entity)
         {
-            var utilId = entity as string;
             try
             {
-                using (PatientNoteMongoContext ctx = new PatientNoteMongoContext(ContractDBName))
+                if (entity != null)
                 {
-                    var q = MB.Query<MEPatientUtilization>.EQ(b => b.Id, ObjectId.Parse(utilId));
-
-                    var uv = new List<MB.UpdateBuilder>();
-                    // eng-1408
-                    //uv.Add(MB.Update.Set(MEPatientUtilization.TTLDateProperty, DateTime.UtcNow.AddDays(_expireDays)));
-                    uv.Add(MB.Update.Set(MEPatientUtilization.LastUpdatedOnProperty, DateTime.UtcNow));
-                    uv.Add(MB.Update.Set(MEPatientUtilization.DeleteFlagProperty, true));
-                    uv.Add(MB.Update.Set(MEPatientUtilization.UpdatedByProperty, ObjectId.Parse(this.UserId)));
-
-                    IMongoUpdate update = MB.Update.Combine(uv);
-                    ctx.PatientUtilizations.Collection.Update(q, update);
-
-                    AuditHelper.LogDataAudit(this.UserId, 
-                                            MongoCollectionName.PatientUtilization.ToString(), 
-                                            utilId, 
-                                            DataAuditType.Delete, 
-                                            ContractDBName);
+                    using (PatientNoteMongoContext ctx = new PatientNoteMongoContext(ContractDBName))
+                    {
+                        string utilId = entity.ToString();
+                        var q = MB.Query<MEPatientUtilization>.EQ(b => b.Id, ObjectId.Parse(utilId));
+                        var uv = new List<MB.UpdateBuilder>();
+                        uv.Add(MB.Update.Set(MEPatientUtilization.LastUpdatedOnProperty, DateTime.UtcNow));
+                        uv.Add(MB.Update.Set(MEPatientUtilization.DeleteFlagProperty, true));
+                        uv.Add(MB.Update.Set(MEPatientUtilization.UpdatedByProperty, ObjectId.Parse(this.UserId)));
+                        IMongoUpdate update = MB.Update.Combine(uv);
+                        ctx.PatientUtilizations.Collection.Update(q, update);
+                        AuditHelper.LogDataAudit(this.UserId,
+                                                MongoCollectionName.PatientUtilization.ToString(),
+                                                utilId,
+                                                DataAuditType.Delete,
+                                                ContractDBName);
+                    }
                 }
             }
             catch (Exception) { throw; }
@@ -328,20 +326,23 @@ namespace Phytel.API.DataDomain.PatientNote.Repo
             List<PatientUtilizationData> utilDataList = null;
             try
             {
-                using (PatientNoteMongoContext ctx = new PatientNoteMongoContext(ContractDBName))
+                if (request != null)
                 {
-                    List<IMongoQuery> queries = new List<IMongoQuery>();
-                    queries.Add(MB.Query.EQ(MEPatientUtilization.PatientIdProperty, ObjectId.Parse(request.ToString())));
-                    queries.Add(MB.Query.EQ(MEPatientUtilization.DeleteFlagProperty, false));
-
-                    IMongoQuery mQuery = MB.Query.And(queries);
-                    List<MEPatientUtilization> meUtils = null;
-
-                    meUtils = ctx.PatientUtilizations.Collection.Find(mQuery).ToList();
-
-                    if (meUtils != null && meUtils.Count > 0)
+                    using (PatientNoteMongoContext ctx = new PatientNoteMongoContext(ContractDBName))
                     {
-                        utilDataList = meUtils.Select(MapPatientUtilizationData).ToList();
+                        List<IMongoQuery> queries = new List<IMongoQuery>();
+                        queries.Add(MB.Query.EQ(MEPatientUtilization.PatientIdProperty, ObjectId.Parse(request.ToString())));
+                        queries.Add(MB.Query.EQ(MEPatientUtilization.DeleteFlagProperty, false));
+
+                        IMongoQuery mQuery = MB.Query.And(queries);
+                        List<MEPatientUtilization> meUtils = null;
+
+                        meUtils = ctx.PatientUtilizations.Collection.Find(mQuery).ToList();
+
+                        if (meUtils != null && meUtils.Count > 0)
+                        {
+                            utilDataList = meUtils.Select(MapPatientUtilizationData).ToList();
+                        }
                     }
                 }
                 return utilDataList;
@@ -354,28 +355,29 @@ namespace Phytel.API.DataDomain.PatientNote.Repo
 
         public void UndoDelete(object entity)
         {
-            UndoDeletePatientNotesDataRequest request = (UndoDeletePatientNotesDataRequest)entity;
             try
             {
-                using (PatientNoteMongoContext ctx = new PatientNoteMongoContext(ContractDBName))
+                if (entity != null)
                 {
-                    var q = MB.Query<MEPatientNote>.EQ(b => b.Id, ObjectId.Parse(request.PatientNoteId));
+                    using (PatientNoteMongoContext ctx = new PatientNoteMongoContext(ContractDBName))
+                    {
+                        string id = entity.ToString();
+                        var q = MB.Query<MEPatientUtilization>.EQ(b => b.Id, ObjectId.Parse(id));
+                        var uv = new List<MB.UpdateBuilder>();
+                        uv.Add(MB.Update.Set(MEPatientUtilization.TTLDateProperty, BsonNull.Value));
+                        uv.Add(MB.Update.Set(MEPatientUtilization.DeleteFlagProperty, false));
+                        uv.Add(MB.Update.Set(MEPatientUtilization.LastUpdatedOnProperty, DateTime.UtcNow));
+                        uv.Add(MB.Update.Set(MEPatientUtilization.UpdatedByProperty, ObjectId.Parse(this.UserId)));
+                        IMongoUpdate update = MB.Update.Combine(uv);
+                        ctx.PatientUtilizations.Collection.Update(q, update);
 
-                    var uv = new List<MB.UpdateBuilder>();
-                    uv.Add(MB.Update.Set(MEPatientNote.TTLDateProperty, BsonNull.Value));
-                    uv.Add(MB.Update.Set(MEPatientNote.DeleteFlagProperty, false));
-                    uv.Add(MB.Update.Set(MEPatientNote.LastUpdatedOnProperty, DateTime.UtcNow));
-                    uv.Add(MB.Update.Set(MEPatientNote.UpdatedByProperty, ObjectId.Parse(this.UserId)));
+                        AuditHelper.LogDataAudit(this.UserId,
+                                                MongoCollectionName.PatientUtilization.ToString(),
+                                                id,
+                                                DataAuditType.UndoDelete,
+                                                ContractDBName);
 
-                    IMongoUpdate update = MB.Update.Combine(uv);
-                    ctx.PatientNotes.Collection.Update(q, update);
-
-                    AuditHelper.LogDataAudit(this.UserId,
-                                            MongoCollectionName.PatientUtilization.ToString(),
-                                            request.PatientNoteId.ToString(),
-                                            DataAuditType.UndoDelete,
-                                            request.ContractNumber);
-
+                    }
                 }
             }
             catch (Exception) { throw; }

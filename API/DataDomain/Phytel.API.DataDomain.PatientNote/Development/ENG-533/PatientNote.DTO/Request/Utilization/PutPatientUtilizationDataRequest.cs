@@ -3,7 +3,7 @@ using ServiceStack.ServiceHost;
 using System.Collections.Generic;
 using Phytel.API.DataDomain.PatientNote.DTO;
 
-namespace Phytel.API.DataDomain.PatientNote.DTO.Request.Utilization
+namespace Phytel.API.DataDomain.PatientNote.DTO
 {
     [Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Notes/Utilizations/{UtilizationId}", "PUT")]
     public class PutPatientUtilizationDataRequest : IDataDomainRequest
