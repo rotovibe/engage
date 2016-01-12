@@ -88,7 +88,6 @@
             };
             self.cancelOverride = function () {
 				var intervention = self.modalEntity().intervention();
-				intervention.newDetails(null);
                 datacontext.cancelEntityChanges(intervention);
             };
 			

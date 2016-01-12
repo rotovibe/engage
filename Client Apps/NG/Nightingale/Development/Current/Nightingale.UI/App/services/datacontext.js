@@ -1071,6 +1071,8 @@
 			// Display a message while saving
 			var message = queryStarted('Goal', true, 'Saving');
 
+			goal.checkAppend();
+			
 			// Save all of the levels of everything related to a contact card
 			goal.entityAspect.acceptChanges();
 			var serializedGoal;
@@ -1108,6 +1110,8 @@
 				// Display a message while saving
 				var message = queryStarted('Intervention', true, 'Saving');
 
+				intervention.checkAppend();
+				
 				// Save intervention changes so new ones returned are accepted
 				intervention.entityAspect.acceptChanges();
 				var serializedIntervention;
@@ -1130,6 +1134,8 @@
 		function saveTask(task) {
 			// Display a message while saving
 			var message = queryStarted('Task', true, 'Saving');
+			task.checkAppend();
+			
 			// Get the patient id from the goal
 			var patientId = task.goal().patientId();
 			// Save all of the levels of everything related to a contact card
@@ -1155,6 +1161,8 @@
 		function saveBarrier(barrier) {
 			// Display a message while saving
 			var message = queryStarted('Barrier', true, 'Saving');
+			barrier.checkAppend();
+			
 			// Get the patient id from the goal
 			var patientId = barrier.goal().patientId();
 
