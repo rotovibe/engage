@@ -204,17 +204,13 @@
       <Project>{73fa0644-f0b9-45ad-a52a-0930b66c6c10}</Project>
       <Name>DataDomain.PatientGoal</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\DataDomain\Phytel.API.DataDomain.PatientNote\Development\Current\DataDomain.PatientNote.Repo\DataDomain.PatientNote.Repo.csproj">
-      <Project>{BD61E655-5658-49C8-96D8-26822162D008}</Project>
+    <ProjectReference Include="..\..\DataDomain\Phytel.API.DataDomain.PatientNote\Development\ENG-533\DataDomain.PatientNote.Repo\DataDomain.PatientNote.Repo.csproj">
+      <Project>{bd61e655-5658-49c8-96d8-26822162d008}</Project>
       <Name>DataDomain.PatientNote.Repo</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\DataDomain\Phytel.API.DataDomain.PatientNote\Development\Current\PatientNote.DTO\DataDomain.PatientNote.DTO.csproj">
+    <ProjectReference Include="..\..\DataDomain\Phytel.API.DataDomain.PatientNote\Development\ENG-533\PatientNote.DTO\DataDomain.PatientNote.DTO.csproj">
       <Project>{99f4ec29-b099-424e-9757-223e67029001}</Project>
       <Name>DataDomain.PatientNote.DTO</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\DataDomain\Phytel.API.DataDomain.PatientNote\Development\Current\PatientNote\DataDomain.PatientNote.csproj">
-      <Project>{a98ffdeb-2a95-457f-af31-09ac10ff33bb}</Project>
-      <Name>DataDomain.PatientNote</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\DataDomain\Phytel.API.DataDomain.PatientObservation\Development\Current\PatientObservation.DTO\DataDomain.PatientObservation.DTO.csproj">
       <Project>{06d69e2b-a395-459c-b4d0-fc750018bdd8}</Project>
