@@ -35,6 +35,9 @@ namespace Phytel.Services.Communication
         public const string ResponseSent = "Response Sent";
         public const string ResponseDelivered = "Response Delivered";
         public const string ResponseFailed = "ResponseFailed";
+
+        public const string TextDeliveryFailure = "Unable to deliver text";
+        public const string TextFailed = "Text Failed";
         public const string TextQueued = "Text Queued";
         public const string TextSent = "Text Sent";
         public const string TextHelp = "Text Help";
