@@ -31,6 +31,10 @@ namespace Phytel.Services.Communication
         //public const string UnsupportedLanguage = "Unsupported communication language";
         public const string EmailDeliveryFailure = "Unable to deliver email";
         public const string EmailBounced = "Email Bounced";
+        public const string ResponseQueued = "Response Queued";
+        public const string ResponseSent = "Response Sent";
+        public const string ResponseDelivered = "Response Delivered";
+        public const string ResponseFailed = "ResponseFailed";
     }
 
     public static class SendQueueStatus
