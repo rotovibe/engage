@@ -103,7 +103,14 @@
     var events = ko.observableArray();
 
     var alerts = ko.observableArray();
-
+	
+	var counters = { 
+		todos: { 
+					openAssignedToMe: { 
+						total: ko.observable(0)
+					}
+				} 
+	};
     var localcollections = {
         enums: enums,
         todos: todos,
@@ -111,6 +118,7 @@
         interventions: interventions,
         events: events,
         alerts: alerts,
+		counters: counters,
         refreshToDos: refreshToDos,
         refreshInterventions: refreshInterventions
     }

@@ -37,7 +37,6 @@
                 };
                 var cancelOverride = function () {
 					intervention.clearDirty();
-					intervention.newDetails(null);
                     cancel(intervention);
                     getGoalDetails(intervention.goal());
                 };

@@ -1,5 +1,5 @@
 ﻿<header role="banner">
-    <img class="brand" data-bind="attr: { src: currentBrand().imageSource }, css: currentBrand().classOverride" />
+    <img class="brand" data-bind="attr: { src: currentBrand().imageSource }" />
     <div class="options">
         <div class="user-menu dropdown" data-bind="with: $parent.session.currentUser, clickToggle: $parent.userMenuOpen, css: { 'open': $parent.userMenuOpen }">
             <div class="dropdown-toggle">

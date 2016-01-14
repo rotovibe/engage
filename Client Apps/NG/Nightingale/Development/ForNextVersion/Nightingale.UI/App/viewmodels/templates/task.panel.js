@@ -83,7 +83,6 @@
             };
             self.cancelOverride = function () {
 				var task = self.modalEntity().task();
-				task.newDetails(null);
                 datacontext.cancelEntityChanges(task);
             };
 			var modalSettings = {

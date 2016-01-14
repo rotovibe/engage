@@ -271,6 +271,8 @@
 			createAlert: createAlert,
 			getToDos: getToDos,
 			getToDosQuery: getToDosQuery,
+			getToDosRemoteOpenAssignedToMe: getToDosRemoteOpenAssignedToMe,
+			getLocalTodos: getLocalTodos,
 			getInterventions: getInterventions,
 			getInterventionsQuery: getInterventionsQuery,
 			getTasks: getTasks,
@@ -1069,6 +1071,8 @@
 			// Display a message while saving
 			var message = queryStarted('Goal', true, 'Saving');
 
+			goal.checkAppend();
+			
 			// Save all of the levels of everything related to a contact card
 			goal.entityAspect.acceptChanges();
 			var serializedGoal;
@@ -1106,6 +1110,8 @@
 				// Display a message while saving
 				var message = queryStarted('Intervention', true, 'Saving');
 
+				intervention.checkAppend();
+				
 				// Save intervention changes so new ones returned are accepted
 				intervention.entityAspect.acceptChanges();
 				var serializedIntervention;
@@ -1128,6 +1134,8 @@
 		function saveTask(task) {
 			// Display a message while saving
 			var message = queryStarted('Task', true, 'Saving');
+			task.checkAppend();
+			
 			// Get the patient id from the goal
 			var patientId = task.goal().patientId();
 			// Save all of the levels of everything related to a contact card
@@ -1153,6 +1161,8 @@
 		function saveBarrier(barrier) {
 			// Display a message while saving
 			var message = queryStarted('Barrier', true, 'Saving');
+			barrier.checkAppend();
+			
 			// Get the patient id from the goal
 			var patientId = barrier.goal().patientId();
 
@@ -1504,14 +1514,15 @@
 			localCollections.alerts.push(thisAlert);
 		}
 
-		function getToDos (observable, params) {
+		function getToDos (observable, params, observableTotalCount) {
 			var message = queryStarted('ToDos', true, 'Loading');
 			todosSaving(true);
-			return notesService.getToDos(manager, observable, params).then(todosReturned);
+			return notesService.getToDos(manager, observable, params, observableTotalCount).then(todosReturned);
 
 			function todosReturned(todos) {
 				// Finally, clear out the message
 				queryCompleted(message);
+				//TODO: manage the size of the localCollections.todo 
 				// Make sure each of the todos are in the collection locally
 				ko.utils.arrayForEach(todos, function (todo) {
 					if (localCollections.todos.indexOf(todo) === -1) {
@@ -1522,11 +1533,45 @@
 				todosSaving(false);
 			}
 		}
-
-		function getToDosQuery (params, orderstring) {
-			return notesService.getToDosQuery(manager, params, orderstring);
+		
+		/**
+		*	clear all the todos from the cache
+		*	@method clearToDos
+		*/
+		function clearToDos(){
+			ko.utils.arrayForEach( localCollections.todos, function( todo ) {
+				manager.detachEntity(todo);		
+			}); 	
 		}
-
+		
+		function getToDosQuery (params, orderstring, take) {
+			return notesService.getToDosQuery(manager, params, orderstring, take);
+		}
+		
+		function getToDosRemoteOpenAssignedToMe( observable, skip, take, sort ){
+			var params = { 
+						StatusIds: [1,3], 
+						AssignedToId: session.currentUser().userId(), 
+						Skip: skip,
+						Take: take,
+						Sort: sort
+			};
+			localCollections.counters.todos.openAssignedToMe.total(0);
+			var total = ko.observable();
+			return getToDos(observable, params, total).then( function(){
+				localCollections.counters.todos.openAssignedToMe.total( total() );
+			});
+		}
+		
+		function getLocalTodos( params, orderString ){
+			var theseTodos = getToDosQuery( params, orderString );
+			// Filter out the new todos
+			theseTodos = ko.utils.arrayFilter(theseTodos, function (todo) {
+				return !todo.isNew();
+			});				
+			return theseTodos;
+		}
+		
 		function getInterventions (observable, params) {
 			var message = queryStarted('Interventions', true, 'Loading');
 			interventionsSaving(true);
@@ -1572,7 +1617,7 @@
 		function getTasksQuery (params, orderstring) {
 			return goalsService.getTasksQuery(manager, params, orderstring);
 		}
-
+		
 		// Save changes to a single contact card
 		function saveToDo(todo, action) {
 			// Display a message while saving
@@ -1586,19 +1631,29 @@
 				
 				// If it is a new todo,
 				if (todo && todo.id() < 0) {
-						// Remove it so the replacement gets set
-						manager.detachEntity(todo);
-					}
-					if (localCollections.todos.indexOf(data) < 0) {
-						localCollections.todos.push(data);
-					}
+					// Remove it so the replacement gets set
+					manager.detachEntity(todo);
+				}
+				if (localCollections.todos.indexOf(data) < 0) {
+					localCollections.todos.push(data);					
+				}				
+				var count = 0;
+				if( todo.id() < 0 ){
+					count= +1;
+				}
+				if( todo.deleteFlag() ){
+					count = -1;
+				}			
+				if( todo.assignedToId() == session.currentUser().userId() && ( todo.statusId() == 1 || todo.statusId() == 3 ) ){
+					localCollections.counters.todos.openAssignedToMe.total( localCollections.counters.todos.openAssignedToMe.total() + count );					
+				} 
 				// Finally, clear out the message
 				queryCompleted(message);
 				todosSaving(false);
 				return data;
 			}
-		}
-
+		}		
+		
 		function getSystemCareManager(){
 			var SystemCareManager = ko.utils.arrayFirst(datacontext.enums.careManagers(), function (caremanager) {
 				return (caremanager.userId()=== '' && caremanager.firstName() === 'System' && caremanager.preferredName() === 'System');
@@ -1611,6 +1666,13 @@
 				return caremanager.id() === session.currentUser().userId();
 			});
 			return thisMatchedCareManager.preferredName();
+		}
+		
+		function getUserCareManager(){
+			var thisMatchedCareManager = ko.utils.arrayFirst(datacontext.enums.careManagers(), function (caremanager) {
+				return caremanager.id() === session.currentUser().userId();
+			});
+			return thisMatchedCareManager;
 		}
 
 		function getCalendarEvents( theseTodos ){
