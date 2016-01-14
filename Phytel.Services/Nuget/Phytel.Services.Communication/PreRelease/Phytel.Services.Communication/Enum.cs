@@ -10,7 +10,8 @@ namespace Phytel.Services.Communication
         OutreachRecallSendQueue = 2,
         OutreachSendQueue = 3,
         NewFound = 4,
-        AppointmentRemindersIntro = 5
+        AppointmentRemindersIntro = 5,
+        AppointmentRemindersIntroText = 7
     }
 
     public enum CommunicationTypes
@@ -26,7 +27,6 @@ namespace Phytel.Services.Communication
         NONE = 0,
         SendQueue = 1,
         Communication = 2
-
     }
 
     public enum UpdateFlags
@@ -51,16 +51,13 @@ namespace Phytel.Services.Communication
     {
         ACDefault = 1,
         ACIntroDefault = 2,
-    }
-
-   
+    }   
 
     public enum CampaignTypes
     {
         ACDefault = 1,
         OutreachDefault = 2,
     }
-
   
     public enum SendQueueInprocessStatus
     {
@@ -81,19 +78,33 @@ namespace Phytel.Services.Communication
 
     public enum ActivityNotifySender
     {
-        EmailQueued	=170,
-        EmailSent	=171,
-        EmailOpened	=172,
-        EarlierAppointmentUsed	=173,
-        EmailConfirm	=174,
-        EmailClicked	=175,
-        EmailBounced	=176,
-        EmailOptedOut	=177,
-        EmailComplaint=	178,
-        EmailDeliveryFailure	=179,
-
         NoNotification = 0,
-        CancelledByUser = 4
+        CancelledByUser = 4,
+        TextQueued = 150,
+        TextSending = 151,
+        TextSent = 152,
+        TextInboundReceiving = 153,
+        TextInboundRecieved = 154,
+        TextDelivered = 155,
+        TextUndelivered = 156,
+        TextFailed = 157,
+        TextEarlierAppointmentUsedForConfirmation = 158,
+        TextStopped = 159,
+        TextHelp=160,
+        ResponseQueued = 163,
+        ResponseSent = 164,
+        ResponseDelivered = 165,
+        ResponseFailed = 166,
+        EmailQueued	= 170,
+        EmailSent = 171,
+        EmailOpened	= 172,
+        EarlierAppointmentUsed = 173,
+        EmailConfirm = 174,
+        EmailClicked = 175,
+        EmailBounced = 176,
+        EmailOptedOut = 177,
+        EmailComplaint = 178,
+        EmailDeliveryFailure = 179
     }
 
     public enum Prompts
