@@ -35,6 +35,13 @@ namespace Phytel.Services.Communication
         public const string ResponseSent = "Response Sent";
         public const string ResponseDelivered = "Response Delivered";
         public const string ResponseFailed = "ResponseFailed";
+        public const string TextQueued = "Text Queued";
+        public const string TextSent = "Text Sent";
+        public const string TextHelp = "Text Help";
+        public const string TextStop = "Text Stop";
+        public const string TextDelivered = "Text Delivered";
+        public const string TextRecieved = "Text Inbound Recieved";
+        public const string TextUnDelivered = "Text Undelivered";
     }
 
     public static class SendQueueStatus
