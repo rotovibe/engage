@@ -172,10 +172,11 @@ namespace Phytel.Services.Communication
         public const string ConfirmURLSetting = "ConfirmURL";
         public const string OptOutURLSetting = "OptOutURL";
 
-        public const string BaseCommURIsNode = BaseNode + "BaseCommURIs";
-        public const string BaseCommURI = "CommAppUrl";
-        public const string BaseCommunicationURI = "CommDataUrl";
-
+        public const string CommURIsNode = BaseNode + "BaseCommURIs";
+        public const string CommURI = "CommAppUrl";
+        public const string CommunicationURI = "CommDataUrl";
+        public const string ModeNode = BaseNode + "Mode";
+        public const string ContractURI = "ContractUrl";
         
     }
 
