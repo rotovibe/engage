@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.2.0.final using JasperReports Library version 6.2.0  -->
+<!-- 2016-01-14T14:15:48 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="subreport_active_medications" language="groovy" pageWidth="576" pageHeight="792" whenNoDataType="NoDataSection" columnWidth="576" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="94706ec6-5168-4b82-a2f7-5a7919eb1456">
+	<property name="ireport.zoom" value="1.6105100000000019"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="ireport.jasperserver.url" value="http://mdljasper01.phytelmodel.phytel.com:8080/jasperserver-pro/"/>
+	<property name="ireport.jasperserver.user" value="qauser"/>
+	<property name="ireport.jasperserver.report.resource" value="/organizations/organization_1/InHealth/Ad_Hoc_Components/MDVC_CM_Summary/rpt_MDVC_CM_Summary_files/subreport_active_medications.jrxml"/>
+	<property name="ireport.jasperserver.reportUnit" value="/organizations/organization_1/InHealth/Ad_Hoc_Components/MDVC_CM_Summary/rpt_MDVC_CM_Summary"/>
+	<parameter name="ID_MongoPatientId" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select
+	pms.mongopatientid,
+	pms.name,
+	pms.category,
+	CASE WHEN pms.[FreqQuantity] IS NOT NULL THEN pms.[FreqQuantity] + ' ' ELSE '' END AS FreqQuantity,
+	CASE WHEN pms.strength IS NOT NULL THEN pms.strength + ' ' ELSE '' END AS strength,
+	CASE WHEN pms.form IS NOT NULL THEN pms.form + ' ' ELSE '' END AS form,
+	CASE WHEN pms.[route] IS NOT NULL THEN pms.[route] + ' ' ELSE '' END AS [route],
+	CASE WHEN pmf.Name IS NOT NULL THEN pmf.Name ELSE '' END AS Frequency,
+	pms.[StartDate]
+from
+	RPT_PatientMedSupp pms
+	LEFT JOIN RPT_PatientMedFrequency pmf ON pms.MongoFrequencyId = pmf.MongoId
+where
+	[Status] = 'Active'
+	AND mongopatientid = $P{ID_MongoPatientId}
+	AND pms.[Delete] = 'False' and pms.TTLDate IS NULL]]>
+	</queryString>
+	<field name="mongopatientid" class="java.lang.String"/>
+	<field name="name" class="java.lang.String"/>
+	<field name="category" class="java.lang.String"/>
+	<field name="strength" class="java.lang.String"/>
+	<field name="route" class="java.lang.String"/>
+	<field name="form" class="java.lang.String"/>
+	<field name="FreqQuantity" class="java.lang.String"/>
+	<field name="StartDate" class="java.sql.Timestamp"/>
+	<field name="Frequency" class="java.lang.String"/>
+	<columnHeader>
+		<band height="27" splitType="Stretch">
+			<frame>
+				<reportElement mode="Opaque" x="0" y="15" width="576" height="11" backcolor="#F0F0F0" uuid="fc8ea9c2-cd89-4b8b-990a-0e38028f0439"/>
+				<staticText>
+					<reportElement x="197" y="0" width="302" height="11" uuid="bb65da31-b014-41eb-8974-d1c82f146818">
+						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					</reportElement>
+					<textElement verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[SIG]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="6" y="0" width="180" height="11" uuid="9f439753-5d05-4385-875c-be19d493fc2c">
+						<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					</reportElement>
+					<textElement verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[Name]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="510" y="0" width="63" height="11" uuid="0b07c54d-53d5-4f9b-a8be-21f58415a82d"/>
+					<textElement verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[Start Date]]></text>
+				</staticText>
+			</frame>
+			<staticText>
+				<reportElement x="6" y="0" width="110" height="14" uuid="94776379-8675-4716-954c-dfcee5e24b66"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Active Medications]]></text>
+			</staticText>
+			<line>
+				<reportElement positionType="Float" x="0" y="14" width="576" height="1" forecolor="#666666" uuid="f82196f5-3568-4052-81f7-5ccda026c587"/>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="12" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="6" y="0" width="190" height="12" uuid="4d8cae95-b0e2-410d-9bf4-b91e5b337af7">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+				</reportElement>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="197" y="0" width="310" height="12" uuid="b08612e8-e0af-4744-93e1-edb67abe4a0c">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+				</reportElement>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{FreqQuantity} + $F{strength} +  $F{form} + $F{route} + $F{Frequency}]]></textFieldExpression>
+			</textField>
+			<textField pattern="MM/dd/yyyy" isBlankWhenNull="true">
+				<reportElement x="510" y="0" width="63" height="12" uuid="d23f6012-37ac-4248-ba22-5575acde475a"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{StartDate}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

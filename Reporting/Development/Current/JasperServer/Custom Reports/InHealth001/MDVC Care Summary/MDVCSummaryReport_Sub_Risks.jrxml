@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.2.0.final using JasperReports Library version 6.2.0  -->
+<!-- 2016-01-15T13:54:32 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="MDVCSummaryReport_Sub_Risks" language="groovy" pageWidth="576" pageHeight="792" columnWidth="576" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="8e18d4f1-763a-4ebd-b7e5-6ac366c028cd">
+	<property name="ireport.zoom" value="2.143588810000004"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="ireport.jasperserver.url" value="http://mdljasper01.phytelmodel.phytel.com:8080/jasperserver-pro/"/>
+	<property name="ireport.jasperserver.user" value="qauser"/>
+	<property name="ireport.jasperserver.report.resource" value="/organizations/organization_1/InHealth/Ad_Hoc_Components/MDVC_CM_Summary/rpt_MDVC_CM_Summary_files/MDVCSummaryReport_Sub_Risks.jrxml"/>
+	<property name="ireport.jasperserver.reportUnit" value="/organizations/organization_1/InHealth/Ad_Hoc_Components/MDVC_CM_Summary/rpt_MDVC_CM_Summary"/>
+	<parameter name="ID_MongoPatientId" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select
+ob.description as [risk]
+,po.NumericValue
+, otl.name
+, COALESCE(po.lastupdatedon, po.recordcreatedon) as [Date]
+from
+	RPT_patientobservation po
+	INNER JOIN RPT_Observation ob ON po.mongoobservationid = ob.mongoid
+	INNER JOIN rpt_Observationtypelookup otl ON ob.[MongoObservationLookUpId] = otl.mongoid
+where
+	otl.MongoId = '5463bb98d4332316f8e8f482'
+	and po.mongopatientid = $P{ID_MongoPatientId}
+	and po.[Delete] = 'False' AND po.TTLDate IS NULL
+order by ob.description]]>
+	</queryString>
+	<field name="risk" class="java.lang.String"/>
+	<field name="NumericValue" class="java.lang.Double"/>
+	<field name="name" class="java.lang.String"/>
+	<field name="Date" class="java.util.Date"/>
+	<columnHeader>
+		<band height="46" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+			<line>
+				<reportElement positionType="Float" x="0" y="12" width="576" height="1" forecolor="#666666" uuid="7df8007e-8038-4f63-aaf0-a6425e6340df"/>
+			</line>
+			<staticText>
+				<reportElement positionType="Float" x="6" y="0" width="568" height="13" uuid="85539c80-a2c9-418b-a5b6-35c1ff1c1fd4">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+				</reportElement>
+				<textElement>
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Risks]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="6" y="14" width="552" height="19" uuid="0b320a98-79f0-4224-9d71-f2efc5589aa8">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<textElement>
+					<font size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Acuity Score: Stratification system that is based on current status/needs, functional capacity and interventions required (1-Proficient/ Competent in Self Management, 2-Somewhat Proficient in Self Management, 3-Needs Review or Reinforcement in Self Management, 4-Needs Full Instruction in Self Management)]]></text>
+			</staticText>
+			<frame>
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="0" y="34" width="566" height="11" backcolor="#F0F0F0" uuid="4f9b8b61-49ee-414e-8514-da7cd57163c2">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<staticText>
+					<reportElement x="6" y="0" width="292" height="11" uuid="8d82be09-1def-4f80-b404-9cf3c4ee49f1">
+						<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					</reportElement>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[Description]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="300" y="0" width="76" height="11" uuid="b650cb40-5175-46f6-821e-a7f41066de1e">
+						<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					</reportElement>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[Value]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="400" y="0" width="76" height="11" uuid="b075627d-70a5-4c5a-a8ab-7bfab327a5a3">
+						<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					</reportElement>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[Date]]></text>
+				</staticText>
+			</frame>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="11" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="6" y="0" width="292" height="11" uuid="b056fe0d-c011-4a22-8349-ca26faddf916">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{risk}]]></textFieldExpression>
+			</textField>
+			<textField pattern="MM/dd/yyyy" isBlankWhenNull="true">
+				<reportElement x="400" y="0" width="76" height="11" uuid="f1d46673-e630-4404-9b8f-8c1d4643a6a3">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+				</reportElement>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Date}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="300" y="-1" width="76" height="11" uuid="1e9b8a13-84bb-4f04-9243-1f7f8ba2e1bc">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+				</reportElement>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NumericValue}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="1">
+			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+		</band>
+	</columnFooter>
+</jasperReport>

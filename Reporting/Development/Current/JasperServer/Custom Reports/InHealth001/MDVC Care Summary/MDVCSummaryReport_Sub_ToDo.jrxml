@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.2.0.final using JasperReports Library version 6.2.0  -->
+<!-- 2016-01-15T13:55:37 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="MDVCSummaryReport_Sub_ToDo" language="groovy" pageWidth="576" pageHeight="842" columnWidth="576" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="56a1a530-75ca-44f2-95a1-785dfc52bebf">
+	<property name="ireport.zoom" value="2.853116706110004"/>
+	<property name="ireport.x" value="28"/>
+	<property name="ireport.y" value="0"/>
+	<property name="ireport.jasperserver.url" value="http://mdljasper01.phytelmodel.phytel.com:8080/jasperserver-pro/"/>
+	<property name="ireport.jasperserver.user" value="qauser"/>
+	<property name="ireport.jasperserver.report.resource" value="/organizations/organization_1/InHealth/Ad_Hoc_Components/MDVC_CM_Summary/rpt_MDVC_CM_Summary_files/MDVCSummaryReport_Sub_ToDo.jrxml"/>
+	<property name="ireport.jasperserver.reportUnit" value="/organizations/organization_1/InHealth/Ad_Hoc_Components/MDVC_CM_Summary/rpt_MDVC_CM_Summary"/>
+	<parameter name="ID_MongoPatientId" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[Select
+	td.title as [Description],
+	td.DueDate as [Due Date]
+from RPT_ToDo td WITH(NOLOCK)
+INNER JOIN RPT_ToDoCategoryLookUp tdc WITH(NOLOCK) ON tdc.MongoId = td.MongoCategory
+where
+tdc.Name = 'Care Opportunity'
+AND td.Status in ('Open','NotMet')
+AND td.mongopatientid = $P{ID_MongoPatientId}
+AND td.[DeleteFlag] = 'False' and td.TTLDate IS NULL
+Order by CASE WHEN td.DueDate IS NULL THEN 1 ELSE 0 END, td.DueDate]]>
+	</queryString>
+	<field name="description" class="java.lang.String"/>
+	<field name="Due Date" class="java.sql.Timestamp"/>
+	<columnHeader>
+		<band height="39" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+			<frame>
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="6" y="26" width="566" height="13" backcolor="#F0F0F0" uuid="57af04df-2f3a-436c-a862-26dfa6110b09">
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+				</reportElement>
+				<staticText>
+					<reportElement x="100" y="0" width="460" height="11" uuid="e0a46682-b52d-4497-b8ab-0367c080c981">
+						<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+					</reportElement>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[Description]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="0" y="0" width="87" height="11" uuid="6df398e2-51de-435d-9e41-e894ba6bd43b">
+						<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+					</reportElement>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[Due Date]]></text>
+				</staticText>
+			</frame>
+			<line>
+				<reportElement positionType="Float" x="0" y="14" width="576" height="1" forecolor="#666666" uuid="1a75409f-2fb6-4672-9abd-ee2f627b62b2"/>
+			</line>
+			<staticText>
+				<reportElement x="6" y="0" width="110" height="14" uuid="79af48c5-6c21-4af9-a700-c0d817b25160"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Care Opportunities]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="6" y="16" width="536" height="10" uuid="0d69aed3-4edf-45d4-94ce-f469b0e0db4f">
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<text><![CDATA[Care Opportunities are provided for your consideration and are based upon the initial assessment conducted with the patient.]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="12" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+			<textField pattern="MM/dd/yyyy" isBlankWhenNull="true">
+				<reportElement x="6" y="0" width="87" height="12" uuid="ed1a4817-f1e1-4de1-beb4-c0a788a78731">
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+				</reportElement>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Due Date}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="106" y="0" width="466" height="12" uuid="cb86b6c2-37de-4e32-8a1c-ea263cc4701b">
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+				</reportElement>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{description}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band>
+			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+		</band>
+	</columnFooter>
+</jasperReport>

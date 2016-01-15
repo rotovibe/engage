@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.2.0.final using JasperReports Library version 6.2.0  -->
+<!-- 2016-01-15T12:08:13 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="MDVCSummaryReport_Sub_HomeVisit" language="groovy" pageWidth="576" pageHeight="842" columnWidth="576" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="d11c8094-9e05-4b82-ab32-bf3dde8f0341">
+	<property name="ireport.zoom" value="1.4641000000000028"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="ireport.jasperserver.url" value="http://mdljasper01.phytelmodel.phytel.com:8080/jasperserver-pro/"/>
+	<property name="ireport.jasperserver.user" value="qauser"/>
+	<property name="ireport.jasperserver.report.resource" value="/organizations/organization_1/InHealth/Ad_Hoc_Components/MDVC_CM_Summary/rpt_MDVC_CM_Summary_files/MDVCSummaryReport_Sub_HomeVisit.jrxml"/>
+	<property name="ireport.jasperserver.reportUnit" value="/organizations/organization_1/InHealth/Ad_Hoc_Components/MDVC_CM_Summary/rpt_MDVC_CM_Summary"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Prod Data Adapter "/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<parameter name="ID_MongoPatientId" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select
+	pn.[text]
+	, convert(varchar(15), pn.contactedon, 101) as contactedon
+	, mt.Name as [type]
+	, nout.Name as [outcome]
+	, who.Name as [who]
+from
+	RPT_PatientNote pn with(nolock)
+	INNER JOIN RPT_NoteTypeLookUp nt with(nolock) ON pn.[Type] = nt.MongoId
+	INNER JOIN RPT_NoteMethodLookUp mt with(nolock) ON pn.MongoMethodId = mt.MongoId
+	INNER JOIN rpt_noteoutcomelookup nout with(nolock) ON pn.MongoOutcomeId = nout.MongoId
+	INNER JOIN RPT_notewholookup who with(nolock) ON pn.MongoWhoId = who.MongoId
+where
+	[Type] = '54909997d43323251c0a1dfe'
+	and mongomethodid = '540f1da7d4332319883f3e8c'
+	and mongopatientid = $P{ID_MongoPatientId}
+ORDER BY pn.contactedon DESC]]>
+	</queryString>
+	<field name="text" class="java.lang.String"/>
+	<field name="contactedon" class="java.lang.String"/>
+	<field name="type" class="java.lang.String"/>
+	<field name="outcome" class="java.lang.String"/>
+	<field name="who" class="java.lang.String"/>
+	<columnHeader>
+		<band height="14" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+			<staticText>
+				<reportElement x="7" y="0" width="50" height="14" uuid="e373e923-2ba6-4bc8-bd42-1641b6de9c67">
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Home Visit:]]></text>
+			</staticText>
+			<frame>
+				<reportElement mode="Opaque" x="71" y="0" width="287" height="14" backcolor="#FFFFFF" uuid="a79a7156-d9fd-4ea2-ae1a-c1f2614a150b">
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+				</reportElement>
+				<textField pattern="MM/dd/yyyy">
+					<reportElement x="9" y="0" width="79" height="12" uuid="24e7b84f-aeb5-4315-9934-bee481e38112">
+						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+					</reportElement>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{contactedon}]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</columnHeader>
+	<detail>
+		<band splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+		</band>
+	</detail>
+</jasperReport>

@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.2.0.final using JasperReports Library version 6.2.0  -->
+<!-- 2016-01-15T14:29:44 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="MDVC_Management_Summary" pageWidth="612" pageHeight="792" columnWidth="572" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" whenResourceMissingType="Empty" uuid="c743537e-4134-4584-9ad9-760e6d2fa72f">
+	<property name="ireport.zoom" value="1.000000000000003"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="ireport.jasperserver.reportUnit" value="/organizations/organization_1/InHealth/Ad_Hoc_Components/MDVC_CM_Summary/rpt_MDVC_CM_Summary"/>
+	<property name="ireport.jasperserver.url" value="http://mdljasper01.phytelmodel.phytel.com:8080/jasperserver-pro/"/>
+	<property name="ireport.jasperserver.user" value="qauser"/>
+	<property name="ireport.jasperserver.report.resource" value="/organizations/organization_1/InHealth/Ad_Hoc_Components/MDVC_CM_Summary/rpt_MDVC_CM_Summary_files/main_jrxml"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageHeight" value="inch"/>
+	<property name="com.jaspersoft.studio.unit.pageWidth" value="inch"/>
+	<property name="com.jaspersoft.studio.unit.topMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.bottomMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.leftMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Prod Data Adapter "/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\Users\\IBM_ADMIN\\Documents\\IReports\\InHealth\\"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="Practice" class="java.lang.String"/>
+	<parameter name="PCPName" class="java.lang.String"/>
+	<parameter name="Enrollment" class="java.util.Collection">
+		<defaultValueExpression><![CDATA[java.util.Arrays.asList(new String[]{"String1", "String2"})]]></defaultValueExpression>
+	</parameter>
+	<parameter name="State" class="java.util.Collection"/>
+	<parameter name="PrimaryId" class="java.lang.String"/>
+	<parameter name="EngageId" class="java.lang.String"/>
+	<parameter name="FirstName" class="java.lang.String"/>
+	<parameter name="LastName" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select DISTINCT
+	pt.mongoid as [MongoPatientId],
+	pt.EngageId,
+	pt.[FirstName] + ', ' + pt.[LastName] as [Name],
+	pt.[DateOfBirth],
+	pt.[Gender],
+	pt.Phone_1,
+	pt.phone_2,
+	pt.Email_1,
+	(pt.Address_1 +' '+ pt.Address_2+' '+ pt.Address_3) as [address1],
+	(pt.Address_City + ', ' +pt.Address_State + ' ' +pt.Address_ZIP_Code) as [address2],
+	eng.Practice,
+	eng.PCP,
+	'('+ pt.primaryidsystem +') '+pt.primaryid as [systemid]
+from
+	RPT_PatientInformation pt
+	INNER JOIN RPT_Engage_Enrollment_Info eng ON pt.Mongoid = eng.[MongoPatientId]
+where 	($P{Practice} IS NULL OR eng.Practice =  $P{Practice} )
+	and ($P{PCPName} IS NULL OR eng.PCP =  $P{PCPName} )
+	and $X{IN,eng.State,State}
+	and $X{IN,eng.Enrollment,Enrollment}
+	and ($P{PrimaryId} IS NULL OR pt.primaryid =  $P{PrimaryId} )
+	and ($P{EngageId} IS NULL OR pt.engageid =  $P{EngageId} )
+	and ($P{FirstName} IS NULL OR pt.firstname =  $P{FirstName} )
+	and ($P{LastName} IS NULL OR pt.lastname =  $P{LastName})]]>
+	</queryString>
+	<field name="MongoPatientId" class="java.lang.String"/>
+	<field name="EngageId" class="java.lang.String"/>
+	<field name="Name" class="java.lang.String"/>
+	<field name="DateOfBirth" class="java.lang.String"/>
+	<field name="Gender" class="java.lang.String"/>
+	<field name="Phone_1" class="java.lang.String"/>
+	<field name="phone_2" class="java.lang.String"/>
+	<field name="Email_1" class="java.lang.String"/>
+	<field name="address1" class="java.lang.String"/>
+	<field name="address2" class="java.lang.String"/>
+	<field name="Practice" class="java.lang.String"/>
+	<field name="PCP" class="java.lang.String"/>
+	<field name="systemid" class="java.lang.String"/>
+	<field name="state" class="java.lang.String"/>
+	<field name="enrollment" class="java.lang.String"/>
+	<detail>
+		<band height="570" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+			<frame>
+				<reportElement key="Demographics" mode="Transparent" x="0" y="6" width="572" height="144" backcolor="#CCCCCC" uuid="b21605e7-26f5-4da7-9eb7-7bc3580b95ee"/>
+				<textField>
+					<reportElement x="4" y="25" width="0" height="0" forecolor="#F0F0F0" uuid="bcab59be-8891-4174-913a-fccfb221116e"/>
+					<textFieldExpression><![CDATA[$F{MongoPatientId}]]></textFieldExpression>
+				</textField>
+				<elementGroup>
+					<staticText>
+						<reportElement x="8" y="94" width="63" height="11" uuid="35bcbf61-65aa-4f41-a5c2-dab57b441d88"/>
+						<textElement>
+							<font size="8" isBold="true"/>
+						</textElement>
+						<text><![CDATA[Practice:]]></text>
+					</staticText>
+					<staticText>
+						<reportElement x="8" y="105" width="63" height="11" uuid="df763603-e108-4e8d-8150-301633486f4d"/>
+						<textElement>
+							<font size="8" isBold="true"/>
+						</textElement>
+						<text><![CDATA[Physician:]]></text>
+					</staticText>
+					<staticText>
+						<reportElement x="8" y="83" width="63" height="11" uuid="9b1f80d4-1bcb-4b07-832c-00ed635c3e3d"/>
+						<textElement>
+							<font size="8" isBold="true"/>
+						</textElement>
+						<text><![CDATA[Report Date:]]></text>
+					</staticText>
+					<textField isBlankWhenNull="true">
+						<reportElement positionType="Float" x="80" y="105" width="282" height="11" uuid="e1efead5-068f-47d5-a406-154bb8ea633b"/>
+						<textElement>
+							<font size="8"/>
+						</textElement>
+						<textFieldExpression><![CDATA[($F{PCP} == null ? new java.lang.String("N/A") : $F{PCP})]]></textFieldExpression>
+					</textField>
+					<textField isBlankWhenNull="true">
+						<reportElement x="492" y="127" width="79" height="11" uuid="c0c9a188-0e4a-431f-8d21-70fc80e797ff"/>
+						<textElement>
+							<font size="8"/>
+						</textElement>
+						<textFieldExpression><![CDATA[$F{DateOfBirth}]]></textFieldExpression>
+					</textField>
+					<staticText>
+						<reportElement x="8" y="116" width="63" height="11" uuid="d1d05be8-f48c-4d1a-bb5d-0d5d319d01f8"/>
+						<textElement>
+							<font size="8" isBold="true"/>
+						</textElement>
+						<text><![CDATA[Patient Name:]]></text>
+					</staticText>
+					<staticText>
+						<reportElement x="434" y="127" width="56" height="11" uuid="bd0de3b3-cf77-43ec-8167-ddce61505698"/>
+						<textElement textAlignment="Right">
+							<font size="8"/>
+						</textElement>
+						<text><![CDATA[Patient DOB:]]></text>
+					</staticText>
+					<textField pattern="MM/dd/yyyy" isBlankWhenNull="true">
+						<reportElement positionType="Float" x="80" y="83" width="282" height="11" uuid="03674917-d3d2-4d88-94e6-6dcc6ce43caa"/>
+						<textElement>
+							<font size="8"/>
+						</textElement>
+						<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+					</textField>
+					<textField isBlankWhenNull="true">
+						<reportElement positionType="Float" x="80" y="127" width="282" height="11" uuid="8fdb6a81-7dee-4db7-9bf8-e4183180e1d6"/>
+						<textElement>
+							<font size="8"/>
+						</textElement>
+						<textFieldExpression><![CDATA[($F{systemid} == null ? new java.lang.String("N/A") : $F{systemid})]]></textFieldExpression>
+					</textField>
+					<staticText>
+						<reportElement x="219" y="61" width="135" height="20" uuid="10433647-841b-49bb-8651-5db6f5745774"/>
+						<textElement>
+							<font isBold="true"/>
+						</textElement>
+						<text><![CDATA[Care Management Summary Report]]></text>
+					</staticText>
+					<staticText>
+						<reportElement x="8" y="127" width="63" height="11" uuid="c69e5c05-cfbb-4449-a232-21c9ca1e857f"/>
+						<textElement>
+							<font size="8" isBold="true"/>
+						</textElement>
+						<text><![CDATA[Primary ID#:]]></text>
+					</staticText>
+					<image>
+						<reportElement x="220" y="6" width="133" height="51" uuid="b8e51640-a836-4894-8a5d-ce3f53aed238"/>
+						<imageExpression><![CDATA["repo:MDVC_logo.jpg"]]></imageExpression>
+					</image>
+				</elementGroup>
+				<textField isBlankWhenNull="true">
+					<reportElement positionType="Float" x="80" y="116" width="282" height="11" uuid="59f93fce-c654-4d28-8f35-ab4d968c8c64"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{Name}]]></textFieldExpression>
+				</textField>
+				<textField pattern="" isBlankWhenNull="false">
+					<reportElement positionType="Float" x="80" y="94" width="282" height="11" uuid="d0032d92-711c-4c84-9659-6cd5669bcca8"/>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[($F{Practice} == null ? new java.lang.String("N/A") : $F{Practice})]]></textFieldExpression>
+					<patternExpression><![CDATA[($F{Practice} == null ? new java.lang.String("NA") : $F{Practice})]]></patternExpression>
+				</textField>
+			</frame>
+			<subreport>
+				<reportElement key="Risks" positionType="Float" x="0" y="220" width="572" height="44" isRemoveLineWhenBlank="true" uuid="fbc36ea9-9cab-4cb7-a0f2-daf090c73cf7"/>
+				<subreportParameter name="ID_MongoPatientId">
+					<subreportParameterExpression><![CDATA[$F{MongoPatientId}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA["repo:MDVCSummaryReport_Sub_Risks.jrxml"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement key="Active Medications" positionType="Float" x="0" y="455" width="572" height="44" isRemoveLineWhenBlank="true" uuid="0df7702f-7868-4237-89af-6ec838f5e116">
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+				</reportElement>
+				<subreportParameter name="ID_MongoPatientId">
+					<subreportParameterExpression><![CDATA[$F{MongoPatientId}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA["repo:subreport_active_medications.jrxml"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement key="Home Visit " positionType="Float" x="0" y="153" width="572" height="17" isRemoveLineWhenBlank="true" uuid="22bf5815-58f6-43ff-ade6-066caf15b423">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<subreportParameter name="ID_MongoPatientId">
+					<subreportParameterExpression><![CDATA[$F{MongoPatientId}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA["repo:MDVCSummaryReport_Sub_HomeVisit.jrxml"]]></subreportExpression>
+			</subreport>
+			<subreport isUsingCache="true">
+				<reportElement key="Enrollment" positionType="Float" x="0" y="173" width="572" height="44" isRemoveLineWhenBlank="true" uuid="c7a5ab03-56f4-42e2-9fdf-fca07ba20892"/>
+				<subreportParameter name="ID_MongoPatientId">
+					<subreportParameterExpression><![CDATA[$F{MongoPatientId}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA["repo:MDVCSummaryReport_Sub_Enrollment.jrxml"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement key="Assessments" positionType="Float" x="0" y="267" width="572" height="44" isRemoveLineWhenBlank="true" uuid="9dfd899e-d1d3-4c74-be8b-9e376e9c89c1"/>
+				<subreportParameter name="ID_MongoPatientId">
+					<subreportParameterExpression><![CDATA[$F{MongoPatientId}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA["repo:MDVCSummaryReport_Sub_Assessments.jrxml"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement key="Problems" positionType="Float" x="0" y="314" width="572" height="44" isRemoveLineWhenBlank="true" uuid="28f95780-290d-4f68-961b-a8895f0e3fe2"/>
+				<subreportParameter name="ID_MongoPatientId">
+					<subreportParameterExpression><![CDATA[$F{MongoPatientId}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA["repo:subreport_Recent_Clinical.jrxml"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement key="Care Plan Goals" positionType="Float" x="0" y="361" width="572" height="44" isRemoveLineWhenBlank="true" uuid="a6d594ab-d2b1-4620-8ef1-5d7ab8f90cbd"/>
+				<subreportParameter name="ID_MongoPatientId">
+					<subreportParameterExpression><![CDATA[$F{MongoPatientId}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA["repo:MDVCSummaryReport_Sub_Plan_Goals.jrxml"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement key="Care Opportunities" positionType="Float" x="0" y="408" width="572" height="44" isRemoveLineWhenBlank="true" uuid="f6c6d435-cafc-44c9-a9da-bf7b6e3c258e">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<subreportParameter name="ID_MongoPatientId">
+					<subreportParameterExpression><![CDATA[$F{MongoPatientId}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA["repo:MDVCSummaryReport_Sub_ToDo.jrxml"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement key="Active Allergies" positionType="Float" x="0" y="502" width="572" height="44" isRemoveLineWhenBlank="true" uuid="7387fb54-0d12-45fe-9d46-4c5301508bd3">
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+				<subreportParameter name="ID_MongoPatientId">
+					<subreportParameterExpression><![CDATA[$F{MongoPatientId}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA["repo:subreport_allergies.jrxml"]]></subreportExpression>
+			</subreport>
+			<elementGroup>
+				<line>
+					<reportElement positionType="Float" x="1" y="552" width="571" height="1" uuid="34b812c2-eb50-4040-8b73-71ec50d72fe4">
+						<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+					</reportElement>
+				</line>
+				<textField>
+					<reportElement positionType="Float" x="467" y="556" width="100" height="11" uuid="0da9d355-f24a-4760-8d04-55a23334fc32">
+						<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+					</reportElement>
+					<textElement textAlignment="Right">
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{Name}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement positionType="Float" x="7" y="556" width="135" height="11" uuid="12d4e91a-85d7-4b25-92c1-e2d63ed66917">
+						<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+					</reportElement>
+					<textElement>
+						<font size="8" isBold="false"/>
+					</textElement>
+					<text><![CDATA[Care Management Summary Report]]></text>
+				</staticText>
+				<textField pattern="MM/dd/yyyy">
+					<reportElement positionType="Float" x="252" y="556" width="75" height="11" uuid="3c7fca8b-7e49-4c82-b24b-3695cf77ebe8">
+						<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+					</reportElement>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+				</textField>
+			</elementGroup>
+			<break>
+				<reportElement x="0" y="2" width="571" height="1" uuid="d42ce8db-cbc0-4f8c-a650-9b36f6b548ee">
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+				</reportElement>
+			</break>
+		</band>
+	</detail>
+</jasperReport>
