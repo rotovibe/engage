@@ -41,5 +41,11 @@ namespace Phytel.Services.Communication
         public DateTime CommStartDateTime { get; set; }
         public DateTime CommStopDateTime { get; set; }
         public String ErrorCode { get; set; }
+        public string ErrorDescription { get; set; }
+        public string ResultDescription { get; set; }
+        public bool ActivitySendQueueSaveFlag { get; set; }
+        public int CommServerID { get; set; }
+        public bool CommEventSaveFlag { get; set; }
+        public string CallStatus { get; set; }
     }
 }
