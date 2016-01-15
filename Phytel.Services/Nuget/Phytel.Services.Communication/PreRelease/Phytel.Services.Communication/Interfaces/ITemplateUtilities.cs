@@ -18,5 +18,6 @@ namespace Phytel.Services.Communication
         bool IsEmailAddressFormatValid(string emailAddress);
         string[] GetCommRequestStatuses();
         string Transform(XmlDocument xml, TemplateDetail templateDetail, string mode);
+        CommTextResult BuildCommTextResult(XmlNode call);
     }
 }
