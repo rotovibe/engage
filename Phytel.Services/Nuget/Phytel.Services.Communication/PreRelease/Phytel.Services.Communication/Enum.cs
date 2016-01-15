@@ -130,4 +130,11 @@ namespace Phytel.Services.Communication
         Complete
     }
 
+    public enum Products
+    {
+        Outreach,
+        Remind,
+        Coordinate,
+        Engage
+    }
 }

@@ -66,7 +66,6 @@ namespace Phytel.Services.Communication
         public const string Reschedule = "RESCH";
         public const string Unconfirmed = "UNCNF";
         public const string Successful = "ACCES";
-
     }
 
     public static class XMLFields
@@ -176,8 +175,7 @@ namespace Phytel.Services.Communication
         public const string CommURI = "CommAppUrl";
         public const string CommunicationURI = "CommDataUrl";
         public const string ModeNode = BaseNode + "Mode";
-        public const string ContractURI = "ContractUrl";
-        
+        public const string ContractURI = "ContractUrl";        
     }
 
     public static class EmailAlert
@@ -198,8 +196,6 @@ namespace Phytel.Services.Communication
         public const string EmailAddressPatern = @"^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}" +
                                                     @"\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\" +
                                                     @".)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$";
-
-
     }
 
     public static class MessageTypes
@@ -207,6 +203,5 @@ namespace Phytel.Services.Communication
         public const string AppointmentReminder = "Appointment Reminder ";
         public const string IntroductoryEmail = "IntroductoryEmail";
         public const string OutreachRecall = "Health Reminder ";
-
     }
 }
