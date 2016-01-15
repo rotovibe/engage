@@ -13,29 +13,31 @@ namespace Phytel.Services.Communication
         public const string IntroductoryEmail = "ACINT";
         public const string IntroductoryText = "ACINT";
         public const string OutreachRecall = "ACMOT";
+        public const string AlertNotifications = "ACNOT";
     }
     public static class SendQueueErrorMessage
     {
-        //public const string InvalidEmailAddress = "Invalid EmailAddress";
+        public const string InvalidEmailAddress = "Invalid EmailAddress";
+        public const string InvalidPhoneNumber = "Invalid Phone Number";
         public const string InvalidActivityConfiguration = "Invalid email activity configuration";
-        //public const string EmptyPhoneNumber = "No Notification Phone Number";
-        //public const string ActivityAlreadyAccessed = "Activity Already Accessed";
+        public const string EmptyPhoneNumber = "No Notification Phone Number";
+        public const string EmptyBody = "No Text Body";
+        public const string ActivityAlreadyAccessed = "Activity Already Accessed";
         public const string ActivityAlreadyComplete = "Activity Already Completed Or Problem With Media";
         public const string NotificationAlreadyDelivered = "Notification Already Delivered";
         public const string PendingNotificationCanceled = "Notification Cancelled, Activity Status = PEND";
-        //public const string NewNotificationCanceled = "Notification Cancelled, Activity Status = NEW";
+        public const string NewNotificationCanceled = "Notification Cancelled, Activity Status = NEW";
         public const string ActivityNotFound = "Activity Not Found";
-        //public const string CallStilllNeededFailed = "Unable to determine if CallStillNeeded";
+        public const string CallStillNeededFailed = "Unable to determine if CallStillNeeded";
         public const string AfterNormalHours = "After Normal Delivery Hr of ";
         public const string BeforeNormalHours = "Before Normal Delivery Hr of ";
-        //public const string UnsupportedLanguage = "Unsupported communication language";
+        public const string UnsupportedLanguage = "Unsupported communication language";
         public const string EmailDeliveryFailure = "Unable to deliver email";
         public const string EmailBounced = "Email Bounced";
         public const string ResponseQueued = "Response Queued";
         public const string ResponseSent = "Response Sent";
         public const string ResponseDelivered = "Response Delivered";
         public const string ResponseFailed = "ResponseFailed";
-
         public const string TextDeliveryFailure = "Unable to deliver text";
         public const string TextFailed = "Text Failed";
         public const string TextQueued = "Text Queued";
@@ -66,6 +68,7 @@ namespace Phytel.Services.Communication
         public const string Reschedule = "RESCH";
         public const string Unconfirmed = "UNCNF";
         public const string Successful = "ACCES";
+        public const string New = "NEW";
     }
 
     public static class XMLFields
@@ -203,5 +206,25 @@ namespace Phytel.Services.Communication
         public const string AppointmentReminder = "Appointment Reminder ";
         public const string IntroductoryEmail = "IntroductoryEmail";
         public const string OutreachRecall = "Health Reminder ";
+    }
+
+    public static class DateFormats
+    {
+        public const string Military = "MMddyy'-'HHmmss'-'ffffff";
+        public const string Military2 = "yyyy'-'MM'-'dd' 'HH':'mm':'ss";
+    }
+
+    public static class ConfigurationKeys
+    {
+        public const string PhytelLocalDirectory = "Phytel";
+        public const string NFLocalDirectory = "NewFound";
+        public const string SMTPServer = "smtpServer";
+    }
+
+    public static class CommLanguagePreferenceCodes
+    {
+        public const string English = "EN";
+        public const string Spanish = "ES";
+        public const string NotSpecified = "NS";
     }
 }
