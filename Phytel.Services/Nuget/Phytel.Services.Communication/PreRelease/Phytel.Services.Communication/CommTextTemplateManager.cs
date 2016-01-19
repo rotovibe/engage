@@ -8,7 +8,7 @@ namespace Phytel.Services.Communication
 {
     public class CommTextTemplateManager : ICommTextTemplateManager
     {
-        private const string Mode = "TEXT";
+        private const string Mode = "Text";
         private readonly ITemplateUtilities _templateUtilities;
 
         public CommTextTemplateManager(ITemplateUtilities templateUtilities)
