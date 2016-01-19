@@ -40,7 +40,10 @@
 		var maxTodosCount = ko.observable(400); // max todos to load
 		var todosTop = ko.observable(0);		
 		var todosTake = ko.observable(100); //TODO: new parameter?
-		var todosTotalCount = ko.computed( localCollections.counters.todos.openAssignedToMe.total ).extend({ throttle: 50 });
+		var todosTotalCount = ko.computed( function(){
+			var total = localCollections.counters.todos.openAssignedToMe.total();
+			return total;
+		});
 		var canLoadMoreTodos = ko.observable(false);		
 		var maxToToDosLoaded = ko.observable(false);
 		var todosProcessing = ko.observable(false);
