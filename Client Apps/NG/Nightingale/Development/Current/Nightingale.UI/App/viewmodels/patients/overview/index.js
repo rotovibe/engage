@@ -710,15 +710,16 @@
         }
 
         function detached() {
-            console.log('patients/index detached.');
-            myToDosUpdater.dispose();
-            selectedPatient.dispose();
-            todoViews.dispose();
-            todosSaving.dispose();
-            todoCategories.dispose();
-            activeTodoFilters.dispose();
-            activeTodoColumns.dispose();
-            computedTodoTitle.dispose();
+			// remarked ! disposing computeds on this module causes many unpredictable problems.
+            // console.log('patients/index detached.');
+            // myToDosUpdater.dispose();
+            // selectedPatient.dispose();
+            // todoViews.dispose();
+            // todosSaving.dispose();
+            // todoCategories.dispose();
+            // activeTodoFilters.dispose();
+            // activeTodoColumns.dispose();
+            // computedTodoTitle.dispose();
             // myToDos.dispose();
             // interventionViews.dispose();
             // interventionsSaving.dispose();
@@ -733,9 +734,9 @@
             // activeTaskColumns.dispose();
             // computedTaskTitle.dispose();
             // myTasks.dispose();
-            ko.utils.arrayForEach(subscriptionTokens, function (token) {
-                token.dispose();
-            });
+            // ko.utils.arrayForEach(subscriptionTokens, function (token) {
+                // token.dispose();
+            // });
         }
 
         function toggleHeaderOpen (sender, widgetOpen) {

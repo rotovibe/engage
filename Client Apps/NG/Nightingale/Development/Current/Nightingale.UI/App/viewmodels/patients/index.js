@@ -650,11 +650,12 @@
         //#endregion
 
 		function detached(){
-			console.log('patients/index detached.');
-            myToDosUpdater.dispose();
+			// remarked ! disposing computeds on this module causes many unpredictable problems.
+			// console.log('patients/index detached.');
+            // myToDosUpdater.dispose();
 			
-			ko.utils.arrayForEach(subscriptionTokens, function (token) {
-                token.dispose();
-            });			
+			// ko.utils.arrayForEach(subscriptionTokens, function (token) {
+                // token.dispose();
+            // });			
 		}
     });
