@@ -651,9 +651,7 @@
 
 		function detached(){
 			// remarked ! disposing computeds on this module causes many unpredictable problems.
-			// console.log('patients/index detached.');
-            // myToDosUpdater.dispose();
-			
+			// console.log('patients/index detached.');          
 			// ko.utils.arrayForEach(subscriptionTokens, function (token) {
                 // token.dispose();
             // });			

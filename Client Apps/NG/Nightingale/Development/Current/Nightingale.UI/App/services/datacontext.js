@@ -1548,19 +1548,15 @@
 			return notesService.getToDosQuery(manager, params, orderstring, take);
 		}
 		
-		function getToDosRemoteOpenAssignedToMe( observable, skip, take, sort ){
+		function getToDosRemoteOpenAssignedToMe( observable, skip, take, sort, observableTotalCount ){
 			var params = { 
 						StatusIds: [1,3], 
 						AssignedToId: session.currentUser().userId(), 
 						Skip: skip,
 						Take: take,
 						Sort: sort
-			};
-			localCollections.counters.todos.openAssignedToMe.total(0);
-			var total = ko.observable();
-			return getToDos(observable, params, total).then( function(){
-				localCollections.counters.todos.openAssignedToMe.total( total() );
-			});
+			};						
+			return getToDos(observable, params, observableTotalCount);			
 		}
 		
 		function getLocalTodos( params, orderString ){
@@ -1636,17 +1632,7 @@
 				}
 				if (localCollections.todos.indexOf(data) < 0) {
 					localCollections.todos.push(data);					
-				}				
-				var count = 0;
-				if( todo.id() < 0 ){
-					count= +1;
-				}
-				if( todo.deleteFlag() ){
-					count = -1;
-				}			
-				if( todo.assignedToId() == session.currentUser().userId() && ( todo.statusId() == 1 || todo.statusId() == 3 ) ){
-					localCollections.counters.todos.openAssignedToMe.total( localCollections.counters.todos.openAssignedToMe.total() + count );					
-				} 
+				}								
 				// Finally, clear out the message
 				queryCompleted(message);
 				todosSaving(false);

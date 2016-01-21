@@ -230,7 +230,7 @@
             }
 			myToDos(theseTodos);
             return theseTodos;
-        }).extend({ throttle: 10 });
+        }).extend({ throttle: 50 });
 
         // Reset all the filters to default state
         function resetTodoFilters () {
@@ -268,13 +268,13 @@
 		*	@method	clearTodosCacheAndLoad
 		*/
 		function clearTodosCacheAndLoad(){
-			//assign empty array so todos wount be referenced from ko data binding of the views that had them showing.
+			//assign empty array so todos wount be referenced from ko data binding of the views that had them showing.			
 			myToDos([]);
 			var todos = localCollections.todos();
 			//empty the collection. the todos should be cleaned out by garbage collector.
 			localCollections.todos([]);
 			return setTimeout( function(){
-				//short delay to allow the ko data binding to release references to these todos, before removing them: 
+				//short delay to allow the ko data binding to release references to these todos, before removing them: 				
 				if( todos && todos.length > 0 ){					
 					ko.utils.arrayForEach( todos, function(todo){						
 						if( todo ){
@@ -282,8 +282,8 @@
 							todo.entityAspect.setDeleted();
 							todo.entityAspect.acceptChanges();							
 						}						
-					});					
-				}
+					});
+				}				
 				patientsIndex.getPatientsToDos();
 			}, 50);
 		}
@@ -698,7 +698,7 @@
 
         return vm;
 
-        function activate() {			
+        function activate() {
             if (!initialized()) {
                 initializeViewModel();
                 initialized(true);

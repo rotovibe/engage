@@ -32,18 +32,15 @@
 
         var newTodo = ko.observable();
 		var todosLoading = ko.computed(datacontext.todosSaving).extend({ throttle: 50 });
-        var initialized = false;
+        var initialized = false;		
         var selectedCohortToken;
         var maxPatientCount = ko.observable(20);
         var cohortPatientsSkip = ko.observable(0);
 		//new paging
 		var maxTodosCount = ko.observable(400); // max todos to load
-		var todosTop = ko.observable(0);		
-		var todosTake = ko.observable(100); //TODO: new parameter?
-		var todosTotalCount = ko.computed( function(){
-			var total = localCollections.counters.todos.openAssignedToMe.total();
-			return total;
-		});
+		var todosSkip = ko.observable(0);		
+		var todosTake = ko.observable(100); 
+		var todosTotalCount = ko.observable(0);		
 		var canLoadMoreTodos = ko.observable(false);		
 		var maxToToDosLoaded = ko.observable(false);
 		var todosProcessing = ko.observable(false);
@@ -209,24 +206,7 @@
 			myEvents.valueHasMutated();
 			datacontext.syncCalendarEvents(theseTodos);	//sync Event entities from given todos
 		};
-		
-		function manageTodoPaging( localCount ){
-			//localCount - the number of Current User ToDos on local cache
-			if( localCount > todosTop() ){
-				todosTop( localCount );
-			}
-			if( localCount < maxTodosCount() && localCount < todosTotalCount() ){
-				canLoadMoreTodos(true);
-				maxToToDosLoaded(false);
-			}
-			else{
-				canLoadMoreTodos(false);
-				if( localCount >= maxTodosCount() ){
-					maxToToDosLoaded(true);
-				}
-			}
-		}
-	
+			
 		var refreshMyTodos = function(){						           
             // Either sort by the selected sort or the default
 			var selectedSortCol = selectedTodoSortColumn();					
@@ -234,10 +214,11 @@
             // Add the second and third orders to the string
             orderString = orderString + ', category.name, title';
             // Go get the todos locally
-			var theseTodos = getCurrentUserToDos( true, orderString);
+			var theseTodos = getCurrentUserToDos(orderString);
             updateCalendarEvents(theseTodos);                       
             return theseTodos;			
 		};
+		var myToDosQueryResult = ko.observableArray([]);
 		var myToDos = ko.observableArray([]);
         var myToDosUpdater = ko.computed(function () {
 			var theseTodos = [];
@@ -246,22 +227,21 @@
 			//Subscribe to sorting
 			var selectedSortCol = selectedTodoSortColumn();			
 			var bSort = backendSort? backendSort() : null;
-			var processing = todosProcessing();
+			var processing = todosProcessing();			
 			if( !processing ){
 				if( backendSort() !== lastSort() ){				
 					lastSort( backendSort() );				
-					clearTodosCacheAndLoad();				
+					clearTodosCacheAndLoad();									
 					theseTodos = [];
 				}
 				else{
 					//refresh from local query
 					theseTodos = refreshMyTodos();
-					manageTodoPaging(theseTodos.length);	
 				}	
-			}
+			}						
 			myToDos(theseTodos);
 			return theseTodos;
-        }).extend({ throttle: 10 });
+        }).extend({ throttle: 50 });
 		
 				
 		var todosReloading = ko.computed( function(){			
@@ -280,7 +260,7 @@
 				showing = 'Loading...';
 			}
 			else{
-				showing = todos.length + ' showing'
+				showing = todos.length + ' showing';
 				if( todos.length < totalCount ) {
 					showing += ' out of ' + totalCount;
 				}	
@@ -394,7 +374,7 @@
             if (!initialized) {
                 initializeViewModel();													
                 initialized = true;				
-            }
+            }			
 			todosProcessing(false);
 			return clearTodosCacheAndLoad();	//reloaded every time we navigate back to myhome, since the todos tab activity may clear the cache.			
         }
@@ -437,19 +417,19 @@
             //getEvents();
             // Go get a list of cohorts locally
             datacontext.getEntityList(cohortsList, cohortEndPoint().EntityType, cohortEndPoint().ResourcePath, null, null, false, null, 'sName').then(cohortsReturned);            
-			//TODO			
-			// if (session.currentUser().settings()) {
-				// var totalQueryCount = datacontext.getSettingsParam('SomeNewParameter');
-				// if( totalQueryCount ){
-					// //the max todos to load
-					// maxTodosCount( parseInt( totalQueryCount ) );					
-            // }
-                // var take = datacontext.getSettingsParam('SomeNewParameter For Take');
-                // if( take ){
-                    // //the take
-                    // todosTake( parseInt( take ) );					
-                // }
-            // }
+					
+			if (session.currentUser().settings()) {
+				var totalQueryCount = datacontext.getSettingsParam('TotalQueryCount');
+				if( totalQueryCount ){
+					//the max todos to load
+					maxTodosCount( parseInt( totalQueryCount ) );					
+                }
+			    var take = datacontext.getSettingsParam('QueryTake');
+			    if( take ){
+				    //the take
+				    todosTake( parseInt( take ) );					
+			    }
+            }
 														
             // Get my Interventions
             getCurrentUserInterventions();
@@ -519,36 +499,32 @@
             modalShowing(true);
         }
 
-        function getCurrentUserToDos(local, orderString) {
-            // Go get a list of my todos			
-			if(local){
-				var params = []
-				params.push( new modelConfig.Parameter('assignedToId', session.currentUser().userId(), '==') );
-				params.push( new modelConfig.Parameter('statusId', '2', '!=') );
-				params.push( new modelConfig.Parameter('statusId', '4', '!=') );
-				return datacontext.getLocalTodos(params, orderString);
-			}
-			else{
-				return loadMoreTodos()				
-			}            
+        function getCurrentUserToDos(orderString) {
+            // Go get a list of my todos						
+			var params = []
+			params.push( new modelConfig.Parameter('assignedToId', session.currentUser().userId(), '==') );
+			params.push( new modelConfig.Parameter('statusId', '2', '!=') );
+			params.push( new modelConfig.Parameter('statusId', '4', '!=') );
+			return datacontext.getLocalTodos(params, orderString);						        
         }
 		
 		/**
 		*	clear all todos from localCollections and breeze cache.
 		*	@method	clearTodosCacheAndLoad
 		*/
-		function clearTodosCacheAndLoad(){
-			todosTop(0);			
+		function clearTodosCacheAndLoad(){			
+			todosSkip(0);			
 			canLoadMoreTodos(false);
 			maxToToDosLoaded(false);
 			//assign empty array so todos wount be referenced from ko data binding of the views that had them showing.			
 			myToDos([]);
 			todosProcessing(true);			
-			var todos = localCollections.todos();
+			var todos = datacontext.getLocalTodos([], null);
 			//empty the collection. the todos should be cleaned out by garbage collector.
-			localCollections.todos([]);			
+			localCollections.todos([]);
 			return setTimeout( function(){
 				//short delay to allow the ko data binding to release references to these todos, before removing them: 
+				var todosincache = [];
 				if( todos && todos.length > 0 ){
 					ko.utils.arrayForEach( todos, function(todo){						
 						if( todo ){
@@ -557,7 +533,8 @@
 							todo.entityAspect.acceptChanges();							
 						}						
 					});					
-				}				
+				}		
+				todosincache = datacontext.getLocalTodos([], null);
 				return loadMoreTodos().then(generateCalendarEvents);	//load first block with the new sort
 			}, 50);
 		}
@@ -565,15 +542,15 @@
 		function loadMoreTodos(){
 			todosProcessing(true);	
 			canLoadMoreTodos(false);
-			return datacontext.getToDosRemoteOpenAssignedToMe( null, todosTop(), todosTake(), backendSort() ).then( todosReturned );
+			return datacontext.getToDosRemoteOpenAssignedToMe( myToDosQueryResult, todosSkip(), todosTake(), backendSort(), todosTotalCount ).then( todosReturned );
 		}
 				
-		function todosReturned(){
-			todosProcessing(false);
-			var skipped = todosTop();
+		function todosReturned(){			
+			var returnedCount = myToDosQueryResult().length;
+			var skipped = todosSkip();
 			var nextSkip = skipped + todosTake();
 			if( nextSkip < todosTotalCount() && nextSkip < maxTodosCount() ){
-				todosTop(nextSkip);		
+				todosSkip(nextSkip);		
 				canLoadMoreTodos(true);
 			}	
 			else{
@@ -584,13 +561,16 @@
 			}
 			else{				
 				maxToToDosLoaded(true);
-			}						
+			}	
+			var todos = refreshMyTodos();
+			myToDos(todos);
+			todosProcessing(false);
 		}
 		
 		function generateCalendarEvents(){
 			//after the current user todos loaded: get them locally
 			//TODO: will have to get todos by DueDate date range			
-			var theseTodos = getCurrentUserToDos( true );
+			var theseTodos = getCurrentUserToDos();
 			//create calendar event entities to reflect these todos:
             datacontext.syncCalendarEvents(theseTodos);
 		}
@@ -643,7 +623,7 @@
             self.activationData = { event: self.event, canSave: self.canSave, showing: modalShowing  };
         }
 
-		function detached(){		
-			
+		function detached() {
+
 		}
     });
