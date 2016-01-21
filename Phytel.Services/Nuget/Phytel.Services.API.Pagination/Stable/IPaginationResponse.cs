@@ -2,8 +2,7 @@
 {
     public interface IPaginationResponse
     {
-        long TotalCount { get; set; }
-        long TotalPages { get; set; }
+        long? TotalCount { get; set; }
         int? Take { get; set; }
         int Skip { get; set; }
     }
