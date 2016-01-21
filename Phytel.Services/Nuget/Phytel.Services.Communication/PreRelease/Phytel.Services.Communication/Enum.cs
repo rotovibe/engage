@@ -137,4 +137,11 @@ namespace Phytel.Services.Communication
         Coordinate,
         Engage
     }
+
+    public enum TextResultTypes
+    {
+        SendTextResult,
+        VendorResponse,
+        PatientResponse
+    }
 }
