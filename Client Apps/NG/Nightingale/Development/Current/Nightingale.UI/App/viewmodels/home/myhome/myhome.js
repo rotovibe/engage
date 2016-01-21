@@ -254,7 +254,7 @@
 			var showing = ' showing ';
 			var totalCount = todosTotalCount();
 			var processing = todosProcessing();
-			var todos = myToDos();
+			var todos = myToDos? myToDos() : [];
 			var reloading = todosReloading();
 			if( reloading || processing ){
 				showing = 'Loading...';
@@ -266,7 +266,7 @@
 				}	
 			}			
 			return showing;
-		}).extend({ throttle: 10 });
+		}).extend({ throttle: 100 });
 		
         // My interventions
         var myInterventions = ko.computed(function () {
@@ -546,7 +546,7 @@
 		}
 				
 		function todosReturned(){			
-			var returnedCount = myToDosQueryResult().length;
+			var returnedCount = myToDosQueryResult()? myToDosQueryResult().length : 0;
 			var skipped = todosSkip();
 			var nextSkip = skipped + todosTake();
 			if( nextSkip < todosTotalCount() && nextSkip < maxTodosCount() ){
