@@ -11,19 +11,18 @@ namespace Phytel.Engage.Integrations
         public IIsApplicableContract<RegistryCompleteMessage> IsApplicableContract { get; set; }
         public IImportUow PatientsUow { get; set; }
 
-        public void Process(RegistryCompleteMessage message)
+        public void  Process(RegistryCompleteMessage message)
         {
             try
             {
-                if (!IsApplicableContract.IsSatisfiedBy(message))
-                {
-                    LoggerDomainEvent.Raise(LogStatus.Create("Integration for this contract is not registered. Closing import process.", true));
-                    return;
-                }
+                if (!IsApplicableContract.IsSatisfiedBy(message)) return;
 
-                LoggerDomainEvent.Raise(LogStatus.Create("Initializing Entity records from Atmosphere...", true));
+                LoggerDomainEvent.Raise(LogStatus.Create("*** Atmosphere Import Start ***", true));
+                LoggerDomainEvent.Raise(LogStatus.Create("Atmosphere Patient Import for " + message.ContractDataBase + " started.", true));
                 PatientsUow.Initialize(message.ContractDataBase);
                 PatientsUow.Commit(message.ContractDataBase);
+                LoggerDomainEvent.Raise(LogStatus.Create("Atmosphere Patient Import for "+ message.ContractDataBase +" completed.", true));
+                LoggerDomainEvent.Raise(LogStatus.Create("*** Atmosphere Import Completed ***", true));
             }
             catch (Exception ex)
             {

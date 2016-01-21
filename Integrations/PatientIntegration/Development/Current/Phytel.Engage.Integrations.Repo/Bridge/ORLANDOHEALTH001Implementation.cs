@@ -43,11 +43,12 @@ namespace Phytel.Engage.Integrations.Repo.Bridge
              select new PatientInfo
              {
                  SubscriberId = rp.SubscriberID,
-                 PatientId = (int?)c3p.PatientID,
+                 PatientId = ce.ID,
+                 //PatientId = (int?)c3p.PatientID,
                  FirstName = ce.FirstName,
                  MiddleInitial = ce.MiddleInitial,
                  LastName = ce.LastName,
-                 Suffix = ce.Suffix,
+                 Suffix = ce.Suffix,                                                                                                      
                  Gender = ce.Gender,
                  BirthDate = ce.BirthDate,
                  Ssn = kd.KeyData1,

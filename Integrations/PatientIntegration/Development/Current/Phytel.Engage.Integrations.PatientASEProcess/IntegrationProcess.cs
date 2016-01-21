@@ -29,12 +29,7 @@ namespace Phytel.Engage.Integrations.QueueProcess
             doc.LoadXml(queueMessage.Body);
             var message = Mapper.Map<RegistryCompleteMessage>(doc.DocumentElement);
             _contractName = message.ContractDataBase;
-
-            LoggerDomainEvent.Raise(LogStatus.Create("*** Atmosphere Import Start ***" + " contract", true));
-            LoggerDomainEvent.Raise(LogStatus.Create("Initializing Integration process for : " + message.ContractDataBase  +" contract", true));
-            
             Processor.Process(message);
-            LoggerDomainEvent.Raise(LogStatus.Create("Atmosphere Patient Import completed.", true));
         }
 
         public IntegrationProcess()

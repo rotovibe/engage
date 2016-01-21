@@ -13,7 +13,6 @@ using Phytel.API.DataDomain.PatientSystem.DTO;
 using Phytel.Engage.Integrations.DomainEvents;
 using Phytel.Engage.Integrations.Extensions;
 using Phytel.Engage.Integrations.Repo.DTOs;
-using Phytel.Engage.Integrations.Repo.DTOs.SQL;
 using Phytel.Engage.Integrations.Repo.Repositories;
 
 namespace Phytel.Engage.Integrations.UOW
@@ -24,6 +23,7 @@ namespace Phytel.Engage.Integrations.UOW
 
         public void Initialize(string contractDb)
         {
+            LoggerDomainEvent.Raise(LogStatus.Create("Initializing Integration process for : [" + contractDb + "] contract", true));
             // load pcpRepo
             var pcpRepo = RepositoryFactory.GetRepository(contractDb, RepositoryType.PCPPhoneRepository);
             LoadPcpPhones(pcpRepo, PCPPhones = new List<PCPPhone>());
@@ -56,33 +56,33 @@ namespace Phytel.Engage.Integrations.UOW
 
                 //1) save patients
                 AssignPatientPCPContactInfo(Patients, PCPPhones);
-                BulkOperation(Patients, contract, new PatientDataDomain());
-                LoggerDomainEvent.Raise(new LogStatus { Message = "1) Saved patients - success", Type = LogType.Debug });
+                BulkOperation(Patients, contract, new PatientDataDomain(), "patients");
 
                 //2) save patientsystems
                 List<PatientSystemData> pSys = GetPatientSystemsToLoad(PatientSystems, PatientSaveResults);
-                if (pSys != null && pSys.Count > 0) BulkOperation(pSys, contract, new PatientSystemDataDomain());
-                LoggerDomainEvent.Raise(new LogStatus { Message = "2) Saved patientsystems - success", Type = LogType.Debug });
+                if (pSys != null && pSys.Count > 0) 
+                    BulkOperation(pSys, contract, new PatientSystemDataDomain(), "patient systems");
 
                 //3) save contact info
                 var contactList = GetPatientContactsToRegister(PatientSaveResults);
-                if (contactList != null && contactList.Count > 0) BulkOperation(contactList, contract, new ContactDataDomain());
-                LoggerDomainEvent.Raise(new LogStatus { Message = "3) Saved contact info - success", Type = LogType.Debug });
+                if (contactList != null && contactList.Count > 0) 
+                    BulkOperation(contactList, contract, new ContactDataDomain(), "contact info");
 
                 //4) save patient notes
                 var patientNotesList = GetPatientNotesToRegister(PatientSaveResults, PatientNotes);
-                if (patientNotesList != null && patientNotesList.Count > 0) BulkOperation(patientNotesList, contract, new PatientNoteDataDomain());
-                LoggerDomainEvent.Raise(new LogStatus { Message = "4) Saved Patient notes - success", Type = LogType.Debug });
+                if (patientNotesList != null && patientNotesList.Count > 0) 
+                    BulkOperation(patientNotesList, contract, new PatientNoteDataDomain(), "patient notes");
 
                 // 5) save todos from patientnoteslist
                 var toDoList = ParseToDos(PatientSaveResults);
-                if (toDoList != null && toDoList.Count > 0) BulkOperation(toDoList, contract, new ToDoDataDomain());
-                LoggerDomainEvent.Raise(new LogStatus { Message = "5) Saved Patient ToDos - success", Type = LogType.Debug });
+                if (toDoList != null && toDoList.Count > 0) 
+                    BulkOperation(toDoList, contract, new ToDoDataDomain(), "to dos");
 
             }
             catch (Exception ex)
             {
                 LoggerDomainEvent.Raise(new LogStatus { Message = "PatientsImportUow:Commit(): " + ex.Message, Type = LogType.Error });
+                throw;
             }
         }
 
@@ -108,6 +108,7 @@ namespace Phytel.Engage.Integrations.UOW
             catch (Exception ex)
             {
                 LoggerDomainEvent.Raise(new LogStatus { Message = "PatientsImportUow:AssignPatientPCPContactInfo(): " + ex.Message, Type = LogType.Error });
+                throw;
             }
         }
 

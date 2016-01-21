@@ -36,11 +36,11 @@ namespace Phytel.Engage.Integrations.UOW
         public List<PCPPhone> PCPPhones { get; set; }
         public List<ToDoData> ToDos { get; set; }
 
-        internal void BulkOperation<T>(List<T> pocos, string contract, IDataDomain domain)
+        internal void BulkOperation<T>(List<T> pocos, string contract, IDataDomain domain, string collection)
         {
             try
             {
-                if (pocos.Count == 0) throw new Exception("There are no items to page in list.");
+                if (pocos.Count == 0) return; //throw new Exception("There are no items to page in list.");
 
                 if (pocos.Count > 5 && pocos.Count > ProcConstants.TakeCount)
                 {
@@ -49,6 +49,8 @@ namespace Phytel.Engage.Integrations.UOW
                 }
                 else
                     HandleResponse(domain.Save(pocos, contract), contract);
+
+                LoggerDomainEvent.Raise(LogStatus.Create("[Batch Process]: Saving " + collection + " - success.", true));
             }
             catch (Exception ex)
             {
@@ -164,7 +166,7 @@ namespace Phytel.Engage.Integrations.UOW
 
                 cb.Add(new EIntegrationPatientXref
                 {
-                    CreateDate = PatientInfoUtils.CstConvert(DateTime.UtcNow),
+                    CreateDate =  DateTime.Parse("1900-01-01"), //PatientInfoUtils.CstConvert(DateTime.UtcNow),
                     ExternalPatientID = mongoId,
                     ExternalDisplayPatientId = engageId, //"engageid"
                     PhytelPatientID = Convert.ToInt32(phytelId), //"phytelid"
