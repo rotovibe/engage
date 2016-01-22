@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Phytel.Services.Communication.Model
+namespace Phytel.Services.Communication
 {
     public class TextResult
     {
