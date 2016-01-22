@@ -420,12 +420,12 @@
 					
 			if (session.currentUser().settings()) {
 				var totalQueryCount = datacontext.getSettingsParam('TotalQueryCount');
-				if( totalQueryCount ){
+				if( totalQueryCount && !isNaN(totalQueryCount)){
 					//the max todos to load
 					maxTodosCount( parseInt( totalQueryCount ) );					
                 }
 			    var take = datacontext.getSettingsParam('QueryTake');
-			    if( take ){
+			    if( take && !isNaN(take) ){
 				    //the take
 				    todosTake( parseInt( take ) );					
 			    }
@@ -559,8 +559,10 @@
 			if( todosTotalCount() < maxTodosCount() ){			
 				maxToToDosLoaded(false);
 			}
-			else{				
-				maxToToDosLoaded(true);
+			else{
+				if( returnedCount && (skipped + returnedCount) >= maxTodosCount() ){
+					maxToToDosLoaded(true);
+				}
 			}	
 			var todos = refreshMyTodos();
 			myToDos(todos);
