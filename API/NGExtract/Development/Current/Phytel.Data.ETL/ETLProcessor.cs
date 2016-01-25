@@ -1748,7 +1748,7 @@ namespace Phytel.Data.ETL
                             // new fields
                             parms.Add(new Parameter("@ClosedDate", intervention.ClosedDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
                             parms.Add(new Parameter("@TemplateId", (string.IsNullOrEmpty(intervention.TemplateId.ToString()) ? string.Empty : intervention.TemplateId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
-
+                            parms.Add(new Parameter("@DueDate", intervention.DueDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
                             SQLDataService.Instance.ExecuteScalar(_contract, true, "REPORT", "spPhy_RPT_SavePatientIntervention", parms);
 
                             if (intervention.BarrierIds != null)
@@ -3007,42 +3007,6 @@ namespace Phytel.Data.ETL
                         parms.Add(new Parameter("@TemplateId", (string.IsNullOrEmpty(task.TemplateId.ToString()) ? string.Empty : task.TemplateId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
 
                         SQLDataService.Instance.ExecuteScalar(_contract, true, "REPORT", "spPhy_RPT_SavePatientTask", parms);
-
-                        if (task.Attributes != null)
-                        {
-                            foreach (MAttribute att in task.Attributes)
-                            {
-                                parms.Clear();
-                                parms.Add(new Parameter("@GoalAttributeMongoID", (string.IsNullOrEmpty(att.AttributeId.ToString()) ? string.Empty : att.AttributeId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                                parms.Add(new Parameter("@PatientTaskMongoID", (string.IsNullOrEmpty(task.Id.ToString()) ? string.Empty : task.Id.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                                parms.Add(new Parameter("@MongoUpdatedBy", task.UpdatedBy == null ? string.Empty : task.UpdatedBy.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                                parms.Add(new Parameter("@LastUpdatedOn", task.LastUpdatedOn ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
-                                parms.Add(new Parameter("@MongoRecordCreatedBy", (string.IsNullOrEmpty(task.RecordCreatedBy.ToString()) ? string.Empty : task.RecordCreatedBy.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                                parms.Add(new Parameter("@RecordCreatedOn", task.RecordCreatedOn, SqlDbType.DateTime, ParameterDirection.Input, 50));
-                                parms.Add(new Parameter("@Version", task.Version, SqlDbType.Float, ParameterDirection.Input, 50));
-
-                                SQLDataService.Instance.ExecuteScalar(_contract, true, "REPORT", "spPhy_RPT_SavePatientTaskAttribute", parms);
-
-                                if (att.Values != null)
-                                {
-                                    foreach (string val in att.Values)
-                                    {
-                                        parms.Clear();
-                                        parms.Add(new Parameter("@Value", (string.IsNullOrEmpty(val) ? string.Empty : val), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                                        parms.Add(new Parameter("@PatientTaskMongoID", (string.IsNullOrEmpty(task.Id.ToString()) ? string.Empty : task.Id.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                                        parms.Add(new Parameter("@GoalAttributeMongoID", (string.IsNullOrEmpty(att.AttributeId.ToString()) ? string.Empty : att.AttributeId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                                        parms.Add(new Parameter("@MongoUpdatedBy", task.UpdatedBy == null ? string.Empty : task.UpdatedBy.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                                        parms.Add(new Parameter("@LastUpdatedOn", task.LastUpdatedOn ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
-                                        parms.Add(new Parameter("@MongoRecordCreatedBy", (string.IsNullOrEmpty(task.RecordCreatedBy.ToString()) ? string.Empty : task.RecordCreatedBy.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                                        parms.Add(new Parameter("@RecordCreatedOn", task.RecordCreatedOn, SqlDbType.DateTime, ParameterDirection.Input, 50));
-                                        parms.Add(new Parameter("@Version", task.Version, SqlDbType.Float, ParameterDirection.Input, 50));
-
-                                        SQLDataService.Instance.ExecuteScalar(_contract, true, "REPORT", "spPhy_RPT_SavePatientTaskAttributeValue", parms);
-                                    }
-                                }
-                            }
-                        }
-
                         if (task.BarrierIds != null)
                         {
                             foreach (ObjectId bar in task.BarrierIds)
