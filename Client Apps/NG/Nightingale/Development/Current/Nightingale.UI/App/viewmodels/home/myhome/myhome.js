@@ -550,7 +550,6 @@
 			var returnedCount = myToDosQueryResult()? myToDosQueryResult().length : 0;
 			var skipped = todosSkip();
 			var nextSkip = skipped + todosTake();
-console.log('todosReturned - skipped: '+skipped  + ' returnedCount:' + returnedCount +' maxTodosCount():'+ maxTodosCount() )			
 			if( nextSkip < todosTotalCount() && nextSkip < maxTodosCount() ){
 				todosSkip(nextSkip);		
 				canLoadMoreTodos(true);
@@ -563,7 +562,6 @@ console.log('todosReturned - skipped: '+skipped  + ' returnedCount:' + returnedC
 			}
 			else{
 				if( returnedCount && (skipped + returnedCount) >= maxTodosCount() ){
-					console.log('todosReturned - maxToToDosLoaded **********************');
 					maxToToDosLoaded(true);
 				}
 			}	
