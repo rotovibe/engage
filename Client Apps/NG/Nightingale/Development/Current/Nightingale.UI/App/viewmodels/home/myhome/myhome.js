@@ -229,7 +229,7 @@
 			var bSort = backendSort? backendSort() : null;
 			var processing = todosProcessing();			
 			if( !processing ){
-				if( backendSort() !== lastSort() ){				
+				if( backendSort() !== lastSort() ){									
 					lastSort( backendSort() );				
 					clearTodosCacheAndLoad();									
 					theseTodos = [];
@@ -375,8 +375,9 @@
                 initializeViewModel();													
                 initialized = true;				
             }			
-			todosProcessing(false);
-			return clearTodosCacheAndLoad();	//reloaded every time we navigate back to myhome, since the todos tab activity may clear the cache.			
+			if( !todosProcessing() ){	//from some reason the activate fires twice when just logging in. (only in qa) 				
+				return clearTodosCacheAndLoad();	//reloaded every time we navigate back to myhome, since the todos tab activity may clear the cache.			
+			}
         }
 
         function attached() {
@@ -545,10 +546,11 @@
 			return datacontext.getToDosRemoteOpenAssignedToMe( myToDosQueryResult, todosSkip(), todosTake(), backendSort(), todosTotalCount ).then( todosReturned );
 		}
 				
-		function todosReturned(){			
+		function todosReturned(){
 			var returnedCount = myToDosQueryResult()? myToDosQueryResult().length : 0;
 			var skipped = todosSkip();
 			var nextSkip = skipped + todosTake();
+console.log('todosReturned - skipped: '+skipped  + ' returnedCount:' + returnedCount +' maxTodosCount():'+ maxTodosCount() )			
 			if( nextSkip < todosTotalCount() && nextSkip < maxTodosCount() ){
 				todosSkip(nextSkip);		
 				canLoadMoreTodos(true);
@@ -561,6 +563,7 @@
 			}
 			else{
 				if( returnedCount && (skipped + returnedCount) >= maxTodosCount() ){
+					console.log('todosReturned - maxToToDosLoaded **********************');
 					maxToToDosLoaded(true);
 				}
 			}	
