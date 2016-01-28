@@ -1554,6 +1554,7 @@ namespace Phytel.Data.ETL
                         parms.Add(new Parameter("@UpdatedBy", (string.IsNullOrEmpty(bar.UpdatedBy.ToString()) ? string.Empty : bar.UpdatedBy.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
                         parms.Add(new Parameter("@Version", (string.IsNullOrEmpty(bar.Version.ToString()) ? string.Empty : bar.Version.ToString()), SqlDbType.Float, ParameterDirection.Input, 32));
                         parms.Add(new Parameter("@Name", (string.IsNullOrEmpty(bar.Name) ? string.Empty : bar.Name), SqlDbType.VarChar, ParameterDirection.Input, 500));
+                        parms.Add(new Parameter("@Details", (string.IsNullOrEmpty(bar.Details) ? (object)DBNull.Value : bar.Details), SqlDbType.VarChar, ParameterDirection.Input, 5000));
                         if (bar.ExtraElements != null)
                             parms.Add(new Parameter("@ExtraElements", bar.ExtraElements.ToString(), SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
                         else
@@ -1611,6 +1612,7 @@ namespace Phytel.Data.ETL
                         parms.Add(new Parameter("@Version", goal.Version.ToString(), SqlDbType.Float, ParameterDirection.Input, 32));
                         parms.Add(new Parameter("@Delete", goal.DeleteFlag.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 50));
                         parms.Add(new Parameter("@TimeToLive", goal.TTLDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                        parms.Add(new Parameter("@Details", (string.IsNullOrEmpty(goal.Details) ? (object)DBNull.Value : goal.Details), SqlDbType.VarChar, ParameterDirection.Input, 5000));
                         if (goal.ExtraElements != null)
                             parms.Add(new Parameter("@ExtraElements", goal.ExtraElements.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 5000));
                         else
@@ -1740,6 +1742,7 @@ namespace Phytel.Data.ETL
                             parms.Add(new Parameter("@StartDate", intervention.StartDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
                             parms.Add(new Parameter("@Description", (string.IsNullOrEmpty(intervention.Description) ? string.Empty : intervention.Description), SqlDbType.VarChar, ParameterDirection.Input, 5000));
                             parms.Add(new Parameter("@Name", (string.IsNullOrEmpty(intervention.Name) ? string.Empty : intervention.Name), SqlDbType.VarChar, ParameterDirection.Input, 100));
+                            parms.Add(new Parameter("@Details", (string.IsNullOrEmpty(intervention.Details) ? (object)DBNull.Value : intervention.Details), SqlDbType.VarChar, ParameterDirection.Input, 5000));
                             if (intervention.ExtraElements != null)
                                 parms.Add(new Parameter("@ExtraElements", intervention.ExtraElements.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 5000));
                             else
@@ -2997,6 +3000,7 @@ namespace Phytel.Data.ETL
                         parms.Add(new Parameter("@Version", task.Version, SqlDbType.Float, ParameterDirection.Input, 50));
                         parms.Add(new Parameter("@Delete", (string.IsNullOrEmpty(task.DeleteFlag.ToString()) ? string.Empty : task.DeleteFlag.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
                         parms.Add(new Parameter("@TimeToLive", task.TTLDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+                        parms.Add(new Parameter("@Details", (string.IsNullOrEmpty(task.Details) ? (object)DBNull.Value : task.Details), SqlDbType.VarChar, ParameterDirection.Input, 5000));
                         if (task.ExtraElements != null)
                             parms.Add(new Parameter("@ExtraElements", task.ExtraElements.ToString(), SqlDbType.VarChar, ParameterDirection.Input, 5000));
                         else
