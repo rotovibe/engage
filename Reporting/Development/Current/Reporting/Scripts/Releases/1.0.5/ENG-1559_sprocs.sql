@@ -238,6 +238,7 @@ CREATE PROCEDURE [dbo].[spPhy_RPT_SavePatientIntervention]
 	@ExtraElements varchar(5000),
 	@ClosedDate datetime,
 	@TemplateId varchar(50),
+	@DueDate datetime,
 	@Details varchar(5000)
 AS
 BEGIN
@@ -288,6 +289,7 @@ BEGIN
 			ExtraElements = @ExtraElements,
 			ClosedDate = @ClosedDate,
 			TemplateId = @TemplateId,
+			DueDate = @DueDate,
 			Details = @Details
 		Where MongoId = @MongoID
 		
@@ -319,6 +321,7 @@ BEGIN
 		MongoId, 
 		[ClosedDate], 
 		[TemplateId],
+		DueDate,
 		[Details]) 
 		values 
 		(@Name, 
@@ -345,6 +348,7 @@ BEGIN
 		@MongoID,
 		@ClosedDate,
 		@TemplateId,
+		@DueDate,
 		@Details)
 	End
 END
@@ -557,6 +561,7 @@ BEGIN
 		,PatientInterventionTemplateId
 		,PatientInterventionAssignedTo
 		,PatientInterventionBarrierName
+		,PatientInterventionDueDate
 		,PatientInterventionDetails 	
 	) 
 SELECT DISTINCT 	
@@ -621,6 +626,7 @@ SELECT DISTINCT
 		  ,pi.TemplateId as PatientInterventionTemplateId
 		  ,u1.PreferredName as PatientInterventionAssignedTo
 		  ,pb2.Name as PatientInterventionBarrierName 	
+		  ,pi.DueDate as PatientInterventionDueDate 
 		  ,pi.Details as PatientInterventionDetails
 	FROM
 		  RPT_PatientGoal as pg with (nolock) 	
