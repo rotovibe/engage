@@ -60,8 +60,7 @@ Begin
 		,pg.LastUpdatedOn as UpdatedOn
 		,u3.PreferredName AS UpdatedBy
 		,pg.Name
-		,'' as Details
-		--,pg.Details Note: This coulmn is not yet available as ETL hasn't been updated
+		,pg.Details
 		,pg.TemplateId 
 		,pgl.Name as Source
 		,pg.TargetDate

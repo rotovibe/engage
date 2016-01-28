@@ -41,9 +41,8 @@ Begin
 		,pt.StartDate
 		,pt.TargetDate
 		,pt.TargetValue
-		,pt.Description
-		,'' as Details
-		--,pt.Details Note: This coulmn is not yet available as ETL hasn't been updated
+		,pt.[Description]
+		,pt.Details
 		,pt.TemplateId
 		,u.MongoId AS 'PrimaryCareManagerMongoId'
 		,u.PreferredName AS 'PrimaryCareManagerPreferredName'

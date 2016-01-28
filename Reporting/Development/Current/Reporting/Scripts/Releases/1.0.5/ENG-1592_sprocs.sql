@@ -34,8 +34,7 @@ Begin
 		,u3.PreferredName AS UpdatedBy
 		,pb.[Status]
 		,pb.Name
-		,'' as Details
-		--,pb.Details Note: This coulmn is not yet available as ETL hasn't been updated
+		,pb.Details
 		,bcl.Name as Category
 		,u.MongoId AS 'PrimaryCareManagerMongoId'
 		,u.PreferredName AS 'PrimaryCareManagerPreferredName'

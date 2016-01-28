@@ -40,11 +40,9 @@ Begin
 		,pi.ClosedDate
 		,pi.[Status]
 		,pi.StartDate
-		,'' as DueDate
-		--,pi.DueDate as DueDate Note: This coulmn is not yet available as ETL hasn't been updated
+		,pi.DueDate
 		,pi.Description
-		,'' as Details
-		--,pi.Details as Details Note: This coulmn is not yet available as ETL hasn't been updated
+		,pi.Details
 		,icl.Name as CategoryName
 		,pi.TemplateId		
 		,u1.PreferredName as AssignedTo
