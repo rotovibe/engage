@@ -198,7 +198,7 @@ namespace Phytel.Data.ETL.Templates
                             Delete = pt.DeleteFlag.ToString(),
                             Background = pt.Background,
                             TTLDate = pt.TTLDate ?? null,
-                            LSSN = pt.LastFourSSN == null ? 0 : Convert.ToInt32(pt.LastFourSSN),
+                            LSSN = pt.LastFourSSN == null ? null : (int?)Convert.ToInt32(pt.LastFourSSN),
                             FSSN = pt.FullSSN,
                             ClinicalBackGround = pt.ClinicalBackground,
                             DataSource = pt.DataSource,
