@@ -525,7 +525,6 @@ BEGIN
 		,PatientGoalProgramEndDate
 		,PatientGoalAttributeName
 		,PatientGoalAttributeValue
-		,PatientGoalDetails
 		,PatientBarrierId
 		,PatientBarrierName
 		,PatientBarrierCategory
@@ -533,7 +532,6 @@ BEGIN
 		,PatientBarrierStatusDate
 		,PatientBarrierLastUpdated
 		,PatientBarrierCreatedOn
-		,PatientBarrierDetails
 		,PatientTaskId
 		,PatientTaskDescription
 		,PatientTaskStartDate
@@ -546,9 +544,6 @@ BEGIN
 		,PatientTaskClosedDate
 		,PatientTaskTemplateId
 		,PatientTaskBarrierName
-		,PatientTaskAttributeName
-		,PatientTaskAttributeValue
-		,PatientTaskDetails
 		,PatientInterventionId
 		,PatientInterventionCategoryName
 		,PatientInterventionDesc
@@ -562,7 +557,10 @@ BEGIN
 		,PatientInterventionAssignedTo
 		,PatientInterventionBarrierName
 		,PatientInterventionDueDate
+		,PatientGoalDetails
+		,PatientBarrierDetails
 		,PatientInterventionDetails 	
+		,PatientTaskDetails
 	) 
 SELECT DISTINCT 	
 		   pg.MongoPatientId
@@ -590,7 +588,6 @@ SELECT DISTINCT
 		  ,pp1.AttributeEndDate  as PatientGoalProgramEndDate
 		  ,ga.Name as PatientGoalAttributeName
 		  ,gao.Value as PatientGoalAttributeValue
-		  ,pg.Details as PatientGoalDetails
 		  ,pb.PatientBarrierId
 		  ,pb.Name as PatientBarrierName
 		  ,bcl.Name as PatientBarrierCategory
@@ -598,7 +595,6 @@ SELECT DISTINCT
 		  ,pb.StatusDate as PatientBarrierStatusDate
 		  ,pb.LastUpdatedOn as PatientBarrierLastUpdated
 		  ,pb.RecordCreatedOn as PatientBarrierCreatedOn
-		  ,pb.Details as PatientBarrierDetails
 		  ,pt.PatientTaskId
 		  ,pt.Description as PatientTaskDescription
 		  ,pt.StartDate as PatientTaskStartDate
@@ -611,9 +607,6 @@ SELECT DISTINCT
 		  ,pt.ClosedDate as PatientTaskClosedDate
 		  ,pt.TemplateId as PatientTaskTemplateId
 		  ,pb1.Name as PatientTaskBarrierName
-		  ,ga1.Name as PatientTaskAttributeName
-		  ,gao1.Value as PatientTaskAttributeValue
-		  ,pt.Details as PatientTaskDetails
 		  ,pi.PatientInterventionId
 		  ,icl.Name as PatientInterventionCategoryName
 		  ,pi.Description as PatientInterventionDesc
@@ -627,7 +620,10 @@ SELECT DISTINCT
 		  ,u1.PreferredName as PatientInterventionAssignedTo
 		  ,pb2.Name as PatientInterventionBarrierName 	
 		  ,pi.DueDate as PatientInterventionDueDate 
+		  ,pg.Details as PatientGoalDetails
+		  ,pb.Details as PatientBarrierDetails
 		  ,pi.Details as PatientInterventionDetails
+		  ,pt.Details as PatientTaskDetails
 	FROM
 		  RPT_PatientGoal as pg with (nolock) 	
 		  left join RPT_SourceLookUp as pgl with (nolock) on pg.Source = pgl.MongoId
@@ -644,10 +640,6 @@ SELECT DISTINCT
 		  left join RPT_PatientTask as pt with (nolock) on pg.MongoId = pt.MongoPatientGoalId and pt.[Delete] = 'False' and pt.TTLDate IS NULL 
 		  left join RPT_PatientTaskBarrier as ptb with (nolock) on pt.MongoId = ptb.MongoPatientTaskId
 		  left join RPT_PatientBarrier as pb1 with (nolock) on ptb.MongoPatientBarrierId = pb1.MongoId
-		  left join RPT_PatientTaskAttribute as pta with (nolock) on pt.MongoId = pta.MongoPatientTaskId
-		  left join RPT_GoalAttribute as ga1 with (nolock) on pta.MongoGoalAttributeId = ga1.MongoId
-		  left join RPT_PatientTaskAttributeValue as ptav with (nolock)on pta.PatientTaskAttributeId = ptav.PatientTaskAttributeId
-		  left join RPT_GoalAttributeOption as gao1 with (nolock) on ptav.Value = gao1.[Key] and ga1.MongoId = gao1.MongoGoalAttributeId
 		  left join RPT_PatientIntervention as pi with (nolock) on pg.MongoId = pi.MongoPatientGoalId and pi.[Delete] = 'False' and pi.TTLDate IS NULL 
 		  left join RPT_InterventionCategoryLookUp as icl with (nolock) on pi.MongoCategoryLookUpId = icl.MongoId
 		  left join RPT_User as u1 with (nolock)on pi.MongoContactUserId = u1.MongoId
