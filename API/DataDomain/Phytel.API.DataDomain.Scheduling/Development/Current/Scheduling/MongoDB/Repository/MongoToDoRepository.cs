@@ -371,14 +371,6 @@ namespace Phytel.API.DataDomain.Scheduling
                         {
                             uv.Add(MB.Update.Set(METoDo.AssignedToProperty, BsonNull.Value));
                         }
-                        if (!string.IsNullOrEmpty(todoData.ExternalRecordId))
-                        {
-                            uv.Add(MB.Update.Set(METoDo.ExternalRecordIdProperty, todoData.ExternalRecordId));
-                        }
-                        else
-                        {
-                            uv.Add(MB.Update.Set(METoDo.ExternalRecordIdProperty, BsonNull.Value));
-                        }
                         uv.Add(MB.Update.Set(METoDo.DeleteFlagProperty, todoData.DeleteFlag));
                         DataAuditType type;
                         if (todoData.DeleteFlag)
