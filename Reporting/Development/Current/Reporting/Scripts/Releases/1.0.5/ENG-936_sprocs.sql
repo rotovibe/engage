@@ -104,7 +104,6 @@ BEGIN
 	--Delete the lookup columns in the end due to it's dependencies on base tables.
 
 	-- Notes Lookups
-	DELETE RPT_NoteDurationLookUp
 	DELETE RPT_NoteMethodLookUp
 	DELETE RPT_NoteOutcomeLookUp
 	DELETE RPT_NoteSourceLookUp
@@ -228,7 +227,6 @@ BEGIN
 	DBCC CHECKIDENT ('RPT_PatientUtilizationProgram', RESEED, 0)
 
 	-- lookups
-	DBCC CHECKIDENT ('RPT_NoteDurationLookUp', RESEED, 0)
 	DBCC CHECKIDENT ('RPT_NoteMethodLookUp', RESEED, 0)
 	DBCC CHECKIDENT ('RPT_NoteOutcomeLookUp', RESEED, 0)
 	DBCC CHECKIDENT ('RPT_NoteSourceLookUp', RESEED, 0)

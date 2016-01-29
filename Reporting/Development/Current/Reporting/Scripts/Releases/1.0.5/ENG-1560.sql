@@ -25,3 +25,6 @@ IF EXISTS (SELECT * FROM sys.columns WHERE Name = N'Duration' AND Object_ID = Ob
 		DROP COLUMN [Duration];
 	END
 GO
+
+DROP TABLE [dbo].[RPT_NoteDurationLookUp];
+GO
