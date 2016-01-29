@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.2.0.final using JasperReports Library version 6.2.0  -->
-<!-- 2016-01-15T13:54:32 -->
+<!-- 2016-01-27T18:16:40 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="MDVCSummaryReport_Sub_Risks" language="groovy" pageWidth="576" pageHeight="792" columnWidth="576" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="8e18d4f1-763a-4ebd-b7e5-6ac366c028cd">
 	<property name="ireport.zoom" value="2.143588810000004"/>
 	<property name="ireport.x" value="0"/>
@@ -9,6 +9,8 @@
 	<property name="ireport.jasperserver.user" value="qauser"/>
 	<property name="ireport.jasperserver.report.resource" value="/organizations/organization_1/InHealth/Ad_Hoc_Components/MDVC_CM_Summary/rpt_MDVC_CM_Summary_files/MDVCSummaryReport_Sub_Risks.jrxml"/>
 	<property name="ireport.jasperserver.reportUnit" value="/organizations/organization_1/InHealth/Ad_Hoc_Components/MDVC_CM_Summary/rpt_MDVC_CM_Summary"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Model Data Adapter "/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<parameter name="ID_MongoPatientId" class="java.lang.String">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
@@ -17,7 +19,7 @@
 ob.description as [risk]
 ,po.NumericValue
 , otl.name
-, COALESCE(po.lastupdatedon, po.recordcreatedon) as [Date]
+, po.EndDate as [Date]
 from
 	RPT_patientobservation po
 	INNER JOIN RPT_Observation ob ON po.mongoobservationid = ob.mongoid
@@ -26,6 +28,7 @@ where
 	otl.MongoId = '5463bb98d4332316f8e8f482'
 	and po.mongopatientid = $P{ID_MongoPatientId}
 	and po.[Delete] = 'False' AND po.TTLDate IS NULL
+	and po.EndDate > DATEADD(month, -24, GETDATE())
 order by ob.description]]>
 	</queryString>
 	<field name="risk" class="java.lang.String"/>
@@ -48,12 +51,12 @@ order by ob.description]]>
 				<text><![CDATA[Risks]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="6" y="14" width="552" height="19" uuid="0b320a98-79f0-4224-9d71-f2efc5589aa8">
+				<reportElement x="6" y="14" width="565" height="19" uuid="0b320a98-79f0-4224-9d71-f2efc5589aa8">
 					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 				</reportElement>
 				<textElement>
-					<font size="7" isBold="false"/>
+					<font size="7" isBold="false" isItalic="true"/>
 				</textElement>
 				<text><![CDATA[Acuity Score: Stratification system that is based on current status/needs, functional capacity and interventions required (1-Proficient/ Competent in Self Management, 2-Somewhat Proficient in Self Management, 3-Needs Review or Reinforcement in Self Management, 4-Needs Full Instruction in Self Management)]]></text>
 			</staticText>

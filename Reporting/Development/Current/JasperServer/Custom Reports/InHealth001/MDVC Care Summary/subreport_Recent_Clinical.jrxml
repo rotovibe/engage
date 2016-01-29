@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.2.0.final using JasperReports Library version 6.2.0  -->
-<!-- 2016-01-15T13:57:27 -->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="subreport_Recent_Clinical" language="groovy" pageWidth="576" pageHeight="576" columnWidth="576" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="77a74b22-454e-4021-a765-b7c96a07ef6a">
+<!-- 2016-01-28T14:49:08 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="subreport_Recent_Clinical_TwoColumns" language="groovy" pageWidth="576" pageHeight="576" columnWidth="576" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="77a74b22-454e-4021-a765-b7c96a07ef6a">
 	<property name="ireport.zoom" value="1.4641000000000015"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
@@ -9,8 +9,35 @@
 	<property name="ireport.jasperserver.user" value="qauser"/>
 	<property name="ireport.jasperserver.report.resource" value="/organizations/organization_1/InHealth/Ad_Hoc_Components/MDVC_CM_Summary/rpt_MDVC_CM_Summary_files/subreport_Recent_Clinical.jrxml"/>
 	<property name="ireport.jasperserver.reportUnit" value="/organizations/organization_1/InHealth/Ad_Hoc_Components/MDVC_CM_Summary/rpt_MDVC_CM_Summary"/>
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Prod Data Adapter "/>
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Model Data Adapter "/>
+	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.topMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.bottomMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.leftMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
+	<style name="Table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
 	<parameter name="ID_MongoPatientId" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[select
@@ -34,17 +61,7 @@ Order by pcd.[Description]]]>
 		<band splitType="Stretch"/>
 	</background>
 	<columnHeader>
-		<band height="28" splitType="Stretch">
-			<frame>
-				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="0" y="16" width="576" height="11" backcolor="#F0F0F0" uuid="bad5a6fd-a2af-41ae-959b-97d5fa7e068f"/>
-				<staticText>
-					<reportElement x="6" y="0" width="190" height="11" uuid="4d2c0cee-4deb-4558-9588-81ec2d583f0d"/>
-					<textElement verticalAlignment="Top">
-						<font size="8"/>
-					</textElement>
-					<text><![CDATA[Description]]></text>
-				</staticText>
-			</frame>
+		<band height="16" splitType="Stretch">
 			<line>
 				<reportElement positionType="Float" x="0" y="15" width="576" height="1" forecolor="#666666" uuid="67d316e3-3b76-4485-90b9-4d509c3585e8"/>
 			</line>
@@ -53,14 +70,19 @@ Order by pcd.[Description]]]>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
-				<text><![CDATA[Active Problems]]></text>
+				<text><![CDATA[Current Problems]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
 		<band height="12" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement x="6" y="0" width="264" height="11" uuid="507b8e2e-d6a7-4e5e-ae6f-abb44729d984"/>
+				<reportElement x="6" y="0" width="570" height="12" uuid="8d541be9-0948-47a6-bd3d-c45c1d62b1ab">
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
 				<textElement>
 					<font size="8"/>
 				</textElement>

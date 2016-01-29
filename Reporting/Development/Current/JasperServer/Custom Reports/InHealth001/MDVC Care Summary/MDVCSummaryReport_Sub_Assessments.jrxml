@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.2.0.final using JasperReports Library version 6.2.0  -->
-<!-- 2016-01-15T12:06:28 -->
+<!-- 2016-01-27T18:15:16 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="MDVCSummaryReport_Sub_Assessments" language="groovy" pageWidth="576" pageHeight="842" columnWidth="576" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="db6125b1-952d-4e40-8426-993a71e36796">
 	<property name="ireport.zoom" value="1.7715610000000022"/>
 	<property name="ireport.x" value="0"/>
@@ -9,15 +9,17 @@
 	<property name="ireport.jasperserver.user" value="qauser"/>
 	<property name="ireport.jasperserver.report.resource" value="/organizations/organization_1/InHealth/Ad_Hoc_Components/MDVC_CM_Summary/rpt_MDVC_CM_Summary_files/MDVCSummaryReport_Sub_Assessments.jrxml"/>
 	<property name="ireport.jasperserver.reportUnit" value="/organizations/organization_1/InHealth/Ad_Hoc_Components/MDVC_CM_Summary/rpt_MDVC_CM_Summary"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Model Data Adapter "/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<parameter name="ID_MongoPatientId" class="java.lang.String">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
 	<queryString>
 		<![CDATA[select
-COALESCE(NULLIF(ob.CommonName, ''), ob.description) as [assessment]
+ob.description as [assessment]
 ,po.NumericValue
 , otl.name
-, COALESCE(po.lastupdatedon, po.recordcreatedon) as [Date]
+, po.EndDate as [Date]
 from
 	RPT_patientobservation po
 	INNER JOIN RPT_Observation ob ON po.mongoobservationid = ob.mongoid
@@ -25,8 +27,9 @@ from
 where
 	otl.MongoId = '552402ded43323192031a507'
 	and po.mongopatientid = $P{ID_MongoPatientId}
+	and po.EndDate > DATEADD(month, -24, GETDATE()) 
 	and 	po.[Delete] = 'False' and po.TTLDate IS NULL
-order by COALESCE(NULLIF(ob.CommonName, ''), ob.description)]]>
+order by ob.description]]>
 	</queryString>
 	<field name="assessment" class="java.lang.String"/>
 	<field name="NumericValue" class="java.lang.Double"/>
@@ -50,7 +53,7 @@ order by COALESCE(NULLIF(ob.CommonName, ''), ob.description)]]>
 					<textElement>
 						<font size="8"/>
 					</textElement>
-					<text><![CDATA[Numeric Value]]></text>
+					<text><![CDATA[Value]]></text>
 				</staticText>
 			</frame>
 			<staticText>
