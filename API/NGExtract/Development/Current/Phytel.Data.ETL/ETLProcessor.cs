@@ -909,9 +909,6 @@ namespace Phytel.Data.ETL
                             case LookUpType.NoteSource:
                                 LoadLookUp(lookup, "spPhy_RPT_SaveNoteSourceLookUp");
                                 break;
-                            case LookUpType.NoteDuration:
-                                LoadLookUp(lookup, "spPhy_RPT_SaveNoteDurationLookUp");
-                                break;
                             // AllergyType
                             case LookUpType.AllergyType:
                                 LoadAllergyType(lookup);
