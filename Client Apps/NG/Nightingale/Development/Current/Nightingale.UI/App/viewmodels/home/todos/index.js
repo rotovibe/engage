@@ -483,18 +483,18 @@ define(['services/session', 'services/datacontext', 'config.services', 'models/b
 			}
 			myToDos(theseTodos);
             return theseTodos;
-        }).extend({ throttle: 10 });
+        }).extend({ throttle: 100 });
 
 		/**
 		*	clear all todos from localCollections and breeze cache.
 		*	@method	clearTodosCacheAndLoad
 		*/
-		function clearTodosCacheAndLoad(){			
+		function clearTodosCacheAndLoad(){
 			maxToToDosLoaded(false);
 			//assign empty array so todos wount be referenced from ko data binding of the views that had them showing.			
 			myToDos([]);
 			todosProcessing(true);
-			var todos = localCollections.todos();
+			var todos = datacontext.getLocalTodos([], null);
 			//empty the collection. the todos should be cleaned out by garbage collector.
 			localCollections.todos([]);
 			todosTotalCount(0);	

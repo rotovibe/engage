@@ -525,7 +525,6 @@
 			localCollections.todos([]);
 			return setTimeout( function(){
 				//short delay to allow the ko data binding to release references to these todos, before removing them: 
-				var todosincache = [];
 				if( todos && todos.length > 0 ){
 					ko.utils.arrayForEach( todos, function(todo){						
 						if( todo ){
@@ -535,7 +534,6 @@
 						}						
 					});					
 				}		
-				todosincache = datacontext.getLocalTodos([], null);
 				return loadMoreTodos().then(generateCalendarEvents);	//load first block with the new sort
 			}, 50);
 		}
