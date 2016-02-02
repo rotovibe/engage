@@ -41,8 +41,7 @@ BEGIN
 		,pt.MongoId as MongoPatientId
 		,ppt.PatientProgramId
 		,ppt.MongoId as MongoPatientProgramId
-		,(select CASE WHEN LEN(Value) > 0 THEN Value ELSE NULL END 
-			from fn_RPT_GetText_SingleSelect(pt.PatientId, ppt.PatientProgramId, @ProgramSourceId,'55177225ac80d37c8000038c', '54fdd419ac80d329bf000064')) as [Enrollment_Status]
+		,(SELECT TOP 1 [Enrollment] FROM dbo.fn_RPT_Enrollment(pt.PatientId, ppt.PatientProgramId,@ProgramSourceId, '55177225ac80d37c8000038c', '54fdd419ac80d329bf000064')) as [Enrollment_Status]
 		,(select CASE WHEN LEN(Value) > 0 THEN Value ELSE NULL END
 			from fn_RPT_GetDate(pt.PatientId, ppt.PatientProgramId, @ProgramSourceId, '55177225ac80d37c8000038c', '54fdd477ac80d329bf000065') ) as [Enrolled_Date]     	     	
 		,( select CASE WHEN LEN(Value) > 0 THEN Value ELSE NULL END
