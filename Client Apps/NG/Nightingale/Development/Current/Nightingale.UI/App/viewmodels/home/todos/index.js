@@ -378,7 +378,10 @@ define(['services/session', 'services/datacontext', 'config.services', 'models/b
 		var todosReloading = ko.computed( function(){
 			var todosSaving = todosSaving ? todosSaving(): false;
 			var processing = todosProcessing ? todosProcessing() : false;			
-			return (todosSaving || processing);
+			var totalCount = todosTotalCount();
+			var todos = myToDos? myToDos(): null;			
+			return (todosSaving || processing 
+					|| (totalCount > 0 && todos.length == 0));	//reloading has finished, but ko is processing the array and we need to wait a bit
 		}).extend({ throttle: 50 });
 		
 		function getLocalTodos(){
@@ -443,6 +446,8 @@ define(['services/session', 'services/datacontext', 'config.services', 'models/b
 			}
 			return changed;
 		}
+		
+		var myToDosQueryResult = ko.observableArray([]);
 		var myToDos = ko.observableArray([]);
         var myToDosUpdater = ko.computed(function () {
             var theseTodos = [];
@@ -528,7 +533,7 @@ define(['services/session', 'services/datacontext', 'config.services', 'models/b
 				}
 			}
 			return showing;
-		});
+		}).extend({ throttle: 50 });
 				
         // My interventions
         var myInterventions = ko.computed(function () {
@@ -795,7 +800,7 @@ define(['services/session', 'services/datacontext', 'config.services', 'models/b
 			params.Skip = 0;
 			params.Take = todosTake();
 			params.Sort = backendSort() ? backendSort() : selectedView().backendSort;
-			datacontext.getToDos( null, params, todosTotalCount ).then( todosReturned );
+			datacontext.getToDos( myToDosQueryResult, params, todosTotalCount ).then( todosReturned );
 		}
 		
 		function todosReturned(){						
