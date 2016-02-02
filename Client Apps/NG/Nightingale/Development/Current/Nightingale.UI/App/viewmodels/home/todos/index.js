@@ -803,13 +803,16 @@ define(['services/session', 'services/datacontext', 'config.services', 'models/b
 			datacontext.getToDos( myToDosQueryResult, params, todosTotalCount ).then( todosReturned );
 		}
 		
-		function todosReturned(){						
+		function todosReturned(){
+			var returnedCount = myToDosQueryResult()? myToDosQueryResult().length : 0;
 			var totalCount = todosTotalCount();						
 			if( totalCount < maxTodosCount() ){			
 				maxToToDosLoaded(false);
 			}
 			else{				
-				maxToToDosLoaded(true);
+				if( returnedCount && returnedCount >= maxTodosCount() ){	
+					maxToToDosLoaded(true);
+				}
 			}
 			todosProcessing(false);				
 		}
