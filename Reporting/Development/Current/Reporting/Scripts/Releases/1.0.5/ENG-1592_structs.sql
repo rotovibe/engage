@@ -12,7 +12,7 @@ CREATE TABLE [dbo].[RPT_Flat_BarrierStatistics](
 		UpdatedBy [varchar](100) NULL,
 		[Status] [varchar](50) NULL,
 		Name [varchar](500) NULL,
-		Details [varchar](5000) NULL,
+		Details [varchar](max) NULL,
 		Category [varchar](50) NULL,
 		PrimaryCareManagerMongoId [varchar](50) NULL,
 		PrimaryCareManagerPreferredName [varchar](100) NULL,

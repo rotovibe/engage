@@ -13,7 +13,7 @@ CREATE TABLE [dbo].[RPT_Flat_GoalStatistics](
 	UpdatedOn DateTime NULL,
 	UpdatedBy [varchar](100) NULL,
 	Name [varchar](500) NULL,
-	Details [varchar](5000) NULL,
+	Details [varchar](max) NULL,
 	TemplateId [varchar](50) NULL,
 	[Source] [varchar](max) NULL,
 	TargetDate DateTime NULL,

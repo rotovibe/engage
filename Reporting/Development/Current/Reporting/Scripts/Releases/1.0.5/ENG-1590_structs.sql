@@ -15,7 +15,7 @@ CREATE TABLE [dbo].[RPT_Flat_InterventionStatistics](
 		StartDate [datetime] NULL,
 		DueDate [datetime] NULL,
 		[Description] [varchar](max) NULL,
-		Details [varchar](5000) NULL,
+		Details [varchar](max) NULL,
 		CategoryName [varchar](max) NULL,
 		TemplateId [varchar](50) NULL,
 		AssignedTo [varchar](100) NULL,

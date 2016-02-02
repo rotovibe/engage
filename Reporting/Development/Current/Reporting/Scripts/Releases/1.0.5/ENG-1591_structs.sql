@@ -16,7 +16,7 @@ CREATE TABLE [dbo].[RPT_Flat_TaskStatistics](
 		TargetDate [datetime] NULL,
 		TargetValue [varchar](50) NULL,
 		[Description] [varchar](max) NULL,
-		Details [varchar](5000) NULL,
+		Details [varchar](max) NULL,
 		TemplateId [varchar](50) NULL,
 		PrimaryCareManagerMongoId [varchar](50) NULL,
 		PrimaryCareManagerPreferredName [varchar](100) NULL,

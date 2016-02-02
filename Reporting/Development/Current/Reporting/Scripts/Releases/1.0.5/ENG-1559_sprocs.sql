@@ -23,7 +23,7 @@ CREATE PROCEDURE [dbo].[spPhy_RPT_SavePatientGoal]
 	@TimeToLive datetime,
 	@ExtraElements varchar(5000),
 	@TemplateId varchar(50),
-	@Details varchar(5000)
+	@Details varchar(max)
 AS
 BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -159,7 +159,7 @@ CREATE PROCEDURE [dbo].[spPhy_RPT_SavePatientBarrier]
 	@StartDate datetime,
 	@Name varchar(500),
 	@ExtraElements varchar(MAX),
-	@Details varchar(5000)
+	@Details varchar(max)
 AS
 BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -239,7 +239,7 @@ CREATE PROCEDURE [dbo].[spPhy_RPT_SavePatientIntervention]
 	@ClosedDate datetime,
 	@TemplateId varchar(50),
 	@DueDate datetime,
-	@Details varchar(5000)
+	@Details varchar(max)
 AS
 BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -378,7 +378,7 @@ CREATE PROCEDURE [dbo].[spPhy_RPT_SavePatientTask]
 	@ExtraElements varchar(5000),
 	@ClosedDate datetime,
 	@TemplateId varchar(50),
-	@Details varchar(5000)
+	@Details varchar(max)
 AS
 BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
