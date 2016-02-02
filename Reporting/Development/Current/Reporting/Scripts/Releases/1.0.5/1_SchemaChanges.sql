@@ -1,10 +1,12 @@
 ﻿----------------------------------------------------------------------------------------------------------------------------------
 --ENG-936
 ----------------------------------------------------------------------------------------------------------------------------------
-DROP TABLE [dbo].[RPT_PatientTaskAttributeValue];
+IF EXISTS (SELECT * FROM sys.objects WHERE type = 'U' AND name = 'RPT_PatientTaskAttributeValue')
+	DROP TABLE [dbo].[RPT_PatientTaskAttributeValue];
 GO
 
-DROP TABLE [dbo].[RPT_PatientTaskAttribute];
+IF EXISTS (SELECT * FROM sys.objects WHERE type = 'U' AND name = 'RPT_PatientTaskAttribute')
+	DROP TABLE [dbo].[RPT_PatientTaskAttribute];
 GO
 
 IF EXISTS (SELECT * FROM sys.columns WHERE Name = N'PatientTaskAttributeName' AND Object_ID = Object_ID(N'RPT_PatientGoalMetrics'))
@@ -152,7 +154,8 @@ IF EXISTS (SELECT * FROM sys.columns WHERE Name = N'Duration' AND Object_ID = Ob
 	END
 GO
 
-DROP TABLE [dbo].[RPT_NoteDurationLookUp];
+IF EXISTS (SELECT * FROM sys.objects WHERE type = 'U' AND name = 'RPT_NoteDurationLookUp')
+	DROP TABLE [dbo].[RPT_NoteDurationLookUp];
 GO
 
 ----------------------------------------------------------------------------------------------------------------------------------
