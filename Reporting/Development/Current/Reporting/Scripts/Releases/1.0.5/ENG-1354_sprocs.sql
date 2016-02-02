@@ -51,7 +51,7 @@ BEGIN
 			from fn_RPT_GetDate(pt.PatientId, ppt.PatientProgramId, @ProgramSourceId,'55177225ac80d37c8000038c', '54fdd51eac80d32a86000082')) as [Disenroll_Date]	 	
 		,( select Market FROM dbo.fn_RPT_DisEnrollmentReason(pt.PatientId,ppt.PatientProgramId,@ProgramSourceId, '55177225ac80d37c8000038c', '54fdd530ac80d329bf000069') ) as [Disenroll_Reason] 
 		,(select CASE WHEN LEN(Value) > 0 THEN Value ELSE NULL END
-			from fn_RPT_GetDate(pt.PatientId, ppt.PatientProgramId, @ProgramSourceId, '5453c6c7bdd4dfc94e000012', '54fdd649ac80d329bf00006b')) as [Program_Completed_Date]     	       	
+			from fn_RPT_GetDate(pt.PatientId, ppt.PatientProgramId, @ProgramSourceId, '55177225ac80d37c8000038c', '54fdd649ac80d329bf00006b')) as [Program_Completed_Date]     	       	
 		,(select CASE WHEN LEN(Value) > 0 THEN Value ELSE NULL END 
 			from fn_RPT_GetText_SingleSelect(pt.PatientId, ppt.PatientProgramId, @ProgramSourceId,'55a7d2a8ac80d308d000031e', '55a576f5ac80d308d00001e7')) as [Call_Within_48Hours_PostDischarge]
 		,(select CASE WHEN LEN(Value) > 0 THEN Value ELSE NULL END 
