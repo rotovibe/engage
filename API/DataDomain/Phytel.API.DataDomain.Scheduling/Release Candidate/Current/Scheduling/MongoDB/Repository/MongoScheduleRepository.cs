@@ -111,11 +111,10 @@ namespace Phytel.API.DataDomain.Scheduling
             throw new NotImplementedException();
         }
 
-        public IEnumerable<object> FindToDos(object request)
+        public GetToDosDataResponse FindToDos(object request)
         {
             throw new NotImplementedException();
         }
-
 
         public IEnumerable<object> FindToDosWithAProgramId(string entityId)
         {

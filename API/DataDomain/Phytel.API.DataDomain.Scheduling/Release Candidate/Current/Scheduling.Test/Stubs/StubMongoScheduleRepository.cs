@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Phytel.API.DataDomain.Scheduling;
+using Phytel.API.DataDomain.Scheduling.DTO;
 
 namespace Phytel.API.DataDomain.ToDo.Test.Stubs
 {
@@ -15,7 +16,7 @@ namespace Phytel.API.DataDomain.ToDo.Test.Stubs
         {
         }
         
-        public IEnumerable<object> FindToDos(object request)
+        public GetToDosDataResponse FindToDos(object request)
         {
             throw new NotImplementedException();
         }

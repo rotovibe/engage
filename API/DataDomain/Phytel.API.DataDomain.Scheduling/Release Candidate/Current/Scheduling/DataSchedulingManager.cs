@@ -25,7 +25,7 @@ namespace Phytel.API.DataDomain.Scheduling
 
                 ISchedulingRepository repo = Factory.GetRepository(request, RepositoryType.ToDo);
                 repo.UserId = request.UserId;
-                result.ToDos = (List<ToDoData>)repo.FindToDos(request);
+                result = (GetToDosDataResponse)repo.FindToDos(request);                
                 return result;
             }
             catch (Exception ex)
@@ -154,7 +154,8 @@ namespace Phytel.API.DataDomain.Scheduling
                     UserId = request.UserId,
                     Version = request.Version
                 };
-                List<ToDoData> patientToDos = (List<ToDoData>)repo.FindToDos(getToDosDataRequest); ;
+                GetToDosDataResponse toDosResponse = repo.FindToDos(getToDosDataRequest);
+                List<ToDoData> patientToDos = (List<ToDoData>)toDosResponse.ToDos; //repo.FindToDos(getToDosDataRequest);
                 List<string> deletedIds = null;
                 if (patientToDos != null)
                 {
