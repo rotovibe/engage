@@ -108,7 +108,9 @@
     <Compile Include="IAppDomainRequest.cs" />
     <Compile Include="IDataDomainRequest.cs" />
     <Compile Include="IMEEntity.cs" />
+    <Compile Include="ICountableResponse.cs" />
     <Compile Include="IRepository.cs" />
+    <Compile Include="ISortableRequest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
