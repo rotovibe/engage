@@ -244,8 +244,8 @@
                 datacontext = require('services/datacontext');
             }
         }
-
-        function getToDos (manager, observable, params) {
+		
+        function getToDos (manager, observable, params, observableTotalCount) {
             checkDataContext();
             // If there is no manager, we can't query using breeze
             if (!manager) { throw new Error("[manager] cannot be a null parameter"); }
@@ -264,9 +264,15 @@
 
             payload.PatientId = params.PatientId;
             payload.AssignedToId = params.AssignedToId;
+			payload.NotAssignedToId = params.NotAssignedToId;	//=> where AssignedToId != value && AssignedToId != null
             payload.CreatedById = params.CreatedById;
             payload.FromDate = params.FromDate;
             payload.StatusIds = params.StatusIds;
+			payload.CategoryIds = params.CategoryIds;
+			payload.PriorityIds = params.PriorityIds;
+			payload.Skip = params.Skip;
+			payload.Take = params.Take;
+			payload.Sort = params.Sort;
             payload = JSON.stringify(payload);
 
             // Query to post the results
@@ -283,6 +289,12 @@
 
             function querySucceeded(data) {
                 var s = data.results;
+				if(observableTotalCount){					
+					var count = data.httpResponse.data.TotalCount;					
+					if( count != undefined ){
+						observableTotalCount(count);						
+					}					
+				}
                 if (observable) {
                     return observable(s);
                 } else {
@@ -317,7 +329,7 @@
                 // Add it
                 query = query.orderBy(orderString);
             }
-
+			
             // Create a predicate array
             var preds = [];
 

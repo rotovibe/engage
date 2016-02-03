@@ -103,7 +103,7 @@
     var events = ko.observableArray();
 
     var alerts = ko.observableArray();
-
+	
     var localcollections = {
         enums: enums,
         todos: todos,

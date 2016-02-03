@@ -664,6 +664,7 @@ define(['services/session', 'services/dateHelper'],
 							existingEvent.start(todo.dueDate());
 							existingEvent.allDay(true);
 						}
+						return existingEvent;
 					};
 					todo.getEventTitle = function(){
 						return (todo.patientDetails() ? todo.patientDetails().fullLastName() + ', ' + todo.patientDetails().fullFirstName() + ' - ' : '') + todo.title();

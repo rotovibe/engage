@@ -103,7 +103,6 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
                     saveIntervention(intervention);
                 };
                 var cancelOverride = function () {
-					intervention.newDetails(null);
                     cancel(intervention);
                     getGoalDetails(thisGoal);
                 };
@@ -118,7 +117,6 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
                     saveTask(task);
                 };
                 var cancelOverride = function () {
-					task.newDetails(null);
                     datacontext.cancelEntityChanges(task);
                     getGoalDetails(thisGoal);
                 };
@@ -187,23 +185,19 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
         }
 
         function save(goal) {
-            goal.checkAppend();
             datacontext.saveGoal(goal);
         }
 
         function saveIntervention (entity) {
 			entity.isNew(false);
-			entity.checkAppend();
             datacontext.saveIntervention(entity);
         }
 
         function saveTask (entity) {
-			entity.checkAppend();
             datacontext.saveTask(entity);
         }
 
         function saveGoal (entity) {
-			entity.checkAppend();
             datacontext.saveGoal(entity);
         }
 

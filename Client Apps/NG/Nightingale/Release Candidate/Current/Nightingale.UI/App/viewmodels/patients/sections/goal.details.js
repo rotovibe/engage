@@ -104,7 +104,6 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
         };
 
         function save (goal) {
-			goal.checkAppend();			
             datacontext.saveGoal(goal);
         }
 
