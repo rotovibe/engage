@@ -8,7 +8,6 @@ using ServiceStack.ServiceClient.Web;
 using System.Linq;
 using Phytel.API.AppDomain.NG.DTO;
 using Phytel.API.DataDomain.PatientNote.DTO;
-using Phytel.API.DataDomain.PatientNote.DTO.Request.Utilization;
 
 namespace Phytel.API.AppDomain.NG.Notes
 {

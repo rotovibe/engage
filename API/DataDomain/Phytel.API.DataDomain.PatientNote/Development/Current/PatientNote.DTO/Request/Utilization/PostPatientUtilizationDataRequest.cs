@@ -1,7 +1,7 @@
 using Phytel.API.Interface;
 using ServiceStack.ServiceHost;
 
-namespace Phytel.API.DataDomain.PatientNote.DTO.Request.Utilization
+namespace Phytel.API.DataDomain.PatientNote.DTO
 {
     [Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Notes/Utilizations/", "POST")]
     public class PostPatientUtilizationDataRequest : IDataDomainRequest

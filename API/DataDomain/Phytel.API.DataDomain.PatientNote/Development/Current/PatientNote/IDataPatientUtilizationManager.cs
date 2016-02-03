@@ -8,8 +8,10 @@ namespace Phytel.API.DataDomain.PatientNote
     {
         PatientUtilizationData InsertPatientUtilization(PatientUtilizationData data);
         PatientUtilizationData UpdatePatientUtilization(PatientUtilizationData data);
-        List<PatientUtilizationData> GetPatientUtilizations(string userId);
+        List<PatientUtilizationData> GetPatientUtilizations(string patientId);
         PatientUtilizationData GetPatientUtilization(string utilId);
         bool DeletePatientUtilization(string utilId);
+        UndoDeletePatientUtilizationsDataResponse UndoDeletePatientPatientUtilizations(UndoDeletePatientUtilizationsDataRequest request);
+        DeleteUtilizationByPatientIdDataResponse DeletePatientUtilizationsByPatientId(DeleteUtilizationsByPatientIdDataRequest request);
     }
 }

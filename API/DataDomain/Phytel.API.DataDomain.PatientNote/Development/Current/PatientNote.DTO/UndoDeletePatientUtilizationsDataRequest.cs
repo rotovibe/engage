@@ -1,21 +1,19 @@
+using System.Collections.Generic;
 using Phytel.API.Interface;
 using ServiceStack.ServiceHost;
-using System.Collections.Generic;
-using Phytel.API.DataDomain.PatientNote.DTO;
 
 namespace Phytel.API.DataDomain.PatientNote.DTO
 {
-    [Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Notes/Utilizations", "GET")]
-    public class GetAllPatientUtilizationDataRequest : IDataDomainRequest
+    [Route("/{Context}/{Version}/{ContractNumber}/PatientUtilization/UndoDelete", "PUT")]
+    public class UndoDeletePatientUtilizationsDataRequest : IDataDomainRequest
     {
-
-        [ApiMember(Name = "PatientId", Description = "Id of the patient", ParameterType = "property", DataType = "string", IsRequired = true)]
-        public string PatientId { get; set; }
+        [ApiMember(Name = "Ids", Description = "PatientUtilization Ids that need to be un-deleted.", ParameterType = "property", DataType = "List<string>", IsRequired = true)]
+        public List<string> Ids { get; set; }
 
         [ApiMember(Name = "UserId", Description = "UserId of the logged in user", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string UserId { get; set; }
 
-        [ApiMember(Name = "Context", Description = "Product Context requesting the PatientNote", ParameterType = "property", DataType = "string", IsRequired = true)]
+        [ApiMember(Name = "Context", Description = "Product Context requesting the PatientUtilization", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string Context { get; set; }
 
         [ApiMember(Name = "ContractNumber", Description = "Contract Number to retrieve data from", ParameterType = "property", DataType = "string", IsRequired = true)]
