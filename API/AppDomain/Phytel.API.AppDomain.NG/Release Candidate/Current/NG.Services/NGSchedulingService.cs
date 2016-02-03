@@ -100,7 +100,7 @@ namespace Phytel.API.AppDomain.NG.Service
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
-                    response.ToDos = toDoMgr.GetToDos(request);
+                    response = toDoMgr.GetToDos(request);                    
                 }
                 else
                     throw new UnauthorizedAccessException();
