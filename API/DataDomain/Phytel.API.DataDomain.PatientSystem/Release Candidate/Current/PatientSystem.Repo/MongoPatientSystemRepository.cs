@@ -271,11 +271,6 @@ namespace Phytel.API.DataDomain.PatientSystem
                         else
                             uv.Add(MB.Update.Set(MEPatientSystem.DataSourceProperty, BsonNull.Value));
 
-                        if (!string.IsNullOrEmpty(data.ExternalRecordId))
-                            uv.Add(MB.Update.Set(MEPatientSystem.ExternalRecordIdProperty, data.ExternalRecordId));
-                        else
-                            uv.Add(MB.Update.Set(MEPatientSystem.ExternalRecordIdProperty, BsonNull.Value));
-
                         if (data.StatusId != 0) uv.Add(MB.Update.Set(MEPatientSystem.StatusProperty, data.StatusId));
                         uv.Add(MB.Update.Set(MEPatientSystem.PrimaryProperty, data.Primary));
                         if (!string.IsNullOrEmpty(data.SystemId)) uv.Add(MB.Update.Set(MEPatientSystem.SystemIdProperty, ObjectId.Parse(data.SystemId)));
