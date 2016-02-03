@@ -351,14 +351,6 @@ namespace Phytel.API.DataDomain.PatientNote.Repo
                         uv.Add(MB.Update.Set(MEPatientNote.DataSourceProperty, BsonNull.Value));
                     }
 
-                    if (!string.IsNullOrEmpty(pn.ExternalRecordId))
-                    {
-                        uv.Add(MB.Update.Set(MEPatientNote.ExternalRecordIdProperty, pn.ExternalRecordId));
-                    }
-                    else
-                    {
-                        uv.Add(MB.Update.Set(MEPatientNote.ExternalRecordIdProperty, BsonNull.Value));
-                    }
                     IMongoUpdate update = MB.Update.Combine(uv);
                     ctx.PatientNotes.Collection.Update(q, update);
 
