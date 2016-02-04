@@ -312,3 +312,51 @@ CREATE CLUSTERED INDEX [CIDX_RPT_Flat_BarrierStatistics_MongoPatientId_MongoGoal
 	MongoGoalId ASC
 )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
 GO
+
+----------------------------------------------------------------------------------------------------------------------------------
+--ENG-1663
+----------------------------------------------------------------------------------------------------------------------------------
+
+IF NOT EXISTS(SELECT * FROM sys.columns 
+            WHERE Name = N'HTN' and Object_ID = Object_ID(N'RPT_Engage_Enrollment_Info'))
+BEGIN
+	ALTER TABLE RPT_Engage_Enrollment_Info
+	ADD HTN varchar(100) NULL
+END
+
+IF NOT EXISTS(SELECT * FROM sys.columns 
+            WHERE Name = N'Heart_Failure' and Object_ID = Object_ID(N'RPT_Engage_Enrollment_Info'))
+BEGIN
+	ALTER TABLE RPT_Engage_Enrollment_Info
+	ADD Heart_Failure varchar(100) NULL
+END
+
+IF NOT EXISTS(SELECT * FROM sys.columns 
+            WHERE Name = N'COPD' and Object_ID = Object_ID(N'RPT_Engage_Enrollment_Info'))
+BEGIN
+	ALTER TABLE RPT_Engage_Enrollment_Info
+	ADD COPD varchar(100) NULL
+END
+
+IF NOT EXISTS(SELECT * FROM sys.columns 
+            WHERE Name = N'Diabetes' and Object_ID = Object_ID(N'RPT_Engage_Enrollment_Info'))
+BEGIN
+	ALTER TABLE RPT_Engage_Enrollment_Info
+	ADD Diabetes varchar(100) NULL
+END
+
+IF NOT EXISTS(SELECT * FROM sys.columns 
+            WHERE Name = N'Asthma' and Object_ID = Object_ID(N'RPT_Engage_Enrollment_Info'))
+BEGIN
+	ALTER TABLE RPT_Engage_Enrollment_Info
+	ADD Asthma varchar(100) NULL
+END
+
+IF NOT EXISTS(SELECT * FROM sys.columns 
+            WHERE Name = N'Comorbid_Disease' and Object_ID = Object_ID(N'RPT_Engage_Enrollment_Info'))
+BEGIN
+	ALTER TABLE RPT_Engage_Enrollment_Info
+	ADD Comorbid_Disease varchar(500) NULL
+END
+
+

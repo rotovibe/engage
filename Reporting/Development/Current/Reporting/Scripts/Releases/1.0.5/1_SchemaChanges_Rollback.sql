@@ -248,3 +248,50 @@ GO
 IF EXISTS (SELECT * FROM sys.objects WHERE type = 'U' AND name = 'RPT_Flat_BarrierStatistics')
 	DROP TABLE [dbo].[RPT_Flat_BarrierStatistics]
 GO
+
+
+----------------------------------------------------------------------------------------------------------------------------------
+--ENG-1663
+----------------------------------------------------------------------------------------------------------------------------------
+
+IF EXISTS(SELECT * FROM sys.columns 
+            WHERE Name = N'HTN' and Object_ID = Object_ID(N'RPT_Engage_Enrollment_Info'))
+BEGIN
+    ALTER TABLE RPT_Engage_Enrollment_Info
+	DROP COLUMN HTN 
+END
+
+IF EXISTS(SELECT * FROM sys.columns 
+            WHERE Name = N'Heart_Failure' and Object_ID = Object_ID(N'RPT_Engage_Enrollment_Info'))
+BEGIN
+    ALTER TABLE RPT_Engage_Enrollment_Info
+	DROP COLUMN Heart_Failure 
+END
+
+IF EXISTS(SELECT * FROM sys.columns 
+            WHERE Name = N'COPD' and Object_ID = Object_ID(N'RPT_Engage_Enrollment_Info'))
+BEGIN
+    ALTER TABLE RPT_Engage_Enrollment_Info
+	DROP COLUMN COPD 
+END
+
+IF EXISTS(SELECT * FROM sys.columns 
+            WHERE Name = N'Diabetes' and Object_ID = Object_ID(N'RPT_Engage_Enrollment_Info'))
+BEGIN
+    ALTER TABLE RPT_Engage_Enrollment_Info
+	DROP COLUMN Diabetes 
+END
+
+IF EXISTS(SELECT * FROM sys.columns 
+            WHERE Name = N'Asthma' and Object_ID = Object_ID(N'RPT_Engage_Enrollment_Info'))
+BEGIN
+    ALTER TABLE RPT_Engage_Enrollment_Info
+	DROP COLUMN Asthma 
+END
+
+IF EXISTS(SELECT * FROM sys.columns 
+            WHERE Name = N'Comorbid_Disease' and Object_ID = Object_ID(N'RPT_Engage_Enrollment_Info'))
+BEGIN
+    ALTER TABLE RPT_Engage_Enrollment_Info
+	DROP COLUMN Comorbid_Disease 
+END
