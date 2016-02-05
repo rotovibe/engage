@@ -1691,16 +1691,31 @@ BEGIN
 
 	DECLARE @CoMorbidDisease TABLE
 	(
-	  Id int,
 	  Name	varchar(50),
+	  ActionSourceId varchar(50),
 	  StepSourceId varchar(50)
 	)
 
-	Insert Into @CoMorbidDisease(Id, Name, StepSourceId) Values(1, 'HTN', '55ad0692ac80d308d20004b6')
-	Insert Into @CoMorbidDisease(Id, Name, StepSourceId) Values(2, 'Heart Failure', '55ad04b8ac80d308d0000604')
-	Insert Into @CoMorbidDisease(Id, Name, StepSourceId) Values(3, 'COPD', '55ad3cd4ac80d308d20004d5')
-	Insert Into @CoMorbidDisease(Id, Name, StepSourceId) Values(4, 'Diabetes', '55ad3e0aac80d308d20004d8')
-	Insert Into @CoMorbidDisease(Id, Name, StepSourceId) Values(5, 'Asthma', '55ad42bcac80d308d00006a2')
+	--version 1 @ProgramSourceId = '5465e772bdd4dfb6d80004f7'
+	Insert Into @CoMorbidDisease(Name, ActionSourceId, StepSourceId) Values('HTN', '5457cd63890e94338f000053', '544f0347ac80d37bc0000283')
+	Insert Into @CoMorbidDisease(Name, ActionSourceId, StepSourceId) Values('Heart Failure', '5457cd63890e94338f000053', '544f0295ac80d37bc0000282')
+	Insert Into @CoMorbidDisease(Name, ActionSourceId, StepSourceId) Values('COPD', '5457cd63890e94338f000053', '544f0461ac80d37bc20002d8')
+	Insert Into @CoMorbidDisease(Name, ActionSourceId, StepSourceId) Values('Diabetes', '5457cd63890e94338f000053', '544f0545ac80d37bc20002db')
+	Insert Into @CoMorbidDisease(Name, ActionSourceId, StepSourceId) Values('Asthma', '5457cd63890e94338f000053', '544f0483ac80d37bc0000286')
+
+	--version 2 @ProgramSourceId = '54b69910ac80d33c2c000032'
+	Insert Into @CoMorbidDisease(Name, ActionSourceId, StepSourceId) Values('HTN', '54aadace890e9480450001d3', '544f0347ac80d37bc0000283')
+	Insert Into @CoMorbidDisease(Name, ActionSourceId, StepSourceId) Values('Heart Failure', '54aadace890e9480450001d3', '548ef479ac80d33c2c000001')
+	Insert Into @CoMorbidDisease(Name, ActionSourceId, StepSourceId) Values('COPD', '54aadace890e9480450001d3', '548efc22ac80d33c2c000002')
+	Insert Into @CoMorbidDisease(Name, ActionSourceId, StepSourceId) Values('Diabetes', '54aadace890e9480450001d3', '544f0545ac80d37bc20002db')
+	Insert Into @CoMorbidDisease(Name, ActionSourceId, StepSourceId) Values('Asthma', '54aadace890e9480450001d3', '544f0483ac80d37bc0000286')
+	
+	--version 3 @ProgramSourceId = '55ca3880ac80d35b8e00053e'
+	Insert Into @CoMorbidDisease(Name, ActionSourceId, StepSourceId) Values('HTN', '55c248aaac80d31c4a000709', '55ad0692ac80d308d20004b6')
+	Insert Into @CoMorbidDisease(Name, ActionSourceId, StepSourceId) Values('Heart Failure', '55c248aaac80d31c4a000709', '55ad04b8ac80d308d0000604')
+	Insert Into @CoMorbidDisease(Name, ActionSourceId, StepSourceId) Values('COPD', '55c248aaac80d31c4a000709', '55ad3cd4ac80d308d20004d5')
+	Insert Into @CoMorbidDisease(Name, ActionSourceId, StepSourceId) Values('Diabetes', '55c248aaac80d31c4a000709', '55ad3e0aac80d308d20004d8')
+	Insert Into @CoMorbidDisease(Name, ActionSourceId, StepSourceId) Values('Asthma', '55c248aaac80d31c4a000709', '55ad42bcac80d308d00006a2')
 	
 	INSERT INTO [RPT_Engage_Enrollment_Info]
 	(
@@ -1822,19 +1837,20 @@ BEGIN
 		,(select CASE WHEN LEN(Value) > 0 THEN Value ELSE NULL END 
 			from fn_RPT_GetText_ZeroVal(pt.PatientId, ppt.PatientProgramId, @ProgramSourceId, '545bfc3bac80d36bd10000a7', '5453e3bbac80d37bc0000f03') )as [acuity_score] 
 		,(select CASE WHEN LEN(Value) > 0 THEN Value ELSE NULL END 
-			from fn_RPT_GetText_SingleSelect(pt.PatientId, ppt.PatientProgramId, @ProgramSourceId,'55c248aaac80d31c4a000709', '55ad0692ac80d308d20004b6')) as [HTN]
+			from fn_RPT_GetText_SingleSelect(pt.PatientId, ppt.PatientProgramId, @ProgramSourceId,'5457cd63890e94338f000053', '544f0347ac80d37bc0000283')) as [HTN]
 		,(select CASE WHEN LEN(Value) > 0 THEN Value ELSE NULL END 
-			from fn_RPT_GetText_SingleSelect(pt.PatientId, ppt.PatientProgramId, @ProgramSourceId,'55c248aaac80d31c4a000709', '55ad04b8ac80d308d0000604')) as [Heart_Failure]
+			from fn_RPT_GetText_SingleSelect(pt.PatientId, ppt.PatientProgramId, @ProgramSourceId,'5457cd63890e94338f000053', '544f0295ac80d37bc0000282')) as [Heart_Failure]
 		,(select CASE WHEN LEN(Value) > 0 THEN Value ELSE NULL END 
-			from fn_RPT_GetText_SingleSelect(pt.PatientId, ppt.PatientProgramId, @ProgramSourceId,'55c248aaac80d31c4a000709', '55ad3cd4ac80d308d20004d5')) as [COPD]
+			from fn_RPT_GetText_SingleSelect(pt.PatientId, ppt.PatientProgramId, @ProgramSourceId,'5457cd63890e94338f000053', '544f0461ac80d37bc20002d8')) as [COPD]
 		,(select CASE WHEN LEN(Value) > 0 THEN Value ELSE NULL END 
-			from fn_RPT_GetText_SingleSelect(pt.PatientId, ppt.PatientProgramId, @ProgramSourceId,'55c248aaac80d31c4a000709', '55ad3e0aac80d308d20004d8')) as [Diabetes]
+			from fn_RPT_GetText_SingleSelect(pt.PatientId, ppt.PatientProgramId, @ProgramSourceId,'5457cd63890e94338f000053', '544f0545ac80d37bc20002db')) as [Diabetes]
 		,(select CASE WHEN LEN(Value) > 0 THEN Value ELSE NULL END 
-			from fn_RPT_GetText_SingleSelect(pt.PatientId, ppt.PatientProgramId, @ProgramSourceId,'55c248aaac80d31c4a000709', '55ad42bcac80d308d00006a2')) as [Asthma]
+			from fn_RPT_GetText_SingleSelect(pt.PatientId, ppt.PatientProgramId, @ProgramSourceId,'5457cd63890e94338f000053', '544f0483ac80d37bc0000286')) as [Asthma]
 		,STUFF(
 				(select ', ' + CASE WHEN Value = 'Yes' THEN cm.Name ELSE NULL END 
-					From @CoMorbidDisease cm
-						OUTER APPLY fn_RPT_GetText_SingleSelect(pt.PatientId, ppt.PatientProgramId, @ProgramSourceId,'55c248aaac80d31c4a000709', cm.StepSourceId)
+					From @CoMorbidDisease cm 
+						OUTER APPLY fn_RPT_GetText_SingleSelect(pt.PatientId, ppt.PatientProgramId, @ProgramSourceId, cm.ActionSourceId, cm.StepSourceId)
+					Where cm.ActionSourceId = '5457cd63890e94338f000053'
 					For Xml Path, Type
 				).value('.', 'varchar(max)')
 			, 1
@@ -1976,19 +1992,20 @@ INSERT INTO [RPT_Engage_Enrollment_Info]
 		,(select CASE WHEN LEN(Value) > 0 THEN Value ELSE NULL END 
 			from fn_RPT_GetText_ZeroVal(pt.PatientId, ppt.PatientProgramId, @ProgramSourceId, '545bfc3bac80d36bd10000a7', '5453e3bbac80d37bc0000f03') )as [acuity_score] --	
 		,(select CASE WHEN LEN(Value) > 0 THEN Value ELSE NULL END 
-			from fn_RPT_GetText_SingleSelect(pt.PatientId, ppt.PatientProgramId, @ProgramSourceId,'55c248aaac80d31c4a000709', '55ad0692ac80d308d20004b6')) as [HTN]
+			from fn_RPT_GetText_SingleSelect(pt.PatientId, ppt.PatientProgramId, @ProgramSourceId,'54aadace890e9480450001d3', '544f0347ac80d37bc0000283')) as [HTN]
 		,(select CASE WHEN LEN(Value) > 0 THEN Value ELSE NULL END 
-			from fn_RPT_GetText_SingleSelect(pt.PatientId, ppt.PatientProgramId, @ProgramSourceId,'55c248aaac80d31c4a000709', '55ad04b8ac80d308d0000604')) as [Heart_Failure]
+			from fn_RPT_GetText_SingleSelect(pt.PatientId, ppt.PatientProgramId, @ProgramSourceId,'54aadace890e9480450001d3', '548ef479ac80d33c2c000001')) as [Heart_Failure]
 		,(select CASE WHEN LEN(Value) > 0 THEN Value ELSE NULL END 
-			from fn_RPT_GetText_SingleSelect(pt.PatientId, ppt.PatientProgramId, @ProgramSourceId,'55c248aaac80d31c4a000709', '55ad3cd4ac80d308d20004d5')) as [COPD]
+			from fn_RPT_GetText_SingleSelect(pt.PatientId, ppt.PatientProgramId, @ProgramSourceId,'54aadace890e9480450001d3', '548efc22ac80d33c2c000002')) as [COPD]
 		,(select CASE WHEN LEN(Value) > 0 THEN Value ELSE NULL END 
-			from fn_RPT_GetText_SingleSelect(pt.PatientId, ppt.PatientProgramId, @ProgramSourceId,'55c248aaac80d31c4a000709', '55ad3e0aac80d308d20004d8')) as [Diabetes]
+			from fn_RPT_GetText_SingleSelect(pt.PatientId, ppt.PatientProgramId, @ProgramSourceId,'54aadace890e9480450001d3', '544f0545ac80d37bc20002db')) as [Diabetes]
 		,(select CASE WHEN LEN(Value) > 0 THEN Value ELSE NULL END 
-			from fn_RPT_GetText_SingleSelect(pt.PatientId, ppt.PatientProgramId, @ProgramSourceId,'55c248aaac80d31c4a000709', '55ad42bcac80d308d00006a2')) as [Asthma]
+			from fn_RPT_GetText_SingleSelect(pt.PatientId, ppt.PatientProgramId, @ProgramSourceId,'54aadace890e9480450001d3', '544f0483ac80d37bc0000286')) as [Asthma]
 		,STUFF(
 				(select ', ' + CASE WHEN Value = 'Yes' THEN cm.Name ELSE NULL END 
 					From @CoMorbidDisease cm
-						OUTER APPLY fn_RPT_GetText_SingleSelect(pt.PatientId, ppt.PatientProgramId, @ProgramSourceId,'55c248aaac80d31c4a000709', cm.StepSourceId)
+						OUTER APPLY fn_RPT_GetText_SingleSelect(pt.PatientId, ppt.PatientProgramId, @ProgramSourceId, cm.ActionSourceId, cm.StepSourceId)
+					Where cm.ActionSourceId = '54aadace890e9480450001d3'
 					For Xml Path, Type
 				).value('.', 'varchar(max)')
 			, 1
@@ -2145,7 +2162,8 @@ INSERT INTO [RPT_Engage_Enrollment_Info]
 		,STUFF(
 				(select ', ' + CASE WHEN Value = 'Yes' THEN cm.Name ELSE NULL END 
 					From @CoMorbidDisease cm
-						OUTER APPLY fn_RPT_GetText_SingleSelect(pt.PatientId, ppt.PatientProgramId, @ProgramSourceId,'55c248aaac80d31c4a000709', cm.StepSourceId)
+						OUTER APPLY fn_RPT_GetText_SingleSelect(pt.PatientId, ppt.PatientProgramId, @ProgramSourceId, cm.ActionSourceId, cm.StepSourceId)
+					Where cm.ActionSourceId = '55c248aaac80d31c4a000709'
 					For Xml Path, Type
 				).value('.', 'varchar(max)')
 			, 1
