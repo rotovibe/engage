@@ -33,7 +33,8 @@ namespace Phytel.API.AppDomain.NG.Test.Scheduling
                 StatusIds = new List<int> { 1, 3}
             };
 
-            List<AppDomain.NG.DTO.ToDo> list = ngm.GetToDos(request);
+            GetToDosResponse response = ngm.GetToDos(request);
+            List<AppDomain.NG.DTO.ToDo> list = response.ToDos;
             Assert.IsNotNull(list);
         }
 
