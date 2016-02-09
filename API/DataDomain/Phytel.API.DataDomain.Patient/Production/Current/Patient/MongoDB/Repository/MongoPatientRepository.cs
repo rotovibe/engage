@@ -742,14 +742,6 @@ namespace Phytel.API.DataDomain.Patient
                     {
                         updt.Set(MEPatient.StatusDataSourceProperty, Helper.TrimAndLimit(request.PatientData.StatusDataSource, 50));
                     }
-                    if (!string.IsNullOrEmpty(request.PatientData.ExternalRecordId))
-                    {
-                        updt.Set(MEPatient.ExternalRecordIdProperty, request.PatientData.ExternalRecordId);
-                    }
-                    else
-                    {
-                        updt.Set(MEPatient.ExternalRecordIdProperty, BsonNull.Value);
-                    }
                     updt.Set(MEPatient.UpdatedByProperty, ObjectId.Parse(this.UserId));
                     updt.Set(MEPatient.VersionProperty, request.Version);
 
