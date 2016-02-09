@@ -1,9 +1,8 @@
 //IBM Confidential
 //OCO Source Materials
 //PID:5725Z49
-//Â© Copyright IBM Corp. 2013, 2016
-//The source code for this program is not published or otherwise divested of its trade secrets, irrespective of what has been deposited with the U.S. Copyright Office.
-
+//© Copyright IBM Corp. 2013, 2016
+//The source code for this program is not published or otherwise divested of its trade secrets, irrespective of what has been deposited with the U.S. Copyright Office
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -16,7 +15,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("IBM Corp.")]
 [assembly: AssemblyProduct("PID:5725Z49")]
-[assembly: AssemblyCopyright("Â© Copyright IBM Corp. 2013, 2016")]
+[assembly: AssemblyCopyright("Copyright © IBM Corporation 2013, 2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
