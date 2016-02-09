@@ -10,6 +10,7 @@ using MB = MongoDB.Driver.Builders;
 using MongoDB.Driver.Builders;
 using System.Linq;
 using System.Configuration;
+using System.Reflection;
 
 namespace Phytel.API.DataDomain.Scheduling
 {
@@ -41,6 +42,7 @@ namespace Phytel.API.DataDomain.Scheduling
                         Priority = (Priority)todoData.PriorityId,
                         Description = todoData.Description,
                         Title = todoData.Title,
+                        LoweredTitle = todoData.Title != null ? todoData.Title.ToLower() : null,
                         DueDate = todoData.DueDate,
                         StartTime = todoData.StartTime,
                         Duration = todoData.Duration,
@@ -49,7 +51,7 @@ namespace Phytel.API.DataDomain.Scheduling
                         LastUpdatedOn = todoData.UpdatedOn,
                         ExternalRecordId = todoData.ExternalRecordId
                     };
-
+                    
                     if (!string.IsNullOrEmpty(todoData.AssignedToId))
                     {
                         meToDo.AssignedToId = ObjectId.Parse(todoData.AssignedToId);
@@ -107,6 +109,7 @@ namespace Phytel.API.DataDomain.Scheduling
                             Priority = (Priority)t.PriorityId,
                             Description = t.Description,
                             Title = t.Title,
+                            LoweredTitle = t.Title != null ? t.Title.ToLower() : null,
                             DueDate = t.DueDate,
                             StartTime = t.StartTime,
                             Duration = t.Duration,
@@ -289,6 +292,9 @@ namespace Phytel.API.DataDomain.Scheduling
                         uv.Add(MB.Update.Set(METoDo.VersionProperty, request.Version));
                         uv.Add(MB.Update.Set(METoDo.LastUpdatedOnProperty, System.DateTime.UtcNow));
                         uv.Add(MB.Update.Set(METoDo.TitleProperty, todoData.Title));
+                        if( !string.IsNullOrEmpty(todoData.Title)){
+                            uv.Add(MB.Update.Set(METoDo.LoweredTitleProperty, todoData.Title.ToLower()));
+                        }                        
                         uv.Add(MB.Update.Set(METoDo.StatusProperty, (Status)todoData.StatusId));
                         uv.Add(MB.Update.Set(METoDo.PriorityProperty, (Priority)todoData.PriorityId));
 
@@ -365,14 +371,6 @@ namespace Phytel.API.DataDomain.Scheduling
                         {
                             uv.Add(MB.Update.Set(METoDo.AssignedToProperty, BsonNull.Value));
                         }
-                        if (!string.IsNullOrEmpty(todoData.ExternalRecordId))
-                        {
-                            uv.Add(MB.Update.Set(METoDo.ExternalRecordIdProperty, todoData.ExternalRecordId));
-                        }
-                        else
-                        {
-                            uv.Add(MB.Update.Set(METoDo.ExternalRecordIdProperty, BsonNull.Value));
-                        }
                         uv.Add(MB.Update.Set(METoDo.DeleteFlagProperty, todoData.DeleteFlag));
                         DataAuditType type;
                         if (todoData.DeleteFlag)
@@ -438,8 +436,9 @@ namespace Phytel.API.DataDomain.Scheduling
             catch (Exception) { throw; }
         }
 
-        public IEnumerable<object> FindToDos(object request)
+        public GetToDosDataResponse FindToDos(object request)
         {
+            GetToDosDataResponse response = new GetToDosDataResponse();
             List<ToDoData> todoList = null;
             GetToDosDataRequest dataRequest = (GetToDosDataRequest)request;
             try
@@ -459,9 +458,18 @@ namespace Phytel.API.DataDomain.Scheduling
                         {
                             // Fix for bug  - ENG-1068, UI sends AssignedToId = -1 to query on all unassigned ToDos.
                             if (string.Compare(dataRequest.AssignedToId, "-1", true) == 0)
-                            {
-                                queries.Add(Query.EQ(METoDo.AssignedToProperty, BsonNull.Value));
+                            {                                
+                                //queries.Add(Query.Or(Query.EQ(METoDo.AssignedToProperty, BsonNull.Value), Query.EQ(METoDo.AssignedToProperty, BsonString.Empty)));
+                                queries.Add(Query.In(METoDo.AssignedToProperty, new BsonArray { BsonNull.Value, BsonString.Empty }));
                             }
+                        }
+                    }
+                    if (!string.IsNullOrEmpty(dataRequest.NotAssignedToId))
+                    {
+                        ObjectId nto;
+                        if (ObjectId.TryParse(dataRequest.NotAssignedToId, out nto))
+                        {                            
+                            queries.Add(Query.NotIn(METoDo.AssignedToProperty, new BsonArray { nto, BsonNull.Value, BsonString.Empty }));                         
                         }
                     }
                     if (!string.IsNullOrEmpty(dataRequest.CreatedById))
@@ -476,14 +484,39 @@ namespace Phytel.API.DataDomain.Scheduling
                     {
                         queries.Add(Query.In(METoDo.StatusProperty, new BsonArray(dataRequest.StatusIds)));
                     }
+                    if (dataRequest.PriorityIds != null && dataRequest.PriorityIds.Count > 0)
+                    {
+                        queries.Add(Query.In(METoDo.PriorityProperty, new BsonArray(dataRequest.PriorityIds))); //integer values (not object ids)
+                    }
+                    if (dataRequest.CategoryIds != null && dataRequest.CategoryIds.Count > 0)
+                    {
+                        List<BsonValue> categories = new List<BsonValue>();
+                        foreach( string categoryId in dataRequest.CategoryIds ){
+                            if (categoryId.Length > 0)
+                            {
+                                categories.Add(BsonValue.Create(ObjectId.Parse(categoryId)));
+                            }
+                            else
+                            {
+                                categories.Add(BsonNull.Value); //empty string => include null categories ( not set )
+                            }
+                        }
+                        queries.Add(Query.In(METoDo.CatgegoryProperty, categories));
+                    }
                     if (dataRequest.FromDate != null)
                     {
                         queries.Add(Query.GTE(METoDo.ClosedDateProperty, dataRequest.FromDate));
                     }
-
+                    
                     IMongoQuery mQuery = Query.And(queries);
-                    List<METoDo> meToDos = null;
-                    meToDos = ctx.ToDos.Collection.Find(mQuery).ToList();
+                    MongoCursor<METoDo> cToDos = ctx.ToDos.Collection.Find(mQuery);               
+                    List<METoDo> meToDos = null;                   
+                    SortByBuilder sortBy = MongoSortingUtils.GetSortByBuilder( dataRequest.Sort, typeof(METoDo) );                             
+                    cToDos = cToDos.SetSortOrder(sortBy);                                        
+                    cToDos = (MongoCursor<METoDo>) MongoSortingUtils.ApplySkipTake(cToDos, dataRequest);
+                    response.TotalCount = cToDos.Count();
+                    meToDos = cToDos.ToList();  //query now                    
+                                                            
                     if (meToDos != null && meToDos.Count > 0)
                     {
                         todoList = new List<ToDoData>();
@@ -514,7 +547,8 @@ namespace Phytel.API.DataDomain.Scheduling
                         }
                     }
                 }
-                return todoList;
+                response.ToDos = todoList;
+                return response;
             }
             catch (Exception ex)
             {
