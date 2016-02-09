@@ -108,7 +108,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataAuditMongoContext.cs" />
-    <Compile Include="DataAuditFailureProcessor.cs" />
     <Compile Include="DataAuditProcessor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
