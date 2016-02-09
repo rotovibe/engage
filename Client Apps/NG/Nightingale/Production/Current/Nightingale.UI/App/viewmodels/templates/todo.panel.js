@@ -38,24 +38,24 @@ define(['services/session', 'services/datacontext', 'config.services', 'viewmode
 			*/
 			self.originalProgramIds = ko.observableArray([]);
     	}
-
+		
         // All the available columns
     	var allColumns = [
-            new Column('priority', 'Priority', 'span2', 'priority.id'),
+            new Column('priority', 'Priority', 'span2', 'priority.id', 'Priority'),
     		new Column('status', 'Status', 'span2', 'status.id'),
-            new Column('priority-small', 'Priority', 'span1', 'priority.id'),
+            new Column('priority-small', 'Priority', 'span1', 'priority.id', 'Priority'),
             new Column('status-small', 'Status', 'span1', 'status.id'),
-    		new Column('patient', 'Individual','span2', 'patientDetails.lastName'),
-    		new Column('category', 'Category','span2', 'category.name'),
-            new Column('category-small', 'Category','span1', 'category.name'),
-    		new Column('title', 'Title','span4', 'title'),
-            new Column('title-small', 'Title','span3', 'title'),
-    		new Column('duedate', 'Due Date','span2', 'dueDate'),
-    		new Column('assignedto', 'Assigned To','span2', 'assignedTo.preferredName'),
-            new Column('closedon', 'Date','span2', 'closedDate'),
-            new Column('closedon-small', 'Date','span1', 'closedDate'),
-            new Column('updatedon', 'Date','span2', 'updatedOn'),
-            new Column('updatedon-small', 'Date', 'span1', 'updatedOn')
+    		new Column('patient', 'Individual','span2', 'patientDetails.lastName', true),
+    		new Column('category', 'Category','span2', 'category.name', true ),
+            new Column('category-small', 'Category','span1', 'category.name', true ),
+    		new Column('title', 'Title','span4', 'title', 'Title'),
+            new Column('title-small', 'Title','span3', 'title', 'Title'),
+    		new Column('duedate', 'Due Date','span2', 'dueDate', 'DueDate'),
+    		new Column('assignedto', 'Assigned To','span2', 'assignedTo.preferredName', true),
+            new Column('closedon', 'Date','span2', 'closedDate', 'ClosedDate'),
+            new Column('closedon-small', 'Date','span1', 'closedDate', 'ClosedDate'),
+            new Column('updatedon', 'Date','span2', 'updatedOn', 'UpdatedOn'),
+            new Column('updatedon-small', 'Date', 'span1', 'updatedOn', 'UpdatedOn')
     	];
         
         var patientEndPoint = ko.computed(function () {
@@ -71,14 +71,41 @@ define(['services/session', 'services/datacontext', 'config.services', 'viewmode
                 return false;
             }
             return new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'Patient', 'Program');
-        });
-    	
+        });    	
+		
         ctor.prototype.activate = function (data) {
     		var self = this;
     		self.todos = data.todos;
             self.selectedSortColumn = data.selectedSortColumn;
             self.toggleSort = data.toggleSort;
             self.canSort = data.canSort ? data.canSort : false;
+			self.isBackendSort = data.isBackendSort ? data.isBackendSort : false;
+			self.todosReloading = data.todosReloading ? data.todosReloading : ko.observable(false);
+			
+			//dont allow sorting on category name and individual name since this view's data has backend sorting. 
+			//	for now - backend sorting cannot sort on related collections properties as category name in a todo query.
+			var column = findColumnByName('assignedto');
+			if( column ){
+				column.backendSort = !self.isBackendSort;
+			}
+			column = findColumnByName('patient');
+			if( column ){
+				column.backendSort = !self.isBackendSort;;
+			}
+			column = findColumnByName('category');
+			if( column ){
+				column.backendSort = !self.isBackendSort;;
+			}
+			column = findColumnByName('category-small');
+			if( column ){
+				column.backendSort = !self.isBackendSort;;
+			}
+			
+			self.loadMoreTodos = data.loadMoreTodos;
+			self.canLoadMoreTodos = data.canLoadMoreTodos;
+			// self.loadPrevTodos = data.loadPrevTodos;
+			// self.canLoadPrevTodos = data.canLoadPrevTodos;
+			self.maxToToDosLoaded = data.maxToToDosLoaded;
             self.saveOverride = function () {
                 // If patient has been removed - clear all associated programs:
                 if (self.modalEntity().todo() && self.modalEntity().todo().programIds().length > 0 && !self.modalEntity().todo().patientId()) {                    
@@ -214,6 +241,9 @@ define(['services/session', 'services/datacontext', 'config.services', 'viewmode
                 //return temparray.sort(self.descendingDateSort);
                 return finalTodos;
     		});
+			self.noDataFound = ko.computed( function(){
+				return (!self.todosReloading() && self.computedTodos().length == 0);
+			});
     	}
 
         /**
@@ -243,7 +273,8 @@ define(['services/session', 'services/datacontext', 'config.services', 'viewmode
             patientProgramEndPoint.dispose();
             //self.modalEntity().canSave.dispose(); remarked: causes timing issues
             self.columns.dispose();
-            self.computedTodos.dispose();			
+            self.computedTodos.dispose();
+			self.noDataFound.dispose();	
         };
 
     	function findColumnByName(name) {
@@ -256,7 +287,7 @@ define(['services/session', 'services/datacontext', 'config.services', 'viewmode
     		return match;
     	}
 
-    	function Column(name, displayname, cssclass, sortprop) {
+    	function Column(name, displayname, cssclass, sortprop, backendSort) {
     		var self = this;
     		self.name = name;
     		self.displayName = displayname;
@@ -268,6 +299,7 @@ define(['services/session', 'services/datacontext', 'config.services', 'viewmode
             }
     		self.cssClass = cssclass;
             self.sortProperty = sortprop;
+			self.backendSort = backendSort;
     	}
 
     	return ctor;

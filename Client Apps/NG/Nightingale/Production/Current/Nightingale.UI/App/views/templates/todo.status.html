@@ -1,1 +1,3 @@
-﻿<i data-bind="css: status().iconClass"></i>
+﻿<!-- ko if: status() -->
+	<i data-bind="css: (status()? status().iconClass : null)"></i>
+<!-- /ko -->

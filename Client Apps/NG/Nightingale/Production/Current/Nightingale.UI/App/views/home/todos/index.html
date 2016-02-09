@@ -15,7 +15,7 @@
                                                         <div class="row">
                                                             <div class="span6">
 																<label class="span1 gray">Filter:</label>
-																<div style="display: inline-block" data-bind="chsnsingle: { options: views, value: selectedView, text: 'name', label: 'programs' }"></div>                                                                
+																<div class="span10" style="display: inline-block" data-bind="chsnsingle: { options: views, value: selectedView, text: 'name', label: 'programs' }"></div>                                                                
                                                             </div>
                                                             <div class="span4 grey">
                                                                 <label data-bind="visible: (selectedCategories().length > 0 || selectedPriorities().length > 0)">
@@ -48,7 +48,7 @@
 																	<div class="span6" data-bind="multiselect: { options: priorities, values: selectedPriorities, text: 'levelName', label: 'categories', idValue: 'id' }, visible: selectedView() && selectedView().type() === 'todos'"></div>
 																</div>
 																<div class="span3">
-																	<div class="span6" data-bind="multiselect: { options: categories, values: selectedCategories, text: 'name', label: 'categories', idValue: 'id' }"></div>
+																	<div class="span10" data-bind="multiselect: { options: categories, values: selectedCategories, text: 'name', label: 'categories', idValue: 'id' }"></div>
 																</div>
                                                             </div>
                                                         </section>
@@ -61,7 +61,7 @@
                                         <div class="header">
                                             <div class="table-cell">
                                                 <header class="ellipsis">
-                                                    <h1><span data-bind="text: selectedView() ? selectedView().name : 'To-Do List'"></span> - <span data-bind="text: myToDos().length + ' showing'"></span></h1>
+                                                    <h1><span data-bind="text: selectedView() ? selectedView().name : 'To-Do List'"></span> - <span data-bind="text: todosShowingText"></span></h1>
                                                     <div class="controls">
 														<div class="toggle" ">
 															<i class="pointer icon-plus" data-bind="click: addToDo, clickBubble: false" title="Add"></i>
@@ -84,7 +84,10 @@
                                         <div class="table-row">
                                             <div class="table-cell">
                                                 <div class="body">
-                                                    <div class="content" data-bind="compose: { model: 'viewmodels/templates/todo.panel', activationData: { todos: myToDos, columns: activeColumns, toggleSort: toggleSort, selectedSortColumn: selectedSortColumn, canSort: true } }">
+                                                    <div class="content" data-bind="compose: { model: 'viewmodels/templates/todo.panel', 
+																activationData: { todos: myToDos, columns: activeColumns, toggleSort: toggleSort, 
+																					selectedSortColumn: selectedSortColumn, canSort: true,																						
+																					maxToToDosLoaded: maxToToDosLoaded, isBackendSort:true, todosReloading: todosReloading } }">
                                                     </div>
                                                 </div>
                                             </div>

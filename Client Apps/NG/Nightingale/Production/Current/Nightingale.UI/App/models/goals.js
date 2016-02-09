@@ -34,7 +34,8 @@ define(['services/session'],
 		            focusAreaIds: { complexTypeName: "Identifier:#Nightingale", isScalar: false },
 		            programIds: { complexTypeName: "Identifier:#Nightingale", isScalar: false },
 		            customAttributes: { complexTypeName: "Attribute:#Nightingale", isScalar: false },
-					details: { dataType: "String" }
+					details: { dataType: "String" },
+					newDetails:  { dataType: "String" }
 		        },
 		        navigationProperties: {
 		            source: {
@@ -104,7 +105,8 @@ define(['services/session'],
 		            statusId: { dataType: "String" },
 		            patientGoalId: { dataType: "String" },
 		            deleteFlag: { dataType: "Boolean" },
-					details: { dataType: "String" }
+					details: { dataType: "String" },
+					newDetails:  { dataType: "String" }
 		        },
 		        navigationProperties: {
 		            category: {
@@ -142,7 +144,8 @@ define(['services/session'],
 		            barrierIds: { complexTypeName: "Identifier:#Nightingale", isScalar: false },
 		            customAttributes: { complexTypeName: "Attribute:#Nightingale", isScalar: false },
 		            deleteFlag: { dataType: "Boolean" },
-					details: { dataType: "String" }
+					details: { dataType: "String" },
+					newDetails:  { dataType: "String" }
 		        },
 		        navigationProperties: {
 		            status: {
@@ -179,7 +182,8 @@ define(['services/session'],
                     assignedToId: { dataType: "String" },
 		            barrierIds: { complexTypeName: "Identifier:#Nightingale", isScalar: false },
 		            deleteFlag: { dataType: "Boolean" },
-					details: { dataType: "String" }
+					details: { dataType: "String" },
+					newDetails:  { dataType: "String" }
 		        },
 		        navigationProperties: {
 		            status: {
@@ -356,7 +360,6 @@ define(['services/session'],
 
             function barrierInitializer(barrier) {
             	barrier.isNew = ko.observable(false);
-				barrier.newDetails = ko.observable();
 				barrier.checkAppend = function () {
 					appendNewDetails( barrier.newDetails, barrier.details );					
 				};
@@ -424,7 +427,6 @@ define(['services/session'],
 
             function goalInitializer(goal) {
                 goal.isNew = ko.observable(false);
-				goal.newDetails = ko.observable();
 				goal.checkAppend = function () {
 					appendNewDetails( goal.newDetails, goal.details );
 				};
@@ -494,7 +496,6 @@ define(['services/session'],
 
 		    function interventionInitializer(intervention) {
 				intervention.isNew = ko.observable(false);
-				intervention.newDetails = ko.observable();
 				intervention.checkAppend = function () {
 					appendNewDetails( intervention.newDetails, intervention.details );
 				};
@@ -552,11 +553,7 @@ define(['services/session'],
 					var barriersToken = intervention.barrierIds.subscribe(function (newValue) {
 						intervention.isDirty(true);
 						barriersToken.dispose();
-					});
-					var newDetailsToken = intervention.newDetails.subscribe(function (newValue) {
-						intervention.isDirty(true);
-						newDetailsToken.dispose();
-					});
+					});					
 				};
 				intervention.dueDateErrors = ko.observableArray([]);	//datetimepicker validation errors
 				intervention.startDateErrors = ko.observableArray([]);	//datetimepicker validation errors
@@ -610,7 +607,6 @@ define(['services/session'],
 		    }
 
 		    function taskInitializer(task) {
-				task.newDetails = ko.observable();
 				task.checkAppend = function () {
 					appendNewDetails( task.newDetails, task.details );
 				};

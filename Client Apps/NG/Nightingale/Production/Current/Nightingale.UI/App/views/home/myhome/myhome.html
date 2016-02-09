@@ -53,7 +53,7 @@
                                         <div class="header filter-toggle">
                                             <div class="table-cell" data-bind="click: function () { toggleWidgetOpen(myToDoListOpen) }">
                                                 <header>
-                                                    <h1>My To-Do List - <span data-bind="text: myToDos().length + ' showing'"></span></h1>
+                                                    <h1>My To-Do List - <span data-bind="text: todosShowingText"></span></h1>
                                                     <div class="controls pad-left">
 														<div class="toggle">
 															<i class="pointer icon-plus" data-bind="click: addToDo, clickBubble: false" title="Add"></i>
@@ -67,8 +67,14 @@
                                         <div class="table-row">
                                             <div class="table-cell">
                                                 <div class="body">
-                                                    <div class="content" data-bind="compose: { model: 'viewmodels/templates/todo.panel', activationData: { todos: myToDos, columns: activeTodoColumns, toggleSort: toggleTodoSort, selectedSortColumn: selectedTodoSortColumn, canSort: true } }">
+                                                    <div class="content" data-bind="compose: { model: 'viewmodels/templates/todo.panel', 
+																	activationData: { todos: myToDos, columns: activeTodoColumns, toggleSort: toggleTodoSort, 
+																						selectedSortColumn: selectedTodoSortColumn, canSort: true,
+																						loadMoreTodos: loadMoreTodos, canLoadMoreTodos: canLoadMoreTodos, 
+																						maxToToDosLoaded: maxToToDosLoaded, isBackendSort:true, todosReloading: todosReloading} }">
                                                     </div>
+													<!-- 
+														 loadPrevTodos: loadPrevTodos, canLoadPrevTodos: canLoadPrevTodos  -->
                                                 </div>
                                             </div>
                                         </div>
