@@ -21,19 +21,13 @@ namespace DataDomain.Search.Repo.LuceneStrategy
 
         public string Contract { get; set; }
         public StandardAnalyzer Analyzer { get; set; }
-        private IndexWriter _writer;
         private readonly Dictionary<string, IndexWriter> _writerPool;
 
         public MedNameLuceneStrategy()
         {
             Analyzer = new StandardAnalyzer(Version.LUCENE_30, new HashSet<string>());
-            _writerPool = GetWriterPool();
-        }
-
-        private Dictionary<string, IndexWriter> GetWriterPool()
-        {
-            var contracts = ConfigurationManager.AppSettings["SearchContractName"].Split(';');
-            return contracts.ToDictionary(s => s.ToLower(), s => new IndexWriter(GetDirectory(indexPath + s + mednameIndex), Analyzer, IndexWriter.MaxFieldLength.UNLIMITED));
+            _writerPool = new Dictionary<string, IndexWriter>();
+            ManageWriterPool(_writerPool, HostContext.Instance.Items["Contract"].ToString(), indexPath, mednameIndex);
         }
 
         public void Delete(T sampleData, IndexWriter writer)

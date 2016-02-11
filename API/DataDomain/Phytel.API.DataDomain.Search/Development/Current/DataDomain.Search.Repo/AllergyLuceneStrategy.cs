@@ -26,7 +26,6 @@ namespace DataDomain.Search.Repo.LuceneStrategy
         private readonly string allergyIndex = @"\Allergy_Index";
 
         public StandardAnalyzer Analyzer { get; set; }
-        private IndexWriter _writer;
         private readonly Dictionary<string, IndexWriter> _writerPool;
 
         public override string LuceneDir
@@ -37,13 +36,8 @@ namespace DataDomain.Search.Repo.LuceneStrategy
         public AllergyLuceneStrategy()
         {
             Analyzer = new StandardAnalyzer(Version.LUCENE_30, new HashSet<string>());
-            _writerPool = GetWriterPool();
-        }
-
-        private Dictionary<string, IndexWriter> GetWriterPool()
-        {
-            var contracts = ConfigurationManager.AppSettings["SearchContractName"].Split(';');
-            return contracts.ToDictionary(s => s.ToLower(), s => new IndexWriter(GetDirectory(indexPath + s + allergyIndex), Analyzer, IndexWriter.MaxFieldLength.UNLIMITED));
+            _writerPool = new Dictionary<string, IndexWriter>();
+            ManageWriterPool(_writerPool, HostContext.Instance.Items["Contract"].ToString(), indexPath, allergyIndex);
         }
 
         public override void AddToLuceneIndex(T sampleData, IndexWriter writer)

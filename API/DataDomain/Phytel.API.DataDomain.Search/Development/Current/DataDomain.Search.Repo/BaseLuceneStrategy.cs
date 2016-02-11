@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Contrib.Regex;
+using Lucene.Net.Analysis;
 using Lucene.Net.Analysis.Standard;
 using Lucene.Net.Documents;
 using Lucene.Net.Index;
@@ -23,6 +24,14 @@ namespace DataDomain.Search.Repo.LuceneStrategy
         public abstract void AddUpdateLuceneIndex(IEnumerable<T> sampleDatas);
         public abstract void AddUpdateLuceneIndex(T sampleData);
         public FSDirectory DirectoryTemp;
+
+        public void ManageWriterPool(Dictionary<string, IndexWriter> pool, string contract, string path, string namedIndex)
+        {
+            if (!pool.ContainsKey(contract))
+            {
+                pool.Add(contract, new IndexWriter(GetDirectory(path + contract + namedIndex), Analyzer, IndexWriter.MaxFieldLength.UNLIMITED));
+            }
+        }
 
         public FSDirectory Directory
         {
