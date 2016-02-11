@@ -37,7 +37,7 @@ namespace DataDomain.Search.Repo.LuceneStrategy
         {
             Analyzer = new StandardAnalyzer(Version.LUCENE_30, new HashSet<string>());
             _writerPool = new Dictionary<string, IndexWriter>();
-            ManageWriterPool(_writerPool, HostContext.Instance.Items["Contract"].ToString(), indexPath, allergyIndex);
+            ManageWriterPool(_writerPool, Analyzer, HostContext.Instance.Items["Contract"].ToString(), indexPath, allergyIndex);
         }
 
         public override void AddToLuceneIndex(T sampleData, IndexWriter writer)

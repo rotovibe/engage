@@ -27,7 +27,7 @@ namespace DataDomain.Search.Repo.LuceneStrategy
         {
             Analyzer = new StandardAnalyzer(Version.LUCENE_30, new HashSet<string>());
             _writerPool = new Dictionary<string, IndexWriter>();
-            ManageWriterPool(_writerPool, HostContext.Instance.Items["Contract"].ToString(), indexPath, mednameIndex);
+            ManageWriterPool(_writerPool, Analyzer, HostContext.Instance.Items["Contract"].ToString(), indexPath, mednameIndex);
         }
 
         public void Delete(T sampleData, IndexWriter writer)
