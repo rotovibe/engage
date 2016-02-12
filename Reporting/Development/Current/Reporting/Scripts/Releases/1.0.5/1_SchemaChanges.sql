@@ -54,7 +54,7 @@ CREATE TABLE [dbo].[RPT_Flat_Transition_Info](
 		Program_Completed_Date [date] NULL,
 		Call_Within_48Hours_PostDischarge [varchar](100) NULL,
 		Discharge_Type [varchar](100) NULL,
-		Total_LACE_Score [varchar](100) NULL,
+		Total_LACE_Score [varchar](1000) NULL,
 		High_Risk_For_Readmission [varchar](100) NULL,
 		Program_Status [varchar](100) NULL,
 ) ON [PRIMARY]
