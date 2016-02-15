@@ -59,8 +59,7 @@ BEGIN
 	LEFT OUTER JOIN [dbo].[RPT_User] u WITH(NOLOCK)
 		ON cm.MongoUserId = u.MongoId
 	WHERE obs.RowNumber = 1
-	and p.[Delete] = 'False'
-	and p.[Status] = 'Active'
+	and p.[Delete] = 'False' and p.TTLDate IS NULL
 
 END
 
