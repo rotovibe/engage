@@ -39,7 +39,7 @@ BEGIN
 		u.FirstName AS 'PrimaryCareManagerFirstName',
 		u.LastName AS 'PrimaryCareManagerLastName',
 		u.PreferredName AS 'PrimaryCareManagerPreferredName'
-	FROM (SELECT ROW_NUMBER() OVER (PARTITION BY MongoPatientId, ObservationType, [Code]  ORDER BY StartDate DESC) AS RowNumber,
+	FROM (SELECT ROW_NUMBER() OVER (PARTITION BY MongoPatientId, ObservationType, [Code], [Description]  ORDER BY StartDate DESC, LastUpdatedOn DESC) AS RowNumber,
 			MongoPatientId,
 			ObservationType,
 			Code,
