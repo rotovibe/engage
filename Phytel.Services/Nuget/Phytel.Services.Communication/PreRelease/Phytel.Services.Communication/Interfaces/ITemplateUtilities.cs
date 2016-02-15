@@ -19,5 +19,6 @@ namespace Phytel.Services.Communication
         string[] GetCommRequestStatuses();
         string Transform(XmlDocument xml, TemplateDetail templateDetail, string mode);
         CommTextResult BuildCommTextResult(XmlNode call);
+        bool ValidateModeCase(XmlNode doc, ref string mode);
     }
 }
