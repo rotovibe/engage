@@ -12,7 +12,7 @@ namespace DataDomain.Search.Repo.LuceneStrategy
     {
         //string LuceneDir { get; }
         string Contract { get; set; }
-        StandardAnalyzer Analyzer { get; set; }
+        StandardAnalyzer SAnalyzer { get; set; }
         //FSDirectory Directory { get; }
         void AddToLuceneIndex(T sampleData, IndexWriter writer);
         void AddUpdateLuceneIndex(IEnumerable<T> sampleDatas);

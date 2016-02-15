@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,6 +14,7 @@ using Lucene.Net.Search;
 using Phytel.API.Common.CustomObject;
 using Phytel.API.DataDomain.Search.DTO;
 using ServiceStack.Common;
+using ServiceStack.Common.Extensions;
 using Version = Lucene.Net.Util.Version;
 
 namespace DataDomain.Search.Repo.LuceneStrategy
@@ -25,7 +27,7 @@ namespace DataDomain.Search.Repo.LuceneStrategy
         private readonly string indexPath = ConfigurationManager.AppSettings["SearchIndexPath"] + "\\";
         private readonly string allergyIndex = @"\Allergy_Index";
 
-        public StandardAnalyzer Analyzer { get; set; }
+        public StandardAnalyzer SAnalyzer { get; set; }
         private readonly Dictionary<string, IndexWriter> _writerPool;
 
         public override string LuceneDir
@@ -35,9 +37,21 @@ namespace DataDomain.Search.Repo.LuceneStrategy
 
         public AllergyLuceneStrategy()
         {
-            Analyzer = new StandardAnalyzer(Version.LUCENE_30, new HashSet<string>());
+            SAnalyzer = new StandardAnalyzer(Version.LUCENE_30, new HashSet<string>());
             _writerPool = new Dictionary<string, IndexWriter>();
-            ManageWriterPool(_writerPool, Analyzer, HostContext.Instance.Items["Contract"].ToString(), indexPath, allergyIndex);
+            ManageWriterPool(_writerPool, HostContext.Instance.Items["Contract"].ToString(), indexPath, allergyIndex);
+        }
+
+        public void ManageWriterPool(Dictionary<string, IndexWriter> pool, string contract, string path, string namedIndex)
+        {
+            var dirs = new DirectoryInfo(indexPath).GetDirectories();
+            dirs.ForEach(r =>
+            {
+                if (!pool.ContainsKey(r.Name.ToLower()))
+                {
+                    pool.Add(r.Name.ToLower(), new IndexWriter(GetDirectory(path + r.Name + namedIndex), SAnalyzer, IndexWriter.MaxFieldLength.UNLIMITED));
+                }
+            });
         }
 
         public override void AddToLuceneIndex(T sampleData, IndexWriter writer)
@@ -57,7 +71,7 @@ namespace DataDomain.Search.Repo.LuceneStrategy
         {
             try
             {
-                foreach (var sampleData in sampleDatas) AddToLuceneIndex(sampleData, _writerPool[HostContext.Instance.Items["Contract"].ToString()]);
+                foreach (var sampleData in sampleDatas) AddToLuceneIndex(sampleData, _writerPool[HostContext.Instance.Items["Contract"].ToString().ToLower()]);
             }
             catch (Exception ex)
             {
@@ -65,7 +79,7 @@ namespace DataDomain.Search.Repo.LuceneStrategy
             }
             finally
             {
-                IndexWriter.Unlock(_writerPool[HostContext.Instance.Items["Contract"].ToString()].Directory);
+                IndexWriter.Unlock(_writerPool[HostContext.Instance.Items["Contract"].ToString().ToLower()].Directory);
             }
         }
 
@@ -85,7 +99,7 @@ namespace DataDomain.Search.Repo.LuceneStrategy
                 IndexReader rdr;
                 try
                 {
-                    rdr = IndexReader.Open(_writerPool[HostContext.Instance.Items["Contract"].ToString()].Directory,
+                    rdr = IndexReader.Open(_writerPool[HostContext.Instance.Items["Contract"].ToString().ToLower()].Directory,
                         true);
                 }
                 catch (Exception ex)

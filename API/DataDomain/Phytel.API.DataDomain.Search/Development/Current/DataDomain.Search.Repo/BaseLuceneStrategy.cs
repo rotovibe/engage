@@ -25,14 +25,6 @@ namespace DataDomain.Search.Repo.LuceneStrategy
         public abstract void AddUpdateLuceneIndex(T sampleData);
         public FSDirectory DirectoryTemp;
 
-        public void ManageWriterPool(Dictionary<string, IndexWriter> pool, StandardAnalyzer analizer, string contract, string path, string namedIndex)
-        {
-            if (!pool.ContainsKey(contract))
-            {
-                pool.Add(contract, new IndexWriter(GetDirectory(path + contract + namedIndex), analizer, IndexWriter.MaxFieldLength.UNLIMITED));
-            }
-        }
-
         public FSDirectory Directory
         {
             get

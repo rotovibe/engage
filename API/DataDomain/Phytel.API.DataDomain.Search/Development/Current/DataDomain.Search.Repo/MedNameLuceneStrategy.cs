@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.IO;
 using System.Linq;
+using System.Text;
 using Lucene.Net.Analysis.Standard;
 using Lucene.Net.Documents;
 using Lucene.Net.Index;
@@ -9,6 +11,7 @@ using Lucene.Net.QueryParsers;
 using Lucene.Net.Search;
 using Phytel.API.DataDomain.Search.DTO;
 using ServiceStack.Common;
+using ServiceStack.Common.Extensions;
 using Version = Lucene.Net.Util.Version;
 
 namespace DataDomain.Search.Repo.LuceneStrategy
@@ -20,14 +23,26 @@ namespace DataDomain.Search.Repo.LuceneStrategy
         private readonly string mednameIndex = @"\MedNames_Index";
 
         public string Contract { get; set; }
-        public StandardAnalyzer Analyzer { get; set; }
+        public StandardAnalyzer SAnalyzer { get; set; }
         private readonly Dictionary<string, IndexWriter> _writerPool;
 
         public MedNameLuceneStrategy()
         {
-            Analyzer = new StandardAnalyzer(Version.LUCENE_30, new HashSet<string>());
+            SAnalyzer = new StandardAnalyzer(Version.LUCENE_30, new HashSet<string>());
             _writerPool = new Dictionary<string, IndexWriter>();
-            ManageWriterPool(_writerPool, Analyzer, HostContext.Instance.Items["Contract"].ToString(), indexPath, mednameIndex);
+            ManageWriterPool(_writerPool, HostContext.Instance.Items["Contract"].ToString(), indexPath, mednameIndex);
+        }
+
+        public void ManageWriterPool(Dictionary<string, IndexWriter> pool, string contract, string path, string namedIndex)
+        {
+            var dirs = new DirectoryInfo(indexPath).GetDirectories();
+            dirs.ForEach(r =>
+            {
+                if (!pool.ContainsKey(r.Name.ToLower()))
+                {
+                    pool.Add(r.Name.ToLower(), new IndexWriter(GetDirectory(path + r.Name + namedIndex), SAnalyzer, IndexWriter.MaxFieldLength.UNLIMITED));
+                }
+            });
         }
 
         public void Delete(T sampleData, IndexWriter writer)
@@ -77,7 +92,7 @@ namespace DataDomain.Search.Repo.LuceneStrategy
         {
             try
             {
-                foreach (var sampleData in sampleDatas) Delete(sampleData, _writerPool[HostContext.Instance.Items["Contract"].ToString()]);
+                foreach (var sampleData in sampleDatas) Delete(sampleData, _writerPool[HostContext.Instance.Items["Contract"].ToString().ToLower()]);
             }
             catch (Exception ex)
             {
@@ -85,7 +100,7 @@ namespace DataDomain.Search.Repo.LuceneStrategy
             }
             finally
             {
-                IndexWriter.Unlock(_writerPool[HostContext.Instance.Items["Contract"].ToString()].Directory);
+                IndexWriter.Unlock(_writerPool[HostContext.Instance.Items["Contract"].ToString().ToLower()].Directory);
             }
         }
 
@@ -94,7 +109,7 @@ namespace DataDomain.Search.Repo.LuceneStrategy
             try
             {
                 //foreach (var sampleData in sampleDatas) AddToLuceneIndex(sampleData, _writer);
-                foreach (var sampleData in sampleDatas) AddToLuceneIndex(sampleData, _writerPool[HostContext.Instance.Items["Contract"].ToString()]);
+                foreach (var sampleData in sampleDatas) AddToLuceneIndex(sampleData, _writerPool[HostContext.Instance.Items["Contract"].ToString().ToLower()]);
             }
             catch (Exception ex)
             {
@@ -102,7 +117,7 @@ namespace DataDomain.Search.Repo.LuceneStrategy
             }
             finally
             {
-                IndexWriter.Unlock(_writerPool[HostContext.Instance.Items["Contract"].ToString()].Directory);
+                IndexWriter.Unlock(_writerPool[HostContext.Instance.Items["Contract"].ToString().ToLower()].Directory);
             }
         }
 
@@ -129,7 +144,7 @@ namespace DataDomain.Search.Repo.LuceneStrategy
                 IndexReader rdr;
                 try
                 {
-                    rdr = IndexReader.Open(_writerPool[HostContext.Instance.Items["Contract"].ToString()].Directory,
+                    rdr = IndexReader.Open(_writerPool[HostContext.Instance.Items["Contract"].ToString().ToLower()].Directory,
                         true);
                 }
                 catch (Exception ex)
@@ -144,7 +159,7 @@ namespace DataDomain.Search.Repo.LuceneStrategy
 
                 if (!string.IsNullOrEmpty(searchField))
                 {
-                    var parser = new QueryParser(Version.LUCENE_30, searchField, Analyzer)
+                    var parser = new QueryParser(Version.LUCENE_30, searchField, SAnalyzer)
                     {
                         AllowLeadingWildcard = true,
                         PhraseSlop = 0
@@ -158,7 +173,7 @@ namespace DataDomain.Search.Repo.LuceneStrategy
                 else
                 {
                     var fields = new[] {"CompositeName", "SubstanceName"};
-                    var parser = new MultiFieldQueryParser(Version.LUCENE_30, fields, Analyzer)
+                    var parser = new MultiFieldQueryParser(Version.LUCENE_30, fields, SAnalyzer)
                     {
                         DefaultOperator = QueryParser.Operator.AND,
                         PhraseSlop = 0
