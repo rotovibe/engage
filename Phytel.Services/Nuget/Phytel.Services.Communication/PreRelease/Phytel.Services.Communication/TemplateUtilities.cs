@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -13,8 +14,8 @@ namespace Phytel.Services.Communication
 {
     public class TemplateUtilities : ITemplateUtilities
     {
-        public TemplateUtilities(){ }
-        
+        public TemplateUtilities() { }
+
         public string GetModeSpecificTag(string originalTag, string mode)
         {
             string modeSpecificTag = string.Empty;
@@ -122,7 +123,7 @@ namespace Phytel.Services.Communication
         private string GetShortMonth(string month)
         {
             string shortMonth = string.Empty;
-            
+
             switch (month)
             {
                 case "January":
@@ -167,6 +168,7 @@ namespace Phytel.Services.Communication
 
         public TemplateResults BuildPatient(XmlDocument xdoc, ActivityDetail activityDetail, Hashtable missingObjects, string mode, string[] requiredObjects = null)
         {
+            ValidateModeCase(xdoc, ref mode);
             TemplateResults results = new TemplateResults();
 
             string patientID = string.Empty;
@@ -220,6 +222,7 @@ namespace Phytel.Services.Communication
 
         public TemplateResults BuildHeader(XmlDocument xdoc, ActivityDetail activityDetail, Hashtable missingObjects, string mode, string[] requiredObjects = null)
         {
+            ValidateModeCase(xdoc, ref mode);
             TemplateResults results = new TemplateResults();
 
             string sendID = string.Empty;
@@ -253,6 +256,7 @@ namespace Phytel.Services.Communication
 
         public TemplateResults BuildSchedule(XmlDocument xdoc, ActivityDetail activityDetail, Hashtable missingObjects, string mode, string[] requiredObjects = null)
         {
+            ValidateModeCase(xdoc, ref mode);
             TemplateResults results = new TemplateResults();
 
             string xpath = string.Empty;
@@ -272,10 +276,11 @@ namespace Phytel.Services.Communication
 
         public TemplateResults BuildApptDateTime(XmlDocument xdoc, ActivityDetail activityDetail, Hashtable missingObjects, string mode, bool shortMonth = false, string[] requiredObjects = null)
         {
+            ValidateModeCase(xdoc, ref mode);
             TemplateResults results = new TemplateResults();
 
             string appointmentDateTime = string.Empty;
-            string activityID = string.Empty; 
+            string activityID = string.Empty;
             string appointmentDayOfWeek = string.Empty;
             string appointmentMonth = string.Empty;
             string appointmentDate = string.Empty;
@@ -285,9 +290,9 @@ namespace Phytel.Services.Communication
 
             activityID = activityDetail.ActivityID.ToString();
             appointmentDateTime = activityDetail.ScheduleDateTime;
-            
+
             //Appointment date fields
-            if ((string.IsNullOrEmpty(appointmentDateTime) || Convert.ToDateTime(appointmentDateTime) < DateTime.Now) 
+            if ((string.IsNullOrEmpty(appointmentDateTime) || Convert.ToDateTime(appointmentDateTime) < DateTime.Now)
                 && (requiredObjects != null && requiredObjects.Contains("ScheduleDateTime")))
             {
                 string missingObjString = "Appointment Datetime " + activityID;
@@ -327,7 +332,7 @@ namespace Phytel.Services.Communication
                 XmlNode appointmentTimeNode = xdoc.SelectSingleNode(xpath);
                 SetXMlNodeInnerText(appointmentTimeNode, appointmentTime);
             }
-            
+
             results.PopulatedTemplate = xdoc;
             results.MissingObjects = missingObjects;
             return results;
@@ -356,7 +361,7 @@ namespace Phytel.Services.Communication
 
             return body;
         }
-        
+
         private string TransformTemplate(XmlDocument xml, TemplateDetail templateDetail, string mode)
         {
             string transformedString = string.Empty;
@@ -371,6 +376,7 @@ namespace Phytel.Services.Communication
             if (templateDetail != null)
             {
                 string xslBody = templateDetail.TemplateXSLBody.ToString().Trim();
+                xslBody = Regex.Replace(xslBody, "//Text/", "//" + mode + "/", RegexOptions.IgnoreCase);
                 XmlDocument xslDoc = new XmlDocument();
                 xslDoc.LoadXml(xslBody);
                 XslCompiledTransform xslTransform = new XslCompiledTransform();
@@ -387,10 +393,38 @@ namespace Phytel.Services.Communication
             return transformedString;
         }
 
+        public bool ValidateModeCase(XmlNode doc, ref string mode)
+        {
+            bool valid = true;
+            string upperMode = mode.ToUpper();
+            XmlNode textNode = doc.SelectSingleNode(upperMode);
+            if (textNode == null)
+            {
+                string titleMode = new CultureInfo("en-US").TextInfo.ToTitleCase(mode);
+                textNode = doc.SelectSingleNode(titleMode);
+                if (textNode == null)
+                {
+                    string lowerMode = mode.ToLower();
+                    textNode = doc.SelectSingleNode(lowerMode);
+                    if (textNode == null)
+                        valid = false;
+                    else
+                        mode = lowerMode;
+                }
+                else
+                    mode = titleMode;
+            }
+            else
+                mode = upperMode;
+
+            return valid;
+        }
+
         public CommTextResult BuildCommTextResult(XmlNode call)
         {
-            CommTextResult commTextResult = new CommTextResult();
             string mode = "TEXT";
+            ValidateModeCase(call, ref mode);
+            CommTextResult commTextResult = new CommTextResult();
             string xpath = string.Empty;
 
             //SendID
@@ -492,7 +526,7 @@ namespace Phytel.Services.Communication
             commTextResult.ContractID = int.MaxValue;
             commTextResult.CommStartDateTime = DateTime.MaxValue;
             commTextResult.CommStopDateTime = DateTime.MaxValue;
-        
+
             return commTextResult;
         }
     }

@@ -70,6 +70,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="CommTemplateUtilitiesTests.cs" />
     <Compile Include="CommTextTemplateManagerTests.cs" />
     <Compile Include="CommEmailTemplateManagerTests.cs" />
     <Compile Include="TemplateUtilitiesTests.cs" />
