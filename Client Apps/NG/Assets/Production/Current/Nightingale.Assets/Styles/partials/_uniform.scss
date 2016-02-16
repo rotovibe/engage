@@ -72,8 +72,8 @@
   }
 }
 
-$sprite: "images/uniform-sprite.png" !default;
-$sprite-retina: "images/uniform-sprite.png" !default;
+$sprite: "../images/uniform-sprite.png" !default;
+$sprite-retina: "../images/uniform-sprite.png" !default;
 $sprite-size: 493px !default;
 $button-height: 30px !default;
 $button-margin-left: 13px !default;

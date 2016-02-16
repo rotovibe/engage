@@ -112,6 +112,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="copyright.js" />
     <Content Include="favicon.ico" />
     <Content Include="Fonts\helvetica_neue\bold\normal.svg" />
     <Content Include="Fonts\helvetica_neue\light\italic.svg" />
@@ -150,7 +151,9 @@
     <Content Include="Fonts\nightingale-glyphs\fontcustomv1.eot" />
     <Content Include="Fonts\nightingale-glyphs\fontcustomv1.ttf" />
     <Content Include="Fonts\nightingale-glyphs\fontcustomv1.woff" />
+    <Content Include="package.json" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="gulpfile.js" />
     <Content Include="Images\address_blue_large.png" />
     <Content Include="Images\address_blue_small.png" />
     <Content Include="Images\address_grey_large.png" />

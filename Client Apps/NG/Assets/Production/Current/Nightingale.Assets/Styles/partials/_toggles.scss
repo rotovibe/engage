@@ -9,65 +9,65 @@ header, .header, .filters {
     background-repeat: no-repeat;
 
 		&.refresh {
-			background-image: image-url("images/refresh.png");
+			background-image: url("../images/refresh.png");
 		}
 
 		&.filter {
-			background-image: image-url("images/filter_inactive.png");
+			background-image: url("../images/filter_inactive.png");
 
 			&.active {
-				background-image: image-url("images/filter_active.png");
+				background-image: url("../images/filter_active.png");
 			}
 		}
 
         &.fullscreen {
-          background-image: image-url("images/full_screen_open.png");
+          background-image: url("../images/full_screen_open.png");
         }
         &.double-arrow-right {
-          background-image: image-url("images/expand_right.png");
+          background-image: url("../images/expand_right.png");
         }
         &.single-arrow-left {
-          background-image: image-url("images/collapse_left.png");
+          background-image: url("../images/collapse_left.png");
         }
         &.next {
-          background-image: image-url("images/page_forward_small.png");
+          background-image: url("../images/page_forward_small.png");
         }
         &.down-up {
-          background-image: image-url("images/expand_down.png");
+          background-image: url("../images/expand_down.png");
         }
         &.up-down {
-          background-image: image-url("images/collapse_up.png");
+          background-image: url("../images/collapse_up.png");
         }
 
 		&.plus {
-			background-image: image-url("images/add_blue.png");
+			background-image: url("../images/add_blue.png");
 		}
 
 		&.print {
-			background-image: image-url("images/print_blue_small.png");
+			background-image: url("../images/print_blue_small.png");
 		}
 
 		&.edit {
-			background-image: image-url("images/edit_blue.png");
+			background-image: url("../images/edit_blue.png");
 		}
 
 		&.remove {
-			background-image: image-url("images/cancel_x.png");
+			background-image: url("../images/cancel_x.png");
 		}
 	}
 }
 
 .widget.fullscreen .toggle.fullscreen {
-  background-image: image-url("images/full_screen_close.png");
+  background-image: url("../images/full_screen_close.png");
 }
 
 .accordion.open .toggle,
 .quickadd.open .toggle {
   &.down-up {
-    background-image: image-url("images/collapse_up.png");
+    background-image: url("../images/collapse_up.png");
   }
   &.up-down {
-    background-image: image-url("images/expand_down.png");
+    background-image: url("../images/expand_down.png");
   }
 }
 

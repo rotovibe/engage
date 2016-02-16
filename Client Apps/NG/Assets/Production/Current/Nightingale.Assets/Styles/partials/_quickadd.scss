@@ -30,9 +30,10 @@
       border-bottom: 1px solid rgb(225, 220, 211);
       .tab {
         @include float-left;
-        &:nth-child("6n") a {
-          border-right: none;
-        }
+		//intended to be used for Quickadd tabs when we have more than 6 tabs... (remaked as we dont use it now and its failing to compile.)
+//        &:nth-child("6n") a {
+//          border-right: none;
+//        }
         a {
           @include transition(background 500ms);
           @extend .pad;

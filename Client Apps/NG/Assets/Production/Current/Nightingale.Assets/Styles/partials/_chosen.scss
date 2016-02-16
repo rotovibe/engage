@@ -129,7 +129,7 @@
       display: block;
       b {
         @include size(100% 100%);
-        background-image: url("images/menu_arrow_blue.png");
+        background-image: url("../images/menu_arrow_blue.png");
         display: block;
         opacity: 0.5;
       }
@@ -140,7 +140,7 @@
         margin-right: 38px;
        } 
        abbr {
-           	background-image: url("images/close_grey.png");	
+           	background-image: url("../images/close_grey.png");	
 	        background-repeat: no-repeat;	
 	        background-size: 100%;
 	        top: 5px;
@@ -375,7 +375,7 @@
     background: $background-normal;
     border-color: $border-normal;
     div b {
-      background-image: url("images/menu_arrow_white.png");
+      background-image: url("../images/menu_arrow_white.png");
     }
     &:hover {
       border-color: $border-color;
@@ -402,7 +402,7 @@
     background: $background-normal;
     border-color: $border-normal !important;
     div b {
-      background-image: url("images/menu_arrow_grey.png");
+      background-image: url("../images/menu_arrow_grey.png");
       opacity: 0.5;
     }
     &:hover {
@@ -442,7 +442,7 @@
       opacity: 1;
     }
     li.search-field {
-      background-image: url("images/menu_arrow_blue.png");
+      background-image: url("../images/menu_arrow_blue.png");
       background-position: right center;
       background-repeat: no-repeat;
       float: none;

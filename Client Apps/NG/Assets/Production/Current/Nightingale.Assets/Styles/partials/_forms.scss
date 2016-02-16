@@ -38,10 +38,9 @@ form.stacked {
   }
 }
 
-
 input[type="search"] {
   @include box-sizing("border-box");
-  background-image: image-url("../../images/search_light_blue.png");
+  background-image: url("../images/search_light_blue.png");
   background-repeat: no-repeat;
   background-position: right center;
   background-size: 20px 20px;
