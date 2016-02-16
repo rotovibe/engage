@@ -6,8 +6,8 @@ header[role=banner] {
   text-align: justify;
   .brand {
     @include inline-block(middle);
-    height: 4 * $grid-padding;
-    margin: $grid-padding / 2 2.5 * $grid-padding;
+    height: 2 * $grid-padding;
+    margin: 1.5 * $grid-padding 3.5 * $grid-padding;
     opacity: 0.5;
   }
   .options {
@@ -64,7 +64,7 @@ header[role=banner] {
       @include transition(background-color 250ms);
       @include size(45px 30px);
       background-color: #2d566a;
-      background-image: image-url("Images/menu_arrow_white.png");
+      background-image: url("../Images/menu_arrow_white.png");
       background-position: right center;
       background-repeat: no-repeat;
       margin: 0;
@@ -178,7 +178,7 @@ header[role=navigation] {
     > a {
       margin-left: $grid-padding;
       padding-left: 2.5 * $grid-padding;
-      background-image: url(../../images/expand_down.png);
+      background-image: url("../images/expand_down.png");
       background-repeat: no-repeat;
       background-position: left center;
       position: relative;
@@ -267,7 +267,7 @@ header[role=navigation] {
     }
     &.open {
       > a {
-        background-image: url(../../Images/collapse_up.png);
+        background-image: url("../Images/collapse_up.png");
       }
       .content {
         //display: block

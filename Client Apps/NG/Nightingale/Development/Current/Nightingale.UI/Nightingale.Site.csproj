@@ -260,6 +260,7 @@
     <Content Include="App\views\templates\allergy.status.html" />
     <Content Include="App\views\templates\allergy.edit.html" />
     <Content Include="App\views\templates\validation.errors.html" />
+    <Content Include="Content\images\IBM_White_Logo_34.png" />
     <Content Include="Content\images\phytel_logo_IBM.png" />
     <Content Include="Content\images\watson_cm_logo_large.png" />
     <Content Include="Content\images\watson_cm_logo.png" />

@@ -1,7 +1,7 @@
 ﻿define([],
     function () {
 
-        var currentBrand = ko.observable(new brand('Phytel', '/NightingaleUI/Content/images/phytel_logo_IBM.png'));
+        var currentBrand = ko.observable(new brand('Phytel', '/NightingaleUI/Content/images/IBM_White_Logo_34.png'));
 
         var branding = {
             currentBrand: currentBrand
