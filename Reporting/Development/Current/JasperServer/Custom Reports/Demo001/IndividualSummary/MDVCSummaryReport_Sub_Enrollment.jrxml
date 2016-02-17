@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.2.0.final using JasperReports Library version 6.2.0  -->
+<!-- 2016-02-15T11:06:38 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="MDVCSummaryReport_Sub_Enrollment" language="groovy" pageWidth="576" pageHeight="842" columnWidth="576" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" whenResourceMissingType="Empty" uuid="f50ddb62-a202-490b-a327-7fdc6924de6c">
+	<property name="ireport.zoom" value="1.6105100000000014"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="ireport.jasperserver.url" value="https://reporting.phytel.com/jasperserver-pro/"/>
+	<property name="ireport.jasperserver.user" value="bjoseph"/>
+	<property name="ireport.jasperserver.report.resource" value="/organizations/organization_1/organizations/DEMO001/Reports_1/Individual_Summary_files/main_jrxml"/>
+	<property name="ireport.jasperserver.reportUnit" value="/organizations/organization_1/organizations/DEMO001/Reports_1/Individual_Summary"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Prod DEMO Data Adapter "/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<parameter name="ID_MongoPatientId" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[Select ppi.ProgramName as [Name], u.PreferredName as 'Assigned_PCM', ppi.Enrollment, ppi.StartDate
+FROM RPT_Patient_PCM_Program_Info ppi with (nolock)
+	LEFT OUTER JOIN RPT_PatientProgram pp with (nolock)
+		ON ppi.mongopatientprogramid = pp.mongoid
+	LEFT OUTER JOIN [RPT_User] u with (nolock) 
+		ON pp.MongoAssignedToId = u.MongoId	
+WHERE ppi.mongopatientid = $P{ID_MongoPatientId} 
+AND (ppi.[State] IN ('NotStarted','InProgress')
+		OR
+	(ppi.[State] IN ('Closed','Completed') AND ppi.Assigned_Date > DATEADD(month, -24, GETDATE()))
+	)
+Order by CASE WHEN ppi.StartDate IS NULL THEN 0 ELSE 1 END, ppi.StartDate DESC]]>
+	</queryString>
+	<field name="Name" class="java.lang.String"/>
+	<field name="Assigned_PCM" class="java.lang.String"/>
+	<field name="Enrollment" class="java.lang.String"/>
+	<field name="StartDate" class="java.util.Date"/>
+	<field name="LastStateUpdateDate" class="java.util.Date"/>
+	<columnHeader>
+		<band height="31" splitType="Stretch">
+			<frame>
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="0" y="18" width="576" height="12" backcolor="#F0F0F0" uuid="4ce04b0c-69be-4ca1-b932-5b99b4e719f2"/>
+			</frame>
+			<staticText>
+				<reportElement x="6" y="19" width="205" height="11" uuid="2fec96ce-e08b-42f8-83df-d92da3f0d038">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="215" y="19" width="130" height="11" uuid="88443f62-9e5f-44dd-94b1-6a9305f3608a">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+				</reportElement>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Care Manager]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="350" y="19" width="150" height="11" uuid="5d3b771b-5525-4646-98f5-a62503c79b70">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+				</reportElement>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Enrollment]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="510" y="19" width="60" height="11" uuid="17264fbd-8a6f-4ee7-a692-04fe90c61a2e">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Start Date]]></text>
+			</staticText>
+			<line>
+				<reportElement positionType="Float" x="0" y="17" width="576" height="1" forecolor="#666666" uuid="45317bdd-4999-4aa7-85e3-73dae4350d2b"/>
+			</line>
+			<staticText>
+				<reportElement x="6" y="3" width="110" height="14" uuid="6d50ec3e-c9d2-446e-a64e-225098091361"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Program Enrollment]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="12" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="6" y="0" width="205" height="11" uuid="9372da23-b981-4927-99a3-14122a1e59a6">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Name}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="215" y="0" width="130" height="11" uuid="cae69596-8358-4519-8bed-27f15068ddcb">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Assigned_PCM}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="350" y="0" width="150" height="11" uuid="2fdf7d28-c46a-4352-af43-113acae8bef1">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+				</reportElement>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Enrollment}]]></textFieldExpression>
+			</textField>
+			<textField pattern="MM/dd/yyyy" isBlankWhenNull="true">
+				<reportElement x="510" y="0" width="60" height="11" uuid="aad8baac-a65c-4860-a987-56f9d3c44220">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{StartDate}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

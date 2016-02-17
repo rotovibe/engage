@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.2.0.final using JasperReports Library version 6.2.0  -->
+<!-- 2016-02-15T11:04:54 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="MDVCSummaryReport_Sub_Plan_Goals" language="groovy" pageWidth="576" pageHeight="842" columnWidth="576" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="7f5caf3a-ada5-4508-96c8-514cc96cc62a">
+	<property name="ireport.zoom" value="2.3579476910000023"/>
+	<property name="ireport.x" value="23"/>
+	<property name="ireport.y" value="0"/>
+	<property name="ireport.jasperserver.url" value="https://reporting.phytel.com/jasperserver-pro/"/>
+	<property name="ireport.jasperserver.user" value="bjoseph"/>
+	<property name="ireport.jasperserver.report.resource" value="/organizations/organization_1/organizations/DEMO001/Reports_1/Individual_Summary_files/main_jrxml"/>
+	<property name="ireport.jasperserver.reportUnit" value="/organizations/organization_1/organizations/DEMO001/Reports_1/Individual_Summary"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Prod DEMO Data Adapter "/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<parameter name="ID_MongoPatientId" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select
+	pg.name as [Description]
+	,pg.[status]
+	,pg.startdate
+	,pg.targetdate
+from
+	RPT_PatientGoal pg
+where
+	pg.mongopatientid = $P{ID_MongoPatientId}
+	AND 
+	(
+		pg.status in ('Open', 'NotMet')
+		OR 
+		(pg.Status in ('Met', 'Abandoned')
+			and pg.LastUpdatedOn > DATEADD(month, -12, GETDATE()) 
+		)
+	)
+	AND (pg.[Delete] = 'False' AND pg.TTLDate IS NULL)
+Order by CASE WHEN targetdate IS NULL THEN 1 ELSE 0 END, targetdate ASC]]>
+	</queryString>
+	<field name="Description" class="java.lang.String"/>
+	<field name="status" class="java.lang.String"/>
+	<field name="startdate" class="java.util.Date"/>
+	<field name="targetdate" class="java.util.Date"/>
+	<columnHeader>
+		<band height="28" splitType="Stretch">
+			<staticText>
+				<reportElement x="6" y="1" width="110" height="14" uuid="65bd93c3-5a10-412f-8107-201e24039714"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Care Plan Goals]]></text>
+			</staticText>
+			<frame>
+				<reportElement stretchType="RelativeToBandHeight" mode="Opaque" x="0" y="16" width="576" height="12" backcolor="#F0F0F0" uuid="eb9f161d-92a2-4849-ae81-7d2700011c9b"/>
+			</frame>
+			<line>
+				<reportElement positionType="Float" x="0" y="15" width="576" height="1" forecolor="#666666" uuid="b67e143a-1c07-4307-ae47-2d882895363b"/>
+			</line>
+			<staticText>
+				<reportElement x="423" y="17" width="46" height="11" uuid="de471274-7946-4b2b-85e7-2a9eb400d50e">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+				</reportElement>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Status]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="471" y="17" width="45" height="11" uuid="299269c3-2c83-488c-873d-98e0f2158711">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Start Date]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="6" y="17" width="410" height="11" uuid="9b781fdd-57de-46ae-bba4-50115de405b5">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Description]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="528" y="17" width="45" height="11" uuid="b536e0c3-2dfb-4492-9538-55eabd94b860">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Target Date]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="12" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="6" y="0" width="410" height="11" uuid="04afe577-4cf3-46c5-af2a-c6eb4fcb62c8">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Description}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="423" y="0" width="46" height="11" uuid="81906e83-97a0-4027-994b-6ef436b38473">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+				</reportElement>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{status}]]></textFieldExpression>
+			</textField>
+			<textField pattern="MM/dd/yyyy" isBlankWhenNull="true">
+				<reportElement x="476" y="0" width="45" height="11" uuid="9311671e-938c-493c-a3c8-23adbea6fca3">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+				</reportElement>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{startdate}]]></textFieldExpression>
+			</textField>
+			<textField pattern="MM/dd/yyyy" isBlankWhenNull="true">
+				<reportElement x="528" y="0" width="45" height="11" uuid="a69facb2-9f1a-4d64-bf52-5aea50cdd988">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+				</reportElement>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{targetdate}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

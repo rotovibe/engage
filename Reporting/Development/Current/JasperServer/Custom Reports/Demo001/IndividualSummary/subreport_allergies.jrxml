@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.2.0.final using JasperReports Library version 6.2.0  -->
+<!-- 2016-02-15T11:01:46 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="subreport_Allergies" language="groovy" pageWidth="576" pageHeight="842" columnWidth="576" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="ecc880da-ac97-44eb-b6a5-8f9b4ec99306">
+	<property name="ireport.zoom" value="2.593742460100003"/>
+	<property name="ireport.x" value="25"/>
+	<property name="ireport.y" value="0"/>
+	<property name="ireport.jasperserver.url" value="https://reporting.phytel.com/jasperserver-pro/"/>
+	<property name="ireport.jasperserver.user" value="bjoseph"/>
+	<property name="ireport.jasperserver.report.resource" value="/organizations/organization_1/organizations/DEMO001/Reports_1/Individual_Summary_files/main_jrxml"/>
+	<property name="ireport.jasperserver.reportUnit" value="/organizations/organization_1/organizations/DEMO001/Reports_1/Individual_Summary"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Prod DEMO Data Adapter "/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<parameter name="ID_MongoPatientId" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select
+al.name,
+sv.Name as [severity],
+s.Name as Source
+from
+	RPT_PatientAllergy pa
+	INNER JOIN RPT_Patient pt ON pa.mongopatientid = pt.mongoid
+	INNER JOIN RPT_Allergy al ON pa.mongoallergyid = al.mongoId
+	LEFT JOIN RPT_SeverityLookUp sv ON pa.MongoSeverityId = sv.MongoId
+	LEFT JOIN RPT_AllergySourceLookUp s ON pa.SourceId = s.MongoId
+where
+	pa.mongopatientid = $P{ID_MongoPatientId}
+	and pa.statusid = 'Active'
+	AND pa.[Delete] = 'False' and pa.TTLDate IS NULL
+ order by al.name]]>
+	</queryString>
+	<field name="name" class="java.lang.String"/>
+	<field name="severity" class="java.lang.String"/>
+	<field name="Source" class="java.lang.String"/>
+	<columnHeader>
+		<band height="29" splitType="Stretch">
+			<frame>
+				<reportElement mode="Opaque" x="0" y="15" width="576" height="13" backcolor="#F0F0F0" uuid="2b7cd68c-0858-453f-8f1c-918836706eb9"/>
+				<staticText>
+					<reportElement x="350" y="0" width="126" height="12" uuid="a00f9ae8-58b6-4eb3-9a39-854a9bb5bb82">
+						<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					</reportElement>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[Severity]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="6" y="0" width="342" height="12" uuid="6e2be9aa-7cbb-4197-acf4-f5f57bbc95fb">
+						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					</reportElement>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[Name]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="478" y="0" width="96" height="12" uuid="3dd9fd2a-82eb-4148-ad38-b4a4113b598e">
+						<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					</reportElement>
+					<textElement>
+						<font size="8"/>
+					</textElement>
+					<text><![CDATA[Source]]></text>
+				</staticText>
+			</frame>
+			<line>
+				<reportElement positionType="Float" x="0" y="14" width="576" height="1" forecolor="#666666" uuid="1749d6de-57ed-45a8-9789-74ee9759b434"/>
+			</line>
+			<staticText>
+				<reportElement x="6" y="0" width="110" height="14" uuid="6b4bcf92-3585-42e2-b014-46a97de2a8eb"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Current Allergies]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="13" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="6" y="0" width="342" height="11" uuid="8285b9ce-4b37-4d97-ad9a-571b33ccf085">
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="350" y="0" width="126" height="11" uuid="d15430d6-8ad5-4273-8692-3c55a5ada047">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{severity}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="478" y="0" width="96" height="11" uuid="92c6f9fc-9828-4a89-ada0-85fbc7bdf932">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+				</reportElement>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Source}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>
