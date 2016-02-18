@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.2.0.final using JasperReports Library version 6.2.0  -->
-<!-- 2016-02-16T12:58:51 -->
+<!-- 2016-02-18T13:20:38 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="MDVC_Management_Summary" pageWidth="612" pageHeight="792" columnWidth="572" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="2" whenResourceMissingType="Empty" uuid="c743537e-4134-4584-9ad9-760e6d2fa72f">
 	<property name="ireport.zoom" value="1.000000000000003"/>
 	<property name="ireport.x" value="0"/>
@@ -47,7 +47,7 @@
 	pt.EngageId,
 	CASE 
 		WHEN pt.[FirstName] IS NULL OR pt.[FirstName] = '' OR pt.[LastName] IS NULL OR pt.[LastName] = '' THEN '' 
-		ELSE pt.[FirstName] + ', ' + pt.[LastName]
+		ELSE pt.[FirstName] + ' ' + pt.[LastName]
 	END AS [Name],	
 	pt.[DateOfBirth],
 	pt.[Gender],
@@ -90,7 +90,7 @@ where ($P{Practice} IS NULL OR eng.Practice =  $P{Practice} )
 	<field name="enrollment" class="java.lang.String"/>
 	<field name="PrimaryIdStatus" class="java.lang.String"/>
 	<detail>
-		<band height="597" splitType="Stretch">
+		<band height="577" splitType="Stretch">
 			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 			<frame>
 				<reportElement key="Demographics" mode="Transparent" x="0" y="6" width="572" height="122" backcolor="#CCCCCC" uuid="b21605e7-26f5-4da7-9eb7-7bc3580b95ee"/>
@@ -331,7 +331,7 @@ where ($P{Practice} IS NULL OR eng.Practice =  $P{Practice} )
 				</reportElement>
 			</break>
 			<staticText>
-				<reportElement positionType="Float" x="10" y="560" width="110" height="11" uuid="0c2c2a0a-619f-489c-a57c-8b7e2e427364">
+				<reportElement positionType="Float" x="10" y="560" width="90" height="11" uuid="0c2c2a0a-619f-489c-a57c-8b7e2e427364">
 					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
 				</reportElement>
 				<textElement>
@@ -340,7 +340,7 @@ where ($P{Practice} IS NULL OR eng.Practice =  $P{Practice} )
 				<text><![CDATA[© IBM Corporation 2013, ]]></text>
 			</staticText>
 			<textField pattern="yyyy">
-				<reportElement positionType="Float" x="120" y="560" width="65" height="11" uuid="86cfa9ba-8f7b-4b93-ad9f-dc065a9a14ff">
+				<reportElement positionType="Float" x="100" y="560" width="65" height="11" uuid="86cfa9ba-8f7b-4b93-ad9f-dc065a9a14ff">
 					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
 				</reportElement>
 				<textElement>
@@ -348,15 +348,6 @@ where ($P{Practice} IS NULL OR eng.Practice =  $P{Practice} )
 				</textElement>
 				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
 			</textField>
-			<staticText>
-				<reportElement positionType="Float" x="10" y="571" width="557" height="19" uuid="b68dd6ae-a6bc-4ef8-a329-835e0492c346">
-					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
-				</reportElement>
-				<textElement>
-					<font size="8" isBold="false"/>
-				</textElement>
-				<text><![CDATA[US Government Users Restricted Rights- Use, duplication or disclosure restricted by GSA ADP Schedule Contract with IBM Corp.]]></text>
-			</staticText>
 		</band>
 	</detail>
 </jasperReport>
