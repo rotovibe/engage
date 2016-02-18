@@ -353,6 +353,7 @@ namespace Phytel.Services.Communication
             string body = string.Empty;
             string xpath = string.Empty;
 
+            ValidateModeCase(xml, ref mode);
             body = TransformTemplate(xml, templateDetail, mode);
             xpath = GetModeSpecificTag(XMLFields.ModeMessageBody, mode);
             XmlNode bodyNode = xml.SelectSingleNode(xpath);
