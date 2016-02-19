@@ -1,12 +1,15 @@
-//gulpfile - node js based build configuration for Engage Assets
-//  first time: you need to have node.js and gulp installed,
-//  then run >npm init from the Nightingale.Assets folder (the package.json will guide npm to install dependencies).
-//
-//  building the css:
-//      from the Nightingale.Assets folder >gulp buildcss
-//
-//  output application.css and application.css.min will be created inside Nightingale.Assets\Styles\CSS
-
+/**	
+*	gulpfile - node js based build configuration for Engage Assets (scss/css) 
+*		first time: you need to have node.js and gulp installed,
+*		then run >npm install from the Nightingale.Assets folder (the package.json will guide npm to install dependencies).
+*		
+*		building the css:
+*			from the Nightingale.Assets folder >gulp buildcss
+*		
+*		output application.css and application.css.min will be created inside Nightingale.Assets\Styles\CSS
+*    
+*/  
+  
 //load plugins
 var gulp             = require('gulp'),
 	compass          = require('gulp-compass'),
@@ -50,7 +53,7 @@ gulp.task('styles', function() {
 		.pipe(rename({ suffix: '.min' }))
 		.pipe(minifycss())
 		.pipe(gulp.dest('Styles/css'));
-	//return setTimeout(function(){ return; }, 2000);	
+	
 });
 
 //synchronized execute cleancss then styles then run parallel: prepend copyright text to css and mini:
@@ -73,37 +76,6 @@ gulp.task('copyrightCss', function(){
 gulp.task('copyrightMiniCss', function(){
 	return gulp.src(['copyright.js', 'Styles/CSS/application.min.css'])
 		.pipe(concat('Styles/CSS/application.min.css'))
-		.pipe(gulp.dest('./'));
-});
-
-// build js with gulp-durandal: this is intended for the Nightingale.UI project
-
-gulp.task('clean', function() {
-    return gulp.src('App/main-built*.*').pipe(rm());
-});
-
-//synchronized execute clean then durandal
-gulp.task('durandal', ['clean'], function() {	
-	
-	//this task is producing main-built.js but the js does not work!! it also has jasmin content that should be excluded
-	
-    return durandal({
-            baseDir: 'App',   //same as default, so not really required.
-            main: 'main.js',  //same as default, so not really required.
-            output: 'main-built.js', //default is main.js
-            almond: true,
-            minify: false,
-			verbose: true
-        })
-        .pipe(gulp.dest('App'));	
-});
-
-//synchronized execute durandal then prepend copyright text file:
-gulp.task('buildjs', ['durandal'], function(d){	
-	
-	
-	return gulp.src(['copyright.js', 'App/main-built.js'])
-		.pipe(concat('App/main-built.js'))
 		.pipe(gulp.dest('./'));
 });
 

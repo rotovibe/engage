@@ -1,18 +1,20 @@
-/*
-    build js with gulp-durandal: this is intended for the Nightingale.UI project
-
-	in order to build js: 
-		1. make sure everything is saved in the app/test folder.
-		2. on folder Nightingale.UI> gulp buildjs
-
-        notes: 
-        1. the build includes a workaround (movex task) to exclude (by moving away) the app/test/ from the durandal js build.
-            if the test folder is included, the main-built.js file will be generated but corrupted and wont work!!
-
-        2. the nightingale.UI project also has a weyland build configured. to build with weyland:
-            on folder Nightingale.UI> weyland build
-
-            BUT - the generated main-built.js will not be as compact as the gulp buildjs does, and copyright text wont be prepended.
+/**
+*	gulpfile - node js based build configuration for Engage UI js
+*	first time: you need to have node.js and gulp installed,
+*	then run >npm install from the Nightingale.UI folder (the package.json will guide npm to install dependencies).
+*	
+*	building the js:
+*		1. make sure everything is saved in the app/test folder. (or move it away)
+*		2. on folder Nightingale.UI> gulp buildjs
+*
+*        notes: 
+*        1. the build includes a workaround ('movex' task) to exclude (by moving away) the app/test/ from the durandal js build.
+*            if the test folder is included, the main-built.js file will be generated but corrupted and wont work!!
+*
+*        2. the nightingale.UI project also has a weyland build configured. to build with weyland:
+*            on folder Nightingale.UI> weyland build
+*
+*            BUT - the generated main-built.js will not be as compact as the gulp buildjs does, and copyright text wont be prepended.
 */
 
 //load plugins
