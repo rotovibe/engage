@@ -785,9 +785,6 @@
     <Content Include="Content\CSS\dev.css.map">
       <DependentUpon>dev.css</DependentUpon>
     </Content>
-    <Content Include="App\models\config.app - Copy.min.js.map">
-      <DependentUpon>controls.js</DependentUpon>
-    </Content>
     <Content Include="App\viewmodels\insight\reports\index.min.js.map">
       <DependentUpon>index.js</DependentUpon>
     </Content>
