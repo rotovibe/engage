@@ -1,4 +1,11 @@
-﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="C3.master.cs" Inherits="C3.Web.C3" %>
+﻿<!--
+    Licensed Materials - Property of IBM
+    PID : 5725Z49
+    Copyright IBM Corporation 2013, 2016
+    US Government Users Restricted Rights- Use, duplication or disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
+-->
+
+<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="C3.master.cs" Inherits="C3.Web.C3" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp2" %>
 <%@ Register TagPrefix="asp" Namespace="System.Web.UI" Assembly="System.Web"%>
 <%@ Register Src="~/App_Resource/Atmosphere.Core.dll/Atmosphere.Web.Controls.Header.ascx" TagPrefix="hdr2" TagName="Header" %>
