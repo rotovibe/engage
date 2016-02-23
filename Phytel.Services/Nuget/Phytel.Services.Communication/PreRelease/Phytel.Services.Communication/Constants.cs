@@ -57,6 +57,8 @@ namespace Phytel.Services.Communication
         public const string Pending = "PEND";
         public const string Reschedule = "RESCH";
         public const string Unconfirmed = "UNCNF";
+        public const string Successful = "ACCES";
+        public const string New = "NEW";
     }
 
     public static class ActivityStatus
