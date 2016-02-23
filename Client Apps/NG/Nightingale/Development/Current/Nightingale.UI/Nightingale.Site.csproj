@@ -353,13 +353,6 @@
     <Content Include="Scripts\highcharts\highcharts.js" />
     <Content Include="Scripts\knockout-3.2.0.debug.js" />
     <Content Include="Scripts\knockout-3.2.0.min.js" />
-    <Content Include="App\test\jasmine-1.2.0.js" />
-    <Content Include="App\test\jasmine.console_reporter.js" />
-    <None Include="App\test\phantomjs.exe" />
-    <Content Include="App\test\spec.html" />
-    <Content Include="App\test\spec.js" />
-    <Content Include="App\test\specs\module.details.spec.js" />
-    <Content Include="App\test\specs\session.spec.js" />
     <Content Include="App\viewmodels\admin\concierge\index.js" />
     <Content Include="App\viewmodels\admin\index.js" />
     <Content Include="App\viewmodels\admin\reports\index.js" />
@@ -767,8 +760,6 @@
     <Content Include="Content\nightingale\fonts\fontcustom.ttf" />
     <Content Include="Content\nightingale\fontcustom.css" />
     <Content Include="App\views\patients\tabs\program.details.html" />
-    <Content Include="App\test\README.md" />
-    <Content Include="App\test\chutzpah.json" />
     <Content Include="App\viewmodels\admin\index.min.js.map">
       <DependentUpon>index.js</DependentUpon>
     </Content>
