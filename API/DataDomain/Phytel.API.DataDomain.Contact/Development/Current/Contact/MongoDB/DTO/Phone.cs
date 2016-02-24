@@ -1,9 +1,10 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using Phytel.API.Interface;
 
 namespace Phytel.API.DataDomain.Contact.DTO
 {
-    public class Phone
+    public class Phone:IMEDataSource
     {
         public const string IDProperty = "_id";
         [BsonElement(IDProperty)]
@@ -41,5 +42,10 @@ namespace Phytel.API.DataDomain.Contact.DTO
         public const string DeleteFlagProperty = "del";
         [BsonElement(DeleteFlagProperty)]
         public bool DeleteFlag { get; set; }
+
+        public const string ExternalRecordIdProperty = "extrid";
+        [BsonElement(ExternalRecordIdProperty)]
+        [BsonIgnoreIfNull(true)]
+        public string ExternalRecordId { get; set; }
     }
 }

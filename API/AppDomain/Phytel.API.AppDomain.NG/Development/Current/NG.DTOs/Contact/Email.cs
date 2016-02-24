@@ -12,5 +12,7 @@ namespace Phytel.API.AppDomain.NG.DTO
         public string TypeId { get; set; }
         public bool Preferred { get; set; }
         public bool OptOut { get; set; }
+        public string ExternalRecordId { get; set; }
+        public string DataSource { get; set; }
     }
 }

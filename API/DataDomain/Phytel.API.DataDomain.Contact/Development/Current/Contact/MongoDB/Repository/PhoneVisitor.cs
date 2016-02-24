@@ -24,7 +24,8 @@ namespace Phytel.API.DataDomain.Contact.MongoDB.Repository
                         PreferredText = p.TextPreferred,
                         OptOut = p.OptOut,
                         DeleteFlag = false,
-                        DataSource = p.DataSource
+                        DataSource = p.DataSource,
+                        ExternalRecordId = p.ExternalRecordId
                     }).ToList();
 
                     meContact.Phones = mePhones;
