@@ -26,11 +26,6 @@ namespace Phytel.Data.ETL.Templates
         private void SaveSubcollection(IEnumerable<EPatient> dic)
         {
             OnDocColEvent(new ETLEventArgs { Message = "[" + Contract + "] Saving patient data.", IsError = false });
-            var mids = dic.Select(r => r.MongoId.ToString()).ToList();
-            StringBuilder sb = new StringBuilder();
-            mids.ForEach(r => sb.Append(r + ","));
-            OnDocColEvent(new ETLEventArgs { Message = "[" + Contract + "] patient mongo ids: " + sb.ToString(), IsError = false });
-
             var rSeries = dic;
 
             using (var bcc = new SqlBulkCopy(ConnectionString, SqlBulkCopyOptions.Default))
@@ -152,15 +147,15 @@ namespace Phytel.Data.ETL.Templates
                 }
                 OnDocColEvent(new ETLEventArgs { Message = "[" + Contract + "] Patient mongo collection loaded.", IsError = false });
 
-                ConcurrentBag<MEPatientSystem> systems = null;
+                ConcurrentBag<MEPatientSystem> patientSystems = null;
                 using (PatientSystemMongoContext psctx = new PatientSystemMongoContext(Contract))
                 {
-                    systems = new ConcurrentBag<MEPatientSystem>(Utils.GetMongoCollectionList(psctx.PatientSystems.Collection, 50000));
+                    patientSystems = new ConcurrentBag<MEPatientSystem>(Utils.GetMongoCollectionList(psctx.PatientSystems.Collection, 50000));
                 }
                 OnDocColEvent(new ETLEventArgs { Message = "[" + Contract + "] Patient system mongo collection loaded.", IsError = false });
 
                 Dictionary<ObjectId, string> dic = new Dictionary<ObjectId, string>();
-                foreach (var s in systems.Where(s => !dic.ContainsKey(s.PatientId)))
+                foreach (var s in patientSystems.Where(s => !dic.ContainsKey(s.PatientId)))
                 {
                     dic.Add(s.PatientId, s.Id.ToString());
                 }
@@ -168,7 +163,7 @@ namespace Phytel.Data.ETL.Templates
                 #region //set patients
                 //ConcurrentBag<EPatient> patientMap = new ConcurrentBag<EPatient>();
                 List<EPatient> patientMap = new List<EPatient>();
-                var pList = patients.Where(t => !t.DeleteFlag).ToList();
+                var pList = patients.ToList();
 
                 OnDocColEvent(new ETLEventArgs { Message = "[" + Contract + "] Creating Patient bulk load set.", IsError = false });
                 //Parallel.ForEach(pList, pt =>
@@ -176,8 +171,7 @@ namespace Phytel.Data.ETL.Templates
                 {
                     try
                     {
-                        var mongoPatientSystemId = dic[pt.Id];
-                        //var mongoPatientSystemId = systems.Where(x => x.PatientId == pt.Id).Select(r => r.Id).FirstOrDefault().ToString();
+                        string mongoPatientSystemId = dic.ContainsKey(pt.Id) ? dic[pt.Id] : null;
 
                         patientMap.Add(new EPatient
                         {
@@ -203,13 +197,13 @@ namespace Phytel.Data.ETL.Templates
                             ClinicalBackGround = pt.ClinicalBackground,
                             DataSource = pt.DataSource,
                             MongoMaritalStatusId =
-                                pt.MaritalStatusId == null ? string.Empty : pt.MaritalStatusId.Value.ToString(),
+                            pt.MaritalStatusId == null ? string.Empty : pt.MaritalStatusId.Value.ToString(),
                             Protected = pt.Protected.ToString(),
                             Deceased = pt.Deceased.ToString(),
                             Status = pt.Status.ToString(),
                             MongoReasonId = pt.ReasonId == null ? string.Empty : pt.ReasonId.Value.ToString(),
                             StatusDataSource = pt.StatusDataSource,
-                            MongoPatientSystemId = mongoPatientSystemId ?? null,
+                            MongoPatientSystemId = mongoPatientSystemId,
                             ExtraElements = null
                         });
                     }
@@ -234,31 +228,30 @@ namespace Phytel.Data.ETL.Templates
                 OnDocColEvent(new ETLEventArgs { Message = "[" + Contract + "] Creating patient system bulk load set.", IsError = false });
                 //ConcurrentBag<EPatientSystem> patientSystemMap = new ConcurrentBag<EPatientSystem>();
                 List<EPatientSystem> patientSystemMap = new List<EPatientSystem>();
-                var sys = systems.Where(t => !t.DeleteFlag);
-                //Parallel.ForEach(sys, pt =>
-                foreach (MEPatientSystem pt in sys)
+                List<MEPatientSystem> psList = patientSystems.ToList();
+                foreach (MEPatientSystem ps in patientSystems)
                 {
                     try
                     {
                         patientSystemMap.Add(new EPatientSystem
                         {
-                            MongoPatientId = pt.PatientId.ToString(),
-                            MongoId = pt.Id.ToString(),
-                            Label = pt.DisplayLabel,
+                            MongoPatientId = ps.PatientId.ToString(),
+                            MongoId = ps.Id.ToString(),
+                            Label = ps.DisplayLabel,
                             //SystemId = pt.SystemId.ToString(),
-                            SystemName = pt.SystemName,
-                            MongoUpdatedBy = pt.UpdatedBy == null ? string.Empty : pt.UpdatedBy.Value.ToString(),
-                            LastUpdatedOn = pt.LastUpdatedOn ?? null,
-                            MongoRecordCreatedBy = pt.RecordCreatedBy.ToString(),
-                            RecordCreatedOn = ParseDate(pt.RecordCreatedOn).Value,
-                            Version = Convert.ToInt32(pt.Version),
-                            TTLDate = pt.TTLDate,
-                            Delete = pt.DeleteFlag.ToString(),
-                            Value = pt.Value,
-                            DataSource = pt.DataSource,
-                            Status = pt.Status.ToString(),
-                            Primary = pt.Primary.ToString(),
-                            SysId = pt.SystemId.ToString()
+                            SystemName = ps.SystemName,
+                            MongoUpdatedBy = ps.UpdatedBy == null ? string.Empty : ps.UpdatedBy.Value.ToString(),
+                            LastUpdatedOn = ps.LastUpdatedOn ?? null,
+                            MongoRecordCreatedBy = ps.RecordCreatedBy.ToString(),
+                            RecordCreatedOn = ParseDate(ps.RecordCreatedOn).Value,
+                            Version = Convert.ToInt32(ps.Version),
+                            TTLDate = ps.TTLDate,
+                            Delete = ps.DeleteFlag.ToString(),
+                            Value = ps.Value,
+                            DataSource = ps.DataSource,
+                            Status = ps.Status.ToString(),
+                            Primary = ps.Primary.ToString(),
+                            SysId = ps.SystemId.ToString()
                         });
                     }
                     catch (Exception ex)
