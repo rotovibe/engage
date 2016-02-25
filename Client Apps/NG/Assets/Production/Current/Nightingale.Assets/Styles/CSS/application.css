@@ -5452,6 +5452,8 @@ nav.pagination span a {
 }
 
 main[role=application] {
+  height: auto !important;
+  margin-bottom: 50px;
   overflow: hidden;
 }
 main[role=application] > div {
@@ -6009,6 +6011,21 @@ main[role=application] section.open .controls .toggle[data-type=remove][data-met
 main[role=application] .column.open .controls .toggle[data-type=remove][data-method=open]:hover,
 main[role=application] section.open .controls .toggle[data-type=remove][data-method=open]:hover {
   opacity: 1;
+}
+
+footer.copyright {
+  background-color: #e6e6e6;
+  bottom: 0px;
+  margin-left: -10px;
+  height: 50px;
+  position: absolute;
+  width: 100%;
+}
+footer.copyright .container {
+  color: #777777;
+  float: right;
+  padding: 10px 15px;
+  width: 100%;
 }
 
 .popover .popover-content {

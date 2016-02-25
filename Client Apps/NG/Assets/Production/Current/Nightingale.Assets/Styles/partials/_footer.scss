@@ -1,0 +1,15 @@
+﻿footer.copyright{
+   background-color: $grey;
+   bottom: 0px;
+   margin-left: -10px;
+   height: $footer-height;
+   position: absolute;
+   width:100%;
+   
+   .container{
+     color: $grey-dark;
+     float: right;
+     padding: 10px 15px;
+     width:100%;
+   }
+ }

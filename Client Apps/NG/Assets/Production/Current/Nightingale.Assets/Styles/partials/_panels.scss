@@ -1,4 +1,6 @@
 main[role=application] {
+  height: auto !important;
+  margin-bottom: $footer-height;
   overflow: hidden;
   > div {
     @include stretch;
