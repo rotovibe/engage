@@ -1889,7 +1889,11 @@ INSERT INTO [RPT_Engage_Enrollment_Info]
 END
 
 GO
+---------------------------------------------------------------------------------------------------------------------------------
+--ENG-1506
+----------------------------------------------------------------------------------------------------------------------------------
 
-
-
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[spPhy_RPT_Flat_Latest_PatientObservations]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[spPhy_RPT_Flat_Latest_PatientObservations]
+GO
 

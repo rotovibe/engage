@@ -295,3 +295,9 @@ BEGIN
     ALTER TABLE RPT_Engage_Enrollment_Info
 	DROP COLUMN Comorbid_Disease 
 END
+---------------------------------------------------------------------------------------------------------------------------------
+--ENG-1506
+----------------------------------------------------------------------------------------------------------------------------------
+IF EXISTS (SELECT * FROM sys.objects WHERE type = 'U' AND name = 'RPT_Flat_Latest_PatientObservations')
+	DROP TABLE [dbo].[RPT_Flat_Latest_PatientObservations]
+GO

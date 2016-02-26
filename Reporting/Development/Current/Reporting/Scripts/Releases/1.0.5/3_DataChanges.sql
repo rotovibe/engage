@@ -37,3 +37,14 @@ DELETE FROM RPT_SprocNames WHERE SprocName = 'spPhy_RPT_Flat_BarrierStatistics';
 GO
 INSERT INTO RPT_SprocNames (SprocName, Prerequire) VALUES ('spPhy_RPT_Flat_BarrierStatistics', 'false');
 GO
+
+----------------------------------------------------------------------------------------------------------------------------------
+--ENG-1506
+----------------------------------------------------------------------------------------------------------------------------------
+
+IF NOT EXISTS (SELECT * FROM [dbo].[RPT_SprocNames] WHERE SprocName = 'spPhy_RPT_Flat_Latest_PatientObservations')
+BEGIN
+	INSERT INTO [dbo].[RPT_SprocNames]([SprocName],[Prerequire],[Description])
+	VALUES ('spPhy_RPT_Flat_Latest_PatientObservations', 0, null)	
+END
+GO
