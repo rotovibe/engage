@@ -261,6 +261,7 @@
     <Content Include="App\views\templates\allergy.status.html" />
     <Content Include="App\views\templates\allergy.edit.html" />
     <Content Include="App\views\templates\validation.errors.html" />
+    <Content Include="Content\images\favicon.ico" />
     <Content Include="Content\images\IBM_White_Logo_34.png" />
     <Content Include="Content\images\phytel_logo_IBM.png" />
     <Content Include="Content\images\watson_cm_logo_large.png" />
@@ -268,6 +269,7 @@
     <Content Include="Content\images\PH_IBM Watson Woodmark-01.png" />
     <Content Include="Content\images\PH_LOGO-01.png" />
     <Content Include="copyright.js" />
+    <Content Include="favicon.ico" />
     <Content Include="gulpfile.js" />
     <Content Include="Properties\PublishProfiles\Azure QA Publish.pubxml.user" />
     <Content Include="Scripts\breeze.ajaxpost2.js" />
