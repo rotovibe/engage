@@ -5,15 +5,20 @@ VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppDomain.Engage.Population", "AppDomain.Engage.Population\AppDomain.Engage.Population.csproj", "{F23F90E1-9C74-4076-AC23-D982DEC26B0A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppDomain.Engage.Population.DTO", "AppDomain.Engage.Population.DTO\AppDomain.Engage.Population.DTO.csproj", "{41E3E8F5-5237-456F-8508-C443DAF6623D}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 2
+		SccNumberOfProjects = 3
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://hillstfs2013.hills.phytel.com:8080/tfs/phytel
 		SccLocalPath0 = .
 		SccProjectUniqueName1 = AppDomain.Engage.Population\\AppDomain.Engage.Population.csproj
 		SccProjectName1 = AppDomain.Engage.Population
 		SccLocalPath1 = AppDomain.Engage.Population
+		SccProjectUniqueName2 = AppDomain.Engage.Population.DTO\\AppDomain.Engage.Population.DTO.csproj
+		SccProjectName2 = AppDomain.Engage.Population.DTO
+		SccLocalPath2 = AppDomain.Engage.Population.DTO
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,6 +29,10 @@ Global
 		{F23F90E1-9C74-4076-AC23-D982DEC26B0A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F23F90E1-9C74-4076-AC23-D982DEC26B0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F23F90E1-9C74-4076-AC23-D982DEC26B0A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{41E3E8F5-5237-456F-8508-C443DAF6623D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{41E3E8F5-5237-456F-8508-C443DAF6623D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{41E3E8F5-5237-456F-8508-C443DAF6623D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{41E3E8F5-5237-456F-8508-C443DAF6623D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
