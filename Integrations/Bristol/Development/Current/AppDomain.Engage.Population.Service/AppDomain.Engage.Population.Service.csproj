@@ -44,9 +44,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Phytel.API.Interface">
-      <HintPath>..\..\..\..\..\Interfaces\Development\Current\Phytel.API.Interface\bin\Debug\Phytel.API.Interface.dll</HintPath>
-    </Reference>
     <Reference Include="ServiceStack, Version=3.9.71.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ServiceStack.3.9.71\lib\net35\ServiceStack.dll</HintPath>
       <Private>True</Private>
@@ -151,6 +148,10 @@
     <ProjectReference Include="..\..\..\..\..\..\PhytelCode\Phytel.Net\Services\API\Common\Phytel.API.DataAudit\Development\Current\Phytel.API.DataAudit.csproj">
       <Project>{ae842695-4dd4-4403-9be4-8473bca09580}</Project>
       <Name>Phytel.API.DataAudit</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\..\PhytelCode\Phytel.Net\Services\API\Interfaces\Development\Current\Phytel.API.Interface\Phytel.API.Interface.csproj">
+      <Project>{abe948fb-247e-4955-b3ab-b7c93e10a542}</Project>
+      <Name>Phytel.API.Interface</Name>
     </ProjectReference>
     <ProjectReference Include="..\AppDomain.Engage.Population.DTO\AppDomain.Engage.Population.DTO.csproj">
       <Project>{41e3e8f5-5237-456f-8508-c443daf6623d}</Project>
