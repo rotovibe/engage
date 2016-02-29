@@ -14,6 +14,11 @@ namespace Phytel.API.DataDomain.Contact.DTO
         [BsonElement(NumberProperty)]
         public long Number { get; set; }
 
+        public const string ExtNumberProperty = "extn";
+        [BsonElement(ExtNumberProperty)]
+        [BsonIgnoreIfNull]
+        public string ExtNumber { get; set; }
+
         public const string TypeIdProperty = "typeid";
         [BsonElement(TypeIdProperty)]
         public ObjectId TypeId { get; set; }

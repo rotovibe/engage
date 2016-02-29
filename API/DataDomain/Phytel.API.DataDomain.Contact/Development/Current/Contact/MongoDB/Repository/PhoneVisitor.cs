@@ -18,6 +18,7 @@ namespace Phytel.API.DataDomain.Contact.MongoDB.Repository
                     {
                         Id = ObjectId.GenerateNewId(),
                         Number = p.Number,
+                        ExtNumber = p.ExtNumber,
                         IsText = p.IsText,
                         TypeId = ObjectId.Parse(p.TypeId),
                         PreferredPhone = p.PhonePreferred,

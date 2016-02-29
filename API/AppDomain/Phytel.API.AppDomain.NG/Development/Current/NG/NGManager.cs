@@ -1320,6 +1320,7 @@ namespace Phytel.API.AppDomain.NG
                                     Id = ph.Id,
                                     TypeId = ph.TypeId,
                                     Number = ph.Number,
+                                    ExtNumber = ph.ExtNumber,
                                     IsText = ph.IsText,
                                     PhonePreferred = ph.PhonePreferred,
                                     TextPreferred = ph.TextPreferred,

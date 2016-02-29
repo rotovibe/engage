@@ -603,6 +603,7 @@ namespace Phytel.API.DataDomain.Contact
                                         {
                                             Id = ObjectId.GenerateNewId(),
                                             Number = p.Number,
+                                            ExtNumber = p.ExtNumber,
                                             IsText = p.IsText,
                                             TypeId = ObjectId.Parse(p.TypeId),
                                             PreferredPhone = p.PhonePreferred,
@@ -651,6 +652,7 @@ namespace Phytel.API.DataDomain.Contact
                                         {
                                             Id = id,
                                             Number = p.Number,
+                                            ExtNumber = p.ExtNumber,
                                             IsText = p.IsText,
                                             TypeId = ObjectId.Parse(p.TypeId),
                                             PreferredPhone = p.PhonePreferred,
@@ -1036,6 +1038,7 @@ namespace Phytel.API.DataDomain.Contact
                                     Id = mePh.Id.ToString(),
                                     IsText = mePh.IsText,
                                     Number = mePh.Number,
+                                    ExtNumber = mePh.ExtNumber,
                                     OptOut = mePh.OptOut,
                                     PhonePreferred = mePh.PreferredPhone,
                                     TextPreferred = mePh.PreferredText,
