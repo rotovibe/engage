@@ -152,6 +152,14 @@
       <Project>{ae842695-4dd4-4403-9be4-8473bca09580}</Project>
       <Name>Phytel.API.DataAudit</Name>
     </ProjectReference>
+    <ProjectReference Include="..\AppDomain.Engage.Population.DTO\AppDomain.Engage.Population.DTO.csproj">
+      <Project>{41e3e8f5-5237-456f-8508-c443daf6623d}</Project>
+      <Name>AppDomain.Engage.Population.DTO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AppDomain.Engage.Population\AppDomain.Engage.Population.csproj">
+      <Project>{f23f90e1-9c74-4076-ac23-d982dec26b0a}</Project>
+      <Name>AppDomain.Engage.Population</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
