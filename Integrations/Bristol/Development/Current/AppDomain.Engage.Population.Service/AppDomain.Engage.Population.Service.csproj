@@ -144,11 +144,11 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\..\API\Common\Phytel.API.Common\Development\Current\Phytel.API.Common.csproj">
+    <ProjectReference Include="..\..\..\..\..\..\PhytelCode\Phytel.Net\Services\API\Common\Phytel.API.Common\Development\Current\Phytel.API.Common.csproj">
       <Project>{25cf3c3f-221f-4a49-b5ef-a8a5fcf9a5ba}</Project>
       <Name>Phytel.API.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\..\API\Common\Phytel.API.DataAudit\Development\Current\Phytel.API.DataAudit.csproj">
+    <ProjectReference Include="..\..\..\..\..\..\PhytelCode\Phytel.Net\Services\API\Common\Phytel.API.DataAudit\Development\Current\Phytel.API.DataAudit.csproj">
       <Project>{ae842695-4dd4-4403-9be4-8473bca09580}</Project>
       <Name>Phytel.API.DataAudit</Name>
     </ProjectReference>
