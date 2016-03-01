@@ -2,11 +2,11 @@
 
 namespace AppDomain.Engage.Population
 {
-    public class IntegrationManager : IIntegrationManager
+    public class DemographicsManager : IDemographicsManager
     {
         private IServiceContext _context;
 
-        public IntegrationManager(IServiceContext context)
+        public DemographicsManager(IServiceContext context)
         {
             _context = context;
         }

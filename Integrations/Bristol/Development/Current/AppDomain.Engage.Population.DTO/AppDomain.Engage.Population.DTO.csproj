@@ -60,6 +60,7 @@
     <Compile Include="Context\ServiceContext.cs" />
     <Compile Include="Demographics\Address.cs" />
     <Compile Include="Demographics\Email.cs" />
+    <Compile Include="Demographics\Patient.cs" />
     <Compile Include="Demographics\PostPatientDemographicsRequest.cs" />
     <Compile Include="Demographics\PostPatientDemographicsResponse.cs" />
     <Compile Include="Demographics\Phone.cs" />

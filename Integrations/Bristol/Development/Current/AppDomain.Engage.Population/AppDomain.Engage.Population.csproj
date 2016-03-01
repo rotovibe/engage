@@ -44,8 +44,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IIntegrationManager.cs" />
-    <Compile Include="IntegrationManager.cs" />
+    <Compile Include="IDemographicsManager.cs" />
+    <Compile Include="DemographicsManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

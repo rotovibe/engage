@@ -9,6 +9,9 @@ namespace AppDomain.Engage.Population.Service
 {
     public class ServiceBase : ServiceStack.ServiceInterface.Service
     {
+        public ICommonFormatterUtil CommonFormatter { get; set; }
+        public Common.IHelpers Helpers { get; set; }
+
         public void FormatException(IDomainResponse response, Exception ex)
         {
             CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
@@ -21,7 +24,7 @@ namespace AppDomain.Engage.Population.Service
         public void LogException(Exception ex)
         {
             var aseProcessId = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
-            Common.Helper.LogException(int.Parse(aseProcessId), ex);
+            Helpers.LogException(int.Parse(aseProcessId), ex);
         }
     }
 }

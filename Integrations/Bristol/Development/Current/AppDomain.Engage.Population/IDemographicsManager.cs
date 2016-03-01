@@ -1,6 +1,6 @@
 ﻿namespace AppDomain.Engage.Population
 {
-    public interface IIntegrationManager
+    public interface IDemographicsManager
     {
         string DoSomething();
     }

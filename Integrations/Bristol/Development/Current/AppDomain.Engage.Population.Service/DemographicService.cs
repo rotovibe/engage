@@ -1,5 +1,6 @@
 ﻿using System;
 using AppDomain.Engage.Population.DTO.Demographics;
+using Phytel.API.Common.Audit;
 using Phytel.API.DataAudit;
 using ServiceStack.ServiceInterface.ServiceModel;
 
@@ -7,7 +8,8 @@ namespace AppDomain.Engage.Population.Service
 {
     public class DemographicService : ServiceBase
     {
-        public IIntegrationManager Manager { get; set; }
+        public IDemographicsManager Manager { get; set; }
+        public IAuditHelpers AuditHelper { get; set; }
 
         public PostPatientDemographicsResponse Post(PostPatientDemographicsRequest request)
         {
@@ -16,6 +18,7 @@ namespace AppDomain.Engage.Population.Service
             {
                 var status = new ResponseStatus {Message = Manager.DoSomething()};
                 response.ResponseStatus = status;
+
                 return response;
             }
             catch (Exception ex)

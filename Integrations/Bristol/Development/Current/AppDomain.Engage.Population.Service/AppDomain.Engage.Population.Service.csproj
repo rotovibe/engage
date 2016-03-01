@@ -137,6 +137,7 @@
     <Compile Include="DemographicService.cs" />
     <Compile Include="IntegrationAppHost.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReferralService.cs" />
     <Compile Include="ServiceBase.cs" />
   </ItemGroup>
   <ItemGroup />
