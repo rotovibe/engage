@@ -41,9 +41,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.API.Interface", "..\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppDomain.Engage.Population.DataDomainClient", "AppDomain.Engage.Population.DataDomainClient\AppDomain.Engage.Population.DataDomainClient.csproj", "{E1CD91FD-8155-49F9-95FB-E1E5DF962A91}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppDomain.Engage.PopulationTests", "AppDomain.Engage.PopulationTests\AppDomain.Engage.PopulationTests.csproj", "{AFF26DAE-B9AE-46AF-B85F-71D4D7E26A27}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 17
+		SccNumberOfProjects = 18
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://192.168.111.123:8080/tfs/phytel
 		SccLocalPath0 = .
@@ -107,6 +109,9 @@ Global
 		SccProjectUniqueName16 = AppDomain.Engage.Population.DataDomainClient\\AppDomain.Engage.Population.DataDomainClient.csproj
 		SccProjectName16 = AppDomain.Engage.Population.DataDomainClient
 		SccLocalPath16 = AppDomain.Engage.Population.DataDomainClient
+		SccProjectUniqueName17 = AppDomain.Engage.PopulationTests\\AppDomain.Engage.PopulationTests.csproj
+		SccProjectName17 = AppDomain.Engage.PopulationTests
+		SccLocalPath17 = AppDomain.Engage.PopulationTests
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -276,6 +281,16 @@ Global
 		{E1CD91FD-8155-49F9-95FB-E1E5DF962A91}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E1CD91FD-8155-49F9-95FB-E1E5DF962A91}.Test|Any CPU.ActiveCfg = Release|Any CPU
 		{E1CD91FD-8155-49F9-95FB-E1E5DF962A91}.Test|Any CPU.Build.0 = Release|Any CPU
+		{AFF26DAE-B9AE-46AF-B85F-71D4D7E26A27}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AFF26DAE-B9AE-46AF-B85F-71D4D7E26A27}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AFF26DAE-B9AE-46AF-B85F-71D4D7E26A27}.Model|Any CPU.ActiveCfg = Release|Any CPU
+		{AFF26DAE-B9AE-46AF-B85F-71D4D7E26A27}.Model|Any CPU.Build.0 = Release|Any CPU
+		{AFF26DAE-B9AE-46AF-B85F-71D4D7E26A27}.QA|Any CPU.ActiveCfg = Release|Any CPU
+		{AFF26DAE-B9AE-46AF-B85F-71D4D7E26A27}.QA|Any CPU.Build.0 = Release|Any CPU
+		{AFF26DAE-B9AE-46AF-B85F-71D4D7E26A27}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AFF26DAE-B9AE-46AF-B85F-71D4D7E26A27}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AFF26DAE-B9AE-46AF-B85F-71D4D7E26A27}.Test|Any CPU.ActiveCfg = Release|Any CPU
+		{AFF26DAE-B9AE-46AF-B85F-71D4D7E26A27}.Test|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
