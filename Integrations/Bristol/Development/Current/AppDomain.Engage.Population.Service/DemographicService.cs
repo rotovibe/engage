@@ -16,7 +16,8 @@ namespace AppDomain.Engage.Population.Service
             var response = new PostPatientDemographicsResponse();
             try
             {
-                var status = new ResponseStatus {Message = Manager.DoSomething()};
+                Manager.DoSomething();
+                var status = new ResponseStatus {Message = "success!"};
                 response.ResponseStatus = status;
 
                 return response;

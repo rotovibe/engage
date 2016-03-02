@@ -155,6 +155,10 @@
       <Project>{abe948fb-247e-4955-b3ab-b7c93e10a542}</Project>
       <Name>Phytel.API.Interface</Name>
     </ProjectReference>
+    <ProjectReference Include="..\AppDomain.Engage.Population.DataDomainClient\AppDomain.Engage.Population.DataDomainClient.csproj">
+      <Project>{E1CD91FD-8155-49F9-95FB-E1E5DF962A91}</Project>
+      <Name>AppDomain.Engage.Population.DataDomainClient</Name>
+    </ProjectReference>
     <ProjectReference Include="..\AppDomain.Engage.Population.DTO\AppDomain.Engage.Population.DTO.csproj">
       <Project>{41e3e8f5-5237-456f-8508-c443daf6623d}</Project>
       <Name>AppDomain.Engage.Population.DTO</Name>
