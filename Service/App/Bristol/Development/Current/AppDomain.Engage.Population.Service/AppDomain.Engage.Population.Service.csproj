@@ -145,6 +145,14 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\Common\Phytel.API.Common\Development\Current\Bristol-branch\Phytel.API.Common.csproj">
+      <Project>{25cf3c3f-221f-4a49-b5ef-a8a5fcf9a5ba}</Project>
+      <Name>Phytel.API.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\Interfaces\Development\Current\Bristol-branch\Phytel.API.Interface\Phytel.API.Interface.csproj">
+      <Project>{abe948fb-247e-4955-b3ab-b7c93e10a542}</Project>
+      <Name>Phytel.API.Interface</Name>
+    </ProjectReference>
     <ProjectReference Include="..\AppDomain.Engage.Population.DataDomainClient\AppDomain.Engage.Population.DataDomainClient.csproj">
       <Project>{E1CD91FD-8155-49F9-95FB-E1E5DF962A91}</Project>
       <Name>AppDomain.Engage.Population.DataDomainClient</Name>

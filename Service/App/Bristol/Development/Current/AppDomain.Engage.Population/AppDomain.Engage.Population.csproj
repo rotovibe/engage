@@ -52,6 +52,14 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\Common\Phytel.API.Common\Development\Current\Bristol-branch\Phytel.API.Common.csproj">
+      <Project>{25cf3c3f-221f-4a49-b5ef-a8a5fcf9a5ba}</Project>
+      <Name>Phytel.API.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\Data\Patient\Development\Current\Bristol-branch\Patient.DTOs\DataDomain.Patient.DTO.csproj">
+      <Project>{1b3148a8-fb57-4461-91bc-f1cd38a013b6}</Project>
+      <Name>DataDomain.Patient.DTO</Name>
+    </ProjectReference>
     <ProjectReference Include="..\AppDomain.Engage.Population.DataDomainClient\AppDomain.Engage.Population.DataDomainClient.csproj">
       <Project>{e1cd91fd-8155-49f9-95fb-e1e5df962a91}</Project>
       <Name>AppDomain.Engage.Population.DataDomainClient</Name>
