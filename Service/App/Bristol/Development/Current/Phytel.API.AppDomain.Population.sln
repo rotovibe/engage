@@ -51,9 +51,17 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Patient.Service.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Patient.Test", "..\..\..\..\Data\Patient\Development\Current\Bristol-branch\Patient.Tests\DataDomain.Patient.Test.csproj", "{EC134A5F-CB56-4196-BB4E-217D365A2534}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Cohort", "..\..\..\..\Data\Cohort\Development\Current\Bristol-branch\Cohort\DataDomain.Cohort.csproj", "{229026B1-C3E5-4D2B-8D2B-61D00E8A52CC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Cohort.Service", "..\..\..\..\Data\Cohort\Development\Current\Bristol-branch\Cohort.Service\DataDomain.Cohort.Service.csproj", "{42F7185B-2EE1-49F9-AB6F-E89E6F8AF7C6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Cohort.Service.Test", "..\..\..\..\Data\Cohort\Development\Current\Bristol-branch\Cohort.Service.Test\DataDomain.Cohort.Service.Test.csproj", "{516D2892-5B54-43EB-9208-30E97A6F9292}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Cohort.Test", "..\..\..\..\Data\Cohort\Development\Current\Bristol-branch\Cohort.Test\DataDomain.Cohort.Test.csproj", "{1E8D72DF-2A09-4872-917F-30ED9B6FDAC3}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 18
+		SccNumberOfProjects = 22
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://192.168.111.123:8080/tfs/phytel
 		SccLocalPath0 = .
@@ -120,6 +128,22 @@ Global
 		SccProjectTopLevelParentUniqueName17 = Phytel.API.AppDomain.Population.sln
 		SccProjectName17 = ../../../../Data/Patient/Development/Current/Bristol-branch/Patient.Tests
 		SccLocalPath17 = ..\\..\\..\\..\\Data\\Patient\\Development\\Current\\Bristol-branch\\Patient.Tests
+		SccProjectUniqueName18 = ..\\..\\..\\..\\Data\\Cohort\\Development\\Current\\Bristol-branch\\Cohort\\DataDomain.Cohort.csproj
+		SccProjectTopLevelParentUniqueName18 = Phytel.API.AppDomain.Population.sln
+		SccProjectName18 = ../../../../Data/Cohort/Development/Current/Bristol-branch/Cohort
+		SccLocalPath18 = ..\\..\\..\\..\\Data\\Cohort\\Development\\Current\\Bristol-branch\\Cohort
+		SccProjectUniqueName19 = ..\\..\\..\\..\\Data\\Cohort\\Development\\Current\\Bristol-branch\\Cohort.Service\\DataDomain.Cohort.Service.csproj
+		SccProjectTopLevelParentUniqueName19 = Phytel.API.AppDomain.Population.sln
+		SccProjectName19 = ../../../../Data/Cohort/Development/Current/Bristol-branch/Cohort.Service
+		SccLocalPath19 = ..\\..\\..\\..\\Data\\Cohort\\Development\\Current\\Bristol-branch\\Cohort.Service
+		SccProjectUniqueName20 = ..\\..\\..\\..\\Data\\Cohort\\Development\\Current\\Bristol-branch\\Cohort.Service.Test\\DataDomain.Cohort.Service.Test.csproj
+		SccProjectTopLevelParentUniqueName20 = Phytel.API.AppDomain.Population.sln
+		SccProjectName20 = ../../../../Data/Cohort/Development/Current/Bristol-branch/Cohort.Service.Test
+		SccLocalPath20 = ..\\..\\..\\..\\Data\\Cohort\\Development\\Current\\Bristol-branch\\Cohort.Service.Test
+		SccProjectUniqueName21 = ..\\..\\..\\..\\Data\\Cohort\\Development\\Current\\Bristol-branch\\Cohort.Test\\DataDomain.Cohort.Test.csproj
+		SccProjectTopLevelParentUniqueName21 = Phytel.API.AppDomain.Population.sln
+		SccProjectName21 = ../../../../Data/Cohort/Development/Current/Bristol-branch/Cohort.Test
+		SccLocalPath21 = ..\\..\\..\\..\\Data\\Cohort\\Development\\Current\\Bristol-branch\\Cohort.Test
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -299,6 +323,46 @@ Global
 		{EC134A5F-CB56-4196-BB4E-217D365A2534}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EC134A5F-CB56-4196-BB4E-217D365A2534}.Test|Any CPU.ActiveCfg = Test|Any CPU
 		{EC134A5F-CB56-4196-BB4E-217D365A2534}.Test|Any CPU.Build.0 = Test|Any CPU
+		{229026B1-C3E5-4D2B-8D2B-61D00E8A52CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{229026B1-C3E5-4D2B-8D2B-61D00E8A52CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{229026B1-C3E5-4D2B-8D2B-61D00E8A52CC}.Model|Any CPU.ActiveCfg = Model|Any CPU
+		{229026B1-C3E5-4D2B-8D2B-61D00E8A52CC}.Model|Any CPU.Build.0 = Model|Any CPU
+		{229026B1-C3E5-4D2B-8D2B-61D00E8A52CC}.QA|Any CPU.ActiveCfg = Model|Any CPU
+		{229026B1-C3E5-4D2B-8D2B-61D00E8A52CC}.QA|Any CPU.Build.0 = Model|Any CPU
+		{229026B1-C3E5-4D2B-8D2B-61D00E8A52CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{229026B1-C3E5-4D2B-8D2B-61D00E8A52CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{229026B1-C3E5-4D2B-8D2B-61D00E8A52CC}.Test|Any CPU.ActiveCfg = Model|Any CPU
+		{229026B1-C3E5-4D2B-8D2B-61D00E8A52CC}.Test|Any CPU.Build.0 = Model|Any CPU
+		{42F7185B-2EE1-49F9-AB6F-E89E6F8AF7C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{42F7185B-2EE1-49F9-AB6F-E89E6F8AF7C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{42F7185B-2EE1-49F9-AB6F-E89E6F8AF7C6}.Model|Any CPU.ActiveCfg = Model|Any CPU
+		{42F7185B-2EE1-49F9-AB6F-E89E6F8AF7C6}.Model|Any CPU.Build.0 = Model|Any CPU
+		{42F7185B-2EE1-49F9-AB6F-E89E6F8AF7C6}.QA|Any CPU.ActiveCfg = Model|Any CPU
+		{42F7185B-2EE1-49F9-AB6F-E89E6F8AF7C6}.QA|Any CPU.Build.0 = Model|Any CPU
+		{42F7185B-2EE1-49F9-AB6F-E89E6F8AF7C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{42F7185B-2EE1-49F9-AB6F-E89E6F8AF7C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{42F7185B-2EE1-49F9-AB6F-E89E6F8AF7C6}.Test|Any CPU.ActiveCfg = Model|Any CPU
+		{42F7185B-2EE1-49F9-AB6F-E89E6F8AF7C6}.Test|Any CPU.Build.0 = Model|Any CPU
+		{516D2892-5B54-43EB-9208-30E97A6F9292}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{516D2892-5B54-43EB-9208-30E97A6F9292}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{516D2892-5B54-43EB-9208-30E97A6F9292}.Model|Any CPU.ActiveCfg = Release|Any CPU
+		{516D2892-5B54-43EB-9208-30E97A6F9292}.Model|Any CPU.Build.0 = Release|Any CPU
+		{516D2892-5B54-43EB-9208-30E97A6F9292}.QA|Any CPU.ActiveCfg = Release|Any CPU
+		{516D2892-5B54-43EB-9208-30E97A6F9292}.QA|Any CPU.Build.0 = Release|Any CPU
+		{516D2892-5B54-43EB-9208-30E97A6F9292}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{516D2892-5B54-43EB-9208-30E97A6F9292}.Release|Any CPU.Build.0 = Release|Any CPU
+		{516D2892-5B54-43EB-9208-30E97A6F9292}.Test|Any CPU.ActiveCfg = Release|Any CPU
+		{516D2892-5B54-43EB-9208-30E97A6F9292}.Test|Any CPU.Build.0 = Release|Any CPU
+		{1E8D72DF-2A09-4872-917F-30ED9B6FDAC3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E8D72DF-2A09-4872-917F-30ED9B6FDAC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E8D72DF-2A09-4872-917F-30ED9B6FDAC3}.Model|Any CPU.ActiveCfg = Model|Any CPU
+		{1E8D72DF-2A09-4872-917F-30ED9B6FDAC3}.Model|Any CPU.Build.0 = Model|Any CPU
+		{1E8D72DF-2A09-4872-917F-30ED9B6FDAC3}.QA|Any CPU.ActiveCfg = Model|Any CPU
+		{1E8D72DF-2A09-4872-917F-30ED9B6FDAC3}.QA|Any CPU.Build.0 = Model|Any CPU
+		{1E8D72DF-2A09-4872-917F-30ED9B6FDAC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E8D72DF-2A09-4872-917F-30ED9B6FDAC3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1E8D72DF-2A09-4872-917F-30ED9B6FDAC3}.Test|Any CPU.ActiveCfg = Model|Any CPU
+		{1E8D72DF-2A09-4872-917F-30ED9B6FDAC3}.Test|Any CPU.Build.0 = Model|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -321,5 +385,9 @@ Global
 		{017DC6E8-FB93-4303-AAF9-52E2449F9A34} = {198FEC8F-4C9E-4961-86D6-2631B2A6E9EC}
 		{5D22373D-E432-4208-A737-E0BCA0567B5F} = {198FEC8F-4C9E-4961-86D6-2631B2A6E9EC}
 		{EC134A5F-CB56-4196-BB4E-217D365A2534} = {198FEC8F-4C9E-4961-86D6-2631B2A6E9EC}
+		{229026B1-C3E5-4D2B-8D2B-61D00E8A52CC} = {6C8967D1-8A53-4DDE-9D8D-A1A731D3782A}
+		{42F7185B-2EE1-49F9-AB6F-E89E6F8AF7C6} = {6C8967D1-8A53-4DDE-9D8D-A1A731D3782A}
+		{516D2892-5B54-43EB-9208-30E97A6F9292} = {6C8967D1-8A53-4DDE-9D8D-A1A731D3782A}
+		{1E8D72DF-2A09-4872-917F-30ED9B6FDAC3} = {6C8967D1-8A53-4DDE-9D8D-A1A731D3782A}
 	EndGlobalSection
 EndGlobal
