@@ -1,9 +1,11 @@
-﻿using MongoDB.Bson;
+﻿using System.CodeDom;
+using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using Phytel.API.Interface;
 
 namespace Phytel.API.DataDomain.Contact.DTO
 {
-    public class Address
+    public class Address:IMEDataSource
     {
         public const string IDProperty = "_id";
         public const string TypeIdProperty = "typeid";
@@ -16,7 +18,7 @@ namespace Phytel.API.DataDomain.Contact.DTO
         public const string PreferredProperty = "pf";
         public const string OptOutProperty = "oo";
         public const string DeleteFlagProperty = "del";
-
+        
         [BsonElement(IDProperty)]
         public ObjectId Id { get; set; }
 
@@ -49,5 +51,15 @@ namespace Phytel.API.DataDomain.Contact.DTO
 
         [BsonElement(DeleteFlagProperty)]
         public bool DeleteFlag { get; set; }
+
+        public const string ExternalRecordIdProperty = "extrid";
+        [BsonElement(ExternalRecordIdProperty)]
+        [BsonIgnoreIfNull(true)]
+        public string ExternalRecordId { get; set; }
+
+        public const string DataSourceProperty = "dsrc";
+        [BsonElement(DataSourceProperty)]
+        [BsonIgnoreIfNull(true)]
+        public string DataSource { get; set; }
     }
 }

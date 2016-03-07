@@ -18,13 +18,15 @@ namespace Phytel.API.DataDomain.Contact.MongoDB.Repository
                     {
                         Id = ObjectId.GenerateNewId(),
                         Number = p.Number,
+                        ExtNumber = p.ExtNumber,
                         IsText = p.IsText,
                         TypeId = ObjectId.Parse(p.TypeId),
                         PreferredPhone = p.PhonePreferred,
                         PreferredText = p.TextPreferred,
                         OptOut = p.OptOut,
                         DeleteFlag = false,
-                        DataSource = p.DataSource
+                        DataSource = p.DataSource,
+                        ExternalRecordId = p.ExternalRecordId
                     }).ToList();
 
                     meContact.Phones = mePhones;
