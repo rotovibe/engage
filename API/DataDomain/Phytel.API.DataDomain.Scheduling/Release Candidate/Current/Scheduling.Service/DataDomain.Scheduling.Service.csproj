@@ -104,7 +104,7 @@
     <None Include="Properties\PublishProfiles\Azure Staging Publish.pubxml">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Properties\PublishProfiles\Azure Model Publish.pubxml">
+    <None Include="Properties\PublishProfiles\Azure QA Publish.pubxml">
       <SubType>Designer</SubType>
     </None>
     <None Include="Properties\PublishProfiles\Phytel Model Publish.pubxml" />
