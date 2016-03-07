@@ -161,6 +161,7 @@
     <Compile Include="Command\PatientMedSuppsCommand.cs" />
     <Compile Include="Command\PatientAllergiesCommand.cs" />
     <Compile Include="Command\PatientToDosCommand.cs" />
+    <Compile Include="Command\PatientUtilizationsCommand.cs" />
     <Compile Include="GoalsManager.cs" />
     <Compile Include="Goal\GoalsEndpointUtils.cs" />
     <Compile Include="Goal\IGoalsEndpointUtils.cs" />

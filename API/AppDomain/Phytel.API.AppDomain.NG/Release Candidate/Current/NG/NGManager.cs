@@ -340,6 +340,9 @@ namespace Phytel.API.AppDomain.NG
                 INGCommand deletePatientNoteCommand = new PatientNotesCommand(request, client);
                 uow.Execute(deletePatientNoteCommand);
 
+                INGCommand deletePatientUtilizationsCommand = new PatientUtilizationsCommand(request, client);
+                uow.Execute(deletePatientUtilizationsCommand);
+
                 INGCommand deletePatientSystemCommand = new PatientSystemsCommand(request, client);
                 uow.Execute(deletePatientSystemCommand);
 
@@ -1317,11 +1320,13 @@ namespace Phytel.API.AppDomain.NG
                                     Id = ph.Id,
                                     TypeId = ph.TypeId,
                                     Number = ph.Number,
+                                    ExtNumber = ph.ExtNumber,
                                     IsText = ph.IsText,
                                     PhonePreferred = ph.PhonePreferred,
                                     TextPreferred = ph.TextPreferred,
                                     OptOut = ph.OptOut,
-                                    DataSource = ph.DataSource
+                                    DataSource = ph.DataSource,
+                                    ExternalRecordId = ph.ExternalRecordId
                                 };
                                 phones.Add(phone);
                             }
@@ -1335,7 +1340,7 @@ namespace Phytel.API.AppDomain.NG
                             List<Email> emails = new List<Email>();
                             foreach (EmailData e in emailData)
                             {
-                                Email email = new Email { Id = e.Id, Text = e.Text, TypeId = e.TypeId, Preferred = e.Preferred, OptOut = e.OptOut };
+                                Email email = new Email { Id = e.Id, Text = e.Text, TypeId = e.TypeId, Preferred = e.Preferred, OptOut = e.OptOut, DataSource = e.DataSource,ExternalRecordId = e.ExternalRecordId};
                                 emails.Add(email);
                             }
                             contact.Emails = emails;
@@ -1348,7 +1353,7 @@ namespace Phytel.API.AppDomain.NG
                             List<Address> addresses = new List<Address>();
                             foreach (AddressData a in addressData)
                             {
-                                Address address = new Address { Id = a.Id, Line1 = a.Line1, Line2 = a.Line2, Line3 = a.Line3, City = a.City, StateId = a.StateId, PostalCode = a.PostalCode, TypeId = a.TypeId, Preferred = a.Preferred, OptOut = a.OptOut };
+                                Address address = new Address { Id = a.Id, Line1 = a.Line1, Line2 = a.Line2, Line3 = a.Line3, City = a.City, StateId = a.StateId, PostalCode = a.PostalCode, TypeId = a.TypeId, Preferred = a.Preferred, OptOut = a.OptOut ,DataSource = a.DataSource,ExternalRecordId = a.ExternalRecordId};
                                 addresses.Add(address);
                             }
                             contact.Addresses = addresses;
@@ -1401,7 +1406,7 @@ namespace Phytel.API.AppDomain.NG
                     emailsData = new List<EmailData>();
                     foreach (Email e in emails)
                     {
-                        EmailData d = new EmailData {  Id = e.Id, Text = e.Text, TypeId = e.TypeId, OptOut = e.OptOut, Preferred =  e.Preferred};
+                        EmailData d = new EmailData {  Id = e.Id, Text = e.Text, TypeId = e.TypeId, OptOut = e.OptOut, Preferred =  e.Preferred, DataSource = e.DataSource, ExternalRecordId = e.ExternalRecordId};
                         emailsData.Add(d);
                     }
                 }
@@ -1413,7 +1418,7 @@ namespace Phytel.API.AppDomain.NG
                     addressesData = new List<AddressData>();
                     foreach (Address a in addresses)
                     {
-                        AddressData d = new AddressData { Id = a.Id, Line1 = a.Line1, Line2 = a.Line2, Line3 = a.Line3, City = a.City, StateId = a.StateId, PostalCode = a.PostalCode, OptOut = a.OptOut, Preferred = a.Preferred, TypeId =  a.TypeId};
+                        AddressData d = new AddressData { Id = a.Id, Line1 = a.Line1, Line2 = a.Line2, Line3 = a.Line3, City = a.City, StateId = a.StateId, PostalCode = a.PostalCode, OptOut = a.OptOut, Preferred = a.Preferred, TypeId =  a.TypeId, DataSource = a.DataSource,ExternalRecordId = a.ExternalRecordId};
                         addressesData.Add(d);
                     }
                 }
