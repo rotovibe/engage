@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Phytel.API.DataDomain.PatientNote.Service;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Phytel.API.DataDomain.PatientNote.DTO;
-using Phytel.API.DataDomain.PatientNote.DTO.Request.Utilization;
 using Phytel.API.DataDomain.PatientNote.Test;
 using Phytel.API.DataDomain.PatientNote.Test.Stub;
 

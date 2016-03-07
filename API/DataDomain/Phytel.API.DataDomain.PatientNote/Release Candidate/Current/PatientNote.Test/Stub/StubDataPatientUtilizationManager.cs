@@ -44,5 +44,16 @@ namespace Phytel.API.DataDomain.PatientNote.Test.Stub
             }
         }
 
+
+
+        public UndoDeletePatientUtilizationsDataResponse UndoDeletePatientPatientUtilizations(UndoDeletePatientUtilizationsDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+        public DeleteUtilizationByPatientIdDataResponse DeletePatientUtilizationsByPatientId(DeleteUtilizationsByPatientIdDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

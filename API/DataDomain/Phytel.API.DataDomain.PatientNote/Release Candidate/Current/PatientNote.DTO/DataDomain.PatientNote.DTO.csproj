@@ -90,6 +90,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="DeleteUtilizationsByPatientIdDataRequest.cs" />
+    <Compile Include="DeleteUtilizationsByPatientIdDataResponse.cs" />
     <Compile Include="InsertBatchPatientNotesDataRequest.cs" />
     <Compile Include="InsertBatchPatientNotesDataResponse.cs" />
     <Compile Include="PatientUtilizationData.cs" />
@@ -102,6 +104,8 @@
     <Compile Include="Response\Utilization\GetPatientUtilizationDataResponse.cs" />
     <Compile Include="Response\Utilization\GetAllPatientUtilizationDataResponse.cs" />
     <Compile Include="Response\Utilization\PutPatientUtilizationDataResponse.cs" />
+    <Compile Include="UndoDeletePatientUtilizationsDataRequest.cs" />
+    <Compile Include="UndoDeletePatientUtilizationsDataResponse.cs" />
     <Compile Include="UpdatePatientNoteDataRequest.cs" />
     <Compile Include="UpdatePatientNoteDataResponse.cs" />
     <Compile Include="RemoveProgramInPatientNotesDataRequest.cs" />

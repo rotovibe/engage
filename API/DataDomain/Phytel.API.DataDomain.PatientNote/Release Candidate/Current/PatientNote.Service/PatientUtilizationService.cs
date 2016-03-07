@@ -1,6 +1,6 @@
 using System;
-using Phytel.API.DataDomain.PatientNote.DTO.Request.Utilization;
 using Phytel.API.DataDomain.PatientNote.DTO.Response.Utilization;
+using Phytel.API.DataDomain.PatientNote.DTO;
 
 namespace Phytel.API.DataDomain.PatientNote.Service
 {
@@ -76,6 +76,38 @@ namespace Phytel.API.DataDomain.PatientNote.Service
                 RequireUserId(request);
                 Manager.DeletePatientUtilization(request.UtilId);
                 response.Success = true;
+            }
+            catch (Exception ex)
+            {
+                RaiseException(response, ex);
+            }
+            return response;
+        }
+
+        public DeleteUtilizationByPatientIdDataResponse Delete(DeleteUtilizationsByPatientIdDataRequest request)
+        {
+            DeleteUtilizationByPatientIdDataResponse response = new DeleteUtilizationByPatientIdDataResponse();
+            try
+            {
+                RequireUserId(request);
+                response = Manager.DeletePatientUtilizationsByPatientId(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                RaiseException(response, ex);
+            }
+            return response;
+        }
+
+        public UndoDeletePatientUtilizationsDataResponse Put(UndoDeletePatientUtilizationsDataRequest request)
+        {
+            UndoDeletePatientUtilizationsDataResponse response = new UndoDeletePatientUtilizationsDataResponse();
+            try
+            {
+                RequireUserId(request);
+                response = Manager.UndoDeletePatientPatientUtilizations(request);
+                response.Version = request.Version;
             }
             catch (Exception ex)
             {
