@@ -71,6 +71,7 @@ namespace DataDomain.Medication.Repo
                         EndDate = data.EndDate == null ? (DateTime?)null : data.EndDate,
                         Reason = data.Reason,
                         Notes = data.Notes,
+                        SigCode = data.SigCode,
                         PrescribedBy = data.PrescribedBy,
                         SystemName = data.SystemName,
                         DeleteFlag = false
@@ -283,6 +284,14 @@ namespace DataDomain.Medication.Repo
                     else 
                     {
                         uv.Add(MB.Update.Set(MEPatientMedSupp.ReasonProperty, BsonNull.Value));
+                    }
+                    if (!string.IsNullOrEmpty(data.SigCode))
+                    {
+                        uv.Add(MB.Update.Set(MEPatientMedSupp.SigProperty, data.SigCode));
+                    }
+                    else
+                    {
+                        uv.Add(MB.Update.Set(MEPatientMedSupp.SigProperty, BsonNull.Value));
                     }
                     if (!string.IsNullOrEmpty(data.Notes))
                     {

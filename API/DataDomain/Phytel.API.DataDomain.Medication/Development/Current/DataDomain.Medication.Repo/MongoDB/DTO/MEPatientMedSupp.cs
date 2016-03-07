@@ -133,6 +133,11 @@ namespace Phytel.API.DataDomain.Medication.DTO
         [BsonIgnoreIfNull(true)]
         public string SystemName { get; set; }
 
+        public const string SigProperty = "sig";
+        [BsonElement(SigProperty)]
+        [BsonIgnoreIfNull(true)]
+        public string SigCode { get; set; }
+
         #region Base elements
         public const string VersionProperty = "v";
         [BsonElement(VersionProperty)]
