@@ -1,5 +1,7 @@
 using ServiceStack.WebHost.Endpoints;
 using System;
+using Phytel.API.Interface;
+using ServiceStack.Common;
 
 namespace Phytel.API.DataDomain.Cohort.Service
 {
@@ -14,6 +16,15 @@ namespace Phytel.API.DataDomain.Cohort.Service
             {
                 //register any dependencies your services use, e.g:
                 //container.Register<ICacheClient>(new MemoryCacheClient());
+
+                HttpServiceContainer.Build(container);
+
+                // request filtering for setting global vals.
+                RequestFilters.Add((req, res, requestDto) =>
+                {
+                    HostContext.Instance.Items.Add("Contract", ((IAppDomainRequest)requestDto).ContractNumber);
+                    HostContext.Instance.Items.Add("Version", ((IAppDomainRequest)requestDto).Version);
+                });
 
             }
         }
