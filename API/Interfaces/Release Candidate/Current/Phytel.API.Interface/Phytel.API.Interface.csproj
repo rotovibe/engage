@@ -107,6 +107,7 @@
     <Compile Include="IDomainResponse.cs" />
     <Compile Include="IAppDomainRequest.cs" />
     <Compile Include="IDataDomainRequest.cs" />
+    <Compile Include="IMEDataSource.cs" />
     <Compile Include="IMEEntity.cs" />
     <Compile Include="ICountableResponse.cs" />
     <Compile Include="IRepository.cs" />
