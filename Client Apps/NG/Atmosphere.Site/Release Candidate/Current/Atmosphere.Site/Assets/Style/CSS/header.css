@@ -1,15 +1,22 @@
-﻿/* Styling for the Header control */
+﻿/*!	
+	Licensed Materials - Property of IBM
+	PID : 5725-Z49
+	Copyright IBM Corp. 2013, 2016
+	US Government Users Restricted Rights- Use, duplication or disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
+*/
+/* Styling for the Header control */
 /* Style for the Upper Left Logo */
 #container > .header #company-name
 {
     position: absolute;
     top: 0;
-    background: url(../../Images/Phytel_logotagline_white_onBlue.png) 0% 0% no-repeat;
+    background: url(../../Images/IBM_White_Logo_34.png) 0% 0% no-repeat;
     background-size: contain;
     width: 220px;
-    height: 26px;
+    height: 5px;
     padding: 7px 0 2px 116px;
-    margin: 0;
+    margin: 10px 10px;
+    opacity: 0.5;
     overflow: hidden;
     color:  #97c7dc;
     font-size: 14px;
