@@ -10,7 +10,7 @@ namespace Phytel.API.DataDomain.Cohort.DTO.Referrals
 
         public double Version { get; set; }
 
-        // this will be depricated. Only used because its inherited from the legacy IDomainResponse in Engage assembles.
+        // this will be deprecated. Only used because its inherited from the legacy IDomainResponse in Engage assembles.
         public ResponseStatus Status { get; set; } 
         public ResponseStatus ResponseStatus { get; set; }
    }
