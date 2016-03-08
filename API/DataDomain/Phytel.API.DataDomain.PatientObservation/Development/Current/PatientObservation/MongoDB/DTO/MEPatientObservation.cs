@@ -13,7 +13,7 @@ namespace Phytel.API.DataDomain.PatientObservation.DTO
     [BsonIgnoreExtraElements(false)]
     [MongoIndex(Keys = new string[] { TTLDateProperty }, TimeToLive = 0)]
     [MongoIndex(Keys = new string[] { PatientIdProperty,ObservationIdProperty, DeleteFlagProperty, TTLDateProperty })]
-    public class MEPatientObservation : IMongoEntity<ObjectId>, IMEEntity
+    public class MEPatientObservation : IMongoEntity<ObjectId>, IMEEntity,IMEDataSource
     {
         public MEPatientObservation(string userId)
         {
@@ -90,6 +90,17 @@ namespace Phytel.API.DataDomain.PatientObservation.DTO
         [BsonIgnoreIfNull(true)]
         public string Source { get; set; }
 
+        public const string DataSourceProperty = "dsrc";
+        [BsonElement(DataSourceProperty)]
+        [BsonIgnoreIfNull(true)]
+        public string DataSource { get; set; }
+
+        public const string ExternalRecordIdProperty = "extrid";
+        [BsonElement(ExternalRecordIdProperty)]
+        [BsonIgnoreIfNull(true)]
+        public string ExternalRecordId { get; set; }
+
+
         #region Standard IMongoEntity Implementation
         [BsonExtraElements]
         public BsonDocument ExtraElements { get; set; }
@@ -129,6 +140,8 @@ namespace Phytel.API.DataDomain.PatientObservation.DTO
         [BsonDateTimeOptions(Kind = System.DateTimeKind.Utc)]
         public System.DateTime RecordCreatedOn { get; private set; }
         #endregion
+
+        
     }
 
 }

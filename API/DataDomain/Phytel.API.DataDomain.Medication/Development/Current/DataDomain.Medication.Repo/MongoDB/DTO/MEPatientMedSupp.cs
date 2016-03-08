@@ -9,7 +9,7 @@ namespace Phytel.API.DataDomain.Medication.DTO
 {
     [BsonIgnoreExtraElements(false)]
     [MongoIndex(Keys = new string[] { TTLDateProperty }, TimeToLive = 0)]
-    public class MEPatientMedSupp : IMongoEntity<ObjectId>, IMEEntity
+    public class MEPatientMedSupp : IMongoEntity<ObjectId>, IMEEntity,IMEDataSource
     {
         public MEPatientMedSupp(string userId)
         {
@@ -138,6 +138,15 @@ namespace Phytel.API.DataDomain.Medication.DTO
         [BsonIgnoreIfNull(true)]
         public string SigCode { get; set; }
 
+        public const string DataSourceProperty = "dsrc";
+        [BsonElement(DataSourceProperty)]
+        [BsonIgnoreIfNull(true)]
+        public string DataSource { get; set; }
+
+        public const string ExternalRecordIdProperty = "extrid";
+        [BsonElement(ExternalRecordIdProperty)]
+        [BsonIgnoreIfNull(true)]
+        public string ExternalRecordId { get; set; }
         #region Base elements
         public const string VersionProperty = "v";
         [BsonElement(VersionProperty)]

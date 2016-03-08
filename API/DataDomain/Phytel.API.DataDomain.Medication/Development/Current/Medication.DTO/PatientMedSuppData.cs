@@ -35,6 +35,8 @@ namespace Phytel.API.DataDomain.Medication.DTO
         public string SigCode { get; set; }
         public bool DeleteFlag { get; set; }
         public DateTime CreatedOn { get; set; }
-        public DateTime? UpdatedOn { get; set; }        
+        public DateTime? UpdatedOn { get; set; }
+        public string ExternalRecordId { get; set; }
+        public string DataSource { get; set; }
     }
 }

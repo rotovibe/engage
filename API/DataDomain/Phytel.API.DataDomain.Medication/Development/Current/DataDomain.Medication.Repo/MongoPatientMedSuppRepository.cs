@@ -74,7 +74,9 @@ namespace DataDomain.Medication.Repo
                         SigCode = data.SigCode,
                         PrescribedBy = data.PrescribedBy,
                         SystemName = data.SystemName,
-                        DeleteFlag = false
+                        DeleteFlag = false,
+                        DataSource = data.DataSource,
+                        ExternalRecordId = data.ExternalRecordId
                     };
 
                     ctx.PatientMedSupps.Collection.Insert(mePMS);
@@ -309,6 +311,25 @@ namespace DataDomain.Medication.Repo
                     {
                         uv.Add(MB.Update.Set(MEPatientMedSupp.PrescribedByProperty, BsonNull.Value));
                     }
+
+                    if (data.DataSource != null)
+                    {
+                        uv.Add(MB.Update.Set(MEPatientMedSupp.DataSourceProperty, data.DataSource));
+                    }
+                    else
+                    {
+                        uv.Add(MB.Update.Set(MEPatientMedSupp.DataSourceProperty, BsonNull.Value));
+                    }
+
+                    if (data.ExternalRecordId != null)
+                    {
+                        uv.Add(MB.Update.Set(MEPatientMedSupp.ExternalRecordIdProperty, data.ExternalRecordId));
+                    }
+                    else
+                    {
+                        uv.Add(MB.Update.Set(MEPatientMedSupp.ExternalRecordIdProperty, BsonNull.Value));
+                    }
+
                     uv.Add(MB.Update.Set(MEPatientMedSupp.SystemProperty, data.SystemName));
                     uv.Add(MB.Update.Set(MEPatientMedSupp.DeleteFlagProperty, data.DeleteFlag));
                     DataAuditType type;
