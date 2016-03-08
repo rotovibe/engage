@@ -8,26 +8,27 @@ namespace Phytel.API.DataDomain.Cohort.Service.Referral
 {
     public class ReferralService : ServiceStack.ServiceInterface.Service
     {
-        IDataReferralManager Manager { get; set; }
-        public PostReferralDefinitionResponse Get(PostReferralDefinitionRequest request)
-        {
-            var response = new PostReferralDefinitionResponse();
-            try
-            {
-                if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("CohortDD:Get()::Unauthorized Access");
+                IDataReferralManager Manager { get; set; }
+                public PostReferralDefinitionResponse Get(PostReferralDefinitionRequest request)
+                {
+                    var response = new PostReferralDefinitionResponse();
+                    try
+                    {
+                        if (string.IsNullOrEmpty(request.UserId))
+                            throw new UnauthorizedAccessException("CohortDD:Get()::Unauthorized Access");
 
-                Manager.SaveReferralData(request.Referral);
-                response.Version = request.Version;
-            }
-            catch (Exception ex)
-            {
-                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                        Manager.SaveReferralData(request.Referral);
+                        response.Version = request.Version;
+                    }
+                    catch (Exception ex)
+                    {
+                        CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
 
-                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
-                Common.Helper.LogException(int.Parse(aseProcessID), ex);
-            }
-            return response;
-        }
+                        string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                        Common.Helper.LogException(int.Parse(aseProcessID), ex);
+                    }
+                    return response;
+
+                }
     }
 }
