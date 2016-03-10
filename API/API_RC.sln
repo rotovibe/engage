@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AppDomain", "AppDomain", "{2E11BED7-15D8-4A76-B289-E9FE4FF9DD72}"
 EndProject
@@ -224,11 +224,23 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.PatientNote.Repo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.PatientSystem.Repo", "DataDomain\Phytel.API.DataDomain.PatientSystem\Release Candidate\Current\PatientSystem.Repo\DataDomain.PatientSystem.Repo.csproj", "{64428B06-18E5-4307-BA78-FB0D238816D8}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NGExtract", "NGExtract", "{7D0FE2AA-2DB2-424E-B160-7157F08C6C30}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExtractConsole", "NGExtract\Release Candidate\Current\ExtractConsole\ExtractConsole.csproj", "{C5604B8A-86D4-4CF9-90E0-48C2E12CB327}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NGETL", "NGExtract\Release Candidate\Current\NGETL\NGETL.csproj", "{40510778-2F44-4C71-8D04-8C3BC06C4032}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.Data.ETL", "NGExtract\Release Candidate\Current\Phytel.Data.ETL\Phytel.Data.ETL.csproj", "{6F7E797F-C4C5-4F6E-A7CE-230E05D375F8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.Data.ETL.Test", "NGExtract\Release Candidate\Current\Phytel.Data.ETL.Test\Phytel.Data.ETL.Test.csproj", "{783646E5-BB09-4083-A115-E7753CE11E29}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.Data.ETLASEProcess", "NGExtract\Release Candidate\Current\Phytel.Data.ETLASEProcess\Phytel.Data.ETLASEProcess.csproj", "{B3C8B739-F479-465B-8E97-9133091818AA}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 87
+		SccNumberOfProjects = 92
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = http://hillstfs2013:8080/tfs/phytel
+		SccTeamFoundationServer = http://192.168.111.123:8080/tfs/phytel
 		SccLocalPath0 = .
 		SccProjectUniqueName1 = AppDomain\\Phytel.API.AppDomain.Security\\Release\u0020Candidate\\Current\\Security\\AppDomain.Security.csproj
 		SccProjectTopLevelParentUniqueName1 = API_RC.sln
@@ -574,6 +586,26 @@ Global
 		SccProjectTopLevelParentUniqueName86 = API_RC.sln
 		SccProjectName86 = DataDomain/Phytel.API.DataDomain.PatientSystem/Release\u0020Candidate/Current/PatientSystem.Repo
 		SccLocalPath86 = DataDomain\\Phytel.API.DataDomain.PatientSystem\\Release\u0020Candidate\\Current\\PatientSystem.Repo
+		SccProjectUniqueName87 = NGExtract\\Release\u0020Candidate\\Current\\ExtractConsole\\ExtractConsole.csproj
+		SccProjectTopLevelParentUniqueName87 = API_RC.sln
+		SccProjectName87 = NGExtract/Release\u0020Candidate/Current/ExtractConsole
+		SccLocalPath87 = NGExtract\\Release\u0020Candidate\\Current\\ExtractConsole
+		SccProjectUniqueName88 = NGExtract\\Release\u0020Candidate\\Current\\NGETL\\NGETL.csproj
+		SccProjectTopLevelParentUniqueName88 = API_RC.sln
+		SccProjectName88 = NGExtract/Release\u0020Candidate/Current/NGETL
+		SccLocalPath88 = NGExtract\\Release\u0020Candidate\\Current\\NGETL
+		SccProjectUniqueName89 = NGExtract\\Release\u0020Candidate\\Current\\Phytel.Data.ETL\\Phytel.Data.ETL.csproj
+		SccProjectTopLevelParentUniqueName89 = API_RC.sln
+		SccProjectName89 = NGExtract/Release\u0020Candidate/Current/Phytel.Data.ETL
+		SccLocalPath89 = NGExtract\\Release\u0020Candidate\\Current\\Phytel.Data.ETL
+		SccProjectUniqueName90 = NGExtract\\Release\u0020Candidate\\Current\\Phytel.Data.ETL.Test\\Phytel.Data.ETL.Test.csproj
+		SccProjectTopLevelParentUniqueName90 = API_RC.sln
+		SccProjectName90 = NGExtract/Release\u0020Candidate/Current/Phytel.Data.ETL.Test
+		SccLocalPath90 = NGExtract\\Release\u0020Candidate\\Current\\Phytel.Data.ETL.Test
+		SccProjectUniqueName91 = NGExtract\\Release\u0020Candidate\\Current\\Phytel.Data.ETLASEProcess\\Phytel.Data.ETLASEProcess.csproj
+		SccProjectTopLevelParentUniqueName91 = API_RC.sln
+		SccProjectName91 = NGExtract/Release\u0020Candidate/Current/Phytel.Data.ETLASEProcess
+		SccLocalPath91 = NGExtract\\Release\u0020Candidate\\Current\\Phytel.Data.ETLASEProcess
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1443,6 +1475,56 @@ Global
 		{64428B06-18E5-4307-BA78-FB0D238816D8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{64428B06-18E5-4307-BA78-FB0D238816D8}.Test|Any CPU.ActiveCfg = Release|Any CPU
 		{64428B06-18E5-4307-BA78-FB0D238816D8}.Test|Any CPU.Build.0 = Release|Any CPU
+		{C5604B8A-86D4-4CF9-90E0-48C2E12CB327}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C5604B8A-86D4-4CF9-90E0-48C2E12CB327}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C5604B8A-86D4-4CF9-90E0-48C2E12CB327}.Mdl|Any CPU.ActiveCfg = Model|Any CPU
+		{C5604B8A-86D4-4CF9-90E0-48C2E12CB327}.Mdl|Any CPU.Build.0 = Model|Any CPU
+		{C5604B8A-86D4-4CF9-90E0-48C2E12CB327}.Model|Any CPU.ActiveCfg = Model|Any CPU
+		{C5604B8A-86D4-4CF9-90E0-48C2E12CB327}.Model|Any CPU.Build.0 = Model|Any CPU
+		{C5604B8A-86D4-4CF9-90E0-48C2E12CB327}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C5604B8A-86D4-4CF9-90E0-48C2E12CB327}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C5604B8A-86D4-4CF9-90E0-48C2E12CB327}.Test|Any CPU.ActiveCfg = Model|Any CPU
+		{C5604B8A-86D4-4CF9-90E0-48C2E12CB327}.Test|Any CPU.Build.0 = Model|Any CPU
+		{40510778-2F44-4C71-8D04-8C3BC06C4032}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{40510778-2F44-4C71-8D04-8C3BC06C4032}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{40510778-2F44-4C71-8D04-8C3BC06C4032}.Mdl|Any CPU.ActiveCfg = Model|Any CPU
+		{40510778-2F44-4C71-8D04-8C3BC06C4032}.Mdl|Any CPU.Build.0 = Model|Any CPU
+		{40510778-2F44-4C71-8D04-8C3BC06C4032}.Model|Any CPU.ActiveCfg = Model|Any CPU
+		{40510778-2F44-4C71-8D04-8C3BC06C4032}.Model|Any CPU.Build.0 = Model|Any CPU
+		{40510778-2F44-4C71-8D04-8C3BC06C4032}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{40510778-2F44-4C71-8D04-8C3BC06C4032}.Release|Any CPU.Build.0 = Release|Any CPU
+		{40510778-2F44-4C71-8D04-8C3BC06C4032}.Test|Any CPU.ActiveCfg = Model|Any CPU
+		{40510778-2F44-4C71-8D04-8C3BC06C4032}.Test|Any CPU.Build.0 = Model|Any CPU
+		{6F7E797F-C4C5-4F6E-A7CE-230E05D375F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F7E797F-C4C5-4F6E-A7CE-230E05D375F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6F7E797F-C4C5-4F6E-A7CE-230E05D375F8}.Mdl|Any CPU.ActiveCfg = Model|Any CPU
+		{6F7E797F-C4C5-4F6E-A7CE-230E05D375F8}.Mdl|Any CPU.Build.0 = Model|Any CPU
+		{6F7E797F-C4C5-4F6E-A7CE-230E05D375F8}.Model|Any CPU.ActiveCfg = Model|Any CPU
+		{6F7E797F-C4C5-4F6E-A7CE-230E05D375F8}.Model|Any CPU.Build.0 = Model|Any CPU
+		{6F7E797F-C4C5-4F6E-A7CE-230E05D375F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6F7E797F-C4C5-4F6E-A7CE-230E05D375F8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6F7E797F-C4C5-4F6E-A7CE-230E05D375F8}.Test|Any CPU.ActiveCfg = Model|Any CPU
+		{6F7E797F-C4C5-4F6E-A7CE-230E05D375F8}.Test|Any CPU.Build.0 = Model|Any CPU
+		{783646E5-BB09-4083-A115-E7753CE11E29}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{783646E5-BB09-4083-A115-E7753CE11E29}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{783646E5-BB09-4083-A115-E7753CE11E29}.Mdl|Any CPU.ActiveCfg = Release|Any CPU
+		{783646E5-BB09-4083-A115-E7753CE11E29}.Mdl|Any CPU.Build.0 = Release|Any CPU
+		{783646E5-BB09-4083-A115-E7753CE11E29}.Model|Any CPU.ActiveCfg = Release|Any CPU
+		{783646E5-BB09-4083-A115-E7753CE11E29}.Model|Any CPU.Build.0 = Release|Any CPU
+		{783646E5-BB09-4083-A115-E7753CE11E29}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{783646E5-BB09-4083-A115-E7753CE11E29}.Release|Any CPU.Build.0 = Release|Any CPU
+		{783646E5-BB09-4083-A115-E7753CE11E29}.Test|Any CPU.ActiveCfg = Release|Any CPU
+		{783646E5-BB09-4083-A115-E7753CE11E29}.Test|Any CPU.Build.0 = Release|Any CPU
+		{B3C8B739-F479-465B-8E97-9133091818AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B3C8B739-F479-465B-8E97-9133091818AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B3C8B739-F479-465B-8E97-9133091818AA}.Mdl|Any CPU.ActiveCfg = Model|Any CPU
+		{B3C8B739-F479-465B-8E97-9133091818AA}.Mdl|Any CPU.Build.0 = Model|Any CPU
+		{B3C8B739-F479-465B-8E97-9133091818AA}.Model|Any CPU.ActiveCfg = Model|Any CPU
+		{B3C8B739-F479-465B-8E97-9133091818AA}.Model|Any CPU.Build.0 = Model|Any CPU
+		{B3C8B739-F479-465B-8E97-9133091818AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B3C8B739-F479-465B-8E97-9133091818AA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B3C8B739-F479-465B-8E97-9133091818AA}.Test|Any CPU.ActiveCfg = Model|Any CPU
+		{B3C8B739-F479-465B-8E97-9133091818AA}.Test|Any CPU.Build.0 = Model|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1553,5 +1635,11 @@ Global
 		{1FCB66F1-56D2-430B-85A7-0D1C26A30FA8} = {2FDF8A25-888A-4C5D-9C06-7FCDF0C3C318}
 		{BD61E655-5658-49C8-96D8-26822162D008} = {5AF7B394-5826-4F7A-871F-60D46BB11348}
 		{64428B06-18E5-4307-BA78-FB0D238816D8} = {B65DC0B4-4013-4BBC-952D-1122F5480535}
+		{7D0FE2AA-2DB2-424E-B160-7157F08C6C30} = {BE4D6E45-ED2C-41A4-839C-AC49756E4166}
+		{C5604B8A-86D4-4CF9-90E0-48C2E12CB327} = {7D0FE2AA-2DB2-424E-B160-7157F08C6C30}
+		{40510778-2F44-4C71-8D04-8C3BC06C4032} = {7D0FE2AA-2DB2-424E-B160-7157F08C6C30}
+		{6F7E797F-C4C5-4F6E-A7CE-230E05D375F8} = {7D0FE2AA-2DB2-424E-B160-7157F08C6C30}
+		{783646E5-BB09-4083-A115-E7753CE11E29} = {7D0FE2AA-2DB2-424E-B160-7157F08C6C30}
+		{B3C8B739-F479-465B-8E97-9133091818AA} = {7D0FE2AA-2DB2-424E-B160-7157F08C6C30}
 	EndGlobalSection
 EndGlobal
