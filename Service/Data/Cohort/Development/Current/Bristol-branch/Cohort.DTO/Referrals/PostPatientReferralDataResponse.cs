@@ -4,8 +4,10 @@ using Phytel.API.Interface;
 
 namespace Phytel.API.DataDomain.Cohort.DTO.Referrals
 {
-    public class PostReferralDefinitionResponse : IDomainResponse
+    public class PostPatientReferralDefinitionResponse : IDomainResponse
    {
+
+
         public double Version { get; set; }
 
         // this will be deprecated. Only used because its inherited from the legacy IDomainResponse in Engage assembles.

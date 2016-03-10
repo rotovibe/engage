@@ -8,11 +8,11 @@ namespace Phytel.API.DataDomain.Cohort.DTO.Model
 {
     public class PatientReferralData
     {
-        public string CohortId { get; set; }
+        public string Id { get; set; }
+        public string ReferralId { get; set; }
         public string PatientId { get; set; }
         public String CreatedBy { get; set; }
         public DateTime CreatedDate { get; set; }
         public bool Flag { get; set; }
-        public DateTime TTLDate { get; set; }
     }
 }

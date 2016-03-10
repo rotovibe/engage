@@ -10,9 +10,9 @@ namespace Phytel.API.DataDomain.Cohort.DTO
     [BsonIgnoreExtraElements(false)]
     [MongoIndex(Keys = new string[] { TTLDateProperty }, TimeToLive = 0)]
     [MongoIndex(Keys = new string[] { DeleteFlagProperty }, Unique = false)]
-    public class MEReferral : IMongoEntity<ObjectId>, IMEEntity
+    public class MEPatientReferral : IMongoEntity<ObjectId>, IMEEntity
     {
-        public MEReferral(string userId)
+        public MEPatientReferral(string userId)
         { 
             Id = ObjectId.GenerateNewId();
             Version = 1.0;
@@ -21,11 +21,8 @@ namespace Phytel.API.DataDomain.Cohort.DTO
         }
 
         public const string IdProperty = "_id";
-        public const string CohortIdProperty = "cid";
-        public const string NameProperty = "nm";
-        public const string DataSourceProperty = "src";
-        public const string DescriptionProperty = "desc";
-
+        public const string ReferralIdProperty = "rid";
+        public const string PatientIdProperty = "pid";
         public const string VersionProperty = "v";
         public const string UpdatedByProperty = "uby";
         public const string DeleteFlagProperty = "del";
@@ -39,21 +36,13 @@ namespace Phytel.API.DataDomain.Cohort.DTO
         public ObjectId Id { get; set; }
 
         [BsonId]
-        [BsonElement(CohortIdProperty)]
-        public ObjectId CohortId { get; set; }
+        [BsonElement(ReferralIdProperty)]
+        public ObjectId ReferralId { get; set; }
 
-        [BsonElement(NameProperty)]
-        [BsonIgnoreIfNull(true)]
-        public string Name { get; set; }
-
-        [BsonElement(DataSourceProperty)]
-        [BsonIgnoreIfNull(true)]
-        public string DataSource { get; set; }
-
-        [BsonElement(DescriptionProperty)]
-        [BsonIgnoreIfNull(true)]
-        public string Description { get; set; }
-
+        [BsonId]
+        [BsonElement(PatientIdProperty)]
+        public ObjectId PatientId { get; set; }
+        
         [BsonExtraElements]
         public BsonDocument ExtraElements { get; set; }
 

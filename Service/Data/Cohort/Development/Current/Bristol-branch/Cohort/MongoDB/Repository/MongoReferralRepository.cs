@@ -1,17 +1,25 @@
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
+using System.Net;
 using Phytel.API.DataDomain.Cohort.DTO;
 using MongoDB.Driver;
 using MongoDB.Driver.Builders;
 using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
 using Phytel.API.DataDomain.Cohort;
+using Phytel.API.DataDomain.Cohort.DTO.Model;
+using Phytel.API.DataDomain.Cohort.DTO.Referrals;
+using ServiceStack.ServiceInterface.ServiceModel;
 
 namespace Phytel.API.DataDomain.Cohort
 {
     public class MongoReferralRepository<T> : IReferralRepository<T>
     {
         private string _dbName = string.Empty;
+        private int _expireDays = Convert.ToInt32(ConfigurationManager.AppSettings["ExpireDays"]);
+        private int _initializeDays = Convert.ToInt32(ConfigurationManager.AppSettings["InitializeDays"]);
 
         static MongoReferralRepository()
         {
@@ -32,7 +40,37 @@ namespace Phytel.API.DataDomain.Cohort
 
         public object Insert(object newEntity)
         {
-            throw new NotImplementedException();
+            try
+            {
+                //Patient
+                PostReferralDefinitionRequest request = newEntity as PostReferralDefinitionRequest;
+                if (request != null)
+                {
+                    ReferralData rd = request.Referral;
+                    using (CohortMongoContext ctx = new CohortMongoContext(_dbName))
+                    {
+                        MEReferral referral = new MEReferral(this.UserId)
+                        {
+                            CohortId = ObjectId.Parse(rd.CohortId),
+                            Description = rd.Description,
+                            Name = rd.Name,
+                            DataSource = rd.DataSource, //Helper.TrimAndLimit(rd.DataSource, 50),
+                            Version = request.Version,
+                            TTLDate = null,
+                            DeleteFlag = false,
+                        };
+                        ctx.Referrals.Insert(referral);
+                    }
+                }
+                return new PostReferralDefinitionResponse
+                {
+                    Version = request.Version
+                };
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         public object InsertAll(List<object> entities)

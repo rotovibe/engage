@@ -68,9 +68,12 @@
     <Compile Include="GetCohortDataRequest.cs" />
     <Compile Include="GetAllCohortsDataResponse.cs" />
     <Compile Include="GetCohortDataResponse.cs" />
+    <Compile Include="Model\PatientReferralData.cs" />
     <Compile Include="Model\ReferralData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Referrals\PostPatientReferralDataRequest.cs" />
     <Compile Include="Referrals\PostReferralDataRequest.cs" />
+    <Compile Include="Referrals\PostPatientReferralDataResponse.cs" />
     <Compile Include="Referrals\PostReferralDataResponse.cs" />
   </ItemGroup>
   <ItemGroup>

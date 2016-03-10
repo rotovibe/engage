@@ -107,12 +107,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataPatientReferralManager.cs" />
     <Compile Include="DataReferralManager.cs" />
+    <Compile Include="IDataPatientReferralManager.cs" />
+    <Compile Include="IPatientReferralRepository.cs" />
     <Compile Include="IReferralRepository.cs" />
     <Compile Include="ICohortRepository.cs" />
     <Compile Include="IDataReferralManager.cs" />
+    <Compile Include="MongoDB\DTO\MEPatientReferral.cs" />
     <Compile Include="MongoDB\DTO\MEReferral.cs" />
     <Compile Include="MongoDB\DTO\MECohort.cs" />
+    <Compile Include="MongoDB\Repository\MongoPatientReferralRepository.cs" />
     <Compile Include="MongoDB\Repository\MongoReferralRepository.cs" />
     <Compile Include="MongoDB\Repository\MongoCohortRepository.cs" />
     <Compile Include="MongoDB\CohortMongoContext.cs" />

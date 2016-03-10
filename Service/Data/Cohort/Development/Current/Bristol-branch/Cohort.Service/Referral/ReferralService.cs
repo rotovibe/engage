@@ -17,7 +17,7 @@ namespace Phytel.API.DataDomain.Cohort.Service.Referral
                         if (string.IsNullOrEmpty(request.UserId))
                             throw new UnauthorizedAccessException("CohortDD:Get()::Unauthorized Access");
 
-                        Manager.SaveReferralData(request.Referral);
+                        Manager.InsertReferral(request);
                         response.Version = request.Version;
                     }
                     catch (Exception ex)
