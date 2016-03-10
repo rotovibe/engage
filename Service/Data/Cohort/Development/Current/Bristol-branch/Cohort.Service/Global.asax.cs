@@ -1,5 +1,6 @@
 using ServiceStack.WebHost.Endpoints;
 using System;
+using System.Reflection;
 using Phytel.API.Interface;
 using ServiceStack.Common;
 
@@ -10,7 +11,7 @@ namespace Phytel.API.DataDomain.Cohort.Service
         public class CohortAppHost : AppHostBase
         {
             //Tell Service Stack the name of your application and where to find your web services
-            public CohortAppHost() : base("Phytel Cohort Data Domain Services", typeof(CohortService).Assembly) { }
+            public CohortAppHost() : base("Phytel Cohort Data Domain Services", Assembly.GetExecutingAssembly()) { }
 
             public override void Configure(Funq.Container container)
             {
