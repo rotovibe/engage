@@ -587,7 +587,11 @@ namespace Phytel.Data.ETL.Templates
             }
             catch (Exception ex)
             {
-                OnDocColEvent(new ETLEventArgs { Message = "[" + Contract + "] LoadContacts():Error" });
+                OnDocColEvent(new ETLEventArgs
+                {
+                    Message = "[" + Contract + "] LoadContacts():Error" + ex.Message + ": " + ex.StackTrace,
+                    IsError = true
+                });
             }
         }
     }
