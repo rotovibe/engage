@@ -49,7 +49,9 @@
   <ItemGroup>
     <Compile Include="IDemographicsManager.cs" />
     <Compile Include="DemographicsManager.cs" />
+    <Compile Include="IReferralManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReferralManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\Common\Phytel.API.Common\Development\Current\Bristol-branch\Phytel.API.Common.csproj">

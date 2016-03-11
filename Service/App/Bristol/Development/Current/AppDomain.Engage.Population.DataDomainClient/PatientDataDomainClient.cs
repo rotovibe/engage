@@ -24,7 +24,7 @@ namespace AppDomain.Engage.Population.DataDomainClient
         // example implementation
         public string PostPatientDetails(PatientData patients)
         {
-            var patientId = String.Empty;
+            var patientId = string.Empty;
             try
             {
                 if (patients == null) return patientId;

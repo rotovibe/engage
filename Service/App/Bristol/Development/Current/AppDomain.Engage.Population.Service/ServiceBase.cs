@@ -15,7 +15,7 @@ namespace AppDomain.Engage.Population.Service
         public void FormatException(IDomainResponse response, Exception ex)
         {
             CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
-            if ((ex is WebServiceException) == false)
+            if (ex is WebServiceException == false)
             {
                 LogException(ex);
             }
