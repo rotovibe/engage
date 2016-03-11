@@ -8,8 +8,8 @@ namespace Phytel.API.DataDomain.Cohort.Service.Referral
 {
     public class ReferralService : ServiceStack.ServiceInterface.Service
     {
-                IDataReferralManager Manager { get; set; }
-                public PostReferralDefinitionResponse Get(PostReferralDefinitionRequest request)
+                public IDataReferralManager Manager { get; set; }
+                public PostReferralDefinitionResponse Post(PostReferralDefinitionRequest request)
                 {
                     var response = new PostReferralDefinitionResponse();
                     try

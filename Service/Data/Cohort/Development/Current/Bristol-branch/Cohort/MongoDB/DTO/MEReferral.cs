@@ -38,9 +38,9 @@ namespace Phytel.API.DataDomain.Cohort.DTO
         [BsonElement(IdProperty)]
         public ObjectId Id { get; set; }
 
-        [BsonId]
         [BsonElement(CohortIdProperty)]
-        public ObjectId CohortId { get; set; }
+        [BsonIgnoreIfNull(true)]
+        public string CohortId { get; set; }
 
         [BsonElement(NameProperty)]
         [BsonIgnoreIfNull(true)]

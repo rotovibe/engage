@@ -23,9 +23,11 @@ namespace Phytel.API.DataDomain.Cohort.Service
                 // request filtering for setting global vals.
                 RequestFilters.Add((req, res, requestDto) =>
                 {
-                    HostContext.Instance.Items.Add("Contract", ((IAppDomainRequest)requestDto).ContractNumber);
-                    HostContext.Instance.Items.Add("Version", ((IAppDomainRequest)requestDto).Version);
+                    HostContext.Instance.Items.Add("Contract", ((IDataDomainRequest)requestDto).ContractNumber);
+                    HostContext.Instance.Items.Add("Version", ((IDataDomainRequest)requestDto).Version);
                 });
+
+                
 
             }
         }

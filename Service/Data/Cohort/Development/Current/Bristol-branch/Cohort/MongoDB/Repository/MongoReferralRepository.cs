@@ -49,9 +49,9 @@ namespace Phytel.API.DataDomain.Cohort
                     ReferralData rd = request.Referral;
                     using (CohortMongoContext ctx = new CohortMongoContext(_dbName))
                     {
-                        MEReferral referral = new MEReferral(this.UserId)
+                        MEReferral referral = new MEReferral(request.UserId)
                         {
-                            CohortId = ObjectId.Parse(rd.CohortId),
+                            CohortId = rd.CohortId,
                             Description = rd.Description,
                             Name = rd.Name,
                             DataSource = rd.DataSource, //Helper.TrimAndLimit(rd.DataSource, 50),
