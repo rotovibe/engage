@@ -135,8 +135,8 @@ namespace Phytel.API.AppDomain.NG.Test
                 SystemName= "Engage",
                 TypeId= "545bdfa6d433232248966639",
 
-                StartDate= DateTime.Now,
-                EndDate= DateTime.Now.AddDays(10),
+                StartDate= DateTime.Parse("2016-03-01T06:00:00.000Z"),//DateTime.Now,
+                EndDate = DateTime.Parse("2016-03-14T05:00:00.000Z"),//DateTime.Now.AddDays(10),
                 Route= "TOPICAL",
                 Form= "OINTMENT",
                 Strength= "7.5 g/30g",
@@ -148,7 +148,7 @@ namespace Phytel.API.AppDomain.NG.Test
             Assert.IsNotNull(sigCode);
             Assert.IsTrue(sigCode.Length > 0);
             Console.WriteLine( "sigCode = " + sigCode);  
-          
+
             patientMedication.FrequencyId =  "56ddd57f84ac070fc8287596"; //a custom freq -             
             sigCode = manager.CalculateSigCode(request);
             Assert.IsNotNull(sigCode);
@@ -162,6 +162,39 @@ namespace Phytel.API.AppDomain.NG.Test
             Assert.IsNotNull(sigCode);
             Assert.IsTrue(sigCode.Length > 0);
             Console.WriteLine("sigCode with some empty values = " + sigCode);
+
+            //daylight saving time tests:
+            patientMedication.StartDate = DateTime.Parse("2016-03-01T06:00:00.000Z");
+            patientMedication.EndDate = DateTime.Parse("2016-03-14T05:00:00.000Z");
+            patientMedication.FreqQuantity = null;
+            patientMedication.FrequencyId = null;
+            sigCode = manager.CalculateSigCode(request);
+            Assert.IsNotNull(sigCode);
+            Assert.IsTrue(sigCode.Length > 0);
+            Console.WriteLine("sig code for dst w /specific dates: ");
+            Console.WriteLine("sig code should be 13 days: " + sigCode);
+
+            patientMedication.StartDate = DateTime.Parse("2016-03-13T06:00:00.0000000Z");
+            patientMedication.EndDate = DateTime.Parse("2016-03-14T05:00:00.0000000Z");
+            sigCode = manager.CalculateSigCode(request);
+            Assert.IsNotNull(sigCode);
+            Assert.IsTrue(sigCode.Length > 0);
+            Console.WriteLine("sig code should be 1 day: " + sigCode);
+
+            patientMedication.StartDate = DateTime.Parse("2016-03-15T05:00:00.0000000Z");
+            patientMedication.EndDate = DateTime.Parse("2016-03-17T05:00:00.0000000Z");
+            sigCode = manager.CalculateSigCode(request);
+            Assert.IsNotNull(sigCode);
+            Assert.IsTrue(sigCode.Length > 0);
+            Console.WriteLine("sig code should be 2 days: " + sigCode);
+
+            patientMedication.StartDate = DateTime.Parse("2016-04-01T05:00:00.0000000Z");
+            patientMedication.EndDate = DateTime.Parse("2017-01-01T06:00:00.0000000Z");
+            sigCode = manager.CalculateSigCode(request);
+            Assert.IsNotNull(sigCode);
+            Assert.IsTrue(sigCode.Length > 0);
+            Console.WriteLine("sig code should be 275 days: " + sigCode);
+
         }
     }
 }

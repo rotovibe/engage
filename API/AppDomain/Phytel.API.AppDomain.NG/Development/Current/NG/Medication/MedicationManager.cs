@@ -226,8 +226,10 @@ namespace Phytel.API.AppDomain.NG.Medication
             string dateRange = "";
             if (startDate != null && endDate != null)
             {
-                TimeSpan ts = (DateTime)endDate - (DateTime)startDate;
-                int days = ts.Days;
+                startDate = (DateTime)startDate.Value.ToUniversalTime();
+                endDate = (DateTime)endDate.Value.ToUniversalTime();                                
+                TimeSpan ts = endDate.Value - startDate.Value;
+                int days = (int)Math.Round(ts.TotalDays);   // daylight savings adjustments: just round it
                 if (days > 0)
                 {
                     dateRange = "for " + days.ToString() + (days == 1 ? " day" : " days");
