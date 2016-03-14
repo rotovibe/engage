@@ -35,5 +35,6 @@ namespace Phytel.API.DataDomain.Patient.DTO
         public string ExternalRecordId { get; set; }
         public string EngagePatientSystemValue { get; set; }
         public string UpdatedByProperty {get; set; }
+        public string Prefix { get; set; }
     }
 }

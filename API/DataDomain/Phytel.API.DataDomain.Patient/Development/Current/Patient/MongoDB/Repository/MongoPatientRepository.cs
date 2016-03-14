@@ -99,7 +99,8 @@ namespace Phytel.API.DataDomain.Patient
                             Protected = pd.Protected,
                             Deceased = (Deceased)pd.DeceasedId,
                             LastUpdatedOn = pd.LastUpdatedOn,
-                            ExternalRecordId = pd.ExternalRecordId
+                            ExternalRecordId = pd.ExternalRecordId,
+                            Prefix = pd.Prefix
                         };
                         if(!string.IsNullOrEmpty(pd.ReasonId))
                         {
@@ -200,6 +201,7 @@ namespace Phytel.API.DataDomain.Patient
                             LastFourSSN = pd.LastFourSSN,
                             LastUpdatedOn = pd.LastUpdatedOn,
                             ExternalRecordId = pd.ExternalRecordId,
+                            Prefix = pd.Prefix
                         };
                         if (!string.IsNullOrEmpty(pd.ReasonId))
                         {
@@ -316,7 +318,8 @@ namespace Phytel.API.DataDomain.Patient
                         Protected = mePatient.Protected,
                         DeceasedId = (int)mePatient.Deceased,
                         StatusId = (int)mePatient.Status,
-                        ExternalRecordId = mePatient.ExternalRecordId
+                        ExternalRecordId = mePatient.ExternalRecordId,
+                        Prefix = mePatient.Prefix
                     };
                     if (!string.IsNullOrEmpty(userId))
                     {
@@ -468,7 +471,8 @@ namespace Phytel.API.DataDomain.Patient
                                 MaritalStatusId = meP.MaritalStatusId == null ? null : meP.MaritalStatusId.ToString(),
                                 Protected = meP.Protected,
                                 DeceasedId = (int)meP.Deceased,
-                                ExternalRecordId = meP.ExternalRecordId
+                                ExternalRecordId = meP.ExternalRecordId,
+                                Prefix = meP.Prefix
                             };
                             pList.Add(data);
                         }
@@ -635,6 +639,14 @@ namespace Phytel.API.DataDomain.Patient
                             updt.Set(MEPatient.SuffixProperty, string.Empty);
                         else
                             updt.Set(MEPatient.SuffixProperty, request.PatientData.Suffix);
+                    }
+
+                    if (request.PatientData.Prefix != null)
+                    {
+                        if (request.PatientData.Prefix == "\"\"" || (request.PatientData.Prefix == "\'\'"))
+                            updt.Set(MEPatient.PrefixProperty, string.Empty);
+                        else
+                            updt.Set(MEPatient.PrefixProperty, Helper.TrimAndLimit(request.PatientData.Prefix, 20));
                     }
 
                     if (request.PatientData.DataSource != null)

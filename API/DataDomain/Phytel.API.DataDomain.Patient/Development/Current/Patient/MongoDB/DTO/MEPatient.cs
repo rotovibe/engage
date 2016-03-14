@@ -46,6 +46,7 @@ namespace Phytel.API.DataDomain.Patient.DTO
         public const string LastUpdatedOnProperty = "uon";
         public const string RecordCreatedByProperty = "rcby";
         public const string RecordCreatedOnProperty = "rcon";
+        public const string PrefixProperty = "pfx";
 
         [BsonId]
         public ObjectId Id { get; set; }
@@ -169,6 +170,10 @@ namespace Phytel.API.DataDomain.Patient.DTO
         [BsonElement(RecordCreatedOnProperty)]
         [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
         public System.DateTime RecordCreatedOn { get; private set; }
+
+        [BsonElement(PrefixProperty)]
+        [BsonIgnoreIfNull(true)]
+        public string Prefix { get; set; }
     }
 
     public enum Priority
