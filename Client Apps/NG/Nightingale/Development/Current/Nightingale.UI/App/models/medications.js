@@ -111,7 +111,7 @@ function medicationInitializer(medication) {
 					// Should the medication save and flag deletion
 					medication.deleteFlag(false);
 					// Should the sig code be calculated
-					medication.computedSigCode = ko.computed(function () {
+	/*				medication.computedSigCode = ko.computed(function () {
 						var strDateRange = '';
 						if(medication.startDate() && medication.endDate()){
 							var startDate = moment(medication.startDate());
@@ -144,7 +144,7 @@ function medicationInitializer(medication) {
 					}
 					return quantity + ' ' + strength + ' ' + form + ' ' + route + ' ' + howOften + ' ' + strDateRange;
 				});
-
+	*/
 medication.setStatus = function(statusId, doneBannerMessage){
 	checkDataContext();
 	medication.statusId(statusId);
