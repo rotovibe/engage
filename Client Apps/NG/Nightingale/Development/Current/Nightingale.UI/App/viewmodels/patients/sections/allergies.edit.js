@@ -6,7 +6,7 @@
     };
 
 	var descendingDateSort = function (l, r) { return (l.createdOn() == r.createdOn()) ? (l.createdOn() < r.createdOn() ? 1 : -1) : (l.createdOn() < r.createdOn() ? 1 : -1) };
-	
+
     ctor.prototype.allergyTypes = ko.computed(datacontext.enums.allergyTypes);
     ctor.prototype.severities = ko.computed(datacontext.enums.severities);
     ctor.prototype.reactions = ko.computed(datacontext.enums.reactions);
@@ -34,9 +34,10 @@
         });
         return filteredPatAllergies.sort(descendingDateSort);
       }).extend({ throttle: 50 });
+      // TODO: Remove dead code
       // self.showActions = self.settings.hasOwnProperty('showActions') ? self.settings.showActions : self.showing;
       // self.saveFocusProblems = self.settings.saveFocusProblems || function () { return false; };
-      // self.cancelFocusProblems = self.settings.cancelFocusProblems || function () { return false; };	  	  
+      // self.cancelFocusProblems = self.settings.cancelFocusProblems || function () { return false; };
     };
 
     ctor.prototype.attached = function () {
