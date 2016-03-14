@@ -1,6 +1,7 @@
 using Phytel.API.DataDomain.Cohort.DTO;
 using Phytel.API.DataDomain.Cohort.DTO.Context;
 using Phytel.API.DataDomain.Cohort.DTO.Model;
+using Phytel.API.DataDomain.Cohort.DTO.Referrals;
 using Phytel.API.Interface;
 
 namespace Phytel.API.DataDomain.Cohort
@@ -16,13 +17,10 @@ namespace Phytel.API.DataDomain.Cohort
             _repository = repository;
         }
 
-        public void SavePatientReferralData(PatientReferralData patientReferral)
+        public PostPatientReferralDefinitionResponse InsertPatientReferral(PostPatientReferralDefinitionRequest request)
         {
-           // GetCohortDataResponse response = new GetCohortDataResponse();
-
-            //_repository.Insert()
-            //response = repository method call;
-
+            PostPatientReferralDefinitionResponse result = _repository.Insert(request) as PostPatientReferralDefinitionResponse;
+            return result;
         }
     }
 }   

@@ -9,15 +9,18 @@ namespace Phytel.API.DataDomain.Cohort
     {
         private static string COLL_CohortS = "Cohort";
         private static string COLL_ReferralS = "Referral";
+        private static string COLL_PatientReferralsS = "PatientReferrals";
 
         public CohortMongoContext(string contractDBName)
             : base(ConfigurationManager.AppSettings.Get("PhytelServicesConnName"), contractDBName, true)
 		{
             Cohorts = new MongoSet<MECohort, ObjectId>(this, COLL_CohortS);
             Referrals = new MongoSet<MEReferral, ObjectId>(this, COLL_ReferralS);
+            PatientReferrals = new MongoSet<MEPatientReferral, ObjectId>(this, COLL_PatientReferralsS);
         }
 
         public MongoSet<MECohort, ObjectId> Cohorts { get; private set; }
         public MongoSet<MEReferral, ObjectId> Referrals { get; private set; }
+        public MongoSet<MEPatientReferral, ObjectId> PatientReferrals { get; private set; }
     }
 }

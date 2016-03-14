@@ -12,7 +12,5 @@ namespace Phytel.API.DataDomain.Cohort.DTO.Model
         public string ReferralId { get; set; }
         public string PatientId { get; set; }
         public String CreatedBy { get; set; }
-        public DateTime CreatedDate { get; set; }
-        public bool Flag { get; set; }
     }
 }

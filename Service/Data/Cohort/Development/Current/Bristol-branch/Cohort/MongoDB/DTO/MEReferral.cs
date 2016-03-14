@@ -25,6 +25,7 @@ namespace Phytel.API.DataDomain.Cohort.DTO
         public const string NameProperty = "nm";
         public const string DataSourceProperty = "src";
         public const string DescriptionProperty = "desc";
+        public const string ReasonProperty = "rs";
 
         public const string VersionProperty = "v";
         public const string UpdatedByProperty = "uby";
@@ -53,6 +54,10 @@ namespace Phytel.API.DataDomain.Cohort.DTO
         [BsonElement(DescriptionProperty)]
         [BsonIgnoreIfNull(true)]
         public string Description { get; set; }
+
+        [BsonElement(ReasonProperty)]
+        [BsonIgnoreIfNull(true)]
+        public string Reason { get; set; }
 
         [BsonExtraElements]
         public BsonDocument ExtraElements { get; set; }

@@ -17,15 +17,6 @@ namespace Phytel.API.DataDomain.Cohort
             _repository = repository;
         }
 
-        //public void SaveReferralData(ReferralData referral)
-        //{
-        //    GetCohortDataResponse response = new GetCohortDataResponse();
-
-        //    _repository.Insert();
-        //    //response = repository method call;
-
-        //}
-
         public PostReferralDefinitionResponse InsertReferral(PostReferralDefinitionRequest request)
         {
             PostReferralDefinitionResponse result = _repository.Insert(request) as PostReferralDefinitionResponse;

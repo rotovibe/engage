@@ -33,6 +33,15 @@ namespace Phytel.API.DataDomain.Cohort.Service
                 new DataReferralManager(c.Resolve<IServiceContext>(), c.Resolve<IReferralRepository<IDataDomainRequest>>()))
                 .ReusedWithin(ReuseScope.Request);
 
+            container.Register<IPatientReferralRepository<IDataDomainRequest>>(c =>
+               new MongoPatientReferralRepository<IDataDomainRequest>(c.Resolve<IServiceContext>().Contract))
+               .ReusedWithin(ReuseScope.Request);
+
+            container.Register<IDataPatientReferralManager>(c =>
+                new DataPatientReferralManager(c.Resolve<IServiceContext>(), c.Resolve<IPatientReferralRepository<IDataDomainRequest>>()))
+                .ReusedWithin(ReuseScope.Request);
+            
+
             return container;
         }
     }

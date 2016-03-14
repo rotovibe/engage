@@ -1,17 +1,21 @@
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using Phytel.API.DataDomain.Cohort.DTO;
 using MongoDB.Driver;
 using MongoDB.Driver.Builders;
 using MongoDB.Bson;
 using Phytel.API.DataDomain.Cohort;
+using Phytel.API.DataDomain.Cohort.DTO.Model;
+using Phytel.API.DataDomain.Cohort.DTO.Referrals;
 
 namespace Phytel.API.DataDomain.Cohort
 {
     public class MongoPatientReferralRepository<T> : IPatientReferralRepository<T>
     {
         private string _dbName = string.Empty;
+        private int _expireDays = Convert.ToInt32(ConfigurationManager.AppSettings["ExpireDays"]);
 
         static MongoPatientReferralRepository()
         {
@@ -32,10 +36,43 @@ namespace Phytel.API.DataDomain.Cohort
 
         public object Insert(object newEntity)
         {
-            throw new NotImplementedException();
+
+            try
+            {
+                //PatientReferral
+                PostPatientReferralDefinitionRequest request = newEntity as PostPatientReferralDefinitionRequest;
+                if (request != null)
+                {
+                    PatientReferralData prd = request.PatientReferral;
+                    using (CohortMongoContext ctx = new CohortMongoContext(_dbName))
+                    {
+                        MEPatientReferral patientReferral = new MEPatientReferral(request.UserId)
+                        {
+                            ReferralId = ObjectId.Parse(prd.ReferralId),
+                            PatientId = ObjectId.Parse(prd.PatientId),
+                            Version = request.Version,
+                            TTLDate = DateTime.UtcNow.AddDays(_expireDays),
+                            DeleteFlag = false,
+                        };
+                        ctx.PatientReferrals.Insert(patientReferral);
+                    }
+                }
+                else
+                {
+                    throw new ApplicationException(string.Format("Invalid Referral Data."));
+                }
+                return new PostReferralDefinitionResponse
+                {
+                    Version = request.Version
+                };
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            } 
         }
 
-        public object InsertAll(List<object> entities)
+    public object InsertAll(List<object> entities)
         {
             throw new NotImplementedException();
         }

@@ -54,13 +54,18 @@ namespace Phytel.API.DataDomain.Cohort
                             CohortId = rd.CohortId,
                             Description = rd.Description,
                             Name = rd.Name,
+                            Reason = rd.Reason,
                             DataSource = rd.DataSource, //Helper.TrimAndLimit(rd.DataSource, 50),
                             Version = request.Version,
-                            TTLDate = null,
+                            TTLDate = DateTime.UtcNow.AddDays(_expireDays),
                             DeleteFlag = false,
                         };
                         ctx.Referrals.Insert(referral);
                     }
+                }
+                else
+                {
+                    throw new ApplicationException(string.Format("Invalid Referral Data."));
                 }
                 return new PostReferralDefinitionResponse
                 {

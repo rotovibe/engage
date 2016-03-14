@@ -6,7 +6,6 @@ namespace Phytel.API.DataDomain.Cohort
 {
     public interface IDataReferralManager
     {
-        //void SaveReferralData(ReferralData referral);
        PostReferralDefinitionResponse InsertReferral(PostReferralDefinitionRequest request);
     }
 }

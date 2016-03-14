@@ -12,8 +12,9 @@ namespace Phytel.API.DataDomain.Cohort.DTO.Model
     {
         public string CohortId { get; set; }
         public string Name { get; set; }
-        public string DataSource { get; set; }
         public string Description { get; set; }
+        public string Reason { get; set; }
+        public string DataSource { get; set; }
         public String CreatedBy { get; set; }
     }
 }
