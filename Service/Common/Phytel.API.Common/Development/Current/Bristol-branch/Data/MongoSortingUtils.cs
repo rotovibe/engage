@@ -27,7 +27,7 @@ namespace Phytel.API.Common.Data
         private static int GetSkip(ISortableRequest request)
         {
             int skip = 0;
-            if (request.Skip != null && request.Skip >= 0)
+            if (request != null && request.Skip >= 0)
             {
                 skip = (int)request.Skip;
             }
@@ -37,7 +37,7 @@ namespace Phytel.API.Common.Data
         private static int GetTake(ISortableRequest request)
         {
             int take = 0;
-            if (request.Take != null && request.Take >= 0)
+            if (request != null && request.Take >= 0)
             {
                 take = (int)request.Take;
             }

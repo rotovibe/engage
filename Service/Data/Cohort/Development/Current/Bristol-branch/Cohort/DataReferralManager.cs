@@ -3,6 +3,7 @@ using Phytel.API.DataDomain.Cohort.DTO.Context;
 using Phytel.API.DataDomain.Cohort.DTO.Model;
 using Phytel.API.DataDomain.Cohort.DTO.Referrals;
 using Phytel.API.Interface;
+using System;
 
 namespace Phytel.API.DataDomain.Cohort
 {
@@ -19,7 +20,35 @@ namespace Phytel.API.DataDomain.Cohort
 
         public PostReferralDefinitionResponse InsertReferral(PostReferralDefinitionRequest request)
         {
-            PostReferralDefinitionResponse result = _repository.Insert(request) as PostReferralDefinitionResponse;
+            PostReferralDefinitionResponse result = new PostReferralDefinitionResponse();
+            try
+            {
+                if (request == null)
+                    throw new ArgumentNullException("Request parameter cannot be NULL");
+                if((String.IsNullOrEmpty(request.Context)))
+                    throw new ArgumentNullException("Request parameter context value cannot be NULL/EMPTY");
+                if ((String.IsNullOrEmpty(request.ContractNumber)))
+                    throw new ArgumentNullException("Request parameter contract number value cannot be NULL/EMPTY");
+                if ((String.IsNullOrEmpty(request.UserId)))
+                    throw new ArgumentNullException("Request parameter user id value cannot be NULL/EMPTY");
+                if ((request.Referral == null))
+                    throw new ArgumentNullException("Request parameter referral cannot be NULL");
+                if (String.IsNullOrEmpty(request.Referral.CohortId ))
+                    throw new ArgumentNullException("Request parameter referral.cohortId cannot be NULL/EMPTY");
+                if (String.IsNullOrEmpty(request.Referral.Name))
+                    throw new ArgumentNullException("Request parameter referral.name cannot be NULL/EMPTY");
+                if (String.IsNullOrEmpty(request.Referral.DataSource))
+                    throw new ArgumentNullException("Request parameter referral.datasource cannot be NULL/EMPTY");
+                if (String.IsNullOrEmpty(request.Referral.CreatedBy))
+                    throw new ArgumentNullException("Request parameter referral.createdBy cannot be NULL/EMPTY");
+
+                result = _repository.Insert(request) as PostReferralDefinitionResponse;
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
             return result;
         }
     }

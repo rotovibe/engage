@@ -1,17 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Linq;
-using System.Net;
 using Phytel.API.DataDomain.Cohort.DTO;
-using MongoDB.Driver;
-using MongoDB.Driver.Builders;
 using MongoDB.Bson;
-using MongoDB.Bson.Serialization;
-using Phytel.API.DataDomain.Cohort;
 using Phytel.API.DataDomain.Cohort.DTO.Model;
 using Phytel.API.DataDomain.Cohort.DTO.Referrals;
-using ServiceStack.ServiceInterface.ServiceModel;
 
 namespace Phytel.API.DataDomain.Cohort
 {

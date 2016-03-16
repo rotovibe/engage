@@ -16,6 +16,10 @@ namespace Phytel.API.DataDomain.Cohort.DTO
         public string ContractNumber { get; set; }
 
         [ApiMember(Name = "Version", Description = "Version of the API being called", ParameterType = "property", DataType = "string", IsRequired = false)]
-        public string Version { get; set; }
+        public double Version { get; set; }
+
+        [ApiMember(Name = "UserId", Description = "ID of the user making the request", ParameterType = "property", DataType = "string", IsRequired = false)]
+        public string UserId { get; set; }
+
     }
 }
