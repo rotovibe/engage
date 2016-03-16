@@ -35,11 +35,13 @@ namespace Phytel.API.DataDomain.Cohort
         {
             try
             {
-                //Patient
+                //Referral
+                string referralid = string.Empty;
                 PostReferralDefinitionRequest request = newEntity as PostReferralDefinitionRequest;
                 if (request != null)
                 {
                     ReferralData rd = request.Referral;
+                   
                     using (CohortMongoContext ctx = new CohortMongoContext(_dbName))
                     {
                         MEReferral referral = new MEReferral(request.UserId)
@@ -54,6 +56,8 @@ namespace Phytel.API.DataDomain.Cohort
                             DeleteFlag = false,
                         };
                         ctx.Referrals.Insert(referral);
+                        referralid = referral.Id.ToString();
+
                     }
                 }
                 else
@@ -62,6 +66,7 @@ namespace Phytel.API.DataDomain.Cohort
                 }
                 return new PostReferralDefinitionResponse
                 {
+                    ReferralId = referralid,
                     Version = request.Version
                 };
             }

@@ -2,6 +2,7 @@ using ServiceStack.WebHost.Endpoints;
 using System;
 using System.Reflection;
 using Phytel.API.Interface;
+using ServiceStack.Api.Swagger;
 using ServiceStack.Common;
 
 namespace Phytel.API.DataDomain.Cohort.Service
@@ -11,7 +12,9 @@ namespace Phytel.API.DataDomain.Cohort.Service
         public class CohortAppHost : AppHostBase
         {
             //Tell Service Stack the name of your application and where to find your web services
-            public CohortAppHost() : base("Phytel Cohort Data Domain Services", Assembly.GetExecutingAssembly()) { }
+            public CohortAppHost() : base("Phytel Cohort Data Domain Services", Assembly.GetExecutingAssembly())
+            {
+            }
 
             public override void Configure(Funq.Container container)
             {
@@ -23,14 +26,16 @@ namespace Phytel.API.DataDomain.Cohort.Service
                 // request filtering for setting global vals.
                 RequestFilters.Add((req, res, requestDto) =>
                 {
-                    HostContext.Instance.Items.Add("Contract", ((IDataDomainRequest)requestDto).ContractNumber);
-                    HostContext.Instance.Items.Add("Version", ((IDataDomainRequest)requestDto).Version);
+                    if (req.OperationName != "Resources" && req.OperationName != "ResourceRequest" )
+                    { 
+                        HostContext.Instance.Items.Add("Contract", ((IDataDomainRequest) requestDto).ContractNumber);
+                        HostContext.Instance.Items.Add("Version", ((IDataDomainRequest) requestDto).Version);
+                    }
                 });
-
-                
-
+                Plugins.Add(new SwaggerFeature());
             }
         }
+
 
         protected void Application_Start(object sender, EventArgs e)
         {
