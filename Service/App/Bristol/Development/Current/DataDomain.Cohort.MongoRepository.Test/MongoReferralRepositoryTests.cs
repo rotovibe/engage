@@ -52,6 +52,7 @@ namespace DataDomain.Cohort.MongoReferralRepository.Test
           // Act
           _PostRefrDefResp = _dataReferralMgr.InsertReferral(_PostRefrDefRqst);
             // Assert
+
             Assert.That(_PostRefrDefResp, Is.Not.Null);
         }   // end CanInsertReferral_Success()
 
