@@ -39,8 +39,6 @@ namespace Phytel.API.DataDomain.Cohort
                     throw new ArgumentNullException("Request parameter referral.name cannot be NULL/EMPTY");
                 if (String.IsNullOrEmpty(request.Referral.DataSource))
                     throw new ArgumentNullException("Request parameter referral.datasource cannot be NULL/EMPTY");
-                if (String.IsNullOrEmpty(request.Referral.CreatedBy))
-                    throw new ArgumentNullException("Request parameter referral.createdBy cannot be NULL/EMPTY");
 
                 result = _repository.Insert(request) as PostReferralDefinitionResponse;
 
