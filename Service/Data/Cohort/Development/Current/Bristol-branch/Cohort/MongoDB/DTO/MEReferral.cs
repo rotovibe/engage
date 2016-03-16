@@ -16,7 +16,7 @@ namespace Phytel.API.DataDomain.Cohort.DTO
         { 
             Id = ObjectId.GenerateNewId();
             Version = 1.0;
-            RecordCreatedBy = ObjectId.Parse(userId);
+            RecordCreated = userId;
             RecordCreatedOn = DateTime.UtcNow;
         }
 
