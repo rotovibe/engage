@@ -16,7 +16,7 @@ namespace Phytel.API.DataDomain.Cohort.DTO
         { 
             Id = ObjectId.GenerateNewId();
             Version = 1.0;
-            RecordCreated = userId;
+            RecordCreatedBy = ObjectId.Parse(userId);
             RecordCreatedOn = DateTime.UtcNow;
         }
 
@@ -29,12 +29,10 @@ namespace Phytel.API.DataDomain.Cohort.DTO
 
         public const string VersionProperty = "v";
         public const string UpdatedByProperty = "uby";
-        public const string UpdatedProperty = "u";
         public const string DeleteFlagProperty = "del";
         public const string TTLDateProperty = "ttl";
         public const string LastUpdatedOnProperty = "uon";
         public const string RecordCreatedByProperty = "rcby";
-        public const string RecordCreatedProperty = "rc";
         public const string RecordCreatedOnProperty = "rcon";
 
         [BsonId]
@@ -71,10 +69,6 @@ namespace Phytel.API.DataDomain.Cohort.DTO
         [BsonElement(UpdatedByProperty)]
         public ObjectId? UpdatedBy { get; set; }
 
-        [BsonElement(UpdatedProperty)]
-        [BsonIgnoreIfNull(true)]
-        public string Updated { get; set; }
-
         [BsonElement(DeleteFlagProperty)]
         [BsonDefaultValue(false)]
         public bool DeleteFlag { get; set; }
@@ -92,10 +86,6 @@ namespace Phytel.API.DataDomain.Cohort.DTO
         [BsonIgnoreIfNull(true)]
         [BsonElement(RecordCreatedByProperty)]
         public ObjectId RecordCreatedBy { get; private set; }
-
-        [BsonElement(RecordCreatedProperty)]
-        [BsonIgnoreIfNull(true)]
-        public string RecordCreated { get; private set; }
 
         [BsonIgnoreIfNull(true)]
         [BsonElement(RecordCreatedOnProperty)]

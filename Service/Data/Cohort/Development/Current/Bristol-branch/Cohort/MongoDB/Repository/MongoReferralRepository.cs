@@ -50,14 +50,13 @@ namespace Phytel.API.DataDomain.Cohort
                             Description = rd.Description,
                             Name = rd.Name,
                             Reason = rd.Reason,
-                            DataSource = rd.DataSource, //Helper.TrimAndLimit(rd.DataSource, 50),
+                            DataSource = rd.DataSource, 
                             Version = request.Version,
                             TTLDate = DateTime.UtcNow.AddDays(_expireDays),
                             DeleteFlag = false,
                         };
                         ctx.Referrals.Insert(referral);
                         referralid = referral.Id.ToString();
-
                     }
                 }
                 else
