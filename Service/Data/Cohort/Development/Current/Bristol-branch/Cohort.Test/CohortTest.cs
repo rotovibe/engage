@@ -39,9 +39,11 @@ namespace Phytel.API.DataDomain.Cohort.Test
             GetCohortDataResponse response = DataCohortManager.GetCohortByID(request);
 
             // Assert
-            Assert.IsTrue(response != null);
-     //       Assert.IsTrue(response.Cohort.SName == "Assigned to me)");
-       //     Assert.IsTrue(response.Cohort.Sort, "ln:1");
+            Assert.IsNotNull(response);
+            Assert.IsNotNull(response.Cohort);
+            Assert.IsNotNull(response.Cohort.ID);
+            Assert.AreEqual(response.Cohort.ID, request.CohortID);
+            Assert.AreEqual("Assigned to me", response.Cohort.SName);
 
         }
 
