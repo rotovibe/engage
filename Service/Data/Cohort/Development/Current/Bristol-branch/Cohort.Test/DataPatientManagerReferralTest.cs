@@ -132,7 +132,7 @@ namespace Phytel.API.DataDomain.Cohort.Test
             Assert.That(ex.Message, Is.StringContaining("Request parameter contract number value cannot be NULL/EMPTY"));
         }   // end  CanInsertPatientReferral_WhenRequestContractNumberIsEmpty_ThrowsArgumentNullException()
 
-
+/*
         [Test]
         public void CanInsertPatientReferral_WhenRequestUserIdIsNull_ThrowsArgumentNullException()
         {
@@ -155,7 +155,7 @@ namespace Phytel.API.DataDomain.Cohort.Test
             Assert.That(ex.Message, Is.StringContaining("Request parameter user id value cannot be NULL/EMPTY"));
         }   // end  CanInsertPatientReferral_WhenRequestUserIdIsEmpty_ThrowsArgumentNullException()
 
-
+*/
         [Test]
         public void CanInsertPatientReferral_WhenRequestPatientReferralIsNull_ThrowsArgumentNullException()
         {
@@ -233,7 +233,7 @@ namespace Phytel.API.DataDomain.Cohort.Test
             // Assert
             Assert.That(ex.Message, Is.StringContaining("Request parameter patientReferral.referralId cannot be NULL/EMPTY"));
         }   // end CanInsertPatientReferral_WhenRequestPatientReferralReferralIdIsEmpty_ThrowsArgumentNullException
-
+        /*
         [Test]
         public void CanInsertPatientReferral_WhenRequestPatientReferralCreatedByIsNull_ThrowsArgumentNullException()
         {
@@ -255,6 +255,6 @@ namespace Phytel.API.DataDomain.Cohort.Test
             // Assert
             Assert.That(ex.Message, Is.StringContaining("Request parameter patientReferral.createdBy cannot be NULL/EMPTY"));
         }   // end CanInsertPatientReferral_WhenRequestPatientReferralReferralCreatedByIsEmpty_ThrowsArgumentNullException
-
+        */
     }
 }

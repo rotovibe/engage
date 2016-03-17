@@ -29,8 +29,6 @@ namespace Phytel.API.DataDomain.Cohort
                     throw new ArgumentNullException("Request parameter context value cannot be NULL/EMPTY");
                 if ((String.IsNullOrEmpty(request.ContractNumber)))
                     throw new ArgumentNullException("Request parameter contract number value cannot be NULL/EMPTY");
-                if ((String.IsNullOrEmpty(request.UserId)))
-                    throw new ArgumentNullException("Request parameter user id value cannot be NULL/EMPTY");
                 if ((request.Referral == null))
                     throw new ArgumentNullException("Request parameter referral cannot be NULL");
                 if (String.IsNullOrEmpty(request.Referral.CohortId ))

@@ -114,7 +114,7 @@ namespace DataDomain.Cohort.MongoReferralRepository.Test
             Assert.That(ex.Message, Is.StringContaining("Request parameter contract number value cannot be NULL/EMPTY"));
         }   // end   CanInsertReferral_WhenRequestContractNumberIsEmpty_ThrowsArgumentNullException()
 
-
+/*
         [Test]
         public void CanInsertReferral_WhenRequestUserIdIsNull_ThrowsArgumentNullException()
         {
@@ -136,7 +136,7 @@ namespace DataDomain.Cohort.MongoReferralRepository.Test
             // Assert
             Assert.That(ex.Message, Is.StringContaining("Request parameter user id value cannot be NULL/EMPTY"));
         }   // end   CanInsertReferral_WhenRequestUserIdIsEmpty_ThrowsArgumentNullException()
-
+*/
         [Test]
         public void CanInsertReferral_WhenRequestReferralIsNull_ThrowsArgumentNullException()
         {

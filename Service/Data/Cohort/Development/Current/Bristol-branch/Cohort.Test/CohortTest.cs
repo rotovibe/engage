@@ -1,15 +1,20 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Phytel.API.DataDomain.Cohort.DTO;
+using Moq;
+using Phytel.API.DataDomain.Cohort;
 
 namespace Phytel.API.DataDomain.Cohort.Test
 {
     [TestClass]
+
     public class CohortTest
     {
-        [TestMethod]
+        private Mock<ICohortRepository<CohortData>> _mongoCohortRepository;
+
+    [TestMethod]
         public void GetCohortByID()
         {
-            ICohortRepository<GetCohortDataResponse> repo = CohortRepositoryFactory<GetCohortDataResponse>.GetCohortRepository("InHealth001", "NG", "");
+            ICohortRepository<GetCohortDataResponse> repo = CohortRepositoryFactory<GetCohortDataResponse>.GetCohortRepository("InHealth001", "NG", "nguser");
 
             repo.Select(new Interface.APIExpression());
         }
@@ -18,16 +23,25 @@ namespace Phytel.API.DataDomain.Cohort.Test
         public void GetCohortByID_Test()
         {
             // Arrange
+            CohortData cohortData = new CohortData() { ID = "AXY", Query = "GetByCohortId", QueryWithFilter = "db.InHealh.Find{cohortId: 234} ", SName = "SName", Sort = "ASC" };
+            _mongoCohortRepository = new Mock<ICohortRepository<CohortData>>(MockBehavior.Default);
+            _mongoCohortRepository.Setup(m => m.FindByID(It.IsAny<string>())).Returns(cohortData);
             double version = 1.0;
             string contractNumber = "InHealth001";
             string context = "NG";
-            GetCohortDataRequest request = new GetCohortDataRequest { CohortID = "528aa055d4332317acc50978", Context = context, ContractNumber = contractNumber, Version = version };
+            GetCohortDataRequest request = new GetCohortDataRequest {
+                                                                                                CohortID = "530f9d9f072ef715f4b411d0",
+                                                                                                Context = context, ContractNumber = contractNumber,
+                                                                                                UserId = "nguser", Version = version
+                                                                                            };
 
             // Act
             GetCohortDataResponse response = DataCohortManager.GetCohortByID(request);
 
             // Assert
-            Assert.IsTrue(response.Cohort.SName == "All(f)");
+            Assert.IsTrue(response != null);
+     //       Assert.IsTrue(response.Cohort.SName == "Assigned to me)");
+       //     Assert.IsTrue(response.Cohort.Sort, "ln:1");
 
         }
 

@@ -14,6 +14,7 @@ namespace Phytel.API.DataDomain.Cohort
             ICohortRepository<T> repo = null;
 
             //We only have 1 repository at this time, just return it
+
             repo = new MongoCohortRepository<T>(dbName) as ICohortRepository<T>;
             repo.UserId = userId;
             return repo;
