@@ -34,7 +34,7 @@ namespace Phytel.API.DataDomain.Cohort.Test
                 ContractNumber = _CONTRACTNUMBER,
                 Version = _VERSION,
                 PatientReferral = new PatientReferralData {
-                    CreatedBy = "JeRonDavis", Id = "RF-8123",
+                    CreatedBy = "JeRonDavis", 
                     PatientId = "PAT00123", ReferralId = "RF-ID 528aa055d4332317acc50978"
                 }            
             };
@@ -166,29 +166,6 @@ namespace Phytel.API.DataDomain.Cohort.Test
             // Assert
             Assert.That(ex.Message, Is.StringContaining("Request parameter patientReferral cannot be NULL"));
         }   // end CanInsertPatientReferral_WhenRequestPatientReferralIsNull_ThrowsArgumentNullException
-
-
-        [Test]
-        public void CanInsertPatientReferral_WhenRequestPatientReferralIdIsNull_ThrowsArgumentNullException()
-        {
-            // Arrange
-            _PostRefrDefRqst.PatientReferral.Id = null;
-            // Act
-            var ex = Assert.Throws<ArgumentNullException>(() => _dataPatientMgr.InsertPatientReferral(_PostRefrDefRqst));
-            // Assert
-            Assert.That(ex.Message, Is.StringContaining("Request parameter patientReferral.referralId cannot be NULL/EMPTY"));
-        }   // end CanInsertPatientReferral_WhenRequestPatientReferralIdIsNull_ThrowsArgumentNullException
-
-        [Test]
-        public void CanInsertPatientReferral_WhenRequestPatientReferralIdIsEmpty_ThrowsArgumentNullException()
-        {
-            // Arrange
-            _PostRefrDefRqst.PatientReferral.Id = String.Empty;
-            // Act
-            var ex = Assert.Throws<ArgumentNullException>(() => _dataPatientMgr.InsertPatientReferral(_PostRefrDefRqst));
-            // Assert
-            Assert.That(ex.Message, Is.StringContaining("Request parameter patientReferral.referralId cannot be NULL/EMPTY"));
-        }   // end CanInsertPatientReferral_WhenRequestPatientReferralIdIsEmpty_ThrowsArgumentNullException
 
         [Test]
         public void CanInsertPatientReferral_WhenRequestPatientReferralPatientIdIsNull_ThrowsArgumentNullException()

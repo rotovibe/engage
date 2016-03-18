@@ -16,35 +16,37 @@ namespace Phytel.API.DataDomain.Cohort.DTO
         { 
             Id = ObjectId.GenerateNewId();
             Version = 1.0;
-            RecordCreated = userId;
+            RecordCreatedBy = ObjectId.Parse(userId);
             RecordCreatedOn = DateTime.UtcNow;
         }
 
         public const string IdProperty = "_id";
         public const string ReferralIdProperty = "rid";
         public const string PatientIdProperty = "pid";
+        public const string ReferralDateProperty = "rdt";
         public const string VersionProperty = "v";
         public const string UpdatedByProperty = "uby";
-        public const string UpdatedProperty = "u";
         public const string DeleteFlagProperty = "del";
         public const string TTLDateProperty = "ttl";
         public const string LastUpdatedOnProperty = "uon";
         public const string RecordCreatedByProperty = "rcby";
-        public const string RecordCreatedProperty = "rc";
         public const string RecordCreatedOnProperty = "rcon";
 
         [BsonId]
         [BsonElement(IdProperty)]
         public ObjectId Id { get; set; }
-
-        [BsonId]
+        
         [BsonElement(ReferralIdProperty)]
         public ObjectId ReferralId { get; set; }
-
-        [BsonId]
+        
         [BsonElement(PatientIdProperty)]
         public ObjectId PatientId { get; set; }
-        
+
+        [BsonElement(ReferralDateProperty)]
+        [BsonIgnoreIfNull(true)]
+        [BsonDateTimeOptions(Kind = System.DateTimeKind.Utc)]
+        public System.DateTime? ReferralDate { get; set; }
+
         [BsonExtraElements]
         public BsonDocument ExtraElements { get; set; }
 
@@ -54,10 +56,6 @@ namespace Phytel.API.DataDomain.Cohort.DTO
 
         [BsonElement(UpdatedByProperty)]
         public ObjectId? UpdatedBy { get; set; }
-
-        [BsonElement(UpdatedProperty)]
-        [BsonIgnoreIfNull(true)]
-        public string Updated { get; set; }
 
         [BsonElement(DeleteFlagProperty)]
         [BsonDefaultValue(false)]
@@ -76,10 +74,6 @@ namespace Phytel.API.DataDomain.Cohort.DTO
         [BsonIgnoreIfNull(true)]
         [BsonElement(RecordCreatedByProperty)]
         public ObjectId RecordCreatedBy { get; private set; }
-
-        [BsonElement(RecordCreatedProperty)]
-        [BsonIgnoreIfNull(true)]
-        public string RecordCreated { get; private set; }
 
         [BsonIgnoreIfNull(true)]
         [BsonElement(RecordCreatedOnProperty)]

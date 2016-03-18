@@ -40,6 +40,7 @@ namespace Phytel.API.DataDomain.Cohort
             try
             {
                 //PatientReferral
+                var patientreferralid = "";
                 PostPatientReferralDefinitionRequest request = newEntity as PostPatientReferralDefinitionRequest;
                 if (request != null)
                 {
@@ -50,19 +51,22 @@ namespace Phytel.API.DataDomain.Cohort
                         {
                             ReferralId = ObjectId.Parse(prd.ReferralId),
                             PatientId = ObjectId.Parse(prd.PatientId),
+                            ReferralDate = prd.ReferralDate,
                             Version = request.Version,
                             TTLDate = DateTime.UtcNow.AddDays(_expireDays),
                             DeleteFlag = false,
                         };
                         ctx.PatientReferrals.Insert(patientReferral);
+                        patientreferralid = patientReferral.Id.ToString();
                     }
                 }
                 else
                 {
                     throw new ApplicationException(string.Format("Invalid Referral Data."));
                 }
-                return new PostReferralDefinitionResponse
+                return new PostPatientReferralDefinitionResponse
                 {
+                    PatientReferralId = patientreferralid,
                     Version = request.Version
                 };
             }

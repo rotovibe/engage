@@ -36,7 +36,7 @@ namespace Phytel.API.DataDomain.Cohort
             try
             {
                 //Referral
-                string referralid = string.Empty;
+                var referralid = "";
                 PostReferralDefinitionRequest request = newEntity as PostReferralDefinitionRequest;
                 if (request != null)
                 {
