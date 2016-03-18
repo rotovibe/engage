@@ -564,9 +564,6 @@
     <Content Include="Content\images\twitter_grey_large.png" />
     <Content Include="Content\images\twitter_grey_small.png" />
     <Content Include="Content\images\twitter_lightblue.png" />
-    <Content Include="Content\nightingale\application.css" />
-    <Content Include="Content\nightingale\controls.css" />
-    <Content Include="Content\nightingale\fonts\fontcustom.svg" />
     <Content Include="Content\font-awesome\font\fontawesome-webfont.svg" />
     <Content Include="Content\ie10mobile.css" />
     <Content Include="Content\images\address_blue_large.png" />
@@ -672,8 +669,6 @@
     <Content Include="Content\images\view_table_blue.png" />
     <Content Include="Content\images\view_table_grey.png" />
     <Content Include="Content\images\warning_yellow.png" />
-    <Content Include="Content\nightingale\helveticaneue.new.css" />
-    <Content Include="Content\nightingale\overrides.css" />
     <Content Include="Content\normalize.css" />
     <Content Include="Content\images\priority_empty.png" />
     <Content Include="Global.asax" />
@@ -755,13 +750,6 @@
     </Content>
     <Content Include="App\viewmodels\templates\observation.add.js" />
     <Content Include="App\views\templates\clinical.dataentry.html" />
-    <Content Include="Content\nightingale\fonts\fontcustomBACKUP.eot" />
-    <Content Include="Content\nightingale\fonts\fontcustomBACKUP.woff" />
-    <Content Include="Content\nightingale\fonts\fontcustomBACKUP.ttf" />
-    <Content Include="Content\nightingale\fonts\fontcustomnope.eot" />
-    <Content Include="Content\nightingale\fonts\fontcustomnope.woff" />
-    <Content Include="Content\nightingale\fonts\fontcustom.ttf" />
-    <Content Include="Content\nightingale\fontcustom.css" />
     <Content Include="App\views\patients\tabs\program.details.html" />
     <Content Include="App\viewmodels\admin\index.min.js.map">
       <DependentUpon>index.js</DependentUpon>
