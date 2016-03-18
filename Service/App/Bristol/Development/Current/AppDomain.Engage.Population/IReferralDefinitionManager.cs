@@ -4,6 +4,6 @@ namespace AppDomain.Engage.Population
 {
     public interface IReferralDefinitionManager
     {
-        string PostReferralDefinition(PostReferralDefinitionRequest request);
+        PostReferralDefinitionResponse PostReferralDefinition(PostReferralDefinitionRequest request);
     }
 }

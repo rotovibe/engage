@@ -28,7 +28,7 @@ namespace AppDomain.Engage.Population.Service.Container
             container.RegisterAutoWiredAs<AuditHelpers, IAuditHelpers>().ReusedWithin(ReuseScope.Request);
             container.Register<IHelpers>(c => new Helpers()).ReusedWithin(ReuseScope.Request);
             container.Register<IRestClient>(c => new JsonServiceClient()).ReusedWithin(ReuseScope.Request);
-            container.Register<IPatientDataDomainClient>(c => new PatientDataDomainClient(ConfigurationManager.AppSettings["DDPatientServiceUrl"], 
+            container.Register<IPatientDataDomainClient>(c => new PatientDataDomainClient(ConfigurationManager.AppSettings["DDCohortServiceUrl"], 
                 c.Resolve<IHelpers>(), 
                 c.Resolve<IRestClient>(), 
                 c.Resolve<IServiceContext>()))

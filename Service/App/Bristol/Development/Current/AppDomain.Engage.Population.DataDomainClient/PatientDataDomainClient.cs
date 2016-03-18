@@ -6,9 +6,7 @@ using Phytel.API.Common;
 using Phytel.API.DataDomain.Patient.DTO;
 using Phytel.API.DataDomain.Cohort.DTO.Model;
 using ServiceStack.Service;
-using ServiceStack.Text;
 using PostReferralDefinitionRequest = Phytel.API.DataDomain.Cohort.DTO.Referrals.PostReferralDefinitionRequest;
-using PostReferralDefinitionResponse = Phytel.API.DataDomain.Cohort.DTO.Referrals.PostReferralDefinitionResponse;
 
 namespace AppDomain.Engage.Population.DataDomainClient
 {
@@ -62,12 +60,10 @@ namespace AppDomain.Engage.Population.DataDomainClient
             }
         }
 
-        public string PostReferralDefinition(ReferralDefinitionData referralDefinitionData)
+        public PostReferralDefinitionResponse PostReferralDefinition(ReferralDefinitionData referralDefinitionData)
         {
-            var referralId = string.Empty;
             try
             {
-                if (referralDefinitionData == null) return referralId;
 
                 ReferralData referralData = Mapper.Map<ReferralData>(referralDefinitionData);
                 var url = _urlHelper.BuildURL(string.Format("{0}/{1}/{2}/{3}/{4}/Referrals",
@@ -75,22 +71,18 @@ namespace AppDomain.Engage.Population.DataDomainClient
                     "api",
                     "NG",
                     _context.Version,
-                    _context.Contract), "531f2df6072ef727c4d2a3c0"); //_context.UserId);
+                    _context.Contract), "531f2df6072ef727c4d2a3c0"); //_context.UserId); TODO: UserId will be functional with integration of Platform.
 
-                PostReferralDefinitionResponse response = _client.Post<PostReferralDefinitionResponse>(url, new PostReferralDefinitionRequest
+                var response = _client.Post<PostReferralDefinitionResponse>(url, new PostReferralDefinitionRequest
                 {
                     Referral = referralData,
                     Context = "NG",
                     ContractNumber = _context.Contract,
                     UserId = _context.UserId,
                     Version = _context.Version
-                } as object);
+                });
 
-                if (response != null)
-                {
-                    referralId = response.ReferralId;
-                }
-                return referralId;
+                return response;
             }
             catch (Exception ex)
             {

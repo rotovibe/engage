@@ -16,12 +16,10 @@ namespace AppDomain.Engage.Population
         }
 
         // Collect the data from the 
-        public string PostReferralDefinition(PostReferralDefinitionRequest request)
+        public PostReferralDefinitionResponse PostReferralDefinition(PostReferralDefinitionRequest request)
         {
             ReferralDefinitionData referral = request.ReferralDefinitionData;
-
-            _client.PostReferralDefinition(referral);
-            return "";
+            return _client.PostReferralDefinition(referral);
         }
     }
 }

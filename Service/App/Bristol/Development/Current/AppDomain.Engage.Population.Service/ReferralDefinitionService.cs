@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Web;
 using AppDomain.Engage.Population.DTO.Referrals;
 using Phytel.API.Common.Audit;
+using Phytel.API.DataAudit;
+using ServiceStack.ServiceClient.Web;
 
 namespace AppDomain.Engage.Population.Service
 {
@@ -15,11 +18,11 @@ namespace AppDomain.Engage.Population.Service
             var response = new PostReferralDefinitionResponse();
             try
             {
-                ReferralDefinitionManager.PostReferralDefinition(request);
+                response = ReferralDefinitionManager.PostReferralDefinition(request);
             }
-            catch (Exception ex)
+            catch (WebServiceException ex)
             {
-
+                throw new Exception(ex.ErrorMessage);
             }
             finally
             {
