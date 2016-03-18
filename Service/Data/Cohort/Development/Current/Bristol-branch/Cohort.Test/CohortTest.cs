@@ -23,7 +23,7 @@ namespace Phytel.API.DataDomain.Cohort.Test
         public void GetCohortByID_Test()
         {
             // Arrange
-            CohortData cohortData = new CohortData() { ID = "AXY", Query = "GetByCohortId", QueryWithFilter = "db.InHealh.Find{cohortId: 234} ", SName = "SName", Sort = "ASC" };
+            CohortData cohortData = new CohortData() { Id = "AXY", Query = "GetByCohortId", QueryWithFilter = "db.InHealh.Find{cohortId: 234} ", SName = "SName", Sort = "ASC" };
             _mongoCohortRepository = new Mock<ICohortRepository<CohortData>>(MockBehavior.Default);
             _mongoCohortRepository.Setup(m => m.FindByID(It.IsAny<string>())).Returns(cohortData);
             double version = 1.0;
@@ -41,8 +41,8 @@ namespace Phytel.API.DataDomain.Cohort.Test
             // Assert
             Assert.IsNotNull(response);
             Assert.IsNotNull(response.Cohort);
-            Assert.IsNotNull(response.Cohort.ID);
-            Assert.AreEqual(response.Cohort.ID, request.CohortID);
+            Assert.IsNotNull(response.Cohort.Id);
+            Assert.AreEqual(response.Cohort.Id, request.CohortID);
             Assert.AreEqual("Assigned to me", response.Cohort.SName);
 
         }

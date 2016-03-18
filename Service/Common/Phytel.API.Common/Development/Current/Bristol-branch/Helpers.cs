@@ -11,13 +11,14 @@ namespace Phytel.API.Common
 {
     public class Helpers : IHelpers
     {
-        public string BuildURL(string baseURL, string userId)
+
+        public string BuildURL(string baseUrl, string userId)
         {
-            string returnURL = baseURL;
-            if (returnURL.Contains("?"))
-                return string.Format("{0}&UserId={1}", returnURL, userId);
+            string returnUrl = baseUrl;
+            if (returnUrl.Contains("?"))
+                return string.Format("{0}&UserId={1}", returnUrl, userId);
             else
-                return string.Format("{0}?UserId={1}", returnURL, userId);
+                return string.Format("{0}?UserId={1}", returnUrl, userId);
         }
 
         /// <summary>
@@ -42,7 +43,7 @@ namespace Phytel.API.Common
         /// <summary>
         /// Converts a list of strings to list of ObjectIds.
         /// </summary>
-        /// <param name="objectIds">list of strings</param>
+        /// <param name="stringList"></param>
         /// <returns>list of ObjectIds</returns>
         public List<ObjectId> ConvertToObjectIdList(List<string> stringList)
         {

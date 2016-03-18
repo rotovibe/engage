@@ -64,7 +64,7 @@ namespace Phytel.API.DataDomain.Cohort
                 {
                     cohortResponse = new GetCohortDataResponse();
                     API.DataDomain.Cohort.DTO.CohortData cohort = new API.DataDomain.Cohort.DTO.CohortData { 
-                            ID = meCohort.Id.ToString(), 
+                            Id = meCohort.Id.ToString(), 
                             SName = meCohort.ShortName, 
                             Query = meCohort.Query, 
                             QueryWithFilter = meCohort.QueryWithFilter,
@@ -92,7 +92,7 @@ namespace Phytel.API.DataDomain.Cohort
                     cohorts = new List<API.DataDomain.Cohort.DTO.CohortData>();
                     foreach (MECohort m in meCohorts)
                     {
-                        API.DataDomain.Cohort.DTO.CohortData cohort = new API.DataDomain.Cohort.DTO.CohortData { ID = m.Id.ToString(), SName = m.ShortName, Query = m.Query, Sort = m.Sort };
+                        API.DataDomain.Cohort.DTO.CohortData cohort = new API.DataDomain.Cohort.DTO.CohortData { Id = m.Id.ToString(), SName = m.ShortName, Query = m.Query, Sort = m.Sort };
                         cohorts.Add(cohort);
                     }
                 }

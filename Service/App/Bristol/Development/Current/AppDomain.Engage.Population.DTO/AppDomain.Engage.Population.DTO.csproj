@@ -70,6 +70,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Referrals\PostReferralDefinitionRequest.cs" />
     <Compile Include="Referrals\PostReferralDefinitionResponse.cs" />
+    <Compile Include="Referrals\ReferralDefinition.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

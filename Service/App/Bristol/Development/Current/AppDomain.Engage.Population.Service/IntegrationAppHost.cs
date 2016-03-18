@@ -17,9 +17,7 @@ namespace AppDomain.Engage.Population.Service
 {
     public class IntegrationAppHost : AppHostBase
     {
-        public IntegrationAppHost(): base("Phytel Search Data Domain Services", Assembly.GetExecutingAssembly())
-        {
-        }
+        public IntegrationAppHost(): base("Phytel Search App Domain Services", Assembly.GetExecutingAssembly()) { }
 
         public override void Configure(Funq.Container container)
         {
@@ -31,7 +29,7 @@ namespace AppDomain.Engage.Population.Service
             RequestFilters.Add((req, res, requestDto) =>
             {
                 HostContext.Instance.Items.Add("Contract", ((IAppDomainRequest)requestDto).ContractNumber);
-                HostContext.Instance.Items.Add("Version", ((IAppDomainRequest)requestDto).Version);
+                HostContext.Instance.Items.Add("Version", ((IAppDomainRequest)requestDto).Version);               
             });
 
             RequestFilters.Add((req, res, requestDto) =>

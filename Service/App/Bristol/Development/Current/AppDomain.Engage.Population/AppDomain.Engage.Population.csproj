@@ -49,18 +49,26 @@
   <ItemGroup>
     <Compile Include="IDemographicsManager.cs" />
     <Compile Include="DemographicsManager.cs" />
-    <Compile Include="IReferralManager.cs" />
+    <Compile Include="IReferralDefinitionManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ReferralManager.cs" />
+    <Compile Include="ReferralDefinitionManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\Common\Phytel.API.Common\Development\Current\Bristol-branch\Phytel.API.Common.csproj">
       <Project>{25cf3c3f-221f-4a49-b5ef-a8a5fcf9a5ba}</Project>
       <Name>Phytel.API.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\Data\Cohort\Development\Current\Bristol-branch\Cohort.DTO\DataDomain.Cohort.DTO.csproj">
+      <Project>{d4489296-17a3-4172-8fdf-db6c0a7ae748}</Project>
+      <Name>DataDomain.Cohort.DTO</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\..\..\Data\Patient\Development\Current\Bristol-branch\Patient.DTOs\DataDomain.Patient.DTO.csproj">
       <Project>{1b3148a8-fb57-4461-91bc-f1cd38a013b6}</Project>
       <Name>DataDomain.Patient.DTO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\Interfaces\Development\Current\Bristol-branch\Phytel.API.Interface\Phytel.API.Interface.csproj">
+      <Project>{abe948fb-247e-4955-b3ab-b7c93e10a542}</Project>
+      <Name>Phytel.API.Interface</Name>
     </ProjectReference>
     <ProjectReference Include="..\AppDomain.Engage.Population.DataDomainClient\AppDomain.Engage.Population.DataDomainClient.csproj">
       <Project>{e1cd91fd-8155-49f9-95fb-e1e5df962a91}</Project>

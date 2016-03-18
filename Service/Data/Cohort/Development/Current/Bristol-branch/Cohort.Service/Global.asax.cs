@@ -32,7 +32,9 @@ namespace Phytel.API.DataDomain.Cohort.Service
                         HostContext.Instance.Items.Add("Version", ((IDataDomainRequest) requestDto).Version);
                     }
                 });
-                Plugins.Add(new SwaggerFeature());
+
+                
+
             }
         }
 
@@ -40,7 +42,6 @@ namespace Phytel.API.DataDomain.Cohort.Service
         protected void Application_Start(object sender, EventArgs e)
         {
             new CohortAppHost().Init();
-
         }
 
         protected void Session_Start(object sender, EventArgs e)

@@ -13,7 +13,7 @@ using ServiceStack.ServiceClient.Web;
 namespace AppDomain.Engage.PopulationTests
 {
     [TestClass]
-    public class ReferralManagerTest
+    public class ReferralDefinitionManagerTest
     {
         // Test stub
         [TestMethod()]
@@ -21,7 +21,7 @@ namespace AppDomain.Engage.PopulationTests
         {
             const string contract = "TestContract001";
             IServiceContext context = new ServiceContext { Contract = contract, Tag = null, Token = "Token", UserId = "userid", Version = 1 };
-            IPatientDataDomainClient client = new PatientDataDomainClient("http://localhost:888/Population", new Helpers(), new JsonServiceClient(), context);
+            IPatientDataDomainClient client = new PatientDataDomainClient("http://localhost:888/ReferralDefinition", new Helpers(), new JsonServiceClient(), context);
             DemographicsManager manager = new DemographicsManager(context, client);
             var result = manager.DoSomething();
             Assert.AreEqual("TestContract001", contract);

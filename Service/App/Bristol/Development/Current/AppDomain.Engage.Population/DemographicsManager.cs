@@ -1,6 +1,5 @@
 ﻿using AppDomain.Engage.Population.DataDomainClient;
 using AppDomain.Engage.Population.DTO.Context;
-using Phytel.API.DataDomain.Patient.DTO;
 
 namespace AppDomain.Engage.Population
 {
@@ -18,7 +17,7 @@ namespace AppDomain.Engage.Population
         //example implementation
         public string DoSomething()
         {
-            _client.PostPatientDetails(new PatientData());
+            //_client.PostPatientDetails(new PatientData()); PatientData should not be referenced here 
             return _context.Contract;
         }
     }

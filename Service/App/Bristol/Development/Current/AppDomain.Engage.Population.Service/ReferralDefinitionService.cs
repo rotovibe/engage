@@ -1,25 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using AppDomain.Engage.Population.DTO.Referrals;
 using Phytel.API.Common.Audit;
-using Phytel.API.DataAudit;
 
 namespace AppDomain.Engage.Population.Service
 {
-    public class ReferralService : ServiceBase
+    public class ReferralDefinitionService : ServiceBase
     {
         // used to retrieve the referral/registry/cohort definition.
-        public IReferralManager ReferralManager { get; set; }
-        public IAuditHelpers AuditHelpers { get; set; }
+        public IReferralDefinitionManager ReferralDefinitionManager { get; set; }
+        public IAuditHelpers AuditHelpers { get; set; }  
 
         public PostReferralDefinitionResponse Post(PostReferralDefinitionRequest request)
         {
-            var response =new PostReferralDefinitionResponse();
+            var response = new PostReferralDefinitionResponse();
             try
             {
-                //ReferralManager.
+                ReferralDefinitionManager.PostReferralDefinition(request);
             }
             catch (Exception ex)
             {
@@ -27,7 +23,7 @@ namespace AppDomain.Engage.Population.Service
             }
             finally
             {
-                AuditHelper.LogAuditData(request, "SQLUserId", null, HttpContext.Current.Request, request.GetType().Name);
+                //AuditHelper.LogAuditData(request, "SQLUserId", null, HttpContext.Current.Request, request.GetType().Name);
             }
             return response;
         }

@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ServiceStack.ServiceInterface.ServiceModel;
 
 namespace AppDomain.Engage.Population.DTO.Referrals
 {
     public class PostReferralDefinitionResponse
     {
+        public double Version { get; set; }
 
+        public ResponseStatus ResponseStatus { get; set; }
+
+        public ResponseStatus Status { get; set; }
     }
 }

@@ -3,7 +3,7 @@ namespace Phytel.API.Common
 {
     public interface IHelpers
     {
-        string BuildURL(string baseURL, string userId);
+        string BuildURL(string baseUrl, string userId);
         object ConvertToAppropriateType(object p);
         System.Collections.Generic.List<MongoDB.Bson.BsonValue> ConvertToBsonValueList(object p);
         System.Collections.Generic.List<MongoDB.Bson.ObjectId> ConvertToObjectIdList(System.Collections.Generic.List<string> stringList);
