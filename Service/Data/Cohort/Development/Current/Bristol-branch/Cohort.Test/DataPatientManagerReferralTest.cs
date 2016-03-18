@@ -210,28 +210,27 @@ namespace Phytel.API.DataDomain.Cohort.Test
             // Assert
             Assert.That(ex.Message, Is.StringContaining("Request parameter patientReferral.referralId cannot be NULL/EMPTY"));
         }   // end CanInsertPatientReferral_WhenRequestPatientReferralReferralIdIsEmpty_ThrowsArgumentNullException
-        /*
+     
         [Test]
-        public void CanInsertPatientReferral_WhenRequestPatientReferralCreatedByIsNull_ThrowsArgumentNullException()
+        public void CanInsertPatientReferral_WhenRequestPatientReferralReferralDateIsLessThanOrEqualMinDate_ThrowsArgumentNullException()
         {
             // Arrange
-            _PostRefrDefRqst.PatientReferral.CreatedBy = null;
+            _PostRefrDefRqst.PatientReferral.ReferralDate = DateTime.MinValue;
             // Act
             var ex = Assert.Throws<ArgumentNullException>(() => _dataPatientMgr.InsertPatientReferral(_PostRefrDefRqst));
             // Assert
-            Assert.That(ex.Message, Is.StringContaining("Request parameter patientReferral.createdBy cannot be NULL/EMPTY"));
-        }   // end CanInsertPatientReferral_WhenRequestPatientReferralCreatedByIsNull_ThrowsArgumentNullException
+            Assert.That(ex.Message, Is.StringContaining("Request parameter patientReferral.date is INVALID"));
+        }   // end CanInsertPatientReferral_WhenRequestPatientReferralReferralDateIsLessThanOrEqualMinDate_ThrowsArgumentNullException
 
         [Test]
-        public void CanInsertPatientReferral_WhenRequestPatientReferralCreatedByIsEmpty_ThrowsArgumentNullException()
+        public void CanInsertPatientReferral_WhenRequestPatientReferralReferralDateIsGreaterThanOrEqualMaxDate_ThrowsArgumentNullException()
         {
             // Arrange
-            _PostRefrDefRqst.PatientReferral.CreatedBy = String.Empty;
+            _PostRefrDefRqst.PatientReferral.ReferralDate = DateTime.MaxValue;
             // Act
             var ex = Assert.Throws<ArgumentNullException>(() => _dataPatientMgr.InsertPatientReferral(_PostRefrDefRqst));
             // Assert
-            Assert.That(ex.Message, Is.StringContaining("Request parameter patientReferral.createdBy cannot be NULL/EMPTY"));
-        }   // end CanInsertPatientReferral_WhenRequestPatientReferralReferralCreatedByIsEmpty_ThrowsArgumentNullException
-        */
+            Assert.That(ex.Message, Is.StringContaining("Request parameter patientReferral.date is INVALID"));
+        }   // end CanInsertPatientReferral_WhenRequestPatientReferralReferralDateIsGreaterThanOrEqualMaxDate_ThrowsArgumentNullException
     }
 }

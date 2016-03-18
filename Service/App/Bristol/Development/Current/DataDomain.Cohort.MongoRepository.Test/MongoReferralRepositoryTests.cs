@@ -18,9 +18,10 @@ namespace DataDomain.Cohort.MongoReferralRepository.Test
         private Mock<IServiceContext> _mockSvcContext;
         private Mock<IReferralRepository<IDataDomainRequest>> _mockReferralRepository;
         private const string _CONTEXT = "NG";
-        private const string _CONTRACT = null;
         private const string _USERID = "nguser";
         private const string _CONTRACT_DBName = "InHealth001";
+        private const string _CONTRACT = _CONTRACT_DBName;
+        private const string _COHORTID = "528aa055d4332317acc50978";
         private PostReferralDefinitionResponse _PostRefrDefResp;
         private PostReferralDefinitionRequest _PostRefrDefRqst;
 
@@ -28,7 +29,7 @@ namespace DataDomain.Cohort.MongoReferralRepository.Test
         public void SetUp()
         {
             _PostRefrDefRqst = new PostReferralDefinitionRequest() { Context = _CONTEXT,  ContractNumber = _CONTRACT_DBName,  UserId = _USERID,    Version = 1.0,
-                                                                                                            Referral = new ReferralData() { Description = "Test Description", CohortId = "528aa055d4332317acc50978",
+                                                                                                            Referral = new ReferralData() { Description = "Test Description", CohortId = _COHORTID,
                                                                                                             CreatedBy = "531f2df6072ef727c4d2a3c0", DataSource = "Test DataSource", Name= "Test Name", Reason = "Any Reason"}  };
             _PostRefrDefResp = new PostReferralDefinitionResponse() {  ResponseStatus =  new ResponseStatus() { ErrorCode = "000", Errors = new List<ResponseError>() , Message = "Everything is Fine", StackTrace = null }, Version = 1.0 };
             _mockReferralRepository = new Mock<IReferralRepository<IDataDomainRequest>>(MockBehavior.Default);
@@ -237,72 +238,5 @@ namespace DataDomain.Cohort.MongoReferralRepository.Test
             // Assert
             Assert.That(ex.Message, Is.StringContaining("Request parameter referral.createdBy cannot be NULL/EMPTY"));
         }   // end  CanInsertReferral_WhenRequestReferralCreatedByIsEmpty_ThrowsArgumentNullException()
-
-        /*
-
-        [Test]
-        public void CanFindByID()
-        {
-            // Arrange
-
-            // Act
-            // Assert
-        }
-
-        [Test]
-        public void CanInsert()
-        {
-            // Arrange
-       //     _repository.Setup(m => m.Insert(It.IsAny<object>())).Returns(It.IsAny<object>());
-            // Act
-
-            // Assert
-        }
-
-        [Test]
-        public void CanInsertAll()
-        {
-            // Arrange
-
-            // Act
-            // Assert
-        }
-
-        [Test]
-        public void CanUpdate()
-        {
-            // Arrange
-
-            // Act
-            // Assert
-        }
-
-        [Test]
-        public void CanDelete()
-        {
-            // Arrange
-
-            // Act
-            // Assert
-        }
-
-        [Test]
-        public void CanDeleteAll()
-        {
-            // Arrange
-
-            // Act
-            // Assert
-        }
-
-        [Test]
-        public void CanUndoDelete()
-        {
-            // Arrange
-
-            // Act
-            // Assert
-        }
-        */
     }
 }

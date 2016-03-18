@@ -36,6 +36,9 @@ namespace Phytel.API.DataDomain.Cohort
                     throw new ArgumentNullException("Request parameter patientReferral.patientId cannot be NULL/EMPTY");
                 if (String.IsNullOrEmpty(request.PatientReferral.ReferralId))
                     throw new ArgumentNullException("Request parameter patientReferral.referralId cannot be NULL/EMPTY");
+                if ((request.PatientReferral.ReferralDate != null) &&  (request.PatientReferral.ReferralDate <= DateTime.MinValue) 
+                                            || (request.PatientReferral.ReferralDate >= DateTime.MinValue))
+                    throw new ArgumentNullException("Request parameter patientReferral.date is INVALID -- {0}", request.PatientReferral.ReferralDate.ToString());
 
                 result = _repository.Insert(request) as PostPatientReferralDefinitionResponse;
             }
