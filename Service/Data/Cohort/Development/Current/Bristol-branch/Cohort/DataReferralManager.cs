@@ -12,7 +12,7 @@ namespace Phytel.API.DataDomain.Cohort
         //private readonly IServiceContext _context;
         private readonly IReferralRepository<IDataDomainRequest> _repository;
         
-        public DataReferralManager(/*IServiceContext context,*/ IReferralRepository<IDataDomainRequest> repository)
+        public DataReferralManager(IServiceContext context, IReferralRepository<IDataDomainRequest> repository)
         {
             //_context = context;
             _repository = repository;
