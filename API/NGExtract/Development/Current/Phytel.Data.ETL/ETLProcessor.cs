@@ -159,10 +159,10 @@ namespace Phytel.Data.ETL
                 LoadPatientTasks(_contract);
 
                 LoadAllergies(_contract);
-                LoadPatientAllergies(_contract);
-                LoadPatientMedSups(_contract);
-                Meds.Export();
-                MedMap.Export();
+        //        LoadPatientAllergies(_contract);
+         //       LoadPatientMedSups(_contract);
+        //        Meds.Export();
+        //        MedMap.Export();
 
                 LoadPatientPrograms(_contract);
                 LoadPatientProgramModules(_contract);
@@ -171,7 +171,7 @@ namespace Phytel.Data.ETL
                 LoadPatientProgramResponses(_contract);
                 LoadPatientProgramAttributes(_contract);
 
-                ProcessSpawnElements();
+        //        ProcessSpawnElements();
                 ToDos.Export();
 
                 FlattenReportSprocs();
