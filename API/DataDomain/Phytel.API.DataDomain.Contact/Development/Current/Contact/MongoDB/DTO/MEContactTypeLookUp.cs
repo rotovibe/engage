@@ -50,6 +50,9 @@ namespace Phytel.API.DataDomain.Contact.MongoDB.DTO
         [BsonElement(LastUpdatedByProperty)]
         public ObjectId? UpdatedBy { get; set; }
 
+        [BsonElement(ActiveProperty)]
+        public bool Active { get; set; }
+
         [BsonElement(DeleteFlagProperty)]
         [BsonDefaultValue(false)]
         public bool DeleteFlag { get; set; }
@@ -77,7 +80,7 @@ namespace Phytel.API.DataDomain.Contact.MongoDB.DTO
         
         public const string NameProperty = "n";
         public const string RoleProperty = "r";
-        public const string ParentIdProperty = "pid";
+        public const string ParentIdProperty = "ptid";
         public const string TTLDateProperty = "ttl";
         public const string GroupProperty = "g";
 
@@ -88,6 +91,7 @@ namespace Phytel.API.DataDomain.Contact.MongoDB.DTO
         public const string LastUpdatedByProperty = "uby";
         public const string RecordCreatedByProperty = "rcby";
         public const string RecordCreatedOnProperty = "rcon";
+        public const string ActiveProperty = "act";
 
         #endregion
     }
