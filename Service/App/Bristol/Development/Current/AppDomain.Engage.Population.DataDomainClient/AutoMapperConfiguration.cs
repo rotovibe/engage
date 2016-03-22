@@ -10,7 +10,8 @@ namespace AppDomain.Engage.Population.DataDomainClient
         {
             Mapper.CreateMap<ReferralDefinitionData, ReferralData>()
                 .ForMember(dest => dest.CohortId, opts => opts.MapFrom(src => src.ExternalId))
-                .ForMember(dest => dest.Name, opts => opts.MapFrom(src => src.ReferralName));
+                .ForMember(dest => dest.Name, opts => opts.MapFrom(src => src.ReferralName))
+                .ForMember(dest => dest.Reason, opts => opts.MapFrom(src => src.ReferralReason));
         }
     }
 }
