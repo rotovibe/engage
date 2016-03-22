@@ -6,6 +6,7 @@ using System.Linq;
 using System.Web;
 using Phytel.API.Common;
 using Phytel.API.Common.Format;
+using Phytel.API.DataDomain.Contact.ContactTypeLookUp;
 using Phytel.API.DataDomain.Contact.DTO;
 using Phytel.API.DataDomain.Contact.DTO.ContactTypeLookUp;
 
@@ -13,7 +14,7 @@ namespace Phytel.API.DataDomain.Contact.Service
 {
     public class ContactTypeLookUpService : ServiceStack.ServiceInterface.Service
     {
-
+        public IContactTypeLookUpManager Manager { get; set; }
         public IHelpers Helpers { get; set; }
         public ICommonFormatterUtil CommonFormat { get; set; }
 
@@ -25,31 +26,9 @@ namespace Phytel.API.DataDomain.Contact.Service
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("ContactDD:ContactTypeLookUpService:Get()::Unauthorized Access");
 
+                var lookups = Manager.GetContactTypeLookUps(request);
 
-                var fakeLookups = new List<ContactTypeLookUpData>()
-                {
-                    new ContactTypeLookUpData 
-                    { 
-                        Id = "56ea0c2c64e91cf53bbfca5f",
-                        Name = "Doctor",
-                        Role = "Doctor(M.D)",
-                        CreatedOn = DateTime.UtcNow,
-                        Group = ContactLookUpGroupType.IndividualTypes,
-                        Children = new List<ContactTypeLookUpData>
-                        {
-                            new ContactTypeLookUpData
-                            {
-                                Id = "56ea228e64e91cf53bbfca66",
-                                Name = "Addiction Medicine",
-                                Role = "Addition Medicine",
-                                CreatedOn = DateTime.UtcNow,
-                                Group = ContactLookUpGroupType.IndividualTypes
-                            }
-                        }
-                    }
-                };
-
-                response.ContactTypeLookUps = fakeLookups;
+                response.ContactTypeLookUps = lookups.ContactTypeLookUps;
 
             }
             catch (Exception ex)

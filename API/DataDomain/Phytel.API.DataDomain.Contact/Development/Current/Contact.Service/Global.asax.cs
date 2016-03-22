@@ -6,6 +6,7 @@ using ServiceStack.MiniProfiler;
 using ServiceStack.ServiceInterface.Admin;
 using ServiceStack.WebHost.Endpoints;
 using System;
+using Phytel.API.DataDomain.Contact.ContactTypeLookUp;
 
 namespace Phytel.API.DataDomain.Contact.Service
 {
@@ -26,7 +27,10 @@ namespace Phytel.API.DataDomain.Contact.Service
                 container.RegisterAutoWiredAs<ContactRepositoryFactory, IContactRepositoryFactory>();
                 container.RegisterAutoWiredAs<Helpers, IHelpers>();
                 container.RegisterAutoWiredAs<ContactDataManager, IContactDataManager>();
+                container.RegisterAutoWiredAs<ContactTypeLookUpRepositoryFactory, IContactTypeLookUpRepositoryFactory>();
+                container.RegisterAutoWiredAs<ContactTypeLookUpManager, IContactTypeLookUpManager>();
                 container.RegisterAutoWiredAs<AuditHelpers, IAuditHelpers>();
+               
             }
         }
 
