@@ -264,5 +264,10 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
         {
             throw new NotImplementedException();
         }
+
+        public GetContactTypeLookupResponse GetContactTypeLookup(GetContactTypeLookupRequest request)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

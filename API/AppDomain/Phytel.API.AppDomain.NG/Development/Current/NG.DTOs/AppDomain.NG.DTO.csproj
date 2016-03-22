@@ -114,6 +114,9 @@
     <Compile Include="Allergy\PostAllergyRequest.cs" />
     <Compile Include="Allergy\PostAllergyResponse.cs" />
     <Compile Include="Allergy\PostPatientAllergiesResponse.cs" />
+    <Compile Include="Contact\ContactTypeLookup.cs" />
+    <Compile Include="Contact\GetContactTypeLookupRequest.cs" />
+    <Compile Include="Contact\GetContactTypeLookupResponse.cs" />
     <Compile Include="Context\IServiceContext.cs" />
     <Compile Include="Context\ServiceContext.cs" />
     <Compile Include="Goal\GetTasksRequest.cs" />

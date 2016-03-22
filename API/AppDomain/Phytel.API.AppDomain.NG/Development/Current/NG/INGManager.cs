@@ -23,6 +23,7 @@ namespace Phytel.API.AppDomain.NG
         GetCohortPatientsResponse GetCohortPatients(GetCohortPatientsRequest request);
         List<Cohort> GetCohorts(GetAllCohortsRequest request);
         Contact GetContactByPatientId(GetContactRequest request);
+        GetContactTypeLookupResponse GetContactTypeLookup(GetContactTypeLookupRequest request);
         List<IdNamePair> GetLookUps(GetLookUpsRequest request);
         List<LookUpDetails> GetLookUpDetails(GetLookUpDetailsRequest request);
         GetPatientResponse GetPatient(GetPatientRequest request);

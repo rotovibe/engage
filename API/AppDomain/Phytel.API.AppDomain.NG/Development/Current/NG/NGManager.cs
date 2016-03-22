@@ -25,6 +25,7 @@ using Phytel.API.DataDomain.PatientGoal.DTO;
 using Phytel.API.DataDomain.PatientSystem.DTO;
 using Phytel.API.DataDomain.PatientObservation.DTO;
 using Phytel.API.DataDomain.Program.DTO;
+using Phytel.API.DataDomain.Contact.DTO.ContactTypeLookUp;
 
 namespace Phytel.API.AppDomain.NG
 {
@@ -36,6 +37,7 @@ namespace Phytel.API.AppDomain.NG
         #endregion
 
         #region Endpoint addresses
+       
         protected static readonly string DDPatientServiceURL = ConfigurationManager.AppSettings["DDPatientServiceUrl"];
         protected static readonly string DDPatientProblemServiceUrl = ConfigurationManager.AppSettings["DDPatientProblemServiceUrl"];
         protected static readonly string DDLookupServiceUrl = ConfigurationManager.AppSettings["DDLookupServiceUrl"];
@@ -48,6 +50,9 @@ namespace Phytel.API.AppDomain.NG
         protected static readonly string DDPatientObservationsServiceUrl = ConfigurationManager.AppSettings["DDPatientObservationUrl"];
         protected static readonly string DDPatientGoalsServiceUrl = ConfigurationManager.AppSettings["DDPatientGoalUrl"];
         protected static readonly string DDSchedulingUrl = ConfigurationManager.AppSettings["DDSchedulingUrl"];
+
+        protected static readonly string DDContactTypeLookupServiceURL = ConfigurationManager.AppSettings["DDContactTypeLookupServiceURL"];
+
         #endregion
 
         public void LogException(Exception ex)
@@ -1646,6 +1651,81 @@ namespace Phytel.API.AppDomain.NG
             return response;
         }
         #endregion
+
+        #region ContactTypeLookUp
+
+        public NG.DTO.GetContactTypeLookupResponse GetContactTypeLookup(NG.DTO.GetContactTypeLookupRequest request)
+        {
+            NG.DTO.GetContactTypeLookupResponse ctResponse = new NG.DTO.GetContactTypeLookupResponse();
+
+            try
+            {
+                //Execute call(s) to ContactTypeLookup Data Domain
+                IRestClient client = new JsonServiceClient();
+                
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/ContactTypeLookUps?grouptype={4}",
+                                                                                           DDContactServiceUrl,
+                                                                                           "NG",
+                                                                                           request.Version,
+                                                                                           request.ContractNumber,
+                                                                                           request.GroupType), request.UserId);
+
+                GetContactTypeLookUpDataResponse response = client.Get<GetContactTypeLookUpDataResponse>(url);
+
+                if (response != null && response.ContactTypeLookUps != null)
+                {
+                    ctResponse.ContactTypeLookUps = GetContactTypeLookupNodes(response.ContactTypeLookUps);                    
+                }
+                return ctResponse;
+            }
+            catch (WebServiceException wse)
+            {
+                throw new WebServiceException("AD:GetContactTypeLookup()::" + wse.Message, wse.InnerException);
+            }
+        }
+
+        private List<ContactTypeLookUp> GetContactTypeLookupNodes(List<ContactTypeLookUpData> contacTypeLookUpData )
+        {
+            if (contacTypeLookUpData == null) return null;
+            List<ContactTypeLookUp> res = new List<ContactTypeLookUp>();
+            foreach (var item in contacTypeLookUpData)
+            {
+                var r = new ContactTypeLookUp()
+                {
+                    Id = item.Id,
+                    Name = item.Name,
+                    Group = GetContactTypeGroupTypeId(item.Group),
+                    Role = item.Role,
+                    CreatedOn = item.CreatedOn,
+                    UpdatedOn = item.UpdatedOn,                                        
+                };
+                r.Children = GetContactTypeLookupNodes(item.Children);               
+                res.Add(r);
+            }
+            return res;            
+        }
+
+        private int GetContactTypeGroupTypeId(ContactLookUpGroupType ct)
+        {
+            int res=0;
+            switch (ct)
+            {
+                case ContactLookUpGroupType.Unknown:
+                    res = (int)ContactLookUpGroupType.Unknown;
+                    break;
+                case ContactLookUpGroupType.IndividualTypes:
+                    res = (int)ContactLookUpGroupType.IndividualTypes;
+                    break;
+                case ContactLookUpGroupType.CareTeam:
+                    res = (int)ContactLookUpGroupType.CareTeam;
+                    break;
+                default:
+                    break;
+            }
+            return res;
+        }
+
+        #endregion ContactTypeLookUp
 
         #region Private methods
         private List<Module> getModuleInfo(DD.GetProgramDetailsSummaryResponse resp, IAppDomainRequest request)
