@@ -136,6 +136,7 @@
     <None Include="Properties\PublishProfiles\Azure Dev Publish.pubxml" />
     <None Include="Properties\PublishProfiles\Azure Staging Publish.pubxml" />
     <None Include="Properties\PublishProfiles\Azure QA Publish.pubxml" />
+    <None Include="Properties\PublishProfiles\File System.pubxml" />
     <None Include="Properties\PublishProfiles\Phytel Model Publish.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

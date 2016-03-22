@@ -95,10 +95,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\..\Interfaces\Development\Current\Bristol-branch\Phytel.API.Interface\Phytel.API.Interface.csproj">
-      <Project>{abe948fb-247e-4955-b3ab-b7c93e10a542}</Project>
-      <Name>Phytel.API.Interface</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Cohort.DTO\DataDomain.Cohort.DTO.csproj">
       <Project>{d4489296-17a3-4172-8fdf-db6c0a7ae748}</Project>
       <Name>DataDomain.Cohort.DTO</Name>
