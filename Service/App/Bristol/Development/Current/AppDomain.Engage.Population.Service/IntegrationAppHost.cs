@@ -2,12 +2,17 @@
 using System.Reflection;
 using System.Web;
 using AppDomain.Engage.Population.Service.Container;
+using Phytel.API.AppDomain.Platform.Security.DTO;
+using Phytel.API.ASE.Client.Interface;
 using Phytel.API.Interface;
+using Phytel.Services.API.Platform;
+using Phytel.Services.API.Platform.Filter;
 using ServiceStack;
 using ServiceStack.Api.Swagger;
 using ServiceStack.Common;
 using ServiceStack.Common.Web;
 using ServiceStack.ServiceHost;
+using ServiceStack.ServiceInterface.Admin;
 using ServiceStack.Text;
 using ServiceStack.WebHost.Endpoints;
 using ServiceStack.WebHost.Endpoints.Extensions;
@@ -24,6 +29,20 @@ namespace AppDomain.Engage.Population.Service
             Plugins.Add(new SwaggerFeature());
 
             HttpServiceContainer.Build(container);
+            PlatformServiceContainer.Build(container);
+
+
+            var auditLogger = container.TryResolve<IAuditLogger>() ??
+                                  new AuditLogger(container.TryResolve<IASEClient>(), container.TryResolve<ITokenManager>());
+
+            auditLogger.SupressAuditingForRequestDtoTypes = new Type[] { typeof(GetNotificationsBySessionIdRequest) };
+            auditLogger.DomainName = "Phytel Search Data Domain Services";
+
+            Plugins.Add(new RequestLogsFeature
+            {
+                RequestLogger = auditLogger
+
+            });
 
             // request filtering for setting global vals.
             RequestFilters.Add((req, res, requestDto) =>
@@ -55,6 +74,7 @@ namespace AppDomain.Engage.Population.Service
 
             // initialize datetime format
             JsConfig.DateHandler = JsonDateHandler.ISO8601;
+            JsConfig.EmitCamelCaseNames = true;
         }
 
         public class CustomActionHandler : IServiceStackHttpHandler, IHttpHandler

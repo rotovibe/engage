@@ -14,7 +14,7 @@
     <RootNamespace>AppDomain.Engage.Population.Service</RootNamespace>
     <AssemblyName>AppDomain.Engage.Population.Service</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
-    <UseIISExpress>true</UseIISExpress>
+    <UseIISExpress>false</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -46,7 +46,42 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ASEAPIClient, Version=2.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ASEAPIClient.2.3.0.06\lib\net451\ASEAPIClient.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Phytel.API.AppDomain.Platform.Security.DTO">
+      <HintPath>..\references\Phytel.API.AppDomain.Platform.Security.DTO.dll</HintPath>
+    </Reference>
+    <Reference Include="Phytel.API.DataDomain.ASE.DTO, Version=2.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\DataDomain.ASEAPI.DTO.2.3.0.05\lib\net451\Phytel.API.DataDomain.ASE.DTO.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Phytel.API.DataDomain.Platform.UserActivity.DTO">
+      <HintPath>..\references\Phytel.API.DataDomain.Platform.UserActivity.DTO.dll</HintPath>
+    </Reference>
+    <Reference Include="Phytel.Services.API, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Phytel.Services.API.2.0.0.01\lib\net451\Phytel.Services.API.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Phytel.Services.API.DTO, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Phytel.Services.API.DTO.2.0.0.01\lib\net451\Phytel.Services.API.DTO.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Phytel.Services.API.Pagination">
+      <HintPath>..\references\Phytel.Services.API.Pagination.dll</HintPath>
+    </Reference>
+    <Reference Include="Phytel.Services.API.Platform.Utility">
+      <HintPath>..\references\Phytel.Services.API.Platform.Utility.dll</HintPath>
+    </Reference>
+    <Reference Include="Phytel.Services.API.Provider">
+      <HintPath>..\references\Phytel.Services.API.Provider.dll</HintPath>
+    </Reference>
+    <Reference Include="Phytel.Services.Security, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Phytel.Services.Security.2.0.0.03\lib\net451\Phytel.Services.Security.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="ServiceStack, Version=3.9.71.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ServiceStack.3.9.71\lib\net35\ServiceStack.dll</HintPath>
       <Private>True</Private>
@@ -135,6 +170,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Container\PlatformServiceContainer.cs" />
     <Compile Include="Container\HttpServiceContainer.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -179,7 +215,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>False</UseIIS>
+          <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>41118</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>

@@ -6,7 +6,8 @@ namespace AppDomain.Engage.Population
 {
     public class ReferralDefinitionManager : IReferralDefinitionManager
     {
-        private readonly IServiceContext _context;
+        private readonly IServiceContext _context; // this is a general request context. it will have things like contract name, etc.
+        public UserContext UserContext { get; set; } // this is a platform specific context. Has user authentication data if it is needed.
         private readonly IPatientDataDomainClient _client;
 
         public ReferralDefinitionManager(IServiceContext context, IPatientDataDomainClient client)
@@ -21,5 +22,6 @@ namespace AppDomain.Engage.Population
             ReferralDefinitionData referral = request.ReferralDefinitionData;
             return _client.PostReferralDefinition(referral);
         }
+
     }
 }

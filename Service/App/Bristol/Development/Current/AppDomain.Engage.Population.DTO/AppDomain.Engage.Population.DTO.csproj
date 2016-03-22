@@ -60,6 +60,7 @@
   <ItemGroup>
     <Compile Include="Context\IServiceContext.cs" />
     <Compile Include="Context\ServiceContext.cs" />
+    <Compile Include="Context\UserContext.cs" />
     <Compile Include="Demographics\Address.cs" />
     <Compile Include="Demographics\Email.cs" />
     <Compile Include="Demographics\Patient.cs" />

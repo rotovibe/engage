@@ -1,8 +1,9 @@
-﻿using ServiceStack.ServiceInterface.ServiceModel;
+﻿using Phytel.API.Interface;
+using ServiceStack.ServiceInterface.ServiceModel;
 
 namespace AppDomain.Engage.Population.DTO.Referrals
 {
-    public class PostReferralDefinitionResponse
+    public class PostReferralDefinitionResponse : IDomainResponse
     {
         public double Version { get; set; }
 

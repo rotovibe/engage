@@ -7,6 +7,7 @@ namespace AppDomain.Engage.Population
     {
         private readonly IServiceContext _context;
         private readonly IPatientDataDomainClient _client;
+        public UserContext UserContext { get; set; }
 
         public DemographicsManager(IServiceContext context, IPatientDataDomainClient client)
         {
