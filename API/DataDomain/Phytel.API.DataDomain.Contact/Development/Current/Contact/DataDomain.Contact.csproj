@@ -86,6 +86,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ContactTypeLookUp\ContactTypeLookUpManager.cs" />
+    <Compile Include="ContactTypeLookUp\ContactTypeLookUpRepositoryFactory.cs" />
+    <Compile Include="MongoDB\ContactTypeLookUpMongoContext.cs" />
+    <Compile Include="MongoDB\Repository\MongoContactTypeLookUpRepository.cs" />
+    <Compile Include="ContactTypeLookUp\IContactTypeLookUpManager.cs" />
+    <Compile Include="ContactTypeLookUp\IContactTypeLookUpRepository.cs" />
+    <Compile Include="ContactTypeLookUp\IContactTypeLookUpRepositoryFactory.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="IContactDataManager.cs" />
     <Compile Include="IContactRepository.cs" />
