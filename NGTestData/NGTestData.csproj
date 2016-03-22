@@ -88,17 +88,25 @@
     <Reference Include="Phytel.API.DataDomain.PatientProblem.DTO">
       <HintPath>References\Phytel.API.DataDomain.PatientProblem.DTO.dll</HintPath>
     </Reference>
-    <Reference Include="Phytel.API.DataDomain.PatientSystem">
+    <Reference Include="Phytel.API.DataDomain.PatientSystem, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>References\Phytel.API.DataDomain.PatientSystem.dll</HintPath>
     </Reference>
-    <Reference Include="Phytel.API.DataDomain.PatientSystem.DTO">
+    <Reference Include="Phytel.API.DataDomain.PatientSystem.DTO, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>References\Phytel.API.DataDomain.PatientSystem.DTO.dll</HintPath>
+    </Reference>
+    <Reference Include="Phytel.API.DataDomain.PatientSystem.Repo">
+      <HintPath>References\Phytel.API.DataDomain.PatientSystem.Repo.dll</HintPath>
     </Reference>
     <Reference Include="Phytel.API.Interface">
       <HintPath>References\Phytel.API.Interface.dll</HintPath>
     </Reference>
     <Reference Include="Phytel.Mongo">
       <HintPath>References\Phytel.Mongo.dll</HintPath>
+    </Reference>
+    <Reference Include="Phytel.Services.Mongo">
+      <HintPath>References\Phytel.Services.Mongo.dll</HintPath>
     </Reference>
     <Reference Include="PhytelServices">
       <HintPath>References\PhytelServices.dll</HintPath>
@@ -148,6 +156,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
