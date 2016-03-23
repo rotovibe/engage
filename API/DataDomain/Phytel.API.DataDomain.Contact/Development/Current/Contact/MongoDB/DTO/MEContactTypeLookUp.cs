@@ -78,7 +78,7 @@ namespace Phytel.API.DataDomain.Contact.MongoDB.DTO
 
         public const string IdProperty = "_id";
         
-        public const string NameProperty = "n";
+        public const string NameProperty = "nm";
         public const string RoleProperty = "r";
         public const string ParentIdProperty = "ptid";
         public const string TTLDateProperty = "ttl";
