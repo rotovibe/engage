@@ -38,7 +38,7 @@ namespace Phytel.API.DataDomain.Contact.MongoDB.DTO
 
         [BsonElement(GroupProperty)]
         [BsonIgnoreIfNull(true)]
-        public GroupType Group { get; set; }
+        public GroupType GroupId { get; set; }
 
         [BsonExtraElements]
         public BsonDocument ExtraElements { get; set; }

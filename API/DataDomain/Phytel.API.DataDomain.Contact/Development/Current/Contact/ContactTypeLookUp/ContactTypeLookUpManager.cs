@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Phytel.API.DataDomain.Contact.DTO;
 using Phytel.API.DataDomain.Contact.DTO.ContactTypeLookUp;
@@ -12,6 +13,9 @@ namespace Phytel.API.DataDomain.Contact.ContactTypeLookUp
 
         public ContactTypeLookUpManager(IContactTypeLookUpRepositoryFactory factory)
         {
+            if(factory == null)
+                throw new ArgumentNullException("factory");
+
             _factory = factory;
         }
 
@@ -45,9 +49,9 @@ namespace Phytel.API.DataDomain.Contact.ContactTypeLookUp
                     Id = flattenedRole.Id.ToString(),
                     Name = flattenedRole.Name,
                     Role = flattenedRole.Role,
-                    Group = (ContactLookUpGroupType)flattenedRole.Group
+                    Group = (ContactLookUpGroupType)flattenedRole.GroupId
                 };
-
+                
 
                 if (flattenedRoles.Any(r => r.ParentId.ToString() == flattenedRole.Id.ToString()))
                 {

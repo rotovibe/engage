@@ -50,7 +50,7 @@ namespace Phytel.API.DataDomain.Contact.ContactTypeLookUp
 
                 if (type != GroupType.Unknown)
                 {
-                    var typeMongoQuery = Query<MEContactTypeLookup>.EQ(c => c.Group, type);
+                    var typeMongoQuery = Query<MEContactTypeLookup>.EQ(c => c.GroupId, type);
                     queries.Add(typeMongoQuery);
 
                 }

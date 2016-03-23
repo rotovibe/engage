@@ -1713,8 +1713,8 @@ namespace Phytel.API.AppDomain.NG
                 case ContactLookUpGroupType.Unknown:
                     res = (int)ContactLookUpGroupType.Unknown;
                     break;
-                case ContactLookUpGroupType.IndividualTypes:
-                    res = (int)ContactLookUpGroupType.IndividualTypes;
+                case ContactLookUpGroupType.ContactType:
+                    res = (int)ContactLookUpGroupType.ContactType;
                     break;
                 case ContactLookUpGroupType.CareTeam:
                     res = (int)ContactLookUpGroupType.CareTeam;

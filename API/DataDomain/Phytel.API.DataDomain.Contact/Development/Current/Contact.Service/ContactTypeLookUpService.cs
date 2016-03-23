@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Web;
 using Phytel.API.Common;
 using Phytel.API.Common.Format;
 using Phytel.API.DataDomain.Contact.ContactTypeLookUp;
@@ -35,7 +31,7 @@ namespace Phytel.API.DataDomain.Contact.Service
             {
                 CommonFormat.FormatExceptionResponse(response, base.Response, ex);
 
-                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                var aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
                 Helpers.LogException(int.Parse(aseProcessID), ex);
             }
             return response;

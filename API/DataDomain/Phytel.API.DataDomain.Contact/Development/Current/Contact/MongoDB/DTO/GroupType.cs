@@ -3,7 +3,8 @@
     public enum GroupType
     {
         Unknown = 0 ,
-        IndividualTypes = 1,
+        ContactType = 1,
         CareTeam = 2
+        
     }
 }
