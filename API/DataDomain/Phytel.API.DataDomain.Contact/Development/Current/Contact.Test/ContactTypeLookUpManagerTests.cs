@@ -37,7 +37,28 @@ namespace Phytel.API.DataDomain.Contact.Test
 
         }
 
-        
+        [TestMethod]
+        public void ContactTypeLookUpManager_Empty_Data_Should_Return_Zero()
+        {
+            var mockFactory = new Mock<IContactTypeLookUpRepositoryFactory>();
+            var mockRepository = new Mock<IContactTypeLookUpRepository>();
+
+            mockRepository.Setup(r => r.GetContactTypeLookUps(It.IsAny<GroupType>()))
+                .Returns(new List<MEContactTypeLookup>() {});
+
+            var stubRequest = new Mock<GetContactTypeLookUpDataRequest>();
+
+            mockFactory.Setup(
+                f => f.GetContactTypeLookUpRepository(It.IsAny<IDataDomainRequest>(), It.IsAny<RepositoryType>()))
+                .Returns(mockRepository.Object);
+
+            var dataManager = new ContactTypeLookUpManager(mockFactory.Object);
+            var data = dataManager.GetContactTypeLookUps(stubRequest.Object);
+
+            Assert.AreEqual(data.ContactTypeLookUps.Count,0);
+            Assert.IsNotNull(data);
+
+        }
     }
 }
  
