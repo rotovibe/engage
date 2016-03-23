@@ -52,7 +52,8 @@ namespace Phytel.API.DataDomain.Contact.ContactTypeLookUp
                     Id = flattenedRole.Id.ToString(),
                     Name = flattenedRole.Name,
                     Role = flattenedRole.Role,
-                    Group = (ContactLookUpGroupType)flattenedRole.GroupId
+                    Group = (ContactLookUpGroupType)flattenedRole.GroupId,
+                    ParentId = flattenedRole.ParentId.ToString()
                 };
                 
 

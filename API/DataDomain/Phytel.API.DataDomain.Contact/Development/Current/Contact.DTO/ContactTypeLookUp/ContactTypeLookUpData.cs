@@ -13,6 +13,7 @@ namespace Phytel.API.DataDomain.Contact.DTO
         public string Id { get; set; }
         public string Name { get; set; }
         public string Role { get; set; }
+        public string ParentId { get; set; }
         public ContactLookUpGroupType Group { get; set; }
         public List<ContactTypeLookUpData> Children { get; set; }
         public DateTime? UpdatedOn { get; set; }
