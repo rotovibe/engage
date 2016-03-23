@@ -14,7 +14,7 @@ using ServiceStack.ServiceInterface.ServiceModel;
 
 namespace AppDomain.Engage.Population.Service
 {
-    [IsAuthenticatedFilter("VP")]
+    [IsAuthenticatedFilter("br")]
     public class DemographicService : ServiceBase
     {
         protected readonly IHostContextProxy _hostContextProxy;
