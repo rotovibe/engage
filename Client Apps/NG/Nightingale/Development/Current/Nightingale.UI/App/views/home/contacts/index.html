@@ -1,0 +1,77 @@
+<div class="route">
+	<section data-type="flex">    
+		<div>
+			<div class="column" data-bind="css: { 'open': leftColumnOpen() }">
+				<div class="widget-wrapper">
+					<div class="widget open" data-bind="css: { 'fullscreen': fullScreenWidget() === 'contactspanel' }, columnSizer: true">
+						<div class="content">
+							<div class="content-fill">
+								<div class="wrapper">
+									<div class="content">
+										<div class="header">
+											<div class="table-cell">
+												<header class="ellipsis">
+													<h1><span data-bind="text: 'Contacts'"></h1>
+													<div class="controls">
+														<div class="toggle" ">
+															<i class="pointer icon-plus" data-bind="click: addContact, clickBubble: false" title="Add"></i>
+														</div>
+														 <div class="toggle single-arrow-left" data-method="open" data-target="column" data-type="remove" data-bind="click: toggleOpenColumn, enable: leftColumnOpen(), clickBubble: false">
+                                                        </div>
+                                                        <div class="toggle double-arrow-right" data-method="open" data-target="column" data-type="add" data-bind="click: toggleOpenColumn, enable: !leftColumnOpen(), clickBubble: false">
+                                                        </div>
+                                                        <div class="toggle fullscreen" data-method="fullscreen" data-target="widget" data-type="both" data-bind="click: function () { toggleFullScreen('contactspanel') }, clickBubble: false">
+                                                        </div>
+													</div>
+												</header>											
+											</div>
+										</div>												
+									</div>
+								</div>
+							</div>
+						</div>					
+					</div>	
+				</div>
+			</div>
+			<div class="column" data-bind="css: { 'open': !leftColumnOpen() }">
+				<div class="widget-wrapper">
+					<div class="widget open" data-bind="css: { 'fullscreen': fullScreenWidget() === 'contactdetails' }, columnSizer: true">
+						<div class="content">
+							<div class="content-fill">
+								<div class="wrapper">
+									<div class="content">
+										<div class="header">
+											<div class="table-cell">
+												<header>
+													<h1><span data-bind="text: 'Details'"></h1>
+													<div class="controls">
+														<!-- ko if: showEditButton -->
+														<div class="toggle" data-bind="click: editContact, clickBubble: false" style="margin-right: 4px;">
+															<a href="#">
+																<i class="icon-edit"></i>
+															</a>
+														</div>	
+														<!-- /ko -->
+														<!-- ko if: showDeleteButton -->
+														<div class="toggle">
+															<a href="#" data-bind="click: deleteContact, clickBubble: false">
+																<i class="icon-cancel red"></i>
+															</a>
+														</div>
+														<!-- /ko -->																											
+														<div class="toggle fullscreen" data-method="fullscreen" data-target="widget" data-type="both" data-bind="click: function () { toggleFullScreen('contactdetails') }, clickBubble: false">
+														</div>
+													</div>
+												</header>											
+											</div>
+										</div>												
+									</div>
+								</div>
+							</div>
+						</div>					
+					</div>	
+				</div>
+			</div>
+		</div>
+	</section>
+</div>

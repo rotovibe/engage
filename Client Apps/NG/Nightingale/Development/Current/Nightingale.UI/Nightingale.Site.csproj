@@ -161,6 +161,7 @@
     <Content Include="App\services\report.context.js" />
     <Content Include="App\services\usercontext.js" />
     <Content Include="App\services\validatorfactory.js" />
+    <Content Include="App\viewmodels\home\contacts\index.js" />
     <Content Include="App\viewmodels\home\todos\index.js" />
     <Content Include="App\viewmodels\insight\reports\index.js" />
     <Content Include="App\viewmodels\insight\index.js" />
@@ -197,6 +198,7 @@
     <Content Include="App\viewmodels\templates\intervention.panel.js" />
     <Content Include="App\viewmodels\templates\allergies.panel.js" />
     <Content Include="App\viewmodels\templates\allergy.edit.js" />
+    <Content Include="App\views\home\contacts\index.html" />
     <Content Include="App\views\patients\medications\index.html" />
     <Content Include="App\views\patients\notes\index.html" />
     <Content Include="App\views\patients\sections\clinicalBackground.html" />
@@ -613,16 +615,6 @@
     <Content Include="Content\images\indicator_right_large.png" />
     <Content Include="Content\images\indicator_right_small.png" />
     <Content Include="Content\images\indicator_top_tab.png" />
-    <Content Include="Content\images\login\feature-image-numbers1.jpg" />
-    <Content Include="Content\images\login\login_1-A.png" />
-    <Content Include="Content\images\login\login_opaque_1-A.png" />
-    <Content Include="Content\images\login\new-wp.png" />
-    <Content Include="Content\images\login\panel_blog.png" />
-    <Content Include="Content\images\login\panel_twitter.png" />
-    <Content Include="Content\images\login\panel_webinar.png" />
-    <Content Include="Content\images\login\panel_whitepaper.png" />
-    <Content Include="Content\images\login\pcpcc_webinar.png" />
-    <Content Include="Content\images\login\twitter_light_blue.png" />
     <Content Include="Content\images\main_menu_toggle.png" />
     <Content Include="Content\images\menu_arrow_blue.png" />
     <Content Include="Content\images\menu_arrow_grey.png" />

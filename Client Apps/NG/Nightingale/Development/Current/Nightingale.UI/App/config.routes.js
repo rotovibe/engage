@@ -27,7 +27,11 @@ define([], function () {
                     title: 'todos',
                     subroute: 'viewmodels/home/todos/index',
                     content: 'To Do'
-                }
+                }, {
+					title: 'contacts',
+					subroute: 'viewmodels/home/contacts/index',
+					content: 'Contacts'
+				}
                 // , {
                 //     title: 'practicehome',
                 //     subroute: 'viewmodels/home/population/index',
@@ -52,7 +56,11 @@ define([], function () {
                     title: 'todos',
                     subroute: 'viewmodels/home/todos/index',
                     content: 'To Do'
-                }
+                }, {
+					title: 'contacts',
+					subroute: 'viewmodels/home/contacts/index',
+					content: 'Contacts'
+				}
                 // , {
                 //     title: 'practicehome',
                 //     subroute: 'viewmodels/home/population/index',

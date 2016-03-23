@@ -992,7 +992,7 @@
 		}
 
 		// Save changes to a single contact card
-		function saveContactCard(contactCard) {
+		function saveContactCard(contactCard) { //TODO: add parameter isInsert
 			// Display a message while saving
 			var message = queryStarted('Contact card', true, 'Saving');
 
