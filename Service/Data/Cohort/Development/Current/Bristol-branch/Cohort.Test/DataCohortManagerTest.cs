@@ -21,7 +21,7 @@ namespace Phytel.API.DataDomain.Cohort.Test
         private const string _CONTRACT_DBName = "InHealth001";
         private const string _CONTRACT = _CONTRACT_DBName;
         private const double _VERSION = 1.1;
-        private Object _repository = new object();
+        private object _repository = new object();
         private Mock<ICohortRepository<GetCohortDataResponse>> _mockedCohortRepository;
         private GetCohortDataRequest _getCohortDataRequest;
         private GetCohortDataResponse _getCohortDataResponse;
@@ -68,7 +68,7 @@ namespace Phytel.API.DataDomain.Cohort.Test
             Assert.That(_getCohortDataResponse, Is.Not.Null);
         }
         [Test]
-        public void CanGelCohorts_Success()
+        public void CanGetCohorts_Success()
         {
 
         }

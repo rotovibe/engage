@@ -38,7 +38,7 @@ namespace AppDomain.Engage.Population.Service
             var response = new PostReferralDefinitionResponse();
             try
             {
-                response = ReferralDefinitionManager.PostReferralDefinition(request);
+                response = ReferralDefinitionManager.PostReferralDefinition(request.ReferralDefinitionData);
 
                 // FYI : use this to log any patients that you might see.
                 //_auditLogger.Patients = new List<string> { "patient1", "patient2", "patient3" };

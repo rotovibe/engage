@@ -6,6 +6,6 @@ namespace AppDomain.Engage.Population
     public interface IReferralDefinitionManager
     {
         UserContext UserContext { get; set; }
-        PostReferralDefinitionResponse PostReferralDefinition(PostReferralDefinitionRequest request);
+        PostReferralDefinitionResponse PostReferralDefinition(ReferralDefinitionData referral);
     }
 }

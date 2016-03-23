@@ -71,7 +71,7 @@ namespace AppDomain.Engage.Population.DataDomainClient
                     "api",
                     "NG",
                     _context.Version,
-                    _context.Contract), "531f2df6072ef727c4d2a3c0"); //_context.UserId); TODO: UserId will be functional with integration of Platform.
+                    _context.Contract), _context.UserId); //TODO: UserId will be functional with integration of Platform.
 
                 var response = _client.Post<PostReferralDefinitionResponse>(url, new PostReferralDefinitionRequest
                 {
