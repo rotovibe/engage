@@ -1,5 +1,6 @@
 ﻿using Phytel.API.AppDomain.NG.DTO;
 using Phytel.API.AppDomain.NG.Programs;
+using Phytel.API.DataDomain.Contact.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -267,7 +268,81 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
 
         public GetContactTypeLookupResponse GetContactTypeLookup(GetContactTypeLookupRequest request)
         {
-            throw new NotImplementedException();
+            var res = new GetContactTypeLookupResponse();
+
+            if (request.GroupType==0)
+            {
+                var fakeLookups = new List<ContactTypeLookUp>()
+                {
+                    new ContactTypeLookUp
+                    {
+                        Id = "56ea0c2c64e91cf53bbfca5f",
+                        Name = "Doctor",
+                        Role = "Doctor(M.D)",
+                        CreatedOn = DateTime.UtcNow,
+                        Group = (int) ContactLookUpGroupType.ContactType,
+                        Children = new List<ContactTypeLookUp>
+                        {
+                            new ContactTypeLookUp
+                            {
+                                Id = "56ea228e64e91cf53bbfca66",
+                                Name = "Addiction Medicine",
+                                Role = "Addition Medicine",
+                                CreatedOn = DateTime.UtcNow,
+                                Group = (int) ContactLookUpGroupType.ContactType
+                            }
+                        }
+                    },
+                    new ContactTypeLookUp
+                    {
+                        Id = "56f310910894eccd367b980e",
+                        Name = "Addiction Medicine",
+                        Role = "Addiction Medicine",
+                        CreatedOn = DateTime.UtcNow,
+                        Group = (int) ContactLookUpGroupType.CareTeam,
+                        Children = new List<ContactTypeLookUp>
+                        {
+                            new ContactTypeLookUp
+                            {
+                                Id = "56f310ae0894eccd367b980f",
+                                Name = "Addiction Medicine",
+                                Role = "Addition Medicine",
+                                CreatedOn = DateTime.UtcNow,
+                                Group = (int) ContactLookUpGroupType.CareTeam
+                            }
+                        }
+                    }
+                };
+                res.ContactTypeLookUps = fakeLookups;
+            }
+            else
+            {
+                var fakeLookups = new List<ContactTypeLookUp>()
+                {
+                    new ContactTypeLookUp
+                    {
+                        Id = "56ea0c2c64e91cf53bbfca5f",
+                        Name = "Doctor",
+                        Role = "Doctor(M.D)",
+                        CreatedOn = DateTime.UtcNow,
+                        Group = request.GroupType,
+                        Children = new List<ContactTypeLookUp>
+                        {
+                            new ContactTypeLookUp
+                            {
+                                Id = "56ea228e64e91cf53bbfca66",
+                                Name = "Addiction Medicine",
+                                Role = "Addition Medicine",
+                                CreatedOn = DateTime.UtcNow,
+                                Group = request.GroupType
+                            }
+                        }
+                    }
+                };
+                res.ContactTypeLookUps = fakeLookups;
+            }
+                       
+            return res;
         }
     }
 }

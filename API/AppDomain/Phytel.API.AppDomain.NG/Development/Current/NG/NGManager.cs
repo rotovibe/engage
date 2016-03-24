@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Web.Hosting;
@@ -1674,7 +1675,10 @@ namespace Phytel.API.AppDomain.NG
 
                 if (response != null && response.ContactTypeLookUps != null)
                 {
-                    ctResponse.ContactTypeLookUps = GetContactTypeLookupNodes(response.ContactTypeLookUps);                    
+                   
+                    var mapData = response.ContactTypeLookUps.Select(Mapper.Map<ContactTypeLookUp>).ToList();
+
+                    ctResponse.ContactTypeLookUps = mapData;
                 }
                 return ctResponse;
             }
@@ -1684,46 +1688,7 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        private List<ContactTypeLookUp> GetContactTypeLookupNodes(List<ContactTypeLookUpData> contacTypeLookUpData )
-        {
-            if (contacTypeLookUpData == null) return null;
-            List<ContactTypeLookUp> res = new List<ContactTypeLookUp>();
-            foreach (var item in contacTypeLookUpData)
-            {
-                var r = new ContactTypeLookUp()
-                {
-                    Id = item.Id,
-                    Name = item.Name,
-                    Group = GetContactTypeGroupTypeId(item.Group),
-                    Role = item.Role,
-                    CreatedOn = item.CreatedOn,
-                    UpdatedOn = item.UpdatedOn,                                        
-                };
-                r.Children = GetContactTypeLookupNodes(item.Children);               
-                res.Add(r);
-            }
-            return res;            
-        }
-
-        private int GetContactTypeGroupTypeId(ContactLookUpGroupType ct)
-        {
-            int res=0;
-            switch (ct)
-            {
-                case ContactLookUpGroupType.Unknown:
-                    res = (int)ContactLookUpGroupType.Unknown;
-                    break;
-                case ContactLookUpGroupType.ContactType:
-                    res = (int)ContactLookUpGroupType.ContactType;
-                    break;
-                case ContactLookUpGroupType.CareTeam:
-                    res = (int)ContactLookUpGroupType.CareTeam;
-                    break;
-                default:
-                    break;
-            }
-            return res;
-        }
+      
 
         #endregion ContactTypeLookUp
 
