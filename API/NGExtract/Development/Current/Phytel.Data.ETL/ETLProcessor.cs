@@ -171,7 +171,7 @@ namespace Phytel.Data.ETL
                 LoadPatientProgramResponses(_contract);
                 LoadPatientProgramAttributes(_contract);
 
-        //        ProcessSpawnElements();
+                ProcessSpawnElements();
                 ToDos.Export();
 
                 FlattenReportSprocs();
