@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using AutoMapper;
 using Phytel.API.DataDomain.Cohort.DTO;
 using MongoDB.Driver;
 using MongoDB.Driver.Builders;
@@ -16,6 +17,7 @@ namespace Phytel.API.DataDomain.Cohort
     {
         private string _dbName = string.Empty;
         private int _expireDays = Convert.ToInt32(ConfigurationManager.AppSettings["ExpireDays"]);
+        protected readonly IMappingEngine _mappingEngine;
 
         static MongoPatientReferralRepository()
         {
@@ -29,8 +31,9 @@ namespace Phytel.API.DataDomain.Cohort
             catch { }
         }
 
-        public MongoPatientReferralRepository(string contractDBName)
+        public MongoPatientReferralRepository(IMappingEngine mappingEngine, string contractDBName)
         {
+            _mappingEngine = mappingEngine;
             _dbName = contractDBName;
         }
 
@@ -47,15 +50,8 @@ namespace Phytel.API.DataDomain.Cohort
                     PatientReferralData prd = request.PatientReferral;
                     using (CohortMongoContext ctx = new CohortMongoContext(_dbName))
                     {
-                        MEPatientReferral patientReferral = new MEPatientReferral(request.UserId)
-                        {
-                            ReferralId = ObjectId.Parse(prd.ReferralId),
-                            PatientId = ObjectId.Parse(prd.PatientId),
-                            ReferralDate = prd.ReferralDate,
-                            Version = request.Version,
-                            TTLDate = DateTime.UtcNow.AddDays(_expireDays),
-                            DeleteFlag = false,
-                        };
+                        MEPatientReferral patientReferral = new MEPatientReferral(request.UserId);
+                        _mappingEngine.Map(request.PatientReferral, patientReferral);
                         ctx.PatientReferrals.Insert(patientReferral);
                         patientreferralid = patientReferral.Id.ToString();
                     }

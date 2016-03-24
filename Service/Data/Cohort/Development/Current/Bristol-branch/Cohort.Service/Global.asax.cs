@@ -1,6 +1,7 @@
 using ServiceStack.WebHost.Endpoints;
 using System;
 using System.Reflection;
+using AutoMapper;
 using Phytel.API.Interface;
 using ServiceStack.Api.Swagger;
 using ServiceStack.Common;
@@ -23,6 +24,15 @@ namespace Phytel.API.DataDomain.Cohort.Service
 
                 HttpServiceContainer.Build(container);
 
+                Mapper.Initialize(mapper =>
+                {
+                    mapper.AddProfile<ObjectIdMap>();
+                    mapper.AddProfile<ReferralDefinitionRequestMap>();
+                    mapper.AddProfile<ReferralDefinitionResultMap>();
+                    mapper.AddProfile<PatientReferralDefinitionRequestMap>();
+                    mapper.AddProfile<PatientReferralDefinitionResultMap>();
+                });
+
                 // request filtering for setting global vals.
                 RequestFilters.Add((req, res, requestDto) =>
                 {
@@ -32,9 +42,6 @@ namespace Phytel.API.DataDomain.Cohort.Service
                         HostContext.Instance.Items.Add("Version", ((IDataDomainRequest) requestDto).Version);
                     }
                 });
-
-                
-
             }
         }
 

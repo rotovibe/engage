@@ -1,4 +1,5 @@
 ﻿using System;
+using AutoMapper;
 using Funq;
 using Phytel.API.Common;
 using Phytel.API.Common.Audit;
@@ -26,7 +27,7 @@ namespace Phytel.API.DataDomain.Cohort.Service
             container.Register<IHelpers>(c => new Helpers()).ReusedWithin(ReuseScope.Request);
 
             container.Register<IReferralRepository<IDataDomainRequest>>(c => 
-                new MongoReferralRepository<IDataDomainRequest>(c.Resolve<IServiceContext>().Contract))
+                new MongoReferralRepository<IDataDomainRequest>(Mapper.Engine, c.Resolve<IServiceContext>().Contract))
                 .ReusedWithin(ReuseScope.Request);
 
             container.Register<IDataReferralManager>(c => 
@@ -34,14 +35,13 @@ namespace Phytel.API.DataDomain.Cohort.Service
                 .ReusedWithin(ReuseScope.Request);
 
             container.Register<IPatientReferralRepository<IDataDomainRequest>>(c =>
-               new MongoPatientReferralRepository<IDataDomainRequest>(c.Resolve<IServiceContext>().Contract))
+               new MongoPatientReferralRepository<IDataDomainRequest>(Mapper.Engine, c.Resolve<IServiceContext>().Contract))
                .ReusedWithin(ReuseScope.Request);
 
             container.Register<IDataPatientReferralManager>(c =>
                 new DataPatientReferralManager(c.Resolve<IServiceContext>(), c.Resolve<IPatientReferralRepository<IDataDomainRequest>>()))
                 .ReusedWithin(ReuseScope.Request);
-            
-
+       
             return container;
         }
     }

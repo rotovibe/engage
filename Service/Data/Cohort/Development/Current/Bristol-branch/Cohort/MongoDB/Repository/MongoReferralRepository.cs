@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using AutoMapper;
 using Phytel.API.DataDomain.Cohort.DTO;
 using MongoDB.Bson;
 using Phytel.API.DataDomain.Cohort.DTO.Model;
@@ -13,7 +14,7 @@ namespace Phytel.API.DataDomain.Cohort
         private string _dbName = string.Empty;
         private int _expireDays = Convert.ToInt32(ConfigurationManager.AppSettings["ExpireDays"]);
         private int _initializeDays = Convert.ToInt32(ConfigurationManager.AppSettings["InitializeDays"]);
-
+        protected readonly IMappingEngine _mappingEngine;
         static MongoReferralRepository()
         {
             try
@@ -26,8 +27,9 @@ namespace Phytel.API.DataDomain.Cohort
             catch { }
         }
 
-        public MongoReferralRepository(string contractDBName)
+        public MongoReferralRepository(IMappingEngine mappingEngine, string contractDBName)
         {
+            _mappingEngine = mappingEngine;
             _dbName = contractDBName;
         }
 
@@ -40,21 +42,10 @@ namespace Phytel.API.DataDomain.Cohort
                 PostReferralDefinitionRequest request = newEntity as PostReferralDefinitionRequest;
                 if (request != null)
                 {
-                    ReferralData rd = request.Referral;
-                   
                     using (CohortMongoContext ctx = new CohortMongoContext(_dbName))
                     {
-                        MEReferral referral = new MEReferral(request.UserId)
-                        {
-                            CohortId = rd.CohortId,
-                            Description = rd.Description,
-                            Name = rd.Name,
-                            Reason = rd.Reason,
-                            DataSource = rd.DataSource, 
-                            Version = request.Version,
-                            TTLDate = DateTime.UtcNow.AddDays(_expireDays),
-                            DeleteFlag = false,
-                        };
+                        MEReferral referral = new MEReferral(request.UserId);
+                        _mappingEngine.Map(request.Referral, referral);
                         ctx.Referrals.Insert(referral);
                         referralid = referral.Id.ToString();
                     }

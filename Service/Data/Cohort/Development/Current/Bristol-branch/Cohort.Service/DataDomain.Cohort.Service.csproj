@@ -45,6 +45,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AutoMapper, Version=4.0.4.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\..\App\Bristol\Development\Current\packages\AutoMapper.4.0.4\lib\net45\AutoMapper.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="ServiceStack, Version=3.9.71.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\..\..\App\Bristol\Development\Current\packages\ServiceStack.3.9.71\lib\net35\ServiceStack.dll</HintPath>
