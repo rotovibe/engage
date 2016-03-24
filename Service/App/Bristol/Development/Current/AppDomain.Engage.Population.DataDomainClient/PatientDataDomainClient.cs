@@ -16,6 +16,7 @@ namespace AppDomain.Engage.Population.DataDomainClient
         private readonly IHelpers _urlHelper;
         private readonly IRestClient _client;
         private readonly IServiceContext _context;
+        public UserContext UserContext { get; set; }
 
         public PatientDataDomainClient(string domainUrl, IHelpers urlHelper, IRestClient client, IServiceContext context)
         {
@@ -60,7 +61,7 @@ namespace AppDomain.Engage.Population.DataDomainClient
             }
         }
 
-        public PostReferralDefinitionResponse PostReferralDefinition(ReferralDefinitionData referralDefinitionData)
+        public PostReferralDefinitionResponse PostReferralDefinition(ReferralDefinitionData referralDefinitionData, UserContext userContext)
         {
             try
             {
@@ -71,14 +72,14 @@ namespace AppDomain.Engage.Population.DataDomainClient
                     "api",
                     "NG",
                     _context.Version,
-                    _context.Contract), _context.UserId); //TODO: UserId will be functional with integration of Platform.
+                    _context.Contract), userContext.UserId);
 
                 var response = _client.Post<PostReferralDefinitionResponse>(url, new PostReferralDefinitionRequest
                 {
                     Referral = referralData,
                     Context = "NG",
                     ContractNumber = _context.Contract,
-                    UserId = _context.UserId,
+                    UserId = userContext.UserId,
                     Version = _context.Version
                 });
 

@@ -1,4 +1,5 @@
-﻿using AppDomain.Engage.Population.DTO.Referrals;
+﻿using AppDomain.Engage.Population.DTO.Context;
+using AppDomain.Engage.Population.DTO.Referrals;
 using Phytel.API.DataDomain.Patient.DTO;
 
 namespace AppDomain.Engage.Population.DataDomainClient
@@ -7,6 +8,6 @@ namespace AppDomain.Engage.Population.DataDomainClient
     {
         string PostPatientDetails(PatientData patients);
 
-        PostReferralDefinitionResponse PostReferralDefinition(ReferralDefinitionData referral);
+        PostReferralDefinitionResponse PostReferralDefinition(ReferralDefinitionData referral, UserContext userContext);
     }
 }

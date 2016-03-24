@@ -19,7 +19,7 @@ namespace AppDomain.Engage.Population
         // Collect the data from the 
         public PostReferralDefinitionResponse PostReferralDefinition(ReferralDefinitionData referral)
         {
-            return _client.PostReferralDefinition(referral);
+            return _client.PostReferralDefinition(referral, UserContext);
         }
     }
 }
