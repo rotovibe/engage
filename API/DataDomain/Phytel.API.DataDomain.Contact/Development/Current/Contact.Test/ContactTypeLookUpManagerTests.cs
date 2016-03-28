@@ -45,7 +45,7 @@ namespace Phytel.API.DataDomain.Contact.Test
             var mockFactory = new Mock<IContactTypeLookUpRepositoryFactory>();
             var mockRepository = new Mock<IContactTypeLookUpRepository>();
 
-            mockRepository.Setup(r => r.GetContactTypeLookUps(It.IsAny<GroupType>()))
+            mockRepository.Setup(r => r.GetContactTypeLookUps(It.IsAny<ContactLookUpGroupType>()))
                 .Returns(new List<MEContactTypeLookup>() {});
 
             var stubRequest = new Mock<GetContactTypeLookUpDataRequest>();
@@ -87,7 +87,7 @@ namespace Phytel.API.DataDomain.Contact.Test
 
             };
 
-            mockRepository.Setup(r => r.GetContactTypeLookUps(It.IsAny<GroupType>()))
+            mockRepository.Setup(r => r.GetContactTypeLookUps(It.IsAny<ContactLookUpGroupType>()))
                 .Returns(lookUpData);
 
             var stubRequest = new Mock<GetContactTypeLookUpDataRequest>();
@@ -136,7 +136,7 @@ namespace Phytel.API.DataDomain.Contact.Test
 
             };
 
-            mockRepository.Setup(r => r.GetContactTypeLookUps(It.IsAny<GroupType>()))
+            mockRepository.Setup(r => r.GetContactTypeLookUps(It.IsAny<ContactLookUpGroupType>()))
                 .Returns(lookUpData);
 
             var stubRequest = new Mock<GetContactTypeLookUpDataRequest>();

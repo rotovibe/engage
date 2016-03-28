@@ -13,4 +13,12 @@
         Yes = 1,
         No = 2
     }
+
+    public enum ContactLookUpGroupType
+    {
+        Unknown = 0,
+        ContactType = 1,
+        CareTeam = 2
+
+    }
 }

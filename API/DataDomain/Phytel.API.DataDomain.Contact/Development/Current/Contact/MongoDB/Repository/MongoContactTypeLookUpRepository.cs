@@ -41,7 +41,7 @@ namespace Phytel.API.DataDomain.Contact.ContactTypeLookUp
 
         #region IContactTypeLookUpRepository Members
 
-        public object GetContactTypeLookUps(GroupType type)
+        public object GetContactTypeLookUps(ContactLookUpGroupType type)
         {
             var dataResponse = new List<MEContactTypeLookup>();
             using (var ctx = new ContactTypeLookUpMongoContext(_dbName))
@@ -53,7 +53,7 @@ namespace Phytel.API.DataDomain.Contact.ContactTypeLookUp
                 };
 
 
-                if (type != GroupType.Unknown)
+                if (type != ContactLookUpGroupType.Unknown)
                 {
                     var typeMongoQuery = Query<MEContactTypeLookup>.EQ(c => c.GroupId, type);
                     queries.Add(typeMongoQuery);
@@ -82,7 +82,7 @@ namespace Phytel.API.DataDomain.Contact.ContactTypeLookUp
                     Active = true,
                     DeleteFlag = false,
                     Id = id,
-                    GroupId = (GroupType)request.Group,
+                    GroupId = (ContactLookUpGroupType)request.Group,
                     ParentId = request.ParentId != null ? ObjectId.Parse(request.ParentId) : ObjectId.Empty,
                     Role = request.Role,
                     Name = request.Name

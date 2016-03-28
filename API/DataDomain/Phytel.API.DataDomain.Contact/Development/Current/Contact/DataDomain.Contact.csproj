@@ -100,7 +100,6 @@
     <Compile Include="IMruList.cs" />
     <Compile Include="MongoDB\DTO\Address.cs" />
     <Compile Include="MongoDB\DTO\CommMode.cs" />
-    <Compile Include="MongoDB\DTO\GroupType.cs" />
     <Compile Include="MongoDB\DTO\MEContact.cs" />
     <Compile Include="MongoDB\DTO\Email.cs" />
     <Compile Include="MongoDB\DTO\Language.cs" />

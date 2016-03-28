@@ -31,7 +31,7 @@ namespace Phytel.API.DataDomain.Contact.ContactTypeLookUp
             if (repository == null)
                 throw new Exception("The repository is null");
 
-            data = (List<MEContactTypeLookup>)repository.GetContactTypeLookUps((GroupType)request.GroupType);
+            data = (List<MEContactTypeLookup>)repository.GetContactTypeLookUps((ContactLookUpGroupType)request.GroupType);
 
             var contactTypeLookupHierarchy = CreateRoleHierarchy(data, "000000000000000000000000");
 

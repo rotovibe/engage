@@ -2,6 +2,7 @@
 using System.Text.RegularExpressions;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using Phytel.API.DataDomain.Contact.DTO;
 using Phytel.Services.Mongo.Linq;
 
 namespace Phytel.API.DataDomain.Contact.MongoDB.DTO
@@ -38,7 +39,7 @@ namespace Phytel.API.DataDomain.Contact.MongoDB.DTO
 
         [BsonElement(GroupProperty)]
         [BsonIgnoreIfNull(true)]
-        public GroupType GroupId { get; set; }
+        public ContactLookUpGroupType GroupId { get; set; }
 
         [BsonExtraElements]
         public BsonDocument ExtraElements { get; set; }
