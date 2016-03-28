@@ -30,6 +30,21 @@ namespace Phytel.API.AppDomain.NG.DTO
         public List<string> TimesOfDaysId { get; set; }
         public string TimeZoneId { get; set; }
         public List<Language> Languages { get; set; }
+        public string ExternalRecordId { get; set; }
+        public string DataSource { get; set; }
+        public int StatusId { get; set; }
+        public int DeceasedId { get; set; }
+        public string Prefix { get; set; }
+        public string Suffix { get; set; }
+        public ContactType Type { get; set; }
+        public bool IsPatient { get; set; }
+        public bool IsUser { get; set; }
 
+    }
+
+    public class ContactType
+    {
+        public string ContactTypeLookupId { get; set; }
+        public List<ContactType> Children { get; set; }
     }
 }

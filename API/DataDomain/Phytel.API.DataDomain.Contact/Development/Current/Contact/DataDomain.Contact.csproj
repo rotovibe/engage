@@ -89,6 +89,7 @@
     <Compile Include="ContactTypeLookUp\ContactTypeLookUpManager.cs" />
     <Compile Include="ContactTypeLookUp\ContactTypeLookUpRepositoryFactory.cs" />
     <Compile Include="MongoDB\ContactTypeLookUpMongoContext.cs" />
+    <Compile Include="MongoDB\DTO\ContactType.cs" />
     <Compile Include="MongoDB\Repository\MongoContactTypeLookUpRepository.cs" />
     <Compile Include="ContactTypeLookUp\IContactTypeLookUpManager.cs" />
     <Compile Include="ContactTypeLookUp\IContactTypeLookUpRepository.cs" />

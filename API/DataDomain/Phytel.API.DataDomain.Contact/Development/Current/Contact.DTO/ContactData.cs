@@ -30,7 +30,15 @@ namespace Phytel.API.DataDomain.Contact.DTO
         public DateTime? UpdatedOn { get; set; }
         public DateTime CreatedOn { get; set; }
         public string ExternalRecordId { get; set; }
+        public string DataSource { get; set; }
+        public int StatusId { get; set; }
+        public int DeceasedId { get; set; }
+        public string Prefix { get; set; }
+        public string Suffix { get; set; }
+        public ContactTypeData TypeData { get; set; }
     }
+
+
 }
 
 
