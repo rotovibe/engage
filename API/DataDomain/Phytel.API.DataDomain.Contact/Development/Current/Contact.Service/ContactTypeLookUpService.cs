@@ -37,6 +37,29 @@ namespace Phytel.API.DataDomain.Contact.Service
             return response;
         }
 
+        public PutContactTypeLookUpDataResponse Put(PutContactTypeLookUpDataRequest request)
+        {
+            var response = new PutContactTypeLookUpDataResponse { Version = request.Version };
+            try
+            {
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("ContactDD:ContactTypeLookUpService:Put()::Unauthorized Access");
+
+                var dataResponse = Manager.SavContactTypeLookUp(request);
+
+                response.Id = dataResponse.Id;
+
+            }
+            catch (Exception ex)
+            {
+                CommonFormat.FormatExceptionResponse(response, base.Response, ex);
+
+                var aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Helpers.LogException(int.Parse(aseProcessID), ex);
+            }
+            return response;
+        }
+
 
     }
 }

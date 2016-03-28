@@ -1,4 +1,5 @@
-﻿using Phytel.API.DataDomain.Contact.MongoDB.DTO;
+﻿using Phytel.API.DataDomain.Contact.DTO;
+using Phytel.API.DataDomain.Contact.MongoDB.DTO;
 using Phytel.API.Interface;
 
 namespace Phytel.API.DataDomain.Contact.ContactTypeLookUp
@@ -7,6 +8,7 @@ namespace Phytel.API.DataDomain.Contact.ContactTypeLookUp
     {
 
         object GetContactTypeLookUps(GroupType type);
-        
+        string SaveContactTypeLookUp(ContactTypeLookUpData request, string userId);
+
     }
 }

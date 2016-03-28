@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
 using MongoDB.Driver.Builders;
 using Phytel.API.Common.Audit;
+using Phytel.API.DataDomain.Contact.DTO;
 using Phytel.API.DataDomain.Contact.MongoDB;
 using Phytel.API.DataDomain.Contact.MongoDB.DTO;
 using ServiceStack.WebHost.Endpoints;
@@ -36,6 +38,9 @@ namespace Phytel.API.DataDomain.Contact.ContactTypeLookUp
             _dbName = dbname;
             AppHostBase.Instance.Container.AutoWire(this);
         }
+
+        #region IContactTypeLookUpRepository Members
+
         public object GetContactTypeLookUps(GroupType type)
         {
             var dataResponse = new List<MEContactTypeLookup>();
@@ -63,11 +68,52 @@ namespace Phytel.API.DataDomain.Contact.ContactTypeLookUp
             return dataResponse;
         }
 
+        public string SaveContactTypeLookUp(DTO.ContactTypeLookUpData request, string userId)
+        {
+            //var data = this.FindByID(request.Id);
+            var id = request.Id == null ? ObjectId.GenerateNewId() : ObjectId.Parse(request.Id); 
+
+            
+            //If not exists add.
+            if (string.IsNullOrEmpty(request.Id) )
+            {
+                var dataEntity = new MEContactTypeLookup(userId, DateTime.Now)
+                {
+                    Active = true,
+                    DeleteFlag = false,
+                    Id = id,
+                    GroupId = (GroupType)request.Group,
+                    ParentId = request.ParentId != null ? ObjectId.Parse(request.ParentId) : ObjectId.Empty,
+                    Role = request.Role,
+                    Name = request.Name
+                    
+                };
+
+                this.Insert(dataEntity);
+            }
+            else
+            {
+                this.Update(request);
+            }
+
+            return id.ToString();
+        }
+
+        #endregion
+
+        #region IRepository Members
+
         public string UserId { get; set; }
 
         public object Insert(object newEntity)
         {
-            throw new NotImplementedException();
+            var dataToInsert = (MEContactTypeLookup) newEntity;
+            using (var ctx = new ContactTypeLookUpMongoContext(_dbName))
+            {
+                ctx.ContactTypeLookUps.Save(dataToInsert);
+            }
+
+            return dataToInsert.Id.ToString();
         }
 
         public object InsertAll(List<object> entities)
@@ -87,7 +133,29 @@ namespace Phytel.API.DataDomain.Contact.ContactTypeLookUp
 
         public object FindByID(string entityID)
         {
-            throw new NotImplementedException();
+            MEContactTypeLookup data = null;
+            using (var ctx = new ContactTypeLookUpMongoContext(_dbName))
+            {
+                var queries = new List<IMongoQuery>
+                {
+                    Query<MEContactTypeLookup>.EQ(c => c.Id, ObjectId.Parse(entityID)),
+                    Query<MEContactTypeLookup>.EQ(c => c.Active, true),
+                    Query<MEContactTypeLookup>.EQ(c => c.DeleteFlag, false)
+                };
+
+
+
+                var query = Query.And(queries);
+                var lookUp = ctx.ContactTypeLookUps.Collection.FindOne(query);
+
+                if (lookUp == null)
+                    throw new Exception(string.Format("No Lookup Item found for Id: {0}", data.Id));
+
+                data = lookUp;
+
+                
+            }
+            return data;
         }
 
         public Tuple<string, IEnumerable<object>> Select(Interface.APIExpression expression)
@@ -102,7 +170,30 @@ namespace Phytel.API.DataDomain.Contact.ContactTypeLookUp
 
         public object Update(object entity)
         {
-            throw new NotImplementedException();
+            var data = (ContactTypeLookUpData) entity;
+
+            using (var ctx = new ContactTypeLookUpMongoContext(_dbName))
+            {
+                var queries = new List<IMongoQuery>
+                {
+                    Query<MEContactTypeLookup>.EQ(c => c.Id, ObjectId.Parse(data.Id)),
+                    Query<MEContactTypeLookup>.EQ(c => c.Active, true),
+                    Query<MEContactTypeLookup>.EQ(c => c.DeleteFlag, false)
+                };
+
+                
+
+                var query = Query.And(queries);
+                var lookUp = ctx.ContactTypeLookUps.Collection.FindOne(query);
+
+                if(lookUp == null)
+                    throw new Exception(string.Format("No Lookup Item found for Id: {0}", data.Id));
+
+                //TODO : Update.
+                
+            }
+
+            return true;
         }
 
         public void CacheByID(List<string> entityIDs)
@@ -114,5 +205,8 @@ namespace Phytel.API.DataDomain.Contact.ContactTypeLookUp
         {
             throw new NotImplementedException();
         }
+
+        #endregion
+
     }
 }

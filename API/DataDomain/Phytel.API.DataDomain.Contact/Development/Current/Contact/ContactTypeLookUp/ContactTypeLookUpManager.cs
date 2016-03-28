@@ -7,17 +7,19 @@ using Phytel.API.DataDomain.Contact.MongoDB.DTO;
 
 namespace Phytel.API.DataDomain.Contact.ContactTypeLookUp
 {
-    public class ContactTypeLookUpManager: IContactTypeLookUpManager
+    public class ContactTypeLookUpManager : IContactTypeLookUpManager
     {
         private readonly IContactTypeLookUpRepositoryFactory _factory;
-
         public ContactTypeLookUpManager(IContactTypeLookUpRepositoryFactory factory)
         {
-            if(factory == null)
+            if (factory == null)
                 throw new ArgumentNullException("factory");
 
             _factory = factory;
         }
+
+
+        #region IContactTypeLookUpManager Members
 
         public GetContactTypeLookUpDataResponse GetContactTypeLookUps(DTO.GetContactTypeLookUpDataRequest request)
         {
@@ -26,12 +28,12 @@ namespace Phytel.API.DataDomain.Contact.ContactTypeLookUp
 
             var repository = _factory.GetContactTypeLookUpRepository(request, RepositoryType.ContactTypeLookUp);
 
-            if(repository == null)
+            if (repository == null)
                 throw new Exception("The repository is null");
 
-             data = (List<MEContactTypeLookup>)repository.GetContactTypeLookUps((GroupType)request.GroupType);
+            data = (List<MEContactTypeLookup>)repository.GetContactTypeLookUps((GroupType)request.GroupType);
 
-             var contactTypeLookupHierarchy = CreateRoleHierarchy(data, "000000000000000000000000");
+            var contactTypeLookupHierarchy = CreateRoleHierarchy(data, "000000000000000000000000");
 
             response.ContactTypeLookUps = contactTypeLookupHierarchy;
             response.Version = 1.0;
@@ -39,6 +41,28 @@ namespace Phytel.API.DataDomain.Contact.ContactTypeLookUp
 
             return response;
         }
+
+        public PutContactTypeLookUpDataResponse SavContactTypeLookUp(PutContactTypeLookUpDataRequest request)
+        {
+
+            var response = new PutContactTypeLookUpDataResponse();
+
+            if(request == null)
+                throw new ArgumentNullException("request");
+
+            var repository = _factory.GetContactTypeLookUpRepository(request, RepositoryType.ContactTypeLookUp);
+
+            var dataResponse = repository.SaveContactTypeLookUp(request.ContactTypeLookUpData, repository.UserId);
+
+            response.Id = dataResponse;
+
+            return response;
+
+        }
+
+        #endregion
+
+        #region Private Methods
 
         private static List<ContactTypeLookUpData> CreateRoleHierarchy(List<MEContactTypeLookup> flattenedRoles, string parentId)
         {
@@ -55,7 +79,7 @@ namespace Phytel.API.DataDomain.Contact.ContactTypeLookUp
                     Group = (ContactLookUpGroupType)flattenedRole.GroupId,
                     ParentId = flattenedRole.ParentId.ToString()
                 };
-                
+
 
                 if (flattenedRoles.Any(r => r.ParentId.ToString() == flattenedRole.Id.ToString()))
                 {
@@ -69,5 +93,8 @@ namespace Phytel.API.DataDomain.Contact.ContactTypeLookUp
 
             return roleHierarchy;
         }
+
+        #endregion
+        
     }
 }

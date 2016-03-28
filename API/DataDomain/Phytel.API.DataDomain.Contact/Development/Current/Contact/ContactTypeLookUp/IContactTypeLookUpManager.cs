@@ -6,5 +6,6 @@ namespace Phytel.API.DataDomain.Contact.ContactTypeLookUp
     public interface IContactTypeLookUpManager
     {
         GetContactTypeLookUpDataResponse GetContactTypeLookUps(GetContactTypeLookUpDataRequest request);
+        PutContactTypeLookUpDataResponse SavContactTypeLookUp(PutContactTypeLookUpDataRequest request);
     }
 }
