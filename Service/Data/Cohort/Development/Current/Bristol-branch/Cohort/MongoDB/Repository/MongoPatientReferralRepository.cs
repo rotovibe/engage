@@ -52,6 +52,7 @@ namespace Phytel.API.DataDomain.Cohort
                     {
                         MEPatientReferral patientReferral = new MEPatientReferral(request.UserId);
                         _mappingEngine.Map(request.PatientReferral, patientReferral);
+                        patientReferral.Version = request.Version;
                         ctx.PatientReferrals.Insert(patientReferral);
                         patientreferralid = patientReferral.Id.ToString();
                     }
