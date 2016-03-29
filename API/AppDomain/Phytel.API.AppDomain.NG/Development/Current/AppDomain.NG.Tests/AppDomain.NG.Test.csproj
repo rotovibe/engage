@@ -135,6 +135,7 @@
     <Compile Include="Allergy\Data_Allergy_Test.cs" />
     <Compile Include="Allergy\Data_PatientAllergy_Test.cs" />
     <Compile Include="AppDomainRequest.cs" />
+    <Compile Include="AutoMapperConfigurationTests.cs" />
     <Compile Include="CareMember_Tests.cs" />
     <Compile Include="ContactTypeLookupManager_Tests.cs" />
     <Compile Include="Factories\NGManagerFactory.cs" />
