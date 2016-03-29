@@ -1657,20 +1657,24 @@ namespace Phytel.API.AppDomain.NG
             Contact contact = null;
             try
             {
-                contact = new Contact
-                {
-                    Id = "cid",
-                    FirstName = "Dummy FName",
-                    LastName = "Dummy LName",
-                    IsPatient = false,
-                    IsUser = false
+                IRestClient client = new JsonServiceClient();
+                var url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Contact/{4}",
+                        DDContactServiceUrl,
+                        "NG",
+                        request.Version,
+                        request.ContractNumber,
+                        request.ContactId), request.UserId);
 
-                };
+                //[Route("/{Context}/{Version}/{ContractNumber}/Contact/{ContactId}", "GET")]
+                var dataDomainResponse = client.Get<DataDomain.Contact.DTO.GetContactByContactIdDataResponse>(url);
+                var mappedData = Mapper.Map<Contact>(dataDomainResponse.Contact);
+
+                contact = mappedData;
 
             }
             catch (WebServiceException wse)
             {
-                throw new WebServiceException("AD:GetContactByPatientId()::" + wse.Message, wse.InnerException);
+                throw new WebServiceException("AD:GetContactByContactId()::" + wse.Message, wse.InnerException);
             }
             return contact;
             
