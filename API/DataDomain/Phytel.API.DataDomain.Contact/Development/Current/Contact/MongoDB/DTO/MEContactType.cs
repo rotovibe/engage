@@ -3,7 +3,7 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace Phytel.API.DataDomain.Contact.DTO
 {
-    public class ContactType
+    public class MEContactType
     {
         public const string ContactTypeLookupIdProperty = "lkid";
         [BsonElement(ContactTypeLookupIdProperty)]
@@ -13,6 +13,6 @@ namespace Phytel.API.DataDomain.Contact.DTO
         public const string ChildrenProperty = "chld";
         [BsonIgnoreIfNull(true)]
         [BsonElement(ChildrenProperty)]
-        public List<ContactType> Children { get; set; }
+        public List<MEContactType> Children { get; set; }
     }
 }

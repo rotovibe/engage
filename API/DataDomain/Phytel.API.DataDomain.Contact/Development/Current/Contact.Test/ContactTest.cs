@@ -97,7 +97,7 @@ namespace Phytel.API.DataDomain.Contact.Test
         [TestMethod]
         public void InsertContactByUserId_Test()
         {
-            PutContactDataRequest request = new PutContactDataRequest();
+            InsertContactDataRequest request = new InsertContactDataRequest();
 
             request.ContractNumber = "InHealth001";
             request.Version = 1;
@@ -111,7 +111,7 @@ namespace Phytel.API.DataDomain.Contact.Test
         [TestMethod]
         public void InsertContact_Test()
         {
-            PutContactDataRequest insRequest = new PutContactDataRequest();
+            InsertContactDataRequest insRequest = new InsertContactDataRequest();
             ContactData request = new ContactData();
 
             insRequest.ContractNumber = "InHealth001";

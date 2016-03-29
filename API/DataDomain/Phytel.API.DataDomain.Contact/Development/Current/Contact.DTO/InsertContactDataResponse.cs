@@ -4,7 +4,7 @@ using Phytel.API.Interface;
 
 namespace Phytel.API.DataDomain.Contact.DTO
 {
-    public class PutContactDataResponse : IDomainResponse
+    public class InsertContactDataResponse : IDomainResponse
     {
         public string Id { get; set; }
         public double Version { get; set; }

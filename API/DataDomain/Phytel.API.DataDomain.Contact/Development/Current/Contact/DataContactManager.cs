@@ -70,7 +70,7 @@ namespace Phytel.API.DataDomain.Contact
             return response;
         }
 
-        public string InsertContact(PutContactDataRequest request)
+        public string InsertContact(InsertContactDataRequest request)
         {
             string id = null;
             try

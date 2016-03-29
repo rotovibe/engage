@@ -38,6 +38,10 @@ namespace Phytel.API.AppDomain.NG.DTO
 
     public class ContactType
     {
+        public ContactType()
+        {
+            Children = new List<ContactType>();
+        }
         public string ContactTypeLookupId { get; set; }
         public List<ContactType> Children { get; set; }
     }

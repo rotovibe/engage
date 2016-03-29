@@ -8,6 +8,11 @@ namespace Phytel.API.DataDomain.Contact.DTO
 {
     public class ContactTypeData
     {
+        public ContactTypeData()
+        {
+            Children = new List<ContactTypeData>();
+        }
+        
         public string ContactTypeLookupId { get; set; }
         public List<ContactTypeData> Children { get; set; }
     }

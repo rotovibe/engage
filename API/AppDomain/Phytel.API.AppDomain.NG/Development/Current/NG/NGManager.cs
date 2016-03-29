@@ -1531,8 +1531,8 @@ namespace Phytel.API.AppDomain.NG
             try
             {
                 ContactData contactData = Mapper.Map<ContactData>(request.Contact);
-                
-                PutContactDataRequest putContactDataRequest = new PutContactDataRequest()
+
+                InsertContactDataRequest ddRequest = new InsertContactDataRequest()
                 {                    
                    ContactData = contactData,
                    UserId = request.UserId,
@@ -1541,15 +1541,15 @@ namespace Phytel.API.AppDomain.NG
                    Version = request.Version   
                 };
                 IRestClient client = new JsonServiceClient();
-                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Contact",
+                //[Route("/{Context}/{Version}/{ContractNumber}/Contacts", "POST")]
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Contacts",
                         DDContactServiceUrl,
                         "NG",
                         request.Version,
                         request.ContractNumber
                         ), request.UserId);
 
-                // [Route("/{Context}/{Version}/{ContractNumber}/Contact", "PUT")]
-                PutContactDataResponse dataDomainResponse = client.Put<PutContactDataResponse>(url, putContactDataRequest);
+                InsertContactDataResponse dataDomainResponse = client.Post<InsertContactDataResponse>(url, ddRequest);
 
                 if (dataDomainResponse != null)
                 {
@@ -2072,26 +2072,23 @@ namespace Phytel.API.AppDomain.NG
                     }
                 }
 
-                // [Route("/{Context}/{Version}/{ContractNumber}/Patient/Contact/{PatientId}", "PUT")]
+                //[Route("/{Context}/{Version}/{ContractNumber}/Contacts", "POST")]
                 IRestClient client = new JsonServiceClient();
-                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/patient/contact/{4}",
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Contacts",
                                                                                 DDContactServiceUrl,
                                                                                 context,
                                                                                 version,
-                                                                                contractNumber,
-                                                                                patientId), userId);
+                                                                                contractNumber), userId);
 
                 ContactData contactData = new ContactData { TimeZoneId = defaultTimeZone, Modes = commModeData, PatientId = patientId };
-                PutContactDataResponse dataDomainResponse =
-                    client.Put<PutContactDataResponse>(url, new PutContactDataRequest
+                InsertContactDataResponse dataDomainResponse =
+                    client.Post<InsertContactDataResponse>(url, new InsertContactDataRequest
                                                             {
-                                                                PatientId = patientId,
                                                                 ContactData = contactData,
                                                                 Context = context,
                                                                 ContractNumber = contractNumber,
                                                                 Version = version,
                                                                 UserId = userId
-
                                                             } as object);
 
                 if (dataDomainResponse != null && !string.IsNullOrEmpty(dataDomainResponse.Id))

@@ -120,23 +120,26 @@ namespace Phytel.API.DataDomain.Contact.Service
             return response;
         }
 
-        public PutContactDataResponse Put(PutContactDataRequest request)
+        public InsertContactDataResponse Post(InsertContactDataRequest request)
         {
-            PutContactDataResponse response = new PutContactDataResponse();
-            response.Version = request.Version;
-            try
+            InsertContactDataResponse response = new InsertContactDataResponse();
+            if (request != null)
             {
-                if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("ContactDD:Put()::Unauthorized Access");
+                response.Version = request.Version;
+                try
+                {
+                    if (string.IsNullOrEmpty(request.UserId))
+                        throw new UnauthorizedAccessException("ContactDD:Post()::Unauthorized Access");
 
-                response.Id = Manager.InsertContact(request);
-            }
-            catch (Exception ex)
-            {
-                CommonFormat.FormatExceptionResponse(response, base.Response, ex);
+                    response.Id = Manager.InsertContact(request);
+                }
+                catch (Exception ex)
+                {
+                    CommonFormat.FormatExceptionResponse(response, base.Response, ex);
 
-                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
-                Helpers.LogException(int.Parse(aseProcessID), ex);
+                    string aseProcessId = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                    Helpers.LogException(int.Parse(aseProcessId), ex);
+                }
             }
             return response;
         }

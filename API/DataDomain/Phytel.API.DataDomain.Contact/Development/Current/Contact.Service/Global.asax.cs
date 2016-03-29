@@ -30,6 +30,7 @@ namespace Phytel.API.DataDomain.Contact.Service
                 container.RegisterAutoWiredAs<ContactTypeLookUpRepositoryFactory, IContactTypeLookUpRepositoryFactory>();
                 container.RegisterAutoWiredAs<ContactTypeLookUpManager, IContactTypeLookUpManager>();
                 container.RegisterAutoWiredAs<AuditHelpers, IAuditHelpers>();
+                ContactContainer.Configure(container);
                
             }
         }

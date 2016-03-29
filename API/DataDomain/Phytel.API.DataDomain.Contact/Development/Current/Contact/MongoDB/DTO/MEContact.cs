@@ -84,7 +84,7 @@ namespace Phytel.API.DataDomain.Contact.DTO
         public const string TypeProperty = "type";
         [BsonElement(TypeProperty)]
         [BsonIgnoreIfNull(true)]
-        public ContactType Type { get; set; }
+        public MEContactType Type { get; set; }
 
         #region Communication fields
         public const string ModesProperty = "mds";
