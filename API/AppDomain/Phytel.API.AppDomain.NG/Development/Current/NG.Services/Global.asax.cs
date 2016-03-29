@@ -44,6 +44,7 @@ namespace Phytel.API.AppDomain.NG.Service
                 PatientSystemMapper.Build();
                 PatientContactMapper.Build();
                 ContactTypeLookUpsMappers.Build();
+                ContactMapper.Build();
                 Plugins.Add(new RequestLogsFeature() {RequiredRoles = new string[] {}});
 
                 // request filtering for setting global vals.

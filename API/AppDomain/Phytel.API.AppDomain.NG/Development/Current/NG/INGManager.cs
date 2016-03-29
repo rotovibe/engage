@@ -38,6 +38,7 @@ namespace Phytel.API.AppDomain.NG
         PutUpdateContactResponse PutUpdateContact(PutUpdateContactRequest request);
         PostDeletePatientResponse DeletePatient(PostDeletePatientRequest request);
         PostRemovePatientProgramResponse RemovePatientProgram(PostRemovePatientProgramRequest request);
+        InsertContactResponse InsertContact(InsertContactRequest request);
         void LogException(Exception ex);
         GetInitializePatientResponse GetInitializePatient(GetInitializePatientRequest request);
         PostProgramAttributesChangeResponse PostProgramAttributeChanges(PostProgramAttributesChangeRequest request);

@@ -27,6 +27,7 @@ using Phytel.API.DataDomain.PatientSystem.DTO;
 using Phytel.API.DataDomain.PatientObservation.DTO;
 using Phytel.API.DataDomain.Program.DTO;
 using Phytel.API.DataDomain.Contact.DTO.ContactTypeLookUp;
+using ServiceStack.Common.Utils;
 
 namespace Phytel.API.AppDomain.NG
 {
@@ -1519,6 +1520,47 @@ namespace Phytel.API.AppDomain.NG
             {
                 throw new WebServiceException("AD:PutUpdateContact()::" + wse.Message, wse.InnerException);
             }
+        }
+
+
+        public InsertContactResponse InsertContact(InsertContactRequest request)
+        {
+            InsertContactResponse insertContactResponse = new InsertContactResponse();
+            
+           
+            try
+            {
+                ContactData contactData = Mapper.Map<ContactData>(request.Contact);
+                
+                PutContactDataRequest putContactDataRequest = new PutContactDataRequest()
+                {                    
+                   ContactData = contactData,
+                   UserId = request.UserId,
+                   ContractNumber = request.ContractNumber,
+                   Context = "NG",
+                   Version = request.Version   
+                };
+                IRestClient client = new JsonServiceClient();
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Contact",
+                        DDContactServiceUrl,
+                        "NG",
+                        request.Version,
+                        request.ContractNumber
+                        ), request.UserId);
+
+                // [Route("/{Context}/{Version}/{ContractNumber}/Contact", "PUT")]
+                PutContactDataResponse dataDomainResponse = client.Put<PutContactDataResponse>(url, putContactDataRequest);
+               
+                insertContactResponse.Version = dataDomainResponse.Version;
+                insertContactResponse.Id = dataDomainResponse.Id;
+                insertContactResponse.Status = dataDomainResponse.Status;
+
+            }
+            catch (WebServiceException wse)
+            {
+                throw new WebServiceException("AD:InsertContact()::" + wse.Message, wse.InnerException);
+            }
+            return insertContactResponse;
         }
 
         public List<PhoneData> GetPhonesData(List<Phone> phonelist)

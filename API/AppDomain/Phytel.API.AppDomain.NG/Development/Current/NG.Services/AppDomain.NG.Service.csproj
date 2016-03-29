@@ -114,10 +114,12 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Mappers\ContactMapper.cs" />
     <Compile Include="Mappers\ContactTypeLookUpsMappers.cs" />
     <Compile Include="Mappers\PatientContactMapper.cs" />
     <Compile Include="Mappers\PatientSystemMapper.cs" />
     <Compile Include="InternalService.cs" />
+    <Compile Include="NGContactService.cs" />
     <Compile Include="PatientSystemService.cs" />
     <Compile Include="Containers\HttpServiceContainer.cs" />
     <Compile Include="Containers\SearchContainer.cs" />
