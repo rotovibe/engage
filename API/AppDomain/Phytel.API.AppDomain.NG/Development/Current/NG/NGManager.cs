@@ -1651,6 +1651,30 @@ namespace Phytel.API.AppDomain.NG
             }
             return response;
         }
+
+        public Contact GetContactByContactId(GetContactByContactIdRequest request)
+        {
+            Contact contact = null;
+            try
+            {
+                contact = new Contact
+                {
+                    Id = "cid",
+                    FirstName = "Dummy FName",
+                    LastName = "Dummy LName",
+                    IsPatient = false,
+                    IsUser = false
+
+                };
+
+            }
+            catch (WebServiceException wse)
+            {
+                throw new WebServiceException("AD:GetContactByPatientId()::" + wse.Message, wse.InnerException);
+            }
+            return contact;
+            
+        }
         #endregion
 
         #region ContactTypeLookUp

@@ -344,5 +344,11 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
                        
             return res;
         }
+
+
+        public Contact GetContactByContactId(GetContactByContactIdRequest request)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
