@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Web.Services.Description;
 using AppDomain.Engage.Population.DTO.Context;
 using AppDomain.Engage.Population.DTO.Demographics;
@@ -30,6 +31,29 @@ namespace AppDomain.Engage.Population.Service
             _userContext = BuildUserContext(_hostContextProxy.GetItem(FilterAttributesConstants.UserSessionName) as AppDomainSessionInfo);
             _auditLogger = auditLogger;
             _client = client;
+        }
+
+        public PostPatientMergeResponse Post(PostPatientMergeRequest request)
+        {
+            Manager.UserContext = _userContext; // initialize this for every service handler.
+            var response = new PostPatientMergeResponse();
+            try
+            {
+                //Manager.DoSomething();
+                var status = new ResponseStatus { Message = "success!"};
+                response.ResponseStatus = status;
+
+                // use this to log any patients that you might see.
+                //_auditLogger.Patients = new List<string> { "patient1", "patient2", "patient3" };
+
+                Response.StatusCode = (int)HttpStatusCode.Accepted;
+                return response;
+            }
+            catch (Exception ex)
+            {
+                FormatException(request, new PostPatientMergeResponse(), _client, ex);
+            }
+            return response;
         }
 
         public PostPatientDemographicsResponse Post(PostPatientDemographicsRequest request)
