@@ -155,6 +155,7 @@ namespace Phytel.API.DataDomain.Contact.DTO
 
         public const string UpdatedByProperty = "uby";
         [BsonElement(UpdatedByProperty)]
+        [BsonIgnoreIfNull(true)]
         public ObjectId? UpdatedBy { get; set; }
 
         public const string DeleteFlagProperty = "del";
