@@ -1550,10 +1550,13 @@ namespace Phytel.API.AppDomain.NG
 
                 // [Route("/{Context}/{Version}/{ContractNumber}/Contact", "PUT")]
                 PutContactDataResponse dataDomainResponse = client.Put<PutContactDataResponse>(url, putContactDataRequest);
-               
-                insertContactResponse.Version = dataDomainResponse.Version;
-                insertContactResponse.Id = dataDomainResponse.Id;
-                insertContactResponse.Status = dataDomainResponse.Status;
+
+                if (dataDomainResponse != null)
+                {
+                    insertContactResponse.Version = dataDomainResponse.Version;
+                    insertContactResponse.Id = dataDomainResponse.Id;
+                    insertContactResponse.Status = dataDomainResponse.Status;
+                }
 
             }
             catch (WebServiceException wse)
