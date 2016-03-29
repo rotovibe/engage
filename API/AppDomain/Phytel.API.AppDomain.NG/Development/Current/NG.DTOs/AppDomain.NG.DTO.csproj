@@ -116,6 +116,8 @@
     <Compile Include="Allergy\PostPatientAllergiesResponse.cs" />
     <Compile Include="Contact\Contact.cs" />
     <Compile Include="Contact\ContactTypeLookup.cs" />
+    <Compile Include="Contact\GetContactByContactIdRequest.cs" />
+    <Compile Include="Contact\GetContactByContactIdResponse.cs" />
     <Compile Include="Contact\GetContactTypeLookupRequest.cs" />
     <Compile Include="Contact\GetContactTypeLookupResponse.cs" />
     <Compile Include="Contact\GetContactRequest.cs" />
