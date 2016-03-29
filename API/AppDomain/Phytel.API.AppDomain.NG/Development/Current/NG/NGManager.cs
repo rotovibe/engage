@@ -1260,7 +1260,7 @@ namespace Phytel.API.AppDomain.NG
         #endregion
 
         #region Contact
-        public Contact GetContactByPatientId(GetContactRequest request)
+        public Contact GetContactByPatientId(GetContactByPatientIdRequest request)
         {
             Contact contact = null;
             try

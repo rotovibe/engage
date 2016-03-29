@@ -364,7 +364,7 @@ namespace Phytel.API.AppDomain.NG.Tests
             string contractNumber = "InHealth001";
             string token = "1234";
             NGManager ngManager = new NGManager();
-            GetContactRequest request = new GetContactRequest
+            GetContactByPatientIdRequest request = new GetContactByPatientIdRequest
             {
                 ContractNumber = contractNumber,
                 Token = token,

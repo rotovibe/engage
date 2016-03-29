@@ -708,9 +708,9 @@ namespace Phytel.API.AppDomain.NG.Service
         }
 
         #region Contact
-        public GetContactResponse Get(GetContactRequest request)
+        public GetContactByPatientIdResponse Get(GetContactByPatientIdRequest request)
         {
-            GetContactResponse response = new GetContactResponse();
+            GetContactByPatientIdResponse response = new GetContactByPatientIdResponse();
             ValidateTokenResponse result = null;
 
             try

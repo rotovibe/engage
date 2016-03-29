@@ -74,7 +74,7 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
             throw new NotImplementedException();
         }
 
-        public DTO.Contact GetContactByPatientId(DTO.GetContactRequest request)
+        public DTO.Contact GetContactByPatientId(DTO.GetContactByPatientIdRequest request)
         {
             throw new NotImplementedException();
         }

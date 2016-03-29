@@ -4,9 +4,9 @@ using System.Collections.Generic;
 
 namespace Phytel.API.AppDomain.NG.DTO
 {
-    public class GetContactResponse : IDomainResponse
+    public class InsertContactResponse : IDomainResponse
     {
-        public Contact Contact { get; set; }
+        public string Id { get; set; }
         public double Version { get; set; }
         public ResponseStatus Status { get; set; }
     }
