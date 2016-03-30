@@ -36,7 +36,7 @@ namespace AppDomain.Engage.Population.Service
                                   new AuditLogger(container.TryResolve<IASEClient>(), container.TryResolve<ITokenManager>());
 
             auditLogger.SupressAuditingForRequestDtoTypes = new Type[] { typeof(GetNotificationsBySessionIdRequest) };
-            auditLogger.DomainName = "Phytel Search Data Domain Services";
+            auditLogger.DomainName = "Engage Integration Services";
 
             Plugins.Add(new RequestLogsFeature
             {
