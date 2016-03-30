@@ -22,7 +22,7 @@ namespace AppDomain.Engage.Population.Service
 {
     public class IntegrationAppHost : AppHostBase
     {
-        public IntegrationAppHost(): base("Phytel Search App Domain Services", Assembly.GetExecutingAssembly()) { }
+        public IntegrationAppHost() : base("Engage Integration Services", Assembly.GetExecutingAssembly()) { }
 
         public override void Configure(Funq.Container container)
         {
