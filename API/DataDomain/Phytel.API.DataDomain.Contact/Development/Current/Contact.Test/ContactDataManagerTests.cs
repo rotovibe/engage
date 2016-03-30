@@ -7,6 +7,10 @@ using Phytel.API.DataDomain.Contact;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Phytel.API.DataDomain.Contact.Test.Stubs;
 using Phytel.API.DataDomain.Contact.DTO;
+using Moq;
+using Phytel.API.DataDomain.Contact.ContactTypeLookUp;
+using Phytel.API.Interface;
+
 namespace Phytel.API.DataDomain.Contact.Tests
 {
     [TestClass()]
@@ -78,6 +82,64 @@ namespace Phytel.API.DataDomain.Contact.Tests
 
                 Assert.IsNotNull(response);
             }
+        }
+    }
+
+    [TestClass]
+    public class ContactDataManagerUnitTests
+    {
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void DataContactManager_GetContactByContactId_Null_Request_Should_Throw()
+        {
+            var mockFactory = new Mock<IContactRepositoryFactory>();
+
+
+            mockFactory.Setup(
+                f => f.GetRepository(It.IsAny<IDataDomainRequest>(), It.IsAny<RepositoryType>()))
+                .Returns((IContactRepository)null);
+
+            var dataManager = new ContactDataManager();
+            dataManager.Factory = mockFactory.Object;
+            var data = dataManager.GetContactByContactId(null);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(Exception))]
+        public void DataContactManager_GetContactByContactId_Null_Repository_Should_Throw()
+        {
+            var mockFactory = new Mock<IContactRepositoryFactory>();
+
+            var stubRequest = new Mock<GetContactByContactIdDataRequest>();
+            mockFactory.Setup(
+                f => f.GetRepository(It.IsAny<IDataDomainRequest>(), It.IsAny<RepositoryType>()))
+                .Returns((IContactRepository)null);
+
+            var dataManager = new ContactDataManager {Factory = mockFactory.Object};
+            var data = dataManager.GetContactByContactId(stubRequest.Object);
+        }
+
+        [TestMethod]
+        public void DataContactManager_GetContactByContactId_Success()
+        {
+            var mockFactory = new Mock<IContactRepositoryFactory>();
+            var mockRepository = new Mock<IContactRepository>();
+            var stubContactData = new Mock<ContactData>();
+
+            mockRepository.Setup(mr => mr.FindByID(It.IsAny<string>())).Returns((object) stubContactData.Object);
+
+            var stubRequest = new Mock<GetContactByContactIdDataRequest>();
+            mockFactory.Setup(
+                f => f.GetRepository(It.IsAny<IDataDomainRequest>(), It.IsAny<RepositoryType>()))
+                .Returns(mockRepository.Object);
+
+            var dataManager = new ContactDataManager { Factory = mockFactory.Object };
+            var data = dataManager.GetContactByContactId(stubRequest.Object);
+            var f1 = data.Contact;
+
+            Assert.IsNotNull(data);
+            mockRepository.Verify(mr => mr.FindByID(It.IsAny<string>()), Times.Once);
+
         }
     }
 }

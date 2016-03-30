@@ -159,9 +159,15 @@ namespace Phytel.API.DataDomain.Contact
         public GetContactByContactIdDataResponse GetContactByContactId(GetContactByContactIdDataRequest request)
         {
             GetContactByContactIdDataResponse result = new GetContactByContactIdDataResponse();
+
+            if(request == null)
+                throw new ArgumentNullException("request");
             try
             {
                 IContactRepository repo = Factory.GetRepository(request, RepositoryType.Contact);
+
+                if(repo == null)
+                    throw new Exception("The repository should not be null");
 
                 result.Contact = repo.FindByID(request.ContactId) as ContactData;
                 result.Limit = Limit;
