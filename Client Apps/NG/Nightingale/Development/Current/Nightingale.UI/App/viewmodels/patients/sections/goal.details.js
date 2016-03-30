@@ -1,4 +1,4 @@
-define(['models/base', 'config/config.services', 'services/datacontext', 'services/session', 'viewmodels/individuals/goals/index', 'viewmodels/shell/shell'],
+define(['models/base', 'config.services', 'services/datacontext', 'services/session', 'viewmodels/patients/goals/index', 'viewmodels/shell/shell'],
     function (modelConfig, servicesConfig, datacontext, session, goalsIndex, shell) {
 
         var modalShowing = ko.observable(true);

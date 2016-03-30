@@ -1,4 +1,4 @@
-﻿define(['plugins/router', 'services/navigation', 'config/config.services', 'models/base', 'services/session', 'services/datacontext', 'viewmodels/individuals/index', 'viewmodels/shell/shell'],
+﻿define(['plugins/router', 'services/navigation', 'config.services', 'models/base', 'services/session', 'services/datacontext', 'viewmodels/patients/index', 'viewmodels/shell/shell'],
     function (router, navigation, servicesConfig, modelConfig, session, datacontext, patientsIndex, shell) {
 
         var subscriptionTokens= [];
@@ -67,8 +67,8 @@
             });
         }
 
-        var goalColumn = ko.observable(new Column('goalColumn', true, [{ name: 'Active Goals', path: 'individuals/widgets/goals.html', statusIds: ['1','3'], canadd: true, open: true }, { name: 'Goal History', path: 'individuals/widgets/goals.html', statusIds: ['2','4'], canadd: false, open: false, emptymessage: 'No history available.', sortoverride: endDateSort }]));
-        var detailsColumn = ko.observable(new Column('goalDetails', false, [{ name: 'GoalDetails', path: 'viewmodels/individuals/sections/goal.details', open: true }, { name: 'TaskDetails', path: 'viewmodels/individuals/sections/task.details', open: true }, { name: 'InterventionDetails', path: 'viewmodels/individuals/sections/intervention.details', open: true }]));
+        var goalColumn = ko.observable(new Column('goalColumn', true, [{ name: 'Active Goals', path: 'patients/widgets/goals.html', statusIds: ['1','3'], canadd: true, open: true }, { name: 'Goal History', path: 'patients/widgets/goals.html', statusIds: ['2','4'], canadd: false, open: false, emptymessage: 'No history available.', sortoverride: endDateSort }]));
+        var detailsColumn = ko.observable(new Column('goalDetails', false, [{ name: 'GoalDetails', path: 'viewmodels/patients/sections/goal.details', open: true }, { name: 'TaskDetails', path: 'viewmodels/patients/sections/task.details', open: true }, { name: 'InterventionDetails', path: 'viewmodels/patients/sections/intervention.details', open: true }]));
         var openColumn = ko.observable();
         var computedOpenColumn = ko.computed({
             read: function () {

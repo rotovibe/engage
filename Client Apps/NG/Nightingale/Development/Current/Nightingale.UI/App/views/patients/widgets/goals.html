@@ -18,7 +18,7 @@
                     <div class="table-row" data-bind="with: $parents[1].selectedPatient">
                         <!-- ko if: goals().length > 0 -->
                         <div class="table-cell">
-                            <div class="body" data-bind="compose: { model: 'viewmodels/individuals/sections/goals', activationData: { selectedPatient: $data, activeGoal: $parents[2].activeGoal, activeTask: $parents[2].activeTask, activeIntervention: $parents[2].activeIntervention, statusIds: $parent.statusIds, emptyMesssage: $parent.emptyMesssage, sortOverride: $parent.sortOverride } }">
+                            <div class="body" data-bind="compose: { model: 'viewmodels/patients/sections/goals', activationData: { selectedPatient: $data, activeGoal: $parents[2].activeGoal, activeTask: $parents[2].activeTask, activeIntervention: $parents[2].activeIntervention, statusIds: $parent.statusIds, emptyMesssage: $parent.emptyMesssage, sortOverride: $parent.sortOverride } }">
                             </div>
                         </div>
                         <!-- /ko -->
