@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Phytel.API.AppDomain.NG.DTO
 {    
-    [Route("/{Version}/{ContractNumber}/ContactTypeLookup", "GET")]
+    [Route("/{Version}/{ContractNumber}/ContactTypeLookups", "GET")]
     public class GetContactTypeLookupRequest : IAppDomainRequest
     {        
         [ApiMember(Name = "GroupType", Description = "the group type to return per request.", ParameterType = "query", DataType = "string", IsRequired = false)]
