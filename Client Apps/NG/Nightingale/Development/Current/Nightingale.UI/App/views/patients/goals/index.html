@@ -1,7 +1,8 @@
-﻿<section class="slider" data-type="flex">
+﻿<section data-type="flex">
     <!-- ko if: selectedPatient() -->
-    <div data-bind="foreach: columns">
-        <div class="column open">
+    <div class="columns-wrapper">
+        <!-- ko with: goalColumn -->
+        <div class="column" data-bind="css: { open: $parent.computedOpenColumn() === $data }">
             <!-- ko if: $parent.isComposed -->
             <div class="widget-wrapper" data-bind="foreach: widgets">
                 <!-- ko compose: path -->
@@ -9,7 +10,25 @@
             </div>
             <!-- /ko -->
         </div>
-        <div class="column details"><div class="widget-wrapper"></div></div>
+        <!-- /ko -->
+        <!-- ko with: detailsColumn -->
+        <div class="column" data-bind="css: { open: $parent.computedOpenColumn() === $data }">
+            <div class="widget-wrapper" data-bind="foreach: widgets">
+                <!-- ko if: ($parents[1].activeGoal() && name() === 'GoalDetails') -->
+                    <!-- ko compose: { model: path, activationData: { activeGoal: $parents[1].activeGoal } } -->
+                    <!-- /ko -->
+                <!-- /ko -->
+                <!-- ko if: ($parents[1].activeTask() && name() === 'TaskDetails') -->
+                    <!-- ko compose: { model: path, activationData: { activeTask: $parents[1].activeTask } } -->
+                    <!-- /ko -->
+                <!-- /ko -->
+                <!-- ko if: ($parents[1].activeIntervention() && name() === 'InterventionDetails' )-->
+                    <!-- ko compose: { model: path, activationData: { activeIntervention: $parents[1].activeIntervention } } -->
+                    <!-- /ko -->
+                <!-- /ko -->
+            </div>
+        </div>
+        <!-- /ko -->
     </div>
     <!-- /ko -->
     <!-- ko if: !selectedPatient() -->
@@ -41,7 +60,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>                        
+                        </div>
                     </div>
                 </div>
             </div>

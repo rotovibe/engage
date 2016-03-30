@@ -1,15 +1,12 @@
 ﻿<div class="widget open" data-bind="css: { 'fullscreen': isFullScreen() }, with: activeAction, columnSizer: {triggers: activeAction}">
     <div class="content">
-        <!-- <div class="arrow-runner">
-            <i class="arrow"></i>
-        </div> -->
         <div class="content-fill">
             <div class="wrapper">
                 <div class="content">
                     <div class="header">
                         <div class="table-cell">
                             <header>
-                                <h1 class="ellipsis"><span data-bind="text: (name().length > 18 ? name().substring(0, 18) + '...' : name()), attr: { 'title': name }"></span></h1> 
+                                <h1 class="ellipsis"><span data-bind="text: (name().length > 18 ? name().substring(0, 18) + '...' : name()), attr: { 'title': name }"></span></h1>
                                 <div class="controls">
                                     <div class="toggle fullscreen" data-bind="click: $parent.toggleFullScreen, clickBubble: false">
                                     </div>
@@ -36,22 +33,6 @@
                             </div>
                         </div>
                     </div>
-                    <!-- <div class="footer">
-                        <div class="table-cell">
-                            <footer>
-                                <div class="tray"></div>
-                                <div class="row">
-                                    <div class="fullscreen-span6">
-                                        <button name="button" type="submit">Complete</button>
-                                        <button class="pull-right" name="button" type="reset">Save</button>
-                                        <a class="tray-toggle" data-remote="true" data-toggle="tooltip" href="/patients/1/program_tasks/139/newnote" title="Add Note">
-                                            <i class="icon-notes"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                            </footer>
-                        </div>
-                    </div> -->
                 </div>
             </div>
         </div>

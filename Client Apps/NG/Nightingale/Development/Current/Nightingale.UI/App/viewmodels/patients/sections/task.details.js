@@ -1,4 +1,4 @@
-﻿define(['models/base', 'config.services', 'services/datacontext', 'services/session', 'viewmodels/patients/goals/index', 'viewmodels/shell/shell'],
+﻿define(['models/base', 'config/config.services', 'services/datacontext', 'services/session', 'viewmodels/individuals/goals/index', 'viewmodels/shell/shell'],
     function (modelConfig, servicesConfig, datacontext, session, goalsIndex, shell) {
 
         var ctor = function () {
@@ -12,25 +12,23 @@
             self.alphabeticalNameSort = function (l, r) { return (l.name() == r.name()) ? (l.name() > r.name() ? 1 : -1) : (l.name() > r.name() ? 1 : -1) };
             self.alphabeticalOrderSort = function (l, r) { return (l.order() == r.order()) ? (l.order() > r.order() ? 1 : -1) : (l.order() > r.order() ? 1 : -1) };
             self.settings = settings;
-            self.task = self.settings.task;
-            self.isExpanded = self.task.goal().isExpanded;
-			self.isDetailsExpanded = ko.observable(false);
-			self.hasDetails = ko.computed( function(){
-				var details = self.task.details();
-				return (details != null && details.length > 0);
-			});
-			self.toggleDetailsExpanded = function(){
-				var isOpen = self.isDetailsExpanded();
-				var details = self.task.details();
-				if( !details && !isOpen ){
-					return;
-				}	
-				self.isDetailsExpanded( !self.isDetailsExpanded() );
-			}
+            self.task = self.settings.activeTask;
+            self.isFullScreen = ko.observable(false);
+            self.isDetailsExpanded = ko.observable(false);
+            self.hasDetails = ko.computed( function(){
+                var details = self.task() ? self.task().details() : [];
+                return (details != null && details.length > 0);
+            });
+            self.toggleDetailsExpanded = function(){
+                var isOpen = self.isDetailsExpanded();
+                var details = self.task().details();
+                if( !details && !isOpen ){
+                    return;
+                }
+                self.isDetailsExpanded( !self.isDetailsExpanded() );
+            }
             self.editTask = function (task) {
-                // Make sure we have the most current details
                 getGoalDetails(task.goal());
-                // Edit this task
                 var modalEntity = ko.observable(new ModalEntity(task, 'description'));
                 var saveOverride = function () {
                     saveTask(task)
@@ -42,15 +40,13 @@
                 editEntity('Edit Task', modalEntity, 'viewmodels/templates/task.edit', saveOverride, cancelOverride);
             };
             self.deleteTask = function (task) {
-                // Prompt the user to confirm deletion
                 var result = confirm('You are about to delete a task.  Press OK to continue, or cancel to return without deleting.');
-                // If they press OK,
                 if (result === true) {
                     var thisGoal = task.goal();
-                    // Trigger the goal to refresh
                     task.entityAspect.rejectChanges();
                     task.deleteFlag(true);
                     datacontext.saveTask(task).then(saveCompleted);
+                    self.settings.activeTask(null);
 
                     function saveCompleted() {
                         if (task && task.goal()) {
@@ -61,31 +57,31 @@
                         }
                     }
                 }
-                else {                    
+                else {
                     return false;
                 }
             };
         };
 
         function editEntity (msg, entity, path, saveoverride, canceloverride) {
-			var modalSettings = {
-				title: msg,
-				showSelectedPatientInTitle: true,
-				entity: entity, 
-				templatePath: path, 
-				showing: modalShowing, 
-				saveOverride: saveoverride, 
-				cancelOverride: canceloverride, 
-				deleteOverride: null, 
-				classOverride: null
-			}
-            var modal = new modelConfig.modal(modalSettings);            
+            var modalSettings = {
+                title: msg,
+                showSelectedPatientInTitle: true,
+                entity: entity,
+                templatePath: path,
+                showing: modalShowing,
+                saveOverride: saveoverride,
+                cancelOverride: canceloverride,
+                deleteOverride: null,
+                classOverride: null
+            }
+            var modal = new modelConfig.modal(modalSettings);
             modalShowing(true);
             shell.currentModal(modal);
         }
 
         function saveTask (task) {
-			task.checkAppend();
+            task.checkAppend();
             datacontext.saveTask(task);
         }
 
@@ -98,18 +94,13 @@
         function getGoalDetails(goal) {
             goalsIndex.getGoalDetails(goal, true);
         }
-        
+
         function ModalEntity(entity, reqpropname) {
             var self = this;
             self.entity = entity;
-            // Object containing parameters to pass to the modal
             self.activationData = { entity: self.entity };
-            // Create a computed property to subscribe to all of
-            // the patients' observations and make sure they are
-            // valid
             self.canSave = ko.computed(function () {
                 var result = self.entity[reqpropname]();
-                // The active goal needs a property passed in from reqpropname
                 return result;
             });
         }
