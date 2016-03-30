@@ -6,6 +6,7 @@ using AutoMapper;
 using Phytel.API.AppDomain.NG;
 using Phytel.API.AppDomain.NG.Test.Stubs;
 using MongoDB.Bson;
+using Phytel.API.AppDomain.NG.Service.Mappers;
 using Phytel.API.DataDomain.Contact.DTO;
 
 namespace Phytel.API.AppDomain.NG.Tests
@@ -13,6 +14,13 @@ namespace Phytel.API.AppDomain.NG.Tests
     [TestClass()]
     public class NGManager_Test
     {
+
+        [TestInitialize]
+        public void SetUp()
+        {
+            ContactMapper.Build();
+        }
+
         [TestClass()]
         public class GetPatientProgramDetailsSummary_Method
         {
@@ -710,6 +718,27 @@ namespace Phytel.API.AppDomain.NG.Tests
             var lP = ngMgr.GetPhonesData(list);
             Assert.AreEqual(typeof (Phone).Name, list[0].GetType().Name);
             Assert.AreEqual("Engage", list[0].DataSource);
+        }
+
+        [TestMethod()]
+        public void InsertContact_ShouldNotReturnNull_Test()
+        {
+            InsertContactRequest request = new InsertContactRequest()
+            {
+                ContractNumber = "InHealth001",               
+                UserId = "5325c821072ef705080d3488",
+                Token = ObjectId.GenerateNewId().ToString(),
+                Version = 1.0,
+                Contact = new Contact()
+                {
+                   FirstName   = "Carl",
+                   LastName = "Lewis",
+                   
+                }
+            };
+            INGManager ngManager = new StubNGManager();
+            var response = ngManager.InsertContact(request);
+            Assert.IsNotNull(response);
         }
     }
 }

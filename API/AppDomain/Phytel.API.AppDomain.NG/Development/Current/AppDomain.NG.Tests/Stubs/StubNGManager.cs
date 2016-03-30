@@ -204,7 +204,12 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
 
         public InsertContactResponse InsertContact(InsertContactRequest request)
         {
-            throw new NotImplementedException();
+            InsertContactResponse response = new InsertContactResponse()
+            {
+                Id = "56ea228e64e91cf53bbfca66",
+                Version = 1.0
+            };
+            return response;
         }
 
         public void LogException(Exception ex)
