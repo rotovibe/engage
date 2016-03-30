@@ -1,4 +1,5 @@
 using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
@@ -362,18 +363,8 @@ namespace Phytel.API.DataDomain.Contact
                 MEContact mc = ctx.Contacts.Collection.Find(mQuery).FirstOrDefault();
                 if (mc != null)
                 {
-                    contactData = new ContactData
-                    {
-                        Id = mc.Id.ToString(),
-                        PatientId = mc.PatientId.ToString(),
-                        UserId = (string.IsNullOrEmpty(mc.ResourceId)) ? string.Empty : mc.ResourceId.ToString().Replace("-", string.Empty).ToLower(),
-                        FirstName = mc.FirstName,
-                        MiddleName = mc.MiddleName,
-                        LastName = mc.LastName,
-                        PreferredName = mc.PreferredName,
-                        Gender = mc.Gender,
-                        RecentsList = mc.RecentList != null ? mc.RecentList.ConvertAll(r => r.ToString()) : null
-                    };
+                    contactData = BuildContactData(mc);
+                    contactData.RecentsList = mc.RecentList != null ? mc.RecentList.ConvertAll(r => r.ToString()) : null;
                 }
             }
             return contactData;
@@ -919,108 +910,7 @@ namespace Phytel.API.DataDomain.Contact
                 MEContact mc = ctx.Contacts.Collection.Find(mQuery).FirstOrDefault();
                 if (mc != null)
                 {
-                    contactData = new ContactData { 
-                        Id = mc.Id.ToString(),
-                        PatientId = mc.PatientId.ToString(),
-                        UserId = (string.IsNullOrEmpty(mc.ResourceId)) ? string.Empty : mc.ResourceId.ToString().Replace("-", string.Empty).ToLower(),
-                        FirstName = mc.FirstName,
-                        MiddleName = mc.MiddleName,
-                        LastName = mc.LastName,
-                        PreferredName = mc.PreferredName,
-                        Gender = mc.Gender,
-                        TimeZoneId = mc.TimeZoneId == null ? null : mc.TimeZoneId.ToString(),
-                        WeekDays = mc.WeekDays,
-                        TimesOfDaysId = Helper.ConvertToStringList(mc.TimesOfDays)
-                    };
-
-                    //Modes
-                    List<CommMode> meCommModes = mc.Modes;
-                    if(meCommModes != null && meCommModes.Count > 0 )
-                    {
-                        List<CommModeData> modes = new List<CommModeData>();
-                        foreach(CommMode cm in meCommModes)
-                        {
-                            CommModeData commMode = new CommModeData { ModeId = cm.ModeId.ToString() , OptOut = cm.OptOut, Preferred = cm.Preferred };
-                            modes.Add(commMode);
-                        }
-                        contactData.Modes = modes;
-                    }
-
-                    //Phones
-                    List<Phone> mePhones = mc.Phones;
-                    if (mePhones != null && mePhones.Count > 0)
-                    {
-                        List<PhoneData> phones = new List<PhoneData>();
-                        foreach (Phone mePh in mePhones)
-                        {
-                            // Get the ones that are not deleted.
-                            if(!mePh.DeleteFlag)
-                            {
-                                PhoneData phone = new PhoneData
-                                {
-                                    Id = mePh.Id.ToString(),
-                                    IsText = mePh.IsText,
-                                    Number = mePh.Number,
-                                    ExtNumber = mePh.ExtNumber,
-                                    OptOut = mePh.OptOut,
-                                    PhonePreferred = mePh.PreferredPhone,
-                                    TextPreferred = mePh.PreferredText,
-                                    TypeId = mePh.TypeId.ToString(),
-                                    DataSource = Helper.TrimAndLimit(mePh.DataSource, 50),
-                                    ExternalRecordId = mePh.ExternalRecordId
-                                };
-                                phones.Add(phone);
-                            }
-                        }
-                        contactData.Phones = phones;
-                    }
-
-                    //Emails
-                    List<Email> meEmails = mc.Emails;
-                    if (meEmails != null && meEmails.Count > 0)
-                    {
-                        List<EmailData> emails = new List<EmailData>();
-                        foreach (Email meE in meEmails)
-                        {
-                            // Get the ones that are not deleted.
-                            if (!meE.DeleteFlag)
-                            {
-                                EmailData email = new EmailData { Id = meE.Id.ToString(), OptOut = meE.OptOut, Preferred = meE.Preferred, Text = meE.Text, TypeId = meE.TypeId.ToString(), DataSource = Helper.TrimAndLimit(meE.DataSource, 50),ExternalRecordId = meE.ExternalRecordId};
-                                emails.Add(email);
-                            }
-                        }
-                        contactData.Emails = emails;
-                    }
-
-                    //Addresses
-                    List<Address> meAddresses = mc.Addresses;
-                    if (meAddresses != null && meAddresses.Count > 0)
-                    {
-                        List<AddressData> addresses = new List<AddressData>();
-                        foreach (Address meAdd in meAddresses)
-                        {
-                            // Get the ones that are not deleted.
-                            if (!meAdd.DeleteFlag)
-                            {
-                                AddressData address = new AddressData { Id = meAdd.Id.ToString(), Line1 = meAdd.Line1, Line2 = meAdd.Line2, Line3 = meAdd.Line3, City = meAdd.City, StateId = meAdd.StateId.ToString(), PostalCode = meAdd.PostalCode, TypeId = meAdd.TypeId.ToString(), OptOut = meAdd.OptOut, Preferred = meAdd.Preferred,DataSource = meAdd.DataSource,ExternalRecordId = meAdd.ExternalRecordId};
-                                addresses.Add(address);
-                            }
-                        }
-                        contactData.Addresses = addresses;
-                    }
-
-                    //Languages
-                    List<Language> meLanguages = mc.Languages;
-                    if (meLanguages != null && meLanguages.Count > 0)
-                    {
-                        List<LanguageData> languages = new List<LanguageData>();
-                        foreach (Language meLang in meLanguages)
-                        {
-                            LanguageData langugage = new LanguageData { LookUpLanguageId = meLang.LookUpLanguageId.ToString() ,Preferred = meLang.Preferred };
-                            languages.Add(langugage);
-                        }
-                        contactData.Languages = languages;
-                    }
+                    contactData = BuildContactData(mc);
                 }
             }
             return contactData;
@@ -1259,5 +1149,149 @@ namespace Phytel.API.DataDomain.Contact
             }
             catch (Exception) { throw; }
         }
+
+        #region Private Methods
+
+        private ContactData BuildContactData(MEContact contactEntity)
+        {
+            var contactData = new ContactData
+            {
+                Id = contactEntity.Id.ToString(),
+                PatientId = contactEntity.PatientId.ToString(),
+                UserId =
+                    (string.IsNullOrEmpty(contactEntity.ResourceId))
+                        ? string.Empty
+                        : contactEntity.ResourceId.ToString().Replace("-", string.Empty).ToLower(),
+                FirstName = contactEntity.FirstName,
+                MiddleName = contactEntity.MiddleName,
+                LastName = contactEntity.LastName,
+                PreferredName = contactEntity.PreferredName,
+                Gender = contactEntity.Gender,
+                TimeZoneId = contactEntity.TimeZoneId == null ? null : contactEntity.TimeZoneId.ToString(),
+                WeekDays = contactEntity.WeekDays,
+                TimesOfDaysId = Helper.ConvertToStringList(contactEntity.TimesOfDays),
+                Modes = BuildCommunicationModes(contactEntity.Modes),
+                Phones = BuildPhoneData(contactEntity.Phones),
+                Emails = BuildEmailData(contactEntity.Emails),
+                Addresses = BuildAddressData(contactEntity.Addresses),
+                Languages = BuildLanguageData(contactEntity.Languages),
+                TypeData = BuildContactTypesData(contactEntity.Type)
+            };
+
+            return contactData;
+        }
+
+        private List<CommModeData> BuildCommunicationModes(List<DTO.CommMode> meCommModes )
+        {
+
+            var modes = new List<CommModeData>();
+            if (meCommModes != null && meCommModes.Count > 0)
+            {
+                
+                foreach (CommMode cm in meCommModes)
+                {
+                    CommModeData commMode = new CommModeData { ModeId = cm.ModeId.ToString(), OptOut = cm.OptOut, Preferred = cm.Preferred };
+                    modes.Add(commMode);
+                }
+                
+            }
+
+            return modes;
+        }
+
+        private List<PhoneData> BuildPhoneData(List<Phone> mePhones)
+        {
+            var phones = new List<PhoneData>();
+            if (mePhones != null && mePhones.Count > 0)
+            {
+              
+                foreach (Phone mePh in mePhones)
+                {
+                    // Get the ones that are not deleted.
+                    if (!mePh.DeleteFlag)
+                    {
+                        PhoneData phone = new PhoneData
+                        {
+                            Id = mePh.Id.ToString(),
+                            IsText = mePh.IsText,
+                            Number = mePh.Number,
+                            ExtNumber = mePh.ExtNumber,
+                            OptOut = mePh.OptOut,
+                            PhonePreferred = mePh.PreferredPhone,
+                            TextPreferred = mePh.PreferredText,
+                            TypeId = mePh.TypeId.ToString(),
+                            DataSource = Helper.TrimAndLimit(mePh.DataSource, 50),
+                            ExternalRecordId = mePh.ExternalRecordId
+                        };
+                        phones.Add(phone);
+                    }
+                }
+               
+            }
+            return phones;
+        }
+
+        private List<EmailData> BuildEmailData(List<Email> meEmails)
+        {
+            var emails = new List<EmailData>();
+            if (meEmails != null && meEmails.Count > 0)
+            {
+                
+                foreach (Email meE in meEmails)
+                {
+                    // Get the ones that are not deleted.
+                    if (!meE.DeleteFlag)
+                    {
+                        EmailData email = new EmailData { Id = meE.Id.ToString(), OptOut = meE.OptOut, Preferred = meE.Preferred, Text = meE.Text, TypeId = meE.TypeId.ToString(), DataSource = Helper.TrimAndLimit(meE.DataSource, 50), ExternalRecordId = meE.ExternalRecordId };
+                        emails.Add(email);
+                    }
+                }
+                
+            }
+            return emails;
+        }
+
+        private List<AddressData> BuildAddressData(List<Address> meAddresses)
+        {
+            var addresses = new List<AddressData>();
+            if (meAddresses != null && meAddresses.Count > 0)
+            {
+                foreach (Address meAdd in meAddresses)
+                {
+                    // Get the ones that are not deleted.
+                    if (!meAdd.DeleteFlag)
+                    {
+                        AddressData address = new AddressData { Id = meAdd.Id.ToString(), Line1 = meAdd.Line1, Line2 = meAdd.Line2, Line3 = meAdd.Line3, City = meAdd.City, StateId = meAdd.StateId.ToString(), PostalCode = meAdd.PostalCode, TypeId = meAdd.TypeId.ToString(), OptOut = meAdd.OptOut, Preferred = meAdd.Preferred, DataSource = meAdd.DataSource, ExternalRecordId = meAdd.ExternalRecordId };
+                        addresses.Add(address);
+                    }
+                }
+               
+            }
+            return addresses;
+        }
+
+        private List<LanguageData> BuildLanguageData(List<Language> meLanguages)
+        {
+            var languages = new List<LanguageData>();
+            if (meLanguages != null && meLanguages.Count > 0)
+            {
+                foreach (Language meLang in meLanguages)
+                {
+                    LanguageData langugage = new LanguageData { LookUpLanguageId = meLang.LookUpLanguageId.ToString(), Preferred = meLang.Preferred };
+                    languages.Add(langugage);
+                }
+                
+            }
+            return languages;
+        }
+
+        private ContactTypeData BuildContactTypesData(MEContactType mecontactType)
+        {
+            var mappedContactTypeData = Mapper.Map<ContactTypeData>(mecontactType);
+
+            return mappedContactTypeData;
+        }
+
+        #endregion
     }
 }

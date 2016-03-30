@@ -1380,6 +1380,13 @@ namespace Phytel.API.AppDomain.NG
                             }
                             contact.Languages = languages;
                         }
+
+                        if (!string.IsNullOrEmpty(cd.PatientId))
+                            contact.IsPatient = true;
+
+                        if (!string.IsNullOrEmpty(cd.UserId))
+                            contact.IsUser = true;
+                        
                     }
                 }
             }
@@ -1713,6 +1720,12 @@ namespace Phytel.API.AppDomain.NG
                 //[Route("/{Context}/{Version}/{ContractNumber}/Contact/{ContactId}", "GET")]
                 var dataDomainResponse = client.Get<DataDomain.Contact.DTO.GetContactByContactIdDataResponse>(url);
                 var mappedData = Mapper.Map<Contact>(dataDomainResponse.Contact);
+
+                if (!string.IsNullOrEmpty(mappedData.PatientId))
+                    mappedData.IsPatient = true;
+
+                if (!string.IsNullOrEmpty(mappedData.UserId))
+                    mappedData.IsUser = true;
 
                 contact = mappedData;
 

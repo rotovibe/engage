@@ -181,16 +181,21 @@ namespace Phytel.API.DataDomain.Contact.ContactTypeLookUp
                     Query<MEContactTypeLookup>.EQ(c => c.DeleteFlag, false)
                 };
 
-                
-
                 var query = Query.And(queries);
                 var lookUp = ctx.ContactTypeLookUps.Collection.FindOne(query);
 
                 if(lookUp == null)
                     throw new Exception(string.Format("No Lookup Item found for Id: {0}", data.Id));
 
-                //TODO : Update.
-                
+                if (!string.IsNullOrEmpty(data.Name))
+                    lookUp.Name = data.Name;
+
+                if (!string.IsNullOrEmpty(data.Role))
+                    lookUp.Role = data.Role;
+
+                lookUp.LastUpdatedOn = DateTime.UtcNow;
+
+                ctx.ContactTypeLookUps.Save(lookUp);
             }
 
             return true;
