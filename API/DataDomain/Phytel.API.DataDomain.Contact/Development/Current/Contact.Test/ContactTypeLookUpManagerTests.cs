@@ -192,8 +192,7 @@ namespace Phytel.API.DataDomain.Contact.Test
             {
                 FlattenData = true
             };
-            //stubRequest.SetupProperty(p => p.FlattenData,true);
-
+            
             mockFactory.Setup(
                 f => f.GetContactTypeLookUpRepository(It.IsAny<IDataDomainRequest>(), It.IsAny<RepositoryType>()))
                 .Returns(mockRepository.Object);
