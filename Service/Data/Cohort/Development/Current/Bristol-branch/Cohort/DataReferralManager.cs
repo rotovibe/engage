@@ -4,6 +4,8 @@ using Phytel.API.DataDomain.Cohort.DTO.Model;
 using Phytel.API.DataDomain.Cohort.DTO.Referrals;
 using Phytel.API.Interface;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Phytel.API.DataDomain.Cohort
 {
@@ -38,7 +40,7 @@ namespace Phytel.API.DataDomain.Cohort
                 if (string.IsNullOrEmpty(request.Referral.DataSource))
                     throw new ArgumentNullException("Request parameter referral.datasource cannot be NULL/EMPTY");
 
-                result = _repository.Insert(request) as PostReferralDefinitionResponse;
+                result = _repository.Insert(request.Referral) as PostReferralDefinitionResponse;
 
             }
             catch (Exception ex)
@@ -47,5 +49,28 @@ namespace Phytel.API.DataDomain.Cohort
             }
             return result;
         }
+
+        public GetReferralDataResponse GetReferralByID(GetReferralDataRequest request)
+        {
+            GetReferralDataResponse response = new GetReferralDataResponse();
+
+            response.Referral = _repository.FindByID(request.ReferralID) as ReferralData;
+            response.Version = request.Version;
+            return response;
+        }
+
+        public GetAllReferralsDataResponse GetReferrals(GetAllReferralsDataRequest request)
+        {
+            GetAllReferralsDataResponse response = new GetAllReferralsDataResponse();
+
+            List<API.DataDomain.Cohort.DTO.Model.ReferralData> referrals = _repository.SelectAll() as List<API.DataDomain.Cohort.DTO.Model.ReferralData>;
+
+            if (referrals != null)
+            {
+                response.Referrals = referrals.ToList();
+            }
+            return response;
+        }
     }
-}   
+}
+  

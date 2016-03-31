@@ -71,6 +71,10 @@
     <Compile Include="Model\PatientReferralData.cs" />
     <Compile Include="Model\ReferralData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Referrals\GetAllReferralsDataRequest.cs" />
+    <Compile Include="Referrals\GetAllReferralsDataResponse.cs" />
+    <Compile Include="Referrals\GetReferralDataRequest.cs" />
+    <Compile Include="Referrals\GetReferralDataResponse.cs" />
     <Compile Include="Referrals\PostPatientReferralDataRequest.cs" />
     <Compile Include="Referrals\PostReferralDataRequest.cs" />
     <Compile Include="Referrals\PostPatientReferralDataResponse.cs" />

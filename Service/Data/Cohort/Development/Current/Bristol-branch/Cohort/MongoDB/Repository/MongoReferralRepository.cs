@@ -1,9 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Linq;
 using AutoMapper;
 using Phytel.API.DataDomain.Cohort.DTO;
 using MongoDB.Bson;
+using MongoDB.Driver;
+using MongoDB.Driver.Builders;
 using Phytel.API.DataDomain.Cohort.DTO.Model;
 using Phytel.API.DataDomain.Cohort.DTO.Referrals;
 
@@ -84,7 +87,21 @@ namespace Phytel.API.DataDomain.Cohort
 
         public object FindByID(string entityID)
         {
-            return null;
+            ReferralData referral = null;
+            using (CohortMongoContext ctx = new CohortMongoContext(_dbName))
+            {
+                List<IMongoQuery> queries = new List<IMongoQuery>();
+                queries.Add(Query.EQ(MEReferral.IdProperty, ObjectId.Parse(entityID)));
+                queries.Add(Query.EQ(MEReferral.DeleteFlagProperty, false));
+                IMongoQuery mQuery = Query.And(queries);
+                MEReferral meReferral = ctx.Referrals.Collection.Find(mQuery).FirstOrDefault();
+                if (meReferral != null)
+                {
+                    referral = new ReferralData();
+                    _mappingEngine.Map(meReferral, referral);
+                }
+            }
+            return referral;
         }
 
         public Tuple<string, IEnumerable<object>> Select(Interface.APIExpression expression)
@@ -94,8 +111,22 @@ namespace Phytel.API.DataDomain.Cohort
 
         public IEnumerable<object> SelectAll()
         {
+            //IEnumerable<object> query = null;
+            // return query;
             IEnumerable<object> query = null;
+            List<ReferralData> referrals = null;
+            using (CohortMongoContext ctx = new CohortMongoContext(_dbName))
+            {
+                List<MEReferral> meReferrals = ctx.Referrals.Collection.Find(Query.EQ(MEReferral.DeleteFlagProperty, false)).ToList();
+                if (meReferrals != null)
+                {
+                    referrals = new List<ReferralData>();
+                    _mappingEngine.Map(meReferrals, referrals);
+                }
+            }
+            query = ((IEnumerable<object>)referrals);
             return query;
+
         }
 
         public object Update(object entity)
