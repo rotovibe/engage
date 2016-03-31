@@ -22,7 +22,7 @@ namespace AppDomain.Engage.Population.DTO.Referrals
         [ApiMember(Name = "Token", Description = "Token", ParameterType = "path", DataType = "string", IsRequired = true)]
         public string Token { get; set; }
 
-        [ApiMember(Name = "UserId", Description = "UserId", ParameterType = "path", DataType = "string", IsRequired = true)]
+        [ApiMember(Name = "UserId", Description = "UserId", ParameterType = "path", DataType = "string", IsRequired = false)]
         public string UserId { get; set; }
     }
 }

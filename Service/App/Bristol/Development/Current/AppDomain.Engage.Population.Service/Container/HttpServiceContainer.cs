@@ -2,6 +2,7 @@
 using System.Configuration;
 using AppDomain.Engage.Population.DataDomainClient;
 using AppDomain.Engage.Population.DTO.Context;
+using AutoMapper;
 using Funq;
 using Phytel.API.AppDomain.Platform.Security.DTO.Client;
 using Phytel.API.ASE.Client;
@@ -35,7 +36,7 @@ namespace AppDomain.Engage.Population.Service.Container
             container.RegisterAutoWiredAs<AuditHelpers, IAuditHelpers>().ReusedWithin(ReuseScope.Request);
             container.Register<IHelpers>(c => new Helpers()).ReusedWithin(ReuseScope.Request);
             container.Register<IRestClient>(c => new JsonServiceClient()).ReusedWithin(ReuseScope.Request);
-            container.Register<IPatientDataDomainClient>(c => new PatientDataDomainClient(ConfigurationManager.AppSettings["DDCohortServiceUrl"], 
+            container.Register<IPatientDataDomainClient>(c => new PatientDataDomainClient(Mapper.Engine, ConfigurationManager.AppSettings["DDCohortServiceUrl"], 
                 c.Resolve<IHelpers>(), 
                 c.Resolve<IRestClient>(), 
                 c.Resolve<IServiceContext>()))

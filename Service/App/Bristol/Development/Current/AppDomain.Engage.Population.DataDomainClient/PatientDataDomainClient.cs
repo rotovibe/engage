@@ -16,10 +16,12 @@ namespace AppDomain.Engage.Population.DataDomainClient
         private readonly IHelpers _urlHelper;
         private readonly IRestClient _client;
         private readonly IServiceContext _context;
+        protected readonly IMappingEngine _mappingEngine;
         public UserContext UserContext { get; set; }
 
-        public PatientDataDomainClient(string domainUrl, IHelpers urlHelper, IRestClient client, IServiceContext context)
+        public PatientDataDomainClient(IMappingEngine mappingEngine, string domainUrl, IHelpers urlHelper, IRestClient client, IServiceContext context)
         {
+            _mappingEngine = mappingEngine;
             _domainUrl = domainUrl;
             _urlHelper = urlHelper;
             _client = client;
@@ -66,7 +68,7 @@ namespace AppDomain.Engage.Population.DataDomainClient
             try
             {
 
-                ReferralData referralData = Mapper.Map<ReferralData>(referralDefinitionData);
+                ReferralData referralData = _mappingEngine.Map<ReferralData>(referralDefinitionData);
                 var url = _urlHelper.BuildURL(string.Format("{0}/{1}/{2}/{3}/{4}/Referrals",
                     _domainUrl,
                     "api",

@@ -64,6 +64,8 @@
   <ItemGroup>
     <Compile Include="AutoMapperConfiguration.cs" />
     <Compile Include="IPatientDataDomainClient.cs" />
+    <Compile Include="Map\ReferralDefinitionRequestMap.cs" />
+    <Compile Include="Map\ReferralDefinitionResultMap.cs" />
     <Compile Include="PatientDataDomainClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
