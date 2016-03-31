@@ -35,7 +35,7 @@ namespace Phytel.API.AppDomain.NG
         PostPatientToProgramsResponse PostPatientToProgram(PostPatientToProgramsRequest request);
         PutPatientDetailsUpdateResponse PutPatientDetailsUpdate(PutPatientDetailsUpdateRequest request);
         PutPatientFlaggedUpdateResponse PutPatientFlaggedUpdate(PutPatientFlaggedUpdateRequest request);
-        PutUpdateContactResponse PutUpdateContact(PutUpdateContactRequest request);
+        UpdateContactResponse PutUpdateContact(DTO.UpdateContactRequest request);
         PostDeletePatientResponse DeletePatient(PostDeletePatientRequest request);
         PostRemovePatientProgramResponse RemovePatientProgram(PostRemovePatientProgramRequest request);
         InsertContactResponse InsertContact(InsertContactRequest request);

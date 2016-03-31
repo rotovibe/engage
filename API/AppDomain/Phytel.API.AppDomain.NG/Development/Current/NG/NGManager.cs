@@ -1397,7 +1397,7 @@ namespace Phytel.API.AppDomain.NG
             return contact;
         }
 
-        public PutUpdateContactResponse PutUpdateContact(PutUpdateContactRequest request)
+        public UpdateContactResponse PutUpdateContact(DTO.UpdateContactRequest request)
         {
             try
             {
@@ -1452,14 +1452,15 @@ namespace Phytel.API.AppDomain.NG
                 }
 
 
-                PutUpdateContactResponse response = new PutUpdateContactResponse();
-                // [Route("/{Context}/{Version}/{ContractNumber}/Patient/Contact", "PUT")]
+                UpdateContactResponse response = new UpdateContactResponse();
+                //[Route("/{Context}/{Version}/{ContractNumber}/Contacts/{Id}", "PUT")]
                 IRestClient client = new JsonServiceClient();
-                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/patient/contact",
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Contacts/{4}",
                                                                                 DDContactServiceUrl,
                                                                                 "NG",
                                                                                 request.Version,
-                                                                                request.ContractNumber), request.UserId);
+                                                                                request.ContractNumber,
+                                                                                request.Id), request.UserId);
                 ContactData cData = new ContactData {
                     Id = request.Contact.Id,
                     Modes = modesData,
@@ -1471,8 +1472,8 @@ namespace Phytel.API.AppDomain.NG
                     Languages = languagesData,
                     TimeZoneId = request.Contact.TimeZoneId,
                 };
-                PutUpdateContactDataResponse dataDomainResponse =
-                    client.Put<PutUpdateContactDataResponse>(url, new PutUpdateContactDataRequest
+                UpdateContactDataResponse dataDomainResponse =
+                    client.Put<UpdateContactDataResponse>(url, new UpdateContactDataRequest
                                                                                 {
                                                                                    ContactData = cData,
                                                                                    Context = "NG",

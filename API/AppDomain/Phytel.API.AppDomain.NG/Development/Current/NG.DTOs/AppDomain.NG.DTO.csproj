@@ -120,9 +120,7 @@
     <Compile Include="Contact\GetContactByContactIdResponse.cs" />
     <Compile Include="Contact\GetContactTypeLookupRequest.cs" />
     <Compile Include="Contact\GetContactTypeLookupResponse.cs" />
-    <Compile Include="Contact\UpdateContactRequest.cs" />
     <Compile Include="Contact\InsertContactRequest.cs" />
-    <Compile Include="Contact\UpdateContactResponse.cs" />
     <Compile Include="Contact\InsertContactResponse.cs" />
     <Compile Include="Context\IServiceContext.cs" />
     <Compile Include="Context\ServiceContext.cs" />

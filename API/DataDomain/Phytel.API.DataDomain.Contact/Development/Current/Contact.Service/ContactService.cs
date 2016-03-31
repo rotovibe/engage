@@ -144,9 +144,9 @@ namespace Phytel.API.DataDomain.Contact.Service
             return response;
         }
 
-        public PutUpdateContactDataResponse Put(PutUpdateContactDataRequest request)
+        public UpdateContactDataResponse Put(UpdateContactDataRequest request)
         {
-            PutUpdateContactDataResponse response = new PutUpdateContactDataResponse();
+            UpdateContactDataResponse response = new UpdateContactDataResponse();
             response.Version = request.Version;
             try
             {

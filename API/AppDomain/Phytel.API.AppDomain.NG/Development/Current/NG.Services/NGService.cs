@@ -773,9 +773,9 @@ namespace Phytel.API.AppDomain.NG.Service
             return response; 
         }
 
-        public PutUpdateContactResponse Post(PutUpdateContactRequest request)
+        public UpdateContactResponse Post(DTO.UpdateContactRequest request)
         {
-            PutUpdateContactResponse response = new PutUpdateContactResponse();
+            UpdateContactResponse response = new UpdateContactResponse();
             ValidateTokenResponse result = null;
 
             try

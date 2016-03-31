@@ -124,10 +124,10 @@
     <Compile Include="GetAllCareManagersDataResponse.cs" />
     <Compile Include="SearchContactsDataResponse.cs" />
     <Compile Include="InsertContactDataRequest.cs" />
-    <Compile Include="PutUpdateContactDataRequest.cs" />
+    <Compile Include="UpdateContactDataRequest.cs" />
     <Compile Include="GetContactByPatientIdDataRequest.cs" />
     <Compile Include="InsertContactDataResponse.cs" />
-    <Compile Include="PutUpdateContactDataResponse.cs" />
+    <Compile Include="UpdateContactDataResponse.cs" />
     <Compile Include="GetContactByPatientIdDataResponse.cs" />
     <Compile Include="LanguageData.cs" />
     <Compile Include="PhoneData.cs" />

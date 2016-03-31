@@ -180,7 +180,7 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
             throw new NotImplementedException();
         }
 
-        public DTO.PutUpdateContactResponse PutUpdateContact(DTO.PutUpdateContactRequest request)
+        public DTO.UpdateContactResponse PutUpdateContact(DTO.UpdateContactRequest request)
         {
             throw new NotImplementedException();
         }

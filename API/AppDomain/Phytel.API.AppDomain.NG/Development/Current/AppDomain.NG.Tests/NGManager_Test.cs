@@ -391,7 +391,7 @@ namespace Phytel.API.AppDomain.NG.Tests
         [TestMethod]
         public void UpdatePatient_Test()
         {
-            PutUpdateContactRequest request = new PutUpdateContactRequest();
+            DTO.UpdateContactRequest request = new DTO.UpdateContactRequest();
             request.ContractNumber = "InHealth001";
             request.UserId = "AD_TestHarness";
             request.Version = 1;
@@ -448,7 +448,7 @@ namespace Phytel.API.AppDomain.NG.Tests
 
             request.Contact = contact;
             NGManager ngManager = new NGManager();
-            PutUpdateContactResponse response = ngManager.PutUpdateContact(request);
+            UpdateContactResponse response = ngManager.PutUpdateContact(request);
 
             Assert.IsNotNull(response);
         }

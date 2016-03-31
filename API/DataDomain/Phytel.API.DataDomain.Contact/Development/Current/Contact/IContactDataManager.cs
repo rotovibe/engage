@@ -13,7 +13,7 @@ namespace Phytel.API.DataDomain.Contact
         string InsertContact(InsertContactDataRequest request);
         SearchContactsDataResponse SearchContacts(SearchContactsDataRequest request);
         List<HttpObjectResponse<ContactData>> InsertBatchContacts(InsertBatchContactDataRequest request);
-        PutUpdateContactDataResponse UpdateContact(PutUpdateContactDataRequest request);
+        UpdateContactDataResponse UpdateContact(UpdateContactDataRequest request);
         PutRecentPatientResponse AddRecentPatient(PutRecentPatientRequest request);
         GetContactByContactIdDataResponse GetContactByContactId(GetContactByContactIdDataRequest request);
         DeleteContactByPatientIdDataResponse DeleteContactByPatientId(DeleteContactByPatientIdDataRequest request);

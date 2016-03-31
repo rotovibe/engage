@@ -4,7 +4,7 @@ using Phytel.API.Interface;
 
 namespace Phytel.API.DataDomain.Contact.DTO
 {
-    public class PutUpdateContactDataResponse : IDomainResponse
+    public class UpdateContactDataResponse : IDomainResponse
     {
         public bool SuccessData { get; set; }
         public List<CleanupIdData> UpdatedPhoneData { get; set; }

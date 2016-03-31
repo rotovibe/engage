@@ -196,7 +196,7 @@ namespace Phytel.API.DataDomain.Contact.Test
             //timesOfday.Add("52e17de8d433232028e9e394");
             //timesOfday.Add("52e17dedd433232028e9e395");
 
-            PutUpdateContactDataRequest updataReq = new PutUpdateContactDataRequest();
+            UpdateContactDataRequest updataReq = new UpdateContactDataRequest();
             ContactData data = new ContactData();
 
             updataReq.ContractNumber = "InHealth001";
@@ -251,7 +251,7 @@ namespace Phytel.API.DataDomain.Contact.Test
             //updataReq.data = "52f6d709d6a4850aa439fa82";
             //updataReq.data = "52e1817ad433232028e9e39d";
 
-            PutUpdateContactDataResponse response = manager.UpdateContact(updataReq);
+            UpdateContactDataResponse response = manager.UpdateContact(updataReq);
 
             Assert.IsNotNull(response);
         }

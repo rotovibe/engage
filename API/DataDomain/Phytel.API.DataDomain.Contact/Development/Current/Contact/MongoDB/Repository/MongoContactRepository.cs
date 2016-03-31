@@ -255,14 +255,14 @@ namespace Phytel.API.DataDomain.Contact
         /// <returns>Boolean field indicating if the update was successful or not.</returns>
         public object Update(object entity)
         {
-            PutUpdateContactDataResponse response = new PutUpdateContactDataResponse();
+            UpdateContactDataResponse response = new UpdateContactDataResponse();
             response.SuccessData = false;
             List<CleanupIdData> updatedPhones = new List<CleanupIdData>();
             List<CleanupIdData> updatedEmails = new List<CleanupIdData>();
             List<CleanupIdData> updatedAddresses = new List<CleanupIdData>();
             try
             {
-                PutUpdateContactDataRequest request = entity as PutUpdateContactDataRequest;
+                UpdateContactDataRequest request = entity as UpdateContactDataRequest;
                 ContactData data = request.ContactData;
                 if (data.Id == null)
                     throw new ArgumentException("ContactId is missing from the DataDomain request.");

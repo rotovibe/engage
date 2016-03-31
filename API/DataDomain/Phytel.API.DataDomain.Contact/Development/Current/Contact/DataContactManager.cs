@@ -85,14 +85,14 @@ namespace Phytel.API.DataDomain.Contact
             return id;
         }
 
-        public PutUpdateContactDataResponse UpdateContact(PutUpdateContactDataRequest request)
+        public UpdateContactDataResponse UpdateContact(UpdateContactDataRequest request)
         {
-            PutUpdateContactDataResponse response = null;
+            UpdateContactDataResponse response = null;
             try
             {
                 IContactRepository repo = Factory.GetRepository(request, RepositoryType.Contact);
 
-                response = repo.Update(request) as PutUpdateContactDataResponse;
+                response = repo.Update(request) as UpdateContactDataResponse;
             }
             catch (Exception ex)
             {
