@@ -224,8 +224,8 @@
     <Compile Include="Contact\GetContactByPatientIdRequest.cs" />
     <Compile Include="Contact\Language.cs" />
     <Compile Include="Contact\Phone.cs" />
-    <Compile Include="Contact\PutUpdateContactRequest.cs" />
-    <Compile Include="Contact\PutUpdateContactResponse.cs" />
+    <Compile Include="Contact\UpdateContactRequest.cs" />
+    <Compile Include="Contact\UpdateContactResponse.cs" />
     <Compile Include="Program\GetPatientActionDetailsRequest.cs" />
     <Compile Include="Program\GetPatientActionDetailsResponse.cs" />
     <Compile Include="Observation\GetPatientProblemsRequest.cs" />
