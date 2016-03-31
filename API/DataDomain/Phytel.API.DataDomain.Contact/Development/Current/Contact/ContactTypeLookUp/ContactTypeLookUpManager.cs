@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using AutoMapper;
 using Phytel.API.DataDomain.Contact.DTO;
 using Phytel.API.DataDomain.Contact.DTO.ContactTypeLookUp;
 using Phytel.API.DataDomain.Contact.MongoDB.DTO;
@@ -26,6 +27,8 @@ namespace Phytel.API.DataDomain.Contact.ContactTypeLookUp
             var response = new GetContactTypeLookUpDataResponse();
             List<MEContactTypeLookup> data = null;
 
+            var contactTypeLookupHierarchy = new List<ContactTypeLookUpData>();
+
             var repository = _factory.GetContactTypeLookUpRepository(request, RepositoryType.ContactTypeLookUp);
 
             if (repository == null)
@@ -33,7 +36,30 @@ namespace Phytel.API.DataDomain.Contact.ContactTypeLookUp
 
             data = (List<MEContactTypeLookup>)repository.GetContactTypeLookUps((ContactLookUpGroupType)request.GroupType);
 
-            var contactTypeLookupHierarchy = CreateRoleHierarchy(data, "000000000000000000000000");
+            if (request.FlattenData)
+            {
+                foreach (var flattenedRole in data)
+                {
+
+                    var role = new ContactTypeLookUpData
+                    {
+                        Id = flattenedRole.Id.ToString(),
+                        Name = flattenedRole.Name,
+                        Role = flattenedRole.Role,
+                        Group = (ContactLookUpGroupType) flattenedRole.GroupId,
+                        ParentId = flattenedRole.ParentId.ToString()
+                    };
+                    contactTypeLookupHierarchy.Add(role);
+                }
+
+
+            }
+            else
+            {
+                contactTypeLookupHierarchy = CreateRoleHierarchy(data, "000000000000000000000000");
+            }
+            
+            
 
             response.ContactTypeLookUps = contactTypeLookupHierarchy;
             response.Version = 1.0;

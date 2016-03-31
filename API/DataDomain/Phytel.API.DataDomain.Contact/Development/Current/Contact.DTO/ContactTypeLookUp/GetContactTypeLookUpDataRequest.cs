@@ -11,6 +11,9 @@ namespace Phytel.API.DataDomain.Contact.DTO
         [ApiMember(Name = "ContactLookUpGroupType", Description = "Group Type to filter lookups", ParameterType = "query", DataType = "ContactLookUpGroupType", IsRequired = true)]
         public ContactLookUpGroupType GroupType { get; set; }
 
+        [ApiMember(Name = "FlattenData", Description = "flatten", ParameterType = "query", DataType = "bool", IsRequired = false)]
+        public bool FlattenData { get; set; }
+
         [ApiMember(Name = "Context", Description = "Product Context requesting the Contact", ParameterType = "path", DataType = "string", IsRequired = true)]
         public string Context { get; set; }
 

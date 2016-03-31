@@ -1693,7 +1693,7 @@ namespace Phytel.API.AppDomain.NG
                 //Execute call(s) to ContactTypeLookup Data Domain
                 IRestClient client = new JsonServiceClient();
                 
-                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/ContactTypeLookUps?grouptype={4}",
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/ContactTypeLookUps?grouptype={4}&flattendata=true",
                                                                                            DDContactServiceUrl,
                                                                                            "NG",
                                                                                            request.Version,

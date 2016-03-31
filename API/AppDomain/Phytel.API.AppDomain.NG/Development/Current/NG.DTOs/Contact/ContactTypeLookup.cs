@@ -10,14 +10,15 @@ namespace Phytel.API.AppDomain.NG.DTO
     {
         public ContactTypeLookUp()
         {
-            Children = new List<ContactTypeLookUp>();
+           // Children = new List<ContactTypeLookUp>();
         }
 
         public string Id { get; set; }
+        public string ParentId { get; set; }
         public string Name { get; set; }
         public string Role { get; set; }
         public int Group { get; set; }        
-        public List<ContactTypeLookUp> Children { get; set; }
+       // public List<ContactTypeLookUp> Children { get; set; }
         public DateTime? UpdatedOn { get; set; }
         public DateTime CreatedOn { get; set; }
     }
