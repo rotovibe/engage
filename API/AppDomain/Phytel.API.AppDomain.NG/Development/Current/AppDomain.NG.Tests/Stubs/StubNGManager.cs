@@ -291,17 +291,8 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
                         Role = "Doctor(M.D)",
                         CreatedOn = DateTime.UtcNow,
                         Group = (int) ContactLookUpGroupType.ContactType,
-                        Children = new List<ContactTypeLookUp>
-                        {
-                            new ContactTypeLookUp
-                            {
-                                Id = "56ea228e64e91cf53bbfca66",
-                                Name = "Addiction Medicine",
-                                Role = "Addition Medicine",
-                                CreatedOn = DateTime.UtcNow,
-                                Group = (int) ContactLookUpGroupType.ContactType
-                            }
-                        }
+                        
+                        
                     },
                     new ContactTypeLookUp
                     {
@@ -310,17 +301,7 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
                         Role = "Addiction Medicine",
                         CreatedOn = DateTime.UtcNow,
                         Group = (int) ContactLookUpGroupType.CareTeam,
-                        Children = new List<ContactTypeLookUp>
-                        {
-                            new ContactTypeLookUp
-                            {
-                                Id = "56f310ae0894eccd367b980f",
-                                Name = "Addiction Medicine",
-                                Role = "Addition Medicine",
-                                CreatedOn = DateTime.UtcNow,
-                                Group = (int) ContactLookUpGroupType.CareTeam
-                            }
-                        }
+                       
                     }
                 };
                 res.ContactTypeLookUps = fakeLookups;
@@ -336,17 +317,7 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
                         Role = "Doctor(M.D)",
                         CreatedOn = DateTime.UtcNow,
                         Group = request.GroupType,
-                        Children = new List<ContactTypeLookUp>
-                        {
-                            new ContactTypeLookUp
-                            {
-                                Id = "56ea228e64e91cf53bbfca66",
-                                Name = "Addiction Medicine",
-                                Role = "Addition Medicine",
-                                CreatedOn = DateTime.UtcNow,
-                                Group = request.GroupType
-                            }
-                        }
+                        
                     }
                 };
                 res.ContactTypeLookUps = fakeLookups;
