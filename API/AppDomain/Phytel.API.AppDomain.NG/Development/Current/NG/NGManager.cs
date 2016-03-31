@@ -1401,58 +1401,10 @@ namespace Phytel.API.AppDomain.NG
         {
             try
             {
-                List<CommModeData> modesData = null;
-                if (request.Contact.Modes != null)
-                {
-                    List<CommMode> modes = request.Contact.Modes;
-                    modesData = new List<CommModeData>();
-                    foreach (CommMode m in modes)
-                    {
-                        CommModeData cd = new CommModeData { ModeId = m.LookUpModeId, OptOut = m.OptOut, Preferred  = m.Preferred};
-                        modesData.Add(cd);
-                    }
-                }
-
-                var phonesData = (request.Contact.Phones != null) ? GetPhonesData(request.Contact.Phones) : null;
-
-                List<EmailData> emailsData = null;
-                if (request.Contact.Emails != null)
-                {
-                    List<Email> emails = request.Contact.Emails;
-                    emailsData = new List<EmailData>();
-                    foreach (Email e in emails)
-                    {
-                        EmailData d = new EmailData {  Id = e.Id, Text = e.Text, TypeId = e.TypeId, OptOut = e.OptOut, Preferred =  e.Preferred, DataSource = e.DataSource, ExternalRecordId = e.ExternalRecordId};
-                        emailsData.Add(d);
-                    }
-                }
-
-                List<AddressData> addressesData = null;
-                if (request.Contact.Addresses != null)
-                {
-                    List<Address> addresses = request.Contact.Addresses;
-                    addressesData = new List<AddressData>();
-                    foreach (Address a in addresses)
-                    {
-                        AddressData d = new AddressData { Id = a.Id, Line1 = a.Line1, Line2 = a.Line2, Line3 = a.Line3, City = a.City, StateId = a.StateId, PostalCode = a.PostalCode, OptOut = a.OptOut, Preferred = a.Preferred, TypeId =  a.TypeId, DataSource = a.DataSource,ExternalRecordId = a.ExternalRecordId};
-                        addressesData.Add(d);
-                    }
-                }
-
-                List<Phytel.API.DataDomain.Contact.DTO.LanguageData> languagesData = null;
-                if (request.Contact.Languages != null)
-                {
-                    List<Language> langs = request.Contact.Languages;
-                    languagesData = new List<Phytel.API.DataDomain.Contact.DTO.LanguageData>();
-                    foreach (Language l in langs)
-                    {
-                        Phytel.API.DataDomain.Contact.DTO.LanguageData d = new Phytel.API.DataDomain.Contact.DTO.LanguageData {  LookUpLanguageId  = l.LookUpLanguageId, Preferred  = l.Preferred};
-                        languagesData.Add(d);
-                    }
-                }
-
-
+                ContactData cData = Mapper.Map<ContactData>(request.Contact);
+                
                 UpdateContactResponse response = new UpdateContactResponse();
+
                 //[Route("/{Context}/{Version}/{ContractNumber}/Contacts/{Id}", "PUT")]
                 IRestClient client = new JsonServiceClient();
                 string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Contacts/{4}",
@@ -1461,17 +1413,7 @@ namespace Phytel.API.AppDomain.NG
                                                                                 request.Version,
                                                                                 request.ContractNumber,
                                                                                 request.Id), request.UserId);
-                ContactData cData = new ContactData {
-                    Id = request.Contact.Id,
-                    Modes = modesData,
-                    Phones = phonesData,
-                    Emails = emailsData,
-                    Addresses = addressesData,
-                    WeekDays = request.Contact.WeekDays,
-                    TimesOfDaysId = request.Contact.TimesOfDaysId,
-                    Languages = languagesData,
-                    TimeZoneId = request.Contact.TimeZoneId,
-                };
+               
                 UpdateContactDataResponse dataDomainResponse =
                     client.Put<UpdateContactDataResponse>(url, new UpdateContactDataRequest
                                                                                 {
