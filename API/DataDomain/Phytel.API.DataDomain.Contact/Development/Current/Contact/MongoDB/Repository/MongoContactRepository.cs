@@ -1032,7 +1032,13 @@ namespace Phytel.API.DataDomain.Contact
                 Emails = BuildEmailData(contactEntity.Emails),
                 Addresses = BuildAddressData(contactEntity.Addresses),
                 Languages = BuildLanguageData(contactEntity.Languages),
-                TypeData = BuildContactTypesData(contactEntity.Type)
+                TypeData = BuildContactTypesData(contactEntity.Type),
+                StatusId = (int)contactEntity.Status,
+                Prefix = contactEntity.Prefix,
+                Suffix = contactEntity.Suffix,
+                DeceasedId = (int) contactEntity.Deceased,
+                DataSource = contactEntity.DataSource,
+                ExternalRecordId = contactEntity.ExternalRecordId
             };
 
             return contactData;
