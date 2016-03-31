@@ -12,37 +12,33 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
             self.alphabeticalNameSort = function (l, r) { return (l.name() == r.name()) ? (l.name() > r.name() ? 1 : -1) : (l.name() > r.name() ? 1 : -1) };
             self.alphabeticalOrderSort = function (l, r) { return (l.order() == r.order()) ? (l.order() > r.order() ? 1 : -1) : (l.order() > r.order() ? 1 : -1) };
             self.settings = settings;
-            self.goal = self.settings.goal;
+            self.goal = self.settings.activeGoal;
             self.selectedPatient = goalsIndex.selectedPatient;
+            self.isFullScreen = ko.observable(false);
             self.computedGoal = ko.computed(function () { return self.goal; }).extend({ throttle: 60 });
-			self.isGoalDetailsExpanded = ko.observable(false);
-			self.hasDetails = ko.computed( function(){
-				var details = self.goal.details();
-				return (details != null && details.length > 0);
-			});
-			self.toggleGoalDetailsExpanded = function(){
-				var isOpen = self.isGoalDetailsExpanded();
-				var details = self.goal.details();
-				if( !details && !isOpen ){
-					return;
-				}	
-				self.isGoalDetailsExpanded( !self.isGoalDetailsExpanded() );
-			}			
+            self.isGoalDetailsExpanded = ko.observable(false);
+            self.hasDetails = ko.computed( function(){
+                var details = self.goal() ? self.goal().details() : [];
+                return (details != null && details.length > 0);
+            });
+            self.toggleGoalDetailsExpanded = function(){
+                var isOpen = self.isGoalDetailsExpanded();
+                var details = self.goal().details();
+                if( !details && !isOpen ){
+                    return;
+                }
+                self.isGoalDetailsExpanded( !self.isGoalDetailsExpanded() );
+            }
             self.edit = function () {
-                // Edit this goal
-                goalsIndex.editGoal(self.goal, 'Edit Goal');
+                goalsIndex.editGoal(self.goal(), 'Edit Goal');
             }
             self.delete = function () {
-                // Prompt the user to confirm deletion
                 var result = confirm('You are about to delete a goal.  Press OK to continue, or cancel to return without deleting.');
-                // If they press OK,
                 if (result === true) {
-                    // self.activeGoal(null);
-                    // self.isEditing(false);
-                    datacontext.deleteGoal(self.goal);
-                    // Proceed to navigate away
+                    datacontext.deleteGoal(self.goal());
+                    self.settings.activeGoal(null);
                 }
-                else {                    
+                else {
                     return false;
                 }
             };
@@ -50,13 +46,11 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
                 self.addEntity('Barrier', goal).then(doSomething);
 
                 function doSomething(barriers) {
-                    // Show the modal
                     self.editBarrier(barriers, 'Add Barrier');
                 }
             };
             self.editBarrier = function (barrier, msg) {
                 var thisGoal = barrier.goal();
-                // Edit this barrier
                 var modalEntity = ko.observable(new ModalEntity(barrier, 'name'));
                 var saveOverride = function () {
                     saveBarrier(barrier)
@@ -73,7 +67,7 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
         ctor.prototype.addEntity = function (type, goal, startDate, assignedToId) {
             var self = this;
             var thisPatientId = self.selectedPatient().id();
-            //var thisPatientId = self.activeGoal.patientId();
+
             var thisGoalId = goal.id();
             return datacontext.initializeEntity(null, type, thisPatientId, thisGoalId).then(entityReturned);
 
@@ -108,7 +102,7 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
         }
 
         function saveBarrier (barrier) {
-			barrier.checkAppend();
+            barrier.checkAppend();
             datacontext.saveBarrier(barrier);
         }
 
@@ -121,15 +115,15 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
         };
 
         function editEntity (msg, entity, path, saveoverride, canceloverride) {
-			var modalSettings = {
-				title: msg,
-				showSelectedPatientInTitle: true,
-				entity: entity, 
-				templatePath: path, 
-				showing: modalShowing, 
-				saveOverride: saveoverride, 
-				cancelOverride: canceloverride
-			}
+            var modalSettings = {
+                title: msg,
+                showSelectedPatientInTitle: true,
+                entity: entity,
+                templatePath: path,
+                showing: modalShowing,
+                saveOverride: saveoverride,
+                cancelOverride: canceloverride
+            }
             var modal = new modelConfig.modal(modalSettings);
             modalShowing(true);
             shell.currentModal(modal);
@@ -138,27 +132,17 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
         function ModalEntity(entity) {
             var self = this;
             self.entity = entity;
-            // Object containing parameters to pass to the modal
             self.activationData = { entity: self.entity };
-            // Create a computed property to subscribe to all of
-            // the patients' observations and make sure they are
-            // valid
             self.canSave = ko.computed(function () {
-                var result = self.entity.isValid();                
+                var result = self.entity.isValid();
                 return result;
             });
         }
 
-		ctor.prototype.detached = function() {
+        ctor.prototype.detached = function() {
             var self = this;
-			//dispose computeds:
-			self.hasDetails.dispose();
-			self.computedGoal.dispose();
-			
-			//dispose subscriptions:
-            // ko.utils.arrayForEach(subscriptionTokens, function (token) {
-                // token.dispose();
-            // });
+            self.hasDetails.dispose();
+            self.computedGoal.dispose();
         }
         return ctor;
     });
