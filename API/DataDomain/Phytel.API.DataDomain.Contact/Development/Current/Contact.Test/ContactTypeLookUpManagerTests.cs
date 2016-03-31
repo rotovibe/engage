@@ -153,6 +153,59 @@ namespace Phytel.API.DataDomain.Contact.Test
             Assert.IsNotNull(data);
 
         }
+
+        [TestMethod]
+        public void ContactTypeLookUpManager_GetContactTypeLookUps__Flatten_HasChildren_Success()
+        {
+            var mockFactory = new Mock<IContactTypeLookUpRepositoryFactory>();
+            var mockRepository = new Mock<IContactTypeLookUpRepository>();
+
+            var lookUpData = new List<MEContactTypeLookup>
+            {
+                new MEContactTypeLookup(ObjectId.Empty.ToString(),DateTime.UtcNow)
+                {
+                    Id = ObjectId.Parse("56f16991078e10eb86038512"),
+                    Name = "Parent",
+                    Role = "Parent",
+                    ParentId = ObjectId.Empty
+                },
+                new MEContactTypeLookup(ObjectId.Empty.ToString(),DateTime.UtcNow)
+                {
+                    Id = ObjectId.GenerateNewId(),
+                    Name = "Parent1",
+                    Role = "Parent1",
+                    ParentId = ObjectId.Empty
+                },
+                new MEContactTypeLookup(ObjectId.Empty.ToString(),DateTime.UtcNow)
+                {
+                    Id = ObjectId.GenerateNewId(),
+                    Name = "Child",
+                    Role = "Child",
+                    ParentId = ObjectId.Parse("56f16991078e10eb86038512")
+                }
+
+            };
+            mockRepository.Setup(r => r.GetContactTypeLookUps(It.IsAny<ContactLookUpGroupType>()))
+                .Returns(lookUpData);
+
+            var stubRequest = new GetContactTypeLookUpDataRequest
+            {
+                FlattenData = true
+            };
+            //stubRequest.SetupProperty(p => p.FlattenData,true);
+
+            mockFactory.Setup(
+                f => f.GetContactTypeLookUpRepository(It.IsAny<IDataDomainRequest>(), It.IsAny<RepositoryType>()))
+                .Returns(mockRepository.Object);
+
+            var dataManager = new ContactTypeLookUpManager(mockFactory.Object);
+            var data = dataManager.GetContactTypeLookUps(stubRequest);
+
+            Assert.AreEqual(data.ContactTypeLookUps.Count, 3);
+            Assert.AreEqual(data.ContactTypeLookUps.FirstOrDefault(c => c.Id == "56f16991078e10eb86038512").Children.Count, 0);
+            Assert.IsNotNull(data);
+
+        }
     }
 }
  
