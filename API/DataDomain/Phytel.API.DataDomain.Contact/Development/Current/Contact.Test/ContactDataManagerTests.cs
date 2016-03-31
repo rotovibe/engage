@@ -135,8 +135,7 @@ namespace Phytel.API.DataDomain.Contact.Tests
 
             var dataManager = new ContactDataManager { Factory = mockFactory.Object };
             var data = dataManager.GetContactByContactId(stubRequest.Object);
-            var f1 = data.Contact;
-
+            
             Assert.IsNotNull(data);
             mockRepository.Verify(mr => mr.FindByID(It.IsAny<string>()), Times.Once);
 
