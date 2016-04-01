@@ -18,6 +18,7 @@ namespace Phytel.API.AppDomain.NG.Test
         [TestInitialize]
         public void SetUp()
         {
+           
             ContactMapper.Build();
             ContactTypeLookUpsMappers.Build();
         }
