@@ -115,6 +115,7 @@
     <Compile Include="Allergy\PostAllergyResponse.cs" />
     <Compile Include="Allergy\PostPatientAllergiesResponse.cs" />
     <Compile Include="Contact\Contact.cs" />
+    <Compile Include="Contact\ContactSearchInfo.cs" />
     <Compile Include="Contact\ContactTypeLookup.cs" />
     <Compile Include="Contact\GetContactByContactIdRequest.cs" />
     <Compile Include="Contact\GetContactByContactIdResponse.cs" />
@@ -122,6 +123,8 @@
     <Compile Include="Contact\GetContactTypeLookupResponse.cs" />
     <Compile Include="Contact\InsertContactRequest.cs" />
     <Compile Include="Contact\InsertContactResponse.cs" />
+    <Compile Include="Contact\SearchContactsRequest.cs" />
+    <Compile Include="Contact\SearchContactsResponse.cs" />
     <Compile Include="Context\IServiceContext.cs" />
     <Compile Include="Context\ServiceContext.cs" />
     <Compile Include="Goal\GetTasksRequest.cs" />

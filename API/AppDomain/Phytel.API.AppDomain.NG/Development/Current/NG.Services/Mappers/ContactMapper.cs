@@ -37,6 +37,9 @@ namespace Phytel.API.AppDomain.NG.Service.Mappers
                 .ForMember(dest => dest.CreatedOn, opt => opt.Ignore())
                 .ForMember(dest => dest.UpdatedOn, opt => opt.Ignore());
 
+
+            Mapper.CreateMap<ContactData, ContactSearchInfo>();
+
         }
     }
 }

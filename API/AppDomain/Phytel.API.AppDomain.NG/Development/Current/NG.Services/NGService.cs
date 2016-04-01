@@ -13,6 +13,9 @@ using Phytel.API.AppDomain.NG.DTO.Context;
 using Phytel.API.AppDomain.NG.DTO.Note.Context;
 using Phytel.API.AppDomain.NG.Notes;
 using ServiceStack.Common.Web;
+using ServiceStack.FluentValidation;
+using ServiceStack.FluentValidation.Results;
+using ServiceStack.Text;
 
 namespace Phytel.API.AppDomain.NG.Service
 {
@@ -842,6 +845,52 @@ namespace Phytel.API.AppDomain.NG.Service
                 
                 if (result != null)
                     AuditHelper.LogAuditData(request, result.SQLUserId, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
+            }
+            return response;
+        }
+
+        public SearchContactsResponse Post(SearchContactsRequest request)
+        {
+            if(request == null)
+                throw new ArgumentNullException("request");
+
+            if (request.ContactTypes.IsNullOrEmpty() && request.ContactStatuses.IsNullOrEmpty())
+                throw new ValidationException(
+                    new List<ValidationFailure>
+                {
+                    new ValidationFailure("ContactTypes","Must provide atleast one ContactType","Contacts.Search.EmptyContactTypes"),
+                    new ValidationFailure("ContactStatuses","Must provide atleast one ContactStatus","Contacts.Search.EmptyContactStatuses")
+                });
+
+
+            var response = new SearchContactsResponse();
+            ValidateTokenResponse result = null;
+
+            try
+            {
+                request.Token = base.Request.Headers["Token"] as string;
+                result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                if (result.UserId.Trim() != string.Empty)
+                {
+                    request.UserId = result.UserId;
+                    var dataResponse = NGManager.SearchContacts(request);
+                    response.Contacts = dataResponse.Contacts;
+                    response.TotalCount = dataResponse.TotalCount;
+                }
+                else
+                    throw new UnauthorizedAccessException();
+            }
+            catch (Exception ex)
+            {
+                //CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                //if ((ex is WebServiceException) == false)
+                //    NGManager.LogException(ex);
+            }
+            finally
+            {
+
+                //if (result != null)
+                //    AuditHelper.LogAuditData(request, result.SQLUserId, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
             }
             return response;
         }

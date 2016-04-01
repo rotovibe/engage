@@ -27,7 +27,12 @@ using Phytel.API.DataDomain.PatientSystem.DTO;
 using Phytel.API.DataDomain.PatientObservation.DTO;
 using Phytel.API.DataDomain.Program.DTO;
 using Phytel.API.DataDomain.Contact.DTO.ContactTypeLookUp;
+using ServiceStack.Common;
 using ServiceStack.Common.Utils;
+using ServiceStack.FluentValidation;
+using ServiceStack.FluentValidation.Results;
+using ServiceStack.Text;
+using ServiceStack.Validation;
 
 namespace Phytel.API.AppDomain.NG
 {
@@ -1680,6 +1685,60 @@ namespace Phytel.API.AppDomain.NG
             return contact;
             
         }
+
+        public SearchContactsResponse SearchContacts(SearchContactsRequest request)
+        {
+
+            var response = new SearchContactsResponse();
+           
+            if(request == null)
+                throw new ArgumentNullException("request");
+
+            if (request.ContactTypes.IsNullOrEmpty() && request.ContactStatuses.IsNullOrEmpty())
+                throw new Exception("Please provide .....TBD");
+
+            try
+            {
+                var normalizedTake = NormalizeTake(request.Take);
+                var normalizeSkip = NormalizeSkip(request.Skip);
+                var contactTypeIds =  request.ContactTypes == null ? new List<string>()  : BuildContactTypeIds(request.ContactTypes);
+                var contactStatuses = request.ContactStatuses.Select(s => (DataDomain.Contact.DTO.Status)s).ToList();
+
+                IRestClient client = new JsonServiceClient();
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/SearchContacts",
+                                                                                DDContactServiceUrl,
+                                                                                "NG",
+                                                                                request.Version,
+                                                                                request.ContractNumber), request.UserId);
+
+                var dataDomainResponse =
+                    client.Post<DataDomain.Contact.DTO.SearchContactsDataResponse>(url, new SearchContactsDataRequest
+                    {
+                        Take = normalizedTake,
+                        Skip = normalizeSkip,
+                        ContactSubTypeIds = request.ContactSubTypeIds,
+                        ContactTypeIds = contactTypeIds,
+                        ContactStatuses = contactStatuses
+
+
+                    } as object);
+
+
+                if (dataDomainResponse != null)
+                {
+
+                    response.TotalCount = dataDomainResponse.TotalCount;
+                    response.Contacts = dataDomainResponse.Contacts.Select(Mapper.Map<ContactSearchInfo>).ToList();
+                }
+
+            }
+            catch (WebServiceException wse)
+            {
+                throw new WebServiceException("AD:SearchContacts()::" + wse.Message, wse.InnerException);
+            }
+            return response;
+
+        }
         #endregion
 
         #region ContactTypeLookUp
@@ -2062,6 +2121,58 @@ namespace Phytel.API.AppDomain.NG
             }
             return newContact;
         }
+
+        private int NormalizeTake(int? take)
+        {
+            var normalizedValue = 100;
+
+            if (take > 0)
+                normalizedValue = take.Value;
+
+            return normalizedValue;
+
+        }
+
+        private int NormalizeSkip(int skip)
+        {
+            var normalizedSkip = 0;
+
+            if (skip > 0)
+                 normalizedSkip = skip;
+
+            return normalizedSkip;
+
+        }
+        /// <summary>
+        /// TODO: remove hard-coded values.
+        /// </summary>
+        /// <param name="statuses"></param>
+        /// <returns></returns>
+        private List<string> BuildContactTypeIds(List<AppDomain.NG.DTO.ContactType> statuses)
+        {
+            var response = new List<string>();
+
+            foreach (var enumVal in statuses)
+            {
+                switch (enumVal)
+                {
+                        case ContactType.Person:
+                        response.Add("56f1a1ad078e10eb86038519");
+                        break;
+
+                        case ContactType.Organization:
+                        //response.Add("");
+                        
+
+                     default:
+                        break;
+                }
+            }
+
+            return response;
+            
+        } 
+
         #endregion
     }
 }

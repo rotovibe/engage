@@ -331,5 +331,11 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
         {
             throw new NotImplementedException();
         }
+
+
+        public SearchContactsResponse SearchContacts(SearchContactsRequest request)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

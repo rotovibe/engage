@@ -43,5 +43,6 @@ namespace Phytel.API.AppDomain.NG
         GetInitializePatientResponse GetInitializePatient(GetInitializePatientRequest request);
         PostProgramAttributesChangeResponse PostProgramAttributeChanges(PostProgramAttributesChangeRequest request);
         Contact GetContactByContactId(GetContactByContactIdRequest request);
+        SearchContactsResponse SearchContacts(SearchContactsRequest request);
     }
 }

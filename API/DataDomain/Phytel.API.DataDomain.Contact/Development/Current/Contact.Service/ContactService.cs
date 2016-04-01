@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Net;
 using Phytel.API.DataDomain.Contact;
 using Phytel.API.DataDomain.Contact.DTO;
@@ -247,6 +248,26 @@ namespace Phytel.API.DataDomain.Contact.Service
                 Common.Helper.LogException(int.Parse(aseProcessID), ex);
             }
             return response;
+        }
+
+        public SearchContactsDataResponse Post(SearchContactsDataRequest request)
+        {
+            
+            if(request == null)
+                throw new ArgumentNullException("request");
+
+
+            return new SearchContactsDataResponse
+            {
+                Contacts = new List<ContactData>
+                {
+                    new ContactData { Id = "MyContactId1" ,FirstName = "John", LastName = "Doe"}
+                },
+                TotalCount = 1
+            };
+
+
+
         }
 
     }
