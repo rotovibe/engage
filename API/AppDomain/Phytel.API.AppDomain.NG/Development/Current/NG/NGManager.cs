@@ -1694,14 +1694,14 @@ namespace Phytel.API.AppDomain.NG
             if(request == null)
                 throw new ArgumentNullException("request");
 
-            if (request.ContactTypes.IsNullOrEmpty() && request.ContactStatuses.IsNullOrEmpty())
+            if (request.ContactTypeIds.IsNullOrEmpty() && request.ContactStatuses.IsNullOrEmpty())
                 throw new Exception("Please provide .....TBD");
 
             try
             {
                 var normalizedTake = NormalizeTake(request.Take);
                 var normalizeSkip = NormalizeSkip(request.Skip);
-                var contactTypeIds =  request.ContactTypes == null ? new List<string>()  : BuildContactTypeIds(request.ContactTypes);
+                var contactTypeIds =  request.ContactTypeIds;// == null ? new List<string>()  : BuildContactTypeIds(request.ContactTypes);
                 var contactStatuses = request.ContactStatuses.Select(s => (DataDomain.Contact.DTO.Status)s).ToList();
 
                 IRestClient client = new JsonServiceClient();

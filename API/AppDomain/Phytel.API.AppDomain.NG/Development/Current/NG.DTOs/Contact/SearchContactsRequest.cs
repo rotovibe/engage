@@ -8,10 +8,10 @@ namespace Phytel.API.AppDomain.NG.DTO
     public class SearchContactsRequest : IAppDomainRequest
     {
 
-       // public List<string> ContactTypeIds { get; set; }
+         public List<string> ContactTypeIds { get; set; }
 
-        [ApiMember(Name = "ContactTypes", Description = "List of ContactTypes to Search for ", ParameterType = "query", DataType = "ContactType", IsRequired = false)]
-        public List<ContactType> ContactTypes { get; set; }
+        //[ApiMember(Name = "ContactTypes", Description = "List of ContactTypes to Search for ", ParameterType = "query", DataType = "ContactType", IsRequired = false)]
+        //public List<ContactType> ContactTypes { get; set; }
 
         [ApiMember(Name = "ContactStatuses", Description = "List of ContactStatuses to Search for ", ParameterType = "query", DataType = "ContactStatus", IsRequired = false)]
         public List<ContactStatus> ContactStatuses { get; set; }

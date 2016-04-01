@@ -854,12 +854,12 @@ namespace Phytel.API.AppDomain.NG.Service
             if(request == null)
                 throw new ArgumentNullException("request");
 
-            if (request.ContactTypes.IsNullOrEmpty() && request.ContactStatuses.IsNullOrEmpty())
+            if (request.ContactTypeIds.IsNullOrEmpty() && request.ContactStatuses.IsNullOrEmpty())
                 throw new ValidationException(
                     new List<ValidationFailure>
                 {
-                    new ValidationFailure("ContactTypes","Must provide atleast one ContactType","Contacts.Search.EmptyContactTypes"),
-                    new ValidationFailure("ContactStatuses","Must provide atleast one ContactStatus","Contacts.Search.EmptyContactStatuses")
+                    new ValidationFailure("ContactTypes or ContactStatuses","Must provide ContactTypeIds or  ContactStatuses","Contacts.Search"),
+                    //new ValidationFailure("ContactStatuses","Must provide atleast one ContactStatus","Contacts.Search.EmptyContactStatuses")
                 });
 
 
