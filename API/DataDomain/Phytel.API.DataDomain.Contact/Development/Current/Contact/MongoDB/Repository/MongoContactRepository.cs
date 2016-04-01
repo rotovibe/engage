@@ -1174,12 +1174,15 @@ namespace Phytel.API.DataDomain.Contact
                     Prefix = data.Prefix,
                     DataSource = data.DataSource,
                     ExternalRecordId = data.ExternalRecordId,
-                    ContactTypeId =  ObjectId.Parse(data.ContactTypeId),
                     ContactSubTypes = AutoMapper.Mapper.Map<List<MEContactSubType>>(data.ContactSubTypesData),
                     Version = version,
                     DeleteFlag = false
                 };
-
+                //ContactTypeId
+                if (data.ContactTypeId != null)
+                {
+                    meContact.ContactTypeId = ObjectId.Parse(data.ContactTypeId);
+                }
                 //PatientId
                 if (data.PatientId != null)
                 {
