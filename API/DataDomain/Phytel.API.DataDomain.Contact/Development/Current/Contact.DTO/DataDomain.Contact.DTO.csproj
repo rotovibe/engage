@@ -108,6 +108,8 @@
     <Compile Include="Enums.cs" />
     <Compile Include="ContactTypeLookUp\PutContactTypeLookUpDataRequest.cs" />
     <Compile Include="ContactTypeLookUp\PutContactTypeLookUpDataResponse.cs" />
+    <Compile Include="GetContactsByContactIdsDataRequest.cs" />
+    <Compile Include="GetContactsByContactIdsDataResponse.cs" />
     <Compile Include="UndoDeleteContactDataRequest.cs" />
     <Compile Include="DeleteContactByPatientIdDataRequest.cs" />
     <Compile Include="UndoDeleteContactDataResponse.cs" />

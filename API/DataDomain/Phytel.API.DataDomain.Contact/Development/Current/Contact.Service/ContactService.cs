@@ -78,9 +78,9 @@ namespace Phytel.API.DataDomain.Contact.Service
             return response;
         }
 
-        public SearchContactsDataResponse Post(SearchContactsDataRequest request)
+        public GetContactsByContactIdsDataResponse Post(GetContactsByContactIdsDataRequest request)
         {
-            SearchContactsDataResponse response = new SearchContactsDataResponse();
+            var response = new GetContactsByContactIdsDataResponse();
             response.Version = request.Version;
             try
             {

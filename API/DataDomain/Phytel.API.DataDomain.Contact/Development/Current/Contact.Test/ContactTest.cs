@@ -63,7 +63,7 @@ namespace Phytel.API.DataDomain.Contact.Test
         [TestMethod]
         public void SearchContacts_Test()
         {
-            SearchContactsDataRequest request = new SearchContactsDataRequest();
+            var request = new GetContactsByContactIdsDataRequest();
 
             request.ContractNumber = "InHealth001";
             request.UserId = "DD_TestHarness";
@@ -74,7 +74,7 @@ namespace Phytel.API.DataDomain.Contact.Test
             ids.Add("52f57462d6a4850fd02cc1b4");
             //request.ContactIds = ids;
 
-            SearchContactsDataResponse response = manager.SearchContacts(request);
+            var response = manager.SearchContacts(request);
 
             Assert.IsNotNull(response);
         }

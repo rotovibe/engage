@@ -869,7 +869,7 @@ namespace Phytel.API.DataDomain.Contact
             catch (Exception ex) { throw ex; }
         }
 
-        public IEnumerable<object> SearchContacts(SearchContactsDataRequest request)
+        public IEnumerable<object> SearchContacts(GetContactsByContactIdsDataRequest request)
         { 
             List<ContactData> contactDataList = null;
             try

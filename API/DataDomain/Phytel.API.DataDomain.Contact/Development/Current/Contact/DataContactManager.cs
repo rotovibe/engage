@@ -53,9 +53,9 @@ namespace Phytel.API.DataDomain.Contact
             return result;
         }
 
-        public SearchContactsDataResponse SearchContacts(SearchContactsDataRequest request)
+        public GetContactsByContactIdsDataResponse SearchContacts(GetContactsByContactIdsDataRequest request)
         {
-            SearchContactsDataResponse response = new SearchContactsDataResponse();
+            var response = new GetContactsByContactIdsDataResponse();
             try
             {
                 IContactRepository repo = Factory.GetRepository(request, RepositoryType.Contact);
