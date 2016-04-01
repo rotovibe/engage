@@ -13,7 +13,7 @@ namespace Phytel.API.AppDomain.NG.DTO
         [ApiMember(Name = "ContactTypes", Description = "List of ContactTypes to Search for ", ParameterType = "query", DataType = "ContactType", IsRequired = false)]
         public List<ContactType> ContactTypes { get; set; }
 
-        [ApiMember(Name = "ContactStatuses", Description = "List of ContactStatuses to Search for ", ParameterType = "query", DataType = "ContactType", IsRequired = false)]
+        [ApiMember(Name = "ContactStatuses", Description = "List of ContactStatuses to Search for ", ParameterType = "query", DataType = "ContactStatus", IsRequired = false)]
         public List<ContactStatus> ContactStatuses { get; set; }
 
         [ApiMember(Name = "ContactSubTypeIds", Description = "List of ContactSubTypeIds to Search for ", ParameterType = "body", DataType = "list of strings", IsRequired = false)]
@@ -52,7 +52,7 @@ namespace Phytel.API.AppDomain.NG.DTO
     public enum ContactType
     {
         Person = 1,
-        Organization = 2
+       // Organization = 2
     }
 
     public enum ContactStatus

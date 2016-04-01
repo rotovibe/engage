@@ -2160,7 +2160,7 @@ namespace Phytel.API.AppDomain.NG
                         response.Add("56f1a1ad078e10eb86038519");
                         break;
 
-                        case ContactType.Organization:
+                        //case ContactType.Organization:
                         //response.Add("");
                         
 
