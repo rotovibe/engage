@@ -27,12 +27,12 @@ namespace Phytel.API.AppDomain.NG.Service.Mappers
 
 
             Mapper.CreateMap<ContactData, Contact>()
-               // .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.TypeData))
+               .ForMember(dest => dest.ContactSubTypes, opt => opt.MapFrom(src => src.ContactSubTypesData))
                 .ForMember(dest => dest.IsPatient, opt => opt.Ignore())
                 .ForMember(dest => dest.IsUser, opt => opt.Ignore());
 
             Mapper.CreateMap<Contact, ContactData>()
-              //  .ForMember(dest => dest.TypeData, opt => opt.MapFrom(src => src.Type))
+                .ForMember(dest => dest.ContactSubTypesData, opt => opt.MapFrom(src => src.ContactSubTypes))
                 .ForMember(dest => dest.RecentsList, opt => opt.Ignore())
                 .ForMember(dest => dest.CreatedOn, opt => opt.Ignore())
                 .ForMember(dest => dest.UpdatedOn, opt => opt.Ignore());
