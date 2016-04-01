@@ -8,7 +8,7 @@ namespace Phytel.API.DataDomain.Contact
     {
         public static Funq.Container Configure(Funq.Container container)
         {
-            Mapper.CreateMap<ContactTypeData, MEContactType>().ReverseMap();
+            Mapper.CreateMap<ContactSubTypeData, MEContactSubType>().ReverseMap();
             return container;
         }
     }

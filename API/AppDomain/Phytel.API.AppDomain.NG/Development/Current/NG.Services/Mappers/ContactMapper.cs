@@ -12,7 +12,7 @@ namespace Phytel.API.AppDomain.NG.Service.Mappers
     {
         public static void Build()
         {
-            Mapper.CreateMap<ContactTypeData, ContactType>().ReverseMap();
+            Mapper.CreateMap<ContactSubTypeData, ContactSubType>().ReverseMap();
             Mapper.CreateMap<LanguageData, Language>().ReverseMap();
             Mapper.CreateMap<AddressData, Address>().ReverseMap();
             Mapper.CreateMap<EmailData, Email>().ReverseMap();
@@ -27,12 +27,12 @@ namespace Phytel.API.AppDomain.NG.Service.Mappers
 
 
             Mapper.CreateMap<ContactData, Contact>()
-                .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.TypeData))
+               // .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.TypeData))
                 .ForMember(dest => dest.IsPatient, opt => opt.Ignore())
                 .ForMember(dest => dest.IsUser, opt => opt.Ignore());
 
             Mapper.CreateMap<Contact, ContactData>()
-                .ForMember(dest => dest.TypeData, opt => opt.MapFrom(src => src.Type))
+              //  .ForMember(dest => dest.TypeData, opt => opt.MapFrom(src => src.Type))
                 .ForMember(dest => dest.RecentsList, opt => opt.Ignore())
                 .ForMember(dest => dest.CreatedOn, opt => opt.Ignore())
                 .ForMember(dest => dest.UpdatedOn, opt => opt.Ignore());

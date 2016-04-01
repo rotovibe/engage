@@ -81,10 +81,15 @@ namespace Phytel.API.DataDomain.Contact.DTO
         [BsonIgnoreIfNull(true)]
         public string Suffix { get; set; }
 
-        public const string TypeProperty = "type";
-        [BsonElement(TypeProperty)]
+        public const string ContactSubTypesProperty = "csubtypes";
+        [BsonElement(ContactSubTypesProperty)]
         [BsonIgnoreIfNull(true)]
-        public MEContactType Type { get; set; }
+        public List<MEContactSubType> ContactSubTypes { get; set; }
+
+        public const string ContactTypeIdProperty = "ctypeid";
+        [BsonElement(ContactTypeIdProperty)]
+        [BsonIgnoreIfNull(true)]
+        public ObjectId ContactTypeId { get; set; }
 
         #region Communication fields
         public const string ModesProperty = "mds";

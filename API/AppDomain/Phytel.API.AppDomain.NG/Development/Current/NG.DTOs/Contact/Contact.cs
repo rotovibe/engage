@@ -30,19 +30,19 @@ namespace Phytel.API.AppDomain.NG.DTO
         public int DeceasedId { get; set; }
         public string Prefix { get; set; }
         public string Suffix { get; set; }
-        public ContactType Type { get; set; }
+       // public ContactType Type { get; set; }
         public bool IsPatient { get; set; }
         public bool IsUser { get; set; }
+        public List<ContactSubType> ContactSubTypes { get; set; }
+        public string ContactTypeId { get; set; }
 
     }
 
-    public class ContactType
+    public class ContactSubType
     {
-        public ContactType()
-        {
-            Children = new List<ContactType>();
-        }
-        public string ContactTypeLookupId { get; set; }
-        public List<ContactType> Children { get; set; }
+        public string Id { get; set; }
+        public string SubTypeId { get; set; }
+        public string SpecialtyId { get; set; }
+        public string SubSpecialtyId { get; set; }
     }
 }

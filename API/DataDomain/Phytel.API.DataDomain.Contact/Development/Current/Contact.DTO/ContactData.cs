@@ -35,10 +35,9 @@ namespace Phytel.API.DataDomain.Contact.DTO
         public int DeceasedId { get; set; }
         public string Prefix { get; set; }
         public string Suffix { get; set; }
-        public ContactTypeData TypeData { get; set; }
+        public List<ContactSubTypeData> ContactSubTypesData { get; set; }
+        public string ContactTypeId { get; set; }
     }
-
-
 }
 
 

@@ -1032,7 +1032,8 @@ namespace Phytel.API.DataDomain.Contact
                 Emails = BuildEmailData(contactEntity.Emails),
                 Addresses = BuildAddressData(contactEntity.Addresses),
                 Languages = BuildLanguageData(contactEntity.Languages),
-                TypeData = BuildContactTypesData(contactEntity.Type),
+                ContactTypeId =  contactEntity.ContactTypeId.ToString(),
+                ContactSubTypesData = BuildContactTypesData(contactEntity.ContactSubTypes),
                 StatusId = (int)contactEntity.Status,
                 Prefix = contactEntity.Prefix,
                 Suffix = contactEntity.Suffix,
@@ -1148,9 +1149,9 @@ namespace Phytel.API.DataDomain.Contact
             return languages;
         }
 
-        private ContactTypeData BuildContactTypesData(MEContactType mecontactType)
+        private List<ContactSubTypeData> BuildContactTypesData(List<MEContactSubType> mecontactSubType)
         {
-            var mappedContactTypeData = Mapper.Map<ContactTypeData>(mecontactType);
+            var mappedContactTypeData = Mapper.Map<List<ContactSubTypeData>>(mecontactSubType);
 
             return mappedContactTypeData;
         }
@@ -1173,7 +1174,8 @@ namespace Phytel.API.DataDomain.Contact
                     Prefix = data.Prefix,
                     DataSource = data.DataSource,
                     ExternalRecordId = data.ExternalRecordId,
-                    Type = AutoMapper.Mapper.Map<MEContactType>(data.TypeData),
+                    ContactTypeId =  ObjectId.Parse(data.ContactTypeId),
+                    ContactSubTypes = AutoMapper.Mapper.Map<List<MEContactSubType>>(data.ContactSubTypesData),
                     Version = version,
                     DeleteFlag = false
                 };
