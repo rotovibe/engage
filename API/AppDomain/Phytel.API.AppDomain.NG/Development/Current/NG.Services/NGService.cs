@@ -858,8 +858,8 @@ namespace Phytel.API.AppDomain.NG.Service
                 throw new ValidationException(
                     new List<ValidationFailure>
                 {
-                    new ValidationFailure("ContactTypes or ContactStatuses","Must provide ContactTypeIds or  ContactStatuses","Contacts.Search"),
-                    //new ValidationFailure("ContactStatuses","Must provide atleast one ContactStatus","Contacts.Search.EmptyContactStatuses")
+                    new ValidationFailure("ContactTypeIds or ContactStatuses","Must provide ContactTypeIds or ContactStatuses","Contacts.Search"),
+                    
                 });
 
 
