@@ -13,7 +13,7 @@ using ServiceStack.ServiceClient.Web;
 
 namespace AppDomain.Engage.Population.Service
 {
-   //[IsAuthenticatedFilter("br")]
+    [IsAuthenticatedFilter("br")]
     public class ReferralDefinitionService : ServiceBase
     {
         private readonly IHostContextProxy _hostContextProxy;
