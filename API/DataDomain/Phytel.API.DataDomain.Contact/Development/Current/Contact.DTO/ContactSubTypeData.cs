@@ -11,6 +11,6 @@ namespace Phytel.API.DataDomain.Contact.DTO
         public string Id { get; set; }
         public string SubTypeId { get; set; }
         public string SpecialtyId { get; set; }
-        public string SubSpecialtyId { get; set; }
+        public List<string> SubSpecialtyIds { get; set; }
     }
 }

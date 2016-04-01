@@ -29,6 +29,6 @@ namespace Phytel.API.DataDomain.Contact.DTO
         public const string SubSpecialtyIdProperty = "subspid";
         [BsonElement(SubSpecialtyIdProperty)]
         [BsonIgnoreIfNull(true)]
-        public List<ObjectId> SubSpecialtyId { get; set; }
+        public List<ObjectId> SubSpecialtyIds { get; set; }
     }
 }
