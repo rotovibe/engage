@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.2.0.final using JasperReports Library version 6.2.0  -->
-<!-- 2016-01-27T18:17:08 -->
+<!-- 2016-03-23T10:45:31 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="subreport_active_medications" language="groovy" pageWidth="576" pageHeight="792" whenNoDataType="NoDataSection" columnWidth="576" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="94706ec6-5168-4b82-a2f7-5a7919eb1456">
 	<property name="ireport.zoom" value="1.6105100000000019"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
-	<property name="ireport.jasperserver.url" value="http://mdljasper01.phytelmodel.phytel.com:8080/jasperserver-pro/"/>
-	<property name="ireport.jasperserver.user" value="qauser"/>
-	<property name="ireport.jasperserver.report.resource" value="/organizations/organization_1/InHealth/Ad_Hoc_Components/MDVC_CM_Summary/rpt_MDVC_CM_Summary_files/subreport_active_medications.jrxml"/>
-	<property name="ireport.jasperserver.reportUnit" value="/organizations/organization_1/InHealth/Ad_Hoc_Components/MDVC_CM_Summary/rpt_MDVC_CM_Summary"/>
+	<property name="ireport.jasperserver.url" value="https://reporting.phytel.com/jasperserver-pro/"/>
+	<property name="ireport.jasperserver.user" value="ltan"/>
+	<property name="ireport.jasperserver.report.resource" value="/organizations/organization_1/organizations/InHealth/Reports/Client_Testing/rpt_MDVC_CM_Summary_files/subreport_active_medications.jrxml"/>
+	<property name="ireport.jasperserver.reportUnit" value="/organizations/organization_1/organizations/InHealth/Reports/Client_Testing/rpt_MDVC_CM_Summary"/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Model Data Adapter "/>
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<parameter name="ID_MongoPatientId" class="java.lang.String"/>
@@ -50,7 +50,7 @@ Order by pms.name]]>
 					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 				</reportElement>
 				<staticText>
-					<reportElement x="197" y="0" width="299" height="11" uuid="bb65da31-b014-41eb-8974-d1c82f146818">
+					<reportElement x="260" y="0" width="205" height="11" uuid="bb65da31-b014-41eb-8974-d1c82f146818">
 						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 						<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
 					</reportElement>
@@ -60,7 +60,7 @@ Order by pms.name]]>
 					<text><![CDATA[SIG]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="6" y="0" width="180" height="11" uuid="9f439753-5d05-4385-875c-be19d493fc2c">
+					<reportElement x="6" y="0" width="250" height="11" uuid="9f439753-5d05-4385-875c-be19d493fc2c">
 						<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
 						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 					</reportElement>
@@ -70,7 +70,7 @@ Order by pms.name]]>
 					<text><![CDATA[Name]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="498" y="0" width="76" height="11" uuid="0b07c54d-53d5-4f9b-a8be-21f58415a82d">
+					<reportElement x="470" y="0" width="100" height="11" uuid="0b07c54d-53d5-4f9b-a8be-21f58415a82d">
 						<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
 						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 					</reportElement>
@@ -97,7 +97,7 @@ Order by pms.name]]>
 	<detail>
 		<band height="12" splitType="Stretch">
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement x="6" y="0" width="190" height="12" uuid="4d8cae95-b0e2-410d-9bf4-b91e5b337af7">
+				<reportElement x="5" y="0" width="250" height="12" uuid="4d8cae95-b0e2-410d-9bf4-b91e5b337af7">
 					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
 				</reportElement>
@@ -107,7 +107,7 @@ Order by pms.name]]>
 				<textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement x="197" y="0" width="299" height="12" uuid="b08612e8-e0af-4744-93e1-edb67abe4a0c">
+				<reportElement x="260" y="0" width="205" height="12" uuid="b08612e8-e0af-4744-93e1-edb67abe4a0c">
 					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
 				</reportElement>
@@ -117,7 +117,7 @@ Order by pms.name]]>
 				<textFieldExpression><![CDATA[$F{FreqQuantity} + $F{strength} +  $F{form} + $F{route} + $F{Frequency}]]></textFieldExpression>
 			</textField>
 			<textField pattern="MM/dd/yyyy" isBlankWhenNull="true">
-				<reportElement x="498" y="0" width="76" height="12" uuid="d23f6012-37ac-4248-ba22-5575acde475a">
+				<reportElement x="470" y="0" width="100" height="12" uuid="d23f6012-37ac-4248-ba22-5575acde475a">
 					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 				</reportElement>

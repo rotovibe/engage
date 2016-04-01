@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.2.0.final using JasperReports Library version 6.2.0  -->
-<!-- 2016-01-27T18:17:20 -->
+<!-- 2016-03-23T10:46:45 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="subreport_Allergies" language="groovy" pageWidth="576" pageHeight="842" columnWidth="576" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="ecc880da-ac97-44eb-b6a5-8f9b4ec99306">
 	<property name="ireport.zoom" value="2.593742460100003"/>
 	<property name="ireport.x" value="25"/>
@@ -37,9 +37,10 @@ where
 			<frame>
 				<reportElement mode="Opaque" x="0" y="15" width="576" height="13" backcolor="#F0F0F0" uuid="2b7cd68c-0858-453f-8f1c-918836706eb9"/>
 				<staticText>
-					<reportElement x="350" y="0" width="126" height="12" uuid="a00f9ae8-58b6-4eb3-9a39-854a9bb5bb82">
+					<reportElement x="260" y="0" width="100" height="11" uuid="a00f9ae8-58b6-4eb3-9a39-854a9bb5bb82">
 						<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
 						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 					</reportElement>
 					<textElement>
 						<font size="8"/>
@@ -47,8 +48,10 @@ where
 					<text><![CDATA[Severity]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="6" y="0" width="342" height="12" uuid="6e2be9aa-7cbb-4197-acf4-f5f57bbc95fb">
+					<reportElement x="5" y="0" width="250" height="11" uuid="6e2be9aa-7cbb-4197-acf4-f5f57bbc95fb">
 						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 					</reportElement>
 					<textElement>
 						<font size="8"/>
@@ -56,9 +59,10 @@ where
 					<text><![CDATA[Name]]></text>
 				</staticText>
 				<staticText>
-					<reportElement x="478" y="0" width="96" height="12" uuid="3dd9fd2a-82eb-4148-ad38-b4a4113b598e">
+					<reportElement x="365" y="0" width="100" height="11" uuid="3dd9fd2a-82eb-4148-ad38-b4a4113b598e">
 						<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
 						<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+						<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 					</reportElement>
 					<textElement>
 						<font size="8"/>
@@ -82,8 +86,9 @@ where
 		<band height="13" splitType="Stretch">
 			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement x="6" y="0" width="342" height="11" uuid="8285b9ce-4b37-4d97-ad9a-571b33ccf085">
+				<reportElement x="5" y="0" width="250" height="11" uuid="8285b9ce-4b37-4d97-ad9a-571b33ccf085">
 					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
 				</reportElement>
 				<textElement>
 					<font size="8"/>
@@ -91,7 +96,7 @@ where
 				<textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="350" y="0" width="126" height="11" uuid="d15430d6-8ad5-4273-8692-3c55a5ada047">
+				<reportElement x="260" y="0" width="100" height="11" uuid="d15430d6-8ad5-4273-8692-3c55a5ada047">
 					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 				</reportElement>
@@ -101,7 +106,7 @@ where
 				<textFieldExpression><![CDATA[$F{severity}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="478" y="0" width="96" height="11" uuid="92c6f9fc-9828-4a89-ada0-85fbc7bdf932">
+				<reportElement x="365" y="0" width="100" height="11" uuid="92c6f9fc-9828-4a89-ada0-85fbc7bdf932">
 					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>

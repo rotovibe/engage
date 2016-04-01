@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.2.0.final using JasperReports Library version 6.2.0  -->
-<!-- 2016-01-28T14:49:08 -->
+<!-- 2016-03-15T14:13:40 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="subreport_Recent_Clinical_TwoColumns" language="groovy" pageWidth="576" pageHeight="576" columnWidth="576" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="77a74b22-454e-4021-a765-b7c96a07ef6a">
 	<property name="ireport.zoom" value="1.4641000000000015"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
-	<property name="ireport.jasperserver.url" value="http://mdljasper01.phytelmodel.phytel.com:8080/jasperserver-pro/"/>
-	<property name="ireport.jasperserver.user" value="qauser"/>
-	<property name="ireport.jasperserver.report.resource" value="/organizations/organization_1/InHealth/Ad_Hoc_Components/MDVC_CM_Summary/rpt_MDVC_CM_Summary_files/subreport_Recent_Clinical.jrxml"/>
-	<property name="ireport.jasperserver.reportUnit" value="/organizations/organization_1/InHealth/Ad_Hoc_Components/MDVC_CM_Summary/rpt_MDVC_CM_Summary"/>
+	<property name="ireport.jasperserver.url" value="https://reporting.phytel.com/jasperserver-pro/"/>
+	<property name="ireport.jasperserver.user" value="ltan"/>
+	<property name="ireport.jasperserver.report.resource" value="/organizations/organization_1/organizations/InHealth/Reports/Client_Testing/rpt_MDVC_CM_Summary_files/subreport_Recent_Clinical.jrxml"/>
+	<property name="ireport.jasperserver.reportUnit" value="/organizations/organization_1/organizations/InHealth/Reports/Client_Testing/rpt_MDVC_CM_Summary"/>
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<property name="com.jaspersoft.studio.unit." value="pixel"/>
-	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Model Data Adapter "/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Prod Data Adapter "/>
 	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.topMargin" value="pixel"/>
@@ -41,11 +41,28 @@
 	<parameter name="ID_MongoPatientId" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[select
-pcd.[Description]
+Distinct  STUFF(
+				(Select
+					Distinct ', ' + pcd1.Description
+				From RPT_Patient_ClinicalData pcd1 with (nolock)
+								Where pcd1.MongoPatientId =pcd.MongoPatientId
+				AND pcd1.Observationtype = 'Problems'
+	AND pcd1.[State] = 'Active'
+	AND pcd1.Display IN ('Primary','Secondary')
+	AND pcd1.RecordCreatedOn in
+	(select max(RecordCreatedOn)
+	from RPT_Patient_ClinicalData pcd2
+	where pcd2.MongoPatientId =  pcd.MongoPatientId
+	GROUP BY Code)
+	Order By ', ' + pcd1.Description				For Xml Path, Type).value('.', 'varchar(max)')
+			, 1
+			, 2
+			, '') as Description
+
 from
 	RPT_Patient_ClinicalData pcd
 WHERE
-	pcd.MongoPatientId = $P{ID_MongoPatientId}
+	pcd.MongoPatientId =$P{ID_MongoPatientId}-- '534685be60e4b90f8c89662c'
 	AND pcd.Observationtype = 'Problems'
 	AND pcd.[State] = 'Active'
 	AND pcd.Display IN ('Primary','Secondary')
@@ -53,8 +70,7 @@ WHERE
 	(select max(RecordCreatedOn)
 	from RPT_Patient_ClinicalData
 	where MongoPatientId = $P{ID_MongoPatientId}
-	GROUP BY Code)
-Order by pcd.[Description]]]>
+	GROUP BY Code)]]>
 	</queryString>
 	<field name="Description" class="java.lang.String"/>
 	<background>
