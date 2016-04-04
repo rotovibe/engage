@@ -1174,7 +1174,6 @@ namespace Phytel.API.DataDomain.Contact
                     Prefix = data.Prefix,
                     DataSource = data.DataSource,
                     ExternalRecordId = data.ExternalRecordId,
-                    ContactSubTypes = AutoMapper.Mapper.Map<List<MEContactSubType>>(data.ContactSubTypesData),
                     Version = version,
                     DeleteFlag = false
                 };
@@ -1182,6 +1181,22 @@ namespace Phytel.API.DataDomain.Contact
                 if (data.ContactTypeId != null)
                 {
                     meContact.ContactTypeId = ObjectId.Parse(data.ContactTypeId);
+                }
+                //ContactSubTypes
+                if (data.ContactSubTypesData != null && data.ContactSubTypesData.Count > 0)
+                {
+                    List<MEContactSubType> list = new List<MEContactSubType>();
+                    foreach (var d in data.ContactSubTypesData)
+                    {
+                        MEContactSubType subtype = new MEContactSubType();
+                        if (!string.IsNullOrEmpty(d.SubTypeId))
+                            subtype.SubTypeId = ObjectId.Parse(d.SubTypeId);
+                        if (!string.IsNullOrEmpty(d.SpecialtyId))
+                            subtype.SpecialtyId = ObjectId.Parse(d.SpecialtyId);
+                        subtype.SubSpecialtyIds = Helper.ConvertToObjectIdList(d.SubSpecialtyIds);
+                        list.Add(subtype);
+                    }
+                    meContact.ContactSubTypes = list;
                 }
                 //PatientId
                 if (data.PatientId != null)
