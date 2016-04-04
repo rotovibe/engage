@@ -75,7 +75,11 @@ namespace Phytel.API.DataDomain.Contact
             string id = null;
             try
             {
+                if (request == null)
+                    throw new ArgumentNullException("request");
                 IContactRepository repo = Factory.GetRepository(request, RepositoryType.Contact);
+                if (repo == null)
+                    throw new Exception("The repository should not be null");
                 id = (string)repo.Insert(request);
             }
             catch (Exception ex)
@@ -90,8 +94,11 @@ namespace Phytel.API.DataDomain.Contact
             UpdateContactDataResponse response = null;
             try
             {
+                if (request == null)
+                    throw new ArgumentNullException("request");
                 IContactRepository repo = Factory.GetRepository(request, RepositoryType.Contact);
-
+                if (repo == null)
+                    throw new Exception("The repository should not be null");
                 response = repo.Update(request) as UpdateContactDataResponse;
             }
             catch (Exception ex)
