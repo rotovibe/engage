@@ -1717,7 +1717,10 @@ namespace Phytel.API.AppDomain.NG
                         Skip = normalizeSkip,
                         ContactSubTypeIds = request.ContactSubTypeIds,
                         ContactTypeIds = contactTypeIds,
-                        ContactStatuses = contactStatuses
+                        ContactStatuses = contactStatuses,
+                        FirstName =  request.FirstName,
+                        LastName = request.LastName,
+                        FilterType = (DataDomain.Contact.DTO.FilterType) request.FilterType
 
 
                     } as object);

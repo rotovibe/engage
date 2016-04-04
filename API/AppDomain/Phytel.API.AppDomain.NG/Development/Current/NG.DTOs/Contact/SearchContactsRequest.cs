@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using Phytel.API.Interface;
 using ServiceStack.ServiceHost;
 
@@ -14,6 +15,7 @@ namespace Phytel.API.AppDomain.NG.DTO
         //public List<ContactType> ContactTypes { get; set; }
 
         [ApiMember(Name = "ContactStatuses", Description = "List of ContactStatuses to Search for ", ParameterType = "query", DataType = "ContactStatus", IsRequired = false)]
+        [ApiAllowableValues("ContactStatuses", typeof(DTO.ContactStatus))]
         public List<ContactStatus> ContactStatuses { get; set; }
 
         [ApiMember(Name = "ContactSubTypeIds", Description = "List of ContactSubTypeIds to Search for ", ParameterType = "body", DataType = "list of strings", IsRequired = false)]
@@ -30,6 +32,10 @@ namespace Phytel.API.AppDomain.NG.DTO
 
         [ApiMember(Name = "Skip", Description = "Number of contacts to skip", ParameterType = "query", DataType = "int", IsRequired = false)]
         public int Skip { get; set; }
+
+        [ApiMember(Name = "FilterType", Description = "Indicates the filter for search (StartsWith or ExactMatch)", ParameterType = "query", DataType = "FilterType", IsRequired = false)]
+        [ApiAllowableValues("FilterType",typeof(DTO.FilterType))]
+        public FilterType FilterType { get; set; } 
 
 
         #region IAppDomainRequest Members
@@ -60,5 +66,11 @@ namespace Phytel.API.AppDomain.NG.DTO
         Active = 1,
         Inactive = 2,
         Archived = 3
+    }
+
+    public enum FilterType
+    {
+        StartsWith = 1,
+        ExactMatch = 2
     }
 }

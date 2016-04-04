@@ -3,6 +3,7 @@ using System.CodeDom;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using System.Text.RegularExpressions;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
@@ -1022,6 +1023,11 @@ namespace Phytel.API.DataDomain.Contact
                 var results = new List<MEContact>();
 
                 var cursor = ctx.Contacts.Collection.Find(query);
+
+                 var sortByBuilder = new SortByBuilder();
+                sortByBuilder.Ascending(MEContact.FirstNameProperty, MEContact.LastNameProperty, MEContact.IdProperty);
+
+                cursor.SetSortOrder(sortByBuilder);
                 cursor.SetSkip(request.Skip);
 
                 if (request.Take.HasValue)
@@ -1395,22 +1401,31 @@ namespace Phytel.API.DataDomain.Contact
                 mongoQuery.Add(contactStatusesQuery);
             }
 
+
+            if (!string.IsNullOrEmpty(request.FirstName))
+            {
+                var firstNameQuery = Query<MEContact>.Matches(c => c.FirstName,
+                    new BsonRegularExpression(new Regex(request.FirstName, RegexOptions.IgnoreCase)));
+
+                mongoQuery.Add(firstNameQuery);
+            }
+
+            if (!string.IsNullOrEmpty(request.LastName))
+            {
+                var lastNameQuery = Query<MEContact>.Matches(c => c.LastName,
+                    new BsonRegularExpression(new Regex(request.LastName, RegexOptions.IgnoreCase)));
+
+                mongoQuery.Add(lastNameQuery);
+            }
+
+
             var query = Query.And(mongoQuery);
 
             return query;
             
 
         }
-
-        private MongoCursor<MEContact> GetSearchContactsEntitiesCursor(IMongoQuery query)
-        {
-            using (var ctx = new ContactMongoContext(_dbName))
-            {
-               return ctx.Contacts.Collection.Find(query);
-
-            }
-        }
-
+        
         #endregion
     }
 }

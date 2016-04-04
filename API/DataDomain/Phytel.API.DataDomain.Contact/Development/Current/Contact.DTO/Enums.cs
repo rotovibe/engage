@@ -21,4 +21,10 @@
         CareTeam = 2
 
     }
+
+    public enum FilterType
+    {
+        StartsWith = 1,
+        ExactMatch = 2
+    }
 }

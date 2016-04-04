@@ -28,6 +28,9 @@ namespace Phytel.API.DataDomain.Contact.DTO
         [ApiMember(Name = "Skip", Description = "Number of contacts to skip", ParameterType = "query", DataType = "int", IsRequired = false)]
         public int Skip { get; set; }
 
+        [ApiMember(Name = "FilterType", Description = "Indicates the filter for search (StartsWith or ExactMatch)", ParameterType = "query", DataType = "FilterType", IsRequired = false)]
+        [ApiAllowableValues("FilterType", typeof(DTO.FilterType))]
+        public FilterType FilterType { get; set; } 
 
         #region IDataDomainRequest Members
 
