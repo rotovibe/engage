@@ -325,59 +325,89 @@ namespace Phytel.API.DataDomain.Patient
         public InsertBatchPatientsDataResponse InsertBatchPatients(InsertBatchPatientsDataRequest request)
         {
             InsertBatchPatientsDataResponse response = new InsertBatchPatientsDataResponse();
-            if (request.PatientsData != null && request.PatientsData.Count > 0)
+
+            try
             {
-                List<HttpObjectResponse<PatientData>> list = new List<HttpObjectResponse<PatientData>>();
-                IPatientRepository repo = Factory.GetRepository(request, RepositoryType.Patient);
-                BulkInsertResult result = (BulkInsertResult)repo.InsertAll(request.PatientsData.Cast<object>().ToList());
-                if (result != null)
+                if (request == null)
+                    throw new ArgumentNullException("request param cannot be NULL");
+                if(String.IsNullOrEmpty(request.Context))
+                    throw new ArgumentNullException("request context param cannot be NULL/EMPTY");
+                if (String.IsNullOrEmpty(request.ContractNumber))
+                    throw new ArgumentNullException("request contract number property cannot be NULL/EMPTY");
+                if (String.IsNullOrEmpty(request.UserId))
+                    throw new ArgumentNullException("request requested user id propery cannot be NULL/EMPTY");
+                if ((request.PatientsData == null) || (request.PatientsData.Count <= 0))
+                    throw new ArgumentNullException("request patients data property cannot be NULL/EMPTY");
+
+                if (request.PatientsData != null && request.PatientsData.Count > 0)
                 {
-                    if(result.ProcessedIds != null && result.ProcessedIds.Count > 0)
+                    List<HttpObjectResponse<PatientData>> list = new List<HttpObjectResponse<PatientData>>();
+                   if (Factory == null)
                     {
-                        // Get the patients that were newly inserted. 
-                        List<PatientData> insertedPatients = repo.Select(result.ProcessedIds);
-                        if (insertedPatients != null && insertedPatients.Count > 0)
+                        Factory = new PatientRepositoryFactory();
+                    }
+                    
+                    IPatientRepository repo = Factory.GetRepository(request, RepositoryType.Patient);
+                    BulkInsertResult result = (BulkInsertResult)repo.InsertAll(request.PatientsData.Cast<object>().ToList());
+                    if (result != null)
+                    {
+                        if (result.ProcessedIds != null && result.ProcessedIds.Count > 0)
                         {
-                            List<string> insertedPatientIds = insertedPatients.Select(p => p.Id).ToList();
-
-                            #region DataAudit for Patients
-                            AuditHelper.LogDataAudit(request.UserId, MongoCollectionName.Patient.ToString(), insertedPatientIds, Common.DataAuditType.Insert, request.ContractNumber);
-                            #endregion
-
-                            #region BulkInsert CohortPatientView
-                            List<CohortPatientViewData> cpvList = getMECohortPatientView(insertedPatients);
-                            IPatientRepository cpvRepo = Factory.GetRepository(request, RepositoryType.CohortPatientView);
-                            cpvRepo.InsertAll(cpvList.Cast<object>().ToList()); 
-                            #endregion
-
-                            #region BulkInsert EngagePatientSystems.
-                            List<string> processedPatientSystemIds = insertBatchEngagePatientSystem(insertedPatientIds, request);
-                            List<PatientSystemData> insertedPatientSystems = getPatientSystems(processedPatientSystemIds, request);
-
-                            #region DataAudit for EngagePatientSystems
-                            List<string> insertedPatientSystemIds = insertedPatientSystems.Select(p => p.Id).ToList();
-                            AuditHelper.LogDataAudit(request.UserId, MongoCollectionName.PatientSystem.ToString(), insertedPatientSystemIds, Common.DataAuditType.Insert, request.ContractNumber);
-                            #endregion
-
-                            insertedPatients.ForEach(r =>
+                            if (repo != null)
                             {
-                                string engageValue = string.Empty;
-                                var x = insertedPatientSystems.Where(s => s.PatientId == r.Id).FirstOrDefault();
-                                if (x != null)
-                                    engageValue = x.Value;
-                                list.Add(new HttpObjectResponse<PatientData> { Code = HttpStatusCode.Created, Body = (PatientData)new PatientData { Id = r.Id, ExternalRecordId = r.ExternalRecordId, EngagePatientSystemValue = engageValue } });
-                            }); 
-                            #endregion
+                                // Get the patients that were newly inserted. 
+                                List<PatientData> insertedPatients = repo.Select(result.ProcessedIds);
+                                if (insertedPatients != null && insertedPatients.Count > 0)
+                                {
+                                    List<string> insertedPatientIds = insertedPatients.Select(p => p.Id).ToList();
+
+                                    #region DataAudit for Patients
+                                    AuditHelper.LogDataAudit(request.UserId, MongoCollectionName.Patient.ToString(), insertedPatientIds, Common.DataAuditType.Insert, request.ContractNumber);
+                                    #endregion
+
+                                    #region BulkInsert CohortPatientView
+                                    List<CohortPatientViewData> cpvList = getMECohortPatientView(insertedPatients);
+                                    if(Factory == null)
+                                    {
+                                        Factory =  new PatientRepositoryFactory();
+                                    }  
+                                    IPatientRepository cpvRepo = Factory.GetRepository(request, RepositoryType.CohortPatientView);
+                                    cpvRepo.InsertAll(cpvList.Cast<object>().ToList());
+                                    #endregion
+
+                                    #region BulkInsert EngagePatientSystems.
+                                    List<string> processedPatientSystemIds = insertBatchEngagePatientSystem(insertedPatientIds, request);
+                                    List<PatientSystemData> insertedPatientSystems = getPatientSystems(processedPatientSystemIds, request);
+
+                                    #region DataAudit for EngagePatientSystems
+                                    List<string> insertedPatientSystemIds = insertedPatientSystems.Select(p => p.Id).ToList();
+                                    AuditHelper.LogDataAudit(request.UserId, MongoCollectionName.PatientSystem.ToString(), insertedPatientSystemIds, Common.DataAuditType.Insert, request.ContractNumber);
+                                    #endregion
+
+                                    insertedPatients.ForEach(r =>
+                                    {
+                                        string engageValue = string.Empty;
+                                        var x = insertedPatientSystems.Where(s => s.PatientId == r.Id).FirstOrDefault();
+                                        if (x != null)
+                                            engageValue = x.Value;
+                                        list.Add(new HttpObjectResponse<PatientData> { Code = HttpStatusCode.Created, Body = (PatientData)new PatientData { Id = r.Id, ExternalRecordId = r.ExternalRecordId, EngagePatientSystemValue = engageValue } });
+                                    });
+                                    #endregion
+                                }
+                            }
+                            result.ErrorMessages.ForEach(e =>
+                            {
+                                list.Add(new HttpObjectResponse<PatientData> { Code = HttpStatusCode.InternalServerError, Message = e });
+                            });
                         }
                     }
-                    result.ErrorMessages.ForEach(e =>
-                    {
-                        list.Add(new HttpObjectResponse<PatientData> { Code = HttpStatusCode.InternalServerError, Message = e });
-                    });
+                        response.Responses = list;                   
                 }
-                response.Responses = list;
             }
-            
+            catch(Exception ex)
+            {
+                throw ex;
+            }
             return response;
         }
 
