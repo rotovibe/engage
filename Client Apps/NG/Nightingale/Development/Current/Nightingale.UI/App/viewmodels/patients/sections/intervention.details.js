@@ -26,7 +26,34 @@
                     return;
                 }
                 self.isDetailsExpanded( !self.isDetailsExpanded() );
-            }
+            };
+
+            self.addBarrier = function (intervention) {
+                goalsIndex.addEntity('Barrier', intervention.goal()).then(doSomething);
+
+                function doSomething(barrier) {
+                    var newBarrierId = datacontext.createComplexType('Identifier', { id: barrier.id() });
+                    self.intervention().barrierIds.push(newBarrierId);
+                    self.editBarrier(barrier, 'Add Barrier');
+                }
+            };
+
+            self.editBarrier = function (barrier, msg) {
+                var thisGoal = barrier.goal();
+                var modalEntity = ko.observable(new ModalEntity(barrier, 'name'));
+                var saveOverride = function () {
+                    saveBarrier(barrier)
+                    saveIntervention(self.intervention());
+                };
+                var cancelOverride = function () {
+                    cancel(barrier);
+                    getGoalDetails(thisGoal);
+                };
+                msg = msg ? msg : 'Edit Barrier';
+                editEntity(msg, modalEntity, 'viewmodels/templates/barrier.edit', saveOverride, cancelOverride);
+            };
+
+
             self.editIntervention = function (intervention) {
                 getGoalDetails(intervention.goal());
                 var modalEntity = ko.observable(new ModalEntity(intervention, 'description'));
@@ -38,7 +65,7 @@
                     cancel(intervention);
                     getGoalDetails(intervention.goal());
                 };
-                editIntervention('Edit Intervention', modalEntity, 'viewmodels/templates/intervention.edit', saveOverride, cancelOverride);
+                editEntity('Edit Intervention', modalEntity, 'viewmodels/templates/intervention.edit', saveOverride, cancelOverride);
             };
             self.deleteIntervention = function (intervention) {
                 var result = confirm('You are about to delete an intervention.  Press OK to continue, or cancel to return without deleting.');
@@ -64,7 +91,7 @@
             };
         };
 
-        function editIntervention (msg, entity, path, saveoverride, canceloverride) {
+        function editEntity (msg, entity, path, saveoverride, canceloverride) {
             var modalSettings = {
                 title: msg,
                 showSelectedPatientInTitle: true,
@@ -79,6 +106,11 @@
             var modal = new modelConfig.modal(modalSettings);
             modalShowing(true);
             shell.currentModal(modal);
+        }
+
+        function saveBarrier (barrier) {
+            barrier.checkAppend();
+            datacontext.saveBarrier(barrier);
         }
 
         function saveIntervention(intervention) {

@@ -14,7 +14,6 @@
                                 <div class="options">
                                     <a class="edit_task icon-outset" href="#" data-bind="click: $parent.editTask"><i class="icon-edit"></i></a>
                                     <a class="delete_task" href="#" data-bind="click: $parent.deleteTask"><i class="icon-cancel"></i></a>
-                                    <!-- <div data-bind="chsnsingledark: { options: $parent.actionActions, value: $parent.selectedAction, text: 'text', label: 'action-actions', caption: 'Action', disabled: $parent.disableActionActions}"></div> -->
                                 </div>
                             </header>
                         </div>
@@ -31,6 +30,13 @@
                                                         Start Date
                                                     </div>
                                                     <div class="span6" data-bind="DateOrDash: startDate">
+                                                    </div>
+                                                </div>
+                                                <div class="row pad-bottom" data-bind="with: status">
+                                                    <div class="span6 grey">
+                                                        Status
+                                                    </div>
+                                                    <div class="span6" data-bind="text: name">
                                                     </div>
                                                 </div>
                                                 <div class="row pad-bottom" data-bind="visible: targetValue">

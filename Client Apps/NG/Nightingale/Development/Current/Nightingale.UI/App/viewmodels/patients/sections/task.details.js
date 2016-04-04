@@ -26,7 +26,33 @@
                     return;
                 }
                 self.isDetailsExpanded( !self.isDetailsExpanded() );
-            }
+            };
+
+            self.addBarrier = function (task) {
+                goalsIndex.addEntity('Barrier', task.goal()).then(doSomething);
+
+                function doSomething(barrier) {
+                    var newBarrierId = datacontext.createComplexType('Identifier', { id: barrier.id() });
+                    self.task().barrierIds.push(newBarrierId);
+                    self.editBarrier(barrier, 'Add Barrier');
+                }
+            };
+
+            self.editBarrier = function (barrier, msg) {
+                var thisGoal = barrier.goal();
+                var modalEntity = ko.observable(new ModalEntity(barrier, 'name'));
+                var saveOverride = function () {
+                    saveBarrier(barrier);
+                    saveTask(self.task());
+                };
+                var cancelOverride = function () {
+                    cancel(barrier);
+                    getGoalDetails(thisGoal);
+                };
+                msg = msg ? msg : 'Edit Barrier';
+                editEntity(msg, modalEntity, 'viewmodels/templates/barrier.edit', saveOverride, cancelOverride);
+            };
+
             self.editTask = function (task) {
                 getGoalDetails(task.goal());
                 var modalEntity = ko.observable(new ModalEntity(task, 'description'));
