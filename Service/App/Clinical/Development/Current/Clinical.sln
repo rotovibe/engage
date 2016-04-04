@@ -27,9 +27,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Medication.DTO",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Medication.Service", "..\..\..\..\Data\Medication\Development\Current\Bristol-Branch\Medication.Service\DataDomain.Medication.Service.csproj", "{12D22E0C-BFFF-4F2E-AC47-6B8E50E69861}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppDomain.Engage.ClinicalTests", "AppDomain.Engage.ClinicalTests\AppDomain.Engage.ClinicalTests.csproj", "{B4D83150-953B-4C8C-8F87-B7D0053D7BD5}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 11
+		SccNumberOfProjects = 12
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://192.168.111.123:8080/tfs/phytel
 		SccProjectUniqueName0 = ..\\..\\..\\..\\Common\\Phytel.API.Common\\Development\\Current\\Bristol-branch\\Phytel.API.Common.csproj
@@ -69,6 +71,9 @@ Global
 		SccProjectUniqueName10 = AppDomain.Engage.Clinical\\AppDomain.Engage.Clinical.csproj
 		SccProjectName10 = AppDomain.Engage.Clinical
 		SccLocalPath10 = AppDomain.Engage.Clinical
+		SccProjectUniqueName11 = AppDomain.Engage.ClinicalTests\\AppDomain.Engage.ClinicalTests.csproj
+		SccProjectName11 = AppDomain.Engage.ClinicalTests
+		SccLocalPath11 = AppDomain.Engage.ClinicalTests
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -178,6 +183,16 @@ Global
 		{12D22E0C-BFFF-4F2E-AC47-6B8E50E69861}.Release|Any CPU.Build.0 = Release|Any CPU
 		{12D22E0C-BFFF-4F2E-AC47-6B8E50E69861}.Test|Any CPU.ActiveCfg = Model|Any CPU
 		{12D22E0C-BFFF-4F2E-AC47-6B8E50E69861}.Test|Any CPU.Build.0 = Model|Any CPU
+		{B4D83150-953B-4C8C-8F87-B7D0053D7BD5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B4D83150-953B-4C8C-8F87-B7D0053D7BD5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B4D83150-953B-4C8C-8F87-B7D0053D7BD5}.Model|Any CPU.ActiveCfg = Release|Any CPU
+		{B4D83150-953B-4C8C-8F87-B7D0053D7BD5}.Model|Any CPU.Build.0 = Release|Any CPU
+		{B4D83150-953B-4C8C-8F87-B7D0053D7BD5}.QA|Any CPU.ActiveCfg = Release|Any CPU
+		{B4D83150-953B-4C8C-8F87-B7D0053D7BD5}.QA|Any CPU.Build.0 = Release|Any CPU
+		{B4D83150-953B-4C8C-8F87-B7D0053D7BD5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B4D83150-953B-4C8C-8F87-B7D0053D7BD5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B4D83150-953B-4C8C-8F87-B7D0053D7BD5}.Test|Any CPU.ActiveCfg = Release|Any CPU
+		{B4D83150-953B-4C8C-8F87-B7D0053D7BD5}.Test|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
