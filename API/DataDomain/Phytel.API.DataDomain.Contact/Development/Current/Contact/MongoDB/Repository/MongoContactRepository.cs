@@ -279,7 +279,21 @@ namespace Phytel.API.DataDomain.Contact
                     if(mc != null)
                     {
                         var uv = new List<MB.UpdateBuilder>();
-
+                        uv.Add(MB.Update.Set(MEContact.FirstNameProperty, data.FirstName));
+                        uv.Add(MB.Update.Set(MEContact.LastNameProperty, data.LastName));
+                        uv.Add(MB.Update.Set(MEContact.MiddleNameProperty, data.MiddleName));
+                        uv.Add(MB.Update.Set(MEContact.PreferredNameProperty, data.PreferredName));
+                        uv.Add(MB.Update.Set(MEContact.GenderProperty, data.Gender));
+                        uv.Add(MB.Update.Set(MEContact.SuffixProperty, data.Suffix));
+                        uv.Add(MB.Update.Set(MEContact.PrefixProperty, data.Prefix));
+                        uv.Add(MB.Update.Set(MEContact.DeceasedProperty, data.DeceasedId));
+                        uv.Add(MB.Update.Set(MEContact.StatusProperty, data.StatusId));
+                        uv.Add(MB.Update.Set(MEContact.DataSourceProperty, data.DataSource));
+                        uv.Add(MB.Update.Set(MEContact.ExternalRecordIdProperty, data.ExternalRecordId));
+                        if (!string.IsNullOrEmpty(data.ContactTypeId))
+                            uv.Add(MB.Update.Set(MEContact.ContactTypeIdProperty, ObjectId.Parse(data.ContactTypeId)));
+                        uv.Add(MB.Update.SetWrapped<List<MEContactSubType>>(MEContact.ContactSubTypesProperty, BuildMEContactSubTypes(data.ContactSubTypesData)));
+                        #region Communication
                         #region Modes
                         if (data.Modes != null)
                         {
@@ -406,7 +420,7 @@ namespace Phytel.API.DataDomain.Contact
                                 else
                                 {
                                     List<PhoneData> phoneData = data.Phones;
-                                    foreach(PhoneData p in phoneData )
+                                    foreach (PhoneData p in phoneData)
                                     {
                                         // Check if it was a new insert.
                                         ObjectId result;
@@ -447,7 +461,7 @@ namespace Phytel.API.DataDomain.Contact
                                         }
                                         else
                                         {
-                                            if(phoneData.Where(a => a.Id == e.Id.ToString()).FirstOrDefault() == null)
+                                            if (phoneData.Where(a => a.Id == e.Id.ToString()).FirstOrDefault() == null)
                                             {
                                                 e.DeleteFlag = true;
                                                 mePhones.Add(e);
@@ -668,11 +682,9 @@ namespace Phytel.API.DataDomain.Contact
                         {
                             uv.Add(MB.Update.Set(MEContact.TimeZoneProperty, ObjectId.Parse(data.TimeZoneId)));
                         } 
+                        #endregion
 
-                        // LastUpdatedOn
                         uv.Add(MB.Update.Set(MEContact.LastUpdatedOnProperty,DateTime.UtcNow));
-
-                        //UpdatedBy
                         uv.Add(MB.Update.Set(MEContact.UpdatedByProperty, ObjectId.Parse(this.UserId)));
 
                         IMongoUpdate update = MB.Update.Combine(uv);
@@ -1242,21 +1254,7 @@ namespace Phytel.API.DataDomain.Contact
                     meContact.ContactTypeId = ObjectId.Parse(data.ContactTypeId);
                 }
                 //ContactSubTypes
-                if (data.ContactSubTypesData != null && data.ContactSubTypesData.Count > 0)
-                {
-                    List<MEContactSubType> list = new List<MEContactSubType>();
-                    foreach (var d in data.ContactSubTypesData)
-                    {
-                        MEContactSubType subtype = new MEContactSubType();
-                        if (!string.IsNullOrEmpty(d.SubTypeId))
-                            subtype.SubTypeId = ObjectId.Parse(d.SubTypeId);
-                        if (!string.IsNullOrEmpty(d.SpecialtyId))
-                            subtype.SpecialtyId = ObjectId.Parse(d.SpecialtyId);
-                        subtype.SubSpecialtyIds = Helper.ConvertToObjectIdList(d.SubSpecialtyIds);
-                        list.Add(subtype);
-                    }
-                    meContact.ContactSubTypes = list;
-                }
+                meContact.ContactSubTypes = BuildMEContactSubTypes(data.ContactSubTypesData);
                 //PatientId
                 if (data.PatientId != null)
                 {
@@ -1376,6 +1374,26 @@ namespace Phytel.API.DataDomain.Contact
             return meContact;
         }
 
+        private List<MEContactSubType> BuildMEContactSubTypes(List<ContactSubTypeData> data )
+        {
+            List<MEContactSubType> list = new List<MEContactSubType>();
+            if (data != null && data.Count > 0)
+            {
+                list = new List<MEContactSubType>();
+                foreach (var d in data)
+                {
+                    MEContactSubType subtype = new MEContactSubType();
+                    if (!string.IsNullOrEmpty(d.SubTypeId))
+                        subtype.SubTypeId = ObjectId.Parse(d.SubTypeId);
+                    if (!string.IsNullOrEmpty(d.SpecialtyId))
+                        subtype.SpecialtyId = ObjectId.Parse(d.SpecialtyId);
+                    subtype.SubSpecialtyIds = Helper.ConvertToObjectIdList(d.SubSpecialtyIds);
+                    list.Add(subtype);
+                }
+            }
+            return list;
+        }
+
         private IMongoQuery BuildSearchContactsMongoQuery(SearchContactsDataRequest request)
         {
             var mongoQuery = new List<IMongoQuery>();
@@ -1401,31 +1419,22 @@ namespace Phytel.API.DataDomain.Contact
                 mongoQuery.Add(contactStatusesQuery);
             }
 
-
-            if (!string.IsNullOrEmpty(request.FirstName))
-            {
-                var firstNameQuery = Query<MEContact>.Matches(c => c.FirstName,
-                    new BsonRegularExpression(new Regex(request.FirstName, RegexOptions.IgnoreCase)));
-
-                mongoQuery.Add(firstNameQuery);
-            }
-
-            if (!string.IsNullOrEmpty(request.LastName))
-            {
-                var lastNameQuery = Query<MEContact>.Matches(c => c.LastName,
-                    new BsonRegularExpression(new Regex(request.LastName, RegexOptions.IgnoreCase)));
-
-                mongoQuery.Add(lastNameQuery);
-            }
-
-
             var query = Query.And(mongoQuery);
 
             return query;
             
 
         }
-        
+
+        private MongoCursor<MEContact> GetSearchContactsEntitiesCursor(IMongoQuery query)
+        {
+            using (var ctx = new ContactMongoContext(_dbName))
+            {
+               return ctx.Contacts.Collection.Find(query);
+
+            }
+        }
+
         #endregion
     }
 }
