@@ -24,7 +24,7 @@ namespace Phytel.API.DataDomain.Contact.Test.Stubs
             throw new NotImplementedException();
         }
 
-        public IEnumerable<object> SearchContacts(DTO.GetContactsByContactIdsDataRequest request)
+        public IEnumerable<object> GetContactsByContactId(DTO.GetContactsByContactIdsDataRequest request)
         {
             throw new NotImplementedException();
         }
@@ -127,6 +127,18 @@ namespace Phytel.API.DataDomain.Contact.Test.Stubs
 
 
         public IEnumerable<object> Select(List<string> ids)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public IEnumerable<object> SearchContacts(SearchContactsDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public long GetSearchContactsCount(SearchContactsDataRequest request)
         {
             throw new NotImplementedException();
         }

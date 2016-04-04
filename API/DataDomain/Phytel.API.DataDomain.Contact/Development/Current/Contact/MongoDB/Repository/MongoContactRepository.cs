@@ -16,6 +16,7 @@ using Phytel.API.Interface;
 using ServiceStack.WebHost.Endpoints;
 using MB = MongoDB.Driver.Builders;
 using AutoMapper;
+using Phytel.API.Common.Extensions;
 
 namespace Phytel.API.DataDomain.Contact
 {
@@ -869,7 +870,7 @@ namespace Phytel.API.DataDomain.Contact
             catch (Exception ex) { throw ex; }
         }
 
-        public IEnumerable<object> SearchContacts(GetContactsByContactIdsDataRequest request)
+        public IEnumerable<object> GetContactsByContactId(GetContactsByContactIdsDataRequest request)
         { 
             List<ContactData> contactDataList = null;
             try
@@ -1005,6 +1006,58 @@ namespace Phytel.API.DataDomain.Contact
                 return dataList as IEnumerable<object>;
             }
             catch (Exception) { throw; }
+        }
+
+        public IEnumerable<object> SearchContacts(SearchContactsDataRequest request)
+        {
+            if(request == null)
+                throw new ArgumentNullException("request");
+
+            List<ContactData> dataList = null;
+
+            using (var ctx = new ContactMongoContext(_dbName))
+            {
+               // var defaultSort = "_id"; //TODO: Add Sort Later.
+                var query = BuildSearchContactsMongoQuery(request);
+                var results = new List<MEContact>();
+
+                var cursor = ctx.Contacts.Collection.Find(query);
+                cursor.SetSkip(request.Skip);
+
+                if (request.Take.HasValue)
+                    cursor.SetLimit(request.Take.Value);
+
+                results = cursor.ToList();
+
+                if (!results.IsNullOrEmpty())
+                {
+                    dataList = new List<ContactData>();
+                    foreach (var item in results)
+                    {
+                        var contactData = BuildContactData(item);
+                        dataList.Add(contactData);
+                    }
+                }
+            }
+
+            return dataList;
+        }
+
+        public long GetSearchContactsCount(SearchContactsDataRequest request)
+        {
+            if (request == null)
+                throw new ArgumentNullException("request");
+
+            long searchTotalCount = 0;
+
+            using (var ctx = new ContactMongoContext(_dbName))
+            {
+                var query = BuildSearchContactsMongoQuery(request);
+                searchTotalCount =  ctx.Contacts.Collection.Count(query);
+
+            }
+
+            return searchTotalCount;
         }
 
         #region Private Methods
@@ -1316,6 +1369,48 @@ namespace Phytel.API.DataDomain.Contact
             }
             return meContact;
         }
+
+        private IMongoQuery BuildSearchContactsMongoQuery(SearchContactsDataRequest request)
+        {
+            var mongoQuery = new List<IMongoQuery>();
+
+            //Build Non Deleted Entries query
+            var activeQuery = Query<MEContact>.EQ(c => c.DeleteFlag, false);
+            mongoQuery.Add(activeQuery);
+
+            //Build Contact Type Search.
+            if (!request.ContactTypeIds.IsNullOrEmpty())
+            {
+                var contactTypesToSearch = request.ContactTypeIds;
+                var contactTypesQuery = Query<MEContact>.In(ct => ct.ContactTypeId,
+                    contactTypesToSearch.Select(ct => ObjectId.Parse(ct)).ToList());
+
+                mongoQuery.Add(contactTypesQuery);
+            }
+
+            //Build Contact Statuses.
+            if (!request.ContactStatuses.IsNullOrEmpty())
+            {
+                var contactStatusesQuery = Query<MEContact>.In(ct => ct.Status, request.ContactStatuses.ToList());
+                mongoQuery.Add(contactStatusesQuery);
+            }
+
+            var query = Query.And(mongoQuery);
+
+            return query;
+            
+
+        }
+
+        private MongoCursor<MEContact> GetSearchContactsEntitiesCursor(IMongoQuery query)
+        {
+            using (var ctx = new ContactMongoContext(_dbName))
+            {
+               return ctx.Contacts.Collection.Find(query);
+
+            }
+        }
+
         #endregion
     }
 }

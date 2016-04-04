@@ -18,5 +18,6 @@ namespace Phytel.API.DataDomain.Contact
         GetContactByContactIdDataResponse GetContactByContactId(GetContactByContactIdDataRequest request);
         DeleteContactByPatientIdDataResponse DeleteContactByPatientId(DeleteContactByPatientIdDataRequest request);
         UndoDeleteContactDataResponse UndoDeleteContact(UndoDeleteContactDataRequest request);
+        SearchContactsDataResponse SearchContacts(SearchContactsDataRequest request );
     }
 }

@@ -255,16 +255,23 @@ namespace Phytel.API.DataDomain.Contact.Service
             
             if(request == null)
                 throw new ArgumentNullException("request");
-
-
-            return new SearchContactsDataResponse
+            var response = new SearchContactsDataResponse();
+            try
             {
-                Contacts = new List<ContactData>
-                {
-                    new ContactData { Id = "MyContactId1" ,FirstName = "John", LastName = "Doe"}
-                },
-                TotalCount = 1
-            };
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("ContactDD:SearchContactsDataRequest()::Unauthorized Access");
+
+                response = Manager.SearchContacts(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+            }
+            return response;
 
 
 

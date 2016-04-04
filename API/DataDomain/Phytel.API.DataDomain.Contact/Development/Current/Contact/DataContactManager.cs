@@ -60,7 +60,7 @@ namespace Phytel.API.DataDomain.Contact
             {
                 IContactRepository repo = Factory.GetRepository(request, RepositoryType.Contact);
 
-                response.Contacts = repo.SearchContacts(request) as List<ContactData>;
+                response.Contacts = repo.GetContactsByContactId(request) as List<ContactData>;
                 response.Version = request.Version;
             }
             catch (Exception ex)
@@ -382,6 +382,35 @@ namespace Phytel.API.DataDomain.Contact
             }
             catch (Exception ex) { throw ex; }
             return timeZoneId;
+        }
+
+
+        public SearchContactsDataResponse SearchContacts(SearchContactsDataRequest request)
+        {
+            var response = new SearchContactsDataResponse();
+            try
+            {
+                var repo = Factory.GetRepository(request, RepositoryType.Contact);
+
+                var searchTotalCount = repo.GetSearchContactsCount(request);
+                if (searchTotalCount > 0)
+                {
+                    response.Contacts = repo.SearchContacts(request) as List<ContactData>;
+                }
+                else
+                {
+                    response.Contacts = new List<ContactData>();
+                }
+
+                
+                response.Version = request.Version;
+                response.TotalCount = searchTotalCount;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return response;
         }
     }
 }

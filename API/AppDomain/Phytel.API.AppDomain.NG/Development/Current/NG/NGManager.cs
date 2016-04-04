@@ -2123,7 +2123,7 @@ namespace Phytel.API.AppDomain.NG
 
         private int NormalizeTake(int? take)
         {
-            var normalizedValue = 100;
+            var normalizedValue = 5;
 
             if (take > 0)
                 normalizedValue = take.Value;

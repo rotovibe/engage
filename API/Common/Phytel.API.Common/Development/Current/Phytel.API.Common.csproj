@@ -138,6 +138,7 @@
     <Compile Include="Data\MongoSortingUtils.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="Extensions\LinqExtensions.cs" />
+    <Compile Include="Extensions\ListExtensions.cs" />
     <Compile Include="Format\CommonFormatterUtil.cs" />
     <Compile Include="Format\CommonFormatter.cs" />
     <Compile Include="Format\ICommonFormatterUtil.cs" />
