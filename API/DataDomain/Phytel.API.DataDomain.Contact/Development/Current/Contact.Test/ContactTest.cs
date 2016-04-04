@@ -74,7 +74,7 @@ namespace Phytel.API.DataDomain.Contact.Test
             ids.Add("52f57462d6a4850fd02cc1b4");
             //request.ContactIds = ids;
 
-            var response = manager.SearchContacts(request);
+            var response = manager.GetContactsByContactId(request);
 
             Assert.IsNotNull(response);
         }

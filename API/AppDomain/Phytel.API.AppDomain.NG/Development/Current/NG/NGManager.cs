@@ -1688,7 +1688,6 @@ namespace Phytel.API.AppDomain.NG
 
         public SearchContactsResponse SearchContacts(SearchContactsRequest request)
         {
-
             var response = new SearchContactsResponse();
            
             if(request == null)
@@ -1702,7 +1701,7 @@ namespace Phytel.API.AppDomain.NG
                 var normalizedTake = NormalizeTake(request.Take);
                 var normalizeSkip = NormalizeSkip(request.Skip);
                 var contactTypeIds =  request.ContactTypeIds;// == null ? new List<string>()  : BuildContactTypeIds(request.ContactTypes);
-                var contactStatuses = request.ContactStatuses.Select(s => (DataDomain.Contact.DTO.Status)s).ToList();
+                var contactStatuses = request.ContactStatuses ==null ? null: request.ContactStatuses.Select(s => (DataDomain.Contact.DTO.Status)s).ToList();
 
                 IRestClient client = new JsonServiceClient();
                 string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/SearchContacts",

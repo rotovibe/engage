@@ -53,7 +53,7 @@ namespace Phytel.API.DataDomain.Contact
             return result;
         }
 
-        public GetContactsByContactIdsDataResponse SearchContacts(GetContactsByContactIdsDataRequest request)
+        public GetContactsByContactIdsDataResponse GetContactsByContactId(GetContactsByContactIdsDataRequest request)
         {
             var response = new GetContactsByContactIdsDataResponse();
             try
