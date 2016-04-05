@@ -27,6 +27,9 @@ namespace Phytel.API.DataDomain.Cohort.Test
         private DataReferralManager _dataReferralMgr;
         private const string _USERID = "nguser";
         private const string _CONTRACT_DBName = "InHealth001";
+        private const string ReferralId = "222aa055d4332317acc2222";
+        ReferralData referralData = null;
+        List<ReferralData> referralDataList = new List<ReferralData>();
 
         [SetUp]
         public void Setup()
@@ -59,24 +62,22 @@ namespace Phytel.API.DataDomain.Cohort.Test
                 Version = _VERSION
             };
 
-           getresponse = new GetReferralDataResponse()
+            referralData = new ReferralData
             {
-                Referral = new ReferralData
-                {
-                    CohortId = "528aa055d4332317acc50978",
-                    DataSource = "Explore",
-                    Name = "Test Name",
-                    Description = "Test desc",
-                    Reason = "Test Reason"
-                },
-                Status = null,
-                Version = _VERSION
+                CohortId = "528aa055d4332317acc50978",
+                DataSource = "Explore",
+                Name = "Test Name",
+                Description = "Test desc",
+                Reason = "Test Reason"
             };
+
+            referralDataList.Add(referralData);
 
             _MockContext = new Mock<IServiceContext>(MockBehavior.Default);
             _MockRepository = new Mock<IReferralRepository<IDataDomainRequest>>(MockBehavior.Default);
-            _MockRepository.Setup(m => m.Insert(It.IsAny<PostReferralDefinitionRequest>())).Returns(response);
-            _MockRepository.Setup(m => m.FindByID(It.IsAny<string>())).Returns(getresponse);
+            _MockRepository.Setup(m => m.Insert(It.IsAny<PostReferralDefinitionRequest>())).Returns(() => ReferralId);
+            _MockRepository.Setup(m => m.FindByID(It.IsAny<string>())).Returns(() => referralData);
+            _MockRepository.Setup(m => m.SelectAll()).Returns(() => referralDataList);
             _dataReferralMgr = new DataReferralManager(_MockContext.Object, _MockRepository.Object);
         }   // Setup()
 
@@ -95,7 +96,7 @@ namespace Phytel.API.DataDomain.Cohort.Test
             // Arrange
                 
             // Act
-            _dataReferralMgr.InsertReferral(_PostRefrDefRqst);
+            _dataReferralMgr.InsertReferral(_PostRefrDefRqst.Referral);
            // Assert
             Assert.IsNotNull(response);
         }
@@ -104,65 +105,9 @@ namespace Phytel.API.DataDomain.Cohort.Test
         public void CanInsertReferral_WhenRequestIsNull_ThrowsArgumentNullException()
         {
             // Arrange
-            _PostRefrDefRqst = null;
-            // Act
-            var ex = Assert.Throws<ArgumentNullException>(() =>_dataReferralMgr.InsertReferral(_PostRefrDefRqst));
-            // Assert
-            Assert.That(ex.Message, Is.StringContaining("Request parameter cannot be NULL"));
-        }  
 
-
-        [Test]
-        public void CanInsertReferral_WhenRequestContextIsNull_ThrowsArgumentNullException()
-        {
-            // Arrange
-            _PostRefrDefRqst.Context = String.Empty;
             // Act
-            var ex = Assert.Throws<ArgumentNullException>(() =>_dataReferralMgr.InsertReferral(_PostRefrDefRqst));
-            // Assert
-            Assert.That(ex.Message, Is.StringContaining("Request parameter context value cannot be NULL/EMPTY"));
-        }   
-
-        [Test]
-        public void CanInsertReferral_WhenRequestContextIsEmpty_ThrowsArgumentNullException()
-        {
-            // Arrange
-            _PostRefrDefRqst.Context = String.Empty;
-            // Act
-            var ex = Assert.Throws<ArgumentNullException>(() =>_dataReferralMgr.InsertReferral(_PostRefrDefRqst));
-            // Assert
-            Assert.That(ex.Message, Is.StringContaining("Request parameter context value cannot be NULL/EMPTY"));
-        }  
-
-        [Test]
-        public void CanInsertReferral_WhenRequestContractNumberIsNull_ThrowsArgumentNullException()
-        {
-            // Arrange
-            _PostRefrDefRqst.ContractNumber = null;
-            // Act
-            var ex = Assert.Throws<ArgumentNullException>(() => _dataReferralMgr.InsertReferral(_PostRefrDefRqst));
-            // Assert
-            Assert.That(ex.Message, Is.StringContaining("Request parameter contract number value cannot be NULL/EMPTY"));
-        }   
-
-        [Test]
-        public void CanInsertReferral_WhenRequestContracttNumberIsEmpty_ThrowsArgumentNullException()
-        {
-            // Arrange
-            _PostRefrDefRqst.ContractNumber = String.Empty;
-            // Act
-            var ex = Assert.Throws<ArgumentNullException>(() => _dataReferralMgr.InsertReferral(_PostRefrDefRqst));
-            // Assert
-            Assert.That(ex.Message, Is.StringContaining("Request parameter contract number value cannot be NULL/EMPTY"));
-        }   
-
-        [Test]
-        public void CanInsertReferral_WhenRequestReferralIsNull_ThrowsArgumentNullException()
-        {
-            // Arrange
-            _PostRefrDefRqst.Referral = null;
-            // Act
-            var ex = Assert.Throws<ArgumentNullException>(() => _dataReferralMgr.InsertReferral(_PostRefrDefRqst));
+            var ex = Assert.Throws<ArgumentNullException>(() =>_dataReferralMgr.InsertReferral(null));
             // Assert
             Assert.That(ex.Message, Is.StringContaining("Request parameter referral cannot be NULL"));
         }  
@@ -173,7 +118,7 @@ namespace Phytel.API.DataDomain.Cohort.Test
             // Arrange
             _PostRefrDefRqst.Referral.CohortId = null;
             // Act
-            var ex = Assert.Throws<ArgumentNullException>(() => _dataReferralMgr.InsertReferral(_PostRefrDefRqst));
+            var ex = Assert.Throws<ArgumentNullException>(() => _dataReferralMgr.InsertReferral(_PostRefrDefRqst.Referral));
             // Assert
             Assert.That(ex.Message, Is.StringContaining("Request parameter referral.cohortId cannot be NULL/EMPTY"));
         }  
@@ -184,7 +129,7 @@ namespace Phytel.API.DataDomain.Cohort.Test
             // Arrange
             _PostRefrDefRqst.Referral.CohortId = String.Empty;
             // Act
-            var ex = Assert.Throws<ArgumentNullException>(() => _dataReferralMgr.InsertReferral(_PostRefrDefRqst));
+            var ex = Assert.Throws<ArgumentNullException>(() => _dataReferralMgr.InsertReferral(_PostRefrDefRqst.Referral));
             // Assert
             Assert.That(ex.Message, Is.StringContaining("Request parameter referral.cohortId cannot be NULL/EMPTY"));
         }  
@@ -195,7 +140,7 @@ namespace Phytel.API.DataDomain.Cohort.Test
             // Arrange
             _PostRefrDefRqst.Referral.Name = string.Empty;
             // Act
-            var ex = Assert.Throws<ArgumentNullException>(() => _dataReferralMgr.InsertReferral(_PostRefrDefRqst));
+            var ex = Assert.Throws<ArgumentNullException>(() => _dataReferralMgr.InsertReferral(_PostRefrDefRqst.Referral));
             // Assert
             Assert.That(ex.Message, Is.StringContaining("Request parameter referral.name cannot be NULL/EMPTY"));
         }
@@ -206,7 +151,7 @@ namespace Phytel.API.DataDomain.Cohort.Test
             // Arrange
             _PostRefrDefRqst.Referral.Name = null;
             // Act
-            var ex = Assert.Throws<ArgumentNullException>(() => _dataReferralMgr.InsertReferral(_PostRefrDefRqst));
+            var ex = Assert.Throws<ArgumentNullException>(() => _dataReferralMgr.InsertReferral(_PostRefrDefRqst.Referral));
             // Assert
             Assert.That(ex.Message, Is.StringContaining("Request parameter referral.name cannot be NULL/EMPTY"));
         }
@@ -217,7 +162,7 @@ namespace Phytel.API.DataDomain.Cohort.Test
             // Arrange
             _PostRefrDefRqst.Referral.DataSource = string.Empty;
             // Act
-            var ex = Assert.Throws<ArgumentNullException>(() => _dataReferralMgr.InsertReferral(_PostRefrDefRqst));
+            var ex = Assert.Throws<ArgumentNullException>(() => _dataReferralMgr.InsertReferral(_PostRefrDefRqst.Referral));
             // Assert
             Assert.That(ex.Message, Is.StringContaining("Request parameter referral.datasource cannot be NULL/EMPTY"));
         }
@@ -228,7 +173,7 @@ namespace Phytel.API.DataDomain.Cohort.Test
             // Arrange
             _PostRefrDefRqst.Referral.DataSource = null;
             // Act
-            var ex = Assert.Throws<ArgumentNullException>(() => _dataReferralMgr.InsertReferral(_PostRefrDefRqst));
+            var ex = Assert.Throws<ArgumentNullException>(() => _dataReferralMgr.InsertReferral(_PostRefrDefRqst.Referral));
             // Assert
             Assert.That(ex.Message, Is.StringContaining("Request parameter referral.datasource cannot be NULL/EMPTY"));
         }
@@ -247,16 +192,15 @@ namespace Phytel.API.DataDomain.Cohort.Test
             };
 
             // Act
-            GetReferralDataResponse getResponse = _dataReferralMgr.GetReferralByID(getRefrDefRqst);
+            var getResponse = _dataReferralMgr.GetReferralById(getRefrDefRqst.ReferralID);
 
             // Assert
             Assert.IsNotNull(getResponse);
-            Assert.IsNotNull(getResponse.Referral);
-            Assert.IsNotNull(getResponse.Referral.CohortId);
-            Assert.AreEqual(getResponse.Referral.CohortId, _PostRefrDefRqst.Referral.CohortId);
-            Assert.AreEqual(getResponse.Referral.Name, _PostRefrDefRqst.Referral.Name);
-            Assert.AreEqual(getResponse.Referral.DataSource, _PostRefrDefRqst.Referral.DataSource);
-            Assert.AreEqual(getResponse.Referral.Reason, _PostRefrDefRqst.Referral.Reason);
+            Assert.IsNotNull(getResponse.CohortId);
+            Assert.AreEqual(getResponse.CohortId, _PostRefrDefRqst.Referral.CohortId);
+            Assert.AreEqual(getResponse.Name, _PostRefrDefRqst.Referral.Name);
+            Assert.AreEqual(getResponse.DataSource, _PostRefrDefRqst.Referral.DataSource);
+            Assert.AreEqual(getResponse.Reason, _PostRefrDefRqst.Referral.Reason);
 
         }
 
@@ -268,13 +212,13 @@ namespace Phytel.API.DataDomain.Cohort.Test
             string contractNumber = "InHealth001";
             string context = "NG";
             GetAllReferralsDataRequest request = new GetAllReferralsDataRequest { Context = context, ContractNumber = contractNumber, Version = version };
-            _dataReferralMgr.InsertReferral(_PostRefrDefRqst);
+            _dataReferralMgr.InsertReferral(_PostRefrDefRqst.Referral);
 
             // Act
-            GetAllReferralsDataResponse getResponse = _dataReferralMgr.GetReferrals(request);
+            var getResponse = _dataReferralMgr.GetAllReferrals();
             
             // Assert
-            Assert.AreNotEqual(0, getResponse.Referrals.Count);
+            Assert.AreNotEqual(0, getResponse.Count);
         }
     }
 }

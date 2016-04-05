@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
 using Phytel.API.DataDomain.Cohort.DTO;
 using Phytel.API.DataDomain.Cohort.DTO.Model;
@@ -7,8 +8,8 @@ namespace Phytel.API.DataDomain.Cohort
 {
     public interface IDataReferralManager
     {
-       PostReferralDefinitionResponse InsertReferral(PostReferralDefinitionRequest request);
-        GetReferralDataResponse GetReferralByID(GetReferralDataRequest request);
-        GetAllReferralsDataResponse GetReferrals(GetAllReferralsDataRequest request);
+       string InsertReferral(ReferralData request);
+        ReferralData GetReferralById(string referralId);
+        List<ReferralData> GetAllReferrals();
     }
 }

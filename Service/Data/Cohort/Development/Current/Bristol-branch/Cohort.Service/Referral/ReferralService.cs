@@ -17,7 +17,12 @@ namespace Phytel.API.DataDomain.Cohort.Service.Referral
             {
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("CohortDD:Post()::Unauthorized Access");
-                response = Manager.InsertReferral(request);
+                if ((string.IsNullOrEmpty(request.Context)))
+                    throw new ArgumentNullException("Request parameter context value cannot be NULL/EMPTY");
+                if ((string.IsNullOrEmpty(request.ContractNumber)))
+                    throw new ArgumentNullException("Request parameter contract number value cannot be NULL/EMPTY");
+                response.ReferralId = Manager.InsertReferral(request.Referral);
+                response.Version = request.Version;
             }
             catch (Exception ex)
             {
@@ -35,7 +40,8 @@ namespace Phytel.API.DataDomain.Cohort.Service.Referral
             GetReferralDataResponse response = new GetReferralDataResponse();
             try
             {
-                response = Manager.GetReferralByID(request);
+                response.Referral = Manager.GetReferralById(request.ReferralID);
+                response.Version = request.Version;
             }
             catch (Exception ex)
             {
@@ -52,7 +58,8 @@ namespace Phytel.API.DataDomain.Cohort.Service.Referral
             GetAllReferralsDataResponse response = new GetAllReferralsDataResponse();
             try
             {
-                response = Manager.GetReferrals(request);
+                response.Referrals = Manager.GetAllReferrals();
+                response.Version = request.Version;
             }
             catch (Exception ex)
             {

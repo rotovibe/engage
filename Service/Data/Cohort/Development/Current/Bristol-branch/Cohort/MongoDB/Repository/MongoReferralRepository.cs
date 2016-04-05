@@ -38,18 +38,23 @@ namespace Phytel.API.DataDomain.Cohort
 
         public object Insert(object newEntity)
         {
+            return new NotImplementedException();
+        }
+
+        public object Insert(object newEntity, double version, string userid)
+        {
             try
             {
                 //Referral
                 var referralid = "";
-                PostReferralDefinitionRequest request = newEntity as PostReferralDefinitionRequest;
+                ReferralData request = newEntity as ReferralData;
                 if (request != null)
                 {
                     using (CohortMongoContext ctx = new CohortMongoContext(_dbName))
                     {
-                        MEReferral referral = new MEReferral(request.UserId);
-                        _mappingEngine.Map(request.Referral, referral);
-                        referral.Version = request.Version;
+                        MEReferral referral = new MEReferral(userid);
+                        _mappingEngine.Map(request, referral);
+                        referral.Version = version;
                         ctx.Referrals.Insert(referral);
                         referralid = referral.Id.ToString();
                     }
@@ -58,11 +63,7 @@ namespace Phytel.API.DataDomain.Cohort
                 {
                     throw new ApplicationException(string.Format("Invalid Referral Data."));
                 }
-                return new PostReferralDefinitionResponse
-                {
-                    ReferralId = referralid,
-                    Version = request.Version
-                };
+                return referralid;
             }
             catch (Exception ex)
             {
@@ -97,8 +98,7 @@ namespace Phytel.API.DataDomain.Cohort
                 MEReferral meReferral = ctx.Referrals.Collection.Find(mQuery).FirstOrDefault();
                 if (meReferral != null)
                 {
-                    referral = new ReferralData();
-                    _mappingEngine.Map(meReferral, referral);
+                    referral = _mappingEngine.Map<ReferralData>(meReferral);
                 }
             }
             return referral;

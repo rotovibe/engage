@@ -20,48 +20,36 @@ namespace Phytel.API.DataDomain.Cohort
             _repository = repository;
         }
 
-        public PostReferralDefinitionResponse InsertReferral(PostReferralDefinitionRequest request)
+        public string InsertReferral(ReferralData request)
         {
-            var result = new PostReferralDefinitionResponse();
             try
             {
-                if (request == null)
-                    throw new ArgumentNullException("Request parameter cannot be NULL");
-                if((string.IsNullOrEmpty(request.Context)))
-                    throw new ArgumentNullException("Request parameter context value cannot be NULL/EMPTY");
-                if ((string.IsNullOrEmpty(request.ContractNumber)))
-                    throw new ArgumentNullException("Request parameter contract number value cannot be NULL/EMPTY");
-                if ((request.Referral == null))
+         
+                if ((request == null))
                     throw new ArgumentNullException("Request parameter referral cannot be NULL");
-                if (string.IsNullOrEmpty(request.Referral.CohortId ))
+                if (string.IsNullOrEmpty(request.CohortId ))
                     throw new ArgumentNullException("Request parameter referral.cohortId cannot be NULL/EMPTY");
-                if (string.IsNullOrEmpty(request.Referral.Name))
+                if (string.IsNullOrEmpty(request.Name))
                     throw new ArgumentNullException("Request parameter referral.name cannot be NULL/EMPTY");
-                if (string.IsNullOrEmpty(request.Referral.DataSource))
+                if (string.IsNullOrEmpty(request.DataSource))
                     throw new ArgumentNullException("Request parameter referral.datasource cannot be NULL/EMPTY");
 
-                result = _repository.Insert(request.Referral) as PostReferralDefinitionResponse;
-
+                return _repository.Insert(request, _context.Version, _context.UserId) as string;
             }
             catch (Exception ex)
             {
                 throw ex;
             }
-            return result;
+           
         }
 
-        public GetReferralDataResponse GetReferralByID(GetReferralDataRequest request)
+        public ReferralData GetReferralById(string referralId)
         {
             try
             {
-                if (request == null)
-                    throw new ArgumentNullException("Request parameter cannot be NULL");
-                if (string.IsNullOrEmpty(request.ReferralID))
+                if (string.IsNullOrEmpty(referralId))
                     throw new ArgumentNullException("Request parameter ReferralID cannot be NULL/EMPTY");
-                GetReferralDataResponse response = new GetReferralDataResponse();
-                response.Referral = _repository.FindByID(request.ReferralID) as ReferralData;
-                response.Version = request.Version;
-                return response;
+                return _repository.FindByID(referralId) as ReferralData;
             }
             catch (Exception ex)
             {
@@ -70,18 +58,11 @@ namespace Phytel.API.DataDomain.Cohort
 
         }
 
-        public GetAllReferralsDataResponse GetReferrals(GetAllReferralsDataRequest request)
+        public List<ReferralData> GetAllReferrals()
         {
             try
             {
-                if (request == null)
-                    throw new ArgumentNullException("Request parameter cannot be NULL");
-
-                GetAllReferralsDataResponse response = new GetAllReferralsDataResponse();
-                List<API.DataDomain.Cohort.DTO.Model.ReferralData> referrals =
-                    _repository.SelectAll() as List<API.DataDomain.Cohort.DTO.Model.ReferralData>;
-                response.Referrals = referrals.ToList();
-                return response;
+                return _repository.SelectAll() as List<ReferralData>;
             }
             catch (Exception ex)
             {
