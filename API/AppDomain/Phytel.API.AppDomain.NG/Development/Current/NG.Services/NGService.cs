@@ -882,15 +882,15 @@ namespace Phytel.API.AppDomain.NG.Service
             }
             catch (Exception ex)
             {
-                //CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
-                //if ((ex is WebServiceException) == false)
-                //    NGManager.LogException(ex);
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                if ((ex is WebServiceException) == false)
+                    NGManager.LogException(ex);
             }
             finally
             {
 
-                //if (result != null)
-                //    AuditHelper.LogAuditData(request, result.SQLUserId, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
+                if (result != null)
+                    AuditHelper.LogAuditData(request, result.SQLUserId, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
             }
             return response;
         }

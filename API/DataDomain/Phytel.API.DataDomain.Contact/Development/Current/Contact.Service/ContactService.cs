@@ -272,9 +272,6 @@ namespace Phytel.API.DataDomain.Contact.Service
                 Common.Helper.LogException(int.Parse(aseProcessID), ex);
             }
             return response;
-
-
-
         }
 
     }

@@ -1749,7 +1749,13 @@ namespace Phytel.API.AppDomain.NG
                 {
 
                     response.TotalCount = dataDomainResponse.TotalCount;
-                    response.Contacts = dataDomainResponse.Contacts.Select(Mapper.Map<Contact>).ToList();
+
+                    if (!dataDomainResponse.Contacts.IsNullOrEmpty())
+                    {
+                        response.Contacts = dataDomainResponse.Contacts.Select(Mapper.Map<Contact>).ToList();
+                    }
+                    
+                   
                 }
 
             }
