@@ -1406,8 +1406,10 @@ namespace Phytel.API.AppDomain.NG
         {
             try
             {
+                if (request == null)
+                    throw new ArgumentNullException("request");
+                CheckForRequiredFields(request.Contact);
                 ContactData cData = Mapper.Map<ContactData>(request.Contact);
-                
                 UpdateContactResponse response = new UpdateContactResponse();
 
                 //[Route("/{Context}/{Version}/{ContractNumber}/Contacts/{Id}", "PUT")]
@@ -1481,28 +1483,28 @@ namespace Phytel.API.AppDomain.NG
         public InsertContactResponse InsertContact(InsertContactRequest request)
         {
             InsertContactResponse insertContactResponse = new InsertContactResponse();
-            
-           
             try
             {
+                if(request == null)
+                    throw new ArgumentNullException("request");
+                CheckForRequiredFields(request.Contact);
                 ContactData contactData = Mapper.Map<ContactData>(request.Contact);
-
                 InsertContactDataRequest ddRequest = new InsertContactDataRequest()
-                {                    
-                   ContactData = contactData,
-                   UserId = request.UserId,
-                   ContractNumber = request.ContractNumber,
-                   Context = "NG",
-                   Version = request.Version   
+                {
+                    ContactData = contactData,
+                    UserId = request.UserId,
+                    ContractNumber = request.ContractNumber,
+                    Context = "NG",
+                    Version = request.Version
                 };
                 IRestClient client = new JsonServiceClient();
                 //[Route("/{Context}/{Version}/{ContractNumber}/Contacts", "POST")]
                 string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Contacts",
-                        DDContactServiceUrl,
-                        "NG",
-                        request.Version,
-                        request.ContractNumber
-                        ), request.UserId);
+                    DDContactServiceUrl,
+                    "NG",
+                    request.Version,
+                    request.ContractNumber
+                    ), request.UserId);
 
                 InsertContactDataResponse dataDomainResponse = client.Post<InsertContactDataResponse>(url, ddRequest);
 
@@ -1512,7 +1514,6 @@ namespace Phytel.API.AppDomain.NG
                     insertContactResponse.Id = dataDomainResponse.Id;
                     insertContactResponse.Status = dataDomainResponse.Status;
                 }
-
             }
             catch (WebServiceException wse)
             {
@@ -1520,6 +1521,25 @@ namespace Phytel.API.AppDomain.NG
             }
             return insertContactResponse;
         }
+
+        private void CheckForRequiredFields(Contact c)
+        {
+            if (c != null)
+            {
+                if (string.IsNullOrEmpty(c.ContactTypeId))
+                    throw new Exception("The Contact Type Id cannot be null.");
+                else
+                {
+                    if (string.Compare(c.ContactTypeId, Constants.PersonContactTypeId, true) == 0 && (string.IsNullOrEmpty(c.FirstName) || string.IsNullOrEmpty(c.LastName)))
+                        throw new Exception("A contact of Person type cannot have empty First and Last name.");
+                }
+            }
+            else
+            {
+                throw new ArgumentNullException("Contact");    
+            }
+        }
+
 
         public List<PhoneData> GetPhonesData(List<Phone> phonelist)
         {
@@ -2158,7 +2178,7 @@ namespace Phytel.API.AppDomain.NG
                 switch (enumVal)
                 {
                         case ContactType.Person:
-                        response.Add("56f1a1ad078e10eb86038519");
+                        response.Add(Constants.PersonContactTypeId);
                         break;
 
                         //case ContactType.Organization:

@@ -16,5 +16,7 @@ namespace Phytel.API.AppDomain.NG
         // Note
         public const string GeneralNoteTypeId = "54909992d43323251c0a1dfd";
         public const string SystemContactId = "5368ff2ad4332316288f3e3e";
+        // Contact 
+        public const string PersonContactTypeId = "56f1a1ad078e10eb86038519";
     }
 }

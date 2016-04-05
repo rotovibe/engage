@@ -11,6 +11,7 @@ using Phytel.API.DataAudit;
 using ServiceStack.Service;
 using ServiceStack.ServiceClient.Web;
 using Phytel.API.Common.CustomObject;
+using ServiceStack.ServiceHost;
 
 namespace Phytel.API.DataDomain.Contact
 {
@@ -77,6 +78,7 @@ namespace Phytel.API.DataDomain.Contact
             {
                 if (request == null)
                     throw new ArgumentNullException("request");
+                CheckForRequiredFields(request.ContactData);
                 IContactRepository repo = Factory.GetRepository(request, RepositoryType.Contact);
                 if (repo == null)
                     throw new Exception("The repository should not be null");
@@ -89,6 +91,24 @@ namespace Phytel.API.DataDomain.Contact
             return id;
         }
 
+        private void CheckForRequiredFields(ContactData c)
+        {
+            if (c != null)
+            {
+                if (string.IsNullOrEmpty(c.ContactTypeId))
+                    throw new Exception("The Contact Type Id cannot be null.");
+                else
+                {
+                    if (string.Compare(c.ContactTypeId, Constants.PersonContactTypeId, true) == 0 && (string.IsNullOrEmpty(c.FirstName) || string.IsNullOrEmpty(c.LastName)))
+                        throw new Exception("A contact of Person type cannot have empty First and Last name.");
+                }
+            }
+            else
+            {
+                throw new ArgumentNullException("Contact");
+            }
+        }
+
         public UpdateContactDataResponse UpdateContact(UpdateContactDataRequest request)
         {
             UpdateContactDataResponse response = null;
@@ -96,6 +116,7 @@ namespace Phytel.API.DataDomain.Contact
             {
                 if (request == null)
                     throw new ArgumentNullException("request");
+                CheckForRequiredFields(request.ContactData);
                 IContactRepository repo = Factory.GetRepository(request, RepositoryType.Contact);
                 if (repo == null)
                     throw new Exception("The repository should not be null");
