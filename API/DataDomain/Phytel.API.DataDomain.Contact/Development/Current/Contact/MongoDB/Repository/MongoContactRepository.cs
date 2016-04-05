@@ -1435,6 +1435,16 @@ namespace Phytel.API.DataDomain.Contact
                 mongoQuery.Add(lastNameQuery);
             }
 
+            if (!request.ContactSubTypeIds.IsNullOrEmpty())
+            {
+                var inQuery = Query<MEContactSubType>.In(cs => cs.SubTypeId, 
+                                                           request.ContactSubTypeIds.Select(c => BsonValue.Create(ObjectId.Parse(c))));
+
+                var contactSubTypeQuery = Query.ElemMatch(MEContact.ContactSubTypesProperty,inQuery);
+
+                mongoQuery.Add(contactSubTypeQuery);
+            }
+
 
             var query = Query.And(mongoQuery);
 
