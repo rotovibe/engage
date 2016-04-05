@@ -42,6 +42,7 @@ namespace Phytel.API.DataDomain.Cohort.Service
                         HostContext.Instance.Items.Add("Version", ((IDataDomainRequest) requestDto).Version);
                     }
                 });
+                Plugins.Add(new SwaggerFeature());
             }
         }
 

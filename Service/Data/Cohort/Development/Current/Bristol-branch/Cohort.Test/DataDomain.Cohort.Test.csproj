@@ -119,6 +119,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="DataCohortManagerTest.cs" />
+    <Compile Include="DataReferralManagerTest.cs" />
     <Compile Include="DataPatientManagerReferralTest.cs" />
     <Compile Include="CohortTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

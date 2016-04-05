@@ -52,24 +52,41 @@ namespace Phytel.API.DataDomain.Cohort
 
         public GetReferralDataResponse GetReferralByID(GetReferralDataRequest request)
         {
-            GetReferralDataResponse response = new GetReferralDataResponse();
+            try
+            {
+                if (request == null)
+                    throw new ArgumentNullException("Request parameter cannot be NULL");
+                if (string.IsNullOrEmpty(request.ReferralID))
+                    throw new ArgumentNullException("Request parameter ReferralID cannot be NULL/EMPTY");
+                GetReferralDataResponse response = new GetReferralDataResponse();
+                response.Referral = _repository.FindByID(request.ReferralID) as ReferralData;
+                response.Version = request.Version;
+                return response;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
 
-            response.Referral = _repository.FindByID(request.ReferralID) as ReferralData;
-            response.Version = request.Version;
-            return response;
         }
 
         public GetAllReferralsDataResponse GetReferrals(GetAllReferralsDataRequest request)
         {
-            GetAllReferralsDataResponse response = new GetAllReferralsDataResponse();
-
-            List<API.DataDomain.Cohort.DTO.Model.ReferralData> referrals = _repository.SelectAll() as List<API.DataDomain.Cohort.DTO.Model.ReferralData>;
-
-            if (referrals != null)
+            try
             {
+                if (request == null)
+                    throw new ArgumentNullException("Request parameter cannot be NULL");
+
+                GetAllReferralsDataResponse response = new GetAllReferralsDataResponse();
+                List<API.DataDomain.Cohort.DTO.Model.ReferralData> referrals =
+                    _repository.SelectAll() as List<API.DataDomain.Cohort.DTO.Model.ReferralData>;
                 response.Referrals = referrals.ToList();
+                return response;
             }
-            return response;
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }
