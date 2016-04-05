@@ -8,12 +8,9 @@ namespace Phytel.API.AppDomain.NG.DTO
     [Route("/{Version}/{ContractNumber}/SearchContacts", "POST")]
     public class SearchContactsRequest : IAppDomainRequest
     {
-
+         [ApiMember(Name = "ContactTypeIds", Description = "List of ContactTypeIds to Search for ", ParameterType = "query", DataType = "List of Strings", IsRequired = false)]
          public List<string> ContactTypeIds { get; set; }
-
-        //[ApiMember(Name = "ContactTypes", Description = "List of ContactTypes to Search for ", ParameterType = "query", DataType = "ContactType", IsRequired = false)]
-        //public List<ContactType> ContactTypes { get; set; }
-
+       
         [ApiMember(Name = "ContactStatuses", Description = "List of ContactStatuses to Search for ", ParameterType = "query", DataType = "ContactStatus", IsRequired = false)]
         [ApiAllowableValues("ContactStatuses", typeof(DTO.ContactStatus))]
         public List<ContactStatus> ContactStatuses { get; set; }
@@ -33,9 +30,9 @@ namespace Phytel.API.AppDomain.NG.DTO
         [ApiMember(Name = "Skip", Description = "Number of contacts to skip", ParameterType = "query", DataType = "int", IsRequired = false)]
         public int Skip { get; set; }
 
-        [ApiMember(Name = "FilterType", Description = "Indicates the filter for search (StartsWith or ExactMatch)", ParameterType = "query", DataType = "FilterType", IsRequired = false)]
-        [ApiAllowableValues("FilterType",typeof(DTO.FilterType))]
-        public FilterType FilterType { get; set; } 
+        //[ApiMember(Name = "FilterType", Description = "Indicates the filter for search (StartsWith or ExactMatch)", ParameterType = "query", DataType = "FilterType", IsRequired = false)]
+        //[ApiAllowableValues("FilterType",typeof(DTO.FilterType))]
+        //public FilterType FilterType { get; set; } 
 
 
         #region IAppDomainRequest Members
@@ -66,11 +63,5 @@ namespace Phytel.API.AppDomain.NG.DTO
         Active = 1,
         Inactive = 2,
         Archived = 3
-    }
-
-    public enum FilterType
-    {
-        StartsWith = 1,
-        ExactMatch = 2
     }
 }

@@ -8,10 +8,10 @@ namespace Phytel.API.AppDomain.NG.DTO
     {
         public SearchContactsResponse()
         {
-            Contacts = new List<ContactSearchInfo>();
+            Contacts = new List<Contact>();
         }
 
-        public List<ContactSearchInfo> Contacts { get; set; }
+        public List<Contact> Contacts { get; set; }
 
         public long TotalCount { get; set; }
 

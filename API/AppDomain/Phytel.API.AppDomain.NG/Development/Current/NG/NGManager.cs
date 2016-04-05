@@ -1694,7 +1694,7 @@ namespace Phytel.API.AppDomain.NG
                 throw new ArgumentNullException("request");
 
             if (request.ContactTypeIds.IsNullOrEmpty() && request.ContactStatuses.IsNullOrEmpty())
-                throw new Exception("Please provide .....TBD");
+                throw new Exception("Please provide atleast ContactTypeIds or ContactStatuses to filter");
 
             try
             {
@@ -1702,6 +1702,7 @@ namespace Phytel.API.AppDomain.NG
                 var normalizeSkip = NormalizeSkip(request.Skip);
                 var contactTypeIds =  request.ContactTypeIds;// == null ? new List<string>()  : BuildContactTypeIds(request.ContactTypes);
                 var contactStatuses = request.ContactStatuses ==null ? null: request.ContactStatuses.Select(s => (DataDomain.Contact.DTO.Status)s).ToList();
+                var contactSubTypeIds = request.ContactSubTypeIds;
 
                 IRestClient client = new JsonServiceClient();
                 string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/SearchContacts",
@@ -1715,14 +1716,12 @@ namespace Phytel.API.AppDomain.NG
                     {
                         Take = normalizedTake,
                         Skip = normalizeSkip,
-                        ContactSubTypeIds = request.ContactSubTypeIds,
+                        ContactSubTypeIds = contactSubTypeIds,
                         ContactTypeIds = contactTypeIds,
                         ContactStatuses = contactStatuses,
                         FirstName =  request.FirstName,
                         LastName = request.LastName,
-                        FilterType = (DataDomain.Contact.DTO.FilterType) request.FilterType
-
-
+                        
                     } as object);
 
 
@@ -1730,7 +1729,7 @@ namespace Phytel.API.AppDomain.NG
                 {
 
                     response.TotalCount = dataDomainResponse.TotalCount;
-                    response.Contacts = dataDomainResponse.Contacts.Select(Mapper.Map<ContactSearchInfo>).ToList();
+                    response.Contacts = dataDomainResponse.Contacts.Select(Mapper.Map<Contact>).ToList();
                 }
 
             }
@@ -2126,7 +2125,7 @@ namespace Phytel.API.AppDomain.NG
 
         private int NormalizeTake(int? take)
         {
-            var normalizedValue = 5;
+            var normalizedValue = 100;
 
             if (take > 0)
                 normalizedValue = take.Value;

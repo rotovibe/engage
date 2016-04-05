@@ -1419,22 +1419,30 @@ namespace Phytel.API.DataDomain.Contact
                 mongoQuery.Add(contactStatusesQuery);
             }
 
+            if (!string.IsNullOrEmpty(request.FirstName))
+            {
+                var firstNameQuery = Query<MEContact>.Matches(c => c.FirstName,
+                    new BsonRegularExpression(new Regex("^" + request.FirstName, RegexOptions.IgnoreCase)));
+
+                mongoQuery.Add(firstNameQuery);
+            }
+
+            if (!string.IsNullOrEmpty(request.LastName))
+            {
+                var lastNameQuery = Query<MEContact>.Matches(c => c.LastName,
+                    new BsonRegularExpression(new Regex("^" + request.LastName, RegexOptions.IgnoreCase)));
+
+                mongoQuery.Add(lastNameQuery);
+            }
+
+
             var query = Query.And(mongoQuery);
 
             return query;
-            
+
 
         }
-
-        private MongoCursor<MEContact> GetSearchContactsEntitiesCursor(IMongoQuery query)
-        {
-            using (var ctx = new ContactMongoContext(_dbName))
-            {
-               return ctx.Contacts.Collection.Find(query);
-
-            }
-        }
-
+         
         #endregion
     }
 }
