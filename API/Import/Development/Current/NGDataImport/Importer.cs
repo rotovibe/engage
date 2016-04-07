@@ -477,18 +477,18 @@ namespace NGDataImport
             return updateResponsePatient;
         }
 
-        public PutContactDataResponse InsertPatientContact(PutContactDataRequest putContactRequest, string patientId)
+        public InsertContactDataResponse InsertContactForAPatient(InsertContactDataRequest putContactRequest, string patientId)
         {
-            Uri contactUri = new Uri(string.Format("{0}/Contact/{1}/{2}/{3}/patient/contact/{4}?UserId={5}",
+            //[Route("/{Context}/{Version}/{ContractNumber}/Contacts", "POST")]
+            Uri contactUri = new Uri(string.Format("{0}/Contact/{1}/{2}/{3}/Contacts?UserId={4}",
                                             Url,
                                             Context,
                                             Version,
                                             ContractNumber,
-                                            patientId,
                                             HeaderUserId));
             HttpClient contactClient = GetHttpClient(contactUri);
 
-            DataContractJsonSerializer contactJsonSer = new DataContractJsonSerializer(typeof(PutContactDataRequest));
+            DataContractJsonSerializer contactJsonSer = new DataContractJsonSerializer(typeof(InsertContactDataRequest));
             MemoryStream contactMs = new MemoryStream();
             contactJsonSer.WriteObject(contactMs, putContactRequest);
             contactMs.Position = 0;
@@ -498,16 +498,16 @@ namespace NGDataImport
             StringContent contactContent = new StringContent(contactSr.ReadToEnd(), System.Text.Encoding.UTF8, "application/json");
 
             //Post the data 
-            var contactResponse = contactClient.PutAsync(contactUri, contactContent);
+            var contactResponse = contactClient.PostAsync(contactUri, contactContent);
             var contactResponseContent = contactResponse.Result.Content;
 
             string contactResponseString = contactResponseContent.ReadAsStringAsync().Result;
-            PutContactDataResponse responseContact = null;
+            InsertContactDataResponse responseContact = null;
 
             using (var contactMsResponse = new MemoryStream(Encoding.Unicode.GetBytes(contactResponseString)))
             {
-                var contactSerializer = new DataContractJsonSerializer(typeof(PutContactDataResponse));
-                responseContact = (PutContactDataResponse)contactSerializer.ReadObject(contactMsResponse);
+                var contactSerializer = new DataContractJsonSerializer(typeof(InsertContactDataResponse));
+                responseContact = (InsertContactDataResponse)contactSerializer.ReadObject(contactMsResponse);
             }
 
             return responseContact;

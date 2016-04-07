@@ -6,6 +6,7 @@ using Phytel.API.DataDomain.Patient.DTO;
 using System;
 using System.Collections.Generic;
 using System.Data.Common;
+using System.Runtime.Remoting.Contexts;
 
 namespace ExplorysImport
 {
@@ -156,16 +157,15 @@ namespace ExplorysImport
                                     Emails = emails,
                                     Addresses = addresses,
                                 };
-                                PutContactDataRequest contactRequest = new PutContactDataRequest
+                                InsertContactDataRequest contactRequest = new InsertContactDataRequest
                                 {
-                                    PatientId = responsePatient.Id,
                                     ContactData = data,
                                     Version = patientRequest.Version,
                                     Context = patientRequest.Context,
                                     ContractNumber = patientRequest.ContractNumber
                                 };
 
-                                PutContactDataResponse responseContact = import.InsertPatientContact(contactRequest, responsePatient.Id.ToString());
+                                InsertContactDataResponse responseContact = import.InsertContactForAPatient(contactRequest, responsePatient.Id.ToString());
                                 if (responseContact.Id == null)
                                 {
                                     throw new Exception("Contact card import request failed.");
