@@ -97,6 +97,23 @@
                                                     </div>
                                                 </div>
 
+
+                                                <div class="row pad-bottom">
+                                                    <div class="span6 grey">
+                                                        # of related tasks
+                                                    </div>
+                                                    <div class="span6" data-bind="text: tasks().length">
+                                                    </div>
+                                                </div>
+
+                                                <div class="row pad-bottom">
+                                                    <div class="span6 grey">
+                                                        # of related interventions
+                                                    </div>
+                                                    <div class="span6" data-bind="text: interventions().length">
+                                                    </div>
+                                                </div>
+
                                                 <div data-bind="foreach: customAttributes().sort($parent.alphabeticalOrderSort)">
                                                     <div data-bind="compose: displayPath">
                                                     </div>

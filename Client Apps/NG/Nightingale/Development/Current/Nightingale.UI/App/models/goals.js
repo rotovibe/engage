@@ -342,6 +342,7 @@ define(['services/session'],
                 barrier.checkAppend = function () {
                     appendNewDetails( barrier.newDetails, barrier.details );
                 };
+
                 barrier.relatedInterventions = ko.computed(function () {
                     checkDataContext();
                     var interventionList = [];
@@ -357,6 +358,7 @@ define(['services/session'],
                     }
                     return interventionList;
                 });
+
                 barrier.relatedTasks = ko.computed(function () {
                     checkDataContext();
                     var taskList = [];
@@ -372,6 +374,37 @@ define(['services/session'],
                     }
                     return taskList;
                 });
+
+                barrier.taskListString = ko.computed(function () {
+                    checkDataContext();
+                    var thisString = '';
+                    var tasks = barrier.relatedTasks();
+                    ko.utils.arrayForEach(tasks, function (task) {
+                        thisString += task ? task.name() + ', ' : '';
+                    });
+                    if (thisString.length > 0) {
+                        thisString = thisString.substr(0, thisString.length - 2);
+                    } else if (thisString.length === 0) {
+                        thisString = 'None';
+                    }
+                    return thisString;
+                });
+
+                barrier.interventionListString = ko.computed(function () {
+                    checkDataContext();
+                    var thisString = '';
+                    var interventions = barrier.relatedInterventions();
+                    ko.utils.arrayForEach(interventions, function (intervention) {
+                        thisString += intervention ? intervention.name() + ', ' : '';
+                    });
+                    if (thisString.length > 0) {
+                        thisString = thisString.substr(0, thisString.length - 2);
+                    } else if (thisString.length === 0) {
+                        thisString = 'None';
+                    }
+                    return thisString;
+                });
+
                 barrier.validationErrors = ko.observableArray([]);
                 barrier.isValid = ko.computed( function() {
                     var hasErrors = false;

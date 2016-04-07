@@ -48,6 +48,12 @@
                                             </div>
                                             <div class="name pad-icon-left accordion-toggle" data-bind="click: $parents[1].setActiveTask.bind($parents[1])">
                                                 <div class="line-reset" data-bind="with: status">
+                                                    <span data-bind="text: $parent.description, css: textClass"></span>
+                                                    <!-- ko if: name() === 'Completed' -->
+                                                        <em>
+                                                            - <span data-bind="Date: $parent.closedDate, attr: { 'title': $parent.closedDate }"></span>
+                                                        </em>
+                                                    <!-- /ko -->
                                                     <span data-bind="text: $parent.description, css: textClass">
                                                     </span>
                                                 </div>
@@ -79,6 +85,19 @@
                                             <div class="pull-left" data-bind="with: status">
                                                 <i data-bind="css: iconClass"></i>
                                             </div>
+
+                                            <!-- ko if: name() !== 'Completed' -->
+                                                <em>
+                                                    <span data-bind="text: $parent.description, css: textClass"></span>
+                                                    - <span data-bind="Date: $parent.closedDate, attr: { 'title': $parent.closedDate }"></span>
+                                                </em>
+                                            <!-- /ko -->
+                                            <!-- ko if: name() === 'Completed' -->
+                                                <span data-bind="text: $parent.description, css: textClass"></span>
+                                                <em>
+                                                    - <span data-bind="Date: $parent.closedDate, attr: { 'title': $parent.closedDate }"></span>
+                                                </em>
+                                            <!-- /ko -->
                                             <div class="name pad-icon-left accordion-toggle" data-bind="click: $parents[1].setActiveIntervention.bind($parents[1])">
                                                 <div class="line-reset" data-bind="with: status">
                                                     <span data-bind="text: $parent.description, css: textClass">

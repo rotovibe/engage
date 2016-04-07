@@ -21,6 +21,9 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
                 var details = self.goal() ? self.goal().details() : [];
                 return (details != null && details.length > 0);
             });
+            self.toggleFullScreen = function () {
+                self.isFullScreen(!self.isFullScreen());
+            };
             self.toggleGoalDetailsExpanded = function(){
                 var isOpen = self.isGoalDetailsExpanded();
                 var details = self.goal().details();
@@ -43,7 +46,7 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
                 }
             };
             self.addBarrier = function (goal) {
-                self.addEntity('Barrier', goal).then(doSomething);
+                goalsIndex.addEntity('Barrier', goal).then(doSomething);
 
                 function doSomething(barriers) {
                     self.editBarrier(barriers, 'Add Barrier');
@@ -53,7 +56,7 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
                 var thisGoal = barrier.goal();
                 var modalEntity = ko.observable(new ModalEntity(barrier, 'name'));
                 var saveOverride = function () {
-                    saveBarrier(barrier)
+                    saveBarrier(barrier);
                 };
                 var cancelOverride = function () {
                     cancel(barrier);
@@ -62,39 +65,6 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
                 msg = msg ? msg : 'Edit Barrier';
                 editEntity(msg, modalEntity, 'viewmodels/templates/barrier.edit', saveOverride, cancelOverride);
             };
-        };
-
-        ctor.prototype.addEntity = function (type, goal, startDate, assignedToId) {
-            var self = this;
-            var thisPatientId = self.selectedPatient().id();
-
-            var thisGoalId = goal.id();
-            return datacontext.initializeEntity(null, type, thisPatientId, thisGoalId).then(entityReturned);
-
-            function entityReturned(data) {
-                var thisId = data.httpResponse.data.Id;
-                if (thisId) {
-                    var params = {};
-                    params.id = thisId;
-                    params.patientGoalId = thisGoalId;
-                    params.statusId = 1;
-                    if (startDate) {
-                        params.startDate = startDate;
-                    }
-                    if (assignedToId) {
-                        params.assignedToId = assignedToId;
-                    }
-                    var thisEntity = datacontext.createEntity(type, params);
-                    return thisEntity;
-                }
-                else {
-                    var thisTask = data.results[0];
-                    thisTask.startDate(new Date());
-                    thisTask.statusId(1);
-                    thisTask.patientGoalId(thisGoalId);
-                    return thisTask;
-                }
-            }
         };
 
         function save (goal) {

@@ -39,6 +39,13 @@
                                                     <div class="span6" data-bind="Date: startDate">
                                                     </div>
                                                 </div>
+                                                <div class="row pad-bottom" data-bind="visible: closedDate">
+                                                    <div class="span6 grey">
+                                                        Closed Date
+                                                    </div>
+                                                    <div class="span6" data-bind="Date: closedDate">
+                                                    </div>
+                                                </div>
                                                 <div class="row pad-bottom" data-bind="with: status">
                                                     <div class="span6 grey">
                                                         Status
@@ -83,7 +90,7 @@
                                             <div class="span12">
                                                 <div class="large grey muted line pad-horizontal pad-icon-left">
                                                     Barriers
-                                                    <a class="accordion-toggle pull-right" data-bind="click: $parent.addBarrier">
+                                                    <a class="filter-toggle pull-right" data-bind="click: $parent.addBarrier">
                                                         <i class="icon-plus"></i>
                                                     </a>
                                                 </div>

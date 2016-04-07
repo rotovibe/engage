@@ -19,6 +19,9 @@
                 var details = self.intervention() ? self.intervention().details() : [];
                 return (details != null && details.length > 0);
             });
+            self.toggleFullScreen = function () {
+                self.isFullScreen(!self.isFullScreen());
+            };
             self.toggleDetailsExpanded = function(){
                 var isOpen = self.isDetailsExpanded();
                 var details = self.intervention().details();

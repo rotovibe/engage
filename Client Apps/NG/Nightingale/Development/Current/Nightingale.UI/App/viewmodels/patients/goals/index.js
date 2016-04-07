@@ -27,7 +27,6 @@
         var activeIntervention = ko.observable();
         var initialized = false;
         var isComposed = ko.observable(true);
-        var isEditing = ko.observable(false);
 
         var newGoal = ko.observable();
         var goalModalShowing = ko.observable(true);
@@ -94,8 +93,8 @@
             detached: detached,
             activeGoal: activeGoal,
             activeTask: activeTask,
+            addEntity: addEntity,
             activeIntervention: activeIntervention,
-            isEditing: isEditing,
             isComposed: isComposed,
             computedOpenColumn: computedOpenColumn,
             goalColumn: goalColumn,
@@ -112,8 +111,40 @@
 
         return vm;
 
+        function addEntity (type, goal, startDate, assignedToId) {
+            var thisPatientId = selectedPatient().id();
+
+            var thisGoalId = goal.id();
+            return datacontext.initializeEntity(null, type, thisPatientId, thisGoalId).then(entityReturned);
+
+            function entityReturned(data) {
+                var thisId = data.httpResponse.data.Id;
+                if (thisId) {
+                    var params = {};
+                    params.id = thisId;
+                    params.patientGoalId = thisGoalId;
+                    params.statusId = 1;
+                    if (startDate) {
+                        params.startDate = startDate;
+                    }
+                    if (assignedToId) {
+                        params.assignedToId = assignedToId;
+                    }
+                    var thisEntity = datacontext.createEntity(type, params);
+                    return thisEntity;
+                }
+                else {
+                    var thisTask = data.results[0];
+                    thisTask.startDate(new Date());
+                    thisTask.statusId(1);
+                    thisTask.patientGoalId(thisGoalId);
+                    return thisTask;
+                }
+            }
+        };
+
         function editGoal(goal, msg) {
-            var modalEntity = ko.observable(new ModalEntity(goal));            
+            var modalEntity = ko.observable(new ModalEntity(goal));
             var saveOverride = function () {
                 datacontext.saveGoal(modalEntity().goal);
             };
@@ -148,6 +179,11 @@
                 sender.isOpen(!sender.isOpen());
             }
         }
+
+        function toggleFullScreen(sender) {
+            sender.isFullScreen(!sender.isFullScreen());
+        }
+
 
         function addGoal() {
             datacontext.initializeEntity(newGoal, 'Goal', selectedPatient().id()).then(goalReturned);
@@ -188,7 +224,6 @@
             isComposed(false);
             var spToken = selectedPatient.subscribe(function (newValue) {
                 activeGoal(null);
-                isEditing(false);
             });
             subscriptionTokens.push(spToken);
             openColumn(goalColumn());
