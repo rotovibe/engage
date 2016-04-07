@@ -271,6 +271,30 @@ namespace Phytel.API.DataDomain.Contact.Service
                 string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
                 Common.Helper.LogException(int.Parse(aseProcessID), ex);
             }
+
+            return response;
+        }
+
+        public SyncContactInfoDataResponse Put(SyncContactInfoDataRequest request)
+        {
+            if (request == null)
+                throw new ArgumentNullException("request");
+            var response = new SyncContactInfoDataResponse();
+            try
+            {
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("ContactDD:SyncContactInfoDataResponse()::Unauthorized Access");
+
+                response = Manager.SyncContactInfo(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+            }
             return response;
         }
 

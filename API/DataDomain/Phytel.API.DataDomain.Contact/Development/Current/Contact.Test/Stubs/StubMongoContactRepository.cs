@@ -142,5 +142,11 @@ namespace Phytel.API.DataDomain.Contact.Test.Stubs
         {
             throw new NotImplementedException();
         }
+
+
+        public bool SyncContact(SyncContactInfoDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

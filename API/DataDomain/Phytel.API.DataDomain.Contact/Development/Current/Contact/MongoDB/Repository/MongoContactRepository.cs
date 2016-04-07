@@ -1078,6 +1078,62 @@ namespace Phytel.API.DataDomain.Contact
             return searchTotalCount;
         }
 
+        public bool SyncContact(SyncContactInfoDataRequest request)
+        {
+            var response = new SyncContactInfoDataResponse();
+            try
+            {
+                using (var ctx = new ContactMongoContext(_dbName))
+                {
+                    var data = request.ContactInfo;
+                    var queries = new List<IMongoQuery>
+                    {
+                        MB.Query.EQ(MEContact.IdProperty, ObjectId.Parse(request.ContactId)),
+                        MB.Query.EQ(MEContact.DeleteFlagProperty, false)
+                    };
+
+                    var query = MB.Query.And(queries);
+                    var mc = ctx.Contacts.Collection.Find(query).FirstOrDefault();
+                    if (mc != null)
+                    {
+                        var uv = new List<MB.UpdateBuilder>();
+                        uv.Add(MB.Update.Set(MEContact.FirstNameProperty, data.FirstName));
+                        uv.Add(MB.Update.Set(MEContact.LastNameProperty, data.LastName));
+                        uv.Add(MB.Update.Set(MEContact.MiddleNameProperty, data.MiddleName));
+                        uv.Add(MB.Update.Set(MEContact.PreferredNameProperty, data.PreferredName));
+                        uv.Add(MB.Update.Set(MEContact.GenderProperty, data.Gender));
+                        uv.Add(MB.Update.Set(MEContact.SuffixProperty, data.Suffix));
+                        uv.Add(MB.Update.Set(MEContact.PrefixProperty, data.Prefix));
+                        uv.Add(MB.Update.Set(MEContact.DeceasedProperty, data.DeceasedId));
+                        uv.Add(MB.Update.Set(MEContact.StatusProperty, data.StatusId));
+
+                   
+
+                    var update = MB.Update.Combine(uv);
+
+                    ctx.Contacts.Collection.Update(query, update);
+
+                    AuditHelper.LogDataAudit(this.UserId,
+                                            MongoCollectionName.Contact.ToString(),
+                                            request.ContactId,
+                                            DataAuditType.Update,
+                                            request.ContractNumber);
+
+                        response.IsSuccessful = true;
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccessful = false;
+                throw ex;
+                
+            }
+
+            return response.IsSuccessful;
+        }
+
         #region Private Methods
 
         private ContactData BuildContactData(MEContact contactEntity)

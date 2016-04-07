@@ -412,7 +412,6 @@ namespace Phytel.API.DataDomain.Contact
             return timeZoneId;
         }
 
-
         public SearchContactsDataResponse SearchContacts(SearchContactsDataRequest request)
         {
             var response = new SearchContactsDataResponse();
@@ -433,6 +432,23 @@ namespace Phytel.API.DataDomain.Contact
                 
                 response.Version = request.Version;
                 response.TotalCount = searchTotalCount;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return response;
+        }
+
+        public SyncContactInfoDataResponse SyncContactInfo(SyncContactInfoDataRequest request)
+        {
+            var response = new SyncContactInfoDataResponse();
+            try
+            {
+                var repo = Factory.GetRepository(request, RepositoryType.Contact);
+                var isSuccessful = repo.SyncContact(request);
+
+                response.IsSuccessful = isSuccessful;
             }
             catch (Exception ex)
             {

@@ -77,6 +77,10 @@
     <Reference Include="MongoDB.Driver">
       <HintPath>..\..\..\..\..\packages\mongocsharpdriver.1.9.2\lib\net35\MongoDB.Driver.dll</HintPath>
     </Reference>
+    <Reference Include="Moq, Version=4.2.1510.2205, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\Moq.4.2.1510.2205\lib\net40\Moq.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Phytel.Mongo">
       <HintPath>..\References\Phytel.Mongo.dll</HintPath>
     </Reference>
@@ -145,6 +149,7 @@
     <Compile Include="Medication\Data_MedicationMap_Test.cs" />
     <Compile Include="Medication\Data_PatientMedication_Test.cs" />
     <Compile Include="MongoDB\Repository\MongoPatientGoalRepositoryTests.cs" />
+    <Compile Include="NGManager_SearchContactsTests.cs" />
     <Compile Include="NGService_Tests.cs" />
     <Compile Include="NGUtils_Test.cs" />
     <Compile Include="Notes\NotesManagerTests.cs" />

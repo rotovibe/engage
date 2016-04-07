@@ -23,5 +23,6 @@ namespace Phytel.API.DataDomain.Contact
         IEnumerable<object> Select(List<string> ids);
         IEnumerable<object> SearchContacts(SearchContactsDataRequest request);
         long GetSearchContactsCount(SearchContactsDataRequest request);
+        bool SyncContact(SyncContactInfoDataRequest request);
     }
 }
