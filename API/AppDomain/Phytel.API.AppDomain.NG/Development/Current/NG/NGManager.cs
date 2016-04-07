@@ -2128,7 +2128,7 @@ namespace Phytel.API.AppDomain.NG
                                                                                 version,
                                                                                 contractNumber), userId);
 
-                ContactData contactData = new ContactData { TimeZoneId = defaultTimeZone, Modes = commModeData, PatientId = patientId };
+                ContactData contactData = new ContactData { TimeZoneId = defaultTimeZone, Modes = commModeData, PatientId = patientId, ContactTypeId = Constants.PersonContactTypeId};
                 InsertContactDataResponse dataDomainResponse =
                     client.Post<InsertContactDataResponse>(url, new InsertContactDataRequest
                                                             {
