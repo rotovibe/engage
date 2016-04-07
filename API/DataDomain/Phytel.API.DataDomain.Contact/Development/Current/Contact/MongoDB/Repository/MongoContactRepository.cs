@@ -1297,6 +1297,7 @@ namespace Phytel.API.DataDomain.Contact
                     FirstName = data.FirstName,
                     LastName = data.LastName,
                     PreferredName = data.PreferredName,
+                    MiddleName = data.MiddleName,
                     Gender = data.Gender,
                     ResourceId = data.UserId,
                     Status = (Status)data.StatusId,

@@ -1293,111 +1293,14 @@ namespace Phytel.API.AppDomain.NG
                     }
                     else
                     {
-                        ContactData cd = dataDomainResponse.Contact;
-                        contact = new Contact
-                        {
-                            Id = cd.Id,
-                            PatientId = cd.PatientId,
-                            UserId = cd.UserId,
-                            FirstName = cd.FirstName,
-                            MiddleName = cd.MiddleName,
-                            LastName = cd.LastName,
-                            PreferredName = cd.PreferredName,
-                            Gender = cd.Gender,
-                            TimeZoneId = cd.TimeZoneId,
-                            WeekDays = cd.WeekDays,
-                            TimesOfDaysId = cd.TimesOfDaysId,
-                            CreatedOn = cd.CreatedOn,
-                            CreatedById = cd.CreatedById,
-                            UpdatedOn = cd.UpdatedOn,
-                            UpdatedById = cd.UpdatedById
-                        };
+                        var mappedData = Mapper.Map<Contact>(dataDomainResponse.Contact);
+                        if (!string.IsNullOrEmpty(mappedData.PatientId))
+                            mappedData.IsPatient = true;
 
-                        #region Communications
-                        //Modes
-                        List<CommModeData> commModeData = cd.Modes;
-                        if (commModeData != null && commModeData.Count > 0)
-                        {
-                            List<CommMode> modes = new List<CommMode>();
-                            foreach (CommModeData cm in commModeData)
-                            {
-                                CommMode commMode = new CommMode { LookUpModeId = cm.ModeId, OptOut = cm.OptOut, Preferred = cm.Preferred };
-                                modes.Add(commMode);
-                            }
-                            contact.Modes = modes;
-                        }
-
-                        //Phones
-                        List<PhoneData> phoneData = cd.Phones;
-                        if (phoneData != null && phoneData.Count > 0)
-                        {
-                            List<Phone> phones = new List<Phone>();
-                            foreach (PhoneData ph in phoneData)
-                            {
-                                Phone phone = new Phone
-                                {
-                                    Id = ph.Id,
-                                    TypeId = ph.TypeId,
-                                    Number = ph.Number,
-                                    ExtNumber = ph.ExtNumber,
-                                    IsText = ph.IsText,
-                                    PhonePreferred = ph.PhonePreferred,
-                                    TextPreferred = ph.TextPreferred,
-                                    OptOut = ph.OptOut,
-                                    DataSource = ph.DataSource,
-                                    ExternalRecordId = ph.ExternalRecordId
-                                };
-                                phones.Add(phone);
-                            }
-                            contact.Phones = phones;
-                        }
-
-                        //Emails
-                        List<EmailData> emailData = cd.Emails;
-                        if (emailData != null && emailData.Count > 0)
-                        {
-                            List<Email> emails = new List<Email>();
-                            foreach (EmailData e in emailData)
-                            {
-                                Email email = new Email { Id = e.Id, Text = e.Text, TypeId = e.TypeId, Preferred = e.Preferred, OptOut = e.OptOut, DataSource = e.DataSource, ExternalRecordId = e.ExternalRecordId };
-                                emails.Add(email);
-                            }
-                            contact.Emails = emails;
-                        }
-
-                        //Address
-                        List<AddressData> addressData = cd.Addresses;
-                        if (addressData != null && addressData.Count > 0)
-                        {
-                            List<Address> addresses = new List<Address>();
-                            foreach (AddressData a in addressData)
-                            {
-                                Address address = new Address { Id = a.Id, Line1 = a.Line1, Line2 = a.Line2, Line3 = a.Line3, City = a.City, StateId = a.StateId, PostalCode = a.PostalCode, TypeId = a.TypeId, Preferred = a.Preferred, OptOut = a.OptOut, DataSource = a.DataSource, ExternalRecordId = a.ExternalRecordId };
-                                addresses.Add(address);
-                            }
-                            contact.Addresses = addresses;
-                        }
-
-                        //Language
-                        List<Phytel.API.DataDomain.Contact.DTO.LanguageData> languageData = cd.Languages;
-                        if (languageData != null && languageData.Count > 0)
-                        {
-                            List<Language> languages = new List<Language>();
-                            foreach (Phytel.API.DataDomain.Contact.DTO.LanguageData l in languageData)
-                            {
-                                Language language = new Language { LookUpLanguageId = l.LookUpLanguageId, Preferred = l.Preferred };
-                                languages.Add(language);
-                            }
-                            contact.Languages = languages;
-                        } 
-                        #endregion
-
-                        if (!string.IsNullOrEmpty(cd.PatientId))
-                            contact.IsPatient = true;
-
-                        if (!string.IsNullOrEmpty(cd.UserId))
-                            contact.IsUser = true;
+                        if (!string.IsNullOrEmpty(mappedData.UserId))
+                            mappedData.IsUser = true;
                         
+                        contact = mappedData;
                     }
                 }
             }
