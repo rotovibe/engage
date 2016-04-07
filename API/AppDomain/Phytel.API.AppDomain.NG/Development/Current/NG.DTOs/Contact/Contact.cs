@@ -35,6 +35,10 @@ namespace Phytel.API.AppDomain.NG.DTO
         public bool IsUser { get; set; }
         public List<ContactSubType> ContactSubTypes { get; set; }
         public string ContactTypeId { get; set; }
+        public string UpdatedById { get; set; }
+        public DateTime? UpdatedOn { get; set; }
+        public string CreatedById { get; set; }
+        public DateTime CreatedOn { get; set; }
 
     }
 

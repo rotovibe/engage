@@ -1110,7 +1110,11 @@ namespace Phytel.API.DataDomain.Contact
                 Suffix = contactEntity.Suffix,
                 DeceasedId = (int) contactEntity.Deceased,
                 DataSource = contactEntity.DataSource,
-                ExternalRecordId = contactEntity.ExternalRecordId
+                ExternalRecordId = contactEntity.ExternalRecordId,
+                CreatedById = contactEntity.RecordCreatedBy.ToString(),
+                CreatedOn = contactEntity.RecordCreatedOn,
+                UpdatedById = contactEntity.UpdatedBy == null ? null : contactEntity.UpdatedBy.ToString(),
+                UpdatedOn = contactEntity.LastUpdatedOn
             };
 
             return contactData;
