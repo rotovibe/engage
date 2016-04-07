@@ -23,5 +23,6 @@ namespace Phytel.API.DataDomain.Patient
         CohortPatientViewData FindCohortPatientViewByPatientId(string patientId);
         object Initialize(object newEntity);
         object FindDuplicatePatient(PutUpdatePatientDataRequest request);
+        bool SyncPatient(SyncPatientInfoDataRequest request);
     }
 }

@@ -108,6 +108,9 @@
     <Compile Include="InsertBatchPatientsDataResponse.cs" />
     <Compile Include="PutPatientSystemIdDataRequest.cs" />
     <Compile Include="PutPatientSystemIdDataResponse.cs" />
+    <Compile Include="SyncPatientInfoData.cs" />
+    <Compile Include="SyncPatientInfoDataRequest.cs" />
+    <Compile Include="SyncPatientInfoDataResponse.cs" />
     <Compile Include="UndoDeleteCohortPatientViewDataRequest.cs" />
     <Compile Include="UndoDeleteCohortPatientViewDataResponse.cs" />
     <Compile Include="UndoDeletePatientUsersDataRequest.cs" />

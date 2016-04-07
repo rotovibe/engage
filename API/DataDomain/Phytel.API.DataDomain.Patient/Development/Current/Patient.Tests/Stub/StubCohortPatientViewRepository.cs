@@ -135,5 +135,17 @@ namespace Phytel.API.DataDomain.Patient.Test.Stub
                 throw new NotImplementedException();
             }
         }
+
+
+        public bool SyncContact(DTO.SyncPatientInfoDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public bool SyncPatient(DTO.SyncPatientInfoDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

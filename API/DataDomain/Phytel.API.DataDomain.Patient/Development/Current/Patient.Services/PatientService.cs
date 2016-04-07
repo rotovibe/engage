@@ -461,5 +461,26 @@ namespace Phytel.API.DataDomain.Patient.Service
             return response;
         }
         #endregion
+
+        public SyncPatientInfoDataResponse Put(SyncPatientInfoDataRequest request)
+        {
+            var response = new SyncPatientInfoDataResponse();
+            try
+            {
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("PatientDD:SyncPatientInfoDataRequest()::Unauthorized Access");
+
+                response = PatientManager.SyncPatient(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                CommonFormatterUtil.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Helpers.LogException(int.Parse(aseProcessID), ex);
+            }
+            return response;
+        }
     }
 }

@@ -26,5 +26,6 @@ namespace Phytel.API.DataDomain.Patient
         PutInitializePatientDataResponse InitializePatient(PutInitializePatientDataRequest request);
         List<PatientData> GetAllPatients(GetAllPatientsDataRequest request);
         InsertBatchPatientsDataResponse InsertBatchPatients(InsertBatchPatientsDataRequest request);
+        SyncPatientInfoDataResponse SyncPatient(SyncPatientInfoDataRequest request);
     }
 }

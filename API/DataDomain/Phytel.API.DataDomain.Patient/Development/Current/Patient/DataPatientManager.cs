@@ -640,5 +640,24 @@ namespace Phytel.API.DataDomain.Patient
             }
             return ids;
         }
+
+
+        public SyncPatientInfoDataResponse SyncPatient(SyncPatientInfoDataRequest request)
+        {
+            var response = new SyncPatientInfoDataResponse();
+            try
+            {
+                var repo = Factory.GetRepository(request, RepositoryType.Patient);
+                var isSuccessful = repo.SyncPatient(request);
+
+                response.IsSuccessful = isSuccessful;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return response;
+        }
+        
     }
 }   

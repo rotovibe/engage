@@ -535,5 +535,11 @@ namespace Phytel.API.DataDomain.Patient
         {
             throw new NotImplementedException();
         }
+
+
+        public bool SyncPatient(SyncPatientInfoDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -1012,5 +1012,62 @@ namespace Phytel.API.DataDomain.Patient
                 throw;
             }
         }
+
+
+        public bool SyncPatient(SyncPatientInfoDataRequest request)
+        {
+            var response = new SyncPatientInfoDataResponse();
+            try
+            {
+                using (var ctx = new PatientMongoContext(_dbName))
+                {
+                    var data = request.PatientInfo;
+                    var queries = new List<IMongoQuery>
+                    {
+                        MB.Query.EQ(MEPatient.IdProperty, ObjectId.Parse(request.PatientId)),
+                        MB.Query.EQ(MEPatient.DeleteFlagProperty, false)
+                    };
+
+                    var query = MB.Query.And(queries);
+                    var mc = ctx.Patients.Collection.Find(query).FirstOrDefault();
+                    if (mc != null)
+                    {
+                        var uv = new List<MB.UpdateBuilder>();
+                        uv.Add(MB.Update.Set(MEPatient.FirstNameProperty, data.FirstName));
+                        uv.Add(MB.Update.Set(MEPatient.LastNameProperty, data.LastName));
+                        uv.Add(MB.Update.Set(MEPatient.MiddleNameProperty, data.MiddleName));
+                        uv.Add(MB.Update.Set(MEPatient.PreferredNameProperty, data.PreferredName));
+                        uv.Add(MB.Update.Set(MEPatient.GenderProperty, data.Gender));
+                        uv.Add(MB.Update.Set(MEPatient.SuffixProperty, data.Suffix));
+                        uv.Add(MB.Update.Set(MEPatient.PrefixProperty, data.Prefix));
+                        uv.Add(MB.Update.Set(MEPatient.DeceasedProperty, data.DeceasedId));
+                        uv.Add(MB.Update.Set(MEPatient.StatusProperty, data.StatusId));
+
+
+
+                        var update = MB.Update.Combine(uv);
+
+                        ctx.Patients.Collection.Update(query, update);
+
+                        AuditHelper.LogDataAudit(this.UserId,
+                                                MongoCollectionName.Contact.ToString(),
+                                                request.PatientId,
+                                                DataAuditType.Update,
+                                                request.ContractNumber);
+
+                        response.IsSuccessful = true;
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccessful = false;
+                throw ex;
+
+            }
+
+            return response.IsSuccessful;
+        }
     }
 }
