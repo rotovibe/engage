@@ -1306,9 +1306,14 @@ namespace Phytel.API.AppDomain.NG
                             Gender = cd.Gender,
                             TimeZoneId = cd.TimeZoneId,
                             WeekDays = cd.WeekDays,
-                            TimesOfDaysId = cd.TimesOfDaysId
+                            TimesOfDaysId = cd.TimesOfDaysId,
+                            CreatedOn = cd.CreatedOn,
+                            CreatedById = cd.CreatedById,
+                            UpdatedOn = cd.UpdatedOn,
+                            UpdatedById = cd.UpdatedById
                         };
 
+                        #region Communications
                         //Modes
                         List<CommModeData> commModeData = cd.Modes;
                         if (commModeData != null && commModeData.Count > 0)
@@ -1354,7 +1359,7 @@ namespace Phytel.API.AppDomain.NG
                             List<Email> emails = new List<Email>();
                             foreach (EmailData e in emailData)
                             {
-                                Email email = new Email { Id = e.Id, Text = e.Text, TypeId = e.TypeId, Preferred = e.Preferred, OptOut = e.OptOut, DataSource = e.DataSource,ExternalRecordId = e.ExternalRecordId};
+                                Email email = new Email { Id = e.Id, Text = e.Text, TypeId = e.TypeId, Preferred = e.Preferred, OptOut = e.OptOut, DataSource = e.DataSource, ExternalRecordId = e.ExternalRecordId };
                                 emails.Add(email);
                             }
                             contact.Emails = emails;
@@ -1367,7 +1372,7 @@ namespace Phytel.API.AppDomain.NG
                             List<Address> addresses = new List<Address>();
                             foreach (AddressData a in addressData)
                             {
-                                Address address = new Address { Id = a.Id, Line1 = a.Line1, Line2 = a.Line2, Line3 = a.Line3, City = a.City, StateId = a.StateId, PostalCode = a.PostalCode, TypeId = a.TypeId, Preferred = a.Preferred, OptOut = a.OptOut ,DataSource = a.DataSource,ExternalRecordId = a.ExternalRecordId};
+                                Address address = new Address { Id = a.Id, Line1 = a.Line1, Line2 = a.Line2, Line3 = a.Line3, City = a.City, StateId = a.StateId, PostalCode = a.PostalCode, TypeId = a.TypeId, Preferred = a.Preferred, OptOut = a.OptOut, DataSource = a.DataSource, ExternalRecordId = a.ExternalRecordId };
                                 addresses.Add(address);
                             }
                             contact.Addresses = addresses;
@@ -1384,7 +1389,8 @@ namespace Phytel.API.AppDomain.NG
                                 languages.Add(language);
                             }
                             contact.Languages = languages;
-                        }
+                        } 
+                        #endregion
 
                         if (!string.IsNullOrEmpty(cd.PatientId))
                             contact.IsPatient = true;
