@@ -1,13 +1,10 @@
 ﻿using Phytel.API.Interface;
 using ServiceStack.ServiceHost;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Phytel.API.DataDomain.Patient.DTO
 {
+    [Api(Description = "A Request object to Update Patient Info .")]
+    [Route("/{Context}/{Version}/{ContractNumber}/Patients/{PatientId}/Sync", "PUT")]
     public class SyncPatientInfoDataRequest : IDataDomainRequest
     {
         [ApiMember(Name = "PatientInfo", Description = "PatientInfo to be inserted.", ParameterType = "body", DataType = "PatientInfoData", IsRequired = true)]

@@ -1380,6 +1380,13 @@ namespace Phytel.API.AppDomain.NG
                 {
                     response.Status = dataDomainResponse.Status;
                 }
+
+                //Sync Patient 
+                if (request.Contact.IsPatient && !string.IsNullOrEmpty(request.Contact.PatientId))
+                {
+                    SyncPatientByContactData(cData,request.Version, request.ContractNumber, request.UserId);
+                }
+
                 return response;
             }
             catch (WebServiceException wse)
@@ -2079,6 +2086,7 @@ namespace Phytel.API.AppDomain.NG
             return normalizedSkip;
 
         }
+
         /// <summary>
         /// TODO: remove hard-coded values.
         /// </summary>
@@ -2107,7 +2115,61 @@ namespace Phytel.API.AppDomain.NG
 
             return response;
             
-        } 
+        }
+
+        private void SyncContactByPatientData(PatientData data, double version, string contractNumber, string userId)
+        {
+            if (data == null)
+                return;
+
+
+            IRestClient client = new JsonServiceClient();
+            var url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Contacts/{4}/Sync",
+                                                                            DDContactServiceUrl,
+                                                                            "NG",
+                                                                            version,
+                                                                            contractNumber,data.Id), userId);
+
+            var mappedRequest = Mapper.Map<DataDomain.Contact.DTO.SyncContactInfoData>(data);
+
+            var dataDomainResponse =
+                client.Put<DataDomain.Contact.DTO.SyncContactInfoDataResponse>(url, new SyncContactInfoDataRequest
+                {
+                    ContactInfo =  mappedRequest
+
+                } as object);
+
+            
+
+
+        }
+
+        private void SyncPatientByContactData(ContactData data, double version, string contractNumber, string userId)
+        {
+            if (data == null)
+                return;
+
+
+            IRestClient client = new JsonServiceClient();
+            string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patients/{4}/Sync",
+                                                                            DDContactServiceUrl,
+                                                                            "NG",
+                                                                            version,
+                                                                            contractNumber, data.Id), userId);
+
+            var mappedRequest = Mapper.Map<DataDomain.Patient.DTO.SyncPatientInfoData>(data);
+
+            var dataDomainResponse =
+                client.Put<DataDomain.Patient.DTO.SyncPatientInfoData>(url, new SyncPatientInfoDataRequest
+                {
+                    PatientInfo = mappedRequest
+
+                } as object);
+
+
+
+
+        }
 
         #endregion
     }
