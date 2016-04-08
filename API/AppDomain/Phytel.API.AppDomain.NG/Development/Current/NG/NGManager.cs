@@ -252,7 +252,38 @@ namespace Phytel.API.AppDomain.NG
                             response.Outcome = new DTO.Outcome { Result = dataDomainResponse.Outcome.Result, Reason = dataDomainResponse.Outcome.Reason};
                         }
                     }
+
+
+                    //Sync Contact 
+                    if (!request.Insert)
+                    {
+                        var contactRequest = new GetContactByPatientIdRequest
+                        {
+                            ContractNumber = request.ContractNumber,
+                            UserId = request.UserId,
+                            PatientID = request.Patient.Id,
+                            Version = 1.0
+                        };
+
+                        var contact = GetContactByPatientId(contactRequest);
+
+                        if (contact != null)
+                        {
+                            //Sync Contact 
+                            SyncContactByPatientData(contact.Id, data, request.Version, request.ContractNumber,
+                                request.UserId);
+                        }
+
+                        
+                    }
+                    else
+                    {
+                      //Should we insert user?...
+                    }
                 }
+
+                
+
                 return response;
             }
             catch (WebServiceException wse)
@@ -2117,7 +2148,7 @@ namespace Phytel.API.AppDomain.NG
             
         }
 
-        private void SyncContactByPatientData(PatientData data, double version, string contractNumber, string userId)
+        private void SyncContactByPatientData(string contactId,PatientData data, double version, string contractNumber, string userId)
         {
             if (data == null)
                 return;
@@ -2138,9 +2169,6 @@ namespace Phytel.API.AppDomain.NG
                     ContactInfo =  mappedRequest
 
                 } as object);
-
-            
-
 
         }
 

@@ -5,6 +5,7 @@ using System.Web;
 using AutoMapper;
 using Phytel.API.AppDomain.NG.DTO;
 using Phytel.API.DataDomain.Contact.DTO;
+using Phytel.API.DataDomain.Patient.DTO;
 
 namespace Phytel.API.AppDomain.NG.Service.Mappers
 {
@@ -37,6 +38,10 @@ namespace Phytel.API.AppDomain.NG.Service.Mappers
 
 
             Mapper.CreateMap<ContactData, ContactSearchInfo>();
+
+            Mapper.CreateMap<ContactData, SyncPatientInfoData>();
+            Mapper.CreateMap<PatientData, SyncContactInfoData>();
+
 
         }
     }

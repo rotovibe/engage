@@ -39,32 +39,5 @@ namespace Phytel.API.AppDomain.NG.Test
             ngManager.SearchContacts(stubRequest);
 
         }
-
-
-        [TestMethod]
-       
-        public void NGManager_SearchContacts_Empty_Take_Should_Normalize_To_100()
-        {
-            var ngManager = new NGManager();
-            var stubRequest = new SearchContactsRequest
-            {
-                ContractNumber = "dummy1234",
-                FirstName = "Abc",
-                Take = 10,
-                Skip = 0,
-                ContactTypeIds = new List<string> { "abcd"}
-            };
-
-            var mockClient = new Mock<IRestClient>();
-            mockClient.Setup(
-                c => c.Post<DataDomain.Contact.DTO.SearchContactsDataResponse>(It.IsAny<string>(), It.IsAny<object>()))
-                .Returns(
-                    new SearchContactsDataResponse { TotalCount = 2 , Version = 1.0,Contacts = new List<ContactData>() }
-                );
-
-          var response =   ngManager.SearchContacts(stubRequest);
-
-        }
-
     }
 }
