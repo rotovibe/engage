@@ -2179,10 +2179,10 @@ namespace Phytel.API.AppDomain.NG
 
             IRestClient client = new JsonServiceClient();
             string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patients/{4}/Sync",
-                                                                            DDContactServiceUrl,
+                                                                            DDPatientServiceURL,
                                                                             "NG",
                                                                             version,
-                                                                            contractNumber, data.Id), userId);
+                                                                            contractNumber, data.PatientId), userId);
 
             var mappedRequest = Mapper.Map<DataDomain.Patient.DTO.SyncPatientInfoData>(data);
 
