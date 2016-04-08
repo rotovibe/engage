@@ -40,6 +40,8 @@ namespace Phytel.API.DataDomain.Cohort.Service
                     { 
                         HostContext.Instance.Items.Add("Contract", ((IDataDomainRequest) requestDto).ContractNumber);
                         HostContext.Instance.Items.Add("Version", ((IDataDomainRequest) requestDto).Version);
+                        HostContext.Instance.Items.Add("Context", ((IDataDomainRequest)requestDto).Context);
+                        HostContext.Instance.Items.Add("UserId", ((IDataDomainRequest)requestDto).UserId);
                     }
                 });
                 Plugins.Add(new SwaggerFeature());

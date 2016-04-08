@@ -19,7 +19,9 @@ namespace Phytel.API.DataDomain.Cohort.Service
                 new ServiceContext
                 {
                     Contract = HostContext.Instance.Items["Contract"].ToString(),
-                    Version = Convert.ToDouble(HostContext.Instance.Items["Version"].ToString())
+                    Context = HostContext.Instance.Items["Context"].ToString(),
+                    Version = Convert.ToDouble(HostContext.Instance.Items["Version"].ToString()),
+                    UserId = HostContext.Instance.Items["UserId"].ToString()
                 }).ReusedWithin(ReuseScope.Request);
 
             container.RegisterAutoWiredAs<CommonFormatterUtil, ICommonFormatterUtil>().ReusedWithin(ReuseScope.Request);
