@@ -56,14 +56,6 @@
       <HintPath>..\..\..\..\..\..\App\Bristol\Development\Current\packages\Phytel.Services.Mongo.2.0.0.01\lib\net451\Phytel.Services.Mongo.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Phytel.Services.Security, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\..\App\Bristol\Development\Current\packages\Phytel.Services.Security.2.0.0.03\lib\net451\Phytel.Services.Security.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Phytel.Services.SQLServer, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\..\App\Bristol\Development\Current\packages\Phytel.Services.SQLServer.2.0.0.02\lib\net451\Phytel.Services.SQLServer.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="ServiceStack, Version=3.9.70.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\..\..\App\Bristol\Development\Current\packages\ServiceStack.3.9.70\lib\net35\ServiceStack.dll</HintPath>
       <Private>True</Private>
