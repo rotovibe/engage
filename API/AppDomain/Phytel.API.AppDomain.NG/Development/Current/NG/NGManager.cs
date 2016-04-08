@@ -17,6 +17,7 @@ using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Runtime.Remoting.Messaging;
 using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Web.Hosting;
@@ -273,16 +274,16 @@ namespace Phytel.API.AppDomain.NG
                             SyncContactByPatientData(contact.Id, data, request.Version, request.ContractNumber,
                                 request.UserId);
                         }
-
-                        
+                        else
+                        {
+                            InsertContactByPatient(request.Patient, request.ContractNumber, request.UserId, request.Version);
+                        }
                     }
                     else
                     {
-                      //Should we insert user?...
+                        InsertContactByPatient(request.Patient, request.ContractNumber, request.UserId, request.Version);
                     }
                 }
-
-                
 
                 return response;
             }
@@ -2159,7 +2160,7 @@ namespace Phytel.API.AppDomain.NG
                                                                             DDContactServiceUrl,
                                                                             "NG",
                                                                             version,
-                                                                            contractNumber,data.Id), userId);
+                                                                            contractNumber,contactId), userId);
 
             var mappedRequest = Mapper.Map<DataDomain.Contact.DTO.SyncContactInfoData>(data);
 
@@ -2198,6 +2199,35 @@ namespace Phytel.API.AppDomain.NG
 
 
         }
+
+        private void InsertContactByPatient(Patient patient, string contractNumber, string userId, double version)
+        {
+            //Insert Contact
+            var insertContactRequest = new InsertContactRequest
+            {
+                Contact = new Contact
+                {
+                    FirstName = patient.FirstName,
+                    LastName = patient.LastName,
+                    MiddleName = patient.MiddleName,
+                    PreferredName = patient.PreferredName,
+                    Suffix = patient.Suffix,
+                    PatientId = patient.Id,
+                    DeceasedId = patient.DeceasedId,
+                    Prefix = patient.Prefix,
+                    Gender = patient.Gender,
+                    StatusId = patient.StatusId
+
+                },
+                ContractNumber = contractNumber,
+                UserId = userId,
+                Version = version
+            };
+
+            InsertContact(insertContactRequest);
+        }
+            
+        
 
         #endregion
     }
