@@ -254,19 +254,20 @@ namespace Phytel.API.AppDomain.NG
                         }
                     }
 
+                    var contactRequest = new GetContactByPatientIdRequest
+                    {
+                        ContractNumber = request.ContractNumber,
+                        UserId = request.UserId,
+                        PatientID = request.Patient.Id,
+                        Version = 1.0
+                    };
+
+
+                    var contact = GetContactByPatientId(contactRequest);
 
                     //Sync Contact 
-                    if (!request.Insert)
-                    {
-                        var contactRequest = new GetContactByPatientIdRequest
-                        {
-                            ContractNumber = request.ContractNumber,
-                            UserId = request.UserId,
-                            PatientID = request.Patient.Id,
-                            Version = 1.0
-                        };
-
-                        var contact = GetContactByPatientId(contactRequest);
+                    
+                       
 
                         if (contact != null)
                         {
@@ -278,11 +279,8 @@ namespace Phytel.API.AppDomain.NG
                         {
                             InsertContactByPatient(request.Patient, request.ContractNumber, request.UserId, request.Version);
                         }
-                    }
-                    else
-                    {
-                        InsertContactByPatient(request.Patient, request.ContractNumber, request.UserId, request.Version);
-                    }
+                    
+                    
                 }
 
                 return response;
@@ -2200,7 +2198,7 @@ namespace Phytel.API.AppDomain.NG
 
         }
 
-        private void InsertContactByPatient(Patient patient, string contractNumber, string userId, double version)
+        private void InsertContactByPatient(Patient patient,string contractNumber, string userId, double version)
         {
             //Insert Contact
             var insertContactRequest = new InsertContactRequest
@@ -2216,7 +2214,9 @@ namespace Phytel.API.AppDomain.NG
                     DeceasedId = patient.DeceasedId,
                     Prefix = patient.Prefix,
                     Gender = patient.Gender,
-                    StatusId = patient.StatusId
+                    StatusId = patient.StatusId,
+                    ContactTypeId = Constants.PersonContactTypeId,
+                    DataSource = patient.DataSource
 
                 },
                 ContractNumber = contractNumber,
