@@ -14,7 +14,7 @@ define([], new breeze.JsonResultsAdapter({
     extractResults: function (data) {
         var results = data.results;
         if (!results) throw new Error("Unable to resolve 'results' property");
-        return results && (results.Problems || results.PatientProblem || results.PatientProblems || results.Patient || results.Cohorts || results.Patients || results.Program || results.Programs || results.PlanElems || results.Languages || results.States || results.Reason || results.CommModes || results.TimesOfDays || results.TimeZones || results.CommTypes || results.Contact || results.Contacts || results.LookUps || results.LookUpDetails || results.Goals || results.Goal || results.Note || results.Notes || results.PatientNote || results.Utilization || results.Library || results.CareMembers || results.Observations || results.Observation ||results.PatientObservations || results.PatientObservation || results.Action || results.Actions || results.Attributes || results.Objectives || results.ToDo || results.ToDos || results.PatientDetails || results.Intervention || results.Interventions || results.Task || results.Tasks || results.Systems || results.PatientSystems || results.Allergy || results.Allergies || results.PatientAllergy || results.PatientAllergies || results.PatientMedSupp || results.PatientMedSupps || results.PatientMedFrequencies);
+        return results && (results.Problems || results.PatientProblem || results.PatientProblems || results.Patient || results.Cohorts || results.Patients || results.Program || results.Programs || results.PlanElems || results.Languages || results.States || results.Reason || results.CommModes || results.TimesOfDays || results.TimeZones || results.CommTypes || results.Contact || results.Contacts || results.LookUps || results.LookUpDetails || results.Goals || results.Goal || results.Note || results.Notes || results.PatientNote || results.Utilization || results.Library || results.CareMembers || results.Observations || results.Observation ||results.PatientObservations || results.PatientObservation || results.Action || results.Actions || results.Attributes || results.Objectives || results.ToDo || results.ToDos || results.PatientDetails || results.Intervention || results.Interventions || results.Task || results.Tasks || results.Systems || results.PatientSystems || results.Allergy || results.Allergies || results.PatientAllergy || results.PatientAllergies || results.PatientMedSupp || results.PatientMedSupps || results.PatientMedFrequencies || results.ContactTypeLookUps);
     },
 
     visitNode: function (node, mappingContext, nodeContext) {
@@ -71,6 +71,22 @@ define([], new breeze.JsonResultsAdapter({
             });
             return { entityType: "CommunicationType" }
         }
+		if(node.SubTypes) {
+			var subTypes = []
+			$.each(node.SubTypes, function(sub){
+				var theseIds = [];
+				$.each(sub.SubSpecialtyIds, function (index, item) {
+					// if the item is not null
+					if (item) {
+						theseIds.push({ Id: item });
+					}
+				});
+				sub.SubSpecialtyIds = theseIds; 
+				//TODO - may need to rewrite the node.SubTypes (1,2)
+				//1. subTypes.push(sub);	
+			});
+			//2. node.SubTypes = subTypes;
+		}
         if (mappingContext.query.fromEntityType && mappingContext.query.fromEntityType.shortName === 'Note') {
             // If you were mapping to a note, we need to map the program ids
             if (node.ProgramIds) {

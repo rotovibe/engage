@@ -246,6 +246,8 @@
 			saveCareMember: saveCareMember,
 			enums: localCollections.enums,
 			alerts: localCollections.alerts,
+			getContactTypes: getContactTypes,
+			getContactTypeLookupById: getContactTypeLookupById,
 			saveContactCard: saveContactCard,
 			cancelAllChangesToContactCard: cancelAllChangesToContactCard,
 			cancelEntityChanges: cancelEntityChanges,
@@ -327,7 +329,8 @@
 				getAllergyLookups(),
 				getAllCareManagers(),
 				getRecentIndividuals(),
-				loadUpMocks()
+				loadUpMocks(),
+				getContactTypesTree(),
 				]).then(processLookpus);
 			return promise;
 		}
@@ -339,6 +342,15 @@
 			}
 		}
 
+		function getContactTypesTree(){
+			if (session.currentUser() && session.currentUser().contracts().length !== 0) {
+				var endPoint = new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'ContactTypeLookups', 'ContactTypeLookup');
+				return getEntityList( localCollections.contactTypesTree, endPoint.EntityType, endPoint.ResourcePath, null, null, true)
+				.then( function(){
+					var stop = 0;
+				});
+			}
+		}
 		// Get a list of problems lookups
 		function getProblemsLookup() {
 			if (session.currentUser() && session.currentUser().contracts().length !== 0) {
@@ -991,11 +1003,37 @@
 			return programsService.savePlanElemAttrs(manager, planElem, programId, patientId).then(queryCompleted(message));
 		}
 
+		function getContactTypes( group, isRoot){			
+			var types = [];
+			ko.utils.arrayForEach(localCollections.contactTypesTree(), function(node){
+				var goes = false;
+				if( ( group && ( node.group() == group )) || !group ) {
+					if( ( isRoot && !node.parentId() ) || ( isRoot == false && node.parentId() ) || !isRoot ){
+						types.push(node);	
+					}					
+				}				
+			});
+			return types;
+		}
+		
+		function getContactTypeLookupById( id ){
+			var contactType = ko.utils.arrayFilter( localCollections.contactTypesTree(), function(node){
+				return node.id() == id;
+			});
+			return contactType;
+		}
+		
 		// Save changes to a single contact card
-		function saveContactCard(contactCard) { //TODO: add parameter isInsert
+		function saveContactCard(contactCard) {
 			// Display a message while saving
 			var message = queryStarted('Contact card', true, 'Saving');
-
+			var isInsert = contactCard.isNew();
+			// if( isInsert ){
+				// contactCard.createdById( session.currentUser().userId() );
+			// }
+			// else{
+				// contactCard.updatedById( session.currentUser().userId() );
+			// }
 			var serializedContactCard;
 			setTimeout(function () {
 				serializedContactCard = entitySerializer.serializeContactCard(contactCard, manager);
@@ -1004,6 +1042,16 @@
 			function saveCompleted (data) {
 				// If data was returned and has a property called success that is true,
 				if (data) {
+					if( isInsert && data.Id ){
+						contactCard.id( data.Id );
+						contactCard.isNew(false);
+						contactCard.createdById( data.CreatedById );
+						contactCard.createdOn( data.CreatedOn );						
+					}
+					else{
+						contactCard.updatedById( data.UpdatedById );
+						contactCard.updatedOn( data.UpdatedOn );
+					}
 					// Go through the data, find any entities that need to have their Id's cleaned up
 					var updatedPhones = data.UpdatedPhone;
 					var updatedEmails = data.UpdatedEmail;
@@ -1060,7 +1108,7 @@
 				}
 			}
 			setTimeout(function () {
-				return contactService.saveContactCard(manager, serializedContactCard).then(saveCompleted);
+				return contactService.saveContactCard(manager, serializedContactCard, isInsert).then(saveCompleted);
 			}, 50);
 
 			
@@ -2011,7 +2059,7 @@
 				allergySaving(false);
 			}
 		}
-
+		
 		function getPatientAllergiesQuery (params, orderstring) {
 			return allergiesService.getPatientAllergiesQuery(manager, params, orderstring);
 		}

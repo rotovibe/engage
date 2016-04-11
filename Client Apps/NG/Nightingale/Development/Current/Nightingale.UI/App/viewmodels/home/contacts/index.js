@@ -1,37 +1,43 @@
-define(['services/session', 'services/datacontext', 'viewmodels/shell/shell', 'models/base'],
-	function(session, datacontext, shell, modelConfig){
+define(['services/session', 'services/datacontext', 'viewmodels/shell/shell', 'models/base', 'services/local.collections'],
+	function(session, datacontext, shell, modelConfig, localCollections){
 				
         var fullScreenWidget = ko.observable();
         var leftColumnOpen = ko.observable(true);
-		
+
 		//contact dialog:
 		var modalShowing = ko.observable(false);
 		var modalEntity = ko.observable(new ModalEntity(modalShowing));
-		var newContact = ko.observable();
+		var theContact = ko.observable();				
 		
 		function saveOverride () {
-			console.log('add contact save clicked');
-            //datacontext.saveContactCard(newContact(), 'Insert').then(saveCompleted);
-			return setTimeout(function(){ saveCompleted(); },1);	//TODO: this is temporary simulating a save
+			if( theContact().isNew() ){				
+				if (localCollections.contacts.indexOf( theContact() ) < 0) {
+					localCollections.contacts.push( theContact() );					
+				}
+				//this is temporary: TODO: save it
+				cancelOverride();
+			}
+			else{
+				theContact().saveChanges();
+				theContact().clearDirty();
+			}
 			
-            function saveCompleted(contact) {
-				datacontext.detachEntity(newContact());	//TODO: this is temporary !!
-				console.log('add contact save completed (dummy)');
-                // contact.isNew(false);
-                // localCollections.contacts.push(newContact());
-				//var dummy = myToDos().length;
-				//contact.clearDirty();
-            }
+            // function saveCompleted(contact) {
+				// datacontext.detachEntity(theContact());	//TODO: this is temporary !!
+				// console.log('add contact save completed (dummy)');
+                // // contact.isNew(false);
+                // // localCollections.contacts.push(theContact());
+				// //var dummy = myToDos().length;
+				// //contact.clearDirty();
+            // }
         };
-		
 		
         function cancelOverride () {
-			datacontext.detachEntity(newContact());	//TODO: this is temporary !!
-			console.log('add contact cancel clicked');
-			
-            //datacontext.cancelEntityChanges(modalEntity().contact());
-			//modalEntity().contact().clearDirty();
+			modalShowing(false);
+			modalEntity().contactCard().cancelChanges();
+			modalEntity().contactCard().clearDirty();	
         };
+		
 		var modalSettings = {
 			title: 'Add Contact',
 			entity: modalEntity, 
@@ -40,21 +46,20 @@ define(['services/session', 'services/datacontext', 'viewmodels/shell/shell', 'm
 			saveOverride: saveOverride, 
 			cancelOverride: cancelOverride, 
 			deleteOverride: null, 
-			classOverride: 'modal-lg'
-		}
+			classOverride: null//'modal-lg'
+		};
+		
         var modal = new modelConfig.modal(modalSettings);
-		
-		
 		
 		function ModalEntity(modalShowing) {
             var self = this;
-            self.contact = ko.observable();
+            self.contactCard = ko.observable();
             self.canSaveObservable = ko.observable(true);
             self.canSave = ko.computed({
                 read: function () {
                     var contactok = false;
-                    if (self.contact()) {                        
-						contactok = self.contact().isValid();
+                    if (self.contactCard()) {                        
+						contactok = self.contactCard().isValid();
                     }
                     return contactok && self.canSaveObservable();
                 },
@@ -63,19 +68,55 @@ define(['services/session', 'services/datacontext', 'viewmodels/shell/shell', 'm
                 }
             });
             // Object containing parameters to pass to the modal
-            self.activationData = { contact: self.contact, canSave: self.canSave, showing: modalShowing  };
+            self.activationData = { contactCard: self.contactCard, canSave: self.canSave, showing: modalShowing  };
         }
 		
 		function addContact(){
 			//navigate to add contact dialog
-			newContact(datacontext.createEntity('ContactCard', { id: -1, statusId: 1, createdById: session.currentUser().userId() }));
-            //newContact().isNew(true);
-			//newContact().watchDirty();
-            modalEntity().contact(newContact());
+			
+			var newModes = [];
+			ko.utils.arrayForEach( datacontext.enums.communicationModes(), function(mode) {
+				var newMode = { lookUpModeId: mode.id(), optOut: false, preferred: false };
+				newModes.push( newMode );
+			});
+			theContact( datacontext.createEntity('ContactCard', { id: -1, statusId: 1, modes: newModes, createdById: session.currentUser().userId() }));
+			theContact().isNew(true);
+			theContact().activeTab("Profile");
+			
+			theContact().watchDirty();
+            modalEntity().contactCard( theContact() );
             shell.currentModal(modal);
             modalShowing(true);
 		}
 		
+		function editContact( contact ){	
+		
+			theContact( contact() );
+			if( theContact().isPatient() ){
+				theContact().activeTab("General");	
+			}
+			else{
+				theContact().activeTab("Profile");
+			}
+			modalEntity().contactCard( contact() );
+			
+			var modalSettings = {
+				title: 'Edit Communication Preferences',
+				showSelectedPatientInTitle: true,
+				entity: modalEntity, 
+				templatePath: 'viewmodels/templates/contact.edit', 
+				showing: modalShowing, 
+				saveOverride: saveOverride, 
+				cancelOverride: cancelOverride, 
+				deleteOverride: null, 
+				classOverride: null//'modal-lg'
+			};
+		
+			var modal = new modelConfig.modal(modalSettings);
+			
+			shell.currentModal(modal);
+            modalShowing(true);
+		}
 		//end contact dialog
 		
 		function activate(){
@@ -106,10 +147,6 @@ define(['services/session', 'services/datacontext', 'viewmodels/shell/shell', 'm
 		
 		}
 		
-		function editContact(){
-			alert('edit');
-		}
-		
 		function deleteContact(){
 			alert('delete');
 		}
@@ -137,7 +174,7 @@ define(['services/session', 'services/datacontext', 'viewmodels/shell/shell', 'm
 			toggleOpenColumn: toggleOpenColumn,
 			fullScreenWidget: fullScreenWidget,
 			leftColumnOpen: leftColumnOpen,
-			toggleFullScreen: toggleFullScreen
+			toggleFullScreen: toggleFullScreen			
 		}
 		
 		return vm;			

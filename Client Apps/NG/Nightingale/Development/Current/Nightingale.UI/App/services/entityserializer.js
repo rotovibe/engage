@@ -184,7 +184,8 @@
 				thisContactCard.Languages = [];
 				thisContactCard.TimesOfDaysId = [];
 				thisContactCard.WeekDays = [];
-
+				thisContactCard.SubTypes = [];
+				
 				// Get the values of the properties of the action
 				//var unwrappedContactCard = ko.toJS(contactCard);
 
@@ -192,7 +193,9 @@
 						.from('fakePath')
 						.where('id', '==', contactCard.id())
 						.toType('ContactCard')
-						.select('id, patientId, timeZoneId');
+						.select('id, patientId, timeZoneId, isPatient, userId, isUser, firstName, middleName, lastName, preferredName,'
+							+ ' gender, contactTypeId, externalRecordId, dataSource, statusId, deceasedId, prefix, suffix, createdOn, updatedOn,'       
+							+ ' createdById, updatedById, externalID');
 				var results = manager.executeQueryLocally(contactCardQuery);
 				var unwrappedContactCard = results[0];
 
@@ -206,11 +209,31 @@
 						thisDowId = parseInt(dow.id.peek());
 						thisContactCard.WeekDays.push(thisDowId);
 				});
-
+				
 				thisContactCard.PatientId = unwrappedContactCard.patientId;
 				thisContactCard.Id = unwrappedContactCard.id;
 				thisContactCard.TimeZoneId = unwrappedContactCard.timeZoneId;
-
+				thisContactCard.IsPatient		 = unwrappedContactCard.isPatient;		
+				thisContactCard.UserId           = unwrappedContactCard.userId;	
+				thisContactCard.IsUser           = unwrappedContactCard.isUser;
+				thisContactCard.FirstName        = unwrappedContactCard.firstName;
+				thisContactCard.MiddleName       = unwrappedContactCard.middleName;
+				thisContactCard.LastName         = unwrappedContactCard.lastName;
+				thisContactCard.PreferredName    = unwrappedContactCard.preferredName;
+				thisContactCard.Gender           = unwrappedContactCard.gender;
+				thisContactCard.ContactTypeId    = unwrappedContactCard.contactTypeId;				
+				thisContactCard.ExternalRecordId = unwrappedContactCard.externalRecordId;
+				thisContactCard.DataSource       = unwrappedContactCard.dataSource;
+				thisContactCard.StatusId         = unwrappedContactCard.statusId;
+				thisContactCard.DeceasedId       = unwrappedContactCard.deceasedId;
+				thisContactCard.Prefix           = unwrappedContactCard.prefix;
+				thisContactCard.Suffix           = unwrappedContactCard.suffix;
+				thisContactCard.CreatedOn        = unwrappedContactCard.createdOn;
+				thisContactCard.UpdatedOn        = unwrappedContactCard.updatedOn;
+				thisContactCard.CreatedById      = unwrappedContactCard.createdById;
+				thisContactCard.UpdatedById      = unwrappedContactCard.updatedById;
+				thisContactCard.ExternalID       = unwrappedContactCard.externalID;
+				
 				ko.utils.arrayForEach(contactCard.modes.peek(), function (mode) {
 						var newMode = {};
 						newMode.LookUpModeId = mode.lookUpModeId.peek();
@@ -264,6 +287,18 @@
 						thisContactCard.Languages.push(newLanguage);
 				});
 
+				ko.utils.arrayForEach(contactCard.subTypes.peek(), function (sub) {	
+					var subType = {};
+					subType.Id = sub.id() ? sub.id() : null;
+					subType.SubTypeId = sub.subTypeId();
+					subType.SpecialtyId = sub.specialtyId() ? sub.specialtyId() : null;
+					subType.SubSpecialtyIds = [];
+					ko.utils.arrayForEach(sub.subSpecialtyIds.peek(), function (sid) {
+						subType.SubSpecialtyIds.push(sid.id.peek());
+					});
+					thisContactCard.SubTypes.push(subType);
+				});
+				
 				var totalTime = new Date().getTime() - startTime;
 
 

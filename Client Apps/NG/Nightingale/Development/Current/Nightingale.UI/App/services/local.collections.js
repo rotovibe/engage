@@ -36,6 +36,17 @@
 	]);
 	enums.maritalStatuses = ko.observableArray();
 	enums.deceasedStatuses = ko.observableArray();
+	
+	enums.contactStatuses = ko.observableArray([
+		new modelConfig.SomeType('1', 'Active'),
+		new modelConfig.SomeType('2', 'Inactive'),
+		new modelConfig.SomeType('3', 'Archived')
+	]);
+	enums.contactLookUpGroupType = ko.observableArray([
+		new modelConfig.SomeType('0', 'Unknown'),
+		new modelConfig.SomeType('1', 'ContactType'),
+		new modelConfig.SomeType('2', 'CareTeam')
+	]);
   enums.phoneTypes = ko.observableArray();
   enums.emailTypes = ko.observableArray();
   enums.addressTypes = ko.observableArray();
@@ -90,6 +101,7 @@
     //   ToDos are shared between a bunch of views so we keep a collection here as well
     var todos = ko.observableArray();
 
+	var contacts = ko.observableArray();
     //
     //   Interventions are shared between a bunch of views so we keep a collection here as well
     var interventions = ko.observableArray();
@@ -104,13 +116,18 @@
 
     var alerts = ko.observableArray();
 	
+	var contactTypesTree = ko.observableArray();
+	var contactTypes = ko.observableArray();
     var localcollections = {
         enums: enums,
         todos: todos,
+		contacts: contacts,
         tasks: tasks,
         interventions: interventions,
         events: events,
         alerts: alerts,
+		contactTypesTree: contactTypesTree,
+		contactTypes: contactTypes,
         refreshToDos: refreshToDos,
         refreshInterventions: refreshInterventions
     }

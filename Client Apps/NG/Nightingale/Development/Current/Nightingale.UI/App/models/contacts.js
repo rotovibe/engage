@@ -28,6 +28,14 @@ define(['services/session', 'services/validatorfactory', 'services/customvalidat
 		        dataProperties: {
 		            id: { dataType: "String", isPartOfKey: true },
 		            patientId: { dataType: "String" },
+					isPatient: { dataType: "Boolean" },
+					userId:  { dataType: "String" },
+					isUser: { dataType: "Boolean" },
+					firstName: { dataType: "String" },
+					middleName: { dataType: "String" },
+					lastName: { dataType: "String" },
+					preferredName: { dataType: "String" },
+					gender: { dataType: "String", defaultValue: 'N' },
 		            timeZoneId: { dataType: "String" },
 		            preferredTimesOfDayIds: { complexTypeName: "Identifier:#Nightingale", isScalar: false },
 		            preferredDaysOfWeekIds: { complexTypeName: "Identifier:#Nightingale", isScalar: false },
@@ -35,7 +43,20 @@ define(['services/session', 'services/validatorfactory', 'services/customvalidat
 		            modes: { complexTypeName: "ContactMode:#Nightingale", isScalar: false },
 		            emails: { complexTypeName: "Email:#Nightingale", isScalar: false },
 		            phones: { complexTypeName: "Phone:#Nightingale", isScalar: false },
-		            addresses: { complexTypeName: "Address:#Nightingale", isScalar: false }
+		            addresses: { complexTypeName: "Address:#Nightingale", isScalar: false },
+					contactTypeId:  { dataType: "String" },
+					subTypes: { complexTypeName: "ContactSubType:#Nightingale", isScalar: false },
+					externalRecordId: { dataType: "String" },
+					dataSource:  { dataType: "String", defaultValue: 'Engage' },
+					statusId: { dataType: "Int64", defaultValue: 1 },
+					deceasedId: { dataType: "Int64", defaultValue: 2 },
+					prefix: { dataType: "String" },
+					suffix: { dataType: "String" },
+					createdOn: { dataType: "DateTime" },
+					updatedOn: { dataType: "DateTime" },
+					createdById: { dataType: "String" },
+					updatedById: { dataType: "String" },
+					externalID:  { dataType: "String" }
 		        },
 		        navigationProperties: {
 		            patient: {
@@ -45,7 +66,19 @@ define(['services/session', 'services/validatorfactory', 'services/customvalidat
 		            timeZone: {
 		                entityTypeName: "TimeZone", isScalar: true,
 		                associationName: "TimeZone_ContactCards", foreignKeyNames: ["timeZoneId"]
-		            }
+		            },					
+					contactType: {
+						entityTypeName: "ContactTypeLookup", isScalar: true,
+						associationName: "ContactTypeLookup_ContactCard", foreignKeyNames: ["contactTypeId"]
+					},
+					createdBy: {
+						entityTypeName: "CareManager", isScalar: true,
+						associationName: "ContactCard_CreatedBy", foreignKeyNames: ["createdById"]
+					},
+					updatedBy: {
+						entityTypeName: "CareManager", isScalar: true,
+						associationName: "ContactCard_UpdatedBy", foreignKeyNames: ["updatedById"]
+					},
 		        }
 		    });
 
@@ -122,6 +155,30 @@ define(['services/session', 'services/validatorfactory', 'services/customvalidat
 		        }
 		    });
 
+			metadataStore.addEntityType({
+		        shortName: "ContactTypeLookup",
+		        namespace: "Nightingale",
+		        dataProperties: {
+		            id: { dataType: "String", isPartOfKey: true },
+					parentId: { dataType: "String" },
+		            name: { dataType: "String" },
+					role: { dataType: "String" },
+					group: { dataType: "String" }
+		        }
+		    });
+			
+			metadataStore.addEntityType({
+		        shortName: "ContactSubType",
+		        namespace: "Nightingale",
+		        isComplexType: true,
+		        dataProperties: {
+		            id: { dataType: "String"  },//, isPartOfKey: true
+					subTypeId:  { dataType: "String" },
+		            specialtyId: { dataType: "String" },
+		            subSpecialtyIds:  { complexTypeName: "Identifier:#Nightingale", isScalar: false }
+		        }
+		    });
+
 		    metadataStore.registerEntityTypeCtor(
 				'ContactCard', null, contactCardInitializer);
 		    metadataStore.registerEntityTypeCtor(
@@ -134,9 +191,57 @@ define(['services/session', 'services/validatorfactory', 'services/customvalidat
 				'Phone', null, phoneInitializer);
 		    metadataStore.registerEntityTypeCtor(
 				'Email', null, emailInitializer);
-
-		    function contactCardInitializer(contactCard) {
-		        contactCard.activeTab = ko.observable('general');
+			metadataStore.registerEntityTypeCtor(
+				'ContactSubType', null, contactSubTypeInitializer);
+			
+			function contactSubTypeInitializer(contactSubType) {
+				contactSubType.isNew = ko.observable(false);
+				contactSubType.subTypeName = ko.computed( function() {
+					var name = null;
+					var subTypeId = contactSubType.subTypeId();
+					if( subTypeId ){
+						var subType = datacontext.getContactTypeLookupById( subTypeId );
+						if( subType && subType.length ){
+							name = subType[0].name();
+						}
+					}
+					return name;
+				});
+				contactSubType.specialtyName = ko.computed( function() {
+					var name = null;
+					var specialtyId = contactSubType.specialtyId();
+					if( specialtyId ){
+						var specialty = datacontext.getContactTypeLookupById( specialtyId );
+						if( specialty && specialty.length ){
+							name = specialty[0].name();
+						}
+					}
+					return name;
+				});
+				contactSubType.subSpecialtyString = ko.computed(function(){
+					var name = null;
+					var subSpecialtyIds = contactSubType.subSpecialtyIds();
+					if( subSpecialtyIds.length ){
+						ko.utils.arrayForEach( subSpecialtyIds, function(sub){
+							var contactType = datacontext.getContactTypeLookupById( sub.id() );
+							if( contactType && contactType.length > 0 ){
+								if( name && name.length ){
+									name += ', ';
+								}
+								else{
+									name = '';
+								}
+								name += contactType[0].name();
+							}
+						});
+					}
+					return name;
+				});
+			}
+			
+		    function contactCardInitializer(contactCard) {				
+				contactCard.isNew = ko.observable(false);
+		        contactCard.activeTab = ko.observable('General');
 		        contactCard.prefCommMethods = ko.computed(function () {
 		            checkDataContext();
 		            var commModeString = '';
@@ -549,19 +654,65 @@ define(['services/session', 'services/validatorfactory', 'services/customvalidat
 		            return returnValue;
 		        });
 				
+				if( contactCard.isPatient() && contactCard.patient() ){
+					//sync dup properties from patient: (TBD - this may not be necessary later on)
+					if( !contactCard.firstName() ){
+						contactCard.firstName( contactCard.patient().firstName() );
+					}
+					if( !contactCard.lastName() ){
+						contactCard.lastName( contactCard.patient().lastName() );
+					}
+				}
+				
 				//validation:				
 				contactCard.phoneValidationErrors = ko.observableArray([]);								
+								
+				contactCard.profileValidationErrors = ko.observableArray([]);
+				contactCard.profileValidationErrorsArray = ko.computed(function () {
+			        var thisArray = [];
+			        ko.utils.arrayForEach(contactCard.profileValidationErrors(), function (error) {
+			            thisArray.push(error.PropName);
+			        });
+			        return thisArray;
+			    });
+				
+				contactCard.isDirty = ko.observable(false);
+                contactCard.clearDirty = function(){
+                    contactCard.isDirty(false);
+                };
+                contactCard.watchDirty = function () {
+                    var propToken = contactCard.entityAspect.propertyChanged.subscribe(function (newValue) {
+                        contactCard.isDirty(true);
+                        propToken.dispose();
+                    });
+                    var subTypesToken = contactCard.subTypes.subscribe(function (newValue) {
+                        contactCard.isDirty(true);
+                        subTypesToken.dispose();
+                    });
+                };
 				
 				/**
-				*	computed. tracks for any validation errors on all tabs of the contact card.
-				*	@method isValid 
+				*	validate the profile tab part of a contact card
+				*	@method hasProfileErrors
 				*/
-				contactCard.isValid = ko.computed(function(){
-										
-					//TODO: combine logic with other tabs errors										
-					return !hasPhoneErrors();											
-				});
-				
+				function hasProfileErrors(){
+					var profileErrors = [];
+					var errorsFound = false;
+					var firstName = contactCard.firstName();
+					var lastName = contactCard.lastName();
+					//var hasChanges = contactCard.isDirty();
+					var isPatient = contactCard.isPatient();
+					if( !firstName || !firstName.trim().length ){
+							profileErrors.push({ PropName: 'firstName', Message: "'First Name' is required"});							
+							errorsFound = true;
+					}
+					if( !lastName || !lastName.trim().length ){
+							profileErrors.push({ PropName: 'lastName', Message: "'Last Name' is required"});
+							errorsFound = true;
+					}
+					contactCard.profileValidationErrors(profileErrors);
+					return errorsFound;
+				}
 				/**
 				*	validates all phones in the contact card phones collection.					
 				*	@method hasPhoneErrors
@@ -589,6 +740,17 @@ define(['services/session', 'services/validatorfactory', 'services/customvalidat
 			        return thisArray;
 			    });
 				
+				/**
+				*	computed. tracks for any validation errors on all tabs of the contact card.
+				*	@method isValid 
+				*/
+				contactCard.isValid = ko.computed(function(){															
+					var profileErrors = hasProfileErrors();
+					var phoneErrors = hasPhoneErrors();
+					
+					return !phoneErrors && !profileErrors;											
+				});								
+								
 		        // Can the contact card save?  Fake validation goes here
 		        contactCard.canSave = ko.computed(function () {
 		            return contactCard.isValid();
