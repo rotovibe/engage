@@ -1033,13 +1033,34 @@ namespace Phytel.API.DataDomain.Patient
                     if (mc != null)
                     {
                         var uv = new List<MB.UpdateBuilder>();
-                        uv.Add(MB.Update.Set(MEPatient.FirstNameProperty, data.FirstName));
-                        uv.Add(MB.Update.Set(MEPatient.LastNameProperty, data.LastName));
-                        uv.Add(MB.Update.Set(MEPatient.MiddleNameProperty, data.MiddleName));
-                        uv.Add(MB.Update.Set(MEPatient.PreferredNameProperty, data.PreferredName));
-                        uv.Add(MB.Update.Set(MEPatient.GenderProperty, data.Gender));
-                        uv.Add(MB.Update.Set(MEPatient.SuffixProperty, data.Suffix));
-                        uv.Add(MB.Update.Set(MEPatient.PrefixProperty, data.Prefix));
+                        if(string.IsNullOrEmpty(data.FirstName))
+                            uv.Add(MB.Update.Set(MEPatient.FirstNameProperty, BsonNull.Value));
+                        else
+                            uv.Add(MB.Update.Set(MEPatient.FirstNameProperty, data.FirstName));
+                        if(string.IsNullOrEmpty(data.LastName))
+                            uv.Add(MB.Update.Set(MEPatient.LastNameProperty, BsonNull.Value));
+                        else 
+                            uv.Add(MB.Update.Set(MEPatient.LastNameProperty, data.LastName));
+                        if(string.IsNullOrEmpty(data.MiddleName))
+                            uv.Add(MB.Update.Set(MEPatient.MiddleNameProperty, BsonNull.Value));
+                        else 
+                            uv.Add(MB.Update.Set(MEPatient.MiddleNameProperty, data.MiddleName));
+                        if(string.IsNullOrEmpty(data.PreferredName))
+                            uv.Add(MB.Update.Set(MEPatient.PreferredNameProperty, BsonNull.Value));
+                        else 
+                            uv.Add(MB.Update.Set(MEPatient.PreferredNameProperty, data.PreferredName));
+                        if(string.IsNullOrEmpty(data.Gender))
+                            uv.Add(MB.Update.Set(MEPatient.GenderProperty, BsonNull.Value));
+                        else 
+                            uv.Add(MB.Update.Set(MEPatient.GenderProperty, data.Gender));
+                        if(string.IsNullOrEmpty(data.Suffix))
+                            uv.Add(MB.Update.Set(MEPatient.SuffixProperty, BsonNull.Value));
+                        else 
+                            uv.Add(MB.Update.Set(MEPatient.SuffixProperty, data.Suffix));
+                        if(string.IsNullOrEmpty(data.Prefix))
+                            uv.Add(MB.Update.Set(MEPatient.PrefixProperty, BsonNull.Value));
+                        else 
+                            uv.Add(MB.Update.Set(MEPatient.PrefixProperty, data.Prefix));
                         uv.Add(MB.Update.Set(MEPatient.DeceasedProperty, data.DeceasedId));
                         uv.Add(MB.Update.Set(MEPatient.StatusProperty, data.StatusId));
                         uv.Add(MB.Update.Set(MEPatient.LastUpdatedOnProperty, DateTime.UtcNow));

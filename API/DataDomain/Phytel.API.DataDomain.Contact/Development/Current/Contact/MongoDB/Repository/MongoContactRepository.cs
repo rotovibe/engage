@@ -279,17 +279,44 @@ namespace Phytel.API.DataDomain.Contact
                     if(mc != null)
                     {
                         var uv = new List<MB.UpdateBuilder>();
-                        uv.Add(MB.Update.Set(MEContact.FirstNameProperty, data.FirstName));
-                        uv.Add(MB.Update.Set(MEContact.LastNameProperty, data.LastName));
-                        uv.Add(MB.Update.Set(MEContact.MiddleNameProperty, data.MiddleName));
-                        uv.Add(MB.Update.Set(MEContact.PreferredNameProperty, data.PreferredName));
-                        uv.Add(MB.Update.Set(MEContact.GenderProperty, data.Gender));
-                        uv.Add(MB.Update.Set(MEContact.SuffixProperty, data.Suffix));
-                        uv.Add(MB.Update.Set(MEContact.PrefixProperty, data.Prefix));
+                        if(string.IsNullOrEmpty(data.FirstName))
+                            uv.Add(MB.Update.Set(MEContact.FirstNameProperty, BsonNull.Value));
+                        else
+                            uv.Add(MB.Update.Set(MEContact.FirstNameProperty, data.FirstName));
+                        if (string.IsNullOrEmpty(data.LastName))
+                            uv.Add(MB.Update.Set(MEContact.LastNameProperty, BsonNull.Value));
+                        else
+                            uv.Add(MB.Update.Set(MEContact.LastNameProperty, data.LastName));
+                        if(string.IsNullOrEmpty(data.MiddleName))
+                            uv.Add(MB.Update.Set(MEContact.MiddleNameProperty, BsonNull.Value));
+                        else
+                            uv.Add(MB.Update.Set(MEContact.MiddleNameProperty, data.MiddleName));
+                        if(string.IsNullOrEmpty(data.PreferredName))
+                            uv.Add(MB.Update.Set(MEContact.PreferredNameProperty, BsonNull.Value));
+                        else
+                            uv.Add(MB.Update.Set(MEContact.PreferredNameProperty, data.PreferredName));
+                        if(string.IsNullOrEmpty(data.Gender))
+                            uv.Add(MB.Update.Set(MEContact.GenderProperty, BsonNull.Value));
+                        else
+                            uv.Add(MB.Update.Set(MEContact.GenderProperty, data.Gender));
+                        if(string.IsNullOrEmpty(data.Suffix))
+                            uv.Add(MB.Update.Set(MEContact.SuffixProperty, BsonNull.Value));
+                        else
+                            uv.Add(MB.Update.Set(MEContact.SuffixProperty, data.Suffix));
+                        if(string.IsNullOrEmpty(data.Prefix))
+                            uv.Add(MB.Update.Set(MEContact.PrefixProperty, BsonNull.Value));
+                        else
+                            uv.Add(MB.Update.Set(MEContact.PrefixProperty, data.Prefix));
+                        if(string.IsNullOrEmpty(data.DataSource))
+                            uv.Add(MB.Update.Set(MEContact.DataSourceProperty, BsonNull.Value));
+                        else
+                            uv.Add(MB.Update.Set(MEContact.DataSourceProperty, data.DataSource));
+                        if(string.IsNullOrEmpty(data.ExternalRecordId))
+                            uv.Add(MB.Update.Set(MEContact.ExternalRecordIdProperty, BsonNull.Value));
+                        else
+                            uv.Add(MB.Update.Set(MEContact.ExternalRecordIdProperty, data.ExternalRecordId));
                         uv.Add(MB.Update.Set(MEContact.DeceasedProperty, data.DeceasedId));
                         uv.Add(MB.Update.Set(MEContact.StatusProperty, data.StatusId));
-                        uv.Add(MB.Update.Set(MEContact.DataSourceProperty, data.DataSource));
-                        uv.Add(MB.Update.Set(MEContact.ExternalRecordIdProperty, data.ExternalRecordId));
                         if (!string.IsNullOrEmpty(data.ContactTypeId))
                             uv.Add(MB.Update.Set(MEContact.ContactTypeIdProperty, ObjectId.Parse(data.ContactTypeId)));
                         uv.Add(MB.Update.SetWrapped<List<MEContactSubType>>(MEContact.ContactSubTypesProperty, BuildMEContactSubTypes(data.ContactSubTypesData)));
@@ -1097,13 +1124,34 @@ namespace Phytel.API.DataDomain.Contact
                     if (mc != null)
                     {
                         var uv = new List<MB.UpdateBuilder>();
-                        uv.Add(MB.Update.Set(MEContact.FirstNameProperty, data.FirstName));
-                        uv.Add(MB.Update.Set(MEContact.LastNameProperty, data.LastName));
-                        uv.Add(MB.Update.Set(MEContact.MiddleNameProperty, data.MiddleName));
-                        uv.Add(MB.Update.Set(MEContact.PreferredNameProperty, data.PreferredName));
-                        uv.Add(MB.Update.Set(MEContact.GenderProperty, data.Gender));
-                        uv.Add(MB.Update.Set(MEContact.SuffixProperty, data.Suffix));
-                        uv.Add(MB.Update.Set(MEContact.PrefixProperty, data.Prefix));
+                        if(string.IsNullOrEmpty(data.FirstName))
+                            uv.Add(MB.Update.Set(MEContact.FirstNameProperty, BsonNull.Value));
+                        else
+                            uv.Add(MB.Update.Set(MEContact.FirstNameProperty, data.FirstName));
+                        if(string.IsNullOrEmpty(data.LastName))
+                            uv.Add(MB.Update.Set(MEContact.LastNameProperty, BsonNull.Value));
+                        else
+                            uv.Add(MB.Update.Set(MEContact.LastNameProperty, data.LastName));
+                        if(string.IsNullOrEmpty(data.MiddleName))
+                            uv.Add(MB.Update.Set(MEContact.MiddleNameProperty, BsonNull.Value));
+                        else
+                            uv.Add(MB.Update.Set(MEContact.MiddleNameProperty, data.MiddleName));
+                        if(string.IsNullOrEmpty(data.PreferredName))
+                            uv.Add(MB.Update.Set(MEContact.PreferredNameProperty, BsonNull.Value));
+                        else
+                            uv.Add(MB.Update.Set(MEContact.PreferredNameProperty, data.PreferredName));
+                        if(string.IsNullOrEmpty(data.Gender))
+                            uv.Add(MB.Update.Set(MEContact.GenderProperty, BsonNull.Value));
+                        else
+                            uv.Add(MB.Update.Set(MEContact.GenderProperty, data.Gender));
+                        if(string.IsNullOrEmpty(data.Suffix))
+                            uv.Add(MB.Update.Set(MEContact.SuffixProperty, BsonNull.Value));
+                        else
+                            uv.Add(MB.Update.Set(MEContact.SuffixProperty, data.Suffix));
+                        if(string.IsNullOrEmpty(data.Prefix))
+                            uv.Add(MB.Update.Set(MEContact.PrefixProperty, BsonNull.Value));
+                        else
+                            uv.Add(MB.Update.Set(MEContact.PrefixProperty, data.Prefix));
                         uv.Add(MB.Update.Set(MEContact.DeceasedProperty, data.DeceasedId));
                         uv.Add(MB.Update.Set(MEContact.StatusProperty, data.StatusId));
                         uv.Add(MB.Update.Set(MEContact.LastUpdatedOnProperty, DateTime.UtcNow));
