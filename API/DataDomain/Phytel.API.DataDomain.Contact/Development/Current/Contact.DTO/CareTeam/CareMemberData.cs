@@ -6,6 +6,8 @@ namespace Phytel.API.DataDomain.Contact.DTO.CareTeam
     {
         public string Id { get; set; }
 
+        public string ContactId { get; set; }
+
         public string RoleId { get; set; }
         
         public string CustomRoleName { get; set; }
@@ -20,7 +22,7 @@ namespace Phytel.API.DataDomain.Contact.DTO.CareTeam
         
         public string Frequency { get; set; }
 
-        public int Distance { get; set; }
+        public int? Distance { get; set; }
         
         public string ExternalRecordId { get; set; }
 

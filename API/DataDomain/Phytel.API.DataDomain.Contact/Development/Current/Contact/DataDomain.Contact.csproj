@@ -92,6 +92,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CareTeam\CareTeamDataManager.cs" />
     <Compile Include="MongoDB\Repository\MongoCareTeamRepository.cs" />
     <Compile Include="CareTeam\CareTeamRepositoryFactory.cs" />
     <Compile Include="CareTeam\ICareTeamManager.cs" />

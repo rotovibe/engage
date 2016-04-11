@@ -92,6 +92,7 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CareTeamService.cs" />
     <Compile Include="ContactService.cs" />
     <Compile Include="ContactTypeLookUpService.cs" />
     <Compile Include="Global.asax.cs">

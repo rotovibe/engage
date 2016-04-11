@@ -11,6 +11,7 @@ namespace Phytel.API.DataDomain.Contact.MongoDB.DTO
 {
     [BsonIgnoreExtraElements()]
     [MongoIndex(Keys = new string[] { TTLDateProperty }, TimeToLive = 0)]
+    [MongoIndex(Keys = new string[] { ContactIdProperty }, TimeToLive = 0, Unique = true)]
     public class MEContactCareTeam : IMongoEntity<ObjectId>
     {
         public MEContactCareTeam(string userId, DateTime? createdOn)
@@ -44,9 +45,7 @@ namespace Phytel.API.DataDomain.Contact.MongoDB.DTO
         [BsonElement(LastUpdatedByProperty)]
         public ObjectId? UpdatedBy { get; set; }
 
-        [BsonElement(ActiveProperty)]
-        public bool Active { get; set; }
-
+        
         [BsonElement(DeleteFlagProperty)]
         [BsonDefaultValue(false)]
         public bool DeleteFlag { get; set; }

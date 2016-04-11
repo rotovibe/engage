@@ -8,7 +8,7 @@ namespace Phytel.API.DataDomain.Contact.MongoDB.DTO
     public class CareTeamMember : IMEDataSource
     {
 
-        public const string IDProperty = "_id";
+        public const string IDProperty = "memid";
         public const string ContactIdProperty = "cid";
         public const string RoleIdProperty = "rid";
         public const string CustomRoleNameProperty = "crnm";
@@ -28,7 +28,7 @@ namespace Phytel.API.DataDomain.Contact.MongoDB.DTO
         [BsonElement(ContactIdProperty)]
         public ObjectId ContactId { get; set; }
 
-        [BsonElement(ContactIdProperty)]
+        [BsonElement(RoleIdProperty)]
         public ObjectId RoleId { get; set; }
 
         [BsonElement(CustomRoleNameProperty)]
@@ -50,7 +50,7 @@ namespace Phytel.API.DataDomain.Contact.MongoDB.DTO
         public ObjectId? Frequency { get; set; }
 
         [BsonElement(DistanceProperty)]
-        public int Distance { get; set; }
+        public int? Distance { get; set; }
        
         [BsonElement(ExternalRecordIdProperty)]
         [BsonIgnoreIfNull(true)]
