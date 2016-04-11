@@ -1106,7 +1106,8 @@ namespace Phytel.API.DataDomain.Contact
                         uv.Add(MB.Update.Set(MEContact.PrefixProperty, data.Prefix));
                         uv.Add(MB.Update.Set(MEContact.DeceasedProperty, data.DeceasedId));
                         uv.Add(MB.Update.Set(MEContact.StatusProperty, data.StatusId));
-
+                        uv.Add(MB.Update.Set(MEContact.LastUpdatedOnProperty, DateTime.UtcNow));
+                        uv.Add(MB.Update.Set(MEContact.UpdatedByProperty, ObjectId.Parse(this.UserId)));
                    
 
                     var update = MB.Update.Combine(uv);

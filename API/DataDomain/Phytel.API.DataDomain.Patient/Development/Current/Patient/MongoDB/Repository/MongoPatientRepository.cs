@@ -1042,7 +1042,8 @@ namespace Phytel.API.DataDomain.Patient
                         uv.Add(MB.Update.Set(MEPatient.PrefixProperty, data.Prefix));
                         uv.Add(MB.Update.Set(MEPatient.DeceasedProperty, data.DeceasedId));
                         uv.Add(MB.Update.Set(MEPatient.StatusProperty, data.StatusId));
-
+                        uv.Add(MB.Update.Set(MEPatient.LastUpdatedOnProperty, DateTime.UtcNow));
+                        uv.Add(MB.Update.Set(MEPatient.UpdatedByProperty, ObjectId.Parse(this.UserId)));
 
 
                         var update = MB.Update.Combine(uv);
