@@ -178,11 +178,11 @@ a.disabled {
 #ui-datepicker-div {display: none;}
 
 #modal  {
-    nav.tabs { float: left; margin-left: 10px; margin-top: -10px; font-size: 14px; }
+    nav.tabs { float: left; padding-right: 0px; font-size: 14px; }
     nav.tabs li { display: -moz-inline-stack; display: inline-block; vertical-align: middle; *vertical-align: auto; zoom: 1; *display: inline; -webkit-transition: opacity 500ms; -moz-transition: opacity 500ms; -o-transition: opacity 500ms; transition: opacity 500ms; border-bottom: 5px solid transparent; border-top: 5px solid transparent; color: #0d4862; cursor: pointer; line-height: 38px;  opacity: 0.5; }
     nav.tabs li.active { border-bottom-color: #0d4862; opacity: 1; }
     nav.tabs li:not(.active):hover { opacity: 1; }
-    nav.tabs a { text-decoration: none !important; vertical-align: middle; }
+    nav.tabs a { text-decoration: none !important; vertical-align: middle; padding-left: 0px;}
     nav.tabs img { vertical-align: middle; }
     .body { min-height: 300px; overflow: auto; }
     .list-items > li { border-bottom: 1px solid gainsboro; padding: 5px 0; }

@@ -2664,7 +2664,7 @@ body:after {
 @media screen and (-webkit-min-device-pixel-ratio: 0) {
   @font-face {
     font-family: "fontcustom";
-    src: url('../../Fonts/fontcustom/fontcustomv1.svg#fontcustom') format("svg");
+    src: url("//az571236.vo.msecnd.net/fontcustom/fontcustomv1.svg#fontcustom") format("svg");
   }
 }
 [data-icon]:before {
@@ -3165,7 +3165,7 @@ header[role=navigation] a:hover {
 @media screen and (-webkit-min-device-pixel-ratio: 0) {
   @font-face {
     font-family: "fontcustom";
-    src: url('../../Fonts/fontcustom/fontcustomv1.svg#fontcustom') format("svg");
+    src: url("//az571236.vo.msecnd.net/fontcustom/fontcustomv1.svg#fontcustom") format("svg");
   }
 }
 [data-icon]:before {
@@ -8328,8 +8328,7 @@ a.disabled {
 
 #modal nav.tabs {
   float: left;
-  margin-left: 10px;
-  margin-top: -10px;
+  padding-right: 0px;
   font-size: 14px;
 }
 #modal nav.tabs li {
@@ -8360,6 +8359,7 @@ a.disabled {
 #modal nav.tabs a {
   text-decoration: none !important;
   vertical-align: middle;
+  padding-left: 0px;
 }
 #modal nav.tabs img {
   vertical-align: middle;

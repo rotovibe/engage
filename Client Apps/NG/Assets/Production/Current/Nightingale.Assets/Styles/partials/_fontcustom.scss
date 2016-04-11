@@ -18,7 +18,7 @@ $CDNPath : "//az571236.vo.msecnd.net/";
 @media screen and (-webkit-min-device-pixel-ratio:0) {
   @font-face {
     font-family: "fontcustom";
-    src: font-url("fontcustom/fontcustomv1.svg#fontcustom") format("svg");
+    src: url("#{$CDNPath}fontcustom/fontcustomv1.svg#fontcustom") format("svg");
   }
 }
 
