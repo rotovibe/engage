@@ -7,7 +7,7 @@ using Phytel.API.Interface;
 
 namespace Phytel.API.DataDomain.LookUp.DTO
 {
-    [BsonIgnoreExtraElements(false)]
+    [BsonIgnoreExtraElements(true)]
     [MongoIndex(Keys = new string[] { TTLDateProperty }, TimeToLive = 0)]
     [MongoIndex(Keys = new string[] { TypeProperty, DeleteFlagProperty }, Unique = true)]
     public class MELookup : IMongoEntity<ObjectId>, IMEEntity

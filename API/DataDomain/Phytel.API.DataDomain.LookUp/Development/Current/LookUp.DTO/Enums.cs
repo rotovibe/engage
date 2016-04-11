@@ -44,6 +44,7 @@ namespace Phytel.API.DataDomain.LookUp.DTO
         Disposition = 34,
         UtilizationLocation = 35,
         Reason = 36,
-        MaritalStatus = 37
+        MaritalStatus = 37,
+        CareTeamFrequency = 38
     }
 }
