@@ -196,7 +196,7 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        public PutPatientDetailsUpdateResponse PutPatientDetailsUpdate(PutPatientDetailsUpdateRequest request)
+        public PutPatientDetailsUpdateResponse UpsertPatient(PutPatientDetailsUpdateRequest request)
         {
             try
             {
@@ -248,46 +248,42 @@ namespace Phytel.API.AppDomain.NG
                     if (dataDomainResponse != null)
                     {
                         response.Id = dataDomainResponse.Id;
-                        if (dataDomainResponse.Outcome != null)
+                        if (dataDomainResponse.Outcome == null)
                         {
-                            response.Outcome = new DTO.Outcome { Result = dataDomainResponse.Outcome.Result, Reason = dataDomainResponse.Outcome.Reason};
-                        }
-                    }
-
-                    var contactRequest = new GetContactByPatientIdRequest
-                    {
-                        ContractNumber = request.ContractNumber,
-                        UserId = request.UserId,
-                        PatientID = request.Patient.Id,
-                        Version = 1.0
-                    };
-
-
-                    var contact = GetContactByPatientId(contactRequest);
-
-                    //Sync Contact 
-                    
-                       
-
-                        if (contact != null)
-                        {
-                            //Sync Contact 
-                            SyncContactByPatientData(contact.Id, data, request.Version, request.ContractNumber,
-                                request.UserId);
+                            // Proceed with syncing contacts only if there is no duplicate patient 
+                            var contact = GetContactByPatientId(new GetContactByPatientIdRequest
+                            {
+                                ContractNumber = request.ContractNumber,
+                                UserId = request.UserId,
+                                PatientID = request.Patient.Id,
+                                Version = 1.0
+                            });
+                            if (contact != null)
+                            {
+                                //Sync Contact 
+                                SyncContactByPatientData(contact.Id, data, request.Version, request.ContractNumber,
+                                    request.UserId);
+                            }
+                            else
+                            {
+                                InsertContactByPatient(request.Patient, request.ContractNumber, request.UserId, request.Version);
+                            }
                         }
                         else
                         {
-                            InsertContactByPatient(request.Patient, request.ContractNumber, request.UserId, request.Version);
+                            response.Outcome = new DTO.Outcome
+                            {
+                                Result = dataDomainResponse.Outcome.Result,
+                                Reason = dataDomainResponse.Outcome.Reason
+                            };
                         }
-                    
-                    
+                    }
                 }
-
                 return response;
             }
             catch (WebServiceException wse)
             {
-                throw new WebServiceException("AD:PutPatientDetailsUpdate()::" + wse.Message, wse.InnerException);
+                throw new WebServiceException("AD:UpsertPatient()::" + wse.Message, wse.InnerException);
             }
         }
 
@@ -1314,24 +1310,16 @@ namespace Phytel.API.AppDomain.NG
                     dataDomainResponse =
                         client.Get<GetContactByPatientIdDataResponse>(url);
 
-                if (dataDomainResponse != null)
+                if (dataDomainResponse != null && dataDomainResponse.Contact != null)
                 {
-                    if (dataDomainResponse.Contact == null)
-                    {
-                        // Insert a new contact for that patient
-                        contact = insertContactForPatient("NG", request.Version, request.ContractNumber, request.PatientID, request.UserId);
-                    }
-                    else
-                    {
-                        var mappedData = Mapper.Map<Contact>(dataDomainResponse.Contact);
-                        if (!string.IsNullOrEmpty(mappedData.PatientId))
-                            mappedData.IsPatient = true;
+                    var mappedData = Mapper.Map<Contact>(dataDomainResponse.Contact);
+                    if (!string.IsNullOrEmpty(mappedData.PatientId))
+                        mappedData.IsPatient = true;
 
-                        if (!string.IsNullOrEmpty(mappedData.UserId))
-                            mappedData.IsUser = true;
+                    if (!string.IsNullOrEmpty(mappedData.UserId))
+                        mappedData.IsUser = true;
                         
-                        contact = mappedData;
-                    }
+                    contact = mappedData;
                 }
             }
             catch (WebServiceException wse)
@@ -2031,6 +2019,15 @@ namespace Phytel.API.AppDomain.NG
             return response;
         }
 
+        /// <summary>
+        /// DEPRECATED - SHOULD NOT BE USED AFTER CONTACTS REFACTORING
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="version"></param>
+        /// <param name="contractNumber"></param>
+        /// <param name="patientId"></param>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         private Contact insertContactForPatient(string context, double version, string contractNumber, string patientId, string userId)
         {
 

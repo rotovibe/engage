@@ -308,7 +308,7 @@ namespace Phytel.API.AppDomain.NG.Service
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
-                    response = NGManager.PutPatientDetailsUpdate(request);
+                    response = NGManager.UpsertPatient(request);
                 }
                 else
                     throw new UnauthorizedAccessException();

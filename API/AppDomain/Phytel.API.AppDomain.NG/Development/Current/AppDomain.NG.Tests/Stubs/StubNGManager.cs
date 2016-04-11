@@ -170,7 +170,7 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
             throw new NotImplementedException();
         }
 
-        public DTO.PutPatientDetailsUpdateResponse PutPatientDetailsUpdate(DTO.PutPatientDetailsUpdateRequest request)
+        public DTO.PutPatientDetailsUpdateResponse UpsertPatient(DTO.PutPatientDetailsUpdateRequest request)
         {
             throw new NotImplementedException();
         }

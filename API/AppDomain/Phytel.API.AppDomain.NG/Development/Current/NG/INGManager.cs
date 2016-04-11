@@ -33,7 +33,7 @@ namespace Phytel.API.AppDomain.NG
         GetPatientSSNResponse GetPatientSSN(GetPatientSSNRequest request);
         List<IdNamePair> GetProblems(GetAllProblemsRequest request);
         PostPatientToProgramsResponse PostPatientToProgram(PostPatientToProgramsRequest request);
-        PutPatientDetailsUpdateResponse PutPatientDetailsUpdate(PutPatientDetailsUpdateRequest request);
+        PutPatientDetailsUpdateResponse UpsertPatient(PutPatientDetailsUpdateRequest request);
         PutPatientFlaggedUpdateResponse PutPatientFlaggedUpdate(PutPatientFlaggedUpdateRequest request);
         UpdateContactResponse PutUpdateContact(DTO.UpdateContactRequest request);
         PostDeletePatientResponse DeletePatient(PostDeletePatientRequest request);
