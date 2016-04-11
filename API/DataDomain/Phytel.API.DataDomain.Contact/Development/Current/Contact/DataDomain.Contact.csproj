@@ -92,9 +92,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MongoDB\Repository\MongoCareTeamRepository.cs" />
+    <Compile Include="CareTeam\CareTeamRepositoryFactory.cs" />
+    <Compile Include="CareTeam\ICareTeamManager.cs" />
+    <Compile Include="CareTeam\ICareTeamRepository.cs" />
+    <Compile Include="CareTeam\ICareTeamRepositoryFactory.cs" />
     <Compile Include="ContactTypeLookUp\ContactTypeLookUpManager.cs" />
     <Compile Include="ContactTypeLookUp\ContactTypeLookUpRepositoryFactory.cs" />
     <Compile Include="Container\ContactContainer.cs" />
+    <Compile Include="MongoDB\ContactCareTeamMongoContext.cs" />
     <Compile Include="MongoDB\ContactTypeLookUpMongoContext.cs" />
     <Compile Include="MongoDB\DTO\CareTeamMember.cs" />
     <Compile Include="MongoDB\DTO\MEContactCareTeam.cs" />

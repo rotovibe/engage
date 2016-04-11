@@ -4,12 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Phytel.API.DataDomain.Contact
+namespace Phytel.API.DataDomain.Contact.CareTeam
 {
-    public enum RepositoryType
+    public interface ICareTeamManager
     {
-        Contact,
-        ContactTypeLookUp,
-        CareTeam
+
     }
 }
