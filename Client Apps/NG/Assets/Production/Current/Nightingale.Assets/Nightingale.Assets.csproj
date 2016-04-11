@@ -400,6 +400,7 @@
     <Content Include="Styles\partials\_fonts.scss" />
     <Content Include="Styles\partials\_extras.scss" />
     <None Include="Styles\partials\_filters.scss" />
+    <Content Include="Styles\partials\_footer.scss" />
     <None Include="Styles\partials\_forms.scss" />
     <Content Include="Styles\partials\_fullcalendar.scss" />
     <None Include="Styles\partials\_graphs.scss" />
