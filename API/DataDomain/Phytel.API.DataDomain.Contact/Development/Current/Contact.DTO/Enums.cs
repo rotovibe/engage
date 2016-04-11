@@ -27,4 +27,11 @@
         StartsWith = 1,
         ExactMatch = 2
     }
+
+    public enum CareTeamMemberStatus
+    {
+        Active = 1,
+        InActive = 2,
+        InValid = 3
+    }
 }
