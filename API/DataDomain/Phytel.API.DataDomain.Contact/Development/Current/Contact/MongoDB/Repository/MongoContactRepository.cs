@@ -1530,17 +1530,20 @@ namespace Phytel.API.DataDomain.Contact
 
             if (!string.IsNullOrEmpty(request.FirstName))
             {
-                var firstNameQuery = Query<MEContact>.Matches(c => c.FirstName,
-                    new BsonRegularExpression(new Regex("^" + request.FirstName, RegexOptions.IgnoreCase)));
+                //var firstNameQuery = Query<MEContact>.Matches(c => c.FirstName,
+                //    new BsonRegularExpression(new Regex("^" + request.FirstName, RegexOptions.IgnoreCase)));
+                var firstNameQuery = BuildFirstNameFilterQuery(request.FirstName, request.FilterType);
 
                 mongoQuery.Add(firstNameQuery);
             }
 
             if (!string.IsNullOrEmpty(request.LastName))
             {
-                var lastNameQuery = Query<MEContact>.Matches(c => c.LastName,
-                    new BsonRegularExpression(new Regex("^" + request.LastName, RegexOptions.IgnoreCase)));
+                //var lastNameQuery = Query<MEContact>.Matches(c => c.LastName,
+                //    new BsonRegularExpression(new Regex("^" + request.LastName, RegexOptions.IgnoreCase)));
 
+                var lastNameQuery = BuildLastNameFilterQuery(request.LastName, request.FilterType);
+               
                 mongoQuery.Add(lastNameQuery);
             }
 
@@ -1560,6 +1563,72 @@ namespace Phytel.API.DataDomain.Contact
             return query;
 
 
+        }
+
+        private IMongoQuery BuildLastNameFilterQuery(string name, FilterType filterType)
+        {
+            IMongoQuery filterQuery = null;
+
+            switch (filterType)
+            {
+                case FilterType.ExactMatch:
+
+                    filterQuery = Query<MEContact>.Matches(c => c.LastName,new BsonRegularExpression("^" + name + "$", "i"));
+                    break;
+                case FilterType.StartsWith:
+
+                    filterQuery = Query<MEContact>.Matches(c => c.LastName,
+                               new BsonRegularExpression(new Regex("^" + name, RegexOptions.IgnoreCase)));
+                    break;
+                case FilterType.Contains:
+
+                    filterQuery = Query<MEContact>.Matches(c => c.FirstName,
+                               new BsonRegularExpression(new Regex(name, RegexOptions.IgnoreCase)));
+                    break;
+                default:
+                    //StartsWith 
+                    filterQuery = Query<MEContact>.Matches(c => c.LastName,
+                               new BsonRegularExpression(new Regex("^" + name, RegexOptions.IgnoreCase)));
+
+                    break;
+
+            }
+
+            return filterQuery;
+        }
+
+        private IMongoQuery BuildFirstNameFilterQuery(string name, FilterType filterType)
+        {
+            IMongoQuery filterQuery = null; 
+
+            switch (filterType)
+            {
+                case FilterType.ExactMatch:
+
+                    filterQuery = Query<MEContact>.Matches(c => c.FirstName,
+                        new BsonRegularExpression("^" + name + "$", "i"));
+
+                    break;
+                case FilterType.StartsWith:
+
+                    filterQuery = Query<MEContact>.Matches(c => c.FirstName,
+                               new BsonRegularExpression(new Regex("^" + name, RegexOptions.IgnoreCase)));
+                    break;
+                case FilterType.Contains:
+
+                    filterQuery = Query<MEContact>.Matches(c => c.FirstName,
+                               new BsonRegularExpression(new Regex( name, RegexOptions.IgnoreCase)));
+                    break;
+                default:
+                    //starts with 
+                    filterQuery = Query<MEContact>.Matches(c => c.FirstName,
+                               new BsonRegularExpression(new Regex("^" + name, RegexOptions.IgnoreCase)));
+
+                    break;
+
+            }
+
+            return filterQuery;
         }
          
         #endregion
