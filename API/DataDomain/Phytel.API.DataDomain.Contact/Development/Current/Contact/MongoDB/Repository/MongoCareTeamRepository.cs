@@ -9,6 +9,7 @@ using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
 using MongoDB.Driver.Builders;
 using Phytel.API.Common.Audit;
+using Phytel.API.DataDomain.Contact.DTO;
 using Phytel.API.DataDomain.Contact.DTO.CareTeam;
 using Phytel.API.DataDomain.Contact.MongoDB;
 using Phytel.API.DataDomain.Contact.MongoDB.DTO;
@@ -76,6 +77,7 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
                             };
 
                             ctx.CareTeam.Collection.Save(meCareTeam);
+                            // TODO: Audit the insert
                             response = meCareTeam.Id.ToString();
                         }
                         else
@@ -86,6 +88,7 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
                             contactCareTeam.LastUpdatedOn = DateTime.UtcNow;
 
                             ctx.CareTeam.Collection.Save(contactCareTeam);
+                            //TODO: Audit the update
                             response = contactCareTeam.Id.ToString();
                         }
                     }
@@ -142,6 +145,46 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
         public void UndoDelete(object entity)
         {
             throw new NotImplementedException();
+        }
+
+        public object GetCareTeamByContactId(string contactId)
+        {
+            CareTeamData careTeam = null;
+            using (var ctx = new ContactCareTeamMongoContext(_dbName))
+            {
+                var queries = new List<IMongoQuery>
+                {
+                    Query<MEContactCareTeam>.EQ(c => c.ContactId, ObjectId.Parse(contactId)),
+                    Query<MEContactCareTeam>.EQ(c => c.DeleteFlag, false)
+                };
+
+                var query = Query.And(queries);
+                var meCareTeam = ctx.CareTeam.Collection.FindOne(query);
+                if (meCareTeam != null)
+                {
+                    careTeam = BuildCareTeamData(meCareTeam);
+                }
+            }
+            return careTeam;
+        }
+
+        private CareTeamData BuildCareTeamData(MEContactCareTeam meCareTeam)
+        {
+            CareTeamData team = null;
+            if (meCareTeam != null)
+            {
+                team = new CareTeamData
+                {
+                    Id = meCareTeam.Id.ToString(),
+                    ContactId = meCareTeam.ContactId.ToString(),
+                    Members = BuildCareTeamMembers(meCareTeam.MeCareTeamMembers),
+                    CreatedOn = meCareTeam.RecordCreatedOn,
+                    CreatedById = meCareTeam.RecordCreatedBy.ToString(),
+                    UpdatedById = meCareTeam.UpdatedBy == null ? null : meCareTeam.UpdatedBy.ToString(),
+                    UpdatedOn = meCareTeam.LastUpdatedOn
+                };
+            }
+            return team;
         }
 
         private List<MECareTeamMember> BuildMECareTeamMembers(List<CareMemberData> members, string userId)

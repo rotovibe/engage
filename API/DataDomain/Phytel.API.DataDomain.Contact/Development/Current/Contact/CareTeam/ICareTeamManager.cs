@@ -6,5 +6,6 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
     public interface ICareTeamManager
     {
         SaveCareTeamDataResponse InsertCareTeam(SaveCareTeamDataRequest request);
+        GetCareTeamDataResponse GetCareTeam(GetCareTeamDataRequest request);
     }
 }

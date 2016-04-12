@@ -76,6 +76,7 @@ namespace Phytel.API.Common
         PatientMedSupp,
         MedicationMap,
         PatientMedFrequency,
-        PatientUtilization
+        PatientUtilization,
+        CareTeam
     }
 }

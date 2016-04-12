@@ -37,5 +37,22 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
 
             return response;
         }
+        
+        public GetCareTeamDataResponse GetCareTeam(GetCareTeamDataRequest request)
+        {
+            var response = new GetCareTeamDataResponse();
+
+            if(request == null)
+                throw new ArgumentNullException("request");
+            if (string.IsNullOrEmpty(request.ContactId))
+                throw new ArgumentNullException("ContactId");
+
+            var repo = _factory.GetCareTeamRepository(request, RepositoryType.CareTeam);
+            if(repo == null)
+                throw new Exception("Repository is null");
+
+           response.CareTeamData = (CareTeamData)repo.GetCareTeamByContactId(request.ContactId);
+           return response;
+        }
     }
 }
