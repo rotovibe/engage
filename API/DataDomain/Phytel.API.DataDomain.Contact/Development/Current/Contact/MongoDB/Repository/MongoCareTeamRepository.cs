@@ -150,7 +150,19 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
 
             foreach (var member in members)
             {
-                var meMember = new MECareTeamMember
+                var meMember = BuildCareTeamMember(userId, member);
+                result.Add(meMember);
+            }
+
+            return result;
+        }
+
+        private MECareTeamMember BuildCareTeamMember(string userId, CareMemberData member)
+        {
+            MECareTeamMember meMember = null;
+            if (member != null)
+            {
+                meMember = new MECareTeamMember
                 {
                     Id = string.IsNullOrEmpty(member.Id) ? ObjectId.GenerateNewId() : ObjectId.Parse(member.Id),
                     ContactId = ObjectId.Parse(member.ContactId),
@@ -159,13 +171,13 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
                     CustomRoleName = member.CustomRoleName,
                     StartDate = member.StartDate,
                     EndDate = member.EndDate,
-                    Frequency = string.IsNullOrEmpty(member.Frequency) ? ObjectId.Empty : ObjectId.Parse(member.Frequency),
+                    Frequency =
+                        string.IsNullOrEmpty(member.Frequency) ? ObjectId.Empty : ObjectId.Parse(member.Frequency),
                     Distance = member.Distance ?? member.Distance,
                     ExternalRecordId = member.ExternalRecordId,
                     Notes = member.Notes,
                     DataSource = member.DataSource
                 };
-
                 if (string.IsNullOrEmpty(member.Id))
                 {
                     //it is an insert
@@ -178,19 +190,29 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
                     meMember.UpdatedBy = ObjectId.Parse(userId);
                     meMember.LastUpdatedOn = DateTime.UtcNow;
                 }
+            }
+            return meMember;
+        }
+
+        private List<CareMemberData> BuildMECareTeamMembers(List<MECareTeamMember> members)
+        {
+            var result = new List<CareMemberData>();
+
+            foreach (var member in members)
+            {
+                var meMember = BuildMECareTeamMember(member);
                 result.Add(meMember);
             }
 
             return result;
         }
 
-        private List<CareMemberData> BuildMECareTeamMemberData(List<MECareTeamMember> members)
+        private CareMemberData BuildMECareTeamMember(MECareTeamMember member)
         {
-            var result = new List<CareMemberData>();
-
-            foreach (var member in members)
+            CareMemberData meMember = null;
+            if (member != null)
             {
-                var meMember = new CareMemberData
+                meMember = new CareMemberData
                 {
                     Id = member.ToString(),
                     ContactId = member.ContactId.ToString(),
@@ -209,11 +231,8 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
                     UpdatedById = member.UpdatedBy == null ? null : member.UpdatedBy.ToString(),
                     UpdatedOn = member.LastUpdatedOn
                 };
-
-                result.Add(meMember);
             }
-
-            return result;
-        } 
+            return meMember;
+        }
     }
 }
