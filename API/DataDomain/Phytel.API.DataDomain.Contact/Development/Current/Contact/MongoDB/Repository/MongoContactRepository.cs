@@ -1582,7 +1582,7 @@ namespace Phytel.API.DataDomain.Contact
                     break;
                 case FilterType.Contains:
 
-                    filterQuery = Query<MEContact>.Matches(c => c.FirstName,
+                    filterQuery = Query<MEContact>.Matches(c => c.LastName,
                                new BsonRegularExpression(new Regex(name, RegexOptions.IgnoreCase)));
                     break;
                 default:
