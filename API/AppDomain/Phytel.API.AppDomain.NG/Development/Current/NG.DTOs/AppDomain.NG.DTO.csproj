@@ -114,6 +114,10 @@
     <Compile Include="Allergy\PostAllergyRequest.cs" />
     <Compile Include="Allergy\PostAllergyResponse.cs" />
     <Compile Include="Allergy\PostPatientAllergiesResponse.cs" />
+    <Compile Include="Contact\CareTeam\Member.cs" />
+    <Compile Include="Contact\CareTeam\CareTeam.cs" />
+    <Compile Include="Contact\CareTeam\GetCareTeamRequest.cs" />
+    <Compile Include="Contact\CareTeam\GetCareTeamResponse.cs" />
     <Compile Include="Contact\Contact.cs" />
     <Compile Include="Contact\ContactSearchInfo.cs" />
     <Compile Include="Contact\ContactTypeLookup.cs" />
@@ -385,9 +389,7 @@
       <Name>Phytel.API.Interface</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Contact\CareTeam\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
