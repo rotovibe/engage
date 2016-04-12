@@ -150,14 +150,14 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
 
             foreach (var member in members)
             {
-                var meMember = BuildCareTeamMember(userId, member);
+                var meMember = BuildMECareTeamMember(userId, member);
                 result.Add(meMember);
             }
 
             return result;
         }
 
-        private MECareTeamMember BuildCareTeamMember(string userId, CareMemberData member)
+        private MECareTeamMember BuildMECareTeamMember(string userId, CareMemberData member)
         {
             MECareTeamMember meMember = null;
             if (member != null)
@@ -194,20 +194,20 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
             return meMember;
         }
 
-        private List<CareMemberData> BuildMECareTeamMembers(List<MECareTeamMember> members)
+        private List<CareMemberData> BuildCareTeamMembers(List<MECareTeamMember> members)
         {
             var result = new List<CareMemberData>();
 
             foreach (var member in members)
             {
-                var meMember = BuildMECareTeamMember(member);
+                var meMember = BuildCareTeamMember(member);
                 result.Add(meMember);
             }
 
             return result;
         }
 
-        private CareMemberData BuildMECareTeamMember(MECareTeamMember member)
+        private CareMemberData BuildCareTeamMember(MECareTeamMember member)
         {
             CareMemberData meMember = null;
             if (member != null)
