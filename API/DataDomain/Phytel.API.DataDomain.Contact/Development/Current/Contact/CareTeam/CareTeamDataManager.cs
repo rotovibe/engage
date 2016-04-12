@@ -20,9 +20,9 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
             _factory = factory;
         }
 
-        public InsertCareTeamDataResponse InsertCareTeam(InsertCareTeamDataRequest request)
+        public SaveCareTeamDataResponse InsertCareTeam(SaveCareTeamDataRequest request)
         {
-            var response = new InsertCareTeamDataResponse();
+            var response = new SaveCareTeamDataResponse();
 
             if(request == null)
                 throw new ArgumentNullException("request");

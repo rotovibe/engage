@@ -102,9 +102,9 @@
     <Compile Include="CareTeam\CareMemberData.cs" />
     <Compile Include="CareTeam\CareTeamData.cs" />
     <Compile Include="CareTeam\GetCareTeamDataRequest.cs" />
-    <Compile Include="CareTeam\InsertCareTeamDataRequest.cs" />
+    <Compile Include="CareTeam\SaveCareTeamDataRequest.cs" />
     <Compile Include="CareTeam\GetCareTeamDataResponse.cs" />
-    <Compile Include="CareTeam\InsertCareTeamDataResponse.cs" />
+    <Compile Include="CareTeam\SaveCareTeamDataResponse.cs" />
     <Compile Include="CommModeData.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="ContactData.cs" />

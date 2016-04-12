@@ -8,7 +8,7 @@ using ServiceStack.ServiceInterface.ServiceModel;
 
 namespace Phytel.API.DataDomain.Contact.DTO.CareTeam
 {
-    public class InsertCareTeamDataResponse : IDomainResponse
+    public class SaveCareTeamDataResponse : IDomainResponse
     {
         public double Version { get; set; }
 

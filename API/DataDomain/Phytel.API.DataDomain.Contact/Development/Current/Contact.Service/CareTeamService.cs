@@ -16,9 +16,9 @@ namespace Phytel.API.DataDomain.Contact.Service
         public IHelpers Helpers { get; set; }
         public ICommonFormatterUtil CommonFormat { get; set; }
 
-        public InsertCareTeamDataResponse Post(InsertCareTeamDataRequest request)
+        public SaveCareTeamDataResponse Post(SaveCareTeamDataRequest request)
         {
-            var response = new InsertCareTeamDataResponse() { Version = request.Version };
+            var response = new SaveCareTeamDataResponse() { Version = request.Version };
             try
             {
                 if (string.IsNullOrEmpty(request.UserId))

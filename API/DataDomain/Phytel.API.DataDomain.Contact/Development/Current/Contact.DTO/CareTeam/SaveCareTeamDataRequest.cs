@@ -5,7 +5,7 @@ namespace Phytel.API.DataDomain.Contact.DTO.CareTeam
 {
     [Api(Description = "A Request object to insert a CareTeam for a contact")]
     [Route("/{Context}/{Version}/{ContractNumber}/Contacts/{ContactId}/CareTeams", "POST")]
-    public class InsertCareTeamDataRequest : IDataDomainRequest
+    public class SaveCareTeamDataRequest : IDataDomainRequest
     {
         [ApiMember(Name = "ContactData", Description = "ContactData to be inserted.", ParameterType = "body", DataType = "string", IsRequired = true)]
         public CareTeamData CareTeamData { get; set; }
