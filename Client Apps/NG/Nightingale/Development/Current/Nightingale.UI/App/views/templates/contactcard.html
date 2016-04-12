@@ -34,12 +34,12 @@
 					</li>
 				</ul>
 			</div>
-            <div class="row" data-bind="visible: $parent.isDuplicate">
-				<!-- <span class="errorheader" style="margin-top: 10px; border: 1px solid; background: #fbcbc7; color: #871409; display: block; font-size: 11px; padding: 5px;">
+            <div class="row" data-bind="visible: isDuplicate">
+				<span class="errorheader" style="margin-top: 10px; border: 1px solid; background: #fbcbc7; color: #871409; display: block; font-size: 11px; padding: 5px;">
 				<a href="#">
 					<i class="icon-warning red"></i>
-				</a>An  -->individual with the same first name, last name and date of birth already exists. Do you want to continue and create this individual? <button class="btn small color" data-bind="click: $parent.forceSave">Proceed and Create</button></span>
-			</div>			  
+				</a>A contact already exists with the same name. Do you want to continue and create? <button class="btn small color" data-bind="click: $parent.forceSave">Proceed and Create</button></span>
+			</div>
 			<div class="row">
 				<label class="span2">
 					<span>Prefix</span>

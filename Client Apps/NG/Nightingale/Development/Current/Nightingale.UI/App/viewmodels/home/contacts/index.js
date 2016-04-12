@@ -10,26 +10,16 @@ define(['services/session', 'services/datacontext', 'viewmodels/shell/shell', 'm
 		var theContact = ko.observable();				
 		
 		function saveOverride () {
-			if( theContact().isNew() ){				
-				if (localCollections.contacts.indexOf( theContact() ) < 0) {
-					localCollections.contacts.push( theContact() );					
-				}
-				//this is temporary: TODO: save it
-				cancelOverride();
-			}
-			else{
-				theContact().saveChanges();
-				theContact().clearDirty();
-			}
 			
-            // function saveCompleted(contact) {
-				// datacontext.detachEntity(theContact());	//TODO: this is temporary !!
-				// console.log('add contact save completed (dummy)');
-                // // contact.isNew(false);
-                // // localCollections.contacts.push(theContact());
-				// //var dummy = myToDos().length;
-				// //contact.clearDirty();
-            // }
+			theContact().saveChanges().then( saveCompleted );
+			theContact().clearDirty();
+	
+			
+            function saveCompleted(contact) {
+                contact.isNew(false);
+                localCollections.contacts.push(theContact());				
+				contact.clearDirty();
+            }
         };
 		
         function cancelOverride () {
@@ -59,7 +49,7 @@ define(['services/session', 'services/datacontext', 'viewmodels/shell/shell', 'm
                 read: function () {
                     var contactok = false;
                     if (self.contactCard()) {                        
-						contactok = self.contactCard().isValid();
+						contactok = self.contactCard().isValid() && !self.contactCard().isDuplicate() && self.contactCard().isDuplicateTested();
                     }
                     return contactok && self.canSaveObservable();
                 },

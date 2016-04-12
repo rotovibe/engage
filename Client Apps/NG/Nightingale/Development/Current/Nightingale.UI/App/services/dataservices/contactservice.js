@@ -15,6 +15,7 @@
         // Create an object to use to reveal functions from this module
         var contactService = {
             saveContactCard: saveContactCard,
+			getContacts: getContacts,
             cancelAllChangesToContactCard: cancelAllChangesToContactCard
         };
         return contactService;
@@ -88,6 +89,53 @@
 			}
         }
 
+		function getContacts( manager, observable, params, observableTotalCount ){
+			
+			// If there is no manager, we can't query using breeze
+            if (!manager) { throw new Error("[manager] cannot be a null parameter"); }
+
+            // Check if the datacontext is available, if so require it
+            checkDataContext();
+						
+			var payload = {
+				ContactTypeIds: params.contactTypeIds,
+				ContactSubTypeIds: params.contactSubTypeIds,
+				FirstName: params.firstName,
+				LastName: params.lastName,
+				Take: params.take,
+				Skip: params.skip
+			};
+			
+			endPoint = new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'SearchContacts?FilterType=ExactMatch', 'ContactCard');
+			payload = JSON.stringify(payload);
+                
+			// Query to post the results
+			var query = breeze.EntityQuery
+				.from(endPoint.ResourcePath)
+				.withParameters({
+					$method: 'POST',
+					$encoding: 'JSON',
+					$data: payload
+				});//.toType('ContactCard');
+
+            return manager.executeQuery(query).then(searchSucceeded).fail(saveFailed);	
+			
+			function searchSucceeded(data) {                
+				var s = data.results;
+				if(observableTotalCount){					
+					var count = data.httpResponse.data.TotalCount;					
+					if( count != undefined ){
+						observableTotalCount(count);						
+					}					
+				}
+                if (observable) {
+                    return observable(s);
+                } else {
+                    return s;
+                }
+            }
+		}
+		
         function saveFailed(error) {
             checkDataContext();
             console.log('Error - ', error);            

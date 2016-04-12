@@ -240,7 +240,7 @@ define(['services/session', 'services/validatorfactory', 'services/customvalidat
 			}
 			
 		    function contactCardInitializer(contactCard) {				
-				contactCard.isNew = ko.observable(false);
+				contactCard.isNew = ko.observable(false);				
 		        contactCard.activeTab = ko.observable('General');
 		        contactCard.prefCommMethods = ko.computed(function () {
 		            checkDataContext();
@@ -740,15 +740,17 @@ define(['services/session', 'services/validatorfactory', 'services/customvalidat
 			        return thisArray;
 			    });
 				
+				contactCard.isDuplicate = ko.observable(false);
+				contactCard.isDuplicateTested = ko.observable(true);
+				
 				/**
 				*	computed. tracks for any validation errors on all tabs of the contact card.
 				*	@method isValid 
 				*/
 				contactCard.isValid = ko.computed(function(){															
 					var profileErrors = hasProfileErrors();
-					var phoneErrors = hasPhoneErrors();
-					
-					return !phoneErrors && !profileErrors;											
+					var phoneErrors = hasPhoneErrors();					
+					return !phoneErrors && !profileErrors;
 				});								
 								
 		        // Can the contact card save?  Fake validation goes here
@@ -759,7 +761,7 @@ define(['services/session', 'services/validatorfactory', 'services/customvalidat
 		        contactCard.saveChanges = function () {
 		            checkDataContext();
 		            // Go save the entity, pass in which parameters should be different
-		            datacontext.saveContactCard(contactCard);
+		            return datacontext.saveContactCard(contactCard);
 		        }
 		        // Method on the modal to cancel changes to the patient
 		        contactCard.cancelChanges = function () {

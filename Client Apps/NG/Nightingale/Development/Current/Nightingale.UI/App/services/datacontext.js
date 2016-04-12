@@ -250,6 +250,7 @@
 			getContactTypeLookupById: getContactTypeLookupById,
 			saveContactCard: saveContactCard,
 			cancelAllChangesToContactCard: cancelAllChangesToContactCard,
+			getContacts: getContacts,
 			cancelEntityChanges: cancelEntityChanges,
 			getAllChanges: getAllChanges,
 			searchForEntities: searchForEntities,
@@ -1035,18 +1036,18 @@
 				// contactCard.updatedById( session.currentUser().userId() );
 			// }
 			var serializedContactCard;
-			setTimeout(function () {
+			//setTimeout(function () {
 				serializedContactCard = entitySerializer.serializeContactCard(contactCard, manager);
-			}, 50);
+			//}, 50);
 			
 			function saveCompleted (data) {
 				// If data was returned and has a property called success that is true,
 				if (data) {
 					if( isInsert && data.Id ){
 						contactCard.id( data.Id );
-						contactCard.isNew(false);
-						contactCard.createdById( data.CreatedById );
-						contactCard.createdOn( data.CreatedOn );						
+						contactCard.isNew(false);						
+						contactCard.createdById( session.currentUser().userId() );//data.CreatedById is not returned
+						contactCard.createdOn( new Date() ); //data.CreatedOn is not returned
 					}
 					else{
 						contactCard.updatedById( data.UpdatedById );
@@ -1107,11 +1108,26 @@
 					queryCompleted(message);
 				}
 			}
-			setTimeout(function () {
+			//setTimeout(function () {
 				return contactService.saveContactCard(manager, serializedContactCard, isInsert).then(saveCompleted);
-			}, 50);
+			//}, 50);			
+		}
+		
+		function getContacts( observable, params, observableTotalCount ){
+			var message = queryStarted('Contacts', true, 'Loading');			
+			return contactService.getContacts(manager, observable, params, observableTotalCount).then(contactsReturned);
 
-			
+			function contactsReturned(contacts) {
+				// Finally, clear out the message
+				queryCompleted(message);
+				return contacts;
+				// ko.utils.arrayForEach(contacts, function (contact) {
+					// if (localCollections.contacts.indexOf(contact) === -1) {
+						// // Add it in
+						// localCollections.contacts.push(contact);
+					// }
+				// });				
+			}
 		}
 
 		// Save changes to a single contact card
