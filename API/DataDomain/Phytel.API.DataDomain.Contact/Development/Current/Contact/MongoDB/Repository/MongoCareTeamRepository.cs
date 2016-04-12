@@ -71,7 +71,7 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
                             {
 
                                 ContactId = ObjectId.Parse(data.ContactId),
-                                Members = BuildMECareTeamMembers(data.Members),
+                                MeCareTeamMembers = BuildMECareTeamMembers(data.Members, this.UserId),
                                 DeleteFlag = false
                             };
 
@@ -81,7 +81,7 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
                         else
                         {
                             //Update
-                            contactCareTeam.Members = BuildMECareTeamMembers(data.Members);
+                            contactCareTeam.MeCareTeamMembers = BuildMECareTeamMembers(data.Members, this.UserId);
                             contactCareTeam.UpdatedBy = ObjectId.Parse(this.UserId);
                             contactCareTeam.LastUpdatedOn = DateTime.UtcNow;
 
@@ -144,13 +144,13 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
             throw new NotImplementedException();
         }
 
-        private List<CareTeamMember> BuildMECareTeamMembers(List<CareMemberData> members)
+        private List<MECareTeamMember> BuildMECareTeamMembers(List<CareMemberData> members, string userId)
         {
-            var result = new List<CareTeamMember>();
+            var result = new List<MECareTeamMember>();
 
             foreach (var member in members)
             {
-                var meMember = new CareTeamMember
+                var meMember = new MECareTeamMember
                 {
                     Id = string.IsNullOrEmpty(member.Id) ? ObjectId.GenerateNewId() : ObjectId.Parse(member.Id),
                     ContactId = ObjectId.Parse(member.ContactId),
@@ -159,21 +159,32 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
                     CustomRoleName = member.CustomRoleName,
                     StartDate = member.StartDate,
                     EndDate = member.EndDate,
-                    Frequency =
-                        string.IsNullOrEmpty(member.Frequency) ? ObjectId.Empty : ObjectId.Parse(member.Frequency),
+                    Frequency = string.IsNullOrEmpty(member.Frequency) ? ObjectId.Empty : ObjectId.Parse(member.Frequency),
                     Distance = member.Distance ?? member.Distance,
                     ExternalRecordId = member.ExternalRecordId,
                     Notes = member.Notes,
                     DataSource = member.DataSource
                 };
 
+                if (string.IsNullOrEmpty(member.Id))
+                {
+                    //it is an insert
+                    meMember.RecordCreatedBy = ObjectId.Parse(userId);
+                    meMember.RecordCreatedOn = DateTime.UtcNow;
+                }
+                else
+                {
+                    //it is an update
+                    meMember.UpdatedBy = ObjectId.Parse(userId);
+                    meMember.LastUpdatedOn = DateTime.UtcNow;
+                }
                 result.Add(meMember);
             }
 
             return result;
         }
 
-        private List<CareMemberData> BuildMECareTeamMemberData(List<CareTeamMember> members)
+        private List<CareMemberData> BuildMECareTeamMemberData(List<MECareTeamMember> members)
         {
             var result = new List<CareMemberData>();
 
@@ -192,7 +203,11 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
                     Distance = member.Distance ?? member.Distance,
                     ExternalRecordId = member.ExternalRecordId,
                     Notes = member.Notes,
-                    DataSource = member.DataSource
+                    DataSource = member.DataSource,
+                    CreatedOn = member.RecordCreatedOn,
+                    CreatedById = member.RecordCreatedBy.ToString(),
+                    UpdatedById = member.UpdatedBy == null ? null : member.UpdatedBy.ToString(),
+                    UpdatedOn = member.LastUpdatedOn
                 };
 
                 result.Add(meMember);

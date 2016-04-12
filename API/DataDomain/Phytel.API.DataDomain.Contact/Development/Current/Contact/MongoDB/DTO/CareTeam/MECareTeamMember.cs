@@ -2,13 +2,15 @@
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using Phytel.API.Interface;
+using Phytel.Services.Mongo.Linq;
 
 namespace Phytel.API.DataDomain.Contact.MongoDB.DTO
 {
-    public class CareTeamMember : IMEDataSource
+
+    public class MECareTeamMember : IMEDataSource
     {
 
-        public const string IDProperty = "memid";
+        public const string IdProperty = "_id";
         public const string ContactIdProperty = "cid";
         public const string RoleIdProperty = "rid";
         public const string CustomRoleNameProperty = "crnm";
@@ -21,8 +23,12 @@ namespace Phytel.API.DataDomain.Contact.MongoDB.DTO
         public const string DistanceProperty = "dist";
         public const string ExternalRecordIdProperty = "extrid";
         public const string DataSourceProperty = "dsrc";
+        public const string LastUpdatedOnProperty = "uon";
+        public const string LastUpdatedByProperty = "uby";
+        public const string RecordCreatedByProperty = "rcby";
+        public const string RecordCreatedOnProperty = "rcon";
 
-        [BsonElement(IDProperty)]
+        [BsonElement(IdProperty)]
         public ObjectId Id { get; set; }
 
         [BsonElement(ContactIdProperty)]
@@ -59,5 +65,22 @@ namespace Phytel.API.DataDomain.Contact.MongoDB.DTO
         [BsonElement(DataSourceProperty)]
         [BsonIgnoreIfNull(true)]
         public string DataSource { get; set; }
+
+        [BsonIgnoreIfNull(true)]
+        [BsonElement(RecordCreatedByProperty)]
+        public ObjectId RecordCreatedBy { get; set; }
+
+        [BsonIgnoreIfNull(true)]
+        [BsonElement(RecordCreatedOnProperty)]
+        [BsonDateTimeOptions(Kind = System.DateTimeKind.Utc)]
+        public DateTime RecordCreatedOn { get; set; }
+
+        [BsonElement(LastUpdatedByProperty)]
+        public ObjectId? UpdatedBy { get; set; }
+
+        [BsonElement(LastUpdatedOnProperty)]
+        [BsonIgnoreIfNull(true)]
+        [BsonDateTimeOptions(Kind = System.DateTimeKind.Utc)]
+        public DateTime? LastUpdatedOn { get; set; }
     }
 }

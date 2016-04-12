@@ -33,7 +33,7 @@ namespace Phytel.API.DataDomain.Contact.MongoDB.DTO
 
         [BsonElement(MembersProperty)]
         [BsonIgnoreIfNull(true)]
-        public List<CareTeamMember> Members { get; set; }
+        public List<MECareTeamMember> MeCareTeamMembers { get; set; }
 
         [BsonExtraElements]
         public BsonDocument ExtraElements { get; set; }
