@@ -24,8 +24,9 @@
 
     public enum FilterType
     {
-        StartsWith = 1,
-        ExactMatch = 2
+        StartsWith = 0,
+        ExactMatch = 1,
+        Contains = 2
     }
 
     public enum CareTeamMemberStatus

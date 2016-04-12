@@ -1675,7 +1675,7 @@ namespace Phytel.API.AppDomain.NG
                         ContactStatuses = contactStatuses,
                         FirstName =  request.FirstName,
                         LastName = request.LastName,
-                        
+                        FilterType = (DataDomain.Contact.DTO.FilterType)request.FilterType
                     } as object);
 
 

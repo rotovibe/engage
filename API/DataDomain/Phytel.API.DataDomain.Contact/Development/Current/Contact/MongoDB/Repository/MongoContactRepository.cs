@@ -1057,7 +1057,6 @@ namespace Phytel.API.DataDomain.Contact
 
             using (var ctx = new ContactMongoContext(_dbName))
             {
-               // var defaultSort = "_id"; //TODO: Add Sort Later.
                 var query = BuildSearchContactsMongoQuery(request);
                 var results = new List<MEContact>();
 

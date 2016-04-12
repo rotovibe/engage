@@ -30,9 +30,9 @@ namespace Phytel.API.AppDomain.NG.DTO
         [ApiMember(Name = "Skip", Description = "Number of contacts to skip", ParameterType = "query", DataType = "int", IsRequired = false)]
         public int Skip { get; set; }
 
-        //[ApiMember(Name = "FilterType", Description = "Indicates the filter for search (StartsWith or ExactMatch)", ParameterType = "query", DataType = "FilterType", IsRequired = false)]
-        //[ApiAllowableValues("FilterType",typeof(DTO.FilterType))]
-        //public FilterType FilterType { get; set; } 
+        [ApiMember(Name = "FilterType", Description = "Indicates the filter for search (StartsWith or ExactMatch)", ParameterType = "query", DataType = "FilterType", IsRequired = false)]
+        [ApiAllowableValues("FilterType", typeof(DTO.FilterType))]
+        public FilterType FilterType { get; set; } 
 
 
         #region IAppDomainRequest Members
@@ -63,5 +63,12 @@ namespace Phytel.API.AppDomain.NG.DTO
         Active = 1,
         Inactive = 2,
         Archived = 3
+    }
+
+    public enum FilterType
+    {
+        StartsWith = 0,
+        ExactMatch = 1,
+        Contains = 2
     }
 }
