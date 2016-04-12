@@ -4,6 +4,7 @@ using Phytel.API.DataDomain.Patient.MongoDB.DTO;
 using ServiceStack.ServiceInterface.Admin;
 using ServiceStack.WebHost.Endpoints;
 using System;
+using ServiceStack.Api.Swagger;
 
 namespace Phytel.API.DataDomain.Patient.Service
 {
@@ -12,7 +13,7 @@ namespace Phytel.API.DataDomain.Patient.Service
         public class PatientAppHost : AppHostBase
         {
             //Tell Service Stack the name of your application and where to find your web services
-            public PatientAppHost() : base("Phytel Patient Data Domain Services", typeof(PatientService).Assembly) { }
+            public PatientAppHost() : base("Patient Data Domain Services", typeof(PatientService).Assembly) { }
 
             public override void Configure(Funq.Container container)
             {
@@ -25,6 +26,7 @@ namespace Phytel.API.DataDomain.Patient.Service
                 container.RegisterAutoWiredAs<PatientDataManager, IPatientDataManager>();
                 container.RegisterAutoWiredAs<PatientRepositoryFactory, IPatientRepositoryFactory>();
                 container.RegisterAutoWiredAs<DTOUtils, IDTOUtils>();
+                Plugins.Add(new SwaggerFeature());
             }
         }
 

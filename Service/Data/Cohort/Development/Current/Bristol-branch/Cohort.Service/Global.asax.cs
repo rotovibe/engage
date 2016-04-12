@@ -13,7 +13,7 @@ namespace Phytel.API.DataDomain.Cohort.Service
         public class CohortAppHost : AppHostBase
         {
             //Tell Service Stack the name of your application and where to find your web services
-            public CohortAppHost() : base("Phytel Cohort Data Domain Services", Assembly.GetExecutingAssembly())
+            public CohortAppHost() : base("Cohort Data Domain Services", Assembly.GetExecutingAssembly())
             {
             }
 
