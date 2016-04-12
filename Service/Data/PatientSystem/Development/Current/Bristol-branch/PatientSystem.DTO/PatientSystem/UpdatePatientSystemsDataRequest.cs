@@ -4,7 +4,7 @@ using ServiceStack.ServiceHost;
 
 namespace Phytel.API.DataDomain.PatientSystem.DTO
 {
-    [Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/PatientSystems", "PUT")]
+    [Route("/api/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/PatientSystems", "PUT")]
     public class UpdatePatientSystemsDataRequest : IDataDomainRequest
     {
         [ApiMember(Name = "PatientId", Description = "Id of the patient whose PatientSystem record needs to be updated.", ParameterType = "property", DataType = "string", IsRequired = true)]

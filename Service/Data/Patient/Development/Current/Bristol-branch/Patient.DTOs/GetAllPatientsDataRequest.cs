@@ -4,7 +4,7 @@ using ServiceStack.ServiceHost;
 
 namespace Phytel.API.DataDomain.Patient.DTO
 {
-    [Route("/{Context}/{Version}/{ContractNumber}/Patients", "GET")]
+    [Route("/api/{Context}/{Version}/{ContractNumber}/Patients", "GET")]
     public class GetAllPatientsDataRequest : IDataDomainRequest
     {
         [ApiMember(Name = "Context", Description = "Product Context requesting the patient", ParameterType = "property", DataType = "string", IsRequired = true)]

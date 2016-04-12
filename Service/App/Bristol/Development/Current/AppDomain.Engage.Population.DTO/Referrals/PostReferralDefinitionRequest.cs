@@ -3,7 +3,7 @@ using ServiceStack.ServiceHost;
 
 namespace AppDomain.Engage.Population.DTO.Referrals
 {
-    [Route("/{Context}/{Version}/{ContractNumber}/ReferralDefinition", "POST")]
+    [Route("/api/{Context}/{Version}/{ContractNumber}/ReferralDefinition", "POST")]
     public class PostReferralDefinitionRequest : IAppDomainRequest
     {
         [ApiMember(Name = "ReferralDefinition", Description = "Referral entity", ParameterType = "property", DataType = "ReferralData", IsRequired = true)]

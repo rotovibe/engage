@@ -4,7 +4,7 @@ using ServiceStack.ServiceHost;
 namespace Phytel.API.DataDomain.LookUp.DTO
 {
     [Api(Description = "A Request object to get a category by it's ID from the API.")]
-    [Route("/{Context}/{Version}/{ContractNumber}/Category/{CategoryID}", "GET")]
+    [Route("/api/{Context}/{Version}/{ContractNumber}/Category/{CategoryID}", "GET")]
     public class GetCategoryDataRequest : IDataDomainRequest
     {
         [ApiMember(Name = "CategoryID", Description = "ID of the Category being requested", ParameterType = "path", DataType = "string", IsRequired = true)]

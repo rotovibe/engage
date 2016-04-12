@@ -4,7 +4,7 @@ using ServiceStack.ServiceHost;
 
 namespace Phytel.API.DataDomain.Contact.DTO
 {
-    [Route("/{Context}/{Version}/{ContractNumber}/Contact/UndoDelete", "PUT")]
+    [Route("/api/{Context}/{Version}/{ContractNumber}/Contact/UndoDelete", "PUT")]
     public class UndoDeleteContactDataRequest : IDataDomainRequest
     {
         [ApiMember(Name = "Id", Description = "Contact Id to be un-deleted", ParameterType = "property", DataType = "string", IsRequired = true)]

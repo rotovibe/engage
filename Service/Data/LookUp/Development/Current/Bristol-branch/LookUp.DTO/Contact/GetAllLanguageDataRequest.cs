@@ -4,7 +4,7 @@ using ServiceStack.ServiceHost;
 namespace Phytel.API.DataDomain.LookUp.DTO
 {
     [Api(Description = "A Request object to get all languages from the API.")]
-    [Route("/{Context}/{Version}/{ContractNumber}/languages", "GET")]
+    [Route("/api/{Context}/{Version}/{ContractNumber}/languages", "GET")]
     public class GetAllLanguagesDataRequest : IDataDomainRequest
     {
         [ApiMember(Name = "Context", Description = "Context", ParameterType = "body", DataType = "string", IsRequired = false)]

@@ -5,7 +5,7 @@ using ServiceStack.ServiceHost;
 
 namespace AppDomain.Engage.Population.DTO.Demographics
 {
-    [Route("/{Context}/{Version}/{ContractNumber}/Patients/Demographics", "POST")]
+    [Route("/api/{Context}/{Version}/{ContractNumber}/Patients/Demographics", "POST")]
     public class PostPatientDemographicsRequest : IAppDomainRequest
     {
         [ApiMember(Name = "PatientList", Description = "Patients list", ParameterType = "Body", DataType = "List<Patient>", IsRequired = true)]

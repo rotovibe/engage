@@ -4,7 +4,7 @@ using ServiceStack.ServiceHost;
 namespace Phytel.API.DataDomain.LookUp.DTO
 {
     [Api(Description = "A Request object to get a problem by it's ID from the API.")]
-    [Route("/{Context}/{Version}/{ContractNumber}/problem/{ProblemID}", "GET")]
+    [Route("/api/{Context}/{Version}/{ContractNumber}/problem/{ProblemID}", "GET")]
     public class GetProblemDataRequest : IDataDomainRequest
     {
         [ApiMember(Name = "ProblemID", Description = "ID of the problem being requested", ParameterType = "path", DataType = "string", IsRequired = true)]

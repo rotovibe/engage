@@ -31,7 +31,7 @@ namespace Phytel.API.DataDomain.PatientSystem.Test
                 Version = version
             };
             //[Route("/{Context}/{Version}/{ContractNumber}/System", "GET")]
-            GetSystemsDataResponse response = client.Get<GetSystemsDataResponse>(string.Format("{0}/{1}/{2}/{3}/System?UserId={4}", url, context, version, contractNumber, request.UserId));
+            GetSystemsDataResponse response = client.Get<GetSystemsDataResponse>(string.Format("api/{0}/{1}/{2}/{3}/System?UserId={4}", url, context, version, contractNumber, request.UserId));
             Assert.IsNotNull(response);
         }
     }

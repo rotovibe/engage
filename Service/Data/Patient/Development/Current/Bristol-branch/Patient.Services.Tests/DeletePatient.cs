@@ -21,8 +21,8 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
         [TestMethod]
         public void DeletePatient_Test()
         {
-            //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{Id}/Delete", "DELETE")]
-            string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Delete",
+            //[Route("api/{Context}/{Version}/{ContractNumber}/Patient/{Id}/Delete", "DELETE")]
+            string url = Common.Helper.BuildURL(string.Format("api/{0}/{1}/{2}/{3}/Patient/{4}/Delete",
                                         ddUrl,
                                         context,
                                         version,
@@ -36,8 +36,8 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
         [TestMethod]
         public void DeletePatientUser_Test()
         {
-            //[Route("/{Context}/{Version}/{ContractNumber}/PatientUser/Patient/{PatientId}/Delete", "DELETE")]
-            string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/PatientUser/Patient/{4}/Delete",
+            //[Route("api/{Context}/{Version}/{ContractNumber}/PatientUser/Patient/{PatientId}/Delete", "DELETE")]
+            string url = Common.Helper.BuildURL(string.Format("api/{0}/{1}/{2}/{3}/PatientUser/Patient/{4}/Delete",
                                         ddUrl,
                                         context,
                                         version,
@@ -51,8 +51,8 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
         [TestMethod]
         public void DeleteCohortPatientView_Test()
         {
-            //[Route("/{Context}/{Version}/{ContractNumber}/PatientUser/Patient/{PatientId}/Delete", "DELETE")]
-            string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/CohortPatientView/Patient/{4}/Delete",
+            //[Route("api/{Context}/{Version}/{ContractNumber}/PatientUser/Patient/{PatientId}/Delete", "DELETE")]
+            string url = Common.Helper.BuildURL(string.Format("api/{0}/{1}/{2}/{3}/CohortPatientView/Patient/{4}/Delete",
                                         ddUrl,
                                         context,
                                         version,
@@ -66,8 +66,8 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
         [TestMethod]
         public void UndoDeletePatient_Test()
         {
-            //[Route("/{Context}/{Version}/{ContractNumber}/Patient/UndoDelete", "PUT")]
-            string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/UndoDelete",
+            //[Route("api/{Context}/{Version}/{ContractNumber}/Patient/UndoDelete", "PUT")]
+            string url = Common.Helper.BuildURL(string.Format("api/{0}/{1}/{2}/{3}/Patient/UndoDelete",
                                         ddUrl,
                                         context,
                                         version,
@@ -84,8 +84,8 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
         [TestMethod]
         public void UndoDeletePatientUser_Test()
         {
-            //[Route("/{Context}/{Version}/{ContractNumber}/PatientUser/UndoDelete", "PUT")]
-            string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/PatientUser/UndoDelete",
+            //[Route("api/{Context}/{Version}/{ContractNumber}/PatientUser/UndoDelete", "PUT")]
+            string url = Common.Helper.BuildURL(string.Format("api/{0}/{1}/{2}/{3}/PatientUser/UndoDelete",
                                         ddUrl,
                                         context,
                                         version,
@@ -108,8 +108,8 @@ namespace Phytel.API.DataDomain.Patient.Service.Test
         [TestMethod]
         public void UndoDeleteCohortPatientView_Test()
         {
-            //[Route("/{Context}/{Version}/{ContractNumber}/CohortPatientView/UndoDelete", "PUT")]
-            string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/CohortPatientView/UndoDelete",
+            //[Route("api/{Context}/{Version}/{ContractNumber}/CohortPatientView/UndoDelete", "PUT")]
+            string url = Common.Helper.BuildURL(string.Format("api/{0}/{1}/{2}/{3}/CohortPatientView/UndoDelete",
                                         ddUrl,
                                         context,
                                         version,

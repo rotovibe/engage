@@ -4,7 +4,7 @@ using ServiceStack.ServiceHost;
 namespace Phytel.API.DataDomain.LookUp.DTO
 {
     [Api(Description = "A Request object to get an objectives by it's ID from the API.")]
-    [Route("/{Context}/{Version}/{ContractNumber}/Objective/{ObjectiveID}", "GET")]
+    [Route("/api/{Context}/{Version}/{ContractNumber}/Objective/{ObjectiveID}", "GET")]
     public class GetObjectiveDataRequest : IDataDomainRequest
     {
         [ApiMember(Name = "ObjectiveID", Description = "ID of the Objective being requested", ParameterType = "path", DataType = "string", IsRequired = true)]

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Phytel.API.DataDomain.Patient.DTO
 {
-    [Route("/{Context}/{Version}/{ContractNumber}/patient/{PatientID}/cohortpatientview", "PUT")]
+    [Route("/api/{Context}/{Version}/{ContractNumber}/patient/{PatientID}/cohortpatientview", "PUT")]
     public class PutCohortPatientViewDataRequest : IDataDomainRequest
     {
         [ApiMember(Name = "PatientID", Description = "ID of the patient being created", ParameterType = "property", DataType = "string", IsRequired = true)]

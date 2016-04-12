@@ -4,7 +4,7 @@ using ServiceStack.ServiceHost;
 namespace Phytel.API.DataDomain.LookUp.DTO
 {
     [Api(Description = "A Request object to get all communication types from the API.")]
-    [Route("/{Context}/{Version}/{ContractNumber}/commtypes", "GET")]
+    [Route("/api/{Context}/{Version}/{ContractNumber}/commtypes", "GET")]
     public class GetAllCommTypesDataRequest : IDataDomainRequest
     {
         [ApiMember(Name = "Context", Description = "Context", ParameterType = "body", DataType = "string", IsRequired = false)]

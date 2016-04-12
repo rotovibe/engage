@@ -4,7 +4,7 @@ using ServiceStack.ServiceHost;
 namespace Phytel.API.DataDomain.LookUp.DTO
 {
     [Api(Description = "A Request object to get all time zones from the API.")]
-    [Route("/{Context}/{Version}/{ContractNumber}/timeZones", "GET")]
+    [Route("/api/{Context}/{Version}/{ContractNumber}/timeZones", "GET")]
     public class GetAllTimeZonesDataRequest : IDataDomainRequest
     {
         [ApiMember(Name = "Context", Description = "Context", ParameterType = "body", DataType = "string", IsRequired = false)]

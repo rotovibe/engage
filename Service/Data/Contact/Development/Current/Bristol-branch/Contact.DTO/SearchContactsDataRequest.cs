@@ -5,7 +5,7 @@ using ServiceStack.ServiceHost;
 namespace Phytel.API.DataDomain.Contact.DTO
 {
     [Api(Description = "A Request object to get details for list of contacts from the API.")]
-    [Route("/{Context}/{Version}/{ContractNumber}/Contact", "POST")]
+    [Route("/api/{Context}/{Version}/{ContractNumber}/Contact", "POST")]
     public class SearchContactsDataRequest : IDataDomainRequest
     {
         [ApiMember(Name = "ContactIds", Description = "ID of the Contacts being requested", ParameterType = "property", DataType = "List of string", IsRequired = false)]

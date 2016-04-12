@@ -4,7 +4,7 @@ using ServiceStack.ServiceHost;
 namespace Phytel.API.DataDomain.LookUp.DTO
 {
     [Api(Description = "A Request object to get the default timezone from the API.")]
-    [Route("/{Context}/{Version}/{ContractNumber}/TimeZone/Default", "GET")]
+    [Route("/api/{Context}/{Version}/{ContractNumber}/TimeZone/Default", "GET")]
     public class GetTimeZoneDataRequest : IDataDomainRequest
     {
         [ApiMember(Name = "Context", Description = "Context", ParameterType = "body", DataType = "string", IsRequired = true)]

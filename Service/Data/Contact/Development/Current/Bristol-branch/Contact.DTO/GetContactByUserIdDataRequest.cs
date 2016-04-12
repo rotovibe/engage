@@ -4,7 +4,7 @@ using ServiceStack.ServiceHost;
 namespace Phytel.API.DataDomain.Contact.DTO
 {
     [Api(Description = "A Request object to get all contact details for an individual by it's userId from the API.")]
-    [Route("/{Context}/{Version}/{ContractNumber}/Contact/User/{SQLUserId}", "GET")]
+    [Route("/api/{Context}/{Version}/{ContractNumber}/Contact/User/{SQLUserId}", "GET")]
     public class GetContactByUserIdDataRequest : IDataDomainRequest
     {
         [ApiMember(Name = "Context", Description = "Product Context requesting the Contact", ParameterType = "property", DataType = "string", IsRequired = true)]

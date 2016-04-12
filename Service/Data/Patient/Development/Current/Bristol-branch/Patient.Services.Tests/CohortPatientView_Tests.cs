@@ -25,7 +25,7 @@ namespace Phytel.API.DataDomain.Patient.Services.Test
                             x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "531f2df9072ef727c4d2a3df"));
             
             GetCohortPatientViewResponse response =
-                client.Get<GetCohortPatientViewResponse>(string.Format("{0}/{1}/{2}/{3}/patient/{4}/cohortpatientview/",
+                client.Get<GetCohortPatientViewResponse>(string.Format("api/{0}/{1}/{2}/{3}/patient/{4}/cohortpatientview/",
                 "http://localhost:8888/Patient",
                 context,
                 version,
@@ -47,7 +47,7 @@ namespace Phytel.API.DataDomain.Patient.Services.Test
                             x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "531f2df9072ef727c4d2a3df"));
 
             PutUpdateCohortPatientViewResponse response =
-                client.Put<PutUpdateCohortPatientViewResponse>(string.Format("{0}/{1}/{2}/{3}/patient/{4}/cohortpatientview/update",
+                client.Put<PutUpdateCohortPatientViewResponse>(string.Format("api/{0}/{1}/{2}/{3}/patient/{4}/cohortpatientview/update",
                 "http://localhost:8888/Patient",
                 context,
                 version,

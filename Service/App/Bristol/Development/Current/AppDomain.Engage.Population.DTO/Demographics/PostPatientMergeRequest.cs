@@ -5,7 +5,7 @@ using ServiceStack.ServiceHost;
 
 namespace AppDomain.Engage.Population.DTO.Demographics
 {
-    [Route("/{Context}/{Version}/{ContractNumber}/Patients/Patient-Merge", "POST")]
+    [Route("/api/{Context}/{Version}/{ContractNumber}/Patients/Patient-Merge", "POST")]
     public class PostPatientMergeRequest : IAppDomainRequest
     {
         [ApiMember(Name = "PatientSystemIds", Description = "Patients EMR source id list", ParameterType = "Body", DataType = "List<string>", IsRequired = true)]
