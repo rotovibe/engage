@@ -75,14 +75,16 @@ define([], new breeze.JsonResultsAdapter({
 			var subTypes = []
 			$.each(node.ContactSubTypes, function(sub){
 				var theseIds = [];
-				$.each(sub.SubSpecialtyIds, function (index, item) {
-					// if the item is not null
-					if (item) {
-						theseIds.push({ Id: item });
-					}
-				});
+				if( sub.SubSpecialtyIds ){
+					$.each(sub.SubSpecialtyIds, function (index, item) {
+						// if the item is not null
+						if (item) {
+							theseIds.push({ Id: item });
+						}
+					});
+				}
 				sub.SubSpecialtyIds = theseIds; 
-				//TODO - may need to rewrite the node.ContactSubTypes (1,2)
+				//TBD - may need to rewrite the node.ContactSubTypes (1,2)
 				//1. subTypes.push(sub);	
 			});
 			//2. node.ContactSubTypes = subTypes;
