@@ -187,7 +187,7 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
             return team;
         }
 
-        private List<MECareTeamMember> BuildMECareTeamMembers(List<CareMemberData> members, string userId)
+        private List<MECareTeamMember> BuildMECareTeamMembers(List<CareTeamMemberData> members, string userId)
         {
             var result = new List<MECareTeamMember>();
 
@@ -200,7 +200,7 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
             return result;
         }
 
-        private MECareTeamMember BuildMECareTeamMember(string userId, CareMemberData member)
+        private MECareTeamMember BuildMECareTeamMember(string userId, CareTeamMemberData member)
         {
             MECareTeamMember meMember = null;
             if (member != null)
@@ -237,9 +237,9 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
             return meMember;
         }
 
-        private List<CareMemberData> BuildCareTeamMembers(List<MECareTeamMember> members)
+        private List<CareTeamMemberData> BuildCareTeamMembers(List<MECareTeamMember> members)
         {
-            var result = new List<CareMemberData>();
+            var result = new List<CareTeamMemberData>();
 
             foreach (var member in members)
             {
@@ -250,12 +250,12 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
             return result;
         }
 
-        private CareMemberData BuildCareTeamMember(MECareTeamMember member)
+        private CareTeamMemberData BuildCareTeamMember(MECareTeamMember member)
         {
-            CareMemberData meMember = null;
+            CareTeamMemberData meMember = null;
             if (member != null)
             {
-                meMember = new CareMemberData
+                meMember = new CareTeamMemberData
                 {
                     Id = member.ToString(),
                     ContactId = member.ContactId.ToString(),

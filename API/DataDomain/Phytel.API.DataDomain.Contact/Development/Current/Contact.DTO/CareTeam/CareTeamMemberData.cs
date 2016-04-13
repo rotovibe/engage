@@ -2,7 +2,7 @@
 
 namespace Phytel.API.DataDomain.Contact.DTO.CareTeam
 {
-    public class CareMemberData 
+    public class CareTeamMemberData 
     {
         public string Id { get; set; }
         public string ContactId { get; set; }

@@ -1743,6 +1743,45 @@ namespace Phytel.API.AppDomain.NG
             return response;
 
         }
+
+        public PutUpdateCareTeamMemberResponse UpdateCareTeamMember(PutUpdateCareTeamMemberRequest request)
+        {
+            var response = new PutUpdateCareTeamMemberResponse();
+
+            if (request == null)
+                throw new ArgumentNullException("request");
+
+            if (request.CareTeamMember == null)
+                throw new ArgumentNullException("request.CareTeamMember");
+
+            try
+            {
+                IRestClient client = new JsonServiceClient();
+                //[Route("/{Version}/{ContractNumber}/Contacts/{ContactId}/CareTeam/CareTeamMembers/{Id}", "PUT")]
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Contacts/{4}/CareTeam/CareTeamMembers/{5}",
+                                                                                DDContactServiceUrl,
+                                                                                "NG",
+                                                                                request.Version,
+                                                                                request.ContractNumber, request.ContactId,request.Id), request.UserId);
+                var dataDomainResponse =
+                    client.Post<PutUpdateCareTeamMemberResponse>(url, new PutUpdateCareTeamMemberDataRequest
+                    {
+                        CareTeamMemberData = Mapper.Map<CareTeamMemberData>(request.CareTeamMember),                       
+                        Version = request.Version,
+                        ContactId = request.ContactId,
+                        ContractNumber = request.ContractNumber,
+                        Context = "NG"
+                    } as object);
+
+
+            }
+            catch (WebServiceException wse)
+            {
+                throw new WebServiceException("AD:UpdateCareTeamMember()::" + wse.Message, wse.InnerException);
+            }
+
+            return response;
+        }
         #endregion
 
         #endregion

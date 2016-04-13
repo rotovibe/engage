@@ -7,7 +7,7 @@ namespace Phytel.API.DataDomain.Contact.DTO.CareTeam
     {
         public string Id { get; set; }
         public string ContactId { get; set; }
-        public List<CareMemberData> Members { get; set; }
+        public List<CareTeamMemberData> Members { get; set; }
         public DateTime? UpdatedOn { get; set; }
         public DateTime CreatedOn { get; set; }
         public string UpdatedById { get; set; }
