@@ -34,16 +34,16 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
             if(repo == null)
                 throw new Exception("Repository is null");
 
-            var members = request.CareTeamData.Members;
+           // var members = request.CareTeamData.Members;
 
-            if (!members.IsNullOrEmpty())
-            {
-                var memberGroups = members.GroupBy(g => g.ContactId).Select(grp => new { ContactId = grp.Key , Count = grp.Count()});
+            //if (!members.IsNullOrEmpty())
+            //{
+            //    var memberGroups = members.GroupBy(g => g.ContactId).Select(grp => new { ContactId = grp.Key , Count = grp.Count()});
 
-                if(memberGroups.Any(m =>  m.Count > 1))
-                    throw new Exception("Care Team cannot have multiple members with same ContactId");
+            //    if(memberGroups.Any(m =>  m.Count > 1))
+            //        throw new Exception("Care Team cannot have multiple members with same ContactId");
 
-            }
+            //}
 
             repo.Insert(request);
 
