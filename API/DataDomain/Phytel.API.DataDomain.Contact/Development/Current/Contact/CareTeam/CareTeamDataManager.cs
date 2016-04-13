@@ -44,8 +44,7 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
 
             }
 
-            repo.Insert(request.CareTeamData);
-
+            repo.Insert(request);
 
             return response;
         }

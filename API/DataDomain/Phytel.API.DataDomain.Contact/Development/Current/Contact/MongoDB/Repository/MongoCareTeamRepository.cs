@@ -8,7 +8,9 @@ using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
 using MongoDB.Driver.Builders;
+using Phytel.API.Common;
 using Phytel.API.Common.Audit;
+using Phytel.API.DataAudit;
 using Phytel.API.DataDomain.Contact.DTO;
 using Phytel.API.DataDomain.Contact.DTO.CareTeam;
 using Phytel.API.DataDomain.Contact.MongoDB;
@@ -49,7 +51,7 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
         public object Insert(object newEntity)
         {
             string response = string.Empty;
-            var data = newEntity as CareTeamData;
+            var data = newEntity as SaveCareTeamDataRequest;
             if (data != null)
             {
                 try
@@ -59,7 +61,7 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
 
                         var queries = new List<IMongoQuery>
                             {
-                                Query<MEContactCareTeam>.EQ(c => c.ContactId, ObjectId.Parse(data.ContactId)),
+                                Query<MEContactCareTeam>.EQ(c => c.ContactId, ObjectId.Parse(data.CareTeamData.ContactId)),
                                 Query<MEContactCareTeam>.EQ(c => c.DeleteFlag, false)
                             };
 
@@ -73,24 +75,33 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
                             {
 
                                 ContactId = ObjectId.Parse(data.ContactId),
-                                MeCareTeamMembers = BuildMECareTeamMembers(data.Members, this.UserId),
+                                MeCareTeamMembers = BuildMECareTeamMembers(data.CareTeamData.Members, this.UserId),
                                 DeleteFlag = false
                             };
 
                             ctx.CareTeam.Collection.Save(meCareTeam);
-                            // TODO: Audit the insert
                             response = meCareTeam.Id.ToString();
+                            AuditHelper.LogDataAudit(this.UserId,
+                                           MongoCollectionName.CareTeam.ToString(),
+                                            meCareTeam.Id.ToString(),
+                                           DataAuditType.Insert,
+                                           data.ContractNumber);
                         }
                         else
                         {
                             //Update
-                            contactCareTeam.MeCareTeamMembers = BuildMECareTeamMembers(data.Members, this.UserId);
+                            contactCareTeam.MeCareTeamMembers = BuildMECareTeamMembers(data.CareTeamData.Members, this.UserId);
                             contactCareTeam.UpdatedBy = ObjectId.Parse(this.UserId);
                             contactCareTeam.LastUpdatedOn = DateTime.UtcNow;
 
                             ctx.CareTeam.Collection.Save(contactCareTeam);
-                            //TODO: Audit the update
                             response = contactCareTeam.Id.ToString();
+
+                            AuditHelper.LogDataAudit(this.UserId,
+                                          MongoCollectionName.CareTeam.ToString(),
+                                           contactCareTeam.Id.ToString(),
+                                          DataAuditType.Update,
+                                          data.ContractNumber);
                         }
                     }
                   
