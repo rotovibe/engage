@@ -276,15 +276,7 @@ define([ 'services/datacontext', 'services/local.collections' ],
 				self.selectedSubSpecialties([]);
 			}
 			
-			self.removeContactSubType = function(subType){
-				// var subTypeString = subType.subTypeName();
-				// if( subType.specialtyName() ){
-					// subTypeString += ' ' + subType.specialtyName();
-				// }
-				// if( subType.subSpecialtyIds().length ){
-					// subTypeString += ' ' + subType.subSpecialtyString();
-				// }
-									
+			self.removeContactSubType = function(subType){									
 				//remove it from the contactCard
 				self.contactCard().subTypes.remove( subType );
 			}
@@ -357,8 +349,7 @@ define([ 'services/datacontext', 'services/local.collections' ],
 		};
 		
 		ctor.prototype.detached = function(){
-			var self = this;
-			console.log('subscriptionTokens: ' + subscriptionTokens.length );
+			var self = this;			
 			self.tabErrorsUpdater.dispose();
 			self.contactSubTypes.dispose();
 			self.contactSpecialties.dispose();
