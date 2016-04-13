@@ -49,7 +49,7 @@ namespace Phytel.API.DataDomain.Patient.Services.Test
             //    "http://azurephytel.cloudapp.net:59901/CohortPatients", context, version, contractNumber, cohortID));
 
             GetCohortPatientsDataResponse response =
-                client.Get<GetCohortPatientsDataResponse>(string.Format("api/{0}/{1}/{2}/{3}/CohortPatients/{4}?Skip=0&Take=1000",
+                client.Get<GetCohortPatientsDataResponse>(string.Format("{0}/api/{1}/{2}/{3}/CohortPatients/{4}?Skip=0&Take=1000",
                 "http://localhost:8888/Patient", context, version, contractNumber, cohortID));
 
             sw.Stop();
@@ -74,7 +74,7 @@ namespace Phytel.API.DataDomain.Patient.Services.Test
             sw.Start();
 
             GetCohortPatientsDataResponse response =
-                client.Get<GetCohortPatientsDataResponse>(string.Format("api/{0}/{1}/{2}/{3}/CohortPatients/{4}?Skip=0&Take=1000&SearchFilter={5}",
+                client.Get<GetCohortPatientsDataResponse>(string.Format("{0}/api/{1}/{2}/{3}/CohortPatients/{4}?Skip=0&Take=1000&SearchFilter={5}",
                 "http://localhost:8888/Patient", context, version, contractNumber, cohortID, searchFilter));
 
             sw.Stop();

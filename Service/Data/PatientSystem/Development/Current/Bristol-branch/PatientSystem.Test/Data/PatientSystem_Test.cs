@@ -35,7 +35,7 @@ namespace Phytel.API.DataDomain.PatientSystem.Test
             };
             //[Route("api/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/PatientSystems", "GET")]
 
-            GetSystemsDataResponse response = client.Get<GetSystemsDataResponse>(string.Format("api/{0}/{1}/{2}/{3}/Patient/{4}/PatientSystems?UserId={5}", url, context, version, contractNumber, request.PatientId, request.UserId));
+            GetSystemsDataResponse response = client.Get<GetSystemsDataResponse>(string.Format("{0}/api/{1}/{2}/{3}/Patient/{4}/PatientSystems?UserId={5}", url, context, version, contractNumber, request.PatientId, request.UserId));
             Assert.IsNotNull(response);
         }
 
@@ -54,7 +54,7 @@ namespace Phytel.API.DataDomain.PatientSystem.Test
             };
 
             //[Route("api/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/PatientSystem", "POST")]         
-            InsertPatientSystemsDataResponse response = client.Post<InsertPatientSystemsDataResponse>(string.Format("api/{0}/{1}/{2}/{3}/Patient/{4}/PatientSystem", url, context, version, contractNumber, request.PatientId), request);
+            InsertPatientSystemsDataResponse response = client.Post<InsertPatientSystemsDataResponse>(string.Format("{0}/api/{1}/{2}/{3}/Patient/{4}/PatientSystem", url, context, version, contractNumber, request.PatientId), request);
             Assert.IsNotNull(response);
         }
 
@@ -76,7 +76,7 @@ namespace Phytel.API.DataDomain.PatientSystem.Test
             };
 
             //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/PatientSystems", "POST")]            
-            InsertPatientSystemsDataResponse response = client.Post<InsertPatientSystemsDataResponse>(string.Format("api/{0}/{1}/{2}/{3}/Patient/{4}/PatientSystems", url, context, version, contractNumber, request.PatientId), request);
+            InsertPatientSystemsDataResponse response = client.Post<InsertPatientSystemsDataResponse>(string.Format("{0}/api/{1}/{2}/{3}/Patient/{4}/PatientSystems", url, context, version, contractNumber, request.PatientId), request);
             Assert.IsNotNull(response);
         }
         [TestMethod]
@@ -97,7 +97,7 @@ namespace Phytel.API.DataDomain.PatientSystem.Test
             };
 
             //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/PatientSystems", "PUT")]        
-            UpdatePatientSystemsDataResponse response = client.Put<UpdatePatientSystemsDataResponse>(string.Format("api/{0}/{1}/{2}/{3}/Patient/{4}/PatientSystems", url, context, version, contractNumber, request.PatientId), request);
+            UpdatePatientSystemsDataResponse response = client.Put<UpdatePatientSystemsDataResponse>(string.Format("{0}/api/{1}/{2}/{3}/Patient/{4}/PatientSystems", url, context, version, contractNumber, request.PatientId), request);
             Assert.IsNotNull(response);
         }
 
@@ -119,7 +119,7 @@ namespace Phytel.API.DataDomain.PatientSystem.Test
             };
 
             //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/PatientSystems/{Ids}", "DELETE")]
-            DeletePatientSystemsDataResponse response = client.Delete<DeletePatientSystemsDataResponse>(string.Format("api/{0}/{1}/{2}/{3}/Patient/{4}/PatientSystems/{5}?UserId={6}", url, context, version, contractNumber, request.PatientId, request.Ids,request.UserId));
+            DeletePatientSystemsDataResponse response = client.Delete<DeletePatientSystemsDataResponse>(string.Format("{0}/api/{1}/{2}/{3}/Patient/{4}/PatientSystems/{5}?UserId={6}", url, context, version, contractNumber, request.PatientId, request.Ids,request.UserId));
             Assert.IsNotNull(response);
         }
 

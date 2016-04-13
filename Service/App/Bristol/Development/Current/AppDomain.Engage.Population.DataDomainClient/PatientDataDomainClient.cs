@@ -36,8 +36,9 @@ namespace AppDomain.Engage.Population.DataDomainClient
             {
                 if (patients == null) return patientId;
 
-                var url = _urlHelper.BuildURL(string.Format("api/{0}/{1}/{2}/{3}/Patient", 
+                var url = _urlHelper.BuildURL(string.Format("{0}/{1}/{2}/{3}/{4}/Patient", 
                     _domainUrl,
+                    "api",
                     "NG",
                     _context.Version,
                     _context.Contract), _context.UserId);
@@ -69,7 +70,7 @@ namespace AppDomain.Engage.Population.DataDomainClient
             {
 
                 ReferralData referralData = _mappingEngine.Map<ReferralData>(referralDefinitionData);
-                var url = _urlHelper.BuildURL(string.Format("api/{0}/{1}/{2}/{3}/{4}/Referrals",
+                var url = _urlHelper.BuildURL(string.Format("{0}/{1}/{2}/{3}/{4}/Referrals",
                     _domainUrl,
                     "api",
                     "NG",
