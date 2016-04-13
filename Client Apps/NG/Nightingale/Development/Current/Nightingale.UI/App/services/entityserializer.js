@@ -184,7 +184,7 @@
 				thisContactCard.Languages = [];
 				thisContactCard.TimesOfDaysId = [];
 				thisContactCard.WeekDays = [];
-				thisContactCard.SubTypes = [];
+				thisContactCard.ContactSubTypes = [];
 				
 				// Get the values of the properties of the action
 				//var unwrappedContactCard = ko.toJS(contactCard);
@@ -287,7 +287,7 @@
 						thisContactCard.Languages.push(newLanguage);
 				});
 
-				ko.utils.arrayForEach(contactCard.subTypes.peek(), function (sub) {	
+				ko.utils.arrayForEach(contactCard.contactSubTypes.peek(), function (sub) {	
 					var subType = {};
 					subType.Id = sub.id() ? sub.id() : null;
 					subType.SubTypeId = sub.subTypeId();
@@ -296,7 +296,7 @@
 					ko.utils.arrayForEach(sub.subSpecialtyIds.peek(), function (sid) {
 						subType.SubSpecialtyIds.push(sid.id.peek());
 					});
-					thisContactCard.SubTypes.push(subType);
+					thisContactCard.ContactSubTypes.push(subType);
 				});
 				
 				var totalTime = new Date().getTime() - startTime;

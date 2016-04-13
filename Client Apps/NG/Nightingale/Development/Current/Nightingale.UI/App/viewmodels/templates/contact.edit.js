@@ -179,7 +179,7 @@ define([ 'services/datacontext', 'services/local.collections' ],
 					sub.subSpecialtyIds.push( subspecial );
 				});
 				
-				var duplicates = ko.utils.arrayFilter(self.contactCard().subTypes(), function(subt){
+				var duplicates = ko.utils.arrayFilter(self.contactCard().contactSubTypes(), function(subt){
 					var dup = false;
 					if( sub.subTypeId == subt.subTypeId() ){
 						dup = true;	//same subTypeId
@@ -268,7 +268,7 @@ define([ 'services/datacontext', 'services/local.collections' ],
 				});
 				
 				//attach the subType to the collection:
-				self.contactCard().subTypes.push(subType);				
+				self.contactCard().contactSubTypes.push(subType);				
 				
 				//clear controls:
 				self.selectedSubType(null);
@@ -278,7 +278,7 @@ define([ 'services/datacontext', 'services/local.collections' ],
 			
 			self.removeContactSubType = function(subType){									
 				//remove it from the contactCard
-				self.contactCard().subTypes.remove( subType );
+				self.contactCard().contactSubTypes.remove( subType );
 			}
 			self.getSubSpecialtyIds = function(){
 				var ids = [];

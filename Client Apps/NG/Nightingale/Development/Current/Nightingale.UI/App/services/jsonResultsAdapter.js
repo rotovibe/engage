@@ -71,9 +71,9 @@ define([], new breeze.JsonResultsAdapter({
             });
             return { entityType: "CommunicationType" }
         }
-		if(node.SubTypes) {
+		if(node.ContactSubTypes) {
 			var subTypes = []
-			$.each(node.SubTypes, function(sub){
+			$.each(node.ContactSubTypes, function(sub){
 				var theseIds = [];
 				$.each(sub.SubSpecialtyIds, function (index, item) {
 					// if the item is not null
@@ -82,10 +82,10 @@ define([], new breeze.JsonResultsAdapter({
 					}
 				});
 				sub.SubSpecialtyIds = theseIds; 
-				//TODO - may need to rewrite the node.SubTypes (1,2)
+				//TODO - may need to rewrite the node.ContactSubTypes (1,2)
 				//1. subTypes.push(sub);	
 			});
-			//2. node.SubTypes = subTypes;
+			//2. node.ContactSubTypes = subTypes;
 		}
         if (mappingContext.query.fromEntityType && mappingContext.query.fromEntityType.shortName === 'Note') {
             // If you were mapping to a note, we need to map the program ids

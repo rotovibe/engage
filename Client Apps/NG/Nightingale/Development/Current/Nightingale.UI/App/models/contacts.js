@@ -45,7 +45,7 @@ define(['services/session', 'services/validatorfactory', 'services/customvalidat
 		            phones: { complexTypeName: "Phone:#Nightingale", isScalar: false },
 		            addresses: { complexTypeName: "Address:#Nightingale", isScalar: false },
 					contactTypeId:  { dataType: "String" },
-					subTypes: { complexTypeName: "ContactSubType:#Nightingale", isScalar: false },
+					contactSubTypes: { complexTypeName: "ContactSubType:#Nightingale", isScalar: false },
 					externalRecordId: { dataType: "String" },
 					dataSource:  { dataType: "String", defaultValue: 'Engage' },
 					statusId: { dataType: "Int64", defaultValue: 1 },
@@ -685,7 +685,7 @@ define(['services/session', 'services/validatorfactory', 'services/customvalidat
                         contactCard.isDirty(true);
                         propToken.dispose();
                     });
-                    var subTypesToken = contactCard.subTypes.subscribe(function (newValue) {
+                    var subTypesToken = contactCard.contactSubTypes.subscribe(function (newValue) {
                         contactCard.isDirty(true);
                         subTypesToken.dispose();
                     });
