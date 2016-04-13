@@ -102,11 +102,12 @@
 				ContactSubTypeIds: params.contactSubTypeIds,
 				FirstName: params.firstName,
 				LastName: params.lastName,
+				FilterType: params.filterType ? params.filterType : null,	//'ExactMatch' / 'StartsWith' 
 				Take: params.take,
 				Skip: params.skip
 			};
 			
-			endPoint = new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'SearchContacts?FilterType=ExactMatch', 'ContactCard');
+			endPoint = new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'SearchContacts', 'ContactCard');
 			payload = JSON.stringify(payload);
                 
 			// Query to post the results

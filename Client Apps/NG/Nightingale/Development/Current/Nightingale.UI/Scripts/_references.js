@@ -224,6 +224,7 @@
 /// <reference path="../copyright.js" />
 /// <reference path="../gulpfile.js" />
 /// <reference path="../app/viewmodels/home/contacts/index.js" />
+/// <reference path="../app/viewmodels/templates/contact.edit.js" />
  
  / / /   < r e f e r e n c e   p a t h = " b r e e z e . d e b u g . j s "   / >  
  

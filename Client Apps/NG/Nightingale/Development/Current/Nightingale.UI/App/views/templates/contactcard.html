@@ -25,111 +25,120 @@
         <h2 class="span12" data-bind="text: $parent.fullName, attr: { title: $parent.fullName }"></h2>
     </div>
 	
-	<div class="row" data-bind="visible: activeTab() === 'Profile'">
-        <!-- <div class="span12"> -->
-			<div class="row validation-summary" data-bind="if: profileValidationErrors().length > 0">            
-				<ul data-bind="foreach: profileValidationErrors">
-					<li class="validation-errors">
-						<h5 data-bind="text: Message"></h5>
-					</li>
-				</ul>
-			</div>
-            <div class="row" data-bind="visible: isDuplicate">
-				<span class="errorheader" style="margin-top: 10px; border: 1px solid; background: #fbcbc7; color: #871409; display: block; font-size: 11px; padding: 5px;">
-				<a href="#">
-					<i class="icon-warning red"></i>
-				</a>A contact already exists with the same name. Do you want to continue and create? <button class="btn small color" data-bind="click: $parent.forceSave">Proceed and Create</button></span>
-			</div>
-			<div class="row">
-				<label class="span2">
-					<span>Prefix</span>
-					<input class="span1" type="text" data-bind="value: prefix, valueUpdate: 'afterkeydown'" placeholder="prefix" />
-				</label>
-				<label class="span5">
-					<span>First Name</span>
-					<input type="text" data-bind="value: firstName, valueUpdate: 'afterkeydown', css: { invalid: (profileValidationErrorsArray().indexOf('firstName') !== -1) }" placeholder="first name" />
-				</label>
-				<label class="span5">
-					<span>Preferred Name</span>
-					<input type="text" data-bind="value: preferredName, valueUpdate: 'afterkeydown'" placeholder="preferred name" />
-				</label>				
-			</div>			
-			<div class="row">
-				<label class="span3">
-					<span>Middle Name</span>
-					<input type="text" data-bind="value: middleName, valueUpdate: 'afterkeydown'" placeholder="middle name" />
-				</label>
-				<label class="span7">
-					<span>Last Name</span>
-					<input type="text" data-bind="value: lastName, valueUpdate: 'afterkeydown', css: { invalid: (profileValidationErrorsArray().indexOf('lastName') !== -1) }" placeholder="last name" />
-				</label>
-				<label class="span2">
-					<span>Suffix</span>
-					<input type="text" data-bind="value: suffix, valueUpdate: 'afterkeydown'" placeholder="suffix" />
-				</label>
-			</div>
-			<div class="row">				
-				<label class="span4">
-					<span>Gender</span>
-					<div data-bind="chsnsingle: { options:  $parent.genders, value: gender, text: 'Description', idValue: 'Gender', isCancel: true }"></div>
-				</label>					
-				<label class="span4">					
-					<span>Deceased</span>
-					<div data-bind="chsnsingle: { options:  $parent.deceasedStatuses, value:  deceasedId, text: 'name', idValue: 'id', isCancel: true }"></div>
-				</label>
-				<label class="span4">					
-					<span>Status</span>
-					<div data-bind="chsnsingle: { options: $parent.contactStatuses, value: statusId, text: 'name', idValue: 'id', isCancel: true }"></div>
-				</label>
-			</div>
-			
-			<!-- <div class="row divider pad-top bold">Type Details</div>
-			<label class="span4">
-				<span >Type</span>
-				<div data-bind="chsnsingle: { options: $parent.contactSubTypes, value: $parent.selectedSubType, text: 'name', idValue: 'id', isCancel: true, caption: 'None' }"></div>					
+	<div class="row" data-bind="visible: activeTab() === 'Profile'">        
+		<div class="row validation-summary" data-bind="if: profileValidationErrors().length > 0">            
+			<ul data-bind="foreach: profileValidationErrors">
+				<li class="validation-errors">
+					<h5 data-bind="text: Message"></h5>
+				</li>
+			</ul>
+		</div>
+		<div class="row" data-bind="visible: isDuplicate">
+			<span class="errorheader" style="margin-top: 10px; border: 1px solid; background: #fbcbc7; color: #871409; display: block; font-size: 11px; padding: 5px;">
+			<a href="#">
+				<i class="icon-warning red"></i>
+			</a>A contact already exists with the same name. Do you want to continue and create? <button class="btn small color" data-bind="click: $parent.forceSave">Proceed and Create</button></span>
+		</div>
+		<div class="row">
+			<label class="span2">
+				<span>Prefix</span>
+				<input class="span1" type="text" data-bind="value: prefix, valueUpdate: 'afterkeydown'" placeholder="prefix" />
 			</label>
-			<label class="span4">
-				<span>Specialty</span>
-				<div data-bind="chsnsingle: { options: $parent.contactSpecialties, value: $parent.selectedSpecialty, text: 'name', idValue: 'id', isCancel: true, caption: 'None' }"></div>
+			<label class="span5">
+				<span>First Name</span>
+				<input type="text" data-bind="value: firstName, valueUpdate: 'afterkeydown', css: { invalid: (profileValidationErrorsArray().indexOf('firstName') !== -1) }" placeholder="first name" />
 			</label>
-			<label class="span4">
-				<span>Sub-Specialties</span>				
-				<div data-bind="multiselect: { options: $parent.contactSubSpecialties, values: $parent.selectedSubSpecialties, text: 'name', idValue: 'id', label: 'contactsubspecialties' }"></div>
+			<label class="span5">
+				<span>Preferred Name</span>
+				<input type="text" data-bind="value: preferredName, valueUpdate: 'afterkeydown'" placeholder="preferred name" />
 			</label>				
-			
-			<div class="row pad-top">
-				<button class="span2 btn small color pull-right" data-bind="click: $parent.addContactSubType, enable: $parent.canAddContactSubType">
-                    <i class="icon-plus"></i>
-                    <span class="pad-left">Add</span>
-                </button>
-			</div> -->
-			<!-- list the lines of ( type /specialty /subspecialty ) here -->
-			<!-- kkkko foreach: subTypes -->
-				<!-- <div class="row pad-top divider">
-					<span class="span4" data-bind="text: subTypeName()"/>
-					<span class="span4" data-bind="text: specialtyName()"/>
-					<span class="span3" data-bind="text: subSpecialtyString()"/>
-					<div class="pull-right filters">
-						<a href="#" data-bind="click: $parents[1].removeContactSubType"><i class="icon-cancel red toggle" title="Delete"></i></a>
-					</div>
-				</div> -->
-			<!-- /kkkkkko -->
-			<div data-bind="visible: !isNew()">
-				<div class="row pad-top divider">
-					<span class="grey">Created On: 	</span>
-					<span class="pad-left" data-bind="DateTime: createdOn"></span> by <span data-bind="text: createdBy()? createdBy().preferredName : ''"></span>
-				</div>
-				<div class="row pad-top" data-bind="if: updatedOn">
-					<span class="grey">Updated On:  </span>
-					<span class="pad-left" data-bind="DateTime: updatedOn"></span> by <span data-bind="text: updatedBy()? updatedBy().preferredName : ''"></span>
-				</div>
-				<div class="row pad-top" data-bind="if: dataSource">
-					<span class="grey" >System:  </span>
-					<span class="pad-left" data-bind="text: dataSource"></span>
+		</div>			
+		<div class="row">
+			<label class="span3">
+				<span>Middle Name</span>
+				<input type="text" data-bind="value: middleName, valueUpdate: 'afterkeydown'" placeholder="middle name" />
+			</label>
+			<label class="span7">
+				<span>Last Name</span>
+				<input type="text" data-bind="value: lastName, valueUpdate: 'afterkeydown', css: { invalid: (profileValidationErrorsArray().indexOf('lastName') !== -1) }" placeholder="last name" />
+			</label>
+			<label class="span2">
+				<span>Suffix</span>
+				<input type="text" data-bind="value: suffix, valueUpdate: 'afterkeydown'" placeholder="suffix" />
+			</label>
+		</div>
+		<div class="row">				
+			<label class="span4">
+				<span>Gender</span>
+				<div data-bind="chsnsingle: { options:  $parent.genders, value: gender, text: 'Description', idValue: 'Gender', isCancel: true }"></div>
+			</label>					
+			<label class="span4">					
+				<span>Deceased</span>
+				<div data-bind="chsnsingle: { options:  $parent.deceasedStatuses, value:  deceasedId, text: 'name', idValue: 'id', isCancel: true }"></div>
+			</label>
+			<label class="span4">					
+				<span>Status</span>
+				<div data-bind="chsnsingle: { options: $parent.contactStatuses, value: statusId, text: 'name', idValue: 'id', isCancel: true }"></div>
+			</label>
+		</div>
+		
+		<div class="row divider pad-top pad-bottom bold">Type Details</div>
+		<div class="row validation-summary" data-bind="if: $parent.isDuplicateSubType()">            
+			<ul>
+				<li class="validation-errors">
+					<h5>Type already exist</h5>
+				</li>
+			</ul>
+		</div>
+		<label class="span4">
+			<span >Type</span>
+			<div data-bind="chsnsingle: { options: $parent.contactSubTypes, value: $parent.selectedSubType, text: 'name', idValue: 'id', isCancel: true, caption: 'None' }, 
+						css: { invalid: $parent.isDuplicateSubType() }"></div>					
+		</label>
+		<label class="span4">
+			<span>Specialty</span>
+			<div data-bind="chsnsingle: { options: $parent.contactSpecialties, value: $parent.selectedSpecialty, text: 'name', idValue: 'id', isCancel: true, caption: 'None' }, 
+						css: { invalid:  $parent.showInvalidSpecialty() }"></div>
+		</label>
+		<label class="span4">
+			<span>Sub-Specialties</span>				
+			<div data-bind="multiselect: { options: $parent.contactSubSpecialties, values: $parent.selectedSubSpecialties, text: 'name', idValue: 'id', label: 'contactsubspecialties' },
+						css: { invalid: $parent.showInvalidSubSpecialties() }"></div>
+		</label>				
+		
+		<div class="row pad-top">
+			<button class="span2 btn small color pull-right" data-bind="click: $parent.addContactSubType, enable: $parent.canAddContactSubType">
+				<i class="icon-plus"></i>
+				<span class="pad-left">Add</span>
+			</button>
+		</div>
+		<!-- list the lines of ( type /specialty /subspecialty ) here -->
+		<!-- ko foreach: subTypes -->
+			<div class="row pad-top divider">
+				<span class="span4" data-bind="text: subTypeName()"/>
+				<span class="span4" data-bind="text: specialtyName()"/>
+				<span class="span3" data-bind="text: subSpecialtyString()"/>
+				<div class="pull-right filters">
+					<a href="#" data-bind="click: $parents[1].removeContactSubType"><i class="icon-cancel red toggle" title="Delete"></i></a>
 				</div>
 			</div>
-			<div class="line"></div>
-			<div class="line"></div>
+		<!-- /ko -->
+		<div data-bind="visible: !isNew()">
+			<div class="row pad-top divider">
+				<span class="grey">Created On: 	</span>
+				<span class="pad-left" data-bind="DateTime: createdOn"></span> by <span data-bind="text: createdBy()? createdBy().preferredName : ''"></span>
+			</div>
+			<div class="row pad-top" data-bind="if: updatedOn">
+				<span class="grey">Updated On:  </span>
+				<span class="pad-left" data-bind="DateTime: updatedOn"></span> by <span data-bind="text: updatedBy()? updatedBy().preferredName : ''"></span>
+			</div>
+			<div class="row pad-top" data-bind="if: dataSource">
+				<span class="grey" >System:  </span>
+				<span class="pad-left" data-bind="text: dataSource"></span>
+			</div>
+		</div>
+		<div class="line"></div>
+		<div class="line"></div>
 	</div>
 	
     <div class="row" data-bind="visible: activeTab() === 'General'">
