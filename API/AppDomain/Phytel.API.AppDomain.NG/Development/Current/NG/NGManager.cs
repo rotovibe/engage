@@ -1769,7 +1769,9 @@ namespace Phytel.API.AppDomain.NG
                         CareTeamMemberData = Mapper.Map<CareTeamMemberData>(request.CareTeamMember),                       
                         Version = request.Version,
                         ContactId = request.ContactId,
-                        ContractNumber = request.ContractNumber,
+                        CareTeamId = request.CareTeamId,
+                        Id = request.Id,
+                        ContractNumber = request.ContractNumber,                       
                         Context = "NG"
                     } as object);
 
