@@ -12,7 +12,7 @@ namespace Phytel.API.AppDomain.NG.DTO
         public DateTime? EndDate { get; set; }
         public bool Core { get; set; }
         public string Notes { get; set; }
-        public string Frequency { get; set; }
+        public string FrequencyId { get; set; }
         public int? Distance { get; set; }
         public string ExternalRecordId { get; set; }
         public string DataSource { get; set; }        

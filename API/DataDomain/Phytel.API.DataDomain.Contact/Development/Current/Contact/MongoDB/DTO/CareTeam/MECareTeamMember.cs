@@ -35,7 +35,7 @@ namespace Phytel.API.DataDomain.Contact.MongoDB.DTO
         public ObjectId ContactId { get; set; }
 
         [BsonElement(RoleIdProperty)]
-        public ObjectId RoleId { get; set; }
+        public ObjectId? RoleId { get; set; }
 
         [BsonElement(CustomRoleNameProperty)]
         public string CustomRoleName { get; set; }

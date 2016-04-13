@@ -14,6 +14,7 @@ using Phytel.API.DataDomain.Contact.DTO.CareTeam;
 using Phytel.API.DataDomain.Contact.MongoDB;
 using Phytel.API.DataDomain.Contact.MongoDB.DTO;
 using ServiceStack.Common;
+using ServiceStack.Common.Web;
 using ServiceStack.WebHost.Endpoints;
 
 namespace Phytel.API.DataDomain.Contact.CareTeam
@@ -210,12 +211,12 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
                     Id = string.IsNullOrEmpty(member.Id) ? ObjectId.GenerateNewId() : ObjectId.Parse(member.Id),
                     ContactId = ObjectId.Parse(member.ContactId),
                     Core = member.Core,
-                    RoleId = string.IsNullOrEmpty(member.RoleId) ? ObjectId.Empty : ObjectId.Parse(member.RoleId),
+                    RoleId = string.IsNullOrEmpty(member.RoleId) ? (ObjectId?)BsonNull.Value : ObjectId.Parse(member.RoleId),
                     CustomRoleName = member.CustomRoleName,
                     StartDate = member.StartDate,
                     EndDate = member.EndDate,
                     Frequency =
-                        string.IsNullOrEmpty(member.Frequency) ? ObjectId.Empty : ObjectId.Parse(member.Frequency),
+                        string.IsNullOrEmpty(member.FrequencyId) ? (ObjectId?)BsonNull.Value : ObjectId.Parse(member.FrequencyId),
                     Distance = member.Distance ?? member.Distance,
                     ExternalRecordId = member.ExternalRecordId,
                     Notes = member.Notes,
@@ -257,14 +258,14 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
             {
                 meMember = new CareTeamMemberData
                 {
-                    Id = member.ToString(),
+                    Id = member.Id.ToString(),
                     ContactId = member.ContactId.ToString(),
                     Core = member.Core,
-                    RoleId = member.RoleId.ToString(),
+                    RoleId = (member.RoleId == null || member.RoleId == ObjectId.Empty) ? null : member.RoleId.ToString(),
                     CustomRoleName = member.CustomRoleName,
                     StartDate = member.StartDate,
                     EndDate = member.EndDate,
-                    Frequency = member.Frequency.ToString(),
+                    FrequencyId = (member.Frequency == null || member.Frequency == ObjectId.Empty) ? null : member.Frequency.ToString(),
                     Distance = member.Distance ?? member.Distance,
                     ExternalRecordId = member.ExternalRecordId,
                     Notes = member.Notes,
