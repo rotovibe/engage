@@ -6,12 +6,11 @@ using System.Threading.Tasks;
 using Phytel.API.Interface;
 using ServiceStack.ServiceInterface.ServiceModel;
 
-namespace Phytel.API.DataDomain.Contact.DTO.CareTeam
+namespace Phytel.API.AppDomain.NG.DTO
 {
-    public class PutUpdateCareTeamMemberDataResponse : IDomainResponse
+    public class UpdateCareTeamMemberResponse : IDomainResponse
     {
         public double Version { get; set; }
-
         public ResponseStatus Status { get; set; }
     }
 }

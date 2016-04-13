@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Phytel.API.Common.Extensions;
 using Phytel.API.DataDomain.Contact.DTO;
 using Phytel.API.DataDomain.Contact.DTO.CareTeam;
+using ServiceStack.ServiceInterface.ServiceModel;
 
 namespace Phytel.API.DataDomain.Contact.CareTeam
 {
@@ -48,7 +49,33 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
 
             return response;
         }
-        
+
+        public UpdateCareTeamMemberDataResponse UpdateCareTeamMember(UpdateCareTeamMemberDataRequest request)
+        {
+            var response = new UpdateCareTeamMemberDataResponse();
+
+            if (request == null)
+                throw new ArgumentNullException("request");
+
+            var repo = _factory.GetCareTeamRepository(request, RepositoryType.CareTeam);
+
+            if (repo == null)
+                throw new Exception("Repository is null");
+
+            try
+            {
+                if (repo.UpdateCareTeamMember(request)) response.Status = new ResponseStatus();
+            }
+            catch (ApplicationException ex)
+            {
+                response.Status = new ResponseStatus("400", ex.Message);
+            }
+            catch (Exception)
+            {                    
+                throw;
+            }                      
+            return response;
+        }
         public GetCareTeamDataResponse GetCareTeam(GetCareTeamDataRequest request)
         {
             var response = new GetCareTeamDataResponse();

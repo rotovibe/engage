@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
-using MongoDB.Driver.Builders;
+using MB = MongoDB.Driver.Builders;
 using Phytel.API.Common;
 using Phytel.API.Common.Audit;
 using Phytel.API.DataAudit;
@@ -61,11 +61,11 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
 
                         var queries = new List<IMongoQuery>
                             {
-                                Query<MEContactCareTeam>.EQ(c => c.ContactId, ObjectId.Parse(data.CareTeamData.ContactId)),
-                                Query<MEContactCareTeam>.EQ(c => c.DeleteFlag, false)
+                                MB.Query<MEContactCareTeam>.EQ(c => c.ContactId, ObjectId.Parse(data.ContactId)),
+                                MB.Query<MEContactCareTeam>.EQ(c => c.DeleteFlag, false)
                             };
 
-                        var query = Query.And(queries);
+                        var query = MB.Query.And(queries);
                         var contactCareTeam = ctx.CareTeam.Collection.FindOne(query);
 
                         if (contactCareTeam == null)
@@ -149,6 +149,67 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
             throw new NotImplementedException();
         }
 
+        public bool UpdateCareTeamMember(object entity)
+        {
+            UpdateCareTeamMemberDataRequest request = (UpdateCareTeamMemberDataRequest)entity;
+            CareTeamMemberData careTeamMemberData = request.CareTeamMemberData;
+            bool result = false;
+            try
+            {
+                if (careTeamMemberData != null)
+                {
+                    using (ContactCareTeamMongoContext ctx = new ContactCareTeamMongoContext(_dbName))
+                    {
+                        var queries = new List<IMongoQuery>
+                        {
+                            MB.Query<MEContactCareTeam>.EQ(c => c.ContactId, ObjectId.Parse(request.ContactId)),
+                            MB.Query<MEContactCareTeam>.EQ(c => c.DeleteFlag, false)
+                        };
+
+                        var query = MB.Query.And(queries);
+                        var contactCareTeam = ctx.CareTeam.Collection.FindOne(query);
+
+                        if (contactCareTeam == null)
+                            throw new ApplicationException("UpdateCareTeamMember: The referenced contact doesn't have a care team");
+
+                        if (contactCareTeam.Id != ObjectId.Parse(request.CareTeamId))
+                            throw new ApplicationException("UpdateCareTeamMember: The referenced Care Team doesn't exist or is not assigned to the referenced contact");
+
+                        var currentMeCareTeamMember =
+                            contactCareTeam.MeCareTeamMembers.FirstOrDefault(
+                                x => x.Id == ObjectId.Parse(careTeamMemberData.Id));
+
+                        
+                        if (currentMeCareTeamMember == null)
+                            throw new ApplicationException("UpdateCareTeamMember: The referenced care team member doesn't exist");
+
+                        var memberIndex = contactCareTeam.MeCareTeamMembers.FindIndex(
+                                x => x.Id == ObjectId.Parse(careTeamMemberData.Id));
+
+
+                        var newMecareMemberTeam = BuildMECareTeamMember(this.UserId, careTeamMemberData);
+
+                        newMecareMemberTeam.RecordCreatedOn = currentMeCareTeamMember.RecordCreatedOn;
+                        newMecareMemberTeam.RecordCreatedBy = currentMeCareTeamMember.RecordCreatedBy;
+
+                        currentMeCareTeamMember = newMecareMemberTeam;
+                        contactCareTeam.MeCareTeamMembers[memberIndex] = newMecareMemberTeam;
+
+                        ctx.CareTeam.Collection.Save(contactCareTeam);
+                        //TODO: Audit the update                       
+                        
+                        result = true;
+                    }
+                }
+                return result;
+            }
+            catch (ApplicationException ex)
+            {
+                throw new ApplicationException(ex.Message);
+            }
+            catch (Exception ex) { throw new Exception("CareMemberDD:MongoCareMemberRepository:Update()" + ex.Message, ex.InnerException); }
+        }
+
         public void CacheByID(List<string> entityIDs)
         {
             throw new NotImplementedException();
@@ -166,11 +227,11 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
             {
                 var queries = new List<IMongoQuery>
                 {
-                    Query<MEContactCareTeam>.EQ(c => c.ContactId, ObjectId.Parse(contactId)),
-                    Query<MEContactCareTeam>.EQ(c => c.DeleteFlag, false)
+                    MB.Query<MEContactCareTeam>.EQ(c => c.ContactId, ObjectId.Parse(contactId)),
+                    MB.Query<MEContactCareTeam>.EQ(c => c.DeleteFlag, false)
                 };
 
-                var query = Query.And(queries);
+                var query = MB.Query.And(queries);
                 var meCareTeam = ctx.CareTeam.Collection.FindOne(query);
                 if (meCareTeam != null)
                 {

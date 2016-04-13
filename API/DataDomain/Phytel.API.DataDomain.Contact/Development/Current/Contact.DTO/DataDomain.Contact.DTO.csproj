@@ -102,8 +102,8 @@
     <Compile Include="CareTeam\CareTeamMemberData.cs" />
     <Compile Include="CareTeam\CareTeamData.cs" />
     <Compile Include="CareTeam\GetCareTeamDataRequest.cs" />
-    <Compile Include="CareTeam\PutUpdateCareTeamMemberDataRequest.cs" />
-    <Compile Include="CareTeam\PutUpdateCareTeamMemberDataResponse.cs" />
+    <Compile Include="CareTeam\UpdateCareTeamMemberDataRequest.cs" />
+    <Compile Include="CareTeam\UpdateCareTeamMemberDataResponse.cs" />
     <Compile Include="CareTeam\SaveCareTeamDataRequest.cs" />
     <Compile Include="CareTeam\GetCareTeamDataResponse.cs" />
     <Compile Include="CareTeam\SaveCareTeamDataResponse.cs" />

@@ -1744,9 +1744,9 @@ namespace Phytel.API.AppDomain.NG
 
         }
 
-        public PutUpdateCareTeamMemberResponse UpdateCareTeamMember(PutUpdateCareTeamMemberRequest request)
+        public UpdateCareTeamMemberResponse UpdateCareTeamMember(UpdateCareTeamMemberRequest request)
         {
-            var response = new PutUpdateCareTeamMemberResponse();
+            var response = new UpdateCareTeamMemberResponse();
 
             if (request == null)
                 throw new ArgumentNullException("request");
@@ -1758,13 +1758,13 @@ namespace Phytel.API.AppDomain.NG
             {
                 IRestClient client = new JsonServiceClient();
                 //[Route("/{Version}/{ContractNumber}/Contacts/{ContactId}/CareTeam/CareTeamMembers/{Id}", "PUT")]
-                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Contacts/{4}/CareTeam/CareTeamMembers/{5}",
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Contacts/{4}/CareTeams/{5}/CareTeamMembers/{6}",
                                                                                 DDContactServiceUrl,
                                                                                 "NG",
                                                                                 request.Version,
-                                                                                request.ContractNumber, request.ContactId,request.Id), request.UserId);
+                                                                                request.ContractNumber, request.ContactId,request.CareTeamId, request.Id), request.UserId);
                 var dataDomainResponse =
-                    client.Post<PutUpdateCareTeamMemberResponse>(url, new PutUpdateCareTeamMemberDataRequest
+                    client.Post<UpdateCareTeamMemberResponse>(url, new UpdateCareTeamMemberDataRequest
                     {
                         CareTeamMemberData = Mapper.Map<CareTeamMemberData>(request.CareTeamMember),                       
                         Version = request.Version,

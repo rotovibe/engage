@@ -8,12 +8,16 @@ using ServiceStack.ServiceHost;
 
 namespace Phytel.API.DataDomain.Contact.DTO.CareTeam
 {
-    [Route("/{Version}/{ContractNumber}/Contacts/{ContactId}/CareTeam/CareTeamMembers/{Id}", "PUT")]
+    [Route("/{Version}/{ContractNumber}/Contacts/{ContactId}/CareTeams/{CareTeamId}/CareTeamMembers/{Id}", "PUT")]
     [Api(Description = "A Request object to update a care team member.")]
-    public class PutUpdateCareTeamMemberDataRequest : IDataDomainRequest
+    public class UpdateCareTeamMemberDataRequest : IDataDomainRequest
     {
-        [ApiMember(Name = "ContactId", Description = "Id of the contact whose care team member needs to be updated.", ParameterType = "path", DataType = "string", IsRequired = true)]
+        [ApiMember(Name = "ContactId", Description = "Id of the contact whose care team needs to be updated.", ParameterType = "path", DataType = "string", IsRequired = true)]
         public string ContactId { get; set; }
+
+        [ApiMember(Name = "CareTeamId", Description = "Id of the care team whose member needs to be updated.", ParameterType = "path", DataType = "string", IsRequired = true)]
+        public string CareTeamId { get; set; }
+
 
         [ApiMember(Name = "Id", Description = "Id of care team Member that is being updated.", ParameterType = "path", DataType = "string", IsRequired = true)]
         public string Id { get; set; }
