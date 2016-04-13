@@ -319,14 +319,14 @@ define([ 'services/datacontext', 'services/local.collections' ],
 				self.contactCard().activeTab(name);
 			}
 			
-			if( self.contactCard().patientId() && self.contactCard().isPatient() ){
+			if( self.contactCard() && self.contactCard().activeTab() && self.contactCard().activeTab() == 'General' ){
 				
 				//hide the profile tab.
-				self.tabs()[0].isShowing = false;
+				self.tabs()[tabIndex.profile].isShowing = false;
 				//hide the contact type dropdown
 				self.contactTypesShowing(false);	
 			}else{
-				self.tabs()[0].isShowing = true;
+				self.tabs()[tabIndex.profile].isShowing = true;
 				self.contactTypesShowing(true);
 			}
 			

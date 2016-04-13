@@ -79,16 +79,20 @@ define(['services/session', 'services/datacontext', 'viewmodels/shell/shell', 'm
             modalShowing(true);
 		}
 		
+		function editPatientContact( contact ){
+			contact().activeTab("General");
+			startEditContactDialog( contact() );
+		}
+		
 		function editContact( contact ){	
 		
-			theContact( contact() );
-			if( theContact().isPatient() ){
-				theContact().activeTab("General");	
-			}
-			else{
-				theContact().activeTab("Profile");
-			}
-			modalEntity().contactCard( contact() );
+			contact().activeTab("Profile");
+			startEditContactDialog( contact() );			
+		}
+		
+		function startEditContactDialog( contact ){
+			theContact( contact );
+			modalEntity().contactCard( contact );
 			
 			var modalSettings = {
 				title: 'Edit Communication Preferences',
@@ -159,6 +163,7 @@ define(['services/session', 'services/datacontext', 'viewmodels/shell/shell', 'm
 			showEditButton: showEditButton,
 			showDeleteButton: showDeleteButton,	
 			editContact: editContact,
+			editPatientContact: editPatientContact,
 			deleteContact: deleteContact,
 			addContact: addContact,
 			toggleOpenColumn: toggleOpenColumn,
