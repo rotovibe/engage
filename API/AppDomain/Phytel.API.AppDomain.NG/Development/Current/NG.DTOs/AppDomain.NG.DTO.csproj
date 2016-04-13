@@ -118,6 +118,8 @@
     <Compile Include="Contact\CareTeam\CareTeam.cs" />
     <Compile Include="Contact\CareTeam\GetCareTeamRequest.cs" />
     <Compile Include="Contact\CareTeam\GetCareTeamResponse.cs" />
+    <Compile Include="Contact\CareTeam\SaveCareTeamRequest.cs" />
+    <Compile Include="Contact\CareTeam\SaveCareTeamResponse.cs" />
     <Compile Include="Contact\Contact.cs" />
     <Compile Include="Contact\ContactSearchInfo.cs" />
     <Compile Include="Contact\ContactTypeLookup.cs" />

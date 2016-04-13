@@ -22,6 +22,7 @@ using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Web.Hosting;
 using AutoMapper;
+using Phytel.API.DataDomain.Contact.DTO.CareTeam;
 using DD = Phytel.API.DataDomain.Program.DTO;
 using Phytel.API.DataDomain.PatientGoal.DTO;
 using Phytel.API.DataDomain.PatientSystem.DTO;
@@ -1700,6 +1701,50 @@ namespace Phytel.API.AppDomain.NG
             return response;
 
         }
+
+        #region CareTeam
+
+        public SaveCareTeamResponse SaveCareTeam(SaveCareTeamRequest request)
+        {
+            var response = new SaveCareTeamResponse();
+
+            if (request == null)
+                throw new ArgumentNullException("request");
+
+            if(request.CareTeam == null)
+                throw new ArgumentNullException("request.CareTeam");
+
+            try
+            {
+                IRestClient client = new JsonServiceClient();
+                // '/{Context}/{Version}/{ContractNumber}/Contacts/{ContactId}/CareTeams
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Contacts/{4}/CareTeams",
+                                                                                DDContactServiceUrl,
+                                                                                "NG",
+                                                                                request.Version,
+                                                                                request.ContractNumber, request.ContactId), request.UserId);
+                var dataDomainResponse =
+                    client.Post<SaveCareTeamDataResponse>(url, new SaveCareTeamDataRequest
+                    {
+                        CareTeamData = Mapper.Map<CareTeamData>(request.CareTeam),
+                        Version = request.Version,
+                        ContactId = request.ContactId,
+                        ContractNumber = request.ContractNumber,
+                        Context = "NG"
+                    } as object);
+
+
+            }
+            catch (WebServiceException wse)
+            {
+                throw new WebServiceException("AD:SaveCareTeam()::" + wse.Message, wse.InnerException);
+            }
+
+            return response;
+
+        }
+        #endregion
+
         #endregion
 
         #region ContactTypeLookUp

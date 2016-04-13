@@ -337,5 +337,11 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
         {
             throw new NotImplementedException();
         }
+
+
+        public SaveCareTeamResponse SaveCareTeam(SaveCareTeamRequest request)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

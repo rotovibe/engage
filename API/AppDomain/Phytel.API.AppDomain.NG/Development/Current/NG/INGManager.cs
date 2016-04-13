@@ -44,5 +44,11 @@ namespace Phytel.API.AppDomain.NG
         PostProgramAttributesChangeResponse PostProgramAttributeChanges(PostProgramAttributesChangeRequest request);
         Contact GetContactByContactId(GetContactByContactIdRequest request);
         SearchContactsResponse SearchContacts(SearchContactsRequest request);
+
+        #region CareTeam
+
+        SaveCareTeamResponse SaveCareTeam(SaveCareTeamRequest request);
+
+        #endregion
     }
 }
