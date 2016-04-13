@@ -19,7 +19,7 @@ namespace Phytel.API.DataDomain.Contact.MongoDB.DTO
         public const string CoreProperty = "cor";
         public const string NotesProperty = "nts";
         public const string StatusProperty = "sts";
-        public const string FrequencyProperty = "freq";
+        public const string FrequencyProperty = "freqid";
         public const string DistanceProperty = "dist";
         public const string ExternalRecordIdProperty = "extrid";
         public const string DataSourceProperty = "dsrc";
