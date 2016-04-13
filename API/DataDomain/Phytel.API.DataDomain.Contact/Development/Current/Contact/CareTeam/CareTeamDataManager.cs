@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Phytel.API.Common.Extensions;
 using Phytel.API.DataDomain.Contact.DTO;
 using Phytel.API.DataDomain.Contact.DTO.CareTeam;
 
@@ -31,6 +32,17 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
 
             if(repo == null)
                 throw new Exception("Repository is null");
+
+            var members = request.CareTeamData.Members;
+
+            if (!members.IsNullOrEmpty())
+            {
+                var memberGroups = members.GroupBy(g => g.ContactId).Select(grp => new { ContactId = grp.Key , Count = grp.Count()});
+
+                if(memberGroups.Any(m =>  m.Count > 1))
+                    throw new Exception("Care Team cannot have multiple members with same ContactId");
+
+            }
 
             repo.Insert(request.CareTeamData);
 
