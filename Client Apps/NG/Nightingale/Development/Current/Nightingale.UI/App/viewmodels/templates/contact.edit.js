@@ -277,15 +277,14 @@ define([ 'services/datacontext', 'services/local.collections' ],
 			}
 			
 			self.removeContactSubType = function(subType){
-				var subTypeString = subType.subTypeName();
-				if( subType.specialtyName() ){
-					subTypeString += ' ' + subType.specialtyName();
-				}
-				if( subType.subSpecialtyIds().length ){
-					subTypeString += ' ' + subType.subSpecialtyString();
-				}
-					
-				alert( 'removing Type: ' + subTypeString );
+				// var subTypeString = subType.subTypeName();
+				// if( subType.specialtyName() ){
+					// subTypeString += ' ' + subType.specialtyName();
+				// }
+				// if( subType.subSpecialtyIds().length ){
+					// subTypeString += ' ' + subType.subSpecialtyString();
+				// }
+									
 				//remove it from the contactCard
 				self.contactCard().subTypes.remove( subType );
 			}
