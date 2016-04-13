@@ -231,7 +231,8 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
                     Distance = member.Distance ?? member.Distance,
                     ExternalRecordId = member.ExternalRecordId,
                     Notes = member.Notes,
-                    DataSource = member.DataSource
+                    DataSource = member.DataSource,
+                    Status = (CareTeamMemberStatus)member.StatusId,
                 };
                 if (string.IsNullOrEmpty(member.Id))
                 {
@@ -281,6 +282,7 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
                     ExternalRecordId = member.ExternalRecordId,
                     Notes = member.Notes,
                     DataSource = member.DataSource,
+                    StatusId = (int)member.Status,
                     CreatedOn = member.RecordCreatedOn,
                     CreatedById = member.RecordCreatedBy.ToString(),
                     UpdatedById = member.UpdatedBy == null ? null : member.UpdatedBy.ToString(),

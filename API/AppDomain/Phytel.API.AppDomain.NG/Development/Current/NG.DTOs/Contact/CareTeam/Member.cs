@@ -15,7 +15,8 @@ namespace Phytel.API.AppDomain.NG.DTO
         public string FrequencyId { get; set; }
         public int? Distance { get; set; }
         public string ExternalRecordId { get; set; }
-        public string DataSource { get; set; }        
+        public string DataSource { get; set; }
+        public int StatusId { get; set; }
         public DateTime? UpdatedOn { get; set; }
         public DateTime CreatedOn { get; set; }
         public string UpdatedById { get; set; }

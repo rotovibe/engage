@@ -1,6 +1,7 @@
 ﻿using System;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using Phytel.API.DataDomain.Contact.DTO;
 using Phytel.API.Interface;
 using Phytel.Services.Mongo.Linq;
 
@@ -65,6 +66,10 @@ namespace Phytel.API.DataDomain.Contact.MongoDB.DTO
         [BsonElement(DataSourceProperty)]
         [BsonIgnoreIfNull(true)]
         public string DataSource { get; set; }
+
+        [BsonElement(StatusProperty)]
+        [BsonIgnoreIfNull(true)]
+        public CareTeamMemberStatus Status { get; set; }
 
         [BsonIgnoreIfNull(true)]
         [BsonElement(RecordCreatedByProperty)]

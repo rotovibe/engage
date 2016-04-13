@@ -32,7 +32,7 @@
     public enum CareTeamMemberStatus
     {
         Active = 1,
-        InActive = 2,
-        InValid = 3
+        Inactive = 2,
+        Invalid = 3
     }
 }
