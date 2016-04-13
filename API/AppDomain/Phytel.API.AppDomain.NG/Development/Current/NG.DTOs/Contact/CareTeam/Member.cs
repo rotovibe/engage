@@ -20,7 +20,7 @@ namespace Phytel.API.AppDomain.NG.DTO
         public DateTime CreatedOn { get; set; }
         public string UpdatedById { get; set; }
         public string CreatedById { get; set; }
-        // Contact is the whole object graph for "ContactId". Populated only in GET calls. Contact object will be ignored in POST & PUT calls if used.
+        // Contact is the whole object graph of "ContactId". Populated only in GET calls. Contact object will be ignored in POST & PUT calls if used.
         public Contact Contact { get; set; }
     }
 }
