@@ -43,8 +43,8 @@ namespace Phytel.API.AppDomain.NG.Service.Mappers
             Mapper.CreateMap<ContactData, SyncPatientInfoData>();
             Mapper.CreateMap<PatientData, SyncContactInfoData>();
 
-            Mapper.CreateMap<Member, CareTeamMemberData>();
-            Mapper.CreateMap<CareTeam, CareTeamData>();
+            Mapper.CreateMap<Member, CareTeamMemberData>().ReverseMap();
+            Mapper.CreateMap<CareTeam, CareTeamData>().ReverseMap();
         }
     }
 }
