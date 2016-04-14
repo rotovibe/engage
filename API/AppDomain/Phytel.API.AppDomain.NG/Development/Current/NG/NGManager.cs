@@ -1714,6 +1714,11 @@ namespace Phytel.API.AppDomain.NG
             if(request.CareTeam == null)
                 throw new ArgumentNullException("request.CareTeam");
 
+            foreach (var member in request.CareTeam.Members)
+            {
+                ValidateCareTeamMemberFields(member);
+            }
+
             try
             {
                 IRestClient client = new JsonServiceClient();
@@ -2309,8 +2314,26 @@ namespace Phytel.API.AppDomain.NG
 
             InsertContact(insertContactRequest);
         }
-            
-        
+
+        private void ValidateCareTeamMemberFields(Member member)
+        {
+            if(member == null)
+                throw new Exception("CareTeam Member cannot be null");
+           
+            if(string.IsNullOrEmpty(member.ContactId))
+                throw new Exception("ContactId cannot be null or empty");
+
+            if (member.StatusId == 0 || member.StatusId == null)
+            {
+                throw new Exception("Status cannot be null");
+            }
+
+            if (string.IsNullOrEmpty(member.RoleId) && string.IsNullOrEmpty(member.CustomRoleName))
+            {
+                throw new Exception("Role or CustomRoleName is required");
+            }
+
+        }
 
         #endregion
     }
