@@ -2315,13 +2315,30 @@ namespace Phytel.API.AppDomain.NG
             InsertContact(insertContactRequest);
         }
 
-        private void ValidateCareTeamMemberFields(Member member)
+        private void ValidateCareTeamMemberFields(Member member)//, string contractNumber, string userId, double version)
         {
             if(member == null)
                 throw new Exception("CareTeam Member cannot be null");
-           
-            if(string.IsNullOrEmpty(member.ContactId))
+
+            if (string.IsNullOrEmpty(member.ContactId))
+            {
                 throw new Exception("ContactId cannot be null or empty");
+            }
+            else
+            {
+              //var response = GetContactByContactId(new GetContactByContactIdRequest
+              //  {
+              //      ContactId = member.ContactId,
+              //      ContractNumber = contractNumber,
+              //      UserId = userId,
+              //      Version = version
+              //  });
+
+              //  if (response == null)
+              //  {
+              //      throw new Exception(string.Format("ContactId : {0} is not a valid contact",  member.ContactId));
+              //  }
+            }
 
             if (member.StatusId == 0 || member.StatusId == null)
             {
