@@ -37,6 +37,27 @@ namespace Phytel.API.DataDomain.Contact.Service
             return response;
         }
 
+        public UpdateCareTeamMemberDataResponse Put(UpdateCareTeamMemberDataRequest request)
+        {
+            var response = new UpdateCareTeamMemberDataResponse() { Version = request.Version };
+            try
+            {
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("ContactDD:CareTeamService:Post()::Unauthorized Access");
+
+                Manager.UpdateCareTeamMember(request);
+
+            }
+            catch (Exception ex)
+            {
+                CommonFormat.FormatExceptionResponse(response, base.Response, ex);
+
+                var aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Helpers.LogException(int.Parse(aseProcessID), ex);
+            }
+            return response;
+        }
+
         public GetCareTeamDataResponse Get(GetCareTeamDataRequest request)
         {
             var response = new GetCareTeamDataResponse() { Version = request.Version };

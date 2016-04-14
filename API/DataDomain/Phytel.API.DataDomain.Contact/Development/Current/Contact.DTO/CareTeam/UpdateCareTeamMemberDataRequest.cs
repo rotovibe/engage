@@ -21,7 +21,7 @@ namespace Phytel.API.DataDomain.Contact.DTO.CareTeam
 
         [ApiMember(Name = "Id", Description = "Id of care team Member that is being updated.", ParameterType = "path", DataType = "string", IsRequired = true)]
         public string Id { get; set; }
-        [ApiMember(Name = "CareTeamMember", Description = "care team member object to be updated", ParameterType = "property", DataType = "CareTeamMember", IsRequired = true)]
+        [ApiMember(Name = "CareTeamMemberData", Description = "care team member object to be updated", ParameterType = "property", DataType = "CareTeamMember", IsRequired = true)]
         public CareTeamMemberData CareTeamMemberData { get; set; }
 
         [ApiMember(Name = "Context", Description = "Product Context requesting the Contact", ParameterType = "path", DataType = "string", IsRequired = true)]

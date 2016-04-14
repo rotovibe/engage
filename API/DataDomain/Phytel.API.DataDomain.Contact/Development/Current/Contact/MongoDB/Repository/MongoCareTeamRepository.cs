@@ -187,17 +187,22 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
                                 x => x.Id == ObjectId.Parse(careTeamMemberData.Id));
 
 
-                        var newMecareMemberTeam = BuildMECareTeamMember(this.UserId, careTeamMemberData);
+                        var updatedMecareMemberTeam = BuildMECareTeamMember(this.UserId, careTeamMemberData);
 
-                        newMecareMemberTeam.RecordCreatedOn = currentMeCareTeamMember.RecordCreatedOn;
-                        newMecareMemberTeam.RecordCreatedBy = currentMeCareTeamMember.RecordCreatedBy;
-
-                        currentMeCareTeamMember = newMecareMemberTeam;
-                        contactCareTeam.MeCareTeamMembers[memberIndex] = newMecareMemberTeam;
+                        updatedMecareMemberTeam.RecordCreatedOn = currentMeCareTeamMember.RecordCreatedOn;
+                        updatedMecareMemberTeam.RecordCreatedBy = currentMeCareTeamMember.RecordCreatedBy;
+                       
+                        contactCareTeam.MeCareTeamMembers[memberIndex] = updatedMecareMemberTeam;
 
                         ctx.CareTeam.Collection.Save(contactCareTeam);
-                        //TODO: Audit the update                       
                         
+                        AuditHelper.LogDataAudit(this.UserId,
+                                          MongoCollectionName.CareTeam.ToString(),
+                                           contactCareTeam.Id.ToString(),
+                                          DataAuditType.Update,
+                                          request.ContractNumber);
+
+
                         result = true;
                     }
                 }
