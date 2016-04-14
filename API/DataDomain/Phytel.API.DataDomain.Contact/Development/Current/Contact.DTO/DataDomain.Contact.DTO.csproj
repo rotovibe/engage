@@ -101,6 +101,8 @@
     <Compile Include="AddressData.cs" />
     <Compile Include="CareTeam\CareTeamMemberData.cs" />
     <Compile Include="CareTeam\CareTeamData.cs" />
+    <Compile Include="CareTeam\DeleteCareTeamMemberDataRequest.cs" />
+    <Compile Include="CareTeam\DeleteCareTeamMemberResponse.cs" />
     <Compile Include="CareTeam\GetCareTeamDataRequest.cs" />
     <Compile Include="CareTeam\UpdateCareTeamMemberDataRequest.cs" />
     <Compile Include="CareTeam\UpdateCareTeamMemberDataResponse.cs" />
