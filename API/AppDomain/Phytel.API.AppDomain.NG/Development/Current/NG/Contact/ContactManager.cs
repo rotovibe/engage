@@ -5,14 +5,17 @@ using Phytel.API.AppDomain.NG.DTO;
 using Phytel.API.DataDomain.Contact.DTO.CareTeam;
 using ServiceStack.Service;
 using ServiceStack.ServiceClient.Web;
+using ServiceStack.Text;
 
 namespace Phytel.API.AppDomain.NG
 {
     public class ContactManager : ManagerBase, IContactManager
     {
+        //TODO: Remove the DDContactServiceUrl once refactored.
         protected static readonly string DDContactServiceUrl = ConfigurationManager.AppSettings["DDContactServiceUrl"];
         public IContactEndpointUtil EndpointUtil { get; set; }
 
+       
         #region Contact
         #endregion
 
@@ -41,6 +44,9 @@ namespace Phytel.API.AppDomain.NG
 
             if (request.CareTeam == null)
                 throw new ArgumentNullException("request.CareTeam");
+
+            if(request.CareTeam.Members.IsNullOrEmpty())
+                 throw new ApplicationException(string.Format("CareTeam should have atleast one or more members."));
 
             foreach (var member in request.CareTeam.Members)
             {

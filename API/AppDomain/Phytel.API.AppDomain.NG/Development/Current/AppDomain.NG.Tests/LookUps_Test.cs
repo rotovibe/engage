@@ -97,7 +97,7 @@ namespace Phytel.API.AppDomain.NG.Test
                 Version = _version,
             };
             // Act
-            List<Contact> response = ngManager.GetCareManagers(request);
+            List<DTO.Contact> response = ngManager.GetCareManagers(request);
 
             //Assert
             Assert.IsTrue(response.Count > 0);
