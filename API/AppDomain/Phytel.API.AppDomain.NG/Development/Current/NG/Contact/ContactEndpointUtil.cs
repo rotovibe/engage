@@ -33,14 +33,7 @@ namespace Phytel.API.AppDomain.NG
                                     request.ContractNumber,
                                     request.ContactId), request.UserId);
 
-                GetCareTeamDataResponse dataDomainResponse = client.Post<GetCareTeamDataResponse>(url, new GetCareTeamDataRequest
-                {
-                    Context = "NG",
-                    ContractNumber = request.ContractNumber,
-                    ContactId = request.ContactId,
-                    UserId = request.UserId,
-                    Version = request.Version
-                } as object);
+                GetCareTeamDataResponse dataDomainResponse = client.Get<GetCareTeamDataResponse>(url);
 
                 if (dataDomainResponse != null)
                 {

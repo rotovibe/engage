@@ -1063,7 +1063,7 @@ namespace Phytel.API.DataDomain.Contact
                 var cursor = ctx.Contacts.Collection.Find(query);
 
                  var sortByBuilder = new SortByBuilder();
-                sortByBuilder.Ascending(MEContact.FirstNameProperty, MEContact.LastNameProperty, MEContact.IdProperty);
+                sortByBuilder.Ascending(MEContact.LastNameProperty, MEContact.FirstNameProperty, MEContact.IdProperty);
 
                 cursor.SetSortOrder(sortByBuilder);
                 cursor.SetSkip(request.Skip);
