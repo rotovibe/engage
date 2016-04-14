@@ -48,6 +48,7 @@ namespace Phytel.API.AppDomain.NG.Service.Containers
             container.RegisterAutoWiredAs<GoalsEndpointUtils, IGoalsEndpointUtils>().ReusedWithin(ReuseScope.Request);
             container.RegisterAutoWiredAs<PatientSystemEndpointUtil, IPatientSystemEndpointUtil>().ReusedWithin(ReuseScope.Request);
             container.RegisterAutoWiredAs<PatientSystemManager, IPatientSystemManager>().ReusedWithin(ReuseScope.Request);
+            container.RegisterAutoWiredAs<ContactManager, IContactManager>().ReusedWithin(ReuseScope.Request);
             return container;
         }
     }
