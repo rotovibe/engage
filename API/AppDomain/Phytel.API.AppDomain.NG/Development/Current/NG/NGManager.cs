@@ -1769,7 +1769,7 @@ namespace Phytel.API.AppDomain.NG
                                                                                 request.Version,
                                                                                 request.ContractNumber, request.ContactId,request.CareTeamId, request.Id), request.UserId);
                 var dataDomainResponse =
-                    client.Post<UpdateCareTeamMemberResponse>(url, new UpdateCareTeamMemberDataRequest
+                    client.Put<UpdateCareTeamMemberResponse>(url, new UpdateCareTeamMemberDataRequest
                     {
                         CareTeamMemberData = Mapper.Map<CareTeamMemberData>(request.CareTeamMember),                       
                         Version = request.Version,

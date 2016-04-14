@@ -8,7 +8,7 @@ using ServiceStack.ServiceHost;
 
 namespace Phytel.API.DataDomain.Contact.DTO.CareTeam
 {
-    [Route("/{Version}/{ContractNumber}/Contacts/{ContactId}/CareTeams/{CareTeamId}/CareTeamMembers/{Id}", "PUT")]
+    [Route("/{Context}/{Version}/{ContractNumber}/Contacts/{ContactId}/CareTeams/{CareTeamId}/CareTeamMembers/{Id}", "PUT")]
     [Api(Description = "A Request object to update a care team member.")]
     public class UpdateCareTeamMemberDataRequest : IDataDomainRequest
     {
