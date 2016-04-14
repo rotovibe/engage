@@ -16,6 +16,8 @@ namespace Phytel.API.AppDomain.NG
 
         #region CareTeam
         CareTeam GetCareTeam(GetCareTeamRequest request);
+        SaveCareTeamResponse SaveCareTeam(SaveCareTeamRequest request);
+        UpdateCareTeamMemberResponse UpdateCareTeamMember(UpdateCareTeamMemberRequest request);
         #endregion
     }
 }

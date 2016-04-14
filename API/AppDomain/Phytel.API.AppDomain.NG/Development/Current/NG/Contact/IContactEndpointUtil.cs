@@ -12,10 +12,12 @@ namespace Phytel.API.AppDomain.NG
     {
         #region Contact
         #endregion
-        
+
         #region CareTeam
         CareTeamData GetCareTeam(GetCareTeamRequest request);
+        SaveCareTeamDataResponse SaveCareTeam(SaveCareTeamRequest request);
+
         #endregion
-        
+
     }
 }
