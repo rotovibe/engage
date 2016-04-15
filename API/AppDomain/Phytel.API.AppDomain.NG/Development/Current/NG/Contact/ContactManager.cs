@@ -11,8 +11,7 @@ namespace Phytel.API.AppDomain.NG
 {
     public class ContactManager : ManagerBase, IContactManager
     {
-        //TODO: Remove the DDContactServiceUrl once refactored.
-        protected static readonly string DDContactServiceUrl = ConfigurationManager.AppSettings["DDContactServiceUrl"];
+        
         public IContactEndpointUtil EndpointUtil { get; set; }
 
         #region Contact
