@@ -148,6 +148,168 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Determines if a Care Team Exist
+        /// </summary>
+        /// <param name="careTeamId"></param>
+        /// <returns></returns>
+        public bool CareTeamExist(string careTeamId)
+        {
+            var res = false;
+            try
+            {
+                using (var ctx = new ContactCareTeamMongoContext(_dbName))
+                {
+                    ObjectId cid;
+                    if (ObjectId.TryParse(careTeamId, out cid))
+                    {
+                        var queries = new List<IMongoQuery>
+                        {
+
+                            MB.Query<MEContactCareTeam>.EQ(c => c.Id, cid),
+                            MB.Query<MEContactCareTeam>.EQ(c => c.DeleteFlag, false)
+                        };
+
+                        var query = MB.Query.And(queries);
+                        var contactCareTeam = ctx.CareTeam.Collection.FindOne(query);
+                        res = contactCareTeam != null;
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return res;
+        }
+
+       
+
+        /// <summary>
+        /// Determines if a Care Team Exist
+        /// </summary>
+        /// <param name="contactId"></param>
+        /// <returns></returns>
+        public bool ContactCareTeamExist(string contactId)
+        {
+            var res = false;
+            try
+            {
+                using (var ctx = new ContactCareTeamMongoContext(_dbName))
+                {
+                    ObjectId cid;
+                    if (ObjectId.TryParse(contactId, out cid))
+                    {
+                        var queries = new List<IMongoQuery>
+                        {
+
+                            MB.Query<MEContactCareTeam>.EQ(c => c.ContactId, cid),
+                            MB.Query<MEContactCareTeam>.EQ(c => c.DeleteFlag, false)
+                        };
+
+                        var query = MB.Query.And(queries);
+                        var contactCareTeam = ctx.CareTeam.Collection.FindOne(query);
+                        res = contactCareTeam != null;
+                    }                                        
+                }
+            }
+            catch (Exception)
+            {                    
+                throw;
+            }
+            return res;
+        }
+
+        public bool CareTeamMemberExist(string careTeamId, string memberId)
+        {
+            var res = false;
+            try
+            {
+                using (var ctx = new ContactCareTeamMongoContext(_dbName))
+                {
+                    ObjectId cid;
+                    ObjectId mid;
+
+                    if (ObjectId.TryParse(careTeamId, out cid) && ObjectId.TryParse(memberId, out mid))
+                    {
+                        var careTeam = GetCareTeam(careTeamId);
+                        if (careTeam!=null)
+                        {
+                            var currentMeCareTeamMember = careTeam.MeCareTeamMembers.FirstOrDefault(
+                                x => x.Id == mid);
+                            res = currentMeCareTeamMember != null;
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return res;
+        }
+
+        private MEContactCareTeam GetContactCareTeam(string contactId)
+        {
+            MEContactCareTeam res = null;
+            try
+            {
+                using (var ctx = new ContactCareTeamMongoContext(_dbName))
+                {
+                    ObjectId cid;
+                    if (ObjectId.TryParse(contactId, out cid))
+                    {
+                        var queries = new List<IMongoQuery>
+                        {
+
+                            MB.Query<MEContactCareTeam>.EQ(c => c.ContactId, cid),
+                            MB.Query<MEContactCareTeam>.EQ(c => c.DeleteFlag, false)
+                        };
+
+                        var query = MB.Query.And(queries);
+                        var contactCareTeam = ctx.CareTeam.Collection.FindOne(query);
+                        res = contactCareTeam;
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return res;
+        }
+
+        private MEContactCareTeam GetCareTeam(string careTeamId)
+        {
+            MEContactCareTeam res = null;
+            try
+            {
+                using (var ctx = new ContactCareTeamMongoContext(_dbName))
+                {
+                    ObjectId cid;
+                    if (ObjectId.TryParse(careTeamId, out cid))
+                    {
+                        var queries = new List<IMongoQuery>
+                        {
+
+                            MB.Query<MEContactCareTeam>.EQ(c => c.Id, cid),
+                            MB.Query<MEContactCareTeam>.EQ(c => c.DeleteFlag, false)
+                        };
+
+                        var query = MB.Query.And(queries);
+                        var careTeam = ctx.CareTeam.Collection.FindOne(query);
+                        res = careTeam;
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return res;
+        }
+
+
         public bool UpdateCareTeamMember(object entity)
         {
             UpdateCareTeamMemberDataRequest request = (UpdateCareTeamMemberDataRequest)entity;

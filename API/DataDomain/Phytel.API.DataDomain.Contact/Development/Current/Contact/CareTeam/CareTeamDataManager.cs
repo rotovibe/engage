@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Phytel.API.Common.Extensions;
@@ -68,7 +69,7 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
             }
             catch (ApplicationException ex)
             {
-                response.Status = new ResponseStatus("400", ex.Message);
+                response.Status = new ResponseStatus(HttpStatusCode.NotFound.ToString(), ex.Message);
             }
             catch (Exception)
             {                    

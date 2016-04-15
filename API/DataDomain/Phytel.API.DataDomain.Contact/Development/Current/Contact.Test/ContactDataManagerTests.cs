@@ -12,6 +12,7 @@ using Phytel.API.DataDomain.Contact.CareTeam;
 using Phytel.API.DataDomain.Contact.ContactTypeLookUp;
 using Phytel.API.DataDomain.Contact.DTO.CareTeam;
 using Phytel.API.Interface;
+using ServiceStack.Common;
 
 namespace Phytel.API.DataDomain.Contact.Tests
 {
@@ -92,7 +93,7 @@ namespace Phytel.API.DataDomain.Contact.Tests
                 {
                     ContactId = "5325c821072ef705080d3488",
                     Id = "570e957fee4785557c0bd569",
-                    Notes = "Test",
+                    Notes = "Test123",
                     StatusId = 1,
                     Core = true,
                     RoleId = "56f169f8078e10eb86038514"
@@ -113,7 +114,7 @@ namespace Phytel.API.DataDomain.Contact.Tests
 
                 var response = cm.UpdateCareTeamMember(request);
 
-                Assert.IsNotNull(response);
+                Assert.IsTrue(response.Status.ErrorCode.IsEmpty());
             }
 
         }
