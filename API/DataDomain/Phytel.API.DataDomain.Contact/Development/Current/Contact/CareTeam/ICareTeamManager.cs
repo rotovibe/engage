@@ -8,6 +8,6 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
         SaveCareTeamDataResponse InsertCareTeam(SaveCareTeamDataRequest request);
         UpdateCareTeamMemberDataResponse UpdateCareTeamMember(UpdateCareTeamMemberDataRequest request);
         GetCareTeamDataResponse GetCareTeam(GetCareTeamDataRequest request);
-        bool DeleteCareTeamMember(DeleteCareTeamMemberDataRequest request);
+        void DeleteCareTeamMember(DeleteCareTeamMemberDataRequest request);
     }
 }

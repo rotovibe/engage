@@ -78,5 +78,27 @@ namespace Phytel.API.DataDomain.Contact.Service
             }
             return response;
         }
+
+        public DeleteCareTeamMemberDataResponse Delete(DeleteCareTeamMemberDataRequest request)
+        {
+            var response = new DeleteCareTeamMemberDataResponse();
+
+            try
+            {
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("ContactDD:CareTeamService:Delete()::Unauthorized Access");
+
+                Manager.DeleteCareTeamMember(request);
+            }
+            catch (Exception ex)
+            {
+                CommonFormat.FormatExceptionResponse(response, base.Response, ex);
+
+                var aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Helpers.LogException(int.Parse(aseProcessID), ex);
+            }
+            return response;
+
+        }
     }
 }

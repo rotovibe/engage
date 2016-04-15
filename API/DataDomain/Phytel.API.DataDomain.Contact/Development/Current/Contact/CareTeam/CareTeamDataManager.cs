@@ -94,9 +94,25 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
            return response;
         }
 
-        public bool DeleteCareTeamMember(DeleteCareTeamMemberDataRequest request)
+        public void DeleteCareTeamMember(DeleteCareTeamMemberDataRequest request)
         {
-            throw new NotImplementedException();
+            if(request == null)
+                throw new ArgumentNullException("request");
+
+            if(string.IsNullOrEmpty(request.ContactId))
+                throw new ArgumentException("Empty ContactId", "request");
+
+            if (string.IsNullOrEmpty(request.CareTeamId))
+                throw new ArgumentException("Null or empty CareTeamId", "request");
+
+            if (string.IsNullOrEmpty(request.MemberId))
+                throw new ArgumentException("Null or empty MemberId", "request");
+
+            var repo = _factory.GetCareTeamRepository(request, RepositoryType.CareTeam);
+            if (repo == null)
+                throw new Exception("Repository is null");
+
+            repo.DeleteCareTeamMember(request);
         }
     }
 }

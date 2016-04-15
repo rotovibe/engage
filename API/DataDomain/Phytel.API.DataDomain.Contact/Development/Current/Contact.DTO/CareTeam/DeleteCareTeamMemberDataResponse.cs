@@ -3,7 +3,7 @@ using ServiceStack.ServiceInterface.ServiceModel;
 
 namespace Phytel.API.DataDomain.Contact.DTO.CareTeam
 {
-    public class DeleteCareTeamMemberResponse : IDomainResponse
+    public class DeleteCareTeamMemberDataResponse : IDomainResponse
     {
         public double Version { get; set; }
 

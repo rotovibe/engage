@@ -519,9 +519,39 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
             return meMember;
         }
 
-        public bool DeleteCareTeamMember(object entity)
+        public void DeleteCareTeamMember(object entity)
         {
-            throw new NotImplementedException();
+            var request = (DeleteCareTeamMemberDataRequest)entity;
+
+            using (var ctx = new ContactCareTeamMongoContext(_dbName))
+            {
+                var queries = new List<IMongoQuery>
+                        {
+                            MB.Query<MEContactCareTeam>.EQ(c => c.ContactId, ObjectId.Parse(request.ContactId)),
+                            MB.Query<MEContactCareTeam>.EQ(c => c.Id, ObjectId.Parse(request.CareTeamId)),
+                            MB.Query<MEContactCareTeam>.EQ(c => c.DeleteFlag, false)
+                        };
+
+                var query = MB.Query.And(queries);
+                var contactCareTeam = ctx.CareTeam.Collection.FindOne(query);
+                var members = contactCareTeam.MeCareTeamMembers;
+                var memberToRemove = members.FirstOrDefault(m => m.Id == ObjectId.Parse(request.MemberId));
+
+                if (memberToRemove == null) return;
+
+                members.Remove(memberToRemove);
+
+                contactCareTeam.MeCareTeamMembers = members;
+                contactCareTeam.LastUpdatedOn = DateTime.UtcNow;
+                contactCareTeam.UpdatedBy = ObjectId.Parse(this.UserId);
+
+                AuditHelper.LogDataAudit(this.UserId,
+                    MongoCollectionName.CareTeam.ToString(),
+                    contactCareTeam.Id.ToString(),
+                    DataAuditType.Update,
+                    request.ContractNumber);
+            }
+            
         }
     }
 }
