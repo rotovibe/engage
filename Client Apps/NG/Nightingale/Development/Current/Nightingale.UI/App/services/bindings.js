@@ -1202,7 +1202,7 @@ define(['services/formatter', 'services/dateHelper'],
 			*	@method columnSizer.init
 			*/
             init: function (element, valueAccessor, allBindingsAccessor) {                
-                if (isChrome() || isIe11()) {
+                if ( isIe11() ) {
 					return;
 				}
 				else{
