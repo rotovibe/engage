@@ -62,10 +62,10 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
                 throw new ArgumentNullException("request");
 
             if (request.CareTeamMemberData == null)
-                throw new ArgumentNullException("CareTeamMemberData");
+                throw new ArgumentNullException("CareTeamMemberData is Null","request");
 
             if (string.IsNullOrEmpty(request.ContactId))
-                throw new ArgumentNullException("Empty ContactId", "request");
+                throw new ArgumentNullException("Null or Empty ContactId", "request");
 
             if (string.IsNullOrEmpty(request.CareTeamId))
                 throw new ArgumentNullException("Null or empty CareTeamId", "request");
