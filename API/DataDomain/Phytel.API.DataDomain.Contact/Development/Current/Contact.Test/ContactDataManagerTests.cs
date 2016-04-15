@@ -8,7 +8,9 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Phytel.API.DataDomain.Contact.Test.Stubs;
 using Phytel.API.DataDomain.Contact.DTO;
 using Moq;
+using Phytel.API.DataDomain.Contact.CareTeam;
 using Phytel.API.DataDomain.Contact.ContactTypeLookUp;
+using Phytel.API.DataDomain.Contact.DTO.CareTeam;
 using Phytel.API.Interface;
 
 namespace Phytel.API.DataDomain.Contact.Tests
@@ -82,6 +84,38 @@ namespace Phytel.API.DataDomain.Contact.Tests
 
                 Assert.IsNotNull(response);
             }
+
+            [TestMethod()]            
+            public void UpdateCareTeamMember_Test()
+            {
+                CareTeamMemberData ctm = new CareTeamMemberData()
+                {
+                    ContactId = "5325c821072ef705080d3488",
+                    Id = "570e957fee4785557c0bd569",
+                    Notes = "Test",
+                    StatusId = 1,
+                    Core = true,
+                    RoleId = "56f169f8078e10eb86038514"
+
+                };
+                var request = new UpdateCareTeamMemberDataRequest()
+                {
+                    CareTeamMemberData = ctm,
+                    ContactId = "5325db7bd6a4850adc047053",
+                    UserId = "5325c81f072ef705080d347e",
+                    CareTeamId = "570e957fee4785557c0bd56a",
+                    Context = "NG",
+                    ContractNumber = "InHealth001",
+                    Version = 1.0
+                };
+                var fact = new CareTeamRepositoryFactory();
+                CareTeamDataManager cm = new CareTeamDataManager (fact);
+
+                var response = cm.UpdateCareTeamMember(request);
+
+                Assert.IsNotNull(response);
+            }
+
         }
     }
 

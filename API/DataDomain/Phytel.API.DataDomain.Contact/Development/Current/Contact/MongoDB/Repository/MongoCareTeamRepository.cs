@@ -42,8 +42,7 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
 
         public MongoCareTeamRepository(string dbname)
         {
-            _dbName = dbname;
-            AppHostBase.Instance.Container.AutoWire(this);
+            _dbName = dbname;           
         }
 
         public string UserId { get; set; }
@@ -195,7 +194,7 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
                         contactCareTeam.MeCareTeamMembers[memberIndex] = updatedMecareMemberTeam;
 
                         ctx.CareTeam.Collection.Save(contactCareTeam);
-                        
+
                         AuditHelper.LogDataAudit(this.UserId,
                                           MongoCollectionName.CareTeam.ToString(),
                                            contactCareTeam.Id.ToString(),
