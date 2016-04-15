@@ -1702,11 +1702,6 @@ namespace Phytel.API.AppDomain.NG
 
         }
 
-        #region CareTeam
-
-        
-        #endregion
-
         #endregion
 
         #region ContactTypeLookUp

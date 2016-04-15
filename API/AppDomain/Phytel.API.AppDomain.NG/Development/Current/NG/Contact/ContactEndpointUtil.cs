@@ -79,9 +79,36 @@ namespace Phytel.API.AppDomain.NG
             return response;
         }
 
+        public DeleteCareTeamMemberDataResponse DeleteCareTeamMember(DeleteCareTeamMemberRequest request)
+        {
+            DeleteCareTeamMemberDataResponse response = null;
+            try
+            {
+
+                IRestClient client = new JsonServiceClient();
+                //[Route("/{Version}/{ContractNumber}/Contacts/{ContactId}/CareTeams/{CareTeamId}/CareTeamMembers/{Id}", "DELETE")]
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Contacts/{4}/CareTeams/{5}/CareTeamMembers/{6}",
+                                                                                DDContactServiceUrl,
+                                                                                "NG",
+                                                                                request.Version,
+                                                                                request.ContractNumber, request.ContactId, request.CareTeamId, request.Id), request.UserId);
+                var dataDomainResponse = client.Delete<DeleteCareTeamMemberDataResponse>(url);
+
+                if (dataDomainResponse != null)
+                {
+                    response.Version = dataDomainResponse.Version;
+                    response.Status = dataDomainResponse.Status;
+                }
+
+            }
+            catch (WebServiceException wse)
+            {
+                throw new WebServiceException("AD:DeleteCareTeamMember()::" + wse.Message, wse.InnerException);
+            }
+
+            return response;
+        }
+
         #endregion
-
-
-       
     }
 }

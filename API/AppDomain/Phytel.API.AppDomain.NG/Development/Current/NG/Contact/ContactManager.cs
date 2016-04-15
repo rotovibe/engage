@@ -15,7 +15,6 @@ namespace Phytel.API.AppDomain.NG
         protected static readonly string DDContactServiceUrl = ConfigurationManager.AppSettings["DDContactServiceUrl"];
         public IContactEndpointUtil EndpointUtil { get; set; }
 
-       
         #region Contact
         #endregion
 
@@ -111,6 +110,24 @@ namespace Phytel.API.AppDomain.NG
             return response;
         }
 
+        public DeleteCareTeamMemberResponse DeleteCareTeamMember(DeleteCareTeamMemberRequest request)
+        {
+            var response = new DeleteCareTeamMemberResponse();
+
+            if (request == null)
+                throw new ArgumentNullException("request");
+            try
+            {
+                EndpointUtil.DeleteCareTeamMember(request);
+            }
+            catch (WebServiceException wse)
+            {
+                throw new WebServiceException("AD:DeleteCareTeamMemberResponse()::" + wse.Message, wse.InnerException);
+            }
+
+            return response;
+        }
+
         #endregion
 
         #region Private Methods
@@ -151,5 +168,6 @@ namespace Phytel.API.AppDomain.NG
 
         }
         #endregion
+        
     }
 }
