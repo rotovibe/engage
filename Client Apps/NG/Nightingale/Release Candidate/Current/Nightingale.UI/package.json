@@ -1,5 +1,5 @@
 {
-  "name": "engage gulp js build",
+  "name": "engageGulpjsBuild",
   "version": "1.0.0",
   "description": "Nightingale.UI js build using gulp",
   "main": "copyright.js",
