@@ -27,6 +27,7 @@ namespace Phytel.API.DataDomain.Patient.DTO
         public const string GenderProperty = "g";
         public const string DOBProperty = "dob";
         public const string MiddleNameProperty = "mn";
+        public const string PrefixProperty = "pfx";
         public const string SuffixProperty = "sfx";
         public const string PreferredNameProperty = "pfn";
         public const string PriorityProperty = "pri";
@@ -61,6 +62,10 @@ namespace Phytel.API.DataDomain.Patient.DTO
         [BsonElement(LastNameProperty)]
         [BsonIgnoreIfNull(true)]
         public string LastName { get; set; }
+
+        [BsonElement(PrefixProperty)]
+        [BsonIgnoreIfNull(true)]
+        public string Prefix { get; set; }
 
         [BsonElement(SuffixProperty)]
         [BsonIgnoreIfNull(true)]

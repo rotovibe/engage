@@ -14,6 +14,7 @@ namespace Phytel.API.DataDomain.Patient
         public const string G = "G";
         public const string DOB = "DOB";
         public const string MN = "MN";
+        public const string PFX = "PFX";
         public const string SFX = "SFX";
         public const string PN = "PN";
         public const string Problem = "Problem";

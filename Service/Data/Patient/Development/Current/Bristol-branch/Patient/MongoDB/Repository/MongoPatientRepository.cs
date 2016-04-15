@@ -84,6 +84,7 @@ namespace Phytel.API.DataDomain.Patient
                             FirstName = pd.FirstName,
                             LastName = pd.LastName,
                             MiddleName = pd.MiddleName,
+                            Prefix = pd.Prefix,
                             Suffix = pd.Suffix,
                             PreferredName = pd.PreferredName,
                             Gender = pd.Gender,
@@ -183,6 +184,7 @@ namespace Phytel.API.DataDomain.Patient
                             FirstName = pd.FirstName,
                             LastName = pd.LastName,
                             MiddleName = pd.MiddleName,
+                            Prefix = pd.Prefix,
                             Suffix = pd.Suffix,
                             PreferredName = pd.PreferredName,
                             Gender = pd.Gender,
@@ -220,7 +222,7 @@ namespace Phytel.API.DataDomain.Patient
                 }
                 // TODO: Auditing.
             }
-            catch (BulkWriteException bwEx)
+            catch (MongoBulkWriteException bwEx)
             {
                 // Get the error messages for the ones that failed.
                 foreach (BulkWriteError er in bwEx.WriteErrors)
@@ -454,6 +456,7 @@ namespace Phytel.API.DataDomain.Patient
                                 Gender = meP.Gender,
                                 LastName = meP.LastName,
                                 MiddleName = meP.MiddleName,
+                                Prefix = meP.Prefix,
                                 Suffix = meP.Suffix,
                                 Version = meP.Version,
                                 PriorityData = (int) meP.Priority,
@@ -629,6 +632,14 @@ namespace Phytel.API.DataDomain.Patient
                         else
                             updt.Set(MEPatient.MiddleNameProperty, request.PatientData.MiddleName);
                     }
+
+                    if (request.PatientData.Prefix != null)
+                    {
+                        if (request.PatientData.Prefix == "\"\"" || (request.PatientData.Prefix == "\'\'"))
+                            updt.Set(MEPatient.PrefixProperty, string.Empty);
+                        else
+                            updt.Set(MEPatient.PrefixProperty, request.PatientData.Prefix);
+                    }
                     if (request.PatientData.Suffix != null)
                     {
                         if (request.PatientData.Suffix == "\"\"" || (request.PatientData.Suffix == "\'\'"))
@@ -789,6 +800,8 @@ namespace Phytel.API.DataDomain.Patient
             data.Add(new SearchFieldData { Active = true, FieldName = Constants.G, Value = request.PatientData.Gender == null ? null : request.PatientData.Gender.ToUpper()});
             data.Add(new SearchFieldData { Active = true, FieldName = Constants.DOB, Value = request.PatientData.DOB });
             data.Add(new SearchFieldData { Active = true, FieldName = Constants.MN, Value = request.PatientData.MiddleName });
+            data.Add(new SearchFieldData { Active = true, FieldName = Constants.PFX, Value = request.PatientData.Prefix });
+
             data.Add(new SearchFieldData { Active = true, FieldName = Constants.SFX, Value = request.PatientData.Suffix });
             data.Add(new SearchFieldData { Active = true, FieldName = Constants.PN, Value = request.PatientData.PreferredName });
             data.Add(new SearchFieldData { Active = true, FieldName = Constants.PCM }); //value left null on purpose
