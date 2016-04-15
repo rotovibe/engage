@@ -92,5 +92,10 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
            response.CareTeamData = (CareTeamData)repo.GetCareTeamByContactId(request.ContactId);
            return response;
         }
+
+        public bool DeleteCareTeamMember(DeleteCareTeamMemberDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

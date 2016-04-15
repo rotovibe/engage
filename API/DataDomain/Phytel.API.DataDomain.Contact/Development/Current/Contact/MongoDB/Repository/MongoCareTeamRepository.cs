@@ -356,5 +356,10 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
             }
             return meMember;
         }
+
+        public bool DeleteCareTeamMember(object entity)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
