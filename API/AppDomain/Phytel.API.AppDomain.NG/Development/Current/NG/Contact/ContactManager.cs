@@ -73,38 +73,31 @@ namespace Phytel.API.AppDomain.NG
                 throw new ArgumentNullException("request");
 
             if (request.CareTeamMember == null)
-                throw new ArgumentNullException("request.CareTeamMember");
+                throw new ArgumentNullException("CareTeamMemberData");
+
+            if (string.IsNullOrEmpty(request.ContactId))
+                throw new ArgumentNullException("Empty ContactId", "request");
+
+            if (string.IsNullOrEmpty(request.CareTeamId))
+                throw new ArgumentNullException("Null or empty CareTeamId", "request");
+
+            if (string.IsNullOrEmpty(request.Id))
+                throw new ArgumentNullException("Null or empty MemberId", "request");
+
+            if (request.Id != request.CareTeamMember.Id)
+                throw new ArgumentNullException("CareTeamMemberData.Id and Id are different", "request");
 
             try
             {
-                IRestClient client = new JsonServiceClient();
-                //[Route("/{Version}/{ContractNumber}/Contacts/{ContactId}/CareTeams/{CareTeamId}/CareTeamMembers/{Id}", "PUT")]
-                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Contacts/{4}/CareTeams/{5}/CareTeamMembers/{6}",
-                                                                                DDContactServiceUrl,
-                                                                                "NG",
-                                                                                request.Version,
-                                                                                request.ContractNumber, request.ContactId, request.CareTeamId, request.Id), request.UserId);
-                var dataDomainResponse =
-                    client.Put<UpdateCareTeamMemberResponse>(url, new UpdateCareTeamMemberDataRequest
-                    {
-                        CareTeamMemberData = Mapper.Map<CareTeamMemberData>(request.CareTeamMember),
-                        Version = request.Version,
-                        ContactId = request.ContactId,
-                        CareTeamId = request.CareTeamId,
-                        Id = request.Id,
-                        ContractNumber = request.ContractNumber,
-                        Context = "NG"
-                    } as object);
-                if (dataDomainResponse!=null)
+                var domainResponse = EndpointUtil.UpdateCareTeamMember(request);
+                if (domainResponse != null)
                 {
-                    response.Version = dataDomainResponse.Version;
-                    response.Status = dataDomainResponse.Status;                   
+                    response.Status = domainResponse.Status;                    
                 }
-
             }
-            catch (WebServiceException wse)
+            catch (Exception ex)
             {
-                throw new WebServiceException("AD:UpdateCareTeamMember()::" + wse.Message, wse.InnerException);
+                throw new Exception("AD:UpdateCareTeamMember()::" + ex.Message, ex.InnerException);
             }
 
             return response;
@@ -124,6 +117,8 @@ namespace Phytel.API.AppDomain.NG
             {
                 throw new WebServiceException("AD:DeleteCareTeamMemberResponse()::" + wse.Message, wse.InnerException);
             }
+
+
 
             return response;
         }

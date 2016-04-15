@@ -321,14 +321,8 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
                 {
                     using (ContactCareTeamMongoContext ctx = new ContactCareTeamMongoContext(_dbName))
                     {
-                        var queries = new List<IMongoQuery>
-                        {
-                            MB.Query<MEContactCareTeam>.EQ(c => c.ContactId, ObjectId.Parse(request.ContactId)),
-                            MB.Query<MEContactCareTeam>.EQ(c => c.DeleteFlag, false)
-                        };
 
-                        var query = MB.Query.And(queries);
-                        var contactCareTeam = ctx.CareTeam.Collection.FindOne(query);
+                        var contactCareTeam = GetContactCareTeam(request.ContactId);
 
                         if (contactCareTeam == null)
                             throw new ApplicationException("UpdateCareTeamMember: The referenced contact doesn't have a care team");
@@ -336,10 +330,9 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
                         if (contactCareTeam.Id != ObjectId.Parse(request.CareTeamId))
                             throw new ApplicationException("UpdateCareTeamMember: The referenced Care Team doesn't exist or is not assigned to the referenced contact");
 
-                        var currentMeCareTeamMember =
+                        var currentMeCareTeamMember = 
                             contactCareTeam.MeCareTeamMembers.FirstOrDefault(
                                 x => x.Id == ObjectId.Parse(careTeamMemberData.Id));
-
                         
                         if (currentMeCareTeamMember == null)
                             throw new ApplicationException("UpdateCareTeamMember: The referenced care team member doesn't exist");
@@ -347,13 +340,15 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
                         var memberIndex = contactCareTeam.MeCareTeamMembers.FindIndex(
                                 x => x.Id == ObjectId.Parse(careTeamMemberData.Id));
 
-
                         var updatedMecareMemberTeam = BuildMECareTeamMember(this.UserId, careTeamMemberData);
 
                         updatedMecareMemberTeam.RecordCreatedOn = currentMeCareTeamMember.RecordCreatedOn;
                         updatedMecareMemberTeam.RecordCreatedBy = currentMeCareTeamMember.RecordCreatedBy;
                        
                         contactCareTeam.MeCareTeamMembers[memberIndex] = updatedMecareMemberTeam;
+
+                        contactCareTeam.LastUpdatedOn = DateTime.UtcNow;
+                        contactCareTeam.UpdatedBy = ObjectId.Parse(this.UserId);
 
                         ctx.CareTeam.Collection.Save(contactCareTeam);
 

@@ -79,6 +79,43 @@ namespace Phytel.API.AppDomain.NG
             return response;
         }
 
+        public UpdateCareTeamMemberResponse UpdateCareTeamMember(UpdateCareTeamMemberRequest request)
+        {
+            UpdateCareTeamMemberResponse response = null;
+            try
+            {
+                IRestClient client = new JsonServiceClient();
+                //[Route("/{Version}/{ContractNumber}/Contacts/{ContactId}/CareTeams/{CareTeamId}/CareTeamMembers/{Id}", "PUT")]
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Contacts/{4}/CareTeams/{5}/CareTeamMembers/{6}",
+                                                                                DDContactServiceUrl,
+                                                                                "NG",
+                                                                                request.Version,
+                                                                                request.ContractNumber, request.ContactId, request.CareTeamId, request.Id), request.UserId);
+                var dataDomainResponse =
+                    client.Put<UpdateCareTeamMemberResponse>(url, new UpdateCareTeamMemberDataRequest
+                    {
+                        CareTeamMemberData = Mapper.Map<CareTeamMemberData>(request.CareTeamMember),
+                        Version = request.Version,
+                        ContactId = request.ContactId,
+                        CareTeamId = request.CareTeamId,
+                        Id = request.Id,
+                        ContractNumber = request.ContractNumber,
+                        Context = "NG"
+                    } as object);
+                if (dataDomainResponse != null)
+                {
+                    response.Version = dataDomainResponse.Version;
+                    response.Status = dataDomainResponse.Status;
+                }
+
+            }
+            catch (WebServiceException wse)
+            {
+                throw new WebServiceException("AD:UpdateCareTeamMember()::" + wse.Message, wse.InnerException);
+            }
+            return response;
+        }
+
         public DeleteCareTeamMemberDataResponse DeleteCareTeamMember(DeleteCareTeamMemberRequest request)
         {
             DeleteCareTeamMemberDataResponse response = null;
@@ -108,7 +145,6 @@ namespace Phytel.API.AppDomain.NG
 
             return response;
         }
-
         #endregion
     }
 }

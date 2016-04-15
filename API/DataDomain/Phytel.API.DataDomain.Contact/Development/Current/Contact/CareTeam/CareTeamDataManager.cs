@@ -7,7 +7,10 @@ using System.Threading.Tasks;
 using Phytel.API.Common.Extensions;
 using Phytel.API.DataDomain.Contact.DTO;
 using Phytel.API.DataDomain.Contact.DTO.CareTeam;
+using ServiceStack.Common.Web;
+using ServiceStack.ServiceClient.Web;
 using ServiceStack.ServiceInterface.ServiceModel;
+using ServiceStack.Text;
 
 namespace Phytel.API.DataDomain.Contact.CareTeam
 {
@@ -58,25 +61,40 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
             if (request == null)
                 throw new ArgumentNullException("request");
 
+            if (request.CareTeamMemberData == null)
+                throw new ArgumentNullException("CareTeamMemberData");
+
+            if (string.IsNullOrEmpty(request.ContactId))
+                throw new ArgumentNullException("Empty ContactId", "request");
+
+            if (string.IsNullOrEmpty(request.CareTeamId))
+                throw new ArgumentNullException("Null or empty CareTeamId", "request");
+
+            if (string.IsNullOrEmpty(request.Id))
+                throw new ArgumentNullException("Null or empty MemberId", "request");
+
+            if (request.Id != request.CareTeamMemberData.Id)
+                throw new ArgumentNullException("CareTeamMemberData.Id and Id are different","request");
+
             var repo = _factory.GetCareTeamRepository(request, RepositoryType.CareTeam);
 
             if (repo == null)
                 throw new Exception("Repository is null");
-
+            
             try
             {
-                if (repo.UpdateCareTeamMember(request)) response.Status = new ResponseStatus();
-            }
-            catch (ApplicationException ex)
-            {
-                response.Status = new ResponseStatus(HttpStatusCode.NotFound.ToString(), ex.Message);
-            }
+                if (!repo.CareTeamMemberExist(request.CareTeamId, request.Id))                
+                    throw new Exception(string.Format("Care Team Member {0} does not exist", request.Id));
+                    
+                repo.UpdateCareTeamMember(request);
+            }                   
             catch (Exception)
             {                    
                 throw;
             }                      
             return response;
         }
+
         public GetCareTeamDataResponse GetCareTeam(GetCareTeamDataRequest request)
         {
             var response = new GetCareTeamDataResponse();

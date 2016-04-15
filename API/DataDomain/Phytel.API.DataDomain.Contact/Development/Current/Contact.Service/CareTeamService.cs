@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using System.Net;
 using System.Web;
 using Phytel.API.Common;
 using Phytel.API.Common.Format;
 using Phytel.API.DataDomain.Contact.CareTeam;
 using Phytel.API.DataDomain.Contact.DTO.CareTeam;
+using ServiceStack.ServiceClient.Web;
 
 namespace Phytel.API.DataDomain.Contact.Service
 {
@@ -45,15 +47,15 @@ namespace Phytel.API.DataDomain.Contact.Service
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("ContactDD:CareTeamService:Put()::Unauthorized Access");
 
-                response = Manager.UpdateCareTeamMember(request);
+                Manager.UpdateCareTeamMember(request);
 
-            }
+            }           
             catch (Exception ex)
             {
                 CommonFormat.FormatExceptionResponse(response, base.Response, ex);
-
+                
                 var aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
-                Helpers.LogException(int.Parse(aseProcessID), ex);
+                Helpers.LogException(int.Parse(aseProcessID), ex);                                 
             }
             return response;
         }

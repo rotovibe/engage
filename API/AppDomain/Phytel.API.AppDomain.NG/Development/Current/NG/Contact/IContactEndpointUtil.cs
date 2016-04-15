@@ -12,6 +12,7 @@ namespace Phytel.API.AppDomain.NG
         CareTeamData GetCareTeam(GetCareTeamRequest request);
         SaveCareTeamDataResponse SaveCareTeam(SaveCareTeamRequest request);
         DeleteCareTeamMemberDataResponse DeleteCareTeamMember(DeleteCareTeamMemberRequest request);
+        UpdateCareTeamMemberResponse UpdateCareTeamMember(UpdateCareTeamMemberRequest request);
 
         #endregion
 
