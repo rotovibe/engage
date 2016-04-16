@@ -1224,7 +1224,7 @@ define(['services/formatter', 'services/dateHelper'],
 			update: function (element, valueAccessor, allBindingsAccessor){					
 				var triggers = ko.unwrap(allBindingsAccessor().columnSizer.triggers); //track/subscribe to any widget hight altering parameter/s. the widgets may have the expand-collaps toggle observable (isOpen) and/or filters show/hide toggle and/or filter content.
 				
-				if (isChrome() || isIe11()){
+				if (isIe11()){
 					return;
 				}
 				else{
