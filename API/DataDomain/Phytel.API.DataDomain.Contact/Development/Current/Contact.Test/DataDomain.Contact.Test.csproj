@@ -99,6 +99,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="CareTeamDataManagerTests.cs" />
     <Compile Include="ContactDataManagerTests.cs" />
     <Compile Include="ContactServiceTests.cs" />
     <Compile Include="ContactTest.cs" />
