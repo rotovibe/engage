@@ -88,5 +88,90 @@ namespace Phytel.API.AppDomain.NG.Test.Contact
         }
 
         #endregion
+
+        #region Update Care Team Member 
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void ContactManager_UpdateCareTeamMember_Null_Request_Should_Throw()
+        {
+            var contactManager = new ContactManager();
+            contactManager.UpdateCareTeamMember(null);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void ContactManager_UpdateCareTeamMember_Null_CareTeamMember_Request_Should_Throw()
+        {
+            var contactManager = new ContactManager();
+            contactManager.UpdateCareTeamMember(new UpdateCareTeamMemberRequest() { CareTeamMember = null });
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void ContactManager_UpdateCareTeamMember_InCompleteMember_EmptyMemberContactId_Should_Throw()
+        {
+            var contactManager = new ContactManager();
+            
+
+            var stubRequest = new UpdateCareTeamMemberRequest() { ContactId = "cid", CareTeamId = "careteamId", Id = "memberId", CareTeamMember = new Member() { StatusId = 1 } };
+            contactManager.UpdateCareTeamMember(stubRequest);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void ContactManager_UpdateCareTeamMember_EmptyCareTeamId_Should_Throw()
+        {
+            var contactManager = new ContactManager();
+
+
+            var stubRequest = new UpdateCareTeamMemberRequest() { ContactId = "cid", Id="memberId", CareTeamMember = new Member() {Id="memberId", StatusId = 1 } };
+            contactManager.UpdateCareTeamMember(stubRequest);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void ContactManager_UpdateCareTeamMember_EmptyMemberId_Should_Throw()
+        {
+            var contactManager = new ContactManager();
+
+
+            var stubRequest = new UpdateCareTeamMemberRequest() { ContactId = "cid",CareTeamId = "careteamId",CareTeamMember = new Member() { Id = "memberId", StatusId = 1 } };
+            contactManager.UpdateCareTeamMember(stubRequest);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void ContactManager_UpdateCareTeamMember_UnmatchedMemberId_Should_Throw()
+        {
+            var contactManager = new ContactManager();
+
+
+            var stubRequest = new UpdateCareTeamMemberRequest() { ContactId = "cid", CareTeamId = "careteamId", Id = "memberId", CareTeamMember = new Member() { Id = "memberId1", StatusId = 1 } };
+            contactManager.UpdateCareTeamMember(stubRequest);
+        }
+      
+
+        [TestMethod]
+        public void ContactManager_UpdateCareTeamMember_Success()
+        {
+            //Arrange
+            var contactManager = new ContactManager();
+            
+            var stubRequest = new UpdateCareTeamMemberRequest() { ContactId = "cid", CareTeamId = "careteamId", Id = "memberId", CareTeamMember = new Member() { ContactId = "memberCid", Id = "memberId" } };
+            var mockContactEndPointUtil = new Mock<IContactEndpointUtil>();
+            mockContactEndPointUtil.Setup(mceu => mceu.UpdateCareTeamMember(It.IsAny<UpdateCareTeamMemberRequest>()))
+                .Returns(new UpdateCareTeamMemberResponse());
+
+            contactManager.EndpointUtil = mockContactEndPointUtil.Object;
+
+            //Act
+            var response = contactManager.UpdateCareTeamMember(stubRequest);
+
+            //Assert.
+            Assert.IsNotNull(response);
+            mockContactEndPointUtil.Verify(mr => mr.UpdateCareTeamMember(It.IsAny<UpdateCareTeamMemberRequest>()), Times.Once);
+        }
+        #endregion
     }
 }
