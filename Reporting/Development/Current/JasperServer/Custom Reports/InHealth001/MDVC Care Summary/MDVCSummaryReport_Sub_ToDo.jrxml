@@ -1,32 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.2.0.final using JasperReports Library version 6.2.0  -->
-<!-- 2016-03-15T14:11:12 -->
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="MDVCSummaryReport_Sub_ToDo" language="groovy" pageWidth="576" pageHeight="842" columnWidth="576" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="56a1a530-75ca-44f2-95a1-785dfc52bebf">
+<!-- 2016-04-18T11:36:56 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="MDVCSummaryReport_Sub_ToDo" language="groovy" pageWidth="576" pageHeight="842" columnWidth="576" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="21" isSummaryWithPageHeaderAndFooter="true" uuid="56a1a530-75ca-44f2-95a1-785dfc52bebf">
 	<property name="ireport.zoom" value="2.853116706110004"/>
 	<property name="ireport.x" value="28"/>
 	<property name="ireport.y" value="0"/>
-	<property name="ireport.jasperserver.url" value="http://mdljasper01.phytelmodel.phytel.com:8080/jasperserver-pro/"/>
-	<property name="ireport.jasperserver.user" value="qauser"/>
-	<property name="ireport.jasperserver.report.resource" value="/organizations/organization_1/InHealth/Ad_Hoc_Components/MDVC_CM_Summary/rpt_MDVC_CM_Summary_files/MDVCSummaryReport_Sub_ToDo.jrxml"/>
-	<property name="ireport.jasperserver.reportUnit" value="/organizations/organization_1/InHealth/Ad_Hoc_Components/MDVC_CM_Summary/rpt_MDVC_CM_Summary"/>
+	<property name="ireport.jasperserver.url" value="https://reporting.phytel.com/jasperserver-pro/"/>
+	<property name="ireport.jasperserver.user" value="ltan"/>
+	<property name="ireport.jasperserver.report.resource" value="/organizations/organization_1/organizations/InHealth/Reports/Client_Testing/rpt_MDVC_CM_Summary_files/MDVCSummaryReport_Sub_ToDo.jrxml"/>
+	<property name="ireport.jasperserver.reportUnit" value="/organizations/organization_1/organizations/InHealth/Reports/Client_Testing/rpt_MDVC_CM_Summary"/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Prod Data Adapter "/>
 	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
 	<parameter name="ID_MongoPatientId" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[Select
-	td.title as [Description],
-	td.DueDate as [Due Date]
-from RPT_ToDo td WITH(NOLOCK)
-INNER JOIN RPT_ToDoCategoryLookUp tdc WITH(NOLOCK) ON tdc.MongoId = td.MongoCategory
-where
-tdc.Name = 'Care Opportunity'
-AND td.Status in ('Open','NotMet')
-AND td.mongopatientid = $P{ID_MongoPatientId}
-AND td.[DeleteFlag] = 'False' and td.TTLDate IS NULL
-Order by td.title]]>
+	td1.title as [Description],
+	td1.DueDate as [Due Date],
+	Case When Len(e.LastFluShotDate)>0 
+		Then Convert(varchar(2),Month(e.LastFluShotDate)) + '/' + Convert(Varchar(2),Day(e.LastFluShotDate))
+		+ '/' +Convert(varchar(4),Year(e.LastFluShotDate))
+		  else  'Unknown'
+		   End as [Last Flu Shot Date],
+		Case When Len(e.LastPneumoniaDate)>0 
+		Then Convert(varchar(2),Month(e.LastPneumoniaDate)) + '/' + Convert(Varchar(2),Day(e.LastPneumoniaDate))
+		+ '/' +Convert(varchar(4),Year(e.LastPneumoniaDate))
+		  else  'Unknown'
+		   End as [Last Pneumonia Date]
+From RPT_PatientInformation p		   
+left outer join (Select td.PatientId, td.title,	td.DueDate
+					From RPT_ToDo td WITH(NOLOCK) 
+					JOIN RPT_ToDoCategoryLookUp tdc WITH(NOLOCK) ON tdc.MongoId = td.MongoCategory
+					where tdc.Name = 'Care Opportunity'
+					AND td.Status in ('Open','NotMet')
+					AND td.[DeleteFlag] = 'False' and td.TTLDate IS NULL
+					) td1 on td1.PatientId=p.PatientId
+left outer join (Select PatientId, Max(DateofLastFluShot) as LastFluShotDate, Max(DateofLastPneumonia) as LastPneumoniaDate 
+					from RPT_Engage_Enrollment_Info e1 group by PatientId ) e on p.PatientId=e.PatientId
+where p.MongoId = $P{ID_MongoPatientId}
+Order by td1.title]]>
 	</queryString>
-	<field name="description" class="java.lang.String"/>
+	<field name="Description" class="java.lang.String"/>
 	<field name="Due Date" class="java.sql.Timestamp"/>
+	<field name="Last Flu Shot Date" class="java.lang.String"/>
+	<field name="Last Pneumonia Date" class="java.lang.String"/>
 	<columnHeader>
 		<band height="39" splitType="Stretch">
 			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
@@ -60,7 +76,7 @@ Order by td.title]]>
 				<text><![CDATA[Care Opportunities]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="6" y="16" width="536" height="10" uuid="0d69aed3-4edf-45d4-94ce-f469b0e0db4f">
+				<reportElement x="6" y="17" width="536" height="10" uuid="c879ad3a-8307-460f-9a08-024f1bd8cacb">
 					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 				</reportElement>
@@ -72,10 +88,10 @@ Order by td.title]]>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="12" splitType="Stretch">
+		<band height="16" splitType="Stretch">
 			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement x="6" y="0" width="567" height="12" uuid="cb86b6c2-37de-4e32-8a1c-ea263cc4701b">
+				<reportElement x="8" y="2" width="567" height="12" uuid="587d7eec-2a63-4663-a0cc-39f70cd9a02d">
 					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
 					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
@@ -83,13 +99,59 @@ Order by td.title]]>
 				<textElement>
 					<font size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{description}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{Description}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
 	<columnFooter>
-		<band>
+		<band height="31">
 			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+			<textField isStretchWithOverflow="true" pattern="M/d/yy" isBlankWhenNull="true">
+				<reportElement x="101" y="16" width="194" height="14" uuid="cb86b6c2-37de-4e32-8a1c-ea263cc4701b">
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Last Pneumonia Date}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="M/d/yy" isBlankWhenNull="true">
+				<reportElement x="102" y="4" width="194" height="14" uuid="30e5ce26-bba0-4edf-93d5-e410105b77ba">
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Last Flu Shot Date}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="8" y="2" width="66" height="10" uuid="0d69aed3-4edf-45d4-94ce-f469b0e0db4f">
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<textElement>
+					<font size="7" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Last Flu Shot Date:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="8" y="16" width="90" height="10" uuid="b083413a-2b17-4ee7-b0e3-d62e37006482">
+					<property name="com.jaspersoft.studio.unit.y" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.width" value="pixel"/>
+				</reportElement>
+				<textElement>
+					<font size="7" isItalic="false"/>
+				</textElement>
+				<text><![CDATA[Last Pneumonia Shot Date:]]></text>
+			</staticText>
 		</band>
 	</columnFooter>
 </jasperReport>
