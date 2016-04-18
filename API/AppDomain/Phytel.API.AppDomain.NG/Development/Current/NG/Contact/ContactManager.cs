@@ -136,6 +136,8 @@ namespace Phytel.API.AppDomain.NG
             if (request.Id != request.CareTeamMember.Id)
                 throw new ArgumentNullException("CareTeamMemberData.Id and Id are different", "request");
 
+            ValidateCareTeamMemberFields(request.CareTeamMember);
+
             try
             {
                 var domainResponse = EndpointUtil.UpdateCareTeamMember(request);
