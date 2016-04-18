@@ -109,6 +109,17 @@ namespace Phytel.API.AppDomain.NG.Test.Contact
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
+        public void ContactManager_UpdateCareTeamMember_EmptyOrNullContactId_Should_Throw()
+        {
+            var contactManager = new ContactManager();
+
+
+            var stubRequest = new UpdateCareTeamMemberRequest() { CareTeamId = "careteamId", Id = "memberId", CareTeamMember = new Member() { StatusId = 1 } };
+            contactManager.UpdateCareTeamMember(stubRequest);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
         public void ContactManager_UpdateCareTeamMember_InCompleteMember_EmptyMemberContactId_Should_Throw()
         {
             var contactManager = new ContactManager();
@@ -120,7 +131,7 @@ namespace Phytel.API.AppDomain.NG.Test.Contact
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
-        public void ContactManager_UpdateCareTeamMember_EmptyCareTeamId_Should_Throw()
+        public void ContactManager_UpdateCareTeamMember_EmptyOrNullCareTeamId_Should_Throw()
         {
             var contactManager = new ContactManager();
 
@@ -131,7 +142,7 @@ namespace Phytel.API.AppDomain.NG.Test.Contact
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
-        public void ContactManager_UpdateCareTeamMember_EmptyMemberId_Should_Throw()
+        public void ContactManager_UpdateCareTeamMember_EmptyOrNullMemberId_Should_Throw()
         {
             var contactManager = new ContactManager();
 
