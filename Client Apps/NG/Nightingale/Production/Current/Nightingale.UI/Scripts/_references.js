@@ -35,9 +35,6 @@
 /// <reference path="../app/models/observations.js" />
 /// <reference path="../app/models/programs.js" />
 /// <reference path="../app/models/users.js" />
-/// <reference path="../app/test/jasmine-1.2.0.js" />
-/// <reference path="../app/test/jasmine.console_reporter.js" />
-/// <reference path="../app/test/spec.js" />
 /// <reference path="../app/viewmodels/authenticate.js" />
 /// <reference path="backup/breeze.js" />
 /// <reference path="backup/knockout-3.0.0.js" />
@@ -63,8 +60,6 @@
 /// <reference path="highcharts/highcharts.js" />
 /// <reference path="jquery/jquery-1.10.2.js" />
 /// <reference path="jqueryui/jquery-ui.js" />
-/// <reference path="../app/test/specs/module.details.spec.js" />
-/// <reference path="../app/test/specs/session.spec.js" />
 /// <reference path="../app/viewmodels/admin/index.js" />
 /// <reference path="../app/viewmodels/home/index.js" />
 /// <reference path="../app/viewmodels/insight/index.js" />
@@ -226,6 +221,8 @@
 /// <reference path="../app/viewmodels/patients/sections/status.js" />
 /// <reference path="../app/viewmodels/templates/note.utilization.edit.js" />
 /// <reference path="../app/viewmodels/patients/notes/index.js" />
+/// <reference path="../copyright.js" />
+/// <reference path="../gulpfile.js" />
  
  / / /   < r e f e r e n c e   p a t h = " b r e e z e . d e b u g . j s "   / >  
  

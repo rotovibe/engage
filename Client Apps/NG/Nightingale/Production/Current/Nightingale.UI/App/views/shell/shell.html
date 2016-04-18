@@ -5,6 +5,7 @@
     <!-- /ko -->
     <main role="application" data-bind="router: { cacheViews: true }">
     </main>
+	<!-- ko compose: 'shell/footer.html' --><!-- /ko -->
     <!-- ko with: currentModal -->
     <div id="modal" data-bind="visible: Showing, css: classOverride">	
         <div class="content" data-bind="with: Entity">

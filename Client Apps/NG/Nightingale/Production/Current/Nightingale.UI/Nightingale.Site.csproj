@@ -210,6 +210,7 @@
     <Content Include="App\views\patients\sections\system.ids.html" />
     <Content Include="App\views\patients\widgets\allergies.html" />
     <Content Include="App\views\patients\widgets\medications.html" />
+    <Content Include="App\views\shell\footer.html" />
     <Content Include="App\views\shell\quickadd\utilization.note.html" />
     <Content Include="App\views\templates\clinicalBackground.html" />
     <Content Include="App\views\templates\datetimepicker.html" />
@@ -260,11 +261,16 @@
     <Content Include="App\views\templates\allergy.status.html" />
     <Content Include="App\views\templates\allergy.edit.html" />
     <Content Include="App\views\templates\validation.errors.html" />
+    <Content Include="Content\images\favicon.ico" />
+    <Content Include="Content\images\IBM_White_Logo_34.png" />
     <Content Include="Content\images\phytel_logo_IBM.png" />
     <Content Include="Content\images\watson_cm_logo_large.png" />
     <Content Include="Content\images\watson_cm_logo.png" />
     <Content Include="Content\images\PH_IBM Watson Woodmark-01.png" />
     <Content Include="Content\images\PH_LOGO-01.png" />
+    <Content Include="copyright.js" />
+    <Content Include="favicon.ico" />
+    <Content Include="gulpfile.js" />
     <Content Include="Properties\PublishProfiles\Azure QA Publish.pubxml.user" />
     <Content Include="Scripts\breeze.ajaxpost2.js" />
     <Content Include="Scripts\breeze.debug.js" />
@@ -350,13 +356,6 @@
     <Content Include="Scripts\highcharts\highcharts.js" />
     <Content Include="Scripts\knockout-3.2.0.debug.js" />
     <Content Include="Scripts\knockout-3.2.0.min.js" />
-    <Content Include="App\test\jasmine-1.2.0.js" />
-    <Content Include="App\test\jasmine.console_reporter.js" />
-    <None Include="App\test\phantomjs.exe" />
-    <Content Include="App\test\spec.html" />
-    <Content Include="App\test\spec.js" />
-    <Content Include="App\test\specs\module.details.spec.js" />
-    <Content Include="App\test\specs\session.spec.js" />
     <Content Include="App\viewmodels\admin\concierge\index.js" />
     <Content Include="App\viewmodels\admin\index.js" />
     <Content Include="App\viewmodels\admin\reports\index.js" />
@@ -764,8 +763,6 @@
     <Content Include="Content\nightingale\fonts\fontcustom.ttf" />
     <Content Include="Content\nightingale\fontcustom.css" />
     <Content Include="App\views\patients\tabs\program.details.html" />
-    <Content Include="App\test\README.md" />
-    <Content Include="App\test\chutzpah.json" />
     <Content Include="App\viewmodels\admin\index.min.js.map">
       <DependentUpon>index.js</DependentUpon>
     </Content>
@@ -781,9 +778,6 @@
     <Content Include="Content\dev.scss" />
     <Content Include="Content\CSS\dev.css.map">
       <DependentUpon>dev.css</DependentUpon>
-    </Content>
-    <Content Include="App\models\config.app - Copy.min.js.map">
-      <DependentUpon>controls.js</DependentUpon>
     </Content>
     <Content Include="App\viewmodels\insight\reports\index.min.js.map">
       <DependentUpon>index.js</DependentUpon>
@@ -801,6 +795,7 @@
     <Content Include="App\viewmodels\patients\medications\index.min.js.map">
       <DependentUpon>index.js</DependentUpon>
     </Content>
+    <Content Include="package.json" />
     <None Include="yuidoc_readme.txt" />
     <None Include="Properties\PublishProfiles\Azure QA Publish.pubxml" />
     <None Include="Properties\PublishProfiles\Phytel Model Publish.pubxml">

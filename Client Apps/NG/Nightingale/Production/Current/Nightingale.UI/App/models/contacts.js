@@ -10,7 +10,7 @@ define(['services/session', 'services/validatorfactory', 'services/customvalidat
 	    var datacontext;
 		var DT = breeze.DataType;
 		var Validator = breeze.Validator;				
-		var LANGUAGE_ALREADY_EXIST = 'laguage already exist';
+		var LANGUAGE_ALREADY_EXIST = 'Language already associated';
 		
 		// Expose the model module to the requiring modules
 		var contactModels = {
