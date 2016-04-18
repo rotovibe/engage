@@ -1607,39 +1607,7 @@ namespace Phytel.API.AppDomain.NG
             return response;
         }
 
-        public Contact GetContactByContactId(GetContactByContactIdRequest request)
-        {
-            Contact contact = null;
-            try
-            {
-                IRestClient client = new JsonServiceClient();
-                var url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Contact/{4}",
-                        DDContactServiceUrl,
-                        "NG",
-                        request.Version,
-                        request.ContractNumber,
-                        request.ContactId), request.UserId);
-
-                //[Route("/{Context}/{Version}/{ContractNumber}/Contact/{ContactId}", "GET")]
-                var dataDomainResponse = client.Get<DataDomain.Contact.DTO.GetContactByContactIdDataResponse>(url);
-                var mappedData = Mapper.Map<Contact>(dataDomainResponse.Contact);
-
-                if (!string.IsNullOrEmpty(mappedData.PatientId))
-                    mappedData.IsPatient = true;
-
-                if (!string.IsNullOrEmpty(mappedData.UserId))
-                    mappedData.IsUser = true;
-
-                contact = mappedData;
-
-            }
-            catch (WebServiceException wse)
-            {
-                throw new WebServiceException("AD:GetContactByContactId()::" + wse.Message, wse.InnerException);
-            }
-            return contact;
-            
-        }
+        
 
         public SearchContactsResponse SearchContacts(SearchContactsRequest request)
         {

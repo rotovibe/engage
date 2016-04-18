@@ -15,7 +15,7 @@ namespace Phytel.API.DataDomain.Contact
         object FindContactByPatientId(GetContactByPatientIdDataRequest request);
         IEnumerable<object> FindCareManagers();
         bool UpdateRecentList(PutRecentPatientRequest request, List<string> recentList);
-        IEnumerable<object> GetContactsByContactId(GetContactsByContactIdsDataRequest request);
+        IEnumerable<object> GetContactsByContactIds(GetContactsByContactIdsDataRequest request);
         object FindContactByUserId(GetContactByUserIdDataRequest request);
         IAuditHelpers AuditHelpers { get; set; }
         object GetContactByPatientId(string patientId);

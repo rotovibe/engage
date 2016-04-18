@@ -24,7 +24,7 @@ namespace Phytel.API.DataDomain.Contact.Test.Stubs
             throw new NotImplementedException();
         }
 
-        public IEnumerable<object> GetContactsByContactId(DTO.GetContactsByContactIdsDataRequest request)
+        public IEnumerable<object> GetContactsByContactIds(DTO.GetContactsByContactIdsDataRequest request)
         {
             throw new NotImplementedException();
         }

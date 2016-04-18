@@ -42,7 +42,7 @@ namespace Phytel.API.AppDomain.NG
         void LogException(Exception ex);
         GetInitializePatientResponse GetInitializePatient(GetInitializePatientRequest request);
         PostProgramAttributesChangeResponse PostProgramAttributeChanges(PostProgramAttributesChangeRequest request);
-        Contact GetContactByContactId(GetContactByContactIdRequest request);
+        
         SearchContactsResponse SearchContacts(SearchContactsRequest request);
     }
 }

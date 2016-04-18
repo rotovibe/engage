@@ -12,6 +12,7 @@ namespace Phytel.API.AppDomain.NG
         void LogException(Exception ex);
 
         #region Contact
+        Contact GetContactByContactId(GetContactByContactIdRequest request);
         #endregion
 
         #region CareTeam

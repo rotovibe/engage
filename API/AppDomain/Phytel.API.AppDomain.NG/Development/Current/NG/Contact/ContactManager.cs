@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
+using System.Linq;
 using AutoMapper;
 using Phytel.API.AppDomain.NG.DTO;
+using Phytel.API.DataDomain.Contact.DTO;
 using Phytel.API.DataDomain.Contact.DTO.CareTeam;
 using ServiceStack.Service;
 using ServiceStack.ServiceClient.Web;
@@ -15,6 +18,26 @@ namespace Phytel.API.AppDomain.NG
         public IContactEndpointUtil EndpointUtil { get; set; }
 
         #region Contact
+        public Contact GetContactByContactId(GetContactByContactIdRequest request)
+        {
+            Contact contact = null;
+            try
+            {
+                ContactData contactData = EndpointUtil.GetContactByContactId(request);
+                if (contactData != null)
+                {
+                    contact = Mapper.Map<Contact>(contactData);
+                    if (!string.IsNullOrEmpty(contactData.PatientId))
+                        contact.IsPatient = true;
+
+                    if (!string.IsNullOrEmpty(contactData.UserId))
+                        contact.IsUser = true;
+                }
+                return contact;
+            }
+            catch (Exception ex) { throw ex; }
+
+        }
         #endregion
 
         #region CareTeam
@@ -27,6 +50,28 @@ namespace Phytel.API.AppDomain.NG
                 if (careTeamData != null)
                 {
                     careTeam = Mapper.Map<CareTeam>(careTeamData);
+                    #region Populate Contact object for each care team member.
+                    if (careTeam.Members != null && careTeam.Members.Count > 0)
+                    {
+                        List<string> contactIds = careTeam.Members.Select(a => a.ContactId).ToList();
+                        List<ContactData> contactsData = EndpointUtil.GetContactsByContactIds(contactIds, request.Version, request.ContractNumber, request.UserId);
+                        if (contactsData != null)
+                        {
+                            foreach (var member in careTeam.Members)
+                            {
+                                ContactData data = contactsData.FirstOrDefault(c => c.Id == member.ContactId);
+                                if (data == null)
+                                {
+                                    throw new ApplicationException(string.Format("Contact card for a care team member with contact id = {0} was not found", member.ContactId));
+                                }
+                                else
+                                {
+                                    member.Contact = Mapper.Map<Contact>(data);
+                                }
+                            }
+                        }
+                    }
+                    #endregion
                 }
                 return careTeam;
             }

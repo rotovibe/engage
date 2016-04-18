@@ -910,7 +910,7 @@ namespace Phytel.API.DataDomain.Contact
             catch (Exception ex) { throw ex; }
         }
 
-        public IEnumerable<object> GetContactsByContactId(GetContactsByContactIdsDataRequest request)
+        public IEnumerable<object> GetContactsByContactIds(GetContactsByContactIdsDataRequest request)
         { 
             List<ContactData> contactDataList = null;
             try
@@ -925,20 +925,15 @@ namespace Phytel.API.DataDomain.Contact
                         queries.Add(MB.Query.EQ(MEContact.DeleteFlagProperty, false));
                         IMongoQuery mQuery = MB.Query.And(queries);
                         List<MEContact> meContacts = ctx.Contacts.Collection.Find(mQuery).ToList();
-                        if (meContacts != null)
+                        if (meContacts != null && meContacts.Count > 0)
                         {
                             contactDataList = new List<ContactData>();
                             foreach (MEContact c in meContacts)
                             {
-                                ContactData contactData = new ContactData
-                                {
-                                    Id = c.Id.ToString(),
-                                    Gender = c.Gender,
-                                    PreferredName = c.PreferredName
-                                };
-                                contactDataList.Add(contactData);
+                                ContactData contactData = BuildContactData(c);
+                                if(contactData != null)
+                                    contactDataList.Add(contactData);
                             }
-
                         }
                     }
                 }
@@ -1186,41 +1181,44 @@ namespace Phytel.API.DataDomain.Contact
 
         private ContactData BuildContactData(MEContact contactEntity)
         {
-            var contactData = new ContactData
+            ContactData contactData = null;
+            if (contactEntity != null)
             {
-                Id = contactEntity.Id.ToString(),
-                PatientId = contactEntity.PatientId.ToString(),
-                UserId =
-                    (string.IsNullOrEmpty(contactEntity.ResourceId))
-                        ? string.Empty
-                        : contactEntity.ResourceId.ToString().Replace("-", string.Empty).ToLower(),
-                FirstName = contactEntity.FirstName,
-                MiddleName = contactEntity.MiddleName,
-                LastName = contactEntity.LastName,
-                PreferredName = contactEntity.PreferredName,
-                Gender = contactEntity.Gender,
-                TimeZoneId = contactEntity.TimeZoneId == null ? null : contactEntity.TimeZoneId.ToString(),
-                WeekDays = contactEntity.WeekDays,
-                TimesOfDaysId = Helper.ConvertToStringList(contactEntity.TimesOfDays),
-                Modes = BuildCommunicationModes(contactEntity.Modes),
-                Phones = BuildPhoneData(contactEntity.Phones),
-                Emails = BuildEmailData(contactEntity.Emails),
-                Addresses = BuildAddressData(contactEntity.Addresses),
-                Languages = BuildLanguageData(contactEntity.Languages),
-                ContactTypeId =  contactEntity.ContactTypeId.ToString(),
-                ContactSubTypesData = BuildContactTypesData(contactEntity.ContactSubTypes),
-                StatusId = (int)contactEntity.Status,
-                Prefix = contactEntity.Prefix,
-                Suffix = contactEntity.Suffix,
-                DeceasedId = (int) contactEntity.Deceased,
-                DataSource = contactEntity.DataSource,
-                ExternalRecordId = contactEntity.ExternalRecordId,
-                CreatedById = contactEntity.RecordCreatedBy.ToString(),
-                CreatedOn = contactEntity.RecordCreatedOn,
-                UpdatedById = contactEntity.UpdatedBy == null ? null : contactEntity.UpdatedBy.ToString(),
-                UpdatedOn = contactEntity.LastUpdatedOn
-            };
-
+                contactData = new ContactData
+                {
+                    Id = contactEntity.Id.ToString(),
+                    PatientId = contactEntity.PatientId.ToString(),
+                    UserId =
+                        (string.IsNullOrEmpty(contactEntity.ResourceId))
+                            ? string.Empty
+                            : contactEntity.ResourceId.ToString().Replace("-", string.Empty).ToLower(),
+                    FirstName = contactEntity.FirstName,
+                    MiddleName = contactEntity.MiddleName,
+                    LastName = contactEntity.LastName,
+                    PreferredName = contactEntity.PreferredName,
+                    Gender = contactEntity.Gender,
+                    TimeZoneId = contactEntity.TimeZoneId == null ? null : contactEntity.TimeZoneId.ToString(),
+                    WeekDays = contactEntity.WeekDays,
+                    TimesOfDaysId = Helper.ConvertToStringList(contactEntity.TimesOfDays),
+                    Modes = BuildCommunicationModes(contactEntity.Modes),
+                    Phones = BuildPhoneData(contactEntity.Phones),
+                    Emails = BuildEmailData(contactEntity.Emails),
+                    Addresses = BuildAddressData(contactEntity.Addresses),
+                    Languages = BuildLanguageData(contactEntity.Languages),
+                    ContactTypeId = contactEntity.ContactTypeId.ToString(),
+                    ContactSubTypesData = BuildContactTypesData(contactEntity.ContactSubTypes),
+                    StatusId = (int) contactEntity.Status,
+                    Prefix = contactEntity.Prefix,
+                    Suffix = contactEntity.Suffix,
+                    DeceasedId = (int) contactEntity.Deceased,
+                    DataSource = contactEntity.DataSource,
+                    ExternalRecordId = contactEntity.ExternalRecordId,
+                    CreatedById = contactEntity.RecordCreatedBy.ToString(),
+                    CreatedOn = contactEntity.RecordCreatedOn,
+                    UpdatedById = contactEntity.UpdatedBy == null ? null : contactEntity.UpdatedBy.ToString(),
+                    UpdatedOn = contactEntity.LastUpdatedOn
+                };
+            }
             return contactData;
         }
 

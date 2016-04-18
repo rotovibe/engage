@@ -61,7 +61,7 @@ namespace Phytel.API.DataDomain.Contact
             {
                 IContactRepository repo = Factory.GetRepository(request, RepositoryType.Contact);
 
-                response.Contacts = repo.GetContactsByContactId(request) as List<ContactData>;
+                response.Contacts = repo.GetContactsByContactIds(request) as List<ContactData>;
                 response.Version = request.Version;
             }
             catch (Exception ex)

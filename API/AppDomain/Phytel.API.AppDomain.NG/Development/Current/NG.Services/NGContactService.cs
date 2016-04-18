@@ -24,7 +24,44 @@ namespace Phytel.API.AppDomain.NG.Service
         private const string unknownUserHostAddress = "Unknown IP";
         
         #region Contact
-
+        public GetContactByContactIdResponse Get(GetContactByContactIdRequest request)
+        {
+            GetContactByContactIdResponse response = new GetContactByContactIdResponse();
+            try
+            {
+                if (base.Request != null)
+                {
+                    request.Token = base.Request.Headers["Token"] as string;
+                }
+                ValidateTokenResponse result = null;
+                result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                if (result.UserId.Trim() != string.Empty)
+                {
+                    request.UserId = result.UserId;
+                    response.Contact = ContactManager.GetContactByContactId(request);
+                }
+                else
+                    throw new UnauthorizedAccessException();
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                if ((ex is WebServiceException) == false)
+                    ContactManager.LogException(ex);
+            }
+            finally
+            {
+                //List<string> patientIds = new List<string>();
+                //patientIds.Add(request.PatientId);
+                //if (result != null)
+                //{
+                //    string browser = (base.Request != null) ? base.Request.UserAgent : unknownBrowserType;
+                //    string hostAddress = (base.Request != null) ? base.Request.UserHostAddress : unknownUserHostAddress;
+                //    AuditUtil.LogAuditData(request, result.SQLUserId, patientIds, browser, hostAddress, request.GetType().Name);
+                //}
+            }
+            return response;
+        }
         #endregion
 
         #region CareTeam

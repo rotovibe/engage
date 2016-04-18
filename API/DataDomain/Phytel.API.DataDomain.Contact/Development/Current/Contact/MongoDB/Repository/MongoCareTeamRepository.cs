@@ -474,14 +474,16 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
 
         private List<CareTeamMemberData> BuildCareTeamMembers(List<MECareTeamMember> members)
         {
-            var result = new List<CareTeamMemberData>();
-
-            foreach (var member in members)
+            List<CareTeamMemberData> result = null;
+            if (members != null && members.Count != 0)
             {
-                var meMember = BuildCareTeamMember(member);
-                result.Add(meMember);
+                result = new List<CareTeamMemberData>();
+                foreach (var member in members)
+                {
+                    var meMember = BuildCareTeamMember(member);
+                    result.Add(meMember);
+                }
             }
-
             return result;
         }
 
