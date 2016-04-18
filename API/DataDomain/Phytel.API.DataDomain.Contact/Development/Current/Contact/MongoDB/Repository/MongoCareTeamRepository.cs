@@ -540,6 +540,8 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
                 contactCareTeam.LastUpdatedOn = DateTime.UtcNow;
                 contactCareTeam.UpdatedBy = ObjectId.Parse(this.UserId);
 
+                var saveResult = ctx.CareTeam.Collection.Save(contactCareTeam);
+
                 AuditHelper.LogDataAudit(this.UserId,
                     MongoCollectionName.CareTeam.ToString(),
                     contactCareTeam.Id.ToString(),
