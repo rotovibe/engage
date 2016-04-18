@@ -54,8 +54,6 @@
                                                             - <span data-bind="Date: $parent.closedDate, attr: { 'title': $parent.closedDate }"></span>
                                                         </em>
                                                     <!-- /ko -->
-                                                    <span data-bind="text: $parent.description, css: textClass">
-                                                    </span>
                                                 </div>
                                             </div>
                                         </div>
@@ -79,7 +77,7 @@
                             <div class="span6 last">
                                 <div class="row rule"></div>
                                 <!-- ko foreach: interventions -->
-                                <div class="row rule filter-toggle" data-bind="css: { 'active': $parents[1].activeIntervention() === $data }">
+                                <div class="row rule filter-toggle" data-bind="css: { 'active': $parents[1].activeIntervention() === $data }, click: $parents[1].setActiveIntervention.bind($parents[1])">
                                     <div class="span12 details">
                                         <div class="status line rule">
                                             <div class="pull-left" data-bind="with: status">
@@ -98,12 +96,6 @@
                                                     - <span data-bind="Date: $parent.closedDate, attr: { 'title': $parent.closedDate }"></span>
                                                     </em>
                                                 <!-- /ko -->
-                                            </div>
-                                            <div class="name pad-icon-left accordion-toggle" data-bind="click: $parents[1].setActiveIntervention.bind($parents[1])">
-                                                <div class="line-reset" data-bind="with: status">
-                                                    <span data-bind="text: $parent.description, css: textClass">
-                                                    </span>
-                                                </div>
                                             </div>
                                         </div>
                                     </div>
