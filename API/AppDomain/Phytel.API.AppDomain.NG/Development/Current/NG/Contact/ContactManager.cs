@@ -44,6 +44,11 @@ namespace Phytel.API.AppDomain.NG
         public CareTeam GetCareTeam(GetCareTeamRequest request)
         {
             CareTeam careTeam = null;
+            if (request == null)
+                throw new ArgumentNullException("request");
+
+            if (string.IsNullOrEmpty(request.ContactId))
+                throw new ArgumentNullException("request.ContactId");
             try
             {
                 CareTeamData careTeamData = EndpointUtil.GetCareTeam(request);

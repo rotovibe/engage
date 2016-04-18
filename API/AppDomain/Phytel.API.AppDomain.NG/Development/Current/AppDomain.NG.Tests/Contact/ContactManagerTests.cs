@@ -184,5 +184,23 @@ namespace Phytel.API.AppDomain.NG.Test.Contact
             mockContactEndPointUtil.Verify(mr => mr.UpdateCareTeamMember(It.IsAny<UpdateCareTeamMemberRequest>()), Times.Once);
         }
         #endregion
+
+        #region SaveCareTeam Tests
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void ContactManager_GetCareTeam_Null_Request_Should_Throw()
+        {
+            var contactManager = new ContactManager();
+            contactManager.GetCareTeam(null);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void ContactManager_GetCareTeam_Null_ContactId_Request_Should_Throw()
+        {
+            var contactManager = new ContactManager();
+            contactManager.GetCareTeam(new GetCareTeamRequest { ContactId = string.Empty });
+        }
+        #endregion
     }
 }
