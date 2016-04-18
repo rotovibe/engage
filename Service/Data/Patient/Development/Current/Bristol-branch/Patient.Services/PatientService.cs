@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Configuration;
 using Phytel.API.Common;
 using Phytel.API.Common.Format;
@@ -311,20 +312,22 @@ namespace Phytel.API.DataDomain.Patient.Service
             return response;
         }
 
-        public InsertBatchPatientsDataResponse Post(InsertBatchPatientsDataRequest request)
+        //public InsertBatchPatientsDataResponse Post(InsertBatchPatientsDataRequest request)
+        public List<AppData> Post(InsertBatchPatientsDataRequest request)
         {
-            InsertBatchPatientsDataResponse response = new InsertBatchPatientsDataResponse();
+            //InsertBatchPatientsDataResponse response = new InsertBatchPatientsDataResponse();
+            List<AppData> response = new List<AppData>();
+
             try
             {
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("PatientDD:Post()::Unauthorized Access");
 
                 response = PatientManager.InsertBatchPatients(request);
-                response.Version = request.Version;
             }
             catch (Exception ex)
             {
-                CommonFormatterUtil.FormatExceptionResponse(response, base.Response, ex);
+              //  CommonFormatterUtil.FormatExceptionResponse(response, base.Response, ex);
 
                 string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
                 Helpers.LogException(int.Parse(aseProcessID), ex);

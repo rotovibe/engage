@@ -149,6 +149,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AppData.cs" />
     <Compile Include="Audit\AuditData.cs" />
     <Compile Include="Audit\AuditDispatcher.cs" />
     <Compile Include="Audit\AuditHelpers.cs" />

@@ -842,6 +842,17 @@ namespace Phytel.API.DataDomain.Patient
                 }
             }
 
+            if (s.FieldName.Equals(Constants.PFX))
+            {
+                if (request.PatientData.Prefix != null)
+                {
+                    if (request.PatientData.Prefix == "\"\"" || (request.PatientData.Prefix == "\'\'"))
+                        s.Value = string.Empty;
+                    else
+                        s.Value = request.PatientData.Prefix;
+                }
+            }
+
             if (s.FieldName.Equals(Constants.MN))
             {
                 if (request.PatientData.MiddleName != null)

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Phytel.API.Common;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -206,7 +207,8 @@ namespace Phytel.API.DataDomain.Patient.Test.Stub
         }
 
 
-        public InsertBatchPatientsDataResponse InsertBatchPatients(InsertBatchPatientsDataRequest request)
+        public List<AppData> InsertBatchPatients(InsertBatchPatientsDataRequest request)
+       //    public InsertBatchPatientsDataResponse InsertBatchPatients(InsertBatchPatientsDataRequest request)
         {
             throw new NotImplementedException();
         }

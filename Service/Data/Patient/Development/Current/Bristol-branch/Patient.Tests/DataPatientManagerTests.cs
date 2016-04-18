@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Phytel.API.DataDomain.Patient.DTO;
 using Phytel.API.DataDomain.Patient;
+using Phytel.API.Common;
 
 namespace Phytel.API.DataDomain.Patient.Test
 {
@@ -16,7 +17,8 @@ namespace Phytel.API.DataDomain.Patient.Test
         private const string _USERID = "bruser";
 
         private InsertBatchPatientsDataRequest _insertBtchPatientRqst = null;
-        private InsertBatchPatientsDataResponse _insertBatchPatientResp = null;
+     //   private InsertBatchPatientsDataResponse _insertBatchPatientResp = null;
+        private List<AppData> _insertBatchPatientResp = new List<AppData>();
         private PatientDataManager _PatientDataMgr = null;
         private IPatientRepository _PatientRepository;
         private IPatientRepositoryFactory _PatientRepositoryFactory;
