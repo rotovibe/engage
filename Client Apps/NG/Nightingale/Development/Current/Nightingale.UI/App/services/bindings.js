@@ -1303,16 +1303,6 @@ define(['services/formatter', 'services/dateHelper'],
 			}
         }
 
-        function isChrome() {
-            var isChromium = window.chrome,
-                vendorName = window.navigator.vendor;
-            if (isChromium !== null && isChromium !== undefined && vendorName === "Google Inc.") {
-                return true;
-            } else {
-                return false;
-            }
-        }
-
 		function isIe11() {
 			return !(window.ActiveXObject) && "ActiveXObject" in window;
 		}

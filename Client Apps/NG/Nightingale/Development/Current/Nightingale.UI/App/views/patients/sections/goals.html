@@ -48,9 +48,12 @@
                                             </div>
                                             <div class="name pad-icon-left accordion-toggle" data-bind="click: $parents[1].setActiveTask.bind($parents[1])">
                                                 <div class="line-reset" data-bind="with: status">
-                                                    <span data-bind="text: $parent.description, css: textClass"></span>
-                                                    <!-- ko if: name() === 'Completed' -->
+                                                    <!-- ko if: (name() !== 'Met' && name() !== 'Abandoned') -->
+                                                        <span data-bind="text: $parent.description, css: textClass"></span>
+                                                    <!-- /ko -->
+                                                    <!-- ko if: (name() === 'Met' || name() === 'Abandoned') -->
                                                         <em>
+                                                            <span data-bind="text: $parent.description, css: textClass"></span>
                                                             - <span data-bind="Date: $parent.closedDate, attr: { 'title': $parent.closedDate }"></span>
                                                         </em>
                                                     <!-- /ko -->
@@ -85,15 +88,12 @@
                                             </div>
                                             <div class="line-reset" data-bind="with: status">
                                                 <!-- ko if: name() !== 'Completed' -->
-                                                    <em>
                                                     <span data-bind="text: $parent.description, css: textClass"></span>
-                                                    - <span data-bind="Date: $parent.closedDate, attr: { 'title': $parent.closedDate }"></span>
-                                                    </em>
                                                 <!-- /ko -->
                                                 <!-- ko if: name() === 'Completed' -->
-                                                    <span data-bind="text: $parent.description, css: textClass"></span>
                                                     <em>
-                                                    - <span data-bind="Date: $parent.closedDate, attr: { 'title': $parent.closedDate }"></span>
+                                                        <span data-bind="text: $parent.description, css: textClass"></span>
+                                                        - <span data-bind="Date: $parent.closedDate, attr: { 'title': $parent.closedDate }"></span>
                                                     </em>
                                                 <!-- /ko -->
                                             </div>

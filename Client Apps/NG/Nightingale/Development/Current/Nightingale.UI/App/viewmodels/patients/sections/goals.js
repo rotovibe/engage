@@ -93,6 +93,8 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
                 var modalEntity = ko.observable(new ModalEntity(intervention, 'description'));
                 var saveOverride = function () {
                     saveIntervention(intervention);
+                    thisGoal.isOpen(false);
+                    thisGoal.isOpen(true);
                 };
                 var cancelOverride = function () {
                     cancel(intervention);
@@ -106,6 +108,8 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
                 var modalEntity = ko.observable(new ModalEntity(task, 'description'));
                 var saveOverride = function () {
                     saveTask(task);
+                    thisGoal.isOpen(false);
+                    thisGoal.isOpen(true);
                 };
                 var cancelOverride = function () {
                     datacontext.cancelEntityChanges(task);

@@ -36,7 +36,7 @@
 
                 function doSomething(barrier) {
                     var newBarrierId = datacontext.createComplexType('Identifier', { id: barrier.id() });
-                    self.task().barrierIds.push(newBarrierId);
+                    self.task().barrierIds().push(newBarrierId);
                     self.editBarrier(barrier, 'Add Barrier');
                 }
             };
