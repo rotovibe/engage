@@ -603,6 +603,7 @@ namespace Phytel.API.DataDomain.Contact
                                         {
                                             Id = ObjectId.GenerateNewId(),
                                             Number = p.Number,
+                                            ExtNumber = p.ExtNumber,
                                             IsText = p.IsText,
                                             TypeId = ObjectId.Parse(p.TypeId),
                                             PreferredPhone = p.PhonePreferred,
@@ -651,13 +652,15 @@ namespace Phytel.API.DataDomain.Contact
                                         {
                                             Id = id,
                                             Number = p.Number,
+                                            ExtNumber = p.ExtNumber,
                                             IsText = p.IsText,
                                             TypeId = ObjectId.Parse(p.TypeId),
                                             PreferredPhone = p.PhonePreferred,
                                             PreferredText = p.TextPreferred,
                                             OptOut = p.OptOut,
                                             DeleteFlag = false,
-                                            DataSource = Helper.TrimAndLimit(p.DataSource, 50)
+                                            DataSource = Helper.TrimAndLimit(p.DataSource, 50),
+                                            ExternalRecordId = p.ExternalRecordId
                                         };
                                         mePhones.Add(mePh);
                                     } 
@@ -704,7 +707,9 @@ namespace Phytel.API.DataDomain.Contact
                                             Preferred = p.Preferred,
                                             TypeId = ObjectId.Parse(p.TypeId),
                                             OptOut = p.OptOut,
-                                            DeleteFlag = false
+                                            DeleteFlag = false,
+                                            DataSource = Helper.TrimAndLimit(p.DataSource, 50),
+                                            ExternalRecordId = p.ExternalRecordId
                                         };
                                         meEmails.Add(me);
                                         updatedEmails.Add(new CleanupIdData { OldId = p.Id, NewId = me.Id.ToString() });
@@ -749,7 +754,9 @@ namespace Phytel.API.DataDomain.Contact
                                             TypeId = ObjectId.Parse(p.TypeId),
                                             Preferred = p.Preferred,
                                             OptOut = p.OptOut,
-                                            DeleteFlag = false
+                                            DeleteFlag = false,
+                                            DataSource = Helper.TrimAndLimit(p.DataSource, 50),
+                                            ExternalRecordId = p.ExternalRecordId
                                         };
                                         meEmails.Add(mePh);
                                     }
@@ -801,7 +808,9 @@ namespace Phytel.API.DataDomain.Contact
                                             PostalCode = p.PostalCode,
                                             Preferred = p.Preferred,
                                             OptOut = p.OptOut,
-                                            DeleteFlag = false
+                                            DeleteFlag = false,
+                                            ExternalRecordId = p.ExternalRecordId,
+                                            DataSource = p.DataSource
                                         };
                                         meAddresses.Add(me);
                                         updatedAddresses.Add(new CleanupIdData { OldId = p.Id, NewId = me.Id.ToString() });
@@ -851,7 +860,10 @@ namespace Phytel.API.DataDomain.Contact
                                             PostalCode = p.PostalCode,
                                             Preferred = p.Preferred,
                                             OptOut = p.OptOut,
-                                            DeleteFlag = false
+                                            DeleteFlag = false,
+                                            ExternalRecordId = p.ExternalRecordId,
+                                            DataSource = p.DataSource
+
                                         };
                                         meAddresses.Add(me);
                                     }
@@ -1026,11 +1038,13 @@ namespace Phytel.API.DataDomain.Contact
                                     Id = mePh.Id.ToString(),
                                     IsText = mePh.IsText,
                                     Number = mePh.Number,
+                                    ExtNumber = mePh.ExtNumber,
                                     OptOut = mePh.OptOut,
                                     PhonePreferred = mePh.PreferredPhone,
                                     TextPreferred = mePh.PreferredText,
                                     TypeId = mePh.TypeId.ToString(),
-                                    DataSource = Helper.TrimAndLimit(mePh.DataSource, 50)
+                                    DataSource = Helper.TrimAndLimit(mePh.DataSource, 50),
+                                    ExternalRecordId = mePh.ExternalRecordId
                                 };
                                 phones.Add(phone);
                             }
@@ -1048,7 +1062,7 @@ namespace Phytel.API.DataDomain.Contact
                             // Get the ones that are not deleted.
                             if (!meE.DeleteFlag)
                             {
-                                EmailData email = new EmailData { Id = meE.Id.ToString(), OptOut = meE.OptOut, Preferred = meE.Preferred, Text = meE.Text, TypeId = meE.TypeId.ToString() };
+                                EmailData email = new EmailData { Id = meE.Id.ToString(), OptOut = meE.OptOut, Preferred = meE.Preferred, Text = meE.Text, TypeId = meE.TypeId.ToString(), DataSource = Helper.TrimAndLimit(meE.DataSource, 50),ExternalRecordId = meE.ExternalRecordId};
                                 emails.Add(email);
                             }
                         }
@@ -1065,7 +1079,7 @@ namespace Phytel.API.DataDomain.Contact
                             // Get the ones that are not deleted.
                             if (!meAdd.DeleteFlag)
                             {
-                                AddressData address = new AddressData { Id = meAdd.Id.ToString(), Line1 = meAdd.Line1, Line2 = meAdd.Line2, Line3 = meAdd.Line3, City = meAdd.City, StateId = meAdd.StateId.ToString(), PostalCode = meAdd.PostalCode, TypeId = meAdd.TypeId.ToString(), OptOut = meAdd.OptOut, Preferred = meAdd.Preferred };
+                                AddressData address = new AddressData { Id = meAdd.Id.ToString(), Line1 = meAdd.Line1, Line2 = meAdd.Line2, Line3 = meAdd.Line3, City = meAdd.City, StateId = meAdd.StateId.ToString(), PostalCode = meAdd.PostalCode, TypeId = meAdd.TypeId.ToString(), OptOut = meAdd.OptOut, Preferred = meAdd.Preferred,DataSource = meAdd.DataSource,ExternalRecordId = meAdd.ExternalRecordId};
                                 addresses.Add(address);
                             }
                         }
