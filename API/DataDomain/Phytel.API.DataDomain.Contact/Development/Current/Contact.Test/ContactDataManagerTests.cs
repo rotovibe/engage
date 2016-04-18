@@ -176,4 +176,25 @@ namespace Phytel.API.DataDomain.Contact.Tests
 
         }
     }
+
+    [TestClass]
+    public class CareTeamDataManagerUnitTests
+    {
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void DataContactManager_UpdateCareTeamMember_Null_Request_Should_Throw()
+        {
+            var mockFactory = new Mock<ICareTeamRepositoryFactory>();
+
+
+            mockFactory.Setup(
+                f => f.GetCareTeamRepository(It.IsAny<IDataDomainRequest>(), It.IsAny<RepositoryType>()))
+                .Returns((ICareTeamRepository)null);
+
+            var careTeamDataManager = new CareTeamDataManager(mockFactory.Object);
+           
+            var data = careTeamDataManager.UpdateCareTeamMember(null);
+        }
+
+    }
 }
