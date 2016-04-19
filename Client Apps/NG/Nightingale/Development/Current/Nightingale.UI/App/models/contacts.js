@@ -4,8 +4,8 @@
 *	Register all of the user related models in the entity manager (initialize function) and provide other non-entity models
 *	@module contactCard
 */
-define(['services/session', 'services/validatorfactory', 'services/customvalidators'],
-	function (session, validatorFactory, customValidators) {		
+define(['services/session', 'services/validatorfactory', 'services/customvalidators', 'services/formatter'],
+	function (session, validatorFactory, customValidators, formatter) {		
 
 	    var datacontext;
 		var DT = breeze.DataType;
@@ -197,6 +197,7 @@ define(['services/session', 'services/validatorfactory', 'services/customvalidat
 			function contactSubTypeInitializer(contactSubType) {
 				contactSubType.isNew = ko.observable(false);
 				contactSubType.subTypeName = ko.computed( function() {
+					checkDataContext();
 					var name = null;
 					var subTypeId = contactSubType.subTypeId();
 					if( subTypeId ){
@@ -208,6 +209,7 @@ define(['services/session', 'services/validatorfactory', 'services/customvalidat
 					return name;
 				});
 				contactSubType.specialtyName = ko.computed( function() {
+					checkDataContext();
 					var name = null;
 					var specialtyId = contactSubType.specialtyId();
 					if( specialtyId ){
@@ -219,6 +221,7 @@ define(['services/session', 'services/validatorfactory', 'services/customvalidat
 					return name;
 				});
 				contactSubType.subSpecialtyString = ko.computed(function(){
+					checkDataContext();
 					var name = null;
 					var subSpecialtyIds = contactSubType.subSpecialtyIds();
 					if( subSpecialtyIds.length ){
@@ -241,7 +244,7 @@ define(['services/session', 'services/validatorfactory', 'services/customvalidat
 			
 		    function contactCardInitializer(contactCard) {				
 				contactCard.isNew = ko.observable(false);				
-		        contactCard.activeTab = ko.observable('General');
+		        contactCard.activeTab = ko.observable('General');				
 		        contactCard.prefCommMethods = ko.computed(function () {
 		            checkDataContext();
 		            var commModeString = '';
@@ -568,6 +571,39 @@ define(['services/session', 'services/validatorfactory', 'services/customvalidat
 		            }
 		        }).extend({ throttle: 50 });
 
+				contactCard.contactSummary = ko.computed( function(){
+					var summary = '';					
+					if( contactCard.contactSubTypes && contactCard.contactSubTypes().length ){						
+						var subTypesText = '';
+						ko.utils.arrayForEach( contactCard.contactSubTypes(), function( subType ){
+							if( subTypesText.length ) {
+								subTypesText += ', ';
+							}
+							subTypesText += subType.subTypeName();
+							if( subType.specialtyId() ){
+								subTypesText += ' (' + subType.specialtyName() + ')';
+							}
+						});
+						summary += subTypesText;
+					}
+					if( contactCard.preferredPhone() ){
+						var phoneNumber = contactCard.preferredPhone().number();
+						phoneNumber = phoneNumber.replace( /\D/g, '');
+						formattedPhone = formatter.formatSeparators( phoneNumber, 'XXX-XXX-XXXX', '-');
+						if( summary.length ){
+							summary += ', ';
+						}
+						summary += formattedPhone;
+					}					
+					if( contactCard.preferredAddress() ){
+						if( summary.length ){
+							summary += ', ';
+						}
+						summary += contactCard.preferredAddress().cityState();
+					}
+					return summary;
+				});
+				
 		        contactCard.preferredLanguage = ko.computed({
 		            read: function () {
 		                // Go through each of the languages
@@ -890,6 +926,11 @@ define(['services/session', 'services/validatorfactory', 'services/customvalidat
 		            }
 		            return null;
 		        });
+				address.cityState = ko.computed( function(){
+					var city = address.city() || '';
+		            var state = address.state() ? address.state().code() : '';		            
+		            return city + ', ' + state;
+				});
 		        address.cityStateZip = ko.computed(function () {
 		            var city = address.city() || '';
 		            var state = address.state() ? address.state().code() : '';

@@ -16,6 +16,7 @@
         var contactService = {
             saveContactCard: saveContactCard,
 			getContacts: getContacts,
+			getLocalContacts: getLocalContacts,
             cancelAllChangesToContactCard: cancelAllChangesToContactCard
         };
         return contactService;
@@ -89,6 +90,19 @@
 			}
         }
 
+		function getLocalContacts( manager ){
+			// Make sure the datacontext has been loaded
+            checkDataContext();
+            // If there is no manager, we can't query using breeze
+            if (!manager) { throw new Error("[manager] cannot be a null parameter"); }
+
+            // Create a base query
+            var query = breeze.EntityQuery.from('ContactCard')
+                .toType('ContactCard');
+
+            return manager.executeQueryLocally(query);
+		}
+		
 		function getContacts( manager, observable, params, observableTotalCount ){
 			
 			// If there is no manager, we can't query using breeze
@@ -100,6 +114,7 @@
 			var payload = {
 				ContactTypeIds: params.contactTypeIds,
 				ContactSubTypeIds: params.contactSubTypeIds,
+				ContactStatuses: params.contactStatuses,
 				FirstName: params.firstName,
 				LastName: params.lastName,
 				FilterType: params.filterType ? params.filterType : null,	//'ExactMatch' / 'StartsWith' 
@@ -117,7 +132,7 @@
 					$method: 'POST',
 					$encoding: 'JSON',
 					$data: payload
-				});//.toType('ContactCard');
+				}).toType('ContactCard');
 
             return manager.executeQuery(query).then(searchSucceeded).fail(saveFailed);	
 			

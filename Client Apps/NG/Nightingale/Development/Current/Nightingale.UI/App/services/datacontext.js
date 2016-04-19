@@ -251,6 +251,7 @@
 			saveContactCard: saveContactCard,
 			cancelAllChangesToContactCard: cancelAllChangesToContactCard,
 			getContacts: getContacts,
+			getLocalContacts: getLocalContacts,
 			cancelEntityChanges: cancelEntityChanges,
 			getAllChanges: getAllChanges,
 			searchForEntities: searchForEntities,
@@ -1004,10 +1005,9 @@
 			return programsService.savePlanElemAttrs(manager, planElem, programId, patientId).then(queryCompleted(message));
 		}
 
-		function getContactTypes( group, isRoot){			
+		function getContactTypes( group, isRoot){
 			var types = [];
-			ko.utils.arrayForEach(localCollections.contactTypesTree(), function(node){
-				var goes = false;
+			ko.utils.arrayForEach(localCollections.contactTypesTree(), function(node){				
 				if( ( group && ( node.group() == group )) || !group ) {
 					if( ( isRoot && !node.parentId() ) || ( isRoot == false && node.parentId() ) || !isRoot ){
 						types.push(node);	
@@ -1111,6 +1111,10 @@
 			//setTimeout(function () {
 				return contactService.saveContactCard(manager, serializedContactCard, isInsert).then(saveCompleted);
 			//}, 50);			
+		}
+		
+		function getLocalContacts(){
+			return contactService.getLocalContacts( manager );	
 		}
 		
 		function getContacts( observable, params, observableTotalCount ){

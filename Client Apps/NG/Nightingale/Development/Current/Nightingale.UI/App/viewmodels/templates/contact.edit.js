@@ -3,8 +3,8 @@
 *	this module composes templates/contactcard.html inside the dialog
 *	@module contact.edit
 */
-define([ 'services/datacontext', 'services/local.collections' ],
-	function( datacontext, localCollections ){
+define([ 'services/datacontext', 'services/local.collections', 'viewmodels/home/contacts/index' ],
+	function( datacontext, localCollections, contactsIndex ){
 
 		var ctor = function () {
             var self = this;					
@@ -42,10 +42,10 @@ define([ 'services/datacontext', 'services/local.collections' ],
 			self.hasErrors = ko.observable(false);
 		}
 		
-		var defaultContactType = ko.observable();
-		var allContactTypes = ko.observableArray([]);
-		var typesList = datacontext.getContactTypes( contactTypeGroupId, false );
-		allContactTypes(typesList);
+		//var defaultContactType = ko.observable();
+		// var allContactTypes = ko.observableArray([]);
+		// var typesList = datacontext.getContactTypes( contactTypeGroupId, false );
+		// allContactTypes(typesList);
 		
 		ctor.prototype.activate = function( settings ){
 			var self = this;
@@ -63,7 +63,7 @@ define([ 'services/datacontext', 'services/local.collections' ],
 			self.deceasedStatuses = datacontext.enums.deceasedStatuses;			
 			self.contactStatuses = datacontext.enums.contactStatuses;
 			
-			self.allContactTypes = allContactTypes;
+			self.allContactTypes = contactsIndex.allContactTypes;
 			
 			var firstNameToken = self.contactCard().firstName.subscribe( function( newValue ){
 				var firstName = newValue;
@@ -145,6 +145,7 @@ define([ 'services/datacontext', 'services/local.collections' ],
 				}
 				return subTypes;
 			}).extend({ throttle: 100 });
+			
 			self.contactSpecialties = ko.computed( function(){
 				//return children of selected sub type
 				var specialties = [];
@@ -295,15 +296,16 @@ define([ 'services/datacontext', 'services/local.collections' ],
 				return subs;
 			}
 			
-			self.contactTypes = ko.observableArray([]);
-			self.contactTypes( datacontext.getContactTypes( contactTypeGroupId, 'root' ) );
+			self.contactTypes = contactsIndex.contactTypes;
+			// self.contactTypes = ko.observableArray([]);
+			// self.contactTypes( datacontext.getContactTypes( contactTypeGroupId, 'root' ) );
 			self.contactTypesShowing = ko.observable(true);
-			if( !defaultContactType() ){
-				defaultContactType( findDefaultContactType(self.contactTypes) )
-			}						
+			// if( !defaultContactType() ){
+				// defaultContactType( findDefaultContactType(self.contactTypes) )
+			// }						
 			
-			if( self.contactCard().isNew() ){//.id() < 0
-				self.contactCard().contactTypeId( defaultContactType().id() );
+			if( self.contactCard().isNew() ){
+				self.contactCard().contactTypeId( contactsIndex.defaultContactType().id() );
 			}
 						
 			self.setActiveTab = function( name ){
@@ -331,22 +333,23 @@ define([ 'services/datacontext', 'services/local.collections' ],
 		}
 		
 		function getContactTypeChildren( typeId ){
-			var subTypes = ko.utils.arrayFilter( allContactTypes(), function(item){
-				return ( item.parentId() && item.parentId() == typeId ) 
-			});
-			return subTypes;
+			return contactsIndex.getContactTypeChildren( typeId );
+			// var subTypes = ko.utils.arrayFilter( allContactTypes(), function(item){
+				// return ( item.parentId() && item.parentId() == typeId ) 
+			// });
+			// return subTypes;
 		}
 		
-		function findDefaultContactType( contactTypes ){
-			var defaultType = null;
-			var types = ko.utils.arrayFilter( contactTypes(), function(node){
-				return node.name() == 'Person';
-			});
-			if( types && types.length > 0 ){
-				defaultType = types[0];
-			}
-			return defaultType;
-		};
+		// function findDefaultContactType( contactTypes ){
+			// var defaultType = null;
+			// var types = ko.utils.arrayFilter( contactTypes(), function(node){
+				// return node.name() == 'Person';
+			// });
+			// if( types && types.length > 0 ){
+				// defaultType = types[0];
+			// }
+			// return defaultType;
+		// };
 		
 		ctor.prototype.detached = function(){
 			var self = this;			
