@@ -42,9 +42,9 @@ namespace Phytel.API.DataDomain.Contact.MongoDB.DTO
         [BsonDefaultValue(1.0)]
         public double Version { get; set; }
 
+        [BsonIgnoreIfNull(true)]
         [BsonElement(LastUpdatedByProperty)]
         public ObjectId? UpdatedBy { get; set; }
-
         
         [BsonElement(DeleteFlagProperty)]
         [BsonDefaultValue(false)]
