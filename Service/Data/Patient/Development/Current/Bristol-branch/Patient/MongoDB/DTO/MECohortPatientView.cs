@@ -17,7 +17,7 @@ namespace Phytel.API.DataDomain.Patient.DTO
         public MECohortPatientView(string userId)
         {
             Id = ObjectId.GenerateNewId();
-            Version = 1.0;
+         //   Version = 1.0;
             RecordCreatedBy = ObjectId.Parse(userId);
             RecordCreatedOn = DateTime.UtcNow;
         }

@@ -15,7 +15,7 @@ namespace Phytel.API.DataDomain.Patient.DTO
         public MEPatient(string userId, DateTime? createdOn)
         {
             Id = ObjectId.GenerateNewId();  
-            Version = 1.0;
+           // Version = 1.0;
             RecordCreatedBy = ObjectId.Parse(userId);
             RecordCreatedOn = createdOn == null || createdOn .Equals(new DateTime())? DateTime.UtcNow : (DateTime)createdOn;
         }

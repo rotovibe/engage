@@ -181,6 +181,8 @@ namespace Phytel.API.DataDomain.Patient
                         MEPatient meP = new MEPatient(this.UserId, pd.RecordCreatedOn)
                         {
                             //Id = ObjectId.Parse("561ea745d43325133cf09a6d"),
+                            Version = pd.Version,
+                            Priority = (PriorityData)pd.PriorityData,
                             FirstName = pd.FirstName,
                             LastName = pd.LastName,
                             MiddleName = pd.MiddleName,
@@ -205,11 +207,19 @@ namespace Phytel.API.DataDomain.Patient
                         };
                         if (!string.IsNullOrEmpty(pd.ReasonId))
                         {
-                            meP.ReasonId = ObjectId.Parse(pd.ReasonId);
+                            int intReasonResult;
+                            Int32.TryParse(pd.ReasonId, out intReasonResult);
+                            string hexReasonId = intReasonResult.ToString("X24");
+                            meP.ReasonId = ObjectId.Parse(hexReasonId);
+                        //    meP.ReasonId = ObjectId.Parse(pd.ReasonId);
                         }
                         if (!string.IsNullOrEmpty(pd.MaritalStatusId))
                         {
-                            meP.MaritalStatusId = ObjectId.Parse(pd.MaritalStatusId);
+                            int intMaritalResult;
+                            Int32.TryParse(pd.MaritalStatusId, out intMaritalResult);
+                            string hexMaritalId = intMaritalResult.ToString("X24");
+                            meP.MaritalStatusId= ObjectId.Parse(hexMaritalId);
+                         //   meP.MaritalStatusId = ObjectId.Parse(pd.MaritalStatusId);
                         }
                         if (!string.IsNullOrEmpty(pd.UpdatedByProperty))
                         {
@@ -603,8 +613,8 @@ namespace Phytel.API.DataDomain.Patient
             PutUpdatePatientDataResponse response = new PutUpdatePatientDataResponse();
             try
             {
-                if (request.PatientData.PriorityData == null)
-                    throw new ArgumentException("Priority is missing from the DataDomain request.");
+                if ((request.PatientData.PriorityData < 0) || (request.PatientData.PriorityData > 3))
+                    throw new ArgumentException("Priority is out of range (valid values: 0,1,2,3) in the DataDomain request.");
 
                 using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
                 {
