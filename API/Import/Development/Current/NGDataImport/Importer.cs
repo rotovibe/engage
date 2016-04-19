@@ -10,6 +10,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Runtime.Serialization.Json;
 using System.Text;
+using System.Web.SessionState;
 using System.Windows.Forms;
 using Phytel.API.Common.CustomObject;
 using Phytel.API.DataDomain.CareMember.DTO;
@@ -18,6 +19,7 @@ using Phytel.API.DataDomain.LookUp.DTO;
 using Phytel.API.DataDomain.Patient.DTO;
 using Phytel.API.DataDomain.PatientSystem.DTO;
 using Microsoft.VisualBasic.FileIO;
+using Phytel.API.DataDomain.Contact.DTO.CareTeam;
 
 namespace NGDataImport
 {
@@ -513,25 +515,24 @@ namespace NGDataImport
             return responseContact;
         }
 
-        public PutCareMemberDataResponse InsertCareMember(PutCareMemberDataRequest putCareMemberRequest, string patientId)
+        public SaveCareTeamDataResponse InsertCareTeam(SaveCareTeamDataRequest request)
         {
-            //Patient
-            Uri careMemberUri = new Uri(string.Format("{0}/CareMember/{1}/{2}/{3}/Patient/{4}/CareMember/Insert?UserId={5}",
+            //[Route("/{Context}/{Version}/{ContractNumber}/Contacts/{ContactId}/CareTeams", "POST")]
+            Uri contactUri = new Uri(string.Format("{0}/Contact/{1}/{2}/{3}/Contacts/{4}/CareTeams?UserId={5}",
                                                  Url,
                                                  Context,
                                                  Version,
                                                  ContractNumber,
-                                                 patientId,
+                                                 request.ContactId,
                                                  HeaderUserId));
-            HttpClient client = GetHttpClient(careMemberUri);
+            HttpClient client = GetHttpClient(contactUri);
 
-            DataContractJsonSerializer jsonSer = new DataContractJsonSerializer(typeof(PutCareMemberDataRequest));
+            DataContractJsonSerializer jsonSer = new DataContractJsonSerializer(typeof(SaveCareTeamDataRequest));
 
             // use the serializer to write the object to a MemoryStream 
             MemoryStream ms = new MemoryStream();
-            jsonSer.WriteObject(ms, putCareMemberRequest);
+            jsonSer.WriteObject(ms, request);
             ms.Position = 0;
-
 
             //use a Stream reader to construct the StringContent (Json) 
             StreamReader sr = new StreamReader(ms);
@@ -539,19 +540,19 @@ namespace NGDataImport
             StringContent theContent = new StringContent(sr.ReadToEnd(), System.Text.Encoding.UTF8, "application/json");
 
             //Post the data 
-            var response = client.PutAsync(careMemberUri, theContent);
+            var response = client.PostAsync(contactUri, theContent);
             var responseContent = response.Result.Content;
 
             string responseString = responseContent.ReadAsStringAsync().Result;
-            PutCareMemberDataResponse responseCareMember = null;
+            SaveCareTeamDataResponse saveCareTeamDataResponse = null;
 
             using (var msResponse = new MemoryStream(Encoding.Unicode.GetBytes(responseString)))
             {
-                var serializer = new DataContractJsonSerializer(typeof(PutCareMemberDataResponse));
-                responseCareMember = (PutCareMemberDataResponse)serializer.ReadObject(msResponse);
+                var serializer = new DataContractJsonSerializer(typeof(SaveCareTeamDataResponse));
+                saveCareTeamDataResponse = (SaveCareTeamDataResponse)serializer.ReadObject(msResponse);
             }
 
-            return responseCareMember;
+            return saveCareTeamDataResponse;
         }
 
         public GetContactByUserIdDataResponse GetContactByUserId(string userId)

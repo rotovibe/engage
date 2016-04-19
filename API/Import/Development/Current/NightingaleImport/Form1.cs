@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Runtime.Remoting.Contexts;
 using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Windows.Forms;
@@ -19,6 +20,7 @@ using Phytel.API.DataDomain.Patient.DTO;
 using Phytel.API.DataDomain.PatientSystem.DTO;
 using Microsoft.VisualBasic.FileIO;
 using NGDataImport;
+using Phytel.API.DataDomain.Contact.DTO.CareTeam;
 
 namespace NightingaleImport
 {
@@ -81,6 +83,7 @@ namespace NightingaleImport
 
         public const string EngageSystemProperty = "Engage";
         public const string DataSourceProperty = "Import";
+        public const string PCMRoleIdProperty = "56f169f8078e10eb86038514";
         string _headerUserId = "000000000000000000000000";
 
         public Form1()
@@ -126,9 +129,6 @@ namespace NightingaleImport
 
                     LoadLookUps();
                     LoadSystems();
-
-                    //"Care Manager
-                    string contactTypeId = careMemberLookUp.Where(x => x.Name == "Care Manager").FirstOrDefault().Id;
 
                     foreach (ListViewItem lvi in listView1.CheckedItems)
                     {
@@ -543,23 +543,30 @@ namespace NightingaleImport
                                 {
                                     GetContactByUserIdDataResponse contactByUserIdResponse = import.GetContactByUserId(userIdResponse.ToString());
 
-                                    CareMemberData careMember = new CareMemberData
+                                    CareTeamMemberData member = new CareTeamMemberData
                                     {
-                                        PatientId = responsePatient.Id.ToString(),
                                         ContactId = contactByUserIdResponse.Contact.Id,
-                                        TypeId = contactTypeId,
-                                        Primary = true,
+                                        RoleId = PCMRoleIdProperty,
+                                        Core = true,
+                                        StatusId = (int)CareTeamMemberStatus.Active,
                                     };
+                                    List<CareTeamMemberData> memberList = new List<CareTeamMemberData>();
+                                    memberList.Add(member);
 
-                                    PutCareMemberDataRequest careMemberRequest = new PutCareMemberDataRequest
+                                    CareTeamData careTeamData = new CareTeamData
                                     {
-                                        PatientId = responsePatient.Id.ToString(),
-                                        CareMember = careMember
+                                          ContactId = responseContact.Id,
+                                          Members = memberList
                                     };
-                                    PutCareMemberDataResponse responseCareMember = import.InsertCareMember(careMemberRequest, responsePatient.Id.ToString());
-                                    if (responseCareMember.Id == null)
+                                    SaveCareTeamDataRequest saveCareTeamDataRequest = new SaveCareTeamDataRequest
                                     {
-                                        throw new Exception("Care Member import request failed.");
+                                        CareTeamData = careTeamData,
+                                        ContactId = responseContact.Id,
+                                    };
+                                    SaveCareTeamDataResponse saveCareTeamDataResponse = import.InsertCareTeam(saveCareTeamDataRequest);
+                                    if (saveCareTeamDataResponse == null)
+                                    {
+                                        throw new Exception("Care Team import request failed.");
                                     }
                                     import.UpdateCohortPatientView(responsePatient.Id.ToString(), contactByUserIdResponse.Contact.Id);
                                 }
