@@ -80,6 +80,7 @@ namespace Phytel.API.DataDomain.Contact.MongoDB.DTO
         [BsonDateTimeOptions(Kind = System.DateTimeKind.Utc)]
         public DateTime RecordCreatedOn { get; set; }
 
+        [BsonIgnoreIfNull(true)]
         [BsonElement(LastUpdatedByProperty)]
         public ObjectId? UpdatedBy { get; set; }
 
