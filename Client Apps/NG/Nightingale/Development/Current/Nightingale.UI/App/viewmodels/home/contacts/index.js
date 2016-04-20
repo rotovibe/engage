@@ -428,7 +428,7 @@ define(['services/session', 'services/datacontext', 'viewmodels/shell/shell', 'm
 			var nextSkip = skipped + contactsTake();
 			if( nextSkip < totalCount() && nextSkip < maxContactsCount() ){
 				contactsSkip( nextSkip );
-				canLoadMoreContacts( false );//TODO: show the button for ENG-1889: canLoadMoreContacts( true );
+				canLoadMoreContacts( true );
 			}
 			else{
 				canLoadMoreContacts( false );
