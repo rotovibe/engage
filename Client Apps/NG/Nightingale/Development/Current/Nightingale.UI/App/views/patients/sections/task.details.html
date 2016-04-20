@@ -32,6 +32,13 @@
                                                     <div class="span6" data-bind="DateOrDash: startDate">
                                                     </div>
                                                 </div>
+                                                <div class="row pad-bottom" data-bind="visible: closedDate">
+                                                    <div class="span6 grey">
+                                                        Closed Date
+                                                    </div>
+                                                    <div class="span6" data-bind="Date: closedDate">
+                                                    </div>
+                                                </div>
                                                 <div class="row pad-bottom" data-bind="with: status">
                                                     <div class="span6 grey">
                                                         Status
@@ -51,10 +58,6 @@
                                                         Target Date
                                                     </div>
                                                     <div class="span6" data-bind="DateOrDash: targetDate">
-                                                    </div>
-                                                </div>
-                                                <div data-bind="foreach: customAttributes().sort($parent.alphabeticalOrderSort)">
-                                                    <div data-bind="compose: displayPath">
                                                     </div>
                                                 </div>
                                                 <div class="row pad-bottom filter-toggle" data-bind="click: $parent.toggleDetailsExpanded, visible: details">

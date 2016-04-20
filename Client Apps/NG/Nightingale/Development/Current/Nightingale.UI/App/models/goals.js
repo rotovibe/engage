@@ -395,7 +395,7 @@ define(['services/session'],
                     var thisString = '';
                     var interventions = barrier.relatedInterventions();
                     ko.utils.arrayForEach(interventions, function (intervention) {
-                        thisString += intervention ? intervention.name() + ', ' : '';
+                        thisString += intervention ? intervention.description() + ', ' : '';
                     });
                     if (thisString.length > 0) {
                         thisString = thisString.substr(0, thisString.length - 2);

@@ -109,6 +109,11 @@
             shell.currentModal(modal);
         }
 
+        function saveBarrier (barrier) {
+            barrier.checkAppend();
+            datacontext.saveBarrier(barrier);
+        }
+
         function saveTask (task) {
             task.checkAppend();
             datacontext.saveTask(task);
