@@ -311,6 +311,8 @@ define(['services/session', 'services/datacontext', 'viewmodels/shell/shell', 'm
 			return defaultType;
 		};
 
+		var noResultsFound = ko.observable(false);
+		
 		function resetFilters(){
 			if( !defaultContactType() ){
 				defaultContactType( findDefaultContactType(contactTypes) )
@@ -416,9 +418,7 @@ define(['services/session', 'services/datacontext', 'viewmodels/shell/shell', 'm
 		function searchContacts(){
 			clearCacheAndLoad();			
 		}			
-		
-		var noResultsFound = ko.observable(false);
-		
+
 		function getContactsReturned(){
 			
 			ko.utils.arrayForEach( contactsReturned(), function(contact){
