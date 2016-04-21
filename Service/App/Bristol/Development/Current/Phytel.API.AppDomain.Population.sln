@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppDomain.Engage.Population", "AppDomain.Engage.Population\AppDomain.Engage.Population.csproj", "{F23F90E1-9C74-4076-AC23-D982DEC26B0A}"
 EndProject
@@ -29,14 +29,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Cohort", "Cohort", "{6C8967
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Cohort.DTO", "..\..\..\..\Data\Cohort\Development\Current\Bristol-branch\Cohort.DTO\DataDomain.Cohort.DTO.csproj", "{D4489296-17A3-4172-8FDF-DB6C0A7AE748}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Contact", "Contact", "{1FB3AFCF-099E-49BA-8820-8F1BD422D95E}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Contact.DTO", "..\..\..\..\Data\Contact\Development\Current\Bristol-branch\Contact.DTO\DataDomain.Contact.DTO.csproj", "{0B6E0ED8-ABE5-4A1D-8E10-0AC54F06D9C4}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "LookUp", "LookUp", "{C63F9481-63B2-4DF3-809E-5BA66B51020D}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.LookUp.DTO", "..\..\..\..\Data\LookUp\Development\Current\Bristol-branch\LookUp.DTO\DataDomain.LookUp.DTO.csproj", "{4885FE36-03DB-47B7-BE7E-33260943A9DC}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PatientSystem", "PatientSystem", "{D86BD142-ECCB-46C7-A35D-E99DF00DA708}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.PatientSystem.DTO", "..\..\..\..\Data\PatientSystem\Development\Current\Bristol-branch\PatientSystem.DTO\DataDomain.PatientSystem.DTO.csproj", "{6033A8EA-A3EF-4182-BFDD-4A9826ECF871}"
@@ -59,13 +51,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Cohort.Service.T
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Cohort.Test", "..\..\..\..\Data\Cohort\Development\Current\Bristol-branch\Cohort.Test\DataDomain.Cohort.Test.csproj", "{1E8D72DF-2A09-4872-917F-30ED9B6FDAC3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.PatientSystem", "..\..\..\..\Data\PatientSystem\Development\Current\Bristol-branch\PatientSystem\DataDomain.PatientSystem.csproj", "{BF2F1262-D5CC-41F0-BCFC-7CCDCE479795}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.PatientSystem.Repo", "..\..\..\..\Data\PatientSystem\Development\Current\Bristol-branch\PatientSystem.Repo\DataDomain.PatientSystem.Repo.csproj", "{64428B06-18E5-4307-BA78-FB0D238816D8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.PatientSystem.Service", "..\..\..\..\Data\PatientSystem\Development\Current\Bristol-branch\PatientSystem.Service\DataDomain.PatientSystem.Service.csproj", "{F127267A-807D-4091-AE83-48CDC12E7D56}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.PatientSystem.Service.Test", "..\..\..\..\Data\PatientSystem\Development\Current\Bristol-branch\PatientSystem.Service.Test\DataDomain.PatientSystem.Service.Test.csproj", "{211E6CB2-91E2-4C25-A235-1FF1D9D4CEC7}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.PatientSystem.Test", "..\..\..\..\Data\PatientSystem\Development\Current\Bristol-branch\PatientSystem.Test\DataDomain.PatientSystem.Test.csproj", "{BA3F00D1-7DE7-4AE6-B637-6681C10EC20D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.PatientSystem", "..\..\..\..\Data\PatientSystem\Development\Current\Bristol-branch\PatientSystem\DataDomain.PatientSystem.csproj", "{BF2F1262-D5CC-41F0-BCFC-7CCDCE479795}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -166,26 +160,6 @@ Global
 		{D4489296-17A3-4172-8FDF-DB6C0A7AE748}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D4489296-17A3-4172-8FDF-DB6C0A7AE748}.Test|Any CPU.ActiveCfg = Model|Any CPU
 		{D4489296-17A3-4172-8FDF-DB6C0A7AE748}.Test|Any CPU.Build.0 = Model|Any CPU
-		{0B6E0ED8-ABE5-4A1D-8E10-0AC54F06D9C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0B6E0ED8-ABE5-4A1D-8E10-0AC54F06D9C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0B6E0ED8-ABE5-4A1D-8E10-0AC54F06D9C4}.Model|Any CPU.ActiveCfg = Model|Any CPU
-		{0B6E0ED8-ABE5-4A1D-8E10-0AC54F06D9C4}.Model|Any CPU.Build.0 = Model|Any CPU
-		{0B6E0ED8-ABE5-4A1D-8E10-0AC54F06D9C4}.QA|Any CPU.ActiveCfg = QA|Any CPU
-		{0B6E0ED8-ABE5-4A1D-8E10-0AC54F06D9C4}.QA|Any CPU.Build.0 = QA|Any CPU
-		{0B6E0ED8-ABE5-4A1D-8E10-0AC54F06D9C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0B6E0ED8-ABE5-4A1D-8E10-0AC54F06D9C4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0B6E0ED8-ABE5-4A1D-8E10-0AC54F06D9C4}.Test|Any CPU.ActiveCfg = Test|Any CPU
-		{0B6E0ED8-ABE5-4A1D-8E10-0AC54F06D9C4}.Test|Any CPU.Build.0 = Test|Any CPU
-		{4885FE36-03DB-47B7-BE7E-33260943A9DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4885FE36-03DB-47B7-BE7E-33260943A9DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4885FE36-03DB-47B7-BE7E-33260943A9DC}.Model|Any CPU.ActiveCfg = Model|Any CPU
-		{4885FE36-03DB-47B7-BE7E-33260943A9DC}.Model|Any CPU.Build.0 = Model|Any CPU
-		{4885FE36-03DB-47B7-BE7E-33260943A9DC}.QA|Any CPU.ActiveCfg = Model|Any CPU
-		{4885FE36-03DB-47B7-BE7E-33260943A9DC}.QA|Any CPU.Build.0 = Model|Any CPU
-		{4885FE36-03DB-47B7-BE7E-33260943A9DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4885FE36-03DB-47B7-BE7E-33260943A9DC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4885FE36-03DB-47B7-BE7E-33260943A9DC}.Test|Any CPU.ActiveCfg = Test|Any CPU
-		{4885FE36-03DB-47B7-BE7E-33260943A9DC}.Test|Any CPU.Build.0 = Test|Any CPU
 		{6033A8EA-A3EF-4182-BFDD-4A9826ECF871}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6033A8EA-A3EF-4182-BFDD-4A9826ECF871}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6033A8EA-A3EF-4182-BFDD-4A9826ECF871}.Model|Any CPU.ActiveCfg = Model|Any CPU
@@ -286,16 +260,6 @@ Global
 		{1E8D72DF-2A09-4872-917F-30ED9B6FDAC3}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1E8D72DF-2A09-4872-917F-30ED9B6FDAC3}.Test|Any CPU.ActiveCfg = Model|Any CPU
 		{1E8D72DF-2A09-4872-917F-30ED9B6FDAC3}.Test|Any CPU.Build.0 = Model|Any CPU
-		{BF2F1262-D5CC-41F0-BCFC-7CCDCE479795}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BF2F1262-D5CC-41F0-BCFC-7CCDCE479795}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BF2F1262-D5CC-41F0-BCFC-7CCDCE479795}.Model|Any CPU.ActiveCfg = Model|Any CPU
-		{BF2F1262-D5CC-41F0-BCFC-7CCDCE479795}.Model|Any CPU.Build.0 = Model|Any CPU
-		{BF2F1262-D5CC-41F0-BCFC-7CCDCE479795}.QA|Any CPU.ActiveCfg = Model|Any CPU
-		{BF2F1262-D5CC-41F0-BCFC-7CCDCE479795}.QA|Any CPU.Build.0 = Model|Any CPU
-		{BF2F1262-D5CC-41F0-BCFC-7CCDCE479795}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BF2F1262-D5CC-41F0-BCFC-7CCDCE479795}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BF2F1262-D5CC-41F0-BCFC-7CCDCE479795}.Test|Any CPU.ActiveCfg = Model|Any CPU
-		{BF2F1262-D5CC-41F0-BCFC-7CCDCE479795}.Test|Any CPU.Build.0 = Model|Any CPU
 		{64428B06-18E5-4307-BA78-FB0D238816D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{64428B06-18E5-4307-BA78-FB0D238816D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{64428B06-18E5-4307-BA78-FB0D238816D8}.Model|Any CPU.ActiveCfg = Release|Any CPU
@@ -316,6 +280,16 @@ Global
 		{F127267A-807D-4091-AE83-48CDC12E7D56}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F127267A-807D-4091-AE83-48CDC12E7D56}.Test|Any CPU.ActiveCfg = Model|Any CPU
 		{F127267A-807D-4091-AE83-48CDC12E7D56}.Test|Any CPU.Build.0 = Model|Any CPU
+		{211E6CB2-91E2-4C25-A235-1FF1D9D4CEC7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{211E6CB2-91E2-4C25-A235-1FF1D9D4CEC7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{211E6CB2-91E2-4C25-A235-1FF1D9D4CEC7}.Model|Any CPU.ActiveCfg = Release|Any CPU
+		{211E6CB2-91E2-4C25-A235-1FF1D9D4CEC7}.Model|Any CPU.Build.0 = Release|Any CPU
+		{211E6CB2-91E2-4C25-A235-1FF1D9D4CEC7}.QA|Any CPU.ActiveCfg = Release|Any CPU
+		{211E6CB2-91E2-4C25-A235-1FF1D9D4CEC7}.QA|Any CPU.Build.0 = Release|Any CPU
+		{211E6CB2-91E2-4C25-A235-1FF1D9D4CEC7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{211E6CB2-91E2-4C25-A235-1FF1D9D4CEC7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{211E6CB2-91E2-4C25-A235-1FF1D9D4CEC7}.Test|Any CPU.ActiveCfg = Release|Any CPU
+		{211E6CB2-91E2-4C25-A235-1FF1D9D4CEC7}.Test|Any CPU.Build.0 = Release|Any CPU
 		{BA3F00D1-7DE7-4AE6-B637-6681C10EC20D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{BA3F00D1-7DE7-4AE6-B637-6681C10EC20D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BA3F00D1-7DE7-4AE6-B637-6681C10EC20D}.Model|Any CPU.ActiveCfg = Model|Any CPU
@@ -326,6 +300,16 @@ Global
 		{BA3F00D1-7DE7-4AE6-B637-6681C10EC20D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BA3F00D1-7DE7-4AE6-B637-6681C10EC20D}.Test|Any CPU.ActiveCfg = Model|Any CPU
 		{BA3F00D1-7DE7-4AE6-B637-6681C10EC20D}.Test|Any CPU.Build.0 = Model|Any CPU
+		{BF2F1262-D5CC-41F0-BCFC-7CCDCE479795}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF2F1262-D5CC-41F0-BCFC-7CCDCE479795}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF2F1262-D5CC-41F0-BCFC-7CCDCE479795}.Model|Any CPU.ActiveCfg = Model|Any CPU
+		{BF2F1262-D5CC-41F0-BCFC-7CCDCE479795}.Model|Any CPU.Build.0 = Model|Any CPU
+		{BF2F1262-D5CC-41F0-BCFC-7CCDCE479795}.QA|Any CPU.ActiveCfg = Model|Any CPU
+		{BF2F1262-D5CC-41F0-BCFC-7CCDCE479795}.QA|Any CPU.Build.0 = Model|Any CPU
+		{BF2F1262-D5CC-41F0-BCFC-7CCDCE479795}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF2F1262-D5CC-41F0-BCFC-7CCDCE479795}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF2F1262-D5CC-41F0-BCFC-7CCDCE479795}.Test|Any CPU.ActiveCfg = Model|Any CPU
+		{BF2F1262-D5CC-41F0-BCFC-7CCDCE479795}.Test|Any CPU.Build.0 = Model|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -337,10 +321,6 @@ Global
 		{ABE948FB-247E-4955-B3AB-B7C93E10A542} = {E7779C1C-8901-45A4-9992-0169325E43E0}
 		{6C8967D1-8A53-4DDE-9D8D-A1A731D3782A} = {3BA0514A-E488-43EE-83FD-BC122588DB6F}
 		{D4489296-17A3-4172-8FDF-DB6C0A7AE748} = {6C8967D1-8A53-4DDE-9D8D-A1A731D3782A}
-		{1FB3AFCF-099E-49BA-8820-8F1BD422D95E} = {3BA0514A-E488-43EE-83FD-BC122588DB6F}
-		{0B6E0ED8-ABE5-4A1D-8E10-0AC54F06D9C4} = {1FB3AFCF-099E-49BA-8820-8F1BD422D95E}
-		{C63F9481-63B2-4DF3-809E-5BA66B51020D} = {3BA0514A-E488-43EE-83FD-BC122588DB6F}
-		{4885FE36-03DB-47B7-BE7E-33260943A9DC} = {C63F9481-63B2-4DF3-809E-5BA66B51020D}
 		{D86BD142-ECCB-46C7-A35D-E99DF00DA708} = {3BA0514A-E488-43EE-83FD-BC122588DB6F}
 		{6033A8EA-A3EF-4182-BFDD-4A9826ECF871} = {D86BD142-ECCB-46C7-A35D-E99DF00DA708}
 		{1536CD0A-6308-4DAF-8618-35BBA0816997} = {198FEC8F-4C9E-4961-86D6-2631B2A6E9EC}
@@ -352,13 +332,14 @@ Global
 		{42F7185B-2EE1-49F9-AB6F-E89E6F8AF7C6} = {6C8967D1-8A53-4DDE-9D8D-A1A731D3782A}
 		{516D2892-5B54-43EB-9208-30E97A6F9292} = {6C8967D1-8A53-4DDE-9D8D-A1A731D3782A}
 		{1E8D72DF-2A09-4872-917F-30ED9B6FDAC3} = {6C8967D1-8A53-4DDE-9D8D-A1A731D3782A}
-		{BF2F1262-D5CC-41F0-BCFC-7CCDCE479795} = {D86BD142-ECCB-46C7-A35D-E99DF00DA708}
 		{64428B06-18E5-4307-BA78-FB0D238816D8} = {D86BD142-ECCB-46C7-A35D-E99DF00DA708}
 		{F127267A-807D-4091-AE83-48CDC12E7D56} = {D86BD142-ECCB-46C7-A35D-E99DF00DA708}
+		{211E6CB2-91E2-4C25-A235-1FF1D9D4CEC7} = {D86BD142-ECCB-46C7-A35D-E99DF00DA708}
 		{BA3F00D1-7DE7-4AE6-B637-6681C10EC20D} = {D86BD142-ECCB-46C7-A35D-E99DF00DA708}
+		{BF2F1262-D5CC-41F0-BCFC-7CCDCE479795} = {D86BD142-ECCB-46C7-A35D-E99DF00DA708}
 	EndGlobalSection
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 26
+		SccNumberOfProjects = 25
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://192.168.111.123:8080/tfs/phytel
 		SccLocalPath0 = .
@@ -393,69 +374,65 @@ Global
 		SccProjectTopLevelParentUniqueName9 = Phytel.API.AppDomain.Population.sln
 		SccProjectName9 = ../../../../Data/Cohort/Development/Current/Bristol-branch/Cohort.DTO
 		SccLocalPath9 = ..\\..\\..\\..\\Data\\Cohort\\Development\\Current\\Bristol-branch\\Cohort.DTO
-		SccProjectUniqueName10 = ..\\..\\..\\..\\Data\\Contact\\Development\\Current\\Bristol-branch\\Contact.DTO\\DataDomain.Contact.DTO.csproj
+		SccProjectUniqueName10 = ..\\..\\..\\..\\Data\\PatientSystem\\Development\\Current\\Bristol-branch\\PatientSystem.DTO\\DataDomain.PatientSystem.DTO.csproj
 		SccProjectTopLevelParentUniqueName10 = Phytel.API.AppDomain.Population.sln
-		SccProjectName10 = ../../../../Data/Contact/Development/Current/Bristol-branch/Contact.DTO
-		SccLocalPath10 = ..\\..\\..\\..\\Data\\Contact\\Development\\Current\\Bristol-branch\\Contact.DTO
-		SccProjectUniqueName11 = ..\\..\\..\\..\\Data\\LookUp\\Development\\Current\\Bristol-branch\\LookUp.DTO\\DataDomain.LookUp.DTO.csproj
+		SccProjectName10 = ../../../../Data/PatientSystem/Development/Current/Bristol-branch/PatientSystem.DTO
+		SccLocalPath10 = ..\\..\\..\\..\\Data\\PatientSystem\\Development\\Current\\Bristol-branch\\PatientSystem.DTO
+		SccProjectUniqueName11 = ..\\..\\..\\..\\Data\\Patient\\Development\\Current\\Bristol-branch\\Patient\\DataDomain.Patient.csproj
 		SccProjectTopLevelParentUniqueName11 = Phytel.API.AppDomain.Population.sln
-		SccProjectName11 = ../../../../Data/LookUp/Development/Current/Bristol-branch/LookUp.DTO
-		SccLocalPath11 = ..\\..\\..\\..\\Data\\LookUp\\Development\\Current\\Bristol-branch\\LookUp.DTO
-		SccProjectUniqueName12 = ..\\..\\..\\..\\Data\\PatientSystem\\Development\\Current\\Bristol-branch\\PatientSystem.DTO\\DataDomain.PatientSystem.DTO.csproj
+		SccProjectName11 = ../../../../Data/Patient/Development/Current/Bristol-branch/Patient
+		SccLocalPath11 = ..\\..\\..\\..\\Data\\Patient\\Development\\Current\\Bristol-branch\\Patient
+		SccProjectUniqueName12 = ..\\..\\..\\..\\Data\\Patient\\Development\\Current\\Bristol-branch\\Patient.DTOs\\DataDomain.Patient.DTO.csproj
 		SccProjectTopLevelParentUniqueName12 = Phytel.API.AppDomain.Population.sln
-		SccProjectName12 = ../../../../Data/PatientSystem/Development/Current/Bristol-branch/PatientSystem.DTO
-		SccLocalPath12 = ..\\..\\..\\..\\Data\\PatientSystem\\Development\\Current\\Bristol-branch\\PatientSystem.DTO
-		SccProjectUniqueName13 = ..\\..\\..\\..\\Data\\Patient\\Development\\Current\\Bristol-branch\\Patient\\DataDomain.Patient.csproj
+		SccProjectName12 = ../../../../Data/Patient/Development/Current/Bristol-branch/Patient.DTOs
+		SccLocalPath12 = ..\\..\\..\\..\\Data\\Patient\\Development\\Current\\Bristol-branch\\Patient.DTOs
+		SccProjectUniqueName13 = ..\\..\\..\\..\\Data\\Patient\\Development\\Current\\Bristol-branch\\Patient.Services\\DataDomain.Patient.Service.csproj
 		SccProjectTopLevelParentUniqueName13 = Phytel.API.AppDomain.Population.sln
-		SccProjectName13 = ../../../../Data/Patient/Development/Current/Bristol-branch/Patient
-		SccLocalPath13 = ..\\..\\..\\..\\Data\\Patient\\Development\\Current\\Bristol-branch\\Patient
-		SccProjectUniqueName14 = ..\\..\\..\\..\\Data\\Patient\\Development\\Current\\Bristol-branch\\Patient.DTOs\\DataDomain.Patient.DTO.csproj
+		SccProjectName13 = ../../../../Data/Patient/Development/Current/Bristol-branch/Patient.Services
+		SccLocalPath13 = ..\\..\\..\\..\\Data\\Patient\\Development\\Current\\Bristol-branch\\Patient.Services
+		SccProjectUniqueName14 = ..\\..\\..\\..\\Data\\Patient\\Development\\Current\\Bristol-branch\\Patient.Services.Tests\\DataDomain.Patient.Service.Test.csproj
 		SccProjectTopLevelParentUniqueName14 = Phytel.API.AppDomain.Population.sln
-		SccProjectName14 = ../../../../Data/Patient/Development/Current/Bristol-branch/Patient.DTOs
-		SccLocalPath14 = ..\\..\\..\\..\\Data\\Patient\\Development\\Current\\Bristol-branch\\Patient.DTOs
-		SccProjectUniqueName15 = ..\\..\\..\\..\\Data\\Patient\\Development\\Current\\Bristol-branch\\Patient.Services\\DataDomain.Patient.Service.csproj
+		SccProjectName14 = ../../../../Data/Patient/Development/Current/Bristol-branch/Patient.Services.Tests
+		SccLocalPath14 = ..\\..\\..\\..\\Data\\Patient\\Development\\Current\\Bristol-branch\\Patient.Services.Tests
+		SccProjectUniqueName15 = ..\\..\\..\\..\\Data\\Patient\\Development\\Current\\Bristol-branch\\Patient.Tests\\DataDomain.Patient.Test.csproj
 		SccProjectTopLevelParentUniqueName15 = Phytel.API.AppDomain.Population.sln
-		SccProjectName15 = ../../../../Data/Patient/Development/Current/Bristol-branch/Patient.Services
-		SccLocalPath15 = ..\\..\\..\\..\\Data\\Patient\\Development\\Current\\Bristol-branch\\Patient.Services
-		SccProjectUniqueName16 = ..\\..\\..\\..\\Data\\Patient\\Development\\Current\\Bristol-branch\\Patient.Services.Tests\\DataDomain.Patient.Service.Test.csproj
+		SccProjectName15 = ../../../../Data/Patient/Development/Current/Bristol-branch/Patient.Tests
+		SccLocalPath15 = ..\\..\\..\\..\\Data\\Patient\\Development\\Current\\Bristol-branch\\Patient.Tests
+		SccProjectUniqueName16 = ..\\..\\..\\..\\Data\\Cohort\\Development\\Current\\Bristol-branch\\Cohort\\DataDomain.Cohort.csproj
 		SccProjectTopLevelParentUniqueName16 = Phytel.API.AppDomain.Population.sln
-		SccProjectName16 = ../../../../Data/Patient/Development/Current/Bristol-branch/Patient.Services.Tests
-		SccLocalPath16 = ..\\..\\..\\..\\Data\\Patient\\Development\\Current\\Bristol-branch\\Patient.Services.Tests
-		SccProjectUniqueName17 = ..\\..\\..\\..\\Data\\Patient\\Development\\Current\\Bristol-branch\\Patient.Tests\\DataDomain.Patient.Test.csproj
+		SccProjectName16 = ../../../../Data/Cohort/Development/Current/Bristol-branch/Cohort
+		SccLocalPath16 = ..\\..\\..\\..\\Data\\Cohort\\Development\\Current\\Bristol-branch\\Cohort
+		SccProjectUniqueName17 = ..\\..\\..\\..\\Data\\Cohort\\Development\\Current\\Bristol-branch\\Cohort.Service\\DataDomain.Cohort.Service.csproj
 		SccProjectTopLevelParentUniqueName17 = Phytel.API.AppDomain.Population.sln
-		SccProjectName17 = ../../../../Data/Patient/Development/Current/Bristol-branch/Patient.Tests
-		SccLocalPath17 = ..\\..\\..\\..\\Data\\Patient\\Development\\Current\\Bristol-branch\\Patient.Tests
-		SccProjectUniqueName18 = ..\\..\\..\\..\\Data\\Cohort\\Development\\Current\\Bristol-branch\\Cohort\\DataDomain.Cohort.csproj
+		SccProjectName17 = ../../../../Data/Cohort/Development/Current/Bristol-branch/Cohort.Service
+		SccLocalPath17 = ..\\..\\..\\..\\Data\\Cohort\\Development\\Current\\Bristol-branch\\Cohort.Service
+		SccProjectUniqueName18 = ..\\..\\..\\..\\Data\\Cohort\\Development\\Current\\Bristol-branch\\Cohort.Service.Test\\DataDomain.Cohort.Service.Test.csproj
 		SccProjectTopLevelParentUniqueName18 = Phytel.API.AppDomain.Population.sln
-		SccProjectName18 = ../../../../Data/Cohort/Development/Current/Bristol-branch/Cohort
-		SccLocalPath18 = ..\\..\\..\\..\\Data\\Cohort\\Development\\Current\\Bristol-branch\\Cohort
-		SccProjectUniqueName19 = ..\\..\\..\\..\\Data\\Cohort\\Development\\Current\\Bristol-branch\\Cohort.Service\\DataDomain.Cohort.Service.csproj
+		SccProjectName18 = ../../../../Data/Cohort/Development/Current/Bristol-branch/Cohort.Service.Test
+		SccLocalPath18 = ..\\..\\..\\..\\Data\\Cohort\\Development\\Current\\Bristol-branch\\Cohort.Service.Test
+		SccProjectUniqueName19 = ..\\..\\..\\..\\Data\\Cohort\\Development\\Current\\Bristol-branch\\Cohort.Test\\DataDomain.Cohort.Test.csproj
 		SccProjectTopLevelParentUniqueName19 = Phytel.API.AppDomain.Population.sln
-		SccProjectName19 = ../../../../Data/Cohort/Development/Current/Bristol-branch/Cohort.Service
-		SccLocalPath19 = ..\\..\\..\\..\\Data\\Cohort\\Development\\Current\\Bristol-branch\\Cohort.Service
-		SccProjectUniqueName20 = ..\\..\\..\\..\\Data\\Cohort\\Development\\Current\\Bristol-branch\\Cohort.Service.Test\\DataDomain.Cohort.Service.Test.csproj
+		SccProjectName19 = ../../../../Data/Cohort/Development/Current/Bristol-branch/Cohort.Test
+		SccLocalPath19 = ..\\..\\..\\..\\Data\\Cohort\\Development\\Current\\Bristol-branch\\Cohort.Test
+		SccProjectUniqueName20 = ..\\..\\..\\..\\Data\\PatientSystem\\Development\\Current\\Bristol-branch\\PatientSystem.Repo\\DataDomain.PatientSystem.Repo.csproj
 		SccProjectTopLevelParentUniqueName20 = Phytel.API.AppDomain.Population.sln
-		SccProjectName20 = ../../../../Data/Cohort/Development/Current/Bristol-branch/Cohort.Service.Test
-		SccLocalPath20 = ..\\..\\..\\..\\Data\\Cohort\\Development\\Current\\Bristol-branch\\Cohort.Service.Test
-		SccProjectUniqueName21 = ..\\..\\..\\..\\Data\\Cohort\\Development\\Current\\Bristol-branch\\Cohort.Test\\DataDomain.Cohort.Test.csproj
+		SccProjectName20 = ../../../../Data/PatientSystem/Development/Current/Bristol-branch/PatientSystem.Repo
+		SccLocalPath20 = ..\\..\\..\\..\\Data\\PatientSystem\\Development\\Current\\Bristol-branch\\PatientSystem.Repo
+		SccProjectUniqueName21 = ..\\..\\..\\..\\Data\\PatientSystem\\Development\\Current\\Bristol-branch\\PatientSystem.Service\\DataDomain.PatientSystem.Service.csproj
 		SccProjectTopLevelParentUniqueName21 = Phytel.API.AppDomain.Population.sln
-		SccProjectName21 = ../../../../Data/Cohort/Development/Current/Bristol-branch/Cohort.Test
-		SccLocalPath21 = ..\\..\\..\\..\\Data\\Cohort\\Development\\Current\\Bristol-branch\\Cohort.Test
-		SccProjectUniqueName22 = ..\\..\\..\\..\\Data\\PatientSystem\\Development\\Current\\Bristol-branch\\PatientSystem\\DataDomain.PatientSystem.csproj
+		SccProjectName21 = ../../../../Data/PatientSystem/Development/Current/Bristol-branch/PatientSystem.Service
+		SccLocalPath21 = ..\\..\\..\\..\\Data\\PatientSystem\\Development\\Current\\Bristol-branch\\PatientSystem.Service
+		SccProjectUniqueName22 = ..\\..\\..\\..\\Data\\PatientSystem\\Development\\Current\\Bristol-branch\\PatientSystem.Service.Test\\DataDomain.PatientSystem.Service.Test.csproj
 		SccProjectTopLevelParentUniqueName22 = Phytel.API.AppDomain.Population.sln
-		SccProjectName22 = ../../../../Data/PatientSystem/Development/Current/Bristol-branch/PatientSystem
-		SccLocalPath22 = ..\\..\\..\\..\\Data\\PatientSystem\\Development\\Current\\Bristol-branch\\PatientSystem
-		SccProjectUniqueName23 = ..\\..\\..\\..\\Data\\PatientSystem\\Development\\Current\\Bristol-branch\\PatientSystem.Repo\\DataDomain.PatientSystem.Repo.csproj
+		SccProjectName22 = ../../../../Data/PatientSystem/Development/Current/Bristol-branch/PatientSystem.Service.Test
+		SccLocalPath22 = ..\\..\\..\\..\\Data\\PatientSystem\\Development\\Current\\Bristol-branch\\PatientSystem.Service.Test
+		SccProjectUniqueName23 = ..\\..\\..\\..\\Data\\PatientSystem\\Development\\Current\\Bristol-branch\\PatientSystem.Test\\DataDomain.PatientSystem.Test.csproj
 		SccProjectTopLevelParentUniqueName23 = Phytel.API.AppDomain.Population.sln
-		SccProjectName23 = ../../../../Data/PatientSystem/Development/Current/Bristol-branch/PatientSystem.Repo
-		SccLocalPath23 = ..\\..\\..\\..\\Data\\PatientSystem\\Development\\Current\\Bristol-branch\\PatientSystem.Repo
-		SccProjectUniqueName24 = ..\\..\\..\\..\\Data\\PatientSystem\\Development\\Current\\Bristol-branch\\PatientSystem.Service\\DataDomain.PatientSystem.Service.csproj
+		SccProjectName23 = ../../../../Data/PatientSystem/Development/Current/Bristol-branch/PatientSystem.Test
+		SccLocalPath23 = ..\\..\\..\\..\\Data\\PatientSystem\\Development\\Current\\Bristol-branch\\PatientSystem.Test
+		SccProjectUniqueName24 = ..\\..\\..\\..\\Data\\PatientSystem\\Development\\Current\\Bristol-branch\\PatientSystem\\DataDomain.PatientSystem.csproj
 		SccProjectTopLevelParentUniqueName24 = Phytel.API.AppDomain.Population.sln
-		SccProjectName24 = ../../../../Data/PatientSystem/Development/Current/Bristol-branch/PatientSystem.Service
-		SccLocalPath24 = ..\\..\\..\\..\\Data\\PatientSystem\\Development\\Current\\Bristol-branch\\PatientSystem.Service
-		SccProjectUniqueName25 = ..\\..\\..\\..\\Data\\PatientSystem\\Development\\Current\\Bristol-branch\\PatientSystem.Test\\DataDomain.PatientSystem.Test.csproj
-		SccProjectTopLevelParentUniqueName25 = Phytel.API.AppDomain.Population.sln
-		SccProjectName25 = ../../../../Data/PatientSystem/Development/Current/Bristol-branch/PatientSystem.Test
-		SccLocalPath25 = ..\\..\\..\\..\\Data\\PatientSystem\\Development\\Current\\Bristol-branch\\PatientSystem.Test
+		SccProjectName24 = ../../../../Data/PatientSystem/Development/Current/Bristol-branch/PatientSystem
+		SccLocalPath24 = ..\\..\\..\\..\\Data\\PatientSystem\\Development\\Current\\Bristol-branch\\PatientSystem
 	EndGlobalSection
 EndGlobal

@@ -1,8 +1,7 @@
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Phytel.API.DataDomain.PatientSystem.DTO;
-using ServiceStack.Service;
-using ServiceStack.ServiceClient.Web;
+using ServiceStack;
 
 namespace Phytel.API.DataDomain.PatientSystem.Services.Test
 {
@@ -18,11 +17,11 @@ namespace Phytel.API.DataDomain.PatientSystem.Services.Test
             string contractNumber = "InHealth001";
             string context = "NG";
             IRestClient client = new JsonServiceClient();
-            JsonServiceClient.HttpWebRequestFilter = x =>
+            JsonServiceClient.GlobalRequestFilter = x =>
                             x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "531f2df9072ef727c4d2a3df"));
 
-            GetAllPatientSystemsDataResponse response = client.Post<GetAllPatientSystemsDataResponse>("http://localhost:8888/NG/data/PatientSystem",
-                new GetAllPatientSystemsDataRequest { PatientID = patientID, ContractNumber = contractNumber, Context = context, Version = 1 } as object);
+            GetPatientSystemsDataResponse response = client.Post<GetPatientSystemsDataResponse>("http://localhost:8888/NG/data/PatientSystem",
+                new GetPatientSystemsDataRequest {  PatientId = patientID, ContractNumber = contractNumber, Context = context, Version = 1 } as object);
 
             sampleValue = string.Empty;
 
@@ -38,11 +37,11 @@ namespace Phytel.API.DataDomain.PatientSystem.Services.Test
             string contractNumber = "InHealth001";
             string context ="NG";
             IRestClient client = new JsonServiceClient();
-            JsonServiceClient.HttpWebRequestFilter = x =>
+            JsonServiceClient.GlobalRequestFilter = x =>
                             x.Headers.Add(string.Format("{0}: {1}", "x-Phytel-UserID", "531f2df9072ef727c4d2a3df"));
 
             GetPatientSystemDataResponse response = client.Post<GetPatientSystemDataResponse>("http://localhost:8888/NG/data/PatientSystem",
-                new GetPatientSystemDataRequest { PatientSystemID = patientSystemID, ContractNumber = contractNumber, Context = context, Version = 1 } as object);
+                new GetPatientSystemDataRequest {  Id = patientSystemID, ContractNumber = contractNumber, Context = context, Version = 1 } as object);
 
             sampleValue = string.Empty;
 

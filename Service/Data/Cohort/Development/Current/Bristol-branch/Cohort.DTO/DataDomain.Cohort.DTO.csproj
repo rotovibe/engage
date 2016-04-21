@@ -46,6 +46,9 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AppDomain.Engage.Population.DTO">
+      <HintPath>..\..\..\..\..\..\App\Bristol\Development\Current\AppDomain.Engage.Population\bin\Debug\AppDomain.Engage.Population.DTO.dll</HintPath>
+    </Reference>
     <Reference Include="ServiceStack.Common">
       <HintPath>..\..\..\..\..\..\App\Bristol\Development\Current\packages\ServiceStack.Common.3.9.71\lib\net35\ServiceStack.Common.dll</HintPath>
     </Reference>
@@ -62,6 +65,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CohortData.cs" />
+    <Compile Include="CohortPatientIdsResponse.cs" />
+    <Compile Include="CohortPatientsRequest.cs" />
+    <Compile Include="CohortPatientsResponse.cs" />
+    <Compile Include="CohortQueryExpressionRequest.cs" />
+    <Compile Include="CohortQueryExpressionResponse.cs" />
+    <Compile Include="CohortRequest.cs" />
     <Compile Include="Context\IServiceContext.cs" />
     <Compile Include="Context\ServiceContext.cs" />
     <Compile Include="GetAllCohortsDataRequest.cs" />

@@ -155,14 +155,6 @@
       <Project>{d4489296-17a3-4172-8fdf-db6c0a7ae748}</Project>
       <Name>DataDomain.Cohort.DTO</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\Contact\Development\Current\Bristol-branch\Contact.DTO\DataDomain.Contact.DTO.csproj">
-      <Project>{0b6e0ed8-abe5-4a1d-8e10-0ac54f06d9c4}</Project>
-      <Name>DataDomain.Contact.DTO</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\LookUp\Development\Current\Bristol-branch\LookUp.DTO\DataDomain.LookUp.DTO.csproj">
-      <Project>{4885fe36-03db-47b7-be7e-33260943a9dc}</Project>
-      <Name>DataDomain.LookUp.DTO</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\..\..\PatientSystem\Development\Current\Bristol-branch\PatientSystem.DTO\DataDomain.PatientSystem.DTO.csproj">
       <Project>{6033a8ea-a3ef-4182-bfdd-4a9826ecf871}</Project>
       <Name>DataDomain.PatientSystem.DTO</Name>

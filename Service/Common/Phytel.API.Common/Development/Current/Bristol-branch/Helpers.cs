@@ -14,7 +14,8 @@ namespace Phytel.API.Common
 
         public string BuildURL(string baseUrl, string userId)
         {
-            string returnUrl = baseUrl;
+            string returnUrl = baseUrl;           
+            
             if (returnUrl.Contains("?"))
                 return string.Format("{0}&UserId={1}", returnUrl, userId);
             else
@@ -141,6 +142,7 @@ namespace Phytel.API.Common
         public void LogException(int processId, Exception ex)
         {
             string aseAPIURL = ConfigurationManager.AppSettings.Get("ASEAPI");
+
             Log.LogError(aseAPIURL, processId, ex, LogErrorCode.Error, LogErrorSeverity.High);
         }
 
