@@ -1819,7 +1819,7 @@ namespace Phytel.Data.ETL
                         bcc.ColumnMappings.Add("NonNumericValue", "NonNumericValue");
                         bcc.ColumnMappings.Add("Source", "Source");
                         bcc.ColumnMappings.Add("State", "State");
-                        bcc.ColumnMappings.Add("Type", "Type");
+                      //  bcc.ColumnMappings.Add("Type", "Type");
                         bcc.ColumnMappings.Add("Units", "Units");
                         bcc.ColumnMappings.Add("AdministeredBy", "AdministeredBy");
                         bcc.ColumnMappings.Add("MongoUpdatedBy", "MongoUpdatedBy");
