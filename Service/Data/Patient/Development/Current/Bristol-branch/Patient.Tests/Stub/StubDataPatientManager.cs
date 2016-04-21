@@ -11,7 +11,11 @@ namespace Phytel.API.DataDomain.Patient.Test.Stub
     public class StubDataPatientManager : IPatientDataManager
     {
         public IPatientRepositoryFactory Factory { get; set; }
-        
+
+        public InsertBatchPatientsDataResponse InsertBatchPatients(DTO.InsertBatchPatientsDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
         public DTO.GetCohortPatientsDataResponse GetCohortPatients(DTO.GetCohortPatientsDataRequest request)
         {
             throw new NotImplementedException();
@@ -202,13 +206,6 @@ namespace Phytel.API.DataDomain.Patient.Test.Stub
 
 
         public List<PatientData> GetAllPatients(GetAllPatientsDataRequest request)
-        {
-            throw new NotImplementedException();
-        }
-
-
-        public List<AppData> InsertBatchPatients(InsertBatchPatientsDataRequest request)
-       //    public InsertBatchPatientsDataResponse InsertBatchPatients(InsertBatchPatientsDataRequest request)
         {
             throw new NotImplementedException();
         }

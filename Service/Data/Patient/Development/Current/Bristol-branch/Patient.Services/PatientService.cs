@@ -312,11 +312,11 @@ namespace Phytel.API.DataDomain.Patient.Service
             return response;
         }
 
-        //public InsertBatchPatientsDataResponse Post(InsertBatchPatientsDataRequest request)
-        public List<AppData> Post(InsertBatchPatientsDataRequest request)
+     public InsertBatchPatientsDataResponse Post(InsertBatchPatientsDataRequest request)
+    //public List<AppData> Post(InsertBatchPatientsDataRequest request)
         {
-            //InsertBatchPatientsDataResponse response = new InsertBatchPatientsDataResponse();
-            List<AppData> response = new List<AppData>();
+            InsertBatchPatientsDataResponse response = new InsertBatchPatientsDataResponse();
+          //  List<AppData> response = new List<AppData>();
 
             try
             {
@@ -327,7 +327,7 @@ namespace Phytel.API.DataDomain.Patient.Service
             }
             catch (Exception ex)
             {
-              //  CommonFormatterUtil.FormatExceptionResponse(response, base.Response, ex);
+               CommonFormatterUtil.FormatExceptionResponse(response, base.Response, ex);
 
                 string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
                 Helpers.LogException(int.Parse(aseProcessID), ex);

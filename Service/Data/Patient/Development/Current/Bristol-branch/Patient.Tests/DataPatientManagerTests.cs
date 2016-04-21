@@ -5,7 +5,7 @@ using NUnit.Framework;
 using Phytel.API.DataDomain.Patient.DTO;
 using Phytel.API.DataDomain.Patient;
 using Phytel.API.Common;
-
+/*
 namespace Phytel.API.DataDomain.Patient.Test
 {
     [TestFixture]
@@ -174,3 +174,4 @@ namespace Phytel.API.DataDomain.Patient.Test
 
     }       // end class DataPatientManagerTests
 }           // end namespace
+*/

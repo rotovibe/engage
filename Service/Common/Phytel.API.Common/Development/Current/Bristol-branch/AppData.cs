@@ -9,6 +9,8 @@ namespace Phytel.API.Common
     public class AppData : IAppData
     {
        public  string Id { get; set; }
+        public string Datasource { get; set; }
+        public DateTime RecordCreatedOn { get; set; }
         public string ExternalRecordId { get; set; }
     }
 }

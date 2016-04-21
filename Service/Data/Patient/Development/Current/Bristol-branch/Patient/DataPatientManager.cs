@@ -322,8 +322,7 @@ namespace Phytel.API.DataDomain.Patient
             return result;
         }
 
-      //  public InsertBatchPatientsDataResponse InsertBatchPatients(InsertBatchPatientsDataRequest request)
-     public List<AppData> InsertBatchPatients(InsertBatchPatientsDataRequest request)
+     public InsertBatchPatientsDataResponse InsertBatchPatients(InsertBatchPatientsDataRequest request)
         {
             InsertBatchPatientsDataResponse response = new InsertBatchPatientsDataResponse();
             response.Version = request.Version;
@@ -415,6 +414,9 @@ namespace Phytel.API.DataDomain.Patient
                     // response.Responses = list;    
                         foreach (HttpObjectResponse<PatientData> patientData in list)
                         {
+                        if (patientData.Code == HttpStatusCode.InternalServerError)
+                            response.ErrorMessages.Add(patientData);
+                        else
                             response.Responses.Add(new AppData { Id = patientData.Body.Id, ExternalRecordId = patientData.Body.ExternalRecordId });
                         }
                 }
@@ -423,7 +425,7 @@ namespace Phytel.API.DataDomain.Patient
             {
                 throw ex;
             }
-            return response.Responses;
+            return response;
         }
 
         private List<PatientSystemData> getPatientSystems(List<string> processedPatientSystemIds, IDataDomainRequest request)
