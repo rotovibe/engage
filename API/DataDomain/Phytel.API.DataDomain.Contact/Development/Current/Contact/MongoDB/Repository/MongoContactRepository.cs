@@ -279,14 +279,30 @@ namespace Phytel.API.DataDomain.Contact
                     if(mc != null)
                     {
                         var uv = new List<MB.UpdateBuilder>();
-                        if(string.IsNullOrEmpty(data.FirstName))
+                        if (string.IsNullOrEmpty(data.FirstName))
+                        {
                             uv.Add(MB.Update.Set(MEContact.FirstNameProperty, BsonNull.Value));
+                            uv.Add(MB.Update.Set(MEContact.LoweredFirstNameProperty, BsonNull.Value));
+                        }
+
                         else
+                        {
                             uv.Add(MB.Update.Set(MEContact.FirstNameProperty, data.FirstName));
+                            uv.Add(MB.Update.Set(MEContact.FirstNameProperty, data.FirstName.ToLower()));
+                        }
+
                         if (string.IsNullOrEmpty(data.LastName))
+                        {
                             uv.Add(MB.Update.Set(MEContact.LastNameProperty, BsonNull.Value));
+                            uv.Add(MB.Update.Set(MEContact.LoweredLastNameProperty, BsonNull.Value));
+                        }
+
                         else
+                        {
                             uv.Add(MB.Update.Set(MEContact.LastNameProperty, data.LastName));
+                            uv.Add(MB.Update.Set(MEContact.LoweredLastNameProperty,data.LastName.ToLower()));
+                        }
+                          
                         if(string.IsNullOrEmpty(data.MiddleName))
                             uv.Add(MB.Update.Set(MEContact.MiddleNameProperty, BsonNull.Value));
                         else
@@ -1058,7 +1074,7 @@ namespace Phytel.API.DataDomain.Contact
                 var cursor = ctx.Contacts.Collection.Find(query);
 
                  var sortByBuilder = new SortByBuilder();
-                sortByBuilder.Ascending(MEContact.LastNameProperty, MEContact.FirstNameProperty, MEContact.IdProperty);
+                sortByBuilder.Ascending(MEContact.LoweredLastNameProperty, MEContact.LoweredFirstNameProperty, MEContact.IdProperty);
 
                 cursor.SetSortOrder(sortByBuilder);
                 cursor.SetSkip(request.Skip);
@@ -1118,14 +1134,28 @@ namespace Phytel.API.DataDomain.Contact
                     if (mc != null)
                     {
                         var uv = new List<MB.UpdateBuilder>();
-                        if(string.IsNullOrEmpty(data.FirstName))
+                        if (string.IsNullOrEmpty(data.FirstName))
+                        {
                             uv.Add(MB.Update.Set(MEContact.FirstNameProperty, BsonNull.Value));
+                            uv.Add(MB.Update.Set(MEContact.LoweredFirstNameProperty, BsonNull.Value));
+                        }
                         else
+                        {
                             uv.Add(MB.Update.Set(MEContact.FirstNameProperty, data.FirstName));
-                        if(string.IsNullOrEmpty(data.LastName))
+                            uv.Add(MB.Update.Set(MEContact.LoweredFirstNameProperty, data.FirstName.ToLower()));
+                        }
+                        if (string.IsNullOrEmpty(data.LastName))
+                        {
                             uv.Add(MB.Update.Set(MEContact.LastNameProperty, BsonNull.Value));
+                            uv.Add(MB.Update.Set(MEContact.LoweredLastNameProperty, BsonNull.Value));
+                        }
+
                         else
+                        {
                             uv.Add(MB.Update.Set(MEContact.LastNameProperty, data.LastName));
+                            uv.Add(MB.Update.Set(MEContact.LoweredLastNameProperty, data.LastName.ToLower()));
+                        }
+                            
                         if(string.IsNullOrEmpty(data.MiddleName))
                             uv.Add(MB.Update.Set(MEContact.MiddleNameProperty, BsonNull.Value));
                         else
@@ -1353,7 +1383,9 @@ namespace Phytel.API.DataDomain.Contact
                     DataSource = data.DataSource,
                     ExternalRecordId = data.ExternalRecordId,
                     Version = version,
-                    DeleteFlag = false
+                    DeleteFlag = false,
+                    LoweredLastName =  data.LastName.ToLower(),
+                    LoweredFirstName = data.FirstName.ToLower()
                 };
                 //ContactTypeId
                 if (data.ContactTypeId != null)
@@ -1566,12 +1598,13 @@ namespace Phytel.API.DataDomain.Contact
         private IMongoQuery BuildLastNameFilterQuery(string name, FilterType filterType)
         {
             IMongoQuery filterQuery = null;
+            //name = name.ToLower();
 
             switch (filterType)
             {
                 case FilterType.ExactMatch:
 
-                    filterQuery = Query<MEContact>.Matches(c => c.LastName,new BsonRegularExpression("^" + name + "$", "i"));
+                    filterQuery = Query<MEContact>.Matches(c => c.LastName, new BsonRegularExpression("^" + name + "$", "i"));
                     break;
                 case FilterType.StartsWith:
 
@@ -1597,7 +1630,8 @@ namespace Phytel.API.DataDomain.Contact
 
         private IMongoQuery BuildFirstNameFilterQuery(string name, FilterType filterType)
         {
-            IMongoQuery filterQuery = null; 
+            IMongoQuery filterQuery = null;
+            //name = name.ToLower();
 
             switch (filterType)
             {
@@ -1615,7 +1649,7 @@ namespace Phytel.API.DataDomain.Contact
                 case FilterType.Contains:
 
                     filterQuery = Query<MEContact>.Matches(c => c.FirstName,
-                               new BsonRegularExpression(new Regex( name, RegexOptions.IgnoreCase)));
+                               new BsonRegularExpression(new Regex(name, RegexOptions.IgnoreCase)));
                     break;
                 default:
                     //starts with 

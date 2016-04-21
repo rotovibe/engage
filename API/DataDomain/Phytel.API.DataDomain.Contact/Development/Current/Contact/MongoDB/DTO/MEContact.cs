@@ -41,10 +41,20 @@ namespace Phytel.API.DataDomain.Contact.DTO
         [BsonIgnoreIfNull(true)]
         public string FirstName { get; set; }
 
+        public const string LoweredFirstNameProperty = "lfn";
+        [BsonElement(LoweredFirstNameProperty)]
+        [BsonIgnoreIfNull(true)]
+        public string LoweredFirstName { get; set; }
+
         public const string LastNameProperty = "ln";
         [BsonElement(LastNameProperty)]
         [BsonIgnoreIfNull(true)]
         public string LastName { get; set; }
+
+        public const string LoweredLastNameProperty = "lln";
+        [BsonElement(LoweredLastNameProperty)]
+        [BsonIgnoreIfNull(true)]
+        public string LoweredLastName { get; set; }
 
         public const string MiddleNameProperty = "mn";
         [BsonElement(MiddleNameProperty)]
