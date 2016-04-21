@@ -327,6 +327,7 @@ namespace Phytel.API.DataDomain.Patient
             InsertBatchPatientsDataResponse response = new InsertBatchPatientsDataResponse();
             response.Version = request.Version;
             response.Responses = new List<AppData>();
+            response.ErrorMessages = new List<HttpObjectResponse<PatientData>>();
 
             try
             {
