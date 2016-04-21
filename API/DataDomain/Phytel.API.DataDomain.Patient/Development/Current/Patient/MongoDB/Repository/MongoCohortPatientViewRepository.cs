@@ -202,6 +202,11 @@ namespace Phytel.API.DataDomain.Patient
 
                     IMongoUpdate update = MB.Update.Combine(uv);
                     ctx.CohortPatientViews.Collection.Update(q, update);
+                    AuditHelper.LogDataAudit(this.UserId,
+                        MongoCollectionName.CohortPatientView.ToString(),
+                        p.CohortPatientView.Id.ToString(),
+                        Common.DataAuditType.Update,
+                        p.ContractNumber);
                 }
                 resp.CohortPatientViewId = p.CohortPatientView.Id;
                 return resp;

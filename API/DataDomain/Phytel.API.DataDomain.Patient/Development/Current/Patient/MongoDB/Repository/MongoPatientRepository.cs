@@ -1072,7 +1072,7 @@ namespace Phytel.API.DataDomain.Patient
                         ctx.Patients.Collection.Update(query, update);
 
                         AuditHelper.LogDataAudit(this.UserId,
-                                                MongoCollectionName.Contact.ToString(),
+                                                MongoCollectionName.Patient.ToString(),
                                                 request.PatientId,
                                                 DataAuditType.Update,
                                                 request.ContractNumber);
