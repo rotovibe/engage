@@ -6,7 +6,7 @@ namespace Phytel.API.DataDomain.Cohort.DTO
     [Route("/api/{Context}/{Version}/{ContractNumber}/Referral/{ReferralID}", "GET")]
     public class GetReferralDataRequest : IDataDomainRequest
     {
-        [ApiMember(Name = "ReferralID", Description = "ID of the Referral being requested", ParameterType = "path", DataType = "string", IsRequired = true)]
+        [ApiMember(Name = "ReferralID", Description = "ReferralID is a Mongo ObjectId. eg:528aa055d4332317acc50978", ParameterType = "path", DataType = "string", IsRequired = true)]
         public string ReferralID { get; set; }
 
         [ApiMember(Name = "Context", Description = "Product Context requesting the Referral", ParameterType = "path", DataType = "string", IsRequired = true)]
