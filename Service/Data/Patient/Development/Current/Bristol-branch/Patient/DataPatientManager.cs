@@ -325,10 +325,7 @@ namespace Phytel.API.DataDomain.Patient
      public InsertBatchPatientsDataResponse InsertBatchPatients(InsertBatchPatientsDataRequest request)
         {
             InsertBatchPatientsDataResponse response = new InsertBatchPatientsDataResponse();
-            response.Version = request.Version;
-            response.Responses = new List<AppData>();
-            response.ErrorMessages = new List<HttpObjectResponse<PatientData>>();
-
+          
             try
             {
                 if (request == null)
@@ -342,12 +339,23 @@ namespace Phytel.API.DataDomain.Patient
                 if ((request.PatientsData == null) || (request.PatientsData.Count <= 0))
                     throw new ArgumentNullException("request patients data property cannot be NULL/EMPTY");
 
+                response.Version = request.Version;
+                response.Responses = new List<AppData>(request.PatientsData.Count);
+                response.ErrorMessages = new List<HttpObjectResponse<PatientData>>();
+
                 if (request.PatientsData != null && request.PatientsData.Count > 0)
                 {
                     int i = 0;
                     foreach(PatientData patientData in request.PatientsData)
                     {
                         request.PatientsData[i].Version = request.Version;
+                        response.Responses.Add(new AppData() {
+                            DataSource = request.PatientsData[i].DataSource,
+                            ExternalRecordId = request.PatientsData[i].ExternalRecordId,
+                            RecordCreatedOn = DateTime.Now,
+                            Id = request.PatientsData[0].Id
+                        }) ;
+                                           
                         i += 1;
                     }
                    
