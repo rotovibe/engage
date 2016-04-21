@@ -15,7 +15,7 @@ namespace Phytel.API.DataDomain.Cohort.DTO
         public MEPatientReferral(string userId)
         { 
             Id = ObjectId.GenerateNewId();
-            Version = 1.0;
+ //           Version = 1.0;
             RecordCreatedBy = ObjectId.Parse(userId);
             RecordCreatedOn = DateTime.UtcNow;
         }

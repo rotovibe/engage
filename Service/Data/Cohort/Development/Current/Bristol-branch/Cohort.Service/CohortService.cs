@@ -19,7 +19,13 @@ namespace Phytel.API.DataDomain.Cohort.Service
                     throw new UnauthorizedAccessException("CohortDD:Get()::Unauthorized Access");
 
                 response = DataCohortManager.GetCohortByID(request);
-                response.Version = request.Version;
+                if(response != null)
+                {
+                    if((response.Version == 0.0) || (response.Version == 0))
+                    {
+                        response.Version = request.Version;
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -40,7 +46,13 @@ namespace Phytel.API.DataDomain.Cohort.Service
                     throw new UnauthorizedAccessException("CohortDD:Get()::Unauthorized Access");
 
                 response = DataCohortManager.GetCohorts(request);
-                response.Version = request.Version;
+                if (response != null)
+                {
+                    if ((response.Version == 0.0) || (response.Version == 0))
+                    {
+                        response.Version = request.Version;
+                    }
+                }
             }
             catch (Exception ex)
             {
