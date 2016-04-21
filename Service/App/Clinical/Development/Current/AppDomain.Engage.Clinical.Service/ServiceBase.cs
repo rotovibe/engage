@@ -13,6 +13,11 @@ namespace AppDomain.Engage.Clinical.Service
     public class ServiceBase : ServiceStack.ServiceInterface.Service
     {
 
+        protected IClinicalManager Manager;
+        protected ServiceBase(IClinicalManager manager)
+        {
+            Manager = manager;
+        }
         public ICommonFormatterUtil CommonFormatter { get; set; }
         public Common.IHelpers Helpers { get; set; }
 

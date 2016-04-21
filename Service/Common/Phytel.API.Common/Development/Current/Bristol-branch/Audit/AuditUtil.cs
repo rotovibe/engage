@@ -336,5 +336,10 @@ namespace Phytel.API.DataAudit
             DataAudit data = GetDataAuditLog(userId, collectionName, entityId, entityKeyField, auditType, contractNumber);
             AuditDispatcher.WriteAudit(data, string.Format("{0}_{1}", data.Type, data.EntityType));
         }
+
+        DataAudit IAuditUtil.GetDataAuditLog(string userId, string collectionName, string entityId, string entityKeyField, DataAuditType auditType, string contractNumber)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

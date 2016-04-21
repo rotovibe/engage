@@ -96,8 +96,20 @@
       <HintPath>..\..\..\..\..\App\Bristol\Development\Current\packages\Phytel.Services.ServiceStack.1.5.0.01\lib\net451\Phytel.Services.ServiceStack.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Phytel.Services.SQLServer, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\App\Bristol\Development\Current\packages\Phytel.Services.SQLServer.2.0.0.02\lib\net451\Phytel.Services.SQLServer.dll</HintPath>
+    <Reference Include="Phytel.Services.Mongo">
+      <HintPath>..\..\..\..\..\App\Clinical\Development\Current\packages\Phytel.Services.Mongo.1.4.0.04\lib\net451\Phytel.Services.Mongo.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Phytel.Services.Security">
+      <HintPath>..\..\..\..\..\App\Clinical\Development\Current\packages\Phytel.Services.Security.1.4.0.01\lib\net451\Phytel.Services.Security.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Phytel.Services.ServiceStack">
+      <HintPath>..\..\..\..\..\App\Clinical\Development\Current\packages\Phytel.Services.ServiceStack.1.5.0.01\lib\net451\Phytel.Services.ServiceStack.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Phytel.Services.SQLServer">
+      <HintPath>..\..\..\..\..\App\Clinical\Development\Current\packages\Phytel.Services.SQLServer.1.4.0.01\lib\net451\Phytel.Services.SQLServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Phytel.Web">
@@ -106,36 +118,36 @@
     <Reference Include="PhytelServices">
       <HintPath>..\..\..\..\..\App\Bristol\Development\Current\references\PhytelServices.dll</HintPath>
     </Reference>
-    <Reference Include="ServiceStack, Version=3.9.70.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\App\Bristol\Development\Current\packages\Phytel.Services.ServiceStack.1.5.0.01\lib\net451\ServiceStack.dll</HintPath>
+    <Reference Include="ServiceStack">
+      <HintPath>..\..\..\..\..\App\Clinical\Development\Current\packages\Phytel.Services.ServiceStack.1.5.0.01\lib\net451\ServiceStack.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="ServiceStack.Common, Version=3.9.71.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\App\Bristol\Development\Current\packages\ServiceStack.Common.3.9.71\lib\net35\ServiceStack.Common.dll</HintPath>
+    <Reference Include="ServiceStack.Common">
+      <HintPath>..\..\..\..\..\App\Clinical\Development\Current\packages\ServiceStack.Common.3.9.71\lib\net35\ServiceStack.Common.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="ServiceStack.Interfaces, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\App\Bristol\Development\Current\packages\ServiceStack.Common.3.9.71\lib\net35\ServiceStack.Interfaces.dll</HintPath>
+    <Reference Include="ServiceStack.Interfaces">
+      <HintPath>..\..\..\..\..\App\Clinical\Development\Current\packages\ServiceStack.Common.3.9.71\lib\net35\ServiceStack.Interfaces.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="ServiceStack.OrmLite, Version=3.9.70.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\App\Bristol\Development\Current\packages\ServiceStack.OrmLite.SqlServer.3.9.70\lib\net35\ServiceStack.OrmLite.dll</HintPath>
+    <Reference Include="ServiceStack.OrmLite">
+      <HintPath>..\..\..\..\..\App\Clinical\Development\Current\packages\ServiceStack.OrmLite.SqlServer.3.9.70\lib\net35\ServiceStack.OrmLite.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="ServiceStack.OrmLite.SqlServer, Version=3.9.70.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\App\Bristol\Development\Current\packages\ServiceStack.OrmLite.SqlServer.3.9.70\lib\net35\ServiceStack.OrmLite.SqlServer.dll</HintPath>
+    <Reference Include="ServiceStack.OrmLite.SqlServer">
+      <HintPath>..\..\..\..\..\App\Clinical\Development\Current\packages\ServiceStack.OrmLite.SqlServer.3.9.70\lib\net35\ServiceStack.OrmLite.SqlServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="ServiceStack.Redis, Version=3.9.70.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\App\Bristol\Development\Current\packages\ServiceStack.Redis.3.9.70\lib\net35\ServiceStack.Redis.dll</HintPath>
+    <Reference Include="ServiceStack.Redis">
+      <HintPath>..\..\..\..\..\App\Clinical\Development\Current\packages\ServiceStack.Redis.3.9.70\lib\net35\ServiceStack.Redis.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="ServiceStack.ServiceInterface, Version=3.9.70.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\App\Bristol\Development\Current\packages\ServiceStack.3.9.70\lib\net35\ServiceStack.ServiceInterface.dll</HintPath>
+    <Reference Include="ServiceStack.ServiceInterface">
+      <HintPath>..\..\..\..\..\App\Clinical\Development\Current\packages\ServiceStack.3.9.70\lib\net35\ServiceStack.ServiceInterface.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="ServiceStack.Text, Version=3.9.70.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\App\Bristol\Development\Current\packages\ServiceStack.Text.3.9.70\lib\net35\ServiceStack.Text.dll</HintPath>
+    <Reference Include="ServiceStack.Text">
+      <HintPath>..\..\..\..\..\App\Clinical\Development\Current\packages\ServiceStack.Text.3.9.70\lib\net35\ServiceStack.Text.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -188,6 +200,9 @@
       <Project>{ae842695-4dd4-4403-9be4-8473bca09580}</Project>
       <Name>Phytel.API.DataAudit</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

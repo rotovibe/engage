@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("IBM")]
-[assembly: AssemblyProduct("AppDomain.Engage.ClinicalTests")]
+[assembly: AssemblyProduct("AppDomain.Engage.Clinical.Service")]
 [assembly: AssemblyCopyright("Copyright © IBM 2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

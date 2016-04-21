@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.40629.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppDomain.Engage.Clinical.Service", "AppDomain.Engage.Clinical.Service\AppDomain.Engage.Clinical.Service.csproj", "{C241AFD2-CD42-4290-853B-5C8C219C00F4}"
 EndProject
@@ -20,61 +20,34 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataDomains", "DataDomains", "{9911EA5F-A9E4-4874-8796-871407F4BDD9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Medication.Repo", "..\..\..\..\Data\Medication\Development\Current\Bristol-Branch\DataDomain.Medication.Repo\DataDomain.Medication.Repo.csproj", "{60C6A9F6-D668-4053-8997-8CFE661628DD}"
+	ProjectSection(ProjectDependencies) = postProject
+		{25CF3C3F-221F-4A49-B5EF-A8A5FCF9A5BA} = {25CF3C3F-221F-4A49-B5EF-A8A5FCF9A5BA}
+		{AE842695-4DD4-4403-9BE4-8473BCA09580} = {AE842695-4DD4-4403-9BE4-8473BCA09580}
+		{ABE948FB-247E-4955-B3AB-B7C93E10A542} = {ABE948FB-247E-4955-B3AB-B7C93E10A542}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Medication", "..\..\..\..\Data\Medication\Development\Current\Bristol-Branch\Medication\DataDomain.Medication.csproj", "{1C19F07A-0F65-4A19-887F-A8DB148D4CA8}"
+	ProjectSection(ProjectDependencies) = postProject
+		{25CF3C3F-221F-4A49-B5EF-A8A5FCF9A5BA} = {25CF3C3F-221F-4A49-B5EF-A8A5FCF9A5BA}
+		{ABE948FB-247E-4955-B3AB-B7C93E10A542} = {ABE948FB-247E-4955-B3AB-B7C93E10A542}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Medication.DTO", "..\..\..\..\Data\Medication\Development\Current\Bristol-Branch\Medication.DTO\DataDomain.Medication.DTO.csproj", "{006555BA-C927-4CE0-BC5A-7A6A7053D0D5}"
+	ProjectSection(ProjectDependencies) = postProject
+		{ABE948FB-247E-4955-B3AB-B7C93E10A542} = {ABE948FB-247E-4955-B3AB-B7C93E10A542}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Medication.Service", "..\..\..\..\Data\Medication\Development\Current\Bristol-Branch\Medication.Service\DataDomain.Medication.Service.csproj", "{12D22E0C-BFFF-4F2E-AC47-6B8E50E69861}"
+	ProjectSection(ProjectDependencies) = postProject
+		{25CF3C3F-221F-4A49-B5EF-A8A5FCF9A5BA} = {25CF3C3F-221F-4A49-B5EF-A8A5FCF9A5BA}
+		{ABE948FB-247E-4955-B3AB-B7C93E10A542} = {ABE948FB-247E-4955-B3AB-B7C93E10A542}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppDomain.Engage.ClinicalTests", "AppDomain.Engage.ClinicalTests\AppDomain.Engage.ClinicalTests.csproj", "{B4D83150-953B-4C8C-8F87-B7D0053D7BD5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.API.DataAudit", "..\..\..\..\Common\Phytel.API.DataAudit\Development\Current\Bristol-branch\Phytel.API.DataAudit.csproj", "{AE842695-4DD4-4403-9BE4-8473BCA09580}"
+EndProject
 Global
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 12
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = http://192.168.111.123:8080/tfs/phytel
-		SccProjectUniqueName0 = ..\\..\\..\\..\\Common\\Phytel.API.Common\\Development\\Current\\Bristol-branch\\Phytel.API.Common.csproj
-		SccProjectTopLevelParentUniqueName0 = Clinical.sln
-		SccProjectName0 = ../../../../Common/Phytel.API.Common/Development/Current/Bristol-branch
-		SccLocalPath0 = ..\\..\\..\\..\\Common\\Phytel.API.Common\\Development\\Current\\Bristol-branch
-		SccProjectUniqueName1 = ..\\..\\..\\..\\Interfaces\\Development\\Current\\Bristol-branch\\Phytel.API.Interface\\Phytel.API.Interface.csproj
-		SccProjectTopLevelParentUniqueName1 = Clinical.sln
-		SccProjectName1 = ../../../../Interfaces/Development/Current/Bristol-branch/Phytel.API.Interface
-		SccLocalPath1 = ..\\..\\..\\..\\Interfaces\\Development\\Current\\Bristol-branch\\Phytel.API.Interface
-		SccProjectUniqueName2 = ..\\..\\..\\..\\Data\\Medication\\Development\\Current\\Bristol-Branch\\DataDomain.Medication.Repo\\DataDomain.Medication.Repo.csproj
-		SccProjectTopLevelParentUniqueName2 = Clinical.sln
-		SccProjectName2 = ../../../../Data/Medication/Development/Current/Bristol-Branch/DataDomain.Medication.Repo
-		SccLocalPath2 = ..\\..\\..\\..\\Data\\Medication\\Development\\Current\\Bristol-Branch\\DataDomain.Medication.Repo
-		SccProjectUniqueName3 = ..\\..\\..\\..\\Data\\Medication\\Development\\Current\\Bristol-Branch\\Medication\\DataDomain.Medication.csproj
-		SccProjectTopLevelParentUniqueName3 = Clinical.sln
-		SccProjectName3 = ../../../../Data/Medication/Development/Current/Bristol-Branch/Medication
-		SccLocalPath3 = ..\\..\\..\\..\\Data\\Medication\\Development\\Current\\Bristol-Branch\\Medication
-		SccProjectUniqueName4 = ..\\..\\..\\..\\Data\\Medication\\Development\\Current\\Bristol-Branch\\Medication.DTO\\DataDomain.Medication.DTO.csproj
-		SccProjectTopLevelParentUniqueName4 = Clinical.sln
-		SccProjectName4 = ../../../../Data/Medication/Development/Current/Bristol-Branch/Medication.DTO
-		SccLocalPath4 = ..\\..\\..\\..\\Data\\Medication\\Development\\Current\\Bristol-Branch\\Medication.DTO
-		SccProjectUniqueName5 = ..\\..\\..\\..\\Data\\Medication\\Development\\Current\\Bristol-Branch\\Medication.Service\\DataDomain.Medication.Service.csproj
-		SccProjectTopLevelParentUniqueName5 = Clinical.sln
-		SccProjectName5 = ../../../../Data/Medication/Development/Current/Bristol-Branch/Medication.Service
-		SccLocalPath5 = ..\\..\\..\\..\\Data\\Medication\\Development\\Current\\Bristol-Branch\\Medication.Service
-		SccLocalPath6 = .
-		SccProjectUniqueName7 = AppDomain.Engage.Clinical.DataDomainClient\\AppDomain.Engage.Clinical.DataDomainClient.csproj
-		SccProjectName7 = AppDomain.Engage.Clinical.DataDomainClient
-		SccLocalPath7 = AppDomain.Engage.Clinical.DataDomainClient
-		SccProjectUniqueName8 = AppDomain.Engage.Clinical.DTO\\AppDomain.Engage.Clinical.DTO.csproj
-		SccProjectName8 = AppDomain.Engage.Clinical.DTO
-		SccLocalPath8 = AppDomain.Engage.Clinical.DTO
-		SccProjectUniqueName9 = AppDomain.Engage.Clinical.Service\\AppDomain.Engage.Clinical.Service.csproj
-		SccProjectName9 = AppDomain.Engage.Clinical.Service
-		SccLocalPath9 = AppDomain.Engage.Clinical.Service
-		SccProjectUniqueName10 = AppDomain.Engage.Clinical\\AppDomain.Engage.Clinical.csproj
-		SccProjectName10 = AppDomain.Engage.Clinical
-		SccLocalPath10 = AppDomain.Engage.Clinical
-		SccProjectUniqueName11 = AppDomain.Engage.ClinicalTests\\AppDomain.Engage.ClinicalTests.csproj
-		SccProjectName11 = AppDomain.Engage.ClinicalTests
-		SccLocalPath11 = AppDomain.Engage.ClinicalTests
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Model|Any CPU = Model|Any CPU
@@ -193,6 +166,16 @@ Global
 		{B4D83150-953B-4C8C-8F87-B7D0053D7BD5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B4D83150-953B-4C8C-8F87-B7D0053D7BD5}.Test|Any CPU.ActiveCfg = Release|Any CPU
 		{B4D83150-953B-4C8C-8F87-B7D0053D7BD5}.Test|Any CPU.Build.0 = Release|Any CPU
+		{AE842695-4DD4-4403-9BE4-8473BCA09580}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE842695-4DD4-4403-9BE4-8473BCA09580}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE842695-4DD4-4403-9BE4-8473BCA09580}.Model|Any CPU.ActiveCfg = Model|Any CPU
+		{AE842695-4DD4-4403-9BE4-8473BCA09580}.Model|Any CPU.Build.0 = Model|Any CPU
+		{AE842695-4DD4-4403-9BE4-8473BCA09580}.QA|Any CPU.ActiveCfg = Model|Any CPU
+		{AE842695-4DD4-4403-9BE4-8473BCA09580}.QA|Any CPU.Build.0 = Model|Any CPU
+		{AE842695-4DD4-4403-9BE4-8473BCA09580}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE842695-4DD4-4403-9BE4-8473BCA09580}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AE842695-4DD4-4403-9BE4-8473BCA09580}.Test|Any CPU.ActiveCfg = Model|Any CPU
+		{AE842695-4DD4-4403-9BE4-8473BCA09580}.Test|Any CPU.Build.0 = Model|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -204,5 +187,55 @@ Global
 		{1C19F07A-0F65-4A19-887F-A8DB148D4CA8} = {9911EA5F-A9E4-4874-8796-871407F4BDD9}
 		{006555BA-C927-4CE0-BC5A-7A6A7053D0D5} = {9911EA5F-A9E4-4874-8796-871407F4BDD9}
 		{12D22E0C-BFFF-4F2E-AC47-6B8E50E69861} = {9911EA5F-A9E4-4874-8796-871407F4BDD9}
+		{AE842695-4DD4-4403-9BE4-8473BCA09580} = {5D0C93FD-4A95-42DB-A873-FFA59F6B1526}
+	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 13
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = http://hillstfs2013.hills.phytel.com:8080/tfs/phytel
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = ..\\..\\..\\..\\Common\\Phytel.API.Common\\Development\\Current\\Bristol-branch\\Phytel.API.Common.csproj
+		SccProjectTopLevelParentUniqueName1 = Clinical.sln
+		SccProjectName1 = ../../../../Common/Phytel.API.Common/Development/Current/Bristol-branch
+		SccLocalPath1 = ..\\..\\..\\..\\Common\\Phytel.API.Common\\Development\\Current\\Bristol-branch
+		SccProjectUniqueName2 = ..\\..\\..\\..\\Interfaces\\Development\\Current\\Bristol-branch\\Phytel.API.Interface\\Phytel.API.Interface.csproj
+		SccProjectTopLevelParentUniqueName2 = Clinical.sln
+		SccProjectName2 = ../../../../Interfaces/Development/Current/Bristol-branch/Phytel.API.Interface
+		SccLocalPath2 = ..\\..\\..\\..\\Interfaces\\Development\\Current\\Bristol-branch\\Phytel.API.Interface
+		SccProjectUniqueName3 = ..\\..\\..\\..\\Data\\Medication\\Development\\Current\\Bristol-Branch\\DataDomain.Medication.Repo\\DataDomain.Medication.Repo.csproj
+		SccProjectTopLevelParentUniqueName3 = Clinical.sln
+		SccProjectName3 = ../../../../Data/Medication/Development/Current/Bristol-Branch/DataDomain.Medication.Repo
+		SccLocalPath3 = ..\\..\\..\\..\\Data\\Medication\\Development\\Current\\Bristol-Branch\\DataDomain.Medication.Repo
+		SccProjectUniqueName4 = ..\\..\\..\\..\\Data\\Medication\\Development\\Current\\Bristol-Branch\\Medication\\DataDomain.Medication.csproj
+		SccProjectTopLevelParentUniqueName4 = Clinical.sln
+		SccProjectName4 = ../../../../Data/Medication/Development/Current/Bristol-Branch/Medication
+		SccLocalPath4 = ..\\..\\..\\..\\Data\\Medication\\Development\\Current\\Bristol-Branch\\Medication
+		SccProjectUniqueName5 = ..\\..\\..\\..\\Data\\Medication\\Development\\Current\\Bristol-Branch\\Medication.DTO\\DataDomain.Medication.DTO.csproj
+		SccProjectTopLevelParentUniqueName5 = Clinical.sln
+		SccProjectName5 = ../../../../Data/Medication/Development/Current/Bristol-Branch/Medication.DTO
+		SccLocalPath5 = ..\\..\\..\\..\\Data\\Medication\\Development\\Current\\Bristol-Branch\\Medication.DTO
+		SccProjectUniqueName6 = ..\\..\\..\\..\\Data\\Medication\\Development\\Current\\Bristol-Branch\\Medication.Service\\DataDomain.Medication.Service.csproj
+		SccProjectTopLevelParentUniqueName6 = Clinical.sln
+		SccProjectName6 = ../../../../Data/Medication/Development/Current/Bristol-Branch/Medication.Service
+		SccLocalPath6 = ..\\..\\..\\..\\Data\\Medication\\Development\\Current\\Bristol-Branch\\Medication.Service
+		SccProjectUniqueName7 = AppDomain.Engage.Clinical.DataDomainClient\\AppDomain.Engage.Clinical.DataDomainClient.csproj
+		SccProjectName7 = AppDomain.Engage.Clinical.DataDomainClient
+		SccLocalPath7 = AppDomain.Engage.Clinical.DataDomainClient
+		SccProjectUniqueName8 = AppDomain.Engage.Clinical.DTO\\AppDomain.Engage.Clinical.DTO.csproj
+		SccProjectName8 = AppDomain.Engage.Clinical.DTO
+		SccLocalPath8 = AppDomain.Engage.Clinical.DTO
+		SccProjectUniqueName9 = AppDomain.Engage.Clinical.Service\\AppDomain.Engage.Clinical.Service.csproj
+		SccProjectName9 = AppDomain.Engage.Clinical.Service
+		SccLocalPath9 = AppDomain.Engage.Clinical.Service
+		SccProjectUniqueName10 = AppDomain.Engage.Clinical\\AppDomain.Engage.Clinical.csproj
+		SccProjectName10 = AppDomain.Engage.Clinical
+		SccLocalPath10 = AppDomain.Engage.Clinical
+		SccProjectUniqueName11 = AppDomain.Engage.ClinicalTests\\AppDomain.Engage.ClinicalTests.csproj
+		SccProjectName11 = AppDomain.Engage.ClinicalTests
+		SccLocalPath11 = AppDomain.Engage.ClinicalTests
+		SccProjectUniqueName12 = ..\\..\\..\\..\\Common\\Phytel.API.DataAudit\\Development\\Current\\Bristol-branch\\Phytel.API.DataAudit.csproj
+		SccProjectTopLevelParentUniqueName12 = Clinical.sln
+		SccProjectName12 = ../../../../Common/Phytel.API.DataAudit/Development/Current/Bristol-branch
+		SccLocalPath12 = ..\\..\\..\\..\\Common\\Phytel.API.DataAudit\\Development\\Current\\Bristol-branch
 	EndGlobalSection
 EndGlobal

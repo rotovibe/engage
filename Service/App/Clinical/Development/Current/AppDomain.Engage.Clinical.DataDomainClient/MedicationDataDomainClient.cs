@@ -1,4 +1,5 @@
-﻿using AppDomain.Engage.Clinical.DTO.Context;
+﻿using System.Collections.Generic;
+using AppDomain.Engage.Clinical.DTO.Context;
 using AutoMapper;
 using Phytel.API.Common;
 using ServiceStack.Service;
@@ -23,9 +24,10 @@ namespace AppDomain.Engage.Clinical.DataDomainClient
         }
 
         // implement method to call data domain service to save data
-        public string PostPatientMedications(Phytel.API.DataDomain.Medication.DTO.PatientMedSuppData data)
+        public string PostPatientMedications(List<Phytel.API.DataDomain.Medication.DTO.PatientMedSuppData> data)
         {
-            throw new System.NotImplementedException();
+            return "No endpoint";
+            //throw new System.NotImplementedException();
         }
     }
 }

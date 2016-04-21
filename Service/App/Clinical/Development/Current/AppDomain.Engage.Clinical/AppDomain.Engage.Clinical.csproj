@@ -35,8 +35,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AutoMapper, Version=4.0.4.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.4.0.4\lib\net45\AutoMapper.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Phytel.API.Interface">
-      <HintPath>..\AppDomain.Engage.Clinical.Service\Bin\Phytel.API.Interface.dll</HintPath>
+      <HintPath>..\..\..\..\..\Interfaces\Development\Current\Bristol-branch\Phytel.API.Interface\bin\Debug\Phytel.API.Interface.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -52,6 +56,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\Data\Medication\Development\Current\Bristol-Branch\Medication.DTO\DataDomain.Medication.DTO.csproj">
+      <Project>{006555ba-c927-4ce0-bc5a-7a6a7053d0d5}</Project>
+      <Name>DataDomain.Medication.DTO</Name>
+    </ProjectReference>
     <ProjectReference Include="..\AppDomain.Engage.Clinical.DataDomainClient\AppDomain.Engage.Clinical.DataDomainClient.csproj">
       <Project>{1780be0d-7964-4db8-ae7d-e99259db3a85}</Project>
       <Name>AppDomain.Engage.Clinical.DataDomainClient</Name>
@@ -60,6 +68,10 @@
       <Project>{d6a85ff1-89c3-4aeb-8db8-98e2c5c00bdc}</Project>
       <Name>AppDomain.Engage.Clinical.DTO</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

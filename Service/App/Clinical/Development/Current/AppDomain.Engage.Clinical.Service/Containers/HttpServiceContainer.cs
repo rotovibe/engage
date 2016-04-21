@@ -32,10 +32,10 @@ namespace AppDomain.Engage.Clinical.Service.Containers
             container.RegisterAutoWiredAs<AuditHelpers, IAuditHelpers>().ReusedWithin(ReuseScope.Request);
             container.Register<IHelpers>(c => new Helpers()).ReusedWithin(ReuseScope.Request);
             container.Register<IRestClient>(c => new JsonServiceClient()).ReusedWithin(ReuseScope.Request);
-            container.Register<IMedicationDataDomainClient>(c => new MedicationDataDomainClient(Mapper.Engine, ConfigurationManager.AppSettings["DDCohortServiceUrl"],
+            container.Register<IMedicationDataDomainClient>(c => new MedicationDataDomainClient(Mapper.Engine, "Http://localhost://Clinical/MetaData",
                 c.Resolve<IHelpers>(),
                 c.Resolve<IRestClient>(),
-                c.Resolve<IServiceContext>()))
+                c.Resolve<IServiceContext>()))  
                 .ReusedWithin(ReuseScope.Request);
 
             container.Register<IClinicalManager>(c => new ClinicalManager(c.Resolve<IServiceContext>(), c.Resolve<IMedicationDataDomainClient>())).ReusedWithin(ReuseScope.Request);

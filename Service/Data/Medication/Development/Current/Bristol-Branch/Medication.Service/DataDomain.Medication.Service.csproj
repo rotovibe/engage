@@ -25,6 +25,7 @@
     <SccProvider>SAK</SccProvider>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -69,9 +70,9 @@
       <HintPath>..\packages\ServiceStack.3.9.70\lib\net35\ServiceStack.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="ServiceStack.Common, Version=3.9.70.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ServiceStack.Common.3.9.70\lib\net35\ServiceStack.Common.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="ServiceStack.Common, Version=3.9.71.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\Referral\Development\Current\Phytel.API.DataDomain.Referral\bin\ServiceStack.Common.dll</HintPath>
     </Reference>
     <Reference Include="ServiceStack.Interfaces, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ServiceStack.Common.3.9.70\lib\net35\ServiceStack.Interfaces.dll</HintPath>
@@ -85,17 +86,17 @@
       <HintPath>..\packages\ServiceStack.OrmLite.SqlServer.3.9.14\lib\ServiceStack.OrmLite.SqlServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="ServiceStack.Redis, Version=3.9.70.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ServiceStack.Redis.3.9.70\lib\net35\ServiceStack.Redis.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="ServiceStack.Redis, Version=3.9.11.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\Referral\Development\Current\Phytel.API.DataDomain.Referral\bin\ServiceStack.Redis.dll</HintPath>
     </Reference>
     <Reference Include="ServiceStack.ServiceInterface, Version=3.9.70.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ServiceStack.3.9.70\lib\net35\ServiceStack.ServiceInterface.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="ServiceStack.Text, Version=3.9.70.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ServiceStack.Text.3.9.70\lib\net35\ServiceStack.Text.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="ServiceStack.Text, Version=4.0.54.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\Referral\Development\Current\Phytel.API.DataDomain.Referral\bin\ServiceStack.Text.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
