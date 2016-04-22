@@ -13,6 +13,7 @@ using Phytel.Services;
 using MB = MongoDB.Driver.Builders;
 using MongoDB.Bson.Serialization;
 using System.Net;
+using ServiceStack.ServiceHost;
 
 namespace Phytel.API.DataDomain.Patient
 {
@@ -175,6 +176,7 @@ namespace Phytel.API.DataDomain.Patient
             BulkInsertResult result = new BulkInsertResult();
             List<string> insertedIds = new List<string>();
             List<string> errorMessages = new List<string>();
+            //List<string> duplicateIds = new List<string>();
             try
             {
                 using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
@@ -186,12 +188,12 @@ namespace Phytel.API.DataDomain.Patient
                         {
                             //Id = ObjectId.Parse("561ea745d43325133cf09a6d"),
                             Version = pd.Version,
-                            Priority = (PriorityData)pd.PriorityData,
-                            FirstName = pd.FirstName,
-                            LastName = pd.LastName,
+                            
+                            FirstName = Helper.TrimAndLimit(pd.FirstName, 64),
+                            LastName = Helper.TrimAndLimit(pd.LastName, 64),
                             MiddleName = pd.MiddleName,
-                            Prefix = pd.Prefix,
-                            Suffix = pd.Suffix,
+                            Prefix = Helper.TrimAndLimit(pd.Prefix,64),
+                            Suffix = Helper.TrimAndLimit(pd.Suffix,20),
                             PreferredName = pd.PreferredName,
                             Gender = pd.Gender,
                             DOB = pd.DOB,
@@ -203,6 +205,7 @@ namespace Phytel.API.DataDomain.Patient
                             Status = (Status)pd.StatusId,
                             StatusDataSource = Helper.TrimAndLimit(pd.StatusDataSource, 50),
                             Protected = pd.Protected,
+                            Priority = (PriorityData)pd.PriorityData,
                             Deceased = (Deceased)pd.DeceasedId,
                             FullSSN = pd.FullSSN,
                             LastFourSSN = pd.LastFourSSN,
@@ -229,6 +232,15 @@ namespace Phytel.API.DataDomain.Patient
                         {
                             meP.UpdatedBy = ObjectId.Parse(pd.UpdatedByProperty);
                         }
+                        //added for BR-23 to check if the patient already exists
+                        //string ExistingPatient = FindDuplicatePatientByExternalRecordId(meP.ExternalRecordId,
+                        //    meP.DataSource);
+                        //if (ExistingPatient != null)
+                        //{
+                        //    duplicateIds.Add(ExistingPatient);
+                        //    continue;
+                        //}
+                                
                         bulk.Insert(meP.ToBsonDocument());
                         insertedIds.Add(meP.Id.ToString());
                     }
@@ -341,6 +353,38 @@ namespace Phytel.API.DataDomain.Patient
                 }
             }
             return patientData;
+        }
+
+        private string FindDuplicatePatientByExternalRecordId(string externalRecordId, string dataSource)
+        {
+            MEPatient mePatient = null;
+            try
+            {
+                using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
+                {
+                    string searchQuery = string.Empty;
+
+                    searchQuery = string.Format("{0} : /^{1}$/i, {2} : /^{3}$/i,  {4} : false, {5} : null",
+                        MEPatient.ExternalRecordIdProperty, externalRecordId,
+                        MEPatient.DataSourceProperty, dataSource,
+                        MEPatient.DeleteFlagProperty,
+                        MEPatient.TTLDateProperty);
+
+                    string jsonQuery = "{ ";
+                    jsonQuery += searchQuery;
+                    jsonQuery += " }";
+                    QueryDocument query = new QueryDocument(BsonSerializer.Deserialize<BsonDocument>(jsonQuery));
+                    mePatient = ctx.Patients.Collection.FindOneAs<MEPatient>(query);
+                }
+            }
+
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return(mePatient == null? null  : mePatient.Id.ToString());
+
         }
 
         public object FindDuplicatePatient(PutUpdatePatientDataRequest request)

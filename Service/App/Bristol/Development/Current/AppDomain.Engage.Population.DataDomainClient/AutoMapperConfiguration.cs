@@ -12,6 +12,8 @@ namespace AppDomain.Engage.Population.DataDomainClient
             {
                mapper.AddProfile<ReferralDefinitionRequestMap>();
                mapper.AddProfile<ReferralDefinitionResultMap>();
+               mapper.AddProfile<ReferralWithPatientsListRequestMap>();
+               mapper.AddProfile<ReferralWithPatientsListResponseMap>();
             });
         }
     }

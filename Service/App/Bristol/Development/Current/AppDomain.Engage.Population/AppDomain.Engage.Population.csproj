@@ -47,11 +47,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CohortManager.cs" />
+    <Compile Include="ICohortManager.cs" />
     <Compile Include="IDemographicsManager.cs" />
     <Compile Include="DemographicsManager.cs" />
-    <Compile Include="IReferralDefinitionManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ReferralDefinitionManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\Common\Phytel.API.Common\Development\Current\Bristol-branch\Phytel.API.Common.csproj">

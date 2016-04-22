@@ -36,15 +36,20 @@ namespace AppDomain.Engage.Population.Service.Container
             container.RegisterAutoWiredAs<AuditHelpers, IAuditHelpers>().ReusedWithin(ReuseScope.Request);
             container.Register<IHelpers>(c => new Helpers()).ReusedWithin(ReuseScope.Request);
             container.Register<IRestClient>(c => new JsonServiceClient()).ReusedWithin(ReuseScope.Request);
-            container.Register<IPatientDataDomainClient>(c => new PatientDataDomainClient(Mapper.Engine, ConfigurationManager.AppSettings["DDCohortServiceUrl"], 
+            container.Register<IPatientDataDomainClient>(c => new PatientDataDomainClient(Mapper.Engine, ConfigurationManager.AppSettings["DDPatientServiceUrl"], 
                 c.Resolve<IHelpers>(), 
                 c.Resolve<IRestClient>(), 
                 c.Resolve<IServiceContext>()))
                 .ReusedWithin(ReuseScope.Request);
 
-            container.Register<IDemographicsManager>(c => new DemographicsManager(c.Resolve<IServiceContext>(), c.Resolve<IPatientDataDomainClient>())).ReusedWithin(ReuseScope.Request);
-            container.Register<IReferralDefinitionManager>(c => new ReferralDefinitionManager(c.Resolve<IServiceContext>(), c.Resolve<IPatientDataDomainClient>())).ReusedWithin(ReuseScope.Request);
+            container.Register<ICohortDataDomainClient>(c => new CohortDataDomainClient(Mapper.Engine, ConfigurationManager.AppSettings["DDCohortServiceUrl"],
+                c.Resolve<IHelpers>(),
+                c.Resolve<IRestClient>(),
+                c.Resolve<IServiceContext>()))
+                .ReusedWithin(ReuseScope.Request);
 
+            container.Register<IDemographicsManager>(c => new DemographicsManager(c.Resolve<IServiceContext>(), c.Resolve<IPatientDataDomainClient>())).ReusedWithin(ReuseScope.Request);
+            container.Register<ICohortManager>(c => new CohortManager(c.Resolve<IServiceContext>(), c.Resolve<ICohortDataDomainClient>())).ReusedWithin(ReuseScope.Request);
             return container;
         }
     }

@@ -1,12 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Net;
 using AppDomain.Engage.Population.DTO.Context;
-using AppDomain.Engage.Population.DTO.Referrals;
+
+using AppDomain.Engage.Population.DTO.Demographics;
 using AutoMapper;
 using Phytel.API.Common;
 using Phytel.API.DataDomain.Patient.DTO;
-using Phytel.API.DataDomain.Cohort.DTO.Model;
+
 using ServiceStack.Service;
-using PostReferralDefinitionRequest = Phytel.API.DataDomain.Cohort.DTO.Referrals.PostReferralDefinitionRequest;
+using PostPatientReferralDefinitionRequest = Phytel.API.DataDomain.Cohort.DTO.Referrals.PostPatientReferralDefinitionRequest;
 
 namespace AppDomain.Engage.Population.DataDomainClient
 {
@@ -28,70 +31,87 @@ namespace AppDomain.Engage.Population.DataDomainClient
             _context = context;
         }
 
-        // example implementation
-        public string PostPatientDetails(PatientData patients)
+       
+
+       
+        public ProcessedPatientsList PostPatientsListDetails(List<Patient> patientDataList,UserContext usercontext)
         {
-            var patientId = string.Empty;
+            List<PatientData> ddPatientData = new List<PatientData>();
+            ProcessedPatientsList adPatientData = new ProcessedPatientsList();
+            List<ProcessedData> addedPatients = new List<ProcessedData>();
+            List<ProcessedData> erroredPatients = new List<ProcessedData>();
+
             try
             {
-                if (patients == null) return patientId;
 
-                var url = _urlHelper.BuildURL(string.Format("{0}/{1}/{2}/{3}/{4}/Patient", 
+                
+
+                foreach (Patient e in patientDataList)
+                {
+                    ddPatientData.Add(_mappingEngine.Map<PatientData>(e));
+                }
+                // List<PatientData> ddPatientData = _mappingEgine.Map<List<Patient>, List<PatientData>>(adPatientData);
+
+
+                var url = _urlHelper.BuildURL(string.Format("{0}/{1}/{2}/{3}/{4}/Batch/Patients",
                     _domainUrl,
                     "api",
                     "NG",
                     _context.Version,
-                    _context.Contract), _context.UserId);
+                    _context.Contract), usercontext.UserId);
 
-                PutPatientDataResponse response = _client.Put<PutPatientDataResponse>(url, new PutPatientDataRequest
+                var response = _client.Post<InsertBatchPatientsDataResponse>(url, new InsertBatchPatientsDataRequest
                 {
+                    PatientsData = ddPatientData,
                     Context = "NG",
                     ContractNumber = _context.Contract,
-                    Patient = patients,
-                    UserId = _context.UserId,
-                    Version = _context.Version
-                } as object);
+                    Version = _context.Version,
+                    UserId = usercontext.UserId
+                } );
+               
+                //if (response.Status.ErrorCode == HttpStatusCode.OK.ToString())
+                //{
+                    foreach (HttpObjectResponse<PatientData> e in response.ErrorMessages)
+                    {
+                        if (e.Code == System.Net.HttpStatusCode.InternalServerError)
+                        {
 
-                if (response != null)
+                        erroredPatients.Add(_mappingEngine.Map<ProcessedData>(e.Body));
+
+                        }
+                        
+                    }
+
+                foreach (AppData e in response.Responses)
                 {
-                    patientId = response.Id;
+                    addedPatients.Add(_mappingEngine.Map<ProcessedData>(e));
                 }
-                return patientId;
+
+                adPatientData.InsertedPatients = addedPatients;
+                    adPatientData.ErroredPatients = erroredPatients;
+                //}
+
+                //else
+                //{
+                //    throw new Exception();
+                //}
+
+                return adPatientData;
+
+
             }
             catch (Exception ex)
             {
                 throw new ArgumentException("AD:PostPatientDetails()::" + ex.Message, ex.InnerException);
             }
+
+            
+
+
         }
 
-        public PostReferralDefinitionResponse PostReferralDefinition(ReferralDefinitionData referralDefinitionData, UserContext userContext)
-        {
-            try
-            {
 
-                ReferralData referralData = _mappingEngine.Map<ReferralData>(referralDefinitionData);
-                var url = _urlHelper.BuildURL(string.Format("{0}/{1}/{2}/{3}/{4}/Referrals",
-                    _domainUrl,
-                    "api",
-                    "NG",
-                    _context.Version,
-                    _context.Contract), userContext.UserId);
-
-                var response = _client.Post<PostReferralDefinitionResponse>(url, new PostReferralDefinitionRequest
-                {
-                    Referral = referralData,
-                    Context = "NG",
-                    ContractNumber = _context.Contract,
-                    UserId = userContext.UserId,
-                    Version = _context.Version
-                });
-
-                return response;
-            }
-            catch (Exception ex)
-            {
-                throw new ArgumentException("AD:PostReferralDefinition()::" + ex.Message, ex.InnerException);
-            }
-        }
+        
+       
     }
 }

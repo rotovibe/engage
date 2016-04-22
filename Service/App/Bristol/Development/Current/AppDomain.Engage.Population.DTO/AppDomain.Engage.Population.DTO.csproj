@@ -37,6 +37,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ServiceStack">
+      <HintPath>..\packages\ServiceStack.3.9.71\lib\net35\ServiceStack.dll</HintPath>
+    </Reference>
     <Reference Include="ServiceStack.Common, Version=3.9.71.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ServiceStack.Common.3.9.71\lib\net35\ServiceStack.Common.dll</HintPath>
       <Private>True</Private>
@@ -44,6 +47,9 @@
     <Reference Include="ServiceStack.Interfaces, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ServiceStack.Common.3.9.71\lib\net35\ServiceStack.Interfaces.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="ServiceStack.ServiceInterface">
+      <HintPath>..\packages\ServiceStack.3.9.71\lib\net35\ServiceStack.ServiceInterface.dll</HintPath>
     </Reference>
     <Reference Include="ServiceStack.Text, Version=3.9.70.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ServiceStack.Text.3.9.70\lib\net35\ServiceStack.Text.dll</HintPath>
@@ -70,10 +76,13 @@
     <Compile Include="Demographics\PostPatientMergeResponse.cs" />
     <Compile Include="Demographics\PostPatientDemographicsResponse.cs" />
     <Compile Include="Demographics\Phone.cs" />
+    <Compile Include="Demographics\ProcessedPatientsList.cs" />
     <Compile Include="Demographics\Triple.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Referrals\PostReferralDefinitionRequest.cs" />
     <Compile Include="Referrals\PostReferralDefinitionResponse.cs" />
+    <Compile Include="Referrals\PostReferralWithPatientsListRequest.cs" />
+    <Compile Include="Referrals\PostReferralWithPatientsListResponse.cs" />
     <Compile Include="Referrals\ReferralDefinition.cs" />
   </ItemGroup>
   <ItemGroup>

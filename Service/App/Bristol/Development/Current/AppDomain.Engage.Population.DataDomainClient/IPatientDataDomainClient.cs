@@ -1,13 +1,16 @@
-﻿using AppDomain.Engage.Population.DTO.Context;
-using AppDomain.Engage.Population.DTO.Referrals;
+﻿using System.Collections.Generic;
+using AppDomain.Engage.Population.DTO.Context;
+using AppDomain.Engage.Population.DTO.Demographics;
 using Phytel.API.DataDomain.Patient.DTO;
 
 namespace AppDomain.Engage.Population.DataDomainClient
 {
     public interface IPatientDataDomainClient
     {
-        string PostPatientDetails(PatientData patients);
+        //string PostPatientDetails(PatientData patients);
 
-        PostReferralDefinitionResponse PostReferralDefinition(ReferralDefinitionData referral, UserContext userContext);
+        ProcessedPatientsList PostPatientsListDetails(List<Patient> patientDataList,UserContext userContext);
+
+       
     }
 }
