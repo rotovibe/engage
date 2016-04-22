@@ -288,7 +288,7 @@ namespace Phytel.API.DataDomain.Contact
                         else
                         {
                             uv.Add(MB.Update.Set(MEContact.FirstNameProperty, data.FirstName));
-                            uv.Add(MB.Update.Set(MEContact.FirstNameProperty, data.FirstName.ToLower()));
+                            uv.Add(MB.Update.Set(MEContact.LoweredFirstNameProperty, data.FirstName.ToLower()));
                         }
 
                         if (string.IsNullOrEmpty(data.LastName))
