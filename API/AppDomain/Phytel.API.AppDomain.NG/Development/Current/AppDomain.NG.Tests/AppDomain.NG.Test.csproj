@@ -142,6 +142,7 @@
     <Compile Include="AutoMapperConfigurationTests.cs" />
     <Compile Include="CareMember_Tests.cs" />
     <Compile Include="ContactTypeLookupManager_Tests.cs" />
+    <Compile Include="Contact\CareTeam\UnassignedPCMCohortRuleTests.cs" />
     <Compile Include="Contact\ContactManagerTests.cs" />
     <Compile Include="Factories\NGManagerFactory.cs" />
     <Compile Include="Factories\SampleFactory.cs" />

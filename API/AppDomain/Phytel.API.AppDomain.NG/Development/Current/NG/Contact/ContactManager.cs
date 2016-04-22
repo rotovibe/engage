@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Linq;
 using AutoMapper;
 using Phytel.API.AppDomain.NG.DTO;
+using Phytel.API.Common.Extensions;
 using Phytel.API.DataDomain.Contact.DTO;
 using Phytel.API.DataDomain.Contact.DTO.CareTeam;
 using ServiceStack.Service;
@@ -16,6 +17,7 @@ namespace Phytel.API.AppDomain.NG
     {
         
         public IContactEndpointUtil EndpointUtil { get; set; }
+        public ICareMemberCohortRuleFactory CareMemberCohortRuleFactory { get; set; }
 
         #region Contact
         public Contact GetContactByContactId(GetContactByContactIdRequest request)
@@ -96,6 +98,17 @@ namespace Phytel.API.AppDomain.NG
             if(request.CareTeam.Members.IsNullOrEmpty())
                  throw new ApplicationException(string.Format("CareTeam should have atleast one or more members."));
 
+
+            var activeCorePCMs = 
+                request.CareTeam.Members.Select(
+                    c =>
+                        c.RoleId == Constants.PCMRoleId && c.Core == true &&
+                        c.StatusId == (int) CareTeamMemberStatus.Active);
+
+            if(!activeCorePCMs.IsNullOrEmpty() && activeCorePCMs.Count() > 1 )
+                throw new ApplicationException("The Care team cannot have multiple Active, Core PCMs");
+
+
             foreach (var member in request.CareTeam.Members)
             {
                 ValidateCareTeamMemberFields(member);
@@ -104,6 +117,8 @@ namespace Phytel.API.AppDomain.NG
             try
             {
                var domainResponse =  EndpointUtil.SaveCareTeam(request);
+
+               OnCareMemberUpdated(request.ContactId,request.ContractNumber,request.UserId);
             }
             catch (Exception ex)
             {
@@ -169,14 +184,13 @@ namespace Phytel.API.AppDomain.NG
                 throw new WebServiceException("AD:DeleteCareTeamMemberResponse()::" + wse.Message, wse.InnerException);
             }
 
-
-
             return response;
         }
 
         #endregion
 
         #region Private Methods
+
         private void ValidateCareTeamMemberFields(Member member)//, string contractNumber, string userId, double version)
         {
             if (member == null)
@@ -210,6 +224,24 @@ namespace Phytel.API.AppDomain.NG
             if (string.IsNullOrEmpty(member.RoleId) && string.IsNullOrEmpty(member.CustomRoleName))
             {
                 throw new Exception("Role or CustomRoleName is required");
+            }
+
+
+        }
+
+        private void OnCareMemberUpdated(string contactId, string contractNumber,string userId)
+        {
+            var careTeam =  GetCareTeam(new GetCareTeamRequest
+            {
+                ContactId = contactId, 
+                ContractNumber = contractNumber, 
+                UserId = userId
+            }); 
+
+            var rules = CareMemberCohortRuleFactory.GenerateEngageCareMemberCohortRules();
+            foreach (var rule in rules)
+            {
+                rule.Run(careTeam);
             }
 
         }
