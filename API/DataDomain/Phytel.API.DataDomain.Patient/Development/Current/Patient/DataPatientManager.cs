@@ -650,6 +650,34 @@ namespace Phytel.API.DataDomain.Patient
                 var repo = Factory.GetRepository(request, RepositoryType.Patient);
                 var isSuccessful = repo.SyncPatient(request);
 
+                if (isSuccessful)
+                {
+                    //Update Cohort Patient View.
+                    var cohortPatientViewRepo = Factory.GetRepository(request, RepositoryType.CohortPatientView);
+
+                   
+                    var putUpdaterequest = new PutUpdatePatientDataRequest
+                    {
+                        ContractNumber = request.ContractNumber,
+                        Context = request.Context,
+                        PatientData = new PatientData
+                        {
+                            FirstName = request.PatientInfo.FirstName,
+                            LastName = request.PatientInfo.LastName,
+                            MiddleName = request.PatientInfo.MiddleName,
+                            PreferredName = request.PatientInfo.PreferredName,
+                            Gender = request.PatientInfo.Gender,
+                            Suffix = request.PatientInfo.Suffix,
+                            Prefix = request.PatientInfo.Prefix,
+                            Id = request.PatientId,
+                            StatusId = request.PatientInfo.StatusId,
+                            DeceasedId =  request.PatientInfo.DeceasedId
+                        }
+                    };
+
+                   var cohortUpdateResponse = cohortPatientViewRepo.Update(request) as PutUpdateCohortPatientViewResponse;
+                }
+
                 response.IsSuccessful = isSuccessful;
             }
             catch (Exception ex)

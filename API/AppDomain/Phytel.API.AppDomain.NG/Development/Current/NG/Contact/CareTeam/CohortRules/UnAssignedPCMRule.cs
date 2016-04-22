@@ -1,17 +1,28 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Phytel.API.AppDomain.NG.DTO;
+using Phytel.API.DataDomain.Contact.DTO;
+using ServiceStack.Text;
 
 namespace Phytel.API.AppDomain.NG
 {
 
     public class UnAssignedPCMRule : ICareMemberCohortRule, ICohortCommand
     {
-        public void Run(List<DTO.Member> members)
+        public void Run(CareTeam careTeam)
         {
-            throw new NotImplementedException();
+            if(careTeam == null)
+                throw new ArgumentNullException("careTeam");
+
+            if (CheckIfCareTeamHasActiveCorePCM(careTeam))
+            {
+                //Remove from UnAssigned PCM
+            }
+            else
+            {
+               //Add to UnAssigned PCM.
+            }
+
         }
 
         public void Add()
@@ -23,5 +34,22 @@ namespace Phytel.API.AppDomain.NG
         {
             throw new NotImplementedException();
         }
+
+        private bool CheckIfCareTeamHasActiveCorePCM(CareTeam team)
+        {
+            var hasPCM = false;
+
+            if (team.Members.IsNullOrEmpty())
+                return false;
+
+            hasPCM = team.Members.Any(c =>
+                    c.StatusId == (int) CareTeamMemberStatus.Active && c.Core == true &&
+                    c.RoleId == Constants.PCMRoleId);
+            
+
+            return hasPCM;
+
+        }
+
     }
 }
