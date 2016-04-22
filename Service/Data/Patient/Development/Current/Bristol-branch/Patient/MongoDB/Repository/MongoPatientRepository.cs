@@ -617,9 +617,10 @@ namespace Phytel.API.DataDomain.Patient
             PutUpdatePatientDataResponse response = new PutUpdatePatientDataResponse();
             try
             {
-                if ((request.PatientData.PriorityData < (int) PriorityData.NotSet) || (request.PatientData.PriorityData > (int) PriorityData.High))
-                    throw new ArgumentException(String.Format("Priority is out of range {0} - {1}  in the DataDomain request.",
-                                                                                                (int)PriorityData.NotSet, (int)PriorityData.High));
+                if(!Enum.IsDefined(typeof(PriorityData), request.PatientData.PriorityData))
+                    {
+                    throw new ArgumentException(String.Format("Invalid Priority in the DataDomain request."));
+                }
 
                 using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
                 {
