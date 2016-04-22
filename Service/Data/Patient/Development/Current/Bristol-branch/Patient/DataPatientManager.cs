@@ -348,14 +348,7 @@ namespace Phytel.API.DataDomain.Patient
                     int i = 0;
                     foreach(PatientData patientData in request.PatientsData)
                     {
-                        request.PatientsData[i].Version = request.Version;
-                  /*      response.Responses.Add(new AppData() {
-                            DataSource = request.PatientsData[i].DataSource,
-                            ExternalRecordId = request.PatientsData[i].ExternalRecordId,
-                            RecordCreatedOn = DateTime.Now,
-                            Id = request.PatientsData[0].Id
-                        }) ;
-                                      */     
+                        request.PatientsData[i].Version = request.Version;                     
                         i += 1;
                     }
                    
@@ -457,7 +450,6 @@ namespace Phytel.API.DataDomain.Patient
                     string DDPatientSystemServiceUrl = ConfigurationManager.AppSettings["DDPatientSystemServiceUrl"];
                     IRestClient client = new JsonServiceClient();
                     //[Route("/api/{Context}/{Version}/{ContractNumber}/PatientSystems/Ids", "POST")]
-  //                  string url = Helpers.BuildURL(string.Format("{0}/api/{1}/{2}/{3}/PatientSystems/Ids", DDPatientSystemServiceUrl, psRequest.Context, psRequest.Version, psRequest.ContractNumber), psRequest.UserId);
                     string url = Helpers.BuildURL(string.Format("{0}/api/{1}/{2}/{3}/PatientSystems/Ids", DDPatientSystemServiceUrl, psRequest.Context, psRequest.Version, psRequest.ContractNumber), psRequest.UserId);
                     GetPatientSystemByIdsDataResponse dataDomainResponse = client.Post<GetPatientSystemByIdsDataResponse>(url, psRequest as object);
                     if (dataDomainResponse != null)
