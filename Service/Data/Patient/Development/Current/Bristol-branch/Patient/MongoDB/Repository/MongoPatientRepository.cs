@@ -104,7 +104,11 @@ namespace Phytel.API.DataDomain.Patient
                         };
                         if(!string.IsNullOrEmpty(pd.ReasonId))
                         {
-                            patient.ReasonId = ObjectId.Parse(pd.ReasonId);
+                            int intReasonResult;
+                            Int32.TryParse(pd.ReasonId, out intReasonResult);
+                            string hexReasonId = intReasonResult.ToString("X24");
+                            patient.ReasonId = ObjectId.Parse(hexReasonId);
+                            // patient.ReasonId = ObjectId.Parse(pd.ReasonId);
                         }
                         if (!string.IsNullOrEmpty(pd.MaritalStatusId))
                         {

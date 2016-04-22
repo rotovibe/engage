@@ -8,7 +8,9 @@ namespace Phytel.API.Common
 {
 
 
-    public enum AuditType
+    public enum 
+        
+        AuditType
     {
         GetPatient = 375,
         GetActionsInfo = 376,

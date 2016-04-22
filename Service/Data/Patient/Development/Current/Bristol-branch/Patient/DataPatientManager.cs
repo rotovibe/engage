@@ -349,13 +349,13 @@ namespace Phytel.API.DataDomain.Patient
                     foreach(PatientData patientData in request.PatientsData)
                     {
                         request.PatientsData[i].Version = request.Version;
-                        response.Responses.Add(new AppData() {
+                  /*      response.Responses.Add(new AppData() {
                             DataSource = request.PatientsData[i].DataSource,
                             ExternalRecordId = request.PatientsData[i].ExternalRecordId,
                             RecordCreatedOn = DateTime.Now,
                             Id = request.PatientsData[0].Id
                         }) ;
-                                           
+                                      */     
                         i += 1;
                     }
                    
@@ -408,7 +408,7 @@ namespace Phytel.API.DataDomain.Patient
                                         var x = insertedPatientSystems.Where(s => s.PatientId == r.Id).FirstOrDefault();
                                         if (x != null)
                                             engageValue = x.Value;
-                                        list.Add(new HttpObjectResponse<PatientData> { Code = HttpStatusCode.Created, Body = (PatientData)new PatientData { Id = r.Id, ExternalRecordId = r.ExternalRecordId, EngagePatientSystemValue = engageValue } });
+                                        list.Add(new HttpObjectResponse<PatientData> { Code = HttpStatusCode.Created, Body = (PatientData)new PatientData { Id = r.Id, ExternalRecordId = r.ExternalRecordId, EngagePatientSystemValue = engageValue ,DataSource = r.DataSource} });
                                     });
                                     #endregion
                                 }
@@ -426,7 +426,7 @@ namespace Phytel.API.DataDomain.Patient
                         if (patientData.Code == HttpStatusCode.InternalServerError)
                             response.ErrorMessages.Add(patientData);
                         else
-                            response.Responses.Add(new AppData { Id = patientData.Body.Id, ExternalRecordId = patientData.Body.ExternalRecordId });
+                            response.Responses.Add(new AppData { Id = patientData.Body.Id, ExternalRecordId = patientData.Body.ExternalRecordId, DataSource = patientData.Body.DataSource});
                         }
                 }
             }
@@ -451,6 +451,7 @@ namespace Phytel.API.DataDomain.Patient
                         ContractNumber = request.ContractNumber,
                         UserId = request.UserId,
                         Version = request.Version
+                      
                     };
 
                     string DDPatientSystemServiceUrl = ConfigurationManager.AppSettings["DDPatientSystemServiceUrl"];
@@ -678,7 +679,8 @@ namespace Phytel.API.DataDomain.Patient
                         Context = request.Context,
                         ContractNumber = request.ContractNumber,
                         UserId = Constants.SystemContactId,                     // the requirement says that the engage Id should have createdby user as 'system'.
-                        Version = request.Version
+                        Version = request.Version,
+                        // DataSource = 
                     };
 
                     string DDPatientSystemServiceUrl = ConfigurationManager.AppSettings["DDPatientSystemServiceUrl"];
