@@ -780,6 +780,12 @@ namespace Phytel.API.DataDomain.Patient
                         cPV.SearchFields.ForEach(s => UpdateProperty(request, s));
                         List<SearchField> sfs = cPV.SearchFields.ToList<SearchField>();
                         ctx.CohortPatientViews.Collection.Update(findQ, MB.Update.SetWrapped<List<SearchField>>(MECohortPatientView.SearchFieldsProperty, sfs).Set(MECohortPatientView.LastNameProperty, request.PatientData.LastName));
+
+                        AuditHelper.LogDataAudit(this.UserId,
+                                                MongoCollectionName.CohortPatientView.ToString(),
+                                                cPV.Id.ToString(),
+                                                DataAuditType.Update,
+                                                request.ContractNumber);
                     }
                 }
 
@@ -1078,6 +1084,39 @@ namespace Phytel.API.DataDomain.Patient
                                                 request.ContractNumber);
 
                         response.IsSuccessful = true;
+
+                        // save to cohortuser collection
+                        var findQ = MB.Query<MECohortPatientView>.EQ(b => b.PatientID, ObjectId.Parse(request.PatientId));
+                        var cPV = ctx.CohortPatientViews.Collection.Find(findQ).FirstOrDefault();
+
+                        var putUpdaterequest = new PutUpdatePatientDataRequest
+                        {
+                            ContractNumber = request.ContractNumber,
+                            Context = request.Context,
+                            PatientData = new PatientData
+                            {
+                                FirstName = request.PatientInfo.FirstName,
+                                LastName = request.PatientInfo.LastName,
+                                MiddleName = request.PatientInfo.MiddleName,
+                                PreferredName = request.PatientInfo.PreferredName,
+                                Gender = request.PatientInfo.Gender,
+                                Suffix = request.PatientInfo.Suffix,
+                                Prefix = request.PatientInfo.Prefix,
+                                Id = request.PatientId,
+                                StatusId = request.PatientInfo.StatusId,
+                                DeceasedId = request.PatientInfo.DeceasedId
+                            }
+                        };
+
+                        cPV.SearchFields.ForEach(s => UpdateProperty(putUpdaterequest, s));
+                        var sfs = cPV.SearchFields.ToList<SearchField>();
+                        ctx.CohortPatientViews.Collection.Update(findQ, MB.Update.SetWrapped<List<SearchField>>(MECohortPatientView.SearchFieldsProperty, sfs).Set(MECohortPatientView.LastNameProperty, request.PatientInfo.LastName));
+
+                        AuditHelper.LogDataAudit(this.UserId,
+                                                MongoCollectionName.CohortPatientView.ToString(),
+                                                cPV.Id.ToString(),
+                                                DataAuditType.Update,
+                                                request.ContractNumber);
                     }
                 }
             }
