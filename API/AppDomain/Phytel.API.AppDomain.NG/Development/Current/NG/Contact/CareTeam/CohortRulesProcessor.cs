@@ -80,14 +80,12 @@ namespace Phytel.API.AppDomain.NG
             {
                 try
                 {
-                    CohortRuleCheckData currCohortRuleCheckData = null;
-                    CareTeam currentCareTeam = null;
                     lock (queueLock)
                     {
+                        CohortRuleCheckData currCohortRuleCheckData = null;
                         if (_cohortRuleCheckDataTeamQueue.TryDequeue(out currCohortRuleCheckData))
                             ApplyCohortRules(currCohortRuleCheckData);
                     }
-                  
                 }
                 catch (Exception ex)
                 {
