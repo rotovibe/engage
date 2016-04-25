@@ -71,6 +71,14 @@ define(['services/session', 'services/validatorfactory', 'services/customvalidat
 						entityTypeName: "ContactTypeLookup", isScalar: true,
 						associationName: "ContactTypeLookup_ContactCard", foreignKeyNames: ["contactTypeId"]
 					},
+					contactStatus: {
+						entityTypeName: "ContactStatus", isScalar: true,
+						associationName: "Contact_ContactStatus", foreignKeyNames: ["statusId"]
+					},
+					deceased: {
+						entityTypeName: "Deceased", isScalar: true,
+						associationName: "Contact_Deceased", foreignKeyNames: ["deceasedId"]
+					},
 					createdBy: {
 						entityTypeName: "CareManager", isScalar: true,
 						associationName: "ContactCard_CreatedBy", foreignKeyNames: ["createdById"]
@@ -571,6 +579,57 @@ define(['services/session', 'services/validatorfactory', 'services/customvalidat
 		            }
 		        }).extend({ throttle: 50 });
 
+				contactCard.fullName = ko.computed( function(){
+					var fullName = '';
+					var prefix = contactCard.prefix();
+					var suffix = contactCard.suffix();
+					var firstName = contactCard.firstName();
+					var lastName = contactCard.lastName();
+					var middleName = contactCard.middleName();
+					
+					if( prefix ){
+						fullName += prefix + ' ' ;
+					}
+					if( firstName ){						
+						fullName += firstName + ' ';
+					}
+					if( middleName ){						
+						fullName += middleName + ' ';
+					}
+					if( lastName ){						
+						fullName += lastName + ' ';
+					}					
+					if( suffix ){						
+						fullName += suffix;
+					}
+					fullName = fullName.trim();
+					return fullName;
+				});
+				
+				contactCard.detailedSubTypes = ko.computed( function(){
+					var subTypeStrings = [];
+					if( contactCard.contactSubTypes && contactCard.contactSubTypes().length ){						
+						
+						ko.utils.arrayForEach( contactCard.contactSubTypes(), function( subType ){
+							var subTypeText = '';
+							if( subTypeText.length ) {
+								subTypeText += ', ';
+							}
+							subTypeText += subType.subTypeName();
+							if( subType.specialtyId() ){
+								subTypeText += ' (' + subType.specialtyName();								
+								if(subType.subSpecialtyString()){
+									subTypeText += ', ' + subType.subSpecialtyString();										
+								}
+								subTypeText += ')';
+							}
+							subTypeStrings.push( subTypeText );
+						});
+						
+					}
+					return subTypeStrings;
+				});
+				
 				contactCard.contactSummary = ko.computed( function(){
 					var summary = '';					
 					if( contactCard.contactSubTypes && contactCard.contactSubTypes().length ){						

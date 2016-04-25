@@ -13,39 +13,8 @@ define([ 'services/datacontext', 'services/local.collections', 'viewmodels/home/
 		var subscriptionTokens = [];
 		var contactTypeGroupId = 1;		
 		var newId = 0;
-		ctor.prototype.tabs = ko.observableArray([
-			new Tab('Profile', null, '/NightingaleUI/Content/images/patient_neutral_small.png', 'Phone blue small'),
-			new Tab('General', null, '/NightingaleUI/Content/images/settings_blue.png', 'Phone blue small'),
-			new Tab('Phone', 'icon-phone blue', null),
-			new Tab('Text', 'icon-sms blue', null),
-			new Tab('Email', 'icon-email blue', null),
-			new Tab('Address', 'icon-address blue', null),
-			new Tab('Language', null, '/NightingaleUI/Content/images/nav_population.png', 'Language blue small')			
-		]);
-		var tabIndex = {
-			profile: 0,
-			general: 1,
-			phone: 2,
-			text: 3,
-			email: 4,
-			address: 5,
-			language: 6
-		};
-		
-		function Tab(name, cssClass, imgSource, imgAlt){
-			var self = this;
-			self.name = name;
-			self.cssClass = cssClass;
-			self.imgSource = imgSource;
-			self.imgAlt = imgAlt;
-			self.isShowing = true;
-			self.hasErrors = ko.observable(false);
-		}
-		
-		//var defaultContactType = ko.observable();
-		// var allContactTypes = ko.observableArray([]);
-		// var typesList = datacontext.getContactTypes( contactTypeGroupId, false );
-		// allContactTypes(typesList);
+		ctor.prototype.tabs = contactsIndex.tabs;
+		var tabIndex = contactsIndex.tabIndex;
 		
 		ctor.prototype.activate = function( settings ){
 			var self = this;
@@ -308,9 +277,7 @@ define([ 'services/datacontext', 'services/local.collections', 'viewmodels/home/
 				self.contactCard().contactTypeId( contactsIndex.defaultContactType().id() );
 			}
 						
-			self.setActiveTab = function( name ){
-				self.contactCard().activeTab(name);
-			}
+			self.setActiveTab = contactsIndex.setActiveTab;
 			
 			if( self.contactCard() && self.contactCard().activeTab() && self.contactCard().activeTab() == 'General' ){
 				

@@ -6,6 +6,43 @@ define(['services/session', 'services/datacontext', 'viewmodels/shell/shell', 'm
 
 		checkDataContext();
 		
+		var tabs = ko.observableArray([
+			new Tab('Profile', null, '/NightingaleUI/Content/images/patient_neutral_small.png', 'Phone blue small'),
+			new Tab('General', null, '/NightingaleUI/Content/images/settings_blue.png', 'Phone blue small'),
+			new Tab('Phone', 'icon-phone blue', null),
+			new Tab('Text', 'icon-sms blue', null),
+			new Tab('Email', 'icon-email blue', null),
+			new Tab('Address', 'icon-address blue', null),
+			new Tab('Language', null, '/NightingaleUI/Content/images/nav_population.png', 'Language blue small')			
+		]);
+		
+		var tabIndex = {
+			profile: 0,
+			general: 1,
+			phone: 2,
+			text: 3,
+			email: 4,
+			address: 5,
+			language: 6
+		};
+		
+		
+		
+		function Tab(name, cssClass, imgSource, imgAlt){
+			var self = this;
+			self.name = name;
+			self.cssClass = cssClass;
+			self.imgSource = imgSource;
+			self.imgAlt = imgAlt;
+			self.isShowing = true;
+			self.hasErrors = ko.observable(false);
+		}
+		
+		function setActiveTab( contactCard, name ){
+			contactCard.activeTab(name);
+		}
+		
+		
 		//contact dialog:
 		var modalShowing = ko.observable(false);
 		var modalEntity = ko.observable(new ModalEntity(modalShowing));
@@ -291,7 +328,16 @@ define(['services/session', 'services/datacontext', 'viewmodels/shell/shell', 'm
 			}
 		});
 		
+		function resetTabs(){
+			ko.utils.arrayForEach(tabs, function(tab){
+				tab.isShowing = true;
+				tab.hasErrors(false);
+			});
+		}
+		
 		function selectContact( contact ){
+			resetTabs();
+			contact.activeTab("Profile");
 			selectedContact( contact );
 		}
 		
@@ -366,9 +412,11 @@ define(['services/session', 'services/datacontext', 'viewmodels/shell/shell', 'm
 				if( contacts && contacts.length > 0 ){										
 					ko.utils.arrayForEach( contacts, function(contact){
 						if( contact ){
-							//remove from breeze cache:
-							contact.entityAspect.setDeleted();
-							contact.entityAspect.acceptChanges();															
+							if( selectedContact() && contact.id() !== selectedContact().id() ){
+								//remove from breeze cache:
+								contact.entityAspect.setDeleted();
+								contact.entityAspect.acceptChanges();
+							}
 						}
 					});					
 				}				
@@ -449,28 +497,6 @@ define(['services/session', 'services/datacontext', 'viewmodels/shell/shell', 'm
 			searching(false);
 		}
 		
-		// var canSearchContacts = ko.computed( function(){
-			// var canSearch = false;
-			// var firstName = criteriaFirstName();
-			// var lastName = criteriaLastName();
-			// var statuses = criteriaContactStatuses();
-			// var subTypes = criteriaContactSubTypes();
-			// var searching = searching? searching() : false;
-			
-			// if( statuses && statuses.length > 0 ){
-				// if( subTypes.length > 0 ){
-					// canSearch = true;	//status/s and type/s are selected
-				// }
-				// else{
-					// if( firstName && firstName.trim().length > 0 && lastName && lastName.trim().length > 0 ){
-						// canSearch = true;	//status/s and first and last name
-					// }					
-				// }
-			// }
-			// canSearch = canSearch && !searching;	//block until search returned
-			// return canSearch;
-		// }).extend({ throttle: 100 });
-		
 		function checkDataContext() {
 		    if (!datacontext) {
 		        datacontext = require('services/datacontext');
@@ -488,10 +514,19 @@ define(['services/session', 'services/datacontext', 'viewmodels/shell/shell', 'm
 			self.contactSubTypes.dispose();
 		}
 		
+		var activeDetailsTab = ko.observable('Profile');
+		
+		function setActiveDetailsTab( name ){
+			self.activeDetailsTab(name);	
+		}
+		
 		var vm = {
 			activate: activate,
 			detached: detached,
 			
+			tabs: tabs,
+			tabIndex: tabIndex,
+			setActiveTab: setActiveTab,
 			searchContacts: searchContacts,			
 			selectedContact: selectedContact,
 			selectContact: selectContact,

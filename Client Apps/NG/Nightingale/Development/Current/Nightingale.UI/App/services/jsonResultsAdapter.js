@@ -73,7 +73,7 @@ define([], new breeze.JsonResultsAdapter({
         }
 		if(node.ContactSubTypes) {
 			var subTypes = []
-			$.each(node.ContactSubTypes, function(sub){
+			$.each(node.ContactSubTypes, function(index, sub){
 				var theseIds = [];
 				if( sub.SubSpecialtyIds ){
 					$.each(sub.SubSpecialtyIds, function (index, item) {
