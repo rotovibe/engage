@@ -27,7 +27,8 @@ namespace Phytel.Data.ETL.BulkCopy
         public string Delete { get; set; }
         public string ExtraElements { get; set; }
         public string FSSN { get; set; }
-        public int? LSSN { get; set; }
+        //   public int? LSSN { get; set; }
+        public string LSSN { get; set; }
         public string DataSource { get; set; }
         public string MongoMaritalStatusId { get; set; }
         public string Protected { get; set; }
