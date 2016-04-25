@@ -7,6 +7,7 @@ using Phytel.API.DataDomain.Contact.DTO;
 using Phytel.API.DataDomain.Contact.DTO.CareTeam;
 using ServiceStack.Service;
 using ServiceStack.ServiceClient.Web;
+using ServiceStack.ServiceInterface.ServiceModel;
 
 namespace Phytel.API.AppDomain.NG
 {
@@ -145,7 +146,7 @@ namespace Phytel.API.AppDomain.NG
 
         public UpdateCareTeamMemberResponse UpdateCareTeamMember(UpdateCareTeamMemberRequest request)
         {
-            UpdateCareTeamMemberResponse response = null;
+            UpdateCareTeamMemberResponse response = new UpdateCareTeamMemberResponse();
             try
             {
                 IRestClient client = new JsonServiceClient();
@@ -167,9 +168,9 @@ namespace Phytel.API.AppDomain.NG
                         Context = "NG"
                     } as object);
                 if (dataDomainResponse != null)
-                {
+                {                   
                     response.Version = dataDomainResponse.Version;
-                    response.Status = dataDomainResponse.Status;
+                    response.Status = response.Status==null?new ResponseStatus() : dataDomainResponse.Status;
                 }
 
             }

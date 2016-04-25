@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
@@ -17,6 +18,7 @@ namespace Phytel.API.AppDomain.NG
     {
         
         public IContactEndpointUtil EndpointUtil { get; set; }
+        public ICohortRulesProcessor CohortRules { get; set; }
         public ICareMemberCohortRuleFactory CareMemberCohortRuleFactory { get; set; }
 
         #region Contact
@@ -99,13 +101,7 @@ namespace Phytel.API.AppDomain.NG
                  throw new ApplicationException(string.Format("CareTeam should have atleast one or more members."));
 
 
-            var activeCorePCMs = 
-                request.CareTeam.Members.Select(
-                    c =>
-                        c.RoleId == Constants.PCMRoleId && c.Core == true &&
-                        c.StatusId == (int) CareTeamMemberStatus.Active);
-
-            if(!activeCorePCMs.IsNullOrEmpty() && activeCorePCMs.Count() > 1 )
+            if(NGUtils.HasMultipleActiveCorePCM(request.CareTeam))
                 throw new ApplicationException("The Care team cannot have multiple Active, Core PCMs");
 
 
@@ -151,24 +147,38 @@ namespace Phytel.API.AppDomain.NG
             if (request.Id != request.CareTeamMember.Id)
                 throw new ArgumentNullException("CareTeamMemberData.Id and Id are different", "request");
 
-            ValidateCareTeamMemberFields(request.CareTeamMember);
+            var cohortRuleCheckData = new CohortRuleCheckData()
+            {
+                ContactId = request.ContactId,
+                ContractNumber = request.ContractNumber,
+                UserId = request.UserId
+            };
 
+            string currentActiveCorePCMId = CohortRules.GetCareTeamActiveCorePCMId(cohortRuleCheckData);
+            if (currentActiveCorePCMId!=null && currentActiveCorePCMId!=request.Id)
+                throw new ArgumentNullException("Care Team already has an Active Core PCM", "request");
+
+            ValidateCareTeamMemberFields(request.CareTeamMember);
+            
             try
             {
                 var domainResponse = EndpointUtil.UpdateCareTeamMember(request);
                 if (domainResponse != null)
                 {
-                    response.Status = domainResponse.Status;                    
+                    response.Status = domainResponse.Status;                   
+                    CohortRules.EnqueueCohorRuleCheck(cohortRuleCheckData);                   
+                    //OnCareMemberUpdated(request.ContactId, request.ContractNumber, request.UserId);
                 }
             }
             catch (Exception ex)
             {
                 throw new Exception("AD:UpdateCareTeamMember()::" + ex.Message, ex.InnerException);
             }
-
+           
             return response;
         }
 
+        
         public DeleteCareTeamMemberResponse DeleteCareTeamMember(DeleteCareTeamMemberRequest request)
         {
             var response = new DeleteCareTeamMemberResponse();
@@ -236,8 +246,11 @@ namespace Phytel.API.AppDomain.NG
                 ContactId = contactId, 
                 ContractNumber = contractNumber, 
                 UserId = userId
-            }); 
-
+            });
+            //if (careTeam!=null)
+            //{
+            //    CohortRules.EnqueueCareTeam(careTeam);
+            //}
             var rules = CareMemberCohortRuleFactory.GenerateEngageCareMemberCohortRules();
             foreach (var rule in rules)
             {

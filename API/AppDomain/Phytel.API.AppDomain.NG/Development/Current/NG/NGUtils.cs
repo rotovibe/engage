@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Phytel.API.AppDomain.NG
 {
-    public static class NGUtils
+    public static partial class NGUtils
     {
         public static bool IsDateValid(string p)
         {

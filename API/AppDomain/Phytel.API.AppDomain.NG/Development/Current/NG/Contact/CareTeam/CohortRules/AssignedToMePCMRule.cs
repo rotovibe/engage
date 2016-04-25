@@ -4,11 +4,26 @@ using Phytel.API.AppDomain.NG.DTO;
 
 namespace Phytel.API.AppDomain.NG
 {
+    /// <summary>
+    /// This rules checks a care team to ensure that if a member is an Active Core PCM then
+    /// a corresponding "Assigned to me PCM"  cohort exists for the referenced individual.
+    /// </summary>
     public class AssignedToMePCMRule : ICareMemberCohortRule, ICohortCommand
     {
         public void Run(CareTeam careTeam)
         {
-            throw new NotImplementedException();
+            if (careTeam == null)
+                throw new ArgumentNullException("careTeam");
+            Member activeCorePCM = NGUtils.GetCareTeamActiveCorePCM(careTeam);
+            if (activeCorePCM != null)
+            {
+                Add();
+            }
+            else
+            {
+                Remove();
+            }
+
         }
 
         public void Add()
