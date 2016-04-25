@@ -19,7 +19,7 @@ namespace Phytel.API.AppDomain.NG.Test.Contact
         public void UnassignedPCMCohortRule_Run_Null_Input_ShouldThrow()
         {
             
-            var rule = new UnAssignedPCMRule();
+            var rule = new UnAssignedPCMRule(null);
 
             rule.Run(null);
 

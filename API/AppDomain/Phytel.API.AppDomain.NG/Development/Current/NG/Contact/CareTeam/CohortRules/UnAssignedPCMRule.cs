@@ -9,6 +9,13 @@ namespace Phytel.API.AppDomain.NG
 
     public class UnAssignedPCMRule : ICareMemberCohortRule, ICohortCommand
     {
+        private readonly IContactEndpointUtil _contactEndpointUtil;
+
+        public UnAssignedPCMRule(IContactEndpointUtil contactEndpointUtil)
+        {
+            _contactEndpointUtil = contactEndpointUtil;
+        }
+
         public void Run(CareTeam careTeam)
         {
             if(careTeam == null)
@@ -16,7 +23,7 @@ namespace Phytel.API.AppDomain.NG
 
             if (NGUtils.CheckIfCareTeamHasActiveCorePCM(careTeam))
             {
-                //Remove from UnAssigned PCM
+              
             }
             else
             {
