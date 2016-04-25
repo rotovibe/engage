@@ -13,6 +13,7 @@ using ServiceStack.Common;
 using ServiceStack.Common.Web;
 using ServiceStack.ServiceHost;
 using ServiceStack.ServiceInterface.Admin;
+using ServiceStack.ServiceInterface.Validation;
 using ServiceStack.Text;
 using ServiceStack.WebHost.Endpoints;
 using ServiceStack.WebHost.Endpoints.Extensions;
@@ -27,6 +28,7 @@ namespace AppDomain.Engage.Population.Service
         public override void Configure(Funq.Container container)
         {
             Plugins.Add(new SwaggerFeature());
+            Plugins.Add(new ValidationFeature());
 
             HttpServiceContainer.Build(container);
             PlatformServiceContainer.Build(container);

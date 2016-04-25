@@ -18,6 +18,8 @@ using Phytel.Services.API.Provider;
 using ServiceStack.Common;
 using ServiceStack.Service;
 using ServiceStack.ServiceClient.Web;
+using ServiceStack.ServiceInterface.Validation;
+using AppDomain.Engage.Population.DTO.Referrals;
 
 namespace AppDomain.Engage.Population.Service.Container
 {
@@ -50,6 +52,8 @@ namespace AppDomain.Engage.Population.Service.Container
 
             container.Register<IDemographicsManager>(c => new DemographicsManager(c.Resolve<IServiceContext>(), c.Resolve<IPatientDataDomainClient>())).ReusedWithin(ReuseScope.Request);
             container.Register<ICohortManager>(c => new CohortManager(c.Resolve<IServiceContext>(), c.Resolve<ICohortDataDomainClient>())).ReusedWithin(ReuseScope.Request);
+            container.RegisterValidators(typeof(ReferralWithPatientsListRequestValidator).Assembly);
+            
             return container;
         }
     }
