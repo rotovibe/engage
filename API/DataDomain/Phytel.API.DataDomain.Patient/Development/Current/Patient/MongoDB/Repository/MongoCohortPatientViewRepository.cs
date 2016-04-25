@@ -108,6 +108,7 @@ namespace Phytel.API.DataDomain.Patient
                             PatientID = ObjectId.Parse(cpvData.PatientID),
                             LastName = cpvData.LastName,
                             DeleteFlag = false,
+                            AssignedToContactIds = cpvData.AssignedToContactIds
                         };
                         if (cpvData.SearchFields != null && cpvData.SearchFields.Count > 0)
                         {
@@ -197,6 +198,7 @@ namespace Phytel.API.DataDomain.Patient
                     if (!String.IsNullOrEmpty(cpvd.PatientID)) uv.Add(MB.Update.Set(MECohortPatientView.PatientIDProperty, ObjectId.Parse(cpvd.PatientID)));
                     uv.Add(MB.Update.Set(MECohortPatientView.UpdatedByProperty, ObjectId.Parse(this.UserId)));
                     uv.Add(MB.Update.Set(MECohortPatientView.LastUpdatedOnProperty, DateTime.UtcNow ));
+                   // uv.Add(MB.Update.Set(MECohortPatientView.AssignedToProperty, p.CohortPatientView.AssignedToContactIds.Select(c => BsonValue.Create(c))));
                     
                     if (p.CohortPatientView != null) { uv.Add(MB.Update.SetWrapped<List<SearchField>>(MECohortPatientView.SearchFieldsProperty, sfds)); }
 
@@ -443,7 +445,8 @@ namespace Phytel.API.DataDomain.Patient
                         {
                             Id = meCPV.Id.ToString(),
                             LastName = meCPV.LastName,
-                            PatientID = meCPV.PatientID.ToString()
+                            PatientID = meCPV.PatientID.ToString(),
+                            AssignedToContactIds = meCPV.AssignedToContactIds
                         };
                     }
                 }

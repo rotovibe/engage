@@ -26,6 +26,7 @@ namespace Phytel.API.DataDomain.Patient.DTO
         public const string PatientIDProperty = "pid";
         public const string SearchFieldsProperty = "sf";
         public const string LastNameProperty = "ln";
+        public const string AssignedToProperty = "ato";
 
         [BsonId]
         public ObjectId Id { get; set; }
@@ -39,6 +40,9 @@ namespace Phytel.API.DataDomain.Patient.DTO
 
         [BsonElement(LastNameProperty)]
         public string LastName { get; set; }
+
+        [BsonElement(AssignedToProperty)]
+        public List<string> AssignedToContactIds { get; set; }
 
         #region Standard IMongoEntity Implementation
         [BsonExtraElements]

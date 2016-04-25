@@ -13,6 +13,7 @@ namespace Phytel.API.DataDomain.Patient.DTO
         public List<SearchFieldData> SearchFields { get; set; }
         public string LastName { get; set; }
         public double Version { get; set; }
+        public List<string> AssignedToContactIds { get; set; }
     }
 
     public class SearchFieldData
