@@ -54,7 +54,23 @@ namespace Phytel.API.AppDomain.NG
                         c.RoleId == Constants.PCMRoleId && c.Core == true &&
                         c.StatusId == (int)CareTeamMemberStatus.Active);
             if (!activeCorePCMs.IsNullOrEmpty() && activeCorePCMs.Count() > 1)
-                res = true; ;
+                res = true;
+
+            return res;
+        }
+
+        public static bool HasMultipleActiveCorePCP(CareTeam careTeam)
+        {
+            bool res = false;
+
+            if (careTeam == null) return false;
+            var activeCorePCMs =
+                careTeam.Members.Select(
+                    c =>
+                        c.RoleId == Constants.PCPRoleId && c.Core == true &&
+                        c.StatusId == (int)CareTeamMemberStatus.Active);
+            if (!activeCorePCMs.IsNullOrEmpty() && activeCorePCMs.Count() > 1)
+                res = true;
 
             return res;
         }

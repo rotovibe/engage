@@ -104,6 +104,9 @@ namespace Phytel.API.AppDomain.NG
             if(NGUtils.HasMultipleActiveCorePCM(request.CareTeam))
                 throw new ApplicationException("The Care team cannot have multiple Active, Core PCMs");
 
+            if(NGUtils.HasMultipleActiveCorePCP(request.CareTeam))
+                throw new ApplicationException("The Care team cannot have multiple Active, Core PCPs");
+
 
             foreach (var member in request.CareTeam.Members)
             {

@@ -21,5 +21,8 @@ namespace Phytel.API.AppDomain.NG
 
         //PCMRoleId
         public const string PCMRoleId = "56f169f8078e10eb86038514";
+
+        //PCPRoleId
+        public const string PCPRoleId = "56f16a6e078e10eb86038516";
     }
 }
