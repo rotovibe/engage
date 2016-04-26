@@ -4,6 +4,7 @@ using System.Net;
 using AppDomain.Engage.Population.DTO.Context;
 
 using AppDomain.Engage.Population.DTO.Demographics;
+using AppDomain.Engage.Population.DTO.Referrals;
 using AutoMapper;
 using Phytel.API.Common;
 using Phytel.API.DataDomain.Patient.DTO;
@@ -34,13 +35,13 @@ namespace AppDomain.Engage.Population.DataDomainClient
        
 
        
-        public ProcessedPatientsList PostPatientsListDetails(List<Patient> patientDataList,UserContext usercontext)
+        public PostReferralWithPatientsListResponse PostPatientsListDetails(List<Patient> patientDataList,UserContext usercontext)
         {
             List<PatientData> ddPatientData = new List<PatientData>();
             ProcessedPatientsList adPatientData = new ProcessedPatientsList();
             List<ProcessedData> addedPatients = new List<ProcessedData>();
             List<ProcessedData> erroredPatients = new List<ProcessedData>();
-
+            PostReferralWithPatientsListResponse appdomainResponse = new PostReferralWithPatientsListResponse();
             try
             {
 
@@ -68,9 +69,9 @@ namespace AppDomain.Engage.Population.DataDomainClient
                     Version = _context.Version,
                     UserId = usercontext.UserId
                 } );
-               
+
                 //if (response.Status.ErrorCode == HttpStatusCode.OK.ToString())
-                //{
+                    //{
                     foreach (HttpObjectResponse<PatientData> e in response.ErrorMessages)
                     {
                         if (e.Code == System.Net.HttpStatusCode.InternalServerError)
@@ -89,16 +90,11 @@ namespace AppDomain.Engage.Population.DataDomainClient
 
                 adPatientData.InsertedPatients = addedPatients;
                     adPatientData.ErroredPatients = erroredPatients;
-                //}
-
-                //else
-                //{
-                //    throw new Exception();
-                //}
-
-                return adPatientData;
-
-
+               
+                appdomainResponse.ProcessedPatients = adPatientData;
+                appdomainResponse.Version = response.Version;
+                appdomainResponse.Status = response.Status;
+                return appdomainResponse;
             }
             catch (Exception ex)
             {

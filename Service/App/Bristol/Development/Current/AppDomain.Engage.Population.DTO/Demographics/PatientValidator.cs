@@ -17,12 +17,15 @@ namespace AppDomain.Engage.Population.DTO.Demographics
             RuleFor(r => r.DataSource).NotEmpty().NotNull();
             RuleFor(r => r.FirstName).NotEmpty().NotNull();
             RuleFor(r => r.LastName).NotEmpty().NotNull();
+            RuleFor(r => r.DOB).NotEmpty().NotNull();
             RuleFor(r => r.ExternalRecordId).NotEmpty().NotNull();
             RuleFor(r => r.PriorityData).LessThan(4);
-            RuleFor(r => r.DeceasedId).LessThan(2);
+            RuleFor(r => r.DeceasedId).LessThan(3);
             RuleFor(r => r.LastFourSSN).Length(4);
-            RuleFor(r => r.FullSsn).Length(8);
+            RuleFor(r => r.FullSsn).Length(9);
             
         }
+
+        
     }
 }

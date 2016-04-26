@@ -71,6 +71,7 @@
     <Compile Include="Demographics\Email.cs" />
     <Compile Include="Demographics\MatchEvent.cs" />
     <Compile Include="Demographics\Patient.cs" />
+    <Compile Include="Demographics\PatientValidator.cs" />
     <Compile Include="Demographics\PostPatientMergeRequest.cs" />
     <Compile Include="Demographics\PostPatientDemographicsRequest.cs" />
     <Compile Include="Demographics\PostPatientMergeResponse.cs" />
@@ -84,6 +85,7 @@
     <Compile Include="Referrals\PostReferralWithPatientsListRequest.cs" />
     <Compile Include="Referrals\PostReferralWithPatientsListResponse.cs" />
     <Compile Include="Referrals\ReferralDefinition.cs" />
+    <Compile Include="Referrals\ReferralWithPatientsListRequestValidator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

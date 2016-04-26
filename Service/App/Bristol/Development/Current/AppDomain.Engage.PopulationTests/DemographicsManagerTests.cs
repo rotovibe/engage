@@ -4,6 +4,7 @@ using Moq;
 using AppDomain.Engage.Population.DataDomainClient;
 using AppDomain.Engage.Population.DTO.Context;
 using AppDomain.Engage.Population.DTO.Demographics;
+using AppDomain.Engage.Population.DTO.Referrals;
 using AutoMapper;
 
 using NUnit.Framework;
@@ -32,6 +33,8 @@ namespace AppDomain.Engage.Population.Tests
         private Mock<IMappingEngine> _mockMappingengine;
         private Mock<UserContext> _mockUserContext;
         private List<Patient> testData;
+        private PostReferralWithPatientsListResponse testProcessedresponse;
+
         [SetUp]
         public void SetUp()
         {
@@ -49,14 +52,14 @@ namespace AppDomain.Engage.Population.Tests
                 
             };
 
-            testProcessedPatientsList = new ProcessedPatientsList();
-            testProcessedPatientsList.InsertedPatients = new List<ProcessedData>
+            testProcessedresponse = new PostReferralWithPatientsListResponse();
+            testProcessedresponse.ProcessedPatients.InsertedPatients = new List<ProcessedData>
             {
                 new ProcessedData() {EngagePatientSystemValue = "4565", ExternalRecordId = "7888",Id="jgkgk455"},
                 new ProcessedData() { EngagePatientSystemValue = "4566", ExternalRecordId = "7889", Id = "jgkgk455"}
             };
 
-            _mockDataDomainClient.Setup(m => m.PostPatientsListDetails(It.IsAny<List<Patient>>(), _mockUserContext.Object)).Returns(() => testProcessedPatientsList);
+            _mockDataDomainClient.Setup(m => m.PostPatientsListDetails(It.IsAny<List<Patient>>(), _mockUserContext.Object)).Returns(() => testProcessedresponse);
 
 
         }

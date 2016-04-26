@@ -44,7 +44,11 @@ namespace AppDomain.Engage.Population.DTO.Demographics
         public string LastFourSSN { get; set; }
         public string Mrn { get; set; }
 
+        [ApiMember(Name = "ExternalRecordId", Description = "ExternalRecordId", ParameterType = "property", DataType = "string", IsRequired = true)]
+
         public string ExternalRecordId { get; set; }
+
+        [ApiMember(Name = "DataSource", Description = "DataSource", ParameterType = "property", DataType = "string", IsRequired = true)]
 
         public string DataSource { get; set; }
 

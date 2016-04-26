@@ -11,7 +11,7 @@ namespace AppDomain.Engage.Population
         UserContext UserContext { get; set; }
         
 
-        ProcessedPatientsList InsertBulkPatients(List<Patient> patientslist);
+        PostReferralWithPatientsListResponse InsertBulkPatients(List<Patient> patientslist);
 
     }
 }

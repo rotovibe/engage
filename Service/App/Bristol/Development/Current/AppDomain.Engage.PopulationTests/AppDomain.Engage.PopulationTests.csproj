@@ -115,6 +115,10 @@
       <Project>{1b3148a8-fb57-4461-91bc-f1cd38a013b6}</Project>
       <Name>DataDomain.Patient.DTO</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\Interfaces\Development\Current\Bristol-branch\Phytel.API.Interface\Phytel.API.Interface.csproj">
+      <Project>{ABE948FB-247E-4955-B3AB-B7C93E10A542}</Project>
+      <Name>Phytel.API.Interface</Name>
+    </ProjectReference>
     <ProjectReference Include="..\AppDomain.Engage.Population.DataDomainClient\AppDomain.Engage.Population.DataDomainClient.csproj">
       <Project>{E1CD91FD-8155-49F9-95FB-E1E5DF962A91}</Project>
       <Name>AppDomain.Engage.Population.DataDomainClient</Name>

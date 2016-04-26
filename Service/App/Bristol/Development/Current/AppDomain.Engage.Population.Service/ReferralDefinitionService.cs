@@ -59,7 +59,7 @@ namespace AppDomain.Engage.Population.Service
             CohortManager.UserContext = _userContext;
             DemographicsManager.UserContext = _userContext;
             CohortManager.UserContext = _userContext;
-            var response = new PostReferralWithPatientsListResponse();
+            var patientsResponse = new PostReferralWithPatientsListResponse();
                
                 try
                 {
@@ -73,25 +73,24 @@ namespace AppDomain.Engage.Population.Service
                     if (!String.IsNullOrEmpty(referralid))
                     {
                         //create request and make call to patientdatamanager.bulkinsertpatients with request.patientslist and referralid
-                        ProcessedPatientsList processedpatients =
-                            DemographicsManager.InsertBulkPatients(request.PatientsData);
+                        patientsResponse = DemographicsManager.InsertBulkPatients(request.PatientsData);
 
                         //get the patiendids that are inserted from response of previous call and insert into patientreferral
-                        if (processedpatients.InsertedPatients != null && processedpatients.InsertedPatients.Count > 0)
-                            foreach (ProcessedData pd in processedpatients.InsertedPatients)
+                        if (patientsResponse.ProcessedPatients.InsertedPatients != null && patientsResponse.ProcessedPatients.InsertedPatients.Count > 0)
+                            foreach (ProcessedData pd in patientsResponse.ProcessedPatients.InsertedPatients)
                                 CohortManager.CreatePatientReferral(pd.Id, referralid);
 
-                        response.ProcessedPatients = processedpatients;
-                        response.ReferralId = referralid;
+                        
+                        patientsResponse.ReferralId = referralid;
                     }
 
                 }
 
                 catch (Exception ex)
                 {
-                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                CommonFormatter.FormatExceptionResponse(patientsResponse, base.Response, ex);
                 }
-                return response;
+                return patientsResponse;
             
         }
     }

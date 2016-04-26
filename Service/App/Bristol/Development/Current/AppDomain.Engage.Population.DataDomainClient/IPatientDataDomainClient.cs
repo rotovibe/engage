@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using AppDomain.Engage.Population.DTO.Context;
 using AppDomain.Engage.Population.DTO.Demographics;
+using AppDomain.Engage.Population.DTO.Referrals;
 using Phytel.API.DataDomain.Patient.DTO;
 
 namespace AppDomain.Engage.Population.DataDomainClient
@@ -9,7 +10,7 @@ namespace AppDomain.Engage.Population.DataDomainClient
     {
         //string PostPatientDetails(PatientData patients);
 
-        ProcessedPatientsList PostPatientsListDetails(List<Patient> patientDataList,UserContext userContext);
+        PostReferralWithPatientsListResponse PostPatientsListDetails(List<Patient> patientDataList,UserContext userContext);
 
        
     }

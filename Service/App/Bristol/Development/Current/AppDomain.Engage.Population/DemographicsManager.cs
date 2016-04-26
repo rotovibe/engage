@@ -22,7 +22,7 @@ namespace AppDomain.Engage.Population
             _client = client;
         }
 
-        public ProcessedPatientsList InsertBulkPatients(List<Patient> patientslist)
+        public PostReferralWithPatientsListResponse InsertBulkPatients(List<Patient> patientslist)
         {
             try
             {
