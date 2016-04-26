@@ -34,19 +34,25 @@ define([ 'services/datacontext', 'services/local.collections', 'viewmodels/home/
 			
 			self.allContactTypes = contactsIndex.allContactTypes;
 			
-			var firstNameToken = self.contactCard().firstName.subscribe( function( newValue ){
-				var firstName = newValue;
-				var lastName = self.contactCard().lastName();
-				self.checkDuplicateContact( firstName, lastName );
-			});
-			subscriptionTokens.push( firstNameToken );
+			if( self.contactCard().isNew() ){
+				
+				//check for duplicate only when creating new:
+				
+				var firstNameToken = self.contactCard().firstName.subscribe( function( newValue ){
+					var firstName = newValue;
+					var lastName = self.contactCard().lastName();
+					self.checkDuplicateContact( firstName, lastName );
+				});
+				subscriptionTokens.push( firstNameToken );
+				
+				var lastNameToken = self.contactCard().lastName.subscribe( function( newValue ){
+					var lastName = newValue;				
+					var firstName = self.contactCard().firstName();				
+					self.checkDuplicateContact( firstName, lastName );
+				});
+				subscriptionTokens.push( lastNameToken );
+			}
 			
-			var lastNameToken = self.contactCard().lastName.subscribe( function( newValue ){
-				var lastName = newValue;				
-				var firstName = self.contactCard().firstName();				
-				self.checkDuplicateContact( firstName, lastName );
-			});			
-			subscriptionTokens.push( lastNameToken );
 			
 			self.checkDuplicateContact = function( firstName, lastName ){
 				var contactTypeId = self.contactCard().contactTypeId();

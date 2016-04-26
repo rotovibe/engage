@@ -131,12 +131,12 @@
 												<header>
 													<h1>Details<span data-bind="text: (selectedContact() ? ' - ' + selectedContact().firstName() + ' ' + selectedContact().lastName() : '')"></h1>
 													<div class="controls">
-														<!-- ko if: showEditButton -->
-														<!-- <div class="toggle" data-bind="click: editContact, clickBubble: false" style="margin-right: 4px;">
+														<!-- ko with: selectedContact -->
+														<div class="toggle" data-bind="click: $parent.editContact, clickBubble: false, visible: $parent.showEditButton" style="margin-right: 4px;">
 															<a href="#">
 																<i class="icon-edit"></i>
 															</a>
-														</div> -->	
+														</div>	
 														<!-- /ko -->
 														<!-- ko if: showDeleteButton -->
 														<!-- <div class="toggle">

@@ -100,7 +100,7 @@
             // or the communicationModalShowing one.
             self.isEditing = ko.observable(false);
 			self.editContact = function(){
-			    contactsIndex.editPatientContact(self.contactCard);				
+			    contactsIndex.editPatientContact(self.contactCard());				
 			}
 
 			self.isValid = ko.observable(true);

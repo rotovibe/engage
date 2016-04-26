@@ -59,12 +59,13 @@ define(['services/session', 'services/datacontext', 'viewmodels/shell/shell', 'm
 			
 			theContact().saveChanges().then( saveCompleted );
 			theContact().clearDirty();
-	
-			
+				
             function saveCompleted(contact) {
-                contact.isNew(false);
-                localCollections.contacts.push(theContact());				
-				contact.clearDirty();
+                if (contact) {
+                    //only insert returns the object
+					contact.isNew(false);					
+					contact.clearDirty();
+				}				               
             }
         };
 		
@@ -126,14 +127,13 @@ define(['services/session', 'services/datacontext', 'viewmodels/shell/shell', 'm
 		}
 		
 		function editPatientContact( contact ){
-			contact().activeTab("General");
-			startEditContactDialog( contact() );
+			contact.activeTab("General");
+			startEditContactDialog( contact );
 		}
 		
-		function editContact( contact ){	
-		
-			contact().activeTab("Profile");
-			startEditContactDialog( contact() );			
+		function editContact( contact ){						
+			contact.activeTab("Profile");
+			startEditContactDialog( contact );			
 		}
 		
 		function startEditContactDialog( contact ){
@@ -307,10 +307,7 @@ define(['services/session', 'services/datacontext', 'viewmodels/shell/shell', 'm
             }
         }
 		
-		var selectedContact = ko.observable();
-		function isShowEditButton(){			
-			return selectedContact && selectedContact();			
-		}
+		var selectedContact = ko.observable();		
 		
 		function deleteContact(){
 			alert('delete');
@@ -323,8 +320,12 @@ define(['services/session', 'services/datacontext', 'viewmodels/shell/shell', 'm
 		});
 		
 		var showEditButton = ko.computed(function(){
-			if( selectedContact() ){
+			var contact = selectedContact();			
+			if( contact && contact.isEditable() ){
 				return true;
+			}
+			else{
+				return false;
 			}
 		});
 		

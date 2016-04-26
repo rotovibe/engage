@@ -847,7 +847,11 @@ define(['services/session', 'services/validatorfactory', 'services/customvalidat
 					var phoneErrors = hasPhoneErrors();					
 					return !phoneErrors && !profileErrors;
 				});								
-								
+					
+				contactCard.isEditable = function(){
+					return contactCard.dataSource() == 'Engage';
+				}
+				
 		        // Can the contact card save?  Fake validation goes here
 		        contactCard.canSave = ko.computed(function () {
 		            return contactCard.isValid();

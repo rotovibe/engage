@@ -1,5 +1,5 @@
 <div>
-	<em data-bind="visible: !contact()">No contact selected</em>
+	<em class="grey" data-bind="visible: !contact()">No contact selected</em>
 	<nav class="tabs" data-bind="visible: contact">
 		<!-- ko foreach: detailsTabs -->
 			<span data-bind="css: {'active': $parent.activeDetailsTab() == name}, 
