@@ -169,6 +169,7 @@
     <Compile Include="Contact\CareTeam\CohortRules\AssignedToMeRule.cs" />
     <Compile Include="Contact\CareTeam\CohortRuleResponse.cs" />
     <Compile Include="Contact\CareTeam\CohortRules\CohortRulesUtil.cs" />
+    <Compile Include="Contact\CareTeam\ICohortRuleUtil.cs" />
     <Compile Include="Contact\CareTeam\ILogger.cs" />
     <Compile Include="Contact\CareTeam\CohortRules\UnAssignedPCMRule.cs" />
     <Compile Include="Contact\CareTeam\EngageCareMemberCohortRuleFactory.cs" />

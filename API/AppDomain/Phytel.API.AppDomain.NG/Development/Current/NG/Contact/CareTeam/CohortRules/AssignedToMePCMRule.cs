@@ -10,11 +10,20 @@ namespace Phytel.API.AppDomain.NG
     /// </summary>
     public class AssignedToMePCMRule : ICareMemberCohortRule
     {
+        private readonly ICohortRuleUtil _cohortRuleUtil;
+
+        public AssignedToMePCMRule(ICohortRuleUtil cohortRuleUtil)
+        {
+            _cohortRuleUtil = cohortRuleUtil;
+        }
+
         public CohortRuleResponse Run(CareTeam careTeam)
         {
             if (careTeam == null)
                 throw new ArgumentNullException("careTeam");
-            Member activeCorePCM = NGUtils.GetCareTeamActiveCorePCM(careTeam);
+
+            var activeCorePCM = _cohortRuleUtil.GetCareTeamActiveCorePCM(careTeam);
+
             if (activeCorePCM != null)
             {
                 Add();

@@ -13,6 +13,7 @@ namespace Phytel.API.AppDomain.NG
 {
     public class CohortRulesProcessor: ICohortRulesProcessor
     {
+        private readonly ICohortRuleUtil _cohortRuleUtil;
         protected ConcurrentQueue<CohortRuleCheckData> _cohortRuleCheckDataTeamQueue;        
         private AutoResetEvent _queuEvent;
         private ManualResetEvent _exitEvent;
@@ -21,8 +22,9 @@ namespace Phytel.API.AppDomain.NG
         private object queueLock;
         private IContactEndpointUtil EndpointUtil { get; set; }
         private ICareMemberCohortRuleFactory CareMemberCohortRuleFactory { get; set; }
-        public CohortRulesProcessor(ICareMemberCohortRuleFactory cf,IContactEndpointUtil ceu)
+        public CohortRulesProcessor(ICareMemberCohortRuleFactory cf,IContactEndpointUtil ceu, ICohortRuleUtil cohortRuleUtil)
         {
+            _cohortRuleUtil = cohortRuleUtil;
             _cohortRuleCheckDataTeamQueue = new ConcurrentQueue<CohortRuleCheckData>();
             CareMemberCohortRuleFactory = cf;
             EndpointUtil = ceu;            
@@ -62,7 +64,7 @@ namespace Phytel.API.AppDomain.NG
             if (careTeamData != null)
             {
                 var careTeam = Mapper.Map<CareTeam>(careTeamData);
-                var m = NGUtils.GetCareTeamActiveCorePCM(careTeam);
+                var m = _cohortRuleUtil.GetCareTeamActiveCorePCM(careTeam);
                 if (m != null) res = m.Id;
             }
             return res;

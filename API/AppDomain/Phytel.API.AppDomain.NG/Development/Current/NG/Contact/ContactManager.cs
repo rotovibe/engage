@@ -20,6 +20,7 @@ namespace Phytel.API.AppDomain.NG
         public IContactEndpointUtil EndpointUtil { get; set; }
         public ICohortRulesProcessor CohortRules { get; set; }
         public ICareMemberCohortRuleFactory CareMemberCohortRuleFactory { get; set; }
+        public ICohortRuleUtil CohortRuleUtil { get; set; }
 
         #region Contact
         public Contact GetContactByContactId(GetContactByContactIdRequest request)
@@ -101,10 +102,10 @@ namespace Phytel.API.AppDomain.NG
                  throw new ApplicationException(string.Format("CareTeam should have atleast one or more members."));
 
 
-            if(NGUtils.HasMultipleActiveCorePCM(request.CareTeam))
+            if (CohortRuleUtil.HasMultipleActiveCorePCM(request.CareTeam))
                 throw new ApplicationException("The Care team cannot have multiple Active, Core PCMs");
 
-            if(NGUtils.HasMultipleActiveCorePCP(request.CareTeam))
+            if (CohortRuleUtil.HasMultipleActiveCorePCP(request.CareTeam))
                 throw new ApplicationException("The Care team cannot have multiple Active, Core PCPs");
 
 

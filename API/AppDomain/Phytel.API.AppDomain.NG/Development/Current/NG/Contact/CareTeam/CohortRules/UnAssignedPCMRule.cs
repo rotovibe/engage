@@ -10,8 +10,9 @@ namespace Phytel.API.AppDomain.NG
     {
         private readonly IContactEndpointUtil _contactEndpointUtil;
         private readonly ILogger _logger;
+        private readonly ICohortRuleUtil _cohortRuleUtil;
 
-        public UnAssignedPCMRule(IContactEndpointUtil contactEndpointUtil, ILogger logger)
+        public UnAssignedPCMRule(IContactEndpointUtil contactEndpointUtil, ILogger logger, ICohortRuleUtil cohortRuleUtil)
         {
             if (contactEndpointUtil == null)
                 throw new ArgumentNullException("contactEndpointUtil");
@@ -21,7 +22,7 @@ namespace Phytel.API.AppDomain.NG
 
             _contactEndpointUtil = contactEndpointUtil;
             _logger = logger;
-
+            _cohortRuleUtil = cohortRuleUtil;
         }
 
         #region ICareMemberCohortRule Members
@@ -33,9 +34,8 @@ namespace Phytel.API.AppDomain.NG
             {
                 if (careTeam == null)
                     throw new ArgumentNullException("careTeam");
-
-                //TODO : Remove the NGUtils dependency and Inject for mocking.
-                if (NGUtils.CheckIfCareTeamHasActiveCorePCM(careTeam))
+                
+                if (_cohortRuleUtil.CheckIfCareTeamHasActiveCorePCM(careTeam))
                 {
 
                 }

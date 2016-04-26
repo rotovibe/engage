@@ -9,9 +9,9 @@ using Phytel.API.DataDomain.Contact.DTO;
 
 namespace Phytel.API.AppDomain.NG
 {
-    public static partial class NGUtils
+    public class CohortRoleUtils: ICohortRuleUtil
     {
-        public static bool CheckIfCareTeamHasActiveCorePCM(CareTeam team)
+        public  bool CheckIfCareTeamHasActiveCorePCM(CareTeam team)
         {
             var hasPCM = false;
 
@@ -27,7 +27,7 @@ namespace Phytel.API.AppDomain.NG
 
         }
 
-        public static Member GetCareTeamActiveCorePCM(CareTeam team)
+        public  Member GetCareTeamActiveCorePCM(CareTeam team)
         {
             Member res = null;
 
@@ -43,7 +43,7 @@ namespace Phytel.API.AppDomain.NG
 
         }
 
-        public static bool HasMultipleActiveCorePCM(CareTeam careTeam)
+        public  bool HasMultipleActiveCorePCM(CareTeam careTeam)
         {
             bool res = false;
 
@@ -59,7 +59,7 @@ namespace Phytel.API.AppDomain.NG
             return res;
         }
 
-        public static bool HasMultipleActiveCorePCP(CareTeam careTeam)
+        public  bool HasMultipleActiveCorePCP(CareTeam careTeam)
         {
             bool res = false;
 
