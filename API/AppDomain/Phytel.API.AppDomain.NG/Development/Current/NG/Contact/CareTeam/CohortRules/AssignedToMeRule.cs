@@ -6,7 +6,7 @@ namespace Phytel.API.AppDomain.NG
 {
     public class AssignedToMeRule : ICareMemberCohortRule
     {
-        public CohortRuleResponse Run(CareTeam careTeam)
+        public CohortRuleResponse Run(CareTeam careTeam, CohortRuleCheckData data)
         {
             throw new NotImplementedException();
         }

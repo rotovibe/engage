@@ -118,7 +118,7 @@ namespace Phytel.API.AppDomain.NG
             {
                var domainResponse =  EndpointUtil.SaveCareTeam(request);
 
-               OnCareMemberUpdated(request.ContactId,request.ContractNumber,request.UserId);
+              // OnCareMemberUpdated(request.ContactId,request.ContractNumber,request.UserId);
             }
             catch (Exception ex)
             {
@@ -243,25 +243,25 @@ namespace Phytel.API.AppDomain.NG
 
         }
 
-        private void OnCareMemberUpdated(string contactId, string contractNumber,string userId)
-        {
-            var careTeam =  GetCareTeam(new GetCareTeamRequest
-            {
-                ContactId = contactId, 
-                ContractNumber = contractNumber, 
-                UserId = userId
-            });
-            //if (careTeam!=null)
-            //{
-            //    CohortRules.EnqueueCareTeam(careTeam);
-            //}
-            var rules = CareMemberCohortRuleFactory.GenerateEngageCareMemberCohortRules();
-            foreach (var rule in rules)
-            {
-                rule.Run(careTeam);
-            }
+        //private void OnCareMemberUpdated(string contactId, string contractNumber,string userId)
+        //{
+        //    var careTeam =  GetCareTeam(new GetCareTeamRequest
+        //    {
+        //        ContactId = contactId, 
+        //        ContractNumber = contractNumber, 
+        //        UserId = userId
+        //    });
+        //    //if (careTeam!=null)
+        //    //{
+        //    //    CohortRules.EnqueueCareTeam(careTeam);
+        //    //}
+        //    var rules = CareMemberCohortRuleFactory.GenerateEngageCareMemberCohortRules();
+        //    foreach (var rule in rules)
+        //    {
+        //        rule.Run(careTeam);
+        //    }
 
-        }
+        //}
         #endregion
         
     }

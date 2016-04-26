@@ -20,7 +20,7 @@ namespace Phytel.API.AppDomain.NG
             if (logger == null)
                 throw new ArgumentNullException("logger");
 
-            if (_cohortRuleUtil == null)
+            if (cohortRuleUtil == null)
                 throw new ArgumentNullException("cohortRuleUtil");
 
             _contactEndpointUtil = contactEndpointUtil;
@@ -30,7 +30,7 @@ namespace Phytel.API.AppDomain.NG
 
         #region ICareMemberCohortRule Members
 
-        public CohortRuleResponse Run(CareTeam careTeam)
+        public CohortRuleResponse Run(CareTeam careTeam, CohortRuleCheckData data)
         {
             var response = new CohortRuleResponse();
             try
@@ -38,13 +38,11 @@ namespace Phytel.API.AppDomain.NG
                 if (careTeam == null)
                     throw new ArgumentNullException("careTeam");
                 
-                if (_cohortRuleUtil.CheckIfCareTeamHasActiveCorePCM(careTeam))
-                {
-
-                }
-                else
+                if (!_cohortRuleUtil.CheckIfCareTeamHasActiveCorePCM(careTeam))
                 {
                     //Add to UnAssigned PCM.
+
+                    _contactEndpointUtil.RemovePCMCohortPatientView("PatientId", 1.0, data.ContractNumber, data.UserId);
                 }
             }
             catch (Exception ex)

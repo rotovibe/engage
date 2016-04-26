@@ -17,7 +17,7 @@ namespace Phytel.API.AppDomain.NG
             _cohortRuleUtil = cohortRuleUtil;
         }
 
-        public CohortRuleResponse Run(CareTeam careTeam)
+        public CohortRuleResponse Run(CareTeam careTeam, CohortRuleCheckData data)
         {
             if (careTeam == null)
                 throw new ArgumentNullException("careTeam");

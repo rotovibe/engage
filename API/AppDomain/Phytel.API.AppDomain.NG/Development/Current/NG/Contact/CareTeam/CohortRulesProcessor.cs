@@ -112,7 +112,7 @@ namespace Phytel.API.AppDomain.NG
             var rules = CareMemberCohortRuleFactory.GenerateEngageCareMemberCohortRules();
             foreach (var rule in rules)
             {
-                rule.Run(careTeam);
+                rule.Run(careTeam, cohortRuleCheckData);
             }
         }
 
