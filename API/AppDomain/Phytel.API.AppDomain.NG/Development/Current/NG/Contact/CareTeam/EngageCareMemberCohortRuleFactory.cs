@@ -19,7 +19,7 @@ namespace Phytel.API.AppDomain.NG
         {
             return new List<ICareMemberCohortRule>
             {
-                new AssignedToMePCMRule(_cohortRuleUtil),
+                new AssignedToMePCMRule(_contactEndpointUtil, _logger,_cohortRuleUtil),
                 new UnAssignedPCMRule(_contactEndpointUtil, _logger,_cohortRuleUtil),
                 new AssignedToMeRule()
 

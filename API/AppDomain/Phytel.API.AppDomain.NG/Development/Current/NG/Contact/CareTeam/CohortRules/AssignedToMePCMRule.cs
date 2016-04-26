@@ -12,7 +12,7 @@ namespace Phytel.API.AppDomain.NG
     {
         private readonly ICohortRuleUtil _cohortRuleUtil;
 
-        public AssignedToMePCMRule(ICohortRuleUtil cohortRuleUtil)
+        public AssignedToMePCMRule(IContactEndpointUtil contactEndpointUtil, ILogger logger, ICohortRuleUtil cohortRuleUtil)
         {
             _cohortRuleUtil = cohortRuleUtil;
         }
