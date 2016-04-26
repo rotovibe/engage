@@ -20,6 +20,9 @@ namespace Phytel.API.AppDomain.NG
             if (logger == null)
                 throw new ArgumentNullException("logger");
 
+            if (_cohortRuleUtil == null)
+                throw new ArgumentNullException("cohortRuleUtil");
+
             _contactEndpointUtil = contactEndpointUtil;
             _logger = logger;
             _cohortRuleUtil = cohortRuleUtil;

@@ -211,5 +211,19 @@ namespace Phytel.API.AppDomain.NG
             return response;
         }
         #endregion
+
+        #region CohortPatientView
+
+        public bool AddPCMToCohortPatientView(string patientId, string contactIdToAdd, double version,string contractNumber, string userId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool RemovePCMCohortPatientView(string patientId, double version, string contractNumber, string userId)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
     }
 }
