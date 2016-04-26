@@ -1,5 +1,5 @@
 ECHO OFF
-SET PATH=%PATH%;C:\Program Files (x86)\Microsoft Visual Studio 12.0\Common7\IDE
+SET PATH=%PATH%;C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE
 
 tf merge "$/PhytelCode/Phytel.Net/Services/API/NGExtract/Release Candidate/Current" "$/PhytelCode/Phytel.Net/Services/API/NGExtract/Production/Current" /recursive /nosummary /lock:checkout
 
