@@ -4,19 +4,9 @@ using Phytel.API.AppDomain.NG.DTO;
 
 namespace Phytel.API.AppDomain.NG
 {
-    public class AssignedToMeRule : ICareMemberCohortRule, ICohortCommand
+    public class AssignedToMeRule : ICareMemberCohortRule
     {
-        public void Run(CareTeam careTeam)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Add()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Remove()
+        public CohortRuleResponse Run(CareTeam careTeam)
         {
             throw new NotImplementedException();
         }

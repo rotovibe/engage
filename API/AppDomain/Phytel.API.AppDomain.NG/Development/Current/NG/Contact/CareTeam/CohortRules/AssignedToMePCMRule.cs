@@ -8,9 +8,9 @@ namespace Phytel.API.AppDomain.NG
     /// This rules checks a care team to ensure that if a member is an Active Core PCM then
     /// a corresponding "Assigned to me PCM"  cohort exists for the referenced individual.
     /// </summary>
-    public class AssignedToMePCMRule : ICareMemberCohortRule, ICohortCommand
+    public class AssignedToMePCMRule : ICareMemberCohortRule
     {
-        public void Run(CareTeam careTeam)
+        public CohortRuleResponse Run(CareTeam careTeam)
         {
             if (careTeam == null)
                 throw new ArgumentNullException("careTeam");
@@ -23,6 +23,8 @@ namespace Phytel.API.AppDomain.NG
             {
                 Remove();
             }
+
+            return new CohortRuleResponse();
 
         }
 

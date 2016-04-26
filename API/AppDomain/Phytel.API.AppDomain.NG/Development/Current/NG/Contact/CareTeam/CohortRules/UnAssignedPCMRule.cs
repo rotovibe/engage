@@ -1,46 +1,61 @@
 ﻿using System;
-using System.Linq;
 using Phytel.API.AppDomain.NG.DTO;
-using Phytel.API.DataDomain.Contact.DTO;
-using ServiceStack.Text;
 
 namespace Phytel.API.AppDomain.NG
 {
-
-    public class UnAssignedPCMRule : ICareMemberCohortRule, ICohortCommand
+    /// <summary>
+    /// Check if a care member has Active,Core PCM and if not remove the user from PCM.
+    /// </summary>
+    public class UnAssignedPCMRule : ICareMemberCohortRule
     {
         private readonly IContactEndpointUtil _contactEndpointUtil;
+        private readonly ILogger _logger;
 
-        public UnAssignedPCMRule(IContactEndpointUtil contactEndpointUtil)
+        public UnAssignedPCMRule(IContactEndpointUtil contactEndpointUtil, ILogger logger)
         {
+            if (contactEndpointUtil == null)
+                throw new ArgumentNullException("contactEndpointUtil");
+
+            if (logger == null)
+                throw new ArgumentNullException("logger");
+
             _contactEndpointUtil = contactEndpointUtil;
+            _logger = logger;
+
         }
 
-        public void Run(CareTeam careTeam)
-        {
-            if(careTeam == null)
-                throw new ArgumentNullException("careTeam");
+        #region ICareMemberCohortRule Members
 
-            if (NGUtils.CheckIfCareTeamHasActiveCorePCM(careTeam))
+        public CohortRuleResponse Run(CareTeam careTeam)
+        {
+            var response = new CohortRuleResponse();
+            try
             {
-              
+                if (careTeam == null)
+                    throw new ArgumentNullException("careTeam");
+
+                //TODO : Remove the NGUtils dependency and Inject for mocking.
+                if (NGUtils.CheckIfCareTeamHasActiveCorePCM(careTeam))
+                {
+
+                }
+                else
+                {
+                    //Add to UnAssigned PCM.
+                }
             }
-            else
+            catch (Exception ex)
             {
-               //Add to UnAssigned PCM.
+                response.IsSuccessful = false;
+                response.ErrorCode = "UnAssignedPCMRule.Cohort.Error";
+                response.Message = ex.Message;
+
+                _logger.Log(ex);
             }
 
+            return response;
         }
 
-        public void Add()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Remove()
-        {
-            throw new NotImplementedException();
-        }
-        
+        #endregion
     }
 }

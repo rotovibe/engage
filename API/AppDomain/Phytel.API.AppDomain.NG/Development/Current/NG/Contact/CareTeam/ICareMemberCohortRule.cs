@@ -9,6 +9,6 @@ namespace Phytel.API.AppDomain.NG
 {
     public interface ICareMemberCohortRule
     {
-        void Run(CareTeam careTeam);
+        CohortRuleResponse Run(CareTeam careTeam);
     }
 }

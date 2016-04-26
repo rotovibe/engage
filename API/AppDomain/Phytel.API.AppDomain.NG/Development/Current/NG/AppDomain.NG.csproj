@@ -164,9 +164,12 @@
     <Compile Include="Command\PatientUtilizationsCommand.cs" />
     <Compile Include="Contact\CareTeam\CohortRuleCheckData.cs" />
     <Compile Include="Contact\CareTeam\CohortRulesProcessor.cs" />
+    <Compile Include="Contact\CareTeam\ASEExceptionLogger.cs" />
     <Compile Include="Contact\CareTeam\CohortRules\AssignedToMePCMRule.cs" />
     <Compile Include="Contact\CareTeam\CohortRules\AssignedToMeRule.cs" />
+    <Compile Include="Contact\CareTeam\CohortRuleResponse.cs" />
     <Compile Include="Contact\CareTeam\CohortRules\CohortRulesUtil.cs" />
+    <Compile Include="Contact\CareTeam\ILogger.cs" />
     <Compile Include="Contact\CareTeam\CohortRules\UnAssignedPCMRule.cs" />
     <Compile Include="Contact\CareTeam\EngageCareMemberCohortRuleFactory.cs" />
     <Compile Include="Contact\CareTeam\ICareMemberCohortRule.cs" />
