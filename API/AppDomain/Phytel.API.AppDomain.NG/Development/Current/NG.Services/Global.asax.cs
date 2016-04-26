@@ -21,7 +21,7 @@ namespace Phytel.API.AppDomain.NG.Service
     public class Global : HttpApplication
     {
         private static readonly bool Profile = Convert.ToBoolean(WebConfigurationManager.AppSettings.Get("Profiler"));
-
+        private NGAppHost _ngAppHost;
         public class NGAppHost : AppHostBase
         {
             //Tell Service Stack the name of your application and where to find your web services
@@ -112,7 +112,8 @@ namespace Phytel.API.AppDomain.NG.Service
 
         protected void Application_Start(object sender, EventArgs e)
         {
-            new NGAppHost().Init();
+            _ngAppHost = new NGAppHost();
+            _ngAppHost.Init();                                      
         }
 
         protected void Session_Start(object sender, EventArgs e)
@@ -149,7 +150,9 @@ namespace Phytel.API.AppDomain.NG.Service
 
         protected void Application_End(object sender, EventArgs e)
         {
-
+            var cohortRulesProcessor = _ngAppHost.TryResolve<ICohortRulesProcessor>();
+            if (cohortRulesProcessor != null)
+                cohortRulesProcessor.Stop();
         }
     }
 }
