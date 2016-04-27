@@ -379,6 +379,7 @@ define(['services/session', 'services/datacontext', 'viewmodels/shell/shell', 'm
 			canLoadMoreContacts(false);
 			maxContactsLoaded(false);
 			noResultsFound(false);
+			selectedContact(null);
 		}
 		resetFilters();
 				
@@ -407,17 +408,17 @@ define(['services/session', 'services/datacontext', 'viewmodels/shell/shell', 'm
 			myContactSearchResults([]);
 			totalCount(0);
 			contactsSkip(0);
-			
+			selectedContact(null);
 			setTimeout( function(){
 				//short delay to allow the ko data binding to release references to these contacts, before removing them: 
 				if( contacts && contacts.length > 0 ){										
 					ko.utils.arrayForEach( contacts, function(contact){
 						if( contact ){
-							if( selectedContact() && contact.id() !== selectedContact().id() ){
+							//if( selectedContact() && contact.id() !== selectedContact().id() ){
 								//remove from breeze cache:
 								contact.entityAspect.setDeleted();
 								contact.entityAspect.acceptChanges();
-							}
+							//}
 						}
 					});					
 				}				

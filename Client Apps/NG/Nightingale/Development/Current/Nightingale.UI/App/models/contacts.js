@@ -606,29 +606,40 @@ define(['services/session', 'services/validatorfactory', 'services/customvalidat
 					return fullName;
 				});
 				
+				function getDetailedSubTypeText(subType){
+					//subtype, specialty and sub specialty
+					var subTypeText = '';							
+					subTypeText += subType.subTypeName();
+					if( subType.specialtyId() ){
+						subTypeText += ' - ' + subType.specialtyName();								
+						if(subType.subSpecialtyString()){
+							subTypeText += ' (' + subType.subSpecialtyString() + ')';
+						}								
+					}
+					return subTypeText;
+				}
+				
 				contactCard.detailedSubTypes = ko.computed( function(){
 					var subTypeStrings = [];
 					if( contactCard.contactSubTypes && contactCard.contactSubTypes().length ){						
 						
 						ko.utils.arrayForEach( contactCard.contactSubTypes(), function( subType ){
-							var subTypeText = '';
-							if( subTypeText.length ) {
-								subTypeText += ', ';
-							}
-							subTypeText += subType.subTypeName();
-							if( subType.specialtyId() ){
-								subTypeText += ' (' + subType.specialtyName();								
-								if(subType.subSpecialtyString()){
-									subTypeText += ', ' + subType.subSpecialtyString();										
-								}
-								subTypeText += ')';
-							}
+							var subTypeText = getDetailedSubTypeText(subType);							
 							subTypeStrings.push( subTypeText );
 						});
 						
 					}
 					return subTypeStrings;
 				});
+				
+				function getSubTypeSummaryText(subType){
+					//subtype and specialty text only
+					var text = subType.subTypeName();
+					if( subType.specialtyId() ){
+						text += ' - ' + subType.specialtyName();
+					}
+					return text;
+				}
 				
 				contactCard.contactSummary = ko.computed( function(){
 					var summary = '';					
@@ -638,10 +649,7 @@ define(['services/session', 'services/validatorfactory', 'services/customvalidat
 							if( subTypesText.length ) {
 								subTypesText += ', ';
 							}
-							subTypesText += subType.subTypeName();
-							if( subType.specialtyId() ){
-								subTypesText += ' (' + subType.specialtyName() + ')';
-							}
+							subTypesText += getSubTypeSummaryText(subType);
 						});
 						summary += subTypesText;
 					}

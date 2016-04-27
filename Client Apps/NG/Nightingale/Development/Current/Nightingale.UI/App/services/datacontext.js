@@ -1050,8 +1050,8 @@
 						contactCard.createdOn( new Date() ); //data.CreatedOn is not returned
 					}
 					else{
-						contactCard.updatedById( data.UpdatedById );
-						contactCard.updatedOn( data.UpdatedOn );
+						contactCard.updatedById( session.currentUser().userId() );
+						contactCard.updatedOn( new Date() );
 					}
 					// Go through the data, find any entities that need to have their Id's cleaned up
 					var updatedPhones = data.UpdatedPhone;
