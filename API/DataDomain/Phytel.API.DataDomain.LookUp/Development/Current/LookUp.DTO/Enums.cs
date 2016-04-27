@@ -46,6 +46,7 @@ namespace Phytel.API.DataDomain.LookUp.DTO
         Reason = 36,
         MaritalStatus = 37,
         CareTeamFrequency = 38,
-        MedicationReview = 39
+        MedicationReview = 39,
+        DurationUnit = 40
     }
 }

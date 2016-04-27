@@ -366,6 +366,14 @@ namespace Phytel.API.DataDomain.LookUp
                 }
             }
             catch { }
+            try
+            {
+                if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(DurationUnit)) == false)
+                {
+                    MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<DurationUnit>();
+                }
+            }
+            catch { } 
             #endregion
 
             // Get the redis IP address from config file.
