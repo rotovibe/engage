@@ -8,7 +8,7 @@ namespace Phytel.API.AppDomain.NG
     {
         public CohortRuleResponse Run(CareTeam careTeam, CohortRuleCheckData data)
         {
-            throw new NotImplementedException();
+            return null;
         }
     }
 }

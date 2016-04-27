@@ -1128,5 +1128,11 @@ namespace Phytel.API.DataDomain.Patient
 
             return response.IsSuccessful;
         }
+
+
+        public bool AddPCMToPatientCohortView(AddPCMToCohortPatientViewDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

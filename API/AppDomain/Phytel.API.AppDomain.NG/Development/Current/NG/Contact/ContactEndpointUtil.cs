@@ -5,6 +5,7 @@ using AutoMapper;
 using Phytel.API.AppDomain.NG.DTO;
 using Phytel.API.DataDomain.Contact.DTO;
 using Phytel.API.DataDomain.Contact.DTO.CareTeam;
+using Phytel.API.DataDomain.Patient.DTO;
 using ServiceStack.Service;
 using ServiceStack.ServiceClient.Web;
 using ServiceStack.ServiceInterface.ServiceModel;
@@ -15,6 +16,7 @@ namespace Phytel.API.AppDomain.NG
     {
         #region endpoint addresses
         protected readonly string DDContactServiceUrl = ConfigurationManager.AppSettings["DDContactServiceUrl"];
+        protected readonly string DDPatientServiceUrl = ConfigurationManager.AppSettings["DDPatientServiceUrl"];
         #endregion
 
         #region Contact
@@ -216,7 +218,36 @@ namespace Phytel.API.AppDomain.NG
 
         public bool AddPCMToCohortPatientView(string patientId, string contactIdToAdd, double version,string contractNumber, string userId)
         {
-            return true;
+            var response = false;
+            try
+            {
+                var client = new JsonServiceClient();
+                ///{Context}/{Version}/{ContractNumber}/CohortPatientView/Patients/{PatientId}/PCM", "PUT";
+                var url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/CohortPatientView/Patients/{4}/PCM",
+                                                                                DDPatientServiceUrl,
+                                                                                "NG",
+                                                                                1.0,
+                                                                                contractNumber, patientId), userId);
+                var dataDomainResponse =
+                    client.Put<AddPCMToCohortPatientViewDataResponse>(url, new AddPCMToCohortPatientViewDataRequest
+                    {
+                       
+                        Version =version,
+                        Id = patientId,
+                        ContractNumber = contractNumber,
+                        Context = "NG",
+                        ContactIdToAdd = contactIdToAdd,
+                        UserId = userId
+                    } as object);
+
+                response = dataDomainResponse == null;
+
+            }
+            catch (WebServiceException wse)
+            {
+                throw new WebServiceException("AD:AddPCMToCohortPatientView()::" + wse.Message, wse.InnerException);
+            }
+            return response;
         }
 
         public bool RemovePCMCohortPatientView(string patientId, double version, string contractNumber, string userId)

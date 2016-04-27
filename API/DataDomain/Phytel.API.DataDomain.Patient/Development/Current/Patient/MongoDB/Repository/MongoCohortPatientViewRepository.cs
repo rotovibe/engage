@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 using MB = MongoDB.Driver.Builders;
 using System.Configuration;
+using ServiceStack.DataAnnotations;
 
 namespace Phytel.API.DataDomain.Patient
 {
@@ -548,6 +549,72 @@ namespace Phytel.API.DataDomain.Patient
         public bool SyncPatient(SyncPatientInfoDataRequest request)
         {
             throw new NotImplementedException();
+        }
+
+
+        public bool AddPCMToPatientCohortView(AddPCMToCohortPatientViewDataRequest request)
+        {
+            try
+            {
+                using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
+                {
+                    var q = MB.Query<MECohortPatientView>.EQ(b => b.PatientID, ObjectId.Parse(request.Id));
+
+                    var cohort = ctx.CohortPatientViews.Collection.FindOne(q);
+
+                    if (cohort != null)
+                    {
+                        var fields = cohort.SearchFields;
+                        var PcmField = fields.FirstOrDefault(f => f.FieldName == Constants.PCM);
+
+                        if (PcmField == null)
+                        {
+                            var searchField = new SearchField
+                            {
+                                FieldName = Constants.PCM,
+                                Value = request.ContactIdToAdd,
+                                Active = true
+                            };
+
+                            fields.Add(searchField);
+
+                        }
+                        else
+                        {
+                            PcmField.Value = request.ContactIdToAdd;
+                            PcmField.Active = true;
+
+                        }
+
+                        ctx.CohortPatientViews.Collection.Save(cohort);
+
+                    }
+
+                    
+
+                    //var ub = new List<MB.UpdateBuilder>();
+                    //ub.Add(MB.Update.Set(MECohortPatientView.TTLDateProperty, BsonNull.Value));
+                    //ub.Add(MB.Update.Set(MECohortPatientView.DeleteFlagProperty, false));
+                    //ub.Add(MB.Update.Set(MECohortPatientView.LastUpdatedOnProperty, DateTime.UtcNow));
+                    //ub.Add(MB.Update.Set(MECohortPatientView.UpdatedByProperty, ObjectId.Parse(this.UserId)));
+                    //ub.Add(MB.Update.Set(MECohortPatientView.SearchFieldsProperty, cohort.SearchFields));
+
+                    //IMongoUpdate update = MB.Update.Combine(ub);
+                    //ctx.CohortPatientViews.Collection.Update(q, update);\
+
+
+
+
+                    AuditHelper.LogDataAudit(this.UserId,
+                                            MongoCollectionName.CohortPatientView.ToString(),
+                                            request.Id.ToString(),
+                                            Common.DataAuditType.Update,
+                                            request.ContractNumber);
+
+                    return true;
+                }
+            }
+            catch (Exception) { throw; }
         }
     }
 }

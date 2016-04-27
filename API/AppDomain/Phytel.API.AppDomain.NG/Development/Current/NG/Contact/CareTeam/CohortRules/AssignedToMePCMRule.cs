@@ -39,10 +39,10 @@ namespace Phytel.API.AppDomain.NG
             {
                 var activeCorePCM = _cohortRuleUtil.GetCareTeamActiveCorePCM(careTeam);
 
-                if (activeCorePCM == null)
+                if (activeCorePCM != null)
                 {
-                    //We need to remove any Active Core PCM from the CohortPatientView for the referenced individual
-                    _contactEndpointUtil.RemovePCMCohortPatientView(data.PatientId, data.Version, data.ContractNumber,
+                    //We need to add Active Core PCM from the CohortPatientView for the referenced individual
+                    _contactEndpointUtil.AddPCMToCohortPatientView(data.PatientId,activeCorePCM.ContactId, data.Version, data.ContractNumber,
                         data.UserId);
                 }               
             }

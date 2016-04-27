@@ -658,6 +658,23 @@ namespace Phytel.API.DataDomain.Patient
             }
             return response;
         }
-        
+
+        public AddPCMToCohortPatientViewDataResponse AddPcmToCohortPatientView(AddPCMToCohortPatientViewDataRequest request)
+        {
+            var response = new AddPCMToCohortPatientViewDataResponse();
+            try
+            {
+                var repo = Factory.GetRepository(request, RepositoryType.CohortPatientView);
+                var isSuccessful = repo.AddPCMToPatientCohortView(request);
+
+                response.IsSuccessful = isSuccessful;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return response;
+            
+        }
     }
 }   
