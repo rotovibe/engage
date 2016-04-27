@@ -373,6 +373,14 @@ namespace Phytel.API.DataDomain.LookUp
                     MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<DurationUnit>();
                 }
             }
+            catch { }
+            try
+            {
+                if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(RefusalReason)) == false)
+                {
+                    MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<RefusalReason>();
+                }
+            }
             catch { } 
             #endregion
 
