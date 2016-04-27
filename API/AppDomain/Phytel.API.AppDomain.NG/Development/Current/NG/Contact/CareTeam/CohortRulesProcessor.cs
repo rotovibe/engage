@@ -20,12 +20,14 @@ namespace Phytel.API.AppDomain.NG
         private WaitHandle[] wHandles;
         private Thread _processQueueThread;
         private object queueLock;
-        private IContactEndpointUtil EndpointUtil { get; set; }
-        private ICareMemberCohortRuleFactory CareMemberCohortRuleFactory { get; set; }
-        public CohortRulesProcessor(ICareMemberCohortRuleFactory cf,IContactEndpointUtil ceu, ICohortRuleUtil cohortRuleUtil)
+        private readonly IContactEndpointUtil EndpointUtil;
+        private readonly ICareMemberCohortRuleFactory CareMemberCohortRuleFactory;
+        private readonly ILogger _logger;
+        public CohortRulesProcessor(ICareMemberCohortRuleFactory cf,IContactEndpointUtil ceu, ICohortRuleUtil cohortRuleUtil, ILogger logger)
         {
             _cohortRuleUtil = cohortRuleUtil;
             _cohortRuleCheckDataTeamQueue = new ConcurrentQueue<CohortRuleCheckData>();
+            _logger = logger;
             CareMemberCohortRuleFactory = cf;
             EndpointUtil = ceu;            
             _queuEvent = new AutoResetEvent(false);
