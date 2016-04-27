@@ -100,6 +100,9 @@
             goalColumn: goalColumn,
             detailsColumn: detailsColumn,
             widgets: widgets,
+            minimizeThisColumn: minimizeThisColumn,
+            maximizeThisColumn: maximizeThisColumn,
+            toggleFullScreen: toggleFullScreen,
             selectedPatient: selectedPatient,
             cancelChanges: cancelChanges,
             addGoal: addGoal,
@@ -178,6 +181,18 @@
             } else {
                 sender.isOpen(!sender.isOpen());
             }
+        }
+
+        function setOpenColumn(sender) {
+            openColumn(sender);
+        }
+
+        function minimizeThisColumn(sender) {
+            sender.column.isOpen(false);
+        }
+
+        function maximizeThisColumn(sender) {
+            sender.column.isOpen(true);
         }
 
         function toggleFullScreen(sender) {

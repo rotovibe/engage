@@ -1,18 +1,30 @@
 ﻿<section data-type="flex">
     <!-- ko if: selectedPatient() -->
-    <div data-bind="foreach: columns">
+    <div class="columns-wrapper">
+        <!-- ko with: medicationColumn -->
+        <div class="column" data-bind="css: { open: $parent.computedOpenColumn() === $data }">
+            <!-- ko if: $parent.isComposed -->
+            <div class="widget-wrapper" data-bind="foreach: widgets">
+                <!-- ko compose: { model: path, activationData: activationData } -->
+                <!-- /ko -->
+            </div>
+            <!-- /ko -->
+        </div>
+        <!-- /ko -->
+        <!-- ko with: detailsColumn -->
         <div class="column" data-bind="css: { open: $parent.computedOpenColumn() === $data }">
             <div class="widget-wrapper" data-bind="foreach: widgets">
-                <!-- ko if: (path().indexOf('html') === -1) -->
-                    <!-- ko compose: { model: path, activationData: activationData } -->
+                <!-- ko if: ($parents[1].activeMedication() && name() === 'MedicationDetails') -->
+                    <!-- ko compose: { model: path, activationData: { activeMedication: $parents[1].activeMedication } } -->
                     <!-- /ko -->
                 <!-- /ko -->
-                <!-- ko ifnot: (path().indexOf('html') === -1) -->
-                    <!-- ko compose: path -->
+                <!-- ko if: ($parents[1].activeAllergy() && name() === 'AllergyDetails') -->
+                    <!-- ko compose: { model: path, activationData: { activeAllergy: $parents[1].activeAllergy } } -->
                     <!-- /ko -->
                 <!-- /ko -->
             </div>
         </div>
+        <!-- /ko -->
     </div>
     <!-- /ko -->
     <!-- ko if: !selectedPatient() -->
@@ -44,7 +56,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>                        
+                        </div>
                     </div>
                 </div>
             </div>

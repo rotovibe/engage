@@ -380,7 +380,7 @@ define(['services/session'],
                     var thisString = '';
                     var tasks = barrier.relatedTasks();
                     ko.utils.arrayForEach(tasks, function (task) {
-                        thisString += task ? task.name() + ', ' : '';
+                        thisString += task ? task.description() + ', ' : '';
                     });
                     if (thisString.length > 0) {
                         thisString = thisString.substr(0, thisString.length - 2);

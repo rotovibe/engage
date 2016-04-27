@@ -16,7 +16,7 @@
  */
  define(['services/session', 'services/jsonResultsAdapter', 'models/base', 'config.services', 'services/dataservices/getentityservice', 'models/programs', 'models/lookups', 'models/contacts', 'models/goals', 'models/notes', 'models/observations', 'models/allergies', 'models/medications', 'services/dataservices/programsservice', 'services/entityfinder', 'services/usercontext', 'services/dataservices/contactservice', 'services/entityserializer', 'services/dataservices/lookupsservice', 'services/dataservices/goalsservice', 'services/dataservices/notesservice', 'services/dataservices/observationsservice', 'services/dataservices/caremembersservice', 'services/dataservices/patientsservice', 'services/dataservices/allergiesservice', 'services/dataservices/medicationsservice', 'services/local.collections', 'services/dateHelper'],
  	function (session, jsonResultsAdapter, modelConfig, servicesConfig, getEntityService, stepModelConfig, lookupModelConfig, contactModelConfig, goalModelConfig, notesModelConfig, observationsModelConfig, allergyModelConfig, medicationModelConfig, programsService, entityFinder, usercontext, contactService, entitySerializer, lookupsService, goalsService, notesService, observationsService, careMembersService, patientsService, allergiesService, medicationsService, localCollections, dateHelper) {
-	
+
 		// Object to use for the loading messages
 		function loadingMessage(message, showing) {
 			var self = this;
@@ -192,7 +192,7 @@
 		manager.hasChangesChanged.subscribe(function (eventArgs) {
 			hasChanges(eventArgs.hasChanges);
 		});
-		
+
 		function getSettingsParam( key ){
 			var user = session.currentUser();
 			var settings = user && session.currentUser().settings? session.currentUser().settings(): null;
@@ -202,7 +202,7 @@
 			}
 			return result;
 		}
-		
+
 		var datacontext = {
 			manager: manager,
 			loadingMessages: loadingMessages,
@@ -297,8 +297,8 @@
 			saveAllergies: saveAllergies,
 			getPatientAllergies: getPatientAllergies,
 			deletePatientAllergy: deletePatientAllergy,
-			getPatientAllergiesQuery: getPatientAllergiesQuery,					
-			getSettingsParam: getSettingsParam, 
+			getPatientAllergiesQuery: getPatientAllergiesQuery,
+			getSettingsParam: getSettingsParam,
 			singleSort: singleSort
 		};
 
@@ -820,7 +820,7 @@
 
 		function deleteIndividual (entity) {
 			var message = queryStarted('Individual', true, 'Deleting');
-			
+
 			function saveCompleted(data) {
 				// Remove the person from cache completely
 				//entity.entityAspect.setDetached();
@@ -841,7 +841,7 @@
 				removeLoadingMessage(message);
 				throw new Error('Delete failed');
 			}
-			
+
 			patientsService.deleteIndividual(manager, entity).then(saveCompleted).fail(saveFailed);
 		}
 
@@ -865,7 +865,7 @@
 
 			var serializedIndividual;
 			serializedIndividual = entitySerializer.serializeIndividual(patient, manager);
-			
+
 			function saveCompleted(data) {
 				// If there is an outcome returned and it equals zero,
 				if (data.httpResponse.data.Outcome && data.httpResponse.data.Outcome.Result == 0) {
@@ -900,7 +900,7 @@
 				console.log(error);
 				removeLoadingMessage(message);
 			}
-			
+
 			return patientsService.saveIndividual(manager, serializedIndividual, insert).then(saveCompleted).fail(saveFailed);
 		}
 
@@ -1007,23 +1007,23 @@
 
 		function getContactTypes( group, isRoot){
 			var types = [];
-			ko.utils.arrayForEach(localCollections.contactTypesTree(), function(node){				
+			ko.utils.arrayForEach(localCollections.contactTypesTree(), function(node){
 				if( ( group && ( node.group() == group )) || !group ) {
 					if( ( isRoot && !node.parentId() ) || ( isRoot == false && node.parentId() ) || !isRoot ){
-						types.push(node);	
-					}					
-				}				
+						types.push(node);
+					}
+				}
 			});
 			return types;
 		}
-		
+
 		function getContactTypeLookupById( id ){
 			var contactType = ko.utils.arrayFilter( localCollections.contactTypesTree(), function(node){
 				return node.id() == id;
 			});
 			return contactType;
 		}
-		
+
 		// Save changes to a single contact card
 		function saveContactCard(contactCard) {
 			// Display a message while saving
@@ -1039,13 +1039,13 @@
 			//setTimeout(function () {
 				serializedContactCard = entitySerializer.serializeContactCard(contactCard, manager);
 			//}, 50);
-			
+
 			function saveCompleted (data) {
 				// If data was returned and has a property called success that is true,
 				if (data) {
 					if( isInsert && data.Id ){
 						contactCard.id( data.Id );
-						contactCard.isNew(false);						
+						contactCard.isNew(false);
 						contactCard.createdById( session.currentUser().userId() );//data.CreatedById is not returned
 						contactCard.createdOn( new Date() ); //data.CreatedOn is not returned
 					}
@@ -1110,15 +1110,15 @@
 			}
 			//setTimeout(function () {
 				return contactService.saveContactCard(manager, serializedContactCard, isInsert).then(saveCompleted);
-			//}, 50);			
+			//}, 50);
 		}
-		
+
 		function getLocalContacts(){
-			return contactService.getLocalContacts( manager );	
+			return contactService.getLocalContacts( manager );
 		}
-		
+
 		function getContacts( observable, params, observableTotalCount ){
-			var message = queryStarted('Contacts', true, 'Loading');			
+			var message = queryStarted('Contacts', true, 'Loading');
 			return contactService.getContacts(manager, observable, params, observableTotalCount).then(contactsReturned);
 
 			function contactsReturned(contacts) {
@@ -1130,7 +1130,7 @@
 						// // Add it in
 						// localCollections.contacts.push(contact);
 					// }
-				// });				
+				// });
 			}
 		}
 
@@ -1140,14 +1140,14 @@
 			var message = queryStarted('Goal', true, 'Saving');
 
 			goal.checkAppend();
-			
+
 			// Save all of the levels of everything related to a contact card
 			goal.entityAspect.acceptChanges();
 			var serializedGoal;
 			setTimeout(function () {
 				serializedGoal = entitySerializer.serializeGoal(goal, manager);
 			}, 50);
-			
+
 			function saveCompleted(data) {
 				// If data was returned and has a property called success that is true,
 				goal.isNew(false);
@@ -1167,7 +1167,7 @@
 				// Finally, clear out the message
 				queryCompleted(message);
 			}
-			
+
 			setTimeout(function () {
 				return goalsService.saveGoal(manager, serializedGoal).then(saveCompleted);
 			}, 50);
@@ -1179,7 +1179,7 @@
 				var message = queryStarted('Intervention', true, 'Saving');
 
 				intervention.checkAppend();
-				
+
 				// Save intervention changes so new ones returned are accepted
 				intervention.entityAspect.acceptChanges();
 				var serializedIntervention;
@@ -1203,7 +1203,7 @@
 			// Display a message while saving
 			var message = queryStarted('Task', true, 'Saving');
 			task.checkAppend();
-			
+
 			// Get the patient id from the goal
 			var patientId = task.goal().patientId();
 			// Save all of the levels of everything related to a contact card
@@ -1220,17 +1220,17 @@
 				//task.entityAspect.acceptChanges();
 				// Finally, clear out the message
 				queryCompleted(message);
-			}			
+			}
 			return goalsService.saveTask(manager, serializedTask, patientId).then(saveCompleted);
 		}
-						
+
 
 		// Save a type of barrier
 		function saveBarrier(barrier) {
 			// Display a message while saving
 			var message = queryStarted('Barrier', true, 'Saving');
 			barrier.checkAppend();
-			
+
 			// Get the patient id from the goal
 			var patientId = barrier.goal().patientId();
 
@@ -1238,7 +1238,7 @@
 			barrier.entityAspect.acceptChanges();
 			var serializedBarrier;
 			serializedBarrier = entitySerializer.serializeBarrier(barrier, manager);
-			
+
 			function saveCompleted(data) {
 				// Save all of the levels of everything related to a contact card
 				barrier.entityAspect.acceptChanges();
@@ -1267,7 +1267,7 @@
 		}
 
 		// Save changes to a single contact card
-		function saveNote(note) {										
+		function saveNote(note) {
 			// Display a message while saving
 			var message = queryStarted('Note', true, 'Saving');
 			var isInsert = false;
@@ -1304,7 +1304,7 @@
 				queryCompleted(message);
 				return true;
 			}
-			
+
 			if( note.id() < 1 ){
 				isInsert = true;
 				note.createdById(session.currentUser().userId());
@@ -1328,7 +1328,7 @@
 					break;
 				}
 			}
-			
+
 
 			function syncUpdateProps( returnedNote ){
 				// Update (PatientNote endpoint)
@@ -1351,10 +1351,10 @@
 				// Finally, clear out the message
 				queryCompleted(message);
 			}
-			
+
 			// Display a message while saving
 			var message = queryStarted('Note', true, 'Deleting');
-			return notesService.deleteNote(manager, note).then(deleteCompleted);					
+			return notesService.deleteNote(manager, note).then(deleteCompleted);
 		}
 		/**
 		*	get note by id. initialy intended to load the full object of utilization type note.
@@ -1424,7 +1424,7 @@
 			});
 			if (serializedObservations.length > 0) {
 				observationsSaving(true);
-					
+
 				function saveCompleted(data) {
 					observationsSaving(false);
 					queryCompleted(message);
@@ -1511,7 +1511,7 @@
 				thisPatient.patientSystems.valueHasMutated();
 				return true;
 			}
-		}				
+		}
 
 		// Get a patients full SSN for display only
 		function getFullSSN(patientId) {
@@ -1590,7 +1590,7 @@
 			function todosReturned(todos) {
 				// Finally, clear out the message
 				queryCompleted(message);
-				//TODO: manage the size of the localCollections.todo 
+				//TODO: manage the size of the localCollections.todo
 				// Make sure each of the todos are in the collection locally
 				ko.utils.arrayForEach(todos, function (todo) {
 					if (localCollections.todos.indexOf(todo) === -1) {
@@ -1601,41 +1601,41 @@
 				todosSaving(false);
 			}
 		}
-		
+
 		/**
 		*	clear all the todos from the cache
 		*	@method clearToDos
 		*/
 		function clearToDos(){
 			ko.utils.arrayForEach( localCollections.todos, function( todo ) {
-				manager.detachEntity(todo);		
-			}); 	
+				manager.detachEntity(todo);
+			});
 		}
-		
+
 		function getToDosQuery (params, orderstring, take) {
 			return notesService.getToDosQuery(manager, params, orderstring, take);
 		}
-		
+
 		function getToDosRemoteOpenAssignedToMe( observable, skip, take, sort, observableTotalCount ){
-			var params = { 
-						StatusIds: [1,3], 
-						AssignedToId: session.currentUser().userId(), 
+			var params = {
+						StatusIds: [1,3],
+						AssignedToId: session.currentUser().userId(),
 						Skip: skip,
 						Take: take,
 						Sort: sort
-			};						
-			return getToDos(observable, params, observableTotalCount);			
+			};
+			return getToDos(observable, params, observableTotalCount);
 		}
-		
+
 		function getLocalTodos( params, orderString ){
 			var theseTodos = getToDosQuery( params, orderString );
 			// Filter out the new todos
 			theseTodos = ko.utils.arrayFilter(theseTodos, function (todo) {
 				return !todo.isNew();
-			});				
+			});
 			return theseTodos;
 		}
-		
+
 		function getInterventions (observable, params) {
 			var message = queryStarted('Interventions', true, 'Loading');
 			interventionsSaving(true);
@@ -1681,7 +1681,7 @@
 		function getTasksQuery (params, orderstring) {
 			return goalsService.getTasksQuery(manager, params, orderstring);
 		}
-		
+
 		// Save changes to a single contact card
 		function saveToDo(todo, action) {
 			// Display a message while saving
@@ -1692,22 +1692,22 @@
 			return notesService.saveToDo(manager, serializedTodo, action).then(saveCompleted);
 
 			function saveCompleted(data) {
-				
+
 				// If it is a new todo,
 				if (todo && todo.id() < 0) {
 					// Remove it so the replacement gets set
 					manager.detachEntity(todo);
 				}
 				if (localCollections.todos.indexOf(data) < 0) {
-					localCollections.todos.push(data);					
-				}								
+					localCollections.todos.push(data);
+				}
 				// Finally, clear out the message
 				queryCompleted(message);
 				todosSaving(false);
 				return data;
 			}
-		}		
-		
+		}
+
 		function getSystemCareManager(){
 			var SystemCareManager = ko.utils.arrayFirst(datacontext.enums.careManagers(), function (caremanager) {
 				return (caremanager.userId()=== '' && caremanager.firstName() === 'System' && caremanager.preferredName() === 'System');
@@ -1721,7 +1721,7 @@
 			});
 			return thisMatchedCareManager.preferredName();
 		}
-		
+
 		function getUserCareManager(){
 			var thisMatchedCareManager = ko.utils.arrayFirst(datacontext.enums.careManagers(), function (caremanager) {
 				return caremanager.id() === session.currentUser().userId();
@@ -1733,9 +1733,9 @@
 			//convert todos to calendar events:
 			var userEvents = [];
 			var careManagerName = getUsercareManagerName();
-			ko.utils.arrayForEach(theseTodos, function (todo) {				
+			ko.utils.arrayForEach(theseTodos, function (todo) {
 				if( todo.isEvent() ){
-					var event = todo.getAsNewEvent(); //fullcalendar event - plain object					
+					var event = todo.getAsNewEvent(); //fullcalendar event - plain object
 					userEvents.push(event);
 				}
 			});
@@ -1759,7 +1759,7 @@
 				syncEventFromTodo(todo);
 			});
 
-			function syncEventFromTodo(todo){				
+			function syncEventFromTodo(todo){
 				if( todo.isEvent() ){
 					//the todo should be represented by a calendar event:
 					if(!updateCalendarEventFromTodo(todo)){
@@ -1777,9 +1777,9 @@
 			}
 
 			function updateCalendarEventFromTodo(todo){
-				var existingEvent = getEventById(todo.id());				
+				var existingEvent = getEventById(todo.id());
 				if(existingEvent){
-					existingEvent = todo.updateExistingEvent( existingEvent );					
+					existingEvent = todo.updateExistingEvent( existingEvent );
 					return true;
 				}
 				return false;
@@ -1868,6 +1868,7 @@
 
 				// Save changes to a list of medications
 		function saveMedication(medication) {
+            console.log(medication);
 			var message = queryStarted('Medication', true, 'Saving');
 			trimNewMedicationFields(medication);
 			if(medication.customFrequency()){
@@ -2079,7 +2080,7 @@
 				allergySaving(false);
 			}
 		}
-		
+
 		function getPatientAllergiesQuery (params, orderstring) {
 			return allergiesService.getPatientAllergiesQuery(manager, params, orderstring);
 		}
@@ -2098,4 +2099,4 @@
 			return manager.executeQueryLocally(query);
 		}
 
-}); 
+});
