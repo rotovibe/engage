@@ -110,6 +110,8 @@
     <Compile Include="InsertBatchPatientsDataResponse.cs" />
     <Compile Include="PutPatientSystemIdDataRequest.cs" />
     <Compile Include="PutPatientSystemIdDataResponse.cs" />
+    <Compile Include="RemovePCMFromCohortPatientViewDataRequest.cs" />
+    <Compile Include="RemovePCMFromCohortPatientViewDataResponse.cs" />
     <Compile Include="SyncPatientInfoData.cs" />
     <Compile Include="SyncPatientInfoDataRequest.cs" />
     <Compile Include="SyncPatientInfoDataResponse.cs" />

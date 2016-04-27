@@ -28,5 +28,6 @@ namespace Phytel.API.DataDomain.Patient
         InsertBatchPatientsDataResponse InsertBatchPatients(InsertBatchPatientsDataRequest request);
         SyncPatientInfoDataResponse SyncPatient(SyncPatientInfoDataRequest request);
         AddPCMToCohortPatientViewDataResponse AddPcmToCohortPatientView(AddPCMToCohortPatientViewDataRequest request);
+        RemovePCMFromCohortPatientViewDataResponse RemovePcmFromCohortPatientView(RemovePCMFromCohortPatientViewDataRequest request);
     }
 }

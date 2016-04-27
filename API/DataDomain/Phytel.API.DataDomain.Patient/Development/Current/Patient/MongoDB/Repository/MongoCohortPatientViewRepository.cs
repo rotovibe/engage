@@ -616,5 +616,48 @@ namespace Phytel.API.DataDomain.Patient
             }
             catch (Exception) { throw; }
         }
+
+
+        public bool RemovePCMFromCohortPatientView(RemovePCMFromCohortPatientViewDataRequest request)
+        {
+            try
+            {
+                using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
+                {
+                    var q = MB.Query<MECohortPatientView>.EQ(b => b.PatientID, ObjectId.Parse(request.Id));
+
+                    var cohort = ctx.CohortPatientViews.Collection.FindOne(q);
+
+                    if (cohort != null)
+                    {
+                        var fields = cohort.SearchFields;
+                        var PcmField = fields.FirstOrDefault(f => f.FieldName == Constants.PCM);
+
+                        if (PcmField != null)
+                        
+                        {
+                            PcmField.Value = string.Empty;
+                            PcmField.Active = true;
+                            ctx.CohortPatientViews.Collection.Save(cohort);
+
+                            AuditHelper.LogDataAudit(this.UserId,
+                                           MongoCollectionName.CohortPatientView.ToString(),
+                                           request.Id.ToString(),
+                                           Common.DataAuditType.Update,
+                                           request.ContractNumber);
+
+                        }
+
+                     
+
+                    }
+
+                   
+
+                    return true;
+                }
+            }
+            catch (Exception) { throw; }
+        }
     }
 }

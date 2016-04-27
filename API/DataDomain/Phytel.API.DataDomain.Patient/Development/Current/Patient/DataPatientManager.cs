@@ -676,5 +676,22 @@ namespace Phytel.API.DataDomain.Patient
             return response;
             
         }
+
+        public RemovePCMFromCohortPatientViewDataResponse RemovePcmFromCohortPatientView(RemovePCMFromCohortPatientViewDataRequest request)
+        {
+            var response = new RemovePCMFromCohortPatientViewDataResponse();
+            try
+            {
+                var repo = Factory.GetRepository(request, RepositoryType.CohortPatientView);
+                var isSuccessful = repo.RemovePCMFromCohortPatientView(request);
+
+                response.IsSuccessful = isSuccessful;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return response;
+        }
     }
 }   

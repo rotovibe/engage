@@ -167,5 +167,11 @@ namespace Phytel.API.DataDomain.Patient.Test.Stub
         {
             throw new NotImplementedException();
         }
+
+
+        public bool RemovePCMFromCohortPatientView(RemovePCMFromCohortPatientViewDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

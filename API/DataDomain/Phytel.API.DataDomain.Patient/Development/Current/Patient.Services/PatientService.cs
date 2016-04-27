@@ -505,5 +505,28 @@ namespace Phytel.API.DataDomain.Patient.Service
             }
             return response;
         }
+
+        public RemovePCMFromCohortPatientViewDataResponse Delete(RemovePCMFromCohortPatientViewDataRequest request)
+        {
+            var response = new RemovePCMFromCohortPatientViewDataResponse();
+            try
+            {
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("PatientDD:RemovePCMFromCohortPatientViewDataRequest()::Unauthorized Access");
+
+                var managerResponse = PatientManager.RemovePcmFromCohortPatientView(request);
+                response.IsSuccessful = managerResponse.IsSuccessful;
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccessful = false;
+                CommonFormatterUtil.FormatExceptionResponse(response, base.Response, ex);
+
+                var aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Helpers.LogException(int.Parse(aseProcessID), ex);
+            }
+            return response;
+        }
     }
 }
