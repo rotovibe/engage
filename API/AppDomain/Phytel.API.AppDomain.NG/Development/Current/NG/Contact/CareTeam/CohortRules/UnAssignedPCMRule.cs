@@ -37,11 +37,14 @@ namespace Phytel.API.AppDomain.NG
             {
                 if (careTeam == null)
                     throw new ArgumentNullException("careTeam");
-                
+
+                //Check if any of the members have active core PCM role.
                 if (!_cohortRuleUtil.CheckIfCareTeamHasActiveCorePCM(careTeam))
                 {
                     //Add to UnAssigned PCM.
-                    _contactEndpointUtil.RemovePCMCohortPatientView(data.PatientId, 1.0, data.ContractNumber, data.UserId);
+                   var isSuccessful = _contactEndpointUtil.RemovePCMCohortPatientView(data.PatientId,data.Version, data.ContractNumber, data.UserId);
+
+                    response.IsSuccessful = isSuccessful;
                 }
             }
             catch (Exception ex)

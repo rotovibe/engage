@@ -49,10 +49,10 @@ namespace Phytel.API.AppDomain.NG
 
             if (careTeam == null) return false;
             var activeCorePCMs =
-                careTeam.Members.Select(
+                careTeam.Members.Where(
                     c =>
                         c.RoleId == Constants.PCMRoleId && c.Core == true &&
-                        c.StatusId == (int)CareTeamMemberStatus.Active);
+                        c.StatusId == (int)CareTeamMemberStatus.Active).ToList();
             if (!activeCorePCMs.IsNullOrEmpty() && activeCorePCMs.Count() > 1)
                 res = true;
 
@@ -65,10 +65,10 @@ namespace Phytel.API.AppDomain.NG
 
             if (careTeam == null) return false;
             var activeCorePCMs =
-                careTeam.Members.Select(
+                careTeam.Members.Where(
                     c =>
                         c.RoleId == Constants.PCPRoleId && c.Core == true &&
-                        c.StatusId == (int)CareTeamMemberStatus.Active);
+                        c.StatusId == (int)CareTeamMemberStatus.Active).ToList();
             if (!activeCorePCMs.IsNullOrEmpty() && activeCorePCMs.Count() > 1)
                 res = true;
 

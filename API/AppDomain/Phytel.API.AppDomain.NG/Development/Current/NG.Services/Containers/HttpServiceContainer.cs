@@ -53,6 +53,10 @@ namespace Phytel.API.AppDomain.NG.Service.Containers
             container.RegisterAutoWiredAs<ContactEndpointUtil, IContactEndpointUtil>().ReusedWithin(ReuseScope.Request);
             container.RegisterAutoWiredAs<EngageCareMemberCohortRuleFactory, ICareMemberCohortRuleFactory>().ReusedWithin(ReuseScope.Request);
             container.RegisterAutoWiredAs<CohortRulesProcessor, ICohortRulesProcessor>().ReusedWithin(ReuseScope.Hierarchy);
+
+            container.RegisterAutoWiredAs<CohortRoleUtils, ICohortRuleUtil>().ReusedWithin(ReuseScope.Request);
+            container.RegisterAutoWiredAs<ASEExceptionLogger, ILogger>().ReusedWithin(ReuseScope.Request);
+
             return container;
         }
     }

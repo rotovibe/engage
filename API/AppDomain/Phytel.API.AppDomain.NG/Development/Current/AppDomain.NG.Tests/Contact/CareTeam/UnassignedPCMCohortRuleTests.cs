@@ -50,5 +50,27 @@ namespace Phytel.API.AppDomain.NG.Test.Contact
 
         }
 
+       [TestMethod]
+       public void UnassignedPCMCohortRule_Run_Has_ActiveCorePCM_Should_NOT_Call_Add_PCM()
+       {
+           //Arrange
+           var mockContactDataController = new Mock<IContactEndpointUtil>();
+           var mockLogger = new Mock<ILogger>();
+           var mockCohortRuleUtil = new Mock<ICohortRuleUtil>();
+
+           mockCohortRuleUtil.Setup(mcru => mcru.CheckIfCareTeamHasActiveCorePCM(It.IsAny<CareTeam>())).Returns(true);
+
+           var rule = new UnAssignedPCMRule(mockContactDataController.Object, mockLogger.Object, mockCohortRuleUtil.Object);
+           var ruleResponse = rule.Run(new CareTeam { ContactId = "cid", Members = new List<Member> { new Member { ContactId = "mcId", RoleId = "OtherroleId", Core = false } } }, new CohortRuleCheckData { ContactId = "cid", ContractNumber = "inhealth001", UserId = "1234" });
+
+           Assert.IsNotNull(ruleResponse);
+
+           mockCohortRuleUtil.Verify(c => c.CheckIfCareTeamHasActiveCorePCM(It.IsAny<CareTeam>()), Times.Once);
+           mockContactDataController.Verify(mcdc => mcdc.RemovePCMCohortPatientView(It.IsAny<string>(), It.IsAny<double>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+
+
+
+       }
+
     }
 }

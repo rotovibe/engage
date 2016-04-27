@@ -101,6 +101,21 @@ namespace Phytel.API.AppDomain.NG
             if(request.CareTeam.Members.IsNullOrEmpty())
                  throw new ApplicationException(string.Format("CareTeam should have atleast one or more members."));
 
+            //TODO: Refactor.
+            var contact = GetContactByContactId(new GetContactByContactIdRequest
+            {
+                ContractNumber = request.ContractNumber,
+                ContactId = request.ContactId,
+                UserId = request.UserId,
+                Version = request.Version
+            });
+
+            if (contact == null)
+                throw new ApplicationException(string.Format("Contact with id: {0} does not exist.", request.ContactId));
+
+            if(!contact.IsPatient)
+                throw new ApplicationException(string.Format("Contact with id: {0} is not a patient.", request.ContactId));
+
 
             if (CohortRuleUtil.HasMultipleActiveCorePCM(request.CareTeam))
                 throw new ApplicationException("The Care team cannot have multiple Active, Core PCMs");
@@ -120,17 +135,6 @@ namespace Phytel.API.AppDomain.NG
 
                if (domainResponse != null)
                {
-                   //TODO: Refactor.
-                   var contact = GetContactByContactId(new GetContactByContactIdRequest
-                   {
-                       ContractNumber = request.ContractNumber,
-                       ContactId = request.ContactId,
-                       UserId = request.UserId,
-                       Version = request.Version
-                   });
-
-                   if (contact == null)
-                       throw new ApplicationException(string.Format("Contact with id: {0} does not exist", request.ContactId));
 
                    var cohortRuleCheckData = new CohortRuleCheckData()
                    {
