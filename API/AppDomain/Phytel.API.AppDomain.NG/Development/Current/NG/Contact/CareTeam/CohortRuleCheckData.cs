@@ -13,5 +13,6 @@ namespace Phytel.API.AppDomain.NG
         public string ContractNumber { get; set; }
         public string UserId { get; set; }
         public double Version { get; set; }
+        public List<string> UserIds { get; set; }
     }    
 }

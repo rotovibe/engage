@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Phytel.API.AppDomain.NG.DTO;
+using ServiceStack.Text;
 
 namespace Phytel.API.AppDomain.NG
 {
@@ -42,8 +43,10 @@ namespace Phytel.API.AppDomain.NG
                 if (activeCorePCM != null)
                 {
                     //We need to add Active Core PCM from the CohortPatientView for the referenced individual
-                    _contactEndpointUtil.AddPCMToCohortPatientView(data.PatientId,activeCorePCM.ContactId, data.Version, data.ContractNumber,
-                        data.UserId);
+                    if (!data.UserIds.IsNullOrEmpty() &&   data.UserIds.Contains(activeCorePCM.ContactId))
+                    {
+                        _contactEndpointUtil.AddPCMToCohortPatientView(data.PatientId, activeCorePCM.ContactId,data.Version, data.ContractNumber,data.UserId);
+                    }
                 }               
             }
             catch (Exception ex)
