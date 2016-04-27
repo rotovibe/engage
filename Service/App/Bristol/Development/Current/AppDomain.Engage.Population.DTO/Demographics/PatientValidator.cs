@@ -24,6 +24,7 @@ namespace AppDomain.Engage.Population.DTO.Demographics
             RuleFor(r => r.DeceasedId).LessThan(3);
             RuleFor(r => r.LastFourSSN).Length(4).Matches("^[0-9]*$");
             RuleFor(r => r.Gender).Length(1).Matches("^[M,F,O]$");
+            RuleFor(r => r.MaritalStatusId).Length(1,2).Matches("^[W,LF,LS,U]$");
 
         }
 

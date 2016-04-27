@@ -42,7 +42,7 @@ namespace AppDomain.Engage.Population.DTO.Demographics
         public string FullSsn { get; set; }
 
         public string LastFourSSN { get; set; }
-        public string Mrn { get; set; }
+       
 
         [ApiMember(Name = "ExternalRecordId", Description = "ExternalRecordId", ParameterType = "property", DataType = "string", IsRequired = true)]
 
@@ -53,8 +53,7 @@ namespace AppDomain.Engage.Population.DTO.Demographics
         public string DataSource { get; set; }
 
         public string StatusCode { get; set; }
-        public DateTime? CreatedOn { get; set; }
-        public string CreatedBy { get; set; }
+        
         
 
     }
