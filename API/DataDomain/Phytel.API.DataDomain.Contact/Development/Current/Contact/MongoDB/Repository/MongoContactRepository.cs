@@ -1384,8 +1384,8 @@ namespace Phytel.API.DataDomain.Contact
                     ExternalRecordId = data.ExternalRecordId,
                     Version = version,
                     DeleteFlag = false,
-                    LoweredLastName =  data.LastName.ToLower(),
-                    LoweredFirstName = data.FirstName.ToLower()
+                    LoweredLastName =  string.IsNullOrEmpty(data.LastName) ? null : data.LastName.ToLower(),
+                    LoweredFirstName = string.IsNullOrEmpty(data.FirstName)? null : data.FirstName.ToLower()
                 };
                 //ContactTypeId
                 if (data.ContactTypeId != null)
