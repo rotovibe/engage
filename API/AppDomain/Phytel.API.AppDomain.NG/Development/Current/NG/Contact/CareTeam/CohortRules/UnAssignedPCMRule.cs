@@ -41,8 +41,7 @@ namespace Phytel.API.AppDomain.NG
                 if (!_cohortRuleUtil.CheckIfCareTeamHasActiveCorePCM(careTeam))
                 {
                     //Add to UnAssigned PCM.
-
-                    _contactEndpointUtil.RemovePCMCohortPatientView("PatientId", 1.0, data.ContractNumber, data.UserId);
+                    _contactEndpointUtil.RemovePCMCohortPatientView(data.PatientId, 1.0, data.ContractNumber, data.UserId);
                 }
             }
             catch (Exception ex)

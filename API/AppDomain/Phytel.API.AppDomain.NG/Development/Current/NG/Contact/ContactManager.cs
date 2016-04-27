@@ -118,7 +118,30 @@ namespace Phytel.API.AppDomain.NG
             {
                var domainResponse =  EndpointUtil.SaveCareTeam(request);
 
-              // OnCareMemberUpdated(request.ContactId,request.ContractNumber,request.UserId);
+               if (domainResponse != null)
+               {
+                   //TODO: Refactor.
+                   var contact = GetContactByContactId(new GetContactByContactIdRequest
+                   {
+                       ContractNumber = request.ContractNumber,
+                       ContactId = request.ContactId,
+                       UserId = request.UserId,
+                       Version = request.Version
+                   });
+
+                   if (contact == null)
+                       throw new ApplicationException(string.Format("Contact with id: {0} does not exist", request.ContactId));
+
+                   var cohortRuleCheckData = new CohortRuleCheckData()
+                   {
+                       ContactId = request.ContactId,
+                       ContractNumber = request.ContractNumber,
+                       UserId = request.UserId,
+                       PatientId = contact.PatientId
+                   };
+                   CohortRules.EnqueueCohorRuleCheck(cohortRuleCheckData);
+
+               }
             }
             catch (Exception ex)
             {
@@ -151,11 +174,23 @@ namespace Phytel.API.AppDomain.NG
             if (request.Id != request.CareTeamMember.Id)
                 throw new ArgumentNullException("CareTeamMemberData.Id and Id are different", "request");
 
+            var contact = GetContactByContactId(new GetContactByContactIdRequest
+            {
+                ContractNumber = request.ContractNumber,
+                ContactId = request.ContactId,
+                UserId = request.UserId,
+                Version = request.Version
+            });
+
+            if(contact == null)
+                throw new ApplicationException(string.Format("Contact with id: {0} does not exist", request.ContactId));
+
             var cohortRuleCheckData = new CohortRuleCheckData()
             {
                 ContactId = request.ContactId,
                 ContractNumber = request.ContractNumber,
-                UserId = request.UserId
+                UserId = request.UserId,
+                PatientId = contact.PatientId
             };
 
             string currentActiveCorePCMId = CohortRules.GetCareTeamActiveCorePCMId(cohortRuleCheckData);
@@ -181,7 +216,6 @@ namespace Phytel.API.AppDomain.NG
            
             return response;
         }
-
         
         public DeleteCareTeamMemberResponse DeleteCareTeamMember(DeleteCareTeamMemberRequest request)
         {
@@ -191,7 +225,32 @@ namespace Phytel.API.AppDomain.NG
                 throw new ArgumentNullException("request");
             try
             {
-                EndpointUtil.DeleteCareTeamMember(request);
+                var dataResponse = EndpointUtil.DeleteCareTeamMember(request);
+
+                if (dataResponse != null)
+                {
+                    //TODO: Refactor.
+                    var contact = GetContactByContactId(new GetContactByContactIdRequest
+                    {
+                        ContractNumber = request.ContractNumber,
+                        ContactId = request.ContactId,
+                        UserId = request.UserId,
+                        Version = request.Version
+                    });
+
+                    if (contact == null)
+                        throw new ApplicationException(string.Format("Contact with id: {0} does not exist", request.ContactId));
+
+                    var cohortRuleCheckData = new CohortRuleCheckData()
+                    {
+                        ContactId = request.ContactId,
+                        ContractNumber = request.ContractNumber,
+                        UserId = request.UserId,
+                        PatientId = contact.PatientId
+                    };
+                    CohortRules.EnqueueCohorRuleCheck(cohortRuleCheckData);
+
+                }
             }
             catch (WebServiceException wse)
             {
@@ -205,7 +264,7 @@ namespace Phytel.API.AppDomain.NG
 
         #region Private Methods
 
-        private void ValidateCareTeamMemberFields(Member member)//, string contractNumber, string userId, double version)
+        private void ValidateCareTeamMemberFields(Member member)
         {
             if (member == null)
                 throw new Exception("CareTeam Member cannot be null");
@@ -242,26 +301,7 @@ namespace Phytel.API.AppDomain.NG
 
 
         }
-
-        //private void OnCareMemberUpdated(string contactId, string contractNumber,string userId)
-        //{
-        //    var careTeam =  GetCareTeam(new GetCareTeamRequest
-        //    {
-        //        ContactId = contactId, 
-        //        ContractNumber = contractNumber, 
-        //        UserId = userId
-        //    });
-        //    //if (careTeam!=null)
-        //    //{
-        //    //    CohortRules.EnqueueCareTeam(careTeam);
-        //    //}
-        //    var rules = CareMemberCohortRuleFactory.GenerateEngageCareMemberCohortRules();
-        //    foreach (var rule in rules)
-        //    {
-        //        rule.Run(careTeam);
-        //    }
-
-        //}
+       
         #endregion
         
     }
