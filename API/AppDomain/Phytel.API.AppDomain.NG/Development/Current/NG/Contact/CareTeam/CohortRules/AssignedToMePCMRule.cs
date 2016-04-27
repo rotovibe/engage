@@ -21,7 +21,7 @@ namespace Phytel.API.AppDomain.NG
             if (logger == null)
                 throw new ArgumentNullException("logger");
 
-            if (_cohortRuleUtil == null)
+            if (cohortRuleUtil == null)
                 throw new ArgumentNullException("cohortRuleUtil");
 
             _contactEndpointUtil = contactEndpointUtil;
@@ -44,14 +44,7 @@ namespace Phytel.API.AppDomain.NG
                     //We need to remove any Active Core PCM from the CohortPatientView for the referenced individual
                     _contactEndpointUtil.RemovePCMCohortPatientView(data.PatientId, data.Version, data.ContractNumber,
                         data.UserId);
-                }
-                else
-                {
-                   //We need to add an Active Core PCM cohort for the referenced individual ;                   
-                   //_contactEndpointUtil.AddPCMToCohortPatientView()
-                   _contactEndpointUtil.AddPCMToCohortPatientView(data.PatientId,activeCorePCM.ContactId, data.Version, data.ContractNumber,
-                        data.UserId);
-                }
+                }               
             }
             catch (Exception ex)
             {
