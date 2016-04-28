@@ -113,13 +113,14 @@ namespace Phytel.API.DataDomain.Patient
                             if (_reasonId.Contains("U"))
                                 patient.ReasonId = "U";
                         }
-                        else if ((pd != null) && (!String.IsNullOrEmpty(pd.ReasonId)))
+                        if ((pd != null) && (!String.IsNullOrEmpty(pd.ReasonId)))
                         {
                             if (_reasonId.Contains(pd.ReasonId))
                             {
                                 patient.ReasonId = pd.ReasonId;
                             }
-                            else throw new ArgumentOutOfRangeException("Invalid ReasonId value in source data");
+                            // SAVE IT ----- else patient.ReasonId = "U";
+                            else throw new ArgumentOutOfRangeException("Invalid Argument");
                         }
 
                         /*    if (!string.IsNullOrEmpty(pd.MaritalStatusId))
@@ -138,7 +139,8 @@ namespace Phytel.API.DataDomain.Patient
                             {
                                 patient.MaritalStatusId = pd.MaritalStatusId;
                             }
-                            else throw new ArgumentOutOfRangeException("Invalid MartialStatusId value in source data");
+                            // SAVE IT else patient.MaritalStatusId = "U";
+                            else throw new ArgumentOutOfRangeException("Invalid Argument");
                         }
 
                         ctx.Patients.Collection.Insert(patient);
@@ -246,11 +248,13 @@ namespace Phytel.API.DataDomain.Patient
                         }
                         else if ((pd != null) && (!String.IsNullOrEmpty(pd.ReasonId)))
                         {
-                            if (_maritalStatus.Contains(pd.ReasonId))
+                            if (_reasonId.Contains(pd.ReasonId))
                             {
                                 meP.ReasonId = pd.ReasonId;
                             }
-                            else throw new ArgumentOutOfRangeException("Invalid Reason Id value in source data");
+                            // SAVE IT else meP.ReasonId = "U";
+                            else throw new ArgumentOutOfRangeException("Invalid Argument");
+
                         }
 
 
@@ -265,18 +269,20 @@ namespace Phytel.API.DataDomain.Patient
                             {
                                 meP.MaritalStatusId = pd.MaritalStatusId;
                             }
-                            else throw new ArgumentOutOfRangeException("Invalid MartialStatusId value in source data");
+                            // SAVE IT else meP.MaritalStatusId = "U";
+                            else throw new ArgumentOutOfRangeException("Invalid Argument");
+
                         }
 
-                 /*       if (!string.IsNullOrEmpty(pd.MaritalStatusId))
-                        {
-                            int intMaritalResult;
-                            Int32.TryParse(pd.MaritalStatusId, out intMaritalResult);
-                            string hexMaritalId = intMaritalResult.ToString("X24");
-                            meP.MaritalStatusId= ObjectId.Parse(hexMaritalId);
-                         //   meP.MaritalStatusId = ObjectId.Parse(pd.MaritalStatusId);
-                        }
-                        */
+                        /*       if (!string.IsNullOrEmpty(pd.MaritalStatusId))
+                               {
+                                   int intMaritalResult;
+                                   Int32.TryParse(pd.MaritalStatusId, out intMaritalResult);
+                                   string hexMaritalId = intMaritalResult.ToString("X24");
+                                   meP.MaritalStatusId= ObjectId.Parse(hexMaritalId);
+                                //   meP.MaritalStatusId = ObjectId.Parse(pd.MaritalStatusId);
+                               }
+                               */
 
                         if (!string.IsNullOrEmpty(pd.UpdatedByProperty))
                         {
