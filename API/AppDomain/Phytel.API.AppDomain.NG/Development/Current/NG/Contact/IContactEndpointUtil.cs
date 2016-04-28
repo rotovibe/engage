@@ -10,6 +10,7 @@ namespace Phytel.API.AppDomain.NG
         #region Contact
         ContactData GetContactByContactId(GetContactByContactIdRequest request);
         List<ContactData> GetContactsByContactIds(List<string> contactIds, double version, string contractNumber,string userId);
+        List<Contact> GetCareManagers(GetAllCareManagersRequest request);
         #endregion
 
         #region CareTeam

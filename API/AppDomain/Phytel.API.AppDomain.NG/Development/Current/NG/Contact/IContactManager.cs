@@ -13,7 +13,9 @@ namespace Phytel.API.AppDomain.NG
 
         #region Contact
         Contact GetContactByContactId(GetContactByContactIdRequest request);
-        #endregion
+        List<Contact> GetCareManagers(GetAllCareManagersRequest request);
+
+            #endregion
 
         #region CareTeam
         CareTeam GetCareTeam(GetCareTeamRequest request);

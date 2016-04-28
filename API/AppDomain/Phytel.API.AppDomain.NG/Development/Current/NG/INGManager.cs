@@ -17,8 +17,7 @@ namespace Phytel.API.AppDomain.NG
         List<StatesLookUp> GetAllStates(GetAllStatesRequest request);
         List<IdNamePair> GetAllTimesOfDays(GetAllTimesOfDaysRequest request);
         List<TimeZonesLookUp> GetAllTimeZones(GetAllTimeZonesRequest request);
-        List<ObjectivesLookUp> GetAllObjectives(GetAllObjectivesRequest request);
-        List<Contact> GetCareManagers(GetAllCareManagersRequest request);
+        List<ObjectivesLookUp> GetAllObjectives(GetAllObjectivesRequest request);        
         GetRecentPatientsResponse GetRecentPatients(GetRecentPatientsRequest request);
         GetCohortPatientsResponse GetCohortPatients(GetCohortPatientsRequest request);
         List<Cohort> GetCohorts(GetAllCohortsRequest request);

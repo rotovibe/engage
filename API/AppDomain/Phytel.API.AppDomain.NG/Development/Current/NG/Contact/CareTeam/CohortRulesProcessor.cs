@@ -74,8 +74,7 @@ namespace Phytel.API.AppDomain.NG
               
         public void Stop()
         {
-            if (_exitEvent!=null)
-                _exitEvent.Set();            
+            _exitEvent?.Set();
         }
 
         private void ProcessQueue()
@@ -87,18 +86,33 @@ namespace Phytel.API.AppDomain.NG
                     lock (queueLock)
                     {
                         CohortRuleCheckData currCohortRuleCheckData = null;
-                        if (_cohortRuleCheckDataTeamQueue.TryDequeue(out currCohortRuleCheckData))
-                            ApplyCohortRules(currCohortRuleCheckData);
+                        if (_cohortRuleCheckDataTeamQueue.TryDequeue(out currCohortRuleCheckData) &&
+                            currCohortRuleCheckData != null) ApplyCohortRules(currCohortRuleCheckData);
                     }
                 }
                 catch (Exception ex)
                 {
-                    //TODO what do we do if we fail to apply a cohort rule?    
-                    throw;
+                    _logger.Log(ex);
                 }                         
             }
         }
-       
+        private List<string> GetAllUsersIds(string contractNumber, string userId, double version)
+        {
+            List<string> res = null;
+            var getAllCareManagersRequest = new GetAllCareManagersRequest()
+            {
+                ContractNumber = contractNumber,
+                UserId = userId,
+                Version = version
+            };
+            var careManagers = EndpointUtil.GetCareManagers(getAllCareManagersRequest);
+
+            if (careManagers != null)
+            {
+                res = (from c in careManagers where c.IsUser select c.UserId).ToList();
+            }
+            return res;
+        }
         private void ApplyCohortRules(CohortRuleCheckData cohortRuleCheckData)
         {
             CareTeam careTeam = null;
@@ -111,6 +125,8 @@ namespace Phytel.API.AppDomain.NG
 
             if (careTeamData == null) return;
             careTeam = Mapper.Map<CareTeam>(careTeamData);
+            var userList = GetAllUsersIds(cohortRuleCheckData.ContractNumber, cohortRuleCheckData.UserId, cohortRuleCheckData.Version);
+            cohortRuleCheckData.UserIds = userList;
             var rules = CareMemberCohortRuleFactory.GenerateEngageCareMemberCohortRules();
             foreach (var rule in rules)
             {

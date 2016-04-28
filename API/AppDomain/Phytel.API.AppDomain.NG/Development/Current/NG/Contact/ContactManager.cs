@@ -43,9 +43,21 @@ namespace Phytel.API.AppDomain.NG
             catch (Exception ex) { throw ex; }
 
         }
+
+        public List<Contact> GetCareManagers(GetAllCareManagersRequest request)
+        {
+            List<Contact> contacts = null;
+            try
+            {
+                contacts = EndpointUtil.GetCareManagers(request);                               
+            }
+            catch (Exception ex) { throw ex; }
+            return contacts;
+        }
+
         #endregion
 
-        #region CareTeam
+            #region CareTeam
         public CareTeam GetCareTeam(GetCareTeamRequest request)
         {
             CareTeam careTeam = null;
@@ -155,7 +167,7 @@ namespace Phytel.API.AppDomain.NG
             return response;
 
         }
-
+       
         public UpdateCareTeamMemberResponse UpdateCareTeamMember(UpdateCareTeamMemberRequest request)
         {
             var response = new UpdateCareTeamMemberResponse();
@@ -189,12 +201,15 @@ namespace Phytel.API.AppDomain.NG
             if(contact == null)
                 throw new ApplicationException(string.Format("Contact with id: {0} does not exist", request.ContactId));
 
+            
+            
+            
             var cohortRuleCheckData = new CohortRuleCheckData()
             {
                 ContactId = request.ContactId,
                 ContractNumber = request.ContractNumber,
                 UserId = request.UserId,
-                PatientId = contact.PatientId
+                PatientId = contact.PatientId               
             };
 
             string currentActiveCorePCMId = CohortRules.GetCareTeamActiveCorePCMId(cohortRuleCheckData);
@@ -209,8 +224,7 @@ namespace Phytel.API.AppDomain.NG
                 if (domainResponse != null)
                 {
                     response.Status = domainResponse.Status;                   
-                    CohortRules.EnqueueCohorRuleCheck(cohortRuleCheckData);                   
-                    //OnCareMemberUpdated(request.ContactId, request.ContractNumber, request.UserId);
+                    CohortRules.EnqueueCohorRuleCheck(cohortRuleCheckData);                                       
                 }
             }
             catch (Exception ex)

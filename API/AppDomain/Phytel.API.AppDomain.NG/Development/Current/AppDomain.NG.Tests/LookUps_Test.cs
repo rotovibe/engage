@@ -89,7 +89,7 @@ namespace Phytel.API.AppDomain.NG.Test
         public void GetCareManagers()
         {
             // Arrange
-            NGManager ngManager = new NGManager();
+            ContactManager ngManager = new ContactManager();
             GetAllCareManagersRequest request = new GetAllCareManagersRequest
             {
                 ContractNumber = _contractNumber,

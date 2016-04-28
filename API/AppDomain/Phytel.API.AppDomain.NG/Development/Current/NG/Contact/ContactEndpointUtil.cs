@@ -82,6 +82,49 @@ namespace Phytel.API.AppDomain.NG
             return result;
         }
 
+        public List<Contact> GetCareManagers(GetAllCareManagersRequest request)
+        {
+            List<Contact> contactList = null;
+            try
+            {
+                IRestClient client = new JsonServiceClient();
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Contact/CareManagers",
+                                                       DDContactServiceUrl,
+                                                       "NG",
+                                                       request.Version,
+                                                       request.ContractNumber), request.UserId);
+
+                //[Route("/{Context}/{Version}/{ContractNumber}/Contact/CareManagers", "GET")]
+                GetAllCareManagersDataResponse dataDomainResponse;
+                dataDomainResponse =
+                    client.Get<GetAllCareManagersDataResponse>(url);
+
+                if (dataDomainResponse != null && dataDomainResponse.Contacts != null)
+                {
+                    contactList = new List<Contact>();
+                    List<ContactData> contactDataList = dataDomainResponse.Contacts;
+                    foreach (ContactData cd in contactDataList)
+                    {
+                        contactList.Add(new Contact
+                        {
+                            Id = cd.Id,
+                            UserId = cd.UserId,
+                            PreferredName = cd.PreferredName,
+                            FirstName = cd.FirstName,
+                            LastName = cd.LastName,
+                            IsUser = !string.IsNullOrEmpty(cd.UserId),
+                            IsPatient = !string.IsNullOrEmpty(cd.PatientId)
+                        });
+                    }
+                }
+            }
+            catch (WebServiceException wse)
+            {
+                throw new WebServiceException("AD:GetCareManagers()::" + wse.Message, wse.InnerException);
+            }
+            return contactList;
+        }
+
         #endregion
 
         #region CareTeam
