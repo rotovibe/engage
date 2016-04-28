@@ -21,7 +21,7 @@ namespace Phytel.API.AppDomain.NG
             {
                 new AssignedToMePCMRule(_contactEndpointUtil, _logger,_cohortRuleUtil),
                 new UnAssignedPCMRule(_contactEndpointUtil, _logger,_cohortRuleUtil),
-                new AssignedToMeRule()
+                new AssignedToMeRule(_contactEndpointUtil, _logger,_cohortRuleUtil)
 
             };
         }
