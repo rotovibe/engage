@@ -54,7 +54,7 @@ namespace AppDomain.Engage.Population.Service.Container
             container.Register<ICohortManager>(
                 c =>
                     new CohortManager(c.Resolve<IServiceContext>(), c.Resolve<ICohortDataDomainClient>(),
-                        c.Resolve<UserContext>())).ReusedWithin(ReuseScope.Request);
+                        new UserContext())).ReusedWithin(ReuseScope.Request);
             container.RegisterValidators(typeof(ReferralWithPatientsListRequestValidator).Assembly);
             
             return container;
