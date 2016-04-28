@@ -109,7 +109,7 @@ namespace Phytel.API.AppDomain.NG
 
             if (careManagers != null)
             {
-                res = (from c in careManagers where c.IsUser select c.UserId).ToList();
+                res = (from c in careManagers where c.IsUser select c.Id).ToList();
             }
             return res;
         }
