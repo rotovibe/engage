@@ -305,16 +305,8 @@ namespace Phytel.API.AppDomain.NG
                                                                                 "NG",
                                                                                 1.0,
                                                                                 contractNumber, patientId), userId);
-                var dataDomainResponse =
-                    client.Put<RemovePCMFromCohortPatientViewDataResponse>(url, new RemovePCMFromCohortPatientViewDataRequest
-                    {
-
-                        Version = version,
-                        Id = patientId,
-                        ContractNumber = contractNumber,
-                        Context = "NG",
-                        UserId = userId
-                    } as object);
+                var dataDomainResponse = client.Delete<RemovePCMFromCohortPatientViewDataResponse>(url);
+                  
 
                 response = dataDomainResponse == null;
 

@@ -47,8 +47,8 @@ namespace Phytel.API.AppDomain.NG
                 }
 
                 _contactEndpointUtil.AssignContactsToCohortPatientView(data.PatientId, contactIdsToAdd, data.Version, data.ContractNumber, data.UserId);
-                
-                
+                response.IsSuccessful = true; 
+
             }
             catch (Exception ex)
             {
