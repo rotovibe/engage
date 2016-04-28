@@ -10,7 +10,7 @@ namespace Phytel.API.Common
     {
        public  string Id { get; set; }
         public string DataSource { get; set; }
-        public DateTime RecordCreatedOn { get; set; }
+   //     public DateTime RecordCreatedOn { get; set; }
         public string ExternalRecordId { get; set; }
     }
 }

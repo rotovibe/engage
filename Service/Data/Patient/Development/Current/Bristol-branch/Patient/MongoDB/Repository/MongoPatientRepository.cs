@@ -1,8 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
 using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
 using MongoDB.Driver.Builders;
 using Phytel.API.Common;
@@ -10,10 +7,11 @@ using Phytel.API.Common.Format;
 using Phytel.API.DataAudit;
 using Phytel.API.DataDomain.Patient.DTO;
 using Phytel.Services;
+using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Linq;
 using MB = MongoDB.Driver.Builders;
-using MongoDB.Bson.Serialization;
-using System.Net;
-using ServiceStack.ServiceHost;
 
 namespace Phytel.API.DataDomain.Patient
 {
@@ -22,6 +20,12 @@ namespace Phytel.API.DataDomain.Patient
         private string _dbName = string.Empty;
         private int _expireDays = Convert.ToInt32(ConfigurationManager.AppSettings["ExpireDays"]);
         private int _initializeDays = Convert.ToInt32(ConfigurationManager.AppSettings["InitializeDays"]);
+
+        // (D)ivorced, (W)idowed, (M)arried, (U)ndisclosed/Unknown, LS = Legally Separated, LP = Life Partner
+        private IEnumerable<string> _maritalStatus = new List<String> { "D", "LS", "LP", "M", "U", "S", "W" };
+
+        // (D)eceased, (N)on responder, (O)ther,  (OO) = Opt Out, (U)nknown
+        private IEnumerable<string> _reasonId = new List<string> {"D","N", "O", "OO", "U" };
 
         static MongoPatientRepository()
         {             
@@ -97,24 +101,46 @@ namespace Phytel.API.DataDomain.Patient
                             DeleteFlag = false,
                             DataSource = Helper.TrimAndLimit(pd.DataSource, 50),
                             Status = (Status)pd.StatusId,
-                            StatusDataSource  = Helper.TrimAndLimit(pd.StatusDataSource, 50),
+                            StatusDataSource = Helper.TrimAndLimit(pd.StatusDataSource, 50),
                             Protected = pd.Protected,
                             Deceased = (Deceased)pd.DeceasedId,
                             LastUpdatedOn = pd.LastUpdatedOn,
-                            ExternalRecordId = pd.ExternalRecordId
+                            ExternalRecordId = pd.ExternalRecordId,
                         };
-                        if(!string.IsNullOrEmpty(pd.ReasonId))
+
+                        if ((pd == null) || String.IsNullOrEmpty(pd.ReasonId))
                         {
-                            int intReasonResult;
-                            Int32.TryParse(pd.ReasonId, out intReasonResult);
-                            string hexReasonId = intReasonResult.ToString("X24");
-                            patient.ReasonId = ObjectId.Parse(hexReasonId);
-                            // patient.ReasonId = ObjectId.Parse(pd.ReasonId);
+                            if (_reasonId.Contains("U"))
+                                patient.ReasonId = "U";
                         }
-                        if (!string.IsNullOrEmpty(pd.MaritalStatusId))
+                        else if ((pd != null) && (!String.IsNullOrEmpty(pd.ReasonId)))
                         {
-                            patient.MaritalStatusId = ObjectId.Parse(pd.MaritalStatusId);
+                            if (_reasonId.Contains(pd.ReasonId))
+                            {
+                                patient.ReasonId = pd.ReasonId;
+                            }
+                            else throw new ArgumentOutOfRangeException("Invalid ReasonId value in source data");
                         }
+
+                        /*    if (!string.IsNullOrEmpty(pd.MaritalStatusId))
+                            {
+                                patient.MaritalStatusId = ObjectId.Parse(pd.MaritalStatusId);
+                            }
+                       */
+                        if ((pd == null) || String.IsNullOrEmpty(pd.MaritalStatusId))
+                        {
+                            if (_maritalStatus.Contains("U"))
+                                patient.MaritalStatusId = "U";
+                        }
+                        else if ((pd != null) && (!String.IsNullOrEmpty(pd.MaritalStatusId)))
+                        {
+                            if (_maritalStatus.Contains(pd.MaritalStatusId))
+                            {
+                                patient.MaritalStatusId = pd.MaritalStatusId;
+                            }
+                            else throw new ArgumentOutOfRangeException("Invalid MartialStatusId value in source data");
+                        }
+
                         ctx.Patients.Collection.Insert(patient);
 
                         List<SearchFieldData> data = new List<SearchFieldData>();
@@ -212,15 +238,37 @@ namespace Phytel.API.DataDomain.Patient
                             LastUpdatedOn = pd.LastUpdatedOn,
                             ExternalRecordId = pd.ExternalRecordId,
                         };
-                        if (!string.IsNullOrEmpty(pd.ReasonId))
+
+                        if ((pd == null) || String.IsNullOrEmpty(pd.ReasonId))
                         {
-                            int intReasonResult;
-                            Int32.TryParse(pd.ReasonId, out intReasonResult);
-                            string hexReasonId = intReasonResult.ToString("X24");
-                            meP.ReasonId = ObjectId.Parse(hexReasonId);
-                        //    meP.ReasonId = ObjectId.Parse(pd.ReasonId);
+                            if (_reasonId.Contains("U"))
+                                meP.ReasonId = "U";
                         }
-                        if (!string.IsNullOrEmpty(pd.MaritalStatusId))
+                        else if ((pd != null) && (!String.IsNullOrEmpty(pd.ReasonId)))
+                        {
+                            if (_maritalStatus.Contains(pd.ReasonId))
+                            {
+                                meP.ReasonId = pd.ReasonId;
+                            }
+                            else throw new ArgumentOutOfRangeException("Invalid Reason Id value in source data");
+                        }
+
+
+                        if ( (pd == null) || String.IsNullOrEmpty(pd.MaritalStatusId))
+                        {
+                            if (_maritalStatus.Contains("U"))
+                                 meP.MaritalStatusId = "U";
+                        }
+                       else  if((pd != null) && (!String.IsNullOrEmpty(pd.MaritalStatusId)))
+                        {
+                            if(_maritalStatus.Contains(pd.MaritalStatusId))
+                            {
+                                meP.MaritalStatusId = pd.MaritalStatusId;
+                            }
+                            else throw new ArgumentOutOfRangeException("Invalid MartialStatusId value in source data");
+                        }
+
+                 /*       if (!string.IsNullOrEmpty(pd.MaritalStatusId))
                         {
                             int intMaritalResult;
                             Int32.TryParse(pd.MaritalStatusId, out intMaritalResult);
@@ -228,6 +276,8 @@ namespace Phytel.API.DataDomain.Patient
                             meP.MaritalStatusId= ObjectId.Parse(hexMaritalId);
                          //   meP.MaritalStatusId = ObjectId.Parse(pd.MaritalStatusId);
                         }
+                        */
+
                         if (!string.IsNullOrEmpty(pd.UpdatedByProperty))
                         {
                             meP.UpdatedBy = ObjectId.Parse(pd.UpdatedByProperty);
@@ -340,16 +390,14 @@ namespace Phytel.API.DataDomain.Patient
                         DataSource = formatSystem(mePatient.DataSource),
                         StatusDataSource = mePatient.StatusDataSource,
                         ReasonId = mePatient.ReasonId == null ? null : mePatient.ReasonId.ToString(),
-                        MaritalStatusId = mePatient.MaritalStatusId == null ? null : mePatient.MaritalStatusId.ToString(),
                         Protected = mePatient.Protected,
                         DeceasedId = (int)mePatient.Deceased,
                         StatusId = (int)mePatient.Status,
-                        ExternalRecordId = mePatient.ExternalRecordId
-                    };
-                    if (!string.IsNullOrEmpty(userId))
-                    {
-                        patientData.Flagged = GetFlaggedStatus(entityId, userId);
-                    }
+                        ExternalRecordId = mePatient.ExternalRecordId,
+                        RecordCreatedOn = mePatient.RecordCreatedOn,
+                        MaritalStatusId = mePatient.MaritalStatusId,
+                        Version = mePatient.Version
+                    };                  
                 }
             }
             return patientData;
@@ -616,9 +664,9 @@ namespace Phytel.API.DataDomain.Patient
                             PatientId = ObjectId.Parse(request.PatientId),
                             ContactId = ObjectId.Parse(request.UserId),
                             Flagged = Convert.ToBoolean(request.Flagged),
-                            Version = 1,
+                            Version = request.Version,
                             DeleteFlag = false
-                            //,LastUpdatedOn = System.DateTime.UtcNow,
+                            //,LastUpdatedOn = DateTime.UtcNow,
                             //UpdatedBy = ObjectId.Parse(this.UserId)
                         };
                         ctx.PatientUsers.Collection.Insert(pu);
@@ -740,8 +788,15 @@ namespace Phytel.API.DataDomain.Patient
 
                     if (request.PatientData.DisplayPatientSystemId != null)
                     {
-                        if (ObjectId.Parse(request.PatientData.DisplayPatientSystemId) != null)
-                            updt.Set(MEPatient.DisplayPatientSystemIdProperty, ObjectId.Parse(request.PatientData.DisplayPatientSystemId));
+                        int displaySysId;
+                        Int32.TryParse(request.PatientData.DisplayPatientSystemId, out displaySysId);
+                        string hexDisplaySysId = displaySysId.ToString("X24");
+                        if(ObjectId.Parse(hexDisplaySysId) != null)
+                        {
+                            updt.Set(MEPatient.DisplayPatientSystemIdProperty, ObjectId.Parse(hexDisplaySysId));
+                        }
+                       // if (ObjectId.Parse(request.PatientData.DisplayPatientSystemId) != null)
+                         //   updt.Set(MEPatient.DisplayPatientSystemIdProperty, ObjectId.Parse(request.PatientData.DisplayPatientSystemId));
                     }
 
                     if (request.PatientData.FullSSN != null)
@@ -766,6 +821,591 @@ namespace Phytel.API.DataDomain.Patient
                                     DataProtector protector = new DataProtector(Services.DataProtector.Store.USE_SIMPLE_STORE);
                                     string encryptedSSN = protector.Encrypt(fullSSN);
                                     updt.Set(MEPatient.FullSSNProperty, encryptedSSN);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                                 }
                                 else
                                 {
@@ -780,7 +1420,7 @@ namespace Phytel.API.DataDomain.Patient
                     }
 
                     updt.Set(MEPatient.TTLDateProperty, BsonNull.Value);
-                    updt.Set(MEPatient.LastUpdatedOnProperty, System.DateTime.UtcNow);
+                    updt.Set(MEPatient.LastUpdatedOnProperty, DateTime.UtcNow);
                     updt.Set(MEPatient.PriorityProperty, request.PatientData.PriorityData);
                     if (request.PatientData.Background != null)
                     {
@@ -792,15 +1432,25 @@ namespace Phytel.API.DataDomain.Patient
                     }
                     if (!string.IsNullOrEmpty(request.PatientData.ReasonId))
                     {
-                        updt.Set(MEPatient.ReasonProperty, ObjectId.Parse(request.PatientData.ReasonId));
+                        if (!(_reasonId.Contains(request.PatientData.ReasonId)))
+                            request.PatientData.ReasonId = "U";
+                        updt.Set(MEPatient.ReasonProperty, request.PatientData.ReasonId);
+                       // updt.Set(MEPatient.ReasonProperty, ObjectId.Parse(request.PatientData.ReasonId));
                     }
                     else
                     {
-                        updt.Set(MEPatient.ReasonProperty, BsonNull.Value);
+                        //updt.Set(MEPatient.ReasonProperty, BsonNull.Value);
+                        updt.Set(MEPatient.ReasonProperty, null);
                     }
                     if (!string.IsNullOrEmpty(request.PatientData.MaritalStatusId))
                     {
-                        updt.Set(MEPatient.MaritalStatusProperty, ObjectId.Parse(request.PatientData.MaritalStatusId));
+                        //      updt.Set(MEPatient.MaritalStatusProperty, ObjectId.Parse(request.PatientData.MaritalStatusId));
+                        if(!(_maritalStatus.Contains(request.PatientData.MaritalStatusId)))
+                        {
+                            request.PatientData.MaritalStatusId = "U";
+                        }
+
+                        updt.Set(MEPatient.MaritalStatusProperty, request.PatientData.MaritalStatusId);
                     }
                     else
                     {
@@ -1028,7 +1678,7 @@ namespace Phytel.API.DataDomain.Patient
                 MEPatient meP = new MEPatient(this.UserId, null)
                 {
                     Id = ObjectId.GenerateNewId(),
-                    TTLDate = System.DateTime.UtcNow.AddDays(_initializeDays)
+                    TTLDate = DateTime.UtcNow.AddDays(_initializeDays)
                 };
 
                 using (PatientMongoContext ctx = new PatientMongoContext(_dbName))

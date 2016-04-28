@@ -1,16 +1,16 @@
-using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using System.Net;
 using Phytel.API.Common;
+using Phytel.API.DataAudit;
 using Phytel.API.DataDomain.Cohort.DTO;
 using Phytel.API.DataDomain.Patient.DTO;
 using Phytel.API.DataDomain.PatientSystem.DTO;
 using Phytel.API.Interface;
 using ServiceStack.Service;
 using ServiceStack.ServiceClient.Web;
-using Phytel.API.DataAudit;
+using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Linq;
+using System.Net;
 
 
 namespace Phytel.API.DataDomain.Patient
@@ -30,7 +30,8 @@ namespace Phytel.API.DataDomain.Patient
 
                 IRestClient client = new JsonServiceClient();
 
-                string url = Helpers.BuildURL(string.Format("{0}/api/{1}/{2}/{3}/cohort/{4}", DDCohortServiceURL, request.Context, request.Version, request.ContractNumber, request.CohortID), request.UserId);
+                string url = Helpers.BuildURL(string.Format("{0}/api/{1}/{2}/{3}/cohort/{4}", DDCohortServiceURL, request.Context, 
+                                                                    request.Version, request.ContractNumber, request.CohortID), request.UserId);
 
                 // 1) lookup query for cohortid in cohorts collection
                 string cohortID = request.CohortID;
@@ -94,7 +95,12 @@ namespace Phytel.API.DataDomain.Patient
                 }
                 else
                 {
-                    result.Patient = repo.FindByID(request.PatientID, request.UserId) as DTO.PatientData;
+                    if (result != null)
+                    {
+                        result.Patient = repo.FindByID(request.PatientID, request.UserId) as DTO.PatientData;
+                        if(result.Patient != null)
+                             result.Version = result.Patient.Version;
+                    }
                 }
                 return (result != null ? result : new GetPatientDataResponse());
             }
@@ -373,7 +379,8 @@ namespace Phytel.API.DataDomain.Patient
                                     List<string> insertedPatientIds = insertedPatients.Select(p => p.Id).ToList();
 
                                     #region DataAudit for Patients
-                                    AuditHelper.LogDataAudit(request.UserId, MongoCollectionName.Patient.ToString(), insertedPatientIds, Common.DataAuditType.Insert, request.ContractNumber);
+                                    AuditHelper.LogDataAudit(request.UserId, MongoCollectionName.Patient.ToString(),
+                                                                                 insertedPatientIds, Common.DataAuditType.Insert, request.ContractNumber);
                                     #endregion
 
                                     #region BulkInsert CohortPatientView
@@ -401,7 +408,13 @@ namespace Phytel.API.DataDomain.Patient
                                         var x = insertedPatientSystems.Where(s => s.PatientId == r.Id).FirstOrDefault();
                                         if (x != null)
                                             engageValue = x.Value;
-                                        list.Add(new HttpObjectResponse<PatientData> { Code = HttpStatusCode.Created, Body = (PatientData)new PatientData { Id = r.Id, ExternalRecordId = r.ExternalRecordId, EngagePatientSystemValue = engageValue ,DataSource = r.DataSource} });
+                                        list.Add(new HttpObjectResponse<PatientData> {
+                                                                                                                            Code = HttpStatusCode.Created,
+                                                                                                                            Body = (PatientData)new PatientData {
+                                                                                                                                                                                                Id = r.Id, ExternalRecordId = r.ExternalRecordId,
+                                                                                                                                                                                                EngagePatientSystemValue = engageValue ,
+                                                                                                                                                                                                DataSource = r.DataSource}
+                                                                                                                                                                                           });
                                     });
                                     #endregion
                                 }
@@ -419,7 +432,12 @@ namespace Phytel.API.DataDomain.Patient
                         if (patientData.Code == HttpStatusCode.InternalServerError)
                             response.ErrorMessages.Add(patientData);
                         else
-                            response.Responses.Add(new AppData { Id = patientData.Body.Id, ExternalRecordId = patientData.Body.ExternalRecordId, DataSource = patientData.Body.DataSource});
+                            response.Responses.Add(new AppData {
+                                                                                                Id = patientData.Body.Id,
+                                                                                                ExternalRecordId = patientData.Body.ExternalRecordId,
+                                                                                                DataSource = patientData.Body.DataSource
+                                                                                            }
+                                                                 );
                         }
                 }
             }
@@ -439,19 +457,21 @@ namespace Phytel.API.DataDomain.Patient
                 {
                     GetPatientSystemByIdsDataRequest psRequest = new GetPatientSystemByIdsDataRequest
                     {
-                        Ids = processedPatientSystemIds,
-                        Context = request.Context,
-                        ContractNumber = request.ContractNumber,
-                        UserId = request.UserId,
+                        Ids = processedPatientSystemIds,  Context = request.Context,
+                        ContractNumber = request.ContractNumber,  UserId = request.UserId,
                         Version = request.Version
-                      
                     };
 
                     string DDPatientSystemServiceUrl = ConfigurationManager.AppSettings["DDPatientSystemServiceUrl"];
                     IRestClient client = new JsonServiceClient();
                     //[Route("/api/{Context}/{Version}/{ContractNumber}/PatientSystems/Ids", "POST")]
-                    string url = Helpers.BuildURL(string.Format("{0}/api/{1}/{2}/{3}/PatientSystems/Ids", DDPatientSystemServiceUrl, psRequest.Context, psRequest.Version, psRequest.ContractNumber), psRequest.UserId);
-                    GetPatientSystemByIdsDataResponse dataDomainResponse = client.Post<GetPatientSystemByIdsDataResponse>(url, psRequest as object);
+                    string url = Helpers.BuildURL(string.Format("{0}/api/{1}/{2}/{3}/PatientSystems/Ids", DDPatientSystemServiceUrl, 
+                                                                                            psRequest.Context, psRequest.Version, psRequest.ContractNumber),
+                                                                                            psRequest.UserId);
+
+                    GetPatientSystemByIdsDataResponse dataDomainResponse =
+                                                                         client.Post<GetPatientSystemByIdsDataResponse>(url, psRequest as object);
+
                     if (dataDomainResponse != null)
                     {
                         psData = dataDomainResponse.PatientSystems;
@@ -637,8 +657,12 @@ namespace Phytel.API.DataDomain.Patient
                 
                 string DDPatientSystemServiceUrl = ConfigurationManager.AppSettings["DDPatientSystemServiceUrl"];
                 IRestClient client = new JsonServiceClient();
+
                 //[Route("/api/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/PatientSystem", "POST")]
-                string url = Helpers.BuildURL(string.Format("{0}/api/{1}/{2}/{3}/Patient/{4}/PatientSystem", DDPatientSystemServiceUrl, psRequest.Context, psRequest.Version, psRequest.ContractNumber, psRequest.PatientId), psRequest.UserId);
+                string url = Helpers.BuildURL(string.Format("{0}/api/{1}/{2}/{3}/Patient/{4}/PatientSystem", DDPatientSystemServiceUrl,
+                                                                                         psRequest.Context, psRequest.Version, psRequest.ContractNumber, 
+                                                                                         psRequest.PatientId), psRequest.UserId);
+
                 InsertPatientSystemDataResponse dataDomainResponse = client.Post<InsertPatientSystemDataResponse>(url, psRequest as object);
                 if (dataDomainResponse != null)
                 {
@@ -672,7 +696,6 @@ namespace Phytel.API.DataDomain.Patient
                         ContractNumber = request.ContractNumber,
                         UserId = Constants.SystemContactId,                     // the requirement says that the engage Id should have createdby user as 'system'.
                         Version = request.Version,
-                        // DataSource = 
                     };
 
                     string DDPatientSystemServiceUrl = ConfigurationManager.AppSettings["DDPatientSystemServiceUrl"];
@@ -681,8 +704,12 @@ namespace Phytel.API.DataDomain.Patient
                     //string url = Helpers.BuildURL(string.Format("{0}/api/{1}/{2}/{3}/Batch/Engage/PatientSystems", DDPatientSystemServiceUrl, psRequest.Context, psRequest.Version, psRequest.ContractNumber), psRequest.UserId);
                    // InsertBatchEngagePatientSystemsDataResponse dataDomainResponse = client.Post<InsertBatchEngagePatientSystemsDataResponse>(url, psRequest as object);
 
-                    string url = String.Format("{0}/{1}/{2}/{3}/{4}/Batch/Engage/PatientSystems", DDPatientSystemServiceUrl,api,psRequest.Context,psRequest.Version,psRequest.ContractNumber);
-                    InsertBatchEngagePatientSystemsDataResponse dataDomainResponse = client.Post<InsertBatchEngagePatientSystemsDataResponse>(url,psRequest);
+                    string url = String.Format("{0}/{1}/{2}/{3}/{4}/Batch/Engage/PatientSystems", DDPatientSystemServiceUrl,
+                                                                api,psRequest.Context,psRequest.Version,psRequest.ContractNumber);
+
+                    InsertBatchEngagePatientSystemsDataResponse dataDomainResponse = 
+                                                                                    client.Post<InsertBatchEngagePatientSystemsDataResponse>(url,psRequest);
+
                     if (dataDomainResponse != null && dataDomainResponse.Result != null)
                     {
                         ids = dataDomainResponse.Result.ProcessedIds;

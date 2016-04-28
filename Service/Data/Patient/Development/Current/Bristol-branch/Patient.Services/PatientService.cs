@@ -1,9 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Configuration;
 using Phytel.API.Common;
 using Phytel.API.Common.Format;
 using Phytel.API.DataDomain.Patient.DTO;
+using System;
+using System.Configuration;
 
 namespace Phytel.API.DataDomain.Patient.Service
 {
@@ -22,7 +21,6 @@ namespace Phytel.API.DataDomain.Patient.Service
                     throw new UnauthorizedAccessException("PatientDD:Get()::Unauthorized Access");
 
                 response = PatientManager.GetPatientByID(request);
-                response.Version = request.Version;
             }
             catch (Exception ex)
             {
@@ -214,7 +212,6 @@ namespace Phytel.API.DataDomain.Patient.Service
                     throw new UnauthorizedAccessException("PatientDD:Put()::Unauthorized Access");
 
                 response = PatientManager.UpdatePatientFlagged(request);
-                response.Version = request.Version;
             }
             catch (Exception ex)
             {
@@ -313,10 +310,8 @@ namespace Phytel.API.DataDomain.Patient.Service
         }
 
      public InsertBatchPatientsDataResponse Post(InsertBatchPatientsDataRequest request)
-    //public List<AppData> Post(InsertBatchPatientsDataRequest request)
         {
             InsertBatchPatientsDataResponse response = new InsertBatchPatientsDataResponse();
-          //  List<AppData> response = new List<AppData>();
 
             try
             {

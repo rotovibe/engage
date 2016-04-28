@@ -53,17 +53,18 @@ namespace Phytel.API.DataDomain.PatientSystem
                         throw new ArgumentException("Patient System status is missing");
                     using (PatientSystemMongoContext ctx = new PatientSystemMongoContext(ContractDBName))
                     {
-                        MEPatientSystem mePS = new MEPatientSystem(this.UserId,data.CreatedOn)
-                            {
-                                PatientId = ObjectId.Parse(data.PatientId),
-                                Value = Helper.TrimAndLimit(data.Value, 100),
-                                Status = (Status)data.StatusId,
-                                Primary = data.Primary,
-                                SystemId = ObjectId.Parse(data.SystemId),
-                                DataSource = Helper.TrimAndLimit(data.DataSource, 50),
-                                DeleteFlag = false,
-                                ExternalRecordId = data.ExternalRecordId,
-                                LastUpdatedOn = data.UpdatedOn
+                        MEPatientSystem mePS = new MEPatientSystem(this.UserId, data.CreatedOn)
+                        {
+                            PatientId = ObjectId.Parse(data.PatientId),
+                            Value = Helper.TrimAndLimit(data.Value, 100),
+                            Status = (Status)data.StatusId,
+                            Primary = data.Primary,
+                            SystemId = ObjectId.Parse(data.SystemId),
+                            DataSource = Helper.TrimAndLimit(data.DataSource, 50),
+                            DeleteFlag = false,
+                            ExternalRecordId = data.ExternalRecordId,
+                            LastUpdatedOn = data.UpdatedOn,
+                            Version = request.Version
                             };
                         ctx.PatientSystems.Collection.Insert(mePS);
                         AuditHelper.LogDataAudit(this.UserId, 

@@ -22,7 +22,7 @@ namespace Phytel.API.DataDomain.PatientSystem.DTO
         public MEPatientSystem(string userId, DateTime? createdOn)
         {
             Id = ObjectId.GenerateNewId();
-            Version = 1.0;
+          //  Version = 1.0;
             RecordCreatedBy = ObjectId.Parse(userId);
             RecordCreatedOn = createdOn == null || createdOn.Equals(new DateTime()) ? DateTime.UtcNow : (DateTime)createdOn;
         }

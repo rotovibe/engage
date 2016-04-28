@@ -4,6 +4,7 @@ using Phytel.API.Interface;
 using Phytel.Services.Mongo.Linq;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System;
 
 namespace Phytel.API.DataDomain.Patient.DTO
 {
@@ -15,9 +16,9 @@ namespace Phytel.API.DataDomain.Patient.DTO
         public MEPatientUser(string userId)
         {
             Id = ObjectId.GenerateNewId();
-            Version = 1.0;
+       //     Version = 1.0;
             RecordCreatedBy = ObjectId.Parse(userId);
-            RecordCreatedOn = System.DateTime.UtcNow;
+            RecordCreatedOn = DateTime.UtcNow;
         }
 
         public const string IdProperty = "_id";

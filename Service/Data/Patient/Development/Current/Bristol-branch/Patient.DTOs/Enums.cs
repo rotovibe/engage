@@ -21,4 +21,15 @@
         Yes = 1,
         No = 2
     }
+
+   public  enum MaritalStatusId
+    {
+        Divorced,
+        Legally,
+        LifePartner,
+        Married,
+        Undisclosed,
+        Single,
+        Widowed
+    }
 }
