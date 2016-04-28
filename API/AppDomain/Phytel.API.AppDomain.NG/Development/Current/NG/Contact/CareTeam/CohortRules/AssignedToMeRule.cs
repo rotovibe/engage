@@ -29,7 +29,32 @@ namespace Phytel.API.AppDomain.NG
         #region ICareMemberCohortRule Members
         public CohortRuleResponse Run(CareTeam careTeam, CohortRuleCheckData data)
         {
-            return null;
+            var response = new CohortRuleResponse();
+            try
+            {
+                if (careTeam == null)
+                    throw new ArgumentNullException("careTeam");
+
+                //For each member in the careteam that is a user, add an ATO cohort for the referenced individual
+                foreach (var member in careTeam.Members)
+                {
+                    if (data.UserIds.Contains(member.ContactId))
+                    {
+                        
+                    }
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccessful = false;
+                response.ErrorCode = "UnAssignedPCMRule.Cohort.Error";
+                response.Message = ex.Message;
+
+                _logger.Log(ex);
+            }
+
+            return response;
         }
         #endregion
     }
