@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using MongoDB.Bson.IO;
 using Phytel.API.AppDomain.NG.DTO;
 using ServiceStack.Text;
 
@@ -47,7 +48,9 @@ namespace Phytel.API.AppDomain.NG
                     {
                         _contactEndpointUtil.AddPCMToCohortPatientView(data.PatientId, activeCorePCM.ContactId,data.Version, data.ContractNumber,data.UserId);
                     }
-                }               
+                }
+
+                response.IsSuccessful = true;
             }
             catch (Exception ex)
             {
@@ -56,8 +59,8 @@ namespace Phytel.API.AppDomain.NG
                 response.Message = ex.Message;
 
                 _logger.Log(ex);
-            }            
-            return new CohortRuleResponse();
+            }
+            return response;
         }
 
         public void Add()
