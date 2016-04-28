@@ -74,7 +74,8 @@ namespace Phytel.API.AppDomain.NG
               
         public void Stop()
         {
-            _exitEvent?.Set();
+            if (_exitEvent != null)
+                _exitEvent.Set();
         }
 
         private void ProcessQueue()
