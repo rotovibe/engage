@@ -104,8 +104,8 @@ namespace Phytel.API.AppDomain.NG
                     //                                                                response.Patient.DisplayPatientSystemId), request.UserId);
                     //    sysResponse = client.Get<Phytel.API.DataDomain.PatientSystem.DTO.GetPatientSystemDataResponse>(patientSystemUrl);
                     //}
-                    
-                    pResponse.Patient = new NG.DTO.Patient
+
+                    var patient = new NG.DTO.Patient
                     {
                         Id = response.Patient.Id,
                         FirstName = response.Patient.FirstName,
@@ -121,7 +121,7 @@ namespace Phytel.API.AppDomain.NG
                         ClinicalBackground = response.Patient.ClinicalBackground,
                         LastFourSSN = response.Patient.LastFourSSN,
                         DataSource = response.Patient.DataSource,
-                        ReasonId  = response.Patient.ReasonId,
+                        ReasonId = response.Patient.ReasonId,
                         StatusId = response.Patient.StatusId,
                         StatusDataSource = response.Patient.StatusDataSource,
                         MaritalStatusId = response.Patient.MaritalStatusId,
@@ -129,6 +129,22 @@ namespace Phytel.API.AppDomain.NG
                         DeceasedId = response.Patient.DeceasedId,
                         Prefix = response.Patient.Prefix
                     };
+
+                    var contact =
+                        GetContactByPatientId(new GetContactByPatientIdRequest
+                        {
+                            ContractNumber = request.ContractNumber,
+                            PatientID = request.PatientID,
+                            UserId = request.UserId,
+                            Version = request.Version
+                        });
+
+                    if (contact != null)
+                    {
+                        patient.ContactId = contact.Id;
+                    }
+
+                    pResponse.Patient = patient;
 
                     // Commented this part out, as there is a separate endpoint to get patient systems ids.
                     //if (sysResponse != null && sysResponse.PatientSystemData != null)

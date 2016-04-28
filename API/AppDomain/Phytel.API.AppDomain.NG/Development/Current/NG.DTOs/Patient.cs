@@ -33,5 +33,6 @@ namespace Phytel.API.AppDomain.NG.DTO
         public bool Protected { get; set; }
         public int DeceasedId { get; set; }
         public string Prefix { get; set; }
+        public string ContactId { get; set; }
     }
 }
