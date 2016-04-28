@@ -11,10 +11,11 @@ namespace AppDomain.Engage.Population
         public UserContext UserContext { get; set; } // this is a platform specific context. Has user authentication data if it is needed.
         private readonly ICohortDataDomainClient _client;
 
-        public CohortManager(IServiceContext context, ICohortDataDomainClient client)
+        public CohortManager(IServiceContext context, ICohortDataDomainClient client, UserContext uContext)
         {
             _context = context;
             _client = client;
+            UserContext = uContext;
         }
         public PostReferralDefinitionResponse PostReferralDefinition(ReferralDefinitionData referral)
         {

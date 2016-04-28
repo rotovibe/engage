@@ -33,7 +33,7 @@ namespace AppDomain.Engage.Population.Tests
             _mockDataDomainClient.Setup(
                 m => m.PostPatientReferralDefinition(It.IsAny<string>(), It.IsAny<string>(), _mockUserContext.Object))
                 .Returns(() => _RETURNVALUE);
-            manager = new CohortManager(_mockContext.Object, _mockDataDomainClient.Object);
+            manager = new CohortManager(_mockContext.Object, _mockDataDomainClient.Object, _mockUserContext.Object);
         }
 
         [Test]

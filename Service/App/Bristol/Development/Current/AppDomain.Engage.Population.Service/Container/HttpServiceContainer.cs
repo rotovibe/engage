@@ -51,7 +51,10 @@ namespace AppDomain.Engage.Population.Service.Container
                 .ReusedWithin(ReuseScope.Request);
 
             container.Register<IDemographicsManager>(c => new DemographicsManager(c.Resolve<IServiceContext>(), c.Resolve<IPatientDataDomainClient>())).ReusedWithin(ReuseScope.Request);
-            container.Register<ICohortManager>(c => new CohortManager(c.Resolve<IServiceContext>(), c.Resolve<ICohortDataDomainClient>())).ReusedWithin(ReuseScope.Request);
+            container.Register<ICohortManager>(
+                c =>
+                    new CohortManager(c.Resolve<IServiceContext>(), c.Resolve<ICohortDataDomainClient>(),
+                        c.Resolve<UserContext>())).ReusedWithin(ReuseScope.Request);
             container.RegisterValidators(typeof(ReferralWithPatientsListRequestValidator).Assembly);
             
             return container;
