@@ -26,5 +26,6 @@ namespace Phytel.API.DataDomain.Patient
         bool SyncPatient(SyncPatientInfoDataRequest request);
         bool AddPCMToPatientCohortView(AddPCMToCohortPatientViewDataRequest request);
         bool RemovePCMFromCohortPatientView(RemovePCMFromCohortPatientViewDataRequest request);
+        bool AddContactsToCohortPatientView(AssignContactsToCohortPatientViewDataRequest request);
     }
 }

@@ -528,5 +528,28 @@ namespace Phytel.API.DataDomain.Patient.Service
             }
             return response;
         }
+
+        public AssignContactsToCohortPatientViewDataResponse Put(AssignContactsToCohortPatientViewDataRequest request)
+        {
+            var response = new AssignContactsToCohortPatientViewDataResponse();
+            try
+            {
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("PatientDD:AssignContactsToCohortPatientViewDataRequest()::Unauthorized Access");
+
+                var managerResponse = PatientManager.AssignContactsToCohortPatientView(request);
+                response.IsSuccessful = managerResponse.IsSuccessful;
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccessful = false;
+                CommonFormatterUtil.FormatExceptionResponse(response, base.Response, ex);
+
+                var aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Helpers.LogException(int.Parse(aseProcessID), ex);
+            }
+            return response;
+        }
     }
 }

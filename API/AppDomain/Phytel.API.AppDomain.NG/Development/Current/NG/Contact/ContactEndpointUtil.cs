@@ -295,7 +295,69 @@ namespace Phytel.API.AppDomain.NG
 
         public bool RemovePCMCohortPatientView(string patientId, double version, string contractNumber, string userId)
         {
-            return true;
+            var response = false;
+            try
+            {
+                var client = new JsonServiceClient();
+                ///{Context}/{Version}/{ContractNumber}/CohortPatientView/Patients/{PatientId}/PCM", "DELETE";
+                var url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/CohortPatientView/Patients/{4}/PCM",
+                                                                                DDPatientServiceUrl,
+                                                                                "NG",
+                                                                                1.0,
+                                                                                contractNumber, patientId), userId);
+                var dataDomainResponse =
+                    client.Put<RemovePCMFromCohortPatientViewDataResponse>(url, new RemovePCMFromCohortPatientViewDataRequest
+                    {
+
+                        Version = version,
+                        Id = patientId,
+                        ContractNumber = contractNumber,
+                        Context = "NG",
+                        UserId = userId
+                    } as object);
+
+                response = dataDomainResponse == null;
+
+            }
+            catch (WebServiceException wse)
+            {
+                throw new WebServiceException("AD:RemovePCMCohortPatientView()::" + wse.Message, wse.InnerException);
+            }
+            return response;
+        }
+
+        public bool AssignContactsToCohortPatientView(string patientId, List<string> contactIds, double version, string contractNumber, string userId)
+        {
+            var response = false;
+            try
+            {
+                var client = new JsonServiceClient();
+                ///{Context}/{Version}/{ContractNumber}/CohortPatientView/Patients/{PatientId}/Assign", "PUT";
+                var url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/CohortPatientView/Patients/{4}/Assign",
+                                                                                DDPatientServiceUrl,
+                                                                                "NG",
+                                                                                1.0,
+                                                                                contractNumber, patientId), userId);
+                var dataDomainResponse =
+                    client.Put<AssignContactsToCohortPatientViewDataResponse>(url, new AssignContactsToCohortPatientViewDataRequest
+                    {
+
+                        Version = version,
+                        Id = patientId,
+                        ContractNumber = contractNumber,
+                        Context = "NG",
+                        UserId = userId,
+                        ContactIdsToAssign = contactIds
+                    } as object);
+
+                response = dataDomainResponse == null;
+
+            }
+            catch (WebServiceException wse)
+            {
+                throw new WebServiceException("AD:AssignContactsToCohortPatientView()::" + wse.Message, wse.InnerException);
+            }
+            return response;
         }
 
         #endregion

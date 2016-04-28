@@ -228,5 +228,11 @@ namespace Phytel.API.DataDomain.Patient.Test.Stub
         {
             throw new NotImplementedException();
         }
+
+
+        public AssignContactsToCohortPatientViewDataResponse AssignContactsToCohortPatientView(AssignContactsToCohortPatientViewDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

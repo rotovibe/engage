@@ -693,5 +693,22 @@ namespace Phytel.API.DataDomain.Patient
             }
             return response;
         }
+
+        public AssignContactsToCohortPatientViewDataResponse AssignContactsToCohortPatientView(AssignContactsToCohortPatientViewDataRequest request)
+        {
+            var response = new AssignContactsToCohortPatientViewDataResponse();
+            try
+            {
+                var repo = Factory.GetRepository(request, RepositoryType.CohortPatientView);
+                var isSuccessful = repo.AddContactsToCohortPatientView(request);
+
+                response.IsSuccessful = isSuccessful;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return response;
+        }
     }
 }   

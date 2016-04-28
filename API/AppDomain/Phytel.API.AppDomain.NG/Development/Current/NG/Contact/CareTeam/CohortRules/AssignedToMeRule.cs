@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Phytel.API.AppDomain.NG.DTO;
+using ServiceStack.Text;
 
 namespace Phytel.API.AppDomain.NG
 {
@@ -36,13 +37,17 @@ namespace Phytel.API.AppDomain.NG
                     throw new ArgumentNullException("careTeam");
 
                 //For each member in the careteam that is a user, add an ATO cohort for the referenced individual
+                var contactIdsToAdd = new List<string>();
                 foreach (var member in careTeam.Members)
                 {
                     if (data.UsersContactIds.Contains(member.ContactId))
                     {
-                        
+                        contactIdsToAdd.Add(member.ContactId);
                     }
                 }
+
+                _contactEndpointUtil.AssignContactsToCohortPatientView(data.PatientId, contactIdsToAdd, data.Version, data.ContractNumber, data.UserId);
+                
                 
             }
             catch (Exception ex)

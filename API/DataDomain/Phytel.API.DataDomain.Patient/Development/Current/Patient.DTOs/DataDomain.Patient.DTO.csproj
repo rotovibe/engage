@@ -101,6 +101,8 @@
   <ItemGroup>
     <Compile Include="AddPCMToCohortPatientViewDataRequest.cs" />
     <Compile Include="AddPCMToCohortPatientViewDataResponse.cs" />
+    <Compile Include="AssignContactsToCohortPatientViewDataRequest.cs" />
+    <Compile Include="AssignContactsToCohortPatientViewDataResponse.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="GetAllPatientsDataRequest.cs" />
     <Compile Include="GetAllPatientsDataResponse.cs" />

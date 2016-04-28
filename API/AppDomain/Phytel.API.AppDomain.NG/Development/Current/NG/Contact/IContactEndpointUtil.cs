@@ -25,6 +25,7 @@ namespace Phytel.API.AppDomain.NG
 
         bool AddPCMToCohortPatientView(string patientId, string contactIdToAdd,double version, string contractNumber,string userId);
         bool RemovePCMCohortPatientView(string patientId, double version, string contractNumber, string userId);
+        bool AssignContactsToCohortPatientView(string patientId,List<string> contactIds , double version, string contractNumber, string userId);
 
         #endregion
 

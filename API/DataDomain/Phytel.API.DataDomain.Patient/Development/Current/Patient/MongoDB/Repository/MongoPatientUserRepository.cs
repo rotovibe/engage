@@ -246,5 +246,11 @@ namespace Phytel.API.DataDomain.Patient
         {
             throw new NotImplementedException();
         }
+
+
+        public bool AddContactsToCohortPatientView(AssignContactsToCohortPatientViewDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
