@@ -127,7 +127,7 @@ namespace Phytel.API.AppDomain.NG
             if (careTeamData == null) return;
             careTeam = Mapper.Map<CareTeam>(careTeamData);
             var userList = GetAllUsersIds(cohortRuleCheckData.ContractNumber, cohortRuleCheckData.UserId, cohortRuleCheckData.Version);
-            cohortRuleCheckData.UserIds = userList;
+            cohortRuleCheckData.UsersContactIds = userList;
             var rules = CareMemberCohortRuleFactory.GenerateEngageCareMemberCohortRules();
             foreach (var rule in rules)
             {

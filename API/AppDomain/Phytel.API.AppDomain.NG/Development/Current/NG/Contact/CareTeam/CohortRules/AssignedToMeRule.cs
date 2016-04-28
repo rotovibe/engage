@@ -38,7 +38,7 @@ namespace Phytel.API.AppDomain.NG
                 //For each member in the careteam that is a user, add an ATO cohort for the referenced individual
                 foreach (var member in careTeam.Members)
                 {
-                    if (data.UserIds.Contains(member.ContactId))
+                    if (data.UsersContactIds.Contains(member.ContactId))
                     {
                         
                     }
@@ -48,7 +48,7 @@ namespace Phytel.API.AppDomain.NG
             catch (Exception ex)
             {
                 response.IsSuccessful = false;
-                response.ErrorCode = "UnAssignedPCMRule.Cohort.Error";
+                response.ErrorCode = "AssignedToMeRule.Cohort.Error";
                 response.Message = ex.Message;
 
                 _logger.Log(ex);

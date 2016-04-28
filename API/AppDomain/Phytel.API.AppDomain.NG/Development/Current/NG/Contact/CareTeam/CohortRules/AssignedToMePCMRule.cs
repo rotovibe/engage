@@ -43,7 +43,7 @@ namespace Phytel.API.AppDomain.NG
                 if (activeCorePCM != null)
                 {
                     //We need to add Active Core PCM from the CohortPatientView for the referenced individual
-                    if (!data.UserIds.IsNullOrEmpty() &&   data.UserIds.Contains(activeCorePCM.ContactId))
+                    if (!data.UsersContactIds.IsNullOrEmpty() &&   data.UsersContactIds.Contains(activeCorePCM.ContactId))
                     {
                         _contactEndpointUtil.AddPCMToCohortPatientView(data.PatientId, activeCorePCM.ContactId,data.Version, data.ContractNumber,data.UserId);
                     }
