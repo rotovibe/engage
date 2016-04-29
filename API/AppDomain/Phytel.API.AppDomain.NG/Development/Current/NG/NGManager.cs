@@ -1476,8 +1476,8 @@ namespace Phytel.API.AppDomain.NG
                     contactData.Modes = commModesData;
                 }
 
-                //if (contactData.StatusId == 0)
-                //    contactData.StatusId = (int) DataDomain.Contact.DTO.Status.Active;
+                if (contactData.StatusId == 0)
+                    contactData.StatusId = (int)DataDomain.Contact.DTO.Status.Active;
 
 
                 InsertContactDataRequest ddRequest = new InsertContactDataRequest()
