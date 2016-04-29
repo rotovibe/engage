@@ -11,7 +11,8 @@ namespace AppDomain.Engage.Population.DTO.Referrals
 
         public string ReferralName { get; set; }
         public string ExternalId { get; set; }
-        public string ReferralDefinition { get; set; }
+        //commenting this out as we dont find this saved in db
+        //public string ReferralDefinition { get; set; }
         public string ReferralReason { get; set; }
         public string DataSource { get; set; }
         public string Description { get; set; }

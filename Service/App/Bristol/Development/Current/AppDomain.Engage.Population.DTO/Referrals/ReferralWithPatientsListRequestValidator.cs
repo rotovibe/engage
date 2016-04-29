@@ -17,7 +17,7 @@ namespace AppDomain.Engage.Population.DTO.Referrals
             RuleFor(r => r.UserId).NotEmpty().NotNull();
             RuleFor(r => r.Context).NotEmpty().NotNull();
             RuleFor(r => r.ContractNumber).NotEmpty().NotNull();
-            RuleFor(r => r.Version).NotEmpty().NotNull();
+            RuleFor(r => r.Version).NotNull();
             RuleFor(r => r.PatientsData).SetCollectionValidator(new PatientValidator());
 
         }
