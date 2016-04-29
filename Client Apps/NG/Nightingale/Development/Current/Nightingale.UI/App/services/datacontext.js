@@ -244,6 +244,7 @@
 			deleteNote: deleteNote,
 			getNote: getNote,
 			saveCareMember: saveCareMember,
+			getCareTeam: getCareTeam,
 			enums: localCollections.enums,
 			alerts: localCollections.alerts,
 			getContactTypes: getContactTypes,
@@ -1372,6 +1373,17 @@
 			}
 		}
 
+		function getCareTeam( observable, patientContactId ){
+			var message = queryStarted('CareTeam', true, 'Loading');			
+			return careMembersService.getCareTeam( manager, observable, patientContactId ).then( careTeamReturned );			
+
+			function careTeamReturned(team) {
+				// Finally, clear out the message
+				queryCompleted(message);
+				return team;
+			}
+		}
+		
 		// Save changes to a single contact card
 		function saveCareMember(careMember, saveType) {
 			// Display a message while saving

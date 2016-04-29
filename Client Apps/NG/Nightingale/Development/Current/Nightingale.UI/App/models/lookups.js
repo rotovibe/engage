@@ -118,6 +118,17 @@ define(['services/session'],
 		        }
 		    });
 			
+			//care member status - enum
+			metadataStore.addEntityType({
+		        shortName: "CareMemberStatus",
+		        namespace: "Nightingale",
+		        dataProperties: {
+		            id: { dataType: "String", isPartOfKey: true },
+		            name: { dataType: "String" },
+					isDefault: { dataType: "Boolean" }
+		        }
+		    });
+			
 			//system status - enum
 			metadataStore.addEntityType({
 				shortName: "SystemStatus",
@@ -459,6 +470,11 @@ define(['services/session'],
 		    manager.createEntity('ContactStatus', { id: 1, name: 'Active'   }).entityAspect.acceptChanges();
 		    manager.createEntity('ContactStatus', { id: 2, name: 'Inactive' }).entityAspect.acceptChanges();
 			manager.createEntity('ContactStatus', { id: 3, name: 'Archived' }).entityAspect.acceptChanges();
+			
+			//care member status
+			manager.createEntity('CareMemberStatus', { id: 1, name: 'Active' }).entityAspect.acceptChanges();
+			manager.createEntity('CareMemberStatus', { id: 2, name: 'Inactive' }).entityAspect.acceptChanges();
+			manager.createEntity('CareMemberStatus', { id: 3, name: 'Invalid' }).entityAspect.acceptChanges();
 			
 			//enums.systemStatus
 			manager.createEntity('SystemStatus', {id: 1, name: 'Active'		}).entityAspect.acceptChanges();

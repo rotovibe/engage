@@ -181,6 +181,8 @@ define(['services/validatorfactory', 'services/customvalidators', 'services/form
 					fullSSN: { dataType: "String" },
 					gender: { dataType: "String" },
 					id: { dataType: "String", isPartOfKey: true },
+					contactId: { dataType: "String" },
+					careTeamId:  { dataType: "String" },
 					lastFourSSN: { dataType: "String" },
 					lastName: { dataType: "String" },
 					maritalStatusId: { dataType: "String" },
@@ -194,7 +196,7 @@ define(['services/validatorfactory', 'services/customvalidators', 'services/form
 					statusDataSource: { dataType: "String" },
 					suffix: { dataType: "String" },
 					dataSource: {dataType: "String" },
-					twitterHandle: { dataType: "String" },
+					twitterHandle: { dataType: "String" }
 				},
 				navigationProperties: {
 					provider: {
@@ -248,6 +250,10 @@ define(['services/validatorfactory', 'services/customvalidators', 'services/form
 					careMembers: {
 						entityTypeName: "CareMember", isScalar: false,
 						associationName: "Patient_CareMembers"
+					},
+					careTeam: {
+						entityTypeName: "CareTeam", isScalar: true,
+						associationName: "Patient_CareTeam", foreignKeyNames: ["careTeamId"]
 					},
 					contactCard: {
 						entityTypeName: "ContactCard", isScalar: true,
@@ -419,33 +425,72 @@ define(['services/validatorfactory', 'services/customvalidators', 'services/form
 				}
 			});
 
-
+			metadataStore.addEntityType({
+				shortName: "CareTeam",
+				namespace: "Nightingale",
+				dataProperties: {
+					id: { dataType: "String", isPartOfKey: true },
+					contactId: { dataType: "String" }
+				},
+				navigationProperties: {
+					patientContact: {
+						entityTypeName: "ContactCard", isScalar: true,
+						associationName: "CareTeamPatient_ContactCard", foreignKeyNames: ["contactId"]
+					},
+					members: { 
+						entityTypeName: "CareMember", isScalar: false,
+						associationName: "Patient_CareMembers"
+					}
+				}
+			});
+			
 			// Care Member complex type
 			metadataStore.addEntityType({
 				shortName: "CareMember",
 				namespace: "Nightingale",
 				dataProperties: {
 					id: { dataType: "String", isPartOfKey: true },
-					gender: { dataType: "String" },
+					gender: { dataType: "String" },	//TODO: remove and use contact
 					preferredName: { dataType: "String" },
-					patientId: { dataType: "String" },
+					patientId: { dataType: "String" }, //TODO: remove and use careTeam
 					contactId: { dataType: "String" },
 					typeId: { dataType: "String" },
-					primary: { dataType: "Boolean" }
+					primary: { dataType: "Boolean" },
+					roleId: { dataType: "String"},
+					customRoleName: { dataType: "String"},
+					startDate: { dataType: "DateTime" }, 
+					endDate: { dataType: "DateTime" },
+					core: { dataType: "Boolean" },
+					notes:  { dataType: "String" },
+					frequencyId: { dataType: "String" },
+					distance: { dataType: "Int64" },
+					externalRecordId: { dataType: "String" },
+					dataSource: { dataType: "String" },
+					statusId: { dataType: "Int64", defaultValue: 1 },
+					
+
+					createdById: { dataType: "String" },
+					createdOn: { dataType: "DateTime" },
+					updatedById: { dataType: "String" },
+					updatedOn: { dataType: "DateTime" }
 				},
 				navigationProperties: {
-					patient: {
-						entityTypeName: "Patient", isScalar: true,
-						associationName: "Patient_CareMembers", foreignKeyNames: ["patientId"]
-					},
-					careManager: {
-						entityTypeName: "CareManager", isScalar: true,
-						associationName: "CareManager_CareMembers", foreignKeyNames: ["contactId"]
-					},
-					type: {
-						entityTypeName: "CareMemberType", isScalar: true,
-						associationName: "CareMember_Type", foreignKeyNames: ["typeId"]
-					},
+				    patient: {
+				        entityTypeName: "Patient", isScalar: true,
+				        associationName: "Patient_CareMembers", foreignKeyNames: ["patientId"]
+				    },
+				    careManager: {
+				        entityTypeName: "CareManager", isScalar: true,
+				        associationName: "CareManager_CareMembers", foreignKeyNames: ["contactId"]
+				    },
+				    type: {
+				        entityTypeName: "CareMemberType", isScalar: true,
+				        associationName: "CareMember_Type", foreignKeyNames: ["typeId"]
+				    },
+					status: {
+						entityTypeName: "CareMemberStatus", isScalar: true,
+						associationName: "CareMember_CareMemberStatus", foreignKeyNames: ["statusId"]
+					}
 				}
 			});
 
@@ -774,26 +819,30 @@ define(['services/validatorfactory', 'services/customvalidators', 'services/form
 				});
 			}
 
-			function careMemberInitializer(careTeam) {
-				careTeam.genderModel = ko.computed({
+			function careMemberInitializer(member) {
+				member.isNew = ko.observable(false);
+				member.isValid = ko.computed( function(){
+					return true;	//TODO
+				});
+				member.genderModel = ko.computed({
 					read: function () {
 						checkDataContext();
 						var thisGender;
-						var gender = careTeam.gender() ? careTeam.gender().toLowerCase() : '';
+						var gender = member.gender() ? member.gender().toLowerCase() : '';
 						if (gender === 'm' || gender === 'male') {
-							careTeam.gender('M');
+							member.gender('M');
 							thisGender = ko.utils.arrayFirst(datacontext.enums.genders(), function (item) {
 								return 'm' === item.Id;
 							});
 						}
 						else if (gender === 'f' || gender === 'female') {
-							careTeam.gender('F');
+							member.gender('F');
 							thisGender = ko.utils.arrayFirst(datacontext.enums.genders(), function (item) {
 								return 'f' === item.Id;
 							});
 						}
 						else {
-							careTeam.gender('N');
+							member.gender('N');
 							thisGender = ko.utils.arrayFirst(datacontext.enums.genders(), function (item) {
 								return 'n' === item.Id;
 							});
@@ -801,7 +850,7 @@ define(['services/validatorfactory', 'services/customvalidators', 'services/form
 						return thisGender;
 					},
 					write: function (newValue) {
-						careTeam.gender(ko.unwrap(newValue).Id.toUpperCase());
+						member.gender(ko.unwrap(newValue).Id.toUpperCase());
 					}
 				});
 			}

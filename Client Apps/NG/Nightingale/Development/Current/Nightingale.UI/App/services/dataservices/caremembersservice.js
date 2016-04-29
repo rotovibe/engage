@@ -6,11 +6,52 @@
 
         // Create an object to use to reveal functions from this module
         var careMemberService = {
+			getCareTeam: getCareTeam,
             saveCareMember: saveCareMember,
             deleteNote: deleteNote
         };
         return careMemberService;
-        
+        		
+		function getCareTeam( manager, observable, patientContactId ){
+			// If there is no manager, we can't query using breeze
+            if (!manager) { throw new Error("[manager] cannot be a null parameter"); }
+
+            // Check if the datacontext is available, if so require it
+            checkDataContext();
+
+		    //Contacts/{ContactId}/CareTeams
+			endPoint = new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'Contacts/' + patientContactId + '/CareTeams', 'CareTeam');			
+                
+			// Query to post the results
+			var query = breeze.EntityQuery
+				.from(endPoint.ResourcePath)
+				.withParameters({
+					$method: 'GET',
+					$encoding: 'JSON'					
+				}).toType('CareTeam');
+
+            return manager.executeQuery(query).then(getCareTeamSucceeded).fail(getCareTeamFailed);	
+			
+			function getCareTeamSucceeded(data) {                
+				if( data.results && data.results.length > 0 ){
+					var s = data.results[0];
+					if (observable) {
+						return observable(s);
+					} else {
+						return s;
+					}
+				}
+            }
+		}
+		
+        function getCareTeamFailed(error) {
+            checkDataContext();
+            console.log('Error - ', error);            
+            var thisAlert = datacontext.createEntity('Alert', { result: 0, reason: 'Get Care Team failed!' });
+            thisAlert.entityAspect.acceptChanges();
+            datacontext.alerts.push(thisAlert);
+        }
+		
         // POST to the server, check the results for entities
         function saveCareMember(manager, serializedCareMember, saveType) {
 

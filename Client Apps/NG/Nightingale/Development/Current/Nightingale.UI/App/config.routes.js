@@ -126,6 +126,10 @@ define([], function () {
                     title: 'history',
                     subroute: 'viewmodels/patients/history/index',
                     content: 'History'
+				}, {
+                    title: 'team',
+                    subroute: 'viewmodels/patients/team/index',
+                    content: 'Team'
                 }, {
                     title: 'data',
                     subroute: 'viewmodels/patients/data/index',

@@ -29,14 +29,14 @@ define(['models/base', 'services/datacontext', 'services/session', 'viewmodels/s
                 // Create a filtered list of care teams,
                 ko.utils.arrayForEach(searchCareTeam, function (careMember) {
                     // If they are a member of the primary care team,
-                    if (careMember.primary()) {
+                    if (careMember.primary() && !careMember.isNew()) {
                         // Add them to the team
                         thisCareTeam.push(careMember);
                     }
                 });
                 // Return the team
                 return thisCareTeam;
-            });
+            }).extend({ throttle: 50 });
 			self.isSaving = ko.observable(false);
 			self.canAssignToMe = ko.computed( function(){
 				var zerolength = self.primaryCareTeam().length === 0;
@@ -67,13 +67,13 @@ define(['models/base', 'services/datacontext', 'services/session', 'viewmodels/s
                 // Create a filtered list of care teams,
                 ko.utils.arrayForEach(searchCareTeam, function (careMember) {
                     // If they are not part of the primary care team,
-                    if (!careMember.primary()) {
+                    if (!careMember.primary() && !careMember.isNew()) {
                         // Make them part of the secondary team
                         thisCareTeam.push(careMember);
                     }
                 });
                 return thisCareTeam;
-            });
+            }).extend({ throttle: 50 });
             self.saveType = ko.observable();
             self.saveOverride = function () { 
                 // Get the current primary care manager
