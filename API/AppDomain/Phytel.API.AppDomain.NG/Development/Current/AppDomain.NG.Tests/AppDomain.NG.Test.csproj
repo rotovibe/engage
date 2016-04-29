@@ -131,7 +131,9 @@
     </When>
     <Otherwise>
       <ItemGroup>
-        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework" />
+        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework">
+          <Private>False</Private>
+        </Reference>
       </ItemGroup>
     </Otherwise>
   </Choose>
@@ -145,6 +147,7 @@
     <Compile Include="Contact\CareTeam\AssignedToMeCohortRuleTests.cs" />
     <Compile Include="Contact\CareTeam\AssignedToMePCMCohortRuleTests.cs" />
     <Compile Include="Contact\CareTeam\UnassignedPCMCohortRuleTests.cs" />
+    <Compile Include="Contact\CareTeam\CohortsRulesProcessorTests.cs" />
     <Compile Include="Contact\ContactManagerTests.cs" />
     <Compile Include="Factories\NGManagerFactory.cs" />
     <Compile Include="Factories\SampleFactory.cs" />

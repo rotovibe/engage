@@ -10,8 +10,9 @@ namespace Phytel.API.AppDomain.NG
     public interface ICohortRulesProcessor
     {
         void EnqueueCohorRuleCheck(CohortRuleCheckData cohortRuleCheckData);
-        void Stop();
-        //void EnqueueCareTeam(CareTeam careTeam);
+        int GetQueueCount();
+        void Start();
+        void Stop();        
         string GetCareTeamActiveCorePCMId(CohortRuleCheckData cohortRuleCheckData);      
        
     }

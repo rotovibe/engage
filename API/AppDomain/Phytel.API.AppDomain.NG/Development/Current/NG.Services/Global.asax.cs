@@ -113,7 +113,10 @@ namespace Phytel.API.AppDomain.NG.Service
         protected void Application_Start(object sender, EventArgs e)
         {
             _ngAppHost = new NGAppHost();
-            _ngAppHost.Init();                                      
+            _ngAppHost.Init();
+            var cohortRulesProcessor = _ngAppHost.TryResolve<ICohortRulesProcessor>();
+            if (cohortRulesProcessor != null)
+                cohortRulesProcessor.Start();
         }
 
         protected void Session_Start(object sender, EventArgs e)

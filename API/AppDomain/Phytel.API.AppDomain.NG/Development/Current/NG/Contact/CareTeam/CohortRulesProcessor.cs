@@ -23,8 +23,11 @@ namespace Phytel.API.AppDomain.NG
         private readonly IContactEndpointUtil EndpointUtil;
         private readonly ICareMemberCohortRuleFactory CareMemberCohortRuleFactory;
         private readonly ILogger _logger;
+
+        public bool QueueProcessorRunning { get; private set; }
         public CohortRulesProcessor(ICareMemberCohortRuleFactory cf,IContactEndpointUtil ceu, ICohortRuleUtil cohortRuleUtil, ILogger logger)
         {
+            QueueProcessorRunning = false;
             _cohortRuleUtil = cohortRuleUtil;
             _cohortRuleCheckDataTeamQueue = new ConcurrentQueue<CohortRuleCheckData>();
             _logger = logger;
@@ -37,20 +40,44 @@ namespace Phytel.API.AppDomain.NG
                 _queuEvent,
                 _exitEvent
             };
-            queueLock = new object();
-            var threadDelegate = new ThreadStart(ProcessQueue);
-            _processQueueThread = new Thread(threadDelegate) {Name = "CohortRulesThread"};
-            _processQueueThread.Start();
+            queueLock = new object();           
+                       
+        }
+
+        public void Start()
+        {
+            if (!QueueProcessorRunning)
+            {
+                if (_processQueueThread == null)
+                {
+                    var threadDelegate = new ThreadStart(ProcessQueue);
+                    _processQueueThread = new Thread(threadDelegate) { Name = "CohortRulesThread" };
+                }
+                _processQueueThread.Start();
+                QueueProcessorRunning = true;
+            }
         }
 
         public void EnqueueCohorRuleCheck(CohortRuleCheckData cohortRuleCheckData)
         {
+            if (!QueueProcessorRunning)
+                throw new ApplicationException("CohortRulesProcessor: The Cohort Rules Queue Processor is not running");
             lock (queueLock)
             {
                 _cohortRuleCheckDataTeamQueue.Enqueue(cohortRuleCheckData);
                 _queuEvent.Set();
             }
             
+        }
+
+        public int GetQueueCount()
+        {
+            int res = 0;
+            lock (queueLock)
+            {
+                res = _cohortRuleCheckDataTeamQueue.Count;
+            }
+            return res;
         }
 
         public string GetCareTeamActiveCorePCMId(CohortRuleCheckData cohortRuleCheckData)
@@ -80,13 +107,17 @@ namespace Phytel.API.AppDomain.NG
 
         private void ProcessQueue()
         {
+           
             while (WaitHandle.WaitAny(wHandles)!=1)
             {
                 try
                 {
+                    QueueProcessorRunning = true;
+
                     lock (queueLock)
                     {
                         CohortRuleCheckData currCohortRuleCheckData = null;
+
                         if (_cohortRuleCheckDataTeamQueue.TryDequeue(out currCohortRuleCheckData) &&
                             currCohortRuleCheckData != null) ApplyCohortRules(currCohortRuleCheckData);
                     }
@@ -96,6 +127,7 @@ namespace Phytel.API.AppDomain.NG
                     _logger.Log(ex);
                 }                         
             }
+            QueueProcessorRunning = false;
         }
         private List<string> GetAllUsersIds(string contractNumber, string userId, double version)
         {
