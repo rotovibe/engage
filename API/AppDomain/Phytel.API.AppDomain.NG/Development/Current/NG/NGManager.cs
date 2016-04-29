@@ -22,6 +22,7 @@ using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Web.Hosting;
 using AutoMapper;
+using Phytel.API.Common.Extensions;
 using Phytel.API.DataDomain.Contact.DTO.CareTeam;
 using DD = Phytel.API.DataDomain.Program.DTO;
 using Phytel.API.DataDomain.PatientGoal.DTO;
@@ -1439,7 +1440,46 @@ namespace Phytel.API.AppDomain.NG
                 if(request == null)
                     throw new ArgumentNullException("request");
                 CheckForRequiredFields(request.Contact);
-                ContactData contactData = Mapper.Map<ContactData>(request.Contact);
+                var contactData = Mapper.Map<ContactData>(request.Contact);
+
+
+                //Check if Request has a timeZone. 
+                if (string.IsNullOrEmpty(contactData.TimeZoneId))
+                {
+                    string defaultTimeZone = null;
+                    var tzDataRequest = new GetTimeZoneDataRequest { ContractNumber = request.ContractNumber, Version = request.Version, Context = "NG", UserId = request.UserId };
+                    var tz = getDefaultTimeZone(tzDataRequest);
+                    if (tz != null)
+                    {
+                        defaultTimeZone = tz.Id;
+                    }
+
+                    contactData.TimeZoneId = defaultTimeZone;
+                }
+
+                //Check for modes.
+                if (contactData.Modes.IsNullOrEmpty())
+                {
+                    var commModesData = new List<CommModeData>();
+                    var commRequest = new GetAllCommModesRequest { ContractNumber = request.ContractNumber, UserId = request.UserId, Version = request.Version };
+                    List<IdNamePair> modesLookUp = GetAllCommModes(commRequest);
+
+                    if (modesLookUp != null && modesLookUp.Count > 0)
+                    {
+                        foreach (var l in modesLookUp)
+                        {
+                           
+                            commModesData.Add(new CommModeData { ModeId = l.Id, OptOut = false, Preferred = false });
+                        }
+                    }
+
+                    contactData.Modes = commModesData;
+                }
+
+                //if (contactData.StatusId == 0)
+                //    contactData.StatusId = (int) DataDomain.Contact.DTO.Status.Active;
+
+
                 InsertContactDataRequest ddRequest = new InsertContactDataRequest()
                 {
                     ContactData = contactData,
@@ -1964,80 +2004,7 @@ namespace Phytel.API.AppDomain.NG
             }
             return response;
         }
-
-        /// <summary>
-        /// DEPRECATED - SHOULD NOT BE USED AFTER CONTACTS REFACTORING
-        /// </summary>
-        /// <param name="context"></param>
-        /// <param name="version"></param>
-        /// <param name="contractNumber"></param>
-        /// <param name="patientId"></param>
-        /// <param name="userId"></param>
-        /// <returns></returns>
-        private Contact insertContactForPatient(string context, double version, string contractNumber, string patientId, string userId)
-        {
-
-            Contact newContact = null;
-            try
-            {
-                // Get the default TimeZone that is set in TimeZone LookUp table. 
-                string defaultTimeZone = null;
-                GetTimeZoneDataRequest tzDataRequest = new GetTimeZoneDataRequest { ContractNumber = contractNumber, Version = version, Context = context, UserId = userId };
-                TimeZonesLookUp tz = getDefaultTimeZone(tzDataRequest);
-                if (tz != null)
-                {
-                    defaultTimeZone = tz.Id;
-                }
-
-                //Get all the available comm modes in the lookup.
-                List<CommModeData> commModeData = new List<CommModeData>();
-                List<CommMode> commMode = new List<CommMode>();
-                GetAllCommModesRequest commRequest = new GetAllCommModesRequest { ContractNumber = contractNumber, UserId = userId, Version = version };
-                List<IdNamePair> modesLookUp = GetAllCommModes(commRequest);
-                if (modesLookUp != null && modesLookUp.Count > 0)
-                {
-                    foreach (IdNamePair l in modesLookUp)
-                    {
-                        commModeData.Add(new CommModeData { ModeId = l.Id, OptOut = false, Preferred = false });
-                        commMode.Add(new CommMode { LookUpModeId = l.Id, OptOut = false, Preferred = false });
-                    }
-                }
-
-                //[Route("/{Context}/{Version}/{ContractNumber}/Contacts", "POST")]
-                IRestClient client = new JsonServiceClient();
-                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Contacts",
-                                                                                DDContactServiceUrl,
-                                                                                context,
-                                                                                version,
-                                                                                contractNumber), userId);
-
-                ContactData contactData = new ContactData { TimeZoneId = defaultTimeZone, Modes = commModeData, PatientId = patientId, ContactTypeId = Constants.PersonContactTypeId};
-                InsertContactDataResponse dataDomainResponse =
-                    client.Post<InsertContactDataResponse>(url, new InsertContactDataRequest
-                                                            {
-                                                                ContactData = contactData,
-                                                                Context = context,
-                                                                ContractNumber = contractNumber,
-                                                                Version = version,
-                                                                UserId = userId
-                                                            } as object);
-
-                if (dataDomainResponse != null && !string.IsNullOrEmpty(dataDomainResponse.Id))
-                {
-                    newContact = new Contact();
-                    newContact.Id = dataDomainResponse.Id;
-                    newContact.PatientId = patientId;
-                    newContact.TimeZoneId = defaultTimeZone;
-                    newContact.Modes = commMode;
-                }
-            }
-            catch (WebServiceException wse)
-            {
-                throw new WebServiceException("AD:InsertContactForPatient()::" + wse.Message, wse.InnerException);
-            }
-            return newContact;
-        }
-
+       
         private int NormalizeTake(int? take)
         {
             var normalizedValue = 100;
@@ -2058,36 +2025,6 @@ namespace Phytel.API.AppDomain.NG
 
             return normalizedSkip;
 
-        }
-
-        /// <summary>
-        /// TODO: remove hard-coded values.
-        /// </summary>
-        /// <param name="statuses"></param>
-        /// <returns></returns>
-        private List<string> BuildContactTypeIds(List<AppDomain.NG.DTO.ContactType> statuses)
-        {
-            var response = new List<string>();
-
-            foreach (var enumVal in statuses)
-            {
-                switch (enumVal)
-                {
-                        case ContactType.Person:
-                        response.Add(Constants.PersonContactTypeId);
-                        break;
-
-                        //case ContactType.Organization:
-                        //response.Add("");
-                        
-
-                     default:
-                        break;
-                }
-            }
-
-            return response;
-            
         }
 
         private void SyncContactByPatientData(string contactId,PatientData data, double version, string contractNumber, string userId)
@@ -2143,6 +2080,29 @@ namespace Phytel.API.AppDomain.NG
 
         private void InsertContactByPatient(Patient patient,string contractNumber, string userId, double version)
         {
+            // Get the default TimeZone that is set in TimeZone LookUp table. 
+            string defaultTimeZone = null;
+            GetTimeZoneDataRequest tzDataRequest = new GetTimeZoneDataRequest { ContractNumber = contractNumber, Version = version, Context = "NG", UserId = userId };
+            TimeZonesLookUp tz = getDefaultTimeZone(tzDataRequest);
+            if (tz != null)
+            {
+                defaultTimeZone = tz.Id;
+            }
+
+            //Get all the available comm modes in the lookup.
+            //List<CommModeData> commModeData = new List<CommModeData>();
+            List<CommMode> commMode = new List<CommMode>();
+            GetAllCommModesRequest commRequest = new GetAllCommModesRequest { ContractNumber = contractNumber, UserId = userId, Version = version };
+            List<IdNamePair> modesLookUp = GetAllCommModes(commRequest);
+            if (modesLookUp != null && modesLookUp.Count > 0)
+            {
+                foreach (IdNamePair l in modesLookUp)
+                {
+                   // commModeData.Add(new CommModeData { ModeId = l.Id, OptOut = false, Preferred = false });
+                    commMode.Add(new CommMode { LookUpModeId = l.Id, OptOut = false, Preferred = false });
+                }
+            }
+
             //Insert Contact
             var insertContactRequest = new InsertContactRequest
             {
@@ -2159,7 +2119,9 @@ namespace Phytel.API.AppDomain.NG
                     Gender = patient.Gender,
                     StatusId = patient.StatusId,
                     ContactTypeId = Constants.PersonContactTypeId,
-                    DataSource = patient.DataSource
+                    DataSource = patient.DataSource,
+                    TimeZoneId = defaultTimeZone,
+                    Modes = commMode
 
                 },
                 ContractNumber = contractNumber,
@@ -2169,6 +2131,88 @@ namespace Phytel.API.AppDomain.NG
 
             InsertContact(insertContactRequest);
         }
+
+        #endregion
+
+        #region Obsolete
+
+        /// <summary>
+        /// DEPRECATED - SHOULD NOT BE USED AFTER CONTACTS REFACTORING
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="version"></param>
+        /// <param name="contractNumber"></param>
+        /// <param name="patientId"></param>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        /// 
+        /// 
+        /// 
+        [Obsolete("Use InsertContactByPatient")]
+        private Contact insertContactForPatient(string context, double version, string contractNumber, string patientId, string userId)
+        {
+
+            Contact newContact = null;
+            try
+            {
+                // Get the default TimeZone that is set in TimeZone LookUp table. 
+                string defaultTimeZone = null;
+                GetTimeZoneDataRequest tzDataRequest = new GetTimeZoneDataRequest { ContractNumber = contractNumber, Version = version, Context = context, UserId = userId };
+                TimeZonesLookUp tz = getDefaultTimeZone(tzDataRequest);
+                if (tz != null)
+                {
+                    defaultTimeZone = tz.Id;
+                }
+
+                //Get all the available comm modes in the lookup.
+                List<CommModeData> commModeData = new List<CommModeData>();
+                List<CommMode> commMode = new List<CommMode>();
+                GetAllCommModesRequest commRequest = new GetAllCommModesRequest { ContractNumber = contractNumber, UserId = userId, Version = version };
+                List<IdNamePair> modesLookUp = GetAllCommModes(commRequest);
+                if (modesLookUp != null && modesLookUp.Count > 0)
+                {
+                    foreach (IdNamePair l in modesLookUp)
+                    {
+                        commModeData.Add(new CommModeData { ModeId = l.Id, OptOut = false, Preferred = false });
+                        commMode.Add(new CommMode { LookUpModeId = l.Id, OptOut = false, Preferred = false });
+                    }
+                }
+
+                //[Route("/{Context}/{Version}/{ContractNumber}/Contacts", "POST")]
+                IRestClient client = new JsonServiceClient();
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Contacts",
+                                                                                DDContactServiceUrl,
+                                                                                context,
+                                                                                version,
+                                                                                contractNumber), userId);
+
+                ContactData contactData = new ContactData { TimeZoneId = defaultTimeZone, Modes = commModeData, PatientId = patientId, ContactTypeId = Constants.PersonContactTypeId };
+                InsertContactDataResponse dataDomainResponse =
+                    client.Post<InsertContactDataResponse>(url, new InsertContactDataRequest
+                    {
+                        ContactData = contactData,
+                        Context = context,
+                        ContractNumber = contractNumber,
+                        Version = version,
+                        UserId = userId
+                    } as object);
+
+                if (dataDomainResponse != null && !string.IsNullOrEmpty(dataDomainResponse.Id))
+                {
+                    newContact = new Contact();
+                    newContact.Id = dataDomainResponse.Id;
+                    newContact.PatientId = patientId;
+                    newContact.TimeZoneId = defaultTimeZone;
+                    newContact.Modes = commMode;
+                }
+            }
+            catch (WebServiceException wse)
+            {
+                throw new WebServiceException("AD:InsertContactForPatient()::" + wse.Message, wse.InnerException);
+            }
+            return newContact;
+        }
+
 
         #endregion
     }
