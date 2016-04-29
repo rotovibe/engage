@@ -224,7 +224,7 @@ namespace Phytel.API.AppDomain.NG.Test.Contact
         }
         #endregion
 
-        #region SaveCareTeam Tests
+        #region GetCareTeam Tests
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
         public void ContactManager_GetCareTeam_Null_Request_Should_Throw()
