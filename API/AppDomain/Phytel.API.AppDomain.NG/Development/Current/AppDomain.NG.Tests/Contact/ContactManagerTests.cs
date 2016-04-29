@@ -4,7 +4,9 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Phytel.API.AppDomain.NG.DTO;
 using Phytel.API.AppDomain.NG.Service.Mappers;
+using Phytel.API.DataDomain.Contact.DTO;
 using Phytel.API.DataDomain.Contact.DTO.CareTeam;
+using ServiceStack.ServiceInterface.ServiceModel;
 
 namespace Phytel.API.AppDomain.NG.Test.Contact
 {
@@ -161,20 +163,57 @@ namespace Phytel.API.AppDomain.NG.Test.Contact
             var stubRequest = new UpdateCareTeamMemberRequest() { ContactId = "cid", CareTeamId = "careteamId", Id = "memberId", CareTeamMember = new Member() { Id = "memberId1", StatusId = 1 } };
             contactManager.UpdateCareTeamMember(stubRequest);
         }
-      
+
+        [TestMethod]
+        [ExpectedException(typeof(ApplicationException))]
+        public void ContactManager_UpdateCareTeamMember_ContactIdDoesNotExist_Should_Throw()
+        {
+            //Arrange           
+           
+            var contactManager = new ContactManager();
+
+            var stubRequest = new UpdateCareTeamMemberRequest() { ContactId = "cid", CareTeamId = "careteamId", Id = "memberId", CareTeamMember = new Member() { ContactId = "memberCid", Id = "memberId", StatusId = 1, RoleId = "roleId" } };
+            var mockContactEndPointUtil = new Mock<IContactEndpointUtil>();
+            mockContactEndPointUtil.Setup(mceu => mceu.UpdateCareTeamMember(It.IsAny<UpdateCareTeamMemberRequest>()))
+                .Returns(new UpdateCareTeamMemberResponse());
+            if (mockContactEndPointUtil.Setup(mcue => mcue.GetContactByContactId(It.IsAny<GetContactByContactIdRequest>())) == null){}
+
+            contactManager.EndpointUtil = mockContactEndPointUtil.Object;
+
+
+            var mockCohortRulesProcessor = new Mock<ICohortRulesProcessor>();
+            contactManager.CohortRules = mockCohortRulesProcessor.Object;
+
+            //Act
+            var response = contactManager.UpdateCareTeamMember(stubRequest);
+
+            //Assert.
+            Assert.IsNotNull(response);
+            mockContactEndPointUtil.Verify(mr => mr.UpdateCareTeamMember(It.IsAny<UpdateCareTeamMemberRequest>()), Times.Once);
+        }
 
         [TestMethod]
         public void ContactManager_UpdateCareTeamMember_Success()
         {
-            //Arrange
+            //Arrange           
+            var contactData = new ContactData()
+            {
+                Id = "cid"
+            };
             var contactManager = new ContactManager();
             
-            var stubRequest = new UpdateCareTeamMemberRequest() { ContactId = "cid", CareTeamId = "careteamId", Id = "memberId", CareTeamMember = new Member() { ContactId = "memberCid", Id = "memberId" } };
+            var stubRequest = new UpdateCareTeamMemberRequest() { ContactId = "cid", CareTeamId = "careteamId", Id = "memberId", CareTeamMember = new Member() { ContactId = "memberCid", Id = "memberId",StatusId = 1,RoleId = "roleId"} };
             var mockContactEndPointUtil = new Mock<IContactEndpointUtil>();
             mockContactEndPointUtil.Setup(mceu => mceu.UpdateCareTeamMember(It.IsAny<UpdateCareTeamMemberRequest>()))
                 .Returns(new UpdateCareTeamMemberResponse());
+            mockContactEndPointUtil.Setup(mcue => mcue.GetContactByContactId(It.IsAny<GetContactByContactIdRequest>()))
+                .Returns(contactData);
 
             contactManager.EndpointUtil = mockContactEndPointUtil.Object;
+            
+
+            var mockCohortRulesProcessor = new Mock<ICohortRulesProcessor>();
+            contactManager.CohortRules = mockCohortRulesProcessor.Object;
 
             //Act
             var response = contactManager.UpdateCareTeamMember(stubRequest);
