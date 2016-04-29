@@ -119,8 +119,8 @@ namespace Phytel.API.DataDomain.Patient
                             {
                                 patient.ReasonId = pd.ReasonId;
                             }
-                            // SAVE IT ----- else patient.ReasonId = "U";
-                            else throw new ArgumentOutOfRangeException("Invalid Argument");
+                            else patient.ReasonId = "U";
+                            
                         }
 
                         /*    if (!string.IsNullOrEmpty(pd.MaritalStatusId))
@@ -139,8 +139,7 @@ namespace Phytel.API.DataDomain.Patient
                             {
                                 patient.MaritalStatusId = pd.MaritalStatusId;
                             }
-                            // SAVE IT else patient.MaritalStatusId = "U";
-                            else throw new ArgumentOutOfRangeException("Invalid Argument");
+                             else patient.MaritalStatusId = "U";
                         }
 
                         ctx.Patients.Collection.Insert(patient);
@@ -252,9 +251,7 @@ namespace Phytel.API.DataDomain.Patient
                             {
                                 meP.ReasonId = pd.ReasonId;
                             }
-                            // SAVE IT else meP.ReasonId = "U";
-                            else throw new ArgumentOutOfRangeException("Invalid Argument");
-
+                            else meP.ReasonId = "U";
                         }
 
 
@@ -269,9 +266,7 @@ namespace Phytel.API.DataDomain.Patient
                             {
                                 meP.MaritalStatusId = pd.MaritalStatusId;
                             }
-                            // SAVE IT else meP.MaritalStatusId = "U";
-                            else throw new ArgumentOutOfRangeException("Invalid Argument");
-
+                           else meP.MaritalStatusId = "U";                            
                         }
 
                         /*       if (!string.IsNullOrEmpty(pd.MaritalStatusId))
