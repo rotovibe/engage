@@ -490,6 +490,12 @@ define(['services/session'],
                     });
                     return thisArray;
                 });
+                goal.sortedInterventions = ko.computed(function () {
+                    return goal.interventions().sort(function (l, r) { return (l.description() == r.description()) ? (l.description() < r.description() ? -1 : 1) : (l.description() < r.description() ? -1 : 1) });
+                });
+                goal.sortedTasks = ko.computed(function () {
+                    return goal.tasks().sort(function (l, r) { return (l.description() == r.description()) ? (l.description() < r.description() ? -1 : 1) : (l.description() < r.description() ? -1 : 1) });
+                });
             }
 
             function interventionInitializer(intervention) {

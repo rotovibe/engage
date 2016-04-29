@@ -39,7 +39,7 @@
                         <div class="task row">
                             <div class="span6">
                                 <div class="row rule"></div>
-                                <!-- ko foreach: tasks -->
+                                <!-- ko foreach: sortedTasks -->
                                 <div class="row rule filter-toggle" data-bind="css: { 'active': $parents[1].activeTask() === $data }">
                                     <div class="span12 details">
                                         <div class="status line rule">
@@ -79,27 +79,27 @@
                             </div>
                             <div class="span6 last">
                                 <div class="row rule"></div>
-                                <!-- ko foreach: interventions -->
-                                <div class="row rule filter-toggle" data-bind="css: { 'active': $parents[1].activeIntervention() === $data }, click: $parents[1].setActiveIntervention.bind($parents[1])">
-                                    <div class="span12 details">
-                                        <div class="status line rule">
-                                            <div class="pull-left" data-bind="with: status">
-                                                <i data-bind="css: iconClass"></i>
-                                            </div>
-                                            <div class="line-reset" data-bind="with: status">
-                                                <!-- ko if: name() !== 'Completed' -->
-                                                    <span data-bind="text: $parent.description, css: textClass"></span>
-                                                <!-- /ko -->
-                                                <!-- ko if: name() === 'Completed' -->
-                                                    <em>
+                                <!-- ko foreach: sortedInterventions -->
+                                    <div class="row rule filter-toggle" data-bind="css: { 'active': $parents[1].activeIntervention() === $data }, click: $parents[1].setActiveIntervention.bind($parents[1])">
+                                        <div class="span12 details">
+                                            <div class="status line rule">
+                                                <div class="pull-left" data-bind="with: status">
+                                                    <i data-bind="css: iconClass"></i>
+                                                </div>
+                                                <div class="line-reset" data-bind="with: status">
+                                                    <!-- ko if: name() !== 'Completed' -->
                                                         <span data-bind="text: $parent.description, css: textClass"></span>
-                                                        - <span data-bind="Date: $parent.closedDate, attr: { 'title': $parent.closedDate }"></span>
-                                                    </em>
-                                                <!-- /ko -->
+                                                    <!-- /ko -->
+                                                    <!-- ko if: name() === 'Completed' -->
+                                                        <em>
+                                                            <span data-bind="text: $parent.description, css: textClass"></span>
+                                                            - <span data-bind="Date: $parent.closedDate, attr: { 'title': $parent.closedDate }"></span>
+                                                        </em>
+                                                    <!-- /ko -->
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
                                 <!-- /ko -->
                                 <!-- ko if: interventions().length === 0 -->
                                 <div class="intervention row rule">
