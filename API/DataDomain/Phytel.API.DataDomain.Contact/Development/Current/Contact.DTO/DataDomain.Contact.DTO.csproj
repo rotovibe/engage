@@ -101,9 +101,13 @@
     <Compile Include="AddressData.cs" />
     <Compile Include="CareTeam\CareTeamMemberData.cs" />
     <Compile Include="CareTeam\CareTeamData.cs" />
+    <Compile Include="CareTeam\DeleteCareTeamDataRequest.cs" />
+    <Compile Include="CareTeam\DeleteCareTeamDataResponse.cs" />
     <Compile Include="CareTeam\DeleteCareTeamMemberDataRequest.cs" />
     <Compile Include="CareTeam\DeleteCareTeamMemberDataResponse.cs" />
     <Compile Include="CareTeam\GetCareTeamDataRequest.cs" />
+    <Compile Include="CareTeam\UndoDeleteCareTeamDataRequest.cs" />
+    <Compile Include="CareTeam\UndoDeleteCareTeamDataResponse.cs" />
     <Compile Include="CareTeam\UpdateCareTeamMemberDataRequest.cs" />
     <Compile Include="CareTeam\UpdateCareTeamMemberDataResponse.cs" />
     <Compile Include="CareTeam\SaveCareTeamDataRequest.cs" />

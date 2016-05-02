@@ -278,6 +278,11 @@ namespace Phytel.API.AppDomain.NG
             return response;
         }
 
+        public DeleteCareTeamResponse DeleteCareTeam(DeleteCareTeamRequest request)
+        {
+            DeleteCareTeamResponse response = null;
+            return response;
+        }
         #endregion
 
         #region Private Methods
