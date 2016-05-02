@@ -9,10 +9,7 @@ namespace AppDomain.Engage.Population.DTO.Demographics
 {
     public class Patient
     {
-        [ApiMember(Name = "ListKey", Description = "ListKey")]
-        public string ListKey { get; set; }
-        [ApiMember(Name = "Sid", Description = "Sid")]
-        public string Sid { get; set; }
+        
         [ApiMember(Name = "FirstName", Description = "FirstName", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string FirstName { get; set; }
 
