@@ -225,6 +225,12 @@
 /// <reference path="../gulpfile.js" />
 /// <reference path="../app/viewmodels/home/contacts/index.js" />
 /// <reference path="../app/viewmodels/templates/contact.edit.js" />
+/// <reference path="../app/viewmodels/home/contacts/contact.details.js" />
+/// <reference path="../app/viewmodels/patients/team/caremember.details.js" />
+/// <reference path="../app/viewmodels/patients/team/index.js" />
+/// <reference path="../app/viewmodels/patients/widgets/caremembers.js" />
+/// <reference path="../app/viewmodels/templates/caremembers.panel.js" />
+/// <reference path="../app/viewmodels/templates/caremember.edit.js" />
  
  / / /   < r e f e r e n c e   p a t h = " b r e e z e . d e b u g . j s "   / >  
  

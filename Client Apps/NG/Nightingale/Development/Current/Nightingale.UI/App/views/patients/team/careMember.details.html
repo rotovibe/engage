@@ -1,0 +1,61 @@
+<div>
+	<em class="grey" data-bind="visible: !contact()">No care member selected</em>
+	<nav class="tabs" data-bind="visible: contact">
+		<!-- ko foreach: detailsTabs -->
+			<span data-bind="css: {'active': $parent.activeDetailsTab() == name}, 
+							click: function(){ $parent.setActiveDetailsTab( name ) }, clickBubble: false">
+				<!-- ko if: imgAlt -->
+					<img data-bind="attr:{ alt: imgAlt, src: imgSource }" style="vertical-align: middle;"/>
+				<!-- /ko -->
+				<!-- ko if: cssClass -->
+					<i data-bind="attr:{ class: cssClass }"></i>
+				<!-- /ko -->
+				<a role="menuitem" data-bind="text: name"></a>
+			</span>
+		<!-- /ko -->
+	</nav>
+
+	<div class="content" data-bind="with: contact">
+		<div class="row" data-bind="visible: $parent.activeDetailsTab() === 'Profile'">
+			<div>
+				<div class="row pad-top" data-bind="visible: fullName">					
+					<span data-bind="text: fullName"></span>
+				</div>
+				
+				<div data-bind="with: deceased">
+					<div class="row pad-top" data-bind="visible: (name() == 'Yes')">
+						<strong class="span2">Deceased</strong>
+						<span>Yes</span>
+					</div>
+				</div>
+				<div class="pad-left">				
+					<ul class="row grey pad-left" style="list-style-type: disc;" data-bind="visible: (detailedSubTypes().length > 0)">
+						<!-- ko foreach: detailedSubTypes -->
+							<li class="pad-top" data-bind="text: $data"></span>
+						<!-- /ko -->
+					</ul>				
+				</div>	
+				<div class="row pad-top" data-bind="visible: (gender() && gender() !== 'N')">
+					<strong class="span2">Gender:</strong>
+					<span data-bind="text: gender"></span>
+				</div>
+				<div class="row pad-top" data-bind="with: contactStatus">
+					<strong class="span2">Status:</strong>
+					<span data-bind="text: name()"></span>
+				</div>
+				<div class="row pad-top" data-bind="visible: createdOn">
+					<strong class="span2">Created:</strong>
+					<span data-bind="DateTime: createdOn"></span> by <span data-bind="text: createdBy().preferredName"></span>
+				</div>
+				<div class="row pad-top" data-bind="visible: updatedOn">
+					<strong class="span2">Updated:</strong>
+					<span data-bind="DateTime: updatedOn"></span> by <span data-bind="text: (updatedBy()? updatedBy().preferredName : '')"></span>
+				</div>
+				<div class="row pad-top" data-bind="visible: dataSource">
+					<strong class="span2">System:</strong>
+					<span class="span9"><span data-bind="text: dataSource"></span>
+				</div>			
+			</div>
+		</div>
+	</div>
+</div>

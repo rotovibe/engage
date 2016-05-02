@@ -1,0 +1,34 @@
+<div class="panel-wrapper">
+    <div class="row">
+        <div class="header grey" data-bind="visible: (careMembers().length > 0)">
+			<div class="table-cell">
+				<header>
+					<div class="line">
+						<div class="span2">Name</div>
+						<div class="span2">Role</div>
+						<div class="span1">Core</div>
+						<div class="span1">Status</div>
+					</div>
+				</header>
+			</div>
+		</div>
+    </div>
+    <div data-bind="foreach: careMembers">
+        <div class="line filter-toggle ellipsis" data-bind="click: $parent.selectCareMember, css:{ 'active': $parent.selectedCareMember() === $data }">			
+			<div class="span2 grey">
+				<!-- <span data-bind="text: lastName"></span> -->
+			</div>
+			<div class="span2 grey">
+				<!-- <span data-bind="text: firstName"></span> -->
+			</div>
+			<div class="span8 grey ellipsis">
+				<!-- <span data-bind="text: contactSummary, attr: { title: contactSummary }"></span> -->
+			</div>
+						
+		</div>
+		<div class="divider" style="margin-top: 0px; padding-top: 0px;"></div>
+    </div>
+    <!-- <div class="row" data-bind="visible: careMembers().length === 0">
+        <em>There are no care team members</em>
+    </div> -->
+</div>
