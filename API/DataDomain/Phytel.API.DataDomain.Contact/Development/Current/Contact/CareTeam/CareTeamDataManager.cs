@@ -132,5 +132,67 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
 
             repo.DeleteCareTeamMember(request);
         }
+
+        public DeleteCareTeamDataResponse DeleteCareTeam(DeleteCareTeamDataRequest request)
+        {
+            var response = new DeleteCareTeamDataResponse();
+
+            if (request == null)
+                throw new ArgumentNullException("request");           
+
+            if (string.IsNullOrEmpty(request.ContactId))
+                throw new ArgumentNullException("Null or Empty ContactId", "request");
+
+            if (string.IsNullOrEmpty(request.Id))
+                throw new ArgumentNullException("Null or empty Care Team Id", "request");                        
+
+            var repo = _factory.GetCareTeamRepository(request, RepositoryType.CareTeam);
+
+            if (repo == null)
+                throw new Exception("Repository is null");
+
+            try
+            {
+                if (!repo.CareTeamExist(request.Id))
+                    throw new Exception(string.Format("Care Team {0} does not exist", request.Id));
+
+                repo.DeleteCareTeam(request);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return response;
+        }
+
+        public UndoDeleteCareTeamDataResponse UndoDeleteCareTeam(UndoDeleteCareTeamDataRequest request)
+        {
+            var response = new UndoDeleteCareTeamDataResponse();
+
+            if (request == null)
+                throw new ArgumentNullException("request");
+
+            if (string.IsNullOrEmpty(request.ContactId))
+                throw new ArgumentNullException("Null or Empty ContactId", "request");
+
+            if (string.IsNullOrEmpty(request.Id))
+                throw new ArgumentNullException("Null or empty Care Team Id", "request");
+            var repo = _factory.GetCareTeamRepository(request, RepositoryType.CareTeam);
+
+            if (repo == null)
+                throw new Exception("Repository is null");
+
+            try
+            {
+                
+                repo.UndoDelete(request);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return response;
+
+        }
     }
 }

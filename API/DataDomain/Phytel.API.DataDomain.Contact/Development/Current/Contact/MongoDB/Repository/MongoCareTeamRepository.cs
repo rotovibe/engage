@@ -248,7 +248,7 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
             }
             return res;
         }
-
+        
         private MEContactCareTeam GetContactCareTeam(string contactId)
         {
             MEContactCareTeam res = null;
@@ -375,12 +375,7 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
         {
             throw new NotImplementedException();
         }
-
-        public void UndoDelete(object entity)
-        {
-            throw new NotImplementedException();
-        }
-
+        
         public object GetCareTeamByContactId(string contactId)
         {
             CareTeamData careTeam = null;
@@ -552,5 +547,65 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
             }
             
         }
+
+        public void DeleteCareTeam(object entity)
+        {
+            var request = (DeleteCareTeamDataRequest)entity;
+
+            using (var ctx = new ContactCareTeamMongoContext(_dbName))
+            {
+                var queries = new List<IMongoQuery>
+                        {
+                            MB.Query<MEContactCareTeam>.EQ(c => c.Id, ObjectId.Parse(request.Id)),                            
+                            MB.Query<MEContactCareTeam>.EQ(c => c.DeleteFlag, false)
+                        };
+
+                var query = MB.Query.And(queries);
+                var contactCareTeam = ctx.CareTeam.Collection.FindOne(query);
+                var builder = new List<MB.UpdateBuilder>();
+                builder.Add(MB.Update.Set(MEContactCareTeam.TTLDateProperty, DateTime.UtcNow.AddDays(_expireDays)));
+                builder.Add(MB.Update.Set(MEContactCareTeam.DeleteFlagProperty, true));
+                builder.Add(MB.Update.Set(MEContactCareTeam.LastUpdatedOnProperty, DateTime.UtcNow));
+                builder.Add(MB.Update.Set(MEContactCareTeam.LastUpdatedByProperty, ObjectId.Parse(this.UserId)));
+
+
+                var saveResult = ctx.CareTeam.Collection.Save(contactCareTeam);
+
+                AuditHelper.LogDataAudit(this.UserId,
+                    MongoCollectionName.CareTeam.ToString(),
+                    contactCareTeam.Id.ToString(),
+                    DataAuditType.Update,
+                    request.ContractNumber);
+            }
+        }
+
+        public void UndoDelete(object entity)
+        {
+            UndoDeleteCareTeamDataRequest request = (UndoDeleteCareTeamDataRequest)entity;
+            try
+            {
+                using (var ctx = new ContactCareTeamMongoContext(_dbName))
+                {
+                    var query = MB.Query<MEContactCareTeam>.EQ(b => b.Id, ObjectId.Parse(request.Id));
+                    var builder = new List<MB.UpdateBuilder>();
+                    builder.Add(MB.Update.Set(MEContactCareTeam.TTLDateProperty, BsonNull.Value));
+                    builder.Add(MB.Update.Set(MEContactCareTeam.DeleteFlagProperty, false));
+                    builder.Add(MB.Update.Set(MEContactCareTeam.LastUpdatedOnProperty, DateTime.UtcNow));
+                    builder.Add(MB.Update.Set(MEContactCareTeam.LastUpdatedByProperty, ObjectId.Parse(this.UserId)));
+
+                    IMongoUpdate update = MB.Update.Combine(builder);
+                    ctx.CareTeam.Collection.Update(query, update);
+
+                    AuditHelper.LogDataAudit(this.UserId,
+                                            MongoCollectionName.CareMember.ToString(),
+                                            request.Id.ToString(),
+                                            Common.DataAuditType.UndoDelete,
+                                            request.ContractNumber);
+                }
+            }
+            catch (Exception) { throw; }
+        }
+
+
     }
 }

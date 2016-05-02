@@ -262,7 +262,7 @@ namespace Phytel.API.AppDomain.NG
             }
             return response;
         }
-
+      
         public DeleteCareTeamMemberDataResponse DeleteCareTeamMember(DeleteCareTeamMemberRequest request)
         {
             DeleteCareTeamMemberDataResponse response = null;
@@ -288,6 +288,64 @@ namespace Phytel.API.AppDomain.NG
             catch (WebServiceException wse)
             {
                 throw new WebServiceException("AD:DeleteCareTeamMember()::" + wse.Message, wse.InnerException);
+            }
+
+            return response;
+        }
+
+        public DeleteCareTeamDataResponse DeleteCareTeam(DeleteCareTeamRequest request)
+        {
+            DeleteCareTeamDataResponse response = null;
+            try
+            {
+
+                IRestClient client = new JsonServiceClient();
+                // '/{Context}/{Version}/{ContractNumber}/Contacts/{ContactId}/CareTeams
+                var url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Contacts/{4}/CareTeams/{5}",
+                                                                                DDContactServiceUrl,
+                                                                                "NG",
+                                                                                request.Version,
+                                                                                request.ContractNumber, request.ContactId,request.Id), request.UserId);
+                response =
+                    client.Delete<DeleteCareTeamDataResponse>(url);
+
+
+            }
+            catch (WebServiceException wse)
+            {
+                throw new WebServiceException("AD:DeleteCareTeam()::" + wse.Message, wse.InnerException);
+            }
+
+            return response;
+        }
+
+        public UndoDeleteCareTeamDataResponse UndoDeleteCareTeam(UndoDeleteCareTeamDataRequest request)
+        {
+            UndoDeleteCareTeamDataResponse response = null;
+            try
+            {
+
+                IRestClient client = new JsonServiceClient();
+                // '/{Context}/{Version}/{ContractNumber}/Contacts/{ContactId}/CareTeams
+                var url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Contacts/{4}/CareTeams/{5}",
+                                                                                DDContactServiceUrl,
+                                                                                "NG",
+                                                                                request.Version,
+                                                                                request.ContractNumber, request.ContactId, request.Id), request.UserId);
+                response =
+                   client.Put<UndoDeleteCareTeamDataResponse>(url, new UndoDeleteCareTeamDataRequest()
+                   {
+                       ContactId = request.ContactId,
+                       Id = request.Id,
+                       Version = request.Version,
+                       ContractNumber = request.ContractNumber,
+                       Context = "NG"
+                   } as object);
+
+            }
+            catch (WebServiceException wse)
+            {
+                throw new WebServiceException("AD:UndoDeleteCareTeam()::" + wse.Message, wse.InnerException);
             }
 
             return response;

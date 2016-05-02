@@ -20,6 +20,9 @@ namespace Phytel.API.AppDomain.NG
         DeleteCareTeamMemberDataResponse DeleteCareTeamMember(DeleteCareTeamMemberRequest request);
         UpdateCareTeamMemberResponse UpdateCareTeamMember(UpdateCareTeamMemberRequest request);
 
+        DeleteCareTeamDataResponse DeleteCareTeam(DeleteCareTeamRequest request);
+        UndoDeleteCareTeamDataResponse UndoDeleteCareTeam(UndoDeleteCareTeamDataRequest request);
+
         #endregion
 
         #region CohortPatientView

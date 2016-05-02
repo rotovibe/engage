@@ -9,5 +9,7 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
         UpdateCareTeamMemberDataResponse UpdateCareTeamMember(UpdateCareTeamMemberDataRequest request);
         GetCareTeamDataResponse GetCareTeam(GetCareTeamDataRequest request);
         void DeleteCareTeamMember(DeleteCareTeamMemberDataRequest request);
+        DeleteCareTeamDataResponse DeleteCareTeam(DeleteCareTeamDataRequest request);
+        UndoDeleteCareTeamDataResponse UndoDeleteCareTeam(UndoDeleteCareTeamDataRequest request);
     }
 }
