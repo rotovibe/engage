@@ -6,6 +6,7 @@ using Phytel.API.AppDomain.NG.DTO;
 using Phytel.API.DataDomain.Contact.DTO;
 using Phytel.API.DataDomain.Contact.DTO.CareTeam;
 using Phytel.API.DataDomain.Patient.DTO;
+using ServiceStack.Common.Web;
 using ServiceStack.Service;
 using ServiceStack.ServiceClient.Web;
 using ServiceStack.ServiceInterface.ServiceModel;
@@ -123,6 +124,42 @@ namespace Phytel.API.AppDomain.NG
                 throw new WebServiceException("AD:GetCareManagers()::" + wse.Message, wse.InnerException);
             }
             return contactList;
+        }
+
+        public bool DereferencePatientInContact(string patientId, double version, string contractNumber, string userId)
+        {
+            var response = false;
+            try
+            {
+                IRestClient client = new JsonServiceClient();
+                string url = Common.Helper.BuildURL(string.Format("/{0}/{1}/{2}/Patient/{3}/Dereference",
+                                                       DDContactServiceUrl,
+                                                       "NG",
+                                                       version,
+                                                       contractNumber), userId);
+
+                //[Route("/{Context}/{Version}/{ContractNumber}/Contact/CareManagers", "GET")]
+                var dataDomainResponse =
+                    client.Put<DereferencePatientDataResponse>(url, new DereferencePatientDataRequest
+                    {
+                        ContractNumber = contractNumber,
+                        Context = "NG",
+                        PatientId =  patientId,
+                        UserId = userId,
+                        Version = version
+                    });
+
+                if (dataDomainResponse != null)
+                {
+
+                    response = dataDomainResponse.IsSuccessful;
+                }
+            }
+            catch (WebServiceException wse)
+            {
+                throw new WebServiceException("AD:DereferencePatientInContact()::" + wse.Message, wse.InnerException);
+            }
+            return response;
         }
 
         #endregion
@@ -353,5 +390,8 @@ namespace Phytel.API.AppDomain.NG
         }
 
         #endregion
+
+
+       
     }
 }

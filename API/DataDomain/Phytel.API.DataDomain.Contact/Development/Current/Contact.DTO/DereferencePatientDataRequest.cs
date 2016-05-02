@@ -3,7 +3,8 @@ using ServiceStack.ServiceHost;
 
 namespace Phytel.API.DataDomain.Contact.DTO
 {
-    [Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}", "PUT")]
+    //TODO: Route: Update 
+    [Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/Dereference", "PUT")]
     public class DereferencePatientDataRequest : IDataDomainRequest
     {
         [ApiMember(Name = "ContactId", Description = "Patient Id", ParameterType = "property", DataType = "string", IsRequired = true)]

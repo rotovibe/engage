@@ -22,6 +22,7 @@ using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Web.Hosting;
 using AutoMapper;
+using Phytel.API.AppDomain.NG.Command;
 using Phytel.API.Common.Extensions;
 using Phytel.API.DataDomain.Contact.DTO.CareTeam;
 using DD = Phytel.API.DataDomain.Program.DTO;
@@ -421,6 +422,9 @@ namespace Phytel.API.AppDomain.NG
 
                 INGCommand deletePatientProgramCommand = new PatientProgramsCommand(request, client);
                 uow.Execute(deletePatientProgramCommand);
+
+                var dereferencePatientInContactCommand = new DereferencePatientInContactCommand(request);
+                uow.Execute(dereferencePatientInContactCommand);
 
                 return response;
             }

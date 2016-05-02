@@ -11,6 +11,7 @@ namespace Phytel.API.AppDomain.NG
         ContactData GetContactByContactId(GetContactByContactIdRequest request);
         List<ContactData> GetContactsByContactIds(List<string> contactIds, double version, string contractNumber,string userId);
         List<Contact> GetCareManagers(GetAllCareManagersRequest request);
+        bool DereferencePatientInContact(string patientId, double version, string contractNumber, string userId);
         #endregion
 
         #region CareTeam

@@ -1,24 +1,32 @@
 ﻿using System;
 using Phytel.API.AppDomain.NG.DTO;
-using ServiceStack.Service;
 
 namespace Phytel.API.AppDomain.NG.Command
 {
     public class DereferencePatientInContactCommand : INGCommand
     {
-        private readonly DereferencePatientRequest _request;
-        private readonly IRestClient _restClient;
-        public IContactEndpointUtil EndpointUtil { get; set; }
+        private readonly PostDeletePatientRequest _request;
+        public IContactEndpointUtil contactEndpointUtil { get; set; }
 
-        public DereferencePatientInContactCommand(DereferencePatientRequest request, IRestClient restClient)
+        public DereferencePatientInContactCommand(PostDeletePatientRequest request)
         {
             _request = request ;
-            _restClient = restClient;
+
         }
 
         public void Execute()
         {
-            var patientId = _request.PatientId;
+            try
+            {
+                var patientId = _request.Id;
+                var response = contactEndpointUtil.DereferencePatientInContact(patientId, _request.Version, _request.ContractNumber, _request.UserId);
+
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception("AD: DereferencePatientInContactCommand Execute::" + ex.Message, ex.InnerException);
+            }
             
         }
 
