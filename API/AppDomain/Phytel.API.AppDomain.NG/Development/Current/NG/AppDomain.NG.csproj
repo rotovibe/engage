@@ -159,6 +159,7 @@
     <Compile Include="Allergy\IAllergyEndpointUtil.cs" />
     <Compile Include="Allergy\IAllergyManager.cs" />
     <Compile Include="Command\CareTeamCommand.cs" />
+    <Compile Include="Command\DereferencePatientInContactCommand.cs" />
     <Compile Include="Command\PatientMedSuppsCommand.cs" />
     <Compile Include="Command\PatientAllergiesCommand.cs" />
     <Compile Include="Command\PatientToDosCommand.cs" />

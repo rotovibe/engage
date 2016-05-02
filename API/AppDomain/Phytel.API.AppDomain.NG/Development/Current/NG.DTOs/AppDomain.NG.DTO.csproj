@@ -129,6 +129,8 @@
     <Compile Include="Contact\Contact.cs" />
     <Compile Include="Contact\ContactSearchInfo.cs" />
     <Compile Include="Contact\ContactTypeLookup.cs" />
+    <Compile Include="Contact\DereferencePatientRequest.cs" />
+    <Compile Include="Contact\DereferencePatientResponse.cs" />
     <Compile Include="Contact\GetContactByContactIdRequest.cs" />
     <Compile Include="Contact\GetContactByContactIdResponse.cs" />
     <Compile Include="Contact\GetContactTypeLookupRequest.cs" />

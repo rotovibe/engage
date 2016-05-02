@@ -120,6 +120,8 @@
     <Compile Include="ContactTypeLookUp\ContactTypeLookUpData.cs" />
     <Compile Include="ContactTypeLookUp\GetContactTypeLookUpDataRequest.cs" />
     <Compile Include="ContactTypeLookUp\GetContactTypeLookUpDataResponse.cs" />
+    <Compile Include="DereferencePatientDataRequest.cs" />
+    <Compile Include="DereferencePatientDataResponse.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="ContactTypeLookUp\PutContactTypeLookUpDataRequest.cs" />
     <Compile Include="ContactTypeLookUp\PutContactTypeLookUpDataResponse.cs" />

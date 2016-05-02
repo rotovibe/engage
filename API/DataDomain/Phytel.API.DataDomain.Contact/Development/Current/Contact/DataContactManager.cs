@@ -456,5 +456,22 @@ namespace Phytel.API.DataDomain.Contact
             }
             return response;
         }
+
+        public DereferencePatientDataResponse DereferencePatient(DereferencePatientDataRequest request)
+        {
+            var response = new DereferencePatientDataResponse();
+            try
+            {
+                var repo = Factory.GetRepository(request, RepositoryType.Contact);
+                var isSuccessful = repo.DereferencePatient(request);
+
+                response.IsSuccessful = isSuccessful;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return response;
+        }
     }
 }

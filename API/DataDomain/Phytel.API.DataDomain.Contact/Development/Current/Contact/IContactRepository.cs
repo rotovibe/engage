@@ -24,5 +24,6 @@ namespace Phytel.API.DataDomain.Contact
         IEnumerable<object> SearchContacts(SearchContactsDataRequest request);
         long GetSearchContactsCount(SearchContactsDataRequest request);
         bool SyncContact(SyncContactInfoDataRequest request);
+        bool DereferencePatient(DereferencePatientDataRequest request);
     }
 }

@@ -3,6 +3,7 @@ using System.CodeDom;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
@@ -1207,6 +1208,44 @@ namespace Phytel.API.DataDomain.Contact
             return response.IsSuccessful;
         }
 
+        public bool DereferencePatient(DereferencePatientDataRequest request)
+        {
+            if (request == null)
+                throw new ArgumentNullException("request");
+
+            var isSuccessful = false;
+
+            try
+            {
+                using (var ctx = new ContactMongoContext(_dbName))
+                {
+                    var query = Query.And(MB.Query<MEContact>.EQ(b => b.PatientId, ObjectId.Parse(request.PatientId)),
+                                          MB.Query<MEContact>.EQ(b => b.DeleteFlag, false));
+
+                    var meContact = ctx.Contacts.Collection.FindOne(query);
+
+                    meContact.PatientId = null;
+
+                    ctx.Contacts.Collection.Save(meContact);
+
+                    isSuccessful = true;
+
+                    AuditHelper.LogDataAudit(this.UserId,
+                        MongoCollectionName.Contact.ToString(),
+                        meContact.Id.ToString(),
+                        DataAuditType.Update,
+                        request.ContractNumber);
+                }
+            }
+            catch (Exception)
+            {
+                isSuccessful = false;
+                throw;
+            }
+
+            return isSuccessful;
+        }
+
         #region Private Methods
 
         private ContactData BuildContactData(MEContact contactEntity)
@@ -1664,5 +1703,6 @@ namespace Phytel.API.DataDomain.Contact
         }
          
         #endregion
+       
     }
 }

@@ -298,5 +298,28 @@ namespace Phytel.API.DataDomain.Contact.Service
             return response;
         }
 
+        public DereferencePatientDataResponse Put(DereferencePatientDataRequest request)
+        {
+            if (request == null)
+                throw new ArgumentNullException("request");
+            var response = new DereferencePatientDataResponse();
+            try
+            {
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("ContactDD:DereferencePatientDataResponse()::Unauthorized Access");
+
+                response = Manager.DereferencePatient(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+            }
+            return response;
+        }
+
     }
 }
