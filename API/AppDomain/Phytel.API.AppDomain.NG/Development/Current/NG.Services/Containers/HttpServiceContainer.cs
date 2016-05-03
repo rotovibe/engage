@@ -36,7 +36,7 @@ namespace Phytel.API.AppDomain.NG.Service.Containers
             container.RegisterAutoWiredAs<PlanElementUtils, IPlanElementUtils>().ReusedWithin(ReuseScope.Request);
             container.RegisterAutoWiredAs<UtilizationManager, IUtilizationManager>().ReusedWithin(ReuseScope.Request);
             container.RegisterAutoWiredAs<NotesManager, INotesManager>().ReusedWithin(ReuseScope.Request);
-            container.RegisterAutoWiredAs<NGManager, INGManager>().ReusedWithin(ReuseScope.Request);
+            
             container.RegisterAutoWiredAs<AuditUtil, IAuditUtil>().ReusedWithin(ReuseScope.Request);
             container.RegisterAutoWiredAs<ObservationEndpointUtil, IObservationEndpointUtil>().ReusedWithin(ReuseScope.Request);
             container.RegisterAutoWiredAs<ObservationsManager, IObservationsManager>().ReusedWithin(ReuseScope.Request);
@@ -62,7 +62,8 @@ namespace Phytel.API.AppDomain.NG.Service.Containers
         {
             container.RegisterAutoWiredAs<ASEExceptionLogger, ILogger>();
             container.RegisterAutoWiredAs<ContactManager, IContactManager>();
-            container.RegisterAutoWiredAs<CohortRulesProcessor, ICohortRulesProcessor>().ReusedWithin(ReuseScope.Hierarchy);
+            container.RegisterAutoWiredAs<CohortRulesProcessor, ICohortRulesProcessor>();
+            container.RegisterAutoWiredAs<NGManager, INGManager>();
         }
     }
 }
