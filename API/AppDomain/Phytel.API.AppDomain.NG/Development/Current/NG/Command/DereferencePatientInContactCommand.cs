@@ -5,13 +5,15 @@ namespace Phytel.API.AppDomain.NG.Command
 {
     public class DereferencePatientInContactCommand : INGCommand
     {
+        private readonly string _contactId;
         private readonly PostDeletePatientRequest _request;
-        public IContactEndpointUtil contactEndpointUtil { get; set; }
-
-        public DereferencePatientInContactCommand(PostDeletePatientRequest request)
+        private readonly IContactEndpointUtil _contactEndpointUtil;
+        
+        public DereferencePatientInContactCommand(string contactId ,PostDeletePatientRequest request, IContactEndpointUtil contactEndpointUtil)
         {
-            _request = request ;
-
+            _contactId = contactId;
+            _request = request;
+            _contactEndpointUtil = contactEndpointUtil;
         }
 
         public void Execute()
@@ -19,7 +21,7 @@ namespace Phytel.API.AppDomain.NG.Command
             try
             {
                 var patientId = _request.Id;
-                var response = contactEndpointUtil.DereferencePatientInContact(patientId, _request.Version, _request.ContractNumber, _request.UserId);
+                _contactEndpointUtil.DereferencePatientInContact(patientId, _request.Version, _request.ContractNumber, _request.UserId);
 
             }
             catch (Exception ex)
@@ -32,7 +34,18 @@ namespace Phytel.API.AppDomain.NG.Command
 
         public void Undo()
         {
-            throw new NotImplementedException();
+            try
+            {
+                var patientId = _request.Id;
+                var contactId = _contactId;
+                _contactEndpointUtil.UndoDereferencePatientInContact(contactId,patientId, _request.Version, _request.ContractNumber, _request.UserId);
+
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception("AD: DereferencePatientInContactCommand Execute::" + ex.Message, ex.InnerException);
+            }
         }
     }
 }

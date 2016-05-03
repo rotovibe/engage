@@ -473,5 +473,10 @@ namespace Phytel.API.DataDomain.Contact
             }
             return response;
         }
+
+        public UndoDereferencePatientDataResponse UndoDereferencePatient(UndoDeleteContactDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

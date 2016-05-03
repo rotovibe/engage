@@ -165,7 +165,7 @@ namespace Phytel.API.AppDomain.NG.Service
         public PostDeletePatientResponse Post(PostDeletePatientRequest request)
         {
             PostDeletePatientResponse response = new PostDeletePatientResponse();
-            NGManager ngm = new NGManager();
+            //NGManager ngm = new NGManager();
             ValidateTokenResponse result = null;
 
             try
@@ -175,7 +175,7 @@ namespace Phytel.API.AppDomain.NG.Service
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
-                    response = ngm.DeletePatient(request);
+                    response = NGManager.DeletePatient(request);
                 }
                 else
                     throw new UnauthorizedAccessException();
@@ -675,7 +675,7 @@ namespace Phytel.API.AppDomain.NG.Service
         public PostRemovePatientProgramResponse Post(PostRemovePatientProgramRequest request)
         {
             PostRemovePatientProgramResponse response = new PostRemovePatientProgramResponse();
-            NGManager ngm = new NGManager();
+            //NGManager ngm = new NGManager();
             ValidateTokenResponse result = null;
 
             try
@@ -685,7 +685,7 @@ namespace Phytel.API.AppDomain.NG.Service
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
-                    response = ngm.RemovePatientProgram(request);
+                    response = NGManager.RemovePatientProgram(request);
                 }
                 else
                    throw new UnauthorizedAccessException();

@@ -154,5 +154,11 @@ namespace Phytel.API.DataDomain.Contact.Test.Stubs
         {
             throw new NotImplementedException();
         }
+
+
+        public bool UnDereferencePatient(UndoDereferencePatientDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

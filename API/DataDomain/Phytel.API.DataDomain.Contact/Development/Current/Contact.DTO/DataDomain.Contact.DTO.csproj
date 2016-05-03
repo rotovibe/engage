@@ -146,6 +146,8 @@
     <Compile Include="GetAllCareManagersDataResponse.cs" />
     <Compile Include="SearchContactsDataResponse.cs" />
     <Compile Include="InsertContactDataRequest.cs" />
+    <Compile Include="UndoDereferencePatientDataRequest.cs" />
+    <Compile Include="UndoDereferencePatientDataResponse.cs" />
     <Compile Include="UpdateContactDataRequest.cs" />
     <Compile Include="GetContactByPatientIdDataRequest.cs" />
     <Compile Include="InsertContactDataResponse.cs" />

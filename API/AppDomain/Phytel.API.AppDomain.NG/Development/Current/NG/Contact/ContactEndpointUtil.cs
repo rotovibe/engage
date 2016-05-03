@@ -132,11 +132,11 @@ namespace Phytel.API.AppDomain.NG
             try
             {
                 IRestClient client = new JsonServiceClient();
-                string url = Common.Helper.BuildURL(string.Format("/{0}/{1}/{2}/Patient/{3}/Dereference",
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Dereference",
                                                        DDContactServiceUrl,
                                                        "NG",
                                                        version,
-                                                       contractNumber), userId);
+                                                       contractNumber,patientId), userId);
 
                 //[Route("/{Context}/{Version}/{ContractNumber}/Contact/CareManagers", "GET")]
                 var dataDomainResponse =
@@ -145,6 +145,43 @@ namespace Phytel.API.AppDomain.NG
                         ContractNumber = contractNumber,
                         Context = "NG",
                         PatientId =  patientId,
+                        UserId = userId,
+                        Version = version
+                    });
+
+                if (dataDomainResponse != null)
+                {
+
+                    response = dataDomainResponse.IsSuccessful;
+                }
+            }
+            catch (WebServiceException wse)
+            {
+                throw new WebServiceException("AD:DereferencePatientInContact()::" + wse.Message, wse.InnerException);
+            }
+            return response;
+        }
+
+        public bool UndoDereferencePatientInContact(string contactId, string patientId, double version,string contractNumber, string userId)
+        {
+            var response = false;
+            try
+            {
+                IRestClient client = new JsonServiceClient();
+                string url = Common.Helper.BuildURL(string.Format("/{0}/{1}/{2}/{3}/Contact/{4}/Patient{5}/Dereference",
+                                                       DDContactServiceUrl,
+                                                       "NG",
+                                                       version,
+                                                       contractNumber, contactId,patientId), userId);
+
+                //[Route("/{Context}/{Version}/{ContractNumber}/Contact/CareManagers", "GET")]
+                var dataDomainResponse =
+                    client.Put<UndoDereferencePatientDataResponse>(url, new UndoDereferencePatientDataRequest
+                    {
+                        ContactId =  contactId,
+                        PatientId = patientId,
+                        ContractNumber = contractNumber,
+                        Context = "NG",
                         UserId = userId,
                         Version = version
                     });
@@ -448,8 +485,5 @@ namespace Phytel.API.AppDomain.NG
         }
 
         #endregion
-
-
-       
     }
 }

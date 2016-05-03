@@ -22,6 +22,7 @@ using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Web.Hosting;
 using AutoMapper;
+using MongoDB.Bson;
 using Phytel.API.AppDomain.NG.Command;
 using Phytel.API.Common.Extensions;
 using Phytel.API.DataDomain.Contact.DTO.CareTeam;
@@ -45,6 +46,7 @@ namespace Phytel.API.AppDomain.NG
         #region dependencies
         public IPlanElementUtils PlanElementUtils { get; set; }
         public IEndpointUtils EndpointUtils { get; set; }
+        public IContactEndpointUtil ContactEndpointUtil { get; set; }
         #endregion
 
         #region Endpoint addresses
@@ -390,8 +392,10 @@ namespace Phytel.API.AppDomain.NG
                 INGCommand deleteCPVCommand = new CohortPatientViewCommand(request, client);
                 uow.Execute(deleteCPVCommand);
 
-                INGCommand deleteContactCommand = new ContactCommand(request, client);
-                uow.Execute(deleteContactCommand);
+
+                //Commenting the Delete Command as a Contact should not be deleted. 
+                //INGCommand deleteContactCommand = new ContactCommand(request, client);
+                //uow.Execute(deleteContactCommand);
 
                 //INGCommand deleteCareMemberCommand = new CareMembersCommand(request, client);
                 //uow.Execute(deleteCareMemberCommand);
@@ -426,9 +430,21 @@ namespace Phytel.API.AppDomain.NG
                 INGCommand deletePatientProgramCommand = new PatientProgramsCommand(request, client);
                 uow.Execute(deletePatientProgramCommand);
 
-                var dereferencePatientInContactCommand = new DereferencePatientInContactCommand(request);
-                uow.Execute(dereferencePatientInContactCommand);
 
+                var contact = GetContactByPatientId(new GetContactByPatientIdRequest
+                {
+                    ContractNumber = request.ContractNumber,
+                    PatientID = request.Id,
+                    UserId = request.UserId,
+                    Version = request.Version
+                });
+
+                if (contact != null)
+                {
+                    var contactId = contact.Id;
+                    var dereferencePatientInContactCommand = new DereferencePatientInContactCommand(contactId,request, ContactEndpointUtil);
+                    uow.Execute(dereferencePatientInContactCommand);
+                }
                 return response;
             }
             catch (WebServiceException ex)
