@@ -9,7 +9,6 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
         void DeleteCareTeamMember(object entity);
         bool CareTeamExist(string careTeamId);
         bool ContactCareTeamExist(string contactId);
-        bool CareTeamMemberExist(string careTeamId, string memberId);
-        void DeleteCareTeam(object entity);
+        bool CareTeamMemberExist(string careTeamId, string memberId);        
     }
 }

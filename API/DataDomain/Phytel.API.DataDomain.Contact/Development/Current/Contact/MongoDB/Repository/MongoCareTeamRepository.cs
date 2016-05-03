@@ -118,11 +118,7 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
             throw new NotImplementedException();
         }
 
-        public void Delete(object entity)
-        {
-            throw new NotImplementedException();
-        }
-
+       
         public void DeleteAll(List<object> entities)
         {
             throw new NotImplementedException();
@@ -548,7 +544,7 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
             
         }
 
-        public void DeleteCareTeam(object entity)
+        public void Delete(object entity)
         {
             var request = (DeleteCareTeamDataRequest)entity;
 
@@ -605,7 +601,5 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
             }
             catch (Exception) { throw; }
         }
-
-
     }
 }
