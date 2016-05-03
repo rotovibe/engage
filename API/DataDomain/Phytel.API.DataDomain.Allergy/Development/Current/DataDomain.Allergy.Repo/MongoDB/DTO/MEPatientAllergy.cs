@@ -83,6 +83,16 @@ namespace Phytel.API.DataDomain.Allergy.DTO
         [BsonIgnoreIfNull(true)]
         public string ExternalRecordId { get; set; }
 
+        public const string CodingSystemProperty = "csid";
+        [BsonElement(CodingSystemProperty)]
+        [BsonIgnoreIfNull(true)]
+        public ObjectId? CodingSystemId { get; set; }
+
+        public const string CodeProperty = "csc";
+        [BsonElement(CodeProperty)]
+        [BsonIgnoreIfNull(true)]
+        public string Code { get; set; }
+
         #region Base elements
         public const string VersionProperty = "v";
         [BsonElement(VersionProperty)]

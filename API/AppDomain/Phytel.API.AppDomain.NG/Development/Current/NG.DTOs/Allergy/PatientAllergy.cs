@@ -26,5 +26,7 @@ namespace Phytel.API.AppDomain.NG.DTO
         public DateTime? UpdatedOn { get; set; }
         public string ExternalRecordId { get; set; }
         public string DataSource { get; set; }
+        public string CodingSystemId { get; set; }
+        public string Code { get; set; }
     }
 }

@@ -200,7 +200,22 @@ namespace DataDomain.Allergy.Repo
                     {
                         uv.Add(MB.Update.Set(MEPatientAllergy.ExternalRecordIdProperty, BsonNull.Value));    
                     }
-                    
+                    if (!string.IsNullOrEmpty(pt.CodingSystemId))
+                    {
+                        uv.Add(MB.Update.Set(MEPatientAllergy.CodingSystemProperty, ObjectId.Parse(pt.CodingSystemId)));
+                    }
+                    else
+                    {
+                        uv.Add(MB.Update.Set(MEPatientAllergy.CodingSystemProperty, BsonNull.Value));
+                    }
+                    if (!string.IsNullOrEmpty(pt.Code))
+                    {
+                        uv.Add(MB.Update.Set(MEPatientAllergy.CodeProperty, pt.Code));
+                    }
+                    else
+                    {
+                        uv.Add(MB.Update.Set(MEPatientAllergy.CodeProperty, BsonNull.Value));
+                    }
                     if (pt.Notes != null) uv.Add(MB.Update.Set(MEPatientAllergy.NotesProperty, pt.Notes));
                     if (pt.SystemName != null) uv.Add(MB.Update.Set(MEPatientAllergy.SystemProperty, pt.SystemName));
                     uv.Add(MB.Update.Set(MEPatientAllergy.DeleteFlagProperty, pt.DeleteFlag));
