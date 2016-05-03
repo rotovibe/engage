@@ -375,11 +375,24 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
+       
         public PostDeletePatientResponse DeletePatient(PostDeletePatientRequest request)
         {
             PostDeletePatientResponse response = new PostDeletePatientResponse();
             try
             {
+                var contact = GetContactByPatientId(new GetContactByPatientIdRequest
+                {
+                    ContractNumber = request.ContractNumber,
+                    PatientID = request.Id,
+                    UserId = request.UserId,
+                    Version = request.Version
+                });
+                if (contact == null)
+                    throw new ApplicationException("The patient contact card was not found");
+
+                
+
                 IRestClient client = new JsonServiceClient();
                 INGUnitOfWork uow = new NGUnitOfWork();
 
@@ -400,7 +413,7 @@ namespace Phytel.API.AppDomain.NG
                 //INGCommand deleteCareMemberCommand = new CareMembersCommand(request, client);
                 //uow.Execute(deleteCareMemberCommand);
 
-                INGCommand deleteCareTeamCommand = new CareTeamCommand(request);
+                INGCommand deleteCareTeamCommand = new CareTeamCommand(request,ContactEndpointUtil,contact.Id);
                 uow.Execute(deleteCareTeamCommand);
 
                 INGCommand deletePatientNoteCommand = new PatientNotesCommand(request, client);
@@ -431,13 +444,7 @@ namespace Phytel.API.AppDomain.NG
                 uow.Execute(deletePatientProgramCommand);
 
 
-                var contact = GetContactByPatientId(new GetContactByPatientIdRequest
-                {
-                    ContractNumber = request.ContractNumber,
-                    PatientID = request.Id,
-                    UserId = request.UserId,
-                    Version = request.Version
-                });
+                
 
                 if (contact != null)
                 {
