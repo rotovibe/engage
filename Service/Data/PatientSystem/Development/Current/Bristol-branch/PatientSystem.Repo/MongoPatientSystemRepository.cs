@@ -60,8 +60,10 @@ namespace Phytel.API.DataDomain.PatientSystem
                             Status = (Status)data.StatusId,
                             Primary = data.Primary,
                             SystemId = ObjectId.Parse(data.SystemId),
+                            SystemName = data.SystemName,
                             DataSource = Helper.TrimAndLimit(data.DataSource, 50),
                             DeleteFlag = false,
+                            TTLDate = null,
                             ExternalRecordId = data.ExternalRecordId,
                             LastUpdatedOn = data.UpdatedOn,
                             Version = request.Version
@@ -102,8 +104,10 @@ namespace Phytel.API.DataDomain.PatientSystem
                             Status = (Status)data.StatusId,
                             Primary = data.Primary,
                             SystemId = ObjectId.Parse(data.SystemId),
+                            SystemName = data.SystemName,
                             DataSource = Helper.TrimAndLimit(data.DataSource, 50),
                             DeleteFlag = false,
+                            TTLDate = null,
                             ExternalRecordId = data.ExternalRecordId,
                             LastUpdatedOn = data.UpdatedOn,
                             UpdatedBy = ParseObjectId(data.UpdatedById)
@@ -202,6 +206,7 @@ namespace Phytel.API.DataDomain.PatientSystem
                             PatientId = mePS.PatientId.ToString(),
                             Value = mePS.Value,
                             StatusId = (int)mePS.Status,
+                            SystemName = mePS.SystemName,
                             Primary = mePS.Primary,
                             ExternalRecordId = mePS.ExternalRecordId,
                             SystemId = mePS.SystemId.ToString(),
@@ -275,7 +280,8 @@ namespace Phytel.API.DataDomain.PatientSystem
                         if (data.StatusId != 0) uv.Add(MB.Update.Set(MEPatientSystem.StatusProperty, data.StatusId));
                         uv.Add(MB.Update.Set(MEPatientSystem.PrimaryProperty, data.Primary));
                         if (!string.IsNullOrEmpty(data.SystemId)) uv.Add(MB.Update.Set(MEPatientSystem.SystemIdProperty, ObjectId.Parse(data.SystemId)));
-                       
+                        if (!string.IsNullOrEmpty(data.SystemName)) uv.Add(MB.Update.Set(MEPatientSystem.SystemNameProperty, ObjectId.Parse(data.SystemName)));
+                        
                         IMongoUpdate update = MB.Update.Combine(uv);
                         WriteConcernResult res = ctx.PatientSystems.Collection.Update(q, update);
                         if (res.Ok == false)
@@ -327,6 +333,7 @@ namespace Phytel.API.DataDomain.PatientSystem
                                 Primary = mePS.Primary,
                                 ExternalRecordId = mePS.ExternalRecordId,
                                 SystemId = mePS.SystemId.ToString(),
+                                SystemName = mePS.SystemName,
                                 DataSource = mePS.DataSource,
                                 CreatedById = mePS.RecordCreatedBy.ToString(),
                                 CreatedOn = mePS.RecordCreatedOn,
@@ -428,6 +435,7 @@ namespace Phytel.API.DataDomain.PatientSystem
                                 Primary = mePS.Primary,
                                 ExternalRecordId = mePS.ExternalRecordId,
                                 SystemId = mePS.SystemId.ToString(),
+                                SystemName = mePS.SystemName,
                                 DataSource = mePS.DataSource,
                                 CreatedById = mePS.RecordCreatedBy.ToString(),
                                 CreatedOn = mePS.RecordCreatedOn,

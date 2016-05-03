@@ -30,10 +30,13 @@ namespace Phytel.API.DataDomain.PatientSystem.DTO
         public const string IdProperty = "_id";
         public const string PatientIdProperty = "pid";
         public const string SystemIdProperty = "sid";
+        public const string SystemNameProperty = "sname";
+        public const string DataSourceProperty = "dsrc";
+        public const string ExternalRecordIdProperty = "extrid";
+        public const string EngageIdProperty = "eid";
         public const string ValueProperty = "val";
         public const string StatusProperty = "sts";
         public const string PrimaryProperty = "pri";
-
         public const string VersionProperty = "v";
         public const string UpdatedByProperty = "uby";
         public const string DeleteFlagProperty = "del";
@@ -56,8 +59,7 @@ namespace Phytel.API.DataDomain.PatientSystem.DTO
         [BsonElement(ValueProperty)]
         [BsonIgnoreIfNull(false)]
         public string Value { get; set; }
-
-        public const string DataSourceProperty = "dsrc";
+        
         [BsonElement(DataSourceProperty)]
         [BsonIgnoreIfNull(false)]
         public string DataSource { get; set; }
@@ -70,7 +72,7 @@ namespace Phytel.API.DataDomain.PatientSystem.DTO
         [BsonIgnoreIfNull(false)]
         public bool Primary { get; set; }
 
-        public const string ExternalRecordIdProperty = "extrid";
+        
         [BsonElement(ExternalRecordIdProperty)]
         [BsonIgnoreIfNull(true)]
         public string ExternalRecordId { get; set; }
@@ -87,7 +89,6 @@ namespace Phytel.API.DataDomain.PatientSystem.DTO
         [BsonIgnoreIfNull(false)]
         public string DisplayLabel { get; set; }
 
-        public const string SystemNameProperty = "sysn";
         [BsonElement(SystemNameProperty)]
         [BsonIgnoreIfNull(false)]
         public string SystemName { get; set; } 
