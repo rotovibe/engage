@@ -48,15 +48,21 @@ namespace Phytel.API.AppDomain.NG.Service.Containers
             container.RegisterAutoWiredAs<GoalsEndpointUtils, IGoalsEndpointUtils>().ReusedWithin(ReuseScope.Request);
             container.RegisterAutoWiredAs<PatientSystemEndpointUtil, IPatientSystemEndpointUtil>().ReusedWithin(ReuseScope.Request);
             container.RegisterAutoWiredAs<PatientSystemManager, IPatientSystemManager>().ReusedWithin(ReuseScope.Request);
-            container.RegisterAutoWiredAs<ContactManager, IContactManager>().ReusedWithin(ReuseScope.Request);
             container.RegisterAutoWiredAs<ContactEndpointUtil, IContactEndpointUtil>().ReusedWithin(ReuseScope.Request);
             container.RegisterAutoWiredAs<EngageCareMemberCohortRuleFactory, ICareMemberCohortRuleFactory>().ReusedWithin(ReuseScope.Request);
-            container.RegisterAutoWiredAs<CohortRulesProcessor, ICohortRulesProcessor>().ReusedWithin(ReuseScope.Hierarchy);
-
             container.RegisterAutoWiredAs<CohortRoleUtils, ICohortRuleUtil>().ReusedWithin(ReuseScope.Request);
-            container.RegisterAutoWiredAs<ASEExceptionLogger, ILogger>().ReusedWithin(ReuseScope.Request);
+            
+
+            RegisterInstances(container);
 
             return container;
+        }
+
+        private static void RegisterInstances(Funq.Container container)
+        {
+            container.RegisterAutoWiredAs<ASEExceptionLogger, ILogger>();
+            container.RegisterAutoWiredAs<ContactManager, IContactManager>();
+            container.RegisterAutoWiredAs<CohortRulesProcessor, ICohortRulesProcessor>().ReusedWithin(ReuseScope.Hierarchy);
         }
     }
 }
