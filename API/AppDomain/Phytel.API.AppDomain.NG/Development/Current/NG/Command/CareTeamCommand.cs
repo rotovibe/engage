@@ -13,18 +13,19 @@ namespace Phytel.API.AppDomain.NG
     {
         private CareTeam _careTeam;
         private readonly PostDeletePatientRequest _request;
-        private IContactEndpointUtil _contactEndpointUtil;
-        public INGManager NgManager { get; set; }
-        private string _contactId;
+        private readonly IContactEndpointUtil _contactEndpointUtil;        
+        private readonly string _contactId;
         public CareTeamCommand(PostDeletePatientRequest req,IContactEndpointUtil contactEndpointUtil, string contactId)
         {
-            _request = req as PostDeletePatientRequest;           
+            _request = req;
+            _contactId = contactId;
+            _contactEndpointUtil = contactEndpointUtil;
         }
     public void Execute()
         {
             try
-            {
-                
+            { 
+                //We get the patient's care team               
                 var getCareTeamRequest = new GetCareTeamRequest()
                 {
                     ContactId = _contactId,
@@ -34,18 +35,21 @@ namespace Phytel.API.AppDomain.NG
                 };
                 var careTeamData = _contactEndpointUtil.GetCareTeam(getCareTeamRequest);
 
-                _careTeam = Mapper.Map<CareTeam>(careTeamData);
-                                              
-                // We send a request to the data domain to delete care team by care tam Id  
-                var request = new DeleteCareTeamRequest()
+                if (careTeamData!=null)
                 {
-                    ContactId = _careTeam.ContactId,
-                    Id = _careTeam.Id,
-                    ContractNumber = _request.ContractNumber,
-                    UserId = _request.UserId,
-                    Version = _request.Version
-                };
-                _contactEndpointUtil.DeleteCareTeam(request);
+                    _careTeam = Mapper.Map<CareTeam>(careTeamData);
+
+                    // We send a request to the data domain to delete care team by care tam Id  
+                    var request = new DeleteCareTeamRequest()
+                    {
+                        ContactId = _careTeam.ContactId,
+                        Id = _careTeam.Id,
+                        ContractNumber = _request.ContractNumber,
+                        UserId = _request.UserId,
+                        Version = _request.Version
+                    };
+                    _contactEndpointUtil.DeleteCareTeam(request);
+                }                
             }
             catch (Exception ex)
             {
@@ -57,17 +61,18 @@ namespace Phytel.API.AppDomain.NG
         {
             try
             {
-                if (_careTeam==null)
-                    throw new Exception("The deleted Patient Care Team was not found");
-                var request = new UndoDeleteCareTeamDataRequest()
+                if (_careTeam != null)
                 {
-                    ContactId = _careTeam.ContactId,
-                    Id = _careTeam.Id,
-                    ContractNumber = _request.ContractNumber,                    
-                    UserId = _request.UserId,
-                    Version = _request.Version
-                };
-                _contactEndpointUtil.UndoDeleteCareTeam(request);
+                    var request = new UndoDeleteCareTeamDataRequest()
+                    {
+                        ContactId = _careTeam.ContactId,
+                        Id = _careTeam.Id,
+                        ContractNumber = _request.ContractNumber,
+                        UserId = _request.UserId,
+                        Version = _request.Version
+                    };
+                    _contactEndpointUtil.UndoDeleteCareTeam(request);
+                }
             }
             catch (Exception ex)
             {
