@@ -156,7 +156,7 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
                 if (!repo.CareTeamExist(request.Id))
                     throw new Exception(string.Format("Care Team {0} does not exist", request.Id));
 
-                repo.DeleteCareTeam(request);
+                repo.Delete(request);
             }
             catch (Exception)
             {
