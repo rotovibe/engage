@@ -393,8 +393,11 @@ namespace Phytel.API.AppDomain.NG
                 INGCommand deleteContactCommand = new ContactCommand(request, client);
                 uow.Execute(deleteContactCommand);
 
-                INGCommand deleteCareMemberCommand = new CareMembersCommand(request, client);
-                uow.Execute(deleteCareMemberCommand);
+                //INGCommand deleteCareMemberCommand = new CareMembersCommand(request, client);
+                //uow.Execute(deleteCareMemberCommand);
+
+                INGCommand deleteCareTeamCommand = new CareTeamCommand(request);
+                uow.Execute(deleteCareTeamCommand);
 
                 INGCommand deletePatientNoteCommand = new PatientNotesCommand(request, client);
                 uow.Execute(deletePatientNoteCommand);
