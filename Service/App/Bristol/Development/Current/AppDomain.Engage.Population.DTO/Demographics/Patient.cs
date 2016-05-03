@@ -49,7 +49,7 @@ namespace AppDomain.Engage.Population.DTO.Demographics
 
         public string DataSource { get; set; }
 
-        public string StatusCode { get; set; }
+       
         
         
 
