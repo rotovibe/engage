@@ -1448,7 +1448,7 @@ namespace Phytel.API.AppDomain.NG
                 }
 
                 //Sync Patient 
-                if (request.Contact.IsPatient && !string.IsNullOrEmpty(request.Contact.PatientId))
+                if (!string.IsNullOrEmpty(request.Contact.PatientId))
                 {
                     SyncPatientByContactData(cData,request.Version, request.ContractNumber, request.UserId);
                 }
