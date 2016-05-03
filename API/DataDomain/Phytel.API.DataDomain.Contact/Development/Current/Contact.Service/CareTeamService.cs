@@ -102,5 +102,49 @@ namespace Phytel.API.DataDomain.Contact.Service
             return response;
 
         }
+
+        public DeleteCareTeamDataResponse Delete(DeleteCareTeamDataRequest request)
+        {
+            var response = new DeleteCareTeamDataResponse();
+
+            try
+            {
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("ContactDD:CareTeamService:Delete Care Team::Unauthorized Access");
+
+                Manager.DeleteCareTeam(request);
+            }
+            catch (Exception ex)
+            {
+                CommonFormat.FormatExceptionResponse(response, base.Response, ex);
+
+                var aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Helpers.LogException(int.Parse(aseProcessID), ex);
+            }
+            return response;
+
+        }
+
+        public UndoDeleteCareTeamDataResponse Put(UndoDeleteCareTeamDataRequest request)
+        {
+            var response = new UndoDeleteCareTeamDataResponse();
+
+            try
+            {
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("ContactDD:CareTeamService:Put Undo Delet eCare Team::Unauthorized Access");
+
+                Manager.UndoDeleteCareTeam(request);
+            }
+            catch (Exception ex)
+            {
+                CommonFormat.FormatExceptionResponse(response, base.Response, ex);
+
+                var aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Helpers.LogException(int.Parse(aseProcessID), ex);
+            }
+            return response;
+
+        }
     }
 }
