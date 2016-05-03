@@ -7,7 +7,7 @@ using Phytel.Services.Mongo.Linq;
 
 namespace Phytel.API.DataDomain.Medication.DTO
 {
-    [BsonIgnoreExtraElements(false)]
+    [BsonIgnoreExtraElements(true)]
     [MongoIndex(Keys = new string[] { TTLDateProperty }, TimeToLive = 0)]
     public class MEPatientMedSupp : IMongoEntity<ObjectId>, IMEEntity,IMEDataSource
     {
@@ -147,6 +147,71 @@ namespace Phytel.API.DataDomain.Medication.DTO
         [BsonElement(ExternalRecordIdProperty)]
         [BsonIgnoreIfNull(true)]
         public string ExternalRecordId { get; set; }
+
+        public const string OriginalDataSourceProperty = "odsrc";
+        [BsonElement(OriginalDataSourceProperty)]
+        [BsonIgnoreIfNull(true)]
+        public string OriginalDataSource { get; set; }
+
+        public const string DurationProperty = "dur";
+        [BsonElement(DurationProperty)]
+        [BsonIgnoreIfNull(true)]
+        public int? Duration { get; set; }
+
+        public const string DurationUnitProperty = "durunitid";
+        [BsonElement(DurationUnitProperty)]
+        [BsonIgnoreIfNull(true)]
+        public ObjectId? DurationUnitId { get; set; }
+
+        public const string OtherDurationProperty = "othdur";
+        [BsonElement(OtherDurationProperty)]
+        [BsonIgnoreIfNull(true)]
+        public string OtherDuration { get; set; }
+        
+        public const string ReviewProperty = "revid";
+        [BsonElement(ReviewProperty)]
+        [BsonIgnoreIfNull(true)]
+        public ObjectId? ReviewId { get; set; }
+
+        public const string RefusalReasonProperty = "refrsnid";
+        [BsonElement(RefusalReasonProperty)]
+        [BsonIgnoreIfNull(true)]
+        public ObjectId? RefusalReasonId { get; set; }
+
+        public const string OtherRefusalReasonProperty = "othrefrsn";
+        [BsonElement(OtherRefusalReasonProperty)]
+        [BsonIgnoreIfNull(true)]
+        public string OtherRefusalReason { get; set; }
+
+        public const string OrderedByProperty = "oby";
+        [BsonElement(OrderedByProperty)]
+        [BsonIgnoreIfNull(true)]
+        public string OrderedBy { get; set; }
+
+        public const string OrderedDateProperty = "od";
+        [BsonElement(OrderedDateProperty)]
+        [BsonIgnoreIfNull(true)]
+        public DateTime? OrderedDate { get; set; }
+
+        public const string PrescribedDateProperty = "pd";
+        [BsonElement(PrescribedDateProperty)]
+        [BsonIgnoreIfNull(true)]
+        public DateTime? PrescribedDate { get; set; }
+
+        public const string RxNumberProperty = "rxnum";
+        [BsonElement(RxNumberProperty)]
+        [BsonIgnoreIfNull(true)]
+        public string RxNumber { get; set; }
+        
+        public const string RxDateProperty = "rxd";
+        [BsonElement(RxDateProperty)]
+        [BsonIgnoreIfNull(true)]
+        public DateTime? RxDate { get; set; }
+
+        public const string PharmacyProperty = "phar";
+        [BsonElement(PharmacyProperty)]
+        [BsonIgnoreIfNull(true)]
+        public string Pharmacy { get; set; }
         #region Base elements
         public const string VersionProperty = "v";
         [BsonElement(VersionProperty)]

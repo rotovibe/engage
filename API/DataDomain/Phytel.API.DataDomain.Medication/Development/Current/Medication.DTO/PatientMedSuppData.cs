@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -38,5 +39,18 @@ namespace Phytel.API.DataDomain.Medication.DTO
         public DateTime? UpdatedOn { get; set; }
         public string ExternalRecordId { get; set; }
         public string DataSource { get; set; }
+        public string OriginalDataSource { get; set; }
+        public int? Duration { get; set; }
+        public string DurationUnitId { get; set; }
+        public string OtherDuration { get; set; }
+        public string ReviewId { get; set; }
+        public string RefusalReasonId { get; set; }
+        public string OtherRefusalReason { get; set; }
+        public string OrderedBy { get; set; }
+        public DateTime? OrderedDate { get; set; }
+        public DateTime? PrescribedDate { get; set; }
+        public string RxNumber { get; set; }
+        public DateTime? RxDate { get; set; }
+        public string Pharmacy { get; set; }
     }
 }
