@@ -898,12 +898,15 @@ namespace Phytel.API.DataDomain.Contact
             {
                 using (ContactMongoContext ctx = new ContactMongoContext(_dbName))
                 {
-                    List<IMongoQuery> queries = new List<IMongoQuery>();
-                    //queries.Add(Query.NE(MEContact.ResourceIdProperty, BsonNull.Value)); commenting this out, so that System is returned.                    
-                    queries.Add(MB.Query.EQ(MEContact.DeleteFlagProperty, false));
-                    queries.Add(MB.Query.EQ(MEContact.PatientIdProperty, BsonNull.Value));
-                    IMongoQuery mQuery = MB.Query.And(queries);
-                    List<MEContact> meContacts = ctx.Contacts.Collection.Find(mQuery).ToList();
+                    var mongoQuery = new List<IMongoQuery>();
+                    var resourceNullQuery = MB.Query.NE("rid", BsonNull.Value);
+                    var fnQuery = MB.Query<MEContact>.EQ(c => c.FirstName, "System");
+                    var delQuery = MB.Query<MEContact>.EQ(c => c.DeleteFlag, false);
+                    mongoQuery.Add(resourceNullQuery);
+                    mongoQuery.Add(fnQuery);
+                    var orQuery = MB.Query.Or(mongoQuery);
+                    var finalQuery = MB.Query.And(orQuery, delQuery);
+                    List<MEContact> meContacts = ctx.Contacts.Collection.Find(finalQuery).ToList();
                     if (meContacts != null)
                     {
                         contactDataList = new List<ContactData>();
