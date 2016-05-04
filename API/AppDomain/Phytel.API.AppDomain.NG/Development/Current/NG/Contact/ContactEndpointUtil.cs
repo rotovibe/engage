@@ -113,7 +113,7 @@ namespace Phytel.API.AppDomain.NG
                             PreferredName = cd.PreferredName,
                             FirstName = cd.FirstName,
                             LastName = cd.LastName,
-                            IsUser = !string.IsNullOrEmpty(cd.UserId),
+                            IsUser = !string.IsNullOrEmpty(cd.UserId) || cd.FirstName=="System",
                             IsPatient = !string.IsNullOrEmpty(cd.PatientId)
                         });
                     }
