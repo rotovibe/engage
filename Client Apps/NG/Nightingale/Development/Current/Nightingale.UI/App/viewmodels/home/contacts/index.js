@@ -317,7 +317,7 @@ define(['services/session', 'services/datacontext', 'viewmodels/shell/shell', 'm
 			if( selectedContact() ){
 				return true;
 			}
-		});
+		}).extend({throttle: 100});
 		
 		var showEditButton = ko.computed(function(){
 			var contact = selectedContact();			
@@ -327,7 +327,7 @@ define(['services/session', 'services/datacontext', 'viewmodels/shell/shell', 'm
 			else{
 				return false;
 			}
-		});
+		}).extend({throttle: 100});
 		
 		function resetTabs(){
 			ko.utils.arrayForEach(tabs, function(tab){
