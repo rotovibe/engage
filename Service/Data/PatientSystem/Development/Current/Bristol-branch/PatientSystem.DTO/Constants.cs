@@ -10,5 +10,6 @@ namespace Phytel.API.DataDomain.PatientSystem.DTO
     {
         public const string EngageSystemId = "559d8453d433232ca04b3131";
         public const string DataSource = "Engage";
+        public const string SystemName = "EngageSystem";
     }
 }

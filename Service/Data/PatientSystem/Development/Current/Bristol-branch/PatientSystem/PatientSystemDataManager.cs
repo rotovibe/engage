@@ -162,6 +162,7 @@ namespace Phytel.API.DataDomain.PatientSystem
                             Primary = status,
                             StatusId = (int)Status.Active,
                             SystemId = Constants.EngageSystemId,
+                            SystemName = Constants.SystemName,
                             Value = EngageId.New()
                         };
                         psList.Add(ps);
