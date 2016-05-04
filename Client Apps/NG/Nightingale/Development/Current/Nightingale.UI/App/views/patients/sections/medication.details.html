@@ -1,0 +1,108 @@
+<div class="widget open" data-bind="css: { 'fullscreen': isFullScreen() }, columnSizer: {triggers: medication}">
+  <div class="content" data-bind="with: medication">
+    <div class="content-fill">
+      <div class="wrapper">
+        <div class="content">
+          <div class="header">
+            <div class="table-cell">
+              <header>
+                <h1 class="ellipsis"><span data-bind="text: (name().length > 18 ? name().substring(0, 18) + '...' : name()), attr: { 'title': name }"></span></h1>
+                <div class="controls">
+                  <div class="toggle fullscreen" data-bind="click: $parent.toggleFullScreen, clickBubble: false">
+                  </div>
+                </div>
+                <div class="options">
+                  <a class="edit_medication icon-outset" href="#" data-bind="click: $parent.edit"><i class="icon-edit"></i></a>
+                  <a class="delete_medication" href="#" data-bind="click: $parent.delete"><i class="icon-cancel"></i></a>
+                </div>
+              </header>
+            </div>
+          </div>
+          <div class="table-row">
+            <div class="table-cell">
+              <div class="body">
+                <div class="content">
+                  <div class="accordion open">
+                    <div class="span12 details">
+                      <div class="status">
+                        <div class="row pad-bottom" data-bind="with: status">
+                          <div class="span6 grey">
+                            Status
+                          </div>
+                          <div class="span6" data-bind="text: name">
+                          </div>
+                        </div>
+                        <div class="row pad-bottom" data-bind="visible: strength">
+                          <div class="span6 grey">
+                            Strength
+                          </div>
+                          <div class="span6" data-bind="text: strength">
+                          </div>
+                        </div>
+                        <div class="row pad-bottom" data-bind="visible: sigCode">
+                          <div class="span10" data-bind="text: computedSigCode">
+                          </div>
+                        </div>
+                        <div class="row pad-bottom" data-bind="visible: prescribedBy">
+                          <div class="span6 grey">
+                            Prescribed by:
+                          </div>
+                          <div class="span6" data-bind="text: prescribedBy">
+                          </div>
+                        </div>
+                        <div class="row pad-bottom" data-bind="visible: reason">
+                          <div class="span6 grey">
+                            Reason
+                          </div>
+                          <div class="span6" data-bind="text: reason">
+                          </div>
+                        </div>
+                        <div class="row pad-bottom rule" data-bind="visible: type">
+                          <div class="span6 grey">
+                            Type
+                          </div>
+                          <div class="span6" data-bind="text: type().name">
+                          </div>
+                        </div>
+                        <div class="row pad-bottom" data-bind="visible: source">
+                          <div class="span6 grey">
+                            Source
+                          </div>
+                          <div class="span6" data-bind="text: source().name">
+                          </div>
+                        </div>
+                        <div class="row pad-bottom" data-bind="visible: startDate">
+                          <div class="span6 grey">
+                            Dates
+                          </div>
+                          <div class="span6">
+                            <span data-bind="Date: startDate"></span> -
+                            <!-- ko if: endDate -->
+                              <span data-bind="Date: endDate"></span>
+                            <!-- /ko -->
+                            <!-- ko ifnot: endDate -->
+                              current
+                            <!-- /ko -->
+                          </div>
+                        </div>
+
+                        <div class="row pad-bottom">
+                          <div class="span6 grey">
+                            Notes
+                          </div>
+                          <textarea class="span12 display-only no-scroll muted" style="height: 6.5em;" rows="5" data-bind="text: notes, attr:{ 'title': notes }, visible: notes" readonly="readonly"></textarea>
+                          </div>
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

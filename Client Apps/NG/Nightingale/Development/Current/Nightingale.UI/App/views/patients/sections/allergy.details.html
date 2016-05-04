@@ -1,0 +1,82 @@
+<div class="widget open" data-bind="css: { 'fullscreen': isFullScreen() }, columnSizer: {triggers: allergy}">
+  <div class="content" data-bind="with: allergy">
+    <div class="content-fill">
+      <div class="wrapper">
+        <div class="content">
+          <div class="header">
+            <div class="table-cell">
+              <header>
+                <h1 class="ellipsis"><span data-bind="text: (allergyName().length > 18 ? allergyName().substring(0, 18) + '...' : allergyName()), attr: { 'title': allergyName }"></span></h1>
+                <div class="controls">
+                  <div class="toggle fullscreen" data-bind="click: $parent.toggleFullScreen, clickBubble: false">
+                  </div>
+                </div>
+                <div class="options">
+                  <a class="edit_allergy icon-outset" href="#" data-bind="click: $parent.edit"><i class="icon-edit"></i></a>
+                  <a class="delete_allergy" href="#" data-bind="click: $parent.delete"><i class="icon-cancel"></i></a>
+                </div>
+              </header>
+            </div>
+          </div>
+          <div class="table-row">
+            <div class="table-cell">
+              <div class="body">
+                <div class="content">
+
+                  <div class="accordion open">
+                    <div class="span12 details">
+                      <div class="status">
+                        <div class="row pad-top">
+                            <div class="span2">
+                                <strong>Type:</strong>
+                            </div>
+                            <div class="span10" data-bind="text: typeString"></div>
+                        </div>
+                        <div class="row pad-top">
+                            <div class="span2">
+                                <strong>Reaction:</strong>
+                            </div>
+                            <div class="span10" data-bind="text: reactionString"></div>
+                        </div>
+                        <div class="row pad-top">
+                            <div class="span2">
+                                <strong>Source:</strong>
+                            </div>
+                            <div class="span10" data-bind="text: source().name()"></div>
+                        </div>
+                        <div class="row pad-top">
+                            <div class="span2">
+                                <strong>Start Date:</strong>
+                            </div>
+                            <div class="span3" data-bind="DateOrDash: startDate"></div>
+                            <div class="span2">
+                                <strong>End Date:</strong>
+                            </div>
+                            <div class="span3" data-bind="DateOrDash: endDate"></div>
+                        </div>
+                        <div class="row pad-top">
+                            <div class="span2">
+                                <strong>Notes</strong>
+                            </div>
+                            <div class="span10">
+                                <textarea disabled="disabled" data-bind="value: notes"></textarea>
+                            </div>
+                        </div>
+                        <div class="row pad-top">
+                            <div class="span2">
+                                <strong>System:</strong>
+                            </div>
+                            <div class="span10" data-bind="text: systemName"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
