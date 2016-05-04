@@ -211,11 +211,11 @@
     <Content Include="App\views\home\contacts\index.html" />
     <Content Include="App\views\patients\medications\index.html" />
     <Content Include="App\views\patients\notes\index.html" />
-    <Content Include="App\viewmodels\patients\sections\allergy.details.html" />
+    <Content Include="App\views\patients\sections\allergy.details.html" />
     <Content Include="App\views\patients\sections\clinicalBackground.html" />
     <Content Include="App\views\patients\sections\dropdown.w.addnew.html" />
     <Content Include="App\views\patients\sections\allergies.edit.html" />
-    <Content Include="App\viewmodels\patients\sections\medication.details.html" />
+    <Content Include="App\views\patients\sections\medication.details.html" />
     <Content Include="App\views\patients\sections\medication.edit.html" />
     <Content Include="App\views\patients\sections\medications.search.html" />
     <Content Include="App\views\patients\sections\allergies.search.html" />
