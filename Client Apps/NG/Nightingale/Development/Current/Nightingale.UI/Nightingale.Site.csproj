@@ -172,8 +172,10 @@
     <Content Include="App\viewmodels\admin\reports\query.builder.js" />
     <Content Include="App\viewmodels\patients\medications\index.js" />
     <Content Include="App\viewmodels\patients\notes\index.js" />
+    <Content Include="App\viewmodels\patients\sections\allergy.details.js" />
     <Content Include="App\viewmodels\patients\sections\clinicalBackground.js" />
     <Content Include="App\viewmodels\patients\sections\dropdown.w.addnew.js" />
+    <Content Include="App\viewmodels\patients\sections\medication.details.js" />
     <Content Include="App\viewmodels\patients\sections\medication.edit.js" />
     <Content Include="App\viewmodels\patients\sections\medications.search.js" />
     <Content Include="App\viewmodels\patients\sections\allergies.search.js" />
@@ -209,9 +211,11 @@
     <Content Include="App\views\home\contacts\index.html" />
     <Content Include="App\views\patients\medications\index.html" />
     <Content Include="App\views\patients\notes\index.html" />
+    <Content Include="App\viewmodels\patients\sections\allergy.details.html" />
     <Content Include="App\views\patients\sections\clinicalBackground.html" />
     <Content Include="App\views\patients\sections\dropdown.w.addnew.html" />
     <Content Include="App\views\patients\sections\allergies.edit.html" />
+    <Content Include="App\viewmodels\patients\sections\medication.details.html" />
     <Content Include="App\views\patients\sections\medication.edit.html" />
     <Content Include="App\views\patients\sections\medications.search.html" />
     <Content Include="App\views\patients\sections\allergies.search.html" />
@@ -931,7 +935,7 @@
     <PreBuildEvent>
     </PreBuildEvent>
   </PropertyGroup>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>

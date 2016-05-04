@@ -139,6 +139,7 @@
 /// <reference path="../app/viewmodels/patients/sections/additional.problem.observations.js" />
 /// <reference path="../app/viewmodels/patients/sections/allergies.edit.js" />
 /// <reference path="../app/viewmodels/patients/sections/allergies.search.js" />
+/// <reference path="../app/viewmodels/patients/sections/allergy.details.js" />
 /// <reference path="../app/viewmodels/patients/sections/background.js" />
 /// <reference path="../app/viewmodels/patients/sections/barrier.details.js" />
 /// <reference path="../app/viewmodels/patients/sections/basic.observations.js" />
@@ -150,6 +151,7 @@
 /// <reference path="../app/viewmodels/patients/sections/goal.details.js" />
 /// <reference path="../app/viewmodels/patients/sections/goals.js" />
 /// <reference path="../app/viewmodels/patients/sections/intervention.details.js" />
+/// <reference path="../app/viewmodels/patients/sections/medication.details.js" />
 /// <reference path="../app/viewmodels/patients/sections/medication.edit.js" />
 /// <reference path="../app/viewmodels/patients/sections/medications.js" />
 /// <reference path="../app/viewmodels/patients/sections/medications.search.js" />
@@ -231,6 +233,8 @@
 /// <reference path="../app/viewmodels/patients/widgets/caremembers.js" />
 /// <reference path="../app/viewmodels/templates/caremembers.panel.js" />
 /// <reference path="../app/viewmodels/templates/caremember.edit.js" />
- 
- / / /   < r e f e r e n c e   p a t h = " b r e e z e . d e b u g . j s "   / >  
+
+ 
+ / / /   < r e f e r e n c e   p a t h = " b r e e z e . d e b u g . j s "   / > 
+ 
  
