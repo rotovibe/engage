@@ -71,10 +71,12 @@
     var setActiveMedication = function (medication) {
       var self = this;
       self.activeMedication(medication);
+      self.activeAllergy(null);
     };
     var setActiveAllergy = function (allergy) {
       var self = this;
       self.activeAllergy(allergy);
+      self.activeMedication(null);
     };
     var openColumn = ko.observable();
     var computedOpenColumn = ko.computed({
