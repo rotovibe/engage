@@ -11,6 +11,7 @@ namespace AppDomain.Engage.Population.DTO.Referrals
     {
         public string ReferralId { get; set; }
         public ProcessedPatientsList ProcessedPatients { get; set; }
+        public int SuccessCount { get; set; }
         public double Version { get; set; }
         public ResponseStatus Status { get; set; }
     }

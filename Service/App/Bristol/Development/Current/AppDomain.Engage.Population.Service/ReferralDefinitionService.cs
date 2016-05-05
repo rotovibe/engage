@@ -60,6 +60,7 @@ namespace AppDomain.Engage.Population.Service
             DemographicsManager.UserContext = _userContext;
             CohortManager.UserContext = _userContext;
             var patientsResponse = new PostReferralWithPatientsListResponse();
+            patientsResponse.SuccessCount = 0;
                
                 try
                 {
@@ -77,11 +78,15 @@ namespace AppDomain.Engage.Population.Service
 
                         //get the patiendids that are inserted from response of previous call and insert into patientreferral
                         if (patientsResponse.ProcessedPatients.InsertedPatients != null && patientsResponse.ProcessedPatients.InsertedPatients.Count > 0)
-                            foreach (ProcessedData pd in patientsResponse.ProcessedPatients.InsertedPatients)
+                    {
+                        foreach (ProcessedData pd in patientsResponse.ProcessedPatients.InsertedPatients)
                                 CohortManager.CreatePatientReferral(pd.Id, referralid);
+                        patientsResponse.SuccessCount = patientsResponse.ProcessedPatients.InsertedPatients.Count;
 
-                        
-                        patientsResponse.ReferralId = referralid;
+                    }
+
+
+                    patientsResponse.ReferralId = referralid;
                     }
 
                 }
