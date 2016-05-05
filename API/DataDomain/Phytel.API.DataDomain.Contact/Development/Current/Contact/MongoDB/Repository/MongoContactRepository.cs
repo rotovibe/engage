@@ -1228,6 +1228,8 @@ namespace Phytel.API.DataDomain.Contact
                     var meContact = ctx.Contacts.Collection.FindOne(query);
 
                     meContact.PatientId = null;
+                    meContact.UpdatedBy = ObjectId.Parse(request.UserId);
+                    meContact.LastUpdatedOn = DateTime.UtcNow;
 
                     ctx.Contacts.Collection.Save(meContact);
 
@@ -1266,9 +1268,10 @@ namespace Phytel.API.DataDomain.Contact
                     var meContact = ctx.Contacts.Collection.FindOne(query);
 
                     meContact.PatientId = ObjectId.Parse(request.PatientId);
+                    meContact.UpdatedBy = ObjectId.Parse(request.UserId);
+                    meContact.LastUpdatedOn = DateTime.UtcNow;
 
                     ctx.Contacts.Collection.Save(meContact);
-
                     isSuccessful = true;
 
                     AuditHelper.LogDataAudit(this.UserId,
