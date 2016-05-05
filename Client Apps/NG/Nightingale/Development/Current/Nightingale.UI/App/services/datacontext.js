@@ -117,16 +117,16 @@
 		// Pass in an end-point and an entity type to get data from that end-point
 		// and create an entity in the manager of that type.
 		var getEntityById = function (entityObservable, id, entityType, endpoint, forceRemote) {
-				// If it is a patient, call it an individual in the message
-				entityTypeName = (entityType && entityType === 'Patient') ? 'Individual' : entityType
-				var message = queryStarted(entityTypeName, forceRemote);
-				return getEntityService.getEntityById(manager, message, entityObservable, id, entityType, endpoint, forceRemote)
-				.then(queryCompleted);
-			};
+			// If it is a patient, call it an individual in the message
+			entityTypeName = (entityType && entityType === 'Patient') ? 'Individual' : entityType
+			var message = queryStarted(entityTypeName, forceRemote);
+			return getEntityService.getEntityById(manager, message, entityObservable, id, entityType, endpoint, forceRemote)
+			.then(queryCompleted);
+		};
 
 		// Check to see if we have this entity locally yet
 		var checkForEntityLocally = function (entityObservable, id, entityType) {
-			var query = breeze.EntityQuery.from(entityType + 's')
+			var query = breeze.EntityQuery.from(entityType)// + 's'
 			.where('id', '==', id)
 			.toType(entityType);
 			var p = manager.executeQueryLocally(query);
@@ -885,6 +885,7 @@
 					}
 					patient.entityAspect.acceptChanges();
 					updateTodoPatient(patient);
+					updateContact(patient);
 					queryCompleted(message);
 					return true;
 				}
@@ -1053,7 +1054,24 @@
 					else{
 						contactCard.updatedById( session.currentUser().userId() );
 						contactCard.updatedOn( new Date() );
+						if(contactCard.patientId()){
+							var contactPatient = ko.observable();							
+							checkForEntityLocally(contactPatient, contactCard.patientId(), 'Patient');										
+							if (contactPatient()) {
+								//the contact related patient exist locally. 
+								//sync the overlapping properties:
+								contactPatient().firstName(contactCard.firstName());
+								contactPatient().lastName(contactCard.lastName());
+								contactPatient().middleName(contactCard.middleName());
+								contactPatient().suffix(contactCard.suffix());								
+								contactPatient().gender(contactCard.gender());
+								contactPatient().preferredName(contactCard.preferredName());
+								contactPatient().deceasedId(contactCard.deceasedId());
+								contactPatient().entityAspect.acceptChanges();
+							}
+						}						
 					}
+				
 					// Go through the data, find any entities that need to have their Id's cleaned up
 					var updatedPhones = data.UpdatedPhone;
 					var updatedEmails = data.UpdatedEmail;
@@ -1799,45 +1817,63 @@
 			}
 		}
 
-				// Update a todo patient's information
-				function updateTodoPatient(patient) {
-					var thisTodoPatient = ko.observable();
-						// Check to see if there is a matching todo patient dto
-						checkForEntityLocally(thisTodoPatient, patient.id(), 'ToDoPatient');
-						// If a matching todo patient was found,
-						if (thisTodoPatient()) {
-								// Update all of the properties
-								thisTodoPatient().firstName(patient.firstName());
-								thisTodoPatient().lastName(patient.lastName());
-								thisTodoPatient().middleName(patient.middleName());
-								thisTodoPatient().suffix(patient.suffix());
-								thisTodoPatient().preferredName(patient.preferredName());
-							}
-						}
+		//update a patient contact
+		function updateContact(patient){
+			var contact = ko.observable();							
+			checkForEntityLocally(contact, patient.contactId(), 'ContactCard');
+			if (contact()) {
+				//the patient related contact exist locally. 
+				//sync the overlapping properties:
+				contact().firstName(patient.firstName());
+				contact().lastName(patient.lastName());
+				contact().middleName(patient.middleName());
+				contact().suffix(patient.suffix());								
+				contact().gender(patient.gender());
+				contact().preferredName(patient.preferredName());
+				contact().deceasedId(patient.deceasedId());
+				contact().entityAspect.acceptChanges();
+			}
+		}
+		
+		// Update a todo patient's information
+		function updateTodoPatient(patient) {
+			var thisTodoPatient = ko.observable();
+			// Check to see if there is a matching todo patient dto
+			checkForEntityLocally(thisTodoPatient, patient.id(), 'ToDoPatient');
+			// If a matching todo patient was found,
+			if (thisTodoPatient()) {
+				// Update all of the properties
+				thisTodoPatient().firstName(patient.firstName());
+				thisTodoPatient().lastName(patient.lastName());
+				thisTodoPatient().middleName(patient.middleName());
+				thisTodoPatient().suffix(patient.suffix());
+				thisTodoPatient().preferredName(patient.preferredName());
+			}
+		}
 
-				// Remove an entity from cache
-				function detachEntity(entity) {
-					manager.detachEntity(entity);
-				}
+		// Remove an entity from cache
+		function detachEntity(entity) {
+			manager.detachEntity(entity);
+		}
 
-				function initializeNewPatientMedication(patient, name) {
-						// Create a fake medications length
-						var medId = (patient.medications().length + 1) * -1;
-						// Get the default source
-						var defaultSource = ko.utils.arrayFirst(datacontext.enums.allergySources(), function (src) {
-							return src.isDefault();
-						});
-						// Get the default type to associate
-						var defaultType = ko.utils.arrayFirst(datacontext.enums.medSuppTypes(), function (type) {
-							return type.name() === 'Prescribed';
-						});
-						var patMed = createEntity('PatientMedication', { id: medId, patientId: patient.id(), categoryId: 1, statusId: 1, sourceId: defaultSource.id(), type: defaultType });
-						patMed.isNew(true);
-						patMed.isEditing(true);
-						patMed.name(name);
-						patMed.isCreateNewMedication(true);
-						return patMed;
-					}
+		function initializeNewPatientMedication(patient, name) {
+			// Create a fake medications length
+			var medId = (patient.medications().length + 1) * -1;
+			// Get the default source
+			var defaultSource = ko.utils.arrayFirst(datacontext.enums.allergySources(), function (src) {
+				return src.isDefault();
+			});
+			// Get the default type to associate
+			var defaultType = ko.utils.arrayFirst(datacontext.enums.medSuppTypes(), function (type) {
+				return type.name() === 'Prescribed';
+			});
+			var patMed = createEntity('PatientMedication', { id: medId, patientId: patient.id(), categoryId: 1, statusId: 1, sourceId: defaultSource.id(), type: defaultType });
+			patMed.isNew(true);
+			patMed.isEditing(true);
+			patMed.name(name);
+			patMed.isCreateNewMedication(true);
+			return patMed;
+		}
 
 		/**
 		*			read medication frequencies from 'Frequency' lookup merged with patient specific medication frequencies ('PatientMedFrequency' - as in back end).
