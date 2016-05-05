@@ -564,8 +564,8 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
                 builder.Add(MB.Update.Set(MEContactCareTeam.LastUpdatedOnProperty, DateTime.UtcNow));
                 builder.Add(MB.Update.Set(MEContactCareTeam.LastUpdatedByProperty, ObjectId.Parse(this.UserId)));
 
-
-                var saveResult = ctx.CareTeam.Collection.Save(contactCareTeam);
+                IMongoUpdate update = MB.Update.Combine(builder);
+                ctx.CareTeam.Collection.Update(query, update);                
 
                 AuditHelper.LogDataAudit(this.UserId,
                     MongoCollectionName.CareTeam.ToString(),
