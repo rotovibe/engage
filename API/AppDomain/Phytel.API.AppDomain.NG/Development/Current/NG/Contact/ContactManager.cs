@@ -148,9 +148,6 @@ namespace Phytel.API.AppDomain.NG
             if (CohortRuleUtil.HasMultipleActiveCorePCP(request.CareTeam))
                 throw new ApplicationException("The Care team cannot have multiple Active, Core PCPs");
 
-
-            
-
             try
             {
                var domainResponse =  EndpointUtil.SaveCareTeam(request);

@@ -64,6 +64,103 @@ namespace Phytel.API.AppDomain.NG.Test.Contact
             contactManager.SaveCareTeam(stubRequest);
         }
 
+
+        [TestMethod]
+        public void ContactManager_SaveCareTeam_Contact_Is_Not_IsPatient_Should_Throw()
+        {
+            //Arrange
+            var contactManager = new ContactManager();
+            var members = new List<Member>
+            {
+                new Member {  ContactId  = "cid", StatusId = 1, RoleId = "rid"}
+            };
+
+            var stubRequest = new SaveCareTeamRequest { ContactId = "cid", CareTeam = new CareTeam() { Members = members } };
+            var mockContactEndPointUtil = new Mock<IContactEndpointUtil>();
+            mockContactEndPointUtil.Setup(mceu => mceu.SaveCareTeam(It.IsAny<SaveCareTeamRequest>()))
+                .Returns(new SaveCareTeamDataResponse());
+
+            mockContactEndPointUtil.Setup(mceu => mceu.GetContactByContactId(It.IsAny<AppDomain.NG.DTO.GetContactByContactIdRequest>()))
+                .Returns(new ContactData { PatientId = "" });
+
+            var mockCohortRuleUtil = new Mock<ICohortRuleUtil>();
+            mockCohortRuleUtil.Setup(mcru => mcru.HasMultipleActiveCorePCM(It.IsAny<AppDomain.NG.DTO.CareTeam>()))
+                .Returns(false);
+            mockCohortRuleUtil.Setup(mcru => mcru.HasMultipleActiveCorePCP(It.IsAny<AppDomain.NG.DTO.CareTeam>()))
+                .Returns(false);
+
+            var mockCohortRuleProcessor = new Mock<ICohortRulesProcessor>();
+
+            contactManager.EndpointUtil = mockContactEndPointUtil.Object;
+            contactManager.CohortRuleUtil = mockCohortRuleUtil.Object;
+            contactManager.CohortRules = mockCohortRuleProcessor.Object;
+
+
+            //Act
+            try
+            {
+                var response = contactManager.SaveCareTeam(stubRequest);
+            }
+            catch (Exception ex)
+            {
+                
+                Assert.AreEqual(string.Format("Contact with id: {0} is not a patient.", "cid"), ex.Message);
+            }
+            
+
+            //Assert.
+            //Assert.IsNull(response);
+            mockContactEndPointUtil.Verify(mr => mr.SaveCareTeam(It.IsAny<SaveCareTeamRequest>()), Times.Never);
+        }
+
+        [TestMethod]
+        public void ContactManager_SaveCareTeam_Contact_Is_Null_Should_Throw()
+        {
+            //Arrange
+            var contactManager = new ContactManager();
+            var members = new List<Member>
+            {
+                new Member {  ContactId  = "cid", StatusId = 1, RoleId = "rid"}
+            };
+
+            var stubRequest = new SaveCareTeamRequest { ContactId = "cid", CareTeam = new CareTeam() { Members = members } };
+            var mockContactEndPointUtil = new Mock<IContactEndpointUtil>();
+            mockContactEndPointUtil.Setup(mceu => mceu.SaveCareTeam(It.IsAny<SaveCareTeamRequest>()))
+                .Returns(new SaveCareTeamDataResponse());
+
+            mockContactEndPointUtil.Setup(mceu => mceu.GetContactByContactId(It.IsAny<AppDomain.NG.DTO.GetContactByContactIdRequest>()))
+                .Returns((ContactData)null);
+
+            var mockCohortRuleUtil = new Mock<ICohortRuleUtil>();
+            mockCohortRuleUtil.Setup(mcru => mcru.HasMultipleActiveCorePCM(It.IsAny<AppDomain.NG.DTO.CareTeam>()))
+                .Returns(false);
+            mockCohortRuleUtil.Setup(mcru => mcru.HasMultipleActiveCorePCP(It.IsAny<AppDomain.NG.DTO.CareTeam>()))
+                .Returns(false);
+
+            var mockCohortRuleProcessor = new Mock<ICohortRulesProcessor>();
+
+            contactManager.EndpointUtil = mockContactEndPointUtil.Object;
+            contactManager.CohortRuleUtil = mockCohortRuleUtil.Object;
+            contactManager.CohortRules = mockCohortRuleProcessor.Object;
+
+
+            //Act
+            try
+            {
+                var response = contactManager.SaveCareTeam(stubRequest);
+            }
+            catch (Exception ex)
+            {
+
+                Assert.AreEqual(string.Format("Contact with id: {0} does not exist.", "cid"), ex.Message);
+            }
+
+
+            //Assert.
+            //Assert.IsNull(response);
+            mockContactEndPointUtil.Verify(mr => mr.SaveCareTeam(It.IsAny<SaveCareTeamRequest>()), Times.Never);
+        }
+
         [TestMethod]
         public void ContactManager_SaveCareTeam_Success()
         {
