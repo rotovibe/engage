@@ -1509,6 +1509,9 @@ namespace Phytel.API.AppDomain.NG
                 if (contactData.StatusId == 0)
                     contactData.StatusId = (int)DataDomain.Contact.DTO.Status.Active;
 
+                if (string.IsNullOrEmpty(contactData.Gender))
+                    contactData.Gender = "N";
+
 
                 InsertContactDataRequest ddRequest = new InsertContactDataRequest()
                 {

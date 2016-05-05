@@ -101,15 +101,12 @@ namespace Phytel.API.AppDomain.NG.Test.Contact
             {
                 var response = contactManager.SaveCareTeam(stubRequest);
             }
-            catch (Exception ex)
-            {
-                
+            catch (Exception ex){
                 Assert.AreEqual(string.Format("Contact with id: {0} is not a patient.", "cid"), ex.Message);
             }
             
 
             //Assert.
-            //Assert.IsNull(response);
             mockContactEndPointUtil.Verify(mr => mr.SaveCareTeam(It.IsAny<SaveCareTeamRequest>()), Times.Never);
         }
 
@@ -157,7 +154,6 @@ namespace Phytel.API.AppDomain.NG.Test.Contact
 
 
             //Assert.
-            //Assert.IsNull(response);
             mockContactEndPointUtil.Verify(mr => mr.SaveCareTeam(It.IsAny<SaveCareTeamRequest>()), Times.Never);
         }
 
