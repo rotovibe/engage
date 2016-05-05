@@ -314,20 +314,28 @@ define(['services/session', 'services/datacontext', 'viewmodels/shell/shell', 'm
 			alert('delete');
 		}
 		
-		var showDeleteButton = ko.computed(function(){
-			if( selectedContact() ){
-				return true;
+		var selectedContactId = ko.computed( function(){
+			var contact = selectedContact;
+			if( contact() ){
+				return contact().id();
 			}
-		}).extend({throttle: 100});
+			else{
+				return '';
+			}
+		});
 		
 		var showEditButton = ko.computed(function(){
-			var contact = selectedContact()? selectedContact() : null;			
-			if( contact && contact.isEditable() ){
+			var hasContactSelected = selectedContactId();
+			if( hasContactSelected && selectedContact().isEditable() ){
 				return true;
 			}
 			else{
 				return false;
 			}
+		}).extend({throttle: 100});
+		
+		var showDeleteButton = ko.computed(function(){
+			return showEditButton();
 		}).extend({throttle: 100});
 		
 		function resetTabs(){
