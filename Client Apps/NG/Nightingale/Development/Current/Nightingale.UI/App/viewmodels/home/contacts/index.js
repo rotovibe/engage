@@ -128,21 +128,22 @@ define(['services/session', 'services/datacontext', 'viewmodels/shell/shell', 'm
 		
 		function editPatientContact( contact ){
 			contact.activeTab("General");
-			startEditContactDialog( contact );
+			startEditContactDialog( contact, 'Edit Communication Preferences', true );
 		}
 		
 		function editContact( contact ){						
 			contact.activeTab("Profile");
-			startEditContactDialog( contact );			
+			var title = 'Edit Contact - ' + contact.firstName() + ' ' + contact.lastName();
+			startEditContactDialog( contact, title, false );			
 		}
 		
-		function startEditContactDialog( contact ){
+		function startEditContactDialog( contact, titleText, showPatientName ){
 			theContact( contact );
 			modalEntity().contactCard( contact );
 			
 			var modalSettings = {
-				title: 'Edit Communication Preferences',
-				showSelectedPatientInTitle: true,
+				title: titleText,
+				showSelectedPatientInTitle: showPatientName,
 				entity: modalEntity, 
 				templatePath: 'viewmodels/templates/contact.edit', 
 				showing: modalShowing, 
