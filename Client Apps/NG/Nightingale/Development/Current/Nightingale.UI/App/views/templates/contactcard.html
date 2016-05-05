@@ -27,29 +27,29 @@
 		<div class="row">
 			<label class="span2">
 				<span>Prefix</span>
-				<input class="span1" type="text" data-bind="value: prefix, valueUpdate: 'afterkeydown'" placeholder="prefix" />
+				<input class="span1" type="text" maxlength="20" data-bind="value: prefix, valueUpdate: 'afterkeydown'" placeholder="prefix" />
 			</label>
 			<label class="span5">
 				<span>First Name</span>
-				<input type="text" data-bind="value: firstName, valueUpdate: 'afterkeydown', css: { invalid: (profileValidationErrorsArray().indexOf('firstName') !== -1) }" placeholder="first name" />
+				<input type="text" maxlength="100" data-bind="value: firstName, valueUpdate: 'afterkeydown', css: { invalid: (profileValidationErrorsArray().indexOf('firstName') !== -1) }" placeholder="first name" />
 			</label>
 			<label class="span5">
 				<span>Preferred Name</span>
-				<input type="text" data-bind="value: preferredName, valueUpdate: 'afterkeydown'" placeholder="preferred name" />
+				<input type="text" maxlength="100" data-bind="value: preferredName, valueUpdate: 'afterkeydown'" placeholder="preferred name" />
 			</label>				
 		</div>			
 		<div class="row">
 			<label class="span3">
 				<span>Middle Name</span>
-				<input type="text" data-bind="value: middleName, valueUpdate: 'afterkeydown'" placeholder="middle name" />
+				<input type="text" maxlength="100" data-bind="value: middleName, valueUpdate: 'afterkeydown'" placeholder="middle name" />
 			</label>
 			<label class="span7">
 				<span>Last Name</span>
-				<input type="text" data-bind="value: lastName, valueUpdate: 'afterkeydown', css: { invalid: (profileValidationErrorsArray().indexOf('lastName') !== -1) }" placeholder="last name" />
+				<input type="text" maxlength="100" data-bind="value: lastName, valueUpdate: 'afterkeydown', css: { invalid: (profileValidationErrorsArray().indexOf('lastName') !== -1) }" placeholder="last name" />
 			</label>
 			<label class="span2">
 				<span>Suffix</span>
-				<input type="text" data-bind="value: suffix, valueUpdate: 'afterkeydown'" placeholder="suffix" />
+				<input type="text" maxlength="20" data-bind="value: suffix, valueUpdate: 'afterkeydown'" placeholder="suffix" />
 			</label>
 		</div>
 		<div class="row">				

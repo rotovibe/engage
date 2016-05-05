@@ -7,11 +7,11 @@
 	</div> -->
 	<div data-bind="foreach: myContactSearchResults">		
 		<div class="line filter-toggle ellipsis" data-bind="click: $parent.selectContact, css:{ 'active': $parent.selectedContact() === $data }">			
-			<div class="span2 grey">
-				<span data-bind="text: lastName"></span>
+			<div class="span2 grey ellipsis">
+				<span data-bind="text: lastName, attr:{ title: lastName }"></span>
 			</div>
-			<div class="span2 grey">
-				<span data-bind="text: firstName"></span>
+			<div class="span2 grey ellipsis">
+				<span data-bind="text: firstName, attr:{ title: firstName }"></span>
 			</div>
 			<div class="span8 grey ellipsis">
 				<span data-bind="text: contactSummary, attr: { title: contactSummary }"></span>
