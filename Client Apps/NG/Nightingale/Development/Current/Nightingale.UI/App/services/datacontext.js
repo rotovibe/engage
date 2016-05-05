@@ -1597,21 +1597,22 @@
 		function getToDos (observable, params, observableTotalCount) {
 			var message = queryStarted('ToDos', true, 'Loading');
 			todosSaving(true);
-			return notesService.getToDos(manager, observable, params, observableTotalCount).then(todosReturned);
-
+			
 			function todosReturned(todos) {
 				// Finally, clear out the message
 				queryCompleted(message);
 				//TODO: manage the size of the localCollections.todo
 				// Make sure each of the todos are in the collection locally
 				ko.utils.arrayForEach(todos, function (todo) {
-					if (localCollections.todos.indexOf(todo) === -1) {
+					if (todo.entityAspect && localCollections.todos.indexOf(todo) === -1) {
 						// Add it in
 						localCollections.todos.push(todo);
 					}
 				});
 				todosSaving(false);
 			}
+			
+			return notesService.getToDos(manager, observable, params, observableTotalCount).then(todosReturned);
 		}
 
 		/**
