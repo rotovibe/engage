@@ -57,7 +57,7 @@ namespace Phytel.API.AppDomain.NG
 
         #endregion
 
-            #region CareTeam
+        #region CareTeam
         public CareTeam GetCareTeam(GetCareTeamRequest request)
         {
             CareTeam careTeam = null;
@@ -113,6 +113,19 @@ namespace Phytel.API.AppDomain.NG
             if(request.CareTeam.Members.IsNullOrEmpty())
                  throw new ApplicationException(string.Format("CareTeam should have atleast one or more members."));
 
+            if(string.IsNullOrEmpty(request.ContactId))
+                throw new ArgumentException(string.Format("ContactId is null or empty"),"request");
+
+            foreach (var member in request.CareTeam.Members)
+            {
+                ValidateCareTeamMemberFields(member);
+
+                if (!string.IsNullOrEmpty(member.RoleId) && !string.IsNullOrEmpty(member.CustomRoleName))
+                {
+                    member.RoleId = null;
+                }
+            }
+
             //TODO: Refactor.
             var contact = GetContactByContactId(new GetContactByContactIdRequest
             {
@@ -136,10 +149,7 @@ namespace Phytel.API.AppDomain.NG
                 throw new ApplicationException("The Care team cannot have multiple Active, Core PCPs");
 
 
-            foreach (var member in request.CareTeam.Members)
-            {
-                ValidateCareTeamMemberFields(member);
-            }
+            
 
             try
             {

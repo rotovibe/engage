@@ -37,7 +37,7 @@ namespace Phytel.API.AppDomain.NG.Test.Contact
         }
 
         [TestMethod]
-        [ExpectedException(typeof(Exception))]
+        [ExpectedException(typeof(ArgumentException))]
         public void ContactManager_SaveCareTeam_InCompleteMember_EmptyContactId_Should_Throw()
         {
             var contactManager = new ContactManager();
@@ -46,7 +46,7 @@ namespace Phytel.API.AppDomain.NG.Test.Contact
                 new Member {  StatusId = 1  }
             };
 
-            var stubRequest = new SaveCareTeamRequest {ContactId = "cid", CareTeam = new CareTeam() {Members = members}};
+            var stubRequest = new SaveCareTeamRequest {ContactId = string.Empty, CareTeam = new CareTeam() {Members = members}};
             contactManager.SaveCareTeam(stubRequest);
         }
 
@@ -79,7 +79,21 @@ namespace Phytel.API.AppDomain.NG.Test.Contact
             mockContactEndPointUtil.Setup(mceu => mceu.SaveCareTeam(It.IsAny<SaveCareTeamRequest>()))
                 .Returns(new SaveCareTeamDataResponse());
 
+            mockContactEndPointUtil.Setup(mceu => mceu.GetContactByContactId(It.IsAny<AppDomain.NG.DTO.GetContactByContactIdRequest>()))
+                .Returns(new ContactData { PatientId = "pid"});
+
+            var mockCohortRuleUtil = new Mock<ICohortRuleUtil>();
+            mockCohortRuleUtil.Setup(mcru => mcru.HasMultipleActiveCorePCM(It.IsAny<AppDomain.NG.DTO.CareTeam>()))
+                .Returns(false);
+            mockCohortRuleUtil.Setup(mcru => mcru.HasMultipleActiveCorePCP(It.IsAny<AppDomain.NG.DTO.CareTeam>()))
+                .Returns(false);
+            
+            var mockCohortRuleProcessor = new Mock<ICohortRulesProcessor>();
+
             contactManager.EndpointUtil = mockContactEndPointUtil.Object;
+            contactManager.CohortRuleUtil = mockCohortRuleUtil.Object;
+            contactManager.CohortRules = mockCohortRuleProcessor.Object;
+
 
             //Act
             var response = contactManager.SaveCareTeam(stubRequest);
