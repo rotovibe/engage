@@ -84,6 +84,7 @@ namespace Phytel.API.DataDomain.PatientSystem
                         request.PatientSystemsData.SystemId = Constants.EngageSystemId;
                         request.PatientSystemsData.Value = EngageId.New();
                         request.PatientSystemsData.Primary = isSystemPrimary(Constants.EngageSystemId);
+                        request.PatientSystemsData.SystemName = Constants.SystemName;
                         request.PatientSystemsData.StatusId = (int)Status.Active;
                         request.PatientSystemsData.DataSource = Constants.DataSource;
                     }
