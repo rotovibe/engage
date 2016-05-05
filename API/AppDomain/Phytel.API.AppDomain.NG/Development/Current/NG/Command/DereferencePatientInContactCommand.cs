@@ -11,6 +11,15 @@ namespace Phytel.API.AppDomain.NG.Command
         
         public DereferencePatientInContactCommand(string contactId ,PostDeletePatientRequest request, IContactEndpointUtil contactEndpointUtil)
         {
+            if(contactId == null)
+                throw new ArgumentNullException("contactId");
+
+            if(request == null)
+                throw new ArgumentNullException("request");
+
+            if(contactEndpointUtil == null)
+                throw new ArgumentNullException("contactEndpointUtil");
+
             _contactId = contactId;
             _request = request;
             _contactEndpointUtil = contactEndpointUtil;

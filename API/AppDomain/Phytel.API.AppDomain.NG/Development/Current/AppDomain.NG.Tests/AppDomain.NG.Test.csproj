@@ -149,6 +149,7 @@
     <Compile Include="Contact\CareTeam\UnassignedPCMCohortRuleTests.cs" />
     <Compile Include="Contact\CareTeam\CohortsRulesProcessorTests.cs" />
     <Compile Include="Contact\ContactManagerTests.cs" />
+    <Compile Include="DereferencePatientFromContactCommandTests.cs" />
     <Compile Include="Factories\NGManagerFactory.cs" />
     <Compile Include="Factories\SampleFactory.cs" />
     <Compile Include="Factories\SecurityManagerFactory.cs" />
