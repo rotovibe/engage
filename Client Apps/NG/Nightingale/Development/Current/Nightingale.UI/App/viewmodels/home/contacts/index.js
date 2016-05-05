@@ -320,7 +320,7 @@ define(['services/session', 'services/datacontext', 'viewmodels/shell/shell', 'm
 		}).extend({throttle: 100});
 		
 		var showEditButton = ko.computed(function(){
-			var contact = selectedContact();			
+			var contact = selectedContact()? selectedContact() : null;			
 			if( contact && contact.isEditable() ){
 				return true;
 			}
