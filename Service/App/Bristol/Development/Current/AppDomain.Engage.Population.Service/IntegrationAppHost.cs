@@ -27,12 +27,10 @@ namespace AppDomain.Engage.Population.Service
 
         public override void Configure(Funq.Container container)
         {
-            Plugins.Add(new SwaggerFeature());
+            
             Plugins.Add(new ValidationFeature());
-
             HttpServiceContainer.Build(container);
             PlatformServiceContainer.Build(container);
-
 
             var auditLogger = container.TryResolve<IAuditLogger>() ??
                                   new AuditLogger(container.TryResolve<IASEClient>(), container.TryResolve<ITokenManager>());
@@ -49,8 +47,15 @@ namespace AppDomain.Engage.Population.Service
             // request filtering for setting global vals.
             RequestFilters.Add((req, res, requestDto) =>
             {
-                HostContext.Instance.Items.Add("Contract", ((IAppDomainRequest)requestDto).ContractNumber);
-                HostContext.Instance.Items.Add("Version", ((IAppDomainRequest)requestDto).Version);               
+            //{ServiceStack.Api.Swagger.Resources}
+                if (req.OperationName != "Resources" && req.OperationName != "ResourceRequest")
+                {
+                    if (requestDto.GetType() == typeof (Resources) ||
+                        requestDto.GetType() == typeof (ResourceRequest))
+                        return;
+                    HostContext.Instance.Items.Add("Contract", ((IAppDomainRequest) requestDto).ContractNumber);
+                    HostContext.Instance.Items.Add("Version", ((IAppDomainRequest) requestDto).Version);
+                }
             });
 
             RequestFilters.Add((req, res, requestDto) =>
@@ -74,6 +79,7 @@ namespace AppDomain.Engage.Population.Service
                 AllowJsonpRequests = true
             });
 
+            Plugins.Add(new SwaggerFeature());
             // initialize datetime format
             JsConfig.DateHandler = JsonDateHandler.ISO8601;
             JsConfig.EmitCamelCaseNames = true;
