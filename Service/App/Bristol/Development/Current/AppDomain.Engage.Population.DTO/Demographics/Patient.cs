@@ -26,12 +26,12 @@ namespace AppDomain.Engage.Population.DTO.Demographics
         [ApiMember(Name = "Prefix", Description = "Prefix", ParameterType = "property", DataType = "string")]
         public string Prefix { get; set; }
         [ApiMember(Name = "Suffix", Description = "Suffix", ParameterType = "property", DataType = "string")]
-
         public string Suffix { get; set; }
         public string Gender { get; set; }
         public string DOB { get; set; }
         public string MaritalStatusId { get; set; }
         public int PriorityData { get; set; }
+        public string ClinicalBackground { get; set; }
         public int DeceasedId { get; set; }
         public List<Phone> Phones { get; set; }
         public List<Address> Addresses { get; set; }
