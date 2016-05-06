@@ -49,8 +49,9 @@ namespace Phytel.API.DataDomain.PatientSystem
                 {
                     if (string.IsNullOrEmpty(data.Value) || string.IsNullOrWhiteSpace(data.Value))
                         throw new ArgumentException("Patient System value is missing");
-                    if (data.StatusId == 0)
-                        throw new ArgumentException("Patient System status is missing");
+                    if (!Enum.IsDefined(typeof(Status), data.StatusId))
+                        throw new ArgumentException("Patient System status is invalid");
+
                     using (PatientSystemMongoContext ctx = new PatientSystemMongoContext(ContractDBName))
                     {
                         MEPatientSystem mePS = new MEPatientSystem(this.UserId, data.CreatedOn)
