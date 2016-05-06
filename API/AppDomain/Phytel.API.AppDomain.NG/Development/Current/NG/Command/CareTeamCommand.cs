@@ -17,6 +17,12 @@ namespace Phytel.API.AppDomain.NG
         private readonly string _contactId;
         public CareTeamCommand(PostDeletePatientRequest req,IContactEndpointUtil contactEndpointUtil, string contactId)
         {
+            if (_request == null)
+                throw new ArgumentNullException("request");
+            if (string.IsNullOrEmpty(_contactId))
+                throw new ArgumentNullException("conatctId");
+            if (_contactEndpointUtil == null)
+                throw new ArgumentNullException("contactEndpointUtil");
             _request = req;
             _contactId = contactId;
             _contactEndpointUtil = contactEndpointUtil;
@@ -24,7 +30,7 @@ namespace Phytel.API.AppDomain.NG
     public void Execute()
         {
             try
-            { 
+            {                 
                 //We get the patient's care team               
                 var getCareTeamRequest = new GetCareTeamRequest()
                 {
