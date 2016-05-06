@@ -16,10 +16,11 @@ namespace AppDomain.Engage.Population
 
         
 
-        public DemographicsManager(IServiceContext context, IPatientDataDomainClient client)
+        public DemographicsManager(IServiceContext context, IPatientDataDomainClient client,UserContext userContext)
         {
             _context = context;
             _client = client;
+            UserContext = userContext;
         }
 
         public PostReferralWithPatientsListResponse InsertBulkPatients(List<Patient> patientslist)

@@ -44,7 +44,9 @@ namespace AppDomain.Engage.Population.Tests
             //_mockMappingengine = new Mock<IMappingEngine>(MockBehavior.Default);
             _mockDataDomainClient = new Mock<IPatientDataDomainClient>(MockBehavior.Default);
            
-            manager = new DemographicsManager(_mockContext.Object, _mockDataDomainClient.Object);
+            manager = new DemographicsManager(_mockContext.Object, _mockDataDomainClient.Object,_mockUserContext.Object
+                
+                );
             testData = new List<Patient>
             {
                 new Patient() { FirstName = "testfirstname", LastName = "testlastname" , DOB = "20070909" , DataSource = "testdatasource" , ExternalRecordId = "92ufieekekememeem" },
@@ -53,6 +55,7 @@ namespace AppDomain.Engage.Population.Tests
             };
 
             testProcessedresponse = new PostReferralWithPatientsListResponse();
+            testProcessedresponse.ProcessedPatients = new ProcessedPatientsList();
             testProcessedresponse.ProcessedPatients.InsertedPatients = new List<ProcessedData>
             {
                 new ProcessedData() {EngagePatientSystemValue = "4565", ExternalRecordId = "7888",Id="jgkgk455"},

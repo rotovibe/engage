@@ -50,7 +50,7 @@ namespace AppDomain.Engage.Population.Service.Container
                 c.Resolve<IServiceContext>()))
                 .ReusedWithin(ReuseScope.Request);
 
-            container.Register<IDemographicsManager>(c => new DemographicsManager(c.Resolve<IServiceContext>(), c.Resolve<IPatientDataDomainClient>())).ReusedWithin(ReuseScope.Request);
+            container.Register<IDemographicsManager>(c => new DemographicsManager(c.Resolve<IServiceContext>(), c.Resolve<IPatientDataDomainClient>(), new UserContext())).ReusedWithin(ReuseScope.Request);
             container.Register<ICohortManager>(
                 c =>
                     new CohortManager(c.Resolve<IServiceContext>(), c.Resolve<ICohortDataDomainClient>(),
