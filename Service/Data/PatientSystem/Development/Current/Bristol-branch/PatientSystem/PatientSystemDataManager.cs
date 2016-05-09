@@ -200,7 +200,7 @@ namespace Phytel.API.DataDomain.PatientSystem
 
                                 insertedPatientSystems.ForEach(r =>
                                 {
-                                    list.Add(new HttpObjectResponse<PatientSystemData> { Code = HttpStatusCode.Created, Body = (PatientSystemData)new PatientSystemData { Id = r.Id, ExternalRecordId = r.ExternalRecordId, PatientId = r.PatientId } });
+                                    list.Add(new HttpObjectResponse<PatientSystemData> { Code = HttpStatusCode.Created, Body = (PatientSystemData)new PatientSystemData { Id = r.Id, ExternalRecordId = r.ExternalRecordId, PatientId = r.PatientId, DataSource = r.DataSource, SystemName = r.SystemName, SystemId = r.SystemId, Value = r.Value, Primary = r.Primary, CreatedById = r.CreatedById, CreatedOn = r.CreatedOn, StatusId = r.StatusId, UpdatedById = r.UpdatedById, UpdatedOn = r.UpdatedOn} });
                                 });
                             }
                         }
