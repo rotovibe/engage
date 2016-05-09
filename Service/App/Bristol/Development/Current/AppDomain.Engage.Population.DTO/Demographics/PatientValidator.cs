@@ -38,7 +38,7 @@ namespace AppDomain.Engage.Population.DTO.Demographics
             String[] PCPstrings;
             char[] charSeparators = new char[] { ';' };
             PCPstrings = pcpInfo.Split(charSeparators, StringSplitOptions.RemoveEmptyEntries);
-            Regex rgx = new Regex(@"^[^|0-9]*[|]{1}[0-9]{10}[|]{1}[^|0-9]*$");
+            Regex rgx = new Regex(@"^([^|0-9])+[|]{1}[0-9]{10}[|]{1}([^|0-9])+$");
             foreach(string s in PCPstrings)
                 if(!rgx.IsMatch(s)) return false;
             return true;
