@@ -110,36 +110,42 @@ define([ 'services/datacontext', 'services/local.collections', 'viewmodels/home/
 			self.selectedSubType = ko.observable();
 			self.selectedSpecialty = ko.observable();
 			self.selectedSubSpecialties = ko.observableArray([]);
-			
+						
 			self.contactSubTypes = ko.computed( function(){
 				//return children of selected type
 				var subTypes = [];
 				var typeId = self.contactCard().contactTypeId();
+				self.selectedSubType(null);
+				self.selectedSpecialty(null);
+				self.selectedSubSpecialties([]);				
 				if( typeId ){
 					subTypes = getContactTypeChildren( typeId );										
 				}
 				return subTypes;
-			}).extend({ throttle: 100 });
+			}).extend({ throttle: 20 });
 			
 			self.contactSpecialties = ko.computed( function(){
 				//return children of selected sub type
 				var specialties = [];
-				var subTypeId = self.selectedSubType() ? self.selectedSubType() : null;
+				var subTypeId = self.selectedSubType() ? self.selectedSubType() : null;				
+				self.selectedSpecialty(null);
+				self.selectedSubSpecialties([]);
 				if( subTypeId ){
 					specialties = getContactTypeChildren( subTypeId );										
 				}
 				return specialties;
-			}).extend({ throttle: 100 });
+			}).extend({ throttle: 20 });
 			
 			self.contactSubSpecialties = ko.computed( function(){
 				//return children of selected specialty
 				var subSpecialties = [];
-				var specialtyId = self.selectedSpecialty() ? self.selectedSpecialty() : null;
+				var specialtyId = self.selectedSpecialty() ? self.selectedSpecialty() : null;				
+				self.selectedSubSpecialties([]);
 				if( specialtyId ){
 					subSpecialties = getContactTypeChildren( specialtyId );										
 				}
 				return subSpecialties;
-			}).extend({ throttle: 100 });
+			}).extend({ throttle: 20 });
 									
 			self.checkDuplicateSubType = function(){
 				//ENG-207: verify that the subtype combination does not exist
@@ -225,8 +231,8 @@ define([ 'services/datacontext', 'services/local.collections', 'viewmodels/home/
 				var selectedSubType = self.selectedSubType();
 				var selectedSubSpecialties = self.selectedSubSpecialties();
 				var isDuplicateSubType = self.checkDuplicateSubType();
-				return contactType && selectedSubType && !isDuplicateSubType;
-			}).extend({ throttle: 100 });
+				return contactType && selectedSubType && !isDuplicateSubType;// && !disableAddContactSubType;
+			}).extend({ throttle: 50 });
 			
 			self.addContactSubType = function(){								
 				
