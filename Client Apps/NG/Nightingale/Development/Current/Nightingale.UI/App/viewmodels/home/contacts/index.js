@@ -322,7 +322,7 @@ define(['services/session', 'services/datacontext', 'viewmodels/shell/shell', 'm
 			else{
 				return '';
 			}
-		});
+		}).extend({ throttle: 100 });
 		
 		var showEditButton = ko.computed(function(){
 			var hasContactSelected = selectedContactId();
@@ -332,11 +332,11 @@ define(['services/session', 'services/datacontext', 'viewmodels/shell/shell', 'm
 			else{
 				return false;
 			}
-		}).extend({throttle: 100});
+		}).extend({throttle: 500});
 		
 		var showDeleteButton = ko.computed(function(){
 			return showEditButton();
-		}).extend({throttle: 100});
+		}).extend({throttle: 500});
 		
 		function resetTabs(){
 			ko.utils.arrayForEach(tabs, function(tab){

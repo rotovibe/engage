@@ -145,7 +145,7 @@
 					}					
 				}
                 if (observable) {
-                    return observable(s);
+                    observable(s);
                 } else {
                     return s;
                 }
