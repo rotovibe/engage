@@ -122,7 +122,7 @@ namespace Phytel.API.DataDomain.PatientSystem
                     {
                         InsertPatientSystemDataRequest insertReq = new InsertPatientSystemDataRequest
                         {
-                            PatientId = p.PatientId,
+                            PatientId = request.PatientId,
                             Context = request.Context,
                             ContractNumber = request.ContractNumber,
                             PatientSystemsData = p,

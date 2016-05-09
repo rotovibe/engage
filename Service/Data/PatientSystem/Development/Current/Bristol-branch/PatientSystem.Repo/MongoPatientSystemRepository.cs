@@ -56,7 +56,7 @@ namespace Phytel.API.DataDomain.PatientSystem
                     {
                         MEPatientSystem mePS = new MEPatientSystem(this.UserId, data.CreatedOn)
                         {
-                            PatientId = ObjectId.Parse(data.PatientId),
+                            PatientId = ObjectId.Parse(request.PatientId),
                             Value = Helper.TrimAndLimit(data.Value, 100),
                             Status = (Status)data.StatusId,
                             Primary = data.Primary,
