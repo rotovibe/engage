@@ -4,10 +4,7 @@ using System.Configuration;
 using System.Linq;
 using AutoMapper;
 using Phytel.API.DataDomain.Cohort.DTO;
-using MongoDB.Driver;
-using MongoDB.Driver.Builders;
-using MongoDB.Bson;
-using Phytel.API.DataDomain.Cohort;
+using MongoDB.Bson.Serialization;
 using Phytel.API.DataDomain.Cohort.DTO.Model;
 using Phytel.API.DataDomain.Cohort.DTO.Referrals;
 
@@ -24,8 +21,8 @@ namespace Phytel.API.DataDomain.Cohort
             try
             {
                 #region Register ClassMap
-                if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(MEPatientReferral)) == false)
-                    MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<MEPatientReferral>();
+                if (BsonClassMap.IsClassMapRegistered(typeof(MEPatientReferral)) == false)
+                    BsonClassMap.RegisterClassMap<MEPatientReferral>();
                 #endregion
             }
             catch { }

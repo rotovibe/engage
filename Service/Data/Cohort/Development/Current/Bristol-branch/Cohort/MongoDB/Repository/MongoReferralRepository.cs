@@ -8,7 +8,7 @@ using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.Builders;
 using Phytel.API.DataDomain.Cohort.DTO.Model;
-using Phytel.API.DataDomain.Cohort.DTO.Referrals;
+using MongoDB.Bson.Serialization;
 
 namespace Phytel.API.DataDomain.Cohort
 {
@@ -23,8 +23,8 @@ namespace Phytel.API.DataDomain.Cohort
             try
             {
                 #region Register ClassMap
-                if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(MEReferral)) == false)
-                    MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<MEReferral>();
+                if (BsonClassMap.IsClassMapRegistered(typeof(MEReferral)) == false)
+                    BsonClassMap.RegisterClassMap<MEReferral>();
                 #endregion
             }
             catch { }

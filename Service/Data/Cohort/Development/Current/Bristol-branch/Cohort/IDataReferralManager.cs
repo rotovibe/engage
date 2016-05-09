@@ -11,5 +11,6 @@ namespace Phytel.API.DataDomain.Cohort
        string InsertReferral(ReferralData request);
         ReferralData GetReferralById(string referralId);
         List<ReferralData> GetAllReferrals();
+        PostPatientsListReferralDefinitionResponse InsertReferralsAll(PostPatientsListReferralDefinitionRequest request);
     }
 }

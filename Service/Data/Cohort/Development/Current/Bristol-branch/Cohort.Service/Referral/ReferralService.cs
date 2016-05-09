@@ -35,6 +35,28 @@ namespace Phytel.API.DataDomain.Cohort.Service.Referral
             return response;
         }
 
+
+        public PostPatientsListReferralDefinitionResponse Post(PostPatientsListReferralDefinitionRequest request)
+        {
+            var response = new PostPatientsListReferralDefinitionResponse();
+            try
+            {
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("CohortDD:Post()::Unauthorized Access");
+
+                response = Manager.InsertReferralsAll(request);
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+            }
+            return response;
+        }       // end method definition
+
+
         public GetReferralDataResponse Get(GetReferralDataRequest request)
         {
             GetReferralDataResponse response = new GetReferralDataResponse();

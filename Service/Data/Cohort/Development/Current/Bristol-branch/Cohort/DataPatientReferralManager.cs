@@ -1,9 +1,12 @@
-using Phytel.API.DataDomain.Cohort.DTO;
 using Phytel.API.DataDomain.Cohort.DTO.Context;
 using Phytel.API.DataDomain.Cohort.DTO.Model;
 using Phytel.API.DataDomain.Cohort.DTO.Referrals;
 using Phytel.API.Interface;
+using Phytel.API.Common.Format;
 using System;
+using System.Collections.Generic;
+using System.Configuration;
+using ServiceStack.ServiceInterface;
 
 namespace Phytel.API.DataDomain.Cohort
 {
@@ -23,7 +26,6 @@ namespace Phytel.API.DataDomain.Cohort
             PostPatientReferralDefinitionResponse result = new PostPatientReferralDefinitionResponse();
             try
             {
-               
                 if (request == null)
                     throw new ArgumentNullException("Request parameter cannot be NULL");
                 if ((String.IsNullOrEmpty(request.Context)))
@@ -47,6 +49,6 @@ namespace Phytel.API.DataDomain.Cohort
                 throw ex;
             }
             return result;
-        }
-    }
-}   
+        }           // end method definition
+    }               // end class definition
+}                   // end namespace definition

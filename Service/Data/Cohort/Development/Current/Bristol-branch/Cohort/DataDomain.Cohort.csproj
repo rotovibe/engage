@@ -57,6 +57,9 @@
       <HintPath>..\..\..\..\..\..\App\Bristol\Development\Current\packages\mongocsharpdriver.1.10.0\lib\net35\MongoDB.Driver.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Phytel.API.Common">
+      <HintPath>..\..\..\..\..\..\Common\Phytel.API.Common\Development\Current\Bristol-branch\bin\Release\Phytel.API.Common.dll</HintPath>
+    </Reference>
     <Reference Include="Phytel.Services.Mongo, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\..\..\App\Bristol\Development\Current\packages\Phytel.Services.Mongo.2.0.0.01\lib\net451\Phytel.Services.Mongo.dll</HintPath>
       <Private>True</Private>
@@ -125,6 +128,7 @@
     <Compile Include="MongoDB\Map\ObjectIdTypeConverter.cs" />
     <Compile Include="MongoDB\Map\PatientReferralDefinitionRequestMap.cs" />
     <Compile Include="MongoDB\Map\PatientReferralDefinitionResultMap.cs" />
+    <Compile Include="MongoDB\Map\PatientReferralsListDefinitionResultMap.cs" />
     <Compile Include="MongoDB\Map\ReferralDefinitionResultMap.cs" />
     <Compile Include="MongoDB\Map\ReferralDefinitionRequestMap.cs" />
     <Compile Include="MongoDB\Repository\MongoPatientReferralRepository.cs" />
@@ -133,6 +137,7 @@
     <Compile Include="MongoDB\CohortMongoContext.cs" />
     <Compile Include="DataCohortManager.cs" />
     <Compile Include="CohortRepositoryFactory.cs" />
+    <Compile Include="MongoDB\Map\PatientReferralsListDefinitionRequestMap.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

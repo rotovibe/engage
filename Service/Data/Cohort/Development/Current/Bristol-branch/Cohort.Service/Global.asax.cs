@@ -5,6 +5,7 @@ using AutoMapper;
 using Phytel.API.Interface;
 using ServiceStack.Api.Swagger;
 using ServiceStack.Common;
+using Phytel.API.DataDomain.Cohort.MongoDB.Map;
 
 namespace Phytel.API.DataDomain.Cohort.Service
 {
@@ -31,6 +32,8 @@ namespace Phytel.API.DataDomain.Cohort.Service
                     mapper.AddProfile<ReferralDefinitionResultMap>();
                     mapper.AddProfile<PatientReferralDefinitionRequestMap>();
                     mapper.AddProfile<PatientReferralDefinitionResultMap>();
+                    mapper.AddProfile<PatientReferralsListDefinitionRequestMap>();
+                    mapper.AddProfile<PatientReferralsListDefinitionResultMap>();
                 });
 
                 // request filtering for setting global vals.

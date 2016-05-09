@@ -5,7 +5,7 @@ using Phytel.API.DataDomain.Cohort.DTO;
 using MongoDB.Driver;
 using MongoDB.Driver.Builders;
 using MongoDB.Bson;
-using Phytel.API.DataDomain.Cohort;
+using MongoDB.Bson.Serialization;
 
 namespace Phytel.API.DataDomain.Cohort
 {
@@ -18,8 +18,8 @@ namespace Phytel.API.DataDomain.Cohort
             try
             {
                 #region Register ClassMap
-                if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(MECohort)) == false)
-                    MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<MECohort>();
+                if (BsonClassMap.IsClassMapRegistered(typeof(MECohort)) == false)
+                    BsonClassMap.RegisterClassMap<MECohort>();
                 #endregion
             }
             catch { }
