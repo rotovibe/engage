@@ -467,7 +467,7 @@ define(['services/session', 'services/datacontext', 'viewmodels/shell/shell', 'm
 				}
 			});
 			contactsReturned([]);
-			return datacontext.getContacts( contactsReturned, params, totalCount ).then( getContactsReturned );
+			return datacontext.getContacts( contactsReturned, params, totalCount, 'ContactCard' ).then( getContactsReturned );
 		}
 		
 		function loadMoreContacts(){

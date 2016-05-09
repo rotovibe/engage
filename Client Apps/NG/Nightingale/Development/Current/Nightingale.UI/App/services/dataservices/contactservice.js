@@ -90,80 +90,87 @@
 			}
         }
 
-		function getLocalContacts( manager ){
+		function getLocalContacts( manager, contactEntity ){
 			// Make sure the datacontext has been loaded
             checkDataContext();
             // If there is no manager, we can't query using breeze
             if (!manager) { throw new Error("[manager] cannot be a null parameter"); }
 
+			if( !contactEntity ){
+				contactEntity = 'ContactCard';
+			}
             // Create a base query
-            var query = breeze.EntityQuery.from('ContactCard')
-                .toType('ContactCard');
+            var query = breeze.EntityQuery.from(contactEntity)
+                .toType(contactEntity);
 
             return manager.executeQueryLocally(query);
 		}
 		
-		function getContacts( manager, observable, params, observableTotalCount ){
-			
-			// If there is no manager, we can't query using breeze
-            if (!manager) { throw new Error("[manager] cannot be a null parameter"); }
+		function getContacts(manager, observable, params, observableTotalCount, entityName) {
 
-            // Check if the datacontext is available, if so require it
-            checkDataContext();
-						
-			var payload = {
-				ContactTypeIds: params.contactTypeIds,
-				ContactSubTypeIds: params.contactSubTypeIds,
-				ContactStatuses: params.contactStatuses,
-				FirstName: params.firstName,
-				LastName: params.lastName,
-				FilterType: params.filterType ? params.filterType : null,	//'ExactMatch' / 'StartsWith' 
-				Take: params.take,
-				Skip: params.skip
-			};
-			
-			endPoint = new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'SearchContacts', 'ContactCard');
-			payload = JSON.stringify(payload);
-                
-			// Query to post the results
-			var query = breeze.EntityQuery
+		    // If there is no manager, we can't query using breeze
+		    if (!manager) { throw new Error("[manager] cannot be a null parameter"); }
+
+		    // Check if the datacontext is available, if so require it
+		    checkDataContext();
+
+		    var payload = {
+		        ContactTypeIds: params.contactTypeIds,
+		        ContactSubTypeIds: params.contactSubTypeIds,
+		        ContactStatuses: params.contactStatuses,
+		        FirstName: params.firstName,
+		        LastName: params.lastName,
+		        FilterType: params.filterType ? params.filterType : null,	//'ExactMatch' / 'StartsWith' 
+		        Take: params.take,
+		        Skip: params.skip
+		    };
+
+		    endPoint = new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'SearchContacts', 'ContactCard');
+		    payload = JSON.stringify(payload);
+
+		    if (!entityName) {
+		        entityName = 'ContactCard';
+		    }
+
+		    // Query to post the results
+		    var query = breeze.EntityQuery
 				.from(endPoint.ResourcePath)
 				.withParameters({
-					$method: 'POST',
-					$encoding: 'JSON',
-					$data: payload
-				}).toType('ContactCard');
+				    $method: 'POST',
+				    $encoding: 'JSON',
+				    $data: payload
+				}).toType(entityName);
 
-            return manager.executeQuery(query).then(searchSucceeded).fail(saveFailed);	
+		    function searchSucceeded(data) {
+		        var s = data.results;
+		        if (observableTotalCount) {
+		            var count = data.httpResponse.data.TotalCount;
+		            if (count != undefined) {
+		                observableTotalCount(count);
+		            }
+		        }
+		        if (observable) {
+		            observable(s);
+		        } else {
+		            return s;
+		        }
+		    }
 			
-			function searchSucceeded(data) {                
-				var s = data.results;
-				if(observableTotalCount){					
-					var count = data.httpResponse.data.TotalCount;					
-					if( count != undefined ){
-						observableTotalCount(count);						
-					}					
-				}
-                if (observable) {
-                    observable(s);
-                } else {
-                    return s;
-                }
-            }
+		    return manager.executeQuery(query).then(searchSucceeded).fail(saveFailed);
 		}
-		
-        function saveFailed(error) {
+
+	    function saveFailed(error) {
             checkDataContext();
-            console.log('Error - ', error);            
+            console.log('Error - ', error);
             var thisAlert = datacontext.createEntity('Alert', { result: 0, reason: 'Save failed!' });
             thisAlert.entityAspect.acceptChanges();
             datacontext.alerts.push(thisAlert);
-        }
+		}
 
-        function checkDataContext() {
+		function checkDataContext() {
             if (!datacontext) {
                 datacontext = require('services/datacontext');
-            }
-        }
+		    }
+		}
 
     });

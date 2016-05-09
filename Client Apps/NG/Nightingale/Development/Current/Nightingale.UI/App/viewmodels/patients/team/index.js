@@ -97,14 +97,14 @@ define(['services/session', 'services/datacontext', 'viewmodels/patients/index',
         };
 		
 		var modalSettings = {
-			title: 'Add Contact',
+			title: 'Assign Care Team',
 			entity: modalEntity, 
 			templatePath: 'viewmodels/templates/careMember.edit', 
 			showing: modalShowing, 
 			saveOverride: saveOverride, 
 			cancelOverride: cancelOverride, 
 			deleteOverride: null, 
-			classOverride: null//'modal-lg'
+			classOverride: 'modal-lg'
 		};
 		
         var modal = new modelConfig.modal(modalSettings);
@@ -152,13 +152,12 @@ define(['services/session', 'services/datacontext', 'viewmodels/patients/index',
 		function deleteCareMember(member){
 			//TODO
 		}
-				
+		
 		function activate(){
 			if( !initialized ){
 				initializeViewModel();
                 initialized = true;
 			}
-			var self = this;
 			
 		};
 		
@@ -236,7 +235,7 @@ define(['services/session', 'services/datacontext', 'viewmodels/patients/index',
 			toggleFullScreen: toggleFullScreen,
 			activeWidgetOpen: activeWidgetOpen,
 			minimizeThisColumn: minimizeThisColumn,
-            maximizeThisColumn: maximizeThisColumn,
+            maximizeThisColumn: maximizeThisColumn			
 		};
 		
 		return vm;

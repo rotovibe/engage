@@ -464,6 +464,7 @@ define(['services/validatorfactory', 'services/customvalidators', 'services/form
 					notes:  { dataType: "String" },
 					frequencyId: { dataType: "String" },
 					distance: { dataType: "Int64" },
+					distanceUnits: {dataType: "String"},
 					externalRecordId: { dataType: "String" },
 					dataSource: { dataType: "String" },
 					statusId: { dataType: "Int64", defaultValue: 1 },
@@ -490,6 +491,10 @@ define(['services/validatorfactory', 'services/customvalidators', 'services/form
 					status: {
 						entityTypeName: "CareMemberStatus", isScalar: true,
 						associationName: "CareMember_CareMemberStatus", foreignKeyNames: ["statusId"]
+					},
+					frequency: {
+						entityTypeName: "CareTeamFrequency", isScalar: true,
+						associationName: "CareMember_CareTeamFrequency", foreignKeyNames: ["frequencyId"]						
 					}
 				}
 			});

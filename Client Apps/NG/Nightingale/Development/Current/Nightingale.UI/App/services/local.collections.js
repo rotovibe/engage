@@ -68,6 +68,7 @@
   enums.interventionStatuses = ko.observableArray();
   enums.careManagers = ko.observableArray();
   enums.careMemberTypes = ko.observableArray();
+  enums.careMemberFrequency = ko.observableArray();
   enums.observationTypes = ko.observableArray();
   enums.observationStates = ko.observableArray();
   enums.observationDisplays = ko.observableArray();

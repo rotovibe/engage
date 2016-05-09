@@ -129,6 +129,16 @@ define(['services/session'],
 		        }
 		    });
 			
+			//care member frequency			
+			metadataStore.addEntityType({
+		        shortName: "CareTeamFrequency",
+		        namespace: "Nightingale",
+		        dataProperties: {
+		            id: { dataType: "String", isPartOfKey: true },
+		            name: { dataType: "String" }					
+		        }
+		    });
+			
 			//system status - enum
 			metadataStore.addEntityType({
 				shortName: "SystemStatus",

@@ -1,9 +1,142 @@
-<div data-bind="visible: showing">		
-	<section class="accordion hoverable open" data-bind="with: careMember">
-		<div class="body">
+<div class="body" data-bind="visible: showing">		
+	<section class="accordion hoverable open">
+				
+		<!--search-->
+		<div data-bind="with: contactSearch">
 			<div class="row pad-top">
-				<h1>add care member - under construction</h1>
+				<!-- <div class="row filters" data-bind="visible: showResetFilters()">
+					<i class="pointer icon-cancel pull-right pad-right toggle" title="Clear Filter" data-bind="click: resetFilters"></i>
+				</div> -->
+				<div class="span1 align-right grey" maxlength="50">First Name</div>
+				<div class="span2 pad-left">
+					<input type="text" data-bind="value: criteriaFirstName, valueUpdate: 'afterkeydown'" placeholder="first name" />
+				</div>
+				<div class="span1 align-right grey" maxlength="50">Last Name</div>
+				<div class="span2 pad-left">		
+					<input type="text" data-bind="value: criteriaLastName, valueUpdate: 'afterkeydown'" placeholder="last name" />
+				</div>
+				<div class="span1 align-right grey">Type</div>
+				<div class="span3 pad-right">
+					<div data-bind="multiselect: { options: contactSubTypes, values: criteriaContactSubTypes, text: 'name', idValue: 'id', label: 'criteriaContactSubTypes' }"></div>
+				</div>
+				<div class="span2">
+					<span class="filters" data-bind="visible: showResetFilters">
+						<i class="pointer icon-cancel pad-right toggle" title="Clear Filter" data-bind="click: resetFilters"></i>
+					</span>
+					<button class="btn color pull-right" data-bind="click: searchContacts, enable: canSearchContacts">
+						<i class="icon-search"></i>
+						<span class="pad-left">Search</span>
+					</button>
+				</div>
 			</div>
-		</div>
+			<!--search results-->
+			<div class="row pad-top divider"></div>
+			<div>
+				<em class="grey pad-left" data-bind="visible: noResultsFound()">No records meet your search criteria</em>
+				<div class="row" data-bind="visible: showResultsHeader">								
+					<div class="pad-bottom">
+						<span>															
+							<h1>Results<span data-bind="text: contactsShowingText"></span></h1>
+						</span>
+					</div>
+					<div class="header grey">
+						 
+							<header>
+								<div class="line">
+									<div class="span8">
+										<div class="span2">Last Name</div>
+										<div class="span2">First Name</div>
+										<div class="span8">Summary</div>
+									</div>
+									<div class="span4 pad-left">
+										Selected Contact
+									</div>
+								</div>
+								
+							</header>
+						 
+					</div>
+				</div>
+				<div class="span8">
+					<h1 data-bind="visible: searching()">Searching...</h1>
+					<div class="body" style="max-height: 310px;" data-bind="visible: !searching()">
+						<!--ko compose: "templates/contactSearchResults.panel.html" --><!-- /ko -->
+					</div>
+				</div>
+				<div class="span4">
+					<div class="row">
+						<div data-bind="with: selectedContact" class="header grey">
+							<!-- <span class="grey">Selected Contact:</span> -->
+							<h1 data-bind="text: fullName"></h1>
+							<span class="grey" data-bind="text: contactSummary"></span>
+							<div data-bind="with: deceased">
+								<div class="row pad-top" data-bind="visible: (name() == 'Yes')">
+									<strong>Deceased:</strong>
+									<span>Yes</span>
+								</div>
+							</div>
+						</div>
+					</div>					
+				</div>
+			</div>
+			
+		</div>		
+		<!-- <h1>add care member - under construction</h1> 		
+		<div class="pad-top" data-bind="visible: selectedContact">
+			
+			<div data-bind="with: careMember">		
+				<div class="row pad-top">
+					<div class="span1 align-right grey">Role</div>
+					<div class="span3" data-bind="chsnsingle: { options: $parent.computedRoles, value: roleId, text: 'role', idValue: 'id', isCancel: true, caption: 'None' }, 
+							css: { invalid: $parent.isDuplicateMember() }"></div>
+					
+					<div class="span1 align-right grey">Core?</div>
+					<div class="checker" data-bind="hoverToggle: 'hover'">
+						<span data-bind="css: { 'checked': core }" class="checked">
+							<input type="checkbox" data-bind="clickToggle: core"></input>
+						</span>
+					</div>					
+				</div>				
+				<div class="row pad-top">
+					<div class="span1 align-right grey">Start Date</div>
+					
+					<div class="span1 align-right grey">End Date</div>
+					
+					<div class="span1 align-right grey">Status</div>
+				</div>
+				<div class="row pad-top">
+					<div class="span1 align-right grey">Distance</div>
+
+					<div>	<-- class="line" 
+						<div class="radio" data-bind="hoverToggle: 'hover'">
+							<span data-bind="css: { 'checked': distanceUnits }" class="">
+								<input type="radio" data-bind="clickRadio: distanceUnits, disable: ($parent.phoneOptedOut() || optOut), setValue: 'M'">
+							</span>
+						</div>
+						<div class="span1 align-right grey">Miles</div>
+					</div>
+					<div>	<-- class="line" 
+						<div class="radio" data-bind="hoverToggle: 'hover'">
+							<span data-bind="css: { 'checked': distanceUnits }" class="">
+								<input type="radio" data-bind="clickRadio: distanceUnits, disable: ($parent.phoneOptedOut() || optOut), setValue: 'K'">
+							</span>
+						</div>
+						<div class="span1 align-right grey">Km</div>
+					</div>
+					
+					Frequency
+				</div>	
+				<div class="row pad-top">
+					Notes
+				</div>
+				
+			</div>
+		</div>-->
+		
+		<!-- <label class="span4">
+			<span>Phone</span>																		
+			<input data-bind="phone: criteriaPhone, value: number, valueUpdate: 'afterkeydown', css: { invalid: !isValid() }" placeholder="XXX-XXX-XXXX" title="XXX-XXX-XXXX"/>																			
+		</label> -->
+		
 	</section>
 </div>
