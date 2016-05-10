@@ -22,6 +22,7 @@ namespace Phytel.API.DataDomain.Contact.MongoDB.DTO
         public const string StatusProperty = "sts";
         public const string FrequencyProperty = "freqid";
         public const string DistanceProperty = "dist";
+        public const string DistanceUnitProperty = "distu";
         public const string ExternalRecordIdProperty = "extrid";
         public const string DataSourceProperty = "dsrc";
         public const string LastUpdatedOnProperty = "uon";
@@ -58,7 +59,10 @@ namespace Phytel.API.DataDomain.Contact.MongoDB.DTO
 
         [BsonElement(DistanceProperty)]
         public int? Distance { get; set; }
-       
+
+        [BsonElement(DistanceUnitProperty)]
+        public string DistanceUnit { get; set; }
+
         [BsonElement(ExternalRecordIdProperty)]
         [BsonIgnoreIfNull(true)]
         public string ExternalRecordId { get; set; }

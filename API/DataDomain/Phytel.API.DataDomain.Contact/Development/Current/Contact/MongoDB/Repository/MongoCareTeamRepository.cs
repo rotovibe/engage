@@ -442,6 +442,7 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
                     Frequency =
                         string.IsNullOrEmpty(member.FrequencyId) ? (ObjectId?)BsonNull.Value : ObjectId.Parse(member.FrequencyId),
                     Distance = member.Distance ?? member.Distance,
+                    DistanceUnit = member.DistanceUnit,
                     ExternalRecordId = member.ExternalRecordId,
                     Notes = member.Notes,
                     DataSource = member.DataSource,
@@ -494,6 +495,7 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
                     EndDate = member.EndDate,
                     FrequencyId = (member.Frequency == null || member.Frequency == ObjectId.Empty) ? null : member.Frequency.ToString(),
                     Distance = member.Distance ?? member.Distance,
+                    DistanceUnit = member.DistanceUnit,
                     ExternalRecordId = member.ExternalRecordId,
                     Notes = member.Notes,
                     DataSource = member.DataSource,

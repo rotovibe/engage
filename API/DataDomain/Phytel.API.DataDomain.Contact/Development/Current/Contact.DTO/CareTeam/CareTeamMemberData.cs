@@ -14,6 +14,7 @@ namespace Phytel.API.DataDomain.Contact.DTO.CareTeam
         public string Notes { get; set; }
         public string FrequencyId { get; set; }
         public int? Distance { get; set; }
+        public string DistanceUnit { get; set; }
         public string ExternalRecordId { get; set; }
         public string DataSource { get; set; }        
         public DateTime? UpdatedOn { get; set; }
