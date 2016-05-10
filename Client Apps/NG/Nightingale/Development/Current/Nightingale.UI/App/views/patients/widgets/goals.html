@@ -1,4 +1,4 @@
-﻿<div class="widget" data-bind="css: { 'open': isOpen }, columnSizer: {triggers: {a: isOpen(), b: $parents[1].selectedPatient(), c:$parents[1].selectedPatient().goals()}}">
+﻿<div class="widget" data-bind="css: { 'open': isOpen, 'fullscreen': isFullScreen() }, columnSizer: {triggers: {a: isOpen(), b: $parents[1].selectedPatient(), c:$parents[1].selectedPatient().goals()}}">
     <div class="content">
         <div class="content-fill">
             <div class="wrapper">
