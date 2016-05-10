@@ -269,7 +269,7 @@
             var alreadyLoaded = forceReload ? true : !goal.isLoaded;
             datacontext.getEntityById(null, goalId, goalEndPoint().EntityType, goalEndPoint().ResourcePath + patientId + '/Goal/', alreadyLoaded).then(goalHasLoaded);
 
-            function goalHasLoaded () {
+            function goalHasLoaded (result) {
                 goal.isLoaded = true;
             }
         };

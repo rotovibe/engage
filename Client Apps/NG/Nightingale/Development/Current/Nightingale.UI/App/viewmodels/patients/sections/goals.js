@@ -97,7 +97,7 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
                     thisGoal.isOpen(true);
                 };
                 var cancelOverride = function () {
-                    cancel(intervention);
+                    datacontext.cancelEntityChanges(intervention);
                     getGoalDetails(thisGoal);
                 };
                 msg = msg ? msg : 'Edit Intervention';
