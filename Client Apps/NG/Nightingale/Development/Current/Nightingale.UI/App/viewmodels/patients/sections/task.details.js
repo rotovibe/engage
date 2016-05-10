@@ -50,6 +50,7 @@
                 };
                 var cancelOverride = function () {
                     cancel(barrier);
+                    cancel(self.task());
                     getGoalDetails(thisGoal);
                 };
                 msg = msg ? msg : 'Edit Barrier';
