@@ -35,7 +35,9 @@ define(['services/session', 'services/dateHelper'],
 		            allergyTypeIds: { complexTypeName: "Identifier:#Nightingale", isScalar: false },
 		            reactionIds: { complexTypeName: "Identifier:#Nightingale", isScalar: false },
 		            severityId: { dataType: "String" },
-		            notes: { dataType: "String" }
+		            notes: { dataType: "String" },
+                    code: { dataType: "String" },
+                    codingSystem: { dataType: "String" }
 		        },
 		        navigationProperties: {
 		            patient: {
@@ -71,7 +73,7 @@ define(['services/session', 'services/dateHelper'],
 				'PatientAllergy', null, patientAllergyInitializer);
 
 		    function patientAllergyInitializer(allergy) {
-                allergy.isNew = ko.observable(false);	
+                allergy.isNew = ko.observable(false);
                 allergy.isUserCreated = ko.observable(false);
                 allergy.typeString = ko.computed(function () {
 		            checkDataContext();
@@ -81,7 +83,7 @@ define(['services/session', 'services/dateHelper'],
 		                    return faEnum.id() === allg.id();
 		                });
 		                if (thisAllergyType) {
-		                	thisString += thisAllergyType.name() + ', ';		                	
+		                	thisString += thisAllergyType.name() + ', ';
 		                }
 		            });
 		            // If the string is longer than zero,
@@ -94,9 +96,9 @@ define(['services/session', 'services/dateHelper'],
 		            }
 		            return thisString;
 		        });
-				
-				allergy.startDateErrors = ko.observableArray([]);	//datetimepicker validation errors 
-				allergy.endDateErrors = ko.observableArray([]);	//datetimepicker validation errors 
+
+				allergy.startDateErrors = ko.observableArray([]);	//datetimepicker validation errors
+				allergy.endDateErrors = ko.observableArray([]);	//datetimepicker validation errors
 				allergy.validationErrors = ko.observableArray([]);
 				allergy.isValid = ko.computed( function() {
 					var hasErrors = false;
@@ -107,19 +109,19 @@ define(['services/session', 'services/dateHelper'],
 					var startDateErrors = allergy.startDateErrors();
 					var endDateErrors = allergy.endDateErrors();
 					if( startDateErrors.length > 0 ){
-						//datetimepicker validation errors: 
+						//datetimepicker validation errors:
 						ko.utils.arrayForEach( startDateErrors, function(error){
 							allergyErrors.push({ PropName: 'startDate', Message: allergy.allergyName() + ' Start Date ' + error.Message});
 							hasErrors = true;
-						});						
+						});
 					}
 					if( endDate ){
-						if( endDateErrors.length > 0 ){						
+						if( endDateErrors.length > 0 ){
 							ko.utils.arrayForEach( endDateErrors, function(error){
 								allergyErrors.push({ PropName: 'endDate', Message: allergy.allergyName() + ' End Date ' + error.Message});
 								hasErrors = true;
 							});
-						}						
+						}
 						if( startDateErrors.length == 0 && endDateErrors.length == 0 && startDate && endDate ){
 							//startDate - endDate range: both dates exist and valid:
 							if( moment(startDate).isAfter( moment( endDate ) ) ){
@@ -128,11 +130,11 @@ define(['services/session', 'services/dateHelper'],
 								hasErrors = true;
 							}
 						}
-					}					
+					}
 					allergy.validationErrors(allergyErrors);
 					return !hasErrors;
 				});
-				
+
 				/**
 				*	computed. tracks for any validation errors and returns a list of the errored property names.
 				*	this will be used in the property field css binding condition for invalid styling.
@@ -145,7 +147,7 @@ define(['services/session', 'services/dateHelper'],
 			        });
 			        return thisArray;
 			    });
-				
+
 				/**
 				*	computed. to allow forcing the datetimepicker control to set the start date as invalid.
 				*	this is needed when the date is valid but range is wrong.
@@ -153,8 +155,8 @@ define(['services/session', 'services/dateHelper'],
 				*/
 				allergy.setInvalidStartDate = ko.computed( function(){
 					var validationErrorsArray = allergy.validationErrorsArray();
-					return (validationErrorsArray && validationErrorsArray.indexOf('startDate') !== -1);  
-				}); 
+					return (validationErrorsArray && validationErrorsArray.indexOf('startDate') !== -1);
+				});
 								/**
 				*	computed. to allow forcing the datetimepicker control to set the end date as invalid.
 				*	this is needed when the date is valid but range is wrong.
@@ -163,11 +165,11 @@ define(['services/session', 'services/dateHelper'],
 
 				allergy.setInvalidEndDate = ko.computed( function(){
 					var validationErrorsArray = allergy.validationErrorsArray();
-					return (validationErrorsArray && validationErrorsArray.indexOf('endDate') !== -1);  
+					return (validationErrorsArray && validationErrorsArray.indexOf('endDate') !== -1);
 				});
-				
+
 				allergy.needToSave = function(){
-					var result = (allergy.entityAspect.entityState.isModified() || allergy.isNew()) && allergy.sourceId();									
+					var result = (allergy.entityAspect.entityState.isModified() || allergy.isNew()) && allergy.sourceId();
 					return result;
 				}
                 allergy.reactionString = ko.computed(function () {
@@ -178,7 +180,7 @@ define(['services/session', 'services/dateHelper'],
 		                    return faEnum.id() === allg.id();
 		                });
 		                if (thisReacion) {
-		                	thisString += thisReacion.name() + ', ';		                	
+		                	thisString += thisReacion.name() + ', ';
 		                }
 		            });
 		            // If the string is longer than zero,
@@ -209,19 +211,19 @@ define(['services/session', 'services/dateHelper'],
 					allergy.setStatus(2,'Allergy has been deactivated!');
 		        }
 				allergy.activatePatientAllergy = function () {
-					allergy.setStatus(1,'Allergy has been activated!');					
+					allergy.setStatus(1,'Allergy has been activated!');
 				}
 		        allergy.deletePatientAllergy = function(){
-					var message = 'You are about to delete: ' + allergy.allergyName() +' from this individual.  Press OK to continue, or cancel to return without deleting.';                
-					var result = confirm(message);				
+					var message = 'You are about to delete: ' + allergy.allergyName() +' from this individual.  Press OK to continue, or cancel to return without deleting.';
+					var result = confirm(message);
 					if (result === true) {
 						checkDataContext();
 						datacontext.deletePatientAllergy(allergy).then(deleted);
 						function deleted () {
-							return true;					                       
+							return true;
 						}
 					}
-					else {                    
+					else {
 						return false;
 					}
 				}

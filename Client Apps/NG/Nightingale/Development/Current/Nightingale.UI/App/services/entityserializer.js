@@ -185,7 +185,7 @@
 				thisContactCard.TimesOfDaysId = [];
 				thisContactCard.WeekDays = [];
 				thisContactCard.ContactSubTypes = [];
-				
+
 				// Get the values of the properties of the action
 				//var unwrappedContactCard = ko.toJS(contactCard);
 
@@ -194,7 +194,7 @@
 						.where('id', '==', contactCard.id())
 						.toType('ContactCard')
 						.select('id, patientId, timeZoneId, isPatient, userId, isUser, firstName, middleName, lastName, preferredName,'
-							+ ' gender, contactTypeId, externalRecordId, dataSource, statusId, deceasedId, prefix, suffix, createdOn, updatedOn,'       
+							+ ' gender, contactTypeId, externalRecordId, dataSource, statusId, deceasedId, prefix, suffix, createdOn, updatedOn,'
 							+ ' createdById, updatedById, externalID');
 				var results = manager.executeQueryLocally(contactCardQuery);
 				var unwrappedContactCard = results[0];
@@ -209,19 +209,19 @@
 						thisDowId = parseInt(dow.id.peek());
 						thisContactCard.WeekDays.push(thisDowId);
 				});
-				
+
 				thisContactCard.PatientId = unwrappedContactCard.patientId;
 				thisContactCard.Id = unwrappedContactCard.id;
 				thisContactCard.TimeZoneId = unwrappedContactCard.timeZoneId;
-				thisContactCard.IsPatient		 = unwrappedContactCard.isPatient;		
-				thisContactCard.UserId           = unwrappedContactCard.userId;	
+				thisContactCard.IsPatient		 = unwrappedContactCard.isPatient;
+				thisContactCard.UserId           = unwrappedContactCard.userId;
 				thisContactCard.IsUser           = unwrappedContactCard.isUser;
 				thisContactCard.FirstName        = unwrappedContactCard.firstName;
 				thisContactCard.MiddleName       = unwrappedContactCard.middleName;
 				thisContactCard.LastName         = unwrappedContactCard.lastName;
 				thisContactCard.PreferredName    = unwrappedContactCard.preferredName;
 				thisContactCard.Gender           = unwrappedContactCard.gender;
-				thisContactCard.ContactTypeId    = unwrappedContactCard.contactTypeId;				
+				thisContactCard.ContactTypeId    = unwrappedContactCard.contactTypeId;
 				thisContactCard.ExternalRecordId = unwrappedContactCard.externalRecordId;
 				thisContactCard.DataSource       = unwrappedContactCard.dataSource;
 				thisContactCard.StatusId         = unwrappedContactCard.statusId;
@@ -233,7 +233,7 @@
 				thisContactCard.CreatedById      = unwrappedContactCard.createdById;
 				thisContactCard.UpdatedById      = unwrappedContactCard.updatedById;
 				thisContactCard.ExternalID       = unwrappedContactCard.externalID;
-				
+
 				ko.utils.arrayForEach(contactCard.modes.peek(), function (mode) {
 						var newMode = {};
 						newMode.LookUpModeId = mode.lookUpModeId.peek();
@@ -287,7 +287,7 @@
 						thisContactCard.Languages.push(newLanguage);
 				});
 
-				ko.utils.arrayForEach(contactCard.contactSubTypes.peek(), function (sub) {	
+				ko.utils.arrayForEach(contactCard.contactSubTypes.peek(), function (sub) {
 					var subType = {};
 					subType.Id = sub.id() ? sub.id() : null;
 					subType.SubTypeId = sub.subTypeId();
@@ -298,7 +298,7 @@
 					});
 					thisContactCard.ContactSubTypes.push(subType);
 				});
-				
+
 				var totalTime = new Date().getTime() - startTime;
 
 
@@ -864,25 +864,27 @@
 					.from('fakePath')
 					.where('id', '==', allergy.id())
 					.toType('PatientAllergy')
-					.select('id, allergyName, startDate, endDate, patientId, statusId, deleteFlag, severityId, allergyId, sourceId, notes, systemName');
+					.select('id, allergyName, startDate, endDate, patientId, statusId, deleteFlag, severityId, allergyId, sourceId, notes, systemName, code, codingSystem');
 			var results = manager.executeQueryLocally(allergyQuery);
-			var unwrappedObservation = results[0];
+			var unwrappedAllergy = results[0];
 
 			// Copy actions properties
-			thisAllergy.Id = unwrappedObservation.id;
-			thisAllergy.AllergyName = unwrappedObservation.allergyName;
-			var startMoment = moment(unwrappedObservation.startDate);
+			thisAllergy.Id = unwrappedAllergy.id;
+			thisAllergy.AllergyName = unwrappedAllergy.allergyName;
+			var startMoment = moment(unwrappedAllergy.startDate);
 			thisAllergy.StartDate = startMoment.isValid()? startMoment.toISOString() : null;
-			var endMoment = moment(unwrappedObservation.endDate);
+			var endMoment = moment(unwrappedAllergy.endDate);
 			thisAllergy.EndDate = endMoment.isValid()? endMoment.toISOString() : null;
-			thisAllergy.PatientId = unwrappedObservation.patientId;
-			thisAllergy.AllergyId = unwrappedObservation.allergyId;
-			thisAllergy.StatusId = unwrappedObservation.statusId;
-			thisAllergy.SourceId = unwrappedObservation.sourceId;
-			thisAllergy.DeleteFlag = unwrappedObservation.deleteFlag;
-			thisAllergy.SeverityId = unwrappedObservation.severityId;
-			thisAllergy.Notes = unwrappedObservation.notes;
-			thisAllergy.SystemName = unwrappedObservation.systemName;
+			thisAllergy.PatientId = unwrappedAllergy.patientId;
+			thisAllergy.AllergyId = unwrappedAllergy.allergyId;
+			thisAllergy.StatusId = unwrappedAllergy.statusId;
+			thisAllergy.SourceId = unwrappedAllergy.sourceId;
+			thisAllergy.DeleteFlag = unwrappedAllergy.deleteFlag;
+			thisAllergy.SeverityId = unwrappedAllergy.severityId;
+            thisAllergy.Notes = unwrappedAllergy.notes;
+            thisAllergy.SystemName = unwrappedAllergy.systemName;
+            thisAllergy.Code = unwrappedAllergy.code;
+            thisAllergy.CodingSystem = unwrappedAllergy.codingSystem;
 
 			// If it is a brand new allergy set an isNewAllergy property
 			if (allergy.isUserCreated()) {
@@ -985,4 +987,4 @@
 
 		return entitySerializer;
 
-}); 
+});
