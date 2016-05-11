@@ -36,7 +36,7 @@
 	]);
 	enums.maritalStatuses = ko.observableArray();
 	enums.deceasedStatuses = ko.observableArray();
-	
+
 	enums.contactStatuses = ko.observableArray([
 		new modelConfig.SomeType('1', 'Active'),
 		new modelConfig.SomeType('2', 'Inactive'),
@@ -97,6 +97,7 @@
 	enums.frequency = ko.observableArray();	//a new lookup to replace freqHowOftens and freqWhens (ENG 969)
   enums.medSuppTypes = ko.observableArray();
   enums.freqWhens = ko.observableArray();
+  enums.durationUnits = ko.observableArray();
 
     //
     //   ToDos are shared between a bunch of views so we keep a collection here as well
@@ -116,7 +117,7 @@
     var events = ko.observableArray();
 
     var alerts = ko.observableArray();
-	
+
 	var contactTypesTree = ko.observableArray();
 	var contactTypes = ko.observableArray();
     var localcollections = {
@@ -151,4 +152,4 @@
     }
 
 
-}); 
+});

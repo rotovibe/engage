@@ -432,6 +432,16 @@ define(['services/session'],
 		        }
 		    });
 
+            // DurationUnit
+            metadataStore.addEntityType({
+                shortName: "DurationUnit",
+                namespace: "Nightingale",
+                dataProperties: {
+                    id: { dataType: "String", isPartOfKey: true },
+                    name: { dataType: "String" }
+                }
+            });
+
 				// Marital Status for a Patient
 				metadataStore.addEntityType({
 						shortName: "MaritalStatus",
