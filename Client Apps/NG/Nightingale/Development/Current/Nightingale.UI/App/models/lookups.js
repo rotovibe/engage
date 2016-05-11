@@ -442,6 +442,17 @@ define(['services/session'],
                 }
             });
 
+            // RefusalReason
+            metadataStore.addEntityType({
+                shortName: "RefusalReason",
+                namespace: "Nightingale",
+                dataProperties: {
+                    id: { dataType: "String", isPartOfKey: true },
+                    name: { dataType: "String" },
+                    isDefault: { dataType: "Boolean" }
+                }
+            });
+
 				// Marital Status for a Patient
 				metadataStore.addEntityType({
 						shortName: "MaritalStatus",

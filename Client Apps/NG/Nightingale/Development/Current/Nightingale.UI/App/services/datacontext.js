@@ -492,6 +492,7 @@
 				lookupsService.getLookup(manager, 'Frequency', datacontext.enums.frequency, true);
 				lookupsService.getLookup(manager, 'FreqWhen', datacontext.enums.freqWhens, true);
                 lookupsService.getLookup(manager, 'DurationUnit', datacontext.enums.durationUnits, true);
+                lookupsService.getNoteLookup(manager, 'RefusalReason', datacontext.enums.refusalReasons, true);
 			}
 		}
 		/**

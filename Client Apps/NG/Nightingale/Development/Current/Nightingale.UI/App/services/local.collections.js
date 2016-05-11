@@ -98,6 +98,7 @@
   enums.medSuppTypes = ko.observableArray();
   enums.freqWhens = ko.observableArray();
   enums.durationUnits = ko.observableArray();
+  enums.refusalReasons = ko.observableArray();
 
     //
     //   ToDos are shared between a bunch of views so we keep a collection here as well
