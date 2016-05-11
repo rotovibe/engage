@@ -7031,7 +7031,6 @@ div.button.disabled span, div.button.disabled.active span {
   color: #222222;
   height: 20px;
   list-style: none;
-  line-height: 20px;
   padding: 0 10px;
 }
 .chosen-container .chosen-results li.active-result {

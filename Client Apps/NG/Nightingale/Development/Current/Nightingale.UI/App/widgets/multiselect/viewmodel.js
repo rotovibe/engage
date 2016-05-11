@@ -30,7 +30,7 @@ define(['durandal/composition'], function (composition) {
                 item.thisText = ko.computed(item[self.text]);
             });
             return thisList;
-        });
+        }).extend({throttle: 50});
         self.checkForIdValue = function (idvalue) {
             var thisMatch = ko.utils.arrayFirst(self.selectedValues(), function (selectedValue) {
                 return selectedValue.id() === idvalue;
@@ -45,7 +45,7 @@ define(['durandal/composition'], function (composition) {
                 return self.selectedValues().length + ' selected.';
             }
             return 'Choose...';
-        });
+        }).extend({throttle: 50});
         self.selectOption = function (sender) {
 			self.stopClosing();	//prevent the chosen-drop from closing		
             checkDataContext();
@@ -81,7 +81,7 @@ define(['durandal/composition'], function (composition) {
 			if( !isInFocus && showing ){								
 				self.startClosing();
 			}			
-		});
+		}).extend({throttle: 50});
 
         self.isDisabled = ko.computed(function () {
             var thisState = false;
@@ -89,10 +89,10 @@ define(['durandal/composition'], function (composition) {
                 thisState = self.settings.disabled;
             }
             return thisState;
-        });
+        }).extend({throttle: 50});
         self.isInvalid = ko.computed(function () {
             return self.isRequired && self.selectedValues().length === 0;
-        });
+        }).extend({throttle: 50});
     };
 
     ctor.prototype.toggleDropdown = function () {

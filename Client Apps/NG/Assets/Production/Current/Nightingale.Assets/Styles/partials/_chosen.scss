@@ -49,7 +49,7 @@
     margin: 0 $opposite-grid-padding;
     max-height: 200px;
     overflow-x: auto;
-    overflow-y: auto;   
+    overflow-y: auto;
     width: auto;
     li {
       @include nowrap;
@@ -57,7 +57,7 @@
       color: $grey-darker;
       height: 20px;
       list-style: none;
-      line-height: 20px;
+      //line-height: 20px; this causes a scroll issue
       padding: 0 $grid-padding;
       &.active-result {
         display: list-item;
