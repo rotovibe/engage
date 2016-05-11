@@ -603,7 +603,7 @@
 			if (session.currentUser()) {
 				lookupsService.getLookup(manager, 'CareTeamFrequency', localCollections.enums.careMemberFrequency, true);
 				return lookupsService.getLookup(manager, 'CareMemberType', localCollections.enums.careMemberTypes, true);
-
+				
 			}
 		}
 
@@ -1060,23 +1060,24 @@
 						contactCard.updatedById( session.currentUser().userId() );
 						contactCard.updatedOn( new Date() );
 						if(contactCard.patientId()){
-							var contactPatient = ko.observable();
-							checkForEntityLocally(contactPatient, contactCard.patientId(), 'Patient');
+							var contactPatient = ko.observable();							
+							checkForEntityLocally(contactPatient, contactCard.patientId(), 'Patient');										
 							if (contactPatient()) {
-								//the contact related patient exist locally.
+								//the contact related patient exist locally. 
 								//sync the overlapping properties:
 								contactPatient().firstName(contactCard.firstName());
 								contactPatient().lastName(contactCard.lastName());
 								contactPatient().middleName(contactCard.middleName());
-								contactPatient().suffix(contactCard.suffix());
+								contactPatient().suffix(contactCard.suffix());								
 								contactPatient().gender(contactCard.gender());
 								contactPatient().preferredName(contactCard.preferredName());
 								contactPatient().deceasedId(contactCard.deceasedId());
+								contactPatient().statusId(contactCard.statusId());
 								contactPatient().entityAspect.acceptChanges();
 							}
-						}
+						}						
 					}
-
+				
 					// Go through the data, find any entities that need to have their Id's cleaned up
 					var updatedPhones = data.UpdatedPhone;
 					var updatedEmails = data.UpdatedEmail;
@@ -1143,13 +1144,13 @@
 
 		function getContacts( observable, params, observableTotalCount, entityName ){
 			var message = queryStarted('Contacts', true, 'Loading');
-
+						
 			function contactsReturned(contacts) {
 				// Finally, clear out the message
 				queryCompleted(message);
-				return contacts;
+				return contacts;				
 			}
-
+			
 			return contactService.getContacts(manager, observable, params, observableTotalCount, entityName).then(contactsReturned);
 		}
 
@@ -1392,8 +1393,8 @@
 		}
 
 		function getCareTeam( observable, patientContactId ){
-			var message = queryStarted('CareTeam', true, 'Loading');
-			return careMembersService.getCareTeam( manager, observable, patientContactId ).then( careTeamReturned );
+			var message = queryStarted('CareTeam', true, 'Loading');			
+			return careMembersService.getCareTeam( manager, observable, patientContactId ).then( careTeamReturned );			
 
 			function careTeamReturned(team) {
 				// Finally, clear out the message
@@ -1401,7 +1402,7 @@
 				return team;
 			}
 		}
-
+		
 		// Save changes to a single contact card
 		function saveCareMember(careMember, saveType) {
 			// Display a message while saving
@@ -1615,7 +1616,7 @@
 		function getToDos (observable, params, observableTotalCount) {
 			var message = queryStarted('ToDos', true, 'Loading');
 			todosSaving(true);
-
+			
 			function todosReturned(todos) {
 				// Finally, clear out the message
 				queryCompleted(message);
@@ -1629,7 +1630,7 @@
 				});
 				todosSaving(false);
 			}
-
+			
 			return notesService.getToDos(manager, observable, params, observableTotalCount).then(todosReturned);
 		}
 
@@ -1819,22 +1820,23 @@
 
 		//update a patient contact
 		function updateContact(patient, contactEntity){
-			var contact = ko.observable();
+			var contact = ko.observable();							
 			checkForEntityLocally(contact, patient.contactId(), contactEntity);
 			if (contact()) {
-				//the patient related contact exist locally.
+				//the patient related contact exist locally. 
 				//sync the overlapping properties:
 				contact().firstName(patient.firstName());
 				contact().lastName(patient.lastName());
 				contact().middleName(patient.middleName());
-				contact().suffix(patient.suffix());
+				contact().suffix(patient.suffix());								
 				contact().gender(patient.gender());
 				contact().preferredName(patient.preferredName());
 				contact().deceasedId(patient.deceasedId());
-				contact().entityAspect.acceptChanges();
+				contact().statusId( patient.statusId() );
+				contact().entityAspect.acceptChanges();				
 			}
 		}
-
+		
 		// Update a todo patient's information
 		function updateTodoPatient(patient) {
 			var thisTodoPatient = ko.observable();
