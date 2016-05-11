@@ -14,16 +14,16 @@ namespace Phytel.API.DataDomain.Cohort.Test
     [TestFixture]
     public class DataPatientManagerReferralTest
     {
-        private const string _CONTRACTNUMBER = "InHealth001";
-        private const string _CONTEXT = "NG";
+        private const string _CONTRACTNUMBER = "OrlandoHealth001";
+        private const string _CONTEXT = "bristol";
         private const double _VERSION = 1.2;
         PostPatientReferralDefinitionRequest _PostRefrDefRqst = null;
-        PostPatientReferralDefinitionResponse response = null;
+        PostPatientReferralDefinitionResponse _PostRefrDefResp = null;
         private Mock<IServiceContext> _MockContext;
         private Mock<IPatientReferralRepository<IDataDomainRequest>> _MockRepository;
         private DataPatientReferralManager _dataPatientMgr;
-        private const string _USERID = "nguser";
-        private const string _CONTRACT_DBName = "InHealth001";
+        private const string _USERID = "531f2df6072ef727c4d2a3c0";
+        private const string _CONTRACT_DBName = _CONTRACTNUMBER;
 
         [SetUp]
         public void Setup()
@@ -34,25 +34,23 @@ namespace Phytel.API.DataDomain.Cohort.Test
                 ContractNumber = _CONTRACTNUMBER,
                 Version = _VERSION,
                 PatientReferral = new PatientReferralData {
-                    CreatedBy = "JeRonDavis", 
-                    PatientId = "PAT00123", ReferralId = "RF-ID 528aa055d4332317acc50978"
+                    CreatedBy = _USERID, 
+                    PatientId = "572cc6e8ecfce9522040b6a8",
+                    ReferralId = "57153625365133250c0e7dd4"
                 }            
             };
 
 
-            response = new PostPatientReferralDefinitionResponse() {
-                                                                                                    ResponseStatus = new ResponseStatus()   {
-                                                                                                    ErrorCode = "000",
-                                                                                                    Errors = new List<ResponseError>(),
-                                                                                                    Message = "Everything is Fine",
-                                                                                                    StackTrace = null
-                                                                                                },
-                                                                                                    Status = null, Version = _VERSION 
-                                                                                                };
+            _PostRefrDefResp = new PostPatientReferralDefinitionResponse() {
+                                                                                                                            PatientReferralId = "57153625365133250c0e7dd4",
+                                                                                                                            Status = new ResponseStatus() { ErrorCode = "200",
+                                                                                                                            Errors = new List<ResponseError>() { },
+                                                                                                                           Message = String.Empty, StackTrace = null
+                                                                                                                         }    };
 
             _MockContext = new Mock<IServiceContext>(MockBehavior.Default);
             _MockRepository = new Mock<IPatientReferralRepository<IDataDomainRequest>>(MockBehavior.Default);
-            _MockRepository.Setup(m => m.Insert(It.IsAny<PostPatientReferralDefinitionRequest>())).Returns(response);
+            _MockRepository.Setup(m => m.Insert(It.IsAny<PostPatientReferralDefinitionRequest>())).Returns(_PostRefrDefResp);
             _dataPatientMgr = new DataPatientReferralManager(_MockContext.Object, _MockRepository.Object);
         }   // Setup()
 
@@ -69,11 +67,11 @@ namespace Phytel.API.DataDomain.Cohort.Test
         public void CanInserPatienttReferral_Success()
         {
             // Arrange
-                
+            _PostRefrDefResp = null;
             // Act
             _dataPatientMgr.InsertPatientReferral(_PostRefrDefRqst);
            // Assert
-            Assert.IsNotNull(response);
+            Assert.IsNotNull(_PostRefrDefResp);
         }
 
         [Test]

@@ -48,16 +48,33 @@ namespace Phytel.API.DataDomain.Cohort
 
         public PostPatientsListReferralDefinitionResponse InsertReferralsAll(PostPatientsListReferralDefinitionRequest request)
         {
+            if(request == null)
+                throw new ArgumentNullException("Request parameter cannot be NULL");
+            if (request.PatientsReferralsList == null)
+                throw new ArgumentNullException("Request parameter PatientsReferralList cannot be NULL");
+            if (string.IsNullOrEmpty(request.UserId))
+                throw new ArgumentNullException("Request parameter UserId cannot be NULL/EMPTY");
+            if (string.IsNullOrEmpty(request.ContractNumber))
+                throw new ArgumentNullException("Request parameter Contract Number cannot be NULL/EMPTY");
+            if (string.IsNullOrEmpty(request.Context))
+                throw new ArgumentNullException("Request parameter Context cannot be NULL/EMPTY");
+            if (string.IsNullOrEmpty(request.PatientsReferralsList[0].ExternalId))
+                throw new ArgumentNullException("Request parameter ExternalId cannot be NULL/EMPTY");
+            if (string.IsNullOrEmpty(request.PatientsReferralsList[0].DataSource))
+                throw new ArgumentNullException("Request parameter Datasource cannot be NULL/EMPTY");
+            if (string.IsNullOrEmpty(request.PatientsReferralsList[0].ReferralId))
+                throw new ArgumentNullException("Request parameter ReferralId cannot be NULL/EMPTY");
+
             PostPatientsListReferralDefinitionResponse patientListReferralResp = new PostPatientsListReferralDefinitionResponse();
             patientListReferralResp.ExistingPatientIds = new List<string>();
             patientListReferralResp.NewPatientIds = new List<string>();
             patientListReferralResp.ResponseStatus = new ServiceStack.ServiceInterface.ServiceModel.ResponseStatus();
            ReferralData patientRefDataRqst = null;
-            PostPatientReferralDefinitionResponse patientRefDefResp = null;
+            CohortMongoContext ctx = null;
 
             try
             {
-                using (CohortMongoContext ctx = new CohortMongoContext(request.ContractNumber))
+                using ( ctx = new CohortMongoContext(request.ContractNumber))
                 {
                     int indx = -1;
                     foreach (PatientReferralsListEntityData pDE in request.PatientsReferralsList)
@@ -110,8 +127,11 @@ namespace Phytel.API.DataDomain.Cohort
             {
                 throw ex;
             }
-            // Combine the list by adding the patientId that were inserted to the list of the existing
-            // Assign the final list to the list in the response object ("patientListReferralResp");
+            finally
+            {
+                if (ctx != null)
+                    ctx.Dispose();
+            }
             return patientListReferralResp;
         }            // end method definition
         public ReferralData GetReferralById(string referralId)
