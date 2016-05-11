@@ -48,7 +48,7 @@
         <label class="span6">
         	<div class="row">
             <span class="span5 line">Protected</span>
-            <div style="padding-top: 2%;" class="span4 line" data-bind="chsnsingle: { options:  $root.protectedStatuses, value: protected, text: 'Name', idValue: 'Id' }"></div>
+            <div style="padding-top: 2%;" class="span4" data-bind="chsnsingle: { options:  $root.protectedStatuses, value: protected, text: 'Name', idValue: 'Id' }"></div>
           </div>
         </label>
     </div>
@@ -59,7 +59,7 @@
                 <div class="span2 line align-right">
                     <img alt="Patient small" class="" data-bind="attr: { src: SmallImgSrc }" />
                 </div>
-                <div style="padding-top: 2%;" class="span4 line" data-bind="chsnsingle: { options:  $root.genders, value: $parent.gender, text: 'Description', idValue: 'Gender' }"></div>
+                <div style="padding-top: 2%;" class="span4" data-bind="chsnsingle: { options:  $root.genders, value: $parent.gender, text: 'Description', idValue: 'Gender' }"></div>
             </div>
         </label>
         <label class="span6" data-bind="with: priorityModel">
@@ -68,7 +68,7 @@
                 <div class="span2 line align-right">
                     <img style="vertical-align: middle;" data-bind="attr: { src: imageSource }">
                 </div>
-                <div style="padding-top: 2%;" class="span4 line" data-bind="chsnsingle: { options:  $root.priorities, value:  $parent.priority, text: 'levelName', idValue: 'id' }"></div>
+                <div style="padding-top: 2%;" class="span4" data-bind="chsnsingle: { options:  $root.priorities, value:  $parent.priority, text: 'levelName', idValue: 'id' }"></div>
             </div>
         </label>
     </div>
@@ -76,14 +76,14 @@
         <label class="span6">
             <div class="row">
                 <span class="span5 line">Marital Status</span>
-									<div style="padding-top: 2%;" class="span7 line" data-bind="chsnsingle: { options: $root.maritalStatuses, value: maritalStatusId, text: 'name', idValue: 'id', isCancel: true, caption: 'None Selected' }">
+									<div style="padding-top: 2%;" class="span7" data-bind="chsnsingle: { options: $root.maritalStatuses, value: maritalStatusId, text: 'name', idValue: 'id', isCancel: true, caption: 'None Selected' }">
 									</div>
             </div>
         </label>
         <label class="span6">
             <div class="row">
                 <span class="span5 line">Deceased</span>
-                <div style="padding-top: 2%;" class="span4 line" data-bind="chsnsingle: { options:  $root.deceasedStatuses, value:  deceasedId, text: 'name', idValue: 'id', isCancel: true, caption: 'None Selected' }">
+                <div style="padding-top: 2%;" class="span4" data-bind="chsnsingle: { options:  $root.deceasedStatuses, value:  deceasedId, text: 'name', idValue: 'id', isCancel: true, caption: 'None Selected' }">
                 </div>
             </div>
         </label>
