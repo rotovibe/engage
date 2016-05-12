@@ -49,7 +49,10 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
 
             //}
 
-            repo.Insert(request);
+            var id = repo.Insert(request) as string;
+
+            response.Id = id;
+
 
             return response;
         }

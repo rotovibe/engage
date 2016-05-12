@@ -154,6 +154,7 @@ namespace Phytel.API.AppDomain.NG
 
                if (domainResponse != null)
                {
+                   response.Id = domainResponse.Id;
 
                    var cohortRuleCheckData = new CohortRuleCheckData()
                    {
