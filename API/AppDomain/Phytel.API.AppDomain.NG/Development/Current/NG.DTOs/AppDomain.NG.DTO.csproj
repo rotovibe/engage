@@ -114,6 +114,8 @@
     <Compile Include="Allergy\PostAllergyRequest.cs" />
     <Compile Include="Allergy\PostAllergyResponse.cs" />
     <Compile Include="Allergy\PostPatientAllergiesResponse.cs" />
+    <Compile Include="Contact\CareTeam\AddCareTeamMemberRequest.cs" />
+    <Compile Include="Contact\CareTeam\AddCareTeamMemberResponse.cs" />
     <Compile Include="Contact\CareTeam\DeleteCareTeamMemberRequest.cs" />
     <Compile Include="Contact\CareTeam\DeleteCareTeamMemberResponse.cs" />
     <Compile Include="Contact\CareTeam\DeleteCareTeamRequest.cs" />
