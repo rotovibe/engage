@@ -7,6 +7,7 @@ using System.Web;
 using Phytel.API.Common;
 using Phytel.API.Common.Format;
 using Phytel.API.DataDomain.Contact.CareTeam;
+using Phytel.API.DataDomain.Contact.DTO;
 using Phytel.API.DataDomain.Contact.DTO.CareTeam;
 using ServiceStack.ServiceClient.Web;
 
@@ -132,7 +133,7 @@ namespace Phytel.API.DataDomain.Contact.Service
             try
             {
                 if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("ContactDD:CareTeamService:Put Undo Delet eCare Team::Unauthorized Access");
+                    throw new UnauthorizedAccessException("ContactDD:CareTeamService:Put Undo Delete Care Team::Unauthorized Access");
 
                 Manager.UndoDeleteCareTeam(request);
             }
@@ -145,6 +146,27 @@ namespace Phytel.API.DataDomain.Contact.Service
             }
             return response;
 
+        }
+
+        public AddCareTeamMemberDataResponse Post(AddCareTeamMemberDataRequest request)
+        {
+            var response = new AddCareTeamMemberDataResponse();
+
+            try
+            {
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("ContactDD:CareTeamService:Post Add Care Team Member::Unauthorized Access");
+
+              response = Manager.AddCareTeamMember(request);
+            }
+            catch (Exception ex)
+            {
+                CommonFormat.FormatExceptionResponse(response, base.Response, ex);
+
+                var aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Helpers.LogException(int.Parse(aseProcessID), ex);
+            }
+            return response;
         }
     }
 }

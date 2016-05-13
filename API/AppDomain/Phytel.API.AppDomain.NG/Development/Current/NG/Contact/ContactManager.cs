@@ -296,6 +296,7 @@ namespace Phytel.API.AppDomain.NG
         public AddCareTeamMemberResponse AddCareTeamMember(AddCareTeamMemberRequest request)
         {
             var response = new AddCareTeamMemberResponse();
+
            if(request == null)
                throw new ArgumentNullException("request");
 
@@ -313,8 +314,7 @@ namespace Phytel.API.AppDomain.NG
                 var mappedMembers = members.Select(Mapper.Map<Member>).ToList();
                 mappedMembers.Add(request.CareTeamMember);
 
-                var careTeam = new CareTeam { Members = mappedMembers};
-
+                var careTeam = new CareTeam { Members = mappedMembers, ContactId = request.ContactId, Id = careTeamData.Id};
 
                 if (CohortRuleUtil.HasMultipleActiveCorePCM(careTeam))
                     throw new ApplicationException("The Care team cannot have multiple Active, Core PCMs");

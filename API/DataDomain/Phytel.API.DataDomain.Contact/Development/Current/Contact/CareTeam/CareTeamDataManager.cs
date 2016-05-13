@@ -198,7 +198,6 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
 
         }
 
-
         public AddCareTeamMemberDataResponse AddCareTeamMember(AddCareTeamMemberDataRequest request)
         {
             var response = new AddCareTeamMemberDataResponse();
@@ -215,7 +214,6 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
             if (string.IsNullOrEmpty(request.CareTeamId))
                 throw new ArgumentNullException("Null or empty CareTeamId", "request");
 
-           
 
             var repo = _factory.GetCareTeamRepository(request, RepositoryType.CareTeam);
 
@@ -224,8 +222,8 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
 
             try
             {
-                if (repo.CareTeamMemberContactExist(request.CareTeamId, request.ContactId))
-                    throw new Exception(string.Format("Care Team Member {0} already exist", request.ContactId));
+                if (repo.CareTeamMemberContactExist(request.CareTeamId, request.CareTeamMemberData.ContactId))
+                    throw new Exception(string.Format("Care Team Member {0} already exists.", request.CareTeamMemberData.ContactId));
 
                response.Id =  repo.AddCareTeamMember(request);
             }

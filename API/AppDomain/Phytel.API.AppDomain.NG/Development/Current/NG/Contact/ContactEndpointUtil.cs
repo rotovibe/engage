@@ -410,6 +410,7 @@ namespace Phytel.API.AppDomain.NG
                         ContractNumber = request.ContractNumber,
                         Context = "NG"
                     } as object);
+
                 if (dataDomainResponse != null)
                 {
                     response.Version = dataDomainResponse.Version;

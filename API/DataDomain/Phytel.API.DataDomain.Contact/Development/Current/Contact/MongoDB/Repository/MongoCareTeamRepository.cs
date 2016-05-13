@@ -633,7 +633,6 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
             return res;
         }
 
-
         public string AddCareTeamMember(AddCareTeamMemberDataRequest request)
         {
             var id = string.Empty;
@@ -647,22 +646,16 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
                         var contactCareTeam = GetContactCareTeam(request.ContactId);
 
                         if (contactCareTeam == null)
-                            throw new ApplicationException(
-                                "AddCareTeamMember: The referenced contact doesn't have a care team");
+                            throw new ApplicationException("AddCareTeamMember: The referenced contact doesn't have a care team");
 
                         if (contactCareTeam.Id != ObjectId.Parse(request.CareTeamId))
-                            throw new ApplicationException(
-                                "AddCareTeamMember: The referenced Care Team doesn't exist or is not assigned to the referenced contact");
-
+                            throw new ApplicationException("AddCareTeamMember: The referenced Care Team doesn't exist or is not assigned to the referenced contact");
 
                         var memberToAdd = BuildMECareTeamMember(this.UserId, request.CareTeamMemberData);
-
-
                         memberToAdd.RecordCreatedOn = DateTime.UtcNow;
                         memberToAdd.RecordCreatedBy = ObjectId.Parse(request.UserId);
 
                         contactCareTeam.MeCareTeamMembers.Add(memberToAdd);
-
 
                         ctx.CareTeam.Collection.Save(contactCareTeam);
 
