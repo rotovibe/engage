@@ -303,7 +303,9 @@ namespace Phytel.API.AppDomain.NG
 
             var careTeamData = EndpointUtil.GetCareTeam(new GetCareTeamRequest { ContactId = request.ContactId, ContractNumber = request.ContactId, UserId = request.UserId, Version = request.Version });
 
-           
+            if (careTeamData == null)
+                throw new ApplicationException(string.Format("No care team exists for contact  {0}", request.ContactId));
+
             var members = careTeamData.Members;
 
             if (!members.IsNullOrEmpty())
@@ -333,9 +335,6 @@ namespace Phytel.API.AppDomain.NG
             if (contact == null)
                 throw new ApplicationException(string.Format("Contact with id: {0} does not exist", request.ContactId));
 
-
-
-
             var cohortRuleCheckData = new CohortRuleCheckData()
             {
                 ContactId = request.ContactId,
@@ -359,8 +358,6 @@ namespace Phytel.API.AppDomain.NG
             }
 
             return response;
-
-            //Add member.
         }
 
         #endregion

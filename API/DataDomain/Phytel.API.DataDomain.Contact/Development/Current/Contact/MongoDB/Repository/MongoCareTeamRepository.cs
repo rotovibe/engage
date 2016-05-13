@@ -657,8 +657,11 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
 
                         var memberToAdd = BuildMECareTeamMember(this.UserId, request.CareTeamMemberData);
 
+
                         memberToAdd.RecordCreatedOn = DateTime.UtcNow;
                         memberToAdd.RecordCreatedBy = ObjectId.Parse(request.UserId);
+
+                        contactCareTeam.MeCareTeamMembers.Add(memberToAdd);
 
 
                         ctx.CareTeam.Collection.Save(contactCareTeam);
