@@ -42,7 +42,7 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
 
         public MongoCareTeamRepository(string dbname)
         {
-            _dbName = dbname;           
+            _dbName = dbname;
         }
 
         public string UserId { get; set; }
@@ -103,9 +103,9 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
                                           data.ContractNumber);
                         }
                     }
-                  
+
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     throw ex;
                 }
@@ -118,7 +118,7 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
             throw new NotImplementedException();
         }
 
-       
+
         public void DeleteAll(List<object> entities)
         {
             throw new NotImplementedException();
@@ -179,7 +179,7 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
             return res;
         }
 
-       
+
 
         /// <summary>
         /// Determines if a Care Team Exist
@@ -206,11 +206,11 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
                         var query = MB.Query.And(queries);
                         var contactCareTeam = ctx.CareTeam.Collection.FindOne(query);
                         res = contactCareTeam != null;
-                    }                                        
+                    }
                 }
             }
             catch (Exception)
-            {                    
+            {
                 throw;
             }
             return res;
@@ -229,7 +229,7 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
                     if (ObjectId.TryParse(careTeamId, out cid) && ObjectId.TryParse(memberId, out mid))
                     {
                         var careTeam = GetCareTeam(careTeamId);
-                        if (careTeam!=null)
+                        if (careTeam != null)
                         {
                             var currentMeCareTeamMember = careTeam.MeCareTeamMembers.FirstOrDefault(
                                 x => x.Id == mid);
@@ -244,7 +244,7 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
             }
             return res;
         }
-        
+
         private MEContactCareTeam GetContactCareTeam(string contactId)
         {
             MEContactCareTeam res = null;
@@ -326,10 +326,10 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
                         if (contactCareTeam.Id != ObjectId.Parse(request.CareTeamId))
                             throw new ApplicationException("UpdateCareTeamMember: The referenced Care Team doesn't exist or is not assigned to the referenced contact");
 
-                        var currentMeCareTeamMember = 
+                        var currentMeCareTeamMember =
                             contactCareTeam.MeCareTeamMembers.FirstOrDefault(
                                 x => x.Id == ObjectId.Parse(careTeamMemberData.Id));
-                        
+
                         if (currentMeCareTeamMember == null)
                             throw new ApplicationException("UpdateCareTeamMember: The referenced care team member doesn't exist");
 
@@ -340,7 +340,7 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
 
                         updatedMecareMemberTeam.RecordCreatedOn = currentMeCareTeamMember.RecordCreatedOn;
                         updatedMecareMemberTeam.RecordCreatedBy = currentMeCareTeamMember.RecordCreatedBy;
-                       
+
                         contactCareTeam.MeCareTeamMembers[memberIndex] = updatedMecareMemberTeam;
 
                         contactCareTeam.LastUpdatedOn = DateTime.UtcNow;
@@ -371,7 +371,7 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
         {
             throw new NotImplementedException();
         }
-        
+
         public object GetCareTeamByContactId(string contactId)
         {
             CareTeamData careTeam = null;
@@ -543,7 +543,7 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
                     DataAuditType.Update,
                     request.ContractNumber);
             }
-            
+
         }
 
         public void Delete(object entity)
@@ -567,7 +567,7 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
                 builder.Add(MB.Update.Set(MEContactCareTeam.LastUpdatedByProperty, ObjectId.Parse(this.UserId)));
 
                 IMongoUpdate update = MB.Update.Combine(builder);
-                ctx.CareTeam.Collection.Update(query, update);                
+                ctx.CareTeam.Collection.Update(query, update);
 
                 AuditHelper.LogDataAudit(this.UserId,
                     MongoCollectionName.CareTeam.ToString(),
@@ -603,5 +603,84 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
             }
             catch (Exception) { throw; }
         }
+
+        public bool CareTeamMemberContactExist(string careTeamId, string contactId)
+        {
+            var res = false;
+            try
+            {
+                using (var ctx = new ContactCareTeamMongoContext(_dbName))
+                {
+                    ObjectId cid;
+                    ObjectId mid;
+
+                    if (ObjectId.TryParse(careTeamId, out cid) && ObjectId.TryParse(contactId, out mid))
+                    {
+                        var careTeam = GetCareTeam(careTeamId);
+                        if (careTeam != null)
+                        {
+                            var currentMeCareTeamMember = careTeam.MeCareTeamMembers.FirstOrDefault(
+                                x => x.ContactId == mid);
+                            res = currentMeCareTeamMember != null;
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            return res;
+        }
+
+
+        public string AddCareTeamMember(AddCareTeamMemberDataRequest request)
+        {
+            var id = string.Empty;
+            try
+            {
+                if (request.CareTeamMemberData != null)
+                {
+                    using (var ctx = new ContactCareTeamMongoContext(_dbName))
+                    {
+
+                        var contactCareTeam = GetContactCareTeam(request.ContactId);
+
+                        if (contactCareTeam == null)
+                            throw new ApplicationException(
+                                "AddCareTeamMember: The referenced contact doesn't have a care team");
+
+                        if (contactCareTeam.Id != ObjectId.Parse(request.CareTeamId))
+                            throw new ApplicationException(
+                                "AddCareTeamMember: The referenced Care Team doesn't exist or is not assigned to the referenced contact");
+
+
+                        var memberToAdd = BuildMECareTeamMember(this.UserId, request.CareTeamMemberData);
+
+                        memberToAdd.RecordCreatedOn = DateTime.UtcNow;
+                        memberToAdd.RecordCreatedBy = ObjectId.Parse(request.UserId);
+
+
+                        ctx.CareTeam.Collection.Save(contactCareTeam);
+
+                        AuditHelper.LogDataAudit(this.UserId,
+                            MongoCollectionName.CareTeam.ToString(),
+                            contactCareTeam.Id.ToString(),
+                            DataAuditType.Update,
+                            request.ContractNumber);
+
+
+                        id = memberToAdd.Id.ToString();
+                    }
+                }
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return id;
+        }
     }
 }
+

@@ -24,6 +24,7 @@ namespace Phytel.API.AppDomain.NG
 
         DeleteCareTeamDataResponse DeleteCareTeam(DeleteCareTeamRequest request);
         UndoDeleteCareTeamDataResponse UndoDeleteCareTeam(UndoDeleteCareTeamDataRequest request);
+        AddCareTeamMemberDataResponse AddCareTeamMember(AddCareTeamMemberRequest request);
 
         #endregion
 

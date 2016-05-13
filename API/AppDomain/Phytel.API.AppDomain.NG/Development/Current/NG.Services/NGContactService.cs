@@ -261,7 +261,9 @@ namespace Phytel.API.AppDomain.NG.Service
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
-                    response.Id = "someStubbedValue";
+                    var dataResponse = ContactManager.AddCareTeamMember(request);
+
+                    response.Id = dataResponse.Id;
 
                 }
                 else

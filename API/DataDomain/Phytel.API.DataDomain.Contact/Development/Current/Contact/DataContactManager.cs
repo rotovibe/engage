@@ -474,9 +474,22 @@ namespace Phytel.API.DataDomain.Contact
             return response;
         }
 
-        public UndoDereferencePatientDataResponse UndoDereferencePatient(UndoDeleteContactDataRequest request)
+        //??
+        public UndoDereferencePatientDataResponse UndoDereferencePatient(UndoDereferencePatientDataRequest request)
         {
-            throw new NotImplementedException();
+            var response = new UndoDereferencePatientDataResponse();
+            try
+            {
+                var repo = Factory.GetRepository(request, RepositoryType.Contact);
+                var isSuccessful = repo.UnDereferencePatient(request);
+
+                response.IsSuccessful = isSuccessful;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return response;
         }
     }
 }

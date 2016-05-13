@@ -1,4 +1,5 @@
-﻿using Phytel.API.Interface;
+﻿using Phytel.API.DataDomain.Contact.DTO;
+using Phytel.API.Interface;
 
 namespace Phytel.API.DataDomain.Contact.CareTeam
 {
@@ -9,6 +10,8 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
         void DeleteCareTeamMember(object entity);
         bool CareTeamExist(string careTeamId);
         bool ContactCareTeamExist(string contactId);
-        bool CareTeamMemberExist(string careTeamId, string memberId);        
+        bool CareTeamMemberExist(string careTeamId, string memberId);
+        string AddCareTeamMember(AddCareTeamMemberDataRequest request);
+        bool CareTeamMemberContactExist(string careTeamId, string contactId);
     }
 }

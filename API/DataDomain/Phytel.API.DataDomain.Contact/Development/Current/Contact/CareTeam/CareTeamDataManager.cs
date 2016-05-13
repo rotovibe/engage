@@ -197,5 +197,44 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
             return response;
 
         }
+
+
+        public AddCareTeamMemberDataResponse AddCareTeamMember(AddCareTeamMemberDataRequest request)
+        {
+            var response = new AddCareTeamMemberDataResponse();
+
+            if (request == null)
+                throw new ArgumentNullException("request");
+
+            if (request.CareTeamMemberData == null)
+                throw new ArgumentNullException("CareTeamMemberData is Null", "request");
+
+            if (string.IsNullOrEmpty(request.ContactId))
+                throw new ArgumentNullException("Null or Empty ContactId", "request");
+
+            if (string.IsNullOrEmpty(request.CareTeamId))
+                throw new ArgumentNullException("Null or empty CareTeamId", "request");
+
+           
+
+            var repo = _factory.GetCareTeamRepository(request, RepositoryType.CareTeam);
+
+            if (repo == null)
+                throw new Exception("Repository is null");
+
+            try
+            {
+                if (repo.CareTeamMemberContactExist(request.CareTeamId, request.ContactId))
+                    throw new Exception(string.Format("Care Team Member {0} already exist", request.ContactId));
+
+               response.Id =  repo.AddCareTeamMember(request);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return response;
+        }
     }
 }

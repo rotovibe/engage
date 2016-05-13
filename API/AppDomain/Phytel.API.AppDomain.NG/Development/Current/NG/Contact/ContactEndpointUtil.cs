@@ -387,6 +387,44 @@ namespace Phytel.API.AppDomain.NG
 
             return response;
         }
+
+        public AddCareTeamMemberDataResponse AddCareTeamMember(AddCareTeamMemberRequest request)
+        {
+            var response = new AddCareTeamMemberDataResponse();
+            try
+            {
+                IRestClient client = new JsonServiceClient();
+                
+                var url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Contacts/{4}/CareTeams/{5}/CareTeamMembers",
+                                                                                DDContactServiceUrl,
+                                                                                "NG",
+                                                                                request.Version,
+                                                                                request.ContractNumber, request.ContactId, request.CareTeamId), request.UserId);
+                var dataDomainResponse =
+                    client.Post<AddCareTeamMemberDataResponse>(url, new AddCareTeamMemberDataRequest
+                    {
+                        CareTeamMemberData = Mapper.Map<CareTeamMemberData>(request.CareTeamMember),
+                        Version = request.Version,
+                        ContactId = request.ContactId,
+                        CareTeamId = request.CareTeamId,
+                        ContractNumber = request.ContractNumber,
+                        Context = "NG"
+                    } as object);
+                if (dataDomainResponse != null)
+                {
+                    response.Version = dataDomainResponse.Version;
+                    response.Status = response.Status == null ? new ResponseStatus() : dataDomainResponse.Status;
+                    response.Id = dataDomainResponse.Id;
+                }
+
+            }
+            catch (WebServiceException wse)
+            {
+                throw new WebServiceException("AD:AddCareTeamMember()::" + wse.Message, wse.InnerException);
+            }
+            return response;
+        }
+
         #endregion
 
         #region CohortPatientView
