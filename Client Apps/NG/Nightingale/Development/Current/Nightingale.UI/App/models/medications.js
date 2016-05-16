@@ -47,6 +47,19 @@ define(['services/session', 'services/dateHelper'],
                     notes: { dataType: "String" },
                     nDCs: { complexTypeName: "Identifier:#Nightingale", isScalar: false },
                     pharmClasses: { complexTypeName: "Identifier:#Nightingale", isScalar: false },
+                    originalDataSource: { dataType: "String" },
+                    duration: { dataType: "String" },
+                    durationUnitID: { dataType: "String" },
+                    otherDuration: { dataType: "String" },
+                    reviewID: { dataType: "String" },
+                    refusalReasonID: { dataType: "String" },
+                    otherRefusalReason: { dataType: "String" },
+                    orderedBy: { dataType: "String" },
+                    orderedDate: { dataType: "DateTime" },
+                    prescribedDate: { dataType: "DateTime" },
+                    rxNumber: { dataType: "String" },
+                    rxDate: { dataType: "DateTime" },
+                    pharmacy: { dataType: "String" }
                 },
                 navigationProperties: {
                     patient: {
@@ -80,6 +93,18 @@ define(['services/session', 'services/dateHelper'],
                     frequency: {
                         entityTypeName: "PatientMedicationFrequency", isScalar: true,
                         associationName: "Medication_Frequency", foreignKeyNames: ["frequencyId"]
+                    },
+                    durationUnit: {
+                        entityTypeName: "PatientMedicationFrequency", isScalar: true,
+                        associationName: "Medication_DurationUnit", foreignKeyNames: ["durationUnitID"]
+                    },
+                    review: {
+                        entityTypeName: "PatientMedicationFrequency", isScalar: true,
+                        associationName: "Medication_MedicationReview", foreignKeyNames: ["reviewID"]
+                    },
+                    refusalReason: {
+                        entityTypeName: "PatientMedicationFrequency", isScalar: true,
+                        associationName: "Medication_RefusalReason", foreignKeyNames: ["refusalReasonID"]
                     }
                 }
             });
@@ -166,6 +191,9 @@ define(['services/session', 'services/dateHelper'],
                 }
                 medication.startDateErrors = ko.observableArray([]);
                 medication.endDateErrors = ko.observableArray([]);
+                medication.prescribedDateErrors = ko.observableArray([]);
+                medication.orderedDateErrors = ko.observableArray([]);
+                medication.rxDateErrors = ko.observableArray([]);
                 medication.validationErrors = ko.observableArray([]);
                 medication.isValid = ko.computed( function() {
                     var hasErrors = false;
