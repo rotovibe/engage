@@ -71,6 +71,86 @@
                           <div class="span6" data-bind="text: source().name">
                           </div>
                         </div>
+                        <div class="row pad-bottom" data-bind="visible: duration">
+                          <div class="span6 grey">
+                            Duration
+                          </div>
+                          <div class="span3" data-bind="text: duration">
+                          </div>
+                          <div class="span3" data-bind="with: $parent.durationUnit">
+                            <span data-bind="text: .name()"></span>
+                          </div>
+                        </div>
+                        <div class="row pad-bottom" data-bind="visible: otherDuration">
+                          <div class="span6 grey">
+                            Duration Other
+                          </div>
+                          <div class="span6" data-bind="text: otherDuration">
+                          </div>
+                        </div>
+                        <div class="row pad-bottom" data-bind="with: review">
+                          <div class="span6 grey">
+                            Review
+                          </div>
+                          <div class="span6" data-bind="text: name">
+                          </div>
+                        </div>
+                        <div class="row pad-bottom" data-bind="with: refusalReason">
+                          <div class="span6 grey">
+                            Refusal Reason
+                          </div>
+                          <div class="span6" data-bind="text: name">
+                          </div>
+                        </div>
+                        <div class="row pad-bottom" data-bind="visible: otherRefusalReason">
+                          <div class="span6 grey">
+                            Refusal Other
+                          </div>
+                          <div class="span6" data-bind="text: otherRefusalReason">
+                          </div>
+                        </div>
+                        <div class="row pad-bottom" data-bind="visible: orderedBy">
+                          <div class="span6 grey">
+                            Ordered By
+                          </div>
+                          <div class="span6" data-bind="text: orderedBy">
+                          </div>
+                        </div>
+                        <div class="row pad-bottom" data-bind="visible: orderedDate">
+                          <div class="span6 grey">
+                            Ordered Date
+                          </div>
+                          <div class="span6" data-bind="Date: orderedDate">
+                          </div>
+                        </div>
+                        <div class="row pad-bottom" data-bind="visible: rxNumber">
+                          <div class="span6 grey">
+                            Rx Number
+                          </div>
+                          <div class="span6" data-bind="text: rxNumber">
+                          </div>
+                        </div>
+                        <div class="row pad-bottom" data-bind="visible: rxDate">
+                          <div class="span6 grey">
+                            Rx Date
+                          </div>
+                          <div class="span6" data-bind="Date: rxDate">
+                          </div>
+                        </div>
+                        <div class="row pad-bottom" data-bind="visible: rxNumber">
+                          <div class="span6 grey">
+                            Pharmacy
+                          </div>
+                          <div class="span6" data-bind="text: pharmacy">
+                          </div>
+                        </div>
+                        <div class="row pad-bottom" data-bind="visible: prescribedDate">
+                          <div class="span6 grey">
+                            Prescribed Date
+                          </div>
+                          <div class="span6" data-bind="text: prescribedDate">
+                          </div>
+                        </div>
                         <div class="row pad-bottom" data-bind="visible: startDate">
                           <div class="span6 grey">
                             Dates

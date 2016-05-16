@@ -56,37 +56,37 @@
         <div class="span2 align-right grey">
             Start Date:
         </div>
-        <div class="span3 pad-left"> 
+        <div class="span3 pad-left">
 			<!-- ko compose: { model: 'viewmodels/templates/datetimepicker', activationData:
 				{
-					observableDateTime: startDate, dateErrors: startDateErrors, showInvalid: $parent.setInvalidStartDate, 
+					observableDateTime: startDate, dateErrors: startDateErrors, showInvalid: $parent.setInvalidStartDate,
 					datepickerOptions:{}, datepickerDynamicOptions: {}, dateName: 'startDate'
 				}
 			} -->
-			<!-- /ko -->			
+			<!-- /ko -->
         </div>
         <div class="span2 align-right grey">
             End Date:
         </div>
-        <div class="span3 pad-left">        	
+        <div class="span3 pad-left">
 			<!-- ko compose: { model: 'viewmodels/templates/datetimepicker', activationData:
 				{
-					observableDateTime: endDate, dateErrors: endDateErrors, showInvalid: $parent.setInvalidEndDate, 
+					observableDateTime: endDate, dateErrors: endDateErrors, showInvalid: $parent.setInvalidEndDate,
 					datepickerOptions:{}, datepickerDynamicOptions: {minDate: startDate}, dateName: 'endDate'
 				}
 			} -->
 			<!-- /ko -->
         </div>
     </div>
-    <div class="row pad-top divider filters">       
-        <!-- ko compose: { model: 'viewmodels/patients/sections/dropdown.w.addnew' , activationData: 
-                { selectedValue: strength, 
+    <div class="row pad-top divider filters">
+        <!-- ko compose: { model: 'viewmodels/patients/sections/dropdown.w.addnew' , activationData:
+                { selectedValue: strength,
 					optionIdValueProp: 'Text',
                     isCreateNew: $parent.isAddingNewStrengthValue,
 					isEditModeOnly: $parent.isNewMedicationName,
                     isCreateNewEnabled: $parent.isCreateNewEnabled,
                     isEnabled: $parent.isDropdownEnabled,
-                    selectOptions: $parent.strengths, 
+                    selectOptions: $parent.strengths,
                     selectionLabel: 'Strength',
                     optionsLabel: 'medication-strength',
                     placeholderText: 'Enter new strength',
@@ -97,15 +97,15 @@
         <i class="pointer icon-cancel pull-right pad-right toggle" data-bind="click: $parent.resetDropdowns"></i>
     </div>
     <div class="row pad-top">
-        
-        <!-- ko compose: { model: 'viewmodels/patients/sections/dropdown.w.addnew' , activationData: 
-                { selectedValue: form, 
+
+        <!-- ko compose: { model: 'viewmodels/patients/sections/dropdown.w.addnew' , activationData:
+                { selectedValue: form,
 					optionIdValueProp: 'Text',
                     isCreateNew: $parent.isAddingNewFormValue,
 					isEditModeOnly: $parent.isNewMedicationName,
                     isCreateNewEnabled: $parent.isCreateNewEnabled,
                     isEnabled: $parent.isDropdownEnabled,
-                    selectOptions: $parent.dosageForms, 
+                    selectOptions: $parent.dosageForms,
                     selectionLabel: 'Dose Form',
                     optionsLabel: 'dosage-form',
                     placeholderText: 'Enter new dose form',
@@ -113,15 +113,15 @@
 					isAddNewOption: true
                 }} -->
         <!-- /ko -->
-                   
-        <!-- ko compose: { model: 'viewmodels/patients/sections/dropdown.w.addnew' , activationData: 
-                { selectedValue: route, 
+
+        <!-- ko compose: { model: 'viewmodels/patients/sections/dropdown.w.addnew' , activationData:
+                { selectedValue: route,
 					optionIdValueProp: 'Text',
                     isCreateNew: $parent.isAddingNewRouteValue,
 					isEditModeOnly: $parent.isNewMedicationName,
                     isCreateNewEnabled: $parent.isCreateNewEnabled,
                     isEnabled: $parent.isDropdownEnabled,
-                    selectOptions: $parent.routes, 
+                    selectOptions: $parent.routes,
                     selectionLabel: 'Route',
                     optionsLabel: 'medication-route',
                     placeholderText: 'Enter new route',
@@ -131,8 +131,109 @@
         <!-- /ko -->
 
         </div>
+    <div class="row pad-top divider">
+    </div>
     <div class="row pad-top">
-
+        <div class="span2 align-right grey">
+            Duration:
+        </div>
+        <div class="span1 pad-left">
+            <input type="text" data-bind="value: duration" size="50" />
+        </div>
+        <div class="span2">
+            <div data-bind="chsnsingle: { options: $parent.durationUnits, value: durationUnitID, text: 'name', label: 'medication-duration-unit', caption: 'Choose...' }"></div>
+        </div>
+        <div class="span2 align-right grey">
+            Other:
+        </div>
+        <div class="span3 pad-left">
+            <input type="text" data-bind="value: otherDuration" size="50" />
+        </div>
+    </div>
+    <div class="row pad-top">
+        <div class="span2 align-right grey">
+            Review:
+        </div>
+        <div class="span3 pad-left">
+            <div data-bind="chsnsingle: { options: $parent.medicationReviews, value: review, text: 'name', label: 'medication-review', caption: 'Choose...' }"></div>
+        </div>
+    </div>
+    <div class="row pad-top">
+        <div class="span2 align-right grey">
+            Refusal Reason:
+        </div>
+        <div class="span3 pad-left">
+            <div data-bind="chsnsingle: { options: $parent.refusalReasons, value: refusalReason, text: 'name', label: 'medication-refusal-reason', caption: 'Choose...' }"></div>
+        </div>
+        <div class="span2 align-right grey">
+            Other:
+        </div>
+        <div class="span3 pad-left">
+            <input type="text" data-bind="value: otherRefusalReason" size="50" />
+        </div>
+    </div>
+    <div class="row pad-top">
+        <div class="span2 align-right grey">
+            Ordered By:
+        </div>
+        <div class="span3 pad-left">
+            <input type="text" data-bind="value: orderedBy" size="50" />
+        </div>
+        <div class="span2 align-right grey">
+            Ordered Date:
+        </div>
+        <div class="span3 pad-left">
+            <!-- ko compose: { model: 'viewmodels/templates/datetimepicker', activationData:
+                {
+                    observableDateTime: orderedDate,
+                    dateErrors: orderedDateErrors, showInvalid: $parent.setInvalidOrderedDate,
+                    datepickerOptions:{}, datepickerDynamicOptions: {}, dateName: 'orderedDate'
+                }
+            } -->
+            <!-- /ko -->
+        </div>
+    </div>
+    <div class="row pad-top">
+        <div class="span2 align-right grey">
+            Rx Number:
+        </div>
+        <div class="span3 pad-left">
+            <input type="text" data-bind="value: rxNumber" size="50" />
+        </div>
+        <div class="span2 align-right grey">
+            Rx Date:
+        </div>
+        <div class="span3 pad-left">
+            <!-- ko compose: { model: 'viewmodels/templates/datetimepicker', activationData:
+                {
+                    observableDateTime: rxDate,
+                    dateErrors: rxDateErrors, showInvalid: $parent.setInvalidRxDate,
+                    datepickerOptions:{}, datepickerDynamicOptions: {}, dateName: 'rxDate'
+                }
+            } -->
+            <!-- /ko -->
+        </div>
+    </div>
+    <div class="row pad-top">
+        <div class="span2 align-right grey">
+            Pharmacy:
+        </div>
+        <div class="span3 pad-left">
+            <input type="text" data-bind="value: pharmacy" size="50" />
+        </div>
+        <div class="span2 align-right grey">
+            Prescribed Date:
+        </div>
+        <div class="span3 pad-left">
+            <!-- ko compose: { model: 'viewmodels/templates/datetimepicker', activationData:
+                {
+                    observableDateTime: prescribedDate,
+                    dateErrors: prescribedDateErrors, showInvalid: $parent.setInvalidPrescribedDate,
+                    datepickerOptions:{}, datepickerDynamicOptions: {}, dateName: 'prescribedDate'
+                }
+            } -->
+            <!-- /ko -->
+        </div>
     </div>
     <div class="row pad-top divider">
         <div class="span2 align-right grey">
@@ -141,8 +242,8 @@
         <div class="span3 pad-left">
         	<input type="text" data-bind="value: freqQuantity" />
         </div>
-		<!-- ko compose: { model: 'viewmodels/patients/sections/dropdown.w.addnew' , activationData: 
-                { selectedValue: frequency, 
+		<!-- ko compose: { model: 'viewmodels/patients/sections/dropdown.w.addnew' , activationData:
+                { selectedValue: frequency,
                     isCreateNew: $parent.isAddingNewFrequencyValue,
                     isCreateNewEnabled: $parent.isCreateNewFrequencyEnabled,
                     isEnabled: $parent.isDropdownEnabled,
@@ -153,7 +254,7 @@
                     placeholderText: 'Enter new frequency',
                     AddNewOptionText: $parent.addNewOptionText,
 					isAddNewOption: false,
-					newCustomValue:	customFrequency 
+					newCustomValue:	customFrequency
                 }} -->
         <!-- /ko -->
     </div>

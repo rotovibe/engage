@@ -160,7 +160,7 @@
             datacontext.saveMedication(modalEntity().medication());
         };
         var cancelOverride = function () {
-            var medicationCancel = modalEntity().medication;
+            var medicationCancel = modalEntity().medication();
             medicationCancel.entityAspect.rejectChanges();
         };
         msg = msg ? msg : 'Edit Medication';
@@ -214,6 +214,7 @@
 
     function MedicationModalEntity(med) {
       var self = this;
+      console.log(med);
       self.medication = ko.observable(med);
       self.canSaveObservable = ko.observable(true);
       self.canSave = ko.computed({

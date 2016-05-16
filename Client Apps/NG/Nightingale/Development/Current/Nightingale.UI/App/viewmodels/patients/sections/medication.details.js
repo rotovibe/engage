@@ -19,7 +19,6 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
         self.isFullScreen(!self.isFullScreen());
       };
       self.edit = function () {
-        console.log(self.medication())
         medicationsIndex.editMedication(self.medication(), 'Edit Medication');
       }
       self.delete = function () {

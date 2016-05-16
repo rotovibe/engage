@@ -453,6 +453,17 @@ define(['services/session'],
                 }
             });
 
+            // MedicationReview
+            metadataStore.addEntityType({
+                shortName: "MedicationReview",
+                namespace: "Nightingale",
+                dataProperties: {
+                    id: { dataType: "String", isPartOfKey: true },
+                    name: { dataType: "String" },
+                    isDefault: { dataType: "Boolean" }
+                }
+            });
+
 				// Marital Status for a Patient
 				metadataStore.addEntityType({
 						shortName: "MaritalStatus",

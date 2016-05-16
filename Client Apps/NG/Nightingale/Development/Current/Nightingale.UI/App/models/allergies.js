@@ -37,7 +37,7 @@ define(['services/session', 'services/dateHelper'],
 		            severityId: { dataType: "String" },
 		            notes: { dataType: "String" },
                     code: { dataType: "String" },
-                    codingSystem: { dataType: "String" }
+                    codingSystemId: { dataType: "String" }
 		        },
 		        navigationProperties: {
 		            patient: {

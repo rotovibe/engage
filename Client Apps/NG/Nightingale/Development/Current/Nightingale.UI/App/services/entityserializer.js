@@ -920,7 +920,7 @@
 						.from('fakePath')
 						.where('id', '==', medication.id())
 						.toType('PatientMedication')
-						.select('id, name, startDate, endDate, patientId, statusId, deleteFlag, sourceId, notes, systemName, dosage, strength, route, form, freqQuantity, freqHowOftenId, frequencyId, freqWhenId, customFrequency, categoryId, prescribedBy, typeId, sigCode, reason, familyId, isCreateNewMedication');
+						.select('id, name, startDate, endDate, patientId, statusId, deleteFlag, sourceId, notes, systemName, dosage, strength, route, form, freqQuantity, freqHowOftenId, frequencyId, freqWhenId, customFrequency, categoryId, prescribedBy, typeId, sigCode, reason, familyId, isCreateNewMedication, originalDataSource, duration, durationUnitID, otherDuration, reviewID, refusalReasonID, otherRefusalReason, orderedBy, orderedDate, prescribedDate, rxNumber, rxDate, pharmacy');
 				var results = manager.executeQueryLocally(medicationQuery);
 				var unwrappedObservation = results[0];
 
@@ -952,6 +952,19 @@
 				thisMedication.Reason = unwrappedObservation.reason;
 				thisMedication.FamilyId = unwrappedObservation.familyId; //a new medicationMap record id
 				thisMedication.RecalculateNDC = medication.recalculateNDC();
+                thisMedication.OriginalDataSource = unwrappedObservation.originalDataSource;
+                thisMedication.Duration = unwrappedObservation.duration;
+                thisMedication.DurationUnitID = unwrappedObservation.durationUnitID;
+                thisMedication.OtherDuration = unwrappedObservation.otherDuration;
+                thisMedication.ReviewID = unwrappedObservation.reviewID;
+                thisMedication.RefusalReasonID = unwrappedObservation.refusalReasonID;
+                thisMedication.OtherRefusalReason = unwrappedObservation.otherRefusalReason;
+                thisMedication.OrderedBy = unwrappedObservation.orderedBy;
+                thisMedication.OrderedDate = unwrappedObservation.orderedDate;
+                thisMedication.PrescribedDate = unwrappedObservation.prescribedDate;
+                thisMedication.RxNumber = unwrappedObservation.rxNumber;
+                thisMedication.RxDate = unwrappedObservation.rxDate;
+                thisMedication.Pharmacy = unwrappedObservation.pharmacy;
 
 				thisMedication.NDCs = [];
 				ko.utils.arrayForEach(medication.nDCs.peek(), function (value) {
