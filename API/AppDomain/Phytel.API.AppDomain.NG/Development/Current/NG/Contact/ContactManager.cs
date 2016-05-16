@@ -400,7 +400,17 @@ namespace Phytel.API.AppDomain.NG
                 throw new Exception("Role or CustomRoleName is required");
             }
 
+            //var distance = member.Distance;
+            //double distanceValue;
 
+            //if (distance.HasValue)
+            //{
+            //   var isParsed =  double.TryParse(distance.Value.ToString(), out distanceValue);
+
+            //    if(!isParsed)
+            //       throw new ApplicationException();
+
+            //}
         }
        
         #endregion

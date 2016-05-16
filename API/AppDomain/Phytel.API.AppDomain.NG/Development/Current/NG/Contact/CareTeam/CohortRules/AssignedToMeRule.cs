@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Phytel.API.AppDomain.NG.DTO;
+using ServiceStack.Common.Extensions;
 using ServiceStack.Text;
 
 namespace Phytel.API.AppDomain.NG
@@ -46,7 +48,7 @@ namespace Phytel.API.AppDomain.NG
                     }
                 }
 
-                _contactEndpointUtil.AssignContactsToCohortPatientView(data.PatientId, contactIdsToAdd, data.Version, data.ContractNumber, data.UserId);
+                _contactEndpointUtil.AssignContactsToCohortPatientView(data.PatientId, contactIdsToAdd.Distinct().ToList(), data.Version, data.ContractNumber, data.UserId);
                 response.IsSuccessful = true; 
 
             }

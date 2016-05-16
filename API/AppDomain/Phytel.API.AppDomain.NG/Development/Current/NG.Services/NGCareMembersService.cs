@@ -7,7 +7,7 @@ using System;
 
 namespace Phytel.API.AppDomain.NG.Service
 {
-    public partial class NGService : ServiceStack.ServiceInterface.Service
+    public partial class NGService //: ServiceStack.ServiceInterface.Service
     {
 
         public PostCareMemberResponse Post(PostCareMemberRequest request)

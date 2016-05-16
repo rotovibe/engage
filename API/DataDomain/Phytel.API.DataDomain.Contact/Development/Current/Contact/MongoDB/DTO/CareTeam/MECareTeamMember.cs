@@ -58,7 +58,7 @@ namespace Phytel.API.DataDomain.Contact.MongoDB.DTO
         public ObjectId? Frequency { get; set; }
 
         [BsonElement(DistanceProperty)]
-        public int? Distance { get; set; }
+        public double? Distance { get; set; }
 
         [BsonElement(DistanceUnitProperty)]
         public string DistanceUnit { get; set; }

@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 using MB = MongoDB.Driver.Builders;
 using System.Configuration;
+using ServiceStack.Common;
 using ServiceStack.DataAnnotations;
 
 namespace Phytel.API.DataDomain.Patient
@@ -587,6 +588,8 @@ namespace Phytel.API.DataDomain.Patient
 
                         ctx.CohortPatientViews.Collection.Save(cohort);
 
+                        cohort.LastUpdatedOn = DateTime.UtcNow;
+                        cohort.UpdatedBy = ObjectId.Parse(request.UserId);
                     }
 
                     AuditHelper.LogDataAudit(this.UserId,
@@ -631,6 +634,15 @@ namespace Phytel.API.DataDomain.Patient
 
                         }
 
+                        AuditHelper.LogDataAudit(this.UserId,
+                                      MongoCollectionName.CohortPatientView.ToString(),
+                                      request.Id.ToString(),
+                                      Common.DataAuditType.Update,
+                                      request.ContractNumber);
+
+                        cohort.LastUpdatedOn = DateTime.UtcNow;
+                        cohort.UpdatedBy = ObjectId.Parse(request.UserId);
+
                      
 
                     }
@@ -661,6 +673,8 @@ namespace Phytel.API.DataDomain.Patient
                             contactsToAssign = request.ContactIdsToAssign;
 
                         cohort.AssignedToContactIds = contactsToAssign;
+                        cohort.LastUpdatedOn = DateTime.UtcNow;
+                        cohort.UpdatedBy = ObjectId.Parse(request.UserId);
 
                         //Update the Cohort.
                         ctx.CohortPatientViews.Collection.Save(cohort);
