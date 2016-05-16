@@ -47,6 +47,11 @@ namespace Phytel.Engage.Integrations.Commands
                     result = "559d8453d433232ca04b3131";
                     break;
                 }
+                case "IDXFC":
+                {
+                    result = "5726a91898a47c2894af45b2";
+                    break;  
+                }
                 default:
                 {
                     result = val;

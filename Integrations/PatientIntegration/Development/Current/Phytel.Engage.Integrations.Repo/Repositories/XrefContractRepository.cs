@@ -80,5 +80,11 @@ namespace Phytel.Engage.Integrations.Repo.Repositories
                 throw new ArgumentException("XrefContractRepository:Insert(): " + ex.Message);
             }
         }
+
+
+        public object SelectAllGeneral()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

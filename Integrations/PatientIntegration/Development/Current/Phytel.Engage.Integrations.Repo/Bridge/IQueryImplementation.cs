@@ -8,6 +8,7 @@ namespace Phytel.Engage.Integrations.Repo.Bridge
     {
         IQueryable<PatientInfo> GetPatientInfoQuery(ContractEntities ct);
         IQueryable<PCPPhone> GetPCPPhoneQuery(ContractEntities ct);
+        IQueryable<PCPPhone> GetPCPPhoneQueryGeneral(ContractEntities db);
         IQueryable<PatientXref> GetPatientXrefQuery(ContractEntities ct);
         IQueryable<PatientNote> GetPatientNotesQuery(ContractEntities ct);
     }

@@ -22,7 +22,7 @@ namespace Phytel.Engage.Integrations.ProcessTests
             //<RegistryComplete contractid="465" contractdatabase="ORLANDOHEALTH001" runtype="Daily" reportdate="09/11/1012"/>
             SetMappings();
             var watch = Stopwatch.StartNew();
-            const string body = @"<RegistryComplete contractid=""465"" contractdatabase=""ORLANDOHEALTH001"" runtype=""Daily"" reportdate=""09/11/1012""/>";
+            const string body = @"<RegistryComplete contractid=""465"" contractdatabase=""HILLCREST001"" runtype=""Daily"" reportdate=""09/11/1012""/>";
             var queMessage = new QueueMessage {Body = body};
             var xmldoc = LoadTextXmlDoc();
             //var nList = xmldoc.DocumentElement.ChildNodes;
@@ -85,37 +85,37 @@ namespace Phytel.Engage.Integrations.ProcessTests
             //<add key="Contracts" value="ORLANDOHEALTH001" />
             var contracts = xmlDoc.CreateElement("add");
             contracts.SetAttribute("key", "Contracts");
-            contracts.SetAttribute("value", "ORLANDOHEALTH001");
+            contracts.SetAttribute("value", "HILLCREST001");
             appConfig.AppendChild(contracts);
             
             //<add key="DDPatientServiceUrl" value="http://azurePhytelDev.cloudapp.net:59901/Patient" />
             var dDPatientServiceUrl = xmlDoc.CreateElement("add");
             dDPatientServiceUrl.SetAttribute("key", "DDPatientServiceUrl");
-            dDPatientServiceUrl.SetAttribute("value", "http://azurePhytelDev.cloudapp.net:59901/Patient");
+            dDPatientServiceUrl.SetAttribute("value", "http://azurePhytel.cloudapp.net:59901/Patient");
             appConfig.AppendChild(dDPatientServiceUrl);
 
-            //<add key="DDPatientSystemUrl" value="http://azurePhytelDev.cloudapp.net:59901/PatientSystem" />
+            //<add key="DDPatientSystemUrl" value="http://azurePhytel.cloudapp.net:59901/PatientSystem" />
             var dDPatientSystemUrl = xmlDoc.CreateElement("add");
             dDPatientSystemUrl.SetAttribute("key", "DDPatientSystemUrl");
-            dDPatientSystemUrl.SetAttribute("value", "http://azurePhytelDev.cloudapp.net:59901/PatientSystem");
+            dDPatientSystemUrl.SetAttribute("value", "http://azurePhytel.cloudapp.net:59901/PatientSystem");
             appConfig.AppendChild(dDPatientSystemUrl);
 
-            //<add key="DDPatientNoteUrl" value="http://azurePhytelDev.cloudapp.net:59901/PatientNote" />
+            //<add key="DDPatientNoteUrl" value="http://azurePhytel.cloudapp.net:59901/PatientNote" />
             var dPatientSystemUrl = xmlDoc.CreateElement("add");
             dPatientSystemUrl.SetAttribute("key", "DDPatientNoteUrl");
-            dPatientSystemUrl.SetAttribute("value", "http://azurePhytelDev.cloudapp.net:59901/PatientNote");
+            dPatientSystemUrl.SetAttribute("value", "http://azurePhytel.cloudapp.net:59901/PatientNote");
             appConfig.AppendChild(dPatientSystemUrl);
 
-            //<add key="DDContactServiceUrl" value="http://azurePhytelDev.cloudapp.net:59901/Contact" />   
+            //<add key="DDContactServiceUrl" value="http://azurePhytel.cloudapp.net:59901/Contact" />   
             var dDContactServiceUrl = xmlDoc.CreateElement("add");
             dDContactServiceUrl.SetAttribute("key", "DDContactServiceUrl");
-            dDContactServiceUrl.SetAttribute("value", "http://azurePhytelDev.cloudapp.net:59901/Contact");
+            dDContactServiceUrl.SetAttribute("value", "http://azurePhytel.cloudapp.net:59901/Contact");
             appConfig.AppendChild(dDContactServiceUrl);
 
-            //<add key="DdPatientToDoServiceUrl" value="http://azurePhytelDev.cloudapp.net:59901/Scheduling" /> 
+            //<add key="DdPatientToDoServiceUrl" value="http://azurePhytel.cloudapp.net:59901/Scheduling" /> 
             var ddPatientToDoServiceUrl = xmlDoc.CreateElement("add");
             ddPatientToDoServiceUrl.SetAttribute("key", "DdPatientToDoServiceUrl");
-            ddPatientToDoServiceUrl.SetAttribute("value", "http://azurePhytelDev.cloudapp.net:59901/Scheduling");
+            ddPatientToDoServiceUrl.SetAttribute("value", "http://azurePhytel.cloudapp.net:59901/Scheduling");
             appConfig.AppendChild(ddPatientToDoServiceUrl); 
 
             return xmlDoc;

@@ -5,54 +5,61 @@ using Phytel.API.DataDomain.PatientNote.DTO;
 using Phytel.Engage.Integrations.Repo.DTOs;
 using Constants = Phytel.API.DataDomain.Patient.Constants;
 
-namespace Phytel.Engage.Integrations.UOW
+namespace Phytel.Engage.Integrations.UOW.Notes
 {
-    public static class ObjMapper
+    public class OrlandoHealth001_NoteMapper : INoteMapper
     {
         private static string _dataSource = "P-Reg";
 
-        public static PatientData MapPatientData(PatientInfo info)
+        public PatientNoteData MapPatientNote(string patientMongoId, PatientNote n)
         {
-            var pData = new PatientData
+            var pnote = new PatientNoteData
             {
-                ExternalRecordId = info.PatientId.ToString(),
-                FirstName = info.FirstName,
-                MiddleName = info.MiddleInitial,
-                LastName = info.LastName,
-                Suffix = info.Suffix,
-                Gender = FormatGender(info.Gender),
-                DOB = info.BirthDate.HasValue ? info.BirthDate.Value.ToShortDateString() : string.Empty,
-                // LastFourSSN = info.Ssn.Substring(),
-                LastFourSSN = info.Ssn != null ? Strings.Right(info.Ssn, 4) : null,
-                RecordCreatedOn = info.CreateDate.GetValueOrDefault(),
-                LastUpdatedOn = info.UpdateDate.GetValueOrDefault(),
-                StatusId = PatientInfoUtils.GetStatus(info.Status),
+                ExternalRecordId = n.NoteId.ToString(),
+                Text = n.Note,
+                PatientId = n.PatientId.ToString(), // look into this.
                 DataSource = _dataSource,
-                DeceasedId = PatientInfoUtils.GetDeceased(info.Status),
-                PriorityData = Convert.ToInt32(info.Priority),
-                ClinicalBackground = !string.IsNullOrEmpty(info.PCP) ? "PCP: " + info.PCP : null,
-                StatusDataSource = _dataSource
+                CreatedOn = n.CreatedDate.GetValueOrDefault(),
+                CreatedById = Constants.SystemContactId,
+                TypeId = GetNoteType(Convert.ToInt32(n.ActionID), n.CategoryId)// get note type
             };
 
-            return pData;
+            if (!pnote.TypeId.Equals("54909997d43323251c0a1dfe")) return pnote;
+
+            if (pnote.TypeId.Equals("54909997d43323251c0a1dfe"))
+            {
+                pnote.SourceId = "540f2091d4332319883f3e9c";//outbound
+                //pnote.DurationId = "540f216cd4332319883f3e9e"; //not applicable
+                pnote.ContactedOn = n.CreatedDate.GetValueOrDefault();
+            }
+
+            switch (n.ActionID)
+            {
+                case 1:
+                    pnote.MethodId = "540f1da4d4332319883f3e8b";  //mail
+                    pnote.OutcomeId = "540f1f10d4332319883f3e92"; // successful
+                    pnote.WhoId = "540f1fbcd4332319883f3e95";
+                    break;
+                case 2:
+                    pnote.MethodId = "540f1d9dd4332319883f3e89";  //phone
+                    pnote.OutcomeId = "540f1f14d4332319883f3e93"; // unsuccessful
+                    pnote.WhoId = "540f1fbcd4332319883f3e95";
+                    break;
+                case 3:
+                    pnote.MethodId = "540f1d9dd4332319883f3e89";  //phone
+                    pnote.OutcomeId = "540f1f10d4332319883f3e92"; // successful
+                    pnote.WhoId = "540f1fbcd4332319883f3e95";
+                    break;
+                case 4:
+                    pnote.MethodId = "540f1d9dd4332319883f3e89";  //phone
+                    pnote.OutcomeId = "540f1f10d4332319883f3e92"; // successful
+                    pnote.WhoId = "540f1fc0d4332319883f3e96"; //caremanager
+                    break;
+            }
+            return pnote;
         }
 
-        public static string FormatGender(string p)
-        {
-            try
-            {
-                var gender = "N";
-                if (string.IsNullOrEmpty(p)) return gender;
-                gender = p;
-                return gender;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
-        private static string GetNoteType(int actionId, int categoryId)
+        public string GetNoteType(int actionId, int categoryId)
         {
             //1	Campaign Follow-up
             //2	Left Message
@@ -69,7 +76,7 @@ namespace Phytel.Engage.Integrations.UOW
             return val;
         }
 
-        private static string SetNoteTypeForGeneral(int categoryId)
+        public string SetNoteTypeForGeneral(int categoryId)
         {
             var noteTypeId = string.Empty;
             const string general = "54909992d43323251c0a1dfd";

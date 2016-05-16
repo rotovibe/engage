@@ -43,6 +43,25 @@ namespace Phytel.Engage.Integrations.Repo.Repositories
             }
         }
 
+        public object SelectAllGeneral()
+        {
+            try
+            {
+                List<PCPPhone> ptInfo = null;
+                using (var ct = new ContractEntities(ConnStr.GetConnectionStringEF(_contract)))
+                {
+                    var query = Implementor.GetPCPPhoneQueryGeneral(ct);
+                    ptInfo = query.ToList();
+                }
+
+                return ptInfo;
+            }
+            catch (Exception ex)
+            {
+                LoggerDomainEvent.Raise(LogStatus.Create("PCPPhoneRepository:SelectAll(): " + ex.Message, false));
+                throw;
+            }
+        }
 
 
         public object Insert(object list)

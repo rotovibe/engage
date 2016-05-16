@@ -12,19 +12,21 @@ namespace Phytel.Engage.Integrations.Repo
     using System;
     using System.Collections.Generic;
     
-    public partial class C3GroupEntity
+    public partial class C3GroupEntityType
     {
-        public int C3GroupEntityId { get; set; }
-        public int C3GroupId { get; set; }
-        public int EntityId { get; set; }
+        public C3GroupEntityType()
+        {
+            this.C3GroupEntity = new HashSet<C3GroupEntity>();
+        }
+    
         public int C3GroupEntityTypeId { get; set; }
+        public string Name { get; set; }
         public bool DeleteFlag { get; set; }
         public System.DateTime CreateDate { get; set; }
         public Nullable<int> CreatedBy { get; set; }
         public Nullable<System.DateTime> UpdateDate { get; set; }
         public Nullable<int> UpdatedBy { get; set; }
     
-        public virtual C3Group C3Group { get; set; }
-        public virtual C3GroupEntityType C3GroupEntityType { get; set; }
+        public virtual ICollection<C3GroupEntity> C3GroupEntity { get; set; }
     }
 }

@@ -19,6 +19,9 @@ using Phytel.Engage.Integrations.Repo.DTO;
 using Phytel.Engage.Integrations.Repo.DTOs;
 using Phytel.Engage.Integrations.Repo.DTOs.SQL;
 using Phytel.Engage.Integrations.Repo.Repositories;
+using Phytel.Engage.Integrations.Specifications;
+using Phytel.Engage.Integrations.UOW.Notes;
+using Phytel.Engage.Integrations.UOW.ObjectMappers;
 using Phytel.Engage.Integrations.Utils;
 using RepositoryType = Phytel.Engage.Integrations.Repo.Repositories.RepositoryType;
 
@@ -26,6 +29,7 @@ namespace Phytel.Engage.Integrations.UOW
 {
     public class UowBase
     {
+        public IParseToDosSpecification<string> ParseToDosSpec { get; set; } 
         public IDataDomain ServiceEndpoint { get; set; }
         public Dictionary<int, PatientInfo> PatientDict { get; set; }
         public List<HttpObjectResponse<PatientData>> PatientSaveResults;
@@ -35,6 +39,50 @@ namespace Phytel.Engage.Integrations.UOW
         public List<PatientData> Patients { get; set; }
         public List<PCPPhone> PCPPhones { get; set; }
         public List<ToDoData> ToDos { get; set; }
+
+
+        public void InitPatientNotes(string contractDb, IRepositoryFactory repositoryFactory)
+        {
+            LoggerDomainEvent.Raise(new LogStatus { Message = "initializing patient notes.", Type = LogType.Debug });
+            // load patient notes
+            var pnRepo = repositoryFactory.GetRepository(contractDb, RepositoryType.PatientNotesRepository);
+            List<PatientNote> pnRes = pnRepo.SelectAll() as List<PatientNote>;
+            var nMap = MapperFactory.NoteMapper(contractDb);
+            LoadPatientNotes(pnRes, Patients, PatientNotes = new List<PatientNoteData>(), nMap);
+        }
+
+        public void InitPatientSystems(string contractDb, IRepositoryFactory repositoryFactory)
+        {
+            LoggerDomainEvent.Raise(new LogStatus { Message = "initializing patient systems.", Type = LogType.Debug });
+            // load patient xrefs
+            var xrepo = repositoryFactory.GetRepository(contractDb, RepositoryType.XrefContractRepository);
+            LoadPatientSystems(xrepo, PatientSystems = new List<PatientSystemData>());
+        }
+
+        public void InitPatients(string contractDb, IRepositoryFactory repositoryFactory)
+        {
+            LoggerDomainEvent.Raise(new LogStatus { Message = "initializing patients.", Type = LogType.Debug });
+            // load patient dictionary
+            var repo = repositoryFactory.GetRepository(contractDb, RepositoryType.PatientsContractRepository);
+            LoadPatients(repo, Patients = new List<PatientData>());
+        }
+
+        public List<PCPPhone> InitPatientPhonesGeneral(string contractDb, IRepositoryFactory repositoryFactory)
+        {
+            LoggerDomainEvent.Raise(new LogStatus { Message = "initializing general pcp phones.", Type = LogType.Debug });
+            // load pcpRepo
+            var pcpRepo = repositoryFactory.GetRepository(contractDb, RepositoryType.PCPPhoneRepository);
+            var phones = LoadGeneralPcpPhones(pcpRepo);
+            return phones;
+        }
+
+        public void InitPCPPhones(string contractDb, IRepositoryFactory repositoryFactory)
+        {
+            LoggerDomainEvent.Raise(new LogStatus { Message = "initializing pcp phones.", Type = LogType.Debug });
+            // load pcpRepo
+            var pcpRepo = repositoryFactory.GetRepository(contractDb, RepositoryType.PCPPhoneRepository);
+            LoadPcpPhones(pcpRepo, PCPPhones = new List<PCPPhone>());
+        }
 
         internal void BulkOperation<T>(List<T> pocos, string contract, IDataDomain domain, string collection)
         {
@@ -230,6 +278,25 @@ namespace Phytel.Engage.Integrations.UOW
             }
         }
 
+        public List<PCPPhone> LoadGeneralPcpPhones(Repo.Repositories.IRepository xrepo)
+        {
+            try
+            {
+                List<PCPPhone> pcpPhones = new List<PCPPhone>();
+                var phnList = xrepo.SelectAllGeneral();
+                if (phnList == null) return pcpPhones;
+                var final = ((List<PCPPhone>)phnList).Where(x => x.Phone != null && x.Phone.Length == 10);
+                if (final == null) return pcpPhones;
+                pcpPhones.AddRange(from xr in final select xr);
+                return pcpPhones;
+            }
+            catch (Exception ex)
+            {
+                LoggerDomainEvent.Raise(LogStatus.Create("UOWBase: LoadGeneralPcpPhones():" + ex.Message, false));
+                throw ex;
+            }
+        }
+
         public void LoadPcpPhones(Repo.Repositories.IRepository xrepo, List<PCPPhone> pcpPhones)
         {
             try
@@ -267,16 +334,15 @@ namespace Phytel.Engage.Integrations.UOW
             }
         }
 
-        public void LoadPatientNotes(Repo.Repositories.IRepository repo, List<PatientData> pats, List<PatientNoteData> notes)
+        public void LoadPatientNotes(List<PatientNote> pNotes, List<PatientData> pats, List<PatientNoteData> notes, INoteMapper mapper)
         {
             try
             {
-                var pNotesL = repo.SelectAll();
                 var valid =
-                    ((List<PatientNote>) pNotesL).Select(
+                    ((List<PatientNote>) pNotes).Select(
                         pn => new {pn, patient = pats.Find(r => r.ExternalRecordId == pn.PatientId.ToString())})
                         .Where(@t => @t.patient != null)
-                        .Select(@t => ObjMapper.MapPatientNote(@t.patient.Id, @t.pn));
+                        .Select(@t => mapper.MapPatientNote(@t.patient.Id, @t.pn));
 
                 notes.AddRange(valid);
             }

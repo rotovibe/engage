@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.Engage.Integrations.QueueProcess", "Phytel.Engage.Integrations.PatientASEProcess\Phytel.Engage.Integrations.QueueProcess.csproj", "{4E23855F-6225-4E71-BFF5-98B6F5616506}"
 EndProject
@@ -48,11 +48,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.API.Interface", "..\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Scheduling.DTO", "..\..\..\..\..\PhytelCode\Phytel.Net\Services\API\DataDomain\Phytel.API.DataDomain.Scheduling\Development\Current\Scheduling.DTO\DataDomain.Scheduling.DTO.csproj", "{1E303326-EEC9-42A8-BA50-880AB7AD99B2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.Engage.Integration.Fixes", "Phytel.Engage.Integration.Fixes\Phytel.Engage.Integration.Fixes.csproj", "{F01D28AB-AC70-4FF0-91E1-2B42EBDC8361}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 18
+		SccNumberOfProjects = 19
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = http://hillstfs2013:8080/tfs/phytel
+		SccTeamFoundationServer = http://192.168.111.123:8080/tfs/phytel
 		SccLocalPath0 = .
 		SccProjectUniqueName1 = Phytel.Engage.Integrations.PatientASEProcess\\Phytel.Engage.Integrations.QueueProcess.csproj
 		SccProjectName1 = Phytel.Engage.Integrations.PatientASEProcess
@@ -114,6 +116,9 @@ Global
 		SccProjectTopLevelParentUniqueName17 = PatientIntegration.sln
 		SccProjectName17 = ../../../../../PhytelCode/Phytel.Net/Services/API/DataDomain/Phytel.API.DataDomain.Scheduling/Development/Current/Scheduling.DTO
 		SccLocalPath17 = ..\\..\\..\\..\\..\\PhytelCode\\Phytel.Net\\Services\\API\\DataDomain\\Phytel.API.DataDomain.Scheduling\\Development\\Current\\Scheduling.DTO
+		SccProjectUniqueName18 = Phytel.Engage.Integration.Fixes\\Phytel.Engage.Integration.Fixes.csproj
+		SccProjectName18 = Phytel.Engage.Integration.Fixes
+		SccLocalPath18 = Phytel.Engage.Integration.Fixes
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -293,20 +298,30 @@ Global
 		{1E303326-EEC9-42A8-BA50-880AB7AD99B2}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1E303326-EEC9-42A8-BA50-880AB7AD99B2}.Test|Any CPU.ActiveCfg = Model|Any CPU
 		{1E303326-EEC9-42A8-BA50-880AB7AD99B2}.Test|Any CPU.Build.0 = Model|Any CPU
+		{F01D28AB-AC70-4FF0-91E1-2B42EBDC8361}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F01D28AB-AC70-4FF0-91E1-2B42EBDC8361}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F01D28AB-AC70-4FF0-91E1-2B42EBDC8361}.Model|Any CPU.ActiveCfg = Release|Any CPU
+		{F01D28AB-AC70-4FF0-91E1-2B42EBDC8361}.Model|Any CPU.Build.0 = Release|Any CPU
+		{F01D28AB-AC70-4FF0-91E1-2B42EBDC8361}.QA|Any CPU.ActiveCfg = Release|Any CPU
+		{F01D28AB-AC70-4FF0-91E1-2B42EBDC8361}.QA|Any CPU.Build.0 = Release|Any CPU
+		{F01D28AB-AC70-4FF0-91E1-2B42EBDC8361}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F01D28AB-AC70-4FF0-91E1-2B42EBDC8361}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F01D28AB-AC70-4FF0-91E1-2B42EBDC8361}.Test|Any CPU.ActiveCfg = Release|Any CPU
+		{F01D28AB-AC70-4FF0-91E1-2B42EBDC8361}.Test|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{7BBC4F28-A376-4D24-B8B1-5BC46AD2170A} = {6B85F8FA-6A1C-4A70-AB03-110E75DE68EB}
+		{1B3148A8-FB57-4461-91BC-F1CD38A013B6} = {7BBC4F28-A376-4D24-B8B1-5BC46AD2170A}
 		{6033A8EA-A3EF-4182-BFDD-4A9826ECF871} = {6B85F8FA-6A1C-4A70-AB03-110E75DE68EB}
+		{017DC6E8-FB93-4303-AAF9-52E2449F9A34} = {7BBC4F28-A376-4D24-B8B1-5BC46AD2170A}
+		{7BBC4F28-A376-4D24-B8B1-5BC46AD2170A} = {6B85F8FA-6A1C-4A70-AB03-110E75DE68EB}
+		{1536CD0A-6308-4DAF-8618-35BBA0816997} = {7BBC4F28-A376-4D24-B8B1-5BC46AD2170A}
 		{25CF3C3F-221F-4A49-B5EF-A8A5FCF9A5BA} = {6B85F8FA-6A1C-4A70-AB03-110E75DE68EB}
 		{99F4EC29-B099-424E-9757-223E67029001} = {6B85F8FA-6A1C-4A70-AB03-110E75DE68EB}
 		{0B6E0ED8-ABE5-4A1D-8E10-0AC54F06D9C4} = {6B85F8FA-6A1C-4A70-AB03-110E75DE68EB}
 		{ABE948FB-247E-4955-B3AB-B7C93E10A542} = {6B85F8FA-6A1C-4A70-AB03-110E75DE68EB}
 		{1E303326-EEC9-42A8-BA50-880AB7AD99B2} = {6B85F8FA-6A1C-4A70-AB03-110E75DE68EB}
-		{017DC6E8-FB93-4303-AAF9-52E2449F9A34} = {7BBC4F28-A376-4D24-B8B1-5BC46AD2170A}
-		{1B3148A8-FB57-4461-91BC-F1CD38A013B6} = {7BBC4F28-A376-4D24-B8B1-5BC46AD2170A}
-		{1536CD0A-6308-4DAF-8618-35BBA0816997} = {7BBC4F28-A376-4D24-B8B1-5BC46AD2170A}
 	EndGlobalSection
 EndGlobal

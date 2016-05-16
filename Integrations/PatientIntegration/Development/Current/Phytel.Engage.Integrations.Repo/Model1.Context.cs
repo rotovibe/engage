@@ -47,5 +47,8 @@ namespace Phytel.Engage.Integrations.Repo
         public virtual DbSet<CommCategory> CommCategories { get; set; }
         public virtual DbSet<PatientRegistryHdr> PatientRegistryHdrs { get; set; }
         public virtual DbSet<PatientPersonalPhysician> PatientPersonalPhysicians { get; set; }
+        public virtual DbSet<C3GroupEntityType> C3GroupEntityType { get; set; }
+        public virtual DbSet<Subscriber> Subscribers { get; set; }
+        public virtual DbSet<SubscriberSolution> SubscriberSolutions { get; set; }
     }
 }

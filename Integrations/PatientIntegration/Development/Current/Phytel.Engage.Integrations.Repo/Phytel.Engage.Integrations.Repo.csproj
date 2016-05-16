@@ -94,11 +94,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bridge\IQueryImplementation.cs" />
+    <Compile Include="Bridge\HILLCREST001Implementation.cs" />
     <Compile Include="Bridge\ORLANDOHEALTH001Implementation.cs" />
     <Compile Include="C3Group.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="C3GroupEntity.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="C3GroupEntityType.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="C3NoteAction.cs">
@@ -177,7 +181,13 @@
     <Compile Include="Repositories\PatientNotesRepository.cs" />
     <Compile Include="Repositories\RepositoryFactory.cs" />
     <Compile Include="Repositories\XrefContractRepository.cs" />
+    <Compile Include="Subscriber.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="SubscriberEntity.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SubscriberSolution.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Utils.cs" />

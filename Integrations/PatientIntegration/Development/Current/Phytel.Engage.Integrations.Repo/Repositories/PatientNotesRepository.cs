@@ -47,5 +47,11 @@ namespace Phytel.Engage.Integrations.Repo.Repositories
         {
             return null;
         }
+
+
+        public object SelectAllGeneral()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

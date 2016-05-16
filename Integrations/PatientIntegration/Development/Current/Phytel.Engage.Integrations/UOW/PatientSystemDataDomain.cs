@@ -57,5 +57,11 @@ namespace Phytel.Engage.Integrations.UOW
                 throw new ArgumentException("PatientSystemDataDomain:Save(): " + ex.Message);
             }
         }
+
+
+        public object Update<T>(T patients, string contract, string ddServiceurl)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

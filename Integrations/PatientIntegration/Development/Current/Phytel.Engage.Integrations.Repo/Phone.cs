@@ -33,7 +33,6 @@ namespace Phytel.Engage.Integrations.Repo
         public Nullable<int> UpdatedBy { get; set; }
         public Nullable<int> DataSourceID { get; set; }
         public Nullable<byte> DeleteFlag { get; set; }
-        public Nullable<int> PreferenceSourceID { get; set; }
     
         public virtual ContactEntity ContactEntity { get; set; }
     }

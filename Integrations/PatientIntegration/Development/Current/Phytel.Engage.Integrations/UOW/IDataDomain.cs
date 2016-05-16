@@ -12,5 +12,6 @@ namespace Phytel.Engage.Integrations.UOW
     public interface IDataDomain
     {
         object Save<T>(T patients, string contract);
+        object Update<T>(T patients, string contract, string ddServiceUrl);
     }
 }

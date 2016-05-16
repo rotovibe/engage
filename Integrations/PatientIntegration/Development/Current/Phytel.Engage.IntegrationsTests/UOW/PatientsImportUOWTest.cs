@@ -32,7 +32,7 @@ namespace Phytel.Engage.Integrations.UOW.Tests
                 };
             var uow = new PatientsImportUow{ Patients = Patients};
 
-            uow.Commit("ORLANDOHEALTH001");
+            uow.Commit("HILLCREST001");
         }
     }
 }

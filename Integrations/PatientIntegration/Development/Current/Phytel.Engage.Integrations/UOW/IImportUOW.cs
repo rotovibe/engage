@@ -3,6 +3,7 @@ using Phytel.API.DataDomain.Patient.DTO;
 using Phytel.API.DataDomain.PatientNote.DTO;
 using Phytel.API.DataDomain.PatientSystem.DTO;
 using Phytel.Engage.Integrations.Repo.DTOs;
+using Phytel.Engage.Integrations.UOW.Notes;
 
 namespace Phytel.Engage.Integrations.UOW
 {
@@ -16,7 +17,7 @@ namespace Phytel.Engage.Integrations.UOW
         void Initialize(string contractDb);
         void LoadPatientSystems(Repo.Repositories.IRepository xrepo, List<PatientSystemData> systems);
         void LoadPatients(Repo.Repositories.IRepository repo, List<PatientData> pats);
-        void LoadPatientNotes(Repo.Repositories.IRepository repo, List<PatientData> pats, List<PatientNoteData> notes);
+        void LoadPatientNotes(List<PatientNote> patientNotes, List<PatientData> pats, List<PatientNoteData> notes, INoteMapper mapper);
         void LoadPcpPhones(Repo.Repositories.IRepository xrepo, List<PCPPhone> pcpPhones);
     }
 }

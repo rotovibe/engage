@@ -30,7 +30,8 @@ namespace Phytel.Engage.Integrations.Process.Initialization
                         ServiceEndpoint = new PatientDataDomain(),
                         Patients = new List<PatientData>(),
                         PatientSystems = new List<PatientSystemData>(),
-                         RepositoryFactory = new RepositoryFactory()
+                        RepositoryFactory = new RepositoryFactory(),
+                        ParseToDosSpec = new ParseToDosSpecification<string>()
                     });
 
             container.RegisterAutoWiredAs<ApplicableContractProvider, IApplicableContractProvider>();

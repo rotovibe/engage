@@ -14,6 +14,8 @@ using Phytel.Engage.Integrations.DomainEvents;
 using Phytel.Engage.Integrations.Extensions;
 using Phytel.Engage.Integrations.Repo.DTOs;
 using Phytel.Engage.Integrations.Repo.Repositories;
+using Phytel.Engage.Integrations.Specifications;
+using ServiceStack.Common;
 
 namespace Phytel.Engage.Integrations.UOW
 {
@@ -24,31 +26,20 @@ namespace Phytel.Engage.Integrations.UOW
         public void Initialize(string contractDb)
         {
             LoggerDomainEvent.Raise(LogStatus.Create("Initializing Integration process for : [" + contractDb + "] contract", true));
-            // load pcpRepo
-            var pcpRepo = RepositoryFactory.GetRepository(contractDb, RepositoryType.PCPPhoneRepository);
-            LoadPcpPhones(pcpRepo, PCPPhones = new List<PCPPhone>());
-
-            // load patient dictionary
-            var repo = RepositoryFactory.GetRepository(contractDb, RepositoryType.PatientsContractRepository);
-            LoadPatients(repo, Patients = new List<PatientData>());
-
-            // load patient xrefs
-            var xrepo = RepositoryFactory.GetRepository(contractDb, RepositoryType.XrefContractRepository);
-            LoadPatientSystems(xrepo, PatientSystems = new List<PatientSystemData>());
-
-            // load patient notes
-            var pnRepo = RepositoryFactory.GetRepository(contractDb, RepositoryType.PatientNotesRepository);
-            LoadPatientNotes(pnRepo, Patients, PatientNotes = new List<PatientNoteData>());
+            InitPCPPhones(contractDb, RepositoryFactory);
+            InitPatients(contractDb, RepositoryFactory);
+            InitPatientSystems(contractDb, RepositoryFactory);
+            InitPatientNotes(contractDb, RepositoryFactory);
         }
 
         public void Commit(string contract)
         {
-            try 
-            { 
-                LoggerDomainEvent.Raise(new LogStatus { Message = "Commit operation started.", Type = LogType.Debug });
+            try
+            {
+                LoggerDomainEvent.Raise(new LogStatus {Message = "Commit operation started.", Type = LogType.Debug});
 
                 // initialize save results
-                if(PatientSaveResults != null) PatientSaveResults.Clear();
+                if (PatientSaveResults != null) PatientSaveResults.Clear();
                 PatientSaveResults = new List<HttpObjectResponse<PatientData>>();
 
                 if (PatientSystemResults != null) PatientSystemResults.Clear();
@@ -60,24 +51,25 @@ namespace Phytel.Engage.Integrations.UOW
 
                 //2) save patientsystems
                 List<PatientSystemData> pSys = GetPatientSystemsToLoad(PatientSystems, PatientSaveResults);
-                if (pSys != null && pSys.Count > 0) 
+                if (pSys != null && pSys.Count > 0)
                     BulkOperation(pSys, contract, new PatientSystemDataDomain(), "patient systems");
 
                 //3) save contact info
                 var contactList = GetPatientContactsToRegister(PatientSaveResults);
-                if (contactList != null && contactList.Count > 0) 
+                if (contactList != null && contactList.Count > 0)
                     BulkOperation(contactList, contract, new ContactDataDomain(), "contact info");
 
                 //4) save patient notes
                 var patientNotesList = GetPatientNotesToRegister(PatientSaveResults, PatientNotes);
-                if (patientNotesList != null && patientNotesList.Count > 0) 
+                if (patientNotesList != null && patientNotesList.Count > 0)
                     BulkOperation(patientNotesList, contract, new PatientNoteDataDomain(), "patient notes");
 
                 // 5) save todos from patientnoteslist
+                if (!ParseToDosSpec.IsSatisfiedBy(contract)) return;
+                //refactor to include command pattern!!!!!!
                 var toDoList = ParseToDos(PatientSaveResults);
-                if (toDoList != null && toDoList.Count > 0) 
+                if (toDoList != null && toDoList.Count > 0)
                     BulkOperation(toDoList, contract, new ToDoDataDomain(), "to dos");
-
             }
             catch (Exception ex)
             {
@@ -99,10 +91,13 @@ namespace Phytel.Engage.Integrations.UOW
                         phones.ForEach(
                             pd =>
                             {
-                                sb.Append(pd.PCP_Name + " | " + pd.Phone + " | " + pd.Facility + "; ");
+                                if (!pd.PCP_Name.IsNullOrEmpty())
+                                    sb.Append(pd.PCP_Name + " | " + pd.Phone + " | " + pd.Facility + "; ");
                             });
                     }
+
                     p.ClinicalBackground = sb.ToString();
+                    if (p.ClinicalBackground.Equals(String.Empty)) p.ClinicalBackground = null;
                 });
             }
             catch (Exception ex)
@@ -216,6 +211,35 @@ namespace Phytel.Engage.Integrations.UOW
                 LoggerDomainEvent.Raise(new LogStatus { Message = "PatientsImportUow:GetPatientSystemsToLoad(): " + ex.Message, Type = LogType.Error });
                 throw new ArgumentException("PatientsImportUow:GetPatientSystemsToLoad(): " + ex.Message);
             }
+        }
+
+        public void PatientBackgroundModification(string contract, string ddlPath)
+        {
+            var _patientDd = new PatientDataDomain();
+            var _phones = InitPatientPhonesGeneral(contract, RepositoryFactory); // get a different set that is not filtered
+            List<string> _patientIds = _patientDd.GetAllPatientIds(contract, ddlPath).Select(p => p.Id).ToList(); // web call to get all patients in contract
+            List<PatientData> _patients = _patientDd.getAllPatientsById(_patientIds, ddlPath, contract);
+
+            _patients.ForEach(pt =>
+            {
+                var pphones = _phones.FindAll(f => f.PatientID == Convert.ToInt64(pt.ExternalRecordId));
+                StringBuilder sb = new StringBuilder();
+                if (pphones != null && pphones.Count > 0)
+                {
+                    pphones.ForEach(
+                        pd =>
+                        {
+                            if (!pd.PCP_Name.IsNullOrEmpty())
+                                sb.Append(pd.PCP_Name + " | " + pd.Phone + " | " + pd.Facility + "; ");
+                        });
+                }
+
+                pt.ClinicalBackground = sb.ToString();
+                if (pt.ClinicalBackground.Equals(String.Empty)) pt.ClinicalBackground = null;
+            });
+
+            // save back to patient DD as updates
+            _patientDd.Update(_patients, contract, ddlPath);
         }
     }
 }

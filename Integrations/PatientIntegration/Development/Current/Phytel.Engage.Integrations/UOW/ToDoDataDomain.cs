@@ -48,9 +48,15 @@ namespace Phytel.Engage.Integrations.UOW
             }
             catch (Exception ex)
             {
-                LoggerDomainEvent.Raise(new LogStatus { Message = "PatientDataDomain:Save(): " + ex.Message, Type = LogType.Error });
-                throw new ArgumentException("PatientDataDomain:Save(): " + ex.Message);
+                LoggerDomainEvent.Raise(new LogStatus { Message = "ToDoDataDomain:Save(): " + ex.Message, Type = LogType.Error });
+                throw new ArgumentException("ToDoDataDomain:Save(): " + ex.Message);
             }
+        }
+
+
+        public object Update<T>(T patients, string contract, string ddSerivceUrl)
+        {
+            throw new NotImplementedException();
         }
     }
 }
