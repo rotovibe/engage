@@ -49,7 +49,7 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
 
         public object Insert(object newEntity)
         {
-            string response = string.Empty;
+            var careTeam = new object();
             var data = newEntity as SaveCareTeamDataRequest;
             if (data != null)
             {
@@ -79,7 +79,7 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
                             };
 
                             ctx.CareTeam.Collection.Save(meCareTeam);
-                            response = meCareTeam.Id.ToString();
+                           // response = meCareTeam.Id.ToString();
                             AuditHelper.LogDataAudit(this.UserId,
                                            MongoCollectionName.CareTeam.ToString(),
                                             meCareTeam.Id.ToString(),
@@ -94,7 +94,7 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
                             contactCareTeam.LastUpdatedOn = DateTime.UtcNow;
 
                             ctx.CareTeam.Collection.Save(contactCareTeam);
-                            response = contactCareTeam.Id.ToString();
+                            //response = contactCareTeam.Id.ToString();
 
                             AuditHelper.LogDataAudit(this.UserId,
                                           MongoCollectionName.CareTeam.ToString(),
@@ -102,6 +102,11 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
                                           DataAuditType.Update,
                                           data.ContractNumber);
                         }
+
+                        careTeam = GetCareTeamByContactId(data.ContactId);
+
+                        if(careTeam == null)
+                            throw new Exception("Care Team is null or empty");
                     }
 
                 }
@@ -110,7 +115,7 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
                     throw ex;
                 }
             }
-            return response;
+            return careTeam;
         }
 
         public object InsertAll(List<object> entities)

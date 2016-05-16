@@ -111,8 +111,8 @@ namespace Phytel.API.AppDomain.NG
             if (request.CareTeam == null)
                 throw new ArgumentNullException("request.CareTeam");
 
-            if(request.CareTeam.Members.IsNullOrEmpty())
-                 throw new ApplicationException(string.Format("CareTeam should have atleast one or more members."));
+            //if(request.CareTeam.Members.IsNullOrEmpty())
+            //     throw new ApplicationException(string.Format("CareTeam should have atleast one or more members."));
 
             if(string.IsNullOrEmpty(request.ContactId))
                 throw new ArgumentException(string.Format("ContactId is null or empty"),"request");
@@ -155,7 +155,8 @@ namespace Phytel.API.AppDomain.NG
 
                if (domainResponse != null)
                {
-                   response.Id = domainResponse.Id;
+                  // response.Id = domainResponse.Id;
+                   response.CareTeam = Mapper.Map<CareTeam>(domainResponse.CareTeamData);
 
                    var cohortRuleCheckData = new CohortRuleCheckData()
                    {

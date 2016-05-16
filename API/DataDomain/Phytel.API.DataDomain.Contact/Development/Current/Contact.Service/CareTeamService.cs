@@ -27,7 +27,7 @@ namespace Phytel.API.DataDomain.Contact.Service
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("ContactDD:CareTeamService:Post()::Unauthorized Access");
 
-                Manager.InsertCareTeam(request);
+               response = Manager.InsertCareTeam(request);
 
             }
             catch (Exception ex)

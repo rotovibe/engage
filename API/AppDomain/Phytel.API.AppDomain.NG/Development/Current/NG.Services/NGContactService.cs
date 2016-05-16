@@ -153,7 +153,7 @@ namespace Phytel.API.AppDomain.NG.Service
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
-                    ContactManager.SaveCareTeam(request);
+                   response = ContactManager.SaveCareTeam(request);
 
                 }
                 else

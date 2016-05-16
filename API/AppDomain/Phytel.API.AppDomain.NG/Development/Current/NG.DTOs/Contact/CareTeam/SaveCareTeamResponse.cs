@@ -7,6 +7,7 @@ namespace Phytel.API.AppDomain.NG.DTO
     {
         public ResponseStatus Status { get; set; }
         public double Version { get; set; }
-        public string Id { get; set; }
+        //public string Id { get; set; }
+        public CareTeam CareTeam { get; set; }
     }
 }
