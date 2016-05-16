@@ -1,0 +1,1520 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="ContractModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="C3Group">
+          <Key>
+            <PropertyRef Name="C3GroupId" />
+          </Key>
+          <Property Name="C3GroupId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="250" Nullable="false" />
+          <Property Name="EnableAll" Type="bit" Nullable="false" />
+          <Property Name="DeleteFlag" Type="bit" Nullable="false" />
+          <Property Name="CreateDate" Type="datetime" Nullable="false" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="UpdateDate" Type="datetime" />
+          <Property Name="UpdatedBy" Type="int" />
+          <Property Name="Description" Type="varchar" MaxLength="250" />
+        </EntityType>
+        <EntityType Name="C3GroupEntity">
+          <Key>
+            <PropertyRef Name="C3GroupEntityId" />
+          </Key>
+          <Property Name="C3GroupEntityId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="C3GroupId" Type="int" Nullable="false" />
+          <Property Name="EntityId" Type="int" Nullable="false" />
+          <Property Name="C3GroupEntityTypeId" Type="int" Nullable="false" />
+          <Property Name="DeleteFlag" Type="bit" Nullable="false" />
+          <Property Name="CreateDate" Type="datetime" Nullable="false" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="UpdateDate" Type="datetime" />
+          <Property Name="UpdatedBy" Type="int" />
+        </EntityType>
+        <EntityType Name="C3GroupEntityType">
+          <Key>
+            <PropertyRef Name="C3GroupEntityTypeId" />
+          </Key>
+          <Property Name="C3GroupEntityTypeId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="DeleteFlag" Type="bit" Nullable="false" />
+          <Property Name="CreateDate" Type="datetime" Nullable="false" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="UpdateDate" Type="datetime" />
+          <Property Name="UpdatedBy" Type="int" />
+        </EntityType>
+        <EntityType Name="C3NoteAction">
+          <Key>
+            <PropertyRef Name="ActionID" />
+          </Key>
+          <Property Name="ActionID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ActionName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="OrderBy" Type="int" Nullable="false" />
+          <Property Name="Enabled" Type="bit" Nullable="false" />
+          <Property Name="CreateDate" Type="datetime" />
+          <Property Name="UpdateDate" Type="datetime" />
+          <Property Name="CreatedBy" Type="uniqueidentifier" />
+          <Property Name="UpdateBy" Type="uniqueidentifier" />
+        </EntityType>
+        <EntityType Name="C3NoteCategory">
+          <Key>
+            <PropertyRef Name="CategoryId" />
+          </Key>
+          <Property Name="CategoryId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CategoryName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="OrderBy" Type="int" Nullable="false" />
+          <Property Name="Enabled" Type="bit" Nullable="false" />
+          <Property Name="CreateDate" Type="datetime" />
+          <Property Name="UpdateDate" Type="datetime" />
+          <Property Name="CreatedBy" Type="uniqueidentifier" />
+          <Property Name="UpdatedBy" Type="uniqueidentifier" />
+        </EntityType>
+        <EntityType Name="C3NotePatient">
+          <Key>
+            <PropertyRef Name="NoteId" />
+          </Key>
+          <Property Name="NoteId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Note" Type="nvarchar(max)" />
+          <Property Name="ActionID" Type="int" Nullable="false" />
+          <Property Name="CategoryId" Type="int" Nullable="false" />
+          <Property Name="PatientId" Type="int" Nullable="false" />
+          <Property Name="CampaignId" Type="int" Nullable="false" />
+          <Property Name="Enabled" Type="bit" Nullable="false" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="UpdatedDate" Type="datetime" />
+          <Property Name="CreatedBy" Type="nvarchar" MaxLength="255" />
+          <Property Name="CreatedById" Type="uniqueidentifier" />
+          <Property Name="DeletedBy" Type="varchar" MaxLength="255" />
+          <Property Name="DeletedDate" Type="datetime" />
+          <Property Name="DeletedStatus" Type="bit" />
+          <Property Name="CampaignName" Type="varchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="C3Patient">
+          <Key>
+            <PropertyRef Name="PatientID" />
+          </Key>
+          <Property Name="PatientID" Type="int" Nullable="false" />
+          <Property Name="PatientName" Type="varchar" MaxLength="250" />
+          <Property Name="ProviderID" Type="int" />
+          <Property Name="SubscriberName" Type="varchar" MaxLength="250" />
+          <Property Name="PMSID" Type="varchar" MaxLength="250" />
+          <Property Name="Payer" Type="varchar" MaxLength="250" />
+          <Property Name="Gender" Type="varchar" MaxLength="5" />
+          <Property Name="Phone" Type="varchar" MaxLength="10" />
+          <Property Name="Email" Type="varchar" MaxLength="50" />
+          <Property Name="Age" Type="numeric" Precision="18" Scale="0" />
+          <Property Name="BirthDate" Type="datetime" />
+          <Property Name="UpcomingBirthdayDate" Type="datetime" />
+          <Property Name="PatientStatus" Type="varchar" MaxLength="50" />
+          <Property Name="PatientStatusID" Type="int" Nullable="false" />
+          <Property Name="Priority" Type="int" />
+          <Property Name="FollowupDueDate" Type="datetime" />
+          <Property Name="LastCommunicationDate" Type="datetime" />
+          <Property Name="LastCommunicationMode" Type="varchar" MaxLength="25" />
+          <Property Name="AlertRecommendationCount" Type="int" />
+          <Property Name="LastPatientNoteID" Type="int" />
+          <Property Name="CareManagerID" Type="uniqueidentifier" />
+          <Property Name="CareManagerName" Type="varchar" MaxLength="100" />
+          <Property Name="LastAppointmentDate" Type="datetime" />
+          <Property Name="NextAppointmentDate" Type="datetime" />
+          <Property Name="ProblemListSortOrder" Type="int" />
+          <Property Name="MedicationAllergies" Type="varchar(max)" />
+          <Property Name="MedicationAllergiesSortOrder" Type="int" />
+          <Property Name="Allergies" Type="varchar(max)" />
+          <Property Name="Medications" Type="varchar(max)" />
+          <Property Name="MedicationSortOrder" Type="int" />
+          <Property Name="CommunicationPreference" Type="varchar" MaxLength="200" />
+          <Property Name="OutreachException" Type="bit" />
+          <Property Name="Address" Type="varchar" MaxLength="250" />
+        </EntityType>
+        <EntityType Name="C3ProblemList">
+          <Key>
+            <PropertyRef Name="ProblemListID" />
+          </Key>
+          <Property Name="ProblemListID" Type="int" Nullable="false" />
+          <Property Name="PatientID" Type="int" Nullable="false" />
+          <Property Name="ProblemExternalCode" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="ProblemDescription" Type="varchar" MaxLength="128" />
+          <Property Name="ProblemTypeID" Type="int" />
+          <Property Name="ProblemTypeDescription" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="CommCategory">
+          <Key>
+            <PropertyRef Name="CommCategoryID" />
+          </Key>
+          <Property Name="CommCategoryID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="CommCategoryCode" Type="varchar" MaxLength="5" Nullable="false" />
+          <Property Name="Description" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ContactEntities">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ParentID" Type="int" />
+          <Property Name="LockedByCaregiverID" Type="int" />
+          <Property Name="Name" Type="varchar" MaxLength="250" />
+          <Property Name="Prefix" Type="varchar" MaxLength="20" />
+          <Property Name="FirstName" Type="varchar" MaxLength="64" />
+          <Property Name="MiddleInitial" Type="varchar" MaxLength="64" />
+          <Property Name="LastName" Type="varchar" MaxLength="64" />
+          <Property Name="Suffix" Type="varchar" MaxLength="20" />
+          <Property Name="Gender" Type="varchar" MaxLength="5" />
+          <Property Name="BirthDate" Type="datetime" />
+          <Property Name="DispenserType" Type="varchar" MaxLength="5" />
+          <Property Name="CategoryCode" Type="varchar" MaxLength="5" Nullable="false" />
+          <Property Name="RaceCode" Type="varchar" MaxLength="5" />
+          <Property Name="LanguagePreferenceCode" Type="varchar" MaxLength="5" />
+          <Property Name="Open24HoursFlag" Type="varchar" MaxLength="1" />
+          <Property Name="SystemFlag" Type="tinyint" Nullable="false" />
+          <Property Name="AllergyFlag" Type="tinyint" />
+          <Property Name="DeleteFlag" Type="tinyint" Nullable="false" />
+          <Property Name="MasterID" Type="int" />
+          <Property Name="DataSourceID" Type="int" />
+          <Property Name="CreateDate" Type="datetime" />
+          <Property Name="UpdateDate" Type="datetime" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="UpdatedBy" Type="int" />
+          <Property Name="HL7GUID" Type="varchar" MaxLength="50" />
+          <Property Name="CPTGuid" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="IntegrationPatientXref">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SendingApplication" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="ExternalPatientID" Type="varchar" MaxLength="256" Nullable="false" />
+          <Property Name="PhytelPatientID" Type="int" Nullable="false" />
+          <Property Name="CreateDate" Type="datetime" Nullable="false" />
+          <Property Name="UpdateDate" Type="datetime" />
+          <Property Name="UpdatedBy" Type="int" />
+          <Property Name="ExternalDisplayPatientId" Type="varchar" MaxLength="256" />
+        </EntityType>
+        <EntityType Name="KeyData">
+          <Key>
+            <PropertyRef Name="KeyDataID" />
+          </Key>
+          <Property Name="KeyDataID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OwnerID" Type="int" Nullable="false" />
+          <Property Name="KeyData" Type="varchar" MaxLength="512" Nullable="false" />
+          <Property Name="CategoryCode" Type="varchar" MaxLength="5" Nullable="false" />
+          <Property Name="CreateDate" Type="datetime" />
+          <Property Name="UpdateDate" Type="datetime" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="UpdatedBy" Type="int" />
+          <Property Name="DataSourceID" Type="int" />
+          <Property Name="DeleteFlag" Type="tinyint" />
+        </EntityType>
+        <EntityType Name="PatientPersonalPhysician">
+          <Key>
+            <PropertyRef Name="PatientPersonalPhysicianID" />
+          </Key>
+          <Property Name="PatientPersonalPhysicianID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PatientRegistryHdrID" Type="int" Nullable="false" />
+          <Property Name="ProviderID" Type="int" />
+          <Property Name="SubscriberID" Type="int" />
+          <Property Name="ClientSpecified" Type="bit" Nullable="false" />
+          <Property Name="SubscriberStatus" Type="varchar" MaxLength="50" />
+          <Property Name="SubscriberStatusDate" Type="datetime" />
+          <Property Name="DeleteFlag" Type="bit" Nullable="false" />
+          <Property Name="CreateDate" Type="datetime" Nullable="false" />
+          <Property Name="CreatedBy" Type="int" Nullable="false" />
+          <Property Name="UpdateDate" Type="datetime" />
+          <Property Name="UpdatedBy" Type="int" />
+        </EntityType>
+        <EntityType Name="PatientRegistryHdr">
+          <Key>
+            <PropertyRef Name="PATIENTID" />
+          </Key>
+          <Property Name="PatientRegistryHdrID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PATIENTID" Type="int" Nullable="false" />
+          <Property Name="ReportDate" Type="datetime" Nullable="false" />
+          <Property Name="PatientDOB" Type="datetime" />
+          <Property Name="Gender" Type="varchar" MaxLength="50" />
+          <Property Name="SUBSCRIBERID" Type="int" />
+          <Property Name="PrimaryCareFlag" Type="int" />
+          <Property Name="CalendarID" Type="int" />
+          <Property Name="FacilityID" Type="int" />
+          <Property Name="ProviderID" Type="int" />
+          <Property Name="OverrideProviderID" Type="int" />
+          <Property Name="OverrideFacilityID" Type="int" />
+          <Property Name="FirstApptDate" Type="datetime" />
+          <Property Name="LastApptDate" Type="datetime" />
+          <Property Name="NextApptDate" Type="datetime" />
+          <Property Name="LastServiceDate" Type="datetime" />
+          <Property Name="LastChronicApptDate" Type="datetime" />
+          <Property Name="LastPreventativeApptDate" Type="datetime" />
+          <Property Name="DaysSinceFirstAppt" Type="int" />
+          <Property Name="DaysSinceLastAppt" Type="int" />
+          <Property Name="DaysSinceLastChronic" Type="int" />
+          <Property Name="DaysSinceLastPreventative" Type="int" />
+          <Property Name="DaysUntilNextAppt" Type="int" />
+          <Property Name="DaysFutureApptExclusion" Type="int" />
+          <Property Name="AreaCode" Type="varchar" MaxLength="3" />
+          <Property Name="PhoneNumberString" Type="varchar" MaxLength="20" />
+          <Property Name="EmailAddress" Type="varchar" MaxLength="50" />
+          <Property Name="StudyGroup" Type="varchar" MaxLength="50" />
+          <Property Name="StudyGroupStatus" Type="varchar" MaxLength="50" />
+          <Property Name="ExternalID" Type="varchar" MaxLength="128" />
+          <Property Name="FirstRecallDate" Type="datetime" />
+          <Property Name="LastRecallDate" Type="datetime" />
+          <Property Name="TotalAttemptCnt" Type="int" />
+          <Property Name="AccessCount" Type="int" />
+          <Property Name="ChronicFlag" Type="int" Nullable="false" />
+          <Property Name="PreventativeFlag" Type="int" Nullable="false" />
+          <Property Name="AncillaryFlag" Type="int" Nullable="false" />
+          <Property Name="ManualFlag" Type="int" Nullable="false" />
+          <Property Name="NC_Chronic" Type="int" Nullable="false" />
+          <Property Name="NC_Preventative" Type="int" Nullable="false" />
+          <Property Name="NC_Ancillary" Type="int" Nullable="false" />
+          <Property Name="NC_Manual" Type="int" Nullable="false" />
+          <Property Name="NC_Any" Type="int" Nullable="false" />
+          <Property Name="InactiveFlag" Type="int" Nullable="false" />
+          <Property Name="DataStatus" Type="int" Nullable="false" />
+          <Property Name="DeleteFlag" Type="int" Nullable="false" />
+          <Property Name="UpdatedBy" Type="int" />
+          <Property Name="UpdateDate" Type="datetime" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="CreateDate" Type="datetime" />
+          <Property Name="AgeInMonths" Type="int" />
+        </EntityType>
+        <EntityType Name="Phone">
+          <Key>
+            <PropertyRef Name="PhoneID" />
+          </Key>
+          <Property Name="PhoneID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OwnerID" Type="int" Nullable="false" />
+          <Property Name="CountryCode" Type="varchar" MaxLength="3" />
+          <Property Name="AreaCode" Type="varchar" MaxLength="3" />
+          <Property Name="PhoneNumberString" Type="varchar" MaxLength="20" />
+          <Property Name="DialString" Type="varchar" MaxLength="50" />
+          <Property Name="Extension" Type="varchar" MaxLength="8" />
+          <Property Name="ExtDialDelay" Type="int" />
+          <Property Name="CategoryCode" Type="varchar" MaxLength="5" Nullable="false" />
+          <Property Name="PagerPIN" Type="varchar" MaxLength="20" />
+          <Property Name="PagerTypeCode" Type="varchar" MaxLength="5" />
+          <Property Name="Preferred" Type="tinyint" Nullable="false" />
+          <Property Name="CallerIDFlag" Type="tinyint" Nullable="false" />
+          <Property Name="CreateDate" Type="datetime" />
+          <Property Name="UpdateDate" Type="datetime" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="UpdatedBy" Type="int" />
+          <Property Name="DataSourceID" Type="int" />
+          <Property Name="DeleteFlag" Type="tinyint" />
+        </EntityType>
+        <EntityType Name="ReportPatient">
+          <Key>
+            <PropertyRef Name="ReportPatientId" />
+          </Key>
+          <Property Name="ReportPatientId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PatientID" Type="int" Nullable="false" />
+          <Property Name="PMSID" Type="varchar" MaxLength="250" />
+          <Property Name="PatientName" Type="varchar" MaxLength="250" />
+          <Property Name="Phone" Type="varchar" MaxLength="10" />
+          <Property Name="Email" Type="varchar" MaxLength="50" />
+          <Property Name="BirthDate" Type="datetime" />
+          <Property Name="Gender" Type="varchar" MaxLength="5" />
+          <Property Name="SubscriberID" Type="int" />
+          <Property Name="ProviderName" Type="varchar" MaxLength="250" />
+          <Property Name="InsurerId" Type="int" />
+          <Property Name="Insurer" Type="varchar" MaxLength="250" />
+          <Property Name="CreateDate" Type="datetime" Nullable="false" />
+          <Property Name="AttributionTypeId" Type="int" />
+          <Property Name="FollowupDueDate" Type="datetime" />
+          <Property Name="Priority" Type="int" />
+          <Property Name="Notes" Type="nvarchar" MaxLength="250" />
+          <Property Name="PatientStatusId" Type="int" Nullable="false" />
+          <Property Name="Race" Type="varchar" MaxLength="50" />
+          <Property Name="LanguagePreference" Type="varchar" MaxLength="50" />
+          <Property Name="RegistryFlag" Type="bit" Nullable="false" />
+          <Property Name="CareManagerID" Type="uniqueidentifier" />
+          <Property Name="CareManagerName" Type="varchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="Subscriber">
+          <Key>
+            <PropertyRef Name="SUBSCRIBERID" />
+          </Key>
+          <Property Name="SUBSCRIBERID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PARENTID" Type="int" />
+          <Property Name="CONTRACTID" Type="int" Nullable="false" />
+          <Property Name="Title" Type="varchar" MaxLength="50" />
+          <Property Name="SubscriberName" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Degree" Type="varchar" MaxLength="50" />
+          <Property Name="PartTimeFlag" Type="int" Nullable="false" />
+          <Property Name="PrimaryCareFlag" Type="int" Nullable="false" />
+          <Property Name="PrimarySpeciality" Type="varchar" MaxLength="50" />
+          <Property Name="SecondarySpeciality" Type="varchar" MaxLength="50" />
+          <Property Name="EffectiveDate" Type="datetime" />
+          <Property Name="TermDate" Type="datetime" />
+          <Property Name="Enabled" Type="int" Nullable="false" />
+          <Property Name="CategoryCode" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="SubscriberFTE" Type="decimal" Precision="5" Scale="2" />
+          <Property Name="SubscriberFTE_Calc" Type="decimal" Precision="5" Scale="2" />
+          <Property Name="ProviderCnt" Type="decimal" Precision="5" Scale="2" />
+          <Property Name="MaxCalls_Mon" Type="int" Nullable="false" />
+          <Property Name="MaxCalls_Tue" Type="int" Nullable="false" />
+          <Property Name="MaxCalls_Wed" Type="int" Nullable="false" />
+          <Property Name="MaxCalls_Thu" Type="int" Nullable="false" />
+          <Property Name="MaxCalls_Fri" Type="int" Nullable="false" />
+          <Property Name="MaxCalls_Sat" Type="int" Nullable="false" />
+          <Property Name="MaxCalls_Sun" Type="int" Nullable="false" />
+          <Property Name="RecallOption" Type="varchar" MaxLength="50" />
+          <Property Name="RecallReleaseTime" Type="datetime" />
+          <Property Name="SubscriberIDPrev" Type="int" />
+          <Property Name="DeleteFlag" Type="int" Nullable="false" />
+          <Property Name="UpdatedBy" Type="int" />
+          <Property Name="UpdateDate" Type="datetime" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="CreateDate" Type="datetime" />
+          <Property Name="InsightPatientPanel" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SubscriberEntity">
+          <Key>
+            <PropertyRef Name="SUBSCRIBERENTITYID" />
+          </Key>
+          <Property Name="SUBSCRIBERENTITYID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SUBSCRIBERID" Type="int" Nullable="false" />
+          <Property Name="FACILITYID" Type="int" Nullable="false" />
+          <Property Name="CONTACTENTITYID" Type="int" Nullable="false" />
+          <Property Name="EntityName" Type="varchar" MaxLength="100" />
+          <Property Name="CategoryCode" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="PreferredFlag" Type="int" Nullable="false" />
+          <Property Name="Enable_RC" Type="int" Nullable="false" />
+          <Property Name="Enable_AR" Type="int" Nullable="false" />
+          <Property Name="Enable_TA" Type="int" Nullable="false" />
+          <Property Name="DeleteFlag" Type="int" Nullable="false" />
+          <Property Name="UpdatedBy" Type="int" />
+          <Property Name="UpdateDate" Type="datetime" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="CreateDate" Type="datetime" />
+          <Property Name="TIN" Type="varchar" MaxLength="25" />
+          <Property Name="NPI" Type="varchar" MaxLength="25" />
+          <Property Name="Enable_PS" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SubscriberSolution">
+          <Key>
+            <PropertyRef Name="SUBSCRIBERSOLUTIONID" />
+          </Key>
+          <Property Name="SUBSCRIBERSOLUTIONID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SUBSCRIBERID" Type="int" Nullable="false" />
+          <Property Name="SOLUTIONID" Type="int" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="100" />
+          <Property Name="Description" Type="varchar" MaxLength="1000" />
+          <Property Name="EffectiveDate" Type="datetime" />
+          <Property Name="TermDate" Type="datetime" />
+          <Property Name="Price" Type="money" Nullable="false" />
+          <Property Name="Qty" Type="decimal" Precision="5" Scale="2" Nullable="false" />
+          <Property Name="IncludedTransactions" Type="money" Nullable="false" />
+          <Property Name="TransactionFee" Type="money" Nullable="false" />
+          <Property Name="BillType" Type="int" Nullable="false" />
+          <Property Name="MinPrice" Type="money" Nullable="false" />
+          <Property Name="MaxPrice" Type="money" Nullable="false" />
+          <Property Name="DeleteFlag" Type="int" Nullable="false" />
+          <Property Name="UpdatedBy" Type="int" />
+          <Property Name="UpdateDate" Type="datetime" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="CreateDate" Type="datetime" />
+          <Property Name="DisplayName" Type="varchar" MaxLength="100" />
+          <Property Name="BillingEffectiveDate" Type="datetime" />
+        </EntityType>
+        <Association Name="FK_C3GroupEntity_C3GroupEntityTypeId">
+          <End Role="C3GroupEntityType" Type="Self.C3GroupEntityType" Multiplicity="1" />
+          <End Role="C3GroupEntity" Type="Self.C3GroupEntity" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="C3GroupEntityType">
+              <PropertyRef Name="C3GroupEntityTypeId" />
+            </Principal>
+            <Dependent Role="C3GroupEntity">
+              <PropertyRef Name="C3GroupEntityTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_C3GroupEntity_C3GroupId">
+          <End Role="C3Group" Type="Self.C3Group" Multiplicity="1" />
+          <End Role="C3GroupEntity" Type="Self.C3GroupEntity" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="C3Group">
+              <PropertyRef Name="C3GroupId" />
+            </Principal>
+            <Dependent Role="C3GroupEntity">
+              <PropertyRef Name="C3GroupId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_KeyData_ContactEntities">
+          <End Role="ContactEntities" Type="Self.ContactEntities" Multiplicity="1" />
+          <End Role="KeyData" Type="Self.KeyData" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ContactEntities">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="KeyData">
+              <PropertyRef Name="OwnerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PatientPersonalPhysician_ContactEntities_ProviderID">
+          <End Role="ContactEntities" Type="Self.ContactEntities" Multiplicity="0..1" />
+          <End Role="PatientPersonalPhysician" Type="Self.PatientPersonalPhysician" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ContactEntities">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PatientPersonalPhysician">
+              <PropertyRef Name="ProviderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <!--Errors Found During Generation:
+warning 6035: The relationship 'FK_PatientPersonalPhysician_PatientRegistryHdr_PatientRegistryHdrID' has columns that are not part of the key of the table on the primary side of the relationship. The relationship was excluded.
+        <Association Name="FK_PatientPersonalPhysician_PatientRegistryHdr_PatientRegistryHdrID" />-->
+        <Association Name="FK_Phone_ContactEntities">
+          <End Role="ContactEntities" Type="Self.ContactEntities" Multiplicity="1" />
+          <End Role="Phone" Type="Self.Phone" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ContactEntities">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Phone">
+              <PropertyRef Name="OwnerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ContractModelStoreContainer">
+          <EntitySet Name="C3Group" EntityType="Self.C3Group" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="C3GroupEntity" EntityType="Self.C3GroupEntity" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="C3GroupEntityType" EntityType="Self.C3GroupEntityType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="C3NoteAction" EntityType="Self.C3NoteAction" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="C3NoteCategory" EntityType="Self.C3NoteCategory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="C3NotePatient" EntityType="Self.C3NotePatient" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="C3Patient" EntityType="Self.C3Patient" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="C3ProblemList" EntityType="Self.C3ProblemList" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CommCategory" EntityType="Self.CommCategory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ContactEntities" EntityType="Self.ContactEntities" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="IntegrationPatientXref" EntityType="Self.IntegrationPatientXref" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="KeyData" EntityType="Self.KeyData" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PatientPersonalPhysician" EntityType="Self.PatientPersonalPhysician" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PatientRegistryHdr" EntityType="Self.PatientRegistryHdr" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Phone" EntityType="Self.Phone" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ReportPatient" EntityType="Self.ReportPatient" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Subscriber" EntityType="Self.Subscriber" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SubscriberEntity" EntityType="Self.SubscriberEntity" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SubscriberSolution" EntityType="Self.SubscriberSolution" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_C3GroupEntity_C3GroupEntityTypeId" Association="Self.FK_C3GroupEntity_C3GroupEntityTypeId">
+            <End Role="C3GroupEntityType" EntitySet="C3GroupEntityType" />
+            <End Role="C3GroupEntity" EntitySet="C3GroupEntity" />
+          </AssociationSet>
+          <AssociationSet Name="FK_C3GroupEntity_C3GroupId" Association="Self.FK_C3GroupEntity_C3GroupId">
+            <End Role="C3Group" EntitySet="C3Group" />
+            <End Role="C3GroupEntity" EntitySet="C3GroupEntity" />
+          </AssociationSet>
+          <AssociationSet Name="FK_KeyData_ContactEntities" Association="Self.FK_KeyData_ContactEntities">
+            <End Role="ContactEntities" EntitySet="ContactEntities" />
+            <End Role="KeyData" EntitySet="KeyData" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PatientPersonalPhysician_ContactEntities_ProviderID" Association="Self.FK_PatientPersonalPhysician_ContactEntities_ProviderID">
+            <End Role="ContactEntities" EntitySet="ContactEntities" />
+            <End Role="PatientPersonalPhysician" EntitySet="PatientPersonalPhysician" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Phone_ContactEntities" Association="Self.FK_Phone_ContactEntities">
+            <End Role="ContactEntities" EntitySet="ContactEntities" />
+            <End Role="Phone" EntitySet="Phone" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ContractModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="ContactEntity">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ParentID" Type="Int32" />
+          <Property Name="LockedByCaregiverID" Type="Int32" />
+          <Property Name="Name" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="Prefix" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="FirstName" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
+          <Property Name="MiddleInitial" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
+          <Property Name="LastName" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
+          <Property Name="Suffix" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Gender" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Name="BirthDate" Type="DateTime" Precision="3" />
+          <Property Name="DispenserType" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Name="CategoryCode" Type="String" MaxLength="5" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="RaceCode" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Name="LanguagePreferenceCode" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Name="Open24HoursFlag" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="SystemFlag" Type="Byte" Nullable="false" />
+          <Property Name="AllergyFlag" Type="Byte" />
+          <Property Name="DeleteFlag" Type="Byte" Nullable="false" />
+          <Property Name="MasterID" Type="Int32" />
+          <Property Name="DataSourceID" Type="Int32" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="UpdatedBy" Type="Int32" />
+          <Property Name="HL7GUID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CPTGuid" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="KeyDatas" Relationship="ContractModel.FK_KeyData_ContactEntities" FromRole="ContactEntity" ToRole="KeyData" />
+          <NavigationProperty Name="Phones" Relationship="ContractModel.FK_Phone_ContactEntities" FromRole="ContactEntity" ToRole="Phone" />
+          <NavigationProperty Name="PatientPersonalPhysicians" Relationship="ContractModel.FK_PatientPersonalPhysician_ContactEntities_ProviderID" FromRole="ContactEntity" ToRole="PatientPersonalPhysician" />
+        </EntityType>
+        <EntityContainer Name="ContractEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="ContactEntities" EntityType="Self.ContactEntity" />
+          <EntitySet Name="C3Group" EntityType="ContractModel.C3Group" />
+          <EntitySet Name="C3GroupEntity" EntityType="ContractModel.C3GroupEntity" />
+          <EntitySet Name="KeyDatas" EntityType="ContractModel.KeyData" />
+          <EntitySet Name="ReportPatients" EntityType="ContractModel.ReportPatient" />
+          <AssociationSet Name="FK_C3GroupEntity_C3GroupId" Association="ContractModel.FK_C3GroupEntity_C3GroupId">
+            <End Role="C3Group" EntitySet="C3Group" />
+            <End Role="C3GroupEntity" EntitySet="C3GroupEntity" />
+          </AssociationSet>
+          <AssociationSet Name="FK_KeyData_ContactEntities" Association="ContractModel.FK_KeyData_ContactEntities">
+            <End Role="ContactEntity" EntitySet="ContactEntities" />
+            <End Role="KeyData" EntitySet="KeyDatas" />
+          </AssociationSet>
+          <EntitySet Name="IntegrationPatientXrefs" EntityType="ContractModel.IntegrationPatientXref" />
+          <EntitySet Name="C3Patient" EntityType="ContractModel.C3Patient" />
+          <EntitySet Name="C3ProblemList" EntityType="ContractModel.C3ProblemList" />
+          <EntitySet Name="C3NoteAction" EntityType="ContractModel.C3NoteAction" />
+          <EntitySet Name="C3NoteCategory" EntityType="ContractModel.C3NoteCategory" />
+          <EntitySet Name="C3NotePatient" EntityType="ContractModel.C3NotePatient" />
+          <EntitySet Name="Phones" EntityType="ContractModel.Phone" />
+          <EntitySet Name="SubscriberEntities" EntityType="ContractModel.SubscriberEntity" />
+          <AssociationSet Name="FK_Phone_ContactEntities" Association="ContractModel.FK_Phone_ContactEntities">
+            <End Role="ContactEntity" EntitySet="ContactEntities" />
+            <End Role="Phone" EntitySet="Phones" />
+          </AssociationSet>
+          <EntitySet Name="CommCategories" EntityType="ContractModel.CommCategory" />
+          <EntitySet Name="PatientRegistryHdrs" EntityType="ContractModel.PatientRegistryHdr" />
+          <EntitySet Name="PatientPersonalPhysicians" EntityType="ContractModel.PatientPersonalPhysician" />
+          <AssociationSet Name="FK_PatientPersonalPhysician_ContactEntities_ProviderID" Association="ContractModel.FK_PatientPersonalPhysician_ContactEntities_ProviderID">
+            <End Role="ContactEntity" EntitySet="ContactEntities" />
+            <End Role="PatientPersonalPhysician" EntitySet="PatientPersonalPhysicians" />
+          </AssociationSet>
+          <EntitySet Name="C3GroupEntityType" EntityType="ContractModel.C3GroupEntityType" />
+          <EntitySet Name="Subscribers" EntityType="ContractModel.Subscriber" />
+          <EntitySet Name="SubscriberSolutions" EntityType="ContractModel.SubscriberSolution" />
+          <AssociationSet Name="FK_C3GroupEntity_C3GroupEntityTypeId" Association="ContractModel.FK_C3GroupEntity_C3GroupEntityTypeId">
+            <End Role="C3GroupEntityType" EntitySet="C3GroupEntityType" />
+            <End Role="C3GroupEntity" EntitySet="C3GroupEntity" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="C3Group">
+          <Key>
+            <PropertyRef Name="C3GroupId" />
+          </Key>
+          <Property Name="C3GroupId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="EnableAll" Type="Boolean" Nullable="false" />
+          <Property Name="DeleteFlag" Type="Boolean" Nullable="false" />
+          <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdatedBy" Type="Int32" />
+          <Property Name="Description" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="C3GroupEntity" Relationship="ContractModel.FK_C3GroupEntity_C3GroupId" FromRole="C3Group" ToRole="C3GroupEntity" />
+        </EntityType>
+        <EntityType Name="C3GroupEntity">
+          <Key>
+            <PropertyRef Name="C3GroupEntityId" />
+          </Key>
+          <Property Name="C3GroupEntityId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="C3GroupId" Type="Int32" Nullable="false" />
+          <Property Name="EntityId" Type="Int32" Nullable="false" />
+          <Property Name="C3GroupEntityTypeId" Type="Int32" Nullable="false" />
+          <Property Name="DeleteFlag" Type="Boolean" Nullable="false" />
+          <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdatedBy" Type="Int32" />
+          <NavigationProperty Name="C3Group" Relationship="ContractModel.FK_C3GroupEntity_C3GroupId" FromRole="C3GroupEntity" ToRole="C3Group" />
+          <NavigationProperty Name="C3GroupEntityType" Relationship="ContractModel.FK_C3GroupEntity_C3GroupEntityTypeId" FromRole="C3GroupEntity" ToRole="C3GroupEntityType" />
+        </EntityType>
+        <EntityType Name="KeyData">
+          <Key>
+            <PropertyRef Name="KeyDataID" />
+          </Key>
+          <Property Name="KeyDataID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OwnerID" Type="Int32" Nullable="false" />
+          <Property Name="KeyData1" Type="String" Nullable="false" MaxLength="512" FixedLength="false" Unicode="false" />
+          <Property Name="CategoryCode" Type="String" Nullable="false" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="UpdatedBy" Type="Int32" />
+          <Property Name="DataSourceID" Type="Int32" />
+          <Property Name="DeleteFlag" Type="Byte" />
+          <NavigationProperty Name="ContactEntity" Relationship="ContractModel.FK_KeyData_ContactEntities" FromRole="KeyData" ToRole="ContactEntity" />
+        </EntityType>
+        <EntityType Name="ReportPatient">
+          <Key>
+            <PropertyRef Name="ReportPatientId" />
+          </Key>
+          <Property Name="ReportPatientId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PatientID" Type="Int32" Nullable="false" />
+          <Property Name="PMSID" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="PatientName" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="Phone" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="BirthDate" Type="DateTime" Precision="3" />
+          <Property Name="Gender" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Name="SubscriberID" Type="Int32" />
+          <Property Name="ProviderName" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="InsurerId" Type="Int32" />
+          <Property Name="Insurer" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="AttributionTypeId" Type="Int32" />
+          <Property Name="FollowupDueDate" Type="DateTime" Precision="3" />
+          <Property Name="Priority" Type="Int32" />
+          <Property Name="Notes" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="PatientStatusId" Type="Int32" Nullable="false" />
+          <Property Name="Race" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LanguagePreference" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="RegistryFlag" Type="Boolean" Nullable="false" />
+          <Property Name="CareManagerID" Type="Guid" />
+          <Property Name="CareManagerName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <Association Name="FK_C3GroupEntity_C3GroupId">
+          <End Type="ContractModel.C3Group" Role="C3Group" Multiplicity="1" />
+          <End Type="ContractModel.C3GroupEntity" Role="C3GroupEntity" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="C3Group">
+              <PropertyRef Name="C3GroupId" />
+            </Principal>
+            <Dependent Role="C3GroupEntity">
+              <PropertyRef Name="C3GroupId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_KeyData_ContactEntities">
+          <End Type="ContractModel.ContactEntity" Role="ContactEntity" Multiplicity="1" />
+          <End Type="ContractModel.KeyData" Role="KeyData" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ContactEntity">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="KeyData">
+              <PropertyRef Name="OwnerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="IntegrationPatientXref">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SendingApplication" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="ExternalPatientID" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="false" />
+          <Property Name="PhytelPatientID" Type="Int32" Nullable="false" />
+          <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdatedBy" Type="Int32" />
+          <Property Name="ExternalDisplayPatientId" Type="String" MaxLength="256" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="C3Patient">
+          <Key>
+            <PropertyRef Name="PatientID" />
+          </Key>
+          <Property Name="PatientID" Type="Int32" Nullable="false" />
+          <Property Name="PatientName" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="ProviderID" Type="Int32" />
+          <Property Name="SubscriberName" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="PMSID" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="Payer" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="Gender" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Name="Phone" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Age" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="BirthDate" Type="DateTime" Precision="3" />
+          <Property Name="UpcomingBirthdayDate" Type="DateTime" Precision="3" />
+          <Property Name="PatientStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="PatientStatusID" Type="Int32" Nullable="false" />
+          <Property Name="Priority" Type="Int32" />
+          <Property Name="FollowupDueDate" Type="DateTime" Precision="3" />
+          <Property Name="LastCommunicationDate" Type="DateTime" Precision="3" />
+          <Property Name="LastCommunicationMode" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Name="AlertRecommendationCount" Type="Int32" />
+          <Property Name="LastPatientNoteID" Type="Int32" />
+          <Property Name="CareManagerID" Type="Guid" />
+          <Property Name="CareManagerName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="LastAppointmentDate" Type="DateTime" Precision="3" />
+          <Property Name="NextAppointmentDate" Type="DateTime" Precision="3" />
+          <Property Name="ProblemListSortOrder" Type="Int32" />
+          <Property Name="MedicationAllergies" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="MedicationAllergiesSortOrder" Type="Int32" />
+          <Property Name="Allergies" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Medications" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="MedicationSortOrder" Type="Int32" />
+          <Property Name="CommunicationPreference" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="OutreachException" Type="Boolean" />
+          <Property Name="Address" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="C3ProblemList">
+          <Key>
+            <PropertyRef Name="ProblemListID" />
+          </Key>
+          <Property Name="ProblemListID" Type="Int32" Nullable="false" />
+          <Property Name="PatientID" Type="Int32" Nullable="false" />
+          <Property Name="ProblemExternalCode" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ProblemDescription" Type="String" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="ProblemTypeID" Type="Int32" />
+          <Property Name="ProblemTypeDescription" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="C3NoteAction">
+          <Key>
+            <PropertyRef Name="ActionID" />
+          </Key>
+          <Property Name="ActionID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ActionName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="OrderBy" Type="Int32" Nullable="false" />
+          <Property Name="Enabled" Type="Boolean" Nullable="false" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
+          <Property Name="CreatedBy" Type="Guid" />
+          <Property Name="UpdateBy" Type="Guid" />
+        </EntityType>
+        <EntityType Name="C3NoteCategory">
+          <Key>
+            <PropertyRef Name="CategoryId" />
+          </Key>
+          <Property Name="CategoryId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CategoryName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="OrderBy" Type="Int32" Nullable="false" />
+          <Property Name="Enabled" Type="Boolean" Nullable="false" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
+          <Property Name="CreatedBy" Type="Guid" />
+          <Property Name="UpdatedBy" Type="Guid" />
+        </EntityType>
+        <EntityType Name="C3NotePatient">
+          <Key>
+            <PropertyRef Name="NoteId" />
+          </Key>
+          <Property Name="NoteId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Note" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ActionID" Type="Int32" Nullable="false" />
+          <Property Name="CategoryId" Type="Int32" Nullable="false" />
+          <Property Name="PatientId" Type="Int32" Nullable="false" />
+          <Property Name="CampaignId" Type="Int32" Nullable="false" />
+          <Property Name="Enabled" Type="Boolean" Nullable="false" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdatedDate" Type="DateTime" Precision="3" />
+          <Property Name="CreatedBy" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedById" Type="Guid" />
+          <Property Name="DeletedBy" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="DeletedDate" Type="DateTime" Precision="3" />
+          <Property Name="DeletedStatus" Type="Boolean" />
+          <Property Name="CampaignName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="Phone">
+          <Key>
+            <PropertyRef Name="PhoneID" />
+          </Key>
+          <Property Name="PhoneID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OwnerID" Type="Int32" Nullable="false" />
+          <Property Name="CountryCode" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
+          <Property Name="AreaCode" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
+          <Property Name="PhoneNumberString" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="DialString" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Extension" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="ExtDialDelay" Type="Int32" />
+          <Property Name="CategoryCode" Type="String" Nullable="false" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Name="PagerPIN" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="PagerTypeCode" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Name="Preferred" Type="Byte" Nullable="false" />
+          <Property Name="CallerIDFlag" Type="Byte" Nullable="false" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="UpdatedBy" Type="Int32" />
+          <Property Name="DataSourceID" Type="Int32" />
+          <Property Name="DeleteFlag" Type="Byte" />
+          <NavigationProperty Name="ContactEntity" Relationship="ContractModel.FK_Phone_ContactEntities" FromRole="Phone" ToRole="ContactEntity" />
+        </EntityType>
+        <EntityType Name="SubscriberEntity">
+          <Key>
+            <PropertyRef Name="SUBSCRIBERENTITYID" />
+          </Key>
+          <Property Name="SUBSCRIBERENTITYID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SUBSCRIBERID" Type="Int32" Nullable="false" />
+          <Property Name="FACILITYID" Type="Int32" Nullable="false" />
+          <Property Name="CONTACTENTITYID" Type="Int32" Nullable="false" />
+          <Property Name="EntityName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="CategoryCode" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="PreferredFlag" Type="Int32" Nullable="false" />
+          <Property Name="Enable_RC" Type="Int32" Nullable="false" />
+          <Property Name="Enable_AR" Type="Int32" Nullable="false" />
+          <Property Name="Enable_TA" Type="Int32" Nullable="false" />
+          <Property Name="DeleteFlag" Type="Int32" Nullable="false" />
+          <Property Name="UpdatedBy" Type="Int32" />
+          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <Property Name="TIN" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Name="NPI" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Name="Enable_PS" Type="Int32" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Phone_ContactEntities">
+          <End Type="ContractModel.ContactEntity" Role="ContactEntity" Multiplicity="1" />
+          <End Type="ContractModel.Phone" Role="Phone" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ContactEntity">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Phone">
+              <PropertyRef Name="OwnerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="CommCategory">
+          <Key>
+            <PropertyRef Name="CommCategoryID" />
+          </Key>
+          <Property Name="CommCategoryID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CommCategoryCode" Type="String" Nullable="false" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="PatientRegistryHdr">
+          <Key>
+            <PropertyRef Name="PATIENTID" />
+          </Key>
+          <Property Name="PatientRegistryHdrID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PATIENTID" Type="Int32" Nullable="false" />
+          <Property Name="ReportDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="PatientDOB" Type="DateTime" Precision="3" />
+          <Property Name="Gender" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="SUBSCRIBERID" Type="Int32" />
+          <Property Name="PrimaryCareFlag" Type="Int32" />
+          <Property Name="CalendarID" Type="Int32" />
+          <Property Name="FacilityID" Type="Int32" />
+          <Property Name="ProviderID" Type="Int32" />
+          <Property Name="OverrideProviderID" Type="Int32" />
+          <Property Name="OverrideFacilityID" Type="Int32" />
+          <Property Name="FirstApptDate" Type="DateTime" Precision="3" />
+          <Property Name="LastApptDate" Type="DateTime" Precision="3" />
+          <Property Name="NextApptDate" Type="DateTime" Precision="3" />
+          <Property Name="LastServiceDate" Type="DateTime" Precision="3" />
+          <Property Name="LastChronicApptDate" Type="DateTime" Precision="3" />
+          <Property Name="LastPreventativeApptDate" Type="DateTime" Precision="3" />
+          <Property Name="DaysSinceFirstAppt" Type="Int32" />
+          <Property Name="DaysSinceLastAppt" Type="Int32" />
+          <Property Name="DaysSinceLastChronic" Type="Int32" />
+          <Property Name="DaysSinceLastPreventative" Type="Int32" />
+          <Property Name="DaysUntilNextAppt" Type="Int32" />
+          <Property Name="DaysFutureApptExclusion" Type="Int32" />
+          <Property Name="AreaCode" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
+          <Property Name="PhoneNumberString" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="EmailAddress" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="StudyGroup" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="StudyGroupStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="ExternalID" Type="String" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="FirstRecallDate" Type="DateTime" Precision="3" />
+          <Property Name="LastRecallDate" Type="DateTime" Precision="3" />
+          <Property Name="TotalAttemptCnt" Type="Int32" />
+          <Property Name="AccessCount" Type="Int32" />
+          <Property Name="ChronicFlag" Type="Int32" Nullable="false" />
+          <Property Name="PreventativeFlag" Type="Int32" Nullable="false" />
+          <Property Name="AncillaryFlag" Type="Int32" Nullable="false" />
+          <Property Name="ManualFlag" Type="Int32" Nullable="false" />
+          <Property Name="NC_Chronic" Type="Int32" Nullable="false" />
+          <Property Name="NC_Preventative" Type="Int32" Nullable="false" />
+          <Property Name="NC_Ancillary" Type="Int32" Nullable="false" />
+          <Property Name="NC_Manual" Type="Int32" Nullable="false" />
+          <Property Name="NC_Any" Type="Int32" Nullable="false" />
+          <Property Name="InactiveFlag" Type="Int32" Nullable="false" />
+          <Property Name="DataStatus" Type="Int32" Nullable="false" />
+          <Property Name="DeleteFlag" Type="Int32" Nullable="false" />
+          <Property Name="UpdatedBy" Type="Int32" />
+          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <Property Name="AgeInMonths" Type="Int32" />
+        </EntityType>
+        <EntityType Name="PatientPersonalPhysician">
+          <Key>
+            <PropertyRef Name="PatientPersonalPhysicianID" />
+          </Key>
+          <Property Name="PatientPersonalPhysicianID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PatientRegistryHdrID" Type="Int32" Nullable="false" />
+          <Property Name="ProviderID" Type="Int32" />
+          <Property Name="SubscriberID" Type="Int32" />
+          <Property Name="ClientSpecified" Type="Boolean" Nullable="false" />
+          <Property Name="SubscriberStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="SubscriberStatusDate" Type="DateTime" Precision="3" />
+          <Property Name="DeleteFlag" Type="Boolean" Nullable="false" />
+          <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedBy" Type="Int32" Nullable="false" />
+          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdatedBy" Type="Int32" />
+          <NavigationProperty Name="ContactEntity" Relationship="ContractModel.FK_PatientPersonalPhysician_ContactEntities_ProviderID" FromRole="PatientPersonalPhysician" ToRole="ContactEntity" />
+        </EntityType>
+        <Association Name="FK_PatientPersonalPhysician_ContactEntities_ProviderID">
+          <End Type="ContractModel.ContactEntity" Role="ContactEntity" Multiplicity="0..1" />
+          <End Type="ContractModel.PatientPersonalPhysician" Role="PatientPersonalPhysician" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ContactEntity">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PatientPersonalPhysician">
+              <PropertyRef Name="ProviderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="C3GroupEntityType">
+          <Key>
+            <PropertyRef Name="C3GroupEntityTypeId" />
+          </Key>
+          <Property Name="C3GroupEntityTypeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="DeleteFlag" Type="Boolean" Nullable="false" />
+          <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdatedBy" Type="Int32" />
+          <NavigationProperty Name="C3GroupEntity" Relationship="ContractModel.FK_C3GroupEntity_C3GroupEntityTypeId" FromRole="C3GroupEntityType" ToRole="C3GroupEntity" />
+        </EntityType>
+        <EntityType Name="Subscriber">
+          <Key>
+            <PropertyRef Name="SUBSCRIBERID" />
+          </Key>
+          <Property Name="SUBSCRIBERID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PARENTID" Type="Int32" />
+          <Property Name="CONTRACTID" Type="Int32" Nullable="false" />
+          <Property Name="Title" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="SubscriberName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Degree" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="PartTimeFlag" Type="Int32" Nullable="false" />
+          <Property Name="PrimaryCareFlag" Type="Int32" Nullable="false" />
+          <Property Name="PrimarySpeciality" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="SecondarySpeciality" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="EffectiveDate" Type="DateTime" Precision="3" />
+          <Property Name="TermDate" Type="DateTime" Precision="3" />
+          <Property Name="Enabled" Type="Int32" Nullable="false" />
+          <Property Name="CategoryCode" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="SubscriberFTE" Type="Decimal" Precision="5" Scale="2" />
+          <Property Name="SubscriberFTE_Calc" Type="Decimal" Precision="5" Scale="2" />
+          <Property Name="ProviderCnt" Type="Decimal" Precision="5" Scale="2" />
+          <Property Name="MaxCalls_Mon" Type="Int32" Nullable="false" />
+          <Property Name="MaxCalls_Tue" Type="Int32" Nullable="false" />
+          <Property Name="MaxCalls_Wed" Type="Int32" Nullable="false" />
+          <Property Name="MaxCalls_Thu" Type="Int32" Nullable="false" />
+          <Property Name="MaxCalls_Fri" Type="Int32" Nullable="false" />
+          <Property Name="MaxCalls_Sat" Type="Int32" Nullable="false" />
+          <Property Name="MaxCalls_Sun" Type="Int32" Nullable="false" />
+          <Property Name="RecallOption" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="RecallReleaseTime" Type="DateTime" Precision="3" />
+          <Property Name="SubscriberIDPrev" Type="Int32" />
+          <Property Name="DeleteFlag" Type="Int32" Nullable="false" />
+          <Property Name="UpdatedBy" Type="Int32" />
+          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <Property Name="InsightPatientPanel" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SubscriberSolution">
+          <Key>
+            <PropertyRef Name="SUBSCRIBERSOLUTIONID" />
+          </Key>
+          <Property Name="SUBSCRIBERSOLUTIONID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SUBSCRIBERID" Type="Int32" Nullable="false" />
+          <Property Name="SOLUTIONID" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="Description" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+          <Property Name="EffectiveDate" Type="DateTime" Precision="3" />
+          <Property Name="TermDate" Type="DateTime" Precision="3" />
+          <Property Name="Price" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="Qty" Type="Decimal" Nullable="false" Precision="5" Scale="2" />
+          <Property Name="IncludedTransactions" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="TransactionFee" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="BillType" Type="Int32" Nullable="false" />
+          <Property Name="MinPrice" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="MaxPrice" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="DeleteFlag" Type="Int32" Nullable="false" />
+          <Property Name="UpdatedBy" Type="Int32" />
+          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <Property Name="DisplayName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="BillingEffectiveDate" Type="DateTime" Precision="3" />
+        </EntityType>
+        <Association Name="FK_C3GroupEntity_C3GroupEntityTypeId">
+          <End Type="ContractModel.C3GroupEntityType" Role="C3GroupEntityType" Multiplicity="1" />
+          <End Type="ContractModel.C3GroupEntity" Role="C3GroupEntity" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="C3GroupEntityType">
+              <PropertyRef Name="C3GroupEntityTypeId" />
+            </Principal>
+            <Dependent Role="C3GroupEntity">
+              <PropertyRef Name="C3GroupEntityTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ContractModelStoreContainer" CdmEntityContainer="ContractEntities">
+          <EntitySetMapping Name="ContactEntities">
+            <EntityTypeMapping TypeName="ContractModel.ContactEntity">
+              <MappingFragment StoreEntitySet="ContactEntities">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="ParentID" ColumnName="ParentID" />
+                <ScalarProperty Name="LockedByCaregiverID" ColumnName="LockedByCaregiverID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Prefix" ColumnName="Prefix" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="MiddleInitial" ColumnName="MiddleInitial" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="Suffix" ColumnName="Suffix" />
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="BirthDate" ColumnName="BirthDate" />
+                <ScalarProperty Name="DispenserType" ColumnName="DispenserType" />
+                <ScalarProperty Name="CategoryCode" ColumnName="CategoryCode" />
+                <ScalarProperty Name="RaceCode" ColumnName="RaceCode" />
+                <ScalarProperty Name="LanguagePreferenceCode" ColumnName="LanguagePreferenceCode" />
+                <ScalarProperty Name="Open24HoursFlag" ColumnName="Open24HoursFlag" />
+                <ScalarProperty Name="SystemFlag" ColumnName="SystemFlag" />
+                <ScalarProperty Name="AllergyFlag" ColumnName="AllergyFlag" />
+                <ScalarProperty Name="DeleteFlag" ColumnName="DeleteFlag" />
+                <ScalarProperty Name="MasterID" ColumnName="MasterID" />
+                <ScalarProperty Name="DataSourceID" ColumnName="DataSourceID" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="HL7GUID" ColumnName="HL7GUID" />
+                <ScalarProperty Name="CPTGuid" ColumnName="CPTGuid" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="C3Group">
+            <EntityTypeMapping TypeName="ContractModel.C3Group">
+              <MappingFragment StoreEntitySet="C3Group">
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="DeleteFlag" ColumnName="DeleteFlag" />
+                <ScalarProperty Name="EnableAll" ColumnName="EnableAll" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="C3GroupId" ColumnName="C3GroupId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="C3GroupEntity">
+            <EntityTypeMapping TypeName="ContractModel.C3GroupEntity">
+              <MappingFragment StoreEntitySet="C3GroupEntity">
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="DeleteFlag" ColumnName="DeleteFlag" />
+                <ScalarProperty Name="C3GroupEntityTypeId" ColumnName="C3GroupEntityTypeId" />
+                <ScalarProperty Name="EntityId" ColumnName="EntityId" />
+                <ScalarProperty Name="C3GroupId" ColumnName="C3GroupId" />
+                <ScalarProperty Name="C3GroupEntityId" ColumnName="C3GroupEntityId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="KeyDatas">
+            <EntityTypeMapping TypeName="ContractModel.KeyData">
+              <MappingFragment StoreEntitySet="KeyData">
+                <ScalarProperty Name="DeleteFlag" ColumnName="DeleteFlag" />
+                <ScalarProperty Name="DataSourceID" ColumnName="DataSourceID" />
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="CategoryCode" ColumnName="CategoryCode" />
+                <ScalarProperty Name="KeyData1" ColumnName="KeyData" />
+                <ScalarProperty Name="OwnerID" ColumnName="OwnerID" />
+                <ScalarProperty Name="KeyDataID" ColumnName="KeyDataID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ReportPatients">
+            <EntityTypeMapping TypeName="ContractModel.ReportPatient">
+              <MappingFragment StoreEntitySet="ReportPatient">
+                <ScalarProperty Name="CareManagerName" ColumnName="CareManagerName" />
+                <ScalarProperty Name="CareManagerID" ColumnName="CareManagerID" />
+                <ScalarProperty Name="RegistryFlag" ColumnName="RegistryFlag" />
+                <ScalarProperty Name="LanguagePreference" ColumnName="LanguagePreference" />
+                <ScalarProperty Name="Race" ColumnName="Race" />
+                <ScalarProperty Name="PatientStatusId" ColumnName="PatientStatusId" />
+                <ScalarProperty Name="Notes" ColumnName="Notes" />
+                <ScalarProperty Name="Priority" ColumnName="Priority" />
+                <ScalarProperty Name="FollowupDueDate" ColumnName="FollowupDueDate" />
+                <ScalarProperty Name="AttributionTypeId" ColumnName="AttributionTypeId" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="Insurer" ColumnName="Insurer" />
+                <ScalarProperty Name="InsurerId" ColumnName="InsurerId" />
+                <ScalarProperty Name="ProviderName" ColumnName="ProviderName" />
+                <ScalarProperty Name="SubscriberID" ColumnName="SubscriberID" />
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="BirthDate" ColumnName="BirthDate" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="PatientName" ColumnName="PatientName" />
+                <ScalarProperty Name="PMSID" ColumnName="PMSID" />
+                <ScalarProperty Name="PatientID" ColumnName="PatientID" />
+                <ScalarProperty Name="ReportPatientId" ColumnName="ReportPatientId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="IntegrationPatientXrefs">
+            <EntityTypeMapping TypeName="ContractModel.IntegrationPatientXref">
+              <MappingFragment StoreEntitySet="IntegrationPatientXref">
+                <ScalarProperty Name="ExternalDisplayPatientId" ColumnName="ExternalDisplayPatientId" />
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="PhytelPatientID" ColumnName="PhytelPatientID" />
+                <ScalarProperty Name="ExternalPatientID" ColumnName="ExternalPatientID" />
+                <ScalarProperty Name="SendingApplication" ColumnName="SendingApplication" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="C3Patient">
+            <EntityTypeMapping TypeName="ContractModel.C3Patient">
+              <MappingFragment StoreEntitySet="C3Patient">
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="OutreachException" ColumnName="OutreachException" />
+                <ScalarProperty Name="CommunicationPreference" ColumnName="CommunicationPreference" />
+                <ScalarProperty Name="MedicationSortOrder" ColumnName="MedicationSortOrder" />
+                <ScalarProperty Name="Medications" ColumnName="Medications" />
+                <ScalarProperty Name="Allergies" ColumnName="Allergies" />
+                <ScalarProperty Name="MedicationAllergiesSortOrder" ColumnName="MedicationAllergiesSortOrder" />
+                <ScalarProperty Name="MedicationAllergies" ColumnName="MedicationAllergies" />
+                <ScalarProperty Name="ProblemListSortOrder" ColumnName="ProblemListSortOrder" />
+                <ScalarProperty Name="NextAppointmentDate" ColumnName="NextAppointmentDate" />
+                <ScalarProperty Name="LastAppointmentDate" ColumnName="LastAppointmentDate" />
+                <ScalarProperty Name="CareManagerName" ColumnName="CareManagerName" />
+                <ScalarProperty Name="CareManagerID" ColumnName="CareManagerID" />
+                <ScalarProperty Name="LastPatientNoteID" ColumnName="LastPatientNoteID" />
+                <ScalarProperty Name="AlertRecommendationCount" ColumnName="AlertRecommendationCount" />
+                <ScalarProperty Name="LastCommunicationMode" ColumnName="LastCommunicationMode" />
+                <ScalarProperty Name="LastCommunicationDate" ColumnName="LastCommunicationDate" />
+                <ScalarProperty Name="FollowupDueDate" ColumnName="FollowupDueDate" />
+                <ScalarProperty Name="Priority" ColumnName="Priority" />
+                <ScalarProperty Name="PatientStatusID" ColumnName="PatientStatusID" />
+                <ScalarProperty Name="PatientStatus" ColumnName="PatientStatus" />
+                <ScalarProperty Name="UpcomingBirthdayDate" ColumnName="UpcomingBirthdayDate" />
+                <ScalarProperty Name="BirthDate" ColumnName="BirthDate" />
+                <ScalarProperty Name="Age" ColumnName="Age" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="Payer" ColumnName="Payer" />
+                <ScalarProperty Name="PMSID" ColumnName="PMSID" />
+                <ScalarProperty Name="SubscriberName" ColumnName="SubscriberName" />
+                <ScalarProperty Name="ProviderID" ColumnName="ProviderID" />
+                <ScalarProperty Name="PatientName" ColumnName="PatientName" />
+                <ScalarProperty Name="PatientID" ColumnName="PatientID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="C3ProblemList">
+            <EntityTypeMapping TypeName="ContractModel.C3ProblemList">
+              <MappingFragment StoreEntitySet="C3ProblemList">
+                <ScalarProperty Name="ProblemTypeDescription" ColumnName="ProblemTypeDescription" />
+                <ScalarProperty Name="ProblemTypeID" ColumnName="ProblemTypeID" />
+                <ScalarProperty Name="ProblemDescription" ColumnName="ProblemDescription" />
+                <ScalarProperty Name="ProblemExternalCode" ColumnName="ProblemExternalCode" />
+                <ScalarProperty Name="PatientID" ColumnName="PatientID" />
+                <ScalarProperty Name="ProblemListID" ColumnName="ProblemListID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="C3NoteAction">
+            <EntityTypeMapping TypeName="ContractModel.C3NoteAction">
+              <MappingFragment StoreEntitySet="C3NoteAction">
+                <ScalarProperty Name="UpdateBy" ColumnName="UpdateBy" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="Enabled" ColumnName="Enabled" />
+                <ScalarProperty Name="OrderBy" ColumnName="OrderBy" />
+                <ScalarProperty Name="ActionName" ColumnName="ActionName" />
+                <ScalarProperty Name="ActionID" ColumnName="ActionID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="C3NoteCategory">
+            <EntityTypeMapping TypeName="ContractModel.C3NoteCategory">
+              <MappingFragment StoreEntitySet="C3NoteCategory">
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="Enabled" ColumnName="Enabled" />
+                <ScalarProperty Name="OrderBy" ColumnName="OrderBy" />
+                <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
+                <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="C3NotePatient">
+            <EntityTypeMapping TypeName="ContractModel.C3NotePatient">
+              <MappingFragment StoreEntitySet="C3NotePatient">
+                <ScalarProperty Name="CampaignName" ColumnName="CampaignName" />
+                <ScalarProperty Name="DeletedStatus" ColumnName="DeletedStatus" />
+                <ScalarProperty Name="DeletedDate" ColumnName="DeletedDate" />
+                <ScalarProperty Name="DeletedBy" ColumnName="DeletedBy" />
+                <ScalarProperty Name="CreatedById" ColumnName="CreatedById" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="UpdatedDate" ColumnName="UpdatedDate" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="Enabled" ColumnName="Enabled" />
+                <ScalarProperty Name="CampaignId" ColumnName="CampaignId" />
+                <ScalarProperty Name="PatientId" ColumnName="PatientId" />
+                <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
+                <ScalarProperty Name="ActionID" ColumnName="ActionID" />
+                <ScalarProperty Name="Note" ColumnName="Note" />
+                <ScalarProperty Name="NoteId" ColumnName="NoteId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Phones">
+            <EntityTypeMapping TypeName="ContractModel.Phone">
+              <MappingFragment StoreEntitySet="Phone">
+                <ScalarProperty Name="DeleteFlag" ColumnName="DeleteFlag" />
+                <ScalarProperty Name="DataSourceID" ColumnName="DataSourceID" />
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="CallerIDFlag" ColumnName="CallerIDFlag" />
+                <ScalarProperty Name="Preferred" ColumnName="Preferred" />
+                <ScalarProperty Name="PagerTypeCode" ColumnName="PagerTypeCode" />
+                <ScalarProperty Name="PagerPIN" ColumnName="PagerPIN" />
+                <ScalarProperty Name="CategoryCode" ColumnName="CategoryCode" />
+                <ScalarProperty Name="ExtDialDelay" ColumnName="ExtDialDelay" />
+                <ScalarProperty Name="Extension" ColumnName="Extension" />
+                <ScalarProperty Name="DialString" ColumnName="DialString" />
+                <ScalarProperty Name="PhoneNumberString" ColumnName="PhoneNumberString" />
+                <ScalarProperty Name="AreaCode" ColumnName="AreaCode" />
+                <ScalarProperty Name="CountryCode" ColumnName="CountryCode" />
+                <ScalarProperty Name="OwnerID" ColumnName="OwnerID" />
+                <ScalarProperty Name="PhoneID" ColumnName="PhoneID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SubscriberEntities">
+            <EntityTypeMapping TypeName="ContractModel.SubscriberEntity">
+              <MappingFragment StoreEntitySet="SubscriberEntity">
+                <ScalarProperty Name="Enable_PS" ColumnName="Enable_PS" />
+                <ScalarProperty Name="NPI" ColumnName="NPI" />
+                <ScalarProperty Name="TIN" ColumnName="TIN" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="DeleteFlag" ColumnName="DeleteFlag" />
+                <ScalarProperty Name="Enable_TA" ColumnName="Enable_TA" />
+                <ScalarProperty Name="Enable_AR" ColumnName="Enable_AR" />
+                <ScalarProperty Name="Enable_RC" ColumnName="Enable_RC" />
+                <ScalarProperty Name="PreferredFlag" ColumnName="PreferredFlag" />
+                <ScalarProperty Name="CategoryCode" ColumnName="CategoryCode" />
+                <ScalarProperty Name="EntityName" ColumnName="EntityName" />
+                <ScalarProperty Name="CONTACTENTITYID" ColumnName="CONTACTENTITYID" />
+                <ScalarProperty Name="FACILITYID" ColumnName="FACILITYID" />
+                <ScalarProperty Name="SUBSCRIBERID" ColumnName="SUBSCRIBERID" />
+                <ScalarProperty Name="SUBSCRIBERENTITYID" ColumnName="SUBSCRIBERENTITYID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CommCategories">
+            <EntityTypeMapping TypeName="ContractModel.CommCategory">
+              <MappingFragment StoreEntitySet="CommCategory">
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="CommCategoryCode" ColumnName="CommCategoryCode" />
+                <ScalarProperty Name="CommCategoryID" ColumnName="CommCategoryID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PatientRegistryHdrs">
+            <EntityTypeMapping TypeName="ContractModel.PatientRegistryHdr">
+              <MappingFragment StoreEntitySet="PatientRegistryHdr">
+                <ScalarProperty Name="AgeInMonths" ColumnName="AgeInMonths" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="DeleteFlag" ColumnName="DeleteFlag" />
+                <ScalarProperty Name="DataStatus" ColumnName="DataStatus" />
+                <ScalarProperty Name="InactiveFlag" ColumnName="InactiveFlag" />
+                <ScalarProperty Name="NC_Any" ColumnName="NC_Any" />
+                <ScalarProperty Name="NC_Manual" ColumnName="NC_Manual" />
+                <ScalarProperty Name="NC_Ancillary" ColumnName="NC_Ancillary" />
+                <ScalarProperty Name="NC_Preventative" ColumnName="NC_Preventative" />
+                <ScalarProperty Name="NC_Chronic" ColumnName="NC_Chronic" />
+                <ScalarProperty Name="ManualFlag" ColumnName="ManualFlag" />
+                <ScalarProperty Name="AncillaryFlag" ColumnName="AncillaryFlag" />
+                <ScalarProperty Name="PreventativeFlag" ColumnName="PreventativeFlag" />
+                <ScalarProperty Name="ChronicFlag" ColumnName="ChronicFlag" />
+                <ScalarProperty Name="AccessCount" ColumnName="AccessCount" />
+                <ScalarProperty Name="TotalAttemptCnt" ColumnName="TotalAttemptCnt" />
+                <ScalarProperty Name="LastRecallDate" ColumnName="LastRecallDate" />
+                <ScalarProperty Name="FirstRecallDate" ColumnName="FirstRecallDate" />
+                <ScalarProperty Name="ExternalID" ColumnName="ExternalID" />
+                <ScalarProperty Name="StudyGroupStatus" ColumnName="StudyGroupStatus" />
+                <ScalarProperty Name="StudyGroup" ColumnName="StudyGroup" />
+                <ScalarProperty Name="EmailAddress" ColumnName="EmailAddress" />
+                <ScalarProperty Name="PhoneNumberString" ColumnName="PhoneNumberString" />
+                <ScalarProperty Name="AreaCode" ColumnName="AreaCode" />
+                <ScalarProperty Name="DaysFutureApptExclusion" ColumnName="DaysFutureApptExclusion" />
+                <ScalarProperty Name="DaysUntilNextAppt" ColumnName="DaysUntilNextAppt" />
+                <ScalarProperty Name="DaysSinceLastPreventative" ColumnName="DaysSinceLastPreventative" />
+                <ScalarProperty Name="DaysSinceLastChronic" ColumnName="DaysSinceLastChronic" />
+                <ScalarProperty Name="DaysSinceLastAppt" ColumnName="DaysSinceLastAppt" />
+                <ScalarProperty Name="DaysSinceFirstAppt" ColumnName="DaysSinceFirstAppt" />
+                <ScalarProperty Name="LastPreventativeApptDate" ColumnName="LastPreventativeApptDate" />
+                <ScalarProperty Name="LastChronicApptDate" ColumnName="LastChronicApptDate" />
+                <ScalarProperty Name="LastServiceDate" ColumnName="LastServiceDate" />
+                <ScalarProperty Name="NextApptDate" ColumnName="NextApptDate" />
+                <ScalarProperty Name="LastApptDate" ColumnName="LastApptDate" />
+                <ScalarProperty Name="FirstApptDate" ColumnName="FirstApptDate" />
+                <ScalarProperty Name="OverrideFacilityID" ColumnName="OverrideFacilityID" />
+                <ScalarProperty Name="OverrideProviderID" ColumnName="OverrideProviderID" />
+                <ScalarProperty Name="ProviderID" ColumnName="ProviderID" />
+                <ScalarProperty Name="FacilityID" ColumnName="FacilityID" />
+                <ScalarProperty Name="CalendarID" ColumnName="CalendarID" />
+                <ScalarProperty Name="PrimaryCareFlag" ColumnName="PrimaryCareFlag" />
+                <ScalarProperty Name="SUBSCRIBERID" ColumnName="SUBSCRIBERID" />
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="PatientDOB" ColumnName="PatientDOB" />
+                <ScalarProperty Name="ReportDate" ColumnName="ReportDate" />
+                <ScalarProperty Name="PATIENTID" ColumnName="PATIENTID" />
+                <ScalarProperty Name="PatientRegistryHdrID" ColumnName="PatientRegistryHdrID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PatientPersonalPhysicians">
+            <EntityTypeMapping TypeName="ContractModel.PatientPersonalPhysician">
+              <MappingFragment StoreEntitySet="PatientPersonalPhysician">
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="DeleteFlag" ColumnName="DeleteFlag" />
+                <ScalarProperty Name="SubscriberStatusDate" ColumnName="SubscriberStatusDate" />
+                <ScalarProperty Name="SubscriberStatus" ColumnName="SubscriberStatus" />
+                <ScalarProperty Name="ClientSpecified" ColumnName="ClientSpecified" />
+                <ScalarProperty Name="SubscriberID" ColumnName="SubscriberID" />
+                <ScalarProperty Name="ProviderID" ColumnName="ProviderID" />
+                <ScalarProperty Name="PatientRegistryHdrID" ColumnName="PatientRegistryHdrID" />
+                <ScalarProperty Name="PatientPersonalPhysicianID" ColumnName="PatientPersonalPhysicianID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="C3GroupEntityType">
+            <EntityTypeMapping TypeName="ContractModel.C3GroupEntityType">
+              <MappingFragment StoreEntitySet="C3GroupEntityType">
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="DeleteFlag" ColumnName="DeleteFlag" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="C3GroupEntityTypeId" ColumnName="C3GroupEntityTypeId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Subscribers">
+            <EntityTypeMapping TypeName="ContractModel.Subscriber">
+              <MappingFragment StoreEntitySet="Subscriber">
+                <ScalarProperty Name="InsightPatientPanel" ColumnName="InsightPatientPanel" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="DeleteFlag" ColumnName="DeleteFlag" />
+                <ScalarProperty Name="SubscriberIDPrev" ColumnName="SubscriberIDPrev" />
+                <ScalarProperty Name="RecallReleaseTime" ColumnName="RecallReleaseTime" />
+                <ScalarProperty Name="RecallOption" ColumnName="RecallOption" />
+                <ScalarProperty Name="MaxCalls_Sun" ColumnName="MaxCalls_Sun" />
+                <ScalarProperty Name="MaxCalls_Sat" ColumnName="MaxCalls_Sat" />
+                <ScalarProperty Name="MaxCalls_Fri" ColumnName="MaxCalls_Fri" />
+                <ScalarProperty Name="MaxCalls_Thu" ColumnName="MaxCalls_Thu" />
+                <ScalarProperty Name="MaxCalls_Wed" ColumnName="MaxCalls_Wed" />
+                <ScalarProperty Name="MaxCalls_Tue" ColumnName="MaxCalls_Tue" />
+                <ScalarProperty Name="MaxCalls_Mon" ColumnName="MaxCalls_Mon" />
+                <ScalarProperty Name="ProviderCnt" ColumnName="ProviderCnt" />
+                <ScalarProperty Name="SubscriberFTE_Calc" ColumnName="SubscriberFTE_Calc" />
+                <ScalarProperty Name="SubscriberFTE" ColumnName="SubscriberFTE" />
+                <ScalarProperty Name="CategoryCode" ColumnName="CategoryCode" />
+                <ScalarProperty Name="Enabled" ColumnName="Enabled" />
+                <ScalarProperty Name="TermDate" ColumnName="TermDate" />
+                <ScalarProperty Name="EffectiveDate" ColumnName="EffectiveDate" />
+                <ScalarProperty Name="SecondarySpeciality" ColumnName="SecondarySpeciality" />
+                <ScalarProperty Name="PrimarySpeciality" ColumnName="PrimarySpeciality" />
+                <ScalarProperty Name="PrimaryCareFlag" ColumnName="PrimaryCareFlag" />
+                <ScalarProperty Name="PartTimeFlag" ColumnName="PartTimeFlag" />
+                <ScalarProperty Name="Degree" ColumnName="Degree" />
+                <ScalarProperty Name="SubscriberName" ColumnName="SubscriberName" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="CONTRACTID" ColumnName="CONTRACTID" />
+                <ScalarProperty Name="PARENTID" ColumnName="PARENTID" />
+                <ScalarProperty Name="SUBSCRIBERID" ColumnName="SUBSCRIBERID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SubscriberSolutions">
+            <EntityTypeMapping TypeName="ContractModel.SubscriberSolution">
+              <MappingFragment StoreEntitySet="SubscriberSolution">
+                <ScalarProperty Name="BillingEffectiveDate" ColumnName="BillingEffectiveDate" />
+                <ScalarProperty Name="DisplayName" ColumnName="DisplayName" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="DeleteFlag" ColumnName="DeleteFlag" />
+                <ScalarProperty Name="MaxPrice" ColumnName="MaxPrice" />
+                <ScalarProperty Name="MinPrice" ColumnName="MinPrice" />
+                <ScalarProperty Name="BillType" ColumnName="BillType" />
+                <ScalarProperty Name="TransactionFee" ColumnName="TransactionFee" />
+                <ScalarProperty Name="IncludedTransactions" ColumnName="IncludedTransactions" />
+                <ScalarProperty Name="Qty" ColumnName="Qty" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="TermDate" ColumnName="TermDate" />
+                <ScalarProperty Name="EffectiveDate" ColumnName="EffectiveDate" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="SOLUTIONID" ColumnName="SOLUTIONID" />
+                <ScalarProperty Name="SUBSCRIBERID" ColumnName="SUBSCRIBERID" />
+                <ScalarProperty Name="SUBSCRIBERSOLUTIONID" ColumnName="SUBSCRIBERSOLUTIONID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

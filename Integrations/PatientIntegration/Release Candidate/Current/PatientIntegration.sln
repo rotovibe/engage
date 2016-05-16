@@ -1,0 +1,327 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.40629.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.Engage.Integrations.QueueProcess", "Phytel.Engage.Integrations.PatientASEProcess\Phytel.Engage.Integrations.QueueProcess.csproj", "{4E23855F-6225-4E71-BFF5-98B6F5616506}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.Engage.Integrations.ProcessTests", "Phytel.Engage.Integrations.ProcessTests\Phytel.Engage.Integrations.ProcessTests.csproj", "{044A3CDE-040F-4373-915B-B1BA7B8B196A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.Engage.Integrations", "Phytel.Engage.Integrations\Phytel.Engage.Integrations.csproj", "{083F077A-FC9D-470C-9F5C-5059AD808D42}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.Engage.Integrations.DTO", "Phytel.Engage.Integrations.DTO\Phytel.Engage.Integrations.DTO.csproj", "{126D45E4-193C-45AD-9310-9365BA9DE589}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.Engage.Integrations.Repo", "Phytel.Engage.Integrations.Repo\Phytel.Engage.Integrations.Repo.csproj", "{576E9EC8-3B81-42D0-8246-20485A596DCD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.Engage.Integrations.RepoTests", "Phytel.Engage.Integrations.RepoTests\Phytel.Engage.Integrations.RepoTests.csproj", "{F618B005-9DEF-405A-B394-D595EDD2DF96}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Engage", "Engage", "{6B85F8FA-6A1C-4A70-AB03-110E75DE68EB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Patient.DTO", "..\..\..\..\..\PhytelCode\Phytel.Net\Services\API\DataDomain\Phytel.API.DataDomain.Patient\Development\Current\Patient.DTOs\DataDomain.Patient.DTO.csproj", "{1B3148A8-FB57-4461-91BC-F1CD38A013B6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.Engage.IntegrationsTests", "Phytel.Engage.IntegrationsTests\Phytel.Engage.IntegrationsTests.csproj", "{4F521BA6-164E-426D-AED2-CD6DCA498A0B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.PatientSystem.DTO", "..\..\..\..\..\PhytelCode\Phytel.Net\Services\API\DataDomain\Phytel.API.DataDomain.PatientSystem\Development\Current\PatientSystem.DTO\DataDomain.PatientSystem.DTO.csproj", "{6033A8EA-A3EF-4182-BFDD-4A9826ECF871}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Patient.Service", "..\..\..\..\..\PhytelCode\Phytel.Net\Services\API\DataDomain\Phytel.API.DataDomain.Patient\Development\Current\Patient.Services\DataDomain.Patient.Service.csproj", "{017DC6E8-FB93-4303-AAF9-52E2449F9A34}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Patient", "Patient", "{7BBC4F28-A376-4D24-B8B1-5BC46AD2170A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Patient", "..\..\..\..\..\PhytelCode\Phytel.Net\Services\API\DataDomain\Phytel.API.DataDomain.Patient\Development\Current\Patient\DataDomain.Patient.csproj", "{1536CD0A-6308-4DAF-8618-35BBA0816997}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.API.Common", "..\..\..\..\..\PhytelCode\Phytel.Net\Services\API\Common\Phytel.API.Common\Development\Current\Phytel.API.Common.csproj", "{25CF3C3F-221F-4A49-B5EF-A8A5FCF9A5BA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{3B4D2ED9-90AF-4CB0-84FB-2E88BDA89726}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.PatientNote.DTO", "..\..\..\..\..\PhytelCode\Phytel.Net\Services\API\DataDomain\Phytel.API.DataDomain.PatientNote\Development\Current\PatientNote.DTO\DataDomain.PatientNote.DTO.csproj", "{99F4EC29-B099-424E-9757-223E67029001}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Contact.DTO", "..\..\..\..\..\PhytelCode\Phytel.Net\Services\API\DataDomain\Phytel.API.DataDomain.Contact\Development\Current\Contact.DTO\DataDomain.Contact.DTO.csproj", "{0B6E0ED8-ABE5-4A1D-8E10-0AC54F06D9C4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.Engage.Integrations.DomainEvents", "Phytel.Engage.Integrations.DomainEvents\Phytel.Engage.Integrations.DomainEvents.csproj", "{A17069BB-DA81-41FE-8689-66617109BADA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.API.Interface", "..\..\..\..\..\PhytelCode\Phytel.Net\Services\API\Interfaces\Development\Current\Phytel.API.Interface\Phytel.API.Interface.csproj", "{ABE948FB-247E-4955-B3AB-B7C93E10A542}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataDomain.Scheduling.DTO", "..\..\..\..\..\PhytelCode\Phytel.Net\Services\API\DataDomain\Phytel.API.DataDomain.Scheduling\Development\Current\Scheduling.DTO\DataDomain.Scheduling.DTO.csproj", "{1E303326-EEC9-42A8-BA50-880AB7AD99B2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.Engage.Integration.Fixes", "Phytel.Engage.Integration.Fixes\Phytel.Engage.Integration.Fixes.csproj", "{F01D28AB-AC70-4FF0-91E1-2B42EBDC8361}"
+EndProject
+Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 19
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = http://192.168.111.123:8080/tfs/phytel
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = Phytel.Engage.Integrations.PatientASEProcess\\Phytel.Engage.Integrations.QueueProcess.csproj
+		SccProjectName1 = Phytel.Engage.Integrations.PatientASEProcess
+		SccLocalPath1 = Phytel.Engage.Integrations.PatientASEProcess
+		SccProjectUniqueName2 = Phytel.Engage.Integrations.ProcessTests\\Phytel.Engage.Integrations.ProcessTests.csproj
+		SccProjectName2 = Phytel.Engage.Integrations.ProcessTests
+		SccLocalPath2 = Phytel.Engage.Integrations.ProcessTests
+		SccProjectUniqueName3 = Phytel.Engage.Integrations\\Phytel.Engage.Integrations.csproj
+		SccProjectName3 = Phytel.Engage.Integrations
+		SccLocalPath3 = Phytel.Engage.Integrations
+		SccProjectUniqueName4 = Phytel.Engage.Integrations.DTO\\Phytel.Engage.Integrations.DTO.csproj
+		SccProjectName4 = Phytel.Engage.Integrations.DTO
+		SccLocalPath4 = Phytel.Engage.Integrations.DTO
+		SccProjectUniqueName5 = Phytel.Engage.Integrations.Repo\\Phytel.Engage.Integrations.Repo.csproj
+		SccProjectName5 = Phytel.Engage.Integrations.Repo
+		SccLocalPath5 = Phytel.Engage.Integrations.Repo
+		SccProjectUniqueName6 = Phytel.Engage.Integrations.RepoTests\\Phytel.Engage.Integrations.RepoTests.csproj
+		SccProjectName6 = Phytel.Engage.Integrations.RepoTests
+		SccLocalPath6 = Phytel.Engage.Integrations.RepoTests
+		SccProjectUniqueName7 = ..\\..\\..\\..\\..\\PhytelCode\\Phytel.Net\\Services\\API\\DataDomain\\Phytel.API.DataDomain.Patient\\Development\\Current\\Patient.DTOs\\DataDomain.Patient.DTO.csproj
+		SccProjectTopLevelParentUniqueName7 = PatientIntegration.sln
+		SccProjectName7 = ../../../../../PhytelCode/Phytel.Net/Services/API/DataDomain/Phytel.API.DataDomain.Patient/Development/Current/Patient.DTOs
+		SccLocalPath7 = ..\\..\\..\\..\\..\\PhytelCode\\Phytel.Net\\Services\\API\\DataDomain\\Phytel.API.DataDomain.Patient\\Development\\Current\\Patient.DTOs
+		SccProjectUniqueName8 = Phytel.Engage.IntegrationsTests\\Phytel.Engage.IntegrationsTests.csproj
+		SccProjectName8 = Phytel.Engage.IntegrationsTests
+		SccLocalPath8 = Phytel.Engage.IntegrationsTests
+		SccProjectUniqueName9 = ..\\..\\..\\..\\..\\PhytelCode\\Phytel.Net\\Services\\API\\DataDomain\\Phytel.API.DataDomain.PatientSystem\\Development\\Current\\PatientSystem.DTO\\DataDomain.PatientSystem.DTO.csproj
+		SccProjectTopLevelParentUniqueName9 = PatientIntegration.sln
+		SccProjectName9 = ../../../../../PhytelCode/Phytel.Net/Services/API/DataDomain/Phytel.API.DataDomain.PatientSystem/Development/Current/PatientSystem.DTO
+		SccLocalPath9 = ..\\..\\..\\..\\..\\PhytelCode\\Phytel.Net\\Services\\API\\DataDomain\\Phytel.API.DataDomain.PatientSystem\\Development\\Current\\PatientSystem.DTO
+		SccProjectUniqueName10 = ..\\..\\..\\..\\..\\PhytelCode\\Phytel.Net\\Services\\API\\DataDomain\\Phytel.API.DataDomain.Patient\\Development\\Current\\Patient.Services\\DataDomain.Patient.Service.csproj
+		SccProjectTopLevelParentUniqueName10 = PatientIntegration.sln
+		SccProjectName10 = ../../../../../PhytelCode/Phytel.Net/Services/API/DataDomain/Phytel.API.DataDomain.Patient/Development/Current/Patient.Services
+		SccLocalPath10 = ..\\..\\..\\..\\..\\PhytelCode\\Phytel.Net\\Services\\API\\DataDomain\\Phytel.API.DataDomain.Patient\\Development\\Current\\Patient.Services
+		SccProjectUniqueName11 = ..\\..\\..\\..\\..\\PhytelCode\\Phytel.Net\\Services\\API\\DataDomain\\Phytel.API.DataDomain.Patient\\Development\\Current\\Patient\\DataDomain.Patient.csproj
+		SccProjectTopLevelParentUniqueName11 = PatientIntegration.sln
+		SccProjectName11 = ../../../../../PhytelCode/Phytel.Net/Services/API/DataDomain/Phytel.API.DataDomain.Patient/Development/Current/Patient
+		SccLocalPath11 = ..\\..\\..\\..\\..\\PhytelCode\\Phytel.Net\\Services\\API\\DataDomain\\Phytel.API.DataDomain.Patient\\Development\\Current\\Patient
+		SccProjectUniqueName12 = ..\\..\\..\\..\\..\\PhytelCode\\Phytel.Net\\Services\\API\\Common\\Phytel.API.Common\\Development\\Current\\Phytel.API.Common.csproj
+		SccProjectTopLevelParentUniqueName12 = PatientIntegration.sln
+		SccProjectName12 = ../../../../../PhytelCode/Phytel.Net/Services/API/Common/Phytel.API.Common/Development/Current
+		SccLocalPath12 = ..\\..\\..\\..\\..\\PhytelCode\\Phytel.Net\\Services\\API\\Common\\Phytel.API.Common\\Development\\Current
+		SccProjectUniqueName13 = ..\\..\\..\\..\\..\\PhytelCode\\Phytel.Net\\Services\\API\\DataDomain\\Phytel.API.DataDomain.PatientNote\\Development\\Current\\PatientNote.DTO\\DataDomain.PatientNote.DTO.csproj
+		SccProjectTopLevelParentUniqueName13 = PatientIntegration.sln
+		SccProjectName13 = ../../../../../PhytelCode/Phytel.Net/Services/API/DataDomain/Phytel.API.DataDomain.PatientNote/Development/Current/PatientNote.DTO
+		SccLocalPath13 = ..\\..\\..\\..\\..\\PhytelCode\\Phytel.Net\\Services\\API\\DataDomain\\Phytel.API.DataDomain.PatientNote\\Development\\Current\\PatientNote.DTO
+		SccProjectUniqueName14 = ..\\..\\..\\..\\..\\PhytelCode\\Phytel.Net\\Services\\API\\DataDomain\\Phytel.API.DataDomain.Contact\\Development\\Current\\Contact.DTO\\DataDomain.Contact.DTO.csproj
+		SccProjectTopLevelParentUniqueName14 = PatientIntegration.sln
+		SccProjectName14 = ../../../../../PhytelCode/Phytel.Net/Services/API/DataDomain/Phytel.API.DataDomain.Contact/Development/Current/Contact.DTO
+		SccLocalPath14 = ..\\..\\..\\..\\..\\PhytelCode\\Phytel.Net\\Services\\API\\DataDomain\\Phytel.API.DataDomain.Contact\\Development\\Current\\Contact.DTO
+		SccProjectUniqueName15 = Phytel.Engage.Integrations.DomainEvents\\Phytel.Engage.Integrations.DomainEvents.csproj
+		SccProjectName15 = Phytel.Engage.Integrations.DomainEvents
+		SccLocalPath15 = Phytel.Engage.Integrations.DomainEvents
+		SccProjectUniqueName16 = ..\\..\\..\\..\\..\\PhytelCode\\Phytel.Net\\Services\\API\\Interfaces\\Development\\Current\\Phytel.API.Interface\\Phytel.API.Interface.csproj
+		SccProjectTopLevelParentUniqueName16 = PatientIntegration.sln
+		SccProjectName16 = ../../../../../PhytelCode/Phytel.Net/Services/API/Interfaces/Development/Current/Phytel.API.Interface
+		SccLocalPath16 = ..\\..\\..\\..\\..\\PhytelCode\\Phytel.Net\\Services\\API\\Interfaces\\Development\\Current\\Phytel.API.Interface
+		SccProjectUniqueName17 = ..\\..\\..\\..\\..\\PhytelCode\\Phytel.Net\\Services\\API\\DataDomain\\Phytel.API.DataDomain.Scheduling\\Development\\Current\\Scheduling.DTO\\DataDomain.Scheduling.DTO.csproj
+		SccProjectTopLevelParentUniqueName17 = PatientIntegration.sln
+		SccProjectName17 = ../../../../../PhytelCode/Phytel.Net/Services/API/DataDomain/Phytel.API.DataDomain.Scheduling/Development/Current/Scheduling.DTO
+		SccLocalPath17 = ..\\..\\..\\..\\..\\PhytelCode\\Phytel.Net\\Services\\API\\DataDomain\\Phytel.API.DataDomain.Scheduling\\Development\\Current\\Scheduling.DTO
+		SccProjectUniqueName18 = Phytel.Engage.Integration.Fixes\\Phytel.Engage.Integration.Fixes.csproj
+		SccProjectName18 = Phytel.Engage.Integration.Fixes
+		SccLocalPath18 = Phytel.Engage.Integration.Fixes
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Model|Any CPU = Model|Any CPU
+		QA|Any CPU = QA|Any CPU
+		Release|Any CPU = Release|Any CPU
+		Test|Any CPU = Test|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4E23855F-6225-4E71-BFF5-98B6F5616506}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4E23855F-6225-4E71-BFF5-98B6F5616506}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4E23855F-6225-4E71-BFF5-98B6F5616506}.Model|Any CPU.ActiveCfg = Release|Any CPU
+		{4E23855F-6225-4E71-BFF5-98B6F5616506}.Model|Any CPU.Build.0 = Release|Any CPU
+		{4E23855F-6225-4E71-BFF5-98B6F5616506}.QA|Any CPU.ActiveCfg = QA|Any CPU
+		{4E23855F-6225-4E71-BFF5-98B6F5616506}.QA|Any CPU.Build.0 = QA|Any CPU
+		{4E23855F-6225-4E71-BFF5-98B6F5616506}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4E23855F-6225-4E71-BFF5-98B6F5616506}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4E23855F-6225-4E71-BFF5-98B6F5616506}.Test|Any CPU.ActiveCfg = Release|Any CPU
+		{4E23855F-6225-4E71-BFF5-98B6F5616506}.Test|Any CPU.Build.0 = Release|Any CPU
+		{044A3CDE-040F-4373-915B-B1BA7B8B196A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{044A3CDE-040F-4373-915B-B1BA7B8B196A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{044A3CDE-040F-4373-915B-B1BA7B8B196A}.Model|Any CPU.ActiveCfg = Release|Any CPU
+		{044A3CDE-040F-4373-915B-B1BA7B8B196A}.Model|Any CPU.Build.0 = Release|Any CPU
+		{044A3CDE-040F-4373-915B-B1BA7B8B196A}.QA|Any CPU.ActiveCfg = QA|Any CPU
+		{044A3CDE-040F-4373-915B-B1BA7B8B196A}.QA|Any CPU.Build.0 = QA|Any CPU
+		{044A3CDE-040F-4373-915B-B1BA7B8B196A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{044A3CDE-040F-4373-915B-B1BA7B8B196A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{044A3CDE-040F-4373-915B-B1BA7B8B196A}.Test|Any CPU.ActiveCfg = Release|Any CPU
+		{044A3CDE-040F-4373-915B-B1BA7B8B196A}.Test|Any CPU.Build.0 = Release|Any CPU
+		{083F077A-FC9D-470C-9F5C-5059AD808D42}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{083F077A-FC9D-470C-9F5C-5059AD808D42}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{083F077A-FC9D-470C-9F5C-5059AD808D42}.Model|Any CPU.ActiveCfg = Release|Any CPU
+		{083F077A-FC9D-470C-9F5C-5059AD808D42}.Model|Any CPU.Build.0 = Release|Any CPU
+		{083F077A-FC9D-470C-9F5C-5059AD808D42}.QA|Any CPU.ActiveCfg = QA|Any CPU
+		{083F077A-FC9D-470C-9F5C-5059AD808D42}.QA|Any CPU.Build.0 = QA|Any CPU
+		{083F077A-FC9D-470C-9F5C-5059AD808D42}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{083F077A-FC9D-470C-9F5C-5059AD808D42}.Release|Any CPU.Build.0 = Release|Any CPU
+		{083F077A-FC9D-470C-9F5C-5059AD808D42}.Test|Any CPU.ActiveCfg = Release|Any CPU
+		{083F077A-FC9D-470C-9F5C-5059AD808D42}.Test|Any CPU.Build.0 = Release|Any CPU
+		{126D45E4-193C-45AD-9310-9365BA9DE589}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{126D45E4-193C-45AD-9310-9365BA9DE589}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{126D45E4-193C-45AD-9310-9365BA9DE589}.Model|Any CPU.ActiveCfg = Release|Any CPU
+		{126D45E4-193C-45AD-9310-9365BA9DE589}.Model|Any CPU.Build.0 = Release|Any CPU
+		{126D45E4-193C-45AD-9310-9365BA9DE589}.QA|Any CPU.ActiveCfg = QA|Any CPU
+		{126D45E4-193C-45AD-9310-9365BA9DE589}.QA|Any CPU.Build.0 = QA|Any CPU
+		{126D45E4-193C-45AD-9310-9365BA9DE589}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{126D45E4-193C-45AD-9310-9365BA9DE589}.Release|Any CPU.Build.0 = Release|Any CPU
+		{126D45E4-193C-45AD-9310-9365BA9DE589}.Test|Any CPU.ActiveCfg = Release|Any CPU
+		{126D45E4-193C-45AD-9310-9365BA9DE589}.Test|Any CPU.Build.0 = Release|Any CPU
+		{576E9EC8-3B81-42D0-8246-20485A596DCD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{576E9EC8-3B81-42D0-8246-20485A596DCD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{576E9EC8-3B81-42D0-8246-20485A596DCD}.Model|Any CPU.ActiveCfg = Release|Any CPU
+		{576E9EC8-3B81-42D0-8246-20485A596DCD}.Model|Any CPU.Build.0 = Release|Any CPU
+		{576E9EC8-3B81-42D0-8246-20485A596DCD}.QA|Any CPU.ActiveCfg = QA|Any CPU
+		{576E9EC8-3B81-42D0-8246-20485A596DCD}.QA|Any CPU.Build.0 = QA|Any CPU
+		{576E9EC8-3B81-42D0-8246-20485A596DCD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{576E9EC8-3B81-42D0-8246-20485A596DCD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{576E9EC8-3B81-42D0-8246-20485A596DCD}.Test|Any CPU.ActiveCfg = Release|Any CPU
+		{576E9EC8-3B81-42D0-8246-20485A596DCD}.Test|Any CPU.Build.0 = Release|Any CPU
+		{F618B005-9DEF-405A-B394-D595EDD2DF96}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F618B005-9DEF-405A-B394-D595EDD2DF96}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F618B005-9DEF-405A-B394-D595EDD2DF96}.Model|Any CPU.ActiveCfg = Release|Any CPU
+		{F618B005-9DEF-405A-B394-D595EDD2DF96}.Model|Any CPU.Build.0 = Release|Any CPU
+		{F618B005-9DEF-405A-B394-D595EDD2DF96}.QA|Any CPU.ActiveCfg = QA|Any CPU
+		{F618B005-9DEF-405A-B394-D595EDD2DF96}.QA|Any CPU.Build.0 = QA|Any CPU
+		{F618B005-9DEF-405A-B394-D595EDD2DF96}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F618B005-9DEF-405A-B394-D595EDD2DF96}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F618B005-9DEF-405A-B394-D595EDD2DF96}.Test|Any CPU.ActiveCfg = Release|Any CPU
+		{F618B005-9DEF-405A-B394-D595EDD2DF96}.Test|Any CPU.Build.0 = Release|Any CPU
+		{1B3148A8-FB57-4461-91BC-F1CD38A013B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B3148A8-FB57-4461-91BC-F1CD38A013B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B3148A8-FB57-4461-91BC-F1CD38A013B6}.Model|Any CPU.ActiveCfg = Model|Any CPU
+		{1B3148A8-FB57-4461-91BC-F1CD38A013B6}.Model|Any CPU.Build.0 = Model|Any CPU
+		{1B3148A8-FB57-4461-91BC-F1CD38A013B6}.QA|Any CPU.ActiveCfg = QA|Any CPU
+		{1B3148A8-FB57-4461-91BC-F1CD38A013B6}.QA|Any CPU.Build.0 = QA|Any CPU
+		{1B3148A8-FB57-4461-91BC-F1CD38A013B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B3148A8-FB57-4461-91BC-F1CD38A013B6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B3148A8-FB57-4461-91BC-F1CD38A013B6}.Test|Any CPU.ActiveCfg = Test|Any CPU
+		{1B3148A8-FB57-4461-91BC-F1CD38A013B6}.Test|Any CPU.Build.0 = Test|Any CPU
+		{4F521BA6-164E-426D-AED2-CD6DCA498A0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F521BA6-164E-426D-AED2-CD6DCA498A0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F521BA6-164E-426D-AED2-CD6DCA498A0B}.Model|Any CPU.ActiveCfg = Release|Any CPU
+		{4F521BA6-164E-426D-AED2-CD6DCA498A0B}.Model|Any CPU.Build.0 = Release|Any CPU
+		{4F521BA6-164E-426D-AED2-CD6DCA498A0B}.QA|Any CPU.ActiveCfg = QA|Any CPU
+		{4F521BA6-164E-426D-AED2-CD6DCA498A0B}.QA|Any CPU.Build.0 = QA|Any CPU
+		{4F521BA6-164E-426D-AED2-CD6DCA498A0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F521BA6-164E-426D-AED2-CD6DCA498A0B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4F521BA6-164E-426D-AED2-CD6DCA498A0B}.Test|Any CPU.ActiveCfg = Release|Any CPU
+		{4F521BA6-164E-426D-AED2-CD6DCA498A0B}.Test|Any CPU.Build.0 = Release|Any CPU
+		{6033A8EA-A3EF-4182-BFDD-4A9826ECF871}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6033A8EA-A3EF-4182-BFDD-4A9826ECF871}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6033A8EA-A3EF-4182-BFDD-4A9826ECF871}.Model|Any CPU.ActiveCfg = Model|Any CPU
+		{6033A8EA-A3EF-4182-BFDD-4A9826ECF871}.Model|Any CPU.Build.0 = Model|Any CPU
+		{6033A8EA-A3EF-4182-BFDD-4A9826ECF871}.QA|Any CPU.ActiveCfg = QA|Any CPU
+		{6033A8EA-A3EF-4182-BFDD-4A9826ECF871}.QA|Any CPU.Build.0 = QA|Any CPU
+		{6033A8EA-A3EF-4182-BFDD-4A9826ECF871}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6033A8EA-A3EF-4182-BFDD-4A9826ECF871}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6033A8EA-A3EF-4182-BFDD-4A9826ECF871}.Test|Any CPU.ActiveCfg = Model|Any CPU
+		{6033A8EA-A3EF-4182-BFDD-4A9826ECF871}.Test|Any CPU.Build.0 = Model|Any CPU
+		{017DC6E8-FB93-4303-AAF9-52E2449F9A34}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{017DC6E8-FB93-4303-AAF9-52E2449F9A34}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{017DC6E8-FB93-4303-AAF9-52E2449F9A34}.Model|Any CPU.ActiveCfg = Model|Any CPU
+		{017DC6E8-FB93-4303-AAF9-52E2449F9A34}.Model|Any CPU.Build.0 = Model|Any CPU
+		{017DC6E8-FB93-4303-AAF9-52E2449F9A34}.QA|Any CPU.ActiveCfg = QA|Any CPU
+		{017DC6E8-FB93-4303-AAF9-52E2449F9A34}.QA|Any CPU.Build.0 = QA|Any CPU
+		{017DC6E8-FB93-4303-AAF9-52E2449F9A34}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{017DC6E8-FB93-4303-AAF9-52E2449F9A34}.Release|Any CPU.Build.0 = Release|Any CPU
+		{017DC6E8-FB93-4303-AAF9-52E2449F9A34}.Test|Any CPU.ActiveCfg = Test|Any CPU
+		{017DC6E8-FB93-4303-AAF9-52E2449F9A34}.Test|Any CPU.Build.0 = Test|Any CPU
+		{1536CD0A-6308-4DAF-8618-35BBA0816997}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1536CD0A-6308-4DAF-8618-35BBA0816997}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1536CD0A-6308-4DAF-8618-35BBA0816997}.Model|Any CPU.ActiveCfg = Model|Any CPU
+		{1536CD0A-6308-4DAF-8618-35BBA0816997}.Model|Any CPU.Build.0 = Model|Any CPU
+		{1536CD0A-6308-4DAF-8618-35BBA0816997}.QA|Any CPU.ActiveCfg = QA|Any CPU
+		{1536CD0A-6308-4DAF-8618-35BBA0816997}.QA|Any CPU.Build.0 = QA|Any CPU
+		{1536CD0A-6308-4DAF-8618-35BBA0816997}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1536CD0A-6308-4DAF-8618-35BBA0816997}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1536CD0A-6308-4DAF-8618-35BBA0816997}.Test|Any CPU.ActiveCfg = Test|Any CPU
+		{1536CD0A-6308-4DAF-8618-35BBA0816997}.Test|Any CPU.Build.0 = Test|Any CPU
+		{25CF3C3F-221F-4A49-B5EF-A8A5FCF9A5BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{25CF3C3F-221F-4A49-B5EF-A8A5FCF9A5BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{25CF3C3F-221F-4A49-B5EF-A8A5FCF9A5BA}.Model|Any CPU.ActiveCfg = Model|Any CPU
+		{25CF3C3F-221F-4A49-B5EF-A8A5FCF9A5BA}.Model|Any CPU.Build.0 = Model|Any CPU
+		{25CF3C3F-221F-4A49-B5EF-A8A5FCF9A5BA}.QA|Any CPU.ActiveCfg = QA|Any CPU
+		{25CF3C3F-221F-4A49-B5EF-A8A5FCF9A5BA}.QA|Any CPU.Build.0 = QA|Any CPU
+		{25CF3C3F-221F-4A49-B5EF-A8A5FCF9A5BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{25CF3C3F-221F-4A49-B5EF-A8A5FCF9A5BA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{25CF3C3F-221F-4A49-B5EF-A8A5FCF9A5BA}.Test|Any CPU.ActiveCfg = Test|Any CPU
+		{25CF3C3F-221F-4A49-B5EF-A8A5FCF9A5BA}.Test|Any CPU.Build.0 = Test|Any CPU
+		{99F4EC29-B099-424E-9757-223E67029001}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{99F4EC29-B099-424E-9757-223E67029001}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{99F4EC29-B099-424E-9757-223E67029001}.Model|Any CPU.ActiveCfg = Model|Any CPU
+		{99F4EC29-B099-424E-9757-223E67029001}.Model|Any CPU.Build.0 = Model|Any CPU
+		{99F4EC29-B099-424E-9757-223E67029001}.QA|Any CPU.ActiveCfg = QA|Any CPU
+		{99F4EC29-B099-424E-9757-223E67029001}.QA|Any CPU.Build.0 = QA|Any CPU
+		{99F4EC29-B099-424E-9757-223E67029001}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{99F4EC29-B099-424E-9757-223E67029001}.Release|Any CPU.Build.0 = Release|Any CPU
+		{99F4EC29-B099-424E-9757-223E67029001}.Test|Any CPU.ActiveCfg = Model|Any CPU
+		{99F4EC29-B099-424E-9757-223E67029001}.Test|Any CPU.Build.0 = Model|Any CPU
+		{0B6E0ED8-ABE5-4A1D-8E10-0AC54F06D9C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B6E0ED8-ABE5-4A1D-8E10-0AC54F06D9C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B6E0ED8-ABE5-4A1D-8E10-0AC54F06D9C4}.Model|Any CPU.ActiveCfg = Model|Any CPU
+		{0B6E0ED8-ABE5-4A1D-8E10-0AC54F06D9C4}.Model|Any CPU.Build.0 = Model|Any CPU
+		{0B6E0ED8-ABE5-4A1D-8E10-0AC54F06D9C4}.QA|Any CPU.ActiveCfg = QA|Any CPU
+		{0B6E0ED8-ABE5-4A1D-8E10-0AC54F06D9C4}.QA|Any CPU.Build.0 = QA|Any CPU
+		{0B6E0ED8-ABE5-4A1D-8E10-0AC54F06D9C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B6E0ED8-ABE5-4A1D-8E10-0AC54F06D9C4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0B6E0ED8-ABE5-4A1D-8E10-0AC54F06D9C4}.Test|Any CPU.ActiveCfg = Test|Any CPU
+		{0B6E0ED8-ABE5-4A1D-8E10-0AC54F06D9C4}.Test|Any CPU.Build.0 = Test|Any CPU
+		{A17069BB-DA81-41FE-8689-66617109BADA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A17069BB-DA81-41FE-8689-66617109BADA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A17069BB-DA81-41FE-8689-66617109BADA}.Model|Any CPU.ActiveCfg = Release|Any CPU
+		{A17069BB-DA81-41FE-8689-66617109BADA}.Model|Any CPU.Build.0 = Release|Any CPU
+		{A17069BB-DA81-41FE-8689-66617109BADA}.QA|Any CPU.ActiveCfg = QA|Any CPU
+		{A17069BB-DA81-41FE-8689-66617109BADA}.QA|Any CPU.Build.0 = QA|Any CPU
+		{A17069BB-DA81-41FE-8689-66617109BADA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A17069BB-DA81-41FE-8689-66617109BADA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A17069BB-DA81-41FE-8689-66617109BADA}.Test|Any CPU.ActiveCfg = Release|Any CPU
+		{A17069BB-DA81-41FE-8689-66617109BADA}.Test|Any CPU.Build.0 = Release|Any CPU
+		{ABE948FB-247E-4955-B3AB-B7C93E10A542}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ABE948FB-247E-4955-B3AB-B7C93E10A542}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ABE948FB-247E-4955-B3AB-B7C93E10A542}.Model|Any CPU.ActiveCfg = Model|Any CPU
+		{ABE948FB-247E-4955-B3AB-B7C93E10A542}.Model|Any CPU.Build.0 = Model|Any CPU
+		{ABE948FB-247E-4955-B3AB-B7C93E10A542}.QA|Any CPU.ActiveCfg = Model|Any CPU
+		{ABE948FB-247E-4955-B3AB-B7C93E10A542}.QA|Any CPU.Build.0 = Model|Any CPU
+		{ABE948FB-247E-4955-B3AB-B7C93E10A542}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ABE948FB-247E-4955-B3AB-B7C93E10A542}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ABE948FB-247E-4955-B3AB-B7C93E10A542}.Test|Any CPU.ActiveCfg = Test|Any CPU
+		{ABE948FB-247E-4955-B3AB-B7C93E10A542}.Test|Any CPU.Build.0 = Test|Any CPU
+		{1E303326-EEC9-42A8-BA50-880AB7AD99B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E303326-EEC9-42A8-BA50-880AB7AD99B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E303326-EEC9-42A8-BA50-880AB7AD99B2}.Model|Any CPU.ActiveCfg = Model|Any CPU
+		{1E303326-EEC9-42A8-BA50-880AB7AD99B2}.Model|Any CPU.Build.0 = Model|Any CPU
+		{1E303326-EEC9-42A8-BA50-880AB7AD99B2}.QA|Any CPU.ActiveCfg = Model|Any CPU
+		{1E303326-EEC9-42A8-BA50-880AB7AD99B2}.QA|Any CPU.Build.0 = Model|Any CPU
+		{1E303326-EEC9-42A8-BA50-880AB7AD99B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E303326-EEC9-42A8-BA50-880AB7AD99B2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1E303326-EEC9-42A8-BA50-880AB7AD99B2}.Test|Any CPU.ActiveCfg = Model|Any CPU
+		{1E303326-EEC9-42A8-BA50-880AB7AD99B2}.Test|Any CPU.Build.0 = Model|Any CPU
+		{F01D28AB-AC70-4FF0-91E1-2B42EBDC8361}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F01D28AB-AC70-4FF0-91E1-2B42EBDC8361}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F01D28AB-AC70-4FF0-91E1-2B42EBDC8361}.Model|Any CPU.ActiveCfg = Release|Any CPU
+		{F01D28AB-AC70-4FF0-91E1-2B42EBDC8361}.Model|Any CPU.Build.0 = Release|Any CPU
+		{F01D28AB-AC70-4FF0-91E1-2B42EBDC8361}.QA|Any CPU.ActiveCfg = Release|Any CPU
+		{F01D28AB-AC70-4FF0-91E1-2B42EBDC8361}.QA|Any CPU.Build.0 = Release|Any CPU
+		{F01D28AB-AC70-4FF0-91E1-2B42EBDC8361}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F01D28AB-AC70-4FF0-91E1-2B42EBDC8361}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F01D28AB-AC70-4FF0-91E1-2B42EBDC8361}.Test|Any CPU.ActiveCfg = Release|Any CPU
+		{F01D28AB-AC70-4FF0-91E1-2B42EBDC8361}.Test|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{1B3148A8-FB57-4461-91BC-F1CD38A013B6} = {7BBC4F28-A376-4D24-B8B1-5BC46AD2170A}
+		{6033A8EA-A3EF-4182-BFDD-4A9826ECF871} = {6B85F8FA-6A1C-4A70-AB03-110E75DE68EB}
+		{017DC6E8-FB93-4303-AAF9-52E2449F9A34} = {7BBC4F28-A376-4D24-B8B1-5BC46AD2170A}
+		{7BBC4F28-A376-4D24-B8B1-5BC46AD2170A} = {6B85F8FA-6A1C-4A70-AB03-110E75DE68EB}
+		{1536CD0A-6308-4DAF-8618-35BBA0816997} = {7BBC4F28-A376-4D24-B8B1-5BC46AD2170A}
+		{25CF3C3F-221F-4A49-B5EF-A8A5FCF9A5BA} = {6B85F8FA-6A1C-4A70-AB03-110E75DE68EB}
+		{99F4EC29-B099-424E-9757-223E67029001} = {6B85F8FA-6A1C-4A70-AB03-110E75DE68EB}
+		{0B6E0ED8-ABE5-4A1D-8E10-0AC54F06D9C4} = {6B85F8FA-6A1C-4A70-AB03-110E75DE68EB}
+		{ABE948FB-247E-4955-B3AB-B7C93E10A542} = {6B85F8FA-6A1C-4A70-AB03-110E75DE68EB}
+		{1E303326-EEC9-42A8-BA50-880AB7AD99B2} = {6B85F8FA-6A1C-4A70-AB03-110E75DE68EB}
+	EndGlobalSection
+EndGlobal

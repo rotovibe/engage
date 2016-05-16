@@ -1,0 +1,211 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{083F077A-FC9D-470C-9F5C-5059AD808D42}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Phytel.Engage.Integrations</RootNamespace>
+    <AssemblyName>Phytel.Engage.Integrations</AssemblyName>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'QA|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\QA\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AutoMapper, Version=3.2.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.3.2.1\lib\net40\AutoMapper.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="AutoMapper.Net4, Version=3.2.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.3.2.1\lib\net40\AutoMapper.Net4.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="Phytel.Services.Security, Version=1.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Phytel.Services.Security.1.4.0.01\lib\net451\Phytel.Services.Security.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Phytel.Services.SQLServer, Version=1.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Phytel.Services.SQLServer.1.4.0.01\lib\net451\Phytel.Services.SQLServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ServiceStack, Version=3.9.71.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ServiceStack.3.9.71\lib\net35\ServiceStack.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ServiceStack.Common, Version=3.9.71.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ServiceStack.Common.3.9.71\lib\net35\ServiceStack.Common.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ServiceStack.Interfaces, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ServiceStack.Common.3.9.71\lib\net35\ServiceStack.Interfaces.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ServiceStack.OrmLite, Version=3.9.14.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ServiceStack.OrmLite.SqlServer.3.9.14\lib\ServiceStack.OrmLite.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ServiceStack.OrmLite.SqlServer, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ServiceStack.OrmLite.SqlServer.3.9.14\lib\ServiceStack.OrmLite.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ServiceStack.Redis, Version=3.9.11.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ServiceStack.Redis.3.9.11\lib\net35\ServiceStack.Redis.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ServiceStack.ServiceInterface, Version=3.9.71.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ServiceStack.3.9.71\lib\net35\ServiceStack.ServiceInterface.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ServiceStack.Text, Version=3.9.71.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ServiceStack.Text.3.9.71\lib\net35\ServiceStack.Text.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Commands\Command.cs" />
+    <Compile Include="Commands\GetSendingApplicationId.cs" />
+    <Compile Include="Commands\IIntegrationCommand.cs" />
+    <Compile Include="Configurations\ApplicableContractProvider.cs" />
+    <Compile Include="Configurations\IApplicableContractProvider.cs" />
+    <Compile Include="DBScriptGenerator.cs" />
+    <Compile Include="Enums.cs" />
+    <Compile Include="Extensions\Lists.cs" />
+    <Compile Include="Extensions\OrderedDistinct.cs" />
+    <Compile Include="IMessageProcessor.cs" />
+    <Compile Include="IRepository.cs" />
+    <Compile Include="MessageProcessor.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Specifications\IIsApplicableContract.cs" />
+    <Compile Include="Specifications\IParseToDosSpecification.cs" />
+    <Compile Include="Specifications\ParseToDosSpecification.cs" />
+    <Compile Include="Specifications\IsApplicableContractSpecification.cs" />
+    <Compile Include="Specifications\ISpecification.cs" />
+    <Compile Include="Specifications\Specification.cs" />
+    <Compile Include="UOW\Comparer.cs" />
+    <Compile Include="UOW\ObjectMappers\MapperFactory.cs" />
+    <Compile Include="UOW\ObjectMappers\Notes\INoteMapper.cs" />
+    <Compile Include="UOW\ObjectMappers\Notes\Hillcrest001_NoteMapper.cs" />
+    <Compile Include="UOW\ObjectMappers\Notes\OrlandoHealth001_NoteMapper.cs" />
+    <Compile Include="UOW\ToDoDataDomain.cs" />
+    <Compile Include="UOW\PatientDataDomain.cs" />
+    <Compile Include="UOW\Helper.cs" />
+    <Compile Include="UOW\IDataDomain.cs" />
+    <Compile Include="UOW\IImportUOW.cs" />
+    <Compile Include="UOW\ObjMapper.cs" />
+    <Compile Include="UOW\PatientNoteDataDomain.cs" />
+    <Compile Include="UOW\ContactDataDomain.cs" />
+    <Compile Include="UOW\PatientSystemDataDomain.cs" />
+    <Compile Include="UOW\PatientsImportUow.cs" />
+    <Compile Include="UOW\UOWBase.cs" />
+    <Compile Include="PatientInfoUtils.cs" />
+    <Compile Include="Utils\LogUtil.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\..\PhytelCode\Phytel.Net\Services\API\Common\Phytel.API.Common\Development\Current\Phytel.API.Common.csproj">
+      <Project>{25cf3c3f-221f-4a49-b5ef-a8a5fcf9a5ba}</Project>
+      <Name>Phytel.API.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\..\PhytelCode\Phytel.Net\Services\API\DataDomain\Phytel.API.DataDomain.Contact\Development\Current\Contact.DTO\DataDomain.Contact.DTO.csproj">
+      <Project>{0b6e0ed8-abe5-4a1d-8e10-0ac54f06d9c4}</Project>
+      <Name>DataDomain.Contact.DTO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\..\PhytelCode\Phytel.Net\Services\API\DataDomain\Phytel.API.DataDomain.PatientNote\Development\Current\PatientNote.DTO\DataDomain.PatientNote.DTO.csproj">
+      <Project>{99f4ec29-b099-424e-9757-223e67029001}</Project>
+      <Name>DataDomain.PatientNote.DTO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\..\PhytelCode\Phytel.Net\Services\API\DataDomain\Phytel.API.DataDomain.PatientSystem\Development\Current\PatientSystem.DTO\DataDomain.PatientSystem.DTO.csproj">
+      <Project>{6033a8ea-a3ef-4182-bfdd-4a9826ecf871}</Project>
+      <Name>DataDomain.PatientSystem.DTO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\..\PhytelCode\Phytel.Net\Services\API\DataDomain\Phytel.API.DataDomain.Patient\Development\Current\Patient.DTOs\DataDomain.Patient.DTO.csproj">
+      <Project>{1b3148a8-fb57-4461-91bc-f1cd38a013b6}</Project>
+      <Name>DataDomain.Patient.DTO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\..\PhytelCode\Phytel.Net\Services\API\DataDomain\Phytel.API.DataDomain.Patient\Development\Current\Patient\DataDomain.Patient.csproj">
+      <Project>{1536cd0a-6308-4daf-8618-35bba0816997}</Project>
+      <Name>DataDomain.Patient</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\..\PhytelCode\Phytel.Net\Services\API\DataDomain\Phytel.API.DataDomain.Scheduling\Development\Current\Scheduling.DTO\DataDomain.Scheduling.DTO.csproj">
+      <Project>{1E303326-EEC9-42A8-BA50-880AB7AD99B2}</Project>
+      <Name>DataDomain.Scheduling.DTO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\..\PhytelCode\Phytel.Net\Services\API\Interfaces\Development\Current\Phytel.API.Interface\Phytel.API.Interface.csproj">
+      <Project>{abe948fb-247e-4955-b3ab-b7c93e10a542}</Project>
+      <Name>Phytel.API.Interface</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Phytel.Engage.Integrations.DomainEvents\Phytel.Engage.Integrations.DomainEvents.csproj">
+      <Project>{a17069bb-da81-41fe-8689-66617109bada}</Project>
+      <Name>Phytel.Engage.Integrations.DomainEvents</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Phytel.Engage.Integrations.DTO\Phytel.Engage.Integrations.DTO.csproj">
+      <Project>{126d45e4-193c-45ad-9310-9365ba9de589}</Project>
+      <Name>Phytel.Engage.Integrations.DTO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Phytel.Engage.Integrations.Repo\Phytel.Engage.Integrations.Repo.csproj">
+      <Project>{576E9EC8-3B81-42D0-8246-20485A596DCD}</Project>
+      <Name>Phytel.Engage.Integrations.Repo</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\packages\AutoMapper.3.2.1\tools\AutoMapper.targets" Condition="Exists('..\packages\AutoMapper.3.2.1\tools\AutoMapper.targets')" />
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

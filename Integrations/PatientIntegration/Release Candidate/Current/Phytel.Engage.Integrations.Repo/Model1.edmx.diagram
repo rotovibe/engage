@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="d9d82ccf9fdc438499f1171b0aa05c52" Name="Diagram1">
+        <EntityTypeShape EntityType="ContractModel.ContactEntity" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ContractModel.C3Group" Width="1.5" PointX="5.375" PointY="1" />
+        <EntityTypeShape EntityType="ContractModel.C3GroupEntity" Width="1.5" PointX="7.625" PointY="1" />
+        <EntityTypeShape EntityType="ContractModel.KeyData" Width="1.5" PointX="3" PointY="2.375" />
+        <EntityTypeShape EntityType="ContractModel.ReportPatient" Width="1.5" PointX="5.375" PointY="4.75" />
+        <AssociationConnector Association="ContractModel.FK_C3GroupEntity_C3GroupId" />
+        <AssociationConnector Association="ContractModel.FK_KeyData_ContactEntities" />
+        <EntityTypeShape EntityType="ContractModel.IntegrationPatientXref" Width="1.5" PointX="7.375" PointY="4.75" />
+        <EntityTypeShape EntityType="ContractModel.C3Patient" Width="1.5" PointX="0.5" PointY="8.375" />
+        <EntityTypeShape EntityType="ContractModel.C3ProblemList" Width="1.5" PointX="7.375" PointY="8.75" />
+        <EntityTypeShape EntityType="ContractModel.C3NoteAction" Width="1.5" PointX="9.375" PointY="4.75" />
+        <EntityTypeShape EntityType="ContractModel.C3NoteCategory" Width="1.5" PointX="9.375" PointY="8.75" />
+        <EntityTypeShape EntityType="ContractModel.C3NotePatient" Width="1.5" PointX="11.375" PointY="0.75" />
+        <EntityTypeShape EntityType="ContractModel.Phone" Width="1.5" PointX="3" PointY="6.625" />
+        <EntityTypeShape EntityType="ContractModel.SubscriberEntity" Width="2.125" PointX="11.375" PointY="5.75" />
+        <AssociationConnector Association="ContractModel.FK_Phone_ContactEntities" />
+        <EntityTypeShape EntityType="ContractModel.CommCategory" Width="1.5" PointX="5.375" PointY="11.75" />
+        <EntityTypeShape EntityType="ContractModel.PatientRegistryHdr" Width="2.5" PointX="11.375" PointY="11.75" />
+        <EntityTypeShape EntityType="ContractModel.PatientPersonalPhysician" Width="2.125" PointX="3" PointY="13.375" />
+        <AssociationConnector Association="ContractModel.FK_PatientPersonalPhysician_ContactEntities_ProviderID" />
+        <EntityTypeShape EntityType="ContractModel.C3GroupEntityType" Width="1.5" PointX="7.375" PointY="13" />
+        <EntityTypeShape EntityType="ContractModel.Subscriber" Width="1.5" PointX="14.375" PointY="0.75" />
+        <EntityTypeShape EntityType="ContractModel.SubscriberSolution" Width="1.5" PointX="14.375" PointY="9.75" />
+        <AssociationConnector Association="ContractModel.FK_C3GroupEntity_C3GroupEntityTypeId" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
