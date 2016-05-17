@@ -30,8 +30,8 @@ namespace Phytel.API.AppDomain.NG.Service.Mappers
 
             Mapper.CreateMap<ContactData, Contact>()
                .ForMember(dest => dest.ContactSubTypes, opt => opt.MapFrom(src => src.ContactSubTypesData))
-                .ForMember(dest => dest.IsPatient, opt => opt.Ignore())
-                .ForMember(dest => dest.IsUser, opt => opt.Ignore());
+                .ForMember(dest => dest.IsPatient, opt => opt.MapFrom(src => !string.IsNullOrEmpty(src.PatientId)))
+                .ForMember(dest => dest.IsUser, opt => opt.MapFrom(src => !string.IsNullOrEmpty(src.UserId)));
 
             Mapper.CreateMap<Contact, ContactData>()
                 .ForMember(dest => dest.ContactSubTypesData, opt => opt.MapFrom(src => src.ContactSubTypes))
