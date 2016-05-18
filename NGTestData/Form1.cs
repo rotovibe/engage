@@ -14,6 +14,7 @@ using System.Data;
 using System.Linq;
 using System.Windows.Forms;
 using System.Configuration;
+using Status = Phytel.API.DataDomain.Contact.DTO.Status;
 
 namespace NGTestData
 {
@@ -308,17 +309,8 @@ namespace NGTestData
             string sqlConn = txtSQLNGConn.Text;
 
             DataSet users = Phytel.Services.SQLDataService.Instance.ExecuteSQLDirect(sqlConn, userSql, 0);
-            foreach(DataRow dr in users.Tables[0].Rows)
+            foreach (DataRow dr in users.Tables[0].Rows)
             {
-                MEContact newC = new MEContact(txtUserID.Text, null)
-                {
-                    FirstName = dr["FirstName"].ToString(),
-                    LastName = dr["LastName"].ToString(),
-                    PreferredName = dr["DisplayName"].ToString(),
-                    ResourceId = dr["UserID"].ToString(),
-                    Version = 1.0
-                };
-
                 string mongoConnString = txtMongoConn.Text;
 
                 MongoDB.Driver.MongoDatabase mongoDB = Phytel.Services.MongoService.Instance.GetDatabase(mongoConnString);
@@ -326,8 +318,31 @@ namespace NGTestData
                 IMongoQuery query = Query.EQ(MEContact.ResourceIdProperty, dr["UserID"].ToString());
 
                 MEContact existsC = mongoDB.GetCollection("Contact").FindOneAs<MEContact>(query);
-                if(existsC == null)
-                    mongoDB.GetCollection("Contact").Insert(newC);
+
+                if (existsC != null) continue;
+
+                List<Phytel.API.DataDomain.Contact.DTO.CommMode> modes = new List<Phytel.API.DataDomain.Contact.DTO.CommMode>();
+
+                modes.Add(new Phytel.API.DataDomain.Contact.DTO.CommMode { ModeId = ObjectId.Parse("52e17cc2d433232028e9e38f"), OptOut = false, Preferred = false });
+                modes.Add(new Phytel.API.DataDomain.Contact.DTO.CommMode { ModeId = ObjectId.Parse("52e17ce6d433232028e9e390"), OptOut = false, Preferred = false });
+                modes.Add(new Phytel.API.DataDomain.Contact.DTO.CommMode { ModeId = ObjectId.Parse("52e17d08d433232028e9e391"), OptOut = false, Preferred = false });
+                modes.Add(new Phytel.API.DataDomain.Contact.DTO.CommMode { ModeId = ObjectId.Parse("52e17d10d433232028e9e392"), OptOut = false, Preferred = false });
+
+                MEContact newC = new MEContact("5368ff2ad4332316288f3e3e", null)
+                {
+                    FirstName = dr["FirstName"].ToString(),
+                    LoweredFirstName = dr["FirstName"].ToString().ToLower(),
+                    LastName = dr["LastName"].ToString(),
+                    LoweredLastName = dr["LastName"].ToString().ToLower(),
+                    PreferredName = dr["DisplayName"].ToString(),
+                    ResourceId = dr["UserID"].ToString(),
+                    Modes = modes,
+                    Status = Status.Active,
+                    DataSource = "Engage",
+                    ContactTypeId = ObjectId.Parse("56f1a1ad078e10eb86038519"),
+                    Version = 1.0
+                };
+                mongoDB.GetCollection("Contact").Insert(newC);
             }
         }
 
