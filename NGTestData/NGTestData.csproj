@@ -46,11 +46,13 @@
     <Reference Include="ASEData">
       <HintPath>References\ASEData.dll</HintPath>
     </Reference>
-    <Reference Include="MongoDB.Bson">
-      <HintPath>References\MongoDB.Bson.dll</HintPath>
+    <Reference Include="MongoDB.Bson, Version=1.9.2.235, Culture=neutral, PublicKeyToken=f686731cfb9cc103, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Services\API\DataDomain\Phytel.API.DataDomain.Contact\Development\Current\Contact.DTO\bin\Debug\MongoDB.Bson.dll</HintPath>
     </Reference>
-    <Reference Include="MongoDB.Driver">
-      <HintPath>References\MongoDB.Driver.dll</HintPath>
+    <Reference Include="MongoDB.Driver, Version=1.9.2.235, Culture=neutral, PublicKeyToken=f686731cfb9cc103, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Services\API\DataDomain\Phytel.API.DataDomain.Contact\Development\Current\Contact.DTO\bin\Debug\MongoDB.Driver.dll</HintPath>
     </Reference>
     <Reference Include="Phytel.API.Common">
       <HintPath>References\Phytel.API.Common.dll</HintPath>
@@ -64,11 +66,13 @@
     <Reference Include="Phytel.API.DataDomain.Cohort.DTO">
       <HintPath>References\Phytel.API.DataDomain.Cohort.DTO.dll</HintPath>
     </Reference>
-    <Reference Include="Phytel.API.DataDomain.Contact">
-      <HintPath>References\Phytel.API.DataDomain.Contact.dll</HintPath>
+    <Reference Include="Phytel.API.DataDomain.Contact, Version=1.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Services\API\DataDomain\Phytel.API.DataDomain.Contact\Development\Current\Contact\bin\Debug\Phytel.API.DataDomain.Contact.dll</HintPath>
     </Reference>
-    <Reference Include="Phytel.API.DataDomain.Contact.DTO">
-      <HintPath>References\Phytel.API.DataDomain.Contact.DTO.dll</HintPath>
+    <Reference Include="Phytel.API.DataDomain.Contact.DTO, Version=1.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Services\API\DataDomain\Phytel.API.DataDomain.Contact\Development\Current\Contact.DTO\bin\Debug\Phytel.API.DataDomain.Contact.DTO.dll</HintPath>
     </Reference>
     <Reference Include="Phytel.API.DataDomain.LookUp">
       <HintPath>References\Phytel.API.DataDomain.LookUp.dll</HintPath>
