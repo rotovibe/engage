@@ -303,7 +303,7 @@ namespace Phytel.API.AppDomain.NG
 
             ValidateCareTeamMemberFields(request.CareTeamMember);
 
-            var careTeamData = EndpointUtil.GetCareTeam(new GetCareTeamRequest { ContactId = request.ContactId, ContractNumber = request.ContactId, UserId = request.UserId, Version = request.Version });
+            var careTeamData = EndpointUtil.GetCareTeam(new GetCareTeamRequest { ContactId = request.ContactId, ContractNumber = request.ContractNumber, UserId = request.UserId, Version = request.Version });
 
             if (careTeamData == null)
                 throw new ApplicationException(string.Format("No care team exists for contact  {0}", request.ContactId));

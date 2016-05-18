@@ -210,8 +210,8 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
 
             try
             {
-                if (repo.CareTeamMemberContactExist(request.CareTeamId, request.CareTeamMemberData.ContactId))
-                    throw new Exception(string.Format("Care Team Member {0} already exists.", request.CareTeamMemberData.ContactId));
+                //if (repo.CareTeamMemberContactExist(request.CareTeamId, request.CareTeamMemberData.ContactId))
+                //    throw new Exception(string.Format("Care Team Member {0} already exists.", request.CareTeamMemberData.ContactId));
 
                response.Id =  repo.AddCareTeamMember(request);
             }
