@@ -1486,7 +1486,7 @@ namespace Phytel.API.DataDomain.Contact
                 #region Communication fields
 
                 //Timezone
-                if (data.TimeZoneId != null)
+                if (!string.IsNullOrEmpty(data.TimeZoneId))
                 {
                     meContact.TimeZoneId = ObjectId.Parse(data.TimeZoneId);
                 }
