@@ -310,9 +310,9 @@ namespace Phytel.API.DataDomain.Contact
                 if (request.ContactsData != null && request.ContactsData.Count > 0)
                 {
                     List<ContactData> contactData = request.ContactsData;
-                    #region Get the default timeZone.
-                    string defaultTimeZoneId = getDefaultTimeZone(request);
-                    #endregion  
+                    //#region Get the default timeZone.
+                    //string defaultTimeZoneId = getDefaultTimeZone(request);
+                    //#endregion  
                     #region Get all the available comm modes in the lookup.
                     List<CommModeData> commModeData = new List<CommModeData>();
                     List<IdNamePair> modesLookUp = getAllCommModes(request);
@@ -328,7 +328,7 @@ namespace Phytel.API.DataDomain.Contact
                     contactData.ForEach(c =>
                     {
                         c.Modes = commModeData;
-                        c.TimeZoneId = defaultTimeZoneId;
+                        //c.TimeZoneId = defaultTimeZoneId;
                     });
                     list = new List<HttpObjectResponse<ContactData>>();
                     IContactRepository repo = Factory.GetRepository(request, RepositoryType.Contact);
