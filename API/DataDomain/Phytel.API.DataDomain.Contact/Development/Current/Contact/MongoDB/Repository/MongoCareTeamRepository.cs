@@ -462,6 +462,9 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
                 else
                 {
                     //it is an update
+                    meMember.RecordCreatedBy = ObjectId.Parse(member.CreatedById);
+                    meMember.RecordCreatedOn = meMember.RecordCreatedOn;
+
                     meMember.UpdatedBy = ObjectId.Parse(userId);
                     meMember.LastUpdatedOn = DateTime.UtcNow;
                 }
@@ -529,6 +532,10 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
 
                 var query = MB.Query.And(queries);
                 var contactCareTeam = ctx.CareTeam.Collection.FindOne(query);
+
+                if(contactCareTeam == null)
+                    throw new Exception(string.Format("No care team exists with Id : {0}", request.CareTeamId));
+
                 var members = contactCareTeam.MeCareTeamMembers;
                 var memberToRemove = members.FirstOrDefault(m => m.Id == ObjectId.Parse(request.MemberId));
 

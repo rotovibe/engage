@@ -302,7 +302,7 @@ namespace Phytel.API.AppDomain.NG
       
         public DeleteCareTeamMemberDataResponse DeleteCareTeamMember(DeleteCareTeamMemberRequest request)
         {
-            DeleteCareTeamMemberDataResponse response = null;
+            var response = new DeleteCareTeamMemberDataResponse();
             try
             {
 
