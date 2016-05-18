@@ -1473,19 +1473,19 @@ namespace Phytel.API.AppDomain.NG
                 var contactData = Mapper.Map<ContactData>(request.Contact);
 
 
-                //Check if Request has a timeZone. 
-                if (string.IsNullOrEmpty(contactData.TimeZoneId))
-                {
-                    string defaultTimeZone = null;
-                    var tzDataRequest = new GetTimeZoneDataRequest { ContractNumber = request.ContractNumber, Version = request.Version, Context = "NG", UserId = request.UserId };
-                    var tz = getDefaultTimeZone(tzDataRequest);
-                    if (tz != null)
-                    {
-                        defaultTimeZone = tz.Id;
-                    }
+                //Check if Request has a timeZone. ENG-1991 (Remove the Default TimeZone)
+                //if (string.IsNullOrEmpty(contactData.TimeZoneId))
+                //{
+                //    string defaultTimeZone = null;
+                //    var tzDataRequest = new GetTimeZoneDataRequest { ContractNumber = request.ContractNumber, Version = request.Version, Context = "NG", UserId = request.UserId };
+                //    var tz = getDefaultTimeZone(tzDataRequest);
+                //    if (tz != null)
+                //    {
+                //        defaultTimeZone = tz.Id;
+                //    }
 
-                    contactData.TimeZoneId = defaultTimeZone;
-                }
+                //    contactData.TimeZoneId = defaultTimeZone;
+                //}
 
                 //Check for modes.
                 if (contactData.Modes.IsNullOrEmpty())
@@ -2113,18 +2113,18 @@ namespace Phytel.API.AppDomain.NG
 
         private void InsertContactByPatient(Patient patient,string contractNumber, string userId, double version)
         {
-            // Get the default TimeZone that is set in TimeZone LookUp table. 
-            string defaultTimeZone = null;
-            GetTimeZoneDataRequest tzDataRequest = new GetTimeZoneDataRequest { ContractNumber = contractNumber, Version = version, Context = "NG", UserId = userId };
-            TimeZonesLookUp tz = getDefaultTimeZone(tzDataRequest);
-            if (tz != null)
-            {
-                defaultTimeZone = tz.Id;
-            }
+            // Get the default TimeZone that is set in TimeZone LookUp table. ENG-1991 (Remove the Default TimeZone)
+            //string defaultTimeZone = null;
+            //GetTimeZoneDataRequest tzDataRequest = new GetTimeZoneDataRequest { ContractNumber = contractNumber, Version = version, Context = "NG", UserId = userId };
+            //TimeZonesLookUp tz = getDefaultTimeZone(tzDataRequest);
+            //if (tz != null)
+            //{
+            //    defaultTimeZone = tz.Id;
+            //}
 
             //Get all the available comm modes in the lookup.
             //List<CommModeData> commModeData = new List<CommModeData>();
-            List<CommMode> commMode = new List<CommMode>();
+            List<CommMode> commModes = new List<CommMode>();
             GetAllCommModesRequest commRequest = new GetAllCommModesRequest { ContractNumber = contractNumber, UserId = userId, Version = version };
             List<IdNamePair> modesLookUp = GetAllCommModes(commRequest);
             if (modesLookUp != null && modesLookUp.Count > 0)
@@ -2132,7 +2132,7 @@ namespace Phytel.API.AppDomain.NG
                 foreach (IdNamePair l in modesLookUp)
                 {
                    // commModeData.Add(new CommModeData { ModeId = l.Id, OptOut = false, Preferred = false });
-                    commMode.Add(new CommMode { LookUpModeId = l.Id, OptOut = false, Preferred = false });
+                    commModes.Add(new CommMode { LookUpModeId = l.Id, OptOut = false, Preferred = false });
                 }
             }
 
@@ -2153,8 +2153,8 @@ namespace Phytel.API.AppDomain.NG
                     StatusId = patient.StatusId,
                     ContactTypeId = Constants.PersonContactTypeId,
                     DataSource = patient.DataSource,
-                    TimeZoneId = defaultTimeZone,
-                    Modes = commMode
+                    //TimeZoneId = defaultTimeZone,
+                    Modes = commModes
 
                 },
                 ContractNumber = contractNumber,
