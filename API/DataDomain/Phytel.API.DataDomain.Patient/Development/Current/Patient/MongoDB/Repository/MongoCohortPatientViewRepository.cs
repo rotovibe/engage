@@ -622,7 +622,7 @@ namespace Phytel.API.DataDomain.Patient
                         if (PcmField != null)
                         
                         {
-                            PcmField.Value = string.Empty;
+                            PcmField.Value = null;
                             PcmField.Active = true;
                             ctx.CohortPatientViews.Collection.Save(cohort);
 
