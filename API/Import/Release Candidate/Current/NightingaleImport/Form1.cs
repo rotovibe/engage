@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Runtime.Remoting.Contexts;
 using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Windows.Forms;
@@ -19,6 +20,7 @@ using Phytel.API.DataDomain.Patient.DTO;
 using Phytel.API.DataDomain.PatientSystem.DTO;
 using Microsoft.VisualBasic.FileIO;
 using NGDataImport;
+using Phytel.API.DataDomain.Contact.DTO.CareTeam;
 
 namespace NightingaleImport
 {
@@ -79,8 +81,9 @@ namespace NightingaleImport
         private double version = double.Parse(ConfigurationManager.AppSettings.Get("version"));
         private string context = ConfigurationManager.AppSettings.Get("context");
 
-        public const string SystemProperty = "Engage";
+        public const string EngageSystemProperty = "Engage";
         public const string DataSourceProperty = "Import";
+        public const string PCMRoleIdProperty = "56f169f8078e10eb86038514";
         string _headerUserId = "000000000000000000000000";
 
         public Form1()
@@ -127,24 +130,23 @@ namespace NightingaleImport
                     LoadLookUps();
                     LoadSystems();
 
-                    //"Care Manager
-                    string contactTypeId = careMemberLookUp.Where(x => x.Name == "Care Manager").FirstOrDefault().Id;
-
                     foreach (ListViewItem lvi in listView1.CheckedItems)
                     {
 
                         PatientData pdata = new PatientData
                         {
+                            #region Sync up properties in Contact
                             FirstName = lvi.SubItems[colFirstN].Text.Trim(),
                             LastName = lvi.SubItems[colLastN].Text.Trim(),
                             MiddleName = (String.IsNullOrEmpty(lvi.SubItems[colMiddleN].Text)) ? null : lvi.SubItems[colMiddleN].Text.Trim(),
-                            Suffix = (String.IsNullOrEmpty(lvi.SubItems[colSuff].Text)) ? null : lvi.SubItems[colSuff].Text.Trim(),
                             PreferredName = (String.IsNullOrEmpty(lvi.SubItems[colPrefN].Text)) ? null : lvi.SubItems[colPrefN].Text.Trim(),
                             Gender = lvi.SubItems[colGen].Text.Trim(),
+                            Suffix = (String.IsNullOrEmpty(lvi.SubItems[colSuff].Text)) ? null : lvi.SubItems[colSuff].Text.Trim(),
+                            StatusId = (int)Phytel.API.DataDomain.Patient.DTO.Status.Active, 
+                            #endregion
                             DOB = lvi.SubItems[colDB].Text.Trim(),
-                            DataSource = SystemProperty,
-                            StatusId = (int)Phytel.API.DataDomain.Patient.DTO.Status.Active,
-                            StatusDataSource = SystemProperty,
+                            DataSource = EngageSystemProperty,
+                            StatusDataSource = EngageSystemProperty,
                             Background = (String.IsNullOrEmpty(lvi.SubItems[colBkgrnd].Text)) ? null : lvi.SubItems[colBkgrnd].Text.Trim(),
 
                         };
@@ -233,6 +235,7 @@ namespace NightingaleImport
 
                             #region Insert Contact record.
 
+                            #region Communication
                             //timezone
                             TimeZoneData tZone = new TimeZoneData();
                             if (string.IsNullOrEmpty(lvi.SubItems[colTimeZ].Text) == false)
@@ -493,27 +496,38 @@ namespace NightingaleImport
                                     add2.TypeId = typesLookUp[0].Id;
 
                                 addresses.Add(add2);
-                            }
+                            } 
+                            #endregion
 
                             //Contact
                             ContactData data = new ContactData {
                                 PatientId = responsePatient.Id,
+                                ContactTypeId = Phytel.API.DataDomain.Contact.DTO.Constants.PersonContactTypeId,
+                                #region Sync up properties in Contact
+                                FirstName = pdata.FirstName,
+                                LastName = pdata.LastName,
+                                MiddleName = pdata.MiddleName,
+                                PreferredName = pdata.PreferredName,
+                                Gender = pdata.Gender,
+                                Suffix = pdata.Suffix,
+                                StatusId = pdata.StatusId,
+                                #endregion
+                                DataSource = EngageSystemProperty,
                                 Modes = modes,
                                 TimeZoneId = tZone.Id,
                                 Phones = phones,
                                 Emails = emails,
-                                Addresses = addresses,
+                                Addresses = addresses
                             };
-                            PutContactDataRequest contactRequest = new PutContactDataRequest
+                            InsertContactDataRequest contactRequest = new InsertContactDataRequest
                             {
-                                PatientId = responsePatient.Id,
                                 ContactData = data,
                                 Version = patientRequest.Version,
                                 Context = patientRequest.Context,
                                 ContractNumber = patientRequest.ContractNumber
                             };
 
-                            PutContactDataResponse responseContact = import.InsertPatientContact(contactRequest, responsePatient.Id.ToString());
+                            InsertContactDataResponse responseContact = import.InsertContactForAPatient(contactRequest, responsePatient.Id.ToString());
                             if (responseContact.Id == null)
                             {
                                 throw new Exception("Contact card import request failed.");
@@ -529,23 +543,30 @@ namespace NightingaleImport
                                 {
                                     GetContactByUserIdDataResponse contactByUserIdResponse = import.GetContactByUserId(userIdResponse.ToString());
 
-                                    CareMemberData careMember = new CareMemberData
+                                    CareTeamMemberData member = new CareTeamMemberData
                                     {
-                                        PatientId = responsePatient.Id.ToString(),
                                         ContactId = contactByUserIdResponse.Contact.Id,
-                                        TypeId = contactTypeId,
-                                        Primary = true,
+                                        RoleId = PCMRoleIdProperty,
+                                        Core = true,
+                                        StatusId = (int)CareTeamMemberStatus.Active,
                                     };
+                                    List<CareTeamMemberData> memberList = new List<CareTeamMemberData>();
+                                    memberList.Add(member);
 
-                                    PutCareMemberDataRequest careMemberRequest = new PutCareMemberDataRequest
+                                    CareTeamData careTeamData = new CareTeamData
                                     {
-                                        PatientId = responsePatient.Id.ToString(),
-                                        CareMember = careMember
+                                          ContactId = responseContact.Id,
+                                          Members = memberList
                                     };
-                                    PutCareMemberDataResponse responseCareMember = import.InsertCareMember(careMemberRequest, responsePatient.Id.ToString());
-                                    if (responseCareMember.Id == null)
+                                    SaveCareTeamDataRequest saveCareTeamDataRequest = new SaveCareTeamDataRequest
                                     {
-                                        throw new Exception("Care Member import request failed.");
+                                        CareTeamData = careTeamData,
+                                        ContactId = responseContact.Id,
+                                    };
+                                    SaveCareTeamDataResponse saveCareTeamDataResponse = import.InsertCareTeam(saveCareTeamDataRequest);
+                                    if (saveCareTeamDataResponse == null)
+                                    {
+                                        throw new Exception("Care Team import request failed.");
                                     }
                                     import.UpdateCohortPatientView(responsePatient.Id.ToString(), contactByUserIdResponse.Contact.Id);
                                 }
