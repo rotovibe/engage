@@ -187,6 +187,36 @@ define([], new breeze.JsonResultsAdapter({
                 return { entityType: "Task" };
             }
         }
+		
+		if ((mappingContext.query.fromEntityType && mappingContext.query.fromEntityType.shortName === 'CareTeam') 
+			|| (nodeContext.propertyName && nodeContext.propertyName === 'careTeam') 
+			|| (nodeContext.propertyName && nodeContext.propertyName === 'members') ) {
+					
+			//help breeze identify the entities in the associated relations CareTeam_CareMembers (both ways)
+			//( this is also done in goals for the sub entities Barriers and Interventions )
+			if (nodeContext.nodeType === 'root' || (nodeContext.propertyName && nodeContext.propertyName === 'careTeam')) {
+				if( node.Members && node.Id ){
+					$.each(node.Members, function(index, member) {
+						member.CareTeamId = node.Id;	//populate the team id
+					});
+				}
+				return { entityType: "CareTeam" };
+			}
+			if (nodeContext.navigationProperty) {
+                if (nodeContext.navigationProperty.name === 'members') {
+					//node.CareTeamId is now set to point to the team id
+					return { entityType: "CareMember" };
+                }
+                //fix mapping to resolve navigation entities we need under caremember
+				if (nodeContext.navigationProperty.name === 'contact') {					
+					return { entityType: "ContactCard" };
+				}
+				if (nodeContext.navigationProperty.name === 'roleType') {					
+					return { entityType: "ContactTypeLookup" };
+				}
+			}
+		}				
+		
         if ((mappingContext.query.fromEntityType && mappingContext.query.fromEntityType.shortName === 'Goal') || (nodeContext.propertyName && nodeContext.propertyName === 'goals')) {
             if (nodeContext.nodeType === 'root' || (nodeContext.propertyName && nodeContext.propertyName === 'goals')) {
                 if (node.FocusAreaIds) {

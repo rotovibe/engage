@@ -7,11 +7,79 @@
         // Create an object to use to reveal functions from this module
         var careMemberService = {
 			getCareTeam: getCareTeam,
-            saveCareMember: saveCareMember,
+			saveCareTeam: saveCareTeam,
+			saveCareTeamMember: saveCareTeamMember,
+            saveCareMemberOld: saveCareMemberOld,
             deleteNote: deleteNote
         };
         return careMemberService;
-        		
+
+		function saveCareTeam( manager, serializedCareTeam ){						
+            if (!manager) { throw new Error("[manager] cannot be a null parameter"); }
+            checkDataContext();
+            var endPoint = new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'Contacts/' + serializedCareTeam.ContactId + '/CareTeams' , 'CareTeam');
+			var method = 'POST';			
+            if (serializedCareTeam) {
+                var payload = {};
+                payload.CareTeam = serializedCareTeam;
+                payload = JSON.stringify(payload);
+                var query = breeze.EntityQuery
+                    .from(endPoint.ResourcePath)
+                    .withParameters({
+                        $method: 'POST',
+                        $encoding: 'JSON',
+                        $data: payload
+                    }).toType('CareTeam');                                
+                return manager.executeQuery(query).then(saveSucceeded).fail(postFailed);
+            }
+
+            function saveSucceeded(data) {
+                return data.httpResponse.data;
+            }
+		}
+		
+		function saveCareTeamMember( manager, serializedCareMember, teamId ){
+            if (!manager) { throw new Error("[manager] cannot be a null parameter"); }
+            checkDataContext();
+            var endPoint = new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'Contacts/' + serializedCareMember.ContactId + '/CareTeams/' + teamId +  '/CareTeamMembers' , 'CareMember');			
+			var method = 'PUT';
+			if( serializedCareMember.Id() < 0 ){
+				method = 'POST';
+				if( teamId ){							
+					endPoint = new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 
+							'Contacts/' + serializedCareMember.ContactId + '/CareTeams/' + teamId +  '/CareTeamMembers' , 'CareMember');
+				}
+				else{
+					//adding a member when the team has not been created need to call saveCareTeam
+				}
+				
+			}
+			else{		
+				//UpdateCareTeamMemberRequest
+				endPoint = new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 
+							'Contacts/' + serializedCareMember.ContactId + '/CareTeams/' + teamId +  '/CareTeamMembers/' + serializedCareMember.Id , 'CareMember');
+			}
+
+            if (serializedCareMember) {
+                var payload = {};
+                payload.CareMember = serializedCareMember;
+                payload = JSON.stringify(payload);
+                var query = breeze.EntityQuery
+                    .from(endPoint.ResourcePath)
+                    .withParameters({
+                        $method: 'POST',
+                        $encoding: 'JSON',
+                        $data: payload
+                    })
+					.toType('CareMember');
+                return manager.executeQuery(query).then(saveSucceeded).fail(postFailed);
+            }
+
+            function saveSucceeded(data) {
+                return data.httpResponse.data;
+            }
+		}
+		
 		function getCareTeam( manager, observable, patientContactId ){
 			// If there is no manager, we can't query using breeze
             if (!manager) { throw new Error("[manager] cannot be a null parameter"); }
@@ -52,8 +120,9 @@
             datacontext.alerts.push(thisAlert);
         }
 		
+		//this will be deprecated:
         // POST to the server, check the results for entities
-        function saveCareMember(manager, serializedCareMember, saveType) {
+        function saveCareMemberOld(manager, serializedCareMember, saveType) {
 
             // If there is no manager, we can't query using breeze
             if (!manager) { throw new Error("[manager] cannot be a null parameter"); }

@@ -463,9 +463,10 @@
 					allPatientPromises.push( datacontext.getEntityList(null, ObservationsEndPoint().EntityType, ObservationsEndPoint().ResourcePath + patientId + '/Observations/Current', null, null, true));
 					// Go get a list of notes for the currently selected patient
 					allPatientPromises.push( datacontext.getEntityList(null, noteEndPoint().EntityType, noteEndPoint().ResourcePath + patientId + '/Notes/100', null, null, true));
-					// Go get a list of care members for the currently selected patient
-					allPatientPromises.push( datacontext.getEntityList(null, careMemberEndPoint().EntityType, careMemberEndPoint().ResourcePath + patientId + '/CareMembers', null, null, true));
- 
+
+                    //note: this is the old call and will be deprecated:
+					//allPatientPromises.push( datacontext.getEntityList(null, careMemberEndPoint().EntityType, careMemberEndPoint().ResourcePath + patientId + '/CareMembers', null, null, true));					
+					
 				Q.all( allPatientPromises ).then( patientReturned ); 				
             }
 			
@@ -497,11 +498,20 @@
                 allPatientPromises.push( getPatientMedications() );
 				allPatientPromises.push( getPatientFrequencies() );
 				
+				//get the care team (new api)
+				allPatientPromises.push( datacontext.getCareTeam( null, selectedPatient().contactId() ).then( careTeamReturned ) );
 				Q.all( allPatientPromises ).then( patientFullyLoaded );
 				                
                 router.navigate('#patients/' + patientId, false);
             }
         }
+		
+		function careTeamReturned( team ){
+			if( team && team.id() ){
+				selectedPatient().careTeamId( team.id() );
+				selectedPatient().entityAspect.acceptChanges();
+			}
+		}
 		/**
 		*	after all patient related calls are completed, mark the patient as loaded (they are synched with Q.all ).
 		*	@method patientFullyLoaded

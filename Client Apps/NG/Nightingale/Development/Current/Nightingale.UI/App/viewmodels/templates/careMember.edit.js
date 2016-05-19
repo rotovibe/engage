@@ -6,7 +6,9 @@ define([ 'services/datacontext', 'services/local.collections', 'viewmodels/home/
 	function( datacontext, localCollections, contactsIndex ){
 
 		var subscriptionTokens = [];		
-		var newId = 0;
+		var newId = 0;		
+		var frequencies = datacontext.enums.careMemberFrequency;
+		var careMemberStatuses = datacontext.enums.careMemberStatuses;
 				
 		function contactSearch( settings ){
 			var self = this;
@@ -267,86 +269,186 @@ define([ 'services/datacontext', 'services/local.collections', 'viewmodels/home/
 			var self = this;
 			self.showing = settings.showing;
 			self.careMember = settings.careMember;
+			self.careTeamMembers = settings.careTeamMembers;
+			self.selectedPatient = settings.selectedPatient;
 			self.selectedContact = ko.observable();
+			self.careMemberRoles = settings.careMemberRoles;
+			self.pcmContactSubType = settings.pcmContactSubType;
+			self.pcpContactSubType = settings.pcpContactSubType;
+			self.addContactReturnedCallback = settings.addContactReturnedCallback;
+			self.editMode = ko.observable(false);
+			if( self.careMember().isNew() ){
+				if( self.careMember().contact() ){				
+					self.selectedContact( self.careMember().contact() );
+					//got back from creating a new contact
+					self.editMode(true);
+				}				
+			}
+			else{
+				//edit
+				self.editMode(true);
+			}
 			var searchSettings = {
 				selectedContact: self.selectedContact
 			}
-			self.contactSearch = new contactSearch( searchSettings );
-			self.contactSearch.init();
-			self.contactSubTypes = self.contactSearch.contactSubTypes;
-
-			if( self.careMember().isNew() ){
-				
-				//check for duplicats?
-				    //TODO: set defaults for the added careMember
-
-				// var firstNameToken = self.careMember().firstName.subscribe( function( newValue ){
-					// var firstName = newValue;
-					// var lastName = self.careMember().lastName();
-					// self.checkDuplicateContact( firstName, lastName );
-				// });
-				// subscriptionTokens.push( firstNameToken );
-				
-				// var lastNameToken = self.careMember().lastName.subscribe( function( newValue ){
-					// var lastName = newValue;				
-					// var firstName = self.careMember().firstName();				
-					// self.checkDuplicateContact( firstName, lastName );
-				// });
-				// subscriptionTokens.push( lastNameToken );
-			}
 			
-			self.isDuplicateMember = ko.computed( function(){
-				return false; //TODO logic
+			self.contactSearch = new contactSearch( searchSettings );
+			self.contactSearch.init();			
+			self.contactSubTypes = self.contactSearch.contactSubTypes;
+			
+			self.canAddContact = ko.computed( function(){
+				//TODO: expose for ENG-1833
+				// var showResults = self.contactSearch? self.contactSearch.showResultsHeader() : false;
+				// var editMode = self.editMode();
+				// return showResults && !editMode;
+				return false;
+			}).extend({throttle: 100});
+			
+			//assign selected contact to the member:
+			var contactSelectedToken = self.selectedContact.subscribe( function(contact){
+				if( contact ){
+					self.careMember().contactId( contact.id() );
+				}
+				else{
+					self.careMember().contactId( null );
+				}
 			});
+			subscriptionTokens.push( contactSelectedToken );						
+			
+			self.contactAlreadyAssigned = ko.observable(false);
+			
+			self.validateCareMember = ko.computed( function(){
+				// in addition to care member isValid, test validation rules related to the patient / current or new member / team here, 
+				// and send hese errors to careMember.isValid
+				
+				var selectedContact = self.selectedContact();
+				var selectedPatient = self.selectedPatient();
+				var teamMembers = self.careTeamMembers();
+				var roleId = self.careMember().roleId();
+				var core = self.careMember().core();
+				var statusId = self.careMember().statusId();
+				var activeStatusId = contactsIndex.activeContactStatus()? contactsIndex.activeContactStatus().id() : null;
+				var customRoleName = self.careMember().customRoleName();
+				var errors = [];
+				if( !selectedContact ){
+					self.contactAlreadyAssigned( false );
+				}
+				
+				else if( teamMembers.length ){
+					//check for duplicate contact:
+					var dup = ko.utils.arrayFirst( teamMembers, function(member){
+						return (member.id() != self.careMember().id()) && member.statusId() == activeStatusId && 
+								member.contactId() == selectedContact.id();
+					});
+					if( dup ){
+						var roleName = dup.customRoleName() ? dup.customRoleName() : (dup.roleType() ? dup.roleType().role() : '');
+						if( roleName ){
+							roleName = '(' + roleName + ')';
+						}
+						self.contactAlreadyAssigned( 'This contact is already assigned '+ roleName );	//not a validation error
+						
+						// errors.push(
+							// { PropName: 'contact', Message: 'The contact:' + selectedContact.fullName() + ' is already assigned' });
+					}
+					else{						
+						self.contactAlreadyAssigned( false );
+					}
+					
+					//dont allow a patient to assigned as a member in his own team:
+					var patientContactId = selectedPatient ? selectedPatient.contactId() : null;
+					if( selectedContact && patientContactId && patientContactId == selectedContact.id() ){						
+						errors.push(
+							{ PropName: 'contact', Message: 'a patient cannot be assigned as a member of his own care team.' }
+						);
+					}
+					
+					//check if core pcp/pcm has already assigned and active:
+					if( roleId && core && statusId == activeStatusId ){
+						//TODO: expose for ENG-1954
+						// dup = ko.utils.arrayFirst( teamMembers, function(member){
+							// if( member.id() != self.careMember().id() &&
+								// member.statusId() == activeStatusId && 																	
+								// member.roleId() && roleId && 
+								// member.roleId() == roleId ){
+									// if (!member.customRoleName() && !customRoleName &&
+										// ( 
+											// ( self.pcmContactSubType() && member.roleId() == self.pcmContactSubType().id() ) || 
+											// ( self.pcpContactSubType() && member.roleId() == self.pcpContactSubType().id() ) 
+										// )
+									// ){
+										// return true; //core active pcp / pcm already assigned.
+									// }
+								// }
+							// else{
+								// return false;
+							// }
+									
+						// });
+						// if( dup ){
+							// var duplicateRoleName = 'this role';
+							// var toDupName = '';
+							// if( dup.roleId() == self.pcmContactSubType().id() ){
+								// duplicateRoleName = self.pcmContactSubType().role();								
+							// }
+							// else if( dup.roleId() == self.pcpContactSubType().id() ){
+								// duplicateRoleName = self.pcpContactSubType().role();								
+							// }
+							// if( dup.contact() && dup.contact().fullName() ){
+								// toDupName = ' to: ' + dup.contact().fullName();
+							// }
+							// errors.push(
+									// { PropName: 'contact', Message: duplicateRoleName + ' is already assigned' + toDupName });
+						// }
+					}
+				}
+				self.careMember().careTeamValidationErrors( errors );
+				return false;
+			}).extend({ throttle: 50 });
 			
 			self.computedRoles = ko.computed( function(){
+				var roles = [];
 				var selectedContact = self.selectedContact();
-				//var contactSubTypes = self.contactSubTypes()
-				//TODO: calc roles per contact and append static roles
-				
-			});
-			// self.checkDuplicateContact = function( firstName, lastName ){
-				// var contactTypeId = self.careMember().contactTypeId();
-				// self.careMember().isDuplicate( false );
-				// self.careMember().isDuplicateTested(false);
-				// if( lastName ){
-					// lastName = lastName.trim();
-				// }
-				// if( firstName ){
-					// firstName = firstName.trim();
-				// }
-				// if( contactTypeId && firstName && lastName ){
-					// var params = {
-						// contactTypeIds: [],
-						// contactSubTypeIds: null,
-						// firstName: firstName,
-						// lastName: lastName,
-						// filterType: 'ExactMatch',
-						// take: 50,
-						// skip: 0
-					// };
-					// params.contactTypeIds.push( self.careMember().contactTypeId() );
-					// return datacontext.getContacts( null, params ).then( self.contactsReturned );
-				// }
-			// };
-						
-												
+				var careMemberRoles = self.careMemberRoles();
+				if( careMemberRoles && careMemberRoles.length > 0 ){
+					ko.utils.arrayForEach( careMemberRoles, function( contactType ){
+						roles.push( contactType );
+					});
+				}
+			    //TODO: ENG-1914: add the contact specific roles based on his types
+				// if( selectedContact && selectedContact.contactSubTypes && selectedContact.contactSubTypes().length ){
+					// var subTypesText = '';
+					// ko.utils.arrayForEach( contactCard.contactSubTypes(), function( subType ){
+						//roles.push(subType);
+					// });
+				// }				
+				return roles;
+			}).extend({ throttle: 50 });
 			
+			self.existingNotesOpen = ko.observable(false);
+			self.toggleOpen = function () {
+				self.existingNotesOpen(!self.existingNotesOpen());
+			};									
+						
+			self.createNewContact = function(){
+				//TODO: expose for ENG-1833
+				//go to add contact dialog, save and come back with a contact.
+				//contactsIndex.addContact( 'CareMember', null, self.addContactReturnedCallback );
+			}
 			return true;
 		}
 		
 		function detached(){
 			var self = this;
             //dispose computeds
-			self.isDuplicateMember.dispose();
+			self.validateCareMember.dispose();
 			self.computedRoles.dispose();
+			self.canAddContact.dispose();
 			
 			self.contactSearch.canSearchContacts.dispose();
 			self.contactSearch.contactSubTypes.dispose();
 			self.contactSearch.showResetFilters.dispose();
 			self.contactSearch.contactsShowingText.dispose();
-			self.contactSearch.showResultsHeader.dispose();
-			
+			self.contactSearch.showResultsHeader.dispose();			
 			
 			ko.utils.arrayForEach(subscriptionTokens, function (token) {
                 token.dispose();
@@ -355,7 +457,9 @@ define([ 'services/datacontext', 'services/local.collections', 'viewmodels/home/
 		}
 		var vm = {
 			activate: activate,
-			detached: detached			
+			detached: detached,
+			frequencies: frequencies,
+			careMemberStatuses: careMemberStatuses
 		}
 		return vm;		
 	}

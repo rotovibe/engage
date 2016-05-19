@@ -10,14 +10,24 @@ define(['services/session', 'services/datacontext', 'viewmodels/patients/index',
         var leftColumnOpen = ko.observable(true);
 		var activeWidgetOpen = ko.observable(true);
 		var inactiveWidgetOpen = ko.observable(false);
-		
-		var initialized = false;
+		var nextId = 0;
 		
 		checkDataContext();
 		
         var selectedPatient = ko.computed(function () {
             return patientsIndex.selectedPatient();
         });
+		
+		var careMemberRoles = ko.observableArray([]);
+		var careMemberRolesGroup = 2;
+		careMemberRoles( datacontext.getContactTypes( careMemberRolesGroup, 'root' ) );
+		
+		var pcmContactSubType = ko.observable( ko.utils.arrayFirst( careMemberRoles(), function( contactType ){
+			return contactType.role() == 'Primary Care Manager';
+		}));
+		var pcpContactSubType = ko.observable( ko.utils.arrayFirst( careMemberRoles(), function( contactType ){
+			return contactType.name() == 'Primary Care Physician';	//note name instead of role since theres a typo in the db...
+		}));
 		
 		var careMembers = ko.computed(function(){
 			var members = [];
@@ -73,27 +83,42 @@ define(['services/session', 'services/datacontext', 'viewmodels/patients/index',
 		var modalShowing = ko.observable(false);
 		var modalEntity = ko.observable(new ModalEntity(modalShowing));
 		var newCareMember = ko.observable();				
-		var theCareMember = ko.observable();
+		var newCareTeam = ko.observable();
+		
+		function saveAndAddAnother(){			
+			saveOverride().then( addCareMember );
+			modalShowing(false);
+		}
 		
 		function saveOverride () {
-			
-			//TODO: save theCareMember
-			// theCareMember().saveChanges().then( saveCompleted );
-			// theCareMember().clearDirty();
-				
-            // function saveCompleted(contact) {
-                // if (contact) {
-                    // //only insert returns the object
-					// contact.isNew(false);					
-					// contact.clearDirty();
-				// }				               
-            // }
+			if( !selectedPatient().careTeamId() ){
+				//team has not yet been created:
+				newCareTeam( datacontext.createEntity('CareTeam', 
+						{ 	id: -1, 
+							contactId: selectedPatient().contactId(),
+							patientId: selectedPatient().id(),
+							createdById: session.currentUser().userId()
+						}) );
+				newCareTeam().members = ko.observableArray();
+				newCareTeam().members.push( newCareMember() );
+				return datacontext.saveCareTeam( newCareTeam() ).then( saveTeamCompleted );
+			}
+			else{
+				//add/save one member to an existing team
+				//	note: the new member should already be here inside members:				
+				return datacontext.saveCareTeam( selectedPatient().careTeam() ).then( saveTeamCompleted );
+			}
+							
+			function saveTeamCompleted( team ){
+				if( team ){					
+					selectedPatient().careTeam(team);					
+				}
+			};			            
         };
 		
         function cancelOverride () {
 			modalShowing(false);
-			//modalEntity().careMember().cancelChanges();
-			//modalEntity().careMember().clearDirty();	
+			modalEntity().careMember().entityAspect.rejectChanges();			
         };
 		
 		var modalSettings = {
@@ -104,7 +129,10 @@ define(['services/session', 'services/datacontext', 'viewmodels/patients/index',
 			saveOverride: saveOverride, 
 			cancelOverride: cancelOverride, 
 			deleteOverride: null, 
-			classOverride: 'modal-lg'
+			classOverride: 'modal-lg',
+			customButtons: [
+				{	btnEnabled: modalEntity().canSave, btnFunction: saveAndAddAnother, btnText: 'Save + New' }
+			]
 		};
 		
         var modal = new modelConfig.modal(modalSettings);
@@ -130,23 +158,52 @@ define(['services/session', 'services/datacontext', 'viewmodels/patients/index',
                 }
             });
             // Object containing parameters to pass to the modal
-            self.activationData = { careMember: self.careMember, canSave: self.canSave, showing: modalShowing  };
+            self.activationData = { careMember: self.careMember, careTeamMembers: careMembers, 
+									selectedPatient: selectedPatient, careMemberRoles: careMemberRoles, 
+									canSave: self.canSave, pcmContactSubType: pcmContactSubType,
+									pcpContactSubType: pcpContactSubType, showing: modalShowing,
+									addContactReturnedCallback: addContactReturned };			
         }
 		
-		function addCareMember(){
-			//var pid = selectedPatient()? selectedPatient().id() : null;
-			//newCareMember( datacontext.createEntity('CareMember', { id: -1, patientId: pid, createdById: session.currentUser().userId() }));
-			newCareMember().isNew(true);
-			//newCareMember().activeTab("Profile");
+		function addContactReturned(contact){
+			// called back from add contact dialog:
+		    if (contact) {
+                //new contact created - attach to the care member:
+				newCareMember().contactId(contact.id());
+				editCareMember( newCareMember() );
+			}
+			else{
+				//add contact canceled:
+				newCareMember().contactId(null);
+				shell.currentModal(modal);
+				modalShowing(true);
+			}
 			
-			//newCareMember().watchDirty();
+		}
+		
+		function addCareMember(){
+			var teamId = selectedPatient()? ( selectedPatient().careTeamId()? selectedPatient().careTeamId(): null ) : null;
+			newCareMember( datacontext.createEntity('CareMember', 
+						{ 	id: --nextId, 
+							contactId: null,	//no contact yet
+							careTeamId: teamId,
+							distanceUnit: 'mi',
+							statusId: 1,		//active 
+							core: false,
+							dataSource: 'Engage',
+							createdById: session.currentUser().userId() 
+						}) );
+			newCareMember().isNew(true);			
             modalEntity().careMember( newCareMember() );
             shell.currentModal(modal);
             modalShowing(true);
 		}
 		
 		function editCareMember(member){
-			//TODO
+			modalEntity().careMember( member );
+			//show the screen without search. show the contact. 
+            shell.currentModal(modal);
+            modalShowing(true);
 		}
 		
 		function deleteCareMember(member){
@@ -154,19 +211,9 @@ define(['services/session', 'services/datacontext', 'viewmodels/patients/index',
 		}
 		
 		function activate(){
-			if( !initialized ){
-				initializeViewModel();
-                initialized = true;
-			}
-			
+			return true;
 		};
-		
-		function initializeViewModel(){
-			var pid = selectedPatient()? selectedPatient().id() : null;
-			newCareMember( datacontext.createEntity('CareMember', { id: -1, patientId: pid, createdById: session.currentUser().userId() }) );
-			newCareMember().isNew(true);
-		}	
-		
+				
 		// Toggle the widget to / from fullscreen
         function toggleFullScreen(widgetname) {
             // If this widget is already fullscreen,
@@ -229,6 +276,9 @@ define(['services/session', 'services/datacontext', 'viewmodels/patients/index',
 			deleteCareMember: deleteCareMember,
 			careMembers: careMembers,
 			selectedCareMember: selectedCareMember,
+			careMemberRoles: careMemberRoles,
+			pcmContactSubType: pcmContactSubType,
+			pcpContactSubType: pcpContactSubType,
 			toggleOpenColumn: toggleOpenColumn,
 			fullScreenWidget: fullScreenWidget,
 			leftColumnOpen: leftColumnOpen,

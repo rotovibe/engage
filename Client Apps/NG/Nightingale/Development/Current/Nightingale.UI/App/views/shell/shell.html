@@ -27,6 +27,9 @@
                 <div class="pull-right">
                     <a class="btn cancel" data-bind="click: $parent.cancelChanges">Cancel</a>
                     <button class="btn color" data-bind="visible: !$parent.canDelete(), enable: canSave, click: $parent.saveChanges">Save</button>
+					<!-- ko foreach: $parent.customButtons -->
+						<button class="btn color" data-bind="visible: !$parents[1].canDelete(), enable: btnEnabled, click: btnFunction, text: btnText"></button>
+					<!-- /ko -->
                     <button class="btn color" data-bind="visible: $parent.canDelete, enable: canSave, click: $parent.delete, text: $parent.deleteText"></button>
                 </div>
             </footer>

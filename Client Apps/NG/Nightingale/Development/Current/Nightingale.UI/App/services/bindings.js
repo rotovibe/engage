@@ -281,6 +281,50 @@ define(['services/formatter', 'services/dateHelper'],
             }
         };
 
+		ko.bindingHandlers.numericDecimal = {
+			/**
+			*	@param valueAccessor expecting an observable that holds/binds to the number.
+			*	@method numericDecimal.init allows digits only with a decimal point
+			*/
+			init: function(element, valueAccessor){
+				var observableNumber = valueAccessor();
+				blockNonNumeric(element);
+				$(element).on('keydown paste change', function(e){
+					var key = e.which || e.keyCode;
+					if( e.type == 'paste' ){
+						e.preventDefault();
+					}
+					// key 190 is the decimal point
+
+					var position = element.selectionStart;
+					var type = e.type;
+					setTimeout( function(){
+						var number = $(element).val();
+						var newNumber = number;
+						if( isNaN(+number) || ( number.match(/\D/) && !number.match(/\./) ) ){	//dont remove if its the decimal point "."
+							//clean out non numeric	chars:
+							newNumber = number.replace(/\D/,'');
+							if( observableNumber ){
+								$(element).val(newNumber);
+								observableNumber( newNumber );
+							}
+						}
+						//fix cursor position as the observable binding update changes it:
+						if( key === 46 || (key === 8 && position-1 < newNumber.length)){	//46=delete or 8=bkspc not on last char: return the cursor to its original position
+							if( key == 8 ){
+								position = position > 0? position -1 : position;
+							}
+							element.setSelectionRange(position, position);
+						}
+						else if( key >= 48 && key <= 57  && position < newNumber.length ){	//digit added in the middle
+							element.setSelectionRange(position +1, position +1);
+						}
+					}, 5);
+				});
+
+			}
+		};
+		
 		ko.bindingHandlers.numeric = {
 			/**
 			*	@param valueAccessor expecting an observable that holds/binds to the number.

@@ -676,6 +676,49 @@ define(['services/session', 'services/validatorfactory', 'services/customvalidat
 					return fullName;
 				});
 				
+				contactCard.genderModel = ko.computed({
+					read: function () {
+						checkDataContext();
+						var thisGender;
+						var gender = contactCard.gender()? contactCard.gender().toLowerCase() : '';
+						if (gender === 'm' || gender === 'male') {
+							contactCard.gender('M');
+							thisGender = ko.utils.arrayFirst(datacontext.enums.genders(), function (item) {
+								return 'm' === item.Id;
+							});
+						}
+						else if (gender === 'f' || gender === 'female') {
+							contactCard.gender('F');
+							thisGender = ko.utils.arrayFirst(datacontext.enums.genders(), function (item) {
+								return 'f' === item.Id;
+							});
+						}
+						else {
+							contactCard.gender('N');
+							thisGender = ko.utils.arrayFirst(datacontext.enums.genders(), function (item) {
+								return 'n' === item.Id;
+							});
+						}
+						return thisGender;
+					},
+					write: function (newValue) {
+						contactCard.gender(ko.unwrap(newValue).Id.toUpperCase());
+					}
+				});
+				
+				contactCard.firstLastOrPreferredName = ko.computed( function(){
+					var preferred = contactCard.preferredName();
+					var firstName = contactCard.firstName();
+					if( !firstName ) {
+						firstName = '';
+					}
+					var lastName = contactCard.lastName();
+					if( !lastName ) {
+						lastName = '';
+					}
+					return preferred? preferred : (firstName + ' ' + lastName);
+				}).extend({throttle: 100});
+				
 				function getDetailedSubTypeText(subType){
 					//subtype, specialty and sub specialty
 					var subTypeText = '';							

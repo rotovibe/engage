@@ -54,6 +54,7 @@ define(['services/session', 'services/datacontext', 'viewmodels/shell/shell', 'm
 		var maxContactsCount = ko.observable(400);
 		var searching = ko.observable(false);
 		var totalCount = ko.observable();
+		var contactReturnedCallback = ko.observable();
 		
 		function saveOverride () {
 			
@@ -64,15 +65,27 @@ define(['services/session', 'services/datacontext', 'viewmodels/shell/shell', 'm
                 if (contact) {
                     //only insert returns the object
 					contact.isNew(false);					
-					contact.clearDirty();
-				}				               
+					contact.clearDirty();					
+				}
+                if (modalEntity().callbackReturnTo) {                    
+                    //a callback to return to after save/cancel (this is currently used from assign care member dialog):
+                    //and return the created contact:
+					return setTimeout( function(){
+						modalEntity().callbackReturnTo( modalEntity().contactCard() );
+					}, 10);
+				}
             }
         };
 		
         function cancelOverride () {
 			modalShowing(false);
 			modalEntity().contactCard().cancelChanges();
-			modalEntity().contactCard().clearDirty();	
+			modalEntity().contactCard().clearDirty();
+			if( modalEntity().callbackReturnTo ){
+				return setTimeout( function(){
+					modalEntity().callbackReturnTo();
+				}, 10);
+			}
         };
 		
 		var modalSettings = {
@@ -80,8 +93,8 @@ define(['services/session', 'services/datacontext', 'viewmodels/shell/shell', 'm
 			entity: modalEntity, 
 			templatePath: 'viewmodels/templates/contact.edit', 
 			showing: modalShowing, 
-			saveOverride: saveOverride, 
-			cancelOverride: cancelOverride, 
+			saveOverride: saveOverride,
+			cancelOverride: cancelOverride,
 			deleteOverride: null, 
 			classOverride: null//'modal-lg'
 		};
@@ -90,7 +103,7 @@ define(['services/session', 'services/datacontext', 'viewmodels/shell/shell', 'm
 		
 		function ModalEntity(modalShowing) {
             var self = this;
-            self.contactCard = ko.observable();
+            self.contactCard = ko.observable();			
             self.canSaveObservable = ko.observable(true);
             self.canSave = ko.computed({
                 read: function () {
@@ -108,7 +121,8 @@ define(['services/session', 'services/datacontext', 'viewmodels/shell/shell', 'm
             self.activationData = { contactCard: self.contactCard, canSave: self.canSave, showing: modalShowing  };
         }
 		
-		function addContact(){
+		
+		function addContact( data, event, contactReturnedCallback ){
 			//navigate to add contact dialog
 			
 			var newModes = [];
@@ -122,6 +136,9 @@ define(['services/session', 'services/datacontext', 'viewmodels/shell/shell', 'm
 			
 			theContact().watchDirty();
             modalEntity().contactCard( theContact() );
+			if( contactReturnedCallback ){
+				modalEntity().callbackReturnTo = contactReturnedCallback;
+			}
             shell.currentModal(modal);
             modalShowing(true);
 		}
@@ -168,7 +185,7 @@ define(['services/session', 'services/datacontext', 'viewmodels/shell/shell', 'm
 		var allContactTypes = ko.observableArray([]);
 		var typesList = datacontext.getContactTypes( contactTypeGroupId, false );
 		allContactTypes(typesList);
-				
+		
 		var criteriaContactTypeId = ko.observable();
 		var criteriaContactSubTypes = ko.observableArray();
 		var criteriaContactStatuses = ko.observableArray();
@@ -565,6 +582,8 @@ define(['services/session', 'services/datacontext', 'viewmodels/shell/shell', 'm
 			activeContactStatus: activeContactStatus,
 			contactTypes: contactTypes,
 			contactSubTypes: contactSubTypes,
+			// pcmContactSubType: pcmContactSubType,
+			// pcpContactSubType: pcpContactSubType
 			contactStatuses: contactStatuses,
 			toggleOpenColumn: toggleOpenColumn,
 			fullScreenWidget: fullScreenWidget,

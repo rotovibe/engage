@@ -2,11 +2,8 @@
 	<section class="accordion hoverable open">
 				
 		<!--search-->
-		<div data-bind="with: contactSearch">
-			<div class="row pad-top">
-				<!-- <div class="row filters" data-bind="visible: showResetFilters()">
-					<i class="pointer icon-cancel pull-right pad-right toggle" title="Clear Filter" data-bind="click: resetFilters"></i>
-				</div> -->
+		<div data-bind="with: contactSearch, visible: !editMode()">
+			<div class="row pad-top">				
 				<div class="span1 align-right grey" maxlength="50">First Name</div>
 				<div class="span2 pad-left">
 					<input type="text" data-bind="value: criteriaFirstName, valueUpdate: 'afterkeydown'" placeholder="first name" />
@@ -39,34 +36,30 @@
 							<h1>Results<span data-bind="text: contactsShowingText"></span></h1>
 						</span>
 					</div>
-					<div class="header grey">
-						 
-							<header>
-								<div class="line">
-									<div class="span8">
-										<div class="span2">Last Name</div>
-										<div class="span2">First Name</div>
-										<div class="span8">Summary</div>
-									</div>
-									<div class="span4 pad-left">
-										Selected Contact
-									</div>
+					<div class="header grey">						 
+						<header>
+							<div class="line">
+								<div class="span8">
+									<div class="span2">Last Name</div>
+									<div class="span2">First Name</div>
+									<div class="span8">Summary</div>
 								</div>
-								
-							</header>
-						 
+								<div class="span4 pad-left">
+									Selected Contact
+								</div>
+							</div>
+						</header>
 					</div>
 				</div>
 				<div class="span8">
 					<h1 data-bind="visible: searching()">Searching...</h1>
-					<div class="body" style="max-height: 310px;" data-bind="visible: !searching()">
+					<div class="body" style="max-height: 310px; min-height: 30px;" data-bind="visible: !searching()">
 						<!--ko compose: "templates/contactSearchResults.panel.html" --><!-- /ko -->
 					</div>
 				</div>
 				<div class="span4">
 					<div class="row">
-						<div data-bind="with: selectedContact" class="header grey">
-							<!-- <span class="grey">Selected Contact:</span> -->
+						<div data-bind="with: selectedContact" class="header grey">							
 							<h1 data-bind="text: fullName" style="overflow-wrap: break-word;"></h1>
 							<span class="grey" data-bind="text: contactSummary"></span>
 							<div data-bind="with: deceased">
@@ -75,68 +68,113 @@
 									<span>Yes</span>
 								</div>
 							</div>
-						</div>
-					</div>					
+						</div>						
+					</div>
+					<div class="row pad-top" data-bind="visible: $parent.contactAlreadyAssigned">
+						<strong  data-bind="text: $parent.contactAlreadyAssigned"></strong>
+					</div>
 				</div>
 			</div>
-			
-		</div>		
-		<!-- <h1>add care member - under construction</h1> 		
-		<div class="pad-top" data-bind="visible: selectedContact">
-			
-			<div data-bind="with: careMember">		
+		</div>						
+		<div class="row pad-top" data-bind="visible: canAddContact">
+			<span class="grey pad-right">can't find the right contact?</span>  
+			<button class="btn small" data-bind="click: createNewContact">
+				<i class="icon-plus"></i>
+				<span class="pad-left">Add</span>
+			</button>
+		</div>
+		<div class="row pad-top" data-bind="visible: selectedContact">
+			<div class="row" data-bind="visible: editMode">
+				<div class="line" data-bind="with: selectedContact">
+					<span class="span1">&nbsp;</span>
+					<h1 data-bind="text: fullName()"></h1>
+					<span class="grey" data-bind="text: contactSummary()"></span>
+				</div>
+			</div>
+			<div data-bind="with: careMember">
+				<!-- ko compose: "templates/validation.errors.html" -->
+				<!-- /ko -->				
 				<div class="row pad-top">
 					<div class="span1 align-right grey">Role</div>
-					<div class="span3" data-bind="chsnsingle: { options: $parent.computedRoles, value: roleId, text: 'role', idValue: 'id', isCancel: true, caption: 'None' }, 
-							css: { invalid: $parent.isDuplicateMember() }"></div>
+					<div class="span3" data-bind="chsnsingle: { options: $parent.computedRoles, value: roleId, text: 'role', idValue: 'id'}, 
+							css: { 'invalid': (validationErrorsArray().indexOf('role') !== -1) } "></div>
 					
+					<!--TODO: ENG-1915 custom role <div class="span1 align-right grey">customRoleName</div>  -->
 					<div class="span1 align-right grey">Core?</div>
 					<div class="checker" data-bind="hoverToggle: 'hover'">
 						<span data-bind="css: { 'checked': core }" class="checked">
 							<input type="checkbox" data-bind="clickToggle: core"></input>
 						</span>
 					</div>					
-				</div>				
+				</div>
+				<div class="pad-top"></div>	
 				<div class="row pad-top">
-					<div class="span1 align-right grey">Start Date</div>
-					
-					<div class="span1 align-right grey">End Date</div>
+					<div class="span1 align-right grey">
+						Start Date
+					</div>
+					<div class="span2"> 
+						<!-- ko compose: { model: 'viewmodels/templates/datetimepicker', activationData:
+							{
+								observableDateTime: startDate, dateErrors: startDateErrors, showInvalid: setInvalidStartDate, 
+								datepickerOptions:{}, datepickerDynamicOptions: {}, dateName: 'startDate'
+							}
+						} -->
+						<!-- /ko -->			
+					</div>
+					<div class="span1 align-right grey">
+						End Date
+					</div>
+					<div class="span2">        	
+						<!-- ko compose: { model: 'viewmodels/templates/datetimepicker', activationData:
+							{
+								observableDateTime: endDate, dateErrors: endDateErrors, showInvalid: setInvalidEndDate, 
+								datepickerOptions:{}, datepickerDynamicOptions: {minDate: startDate}, dateName: 'endDate'
+							}
+						} -->
+						<!-- /ko -->
+					</div>	
 					
 					<div class="span1 align-right grey">Status</div>
+					<div class="span1" data-bind="chsnsingle: { options: $parent.careMemberStatuses, value: statusId, text: 'name', idValue: 'id' }"></div>
 				</div>
+				<div class="pad-top"></div>
 				<div class="row pad-top">
 					<div class="span1 align-right grey">Distance</div>
-
-					<div>	<-- class="line" 
+					<div class="span1">
+						<input type="text" data-bind="value: distance, numericDecimal: distance, valueUpdate: 'afterkeydown', 
+							attr:{maxlength: 10, min: 0}" </input>
+					</div>
+					<div class="span1 pad-left">
+						<span class="grey">Miles</span>
 						<div class="radio" data-bind="hoverToggle: 'hover'">
-							<span data-bind="css: { 'checked': distanceUnits }" class="">
-								<input type="radio" data-bind="clickRadio: distanceUnits, disable: ($parent.phoneOptedOut() || optOut), setValue: 'M'">
+							<span data-bind="css: { 'checked': distanceUnit()==='mi' }" class="">
+								<input type="radio" data-bind="clickRadio: distanceUnit, setValue: 'mi'">
 							</span>
 						</div>
-						<div class="span1 align-right grey">Miles</div>
 					</div>
-					<div>	<-- class="line" 
+					<div class="span1 pad-left">
+						<span class="grey">Kilometers</span>
 						<div class="radio" data-bind="hoverToggle: 'hover'">
-							<span data-bind="css: { 'checked': distanceUnits }" class="">
-								<input type="radio" data-bind="clickRadio: distanceUnits, disable: ($parent.phoneOptedOut() || optOut), setValue: 'K'">
+							<span data-bind="css: { 'checked': distanceUnit()==='km' }" class="">
+								<input type="radio" data-bind="clickRadio: distanceUnit, setValue: 'km'">
 							</span>
-						</div>
-						<div class="span1 align-right grey">Km</div>
-					</div>
-					
-					Frequency
-				</div>	
-				<div class="row pad-top">
-					Notes
+						</div>						
+					</div>										
+					<div class="span1 align-right grey">Frequency</div>
+					<div class="span2" data-bind="chsnsingle: { options: $parent.frequencies, value: frequencyId, text: 'name', idValue: 'id', isCancel: true, caption: 'None' }"></div>					
 				</div>
-				
-			</div>
-		</div>-->
-		
-		<!-- <label class="span4">
-			<span>Phone</span>																		
-			<input data-bind="phone: criteriaPhone, value: number, valueUpdate: 'afterkeydown', css: { invalid: !isValid() }" placeholder="XXX-XXX-XXXX" title="XXX-XXX-XXXX"/>																			
-		</label> -->
-		
+				<div class="pad-top"></div>				
+				<div class="row pad-top">
+					<div class="row pad-top filter-toggle" data-bind="click: $parent.toggleOpen, visible: notes">
+						<h5 class="grey pad-bottom">Existing Notes</h5>
+						<span data-bind="visible: (!($parent.existingNotesOpen())), text: '...'"></span>
+					</div>
+					<pre data-bind="text: notes, visible: $parent.existingNotesOpen" ></pre>
+					<div class="row pad-top divider">
+						<h5 class="grey pad-bottom">Notes</h5>
+						<textarea data-bind="value: newNotes, valueUpdate: 'afterkeydown'" class="string optional" maxlength="5000" type="text" style="height: 10em; resize: both;"></textarea>
+					</div>
+				</div>				
+			</div>		
 	</section>
 </div>

@@ -720,6 +720,62 @@
 				return thisToDo;
 		}
 
+		function serializeCareTeam(careTeam, manager){
+			// Create an object to hold the unwrapped JSON
+			var thisCareTeam = {};
+			var careTeamQuery = breeze.EntityQuery
+						.from('fakePath')
+						.where('id', '==', careTeam.id())
+						.toType('CareTeam')
+						.select('id, contactId');
+			var results = manager.executeQueryLocally(careTeamQuery);
+			var unwrappedCareTeam = results[0];
+
+			thisCareTeam.Id = unwrappedCareTeam.id < 1 ? null : unwrappedCareTeam.id;			
+			thisCareTeam.ContactId = unwrappedCareTeam.contactId;
+			thisCareTeam.members = [];
+			ko.utils.arrayForEach( careTeam.members(), function( member ){
+				var thisCareMember = serializeCareTeamMember( member, manager );
+				thisCareTeam.members.push( thisCareMember )
+			});
+			return thisCareTeam;
+		}
+		
+		function serializeCareTeamMember( careMember, manager ){				
+				var thisCareMember = {};
+				var careMemberQuery = breeze.EntityQuery
+						.from('fakePath')
+						.where('id', '==', careMember.id())
+						.toType('CareMember')
+						.select('id, contactId, roleId, customRoleName, startDate, endDate, core, notes, frequencyId, distance,'
+								+ 'distanceUnit, externalRecordId, dataSource, statusId, updatedOn, createdOn, updatedById, createdById');
+
+				var results = manager.executeQueryLocally(careMemberQuery);
+				var unwrappedCareMember = results[0];
+
+				thisCareMember.Id 				= unwrappedCareMember.id < 1 ? null : unwrappedCareMember.id;
+				thisCareMember.ContactId		= unwrappedCareMember.contactId;		
+				thisCareMember.RoleId           = unwrappedCareMember.roleId;          
+				thisCareMember.CustomRoleName   = unwrappedCareMember.customRoleName;
+				thisCareMember.StartDate        = unwrappedCareMember.startDate; 
+				thisCareMember.EndDate          = unwrappedCareMember.endDate;     
+				thisCareMember.Core             = unwrappedCareMember.core;        
+				thisCareMember.Notes            = unwrappedCareMember.notes;
+				thisCareMember.FrequencyId      = unwrappedCareMember.frequencyId;
+				thisCareMember.Distance         = unwrappedCareMember.distance;
+				thisCareMember.DistanceUnit     = unwrappedCareMember.distanceUnit;
+				thisCareMember.ExternalRecordId = unwrappedCareMember.externalRecordId;
+				thisCareMember.DataSource       = unwrappedCareMember.dataSource;
+				thisCareMember.StatusId         = unwrappedCareMember.statusId;
+				thisCareMember.UpdatedOn        = unwrappedCareMember.updatedOn;
+				thisCareMember.CreatedOn        = unwrappedCareMember.createdOn;
+				thisCareMember.UpdatedById      = unwrappedCareMember.updatedById;
+				thisCareMember.CreatedById      = unwrappedCareMember.createdById;
+			
+				return thisCareMember;
+		}
+		
+		//this will be deprecated:
 		// Serialize a care member to save it
 		function serializeCareMember(careMember, manager) {
 				// When the serialization started
@@ -991,7 +1047,9 @@
 				serializeObservation: serializeObservation,
 				serializeNote: serializeNote,
 				serializeToDo: serializeToDo,
-				serializeCareMember: serializeCareMember,
+				serializeCareMember: serializeCareMember,	
+				serializeCareTeam: serializeCareTeam,
+				serializeCareTeamMember: serializeCareTeamMember,
 				serializeIndividual: serializeIndividual,
 				serializePatientSystem: serializePatientSystem,
 				serializePatientAllergy: serializePatientAllergy,

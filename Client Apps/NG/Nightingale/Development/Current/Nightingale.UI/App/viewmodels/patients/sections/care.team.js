@@ -5,7 +5,9 @@
 define(['models/base', 'services/datacontext', 'services/session', 'viewmodels/shell/shell'],
     function (modelConfig, datacontext, session, shell) {
 
-        var alphabeticalSort = function (l, r) { return (l.preferredName() == r.preferredName()) ? (l.preferredName() > r.preferredName() ? 1 : -1) : (l.preferredName() > r.preferredName() ? 1 : -1) };
+        var alphabeticalSort = function (l, r) { 			
+			return (l.contact().lastName() == r.contact().lastName()) ? (l.contact().lastName() > r.contact().lastName() ? 1 : -1) : (l.contact().lastName() > r.contact().lastName() ? 1 : -1) 
+		};
 
         var ctor = function () {
 			var self = this;			
@@ -16,7 +18,15 @@ define(['models/base', 'services/datacontext', 'services/session', 'viewmodels/s
             // Get the selected patient that was passed in
             self.selectedPatient = settings.selectedPatient;
             // Get a list of all of the care team
-            self.careMembers = self.selectedPatient.careMembers;
+            self.careMembers = ko.computed( function(){
+				var team = self.selectedPatient.careTeam();
+				var allMembers = team ? team.members() : [];
+				var members = ko.utils.arrayFilter( allMembers, function(member){
+					return !member.isNew();
+				});
+				return members;
+			}).extend({ throttle: 50 });
+			
             // The view state of the section (open or not)
             self.isOpen = ko.observable(true);			
             // Create a list of primary care team members to display in the widget
@@ -29,7 +39,7 @@ define(['models/base', 'services/datacontext', 'services/session', 'viewmodels/s
                 // Create a filtered list of care teams,
                 ko.utils.arrayForEach(searchCareTeam, function (careMember) {
                     // If they are a member of the primary care team,
-                    if (careMember.primary() && !careMember.isNew()) {
+                    if (careMember.core() && !careMember.isNew() && careMember.statusId() == 1) {
                         // Add them to the team
                         thisCareTeam.push(careMember);
                     }
@@ -37,6 +47,7 @@ define(['models/base', 'services/datacontext', 'services/session', 'viewmodels/s
                 // Return the team
                 return thisCareTeam;
             }).extend({ throttle: 50 });
+			
 			self.isSaving = ko.observable(false);
 			self.canAssignToMe = ko.computed( function(){
 				var zerolength = self.primaryCareTeam().length === 0;
@@ -50,28 +61,29 @@ define(['models/base', 'services/datacontext', 'services/session', 'viewmodels/s
 				var isPatientLoaded = self.selectedPatient.isLoaded();
 				var isSaving = self.isSaving();
 				if ( primaryCareTeam.length > 0 && isPatientLoaded ) {
-					// var thisMatchedCareManager = ko.utils.arrayFirst( primaryCareTeam, function (caremanager) {
-					    // return caremanager.contactId() === session.currentUser().userId();
-					// });
-					return ( primaryCareTeam.length > 0 && ( primaryCareTeam[0].contactId() !== session.currentUser().userId() ) && !isSaving );
+					var thisMatchedCareManager = ko.utils.arrayFirst( primaryCareTeam, function (caremanager) {
+					    return caremanager.contact().userId() === session.currentUser().userId();
+					});
+					return ( thisMatchedCareManager && !isSaving );
 				}
 				return false;
 			}).extend({ throttle: 50 });
 		
+		//TODO: probably not needed:
             // Create a list of secondary care team members
             self.secondaryCareTeam = ko.computed(function () {
                 // Create an empty array to fill with problems
                 var thisCareTeam = [];
                 // Sort them
-                var searchCareTeam = self.careMembers().sort(alphabeticalSort);
-                // Create a filtered list of care teams,
-                ko.utils.arrayForEach(searchCareTeam, function (careMember) {
-                    // If they are not part of the primary care team,
-                    if (!careMember.primary() && !careMember.isNew()) {
-                        // Make them part of the secondary team
-                        thisCareTeam.push(careMember);
-                    }
-                });
+                // var searchCareTeam = self.careMembers().sort(alphabeticalSort);
+                // // Create a filtered list of care teams,
+                // ko.utils.arrayForEach(searchCareTeam, function (careMember) {
+                    // // If they are not part of the primary care team,
+                    // if (!careMember.primary() && !careMember.isNew()) {
+                        // // Make them part of the secondary team
+                        // thisCareTeam.push(careMember);
+                    // }
+                // });
                 return thisCareTeam;
             }).extend({ throttle: 50 });
             self.saveType = ko.observable();
@@ -85,15 +97,17 @@ define(['models/base', 'services/datacontext', 'services/session', 'viewmodels/s
                         return caremanager.id() === session.currentUser().userId();
                     });
                     // Grab the first primary listed care member
-                    var thisCareMember = ko.utils.arrayFirst(self.selectedPatient.careMembers(), function (ctMember) {
+					var members = self.selectedPatient.careTeam() ? self.selectedPatient.careTeam().members() : [];
+                    var thisCareMember = ko.utils.arrayFirst(members, function (ctMember) {
                         return ctMember.primary();
                     });
-                    datacontext.saveCareMember(thisCareMember, self.saveType());
+                    datacontext.saveCareMemberOld(thisCareMember, self.saveType());
                 }
             };
             self.cancelOverride = function () {
                 datacontext.cancelEntityChanges(self.selectedPatient);
-                ko.utils.arrayForEach(self.selectedPatient.careMembers(), function (cm) {
+				var members = self.selectedPatient.careTeam() ? self.selectedPatient.careTeam().members() : [];
+                ko.utils.arrayForEach(members, function (cm) {
                     datacontext.cancelEntityChanges(cm);
                 });
             };
@@ -147,12 +161,13 @@ define(['models/base', 'services/datacontext', 'services/session', 'viewmodels/s
                 var thisCareMember = datacontext.createEntity('CareMember', { id: -1, patientId: self.selectedPatient.id(), preferredName: thisMatchedCareManager.preferredName(), typeId: careMemberType.id(), gender: 'n', primary: true, contactId: session.currentUser().userId() });
 				function saveCareManagerCompleted() {
 				}
-                return datacontext.saveCareMember(thisCareMember, 'Insert').then( saveCareManagerCompleted );
+                return datacontext.saveCareMemberOld(thisCareMember, 'Insert').then( saveCareManagerCompleted );
             } else{
 				console.log('assignToMe blocked since it is currently saving');
 			}
         };
         
+        //TODO: change to new care member / care team/ member endpoints and contact types:
         ctor.prototype.reassignToMe = function () {
             var self = this;
             // Get the care manager type
@@ -165,7 +180,8 @@ define(['models/base', 'services/datacontext', 'services/session', 'viewmodels/s
                     return caremanager.id() === session.currentUser().userId();
                 });
                 // Grab the first primary listed care member
-                var thisCareMember = ko.utils.arrayFirst(self.selectedPatient.careMembers(), function (ctMember) {
+				var members = self.selectedPatient.careTeam() ? self.selectedPatient.careTeam().members() : [];
+                var thisCareMember = ko.utils.arrayFirst(members, function (ctMember) {
                     return ctMember.primary();
                 });
                 thisCareMember.preferredName(thisMatchedCareManager.preferredName());
@@ -173,10 +189,11 @@ define(['models/base', 'services/datacontext', 'services/session', 'viewmodels/s
                 thisCareMember.contactId(thisMatchedCareManager.id());
 				function saveCareManagerCompleted() {					
 				}
-                datacontext.saveCareMember(thisCareMember, 'Update').then( saveCareManagerCompleted );
+                datacontext.saveCareMemberOld(thisCareMember, 'Update').then( saveCareManagerCompleted );
             }
         };
 
+        //TODO: change to new care member / care team/ member endpoints and contact types:
         ctor.prototype.saveCareTeam = function (caremanagerid) {
             var careManagerId = caremanagerid ? caremanagerid : session.currentUser().userId();
             // Get the care manager type
@@ -188,14 +205,15 @@ define(['models/base', 'services/datacontext', 'services/session', 'viewmodels/s
                     return caremanager.id() === careManagerId;
                 });
                 var thisCareMember = datacontext.createEntity('CareMember', { id: -1, patientId: self.selectedPatient.id(), preferredName: thisMatchedCareManager.preferredName(), typeId: careMemberType.id(), gender: 'n', primary: true, contactId: careManagerId });
-                datacontext.saveCareMember(thisCareMember, 'Insert');
+                datacontext.saveCareMemberOld(thisCareMember, 'Insert');
             }
         }
 
         ctor.prototype.editCareTeam = function () {
-            var self = this;
-            self.editModalShowing(true);
-            shell.currentModal(self.modal);
+			//TODO: rewrite with new care team
+            // var self = this;
+            // self.editModalShowing(true);
+            // shell.currentModal(self.modal);
         }
 
         ctor.prototype.attached = function () {

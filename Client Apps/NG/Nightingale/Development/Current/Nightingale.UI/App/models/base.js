@@ -5,8 +5,8 @@
 *		CareMember, PatientSystem, Alert, System	
 *	@module base
 */
-define(['services/validatorfactory', 'services/customvalidators', 'services/formatter'],
-	function (validatorFactory, customValidators, formatter) {
+define(['services/validatorfactory', 'services/customvalidators', 'services/formatter', 'services/session'],
+	function (validatorFactory, customValidators, formatter, session) {
 
 		var datacontext;
 		var systemCareManager;
@@ -55,53 +55,55 @@ define(['services/validatorfactory', 'services/customvalidators', 'services/form
 		        });
 		    }
 			self.Entity = modalSettings.entity;
+			self.customButtons = modalSettings.customButtons ? modalSettings.customButtons : [];
 			self.TemplatePath = ko.observable(modalSettings.templatePath);
 			self.classOverride = ko.observable(modalSettings.classOverride? modalSettings.classOverride : null);
 			self.Showing = modalSettings.showing ? modalSettings.showing : false;
-					// Method on the modal to save the currently mapped properties
-					self.saveChanges = function () {
-							// If a save override was passed in,
-							if (modalSettings.saveOverride) {
-									// Use that to save.
-									modalSettings.saveOverride();
-									self.Showing(false);
-								} else {
-									// If not, use the entities default ave
-							// Check if a datacontext exists
-							checkDataContext();
-							var thisEntity = ko.unwrap(self.Entity);
-							thisEntity.saveChanges();
-							// Close the modal when the save is complete
-							self.Showing(false);
-						}
-					};
-					self.cancelChanges = function () {
-					// If a cancel override function was passed in,
-					if (modalSettings.cancelOverride) {
-							// Use it
-							var confirmed = modalSettings.cancelOverride();
-							if( confirmed === undefined || confirmed === true ){
-								self.Showing(false);
-							}
-						} else {
-									// If not, use the entities default
-									var thisEntity = ko.unwrap(self.Entity);
-									thisEntity.cancelChanges();
-									self.Showing(false);
-								}
-							};
+			// Method on the modal to save the currently mapped properties
+			self.saveChanges = function () {
+				
+				// If a save override was passed in,
+				if (modalSettings.saveOverride) {
+					// Use that to save.
+					modalSettings.saveOverride();
+					self.Showing(false);
+				} else {
+					// If not, use the entities default ave
+					// Check if a datacontext exists
+					checkDataContext();
+					var thisEntity = ko.unwrap(self.Entity);
+					thisEntity.saveChanges();
+					// Close the modal when the save is complete
+					self.Showing(false);
+				}
+			};
+			self.cancelChanges = function () {
+				// If a cancel override function was passed in,
+				if (modalSettings.cancelOverride) {
+					// Use it
+					var confirmed = modalSettings.cancelOverride();
+					if( confirmed === undefined || confirmed === true ){
+						self.Showing(false);
+					}
+				} else {
+					// If not, use the entities default
+					var thisEntity = ko.unwrap(self.Entity);
+					thisEntity.cancelChanges();
+					self.Showing(false);
+				}
+			};
 			// Placeholder delete method
 			self.delete = function () {
-					// If a cancel override function was passed in,
-					if (modalSettings.deleteOverride) {
-							// Use it
-							modalSettings.deleteOverride();
-							self.Showing(false);
-						} else {
-							self.Showing(false);
-						}
-					};
-					self.deleteText = ko.observable('Delete');
+				// If a cancel override function was passed in,
+				if (modalSettings.deleteOverride) {
+					// Use it
+					modalSettings.deleteOverride();
+					self.Showing(false);
+				} else {
+					self.Showing(false);
+				}
+			};
+			self.deleteText = ko.observable('Delete');
 			// Controls whether the modal shows save or delete buttons
 			self.canDelete = ko.observable(false);
 		}
@@ -246,11 +248,7 @@ define(['services/validatorfactory', 'services/customvalidators', 'services/form
 					medications: {
 						entityTypeName: "PatientMedication", isScalar: false,
 						associationName: "Patient_Medications"
-					},
-					careMembers: {
-						entityTypeName: "CareMember", isScalar: false,
-						associationName: "Patient_CareMembers"
-					},
+					},					
 					careTeam: {
 						entityTypeName: "CareTeam", isScalar: true,
 						associationName: "Patient_CareTeam", foreignKeyNames: ["careTeamId"]
@@ -430,16 +428,25 @@ define(['services/validatorfactory', 'services/customvalidators', 'services/form
 				namespace: "Nightingale",
 				dataProperties: {
 					id: { dataType: "String", isPartOfKey: true },
-					contactId: { dataType: "String" }
+					contactId: { dataType: "String" },
+					patientId:  { dataType: "String" },
+					createdById: { dataType: "String" },
+					createdOn: { dataType: "DateTime" },
+					updatedById: { dataType: "String" },
+					updatedOn: { dataType: "DateTime" } 
 				},
 				navigationProperties: {
+					patient: {
+				        entityTypeName: "Patient", isScalar: true,
+				        associationName: "Patient_CareTeam", foreignKeyNames: ["patientId"]
+				    },
 					patientContact: {
 						entityTypeName: "ContactCard", isScalar: true,
-						associationName: "CareTeamPatient_ContactCard", foreignKeyNames: ["contactId"]
+						associationName: "CareTeam_Patient_ContactCard", foreignKeyNames: ["contactId"]
 					},
 					members: { 
 						entityTypeName: "CareMember", isScalar: false,
-						associationName: "Patient_CareMembers"
+						associationName: "CareTeam_CareMembers"
 					}
 				}
 			});
@@ -451,8 +458,8 @@ define(['services/validatorfactory', 'services/customvalidators', 'services/form
 				dataProperties: {
 					id: { dataType: "String", isPartOfKey: true },
 					gender: { dataType: "String" },	//TODO: remove and use contact
-					preferredName: { dataType: "String" },
-					patientId: { dataType: "String" }, //TODO: remove and use careTeam
+					preferredName: { dataType: "String" },					
+					careTeamId: { dataType: "String" },
 					contactId: { dataType: "String" },
 					typeId: { dataType: "String" },
 					primary: { dataType: "Boolean" },
@@ -462,28 +469,27 @@ define(['services/validatorfactory', 'services/customvalidators', 'services/form
 					endDate: { dataType: "DateTime" },
 					core: { dataType: "Boolean" },
 					notes:  { dataType: "String" },
+					newNotes: { dataType: "String" },
 					frequencyId: { dataType: "String" },
 					distance: { dataType: "Int64" },
-					distanceUnits: {dataType: "String"},
+					distanceUnit: {dataType: "String"},
 					externalRecordId: { dataType: "String" },
 					dataSource: { dataType: "String" },
 					statusId: { dataType: "Int64", defaultValue: 1 },
-					
-
 					createdById: { dataType: "String" },
 					createdOn: { dataType: "DateTime" },
 					updatedById: { dataType: "String" },
 					updatedOn: { dataType: "DateTime" }
 				},
-				navigationProperties: {
-				    patient: {
-				        entityTypeName: "Patient", isScalar: true,
-				        associationName: "Patient_CareMembers", foreignKeyNames: ["patientId"]
-				    },
-				    careManager: {
-				        entityTypeName: "CareManager", isScalar: true,
-				        associationName: "CareManager_CareMembers", foreignKeyNames: ["contactId"]
-				    },
+				navigationProperties: {				    
+					careTeam: {
+						entityTypeName: "CareTeam", isScalar: true,
+						associationName: "CareTeam_CareMembers", foreignKeyNames: ["careTeamId"]
+					},
+					contact:{
+						entityTypeName: "ContactCard", isScalar: true,
+				        associationName: "CareMember_ContactCard", foreignKeyNames: ["contactId"]
+					},
 				    type: {
 				        entityTypeName: "CareMemberType", isScalar: true,
 				        associationName: "CareMember_Type", foreignKeyNames: ["typeId"]
@@ -495,7 +501,11 @@ define(['services/validatorfactory', 'services/customvalidators', 'services/form
 					frequency: {
 						entityTypeName: "CareTeamFrequency", isScalar: true,
 						associationName: "CareMember_CareTeamFrequency", foreignKeyNames: ["frequencyId"]						
-					}
+					},
+					roleType: {
+						entityTypeName: "ContactTypeLookup", isScalar: true,
+						associationName: "ContactTypeLookup_ContactCard", foreignKeyNames: ["roleId"]
+					},
 				}
 			});
 
@@ -826,38 +836,71 @@ define(['services/validatorfactory', 'services/customvalidators', 'services/form
 
 			function careMemberInitializer(member) {
 				member.isNew = ko.observable(false);
+				member.validationErrors = ko.observableArray();
+				member.careTeamValidationErrors = ko.observableArray();
+				member.validationErrorsArray = ko.computed(function () {
+					var thisArray = [];
+					ko.utils.arrayForEach(member.validationErrors(), function (error) {
+						thisArray.push(error.PropName);
+					});
+					return thisArray;
+				});
+				
+				member.checkAppend = function () {
+                    formatter.appendNewDetails( member.newNotes, member.notes, datacontext.getUserFullName() );
+                };
+				
+				member.startDateErrors = ko.observableArray([]);
+				member.endDateErrors = ko.observableArray([]);
+				member.setInvalidStartDate = ko.computed( function(){
+					var validationErrorsArray = member.validationErrorsArray();
+					return (validationErrorsArray && validationErrorsArray.indexOf('startDate') !== -1);  
+				});
+				member.setInvalidEndDate = ko.computed( function(){
+					var validationErrorsArray = member.validationErrorsArray();
+					return (validationErrorsArray && validationErrorsArray.indexOf('endDate') !== -1);  
+				});
 				member.isValid = ko.computed( function(){
-					return true;	//TODO
-				});
-				member.genderModel = ko.computed({
-					read: function () {
-						checkDataContext();
-						var thisGender;
-						var gender = member.gender() ? member.gender().toLowerCase() : '';
-						if (gender === 'm' || gender === 'male') {
-							member.gender('M');
-							thisGender = ko.utils.arrayFirst(datacontext.enums.genders(), function (item) {
-								return 'm' === item.Id;
-							});
-						}
-						else if (gender === 'f' || gender === 'female') {
-							member.gender('F');
-							thisGender = ko.utils.arrayFirst(datacontext.enums.genders(), function (item) {
-								return 'f' === item.Id;
-							});
-						}
-						else {
-							member.gender('N');
-							thisGender = ko.utils.arrayFirst(datacontext.enums.genders(), function (item) {
-								return 'n' === item.Id;
-							});
-						}
-						return thisGender;
-					},
-					write: function (newValue) {
-						member.gender(ko.unwrap(newValue).Id.toUpperCase());
+					var errors = [];					
+					var contactId = member.contactId();					
+					var roleId = member.roleId();
+					var careTeamValidationErrors = member.careTeamValidationErrors();
+					if( careTeamValidationErrors.length ){
+						ko.utils.arrayForEach( careTeamValidationErrors, function(error){
+							errors.push({ PropName: error.PropName, Message: error.Message });
+						});
+					}					
+					if( !contactId ){
+						errors.push({ PropName: 'contact', Message: 'A contact is required' });
 					}
-				});
+					if( !roleId ){
+						errors.push({ PropName: 'role', Message: 'Role is required' });
+					}
+					var startDate = member.startDate();
+					var endDate = member.endDate();
+					var startDateErrors = member.startDateErrors();
+					var endDateErrors = member.endDateErrors();
+					if( startDateErrors.length > 0 ){
+						//datetimepicker validation errors: 
+						ko.utils.arrayForEach( startDateErrors, function(error){
+							errors.push({ PropName: 'startDate', Message: 'Start Date ' + error.Message});							
+						});						
+					}
+					if( endDateErrors.length > 0 ){						
+						ko.utils.arrayForEach( endDateErrors, function(error){
+							errors.push({ PropName: 'endDate', Message: 'End Date ' + error.Message});
+						});
+					}					
+					if( startDateErrors.length == 0 && endDateErrors.length == 0 && startDate && endDate ){
+						//startDate - endDate range: both dates exist and valid:
+						if( moment(startDate).isAfter( moment( endDate ) ) ){
+							errors.push({ PropName: 'endDate', Message: 'End Date must be on or after: ' + moment( startDate ).format("MM/DD/YYYY") });
+							errors.push({ PropName: 'startDate', Message: 'Start Date must be on or before: ' + moment( endDate ).format("MM/DD/YYYY") });
+						}
+					}				
+					member.validationErrors( errors );										
+					return (errors.length === 0);
+				});								
 			}
 
 			function patientProblemInitializer(problem) {
@@ -886,8 +929,8 @@ define(['services/validatorfactory', 'services/customvalidators', 'services/form
 					thisToken.dispose();
 				});
 			}
-		}
-
+		}		
+		
 		function checkDataContext() {
 			if (!datacontext) {
 				datacontext = require('services/datacontext');

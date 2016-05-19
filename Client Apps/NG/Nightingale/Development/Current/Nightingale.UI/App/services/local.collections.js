@@ -42,6 +42,7 @@
 		new modelConfig.SomeType('2', 'Inactive'),
 		new modelConfig.SomeType('3', 'Archived')
 	]);
+	enums.careMemberStatuses = ko.observableArray();
 	enums.contactLookUpGroupType = ko.observableArray([
 		new modelConfig.SomeType('0', 'Unknown'),
 		new modelConfig.SomeType('1', 'ContactType'),
