@@ -129,7 +129,17 @@ namespace Phytel.Engage.Integrations.UOW
                             CreatedOn = ptInfo.CreateDate != null ? Convert.ToDateTime(ptInfo.CreateDate) : default(DateTime),
                             Phones = new List<PhoneData> {new PhoneData{ DataSource = "P-Reg", Number = Convert.ToInt64(ptInfo.Phone), TypeId = "52e18c2ed433232028e9e3a6"}},
                             RecentsList = null,
-                            ExternalRecordId = id
+                            ExternalRecordId = id,
+                            FirstName = ptInfo.FirstName,
+                            LastName =  ptInfo.LastName,
+                            MiddleName = ptInfo.MiddleInitial,
+                            Gender = PatientInfoUtils.FormatGender(ptInfo.Gender),
+                            Suffix = ptInfo.Suffix,
+                            StatusId = PatientInfoUtils.GetStatus(ptInfo.Status),
+                            DeceasedId = PatientInfoUtils.GetStatus(ptInfo.Status),
+                            DataSource = "P-Reg",
+                            ContactTypeId = Phytel.API.DataDomain.Contact.DTO.Constants.PersonContactTypeId
+
                         });
                     }
                 });

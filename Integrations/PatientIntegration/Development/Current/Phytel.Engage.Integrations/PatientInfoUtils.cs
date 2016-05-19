@@ -84,5 +84,20 @@ namespace Phytel.Engage.Integrations
             }
             return val;
         }
+
+        public static string FormatGender(string p)
+        {
+            try
+            {
+                var gender = "N";
+                if (string.IsNullOrEmpty(p)) return gender;
+                gender = p;
+                return gender;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

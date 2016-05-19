@@ -20,7 +20,7 @@ namespace Phytel.Engage.Integrations.UOW
                 MiddleName = info.MiddleInitial,
                 LastName = info.LastName,
                 Suffix = info.Suffix,
-                Gender = FormatGender(info.Gender),
+                Gender = PatientInfoUtils.FormatGender(info.Gender),
                 DOB = info.BirthDate.HasValue ? info.BirthDate.Value.ToShortDateString() : string.Empty,
                 // LastFourSSN = info.Ssn.Substring(),
                 LastFourSSN = info.Ssn != null ? Strings.Right(info.Ssn, 4) : null,
@@ -35,21 +35,6 @@ namespace Phytel.Engage.Integrations.UOW
             };
 
             return pData;
-        }
-
-        public static string FormatGender(string p)
-        {
-            try
-            {
-                var gender = "N";
-                if (string.IsNullOrEmpty(p)) return gender;
-                gender = p;
-                return gender;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
         }
 
         private static string GetNoteType(int actionId, int categoryId)
