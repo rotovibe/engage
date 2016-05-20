@@ -296,12 +296,10 @@ define([ 'services/datacontext', 'services/local.collections', 'viewmodels/home/
 			self.contactSearch.init();			
 			self.contactSubTypes = self.contactSearch.contactSubTypes;
 			
-			self.canAddContact = ko.computed( function(){
-				//TODO: expose for ENG-1833
-				// var showResults = self.contactSearch? self.contactSearch.showResultsHeader() : false;
-				// var editMode = self.editMode();
-				// return showResults && !editMode;
-				return false;
+			self.canAddContact = ko.computed( function(){				
+				var showResults = self.contactSearch? self.contactSearch.showResultsHeader() : false;
+				var editMode = self.editMode();
+				return showResults && !editMode;				
 			}).extend({throttle: 100});
 			
 			//assign selected contact to the member:
@@ -468,10 +466,9 @@ define([ 'services/datacontext', 'services/local.collections', 'viewmodels/home/
 				self.existingNotesOpen(!self.existingNotesOpen());
 			};									
 						
-			self.createNewContact = function(){
-				//TODO: expose for ENG-1833
+			self.createNewContact = function(){				
 				//go to add contact dialog, save and come back with a contact.
-				//contactsIndex.addContact( 'CareMember', null, self.addContactReturnedCallback );
+				contactsIndex.addContact( 'CareMember', null, self.addContactReturnedCallback );
 			}
 			return true;
 		}
