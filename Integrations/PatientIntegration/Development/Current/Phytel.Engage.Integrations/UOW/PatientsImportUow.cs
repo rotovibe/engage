@@ -118,30 +118,36 @@ namespace Phytel.Engage.Integrations.UOW
                 {
                     var ptInfo = PatientDict[Convert.ToInt32(id)];
                     var mongoPtId = saveResults.Find(pt => pt.Body.ExternalRecordId == id).Body.Id;
-                    
-                    if (string.IsNullOrEmpty(ptInfo.Phone)) return;
 
-                    if (ptInfo.Phone.Length == 10)
+                    var contactData = new ContactData
                     {
-                        list.Add(new ContactData
+                        PatientId = mongoPtId,
+                        CreatedOn = ptInfo.CreateDate != null ? Convert.ToDateTime(ptInfo.CreateDate) : default(DateTime),
+                        RecentsList = null,
+                        ExternalRecordId = id,
+                        FirstName = ptInfo.FirstName,
+                        LastName = ptInfo.LastName,
+                        MiddleName = ptInfo.MiddleInitial,
+                        Gender = PatientInfoUtils.FormatGender(ptInfo.Gender),
+                        Suffix = ptInfo.Suffix,
+                        StatusId = PatientInfoUtils.GetStatus(ptInfo.Status),
+                        DeceasedId = PatientInfoUtils.GetDeceased(ptInfo.Status),
+                        DataSource = "P-Reg",
+                        ContactTypeId = Phytel.API.DataDomain.Contact.DTO.Constants.PersonContactTypeId
+                    };
+                    if (!string.IsNullOrEmpty(ptInfo.Phone) && ptInfo.Phone.Length == 10)
+                    {
+                        contactData.Phones = new List<PhoneData>
                         {
-                            PatientId = mongoPtId,
-                            CreatedOn = ptInfo.CreateDate != null ? Convert.ToDateTime(ptInfo.CreateDate) : default(DateTime),
-                            Phones = new List<PhoneData> {new PhoneData{ DataSource = "P-Reg", Number = Convert.ToInt64(ptInfo.Phone), TypeId = "52e18c2ed433232028e9e3a6"}},
-                            RecentsList = null,
-                            ExternalRecordId = id,
-                            FirstName = ptInfo.FirstName,
-                            LastName =  ptInfo.LastName,
-                            MiddleName = ptInfo.MiddleInitial,
-                            Gender = PatientInfoUtils.FormatGender(ptInfo.Gender),
-                            Suffix = ptInfo.Suffix,
-                            StatusId = PatientInfoUtils.GetStatus(ptInfo.Status),
-                            DeceasedId = PatientInfoUtils.GetStatus(ptInfo.Status),
-                            DataSource = "P-Reg",
-                            ContactTypeId = Phytel.API.DataDomain.Contact.DTO.Constants.PersonContactTypeId
-
-                        });
+                            new PhoneData
+                            {
+                                DataSource = "P-Reg",
+                                Number = Convert.ToInt64(ptInfo.Phone),
+                                TypeId = "52e18c2ed433232028e9e3a6"
+                            }
+                        };
                     }
+                    list.Add(contactData);
                 });
                 return list.ToList();
             }
