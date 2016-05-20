@@ -22,7 +22,7 @@ define(['models/base', 'services/datacontext', 'services/session', 'viewmodels/s
 				var team = self.selectedPatient.careTeam();
 				var allMembers = team ? team.members() : [];
 				var members = ko.utils.arrayFilter( allMembers, function(member){
-					return !member.isNew();
+					return !member.isNew() && member.contactId() && member.contact();
 				});
 				return members;
 			}).extend({ throttle: 50 });

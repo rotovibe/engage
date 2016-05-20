@@ -860,10 +860,30 @@ define(['services/validatorfactory', 'services/customvalidators', 'services/form
 					var validationErrorsArray = member.validationErrorsArray();
 					return (validationErrorsArray && validationErrorsArray.indexOf('endDate') !== -1);  
 				});
+				
+				if( member.customRoleName() && !member.roleId() ){
+					member.roleId(-1);	//Other Role (customRoleName)
+				}
+				
+				member.computedRoleName = ko.computed( function(){
+					var name = '';
+					var roleId = member.roleId();
+					var roleType = member.roleType();
+					var customRoleName = member.customRoleName();
+					if( roleId == -1 ){
+						name = customRoleName;
+					}
+					else if( roleId && roleType ){
+						name = roleType.role();
+					}
+					return name;
+				}).extend({ throttle: 100 });
+				
 				member.isValid = ko.computed( function(){
 					var errors = [];					
 					var contactId = member.contactId();					
 					var roleId = member.roleId();
+					var customRoleName = member.customRoleName();
 					var careTeamValidationErrors = member.careTeamValidationErrors();
 					if( careTeamValidationErrors.length ){
 						ko.utils.arrayForEach( careTeamValidationErrors, function(error){
@@ -875,6 +895,9 @@ define(['services/validatorfactory', 'services/customvalidators', 'services/form
 					}
 					if( !roleId ){
 						errors.push({ PropName: 'role', Message: 'Role is required' });
+					}
+					else if( roleId == -1 && !customRoleName ){
+						errors.push({ PropName: 'customRoleName', Message: 'Other Role is required' });
 					}
 					var startDate = member.startDate();
 					var endDate = member.endDate();

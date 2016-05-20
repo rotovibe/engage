@@ -198,6 +198,9 @@ define([], new breeze.JsonResultsAdapter({
 				if( node.Members && node.Id ){
 					$.each(node.Members, function(index, member) {
 						member.CareTeamId = node.Id;	//populate the team id
+						if( !member.RoleId && member.CustomRoleName ){
+							member.RoleId = -1;	//custom role (customeRoleName)
+						}
 					});
 				}
 				return { entityType: "CareTeam" };

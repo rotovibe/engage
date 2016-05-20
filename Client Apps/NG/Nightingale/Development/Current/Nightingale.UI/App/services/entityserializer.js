@@ -752,11 +752,17 @@
 
 				var results = manager.executeQueryLocally(careMemberQuery);
 				var unwrappedCareMember = results[0];
-
+				
 				thisCareMember.Id 				= unwrappedCareMember.id < 1 ? null : unwrappedCareMember.id;
 				thisCareMember.ContactId		= unwrappedCareMember.contactId;		
-				thisCareMember.RoleId           = unwrappedCareMember.roleId;          
-				thisCareMember.CustomRoleName   = unwrappedCareMember.customRoleName;
+				if( unwrappedCareMember.roleId == -1 ){	//Other Role - customRoleName
+					thisCareMember.RoleId = null;					
+					thisCareMember.CustomRoleName   = unwrappedCareMember.customRoleName;
+				}
+				else{
+					thisCareMember.RoleId = unwrappedCareMember.roleId;
+					thisCareMember.CustomRoleName   = null;
+				}				          				
 				thisCareMember.StartDate        = unwrappedCareMember.startDate; 
 				thisCareMember.EndDate          = unwrappedCareMember.endDate;     
 				thisCareMember.Core             = unwrappedCareMember.core;        

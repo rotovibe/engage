@@ -339,7 +339,7 @@ define([ 'services/datacontext', 'services/local.collections', 'viewmodels/home/
 								member.contactId() == selectedContact.id();
 					});
 					if( dup ){
-						var roleName = dup.customRoleName() ? dup.customRoleName() : (dup.roleType() ? dup.roleType().role() : '');
+						var roleName = dup.computedRoleName();
 						if( roleName ){
 							roleName = '(' + roleName + ')';
 						}
@@ -361,7 +361,7 @@ define([ 'services/datacontext', 'services/local.collections', 'viewmodels/home/
 					}
 					
 					//check if core pcp/pcm has already assigned and active:
-					if( roleId && core && statusId == activeStatusId ){
+					if( roleId && roleId != -1 && core && statusId == activeStatusId ){
 						dup = ko.utils.arrayFirst( teamMembers, function(member){
 							if( member.id() != self.careMember().id() &&
 								member.statusId() == activeStatusId && 																	
@@ -457,9 +457,15 @@ define([ 'services/datacontext', 'services/local.collections', 'viewmodels/home/
 					setTimeout(function () {
 						self.careMember().roleId( defaultRoleId );
 					}, 200);	
-				}				
+				}
+				roles.push({name: '- Other -', role: '- Other -', id: -1});
 				return roles;
 			}).extend({ throttle: 50 });
+			
+			self.showCustomRole = ko.computed( function(){
+				var roleId = self.careMember().roleId();
+				return roleId == -1;	// - Other - option selected
+			});
 			
 			self.existingNotesOpen = ko.observable(false);
 			self.toggleOpen = function () {

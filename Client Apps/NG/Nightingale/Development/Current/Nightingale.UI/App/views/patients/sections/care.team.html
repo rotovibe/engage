@@ -27,8 +27,8 @@
 					<div data-bind="with: contact">
 						<strong data-bind="text: firstLastOrPreferredName, attr: { 'title': firstLastOrPreferredName }"></strong>
 					</div>
-                    <small class="grey" data-bind="with: roleType, attr: { 'title': roleType().role() }">
-                        <span data-bind="text: role()"></span>
+                    <small class="grey" data-bind="attr: { 'title': computedRoleName }">
+                        <span data-bind="text: computedRoleName"></span>
                     </small>
                     <br>
                 </div>

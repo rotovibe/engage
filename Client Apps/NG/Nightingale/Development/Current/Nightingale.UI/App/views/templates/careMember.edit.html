@@ -97,9 +97,14 @@
 				<div class="row pad-top">
 					<div class="span1 align-right grey">Role</div>
 					<div class="span3" data-bind="chsnsingle: { options: $parent.computedRoles, value: roleId, text: 'role', idValue: 'id'}, 
-							css: { 'invalid': (validationErrorsArray().indexOf('role') !== -1) } "></div>
-					
-					<!--TODO: ENG-1915 custom role <div class="span1 align-right grey">customRoleName</div>  -->
+							css: { 'invalid': (validationErrorsArray().indexOf('role') !== -1) } "></div>										
+					<div data-bind="visible: $parent.showCustomRole">
+						<div class="span1 align-right grey">Other Role</div>
+						<div class="span2">
+							<input type="text" data-bind="value: customRoleName, attr:{maxlength: 100}, valueUpdate: 'afterkeydown', 
+									css: { 'invalid': (validationErrorsArray().indexOf('customRoleName') !== -1) } " </input>
+						</div>
+					</div>
 					<div class="span1 align-right grey">Core?</div>
 					<div class="checker" data-bind="hoverToggle: 'hover'">
 						<span data-bind="css: { 'checked': core }" class="checked">
