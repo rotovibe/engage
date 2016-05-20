@@ -15,11 +15,16 @@ namespace Phytel.API.DataDomain.Contact
         object FindContactByPatientId(GetContactByPatientIdDataRequest request);
         IEnumerable<object> FindCareManagers();
         bool UpdateRecentList(PutRecentPatientRequest request, List<string> recentList);
-        IEnumerable<object> SearchContacts(SearchContactsDataRequest request);
+        IEnumerable<object> GetContactsByContactIds(GetContactsByContactIdsDataRequest request);
         object FindContactByUserId(GetContactByUserIdDataRequest request);
         IAuditHelpers AuditHelpers { get; set; }
         object GetContactByPatientId(string patientId);
         IEnumerable<object> FindContactsWithAPatientInRecentList(string entityId);
         IEnumerable<object> Select(List<string> ids);
+        IEnumerable<object> SearchContacts(SearchContactsDataRequest request);
+        long GetSearchContactsCount(SearchContactsDataRequest request);
+        bool SyncContact(SyncContactInfoDataRequest request);
+        bool DereferencePatient(DereferencePatientDataRequest request);
+        bool UnDereferencePatient(UndoDereferencePatientDataRequest request);
     }
 }

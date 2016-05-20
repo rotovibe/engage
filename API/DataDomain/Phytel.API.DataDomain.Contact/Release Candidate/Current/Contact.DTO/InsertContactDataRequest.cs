@@ -4,11 +4,11 @@ using ServiceStack.ServiceHost;
 
 namespace Phytel.API.DataDomain.Contact.DTO
 {
-    [Api(Description = "A Request object to update the contact card details.")]
-    [Route("/{Context}/{Version}/{ContractNumber}/Patient/Contact", "PUT")]
-    public class PutUpdateContactDataRequest : IDataDomainRequest
+    [Api(Description = "A Request object to insert a new contact.")]
+    [Route("/{Context}/{Version}/{ContractNumber}/Contacts", "POST")]
+    public class InsertContactDataRequest : IDataDomainRequest
     {
-        [ApiMember(Name = "ContactData", Description = "ContactData to be updated.", ParameterType = "property", DataType = "ContactData", IsRequired = false)]
+        [ApiMember(Name = "ContactData", Description = "ContactData to be inserted.", ParameterType = "property", DataType = "string", IsRequired = true)]
         public ContactData ContactData { get; set; }
 
         [ApiMember(Name = "Context", Description = "Product Context requesting the Contact", ParameterType = "property", DataType = "string", IsRequired = true)]

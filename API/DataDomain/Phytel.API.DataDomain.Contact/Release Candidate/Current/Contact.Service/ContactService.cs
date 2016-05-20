@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Net;
 using Phytel.API.DataDomain.Contact;
 using Phytel.API.DataDomain.Contact.DTO;
@@ -78,16 +79,16 @@ namespace Phytel.API.DataDomain.Contact.Service
             return response;
         }
 
-        public SearchContactsDataResponse Post(SearchContactsDataRequest request)
+        public GetContactsByContactIdsDataResponse Post(GetContactsByContactIdsDataRequest request)
         {
-            SearchContactsDataResponse response = new SearchContactsDataResponse();
+            var response = new GetContactsByContactIdsDataResponse();
             response.Version = request.Version;
             try
             {
                 if (string.IsNullOrEmpty(request.UserId))
                     throw new UnauthorizedAccessException("ContactDD:Post()::Unauthorized Access");
 
-                response = Manager.SearchContacts(request);
+                response = Manager.GetContactsByContactId(request);
             }
             catch (Exception ex)
             {
@@ -120,30 +121,33 @@ namespace Phytel.API.DataDomain.Contact.Service
             return response;
         }
 
-        public PutContactDataResponse Put(PutContactDataRequest request)
+        public InsertContactDataResponse Post(InsertContactDataRequest request)
         {
-            PutContactDataResponse response = new PutContactDataResponse();
-            response.Version = request.Version;
-            try
+            InsertContactDataResponse response = new InsertContactDataResponse();
+            if (request != null)
             {
-                if (string.IsNullOrEmpty(request.UserId))
-                    throw new UnauthorizedAccessException("ContactDD:Put()::Unauthorized Access");
+                response.Version = request.Version;
+                try
+                {
+                    if (string.IsNullOrEmpty(request.UserId))
+                        throw new UnauthorizedAccessException("ContactDD:Post()::Unauthorized Access");
 
-                response.Id = Manager.InsertContact(request);
-            }
-            catch (Exception ex)
-            {
-                CommonFormat.FormatExceptionResponse(response, base.Response, ex);
+                    response.Id = Manager.InsertContact(request);
+                }
+                catch (Exception ex)
+                {
+                    CommonFormat.FormatExceptionResponse(response, base.Response, ex);
 
-                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
-                Helpers.LogException(int.Parse(aseProcessID), ex);
+                    string aseProcessId = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                    Helpers.LogException(int.Parse(aseProcessId), ex);
+                }
             }
             return response;
         }
 
-        public PutUpdateContactDataResponse Put(PutUpdateContactDataRequest request)
+        public UpdateContactDataResponse Put(UpdateContactDataRequest request)
         {
-            PutUpdateContactDataResponse response = new PutUpdateContactDataResponse();
+            UpdateContactDataResponse response = new UpdateContactDataResponse();
             response.Version = request.Version;
             try
             {
@@ -234,6 +238,77 @@ namespace Phytel.API.DataDomain.Contact.Service
                     throw new UnauthorizedAccessException("ContactDD:ContactUndoDelete()::Unauthorized Access");
 
                 response = Manager.UndoDeleteContact(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+            }
+            return response;
+        }
+
+        public SearchContactsDataResponse Post(SearchContactsDataRequest request)
+        {
+            
+            if(request == null)
+                throw new ArgumentNullException("request");
+            var response = new SearchContactsDataResponse();
+            try
+            {
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("ContactDD:SearchContactsDataRequest()::Unauthorized Access");
+
+                response = Manager.SearchContacts(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+            }
+
+            return response;
+        }
+
+        public SyncContactInfoDataResponse Put(SyncContactInfoDataRequest request)
+        {
+            if (request == null)
+                throw new ArgumentNullException("request");
+            var response = new SyncContactInfoDataResponse();
+            try
+            {
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("ContactDD:SyncContactInfoDataResponse()::Unauthorized Access");
+
+                response = Manager.SyncContactInfo(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+            }
+            return response;
+        }
+
+        public DereferencePatientDataResponse Put(DereferencePatientDataRequest request)
+        {
+            if (request == null)
+                throw new ArgumentNullException("request");
+            var response = new DereferencePatientDataResponse();
+            try
+            {
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("ContactDD:DereferencePatientDataResponse()::Unauthorized Access");
+
+                response = Manager.DereferencePatient(request);
                 response.Version = request.Version;
             }
             catch (Exception ex)
