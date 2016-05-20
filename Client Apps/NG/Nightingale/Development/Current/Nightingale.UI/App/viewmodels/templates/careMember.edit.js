@@ -404,7 +404,7 @@ define([ 'services/datacontext', 'services/local.collections', 'viewmodels/home/
 				self.careMember().careTeamValidationErrors( errors );
 				return false;
 			}).extend({ throttle: 50 });
-			
+						
 			self.computedRoles = ko.computed( function(){
 				var roles = [];
 				var selectedContact = self.selectedContact();
@@ -414,13 +414,57 @@ define([ 'services/datacontext', 'services/local.collections', 'viewmodels/home/
 						roles.push( contactType );
 					});
 				}
-			    //TODO: ENG-1914: add the contact specific roles based on his types
-				// if( selectedContact && selectedContact.contactSubTypes && selectedContact.contactSubTypes().length ){
-					// var subTypesText = '';
-					// ko.utils.arrayForEach( contactCard.contactSubTypes(), function( subType ){
-						//roles.push(subType);
-					// });
-				// }				
+			    //ENG-1914: add the selected contact specific roles based on his contact types
+				//	role is the role of the lowest contact type that exist in the contact sub type combination.
+				//	select the first role of the selected contact as default member role.
+				//
+				var defaultRoleId = null;	
+				if( selectedContact && selectedContact.contactSubTypes && selectedContact.contactSubTypes().length ){
+					//console.log( selectedContact.fullName() + ' : ' + selectedContact.detailedSubTypes() );
+					ko.utils.arrayForEach( selectedContact.contactSubTypes(), function( subType ){
+						//roles are the lowest types in a type combination:
+						if( subType.subSpecialtyIds().length ){
+							ko.utils.arrayForEach( subType.subSpecialtyIds(), function(sub){
+								var contactType = datacontext.getContactTypeLookupById( sub.id() );
+								if( contactType && contactType.length > 0 ){
+									roles.push( contactType[0] );
+									if( !defaultRoleId ){
+										defaultRoleId = sub.id();
+									}
+									
+								}
+							});							
+						}
+						else if( subType.specialtyId() ){							
+							var specialty = datacontext.getContactTypeLookupById( subType.specialtyId() );
+							if( specialty && specialty.length ){
+								roles.push( specialty[0] );
+								if( !defaultRoleId ){
+									defaultRoleId = subType.specialtyId();
+								}
+							}							
+						}
+						else if( subType.subTypeId() ){
+							var contactSubType = datacontext.getContactTypeLookupById( subType.subTypeId() );
+							if( contactSubType && contactSubType.length ){
+								roles.push( contactSubType[0] );
+								if( !defaultRoleId ){
+									defaultRoleId = subType.subTypeId();
+								}
+							}
+						}
+						
+					});
+				}
+				if( defaultRoleId ){
+					//let the roles dropdown ko - dom content update before setting the default role
+					setTimeout(function () {
+						self.careMember().roleId( defaultRoleId );
+					}, 200);	
+				}
+				else{
+					self.careMember().roleId( null );
+				}
 				return roles;
 			}).extend({ throttle: 50 });
 			
