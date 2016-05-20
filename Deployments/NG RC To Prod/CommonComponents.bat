@@ -1,5 +1,5 @@
 ECHO OFF
-SET PATH=%PATH%;C:\Program Files (x86)\Microsoft Visual Studio 12.0\Common7\IDE
+SET PATH=%PATH%;C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE
 set mydate=%date:~4,2%-%date:~7,2%-%date:~10,4%
 
 set hr=%TIME: =0%
