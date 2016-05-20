@@ -1512,6 +1512,9 @@ namespace Phytel.API.AppDomain.NG
                 if (string.IsNullOrEmpty(contactData.Gender))
                     contactData.Gender = "N";
 
+                if (contactData.DeceasedId == 0)
+                    contactData.DeceasedId = (int) DataDomain.Contact.DTO.Deceased.No;
+
 
                 InsertContactDataRequest ddRequest = new InsertContactDataRequest()
                 {
