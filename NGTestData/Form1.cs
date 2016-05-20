@@ -14,6 +14,7 @@ using System.Data;
 using System.Linq;
 using System.Windows.Forms;
 using System.Configuration;
+using Deceased = Phytel.API.DataDomain.Contact.DTO.Deceased;
 using Status = Phytel.API.DataDomain.Contact.DTO.Status;
 
 namespace NGTestData
@@ -339,6 +340,8 @@ namespace NGTestData
                     Modes = modes,
                     Status = Status.Active,
                     DataSource = "Engage",
+                    Gender = "N",
+                    Deceased = Deceased.No,
                     ContactTypeId = ObjectId.Parse("56f1a1ad078e10eb86038519"),
                     Version = 1.0
                 };
