@@ -29,7 +29,7 @@ namespace Phytel.API.AppDomain.NG.Test.Contact
         }
 
         [TestMethod]
-        public void AssignedToMeRule_Run_User_Success()
+        public void AssignedToMeRule_Run_User_Inactive_Success()
         {
             //Arrange
             var mockContactDataController = new Mock<IContactEndpointUtil>();
@@ -37,7 +37,7 @@ namespace Phytel.API.AppDomain.NG.Test.Contact
             var mockCohortRuleUtil = new Mock<ICohortRuleUtil>();
 
             var rule = new AssignedToMeRule(mockContactDataController.Object, mockLogger.Object, mockCohortRuleUtil.Object);
-            var ruleResponse = rule.Run(new DTO.CareTeam { ContactId = "cid", Members = new List<Member> { new Member { ContactId = "mcId", RoleId = Constants.PCMRoleId, Core = false } } }, new CohortRuleCheckData { ContactId = "cid", ContractNumber = "inhealth001", UserId = "1234", UsersContactIds = new List<string>
+            var ruleResponse = rule.Run(new DTO.CareTeam { ContactId = "cid", Members = new List<Member> { new Member { ContactId = "mcId", RoleId = Constants.PCMRoleId, Core = false, StatusId =  0} } }, new CohortRuleCheckData { ContactId = "cid", ContractNumber = "inhealth001", UserId = "1234", UsersContactIds = new List<string>
             {
                 "mcId",
                 "m2"
@@ -45,8 +45,35 @@ namespace Phytel.API.AppDomain.NG.Test.Contact
 
             Assert.IsNotNull(ruleResponse);
 
-            mockContactDataController.Verify(mcdc => mcdc.AssignContactsToCohortPatientView(It.IsAny<string>(), new List<string> { "mcId" }, It.IsAny<double>(), It.IsAny<string>(), It.IsAny<string>()), Times.Once);
+            mockContactDataController.Verify(mcdc => mcdc.AssignContactsToCohortPatientView(It.IsAny<string>(), new List<string> { "mcId" }, It.IsAny<double>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
             
+        }
+
+        [TestMethod]
+        public void AssignedToMeRule_Run_User_Active_Success()
+        {
+            //Arrange
+            var mockContactDataController = new Mock<IContactEndpointUtil>();
+            var mockLogger = new Mock<ILogger>();
+            var mockCohortRuleUtil = new Mock<ICohortRuleUtil>();
+
+            var rule = new AssignedToMeRule(mockContactDataController.Object, mockLogger.Object, mockCohortRuleUtil.Object);
+            var ruleResponse = rule.Run(new DTO.CareTeam { ContactId = "cid", Members = new List<Member> { new Member { ContactId = "mcId", RoleId = Constants.PCMRoleId, Core = false, StatusId = (int)DataDomain.Contact.DTO.CareTeamMemberStatus.Active } } }, new CohortRuleCheckData
+            {
+                ContactId = "cid",
+                ContractNumber = "inhealth001",
+                UserId = "1234",
+                UsersContactIds = new List<string>
+            {
+                "mcId",
+                "m2"
+            }
+            });
+
+            Assert.IsNotNull(ruleResponse);
+
+            mockContactDataController.Verify(mcdc => mcdc.AssignContactsToCohortPatientView(It.IsAny<string>(), new List<string> { "mcId" }, It.IsAny<double>(), It.IsAny<string>(), It.IsAny<string>()), Times.Once);
+
         }
 
         [TestMethod]

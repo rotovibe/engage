@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Phytel.API.AppDomain.NG.DTO;
+using Phytel.API.DataDomain.Contact.DTO;
 using ServiceStack.Common.Extensions;
 using ServiceStack.Text;
 
@@ -42,10 +43,14 @@ namespace Phytel.API.AppDomain.NG
                 var contactIdsToAdd = new List<string>();
                 foreach (var member in careTeam.Members)
                 {
-                    if (data.UsersContactIds.Contains(member.ContactId))
+                    if (member.StatusId == (int) CareTeamMemberStatus.Active)
                     {
-                        contactIdsToAdd.Add(member.ContactId);
+                        if (data.UsersContactIds.Contains(member.ContactId))
+                        {
+                            contactIdsToAdd.Add(member.ContactId);
+                        }
                     }
+                    
                 }
 
                 _contactEndpointUtil.AssignContactsToCohortPatientView(data.PatientId, contactIdsToAdd.Distinct().ToList(), data.Version, data.ContractNumber, data.UserId);
