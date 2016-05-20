@@ -364,41 +364,39 @@ define([ 'services/datacontext', 'services/local.collections', 'viewmodels/home/
 					
 					//check if core pcp/pcm has already assigned and active:
 					if( roleId && core && statusId == activeStatusId ){
-						//TODO: expose for ENG-1954
-						// dup = ko.utils.arrayFirst( teamMembers, function(member){
-							// if( member.id() != self.careMember().id() &&
-								// member.statusId() == activeStatusId && 																	
-								// member.roleId() && roleId && 
-								// member.roleId() == roleId ){
-									// if (!member.customRoleName() && !customRoleName &&
-										// ( 
-											// ( self.pcmContactSubType() && member.roleId() == self.pcmContactSubType().id() ) || 
-											// ( self.pcpContactSubType() && member.roleId() == self.pcpContactSubType().id() ) 
-										// )
-									// ){
-										// return true; //core active pcp / pcm already assigned.
-									// }
-								// }
-							// else{
-								// return false;
-							// }
-									
-						// });
-						// if( dup ){
-							// var duplicateRoleName = 'this role';
-							// var toDupName = '';
-							// if( dup.roleId() == self.pcmContactSubType().id() ){
-								// duplicateRoleName = self.pcmContactSubType().role();								
-							// }
-							// else if( dup.roleId() == self.pcpContactSubType().id() ){
-								// duplicateRoleName = self.pcpContactSubType().role();								
-							// }
-							// if( dup.contact() && dup.contact().fullName() ){
-								// toDupName = ' to: ' + dup.contact().fullName();
-							// }
-							// errors.push(
-									// { PropName: 'contact', Message: duplicateRoleName + ' is already assigned' + toDupName });
-						// }
+						dup = ko.utils.arrayFirst( teamMembers, function(member){
+							if( member.id() != self.careMember().id() &&
+								member.statusId() == activeStatusId && 																	
+								member.roleId() && roleId && 
+								member.roleId() == roleId ){
+									if (!member.customRoleName() && !customRoleName &&
+										( 
+											( self.pcmContactSubType() && member.roleId() == self.pcmContactSubType().id() ) || 
+											( self.pcpContactSubType() && member.roleId() == self.pcpContactSubType().id() ) 
+										)
+									){
+										return true; //this is a core active pcp / pcm that is already assigned.
+									}
+								}
+							else{
+								return false;
+							}
+						});
+						if( dup ){
+							var duplicateRoleName = 'this role';
+							var toDupName = '';
+							if( dup.roleId() == self.pcmContactSubType().id() ){
+								duplicateRoleName = self.pcmContactSubType().role();								
+							}
+							else if( dup.roleId() == self.pcpContactSubType().id() ){
+								duplicateRoleName = self.pcpContactSubType().role();								
+							}
+							if( dup.contact() && dup.contact().fullName() ){
+								toDupName = ' as: ' + dup.contact().fullName();
+							}
+							errors.push(
+									{ PropName: 'contact', Message: duplicateRoleName + ' is already assigned' + toDupName });
+						}
 					}
 				}
 				self.careMember().careTeamValidationErrors( errors );
@@ -414,8 +412,8 @@ define([ 'services/datacontext', 'services/local.collections', 'viewmodels/home/
 						roles.push( contactType );
 					});
 				}
-			    //ENG-1914: add the selected contact specific roles based on his contact types
-				//	role is the role of the lowest contact type that exist in the contact sub type combination.
+			    //add the selected contact specific roles based on his contact types
+				//	role is the role of the lowest contact type that exist in the contact sub type combination (sub type / specialty / sub specialty).
 				//	select the first role of the selected contact as default member role.
 				//
 				var defaultRoleId = null;	
@@ -461,10 +459,7 @@ define([ 'services/datacontext', 'services/local.collections', 'viewmodels/home/
 					setTimeout(function () {
 						self.careMember().roleId( defaultRoleId );
 					}, 200);	
-				}
-				else{
-					self.careMember().roleId( null );
-				}
+				}				
 				return roles;
 			}).extend({ throttle: 50 });
 			
