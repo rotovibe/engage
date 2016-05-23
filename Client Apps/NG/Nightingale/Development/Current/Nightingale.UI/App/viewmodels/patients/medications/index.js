@@ -214,7 +214,6 @@
 
     function MedicationModalEntity(med) {
       var self = this;
-      console.log(med);
       self.medication = ko.observable(med);
       self.canSaveObservable = ko.observable(true);
       self.canSave = ko.computed({
