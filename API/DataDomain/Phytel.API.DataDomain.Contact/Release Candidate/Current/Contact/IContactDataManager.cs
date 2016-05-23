@@ -10,17 +10,13 @@ namespace Phytel.API.DataDomain.Contact
         GetAllCareManagersDataResponse GetCareManagers(GetAllCareManagersDataRequest request);
         ContactData GetContactByPatientId(GetContactByPatientIdDataRequest request);
         ContactData GetContactByUserId(GetContactByUserIdDataRequest request);
-        string InsertContact(InsertContactDataRequest request);
-        GetContactsByContactIdsDataResponse GetContactsByContactId(GetContactsByContactIdsDataRequest request);
+        string InsertContact(PutContactDataRequest request);
+        SearchContactsDataResponse SearchContacts(SearchContactsDataRequest request);
         List<HttpObjectResponse<ContactData>> InsertBatchContacts(InsertBatchContactDataRequest request);
-        UpdateContactDataResponse UpdateContact(UpdateContactDataRequest request);
+        PutUpdateContactDataResponse UpdateContact(PutUpdateContactDataRequest request);
         PutRecentPatientResponse AddRecentPatient(PutRecentPatientRequest request);
         GetContactByContactIdDataResponse GetContactByContactId(GetContactByContactIdDataRequest request);
         DeleteContactByPatientIdDataResponse DeleteContactByPatientId(DeleteContactByPatientIdDataRequest request);
         UndoDeleteContactDataResponse UndoDeleteContact(UndoDeleteContactDataRequest request);
-        SearchContactsDataResponse SearchContacts(SearchContactsDataRequest request );
-        SyncContactInfoDataResponse SyncContactInfo(SyncContactInfoDataRequest request);
-        DereferencePatientDataResponse DereferencePatient(DereferencePatientDataRequest request);
-        UndoDereferencePatientDataResponse UndoDereferencePatient(UndoDereferencePatientDataRequest request);
     }
 }

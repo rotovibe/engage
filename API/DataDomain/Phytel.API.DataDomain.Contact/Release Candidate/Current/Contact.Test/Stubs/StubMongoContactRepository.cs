@@ -24,7 +24,7 @@ namespace Phytel.API.DataDomain.Contact.Test.Stubs
             throw new NotImplementedException();
         }
 
-        public IEnumerable<object> GetContactsByContactIds(DTO.GetContactsByContactIdsDataRequest request)
+        public IEnumerable<object> SearchContacts(DTO.SearchContactsDataRequest request)
         {
             throw new NotImplementedException();
         }
@@ -127,36 +127,6 @@ namespace Phytel.API.DataDomain.Contact.Test.Stubs
 
 
         public IEnumerable<object> Select(List<string> ids)
-        {
-            throw new NotImplementedException();
-        }
-
-
-        public IEnumerable<object> SearchContacts(SearchContactsDataRequest request)
-        {
-            throw new NotImplementedException();
-        }
-
-
-        public long GetSearchContactsCount(SearchContactsDataRequest request)
-        {
-            throw new NotImplementedException();
-        }
-
-
-        public bool SyncContact(SyncContactInfoDataRequest request)
-        {
-            throw new NotImplementedException();
-        }
-
-
-        public bool DereferencePatient(DereferencePatientDataRequest request)
-        {
-            throw new NotImplementedException();
-        }
-
-
-        public bool UnDereferencePatient(UndoDereferencePatientDataRequest request)
         {
             throw new NotImplementedException();
         }

@@ -24,7 +24,7 @@ namespace Phytel.API.DataDomain.Contact.MongoDB.Repository.Tests
                             TypeId = "111111111111111111111112"
                         }
                     }};
-            InsertContactDataRequest req = new InsertContactDataRequest
+            PutContactDataRequest req = new PutContactDataRequest
             {
                 ContactData = cData
             };

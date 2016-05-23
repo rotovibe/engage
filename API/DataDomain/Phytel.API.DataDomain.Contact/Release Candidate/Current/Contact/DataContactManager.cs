@@ -11,7 +11,6 @@ using Phytel.API.DataAudit;
 using ServiceStack.Service;
 using ServiceStack.ServiceClient.Web;
 using Phytel.API.Common.CustomObject;
-using ServiceStack.ServiceHost;
 
 namespace Phytel.API.DataDomain.Contact
 {
@@ -54,14 +53,14 @@ namespace Phytel.API.DataDomain.Contact
             return result;
         }
 
-        public GetContactsByContactIdsDataResponse GetContactsByContactId(GetContactsByContactIdsDataRequest request)
+        public SearchContactsDataResponse SearchContacts(SearchContactsDataRequest request)
         {
-            var response = new GetContactsByContactIdsDataResponse();
+            SearchContactsDataResponse response = new SearchContactsDataResponse();
             try
             {
                 IContactRepository repo = Factory.GetRepository(request, RepositoryType.Contact);
 
-                response.Contacts = repo.GetContactsByContactIds(request) as List<ContactData>;
+                response.Contacts = repo.SearchContacts(request) as List<ContactData>;
                 response.Version = request.Version;
             }
             catch (Exception ex)
@@ -71,17 +70,12 @@ namespace Phytel.API.DataDomain.Contact
             return response;
         }
 
-        public string InsertContact(InsertContactDataRequest request)
+        public string InsertContact(PutContactDataRequest request)
         {
             string id = null;
             try
             {
-                if (request == null)
-                    throw new ArgumentNullException("request");
-                CheckForRequiredFields(request.ContactData);
                 IContactRepository repo = Factory.GetRepository(request, RepositoryType.Contact);
-                if (repo == null)
-                    throw new Exception("The repository should not be null");
                 id = (string)repo.Insert(request);
             }
             catch (Exception ex)
@@ -91,36 +85,14 @@ namespace Phytel.API.DataDomain.Contact
             return id;
         }
 
-        private void CheckForRequiredFields(ContactData c)
+        public PutUpdateContactDataResponse UpdateContact(PutUpdateContactDataRequest request)
         {
-            if (c != null)
-            {
-                if (string.IsNullOrEmpty(c.ContactTypeId))
-                    throw new Exception("The Contact Type Id cannot be null.");
-                else
-                {
-                    if (string.Compare(c.ContactTypeId, Constants.PersonContactTypeId, true) == 0 && (string.IsNullOrEmpty(c.FirstName) || string.IsNullOrEmpty(c.LastName)))
-                        throw new Exception("A contact of Person type cannot have empty First and Last name.");
-                }
-            }
-            else
-            {
-                throw new ArgumentNullException("Contact");
-            }
-        }
-
-        public UpdateContactDataResponse UpdateContact(UpdateContactDataRequest request)
-        {
-            UpdateContactDataResponse response = null;
+            PutUpdateContactDataResponse response = null;
             try
             {
-                if (request == null)
-                    throw new ArgumentNullException("request");
-                CheckForRequiredFields(request.ContactData);
                 IContactRepository repo = Factory.GetRepository(request, RepositoryType.Contact);
-                if (repo == null)
-                    throw new Exception("The repository should not be null");
-                response = repo.Update(request) as UpdateContactDataResponse;
+
+                response = repo.Update(request) as PutUpdateContactDataResponse;
             }
             catch (Exception ex)
             {
@@ -187,15 +159,9 @@ namespace Phytel.API.DataDomain.Contact
         public GetContactByContactIdDataResponse GetContactByContactId(GetContactByContactIdDataRequest request)
         {
             GetContactByContactIdDataResponse result = new GetContactByContactIdDataResponse();
-
-            if(request == null)
-                throw new ArgumentNullException("request");
             try
             {
                 IContactRepository repo = Factory.GetRepository(request, RepositoryType.Contact);
-
-                if(repo == null)
-                    throw new Exception("The repository should not be null");
 
                 result.Contact = repo.FindByID(request.ContactId) as ContactData;
                 result.Limit = Limit;
@@ -310,9 +276,9 @@ namespace Phytel.API.DataDomain.Contact
                 if (request.ContactsData != null && request.ContactsData.Count > 0)
                 {
                     List<ContactData> contactData = request.ContactsData;
-                    //#region Get the default timeZone.
-                    //string defaultTimeZoneId = getDefaultTimeZone(request);
-                    //#endregion  
+                    #region Get the default timeZone.
+                    string defaultTimeZoneId = getDefaultTimeZone(request);
+                    #endregion  
                     #region Get all the available comm modes in the lookup.
                     List<CommModeData> commModeData = new List<CommModeData>();
                     List<IdNamePair> modesLookUp = getAllCommModes(request);
@@ -328,7 +294,7 @@ namespace Phytel.API.DataDomain.Contact
                     contactData.ForEach(c =>
                     {
                         c.Modes = commModeData;
-                        //c.TimeZoneId = defaultTimeZoneId;
+                        c.TimeZoneId = defaultTimeZoneId;
                     });
                     list = new List<HttpObjectResponse<ContactData>>();
                     IContactRepository repo = Factory.GetRepository(request, RepositoryType.Contact);
@@ -410,86 +376,6 @@ namespace Phytel.API.DataDomain.Contact
             }
             catch (Exception ex) { throw ex; }
             return timeZoneId;
-        }
-
-        public SearchContactsDataResponse SearchContacts(SearchContactsDataRequest request)
-        {
-            var response = new SearchContactsDataResponse();
-            try
-            {
-                var repo = Factory.GetRepository(request, RepositoryType.Contact);
-
-                var searchTotalCount = repo.GetSearchContactsCount(request);
-                if (searchTotalCount > 0)
-                {
-                    response.Contacts = repo.SearchContacts(request) as List<ContactData>;
-                }
-                else
-                {
-                    response.Contacts = new List<ContactData>();
-                }
-
-                
-                response.Version = request.Version;
-                response.TotalCount = searchTotalCount;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-            return response;
-        }
-
-        public SyncContactInfoDataResponse SyncContactInfo(SyncContactInfoDataRequest request)
-        {
-            var response = new SyncContactInfoDataResponse();
-            try
-            {
-                var repo = Factory.GetRepository(request, RepositoryType.Contact);
-                var isSuccessful = repo.SyncContact(request);
-
-                response.IsSuccessful = isSuccessful;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-            return response;
-        }
-
-        public DereferencePatientDataResponse DereferencePatient(DereferencePatientDataRequest request)
-        {
-            var response = new DereferencePatientDataResponse();
-            try
-            {
-                var repo = Factory.GetRepository(request, RepositoryType.Contact);
-                var isSuccessful = repo.DereferencePatient(request);
-
-                response.IsSuccessful = isSuccessful;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-            return response;
-        }
-
-        //??
-        public UndoDereferencePatientDataResponse UndoDereferencePatient(UndoDereferencePatientDataRequest request)
-        {
-            var response = new UndoDereferencePatientDataResponse();
-            try
-            {
-                var repo = Factory.GetRepository(request, RepositoryType.Contact);
-                var isSuccessful = repo.UnDereferencePatient(request);
-
-                response.IsSuccessful = isSuccessful;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-            return response;
         }
     }
 }

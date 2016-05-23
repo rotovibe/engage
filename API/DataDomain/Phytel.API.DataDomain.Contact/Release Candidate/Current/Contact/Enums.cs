@@ -8,8 +8,6 @@ namespace Phytel.API.DataDomain.Contact
 {
     public enum RepositoryType
     {
-        Contact,
-        ContactTypeLookUp,
-        CareTeam
+        Contact
     }
 }
