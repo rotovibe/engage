@@ -1682,7 +1682,7 @@ namespace Phytel.API.DataDomain.Contact
         {
             IMongoQuery filterQuery = null;
             //name = name.ToLower();
-
+            name = string.IsNullOrEmpty(name) ? name : name.Trim();
             switch (filterType)
             {
                 case FilterType.ExactMatch:
@@ -1715,7 +1715,7 @@ namespace Phytel.API.DataDomain.Contact
         {
             IMongoQuery filterQuery = null;
             //name = name.ToLower();
-
+            name = string.IsNullOrEmpty(name) ? name : name.Trim();
             switch (filterType)
             {
                 case FilterType.ExactMatch:
