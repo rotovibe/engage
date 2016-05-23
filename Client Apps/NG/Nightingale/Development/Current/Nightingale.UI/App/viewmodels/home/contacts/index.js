@@ -118,11 +118,11 @@ define(['services/session', 'services/datacontext', 'viewmodels/shell/shell', 'm
                 }
             });
             // Object containing parameters to pass to the modal
-            self.activationData = { contactCard: self.contactCard, canSave: self.canSave, showing: modalShowing  };
+            self.activationData = { contactCard: self.contactCard, canSave: self.canSave, showing: modalShowing, saveFunction: saveOverride };
         }
 		
 		
-		function addContact( data, event, contactReturnedCallback ){
+		function addContact( data, event, contactReturnedCallback, contactFirstName, contactLastName ){
 			//navigate to add contact dialog
 			
 			var newModes = [];
@@ -133,6 +133,12 @@ define(['services/session', 'services/datacontext', 'viewmodels/shell/shell', 'm
 			theContact( datacontext.createEntity('ContactCard', { id: -1, statusId: 1, modes: newModes, createdById: session.currentUser().userId() }));
 			theContact().isNew(true);
 			theContact().activeTab("Profile");
+			if( contactFirstName ){
+				theContact().firstName( contactFirstName );
+			}
+			if( contactLastName ){
+				theContact().lastName( contactLastName );
+			}
 			
 			theContact().watchDirty();
             modalEntity().contactCard( theContact() );

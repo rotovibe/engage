@@ -31,7 +31,7 @@ define([ 'services/datacontext', 'services/local.collections', 'viewmodels/home/
 			self.genders = datacontext.enums.genders;
 			self.deceasedStatuses = datacontext.enums.deceasedStatuses;			
 			self.contactStatuses = datacontext.enums.contactStatuses;
-			
+			self.saveFunction = settings.saveFunction ? settings.saveFunction : null;
 			self.allContactTypes = contactsIndex.allContactTypes;
 			
 			if( self.contactCard().isNew() ){
@@ -304,7 +304,12 @@ define([ 'services/datacontext', 'services/local.collections', 'viewmodels/home/
 			
 			self.forceSave = function(){
 				//save despite having dups:
-				self.contactCard().saveChanges();
+				if( self.saveFunction ){
+					self.saveFunction();
+				}
+				else{
+					self.contactCard().saveChanges();
+				}				
 				self.showing(false);
 			}
 			self.contactCard().clearDirty();

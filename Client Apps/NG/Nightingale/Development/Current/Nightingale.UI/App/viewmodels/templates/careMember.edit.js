@@ -299,7 +299,8 @@ define([ 'services/datacontext', 'services/local.collections', 'viewmodels/home/
 			self.canAddContact = ko.computed( function(){				
 				var showResults = self.contactSearch? self.contactSearch.showResultsHeader() : false;
 				var editMode = self.editMode();
-				return showResults && !editMode;				
+				var noResultsFound = self.contactSearch.noResultsFound();
+				return ( showResults && !editMode ) || noResultsFound;				
 			}).extend({throttle: 100});
 			
 			//assign selected contact to the member:
@@ -474,7 +475,15 @@ define([ 'services/datacontext', 'services/local.collections', 'viewmodels/home/
 						
 			self.createNewContact = function(){				
 				//go to add contact dialog, save and come back with a contact.
-				contactsIndex.addContact( 'CareMember', null, self.addContactReturnedCallback );
+				var firstName = self.contactSearch.criteriaFirstName();
+				if( firstName && firstName.trim() ){
+					firstName = firstName.trim();
+				}
+				var lastName = self.contactSearch.criteriaLastName();
+				if( lastName && lastName.trim() ) {
+					lastName = lastName.trim();
+				}
+				contactsIndex.addContact( 'CareMember', null, self.addContactReturnedCallback, firstName, lastName );
 			}
 			return true;
 		}
