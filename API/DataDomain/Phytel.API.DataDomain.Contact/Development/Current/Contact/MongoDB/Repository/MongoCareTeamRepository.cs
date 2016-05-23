@@ -461,10 +461,7 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
                 }
                 else
                 {
-                    //it is an update
-                    meMember.RecordCreatedBy = ObjectId.Parse(member.CreatedById);
-                    meMember.RecordCreatedOn = meMember.RecordCreatedOn;
-
+                    //it is an update                   
                     meMember.UpdatedBy = ObjectId.Parse(userId);
                     meMember.LastUpdatedOn = DateTime.UtcNow;
                 }
