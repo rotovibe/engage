@@ -9,7 +9,7 @@ define([], function () {
         self.content = content;
     }
 
-    // The routes define the structure that will eventually be passed down by 
+    // The routes define the structure that will eventually be passed down by
     // the API to give routes to the client
     var routes = [{
         route: '',
@@ -32,11 +32,6 @@ define([], function () {
 					subroute: 'viewmodels/home/contacts/index',
 					content: 'Contacts'
 				}
-                // , {
-                //     title: 'practicehome',
-                //     subroute: 'viewmodels/home/population/index',
-                //     content: 'Practice Home'
-                // }
             ]
         }
     }, {
@@ -61,11 +56,6 @@ define([], function () {
 					subroute: 'viewmodels/home/contacts/index',
 					content: 'Contacts'
 				}
-                // , {
-                //     title: 'practicehome',
-                //     subroute: 'viewmodels/home/population/index',
-                //     content: 'Practice Home'
-                // }
             ]
         }
     }, {
@@ -142,54 +132,6 @@ define([], function () {
             ]
         }
     }, {
-        route: 'designer(/:id)(/:idalso)',
-        moduleId: 'exclmodules/designer/index',
-        title: 'designer',
-        nav: false,
-        settings: {
-            imageSource: '/NightingaleUI/Content/images/nav_programs.png',
-            content: 'Program Designer',
-            pages: [
-                {
-                    title: 'thinker',
-                    subroute: 'exclmodules/designer/home/index',
-                    content: 'Thinker'
-                }
-            ]
-        }
-    }, {
-        route: 'sandbox',
-        moduleId: '../../Sandbox/index',
-        title: 'sandbox',
-        nav: false,
-        settings: {
-            imageSource: '/NightingaleUI/Content/images/nav_programs.png',
-            content: 'Sandbox',
-            pages: [
-                {
-                    title: 'sandboxtwo',
-                    subroute: 'exclmodules/designer/home/index',
-                    content: 'sandboxtwo'
-                }
-            ]
-        }
-    }, {
-        route: 'insight',
-        moduleId: 'viewmodels/insight/index',
-        title: 'insight',
-        nav: false,
-        settings: {
-            imageSource: '/NightingaleUI/Content/images/nav_insights.png',
-            content: 'Insight',
-            pages: [
-                {
-                    title: 'Reports',
-                    subroute: 'viewmodels/insight/reports/index',
-                    content: 'Reports'
-                }
-            ]
-        }
-    }, {
         route: 'admin',
         moduleId: 'viewmodels/admin/index',
         title: 'admin',
@@ -202,16 +144,6 @@ define([], function () {
                     title: 'Concierge',
                     subroute: 'viewmodels/admin/concierge/index',
                     content: 'Concierge'
-                },
-                {
-                    title: '   ',
-                    subroute: 'viewmodels/admin/reports/index',
-                    content: '   '
-                },
-                {
-                    title: '    ',
-                    subroute: 'viewmodels/admin/reports/query.builder',
-                    content: '    '
                 }
             ]
         }

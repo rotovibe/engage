@@ -154,13 +154,28 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
         }
       }).extend({ throttle: 75 });
 
-	  self.trimmedRoute = ko.computed({
+      self.trimmedRoute = ko.computed({
         read: function () {
           var thismed = self.newPatientMedication;
           if (thismed() && thismed().route()) {
             return thismed().route();
           } else {
             return '';
+          }
+        }
+      }).extend({ throttle: 75 });
+
+      self.showOtherReason = ko.computed({
+        read: function () {
+            console.log('reading')
+          var thismed = self.newPatientMedication;
+          if (thismed() && thismed().refusalReason()) {
+            return thismed().refusalReason().name() === 'Other';
+          } else {
+            console.log('Clearing other reason');
+            thismed().otherRefusalReason(null);
+            console.log(thismed());
+            return false;
           }
         }
       }).extend({ throttle: 75 });
