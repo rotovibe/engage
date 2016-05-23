@@ -167,14 +167,11 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
 
       self.showOtherReason = ko.computed({
         read: function () {
-            console.log('reading')
           var thismed = self.newPatientMedication;
           if (thismed() && thismed().refusalReason()) {
             return thismed().refusalReason().name() === 'Other';
           } else {
-            console.log('Clearing other reason');
             thismed().otherRefusalReason(null);
-            console.log(thismed());
             return false;
           }
         }

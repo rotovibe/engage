@@ -43,11 +43,11 @@
                           <div class="span10" data-bind="text: computedSigCode">
                           </div>
                         </div>
-                        <div class="row pad-bottom" data-bind="visible: prescribedBy">
+                        <div class="row pad-bottom" data-bind="visible: computedPrescribedBy">
                           <div class="span6 grey">
                             Prescribed by:
                           </div>
-                          <div class="span6" data-bind="text: prescribedBy">
+                          <div class="span6" data-bind="text: computedPrescribedBy">
                           </div>
                         </div>
                         <div class="row pad-bottom" data-bind="visible: reason">
@@ -69,6 +69,13 @@
                             Source
                           </div>
                           <div class="span6" data-bind="text: source().name">
+                          </div>
+                        </div>
+                        <div class="row pad-bottom" data-bind="visible: originalDataSource">
+                          <div class="span6 grey">
+                            Original Data Source
+                          </div>
+                          <div class="span6" data-bind="text: originalDataSource">
                           </div>
                         </div>
                         <div class="row pad-bottom" data-bind="visible: duration">
@@ -109,32 +116,18 @@
                           <div class="span6" data-bind="text: otherRefusalReason">
                           </div>
                         </div>
-                        <div class="row pad-bottom" data-bind="visible: orderedBy">
+                        <div class="row pad-bottom" data-bind="visible: computedOrderedBy">
                           <div class="span6 grey">
                             Ordered By
                           </div>
-                          <div class="span6" data-bind="text: orderedBy">
+                          <div class="span6" data-bind="text: computedOrderedBy">
                           </div>
                         </div>
-                        <div class="row pad-bottom" data-bind="visible: orderedDate">
+                        <div class="row pad-bottom" data-bind="visible: computedRxInfo">
                           <div class="span6 grey">
-                            Ordered Date
+                            Rx Info
                           </div>
-                          <div class="span6" data-bind="Date: orderedDate">
-                          </div>
-                        </div>
-                        <div class="row pad-bottom" data-bind="visible: rxNumber">
-                          <div class="span6 grey">
-                            Rx Number
-                          </div>
-                          <div class="span6" data-bind="text: rxNumber">
-                          </div>
-                        </div>
-                        <div class="row pad-bottom" data-bind="visible: rxDate">
-                          <div class="span6 grey">
-                            Rx Date
-                          </div>
-                          <div class="span6" data-bind="Date: rxDate">
+                          <div class="span6" data-bind="text: computedRxInfo">
                           </div>
                         </div>
                         <div class="row pad-bottom" data-bind="visible: rxNumber">

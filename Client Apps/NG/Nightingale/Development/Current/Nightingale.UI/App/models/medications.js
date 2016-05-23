@@ -59,7 +59,8 @@ define(['services/session', 'services/dateHelper'],
                     prescribedDate: { dataType: "DateTime" },
                     rxNumber: { dataType: "String" },
                     rxDate: { dataType: "DateTime" },
-                    pharmacy: { dataType: "String" }
+                    pharmacy: { dataType: "String" },
+                    originalDataSource:  { dataType: "String", defaultValue: 'Engage' },
                 },
                 navigationProperties: {
                     patient: {
@@ -150,13 +151,68 @@ define(['services/session', 'services/dateHelper'],
                     quantity = quantity ? quantity: '';
                     var howOften = medication.frequency() ? medication.frequency().name().trim() : '';
 
-
-
                     if(!quantity && !strength && !form && !route && !howOften && !strDateRange){
                         return '-';
                     }
                     return quantity + ' ' + strength + ' ' + form + ' ' + route + ' ' + howOften + ' ' + strDateRange;
                 });
+                medication.computedPrescribedBy = ko.computed(function () {
+                    var result = '';
+                    var prescribedBy = medication.prescribedBy();
+                    result = prescribedBy ? prescribedBy : '';
+                    var prescribedDate = medication.prescribedDate();
+                    if (prescribedDate) {
+                        result = result ? (result + ' on ' + prescribedDate) : prescribedDate;
+                    }
+                    return result;
+                });
+                medication.computedOrderedBy = ko.computed(function () {
+                    var result = '';
+                    var orderedBy = medication.orderedBy();
+                    result = orderedBy ? orderedBy : '';
+                    var orderedDate = medication.orderedDate();
+                    if (orderedDate) {
+                        var date = moment(orderedDate);
+                        var strDate = date.format('MM/DD/YYYY');
+                        result = result ? (result + ' on ' + strDate) : strDate;
+                    }
+                    return result;
+                });
+                medication.computedRxInfo = ko.computed(function () {
+                    var result = '';
+                    var type = medication.type();
+                    result = type ? type.name() : 'Unknown';
+                    var rxNumber = medication.rxNumber();
+                    result = rxNumber ? (result + ', Rx # ' + rxNumber) : result;
+                    var rxDate = medication.rxDate();
+                    if (rxDate) {
+                        var date = moment(rxDate);
+                        var strDate = date.format('MM/DD/YYYY');
+                        result = result ? (result + ' on ' + strDate) : result;
+                    }
+                    return result;
+                });
+
+                medication.associatedProblems = ko.computed(function () {
+                  var problemString = '';
+                  if (medication && medication.patient()) {
+                    var theseObservations = medication.patient().observations();
+                    var filteredObservations = ko.utils.arrayFilter(theseObservations, function (item) {
+                      var truthy = false;
+                      if (item.type()) {
+                        if (item.type().name().toLowerCase() === 'problems') {
+                          truthy = (item.displayId() && item.state() && item.displayId() > 0 && item.state().name().toLowerCase() === 'active' && !item.deleteFlag()) ? true : false;
+                        }
+                      }
+                      return truthy;
+                    });
+                    ko.utils.arrayForEach(filteredObservations, function (problem) {
+                      problemString += problem.name() + ', ';
+                    });
+                    problemString = problemString.slice(0, -2);
+                  }
+                  return problemString;
+                }).extend({ throttle: 75 });
 
                 medication.setStatus = function(statusId, doneBannerMessage){
                     checkDataContext();

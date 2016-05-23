@@ -731,7 +731,7 @@
 			var results = manager.executeQueryLocally(careTeamQuery);
 			var unwrappedCareTeam = results[0];
 
-			thisCareTeam.Id = unwrappedCareTeam.id < 1 ? null : unwrappedCareTeam.id;			
+			thisCareTeam.Id = unwrappedCareTeam.id < 1 ? null : unwrappedCareTeam.id;
 			thisCareTeam.ContactId = unwrappedCareTeam.contactId;
 			thisCareTeam.members = [];
 			ko.utils.arrayForEach( careTeam.members(), function( member ){
@@ -740,8 +740,8 @@
 			});
 			return thisCareTeam;
 		}
-		
-		function serializeCareTeamMember( careMember, manager ){				
+
+		function serializeCareTeamMember( careMember, manager ){
 				var thisCareMember = {};
 				var careMemberQuery = breeze.EntityQuery
 						.from('fakePath')
@@ -752,20 +752,20 @@
 
 				var results = manager.executeQueryLocally(careMemberQuery);
 				var unwrappedCareMember = results[0];
-				
+
 				thisCareMember.Id 				= unwrappedCareMember.id < 1 ? null : unwrappedCareMember.id;
-				thisCareMember.ContactId		= unwrappedCareMember.contactId;		
+				thisCareMember.ContactId		= unwrappedCareMember.contactId;
 				if( unwrappedCareMember.roleId == -1 ){	//Other Role - customRoleName
-					thisCareMember.RoleId = null;					
+					thisCareMember.RoleId = null;
 					thisCareMember.CustomRoleName   = unwrappedCareMember.customRoleName;
 				}
 				else{
 					thisCareMember.RoleId = unwrappedCareMember.roleId;
 					thisCareMember.CustomRoleName   = null;
-				}				          				
-				thisCareMember.StartDate        = unwrappedCareMember.startDate; 
-				thisCareMember.EndDate          = unwrappedCareMember.endDate;     
-				thisCareMember.Core             = unwrappedCareMember.core;        
+				}
+				thisCareMember.StartDate        = unwrappedCareMember.startDate;
+				thisCareMember.EndDate          = unwrappedCareMember.endDate;
+				thisCareMember.Core             = unwrappedCareMember.core;
 				thisCareMember.Notes            = unwrappedCareMember.notes;
 				thisCareMember.FrequencyId      = unwrappedCareMember.frequencyId;
 				thisCareMember.Distance         = unwrappedCareMember.distance;
@@ -777,10 +777,10 @@
 				thisCareMember.CreatedOn        = unwrappedCareMember.createdOn;
 				thisCareMember.UpdatedById      = unwrappedCareMember.updatedById;
 				thisCareMember.CreatedById      = unwrappedCareMember.createdById;
-			
+
 				return thisCareMember;
 		}
-		
+
 		//this will be deprecated:
 		// Serialize a care member to save it
 		function serializeCareMember(careMember, manager) {
@@ -982,7 +982,7 @@
 						.from('fakePath')
 						.where('id', '==', medication.id())
 						.toType('PatientMedication')
-						.select('id, name, startDate, endDate, patientId, statusId, deleteFlag, sourceId, notes, systemName, dosage, strength, route, form, freqQuantity, freqHowOftenId, frequencyId, freqWhenId, customFrequency, categoryId, prescribedBy, typeId, sigCode, reason, familyId, isCreateNewMedication, originalDataSource, duration, durationUnitID, otherDuration, reviewID, refusalReasonID, otherRefusalReason, orderedBy, orderedDate, prescribedDate, rxNumber, rxDate, pharmacy');
+						.select('id, name, startDate, endDate, patientId, statusId, deleteFlag, sourceId, notes, systemName, dosage, strength, route, form, freqQuantity, freqHowOftenId, frequencyId, freqWhenId, customFrequency, categoryId, prescribedBy, typeId, sigCode, reason, familyId, isCreateNewMedication, originalDataSource, duration, durationUnitID, otherDuration, reviewID, refusalReasonID, otherRefusalReason, orderedBy, orderedDate, prescribedDate, rxNumber, rxDate, pharmacy, originalDataSource');
 				var results = manager.executeQueryLocally(medicationQuery);
 				var unwrappedObservation = results[0];
 
@@ -1053,7 +1053,7 @@
 				serializeObservation: serializeObservation,
 				serializeNote: serializeNote,
 				serializeToDo: serializeToDo,
-				serializeCareMember: serializeCareMember,	
+				serializeCareMember: serializeCareMember,
 				serializeCareTeam: serializeCareTeam,
 				serializeCareTeamMember: serializeCareTeamMember,
 				serializeIndividual: serializeIndividual,

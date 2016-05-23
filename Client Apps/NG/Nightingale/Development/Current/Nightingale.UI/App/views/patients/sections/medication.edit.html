@@ -45,6 +45,12 @@
         <div class="span3 pad-left">
         	<div data-bind="chsnsingle: { options: $parent.sources, value: source, text: 'name', label: 'medication-source', caption: 'Choose...' }"></div>
         </div>
+        <div class="span2 align-right grey">
+            Associated Problems:
+        </div>
+        <div class="span3 pad-left">
+            <span data-bind="text: associatedProblems"></span>
+        </div>
     </div>
     <div class="row pad-top divider filters">
         <!-- ko compose: { model: 'viewmodels/patients/sections/dropdown.w.addnew' , activationData:
@@ -189,7 +195,7 @@
             Pharmacy:
         </div>
         <div class="span3 pad-left">
-            <input type="text" data-bind="value: pharmacy" size="50" />
+            <input type="text" data-bind="value: pharmacy" size="500" />
         </div>
     </div>
     <div class="row pad-top divider">
