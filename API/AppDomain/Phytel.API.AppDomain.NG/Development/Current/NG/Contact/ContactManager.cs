@@ -223,7 +223,7 @@ namespace Phytel.API.AppDomain.NG
             };
 
             string currentActiveCorePCMId = CohortRules.GetCareTeamActiveCorePCMId(cohortRuleCheckData);
-            if (currentActiveCorePCMId!=null && request.CareTeamMember.Core && currentActiveCorePCMId!=request.Id)
+            if (currentActiveCorePCMId!=null && request.CareTeamMember.Core && currentActiveCorePCMId!=request.Id & request.CareTeamMember.RoleId == Constants.PCMRoleId)
                 throw new ArgumentNullException("Care Team already has an Active Core PCM", "request");
 
             ValidateCareTeamMemberFields(request.CareTeamMember);
