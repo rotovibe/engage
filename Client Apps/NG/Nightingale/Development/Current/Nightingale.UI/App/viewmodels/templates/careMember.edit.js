@@ -173,8 +173,8 @@ define([ 'services/datacontext', 'services/local.collections', 'viewmodels/home/
 							contactTypeIds: [],
 							contactSubTypeIds: [],
 							contactStatuses: [],
-							firstName: self.criteriaFirstName(),
-							lastName: self.criteriaLastName(),
+							firstName: self.criteriaFirstName()? self.criteriaFirstName().trim() : null,
+							lastName: self.criteriaLastName()? self.criteriaLastName().trim() : null,
 							filterType: 'StartsWith',
 							take: self.contactsTake(),
 							skip: self.contactsSkip()

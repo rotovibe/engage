@@ -52,8 +52,7 @@ define([ 'services/datacontext', 'services/local.collections', 'viewmodels/home/
 				});
 				subscriptionTokens.push( lastNameToken );
 			}
-			
-			
+						
 			self.checkDuplicateContact = function( firstName, lastName ){
 				var contactTypeId = self.contactCard().contactTypeId();
 				self.contactCard().isDuplicate( false );
@@ -277,18 +276,17 @@ define([ 'services/datacontext', 'services/local.collections', 'viewmodels/home/
 				return subs;
 			}
 			
-			self.contactTypes = contactsIndex.contactTypes;
-			// self.contactTypes = ko.observableArray([]);
-			// self.contactTypes( datacontext.getContactTypes( contactTypeGroupId, 'root' ) );
+			self.contactTypes = contactsIndex.contactTypes;			
 			self.contactTypesShowing = ko.observable(true);
-			// if( !defaultContactType() ){
-				// defaultContactType( findDefaultContactType(self.contactTypes) )
-			// }						
 			
 			if( self.contactCard().isNew() ){
 				self.contactCard().contactTypeId( contactsIndex.defaultContactType().id() );
+				//check for dups when the first / last name assigned externally ( care member contact search criteria, for example )
+				if( self.contactCard().firstName() || self.contactCard().lastName() ){
+					self.checkDuplicateContact( self.contactCard().firstName(), self.contactCard().lastName() );
+				}
 			}
-						
+												
 			self.setActiveTab = contactsIndex.setActiveTab;
 			
 			if( self.contactCard() && self.contactCard().activeTab() && self.contactCard().activeTab() == 'General' ){
