@@ -584,8 +584,13 @@ define(['services/session'],
 		    // manager.createEntity('NoteType', { id: 2, name: 'Touchpoint' }).entityAspect.acceptChanges();
 
 		    // Allergy status enums
-		    manager.createEntity('AllergyStatus', { id: 1, name: 'Active' }).entityAspect.acceptChanges();
-		    manager.createEntity('AllergyStatus', { id: 2, name: 'Inactive' }).entityAspect.acceptChanges();
+            manager.createEntity('AllergyStatus', { id: 1, name: 'Active' }).entityAspect.acceptChanges();
+            manager.createEntity('AllergyStatus', { id: 2, name: 'Inactive' }).entityAspect.acceptChanges();
+            manager.createEntity('AllergyStatus', { id: 3, name: 'Refused' }).entityAspect.acceptChanges();
+            manager.createEntity('AllergyStatus', { id: 4, name: 'Not Done Medical' }).entityAspect.acceptChanges();
+            manager.createEntity('AllergyStatus', { id: 5, name: 'Unknown' }).entityAspect.acceptChanges();
+            manager.createEntity('AllergyStatus', { id: 6, name: 'Invalid' }).entityAspect.acceptChanges();
+            manager.createEntity('AllergyStatus', { id: 7, name: 'Duplicate' }).entityAspect.acceptChanges();
 
 		    // Medication status enums
 		    manager.createEntity('MedicationStatus', { id: 1, name: 'Active' }).entityAspect.acceptChanges();

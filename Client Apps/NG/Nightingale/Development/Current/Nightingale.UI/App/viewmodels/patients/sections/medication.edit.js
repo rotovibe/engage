@@ -172,13 +172,24 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
             return thismed().refusalReason().name() === 'Other';
           } else {
             if (thismed()) {
-                console.log('clearing refusal reason')
               thismed().otherRefusalReason(null);
             }
             return false;
           }
         }
       }).extend({ throttle: 75 });
+
+      self.showRefusalReason = ko.computed({
+        read: function () {
+          var thismed = self.newPatientMedication;
+          if (thismed() && thismed().status()) {
+            var statusName = thismed().status().name();
+            return statusName === 'Refused' || statusName === 'Not Done Medical';
+          } else {
+            return false;
+          }
+        }
+      });
 
       self.resultsMessage = ko.observable('');
       if (self.medication && !self.medication()) {

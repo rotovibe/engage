@@ -926,7 +926,7 @@
 					.from('fakePath')
 					.where('id', '==', allergy.id())
 					.toType('PatientAllergy')
-					.select('id, allergyName, startDate, endDate, patientId, statusId, deleteFlag, severityId, allergyId, sourceId, notes, systemName, code, codingSystem');
+					.select('id, allergyName, startDate, endDate, patientId, statusId, deleteFlag, severityId, allergyId, sourceId, notes, systemName, code, codingSystemId');
 			var results = manager.executeQueryLocally(allergyQuery);
 			var unwrappedAllergy = results[0];
 

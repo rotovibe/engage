@@ -249,7 +249,7 @@
             <div data-bind="chsnsingle: { options: $parent.medicationReviews, value: reviewId, idValue: 'id', text: 'name', label: 'medication-review', caption: 'Choose...' }"></div>
         </div>
     </div>
-    <div class="row pad-top">
+    <div class="row pad-top" data-bind="visible: $parent.showRefusalReason">
         <div class="span2 align-right grey">
             Refusal Reason:
         </div>

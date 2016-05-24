@@ -192,7 +192,7 @@
             }
         };
         var cancelOverride = function () {
-            var allergyCancel = modalEntity().allergy;
+            var allergyCancel = modalEntity().allergy();
             allergyCancel.entityAspect.rejectChanges();
         };
         msg = msg ? msg : 'Edit Allergy';
