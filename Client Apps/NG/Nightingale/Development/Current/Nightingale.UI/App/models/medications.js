@@ -49,18 +49,17 @@ define(['services/session', 'services/dateHelper'],
                     pharmClasses: { complexTypeName: "Identifier:#Nightingale", isScalar: false },
                     originalDataSource: { dataType: "String" },
                     duration: { dataType: "String" },
-                    durationUnitID: { dataType: "String" },
+                    durationUnitId: { dataType: "String" },
                     otherDuration: { dataType: "String" },
-                    reviewID: { dataType: "String" },
-                    refusalReasonID: { dataType: "String" },
+                    reviewId: { dataType: "String" },
+                    refusalReasonId: { dataType: "String" },
                     otherRefusalReason: { dataType: "String" },
                     orderedBy: { dataType: "String" },
                     orderedDate: { dataType: "DateTime" },
                     prescribedDate: { dataType: "DateTime" },
                     rxNumber: { dataType: "String" },
                     rxDate: { dataType: "DateTime" },
-                    pharmacy: { dataType: "String" },
-                    originalDataSource:  { dataType: "String", defaultValue: 'Engage' },
+                    pharmacy: { dataType: "String" }
                 },
                 navigationProperties: {
                     patient: {
@@ -96,16 +95,16 @@ define(['services/session', 'services/dateHelper'],
                         associationName: "Medication_Frequency", foreignKeyNames: ["frequencyId"]
                     },
                     durationUnit: {
-                        entityTypeName: "PatientMedicationFrequency", isScalar: true,
-                        associationName: "Medication_DurationUnit", foreignKeyNames: ["durationUnitID"]
+                        entityTypeName: "DurationUnit", isScalar: true,
+                        associationName: "Medication_DurationUnit", foreignKeyNames: ["durationUnitId"]
                     },
                     review: {
-                        entityTypeName: "PatientMedicationFrequency", isScalar: true,
-                        associationName: "Medication_MedicationReview", foreignKeyNames: ["reviewID"]
+                        entityTypeName: "MedicationReview", isScalar: true,
+                        associationName: "Medication_MedicationReview", foreignKeyNames: ["reviewId"]
                     },
                     refusalReason: {
-                        entityTypeName: "PatientMedicationFrequency", isScalar: true,
-                        associationName: "Medication_RefusalReason", foreignKeyNames: ["refusalReasonID"]
+                        entityTypeName: "RefusalReason", isScalar: true,
+                        associationName: "Medication_RefusalReason", foreignKeyNames: ["refusalReasonId"]
                     }
                 }
             });

@@ -232,7 +232,7 @@
             <input type="text" data-bind="value: duration" size="50" />
         </div>
         <div class="span2">
-            <div data-bind="chsnsingle: { options: $parent.durationUnits, value: durationUnitID, text: 'name', label: 'medication-duration-unit', caption: 'Choose...' }"></div>
+            <div data-bind="chsnsingle: { options: $parent.durationUnits, value: durationUnitId, text: 'name', label: 'medication-duration-unit', caption: 'Choose...', idValue: 'id' }"></div>
         </div>
         <div class="span2 align-right grey" data-bind="if: otherDuration">
             Other Duration:
@@ -246,7 +246,7 @@
             Review:
         </div>
         <div class="span3 pad-left">
-            <div data-bind="chsnsingle: { options: $parent.medicationReviews, value: review, text: 'name', label: 'medication-review', caption: 'Choose...' }"></div>
+            <div data-bind="chsnsingle: { options: $parent.medicationReviews, value: reviewId, idValue: 'id', text: 'name', label: 'medication-review', caption: 'Choose...' }"></div>
         </div>
     </div>
     <div class="row pad-top">
@@ -254,13 +254,13 @@
             Refusal Reason:
         </div>
         <div class="span3 pad-left">
-            <div data-bind="chsnsingle: { options: $parent.refusalReasons, value: refusalReason, text: 'name', label: 'medication-refusal-reason', caption: 'Choose...' }"></div>
+            <div data-bind="chsnsingle: { options: $parent.refusalReasons, value: refusalReasonId, idValue: 'id', text: 'name', label: 'medication-refusal-reason', caption: 'Choose...' }"></div>
         </div>
         <div class="span2 align-right grey" data-bind="if: $parent.showOtherReason">
             Other Reason:
         </div>
         <div class="span3 pad-left" data-bind="if: $parent.showOtherReason">
-            <input type="text" data-bind="value: otherRefusalReason" size="50" />
+            <input type="text" data-bind="value: otherRefusalReason" size="100" />
         </div>
     </div>
     <div class="row pad-top">

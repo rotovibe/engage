@@ -171,7 +171,10 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
           if (thismed() && thismed().refusalReason()) {
             return thismed().refusalReason().name() === 'Other';
           } else {
-            thismed().otherRefusalReason(null);
+            if (thismed()) {
+                console.log('clearing refusal reason')
+              thismed().otherRefusalReason(null);
+            }
             return false;
           }
         }

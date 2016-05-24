@@ -195,7 +195,7 @@
 						.toType('ContactCard')
 						.select('id, patientId, timeZoneId, isPatient, userId, isUser, firstName, middleName, lastName, preferredName,'
 							+ ' gender, contactTypeId, externalRecordId, dataSource, statusId, deceasedId, prefix, suffix, createdOn, updatedOn,'
-							+ ' createdById, updatedById, externalID');
+							+ ' createdById, updatedById, externalId');
 				var results = manager.executeQueryLocally(contactCardQuery);
 				var unwrappedContactCard = results[0];
 
@@ -232,7 +232,7 @@
 				thisContactCard.UpdatedOn        = unwrappedContactCard.updatedOn;
 				thisContactCard.CreatedById      = unwrappedContactCard.createdById;
 				thisContactCard.UpdatedById      = unwrappedContactCard.updatedById;
-				thisContactCard.ExternalID       = unwrappedContactCard.externalID;
+				thisContactCard.ExternalId       = unwrappedContactCard.externalId;
 
 				ko.utils.arrayForEach(contactCard.modes.peek(), function (mode) {
 						var newMode = {};
@@ -982,7 +982,7 @@
 						.from('fakePath')
 						.where('id', '==', medication.id())
 						.toType('PatientMedication')
-						.select('id, name, startDate, endDate, patientId, statusId, deleteFlag, sourceId, notes, systemName, dosage, strength, route, form, freqQuantity, freqHowOftenId, frequencyId, freqWhenId, customFrequency, categoryId, prescribedBy, typeId, sigCode, reason, familyId, isCreateNewMedication, originalDataSource, duration, durationUnitID, otherDuration, reviewID, refusalReasonID, otherRefusalReason, orderedBy, orderedDate, prescribedDate, rxNumber, rxDate, pharmacy, originalDataSource');
+						.select('id, name, startDate, endDate, patientId, statusId, deleteFlag, sourceId, notes, systemName, dosage, strength, route, form, freqQuantity, freqHowOftenId, frequencyId, freqWhenId, customFrequency, categoryId, prescribedBy, typeId, sigCode, reason, familyId, isCreateNewMedication, originalDataSource, duration, durationUnitId, otherDuration, reviewId, refusalReasonId, otherRefusalReason, orderedBy, orderedDate, prescribedDate, rxNumber, rxDate, pharmacy, originalDataSource');
 				var results = manager.executeQueryLocally(medicationQuery);
 				var unwrappedObservation = results[0];
 
@@ -1015,11 +1015,11 @@
 				thisMedication.FamilyId = unwrappedObservation.familyId; //a new medicationMap record id
 				thisMedication.RecalculateNDC = medication.recalculateNDC();
                 thisMedication.OriginalDataSource = unwrappedObservation.originalDataSource;
-                thisMedication.Duration = unwrappedObservation.duration;
-                thisMedication.DurationUnitID = unwrappedObservation.durationUnitID;
+                thisMedication.Duration = parseInt(unwrappedObservation.duration);
+                thisMedication.DurationUnitId = unwrappedObservation.durationUnitId;
                 thisMedication.OtherDuration = unwrappedObservation.otherDuration;
-                thisMedication.ReviewID = unwrappedObservation.reviewID;
-                thisMedication.RefusalReasonID = unwrappedObservation.refusalReasonID;
+                thisMedication.ReviewId = unwrappedObservation.reviewId;
+                thisMedication.RefusalReasonId = unwrappedObservation.refusalReasonId;
                 thisMedication.OtherRefusalReason = unwrappedObservation.otherRefusalReason;
                 thisMedication.OrderedBy = unwrappedObservation.orderedBy;
                 thisMedication.OrderedDate = unwrappedObservation.orderedDate;

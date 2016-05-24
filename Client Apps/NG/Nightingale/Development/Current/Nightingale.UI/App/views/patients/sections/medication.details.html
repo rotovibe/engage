@@ -71,6 +71,13 @@
                           <div class="span6" data-bind="text: source().name">
                           </div>
                         </div>
+                        <div class="row pad-bottom" data-bind="visible: associatedProblems">
+                          <div class="span6 grey">
+                            Associated Problems
+                          </div>
+                          <div class="span6" data-bind="text: associatedProblems">
+                          </div>
+                        </div>
                         <div class="row pad-bottom" data-bind="visible: originalDataSource">
                           <div class="span6 grey">
                             Original Data Source
@@ -84,8 +91,8 @@
                           </div>
                           <div class="span3" data-bind="text: duration">
                           </div>
-                          <div class="span3" data-bind="with: $parent.durationUnit">
-                            <span data-bind="text: .name()"></span>
+                          <div class="span3" data-bind="with: durationUnit">
+                            <span data-bind="text: name()"></span>
                           </div>
                         </div>
                         <div class="row pad-bottom" data-bind="visible: otherDuration">

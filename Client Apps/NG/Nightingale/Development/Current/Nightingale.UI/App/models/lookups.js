@@ -117,7 +117,7 @@ define(['services/session'],
 		            name: { dataType: "String" }
 		        }
 		    });
-			
+
 			//care member status - enum
 			metadataStore.addEntityType({
 		        shortName: "CareMemberStatus",
@@ -128,17 +128,17 @@ define(['services/session'],
 					isDefault: { dataType: "Boolean" }
 		        }
 		    });
-			
-			//care member frequency			
+
+			//care member frequency
 			metadataStore.addEntityType({
 		        shortName: "CareTeamFrequency",
 		        namespace: "Nightingale",
 		        dataProperties: {
 		            id: { dataType: "String", isPartOfKey: true },
-		            name: { dataType: "String" }					
+		            name: { dataType: "String" }
 		        }
 		    });
-			
+
 			//system status - enum
 			metadataStore.addEntityType({
 				shortName: "SystemStatus",
@@ -512,12 +512,12 @@ define(['services/session'],
 		    manager.createEntity('ContactStatus', { id: 1, name: 'Active'   }).entityAspect.acceptChanges();
 		    manager.createEntity('ContactStatus', { id: 2, name: 'Inactive' }).entityAspect.acceptChanges();
 			manager.createEntity('ContactStatus', { id: 3, name: 'Archived' }).entityAspect.acceptChanges();
-			
+
 			//enums.careMemberStatuses
 			manager.createEntity('CareMemberStatus', { id: 1, name: 'Active' }).entityAspect.acceptChanges();
 			manager.createEntity('CareMemberStatus', { id: 2, name: 'Inactive' }).entityAspect.acceptChanges();
 			manager.createEntity('CareMemberStatus', { id: 3, name: 'Invalid' }).entityAspect.acceptChanges();
-			
+
 			//enums.systemStatus
 			manager.createEntity('SystemStatus', {id: 1, name: 'Active'		}).entityAspect.acceptChanges();
 			manager.createEntity('SystemStatus', {id: 2, name: 'Inactive'	}).entityAspect.acceptChanges();
@@ -591,7 +591,7 @@ define(['services/session'],
 		    manager.createEntity('MedicationStatus', { id: 1, name: 'Active' }).entityAspect.acceptChanges();
 		    manager.createEntity('MedicationStatus', { id: 2, name: 'Inactive' }).entityAspect.acceptChanges();
             manager.createEntity('MedicationStatus', { id: 3, name: 'Refused' }).entityAspect.acceptChanges();
-            manager.createEntity('MedicationStatus', { id: 4, name: 'NotDoneMedical' }).entityAspect.acceptChanges();
+            manager.createEntity('MedicationStatus', { id: 4, name: 'Not Done Medical' }).entityAspect.acceptChanges();
             manager.createEntity('MedicationStatus', { id: 5, name: 'Unknown' }).entityAspect.acceptChanges();
             manager.createEntity('MedicationStatus', { id: 6, name: 'Invalid' }).entityAspect.acceptChanges();
             manager.createEntity('MedicationStatus', { id: 7, name: 'Duplicate' }).entityAspect.acceptChanges();
@@ -610,4 +610,4 @@ define(['services/session'],
 		        datacontext = require('services/datacontext');
 		    }
 		}
-	}); 
+	});
