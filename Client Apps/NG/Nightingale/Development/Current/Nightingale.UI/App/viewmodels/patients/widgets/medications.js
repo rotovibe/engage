@@ -128,7 +128,7 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
                 return finalmedications;
             }).extend({ throttle: 1 });
             self.activeColumns = ko.computed(function () {
-                return ['expand','name','strength','status'];
+                return ['expand','name', 'sortdate', 'status'];
             });
             self.toggleSort = function (sender) {
                 // If the current column is the one to sort by

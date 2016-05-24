@@ -59,7 +59,8 @@ define(['services/session', 'services/dateHelper'],
                     prescribedDate: { dataType: "DateTime" },
                     rxNumber: { dataType: "String" },
                     rxDate: { dataType: "DateTime" },
-                    pharmacy: { dataType: "String" }
+                    pharmacy: { dataType: "String" },
+                    externalRecordId: { dataType: "String" }
                 },
                 navigationProperties: {
                     patient: {
@@ -155,6 +156,27 @@ define(['services/session', 'services/dateHelper'],
                     }
                     return quantity + ' ' + strength + ' ' + form + ' ' + route + ' ' + howOften + ' ' + strDateRange;
                 });
+                medication.computedDisplayName = ko.computed(function () {
+                    var result = '';
+                    var name = medication.name()
+                    var strength = medication.strength();
+                    var route = medication.route();
+                    var form = medication.form();
+                    result = result + (name ? name + ' ' : '');
+                    result = result + (strength ? strength + ' ' : '');
+                    result = result + (route ? route + ' ' : '');
+                    result = result + (form ? form + ' ' : '');
+                    return result;
+                });
+                medication.medSortDate = ko.computed(function () {
+                    var result = '';
+                    var startDate = medication.startDate();
+                    var orderedDate = medication.orderedDate();
+                    var rxDate = medication.rxDate();
+                    var prescribedDate = medication.prescribedDate();
+                    result = (startDate ? startDate : (orderedDate ? orderedDate : (rxDate ? rxDate : (prescribedDate ? prescribedDate : null))));
+                    return result;
+                });
                 medication.computedPrescribedBy = ko.computed(function () {
                     var result = '';
                     var prescribedBy = medication.prescribedBy();
@@ -191,27 +213,6 @@ define(['services/session', 'services/dateHelper'],
                     }
                     return result;
                 });
-
-                medication.associatedProblems = ko.computed(function () {
-                  var problemString = '';
-                  if (medication && medication.patient()) {
-                    var theseObservations = medication.patient().observations();
-                    var filteredObservations = ko.utils.arrayFilter(theseObservations, function (item) {
-                      var truthy = false;
-                      if (item.type()) {
-                        if (item.type().name().toLowerCase() === 'problems') {
-                          truthy = (item.displayId() && item.state() && item.displayId() > 0 && item.state().name().toLowerCase() === 'active' && !item.deleteFlag()) ? true : false;
-                        }
-                      }
-                      return truthy;
-                    });
-                    ko.utils.arrayForEach(filteredObservations, function (problem) {
-                      problemString += problem.name() + ', ';
-                    });
-                    problemString = problemString.slice(0, -2);
-                  }
-                  return problemString;
-                }).extend({ throttle: 75 });
 
                 medication.setStatus = function(statusId, doneBannerMessage){
                     checkDataContext();

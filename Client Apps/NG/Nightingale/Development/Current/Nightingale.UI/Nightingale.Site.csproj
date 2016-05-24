@@ -237,6 +237,7 @@
     <Content Include="App\views\templates\medication.strength.html" />
     <Content Include="App\views\templates\medication.reason.html" />
     <Content Include="App\views\templates\medication.startdate.html" />
+    <Content Include="App\views\templates\medication.sortdate.html" />
     <Content Include="App\views\templates\medication.status.html" />
     <Content Include="App\views\templates\medication.type.html" />
     <Content Include="App\views\templates\medications.panel.html" />

@@ -42,6 +42,7 @@
     new Column('duedate', 'Due Date','span2 ellipsis', 'dueDate'),
     new Column('assignedto', 'Assigned To','span2 ellipsis', 'assignedTo.preferredName'),
     new Column('startdate', 'Date','span2 ellipsis', 'startDate'),
+    new Column('sortdate', 'Date','span2 ellipsis', 'medSortDate', true),
     new Column('startdate-small', 'Date','span1 ellipsis', 'startDate'),
     new Column('updatedon', 'Date','span2 ellipsis', 'updatedOn'),
     new Column('updatedon-small', 'Date', 'span1 ellipsis', 'updatedOn')

@@ -45,12 +45,6 @@
         <div class="span3 pad-left">
         	<div data-bind="chsnsingle: { options: $parent.sources, value: source, text: 'name', label: 'medication-source', caption: 'Choose...' }"></div>
         </div>
-        <div class="span2 align-right grey">
-            Associated Problems:
-        </div>
-        <div class="span3 pad-left">
-            <span data-bind="text: associatedProblems"></span>
-        </div>
     </div>
     <div class="row pad-top divider filters">
         <!-- ko compose: { model: 'viewmodels/patients/sections/dropdown.w.addnew' , activationData:
@@ -253,10 +247,10 @@
         <div class="span2 align-right grey">
             Refusal Reason:
         </div>
-        <div class="span3 pad-left">
+        <div class="span5 pad-left">
             <div data-bind="chsnsingle: { options: $parent.refusalReasons, value: refusalReasonId, idValue: 'id', text: 'name', label: 'medication-refusal-reason', caption: 'Choose...' }"></div>
         </div>
-        <div class="span2 align-right grey" data-bind="if: $parent.showOtherReason">
+        <div class="span1 align-right grey" data-bind="if: $parent.showOtherReason">
             Other Reason:
         </div>
         <div class="span3 pad-left" data-bind="if: $parent.showOtherReason">

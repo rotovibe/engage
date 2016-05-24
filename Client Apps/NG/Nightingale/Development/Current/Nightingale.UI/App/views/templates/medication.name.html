@@ -1,2 +1,3 @@
-﻿<a class="edit" href="#" data-bind="click: setActiveMedication, attr: { title: name }">
-    <pre data-bind="text: (name() ? name() : '-')"></pre></a>
+﻿<a class="edit" href="#" data-bind="click: setActiveMedication, attr: { title: computedDisplayName }">
+    <pre data-bind="text: (computedDisplayName() ? computedDisplayName() : '-')"></pre>
+</a>

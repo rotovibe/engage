@@ -38,8 +38,8 @@ define(['services/session', 'services/dateHelper'],
 		            notes: { dataType: "String" },
                     code: { dataType: "String" },
                     codingSystemId: { dataType: "String" },
-                    dataSource: { dataType: "String" },
-                    externalId: { dataType: "String" }
+                    dataSource: { dataType: "String", defaultValue: "Engage" },
+                    externalRecordId: { dataType: "String" }
 		        },
 		        navigationProperties: {
 		            patient: {
