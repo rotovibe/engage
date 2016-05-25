@@ -9,6 +9,7 @@
 			getCareTeam: getCareTeam,
 			saveCareTeam: saveCareTeam,
 			saveCareTeamMember: saveCareTeamMember,
+			deleteCareTeamMember: deleteCareTeamMember,
             saveCareMemberOld: saveCareMemberOld,
             deleteNote: deleteNote
         };
@@ -72,6 +73,27 @@
             }
 
             function saveSucceeded(data) {
+                return data.httpResponse.data;
+            }
+		}
+		
+		function deleteCareTeamMember( manager, member ){
+			if (!manager) { throw new Error("[manager] cannot be a null parameter"); }
+            checkDataContext();
+			
+            endPoint = new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 
+							'Contacts/' + member.careTeam().contactId() + '/CareTeams/' + member.careTeamId() +  '/CareTeamMembers/' + member.id() , 'CareMember');
+
+            var query = breeze.EntityQuery
+                .from(endPoint.ResourcePath)
+                .withParameters({
+                    $method: 'DELETE',
+                    $encoding: 'JSON'
+                });
+
+            return manager.executeQuery(query).then(deleteSucceeded).fail(postFailed);
+
+            function deleteSucceeded(data) {				
                 return data.httpResponse.data;
             }
 		}

@@ -246,6 +246,7 @@
 			getNote: getNote,
 			saveCareMember: saveCareMemberOld,	//old - will be deprecated
 			saveCareTeamMember: saveCareTeamMember,
+			deleteCareTeamMember: deleteCareTeamMember,
 			saveCareTeam: saveCareTeam,
 			getCareTeam: getCareTeam,
 			enums: localCollections.enums,
@@ -1356,7 +1357,7 @@
 				}
 			}
 		}
-
+		
 		// Save changes to a single contact card
 		function deleteNote(note) {
 			function deleteCompleted(data) {
@@ -1472,6 +1473,18 @@
 				queryCompleted(message);
 				return true;
 			}
+		}
+				
+		function deleteCareTeamMember( careMember ){
+			function deleteCompleted(data) {
+				careMember.entityAspect.rejectChanges();				
+				manager.detachEntity(careMember);
+				
+				queryCompleted(message);
+			}
+
+			var message = queryStarted('Note', true, 'Deleting');
+			return careMembersService.deleteCareTeamMember(manager, careMember).then(deleteCompleted);
 		}
 		
 		//this func will be deprecated:

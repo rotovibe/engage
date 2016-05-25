@@ -62,7 +62,7 @@ define(['models/base', 'services/datacontext', 'services/session', 'viewmodels/s
 				var isSaving = self.isSaving();
 				if ( primaryCareTeam.length > 0 && isPatientLoaded ) {
 					var thisMatchedCareManager = ko.utils.arrayFirst( primaryCareTeam, function (caremanager) {
-					    return caremanager.contact().userId() === session.currentUser().userId();
+					    return caremanager.contact() && caremanager.contact().userId() === session.currentUser().userId();
 					});
 					return ( thisMatchedCareManager && !isSaving );
 				}

@@ -256,8 +256,9 @@ define(['services/session', 'services/datacontext', 'viewmodels/patients/index',
 		
 		function deleteCareMember(member){			
 			if( confirm('are you sure you want to delete the care member: ' + member.contact().fullName() + ' (' + member.computedRoleName() + ') ') ){
-				//TODO delete it
-				alert('delete is not available yet (under construction)');
+				if( member.contactId() && member.careTeamId() ){
+					datacontext.deleteCareTeamMember( member );
+				}
 			}
 		}
 		
