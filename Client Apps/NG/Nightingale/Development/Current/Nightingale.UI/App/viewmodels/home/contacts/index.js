@@ -307,7 +307,7 @@ define(['services/session', 'services/datacontext', 'viewmodels/shell/shell', 'm
 			self.showEditButton = ko.computed(function(){
 				var hasContactSelected = self.selectedContactId();
 				var contact = selectedContact();
-				return( hasContactSelected && contact.isEditable() );				
+				return( hasContactSelected && contact && contact.isEditable() );				
 			}).extend({throttle: 100});
 			
 			self.showDeleteButton = ko.computed(function(){
