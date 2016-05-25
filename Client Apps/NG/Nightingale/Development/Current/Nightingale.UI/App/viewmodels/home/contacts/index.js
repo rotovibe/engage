@@ -294,6 +294,26 @@ define(['services/session', 'services/datacontext', 'viewmodels/shell/shell', 'm
 				return canSearch;
 			}).extend({ throttle: 100 });
 		
+			self.selectedContactId = ko.computed( function(){
+				var contact = selectedContact();
+				if( contact ){
+					return contact.id();
+				}
+				else{
+					return '';
+				}
+			}).extend({ throttle: 100 });
+			
+			self.showEditButton = ko.computed(function(){
+				var hasContactSelected = self.selectedContactId();
+				var contact = selectedContact();
+				return( hasContactSelected && contact.isEditable() );				
+			}).extend({throttle: 100});
+			
+			self.showDeleteButton = ko.computed(function(){
+				return self.showEditButton();
+			}).extend({throttle: 100});
+											
 			return true;
 			
 		}	//activate
@@ -336,30 +356,6 @@ define(['services/session', 'services/datacontext', 'viewmodels/shell/shell', 'm
 		function deleteContact(){
 			alert('delete');
 		}
-		
-		var selectedContactId = ko.computed( function(){
-			var contact = selectedContact;
-			if( contact() ){
-				return contact().id();
-			}
-			else{
-				return '';
-			}
-		}).extend({ throttle: 100 });
-		
-		var showEditButton = ko.computed(function(){
-			var hasContactSelected = selectedContactId();
-			if( hasContactSelected && selectedContact().isEditable() ){
-				return true;
-			}
-			else{
-				return false;
-			}
-		}).extend({throttle: 500});
-		
-		var showDeleteButton = ko.computed(function(){
-			return showEditButton();
-		}).extend({throttle: 500});
 		
 		function resetTabs(){
 			ko.utils.arrayForEach(tabs, function(tab){
@@ -563,9 +559,7 @@ define(['services/session', 'services/datacontext', 'viewmodels/shell/shell', 'm
 			setActiveTab: setActiveTab,
 			searchContacts: searchContacts,			
 			selectedContact: selectedContact,
-			selectContact: selectContact,
-			showEditButton: showEditButton,
-			showDeleteButton: showDeleteButton,	
+			selectContact: selectContact,				
 			editContact: editContact,
 			editPatientContact: editPatientContact,
 			deleteContact: deleteContact,
@@ -588,8 +582,6 @@ define(['services/session', 'services/datacontext', 'viewmodels/shell/shell', 'm
 			activeContactStatus: activeContactStatus,
 			contactTypes: contactTypes,
 			contactSubTypes: contactSubTypes,
-			// pcmContactSubType: pcmContactSubType,
-			// pcpContactSubType: pcpContactSubType
 			contactStatuses: contactStatuses,
 			toggleOpenColumn: toggleOpenColumn,
 			fullScreenWidget: fullScreenWidget,
