@@ -15,12 +15,16 @@ define(['viewmodels/patients/team/index'],
 			self.widget = self.settings.widget;
 			self.statusIds = self.widget.statusIds;
 			self.careMembers = self.settings.careMembers;
+			self.sortFunction = self.settings.sortFunction;	
+			//Members in the Active section appear in Core (TRUE first), then Role Ascending order
+			//Members in the Inactive section appear in Updated Date Descending, Role Ascending order
 			self.myCareMembers = ko.computed(function () {
+				//TODO: sort order
 				var members = [];
-				members = ko.utils.arrayFilter(self.careMembers, function (member) {
-					return ( !member.isNew() && self.statusIds.indexOf( member.statusId ) !== -1 );
+				members = ko.utils.arrayFilter(self.careMembers(), function (member) {
+					return ( !member.isNew() && self.statusIds.indexOf( member.statusId() ) !== -1 );
                 });
-				
+				members = members.sort( self.sortFunction );
 				return members;
 			});
 			

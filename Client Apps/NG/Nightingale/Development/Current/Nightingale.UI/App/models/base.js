@@ -506,6 +506,14 @@ define(['services/validatorfactory', 'services/customvalidators', 'services/form
 						entityTypeName: "ContactTypeLookup", isScalar: true,
 						associationName: "ContactTypeLookup_ContactCard", foreignKeyNames: ["roleId"]
 					},
+					createdBy: {
+						entityTypeName: "CareManager", isScalar: true,
+						associationName: "PatientSystem_CreatedBy", foreignKeyNames: ["createdById"]
+					},
+					updatedBy: {
+						entityTypeName: "CareManager", isScalar: true,
+						associationName: "PatientSystem_UpdatedBy", foreignKeyNames: ["updatedById"]
+					}
 				}
 			});
 

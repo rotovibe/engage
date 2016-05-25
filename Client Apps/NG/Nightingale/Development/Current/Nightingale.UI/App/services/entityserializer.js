@@ -731,7 +731,7 @@
 			var results = manager.executeQueryLocally(careTeamQuery);
 			var unwrappedCareTeam = results[0];
 
-			thisCareTeam.Id = unwrappedCareTeam.id < 1 ? null : unwrappedCareTeam.id;
+			thisCareTeam.Id = unwrappedCareTeam.id < 1 ? null : unwrappedCareTeam.id;			
 			thisCareTeam.ContactId = unwrappedCareTeam.contactId;
 			thisCareTeam.members = [];
 			ko.utils.arrayForEach( careTeam.members(), function( member ){
@@ -740,32 +740,32 @@
 			});
 			return thisCareTeam;
 		}
-
-		function serializeCareTeamMember( careMember, manager ){
+		
+		function serializeCareTeamMember( careMember, manager ){				
 				var thisCareMember = {};
 				var careMemberQuery = breeze.EntityQuery
 						.from('fakePath')
 						.where('id', '==', careMember.id())
 						.toType('CareMember')
-						.select('id, contactId, roleId, customRoleName, startDate, endDate, core, notes, frequencyId, distance,'
+						.select('id, contactId, careTeamId, roleId, customRoleName, startDate, endDate, core, notes, frequencyId, distance,'
 								+ 'distanceUnit, externalRecordId, dataSource, statusId, updatedOn, createdOn, updatedById, createdById');
 
 				var results = manager.executeQueryLocally(careMemberQuery);
 				var unwrappedCareMember = results[0];
-
+				
 				thisCareMember.Id 				= unwrappedCareMember.id < 1 ? null : unwrappedCareMember.id;
-				thisCareMember.ContactId		= unwrappedCareMember.contactId;
+				thisCareMember.ContactId		= unwrappedCareMember.contactId;		
 				if( unwrappedCareMember.roleId == -1 ){	//Other Role - customRoleName
-					thisCareMember.RoleId = null;
+					thisCareMember.RoleId = null;					
 					thisCareMember.CustomRoleName   = unwrappedCareMember.customRoleName;
 				}
 				else{
 					thisCareMember.RoleId = unwrappedCareMember.roleId;
 					thisCareMember.CustomRoleName   = null;
-				}
-				thisCareMember.StartDate        = unwrappedCareMember.startDate;
-				thisCareMember.EndDate          = unwrappedCareMember.endDate;
-				thisCareMember.Core             = unwrappedCareMember.core;
+				}				          				
+				thisCareMember.StartDate        = unwrappedCareMember.startDate; 
+				thisCareMember.EndDate          = unwrappedCareMember.endDate;     
+				thisCareMember.Core             = unwrappedCareMember.core;        
 				thisCareMember.Notes            = unwrappedCareMember.notes;
 				thisCareMember.FrequencyId      = unwrappedCareMember.frequencyId;
 				thisCareMember.Distance         = unwrappedCareMember.distance;
@@ -777,10 +777,11 @@
 				thisCareMember.CreatedOn        = unwrappedCareMember.createdOn;
 				thisCareMember.UpdatedById      = unwrappedCareMember.updatedById;
 				thisCareMember.CreatedById      = unwrappedCareMember.createdById;
-
+				thisCareMember.CareTeamId 		= unwrappedCareMember.careTeamId ? unwrappedCareMember.careTeamId : null;
+			
 				return thisCareMember;
 		}
-
+		
 		//this will be deprecated:
 		// Serialize a care member to save it
 		function serializeCareMember(careMember, manager) {
@@ -1053,7 +1054,7 @@
 				serializeObservation: serializeObservation,
 				serializeNote: serializeNote,
 				serializeToDo: serializeToDo,
-				serializeCareMember: serializeCareMember,
+				serializeCareMember: serializeCareMember,	
 				serializeCareTeam: serializeCareTeam,
 				serializeCareTeamMember: serializeCareTeamMember,
 				serializeIndividual: serializeIndividual,

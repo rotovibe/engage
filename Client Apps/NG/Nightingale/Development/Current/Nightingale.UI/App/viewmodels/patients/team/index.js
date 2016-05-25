@@ -3,8 +3,8 @@
 *	@module care team index
 */
 
-define(['services/session', 'services/datacontext', 'viewmodels/patients/index', 'models/base', 'viewmodels/shell/shell'],
-    function (session, datacontext, patientsIndex, modelConfig, shell) {
+define(['services/session', 'services/datacontext', 'viewmodels/patients/index', 'models/base', 'viewmodels/shell/shell', 'viewmodels/home/contacts/index'],
+    function (session, datacontext, patientsIndex, modelConfig, shell, contactsIndex) {
 
         var fullScreenWidget = ko.observable();
         var leftColumnOpen = ko.observable(true);
@@ -48,7 +48,7 @@ define(['services/session', 'services/datacontext', 'viewmodels/patients/index',
 			self.column = column;
 			self.isFullScreen = ko.observable(false);
 			//self.filtersOpen = ko.observable(true);
-			self.activationData = { widget: self, careMembers: careMembers, defaultSort: data.defaultSort };
+			self.activationData = { widget: self, careMembers: careMembers, sortFunction: data.sortFunction };
 			self.allowAdd = data.allowAdd;
 			self.statusIds = data.statusIds;
 		}
@@ -65,10 +65,39 @@ define(['services/session', 'services/datacontext', 'viewmodels/patients/index',
 				self.widgets.push(new widget(item, self))
 			});
 		}
-
+		
+		//Members in the Active section appear in Core (TRUE first), then Role Ascending order
+		var activeMembersSort = function (l, r) { 			
+			if( l.core() && ! r.core() ) return -1;
+			if( !l.core() && r.core() )	return 1;
+			if( l.core() == r.core() ){
+				var leftRole = l.computedRoleName() ? l.computedRoleName().toLowerCase() : '';
+				var rightRole = r.computedRoleName() ? r.computedRoleName().toLowerCase() : '';
+				return leftRole == rightRole ? 0 : (leftRole > rightRole ? 1 : -1);
+			}
+			return 0;
+		};
+		
+		//Members in the Inactive section appear in Updated Date Descending, Role Ascending order
+		var inactiveMembersSort = function (l, r) { 			
+			var leftUpdatedOn = l.updatedOn() ? l.updatedOn() : l.createdOn();
+			leftUpdatedOn = moment( leftUpdatedOn ).format("MM/DD/YYYY"); //date only
+			var rightUpdatedOn = r.updatedOn() ? r.updatedOn() : r.createdOn();
+			rightUpdatedOn = moment( rightUpdatedOn ).format("MM/DD/YYYY"); //date only
+			if( leftUpdatedOn == rightUpdatedOn ){
+				var leftRole = l.computedRoleName() ? l.computedRoleName().toLowerCase() : '';
+				var rightRole = r.computedRoleName() ? r.computedRoleName().toLowerCase() : '';
+				return leftRole == rightRole ? 0 : (leftRole > rightRole ? 1 : -1);
+			}
+			else{
+				return leftUpdatedOn < rightUpdatedOn ? 1 : -1;
+			}
+			return 0;
+		}; 
+		
 		var careTeamColumn = ko.observable(new column('careMembers', false, [
-						{ name: 'Active Team', path: 'viewmodels/patients/widgets/careMembers', open: true, statusIds: [1] , allowAdd: true }, 
-						{ name: 'Team History', path: 'viewmodels/patients/widgets/careMembers', open: false, statusIds: [2,3], allowAdd: false }
+						{ name: 'Active Team', path: 'viewmodels/patients/widgets/careMembers', open: true, statusIds: [1] , allowAdd: true, sortFunction: activeMembersSort }, 
+						{ name: 'Team History', path: 'viewmodels/patients/widgets/careMembers', open: false, statusIds: [2,3], allowAdd: false, sortFunction: inactiveMembersSort }
 					]));
 		
 		function minimizeThisColumn(sender) {
@@ -199,15 +228,37 @@ define(['services/session', 'services/datacontext', 'viewmodels/patients/index',
             modalShowing(true);
 		}
 		
+		function editCareMemberContact(member){
+			if( member.contact() ){
+				contactsIndex.editContact( member.contact() );
+			}
+		}
+		
 		function editCareMember(member){
+			var modalSettings = {
+				title: 'Edit Care Team Member - ' + member.contact().fullName(),
+				entity: modalEntity, 
+				templatePath: 'viewmodels/templates/careMember.edit', 
+				showing: modalShowing, 
+				saveOverride: saveOverride, 
+				cancelOverride: cancelOverride, 
+				deleteOverride: null, 
+				classOverride: 'modal-lg'				
+			};
+			
+			var modal = new modelConfig.modal(modalSettings);
+			
 			modalEntity().careMember( member );
 			//show the screen without search. show the contact. 
             shell.currentModal(modal);
             modalShowing(true);
 		}
 		
-		function deleteCareMember(member){
-			//TODO
+		function deleteCareMember(member){			
+			if( confirm('are you sure you want to delete the care member: ' + member.contact().fullName() + ' (' + member.computedRoleName() + ') ') ){
+				//TODO delete it
+				alert('delete is not available yet (under construction)');
+			}
 		}
 		
 		function activate(){
@@ -251,14 +302,24 @@ define(['services/session', 'services/datacontext', 'viewmodels/patients/index',
 			return showEditButton();
 		});
 		
+		var selectedCareMemberName = ko.computed( function(){
+			var name = '';
+			var member = selectedCareMember();
+			var contact = member? member.contact() : null;
+			if( member && contact ){
+				name = ' - ' + contact.firstName() + ' ' + contact.lastName();
+			}
+			return name;			
+		}); 
+		
 		function detached(){
 			var self = this;
-			//dispose computeds:
-			
+			//dispose computeds:			
 			self.showDeleteButton.dispose();
 			self.showEditButton.dispose();
 			//self.selectedPatient.dispose();
 			self.careMembers.dispose();
+			self.selectedCareMemberName.dispose();
 		}
 		
 		var isComposed = ko.observable(true);
@@ -274,8 +335,10 @@ define(['services/session', 'services/datacontext', 'viewmodels/patients/index',
 			showDeleteButton: showDeleteButton,	
 			editCareMember: editCareMember,
 			deleteCareMember: deleteCareMember,
+			editCareMemberContact: editCareMemberContact,
 			careMembers: careMembers,
 			selectedCareMember: selectedCareMember,
+			selectedCareMemberName: selectedCareMemberName,
 			careMemberRoles: careMemberRoles,
 			pcmContactSubType: pcmContactSubType,
 			pcpContactSubType: pcpContactSubType,

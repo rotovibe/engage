@@ -28,7 +28,7 @@
 									<div class="row" data-bind="visible: careMembers().length === 0">
 										<em class="grey">No care team members</em>
 									</div>
-									<div data-bind="compose: { model: 'viewmodels/templates/careMembers.panel', activationData: { careMembers: careMembers } }">
+									<div data-bind="compose: { model: 'viewmodels/templates/careMembers.panel', activationData: { careMembers: myCareMembers } }">
 									</div>
 								</div>
 							</div>

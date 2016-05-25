@@ -1,30 +1,66 @@
 <div class="panel-wrapper">
-    <div class="row">
-        <div class="header grey" data-bind="visible: (careMembers().length > 0)">
-			<div class="table-cell">
-				<header>
-					<div class="line">
-						<div class="span2">Name</div>
-						<div class="span2">Role</div>
-						<div class="span1">Core</div>
-						<div class="span1">Status</div>
-					</div>
-				</header>
+    <div class="row" data-bind="visible: (careMembers().length > 0)">
+        <div class="grey line" >									
+			<div class="span4 ellipsis">
+				<span>Name</span>
+			</div>
+			<div class="span4 ellipsis">
+				<span>Role</span>
+			</div>
+			<div class="span1 ellipsis">
+				<span>Core</span>
+			</div>
+			<div class="span1 ellipsis">
+				<span>Status</span>
 			</div>
 		</div>
+		<div class="divider"></div>
     </div>
     <div data-bind="foreach: careMembers">
         <div class="line filter-toggle ellipsis" data-bind="click: $parent.selectCareMember, css:{ 'active': $parent.selectedCareMember() === $data }">			
-			<div class="span2 grey">
-				<!-- <span data-bind="text: lastName"></span> -->
+			 
+				<div class="span4 grey ellipsis" data-bind="with: contact">
+					<span data-bind="text: fullName, attr: { 'title': fullName }"></span>
+				</div>
+				<div class="span4 grey ellipsis" >
+					<span data-bind="text: computedRoleName, attr: { 'title': computedRoleName }"></span>
+				</div>
+			 			
+			<div class="span1 grey">
+				<div class="ellipsis">
+					<span class="pull-left filters" data-bind="if: core()">
+						<a href="#" data-bind="click: $parent.clearCore"><i class="icon-checkbox-on blue toggle" title="Clear core"></i></a>
+					</span>
+					<div class="pull-left filters" data-bind="if: !core()">        
+						<a href="#" data-bind="click: $parent.setCore"><i class="icon-checkbox-off blue toggle" title="Set as core member"></i></a>
+					</div>					
+				</div>				
 			</div>
-			<div class="span2 grey">
-				<!-- <span data-bind="text: firstName"></span> -->
+			<div class="span1 grey">
+				<div class="ellipsis">
+					<span class="pull-left filters" data-bind="if: statusId() === 1">
+						<a href="#" data-bind="click: $parent.deactivate"><i class="icon-checkbox-on blue toggle" title="Deactivate"></i></a>
+					</span>
+					<div class="pull-left filters" data-bind="if: statusId() !== 1">        
+						<a href="#" data-bind="click: $parent.activate"><i class="icon-checkbox-off blue toggle" title="Activate"></i></a>
+					</div>					
+				</div>
 			</div>
-			<div class="span8 grey ellipsis">
-				<!-- <span data-bind="text: contactSummary, attr: { title: contactSummary }"></span> -->
+			<div class="span1 grey">
+				<div class="pull-right filters">
+					<a href="#" data-bind="click: $parent.editCareMember"><i class="icon-edit toggle" title="Edit"></i></a>		
+				</div>				
 			</div>
-						
+			<div class="span1 grey">
+				<div class="pull-left filters">
+					<a href="#" data-bind="click: $parent.deleteCareMember"><i class="icon-cancel red toggle" title="Delete"></i></a>		
+				</div>
+			</div>
+			
+			<!-- this column is just for debug: -->		
+			<!-- <div class="span5 grey ellipsis" >
+				<span data-bind="text: moment(updatedOn()? updatedOn() : createdOn()).format('MM/DD/YYYY')"></span>
+			</div> -->
 		</div>
 		<div class="divider" style="margin-top: 0px; padding-top: 0px;"></div>
     </div>

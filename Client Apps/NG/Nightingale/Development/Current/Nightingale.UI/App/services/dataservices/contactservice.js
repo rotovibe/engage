@@ -30,8 +30,6 @@
             // Check if the datacontext is available, if so require it
             checkDataContext();
             
-            
-            
             // If there is a contact card,
             if (serializedContactCard) {
 				// Create an end point to use

@@ -277,17 +277,11 @@ define([ 'services/datacontext', 'services/local.collections', 'viewmodels/home/
 			self.pcpContactSubType = settings.pcpContactSubType;
 			self.addContactReturnedCallback = settings.addContactReturnedCallback;
 			self.editMode = ko.observable(false);
-			if( self.careMember().isNew() ){
-				if( self.careMember().contact() ){				
-					self.selectedContact( self.careMember().contact() );
-					//got back from creating a new contact
-					self.editMode(true);
-				}				
-			}
-			else{
-				//edit
+			if( self.careMember().contact() ){				
+				self.selectedContact( self.careMember().contact() );
+				//edit / add new got back from creating a new contact
 				self.editMode(true);
-			}
+			}				
 			var searchSettings = {
 				selectedContact: self.selectedContact
 			}
@@ -453,7 +447,7 @@ define([ 'services/datacontext', 'services/local.collections', 'viewmodels/home/
 						
 					});
 				}
-				if( defaultRoleId ){
+				if( defaultRoleId && self.careMember().isNew() ){
 					//let the roles dropdown ko - dom content update before setting the default role
 					setTimeout(function () {
 						self.careMember().roleId( defaultRoleId );
@@ -466,7 +460,7 @@ define([ 'services/datacontext', 'services/local.collections', 'viewmodels/home/
 			self.showCustomRole = ko.computed( function(){
 				var roleId = self.careMember().roleId();
 				return roleId == -1;	// - Other - option selected
-			});
+			}).extend({ throttle: 50 });
 			
 			self.existingNotesOpen = ko.observable(false);
 			self.toggleOpen = function () {
@@ -494,6 +488,7 @@ define([ 'services/datacontext', 'services/local.collections', 'viewmodels/home/
 			self.validateCareMember.dispose();
 			self.computedRoles.dispose();
 			self.canAddContact.dispose();
+			self.showCustomRole.dispose();
 			
 			self.contactSearch.canSearchContacts.dispose();
 			self.contactSearch.contactSubTypes.dispose();

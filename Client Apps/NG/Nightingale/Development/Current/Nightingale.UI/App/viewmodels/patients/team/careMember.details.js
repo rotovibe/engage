@@ -6,7 +6,7 @@
 define([], 
 	function(){
 	
-		var activeDetailsTab = ko.observable('Profile');
+		var activeDetailsTab = ko.observable('Relationship');
 		
 		function setActiveDetailsTab( name ){
 			activeDetailsTab(name);	
@@ -14,18 +14,18 @@ define([],
 			
 		function activate( settings ){
 			var self = this;
-			self.contact = settings.member;
-			self.isContactSelected = ko.computed( function(){
-				return (self.contact && self.contact()) ? true : false;
+			self.careMember = settings.member;
+			self.isCareMemberSelected = ko.computed( function(){
+				return (self.careMember && self.careMember()) ? true : false;
 			});
 			return true;
 		}
 		
 		var detailsTabs = ko.observableArray([
-				new Tab('Profile', null, '/NightingaleUI/Content/images/patient_neutral_small.png', 'Phone blue small'),
-				new Tab('Professional', null, '/NightingaleUI/Content/images/settings_blue.png', 'Phone blue small'),
-				new Tab('Comm', 'icon-phone blue', null),
-				new Tab('Relationship', null, '/NightingaleUI/Content/images/nav_population.png', 'Phone blue small')
+				new Tab('Relationship', null, '/NightingaleUI/Content/images/nav_population.png', 'Phone blue small'),
+                new Tab('Profile', null, '/NightingaleUI/Content/images/patient_neutral_small.png', 'Phone blue small'),
+				new Tab('Comm', 'icon-phone blue', null)
+				//new Tab('Professional', null, '/NightingaleUI/Content/images/settings_blue.png', 'Phone blue small')
 		]);
 		
 		function Tab(name, cssClass, imgSource, imgAlt){

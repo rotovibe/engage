@@ -775,7 +775,21 @@ define(['services/session'],
                     var fn = careManager.firstName();
                     var ln = careManager.lastName();
                     return fn + ' ' + ln;
-                })
+                }).extend({ throttle: 100 });
+				
+				careManager.firstLastOrPreferredName = ko.computed( function(){
+					var preferred = careManager.preferredName();
+					var firstName = careManager.firstName();
+					if( !firstName ) {
+						firstName = '';
+					}
+					var lastName = careManager.lastName();
+					if( !lastName ) {
+						lastName = '';
+					}
+					return preferred? preferred : (firstName + ' ' + lastName);
+				}).extend({throttle: 100});
+				
             }
         }
 

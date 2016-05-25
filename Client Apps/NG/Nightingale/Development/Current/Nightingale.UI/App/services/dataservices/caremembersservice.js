@@ -38,36 +38,32 @@
             }
 		}
 		
-		function saveCareTeamMember( manager, serializedCareMember, teamId ){
+		function saveCareTeamMember( manager, serializedCareMember, teamId, patientContactId ){
             if (!manager) { throw new Error("[manager] cannot be a null parameter"); }
             checkDataContext();
-            var endPoint = new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'Contacts/' + serializedCareMember.ContactId + '/CareTeams/' + teamId +  '/CareTeamMembers' , 'CareMember');			
+            var endPoint = new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 
+							'Contacts/' + patientContactId + '/CareTeams/' + teamId +  '/CareTeamMembers' , 'CareMember');			
 			var method = 'PUT';
-			if( serializedCareMember.Id() < 0 ){
-				method = 'POST';
-				if( teamId ){							
-					endPoint = new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 
-							'Contacts/' + serializedCareMember.ContactId + '/CareTeams/' + teamId +  '/CareTeamMembers' , 'CareMember');
-				}
-				else{
-					//adding a member when the team has not been created need to call saveCareTeam
-				}
-				
+			if( !teamId ){
+				throw new Error("saveCareTeamMember must have [teamId]");
+			}
+			if( serializedCareMember.Id < 0 ){
+				method = 'POST';								
 			}
 			else{		
 				//UpdateCareTeamMemberRequest
 				endPoint = new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 
-							'Contacts/' + serializedCareMember.ContactId + '/CareTeams/' + teamId +  '/CareTeamMembers/' + serializedCareMember.Id , 'CareMember');
+							'Contacts/' + patientContactId + '/CareTeams/' + teamId +  '/CareTeamMembers/' + serializedCareMember.Id , 'CareMember');
 			}
 
             if (serializedCareMember) {
                 var payload = {};
-                payload.CareMember = serializedCareMember;
+                payload.CareTeamMember = serializedCareMember;
                 payload = JSON.stringify(payload);
                 var query = breeze.EntityQuery
                     .from(endPoint.ResourcePath)
                     .withParameters({
-                        $method: 'POST',
+                        $method: method,
                         $encoding: 'JSON',
                         $data: payload
                     })
