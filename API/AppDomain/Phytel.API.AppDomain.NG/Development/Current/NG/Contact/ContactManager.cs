@@ -210,8 +210,6 @@ namespace Phytel.API.AppDomain.NG
 
             if(contact == null)
                 throw new ApplicationException(string.Format("Contact with id: {0} does not exist", request.ContactId));
-
-            
             
             
             var cohortRuleCheckData = new CohortRuleCheckData()
@@ -222,8 +220,11 @@ namespace Phytel.API.AppDomain.NG
                 PatientId = contact.PatientId               
             };
 
+            //Get the currentActiveCore TeamMember Id.
             string currentActiveCorePCMId = CohortRules.GetCareTeamActiveCorePCMId(cohortRuleCheckData);
-            if (currentActiveCorePCMId!=null && request.CareTeamMember.Core && currentActiveCorePCMId!=request.Id & request.CareTeamMember.RoleId == Constants.PCMRoleId)
+            
+
+            if (currentActiveCorePCMId!=null && request.CareTeamMember.Core && currentActiveCorePCMId!=request.Id & request.CareTeamMember.RoleId == Constants.PCMRoleId && request.CareTeamMember.StatusId == (int)CareTeamMemberStatus.Active)
                 throw new ArgumentNullException("Care Team already has an Active Core PCM", "request");
 
             ValidateCareTeamMemberFields(request.CareTeamMember);
