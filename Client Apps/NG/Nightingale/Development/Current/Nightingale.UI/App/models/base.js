@@ -471,7 +471,7 @@ define(['services/validatorfactory', 'services/customvalidators', 'services/form
 					notes:  { dataType: "String" },
 					newNotes: { dataType: "String" },
 					frequencyId: { dataType: "String" },
-					distance: { dataType: "Int64" },
+					distance: { dataType: "String" },
 					distanceUnit: {dataType: "String"},
 					externalRecordId: { dataType: "String" },
 					dataSource: { dataType: "String" },

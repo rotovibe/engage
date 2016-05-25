@@ -18,26 +18,31 @@
 	<div class="content" data-bind="with: careMember">
 		<div class="row" data-bind="visible: $parent.activeDetailsTab() === 'Relationship'">
 			<div class="row pad-top">
-				<strong class="span2">Role:</strong>
+				<strong class="pad-right">Role:</strong>
 				<span data-bind="text: computedRoleName"></span>
 			</div>
 			<div class="row pad-top" data-bind="with: status">
-				<strong class="span2">Status:</strong>
+				<strong class="pad-right">Status:</strong>
 				<span data-bind="text: name()"></span>
 			</div>
 			<div class="row pad-top" data-bind="visible: startDate">
-				<strong class="span2">Start Date:</strong>
+				<strong class="pad-right">Start Date:</strong>
 				<span data-bind="DateTime: startDate"></span>
 			</div>
 			<div class="row pad-top" data-bind="visible: endDate">
-				<strong class="span2">End Date:</strong>
+				<strong class="pad-right">End Date:</strong>
 				<span data-bind="DateTime: endDate"></span>
 			</div>			
 			<div data-bind="with: frequency">
 				<div class="row pad-top">
-					<strong class="span2">Frequency:</strong>
+					<strong class="pad-right">Frequency:</strong>
 					<span data-bind="text: name"></span>
 				</div>
+			</div>
+			<div class="row pad-top" data-bind="visible: distance">
+				<strong class="pad-right">Distance:</strong>
+				<span data-bind="text: distance"></span>
+				<span class="pad-left" data-bind="text: distanceUnit"></span>
 			</div>
 			<div data-bind="if: notes">
 				<div class="row pad-top">
@@ -48,32 +53,26 @@
 				</div>					
 			</div>
 			<div class="row pad-top" data-bind="visible: createdOn">
-				<strong class="span2">Created:</strong>
+				<strong class="pad-right">Created:</strong>
 				<span data-bind="DateTime: createdOn"></span> by <span data-bind="text: (createdBy()? createdBy().firstLastOrPreferredName : '')"></span>
 			</div>
 			<div class="row pad-top" data-bind="visible: updatedOn">
-				<strong class="span2">Updated:</strong>
+				<strong class="pad-right">Updated:</strong>
 				<span data-bind="DateTime: updatedOn"></span> by <span data-bind="text: (updatedBy()? updatedBy().firstLastOrPreferredName : '')"></span>
 			</div>
 			<div class="row pad-top" data-bind="visible: dataSource">
-				<strong class="span2">System:</strong>
-				<span class="span9"><span data-bind="text: dataSource"></span>
+				<strong class="pad-right">System:</strong>
+				<span data-bind="text: dataSource"></span>
 			</div>
 		</div>
 		<div class="row" data-bind="visible: $parent.activeDetailsTab() === 'Profile'">
 			<div data-bind="with: contact">
 				<div class="row pad-top" data-bind="visible: fullName">					
 					<span data-bind="text: fullName"></span>
-				</div>
-				<!-- <div data-bind="with: $parent">					
-					<div class="row pad-top">
-						<strong class="span2">Role</strong>
-						<span data-bind="text: computedRoleName"></span>
-					</div>
-				</div> -->
+				</div>				
 				<div data-bind="with: deceased">
 					<div class="row pad-top" data-bind="visible: (name() == 'Yes')">
-						<strong class="span2">Deceased:</strong>
+						<strong class="pad-right">Deceased:</strong>
 						<span>Yes</span>
 					</div>
 				</div>
@@ -85,27 +84,10 @@
 					</ul>				
 				</div>	
 				<div class="row pad-top" data-bind="visible: (gender() && gender() !== 'N')">
-					<strong class="span2">Gender:</strong>
+					<strong class="pad-right">Gender:</strong>
 					<span data-bind="text: gender"></span>
 				</div>
-			</div>
-				
-			<!-- <div class="row pad-top" data-bind="with: status">
-				<strong class="span2">Status:</strong>
-				<span data-bind="text: name()"></span>
-			</div>
-			<div class="row pad-top" data-bind="visible: createdOn">
-				<strong class="span2">Created:</strong>
-				<span data-bind="DateTime: createdOn"></span> by <span data-bind="text: (createdBy()? createdBy().firstLastOrPreferredName : '')"></span>
-			</div>
-			<div class="row pad-top" data-bind="visible: updatedOn">
-				<strong class="span2">Updated:</strong>
-				<span data-bind="DateTime: updatedOn"></span> by <span data-bind="text: (updatedBy()? updatedBy().firstLastOrPreferredName : '')"></span>
-			</div>
-			<div class="row pad-top" data-bind="visible: dataSource">
-				<strong class="span2">System:</strong>
-				<span class="span9"><span data-bind="text: dataSource"></span>
-			</div> -->						
+			</div>								
 		</div>
 
 	</div>
