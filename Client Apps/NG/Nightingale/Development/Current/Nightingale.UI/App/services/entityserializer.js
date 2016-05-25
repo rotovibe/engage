@@ -195,7 +195,7 @@
 						.toType('ContactCard')
 						.select('id, patientId, timeZoneId, isPatient, userId, isUser, firstName, middleName, lastName, preferredName,'
 							+ ' gender, contactTypeId, externalRecordId, dataSource, statusId, deceasedId, prefix, suffix, createdOn, updatedOn,'
-							+ ' createdById, updatedById, externalId');
+							+ ' createdById, updatedById');
 				var results = manager.executeQueryLocally(contactCardQuery);
 				var unwrappedContactCard = results[0];
 
@@ -232,7 +232,6 @@
 				thisContactCard.UpdatedOn        = unwrappedContactCard.updatedOn;
 				thisContactCard.CreatedById      = unwrappedContactCard.createdById;
 				thisContactCard.UpdatedById      = unwrappedContactCard.updatedById;
-				thisContactCard.ExternalId       = unwrappedContactCard.externalId;
 
 				ko.utils.arrayForEach(contactCard.modes.peek(), function (mode) {
 						var newMode = {};

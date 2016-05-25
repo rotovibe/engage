@@ -55,8 +55,7 @@ define(['services/session', 'services/validatorfactory', 'services/customvalidat
 					createdOn: { dataType: "DateTime" },
 					updatedOn: { dataType: "DateTime" },
 					createdById: { dataType: "String" },
-					updatedById: { dataType: "String" },
-					externalId:  { dataType: "String" }
+					updatedById: { dataType: "String" }
 		        },
 		        navigationProperties: {
 		            patient: {
@@ -123,8 +122,7 @@ define(['services/session', 'services/validatorfactory', 'services/customvalidat
 					createdOn: { dataType: "DateTime" },
 					updatedOn: { dataType: "DateTime" },
 					createdById: { dataType: "String" },
-					updatedById: { dataType: "String" },
-					externalId:  { dataType: "String" }
+					updatedById: { dataType: "String" }
 		        },
 		        navigationProperties: {
 		            patient: {
