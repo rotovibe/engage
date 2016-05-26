@@ -3057,7 +3057,7 @@ namespace Phytel.Data.ETL
                         ParameterCollection parms = new ParameterCollection();
 
                         parms.Add(new Parameter("@MongoId", (string.IsNullOrEmpty(a.Id.ToString()) ? string.Empty : a.Id.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                        parms.Add(new Parameter("@Name", (string.IsNullOrEmpty(a.Name) ? string.Empty : a.Name.ToUpper()), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                        parms.Add(new Parameter("@Name", (string.IsNullOrEmpty(a.Name) ? string.Empty : a.Name.ToUpper()), SqlDbType.VarChar, ParameterDirection.Input, 100));
                         parms.Add(new Parameter("@CodingSystem", (string.IsNullOrEmpty(a.CodingSystem.ToString()) ? string.Empty : a.CodingSystem.ToString()), SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
                         parms.Add(new Parameter("@CodingSystemCode", (string.IsNullOrEmpty(a.CodingSystemCode) ? string.Empty : a.CodingSystemCode), SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
                         parms.Add(new Parameter("@Version", a.Version, SqlDbType.Float, ParameterDirection.Input, 32));
