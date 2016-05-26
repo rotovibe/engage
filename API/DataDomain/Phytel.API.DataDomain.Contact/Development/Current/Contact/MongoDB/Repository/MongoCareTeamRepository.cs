@@ -88,11 +88,21 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
                         }
                         else
                         {
+                            var oldMembers = contactCareTeam.MeCareTeamMembers;
                             //Update
                             contactCareTeam.MeCareTeamMembers = BuildMECareTeamMembers(data.CareTeamData.Members, this.UserId);
                             contactCareTeam.UpdatedBy = ObjectId.Parse(this.UserId);
                             contactCareTeam.LastUpdatedOn = DateTime.UtcNow;
 
+                            foreach (var m in oldMembers)
+                            {
+                                var newmember = contactCareTeam.MeCareTeamMembers.FirstOrDefault(c => c.Id == m.Id);
+                                if (newmember != null)
+                                {
+                                    newmember.RecordCreatedBy = m.RecordCreatedBy;
+                                    newmember.RecordCreatedOn = m.RecordCreatedOn;
+                                }
+                            }
                             ctx.CareTeam.Collection.Save(contactCareTeam);
                             //response = contactCareTeam.Id.ToString();
 
