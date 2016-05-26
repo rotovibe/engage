@@ -255,6 +255,7 @@ namespace Phytel.API.AppDomain.NG
                         DeceasedId = request.Patient.DeceasedId,
                         Prefix = request.Patient.Prefix
                     };
+                    CleanPatientNames(data);
                     PutUpdatePatientDataResponse dataDomainResponse =
                         client.Put<PutUpdatePatientDataResponse>(url, new PutUpdatePatientDataRequest
                         {
@@ -308,6 +309,7 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
+       
         public PutPatientFlaggedUpdateResponse PutPatientFlaggedUpdate(PutPatientFlaggedUpdateRequest request)
         {
             try
@@ -1340,6 +1342,7 @@ namespace Phytel.API.AppDomain.NG
         #endregion
 
         #region Contact
+        
         public Contact GetContactByPatientId(GetContactByPatientIdRequest request)
         {
             Contact contact = null;
@@ -1384,6 +1387,7 @@ namespace Phytel.API.AppDomain.NG
                 if (request == null)
                     throw new ArgumentNullException("request");
                 CheckForRequiredFields(request.Contact);
+                CleanContactNames(request.Contact);
                 ContactData cData = Mapper.Map<ContactData>(request.Contact);
                 UpdateContactResponse response = new UpdateContactResponse();
 
@@ -1470,6 +1474,7 @@ namespace Phytel.API.AppDomain.NG
                 if(request == null)
                     throw new ArgumentNullException("request");
                 CheckForRequiredFields(request.Contact);
+                CleanContactNames(request.Contact);
                 var contactData = Mapper.Map<ContactData>(request.Contact);
 
 
@@ -1759,11 +1764,41 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-      
+
 
         #endregion ContactTypeLookUp
 
         #region Private methods
+        private void CleanPatientNames(PatientData p)
+        {
+            if (p != null)
+            {
+                if (!string.IsNullOrEmpty(p.FirstName))
+                    p.FirstName = p.FirstName.Trim();
+                if (!string.IsNullOrEmpty(p.LastName))
+                    p.LastName = p.LastName.Trim();
+                if (!string.IsNullOrEmpty(p.PreferredName))
+                    p.PreferredName = p.PreferredName.Trim();
+                if (!string.IsNullOrEmpty(p.MiddleName))
+                    p.MiddleName = p.MiddleName.Trim();
+            }
+        }
+
+        private void CleanContactNames(Contact c)
+        {
+            if (c != null)
+            {
+                if (!string.IsNullOrEmpty(c.FirstName))
+                    c.FirstName = c.FirstName.Trim();
+                if (!string.IsNullOrEmpty(c.LastName))
+                    c.LastName = c.LastName.Trim();
+                if (!string.IsNullOrEmpty(c.PreferredName))
+                    c.PreferredName = c.PreferredName.Trim();
+                if (!string.IsNullOrEmpty(c.MiddleName))
+                    c.MiddleName = c.MiddleName.Trim();
+            }
+        }
+
         private List<Module> getModuleInfo(DD.GetProgramDetailsSummaryResponse resp, IAppDomainRequest request)
         {
             try
