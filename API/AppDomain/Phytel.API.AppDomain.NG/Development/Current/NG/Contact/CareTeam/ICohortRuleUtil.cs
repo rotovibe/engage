@@ -1,4 +1,5 @@
-﻿using Phytel.API.AppDomain.NG.DTO;
+﻿using System.Collections.Generic;
+using Phytel.API.AppDomain.NG.DTO;
 
 namespace Phytel.API.AppDomain.NG
 {
@@ -9,5 +10,6 @@ namespace Phytel.API.AppDomain.NG
         Member GetCareTeamActiveCorePCM(CareTeam team);
         bool HasMultipleActiveCorePCM(CareTeam careTeam);
         bool HasMultipleActiveCorePCP(CareTeam careTeam);
+        bool ActiveCorePcmIsUser(CareTeam team, List<string> usersContactIds);
     }
 }

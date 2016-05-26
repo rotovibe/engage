@@ -13,6 +13,9 @@ namespace Phytel.API.DataDomain.Patient.DTO
         [ApiMember(Name = "ContactId", Description = "ContactId", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string ContactIdToAdd { get; set; }
 
+        [ApiMember(Name = "ActiveCorePcmIsUser", Description = "ActiveCorePcmIsUser", ParameterType = "property", DataType = "bool", IsRequired = true)]
+        public bool ActiveCorePcmIsUser { get; set; }
+
         [ApiMember(Name = "UserId", Description = "UserId of the logged in user", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string UserId { get; set; }
 

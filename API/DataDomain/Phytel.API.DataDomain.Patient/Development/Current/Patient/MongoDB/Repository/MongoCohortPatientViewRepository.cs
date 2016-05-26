@@ -575,14 +575,23 @@ namespace Phytel.API.DataDomain.Patient
                                 Value = request.ContactIdToAdd,
                                 Active = true
                             };
-
+                            if (!request.ActiveCorePcmIsUser)
+                            {
+                                searchField.Value = string.Empty;
+                                searchField.Active = false;
+                            }
                             fields.Add(searchField);
 
                         }
                         else
-                        {
+                        {                            
                             PcmField.Value = request.ContactIdToAdd;
                             PcmField.Active = true;
+                            if (!request.ActiveCorePcmIsUser)
+                            {
+                                PcmField.Value = string.Empty;
+                                PcmField.Active = false;
+                            }
 
                         }
 

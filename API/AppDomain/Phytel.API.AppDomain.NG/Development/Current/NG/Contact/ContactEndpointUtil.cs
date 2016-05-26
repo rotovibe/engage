@@ -430,7 +430,7 @@ namespace Phytel.API.AppDomain.NG
 
         #region CohortPatientView
 
-        public bool AddPCMToCohortPatientView(string patientId, string contactIdToAdd, double version,string contractNumber, string userId)
+        public bool AddPCMToCohortPatientView(string patientId, string contactIdToAdd, double version,string contractNumber, string userId,bool activeCorePcmIsUser)
         {
             var response = false;
             try
@@ -451,6 +451,7 @@ namespace Phytel.API.AppDomain.NG
                         ContractNumber = contractNumber,
                         Context = "NG",
                         ContactIdToAdd = contactIdToAdd,
+                        ActiveCorePcmIsUser = activeCorePcmIsUser,
                         UserId = userId
                     } as object);
 

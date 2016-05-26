@@ -27,6 +27,24 @@ namespace Phytel.API.AppDomain.NG
 
         }
 
+        public bool ActiveCorePcmIsUser(CareTeam team, List<string> usersContactIds )
+        {
+            bool res = false;
+
+            if (team.Members.IsNullOrEmpty() || usersContactIds==null)
+                return res;
+
+            var activeCorePcm = team.Members.FirstOrDefault(c =>
+                    c.StatusId == (int)CareTeamMemberStatus.Active && c.Core == true &&
+                    c.RoleId == Constants.PCMRoleId);
+
+            if (activeCorePcm==null) return res;
+
+            res = usersContactIds.Contains(activeCorePcm.ContactId);
+            return res;
+
+        }
+
         public  Member GetCareTeamActiveCorePCM(CareTeam team)
         {
             Member res = null;

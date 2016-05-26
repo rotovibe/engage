@@ -43,7 +43,7 @@ namespace Phytel.API.AppDomain.NG.Test.Contact
             Assert.IsNotNull(ruleResponse);
 
             mockCohortRuleUtil.Verify(c => c.GetCareTeamActiveCorePCM(It.IsAny<DTO.CareTeam>()), Times.Once);
-            mockContactDataController.Verify(mcdc => mcdc.AddPCMToCohortPatientView(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<double>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+            mockContactDataController.Verify(mcdc => mcdc.AddPCMToCohortPatientView(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<double>(), It.IsAny<string>(), It.IsAny<string>(),true), Times.Never);
 
 
 
@@ -64,7 +64,7 @@ namespace Phytel.API.AppDomain.NG.Test.Contact
             Assert.IsNotNull(ruleResponse);
 
             mockCohortRuleUtil.Verify(c => c.GetCareTeamActiveCorePCM(It.IsAny<DTO.CareTeam>()), Times.Once);
-            mockContactDataController.Verify(mcdc => mcdc.AddPCMToCohortPatientView(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<double>(), It.IsAny<string>(), It.IsAny<string>()), Times.Once);
+            mockContactDataController.Verify(mcdc => mcdc.AddPCMToCohortPatientView(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<double>(), It.IsAny<string>(), It.IsAny<string>(),true), Times.Once);
             
         }
 
@@ -83,7 +83,7 @@ namespace Phytel.API.AppDomain.NG.Test.Contact
             Assert.IsNotNull(ruleResponse);
 
             mockCohortRuleUtil.Verify(c => c.GetCareTeamActiveCorePCM(It.IsAny<DTO.CareTeam>()), Times.Once);
-            mockContactDataController.Verify(mcdc => mcdc.AddPCMToCohortPatientView(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<double>(), It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+            mockContactDataController.Verify(mcdc => mcdc.AddPCMToCohortPatientView(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<double>(), It.IsAny<string>(), It.IsAny<string>(),true), Times.Never);
 
         }
     }
