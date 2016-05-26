@@ -65,7 +65,27 @@
       });
     }
 
-    var medicationColumn = ko.observable(new column('medications', false, [{ name: 'Allergies', path: 'viewmodels/patients/widgets/allergies', open: false, statusIds: [1] }, { name: 'Active Medications', path: 'viewmodels/patients/widgets/medications', open: true, statusIds: [1], allowAdd: true }, { name: 'Inactive Medications', path: 'viewmodels/patients/widgets/medications', open: false, statusIds: [2], defaultSort: 'endDate desc, name' }]));
+    var medicationColumnWidgets = [
+        {
+            name: 'Allergies',
+            path: 'viewmodels/patients/widgets/allergies',
+            open: false,
+            statusIds: [1,2,3,4,5,6,7]
+        }, {
+            name: 'Active Medications',
+            path: 'viewmodels/patients/widgets/medications',
+            open: true,
+            statusIds: [1],
+            allowAdd: true
+        }, {
+            name: 'Inactive Medications',
+            path: 'viewmodels/patients/widgets/medications',
+            open: false,
+            statusIds: [2,3,4,5,6,7],
+            defaultSort: 'endDate desc, name'
+        }
+    ];
+    var medicationColumn = ko.observable(new column('medications', false, medicationColumnWidgets));
     var detailsColumn = ko.observable(new column('medicationDetails', false, [{ name: 'MedicationDetails', path: 'viewmodels/patients/sections/medication.details', open: true }, { name: 'AllergyDetails', path: 'viewmodels/patients/sections/allergy.details', open: true }]));
 
     var setActiveMedication = function (medication) {

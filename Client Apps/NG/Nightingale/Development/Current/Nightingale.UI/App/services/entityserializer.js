@@ -730,7 +730,7 @@
 			var results = manager.executeQueryLocally(careTeamQuery);
 			var unwrappedCareTeam = results[0];
 
-			thisCareTeam.Id = unwrappedCareTeam.id < 1 ? null : unwrappedCareTeam.id;			
+			thisCareTeam.Id = unwrappedCareTeam.id < 1 ? null : unwrappedCareTeam.id;
 			thisCareTeam.ContactId = unwrappedCareTeam.contactId;
 			thisCareTeam.members = [];
 			ko.utils.arrayForEach( careTeam.members(), function( member ){
@@ -739,8 +739,8 @@
 			});
 			return thisCareTeam;
 		}
-		
-		function serializeCareTeamMember( careMember, manager ){				
+
+		function serializeCareTeamMember( careMember, manager ){
 				var thisCareMember = {};
 				var careMemberQuery = breeze.EntityQuery
 						.from('fakePath')
@@ -751,20 +751,20 @@
 
 				var results = manager.executeQueryLocally(careMemberQuery);
 				var unwrappedCareMember = results[0];
-				
+
 				thisCareMember.Id 				= unwrappedCareMember.id < 1 ? null : unwrappedCareMember.id;
-				thisCareMember.ContactId		= unwrappedCareMember.contactId;		
+				thisCareMember.ContactId		= unwrappedCareMember.contactId;
 				if( unwrappedCareMember.roleId == -1 ){	//Other Role - customRoleName
-					thisCareMember.RoleId = null;					
+					thisCareMember.RoleId = null;
 					thisCareMember.CustomRoleName   = unwrappedCareMember.customRoleName;
 				}
 				else{
 					thisCareMember.RoleId = unwrappedCareMember.roleId;
 					thisCareMember.CustomRoleName   = null;
-				}				          				
-				thisCareMember.StartDate        = unwrappedCareMember.startDate; 
-				thisCareMember.EndDate          = unwrappedCareMember.endDate;     
-				thisCareMember.Core             = unwrappedCareMember.core;        
+				}
+				thisCareMember.StartDate        = unwrappedCareMember.startDate;
+				thisCareMember.EndDate          = unwrappedCareMember.endDate;
+				thisCareMember.Core             = unwrappedCareMember.core;
 				thisCareMember.Notes            = unwrappedCareMember.notes;
 				thisCareMember.FrequencyId      = unwrappedCareMember.frequencyId;
 				thisCareMember.Distance         = unwrappedCareMember.distance;
@@ -777,10 +777,10 @@
 				thisCareMember.UpdatedById      = unwrappedCareMember.updatedById;
 				thisCareMember.CreatedById      = unwrappedCareMember.createdById;
 				thisCareMember.CareTeamId 		= unwrappedCareMember.careTeamId ? unwrappedCareMember.careTeamId : null;
-			
+
 				return thisCareMember;
 		}
-		
+
 		//this will be deprecated:
 		// Serialize a care member to save it
 		function serializeCareMember(careMember, manager) {
@@ -923,10 +923,10 @@
 			// Create a query to
 			// Get the unwrapped values of the properties of the allergy
 			var allergyQuery = breeze.EntityQuery
-					.from('fakePath')
-					.where('id', '==', allergy.id())
-					.toType('PatientAllergy')
-					.select('id, allergyName, startDate, endDate, patientId, statusId, deleteFlag, severityId, allergyId, sourceId, notes, systemName, code, codingSystemId');
+				.from('fakePath')
+				.where('id', '==', allergy.id())
+				.toType('PatientAllergy')
+				.select('id, allergyName, startDate, endDate, patientId, statusId, deleteFlag, severityId, allergyId, sourceId, notes, systemName, code, codingSystemId, dataSource, externalRecordId');
 			var results = manager.executeQueryLocally(allergyQuery);
 			var unwrappedAllergy = results[0];
 
@@ -947,6 +947,8 @@
             thisAllergy.SystemName = unwrappedAllergy.systemName;
             thisAllergy.Code = unwrappedAllergy.code;
             thisAllergy.CodingSystem = unwrappedAllergy.codingSystem;
+            thisAllergy.DataSource = unwrappedAllergy.dataSource;
+            thisAllergy.ExternalRecordId = unwrappedAllergy.externalRecordId;
 
 			// If it is a brand new allergy set an isNewAllergy property
 			if (allergy.isUserCreated()) {
@@ -1053,7 +1055,7 @@
 				serializeObservation: serializeObservation,
 				serializeNote: serializeNote,
 				serializeToDo: serializeToDo,
-				serializeCareMember: serializeCareMember,	
+				serializeCareMember: serializeCareMember,
 				serializeCareTeam: serializeCareTeam,
 				serializeCareTeamMember: serializeCareTeamMember,
 				serializeIndividual: serializeIndividual,
