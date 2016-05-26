@@ -69,7 +69,11 @@
 			<div data-bind="with: contact">
 				<div class="row pad-top" data-bind="visible: fullName">					
 					<span data-bind="text: fullName"></span>
-				</div>				
+				</div>
+				<div class="row pad-top" data-bind="visible: preferredName">					
+					<strong class="pad-right">Preferred Name:</strong>
+					<span data-bind="text: preferredName"></span>
+				</div>
 				<div data-bind="with: deceased">
 					<div class="row pad-top" data-bind="visible: (name() == 'Yes')">
 						<strong class="pad-right">Deceased:</strong>
@@ -87,8 +91,23 @@
 					<strong class="pad-right">Gender:</strong>
 					<span data-bind="text: gender"></span>
 				</div>
+				<div class="row pad-top" data-bind="with: contactStatus">
+					<strong class="pad-right">Status:</strong>
+					<span data-bind="text: name"></span>
+				</div>
+				<div class="row pad-top" data-bind="visible: createdOn">
+					<strong class="pad-right">Created:</strong>
+					<span data-bind="DateTime: createdOn"></span> by <span data-bind="text: (createdBy()? createdBy().firstLastOrPreferredName : '')"></span>
+				</div>
+				<div class="row pad-top" data-bind="visible: updatedOn">
+					<strong class="pad-right">Updated:</strong>
+					<span data-bind="DateTime: updatedOn"></span> by <span data-bind="text: (updatedBy()? updatedBy().firstLastOrPreferredName : '')"></span>
+				</div>
+				<div class="row pad-top" data-bind="visible: dataSource">
+					<strong class="pad-right">System:</strong>
+					<span data-bind="text: dataSource"></span>
+				</div>
 			</div>								
 		</div>
-
 	</div>
 </div>
