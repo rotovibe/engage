@@ -38,6 +38,9 @@ define(['services/session', 'services/datacontext', 'viewmodels/patients/index',
 		});
 		
 		var selectedCareMember = ko.observable();
+		var selectedPatientToken = selectedPatient.subscribe( function( newSelectedPatient ){
+			selectedCareMember(null);
+		});
 		
 		//widgets
 		function widget(data, column) {
