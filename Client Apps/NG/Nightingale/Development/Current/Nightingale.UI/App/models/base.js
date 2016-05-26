@@ -873,6 +873,9 @@ define(['services/validatorfactory', 'services/customvalidators', 'services/form
 					member.roleId(-1);	//Other Role (customRoleName)
 				}
 				
+				member.isEditable = ko.computed( function(){
+					return member.dataSource() == 'Engage';
+				});
 				member.computedRoleName = ko.computed( function(){
 					var name = '';
 					var roleId = member.roleId();

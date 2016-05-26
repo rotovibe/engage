@@ -294,7 +294,7 @@ define(['services/session', 'services/datacontext', 'viewmodels/patients/index',
 
 		var showEditButton = ko.computed(function(){
 			var member = selectedCareMember();			
-			if( member ){//TODO: && member.dataSource() == 'Engage' && member.isEditable() ){
+			if( member && member.isEditable() ){
 				return true;
 			}
 			else{
@@ -316,14 +316,7 @@ define(['services/session', 'services/datacontext', 'viewmodels/patients/index',
 			return name;			
 		}); 
 		
-		function detached(){
-			var self = this;
-			//dispose computeds:			
-			self.showDeleteButton.dispose();
-			self.showEditButton.dispose();
-			//self.selectedPatient.dispose();
-			self.careMembers.dispose();
-			self.selectedCareMemberName.dispose();
+		function detached(){			
 		}
 		
 		var isComposed = ko.observable(true);
