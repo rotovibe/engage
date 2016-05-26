@@ -184,7 +184,12 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
           var thismed = self.newPatientMedication;
           if (thismed() && thismed().status()) {
             var statusName = thismed().status().name();
-            return statusName === 'Refused' || statusName === 'Not Done Medical';
+            var result = (statusName === 'Refused' || statusName === 'Not Done Medical');
+            if (!result) {
+              thismed().otherRefusalReason(null);
+              thismed().refusalReasonId(null);
+            }
+            return result;
           } else {
             return false;
           }

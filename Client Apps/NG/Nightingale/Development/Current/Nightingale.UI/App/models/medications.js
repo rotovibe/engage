@@ -158,14 +158,19 @@ define(['services/session', 'services/dateHelper'],
                 });
                 medication.computedDisplayName = ko.computed(function () {
                     var result = '';
-                    var name = medication.name()
+                    var quantity = medication.freqQuantity();
+                    var name = medication.name();
                     var strength = medication.strength();
                     var route = medication.route();
                     var form = medication.form();
-                    result = result + (name ? name + ' ' : '');
+                    result = result + (quantity ? '(' + quantity + ') ' : '');
+                    result = result + (name ? name + ' - ' : '');
                     result = result + (strength ? strength + ' ' : '');
                     result = result + (route ? route + ' ' : '');
                     result = result + (form ? form + ' ' : '');
+                    if (result.substr(result.length - 3) === ' - ') {
+                        result = result.slice(0, -3);
+                    }
                     return result;
                 });
                 medication.medSortDate = ko.computed(function () {
