@@ -24,7 +24,7 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
       self.delete = function () {
         var result = confirm('You are about to delete a medication.  Press OK to continue, or cancel to return without deleting.');
         if (result === true) {
-          datacontext.deleteAllergy(self.allergy());
+          datacontext.deletePatientAllergy(self.allergy());
           self.settings.activeAllergy(null);
         }
         else {
@@ -33,16 +33,16 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
       };
     };
 
-    function save (medication) {
-      datacontext.saveAllergy(medication);
+    function save (allergy) {
+      datacontext.saveAllergy(allergy);
     }
 
     function cancel(item) {
       item.entityAspect.rejectChanges();
     }
 
-    function getAllergyDetails (medication) {
-      medicationsIndex.getAllergyDetails(medication, true);
+    function getAllergyDetails (allergy) {
+      medicationsIndex.getAllergyDetails(allergy, true);
     };
 
     function editEntity (msg, entity, path, saveoverride, canceloverride) {

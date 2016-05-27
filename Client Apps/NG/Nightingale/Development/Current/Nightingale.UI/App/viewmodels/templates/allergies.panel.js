@@ -70,6 +70,7 @@
             self.selectedSortColumn = data.selectedSortColumn;
             self.toggleSort = data.toggleSort;
             self.canSort = data.canSort ? data.canSort : false;
+            self.activeAllergy = medicationsIndex.activeAllergy;
             self.saveOverride = function () {
                 // Edit Existing Allergy: Save it if its valid. if not - cancel any chages (silently !)
 				if ( self.modalEntity().allergy().isValid() ){

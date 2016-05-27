@@ -32,13 +32,19 @@
                             </div>
                             <div class="span10" data-bind="text: typeString"></div>
                         </div>
+                        <div class="row pad-top" data-bind="if: status">
+                            <div class="span2">
+                                <strong>Status:</strong>
+                            </div>
+                            <div class="span10" data-bind="text: status().name()"></div>
+                        </div>
                         <div class="row pad-top">
                             <div class="span2">
                                 <strong>Reaction:</strong>
                             </div>
                             <div class="span10" data-bind="text: reactionString"></div>
                         </div>
-                        <div class="row pad-top">
+                        <div class="row pad-top" data-bind="if: source">
                             <div class="span2">
                                 <strong>Source:</strong>
                             </div>
