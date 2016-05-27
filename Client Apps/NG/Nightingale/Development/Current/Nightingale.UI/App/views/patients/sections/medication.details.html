@@ -32,50 +32,36 @@
                           <div class="span6" data-bind="text: name">
                           </div>
                         </div>
-                        <div class="row pad-bottom" data-bind="visible: strength">
+                        <div class="row pad-bottom" data-bind="with: refusalReason">
                           <div class="span6 grey">
-                            Strength
+                            Refusal Reason
                           </div>
-                          <div class="span6" data-bind="text: strength">
+                          <div class="span6" data-bind="text: name">
                           </div>
                         </div>
-                        <div class="row pad-bottom" data-bind="visible: sigCode">
+                        <div class="row pad-bottom" data-bind="visible: otherRefusalReason">
+                          <div class="span6 grey">
+                            Refusal Other
+                          </div>
+                          <div class="span6" data-bind="text: otherRefusalReason">
+                          </div>
+                        </div>
+                        <div class="row pad-bottom" data-bind="visible: computedSigCode">
                           <div class="span10" data-bind="text: computedSigCode">
                           </div>
                         </div>
-                        <div class="row pad-bottom" data-bind="visible: computedPrescribedBy">
+                        <div class="row pad-bottom" data-bind="visible: startDate">
                           <div class="span6 grey">
-                            Prescribed by:
+                            Dates
                           </div>
-                          <div class="span6" data-bind="text: computedPrescribedBy">
-                          </div>
-                        </div>
-                        <div class="row pad-bottom" data-bind="visible: reason">
-                          <div class="span6 grey">
-                            Reason
-                          </div>
-                          <div class="span6" data-bind="text: reason">
-                          </div>
-                        </div>
-                        <div class="row pad-bottom rule" data-bind="visible: type">
-                          <div class="span6 grey">
-                            Type
-                          </div>
-                          <div class="span6" data-bind="text: type().name">
-                          </div>
-                        </div>
-                        <div class="row pad-bottom" data-bind="visible: source">
-                          <div class="span6 grey">
-                            Source
-                          </div>
-                          <div class="span6" data-bind="text: source().name">
-                          </div>
-                        </div>
-                        <div class="row pad-bottom" data-bind="visible: dataSource">
-                          <div class="span6 grey">
-                            Data Source
-                          </div>
-                          <div class="span6" data-bind="text: dataSource">
+                          <div class="span6">
+                            <span data-bind="Date: startDate"></span> -
+                            <!-- ko if: endDate -->
+                              <span data-bind="Date: endDate"></span>
+                            <!-- /ko -->
+                            <!-- ko ifnot: endDate -->
+                              current
+                            <!-- /ko -->
                           </div>
                         </div>
                         <div class="row pad-bottom" data-bind="visible: duration">
@@ -102,20 +88,14 @@
                           <div class="span6" data-bind="text: name">
                           </div>
                         </div>
-                        <div class="row pad-bottom" data-bind="with: refusalReason">
+                        <div class="row pad-bottom" data-bind="visible: computedPrescribedBy">
                           <div class="span6 grey">
-                            Refusal Reason
+                            Prescribed by:
                           </div>
-                          <div class="span6" data-bind="text: name">
+                          <div class="span6" data-bind="text: computedPrescribedBy">
                           </div>
                         </div>
-                        <div class="row pad-bottom" data-bind="visible: otherRefusalReason">
-                          <div class="span6 grey">
-                            Refusal Other
-                          </div>
-                          <div class="span6" data-bind="text: otherRefusalReason">
-                          </div>
-                        </div>
+                        <div class="row pad-bottom" data-bind="visible: reason">
                         <div class="row pad-bottom" data-bind="visible: computedOrderedBy">
                           <div class="span6 grey">
                             Ordered By
@@ -137,22 +117,13 @@
                           <div class="span6" data-bind="text: pharmacy">
                           </div>
                         </div>
-                        <div class="row pad-bottom" data-bind="visible: startDate">
                           <div class="span6 grey">
-                            Dates
+                            Reason
                           </div>
-                          <div class="span6">
-                            <span data-bind="Date: startDate"></span> -
-                            <!-- ko if: endDate -->
-                              <span data-bind="Date: endDate"></span>
-                            <!-- /ko -->
-                            <!-- ko ifnot: endDate -->
-                              current
-                            <!-- /ko -->
+                          <div class="span6" data-bind="text: reason">
                           </div>
                         </div>
-
-                        <div class="row pad-bottom">
+                        <div class="row pad-bottom" data-bind="visible: notes">
                           <div class="span6 grey">
                             Notes
                           </div>
@@ -160,6 +131,41 @@
                           </div>
                         </div>
 
+                        <div class="row pad-bottom" data-bind="visible: source">
+                          <div class="span6 grey">
+                            Source
+                          </div>
+                          <div class="span6" data-bind="text: source().name">
+                          </div>
+                        </div>
+                        <div class="row pad-bottom" data-bind="visible: createdOn">
+                          <div class="span6 grey">
+                            Created
+                          </div>
+                          <div class="span6" data-bind="Date: createdOn">
+                          </div>
+                        </div>
+                        <div class="row pad-bottom" data-bind="visible: updatedOn">
+                          <div class="span6 grey">
+                            Updated
+                          </div>
+                          <div class="span6" data-bind="Date: updatedOn">
+                          </div>
+                        </div>
+                        <div class="row pad-bottom" data-bind="visible: dataSource">
+                          <div class="span6 grey">
+                            Data Source
+                          </div>
+                          <div class="span6" data-bind="text: dataSource">
+                          </div>
+                        </div>
+                        <div class="row pad-bottom" data-bind="visible: originalDataSource">
+                          <div class="span6 grey">
+                            Original Data Source
+                          </div>
+                          <div class="span6" data-bind="text: originalDataSource">
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>

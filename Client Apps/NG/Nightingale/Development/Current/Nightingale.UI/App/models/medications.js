@@ -189,7 +189,9 @@ define(['services/session', 'services/dateHelper'],
                     result = prescribedBy ? prescribedBy : '';
                     var prescribedDate = medication.prescribedDate();
                     if (prescribedDate) {
-                        result = result ? (result + ' on ' + prescribedDate) : prescribedDate;
+                        var date = moment(prescribedDate);
+                        var strDate = date.format('MM/DD/YYYY');
+                        result = result ? (result + ' on ' + strDate) : strDate;
                     }
                     return result;
                 });
