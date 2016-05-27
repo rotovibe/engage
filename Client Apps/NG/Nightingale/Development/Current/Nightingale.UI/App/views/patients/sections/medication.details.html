@@ -12,8 +12,8 @@
                   </div>
                 </div>
                 <div class="options">
-                  <a class="edit_medication icon-outset" href="#" data-bind="click: $parent.edit"><i class="icon-edit"></i></a>
-                  <a class="delete_medication" href="#" data-bind="click: $parent.delete"><i class="icon-cancel"></i></a>
+                  <a class="edit_medication icon-outset" href="#" data-bind="click: $parent.edit, css: { 'disabled': dataSource() !== 'Engage' }"><i class="icon-edit"></i></a>
+                  <a class="delete_medication" href="#" data-bind="click: $parent.delete, css: { 'disabled': dataSource() !== 'Engage' }"><i class="icon-cancel"></i></a>
                 </div>
               </header>
             </div>
@@ -71,11 +71,11 @@
                           <div class="span6" data-bind="text: source().name">
                           </div>
                         </div>
-                        <div class="row pad-bottom" data-bind="visible: originalDataSource">
+                        <div class="row pad-bottom" data-bind="visible: dataSource">
                           <div class="span6 grey">
-                            Original Data Source
+                            Data Source
                           </div>
-                          <div class="span6" data-bind="text: originalDataSource">
+                          <div class="span6" data-bind="text: dataSource">
                           </div>
                         </div>
                         <div class="row pad-bottom" data-bind="visible: duration">

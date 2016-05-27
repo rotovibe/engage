@@ -19,16 +19,22 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
         self.isFullScreen(!self.isFullScreen());
       };
       self.edit = function () {
-        medicationsIndex.editMedication(self.medication(), 'Edit Medication');
+        var isEditable = self.medication().dataSource() === 'Engage';
+        if (isEditable) {
+            medicationsIndex.editMedication(self.medication(), 'Edit Medication');
+        }
       }
       self.delete = function () {
-        var result = confirm('You are about to delete a medication.  Press OK to continue, or cancel to return without deleting.');
-        if (result === true) {
-          datacontext.deleteMedication(self.medication());
-          self.settings.activeMedication(null);
-        }
-        else {
-          return false;
+        var isEditable = self.medication().dataSource() === 'Engage';
+        if (isEditable) {
+            var result = confirm('You are about to delete a medication.  Press OK to continue, or cancel to return without deleting.');
+            if (result === true) {
+              datacontext.deleteMedication(self.medication());
+              self.settings.activeMedication(null);
+            }
+            else {
+              return false;
+            }
         }
       };
     };

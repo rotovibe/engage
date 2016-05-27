@@ -946,7 +946,7 @@
             thisAllergy.Notes = unwrappedAllergy.notes;
             thisAllergy.SystemName = unwrappedAllergy.systemName;
             thisAllergy.Code = unwrappedAllergy.code;
-            thisAllergy.CodingSystem = unwrappedAllergy.codingSystem;
+            thisAllergy.CodingSystemId = unwrappedAllergy.codingSystemId;
             thisAllergy.DataSource = unwrappedAllergy.dataSource;
             thisAllergy.ExternalRecordId = unwrappedAllergy.externalRecordId;
 
@@ -984,7 +984,7 @@
 						.from('fakePath')
 						.where('id', '==', medication.id())
 						.toType('PatientMedication')
-						.select('id, name, startDate, endDate, patientId, statusId, deleteFlag, sourceId, notes, systemName, dosage, strength, route, form, freqQuantity, freqHowOftenId, frequencyId, freqWhenId, customFrequency, categoryId, prescribedBy, typeId, sigCode, reason, familyId, isCreateNewMedication, originalDataSource, duration, durationUnitId, otherDuration, reviewId, refusalReasonId, otherRefusalReason, orderedBy, orderedDate, prescribedDate, rxNumber, rxDate, pharmacy, originalDataSource');
+						.select('id, name, startDate, endDate, patientId, statusId, deleteFlag, sourceId, notes, systemName, dosage, strength, route, form, freqQuantity, freqHowOftenId, frequencyId, freqWhenId, customFrequency, categoryId, prescribedBy, typeId, sigCode, reason, familyId, isCreateNewMedication, dataSource, duration, durationUnitId, otherDuration, reviewId, refusalReasonId, otherRefusalReason, orderedBy, orderedDate, prescribedDate, rxNumber, rxDate, pharmacy, originalDataSource');
 				var results = manager.executeQueryLocally(medicationQuery);
 				var unwrappedObservation = results[0];
 

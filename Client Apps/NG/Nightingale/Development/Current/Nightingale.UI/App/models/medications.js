@@ -47,6 +47,7 @@ define(['services/session', 'services/dateHelper'],
                     notes: { dataType: "String" },
                     nDCs: { complexTypeName: "Identifier:#Nightingale", isScalar: false },
                     pharmClasses: { complexTypeName: "Identifier:#Nightingale", isScalar: false },
+                    dataSource: { dataType: "String", defaultValue: "Engage" },
                     originalDataSource: { dataType: "String" },
                     duration: { dataType: "String" },
                     durationUnitId: { dataType: "String" },
@@ -163,8 +164,8 @@ define(['services/session', 'services/dateHelper'],
                     var strength = medication.strength();
                     var route = medication.route();
                     var form = medication.form();
-                    result = result + (quantity ? '(' + quantity + ') ' : '');
                     result = result + (name ? name + ' - ' : '');
+                    result = result + (quantity ? '(' + quantity + ') ' : '');
                     result = result + (strength ? strength + ' ' : '');
                     result = result + (route ? route + ' ' : '');
                     result = result + (form ? form + ' ' : '');
