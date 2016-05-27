@@ -1592,7 +1592,7 @@ namespace Phytel.Data.ETL
                         ParameterCollection parms = new ParameterCollection();
                         parms.Add(new Parameter("@MongoId", (string.IsNullOrEmpty(goal.Id.ToString()) ? string.Empty : goal.Id.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
                         parms.Add(new Parameter("@MongoPatientId", (string.IsNullOrEmpty(goal.PatientId.ToString()) ? string.Empty : goal.PatientId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                        parms.Add(new Parameter("@Name", (string.IsNullOrEmpty(goal.Name) ? string.Empty : goal.Name), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                        parms.Add(new Parameter("@Name", (string.IsNullOrEmpty(goal.Name) ? string.Empty : goal.Name), SqlDbType.VarChar, ParameterDirection.Input, 500));
                         parms.Add(new Parameter("@Description", goal.Description == null ? string.Empty : goal.Description, SqlDbType.VarChar, ParameterDirection.Input, 50));
                         parms.Add(new Parameter("@StartDate", goal.StartDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
                         parms.Add(new Parameter("@EndDate", goal.EndDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
@@ -3057,7 +3057,7 @@ namespace Phytel.Data.ETL
                         ParameterCollection parms = new ParameterCollection();
 
                         parms.Add(new Parameter("@MongoId", (string.IsNullOrEmpty(a.Id.ToString()) ? string.Empty : a.Id.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                        parms.Add(new Parameter("@Name", (string.IsNullOrEmpty(a.Name) ? string.Empty : a.Name.ToUpper()), SqlDbType.VarChar, ParameterDirection.Input, 50));
+                        parms.Add(new Parameter("@Name", (string.IsNullOrEmpty(a.Name) ? string.Empty : a.Name.ToUpper()), SqlDbType.VarChar, ParameterDirection.Input, 100));
                         parms.Add(new Parameter("@CodingSystem", (string.IsNullOrEmpty(a.CodingSystem.ToString()) ? string.Empty : a.CodingSystem.ToString()), SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
                         parms.Add(new Parameter("@CodingSystemCode", (string.IsNullOrEmpty(a.CodingSystemCode) ? string.Empty : a.CodingSystemCode), SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
                         parms.Add(new Parameter("@Version", a.Version, SqlDbType.Float, ParameterDirection.Input, 32));
