@@ -604,6 +604,8 @@ define(['services/validatorfactory', 'services/customvalidators', 'services/form
 			metadataStore.registerEntityTypeCtor(
 				'CareMember', null, careMemberInitializer);
 			metadataStore.registerEntityTypeCtor(
+				'CareTeam', null, careTeamInitializer);	
+			metadataStore.registerEntityTypeCtor(
 				'PatientSystem', null, patientSystemInitializer);
 
 			function patientInitializer(patient) {
@@ -937,6 +939,33 @@ define(['services/validatorfactory', 'services/customvalidators', 'services/form
 				});								
 			}
 
+			function careTeamInitializer(careTeam){
+				var primaryCareManagerRoleName = 'Primary Care Manager';
+				var primaryCarePhysicianRoleName = 'Primary Care Physician';
+				
+				careTeam.primaryCarePhysicians = ko.computed( function(){
+					var teamMembers = careTeam.members()? careTeam.members() : [];
+					var activeStatusId = 1;
+					var pcp = ko.utils.arrayFilter( teamMembers, function(m){
+						if( m.statusId() == activeStatusId && m.roleId() && m.roleType() && m.core() ){
+							return !m.customRoleName() && ( m.roleType().role() == primaryCarePhysicianRoleName ); //if true - this is a core active pcp that is already assigned.
+						}
+					});
+					return pcp;
+				}).extend({throttle: 50});
+				
+				careTeam.primaryCareManagers = ko.computed( function(){
+					var teamMembers = careTeam.members()? careTeam.members() : [];
+					var activeStatusId = 1;
+					var pcm = ko.utils.arrayFilter( teamMembers, function(m){
+						if( m.statusId() == activeStatusId && m.roleId() && m.roleType() && m.core() ){
+							return !m.customRoleName() && ( m.roleType().role() == primaryCareManagerRoleName );
+						}						
+					});
+					return pcm;
+				}).extend({throttle: 50});
+			}
+			
 			function patientProblemInitializer(problem) {
 				if (!problem.level || !problem.level()) {
 					problem.level('1');

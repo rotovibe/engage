@@ -357,24 +357,21 @@ define([ 'services/datacontext', 'services/local.collections', 'viewmodels/home/
 					
 					//check if core pcp/pcm has already assigned and active:
 					if( roleId && roleId != -1 && core && statusId == activeStatusId ){
-						dup = ko.utils.arrayFirst( teamMembers, function(member){
-							if( member.id() != self.careMember().id() &&
-								member.statusId() == activeStatusId && 																	
-								member.roleId() && roleId && 
-								member.roleId() == roleId ){
-									if (!member.customRoleName() && !customRoleName &&
-										( 
-											( self.pcmContactSubType() && member.roleId() == self.pcmContactSubType().id() ) || 
-											( self.pcpContactSubType() && member.roleId() == self.pcpContactSubType().id() ) 
-										)
-									){
-										return true; //this is a core active pcp / pcm that is already assigned.
-									}
-								}
-							else{
-								return false;
-							}
+						var pcPhysicians = self.careMember().careTeam().primaryCarePhysicians();
+						var pcp = ko.utils.arrayFirst( pcPhysicians, function(p){
+							return p.id() != self.careMember().id();
 						});
+						var pcManagers = self.careMember().careTeam().primaryCareManagers();
+						var pcm = ko.utils.arrayFirst( pcManagers, function(p){
+							return p.id() != self.careMember().id();
+						});
+						dup = null;
+						if( pcp && pcp.roleId() == roleId ){
+							dup = pcp;
+						}
+						else if( pcm && pcm.roleId() == roleId ){
+							dup = pcm;
+						}	
 						if( dup ){
 							var duplicateRoleName = 'this role';
 							var toDupName = '';
