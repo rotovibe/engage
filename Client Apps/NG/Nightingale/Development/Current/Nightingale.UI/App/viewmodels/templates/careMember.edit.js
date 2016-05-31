@@ -10,7 +10,7 @@ define([ 'services/datacontext', 'services/local.collections', 'viewmodels/home/
 		var frequencies = datacontext.enums.careMemberFrequency;
 		var careMemberStatuses = datacontext.enums.careMemberStatuses;
 				
-		function contactSearch( settings ){
+		function search( settings ){
 			var self = this;
 			self.criteriaFirstName = ko.observable();
 			self.criteriaLastName = ko.observable();			
@@ -265,35 +265,45 @@ define([ 'services/datacontext', 'services/local.collections', 'viewmodels/home/
 			}
 		}	//contactSearch
 		
+		var selectedContact = ko.observable();
+		var contactSearch = new search( {selectedContact: selectedContact} );
+		contactSearch.init();
+			
 		function activate( settings ){
 			var self = this;
 			self.showing = settings.showing;
 			self.careMember = settings.careMember;
 			self.careTeamMembers = settings.careTeamMembers;
 			self.selectedPatient = settings.selectedPatient;
-			self.selectedContact = ko.observable();
+			//self.selectedContact = ko.observable();
 			self.careMemberRoles = settings.careMemberRoles;
 			self.pcmContactSubType = settings.pcmContactSubType;
 			self.pcpContactSubType = settings.pcpContactSubType;
 			self.addContactReturnedCallback = settings.addContactReturnedCallback;
 			self.editMode = ko.observable(false);
+			if( !self.careMember().isNew() ){
+				self.careMember().entityAspect.rejectChanges();
+			}
+			else{
+				self.selectedContact(null);
+			}
 			if( self.careMember().contact() ){				
 				self.selectedContact( self.careMember().contact() );
 				//edit / add new got back from creating a new contact
 				self.editMode(true);
 			}				
-			var searchSettings = {
-				selectedContact: self.selectedContact
-			}
+			// var searchSettings = {
+				// selectedContact: self.selectedContact
+			// }
 			
-			self.contactSearch = new contactSearch( searchSettings );
-			self.contactSearch.init();			
-			self.contactSubTypes = self.contactSearch.contactSubTypes;
+			//self.contactSearch = new contactSearch( searchSettings );
+			//self.contactSearch.init();
+			self.contactSubTypes = contactSearch.contactSubTypes;
 			
 			self.canAddContact = ko.computed( function(){				
-				var showResults = self.contactSearch? self.contactSearch.showResultsHeader() : false;
+				var showResults = contactSearch? contactSearch.showResultsHeader() : false;
 				var editMode = self.editMode();
-				var noResultsFound = self.contactSearch.noResultsFound();
+				var noResultsFound = contactSearch.noResultsFound();
 				return ( showResults && !editMode ) || noResultsFound;				
 			}).extend({throttle: 100});
 			
@@ -356,7 +366,7 @@ define([ 'services/datacontext', 'services/local.collections', 'viewmodels/home/
 					}
 					
 					//check if core pcp/pcm has already assigned and active:
-					if( roleId && roleId != -1 && core && statusId == activeStatusId ){
+					if( roleId && roleId != -1 && core && statusId == activeStatusId && self.careMember().careTeam() ){
 						var pcPhysicians = self.careMember().careTeam().primaryCarePhysicians();
 						var pcp = ko.utils.arrayFirst( pcPhysicians, function(p){
 							return p.id() != self.careMember().id();
@@ -391,7 +401,7 @@ define([ 'services/datacontext', 'services/local.collections', 'viewmodels/home/
 				}
 				self.careMember().careTeamValidationErrors( errors );
 				return false;
-			}).extend({ throttle: 50 });
+			}).extend({ throttle: 250 });
 						
 			self.computedRoles = ko.computed( function(){
 				var roles = [];
@@ -419,7 +429,6 @@ define([ 'services/datacontext', 'services/local.collections', 'viewmodels/home/
 									if( !defaultRoleId ){
 										defaultRoleId = sub.id();
 									}
-									
 								}
 							});							
 						}
@@ -452,12 +461,12 @@ define([ 'services/datacontext', 'services/local.collections', 'viewmodels/home/
 				}
 				roles.push({name: '- Other -', role: '- Other -', id: -1});
 				return roles;
-			}).extend({ throttle: 50 });
+			}).extend({ throttle: 250 });
 			
 			self.showCustomRole = ko.computed( function(){
 				var roleId = self.careMember().roleId();
 				return roleId == -1;	// - Other - option selected
-			}).extend({ throttle: 50 });
+			}).extend({ throttle: 250 });
 			
 			self.existingNotesOpen = ko.observable(false);
 			self.toggleOpen = function () {
@@ -466,11 +475,11 @@ define([ 'services/datacontext', 'services/local.collections', 'viewmodels/home/
 						
 			self.createNewContact = function(){				
 				//go to add contact dialog, save and come back with a contact.
-				var firstName = self.contactSearch.criteriaFirstName();
+				var firstName = contactSearch.criteriaFirstName();
 				if( firstName && firstName.trim() ){
 					firstName = firstName.trim();
 				}
-				var lastName = self.contactSearch.criteriaLastName();
+				var lastName = contactSearch.criteriaLastName();
 				if( lastName && lastName.trim() ) {
 					lastName = lastName.trim();
 				}
@@ -485,14 +494,8 @@ define([ 'services/datacontext', 'services/local.collections', 'viewmodels/home/
 			self.validateCareMember.dispose();
 			self.computedRoles.dispose();
 			self.canAddContact.dispose();
-			self.showCustomRole.dispose();
-			
-			self.contactSearch.canSearchContacts.dispose();
-			self.contactSearch.contactSubTypes.dispose();
-			self.contactSearch.showResetFilters.dispose();
-			self.contactSearch.contactsShowingText.dispose();
-			self.contactSearch.showResultsHeader.dispose();			
-			
+			self.showCustomRole.dispose();			
+			contactSearch.resetFilters();			
 			ko.utils.arrayForEach(subscriptionTokens, function (token) {
                 token.dispose();
             });
@@ -502,7 +505,10 @@ define([ 'services/datacontext', 'services/local.collections', 'viewmodels/home/
 			activate: activate,
 			detached: detached,
 			frequencies: frequencies,
-			careMemberStatuses: careMemberStatuses
+			careMemberStatuses: careMemberStatuses,
+			
+			selectedContact: selectedContact,
+			contactSearch: contactSearch
 		}
 		return vm;		
 	}

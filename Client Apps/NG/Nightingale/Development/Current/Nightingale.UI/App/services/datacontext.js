@@ -1137,8 +1137,13 @@
 			//}, 50);
 		}
 
-		function getLocalContacts( contactEntity ){
-			return contactService.getLocalContacts( manager, contactEntity );
+		function getLocalContactById( contactEntity, id ){
+			var param = new modelConfig.Parameter('id', id, '==');
+			return getLocalContacts( contactEntity, param );
+		}
+		
+		function getLocalContacts( contactEntity, params ){
+			return contactService.getLocalContacts( manager, contactEntity, params );
 		}
 
 		function getContacts( observable, params, observableTotalCount, entityName ){
@@ -1464,6 +1469,15 @@
 					careMember.id(data.Id);
 					careMember.createdOn( new Date() );
 					careMember.createdById( session.currentUser().userId() );
+					//the care member contact is a 'ContactSearch' entity. we need to make sure it exists in 'ContactCard' entity cache:
+					var contact = getLocalContactById( careMember.contactId(), 'ContactCard' );
+					if( !contact ){
+						//copy that entity to ContactCard cache so it wont get deleted (by the search clearing its cache)
+						createEntity('ContactCard', careMember.contact() );
+						
+					}
+					
+					var contacts = datacontext.getLocalContacts('ContactSearch');
 				}
 				else{
 					careMember.updatedOn( new Date() );

@@ -432,7 +432,7 @@ define(['services/session', 'services/datacontext', 'viewmodels/shell/shell', 'm
 			
 			searching(true);
 			noResultsFound(false);			
-			var contacts = datacontext.getLocalContacts();			
+			var contacts = datacontext.getLocalContacts('ContactSearch');
 			myContactSearchResults([]);
 			totalCount(0);
 			contactsSkip(0);
@@ -486,7 +486,7 @@ define(['services/session', 'services/datacontext', 'viewmodels/shell/shell', 'm
 				}
 			});
 			contactsReturned([]);
-			return datacontext.getContacts( contactsReturned, params, totalCount, 'ContactCard' ).then( getContactsReturned );
+			return datacontext.getContacts( contactsReturned, params, totalCount, 'ContactSearch' ).then( getContactsReturned );
 		}
 		
 		function loadMoreContacts(){

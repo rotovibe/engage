@@ -88,7 +88,7 @@
 			}
         }
 
-		function getLocalContacts( manager, contactEntity ){
+		function getLocalContacts( manager, contactEntity, params ){
 			// Make sure the datacontext has been loaded
             checkDataContext();
             // If there is no manager, we can't query using breeze
@@ -101,6 +101,25 @@
             var query = breeze.EntityQuery.from(contactEntity)
                 .toType(contactEntity);
 
+			if( params ){	
+				// Create a predicate array
+				var preds = [];
+
+				// For each of the params,
+				ko.utils.arrayForEach(params, function (param) {
+					// Create a predicate
+					var thispred = breeze.Predicate.create(param.Property, param.Operator, param.Value);
+					// Add the predicate to the array of predicates
+					preds.push(thispred);
+				});
+
+				// If there are predicates in the array,
+				if (preds) {
+					// Create a list of them
+					var pred = breeze.Predicate.and(preds);
+					query = query.where(pred);
+				}
+			}			
             return manager.executeQueryLocally(query);
 		}
 		
@@ -123,12 +142,12 @@
 		        Skip: params.skip
 		    };
 
-		    endPoint = new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'SearchContacts', 'ContactCard');
-		    payload = JSON.stringify(payload);
-
 		    if (!entityName) {
 		        entityName = 'ContactCard';
 		    }
+
+		    endPoint = new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'SearchContacts', entityName);
+		    payload = JSON.stringify(payload);
 
 		    // Query to post the results
 		    var query = breeze.EntityQuery

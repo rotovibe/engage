@@ -90,6 +90,73 @@ define(['services/session', 'services/validatorfactory', 'services/customvalidat
 		    });
 
 			metadataStore.addEntityType({
+		        shortName: "ContactSearch",
+		        namespace: "Nightingale",
+		        dataProperties: {
+		            id: { dataType: "String", isPartOfKey: true },
+		            patientId: { dataType: "String" },
+					isPatient: { dataType: "Boolean" },
+					userId:  { dataType: "String" },
+					isUser: { dataType: "Boolean" },
+					firstName: { dataType: "String" },
+					middleName: { dataType: "String" },
+					lastName: { dataType: "String" },
+					preferredName: { dataType: "String" },
+					gender: { dataType: "String", defaultValue: 'N' },
+		            timeZoneId: { dataType: "String" },
+		            preferredTimesOfDayIds: { complexTypeName: "Identifier:#Nightingale", isScalar: false },
+		            preferredDaysOfWeekIds: { complexTypeName: "Identifier:#Nightingale", isScalar: false },
+		            languages: { complexTypeName: "ContactLanguage:#Nightingale", isScalar: false },
+		            modes: { complexTypeName: "ContactMode:#Nightingale", isScalar: false },
+		            emails: { complexTypeName: "Email:#Nightingale", isScalar: false },
+		            phones: { complexTypeName: "Phone:#Nightingale", isScalar: false },
+		            addresses: { complexTypeName: "Address:#Nightingale", isScalar: false },
+					contactTypeId:  { dataType: "String" },
+					contactSubTypes: { complexTypeName: "ContactSubType:#Nightingale", isScalar: false },
+					externalRecordId: { dataType: "String" },
+					dataSource:  { dataType: "String", defaultValue: 'Engage' },
+					statusId: { dataType: "Int64", defaultValue: 1 },
+					deceasedId: { dataType: "Int64", defaultValue: 2 },
+					prefix: { dataType: "String" },
+					suffix: { dataType: "String" },
+					createdOn: { dataType: "DateTime" },
+					updatedOn: { dataType: "DateTime" },
+					createdById: { dataType: "String" },
+					updatedById: { dataType: "String" }
+		        },
+		        navigationProperties: {
+		            patient: {
+		                entityTypeName: "Patient", isScalar: true,
+		                associationName: "Patient_ContactCard", foreignKeyNames: ["patientId"]
+		            },
+		            timeZone: {
+		                entityTypeName: "TimeZone", isScalar: true,
+		                associationName: "TimeZone_ContactCards", foreignKeyNames: ["timeZoneId"]
+		            },					
+					contactType: {
+						entityTypeName: "ContactTypeLookup", isScalar: true,
+						associationName: "ContactTypeLookup_ContactCard", foreignKeyNames: ["contactTypeId"]
+					},
+					contactStatus: {
+						entityTypeName: "ContactStatus", isScalar: true,
+						associationName: "Contact_ContactStatus", foreignKeyNames: ["statusId"]
+					},
+					deceased: {
+						entityTypeName: "Deceased", isScalar: true,
+						associationName: "Contact_Deceased", foreignKeyNames: ["deceasedId"]
+					},
+					createdBy: {
+						entityTypeName: "CareManager", isScalar: true,
+						associationName: "ContactCard_CreatedBy", foreignKeyNames: ["createdById"]
+					},
+					updatedBy: {
+						entityTypeName: "CareManager", isScalar: true,
+						associationName: "ContactCard_UpdatedBy", foreignKeyNames: ["updatedById"]
+					},
+		        }
+		    });
+
+			metadataStore.addEntityType({
 		        shortName: "ContactCarememberSearch",
 		        namespace: "Nightingale",
 		        dataProperties: {
@@ -254,7 +321,9 @@ define(['services/session', 'services/validatorfactory', 'services/customvalidat
 		    });
 
 		    metadataStore.registerEntityTypeCtor(
-				'ContactCard', null, contactCardInitializer);				
+				'ContactCard', null, contactCardInitializer);
+			metadataStore.registerEntityTypeCtor(
+				'ContactSearch', null, contactCardInitializer);					
 			metadataStore.registerEntityTypeCtor(
 				'ContactCarememberSearch', null, contactCardInitializer);
 		    metadataStore.registerEntityTypeCtor(

@@ -35,7 +35,7 @@ define(['services/session', 'services/datacontext', 'viewmodels/patients/index',
                 members = selectedPatient().careTeam().members();
             }
 			return members;
-		});
+		}).extend({ throttle: 50 });
 		
 		var selectedCareMember = ko.observable();
 		var selectedPatientToken = selectedPatient.subscribe( function( newSelectedPatient ){
@@ -257,12 +257,16 @@ define(['services/session', 'services/datacontext', 'viewmodels/patients/index',
             modalShowing(true);
 		}
 		
-		function deleteCareMember(member){			
+		function deleteCareMember(member){
 			if( confirm('are you sure you want to delete the care member: ' + member.contact().fullName() + ' (' + member.computedRoleName() + ') ') ){
 				if( member.contactId() && member.careTeamId() ){
-					datacontext.deleteCareTeamMember( member );
+					datacontext.deleteCareTeamMember( member ).then( deleteCompleted );
 				}
 			}
+		}
+		
+		function deleteCompleted(){
+			//selectedCareMember(null);
 		}
 		
 		function activate(){
@@ -300,11 +304,11 @@ define(['services/session', 'services/datacontext', 'viewmodels/patients/index',
 			else{
 				return false;
 			}
-		});
+		}).extend({ throttle: 100 });
 					
 		var showDeleteButton = ko.computed(function(){
 			return showEditButton();
-		});
+		}).extend({ throttle: 100 });
 		
 		var selectedCareMemberName = ko.computed( function(){
 			var name = '';
@@ -314,7 +318,7 @@ define(['services/session', 'services/datacontext', 'viewmodels/patients/index',
 				name = ' - ' + contact.firstName() + ' ' + contact.lastName();
 			}
 			return name;			
-		}); 
+		}).extend({ throttle: 100 }); 
 		
 		function detached(){			
 		}
