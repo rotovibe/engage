@@ -24,6 +24,7 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
             medicationsIndex.editMedication(self.medication(), 'Edit Medication');
         }
       }
+      self.isNotesExpanded = ko.observable(false);
       self.delete = function () {
         var isEditable = self.medication().dataSource() === 'Engage';
         if (isEditable) {
@@ -37,6 +38,30 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
             }
         }
       };
+      self.createdString = ko.computed(function () {
+        var result = '';
+        var medication = self.medication();
+        if (!medication) {
+            return '';
+        }
+        // var createdBy = medication.createdBy();
+        var createdOn = medication.createdOn();
+        // result += createdBy ? createdBy : '';
+        result += createdOn ? createdOn + ' on ' : '';
+        return result;
+      });
+      self.updatedString = ko.computed(function () {
+        var result = '';
+        if (!medication) {
+            return '';
+        }
+        var medication = self.medication();
+        // var updatedBy = medication.updatedBy();
+        var updatedOn = medication.updatedOn();
+        // result += updatedBy ? updatedBy : '';
+        result += updatedOn ? updatedOn + ' on ' : '';
+        return result;
+      });
     };
 
     function save (medication) {

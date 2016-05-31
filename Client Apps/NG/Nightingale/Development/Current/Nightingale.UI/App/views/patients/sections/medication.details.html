@@ -64,14 +64,11 @@
                             <!-- /ko -->
                           </div>
                         </div>
-                        <div class="row pad-bottom" data-bind="visible: duration">
+                        <div class="row pad-bottom" data-bind="visible: computedDuration">
                           <div class="span6 grey">
                             Duration
                           </div>
-                          <div class="span3" data-bind="text: duration">
-                          </div>
-                          <div class="span3" data-bind="with: durationUnit">
-                            <span data-bind="text: name()"></span>
+                          <div class="span3" data-bind="text: computedDuration">
                           </div>
                         </div>
                         <div class="row pad-bottom" data-bind="visible: otherDuration">
@@ -95,7 +92,6 @@
                           <div class="span6" data-bind="text: computedPrescribedBy">
                           </div>
                         </div>
-                        <div class="row pad-bottom" data-bind="visible: reason">
                         <div class="row pad-bottom" data-bind="visible: computedOrderedBy">
                           <div class="span6 grey">
                             Ordered By
@@ -117,6 +113,7 @@
                           <div class="span6" data-bind="text: pharmacy">
                           </div>
                         </div>
+                        <div class="row pad-bottom" data-bind="visible: reason">
                           <div class="span6 grey">
                             Reason
                           </div>
@@ -127,10 +124,17 @@
                           <div class="span6 grey">
                             Notes
                           </div>
-                          <textarea class="span12 display-only no-scroll muted" style="height: 6.5em;" rows="5" data-bind="text: notes, attr:{ 'title': notes }, visible: notes" readonly="readonly"></textarea>
+                            <!-- ko ifnot: $parent.isNotesExpanded -->
+                                <div class="span12" data-bind="visible: notes">
+                                    <textarea data-bind="text: notes, attr: { 'title': notes }" readonly="readonly" class="display-only no-scroll" rows="5"></textarea>
+                                    <a class="grey" data-bind="clickToggle: $parent.isNotesExpanded" href="#">...</a>
+                                </div>
+                                <!-- /ko -->
+                                <!-- ko if: $parent.isNotesExpanded -->
+                                <textarea data-bind="text: notes, autoHeight: notes, attr: { 'title': notes }" readonly="readonly" class="display-only span12" ></textarea>
+                            <!-- /ko -->
                           </div>
                         </div>
-
                         <div class="row pad-bottom" data-bind="visible: source">
                           <div class="span6 grey">
                             Source
