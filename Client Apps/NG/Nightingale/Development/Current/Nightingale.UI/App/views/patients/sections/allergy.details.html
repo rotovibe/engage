@@ -22,57 +22,94 @@
             <div class="table-cell">
               <div class="body">
                 <div class="content">
-
                   <div class="accordion open">
                     <div class="span12 details">
                       <div class="status">
-                        <div class="row pad-top">
-                            <div class="span2">
-                                <strong>Type:</strong>
-                            </div>
-                            <div class="span10" data-bind="text: typeString"></div>
+
+                        <div class="row pad-bottom">
+                          <div class="span6 grey">
+                            Type
+                          </div>
+                          <div class="span6" data-bind="text: typeString">
+                          </div>
                         </div>
-                        <div class="row pad-top" data-bind="if: status">
-                            <div class="span2">
-                                <strong>Status:</strong>
-                            </div>
-                            <div class="span10" data-bind="text: status().name()"></div>
+                        <div class="row pad-bottom" data-bind="if: status">
+                          <div class="span6 grey">
+                            Status
+                          </div>
+                          <div class="span6" data-bind="text: status().name">
+                          </div>
                         </div>
-                        <div class="row pad-top">
-                            <div class="span2">
-                                <strong>Reaction:</strong>
-                            </div>
-                            <div class="span10" data-bind="text: reactionString"></div>
+                        <div class="row pad-bottom" data-bind="visible: reactionString() !== '-'">
+                          <div class="span6 grey">
+                            Reaction
+                          </div>
+                          <div class="span6" data-bind="text: reactionString">
+                          </div>
                         </div>
-                        <div class="row pad-top" data-bind="if: source">
-                            <div class="span2">
-                                <strong>Source:</strong>
-                            </div>
-                            <div class="span10" data-bind="text: source().name()"></div>
+                        <div class="row pad-bottom" data-bind="if: severity">
+                          <div class="span6 grey">
+                            Severity
+                          </div>
+                          <div class="span6" data-bind="text: severity().name">
+                          </div>
                         </div>
-                        <div class="row pad-top">
-                            <div class="span2">
-                                <strong>Start Date:</strong>
-                            </div>
-                            <div class="span3" data-bind="DateOrDash: startDate"></div>
-                            <div class="span2">
-                                <strong>End Date:</strong>
-                            </div>
-                            <div class="span3" data-bind="DateOrDash: endDate"></div>
+                        <div class="row pad-bottom" data-bind="if: source">
+                          <div class="span6 grey">
+                            Source
+                          </div>
+                          <div class="span6" data-bind="text: source().name">
+                          </div>
                         </div>
-                        <div class="row pad-top">
-                            <div class="span2">
-                                <strong>Notes</strong>
-                            </div>
-                            <div class="span10">
-                                <textarea disabled="disabled" data-bind="value: notes"></textarea>
-                            </div>
+                        <div class="row pad-bottom" data-bind="visible: startDate">
+                          <div class="span6 grey">
+                            Start Date
+                          </div>
+                          <div class="span6" data-bind="DateOrDash: startDate">
+                          </div>
                         </div>
-                        <div class="row pad-top">
-                            <div class="span2">
-                                <strong>System:</strong>
-                            </div>
-                            <div class="span10" data-bind="text: systemName"></div>
+                        <div class="row pad-bottom" data-bind="visible: endDate">
+                          <div class="span6 grey">
+                            End Date
+                          </div>
+                          <div class="span6" data-bind="DateOrDash: endDate">
+                          </div>
+                        </div>
+                        <div class="row pad-bottom" data-bind="visible: createdOn">
+                          <div class="span6 grey">
+                            Created
+                          </div>
+                          <div class="span6" data-bind="Date: createdOn">
+                          </div>
+                        </div>
+                        <div class="row pad-bottom" data-bind="visible: updatedOn">
+                          <div class="span6 grey">
+                            Updated
+                          </div>
+                          <div class="span6" data-bind="Date: updatedOn">
+                          </div>
+                        </div>
+                        <div class="row pad-bottom" data-bind="visible: notes">
+                          <div class="span6 grey">
+                            Notes
+                          </div>
+                            <!-- ko ifnot: $parent.isNotesExpanded -->
+                                <div class="span12" data-bind="visible: notes">
+                                    <textarea data-bind="text: notes, attr: { 'title': notes }" readonly="readonly" class="display-only no-scroll" rows="5"></textarea>
+                                    <a class="grey" data-bind="clickToggle: $parent.isNotesExpanded" href="#">...</a>
+                                </div>
+                                <!-- /ko -->
+                                <!-- ko if: $parent.isNotesExpanded -->
+                                <textarea data-bind="text: notes, autoHeight: notes, attr: { 'title': notes }" readonly="readonly" class="display-only span12" ></textarea>
+                            <!-- /ko -->
+                          </div>
+                        </div>
+                        <div class="row pad-bottom" data-bind="visible: systemName">
+                          <div class="span6 grey">
+                            System
+                          </div>
+                          <div class="span6" data-bind="text: systemName">
+                          </div>
                         </div>
                       </div>
                     </div>

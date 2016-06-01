@@ -46,7 +46,7 @@
                           <div class="span6" data-bind="text: otherRefusalReason">
                           </div>
                         </div>
-                        <div class="row pad-bottom" data-bind="visible: computedSigCode">
+                        <div class="row pad-bottom" data-bind="visible: computedSigCode() !== '-'">
                           <div class="span10" data-bind="text: computedSigCode">
                           </div>
                         </div>
@@ -78,11 +78,11 @@
                           <div class="span6" data-bind="text: otherDuration">
                           </div>
                         </div>
-                        <div class="row pad-bottom" data-bind="with: review">
+                        <div class="row pad-bottom" data-bind="if: review">
                           <div class="span6 grey">
                             Review
                           </div>
-                          <div class="span6" data-bind="text: name">
+                          <div class="span6" data-bind="text: review().name">
                           </div>
                         </div>
                         <div class="row pad-bottom" data-bind="visible: computedPrescribedBy">

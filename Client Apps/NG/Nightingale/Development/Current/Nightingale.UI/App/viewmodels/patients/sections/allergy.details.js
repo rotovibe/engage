@@ -21,6 +21,7 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
       self.edit = function () {
         medicationsIndex.editAllergy(self.allergy(), 'Edit Allergy');
       }
+      self.isNotesExpanded = ko.observable(false);
       self.delete = function () {
         var result = confirm('You are about to delete a medication.  Press OK to continue, or cancel to return without deleting.');
         if (result === true) {

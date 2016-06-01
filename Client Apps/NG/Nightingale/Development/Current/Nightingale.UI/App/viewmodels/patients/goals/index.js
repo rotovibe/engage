@@ -239,6 +239,8 @@
             isComposed(false);
             var spToken = selectedPatient.subscribe(function (newValue) {
                 activeGoal(null);
+                activeTask(null);
+                activeIntervention(null);
             });
             subscriptionTokens.push(spToken);
             openColumn(goalColumn());

@@ -159,6 +159,10 @@
     };
 
     function activate() {
+      var spToken = selectedPatient.subscribe(function (newValue) {
+        activeMedication(null);
+        activeAllergy(null);
+      });
       openColumn(medicationColumn());
       isComposed(false);
     }
