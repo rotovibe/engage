@@ -23,7 +23,7 @@
 												<h1>Details<span data-bind="text: selectedCareMemberName"></h1>
 												<div class="controls">
 													<!-- ko with: selectedCareMember -->
-													<div class="toggle" data-bind="click: $parent.editCareMemberContact, clickBubble: false, visible: $parent.showEditButton" style="margin-right: 4px;" title="Edit contact information">
+													<div class="toggle" data-bind="click: $parent.editCareMemberContact, clickBubble: false, visible: (contact() && contact().isEditable())" style="margin-right: 4px;" title="Edit contact information">
 														<a href="#">
 															<i class="icon-edit"></i>
 														</a>
