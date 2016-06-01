@@ -18,6 +18,45 @@ define([],
 			self.isCareMemberSelected = ko.computed( function(){
 				return (self.careMember && self.careMember()) ? true : false;
 			});
+			
+			self.primaryCommunications = ko.computed(function () {
+                // Get the primary communication types and return them
+                var communications = [];
+                var contactcard = self.careMember() ? self.careMember().contact() : null;
+                if (contactcard) {
+                    var prefPhone = ko.utils.arrayFirst(contactcard.phones(), function (phone) {
+                        return phone.phonePreferred();
+                    });
+                    if (prefPhone) {
+                        prefPhone.template = 'templates/phone.html';
+                        communications.push(prefPhone);
+                    }
+                    var prefText = ko.utils.arrayFirst(contactcard.phones(), function (phone) {
+                        return phone.textPreferred();
+                    });
+                    if (prefText && prefText !== prefPhone) {
+                        prefText.template = 'templates/phone.html';
+                        communications.push(prefText);
+                    }
+                    var prefEmail = ko.utils.arrayFirst(contactcard.emails(), function (email) {
+                        return email.preferred();
+                    });
+                    if (prefEmail) {
+                        prefEmail.template = 'templates/email.html';
+                        communications.push(prefEmail);
+                    }
+                    var prefAddress = ko.utils.arrayFirst(contactcard.addresses(), function (address) {
+                        return address.preferred();
+                    });
+                    if (prefAddress) {
+                        prefAddress.template = 'templates/address.html';
+                        communications.push(prefAddress);
+                    }
+                }
+                // Return the list of preferred communications
+                return communications;
+            }).extend({ throttle: 25 });
+			
 			return true;
 		}
 		
