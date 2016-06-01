@@ -145,6 +145,9 @@ define(['services/session', 'services/datacontext', 'viewmodels/shell/shell', 'm
 			if( contactReturnedCallback ){
 				modalEntity().callbackReturnTo = contactReturnedCallback;
 			}
+			else{
+				modalEntity().callbackReturnTo = null;
+			}
             shell.currentModal(modal);
             modalShowing(true);
 		}
@@ -163,6 +166,7 @@ define(['services/session', 'services/datacontext', 'viewmodels/shell/shell', 'm
 		function startEditContactDialog( contact, titleText, showPatientName ){
 			theContact( contact );
 			modalEntity().contactCard( contact );
+			modalEntity().callbackReturnTo = null;
 			
 			var modalSettings = {
 				title: titleText,

@@ -199,37 +199,34 @@ define(['services/session', 'services/datacontext', 'viewmodels/patients/index',
 		
 		function addContactReturned(contact){
 			// called back from add contact dialog:
-		    if (contact) {
+		    //back to add care member: show the screen without search. show the new created contact:
+			var modalSettings = {
+				title: 'Assign Care Team',
+				entity: modalEntity, 
+				templatePath: 'viewmodels/templates/careMember.edit', 
+				showing: modalShowing, 
+				saveOverride: saveOverride, 
+				cancelOverride: cancelOverride, 
+				deleteOverride: null, 
+				classOverride: 'modal-lg',
+				customButtons: [
+					{	btnEnabled: modalEntity().canSave, btnFunction: saveAndAddAnother, btnText: 'Save + New' }
+				]
+			};
+			
+			var modal = new modelConfig.modal(modalSettings);
+			if (contact) {
                 //new contact created - attach to the care member:
 				newCareMember().contactId(contact.id());
-
-				//back to add care member: show the screen without search. show the new created contact:
-				var modalSettings = {
-					title: 'Assign Care Team - ' + contact.fullName(),
-					entity: modalEntity, 
-					templatePath: 'viewmodels/templates/careMember.edit', 
-					showing: modalShowing, 
-					saveOverride: saveOverride, 
-					cancelOverride: cancelOverride, 
-					deleteOverride: null, 
-					classOverride: 'modal-lg',
-					customButtons: [
-						{	btnEnabled: modalEntity().canSave, btnFunction: saveAndAddAnother, btnText: 'Save + New' }
-					]
-				};
-				
-				var modal = new modelConfig.modal(modalSettings);
-				modalEntity().careMember( newCareMember() );				 
-				shell.currentModal(modal);
-				modalShowing(true);
+				modalSettings.title += ' - ' + contact.fullName();								
 			}
 			else{
 				//add contact canceled:
-				newCareMember().contactId(null);
-				shell.currentModal(modal);
-				modalShowing(true);
+				newCareMember().contactId(null);				
 			}
-			
+			modalEntity().careMember( newCareMember() );				 
+			shell.currentModal(modal);
+			modalShowing(true);
 		}
 		
 		function addCareMember(){
