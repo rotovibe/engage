@@ -25,21 +25,25 @@
 				<strong class="span3 pad-right">Status:</strong>
 				<div class="span9" data-bind="text: name()"></div>
 			</div>
-			<div class="row pad-top" data-bind="visible: startDate">
+			<div class="row" data-bind="visible: startDate">
+				<div class="pad-top"></div>
 				<strong class="span3 pad-right">Start Date:</strong>
 				<div class="span9" data-bind="Date: startDate"></div>
 			</div>
-			<div class="row pad-top" data-bind="visible: endDate">
+			<div class="row" data-bind="visible: endDate">
+				<div class="pad-top"></div>
 				<strong class="span3 pad-right">End Date:</strong>
 				<div class="span9" data-bind="Date: endDate"></div>
 			</div>			
 			<div data-bind="with: frequency">
-				<div class="row pad-top">
+				<div class="row">
+					<div class="pad-top"></div>
 					<strong class="span3 pad-right">Frequency:</strong>
 					<div class="span9" data-bind="text: name"></div>
 				</div>
 			</div>
-			<div class="row pad-top" data-bind="visible: distance">
+			<div class="row" data-bind="visible: distance">
+				<div class="pad-top"></div>
 				<strong class="span3 pad-right">Distance:</strong>
 				<div class="span9">
 					<span data-bind="text: distance"></span>
@@ -54,17 +58,20 @@
 					<textarea readonly="readonly" class="display-only span12" data-bind="text: notes, autoHeight: notes, attr: { 'title': notes }"></textarea>
 				</div>					
 			</div>
-			<div class="row pad-top" data-bind="visible: createdOn">
+			<div class="row" data-bind="visible: createdOn">
+				<div class="pad-top"></div>
 				<strong class="span3 pad-right">Created:</strong>
 				<span data-bind="DateTime: createdOn"></span> by <span data-bind="text: (createdBy()? createdBy().firstLastOrPreferredName : '')"></span>
 			</div>
-			<div class="row pad-top" data-bind="visible: updatedOn">
+			<div class="row" data-bind="visible: updatedOn">
+				<div class="pad-top"></div>
 				<strong class="span3 pad-right">Updated:</strong>
 				<div class="span9">
 					<span data-bind="DateTime: updatedOn"></span> by <span data-bind="text: (updatedBy()? updatedBy().firstLastOrPreferredName : '')"></span>
 				</div>
 			</div>
-			<div class="row pad-top" data-bind="visible: dataSource">
+			<div class="row" data-bind="visible: dataSource">
+				<div class="pad-top"></div>
 				<strong class="span3 pad-right">System:</strong>
 				<div class="span9" data-bind="text: dataSource"></div>
 			</div>
@@ -74,11 +81,12 @@
 				<div class="row pad-top" data-bind="visible: fullName">					
 					<span data-bind="text: fullName"></span>
 				</div>
-				<div class="row pad-top" data-bind="visible: preferredName">					
+				<div class="row" data-bind="visible: preferredName">
+					<div class="pad-top"></div>
 					<strong class="span3 pad-right">Preferred Name:</strong>
 					<div class="span9" data-bind="text: preferredName"></div>
 				</div>
-				<div data-bind="with: deceased">
+				<div data-bind="with: deceased">					
 					<div class="row pad-top" data-bind="visible: (name() == 'Yes')">
 						<strong class="span3 pad-right">Deceased:</strong>
 						<div class="span9">Yes</div>
@@ -91,27 +99,32 @@
 						<!-- /ko -->
 					</ul>				
 				</div>	
-				<div class="row pad-top" data-bind="visible: (gender() && gender() !== 'N')">
+				<div class="row" data-bind="visible: (gender() && gender() !== 'N')">
+					<div class="pad-top"></div>
 					<strong class="span3 pad-right">Gender:</strong>
 					<div class="span9" data-bind="text: gender"></div>
 				</div>
-				<div class="row pad-top" data-bind="with: contactStatus">
+				<div class="row" data-bind="with: contactStatus">
+					<div class="pad-top"></div>
 					<strong class="span3 pad-right">Status:</strong>
 					<div class="span9" data-bind="text: name"></div>
 				</div>
-				<div class="row pad-top" data-bind="visible: createdOn">
+				<div class="row" data-bind="visible: createdOn">
+					<div class="pad-top"></div>
 					<strong class="span3 pad-right">Created:</strong>
 					<div class="span9">
 						<span data-bind="DateTime: createdOn"></span> by <span data-bind="text: (createdBy()? createdBy().firstLastOrPreferredName : '')"></span>
 					</div>
 				</div>
-				<div class="row pad-top" data-bind="visible: updatedOn">
+				<div class="row" data-bind="visible: updatedOn">
+					<div class="pad-top"></div>
 					<strong class="span3 pad-right">Updated:</strong>
 					<div class="span9">
 						<span data-bind="DateTime: updatedOn"></span> by <span data-bind="text: (updatedBy()? updatedBy().firstLastOrPreferredName : '')"></span>
 					</div>
 				</div>
-				<div class="row pad-top" data-bind="visible: dataSource">
+				<div class="row" data-bind="visible: dataSource">
+					<div class="pad-top"></div>
 					<strong class="span3 pad-right">System:</strong>
 					<div class="span9" data-bind="text: dataSource"></div>
 				</div>
@@ -144,7 +157,8 @@
 						<span class="row" data-bind="visible: preferredTimesOfDay, text: preferredTimesOfDay, attr: { 'title': preferredTimesOfDay }"></span>
 					</div>
 				</div>
-				<div class="row pad-top" data-bind="with: timeZone">
+				<div class="row" data-bind="with: timeZone">
+					<div class="pad-top"></div>
 					<strong class="span3 grey">Time Zone:</strong>
 					<div class="span9" data-bind="text: name, attr: { 'title': name }"></div>
 				</div>
