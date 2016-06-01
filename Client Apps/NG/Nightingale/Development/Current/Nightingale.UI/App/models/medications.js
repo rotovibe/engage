@@ -224,10 +224,10 @@ define(['services/session', 'services/dateHelper'],
                 medication.computedDuration = ko.computed(function () {
                     var result = '';
                     var name = '' + (medication.durationUnit() ? medication.durationUnit().name() : '');
-                    result = medication.duration() + ' ' + name;
+                    var duration = medication.duration() ? medication.duration() + ' ' : '';
+                    result = duration + name;
                     return result;
                 });
-
                 medication.setStatus = function(statusId, doneBannerMessage){
                     checkDataContext();
                     medication.statusId(statusId);

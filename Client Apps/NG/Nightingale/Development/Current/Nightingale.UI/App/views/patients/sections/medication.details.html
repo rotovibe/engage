@@ -50,12 +50,12 @@
                           <div class="span10" data-bind="text: computedSigCode">
                           </div>
                         </div>
-                        <div class="row pad-bottom" data-bind="visible: startDate">
+                        <div class="row pad-bottom" data-bind="visible: (startDate() || endDate())">
                           <div class="span6 grey">
                             Dates
                           </div>
                           <div class="span6">
-                            <span data-bind="Date: startDate"></span> -
+                            <span data-bind="DateOrNothing: startDate"></span> -
                             <!-- ko if: endDate -->
                               <span data-bind="Date: endDate"></span>
                             <!-- /ko -->
@@ -106,7 +106,7 @@
                           <div class="span6" data-bind="text: computedRxInfo">
                           </div>
                         </div>
-                        <div class="row pad-bottom" data-bind="visible: rxNumber">
+                        <div class="row pad-bottom" data-bind="visible: pharmacy">
                           <div class="span6 grey">
                             Pharmacy
                           </div>

@@ -126,7 +126,7 @@
             Ordered By:
         </div>
         <div class="span3 pad-left">
-            <input type="text" data-bind="value: orderedBy" size="50" />
+            <input type="text" data-bind="value: orderedBy" maxlength="50" />
         </div>
         <div class="span2 align-right grey">
             Ordered Date:
@@ -147,7 +147,7 @@
             Rx Number:
         </div>
         <div class="span3 pad-left">
-            <input type="text" data-bind="value: rxNumber" size="50" />
+            <input type="text" data-bind="value: rxNumber" maxlength="50" />
         </div>
         <div class="span2 align-right grey">
             Rx Date:
@@ -168,7 +168,7 @@
             Prescribed by:
         </div>
         <div class="span3 pad-left">
-            <input type="text" data-bind="value: prescribedBy" size="50" />
+            <input type="text" data-bind="value: prescribedBy" maxlength="50" />
         </div>
         <div class="span2 align-right grey">
             Prescribed Date:
@@ -189,7 +189,7 @@
             Pharmacy:
         </div>
         <div class="span3 pad-left">
-            <input type="text" data-bind="value: pharmacy" size="500" />
+            <input type="text" data-bind="value: pharmacy" maxlength="500" />
         </div>
     </div>
     <div class="row pad-top divider">
@@ -223,7 +223,8 @@
             Duration:
         </div>
         <div class="span1 pad-left">
-            <input type="number" data-bind="value: duration" size="50" />
+            <input type="text" data-bind="value: duration, valueUpdate: 'afterkeydown', numeric: duration,
+                css: { 'invalid': (validationErrorsArray().indexOf('duration') !== -1) }" maxlength="50"></input>
         </div>
         <div class="span2">
             <div data-bind="chsnsingle: { options: $parent.durationUnits, value: durationUnitId, text: 'name', label: 'medication-duration-unit', caption: 'Choose...', idValue: 'id' }"></div>
@@ -232,7 +233,7 @@
             Other Duration:
         </div>
         <div class="span3 pad-left" data-bind="if: otherDuration">
-            <input type="text" data-bind="value: otherDuration" size="50" />
+            <input type="text" data-bind="value: otherDuration" maxlength="50" />
         </div>
     </div>
     <div class="row pad-top">
@@ -254,13 +255,13 @@
             Other Reason:
         </div>
         <div class="span3 pad-left" data-bind="if: $parent.showOtherReason">
-            <input type="text" data-bind="value: otherRefusalReason" size="100" />
+            <input type="text" data-bind="value: otherRefusalReason" maxlength="100" />
         </div>
     </div>
     <div class="row pad-top">
         <div class="span2 align-right grey">Reason:</div>
         <div class="span8 pad-left">
-            <input data-bind="value: reason" placeholder="reason for medication" size="250" type="text" />
+            <input data-bind="value: reason" placeholder="reason for medication" maxlength="250" type="text" />
         </div>
     </div>
     <div class="row">

@@ -984,7 +984,7 @@
 						.from('fakePath')
 						.where('id', '==', medication.id())
 						.toType('PatientMedication')
-						.select('id, name, startDate, endDate, patientId, statusId, deleteFlag, sourceId, notes, systemName, dosage, strength, route, form, freqQuantity, freqHowOftenId, frequencyId, freqWhenId, customFrequency, categoryId, prescribedBy, typeId, sigCode, reason, familyId, isCreateNewMedication, dataSource, duration, durationUnitId, otherDuration, reviewId, refusalReasonId, otherRefusalReason, orderedBy, orderedDate, prescribedDate, rxNumber, rxDate, pharmacy, originalDataSource');
+						.select('id, name, startDate, endDate, patientId, statusId, deleteFlag, sourceId, notes, systemName, dosage, strength, route, form, freqQuantity, freqHowOftenId, frequencyId, freqWhenId, customFrequency, categoryId, prescribedBy, typeId, sigCode, reason, familyId, isCreateNewMedication, dataSource, duration, durationUnitId, otherDuration, reviewId, refusalReasonId, otherRefusalReason, orderedBy, orderedDate, prescribedDate, rxNumber, rxDate, pharmacy, originalDataSource, externalRecordId');
 				var results = manager.executeQueryLocally(medicationQuery);
 				var unwrappedObservation = results[0];
 
@@ -1029,6 +1029,8 @@
                 thisMedication.RxNumber = unwrappedObservation.rxNumber;
                 thisMedication.RxDate = unwrappedObservation.rxDate;
                 thisMedication.Pharmacy = unwrappedObservation.pharmacy;
+                thisMedication.DataSource = unwrappedObservation.dataSource;
+                thisMedication.ExternalRecordId = unwrappedObservation.externalRecordId;
 
 				thisMedication.NDCs = [];
 				ko.utils.arrayForEach(medication.nDCs.peek(), function (value) {
