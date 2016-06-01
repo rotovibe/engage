@@ -5,7 +5,12 @@
 define(['models/base', 'services/datacontext', 'services/session', 'viewmodels/shell/shell'],
     function (modelConfig, datacontext, session, shell) {
 
-        var alphabeticalSort = function (l, r) { 			
+        var alphabeticalSort = function (l, r) {
+			if( l.contact() && !r.contact() ){
+				return 1;
+			}
+			if( !l.contact() && r.contact() ) return -1;
+			if( !l.contact() && !r.contact() ) return 0;
 			return (l.contact().lastName() == r.contact().lastName()) ? (l.contact().lastName() > r.contact().lastName() ? 1 : -1) : (l.contact().lastName() > r.contact().lastName() ? 1 : -1) 
 		};
 
@@ -31,19 +36,18 @@ define(['models/base', 'services/datacontext', 'services/session', 'viewmodels/s
             self.isOpen = ko.observable(true);			
             // Create a list of primary care team members to display in the widget
             self.primaryCareTeam = ko.computed(function () {
-				var careMembers = self.careMembers();	//listen to changes in assigned care members (assignedToMe returns result)
-                // Create an empty array to fill with problems				
+				var careMembers = self.careMembers();	//listen to changes in assigned care members (assignedToMe returns result)                
                 var thisCareTeam = [];
-                // Sort the team
-                var searchCareTeam = careMembers.sort(alphabeticalSort);
+                
                 // Create a filtered list of care teams,
-                ko.utils.arrayForEach(searchCareTeam, function (careMember) {
+                ko.utils.arrayForEach(careMembers, function (careMember) {
                     // If they are a member of the primary care team,
                     if (careMember.core() && !careMember.isNew() && careMember.statusId() == 1) {
                         // Add them to the team
                         thisCareTeam.push(careMember);
                     }
                 });
+				thisCareTeam = careMembers.sort(alphabeticalSort);
                 // Return the team
                 return thisCareTeam;
             }).extend({ throttle: 50 });

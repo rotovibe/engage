@@ -172,7 +172,11 @@
 				// When the serialization started
 				var startTime = new Date().getTime();
 
-
+				var entityName = 'ContactCard';
+				if( contactCard.entityAspect.entity.entityType.name.startsWith('ContactSearch') ){
+					entityName = 'ContactSearch';
+				}
+				
 				// Create an object to hold the unwrapped JSON
 				var thisContactCard = {};
 
@@ -192,7 +196,7 @@
 				var contactCardQuery = breeze.EntityQuery
 						.from('fakePath')
 						.where('id', '==', contactCard.id())
-						.toType('ContactCard')
+						.toType( entityName )
 						.select('id, patientId, timeZoneId, isPatient, userId, isUser, firstName, middleName, lastName, preferredName,'
 							+ ' gender, contactTypeId, externalRecordId, dataSource, statusId, deceasedId, prefix, suffix, createdOn, updatedOn,'
 							+ ' createdById, updatedById');

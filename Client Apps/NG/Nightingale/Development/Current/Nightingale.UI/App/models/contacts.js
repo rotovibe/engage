@@ -352,7 +352,7 @@ define(['services/session', 'services/validatorfactory', 'services/customvalidat
 						}
 					}
 					return name;
-				});
+				}).extend({ throttle: 50 });
 				contactSubType.specialtyName = ko.computed( function() {
 					checkDataContext();
 					var name = null;
@@ -364,7 +364,7 @@ define(['services/session', 'services/validatorfactory', 'services/customvalidat
 						}
 					}
 					return name;
-				});
+				}).extend({ throttle: 50 });
 				contactSubType.subSpecialtyString = ko.computed(function(){
 					checkDataContext();
 					var name = null;
@@ -384,7 +384,7 @@ define(['services/session', 'services/validatorfactory', 'services/customvalidat
 						});
 					}
 					return name;
-				});
+				}).extend({ throttle: 50 });
 			}
 			
 		    function contactCardInitializer(contactCard) {				
@@ -741,7 +741,7 @@ define(['services/session', 'services/validatorfactory', 'services/customvalidat
 					}
 					fullName = fullName.trim();
 					return fullName;
-				});
+				}).extend({ throttle: 50 });
 				
 				contactCard.genderModel = ko.computed({
 					read: function () {
@@ -771,7 +771,7 @@ define(['services/session', 'services/validatorfactory', 'services/customvalidat
 					write: function (newValue) {
 						contactCard.gender(ko.unwrap(newValue).Id.toUpperCase());
 					}
-				});
+				}).extend({ throttle: 50 });
 				
 				contactCard.firstLastOrPreferredName = ko.computed( function(){
 					var preferred = contactCard.preferredName();
@@ -810,7 +810,7 @@ define(['services/session', 'services/validatorfactory', 'services/customvalidat
 						
 					}
 					return subTypeStrings;
-				});
+				}).extend({ throttle: 50 });
 				
 				function getSubTypeSummaryText(subType){
 					//subtype and specialty text only
@@ -849,7 +849,7 @@ define(['services/session', 'services/validatorfactory', 'services/customvalidat
 						summary += contactCard.preferredAddress().cityState();
 					}
 					return summary;
-				});
+				}).extend({ throttle: 50 });
 				
 		        contactCard.preferredLanguage = ko.computed({
 		            read: function () {
@@ -1021,7 +1021,7 @@ define(['services/session', 'services/validatorfactory', 'services/customvalidat
 			            thisArray.push(error.PropName + error.Value);
 			        });
 			        return thisArray;
-			    });
+			    }).extend({ throttle: 50 });
 				
 				contactCard.isDuplicate = ko.observable(false);
 				contactCard.isDuplicateTested = ko.observable(true);
@@ -1034,16 +1034,16 @@ define(['services/session', 'services/validatorfactory', 'services/customvalidat
 					var profileErrors = hasProfileErrors();
 					var phoneErrors = hasPhoneErrors();					
 					return !phoneErrors && !profileErrors;
-				});								
+				}).extend({ throttle: 50 });							
 					
 				contactCard.isEditable = ko.computed( function(){
 					return contactCard.dataSource() == 'Engage';
-				});
+				}).extend({ throttle: 50 });
 				
 		        // Can the contact card save?  Fake validation goes here
 		        contactCard.canSave = ko.computed(function () {
 		            return contactCard.isValid();
-		        });
+		        }).extend({ throttle: 50 });
 		        // Method to save changes to the patient
 		        contactCard.saveChanges = function () {
 		            checkDataContext();

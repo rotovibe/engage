@@ -202,7 +202,26 @@ define(['services/session', 'services/datacontext', 'viewmodels/patients/index',
 		    if (contact) {
                 //new contact created - attach to the care member:
 				newCareMember().contactId(contact.id());
-				editCareMember( newCareMember() );
+
+				//back to add care member: show the screen without search. show the new created contact:
+				var modalSettings = {
+					title: 'Assign Care Team - ' + contact.fullName(),
+					entity: modalEntity, 
+					templatePath: 'viewmodels/templates/careMember.edit', 
+					showing: modalShowing, 
+					saveOverride: saveOverride, 
+					cancelOverride: cancelOverride, 
+					deleteOverride: null, 
+					classOverride: 'modal-lg',
+					customButtons: [
+						{	btnEnabled: modalEntity().canSave, btnFunction: saveAndAddAnother, btnText: 'Save + New' }
+					]
+				};
+				
+				var modal = new modelConfig.modal(modalSettings);
+				modalEntity().careMember( newCareMember() );				 
+				shell.currentModal(modal);
+				modalShowing(true);
 			}
 			else{
 				//add contact canceled:
@@ -237,7 +256,7 @@ define(['services/session', 'services/datacontext', 'viewmodels/patients/index',
 			}
 		}
 		
-		function editCareMember(member){
+		function editCareMember(member){			
 			var modalSettings = {
 				title: 'Edit Care Team Member - ' + member.contact().fullName(),
 				entity: modalEntity, 

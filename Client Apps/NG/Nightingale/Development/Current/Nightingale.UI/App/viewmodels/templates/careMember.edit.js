@@ -281,23 +281,35 @@ define([ 'services/datacontext', 'services/local.collections', 'viewmodels/home/
 			self.pcpContactSubType = settings.pcpContactSubType;
 			self.addContactReturnedCallback = settings.addContactReturnedCallback;
 			self.editMode = ko.observable(false);
-			if( !self.careMember().isNew() ){
-				self.careMember().entityAspect.rejectChanges();
+			if( self.careMember().isNew() ){
+				//add new
+				if( self.careMember().contact() ){
+					//add new got back from creating a new contact
+					self.selectedContact( self.careMember().contact() );					
+					self.editMode(true);
+				}
+				else{
+					//add new
+					self.selectedContact(null);
+					var contactSelectedToken = self.selectedContact.subscribe( function(contact){
+						if( contact ){
+							//assign selected contact from search results to the member:
+							self.careMember().contactId( contact.id() );
+						}
+						else{
+							self.careMember().contactId( null );
+						}
+					});
+					subscriptionTokens.push( contactSelectedToken );						
+				}
 			}
 			else{
-				self.selectedContact(null);
-			}
-			if( self.careMember().contact() ){				
-				self.selectedContact( self.careMember().contact() );
-				//edit / add new got back from creating a new contact
+				//edit
+				self.careMember().entityAspect.rejectChanges();
+				self.selectedContact( self.careMember().contact() );					
 				self.editMode(true);
-			}				
-			// var searchSettings = {
-				// selectedContact: self.selectedContact
-			// }
-			
-			//self.contactSearch = new contactSearch( searchSettings );
-			//self.contactSearch.init();
+			}
+							
 			self.contactSubTypes = contactSearch.contactSubTypes;
 			
 			self.canAddContact = ko.computed( function(){				
@@ -307,16 +319,6 @@ define([ 'services/datacontext', 'services/local.collections', 'viewmodels/home/
 				return ( showResults && !editMode ) || noResultsFound;				
 			}).extend({throttle: 100});
 			
-			//assign selected contact to the member:
-			var contactSelectedToken = self.selectedContact.subscribe( function(contact){
-				if( contact ){
-					self.careMember().contactId( contact.id() );
-				}
-				else{
-					self.careMember().contactId( null );
-				}
-			});
-			subscriptionTokens.push( contactSelectedToken );						
 			
 			self.contactAlreadyAssigned = ko.observable(false);
 			
@@ -457,7 +459,7 @@ define([ 'services/datacontext', 'services/local.collections', 'viewmodels/home/
 					//let the roles dropdown ko - dom content update before setting the default role
 					setTimeout(function () {
 						self.careMember().roleId( defaultRoleId );
-					}, 200);	
+					}, 20);	
 				}
 				roles.push({name: '- Other -', role: '- Other -', id: -1});
 				return roles;
