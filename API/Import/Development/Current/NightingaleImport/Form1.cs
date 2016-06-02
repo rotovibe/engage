@@ -545,6 +545,8 @@ namespace NightingaleImport
                                         ContactId = contactByUserIdResponse.Contact.Id,
                                         RoleId = PCMRoleIdProperty,
                                         Core = true,
+                                        DataSource = "Engage",
+                                        DistanceUnit = "mi",
                                         StatusId = (int)CareTeamMemberStatus.Active,
                                     };
                                     List<CareTeamMemberData> memberList = new List<CareTeamMemberData>();
