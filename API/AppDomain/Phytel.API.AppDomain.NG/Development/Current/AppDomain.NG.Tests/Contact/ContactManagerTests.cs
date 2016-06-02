@@ -175,6 +175,9 @@ namespace Phytel.API.AppDomain.NG.Test.Contact
             mockContactEndPointUtil.Setup(mceu => mceu.GetContactByContactId(It.IsAny<AppDomain.NG.DTO.GetContactByContactIdRequest>()))
                 .Returns(new ContactData { PatientId = "pid"});
 
+            mockContactEndPointUtil.Setup(mceu => mceu.GetContactsByContactIds(It.IsAny<List<string>>(), It.IsAny<double>(), It.IsAny<string>(),It.IsAny<string>()))
+                .Returns(new List<ContactData>());
+
             var mockCohortRuleUtil = new Mock<ICohortRuleUtil>();
             mockCohortRuleUtil.Setup(mcru => mcru.HasMultipleActiveCorePCM(It.IsAny<AppDomain.NG.DTO.CareTeam>()))
                 .Returns(false);

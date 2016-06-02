@@ -155,8 +155,35 @@ namespace Phytel.API.AppDomain.NG
 
                if (domainResponse != null)
                {
-                  // response.Id = domainResponse.Id;
-                   response.CareTeam = Mapper.Map<CareTeam>(domainResponse.CareTeamData);
+                  response.CareTeam = Mapper.Map<CareTeam>(domainResponse.CareTeamData);
+
+                   
+                   #region Populate Contact object for each care team member.
+                   if(response.CareTeam != null)
+                   {
+                       if (!response.CareTeam.Members.IsNullOrEmpty())
+                       {
+                           var contactIds = response.CareTeam.Members.Select(a => a.ContactId).ToList();
+                           var contactsData = EndpointUtil.GetContactsByContactIds(contactIds,request.Version, request.ContractNumber, request.UserId);
+                           if (contactsData != null)
+                           {
+                               foreach (var member in response.CareTeam.Members)
+                               {
+                                   var data = contactsData.FirstOrDefault(c => c.Id == member.ContactId);
+                                   if (data == null)
+                                   {
+                                       throw new ApplicationException(string.Format("Contact card for a care team member with contact id = {0} was not found",member.ContactId));
+                                   }
+                                   else
+                                   {
+                                       member.Contact = Mapper.Map<Contact>(data);
+                                   }
+                               }
+                           }
+                       }
+                   }
+
+                   #endregion
 
                    var cohortRuleCheckData = new CohortRuleCheckData()
                    {
