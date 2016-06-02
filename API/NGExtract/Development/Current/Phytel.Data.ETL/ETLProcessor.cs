@@ -64,6 +64,7 @@ namespace Phytel.Data.ETL
         private User Users;
         private Medications Meds;
         private MedicationMap MedMap;
+        private ContactTypeLookUp contactTypeLookUp;
         private Templates.System System;
         private Templates.PatientUtilization PatientUtilization;
 
@@ -121,6 +122,9 @@ namespace Phytel.Data.ETL
             MedMap = new MedicationMap { Contract = _contract, ConnectionString = connString };
             MedMap.DocColEvent += Collections_DocColEvent;
 
+            contactTypeLookUp = new ContactTypeLookUp { Contract = _contract, ConnectionString = connString };
+            contactTypeLookUp.DocColEvent += Collections_DocColEvent;
+
             System = new Templates.System { Contract = _contract, ConnectionString = connString };
             System.DocColEvent += Collections_DocColEvent;
 
@@ -148,7 +152,9 @@ namespace Phytel.Data.ETL
                 PatientNote.Export();
                 PatientUtilization.Export();
                 LoadPatientObservations(_contract);
+
                 Contact.Export();
+                contactTypeLookUp.Export();
 
                 LoadCareMembers(_contract);
                 LoadPatientUsers(_contract);
@@ -707,6 +713,53 @@ namespace Phytel.Data.ETL
                 {
                     throw;
                 }
+                try
+                {
+                    if (BsonClassMap.IsClassMapRegistered(typeof(MedicationReview)) == false)
+                    {
+                        BsonClassMap.RegisterClassMap<MedicationReview>();
+                    }
+                }
+                catch
+                {
+                    throw;
+                }
+
+                try
+                {
+                    if (BsonClassMap.IsClassMapRegistered(typeof(Phytel.API.DataDomain.LookUp.DTO.CareTeamFrequency)) == false)
+                    {
+                        BsonClassMap.RegisterClassMap<Phytel.API.DataDomain.LookUp.DTO.CareTeamFrequency>();
+                    }
+                }
+                catch
+                {
+                    throw;
+                }
+
+
+                try
+                {
+                    if (BsonClassMap.IsClassMapRegistered(typeof(Phytel.API.DataDomain.LookUp.DTO.DurationUnit)) == false)
+                    {
+                        BsonClassMap.RegisterClassMap<Phytel.API.DataDomain.LookUp.DTO.DurationUnit>();
+                    }
+                }
+                catch
+                {
+                    throw;
+                }
+                try
+                {
+                    if (BsonClassMap.IsClassMapRegistered(typeof(Phytel.API.DataDomain.LookUp.DTO.RefusalReason)) == false)
+                    {
+                        BsonClassMap.RegisterClassMap<Phytel.API.DataDomain.LookUp.DTO.RefusalReason>();
+                    }
+                }
+                catch
+                {
+                    throw;
+                }
 
                 #endregion
             }
@@ -967,6 +1020,12 @@ namespace Phytel.Data.ETL
                             case LookUpType.UtilizationSource:
                                 LoadLookUp(lookup, "spPhy_RPT_SaveUtilizationSourceLookUp");
                                 break;
+                            case LookUpType.CareTeamFrequency:
+                                {
+                                    var careTeamFrequency = new Templates.CareTeamFrequency { Contract = ctr, LookUp = lookup, ConnectionString = connString };
+                                    careTeamFrequency.Export();
+                                    break;
+                                }
                             default:
                                 break;
                         }
@@ -1819,7 +1878,7 @@ namespace Phytel.Data.ETL
                         bcc.ColumnMappings.Add("NonNumericValue", "NonNumericValue");
                         bcc.ColumnMappings.Add("Source", "Source");
                         bcc.ColumnMappings.Add("State", "State");
-                      //  bcc.ColumnMappings.Add("Type", "Type");
+                        //  bcc.ColumnMappings.Add("Type", "Type");
                         bcc.ColumnMappings.Add("Units", "Units");
                         bcc.ColumnMappings.Add("AdministeredBy", "AdministeredBy");
                         bcc.ColumnMappings.Add("MongoUpdatedBy", "MongoUpdatedBy");
