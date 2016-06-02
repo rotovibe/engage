@@ -7,6 +7,14 @@
 
     var descendingDateSort = function (l, r) { return (l.createdOn() == r.createdOn()) ? (l.createdOn() < r.createdOn() ? 1 : -1) : (l.createdOn() < r.createdOn() ? 1 : -1) };
 
+    var medGroupSort = function (l, r) {
+      var o1 = l.medSortDate();
+      var o2 = r.medSortDate();
+
+      if (o1 < o2) return 1;
+      if (o1 > o2) return -1;
+      return 0;
+    };
     var alphabeticalOrderSort = function (l, r) { return (l.order() == r.order()) ? (l.order() > r.order() ? 1 : -1) : (l.order() > r.order() ? 1 : -1) };
 
     var initialized = false;
@@ -14,12 +22,60 @@
     var medicationModalShowing = ko.observable(false);
     var allergyModalShowing = ko.observable(false);
 
-    var myMedications = ko.computed(function () {
-      if (selectedPatient()) {
-        return selectedPatient().medications();
-      }
-      return [];
+    var MedicationGroup = function (name, firstMedication) {
+        var self = this;
+        self.name = ko.observable(name);
+        self.medications = ko.observableArray([firstMedication]);
+        self.sortedMedications = ko.computed(function () {
+            var results = [];
+            results = self.medications().sort(medGroupSort);
+            return results;
+        });
+        self.firstMedication = ko.computed(function () {
+            return self.sortedMedications()[0];
+        });
+        self.isActive = ko.observable(false);
+        self.isExpanded = ko.observable(false);
+    }
+
+    var groupedMedications = ko.computed(function () {
+        var medications = selectedPatient().medications();
+        var groups = [];
+        var result = [];
+        ko.utils.arrayForEach(medications, function (medication) {
+            var name = medication.name();
+            var isActive = medication.statusId() === '1';
+            var match = groups.filter(function (group) {
+                return group.name() === name;
+            })[0];
+            if (!match) {
+                var newGroup = new MedicationGroup(name, medication);
+                newGroup.isActive(isActive);
+                groups.push(newGroup);
+            } else {
+                match.medications.push(medication);
+                if (!match.isActive() && isActive) {
+                    match.isActive(true);
+                }
+            }
+        });
+        return groups;
     });
+    var activeMedicationGroups = ko.computed(function () {
+      var result = [];
+      result = groupedMedications().filter(function (group) {
+        return group.isActive();
+      });
+      return result;
+    });
+    var inactiveMedicationGroups = ko.computed(function () {
+      var result = [];
+      result = groupedMedications().filter(function (group) {
+        return !group.isActive();
+      });
+      return result;
+    });
+
     var medicationSaving = ko.computed(datacontext.medicationSaving);
     var selectedSortColumn = ko.observable();
     var activeMedication = ko.observable();
@@ -50,6 +106,7 @@
       self.activationData = { widget: self, selectedPatient: selectedPatient, defaultSort: data.defaultSort };
       self.allowAdd = data.allowAdd;
       self.statusIds = data.statusIds;
+      self.medicationGroups = data.medicationGroups;
     }
 
     function column(name, open, widgets) {
@@ -73,15 +130,15 @@
             statusIds: [1,2,3,4,5,6,7]
         }, {
             name: 'Active Medications',
-            path: 'viewmodels/patients/widgets/medications',
+            path: 'viewmodels/patients/widgets/medication.groups',
             open: true,
-            statusIds: [1],
+            medicationGroups: activeMedicationGroups,
             allowAdd: true
         }, {
             name: 'Inactive Medications',
-            path: 'viewmodels/patients/widgets/medications',
+            path: 'viewmodels/patients/widgets/medication.groups',
             open: false,
-            statusIds: [2,3,4,5,6,7],
+            medicationGroups: inactiveMedicationGroups,
             defaultSort: 'endDate desc, name'
         }
     ];
@@ -119,7 +176,6 @@
     var isComposed = ko.observable(true);
 
     var vm = {
-      myMedications: myMedications,
       medicationSaving: medicationSaving,
       selectedSortColumn: selectedSortColumn,
       activeMedicationColumns: activeMedicationColumns,

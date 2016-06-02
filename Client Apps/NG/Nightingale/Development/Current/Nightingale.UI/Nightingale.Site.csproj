@@ -183,6 +183,7 @@
     <Content Include="App\viewmodels\patients\widgets\action.details.js" />
     <Content Include="App\viewmodels\patients\widgets\careMembers.js" />
     <Content Include="App\viewmodels\patients\widgets\medications.js" />
+    <Content Include="App\viewmodels\patients\widgets\medication.groups.js" />
     <Content Include="App\viewmodels\patients\widgets\allergies.js" />
     <Content Include="App\viewmodels\patients\widgets\module.details.js" />
     <Content Include="App\viewmodels\patients\widgets\program.details.js" />
@@ -192,6 +193,7 @@
     <Content Include="App\viewmodels\templates\datetimepicker.js" />
     <Content Include="App\viewmodels\templates\event.details.js" />
     <Content Include="App\viewmodels\templates\medications.panel.js" />
+    <Content Include="App\viewmodels\templates\medication.groups.panel.js" />
     <Content Include="App\viewmodels\templates\note.general.edit.js" />
     <Content Include="App\viewmodels\templates\note.touchpoint.edit.js" />
     <Content Include="App\viewmodels\templates\note.utilization.edit.js" />
@@ -221,6 +223,7 @@
     <Content Include="App\views\patients\widgets\allergies.html" />
     <Content Include="App\views\patients\widgets\careMembers.html" />
     <Content Include="App\views\patients\widgets\medications.html" />
+    <Content Include="App\views\patients\widgets\medication.groups.html" />
     <Content Include="App\views\shell\footer.html" />
     <Content Include="App\views\shell\quickadd\utilization.note.html" />
     <Content Include="App\views\templates\careMember.edit.html" />
@@ -241,6 +244,7 @@
     <Content Include="App\views\templates\medication.status.html" />
     <Content Include="App\views\templates\medication.type.html" />
     <Content Include="App\views\templates\medications.panel.html" />
+    <Content Include="App\views\templates\medication.groups.panel.html" />
     <Content Include="App\views\templates\allergy.expand.html" />
     <Content Include="App\views\templates\allergy.severity.html" />
     <Content Include="App\views\templates\note.general.details.html" />
