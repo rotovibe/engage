@@ -15,6 +15,7 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
             self.defaultSort = self.settings.defaultSort;
             self.medicationGroups = self.widget.medicationGroups;
             self.allowAdd = self.widget.allowAdd;
+            self.refreshView = function () {
                 patientsIndex.getPatientMedications();
             };
             self.addMedication = function () {
