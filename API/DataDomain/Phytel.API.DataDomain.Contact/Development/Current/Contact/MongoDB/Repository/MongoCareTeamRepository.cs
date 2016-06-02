@@ -510,7 +510,7 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
                     EndDate = member.EndDate,
                     FrequencyId = (member.Frequency == null || member.Frequency == ObjectId.Empty) ? null : member.Frequency.ToString(),
                     Distance = member.Distance ?? member.Distance,
-                    DistanceUnit = member.DistanceUnit,
+                    DistanceUnit = string.IsNullOrEmpty(member.DistanceUnit)?"mi":member.DistanceUnit,
                     ExternalRecordId = member.ExternalRecordId,
                     Notes = member.Notes,
                     DataSource = member.DataSource,

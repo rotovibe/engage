@@ -724,8 +724,12 @@ namespace Phytel.API.DataDomain.Contact
                         // TimeZone
                         if (!string.IsNullOrEmpty(data.TimeZoneId))
                         {
-                            uv.Add(MB.Update.Set(MEContact.TimeZoneProperty, ObjectId.Parse(data.TimeZoneId)));
-                        } 
+                            uv.Add(MB.Update.Set(MEContact.TimeZoneProperty,  ObjectId.Parse(data.TimeZoneId)));
+                        }
+                        else
+                        {
+                            uv.Add(MB.Update.Set(MEContact.TimeZoneProperty, BsonNull.Value));
+                        }
                         #endregion
 
                         uv.Add(MB.Update.Set(MEContact.LastUpdatedOnProperty,DateTime.UtcNow));
