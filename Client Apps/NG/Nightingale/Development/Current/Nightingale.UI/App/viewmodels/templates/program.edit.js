@@ -82,7 +82,10 @@
                         deferred.done(function () { onSuccess(this); });
                         var filterVal = url.toLowerCase();
                         var result = theseCareManagers.filter(function (item) {
-                            return !!~item.preferredName().toLowerCase().indexOf(filterVal);
+                            if (item && item.firstLastOrPreferredName) {
+                                return !!~item.firstLastOrPreferredName().toLowerCase().indexOf(filterVal);
+                            }
+                            return false;
                         });
                         deferred.resolveWith(result);
                         return deferred.promise();

@@ -85,8 +85,8 @@
 
                         var filterVal = url.toLowerCase();
                         var result = theseCareManagers.filter(function (item) {
-                            if (item && item.preferredName) {
-                                return !!~item.preferredName().toLowerCase().indexOf(filterVal);
+                            if (item && item.firstLastOrPreferredName) {
+                                return !!~item.firstLastOrPreferredName().toLowerCase().indexOf(filterVal);
                             }
                             return false;
                         });
