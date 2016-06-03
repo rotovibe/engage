@@ -60,9 +60,7 @@
 
                 var params = [];
                 params.push(new modelConfig.Parameter('patientId', selectedpatient.id(), '=='));
-                if (selectedallergystatuses.length === 1) {
-                    params.push(new modelConfig.Parameter('statusId', selectedallergystatuses[0].id(), '=='));
-                }
+
                 var patientId = self.selectedPatient().id();
                 finalallergies = datacontext.getPatientAllergiesQuery(params, orderProp);
                 // If allergy types were selected,
@@ -86,6 +84,18 @@
                         });
                     });
                     finalallergies = theseAllergies;
+                }
+                if (selectedallergystatuses.length !== 0) {
+                    finalallergies = finalallergies.filter(function (allergy) {
+                        var statusIdFilters = [];
+                        ko.utils.arrayForEach(selectedallergystatuses, function (status) {
+                            // params.push(new modelConfig.Parameter('statusId', status.id(), '=='));
+                            statusIdFilters.push(status.id());
+                        });
+                        if (statusIdFilters.indexOf(allergy.statusId()) !== -1) {
+                            return true;
+                        }
+                    });
                 }
                 return finalallergies;
             });
