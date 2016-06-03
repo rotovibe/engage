@@ -105,15 +105,16 @@ define(['models/base', 'services/datacontext', 'services/session', 'viewmodels/s
 				var pcm = self.primaryCareManager();
 				var isPatientLoaded = self.selectedPatient.isLoaded();
 				var isSaving = self.isSaving();
-				if ( careMembers.length > 0 && isPatientLoaded && pcm ) {
-					//the PCM is assigned
-					var PCMCareManager = ko.utils.arrayFirst( careMembers, function (member) {
-						//find if the the current user is a member in this team, and its not the assigned(active core) pcm, and its role is PCM:
-					    return member.contactId() == session.currentUser().userId() && member.id() != pcm.id() 
-							&& member.contactId() != pcm.contactId()
-							&& member.roleId() == pcm.roleId();
-					});
-					return ( PCMCareManager && !isSaving );
+				if ( careMembers.length > 0 && isPatientLoaded && pcm && !isSaving ) {
+					//the PCM is assigned and its not the current user
+					return pcm.contactId() != session.currentUser().userId();
+					// var PCMCareManager = ko.utils.arrayFirst( careMembers, function (member) {
+						// //find if the the current user is a member in this team, and its not the assigned(active core) pcm, and its role is PCM:
+					    // return member.contactId() == session.currentUser().userId() && member.id() != pcm.id() 
+							// && member.contactId() != pcm.contactId()
+							// && member.roleId() == pcm.roleId();
+					// });
+					// return ( PCMCareManager && !isSaving );
 				}
 				return false;
 			}).extend({ throttle: 50 });
@@ -192,56 +193,64 @@ define(['models/base', 'services/datacontext', 'services/session', 'viewmodels/s
             var userCareManager = datacontext.getUserCareManager();
 			var userContactId = userCareManager.id();	//the caremanager id is actually a contact id (get care managers call returns them as contacts)
 			var careTeam;
+			
+			function saveTeamCompleted( team ){
+				if( team ){					
+					self.selectedPatient.careTeam(team);
+					self.isSaving(false);
+				}
+			};
+			
             if (!self.isSaving() && pcmRoleId) {
-				var pcm = self.primaryCareManager();
-				var PCMCareManager = ko.utils.arrayFirst( self.careMembers(), function (member) {
-					//find if the the current user is a member in this team, and its not the assigned(active core) pcm, and its role is PCM:
-					return member.contactId() == session.currentUser().userId() && member.id() != pcm.id() 
-						&& member.contactId() != pcm.contactId()
-						&& member.roleId() == pcm.roleId();
-				});
-				if( PCMCareManager ){
-					//reassign the user:
-					return self.reassignToMe();
-				}	
 				self.isSaving(true);
-				var newCareMember = datacontext.createEntity('CareMember', 
-						{ 	id: -1, 
-							contactId: userContactId,
-							roleId: pcmRoleId,
-							careTeamId: teamId,
-							distanceUnit: 'mi',
-							statusId: 1,		//active 
-							core: true,
-							dataSource: 'Engage',
-							createdById: session.currentUser().userId()							
-						});
-				newCareMember.isNew(true);
-                
-				function saveTeamCompleted( team ){
-					if( team ){					
-						self.selectedPatient.careTeam(team);
-						self.isSaving(false);
-					}
-				};
-				
-				if( !teamId ){
-					//team has not yet been created:
-					careTeam = datacontext.createEntity('CareTeam', 
-							{ 	id: -1, 
-								contactId: self.selectedPatient.contactId(),
-								patientId: self.selectedPatient.id(),
-								createdById: session.currentUser().userId()
-							});
-					careTeam.members = ko.observableArray();
-					careTeam.members.push( newCareMember );					
-				}
+				var pcm = self.primaryCareManager();
+				if( pcm ){
+					pcm.core( false ); //retire the current pcm if it is assigned
+				}				
+				var userCareMember = ko.utils.arrayFirst( self.careMembers(), function (member) {
+					//find if the the current user is a member in this team, and its not the assigned(active core) pcm, and its role is PCM:
+					return member.contactId() == session.currentUser().userId() && member.roleId() == pcmRoleId 
+							&& ( !member.core() || !member.statusId() == 1 );
+				});
+				if( userCareMember ){					
+					//reassign the existing user pcm member as active core pcm:
+					userCareMember.core( true );
+					userCareMember.statusId( 1 );
+					datacontext.saveCareTeam( self.selectedPatient.careTeam() ).then( saveTeamCompleted );
+				}	
 				else{
-					//add/save one member to an existing team
-					//	note: the new member should already be here inside members:
-					careTeam = self.selectedPatient.careTeam();										
+					//create a new pcm user member
+					var newCareMember = datacontext.createEntity('CareMember', 
+							{ 	id: -1, 
+								contactId: userContactId,
+								roleId: pcmRoleId,
+								careTeamId: teamId,
+								distanceUnit: 'mi',
+								statusId: 1,		//active 
+								core: true,
+								dataSource: 'Engage',
+								createdById: session.currentUser().userId()							
+							});
+					newCareMember.isNew(true);
+                
+					if( !teamId ){
+						//team has not yet been created:
+						careTeam = datacontext.createEntity('CareTeam', 
+								{ 	id: -1, 
+									contactId: self.selectedPatient.contactId(),
+									patientId: self.selectedPatient.id(),
+									createdById: session.currentUser().userId()
+								});
+						careTeam.members = ko.observableArray();
+						careTeam.members.push( newCareMember );					
+					}
+					else{
+						//add/save one member to an existing team
+						//	note: the new member should already be here inside careTeam().members:
+						careTeam = self.selectedPatient.careTeam();										
+					}
+					return datacontext.saveCareTeam( careTeam ).then( saveTeamCompleted );
 				}
-				return datacontext.saveCareTeam( careTeam ).then( saveTeamCompleted );				
             } else{
 				console.log('assignToMe blocked since it is currently saving');
 			}
@@ -271,7 +280,7 @@ define(['models/base', 'services/datacontext', 'services/session', 'viewmodels/s
 							&& member.contactId() != pcm.contactId()
 							&& member.roleId() == pcm.roleId();
 					});
-					pcm.statusId( 2 ); //TBD how to retire the current pcm ??
+					pcm.core( false ); //retire the current pcm
 					userCareMember.core( true );
 					userCareMember.statusId( 1 );
 					datacontext.saveCareTeam( self.selectedPatient.careTeam() ).then( saveTeamCompleted );
