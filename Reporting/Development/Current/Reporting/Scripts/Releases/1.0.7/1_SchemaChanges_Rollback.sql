@@ -7,5 +7,9 @@ IF EXISTS (SELECT * FROM sys.objects WHERE type = 'U' AND name = 'RPT_CareTeamFr
 GO
 
 IF EXISTS (SELECT * FROM sys.objects WHERE type = 'U' AND name = 'RPT_ContactTypeLookUp')
-	DROP TABLE [dbo].RPT_ContactTypeLookUp
+	DROP TABLE [dbo].[RPT_ContactTypeLookUp]
+GO
+
+IF EXISTS (SELECT * FROM sys.objects WHERE type = 'U' AND name = 'RPT_CareTeam')
+	DROP TABLE [dbo].[RPT_CareTeam]
 GO
