@@ -217,6 +217,7 @@
 			getUserByUserToken: getUserByUserToken,
 			getSystemCareManager: getSystemCareManager,
 			getUsercareManagerName: getUsercareManagerName,
+			getUserCareManager: getUserCareManager,
 			getUserFullName: getUserFullName,
 			logOutUserByToken: logOutUserByToken,
 			createUserFromSessionUser: createUserFromSessionUser,
@@ -1439,6 +1440,8 @@
 				
 				if( data.CareTeam && data.CareTeam.Id ){
 					//take the care team from breeze as the entity created with the result returned (all props including members and ids are updated)
+					// note: the members contact object is also expected to be returned by the api. 
+					//	this is needed in order to have the contact nav entity as a ContactCard entity and not ContactSearch entity.
 					var query = breeze.EntityQuery
 					.from('CareTeam')
 					.toType('CareTeam')
@@ -1857,6 +1860,7 @@
 
 		function getUserCareManager(){
 			var thisMatchedCareManager = ko.utils.arrayFirst(datacontext.enums.careManagers(), function (caremanager) {
+				//note: the caremanager id is actually a contact id (get care managers call returns them as contacts)
 				return caremanager.id() === session.currentUser().userId();
 			});
 			return thisMatchedCareManager;
