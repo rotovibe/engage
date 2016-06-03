@@ -193,6 +193,7 @@ define(['models/base', 'services/datacontext', 'services/session', 'viewmodels/s
 			var userContactId = userCareManager.id();	//the caremanager id is actually a contact id (get care managers call returns them as contacts)
 			var careTeam;
             if (!self.isSaving() && pcmRoleId) {
+				var pcm = self.primaryCareManager();
 				var PCMCareManager = ko.utils.arrayFirst( self.careMembers(), function (member) {
 					//find if the the current user is a member in this team, and its not the assigned(active core) pcm, and its role is PCM:
 					return member.contactId() == session.currentUser().userId() && member.id() != pcm.id() 
