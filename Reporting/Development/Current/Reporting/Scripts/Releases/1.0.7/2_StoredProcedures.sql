@@ -129,6 +129,7 @@ BEGIN
 	
 	DELETE RPT_CareTeamFrequency
 	DELETE RPT_ContactTypeLookUp
+	DELETE RPT_CareTeam
 
 	-- Resetting the Identity columns.
 	
@@ -256,6 +257,7 @@ BEGIN
 	--CareTeam 
 	DBCC CHECKIDENT ('RPT_CareTeamFrequency', RESEED, 0)
 	DBCC CHECKIDENT ('RPT_ContactTypeLookUp', RESEED, 0)
+	DBCC CHECKIDENT ('RPT_CareTeam', RESEED, 0)
 
 END
 
