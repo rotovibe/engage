@@ -16,7 +16,7 @@ SET ANSI_PADDING OFF
 GO
 
 CREATE TABLE [dbo].[RPT_ContactTypeLookUp](
-	[CareTeamFrequencyId] [int] IDENTITY(1,1) NOT NULL,
+	[ContactTypeLookUpId] [int] IDENTITY(1,1) NOT NULL,
 	[MongoId] [varchar](50) NOT NULL,
 	[Name] [varchar](200) NULL,
 	[Role] [varchar](200) NULL,
@@ -32,7 +32,7 @@ CREATE TABLE [dbo].[RPT_ContactTypeLookUp](
 	[RecordCreatedOn] [datetime] NULL
  CONSTRAINT [PK_CareTeamFrequency] PRIMARY KEY CLUSTERED 
 (
-	[CareTeamFrequencyId] ASC
+	[ContactTypeLookUpId] ASC
 )
 ) ON [PRIMARY]
 
@@ -56,12 +56,12 @@ SET ANSI_PADDING OFF
 GO
 
 CREATE TABLE [dbo].[RPT_CareTeamFrequency](
-	[ContactTypeLookUpId] [int] IDENTITY(1,1) NOT NULL,
+	[CareTeamFrequencyId] [int] IDENTITY(1,1) NOT NULL,
 	[MongoId] [varchar](50) NOT NULL,
 	[Name] [varchar](200) NULL,
  CONSTRAINT [PK_ContactTypeLookUp] PRIMARY KEY CLUSTERED 
 (
-	[ContactTypeLookUpId] ASC
+	[CareTeamFrequencyId] ASC
 )
 ) ON [PRIMARY]
 
