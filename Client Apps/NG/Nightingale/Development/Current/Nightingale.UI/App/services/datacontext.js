@@ -1500,7 +1500,7 @@
 				queryCompleted(message);
 			}
 
-			var message = queryStarted('Note', true, 'Deleting');
+			var message = queryStarted('CareMember', true, 'Deleting');
 			return careMembersService.deleteCareTeamMember(manager, careMember).then(deleteCompleted);
 		}
 		
