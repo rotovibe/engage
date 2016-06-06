@@ -263,3 +263,49 @@ END
 
 GO
 
+
+
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[spPhy_RPT_Flat_Assigned_PCM]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[spPhy_RPT_Flat_Assigned_PCM]
+GO
+
+
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+CREATE PROCEDURE [dbo].[spPhy_RPT_Flat_Assigned_PCM]
+AS
+BEGIN
+	TRUNCATE TABLE [RPT_Flat_Assigned_PCM]
+	INSERT INTO [RPT_Flat_Assigned_PCM]
+	(
+		[MongoPatientId],
+		[MongoPCMContactId],
+		[MongoCareTeamId],
+		[FirstName],
+		[LastName],
+		[PreferredName]
+	)
+	SELECT 
+		(SELECT c.MongoPatientId FROM RPT_Contact c WHERE MongoId = CT.MongoContactIdForPatient) AS MongoPatientId,		
+		CT.MongoContactIdForCareMember as MongoPCMContactId,
+		CT.MongoCareTeamId as MongoCareTeamId,
+		C.FirstName,
+		C.LastName,
+		C.PreferredName	
+	FROM RPT_CareTeam CT 
+		LEFT JOIN RPT_Contact C
+			ON C.MongoId  =  CT.MongoContactIdForCareMember
+	WHERE
+		 CT.Status = 'Active' AND
+		 CT.Core = 1 AND
+		 CT.RoleId = '56f169f8078e10eb86038514' AND
+		 CT.DeleteFlag = 'False' AND
+		 CT.TTLDate IS NULL
+END
+
+GO

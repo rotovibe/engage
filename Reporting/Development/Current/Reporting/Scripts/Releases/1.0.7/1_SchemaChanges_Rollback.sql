@@ -13,3 +13,7 @@ GO
 IF EXISTS (SELECT * FROM sys.objects WHERE type = 'U' AND name = 'RPT_CareTeam')
 	DROP TABLE [dbo].[RPT_CareTeam]
 GO
+
+IF EXISTS (SELECT * FROM sys.objects WHERE type = 'U' AND name = 'RPT_Flat_Assigned_PCM')
+	DROP TABLE [dbo].[RPT_Flat_Assigned_PCM]
+GO

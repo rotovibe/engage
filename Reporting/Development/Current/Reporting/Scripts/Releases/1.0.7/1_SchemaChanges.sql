@@ -118,3 +118,37 @@ GO
 
 SET ANSI_PADDING OFF
 GO
+
+
+
+IF EXISTS (SELECT * FROM sys.objects WHERE type = 'U' AND name = 'RPT_Flat_Assigned_PCM')
+	DROP TABLE [dbo].[RPT_Flat_Assigned_PCM]
+GO
+
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+SET ANSI_PADDING OFF
+GO
+
+CREATE TABLE [dbo].[RPT_Flat_Assigned_PCM](
+	[MongoPatientId] [varchar](50) NOT NULL,
+	[MongoPCMContactId] [varchar](50) NOT NULL,
+	[MongoCareTeamId] [varchar](50) NOT NULL,
+	[FirstName] [varchar](100) NULL,
+	[LastName] [varchar](100) NULL,
+	[PreferredName] [varchar](100) NULL,
+ CONSTRAINT [PK_RPT_Flat_Assigned_PCM] PRIMARY KEY CLUSTERED 
+(
+	[MongoPatientId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+
+SET ANSI_PADDING OFF
+GO
