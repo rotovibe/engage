@@ -1,4 +1,5 @@
-﻿using Phytel.API.Interface;
+﻿using System.Collections.Generic;
+using Phytel.API.Interface;
 using ServiceStack.ServiceHost;
 
 namespace Phytel.API.DataDomain.Contact.DTO
@@ -10,6 +11,9 @@ namespace Phytel.API.DataDomain.Contact.DTO
 
         [ApiMember(Name = "PatientId", Description = "Patient Id", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string PatientId { get; set; }
+
+        [ApiMember(Name = "List<ContactWithUpdatedRecentList>", Description = "Contact Ids having the deleted contact in their recentList.", ParameterType = "property", DataType = "List<ContactWithUpdatedRecentList>", IsRequired = false)]
+        public List<ContactWithUpdatedRecentList> ContactWithUpdatedRecentLists { get; set; }
 
         [ApiMember(Name = "UserId", Description = "UserId of the logged in user", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string UserId { get; set; }

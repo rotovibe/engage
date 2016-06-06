@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Phytel.API.AppDomain.NG.Command;
 using Phytel.API.AppDomain.NG.DTO;
+using Phytel.API.DataDomain.Contact.DTO;
 
 namespace Phytel.API.AppDomain.NG.Test
 {
@@ -40,7 +41,7 @@ namespace Phytel.API.AppDomain.NG.Test
              mockContactEndPointUtil.Setup(
                  mcep =>
                      mcep.DereferencePatientInContact(It.IsAny<string>(), It.IsAny<double>(), It.IsAny<string>(),
-                         It.IsAny<string>())).Returns(true);
+                         It.IsAny<string>())).Returns(new DereferencePatientDataResponse());
 
 
              var command = new DereferencePatientInContactCommand("someId", new PostDeletePatientRequest(), mockContactEndPointUtil.Object);

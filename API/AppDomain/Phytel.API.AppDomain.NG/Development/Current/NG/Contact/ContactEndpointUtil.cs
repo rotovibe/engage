@@ -126,9 +126,9 @@ namespace Phytel.API.AppDomain.NG
             return contactList;
         }
 
-        public bool DereferencePatientInContact(string patientId, double version, string contractNumber, string userId)
+        public DereferencePatientDataResponse DereferencePatientInContact(string patientId, double version, string contractNumber, string userId)
         {
-            var response = false;
+            DereferencePatientDataResponse dereferencePatientDataResponse = null;
             try
             {
                 IRestClient client = new JsonServiceClient();
@@ -139,7 +139,7 @@ namespace Phytel.API.AppDomain.NG
                                                        contractNumber,patientId), userId);
 
                 //[Route("/{Context}/{Version}/{ContractNumber}/Contact/CareManagers", "GET")]
-                var dataDomainResponse =
+                dereferencePatientDataResponse =
                     client.Put<DereferencePatientDataResponse>(url, new DereferencePatientDataRequest
                     {
                         ContractNumber = contractNumber,
@@ -147,22 +147,16 @@ namespace Phytel.API.AppDomain.NG
                         PatientId =  patientId,
                         UserId = userId,
                         Version = version
-                    });
-
-                if (dataDomainResponse != null)
-                {
-
-                    response = dataDomainResponse.IsSuccessful;
-                }
+                    });                
             }
             catch (WebServiceException wse)
             {
                 throw new WebServiceException("AD:DereferencePatientInContact()::" + wse.Message, wse.InnerException);
             }
-            return response;
+            return dereferencePatientDataResponse;
         }
 
-        public bool UndoDereferencePatientInContact(string contactId, string patientId, double version,string contractNumber, string userId)
+        public bool UndoDereferencePatientInContact(string contactId, string patientId, double version,string contractNumber, List<ContactWithUpdatedRecentList> contactWithUpdatedRecentLists, string userId)
         {
             var response = false;
             try
@@ -181,6 +175,7 @@ namespace Phytel.API.AppDomain.NG
                         ContactId =  contactId,
                         PatientId = patientId,
                         ContractNumber = contractNumber,
+                        ContactWithUpdatedRecentLists =  contactWithUpdatedRecentLists,
                         Context = "NG",
                         UserId = userId,
                         Version = version

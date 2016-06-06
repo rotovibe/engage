@@ -465,6 +465,35 @@ namespace Phytel.API.DataDomain.Contact
                 var repo = Factory.GetRepository(request, RepositoryType.Contact);
                 var isSuccessful = repo.DereferencePatient(request);
 
+                if (isSuccessful)
+                {
+                    // Remove this deleted contact(PatientId) from RecentList of  other contacts(users logged in).
+
+                    List<ContactData> contactsWithAPatientInRecentList = repo.FindContactsWithAPatientInRecentList(request.PatientId) as List<ContactData>;
+                    if (contactsWithAPatientInRecentList != null && contactsWithAPatientInRecentList.Count > 0)
+                    {
+                        var contactsWithUpdatedRecentList = new List<ContactWithUpdatedRecentList>();
+                        contactsWithAPatientInRecentList.ForEach(c =>
+                        {
+                            PutRecentPatientRequest recentPatientRequest = new PutRecentPatientRequest
+                            {
+                                ContactId = c.Id,
+                                Context = request.Context,
+                                ContractNumber = request.ContractNumber,
+                                UserId = request.UserId,
+                                Version = request.Version
+                            };
+                            int index = c.RecentsList.IndexOf(request.PatientId);
+                            if (c.RecentsList.Remove(request.PatientId))
+                            {
+                                if (repo.UpdateRecentList(recentPatientRequest, c.RecentsList))
+                                {
+                                    contactsWithUpdatedRecentList.Add(new ContactWithUpdatedRecentList { ContactId = recentPatientRequest.ContactId, PatientIndex = index });                                    
+                                }
+                            }
+                        });
+                    }
+                }
                 response.IsSuccessful = isSuccessful;
             }
             catch (Exception ex)
@@ -482,6 +511,32 @@ namespace Phytel.API.DataDomain.Contact
             {
                 var repo = Factory.GetRepository(request, RepositoryType.Contact);
                 var isSuccessful = repo.UnDereferencePatient(request);
+
+                // Add the deleted contact back into the RecentList of  other contacts(users logged in) who had him/her before the delete action.
+                var undeletedContact = repo.FindByID(request.ContactId) as ContactData;
+                if (undeletedContact != null)
+                {
+                    if (request.ContactWithUpdatedRecentLists != null && request.ContactWithUpdatedRecentLists.Count > 0)
+                    {
+                        request.ContactWithUpdatedRecentLists.ForEach(c =>
+                        {
+                            var contactData = repo.FindByID(c.ContactId) as ContactData;
+                            if (contactData != null)
+                            {
+                                contactData.RecentsList.Insert(c.PatientIndex, undeletedContact.PatientId);
+                                PutRecentPatientRequest recentPatientRequest = new PutRecentPatientRequest
+                                {
+                                    ContactId = c.ContactId,
+                                    Context = request.Context,
+                                    ContractNumber = request.ContractNumber,
+                                    UserId = request.UserId,
+                                    Version = request.Version
+                                };
+                                repo.UpdateRecentList(recentPatientRequest, contactData.RecentsList);
+                            }
+                        });
+                    }
+                }
 
                 response.IsSuccessful = isSuccessful;
             }

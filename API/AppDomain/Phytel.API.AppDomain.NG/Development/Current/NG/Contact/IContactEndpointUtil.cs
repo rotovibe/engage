@@ -11,8 +11,8 @@ namespace Phytel.API.AppDomain.NG
         ContactData GetContactByContactId(GetContactByContactIdRequest request);
         List<ContactData> GetContactsByContactIds(List<string> contactIds, double version, string contractNumber,string userId);
         List<Contact> GetCareManagers(GetAllCareManagersRequest request);
-        bool DereferencePatientInContact(string patientId, double version, string contractNumber, string userId);
-        bool UndoDereferencePatientInContact(string contactId,string patientId, double version, string contractNumber, string userId);
+        DereferencePatientDataResponse DereferencePatientInContact(string patientId, double version, string contractNumber, string userId);
+        bool UndoDereferencePatientInContact(string contactId,string patientId, double version, string contractNumber, List<ContactWithUpdatedRecentList> contactWithUpdatedRecentLists, string userId);
 
         #endregion
 
