@@ -25,7 +25,7 @@ namespace Phytel.Data.ETL.Templates
                 try
                 {
                     bcc.BulkCopyTimeout = 580;
-                    bcc.ColumnMappings.Add("Id", "MongoId");
+                    bcc.ColumnMappings.Add("MongoId", "MongoId");
                     bcc.ColumnMappings.Add("Name", "Name");
                     bcc.ColumnMappings.Add("Role", "Role");
                     bcc.ColumnMappings.Add("ParentId", "ParentId");
