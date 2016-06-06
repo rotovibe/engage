@@ -335,10 +335,18 @@ define([ 'services/datacontext', 'services/local.collections', 'viewmodels/home/
 				var activeStatusId = contactsIndex.activeContactStatus()? contactsIndex.activeContactStatus().id() : null;
 				var customRoleName = self.careMember().customRoleName();
 				var errors = [];
-				if( !selectedContact ){
-					self.contactAlreadyAssigned( false );
+				
+				//dont allow a patient to assigned as a member in his own team:
+				var patientContactId = selectedPatient ? selectedPatient.contactId() : null;
+				if( selectedContact && patientContactId && patientContactId == selectedContact.id() ){						
+					errors.push(
+						{ PropName: 'contact', Message: 'a patient cannot be assigned as a member of his own care team.' }
+					);
 				}
 				
+				if( !selectedContact ){
+					self.contactAlreadyAssigned( false );
+				}				
 				else if( teamMembers.length ){
 					//check for duplicate contact:
 					var dup = ko.utils.arrayFirst( teamMembers, function(member){
@@ -357,14 +365,6 @@ define([ 'services/datacontext', 'services/local.collections', 'viewmodels/home/
 					}
 					else{						
 						self.contactAlreadyAssigned( false );
-					}
-					
-					//dont allow a patient to assigned as a member in his own team:
-					var patientContactId = selectedPatient ? selectedPatient.contactId() : null;
-					if( selectedContact && patientContactId && patientContactId == selectedContact.id() ){						
-						errors.push(
-							{ PropName: 'contact', Message: 'a patient cannot be assigned as a member of his own care team.' }
-						);
 					}
 					
 					//check if core pcp/pcm has already assigned and active:
