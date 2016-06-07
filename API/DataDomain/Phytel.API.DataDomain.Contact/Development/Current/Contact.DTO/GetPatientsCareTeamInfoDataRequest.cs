@@ -6,8 +6,8 @@ namespace Phytel.API.DataDomain.Contact.DTO
 {
     [Api(Description = "A Request object to get PatientCareTeamInfo given all patientIds.")]
     //Need a better route.
-    [Route("/{Context}/{Version}/{ContractNumber}/Patients/PatientCareTeamInfo", "POST")]
-    public class GetPatientsCareTeamInfoRequest : IDataDomainRequest
+    [Route("/{Context}/{Version}/{ContractNumber}/Contacts/PatientCareTeamInfo", "POST")]
+    public class GetPatientsCareTeamInfoDataRequest : IDataDomainRequest
     {
         [ApiMember(Name = "PatientIds", Description = "PatientIds", ParameterType = "property", DataType = "List of strings", IsRequired = true)]
         public List<string> PatientIds { get; set; }

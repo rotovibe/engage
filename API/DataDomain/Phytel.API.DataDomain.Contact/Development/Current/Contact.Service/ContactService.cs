@@ -322,19 +322,19 @@ namespace Phytel.API.DataDomain.Contact.Service
             return response;
         }
 
-        public GetPatientsCareTeamInfoResponse Post(GetPatientsCareTeamInfoRequest request)
+        public GetPatientsCareTeamInfoDataResponse Post(GetPatientsCareTeamInfoDataRequest dataRequest)
         {
 
-            if (request == null)
-                throw new ArgumentNullException("request");
-            var response = new GetPatientsCareTeamInfoResponse();
+            if (dataRequest == null)
+                throw new ArgumentNullException("dataRequest");
+            var response = new GetPatientsCareTeamInfoDataResponse();
             try
             {
-                if (string.IsNullOrEmpty(request.UserId))
+                if (string.IsNullOrEmpty(dataRequest.UserId))
                     throw new UnauthorizedAccessException("ContactDD:GetPatientsCareTeamInfoRequest()::Unauthorized Access");
 
-                response = CommonDataManager.GetPatientsCareTeamInfo(request);
-                response.Version = request.Version;
+                response = CommonDataManager.GetPatientsCareTeamInfo(dataRequest);
+                response.Version = dataRequest.Version;
             }
             catch (Exception ex)
             {

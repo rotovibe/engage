@@ -4,6 +4,6 @@ namespace Phytel.API.DataDomain.Contact
 {
     public interface ICommonDataManager
     {
-        GetPatientsCareTeamInfoResponse GetPatientsCareTeamInfo(GetPatientsCareTeamInfoRequest request);
+        GetPatientsCareTeamInfoDataResponse GetPatientsCareTeamInfo(GetPatientsCareTeamInfoDataRequest dataRequest);
     }
 }

@@ -4,7 +4,7 @@ using ServiceStack.ServiceInterface.ServiceModel;
 
 namespace Phytel.API.DataDomain.Contact.DTO
 {
-    public class GetPatientsCareTeamInfoResponse : IDomainResponse
+    public class GetPatientsCareTeamInfoDataResponse : IDomainResponse
     {
         public List<PatientCareTeamInfo>  ContactCareTeams { get; set; }
         public double Version { get; set; }

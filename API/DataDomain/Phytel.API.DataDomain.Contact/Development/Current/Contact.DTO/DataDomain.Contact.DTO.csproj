@@ -130,8 +130,8 @@
     <Compile Include="ContactTypeLookUp\PutContactTypeLookUpDataResponse.cs" />
     <Compile Include="GetContactsByContactIdsDataRequest.cs" />
     <Compile Include="GetContactsByContactIdsDataResponse.cs" />
-    <Compile Include="GetPatientsCareTeamInfoRequest.cs" />
-    <Compile Include="GetPatientsCareTeamInfoResponse.cs" />
+    <Compile Include="GetPatientsCareTeamInfoDataRequest.cs" />
+    <Compile Include="GetPatientsCareTeamInfoDataResponse.cs" />
     <Compile Include="SyncContactInfoData.cs" />
     <Compile Include="SyncContactInfoDataRequest.cs" />
     <Compile Include="SyncContactInfoDataResponse.cs" />

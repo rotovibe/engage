@@ -200,7 +200,7 @@ namespace Phytel.API.AppDomain.NG
             try
             {
                 IRestClient client = new JsonServiceClient();
-                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patients/PatientCareTeamInfo",
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Contacts/PatientCareTeamInfo",
                                                        DDContactServiceUrl,
                                                        "NG",
                                                        version,
@@ -208,7 +208,7 @@ namespace Phytel.API.AppDomain.NG
 
               
                 var dataDomainResponse =
-                    client.Post<GetPatientsCareTeamInfoResponse>(url, new GetPatientsCareTeamInfoRequest
+                    client.Post<GetPatientsCareTeamInfoDataResponse>(url, new GetPatientsCareTeamInfoDataRequest
                     {
                         PatientIds = patientIds,
                         ContractNumber = contractNumber,

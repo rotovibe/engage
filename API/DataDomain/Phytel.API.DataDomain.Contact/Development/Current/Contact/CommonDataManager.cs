@@ -19,7 +19,7 @@ namespace Phytel.API.DataDomain.Contact
              throw new ArgumentNullException("contactRepositoryFactory");
 
             if(careTeamRepositoryFactory == null)
-                throw new ApplicationException("careTeamRepositoryFactory");
+                throw new ArgumentNullException("careTeamRepositoryFactory");
 
 
             _contactRepositoryFactory = contactRepositoryFactory;
@@ -28,18 +28,18 @@ namespace Phytel.API.DataDomain.Contact
 
         }
 
-        public GetPatientsCareTeamInfoResponse GetPatientsCareTeamInfo(DTO.GetPatientsCareTeamInfoRequest request)
+        public GetPatientsCareTeamInfoDataResponse GetPatientsCareTeamInfo(DTO.GetPatientsCareTeamInfoDataRequest dataRequest)
         {
-            if(request == null)
-                throw new ArgumentNullException("request");
+            if(dataRequest == null)
+                throw new ArgumentNullException("dataRequest");
 
-            var contactRepository = _contactRepositoryFactory.GetRepository(request, RepositoryType.Contact);
-            var careTeamRepository = _careTeamRepositoryFactory.GetCareTeamRepository(request, RepositoryType.CareTeam);
+            var contactRepository = _contactRepositoryFactory.GetRepository(dataRequest, RepositoryType.Contact);
+            var careTeamRepository = _careTeamRepositoryFactory.GetCareTeamRepository(dataRequest, RepositoryType.CareTeam);
             
-            var response = new GetPatientsCareTeamInfoResponse();
+            var response = new GetPatientsCareTeamInfoDataResponse();
             try
             {
-                var contacts = contactRepository.GetContactsByPatientIds(request.PatientIds);
+                var contacts = contactRepository.GetContactsByPatientIds(dataRequest.PatientIds);
                 
 
                 if (contacts.IsNullOrEmpty())
