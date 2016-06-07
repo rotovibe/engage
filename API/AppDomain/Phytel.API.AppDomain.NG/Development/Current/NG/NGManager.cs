@@ -539,7 +539,7 @@ namespace Phytel.API.AppDomain.NG
                     MiddleName = x.MiddleName,
                     PreferredName = x.PreferredName,
                     Suffix = x.Suffix,
-                    TeamId = patientsInfo.FirstOrDefault(p => p.PatientId == x.Id) == null ? null : patientsInfo.FirstOrDefault(p => p.PatientId == x.Id).CareTeamId
+                    CareTeamId = patientsInfo.FirstOrDefault(p => p.PatientId == x.Id) == null ? null : patientsInfo.FirstOrDefault(p => p.PatientId == x.Id).CareTeamId
                 }));
 
                 if (qResponse.Status != null)
