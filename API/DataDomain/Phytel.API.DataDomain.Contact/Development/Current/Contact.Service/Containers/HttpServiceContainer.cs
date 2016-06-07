@@ -32,6 +32,8 @@ namespace Phytel.API.DataDomain.Contact.Service.Containers
             container.RegisterAutoWiredAs<CareTeamRepositoryFactory, ICareTeamRepositoryFactory>();
             container.RegisterAutoWiredAs<CareTeamDataManager, ICareTeamManager>();
 
+            container.RegisterAutoWiredAs<CommonDataManager, ICommonDataManager>();
+
 
             container.RegisterAutoWiredAs<AuditHelpers, IAuditHelpers>();
 

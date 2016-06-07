@@ -15,6 +15,7 @@ namespace Phytel.API.DataDomain.Contact.Service
         public IContactDataManager Manager { get; set; }
         public IHelpers Helpers { get; set; }
         public ICommonFormatterUtil CommonFormat { get; set; }
+        public ICommonDataManager CommonDataManager { get; set; }
 
         public GetContactByPatientIdDataResponse Get(GetContactByPatientIdDataRequest request)
         {
@@ -318,6 +319,31 @@ namespace Phytel.API.DataDomain.Contact.Service
                 string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
                 Common.Helper.LogException(int.Parse(aseProcessID), ex);
             }
+            return response;
+        }
+
+        public GetPatientsCareTeamInfoResponse Post(GetPatientsCareTeamInfoRequest request)
+        {
+
+            if (request == null)
+                throw new ArgumentNullException("request");
+            var response = new GetPatientsCareTeamInfoResponse();
+            try
+            {
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("ContactDD:GetPatientsCareTeamInfoRequest()::Unauthorized Access");
+
+                response = CommonDataManager.GetPatientsCareTeamInfo(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Common.Helper.LogException(int.Parse(aseProcessID), ex);
+            }
+
             return response;
         }
 

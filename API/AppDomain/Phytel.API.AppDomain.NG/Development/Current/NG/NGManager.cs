@@ -517,6 +517,17 @@ namespace Phytel.API.AppDomain.NG
                 // Route("/{Context}/{Version}/{ContractNumber}/CohortPatients/{CohortID}", "GET")]
                 GetCohortPatientsDataResponse qResponse = client.Get<GetCohortPatientsDataResponse>(url);
 
+
+                
+                var patientIds = qResponse.CohortPatients.Select(r => r.Id).ToList();
+                List<PatientCareTeamInfo> patientsInfo = new List<PatientCareTeamInfo>();
+                if (!patientIds.IsNullOrEmpty())
+                {
+                     patientsInfo = ContactEndpointUtil.GetPatientsCareTeamInfoResponse(patientIds, request.Version,
+                        request.ContractNumber, request.UserId);
+
+                }
+
                 //take qResponse Patient details and map them to "Patient" in the GetCohortPatientsResponse
                 qResponse.CohortPatients.ForEach(x => pResponse.Patients.Add(new CohortPatient
                 {
@@ -527,7 +538,8 @@ namespace Phytel.API.AppDomain.NG
                     LastName = x.LastName,
                     MiddleName = x.MiddleName,
                     PreferredName = x.PreferredName,
-                    Suffix = x.Suffix
+                    Suffix = x.Suffix,
+                    TeamId = patientsInfo.FirstOrDefault(p => p.PatientId == x.Id) == null ? null : patientsInfo.FirstOrDefault(p => p.PatientId == x.Id).CareTeamId
                 }));
 
                 if (qResponse.Status != null)

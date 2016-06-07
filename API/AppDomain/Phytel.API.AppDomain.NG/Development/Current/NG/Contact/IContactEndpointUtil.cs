@@ -13,6 +13,7 @@ namespace Phytel.API.AppDomain.NG
         List<Contact> GetCareManagers(GetAllCareManagersRequest request);
         DereferencePatientDataResponse DereferencePatientInContact(string patientId, double version, string contractNumber, string userId);
         bool UndoDereferencePatientInContact(string contactId,string patientId, double version, string contractNumber, List<ContactWithUpdatedRecentList> contactWithUpdatedRecentLists, string userId);
+        List<PatientCareTeamInfo> GetPatientsCareTeamInfoResponse(List<string> patientIds, double version,string contractNumber, string userId);
 
         #endregion
 

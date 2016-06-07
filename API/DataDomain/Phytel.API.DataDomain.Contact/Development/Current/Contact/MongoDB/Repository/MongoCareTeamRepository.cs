@@ -31,7 +31,7 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
         {
             try
             {
-                if (BsonClassMap.IsClassMapRegistered(typeof(MEContactCareTeam)) == false)
+                if (BsonClassMap.IsClassMapRegistered(typeof (MEContactCareTeam)) == false)
                     BsonClassMap.RegisterClassMap<MEContactCareTeam>();
             }
             catch
@@ -59,10 +59,10 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
                     {
 
                         var queries = new List<IMongoQuery>
-                            {
-                                MB.Query<MEContactCareTeam>.EQ(c => c.ContactId, ObjectId.Parse(data.ContactId)),
-                                MB.Query<MEContactCareTeam>.EQ(c => c.DeleteFlag, false)
-                            };
+                        {
+                            MB.Query<MEContactCareTeam>.EQ(c => c.ContactId, ObjectId.Parse(data.ContactId)),
+                            MB.Query<MEContactCareTeam>.EQ(c => c.DeleteFlag, false)
+                        };
 
                         var query = MB.Query.And(queries);
                         var contactCareTeam = ctx.CareTeam.Collection.FindOne(query);
@@ -79,18 +79,19 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
                             };
 
                             ctx.CareTeam.Collection.Save(meCareTeam);
-                           // response = meCareTeam.Id.ToString();
+                            // response = meCareTeam.Id.ToString();
                             AuditHelper.LogDataAudit(this.UserId,
-                                           MongoCollectionName.CareTeam.ToString(),
-                                            meCareTeam.Id.ToString(),
-                                           DataAuditType.Insert,
-                                           data.ContractNumber);
+                                MongoCollectionName.CareTeam.ToString(),
+                                meCareTeam.Id.ToString(),
+                                DataAuditType.Insert,
+                                data.ContractNumber);
                         }
                         else
                         {
                             var oldMembers = contactCareTeam.MeCareTeamMembers;
                             //Update
-                            contactCareTeam.MeCareTeamMembers = BuildMECareTeamMembers(data.CareTeamData.Members, this.UserId);
+                            contactCareTeam.MeCareTeamMembers = BuildMECareTeamMembers(data.CareTeamData.Members,
+                                this.UserId);
                             contactCareTeam.UpdatedBy = ObjectId.Parse(this.UserId);
                             contactCareTeam.LastUpdatedOn = DateTime.UtcNow;
 
@@ -107,15 +108,15 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
                             //response = contactCareTeam.Id.ToString();
 
                             AuditHelper.LogDataAudit(this.UserId,
-                                          MongoCollectionName.CareTeam.ToString(),
-                                           contactCareTeam.Id.ToString(),
-                                          DataAuditType.Update,
-                                          data.ContractNumber);
+                                MongoCollectionName.CareTeam.ToString(),
+                                contactCareTeam.Id.ToString(),
+                                DataAuditType.Update,
+                                data.ContractNumber);
                         }
 
                         careTeam = GetCareTeamByContactId(data.ContactId);
 
-                        if(careTeam == null)
+                        if (careTeam == null)
                             throw new Exception("Care Team is null or empty");
                     }
 
@@ -323,7 +324,7 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
 
         public bool UpdateCareTeamMember(object entity)
         {
-            UpdateCareTeamMemberDataRequest request = (UpdateCareTeamMemberDataRequest)entity;
+            UpdateCareTeamMemberDataRequest request = (UpdateCareTeamMemberDataRequest) entity;
             CareTeamMemberData careTeamMemberData = request.CareTeamMemberData;
             bool result = false;
             try
@@ -336,20 +337,23 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
                         var contactCareTeam = GetContactCareTeam(request.ContactId);
 
                         if (contactCareTeam == null)
-                            throw new ApplicationException("UpdateCareTeamMember: The referenced contact doesn't have a care team");
+                            throw new ApplicationException(
+                                "UpdateCareTeamMember: The referenced contact doesn't have a care team");
 
                         if (contactCareTeam.Id != ObjectId.Parse(request.CareTeamId))
-                            throw new ApplicationException("UpdateCareTeamMember: The referenced Care Team doesn't exist or is not assigned to the referenced contact");
+                            throw new ApplicationException(
+                                "UpdateCareTeamMember: The referenced Care Team doesn't exist or is not assigned to the referenced contact");
 
                         var currentMeCareTeamMember =
                             contactCareTeam.MeCareTeamMembers.FirstOrDefault(
                                 x => x.Id == ObjectId.Parse(careTeamMemberData.Id));
 
                         if (currentMeCareTeamMember == null)
-                            throw new ApplicationException("UpdateCareTeamMember: The referenced care team member doesn't exist");
+                            throw new ApplicationException(
+                                "UpdateCareTeamMember: The referenced care team member doesn't exist");
 
                         var memberIndex = contactCareTeam.MeCareTeamMembers.FindIndex(
-                                x => x.Id == ObjectId.Parse(careTeamMemberData.Id));
+                            x => x.Id == ObjectId.Parse(careTeamMemberData.Id));
 
                         var updatedMecareMemberTeam = BuildMECareTeamMember(this.UserId, careTeamMemberData);
 
@@ -364,10 +368,10 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
                         ctx.CareTeam.Collection.Save(contactCareTeam);
 
                         AuditHelper.LogDataAudit(this.UserId,
-                                          MongoCollectionName.CareTeam.ToString(),
-                                           contactCareTeam.Id.ToString(),
-                                          DataAuditType.Update,
-                                          request.ContractNumber);
+                            MongoCollectionName.CareTeam.ToString(),
+                            contactCareTeam.Id.ToString(),
+                            DataAuditType.Update,
+                            request.ContractNumber);
 
 
                         result = true;
@@ -379,7 +383,10 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
             {
                 throw new ApplicationException(ex.Message);
             }
-            catch (Exception ex) { throw new Exception("CareMemberDD:MongoCareMemberRepository:Update()" + ex.Message, ex.InnerException); }
+            catch (Exception ex)
+            {
+                throw new Exception("CareMemberDD:MongoCareMemberRepository:Update()" + ex.Message, ex.InnerException);
+            }
         }
 
         public void CacheByID(List<string> entityIDs)
@@ -450,18 +457,21 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
                     Id = string.IsNullOrEmpty(member.Id) ? ObjectId.GenerateNewId() : ObjectId.Parse(member.Id),
                     ContactId = ObjectId.Parse(member.ContactId),
                     Core = member.Core,
-                    RoleId = string.IsNullOrEmpty(member.RoleId) ? (ObjectId?)BsonNull.Value : ObjectId.Parse(member.RoleId),
+                    RoleId =
+                        string.IsNullOrEmpty(member.RoleId) ? (ObjectId?) BsonNull.Value : ObjectId.Parse(member.RoleId),
                     CustomRoleName = member.CustomRoleName,
                     StartDate = member.StartDate,
                     EndDate = member.EndDate,
                     Frequency =
-                        string.IsNullOrEmpty(member.FrequencyId) ? (ObjectId?)BsonNull.Value : ObjectId.Parse(member.FrequencyId),
+                        string.IsNullOrEmpty(member.FrequencyId)
+                            ? (ObjectId?) BsonNull.Value
+                            : ObjectId.Parse(member.FrequencyId),
                     Distance = member.Distance ?? member.Distance,
                     DistanceUnit = member.DistanceUnit,
                     ExternalRecordId = member.ExternalRecordId,
                     Notes = member.Notes,
                     DataSource = member.DataSource,
-                    Status = (CareTeamMemberStatus)member.StatusId,
+                    Status = (CareTeamMemberStatus) member.StatusId,
                 };
                 if (string.IsNullOrEmpty(member.Id))
                 {
@@ -504,17 +514,21 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
                     Id = member.Id.ToString(),
                     ContactId = member.ContactId.ToString(),
                     Core = member.Core,
-                    RoleId = (member.RoleId == null || member.RoleId == ObjectId.Empty) ? null : member.RoleId.ToString(),
+                    RoleId =
+                        (member.RoleId == null || member.RoleId == ObjectId.Empty) ? null : member.RoleId.ToString(),
                     CustomRoleName = member.CustomRoleName,
                     StartDate = member.StartDate,
                     EndDate = member.EndDate,
-                    FrequencyId = (member.Frequency == null || member.Frequency == ObjectId.Empty) ? null : member.Frequency.ToString(),
+                    FrequencyId =
+                        (member.Frequency == null || member.Frequency == ObjectId.Empty)
+                            ? null
+                            : member.Frequency.ToString(),
                     Distance = member.Distance ?? member.Distance,
-                    DistanceUnit = string.IsNullOrEmpty(member.DistanceUnit)?"mi":member.DistanceUnit,
+                    DistanceUnit = string.IsNullOrEmpty(member.DistanceUnit) ? "mi" : member.DistanceUnit,
                     ExternalRecordId = member.ExternalRecordId,
                     Notes = member.Notes,
                     DataSource = member.DataSource,
-                    StatusId = (int)member.Status,
+                    StatusId = (int) member.Status,
                     CreatedOn = member.RecordCreatedOn,
                     CreatedById = member.RecordCreatedBy.ToString(),
                     UpdatedById = member.UpdatedBy == null ? null : member.UpdatedBy.ToString(),
@@ -526,21 +540,21 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
 
         public void DeleteCareTeamMember(object entity)
         {
-            var request = (DeleteCareTeamMemberDataRequest)entity;
+            var request = (DeleteCareTeamMemberDataRequest) entity;
 
             using (var ctx = new ContactCareTeamMongoContext(_dbName))
             {
                 var queries = new List<IMongoQuery>
-                        {
-                            MB.Query<MEContactCareTeam>.EQ(c => c.ContactId, ObjectId.Parse(request.ContactId)),
-                            MB.Query<MEContactCareTeam>.EQ(c => c.Id, ObjectId.Parse(request.CareTeamId)),
-                            MB.Query<MEContactCareTeam>.EQ(c => c.DeleteFlag, false)
-                        };
+                {
+                    MB.Query<MEContactCareTeam>.EQ(c => c.ContactId, ObjectId.Parse(request.ContactId)),
+                    MB.Query<MEContactCareTeam>.EQ(c => c.Id, ObjectId.Parse(request.CareTeamId)),
+                    MB.Query<MEContactCareTeam>.EQ(c => c.DeleteFlag, false)
+                };
 
                 var query = MB.Query.And(queries);
                 var contactCareTeam = ctx.CareTeam.Collection.FindOne(query);
 
-                if(contactCareTeam == null)
+                if (contactCareTeam == null)
                     throw new Exception(string.Format("No care team exists with Id : {0}", request.CareTeamId));
 
                 var members = contactCareTeam.MeCareTeamMembers;
@@ -567,15 +581,15 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
 
         public void Delete(object entity)
         {
-            var request = (DeleteCareTeamDataRequest)entity;
+            var request = (DeleteCareTeamDataRequest) entity;
 
             using (var ctx = new ContactCareTeamMongoContext(_dbName))
             {
                 var queries = new List<IMongoQuery>
-                        {
-                            MB.Query<MEContactCareTeam>.EQ(c => c.Id, ObjectId.Parse(request.Id)),                            
-                            MB.Query<MEContactCareTeam>.EQ(c => c.DeleteFlag, false)
-                        };
+                {
+                    MB.Query<MEContactCareTeam>.EQ(c => c.Id, ObjectId.Parse(request.Id)),
+                    MB.Query<MEContactCareTeam>.EQ(c => c.DeleteFlag, false)
+                };
 
                 var query = MB.Query.And(queries);
                 var contactCareTeam = ctx.CareTeam.Collection.FindOne(query);
@@ -598,7 +612,7 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
 
         public void UndoDelete(object entity)
         {
-            UndoDeleteCareTeamDataRequest request = (UndoDeleteCareTeamDataRequest)entity;
+            UndoDeleteCareTeamDataRequest request = (UndoDeleteCareTeamDataRequest) entity;
             try
             {
                 using (var ctx = new ContactCareTeamMongoContext(_dbName))
@@ -614,13 +628,16 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
                     ctx.CareTeam.Collection.Update(query, update);
 
                     AuditHelper.LogDataAudit(this.UserId,
-                                            MongoCollectionName.CareMember.ToString(),
-                                            request.Id.ToString(),
-                                            Common.DataAuditType.UndoDelete,
-                                            request.ContractNumber);
+                        MongoCollectionName.CareMember.ToString(),
+                        request.Id.ToString(),
+                        Common.DataAuditType.UndoDelete,
+                        request.ContractNumber);
                 }
             }
-            catch (Exception) { throw; }
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
         public bool CareTeamMemberContactExist(string careTeamId, string contactId)
@@ -665,10 +682,12 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
                         var contactCareTeam = GetContactCareTeam(request.ContactId);
 
                         if (contactCareTeam == null)
-                            throw new ApplicationException("AddCareTeamMember: The referenced contact doesn't have a care team");
+                            throw new ApplicationException(
+                                "AddCareTeamMember: The referenced contact doesn't have a care team");
 
                         if (contactCareTeam.Id != ObjectId.Parse(request.CareTeamId))
-                            throw new ApplicationException("AddCareTeamMember: The referenced Care Team doesn't exist or is not assigned to the referenced contact");
+                            throw new ApplicationException(
+                                "AddCareTeamMember: The referenced Care Team doesn't exist or is not assigned to the referenced contact");
 
                         var memberToAdd = BuildMECareTeamMember(this.UserId, request.CareTeamMemberData);
                         memberToAdd.RecordCreatedOn = DateTime.UtcNow;
@@ -696,6 +715,49 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
             }
             return id;
         }
+
+        public IEnumerable<CareTeamData> GetCareTeamsByContactIds(List<string> contactIds)
+        {
+            List<CareTeamData> contactDataList = null;
+
+            try
+            {
+
+                using (var ctx = new ContactCareTeamMongoContext(_dbName))
+                {
+
+                    List<IMongoQuery> queries = new List<IMongoQuery>();
+                    List<BsonValue> bsonList = Helper.ConvertToBsonValueList(contactIds);
+                    if (bsonList != null)
+                    {
+                        queries.Add(MB.Query.In(MEContactCareTeam.ContactIdProperty, bsonList));
+                        queries.Add(MB.Query.EQ(MEContactCareTeam.DeleteFlagProperty, false));
+                        IMongoQuery mQuery = MB.Query.And(queries);
+                        List<MEContactCareTeam> meContacts = ctx.CareTeam.Collection.Find(mQuery).ToList();
+                        if (meContacts != null && meContacts.Count > 0)
+                        {
+                            contactDataList = new List<CareTeamData>();
+                            foreach (var c in meContacts)
+                            {
+                                var careTeamData = BuildCareTeamData(c);
+                                if (careTeamData != null)
+                                    contactDataList.Add(careTeamData);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                
+                throw;
+            }
+           
+            
+
+            return contactDataList;
+        }
     }
 }
+   
 

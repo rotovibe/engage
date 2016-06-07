@@ -162,7 +162,7 @@ namespace Phytel.API.AppDomain.NG
             try
             {
                 IRestClient client = new JsonServiceClient();
-                string url = Common.Helper.BuildURL(string.Format("/{0}/{1}/{2}/{3}/Contact/{4}/Patient{5}/Dereference",
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Contact/{4}/Patient{5}/Dereference",
                                                        DDContactServiceUrl,
                                                        "NG",
                                                        version,
@@ -190,6 +190,42 @@ namespace Phytel.API.AppDomain.NG
             catch (WebServiceException wse)
             {
                 throw new WebServiceException("AD:DereferencePatientInContact()::" + wse.Message, wse.InnerException);
+            }
+            return response;
+        }
+        
+        public List<PatientCareTeamInfo> GetPatientsCareTeamInfoResponse(List<string> patientIds, double version, string contractNumber, string userId)
+        {
+            var response = new List<PatientCareTeamInfo>();
+            try
+            {
+                IRestClient client = new JsonServiceClient();
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patients/PatientCareTeamInfo",
+                                                       DDContactServiceUrl,
+                                                       "NG",
+                                                       version,
+                                                       contractNumber), userId);
+
+              
+                var dataDomainResponse =
+                    client.Post<GetPatientsCareTeamInfoResponse>(url, new GetPatientsCareTeamInfoRequest
+                    {
+                        PatientIds = patientIds,
+                        ContractNumber = contractNumber,
+                        Context = "NG",
+                        UserId = userId,
+                        Version = version
+                    });
+
+                if (dataDomainResponse != null)
+                {
+
+                    response = dataDomainResponse.ContactCareTeams;
+                }
+            }
+            catch (WebServiceException wse)
+            {
+                throw new WebServiceException("AD:GetPatientsCareTeamInfoResponse()::" + wse.Message, wse.InnerException);
             }
             return response;
         }
@@ -520,5 +556,6 @@ namespace Phytel.API.AppDomain.NG
         }
 
         #endregion
+
     }
 }

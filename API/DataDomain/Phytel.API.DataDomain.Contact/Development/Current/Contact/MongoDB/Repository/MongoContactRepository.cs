@@ -1294,6 +1294,38 @@ namespace Phytel.API.DataDomain.Contact
             return isSuccessful;
         }
 
+        public IEnumerable<ContactData> GetContactsByPatientIds(List<string> patientIds)
+        {
+            List<ContactData> contactDataList = null;
+            try
+            {
+                using (ContactMongoContext ctx = new ContactMongoContext(_dbName))
+                {
+                    List<IMongoQuery> queries = new List<IMongoQuery>();
+                    List<BsonValue> bsonList = Helper.ConvertToBsonValueList(patientIds);
+                    if (bsonList != null)
+                    {
+                        queries.Add(MB.Query.In(MEContact.PatientIdProperty, bsonList));
+                        queries.Add(MB.Query.EQ(MEContact.DeleteFlagProperty, false));
+                        IMongoQuery mQuery = MB.Query.And(queries);
+                        List<MEContact> meContacts = ctx.Contacts.Collection.Find(mQuery).ToList();
+                        if (meContacts != null && meContacts.Count > 0)
+                        {
+                            contactDataList = new List<ContactData>();
+                            foreach (MEContact c in meContacts)
+                            {
+                                ContactData contactData = BuildContactData(c);
+                                if (contactData != null)
+                                    contactDataList.Add(contactData);
+                            }
+                        }
+                    }
+                }
+                return contactDataList;
+            }
+            catch (Exception ex) { throw ex; }
+        }
+
         #region Private Methods
 
         private ContactData BuildContactData(MEContact contactEntity)
@@ -1751,5 +1783,8 @@ namespace Phytel.API.DataDomain.Contact
         }
          
         #endregion
+
+
+       
     }
 }

@@ -93,6 +93,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CareTeam\CareTeamDataManager.cs" />
+    <Compile Include="CommonDataManager.cs" />
+    <Compile Include="ICommonDataManager.cs" />
     <Compile Include="MongoDB\Repository\MongoCareTeamRepository.cs" />
     <Compile Include="CareTeam\CareTeamRepositoryFactory.cs" />
     <Compile Include="CareTeam\ICareTeamManager.cs" />

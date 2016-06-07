@@ -117,6 +117,7 @@
     <Compile Include="CareTeam\SaveCareTeamDataResponse.cs" />
     <Compile Include="CommModeData.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="PatientCareTeamInfo.cs" />
     <Compile Include="ContactData.cs" />
     <Compile Include="ContactSubTypeData.cs" />
     <Compile Include="ContactTypeLookUp\ContactTypeLookUpData.cs" />
@@ -129,6 +130,8 @@
     <Compile Include="ContactTypeLookUp\PutContactTypeLookUpDataResponse.cs" />
     <Compile Include="GetContactsByContactIdsDataRequest.cs" />
     <Compile Include="GetContactsByContactIdsDataResponse.cs" />
+    <Compile Include="GetPatientsCareTeamInfoRequest.cs" />
+    <Compile Include="GetPatientsCareTeamInfoResponse.cs" />
     <Compile Include="SyncContactInfoData.cs" />
     <Compile Include="SyncContactInfoDataRequest.cs" />
     <Compile Include="SyncContactInfoDataResponse.cs" />

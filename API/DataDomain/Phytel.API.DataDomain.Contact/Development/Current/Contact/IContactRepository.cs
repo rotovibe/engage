@@ -26,5 +26,7 @@ namespace Phytel.API.DataDomain.Contact
         bool SyncContact(SyncContactInfoDataRequest request);
         bool DereferencePatient(DereferencePatientDataRequest request);
         bool UnDereferencePatient(UndoDereferencePatientDataRequest request);
+
+        IEnumerable<ContactData> GetContactsByPatientIds(List<string> patientIds);
     }
 }

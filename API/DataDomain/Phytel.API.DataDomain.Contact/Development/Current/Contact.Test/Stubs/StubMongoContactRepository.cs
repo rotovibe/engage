@@ -160,5 +160,11 @@ namespace Phytel.API.DataDomain.Contact.Test.Stubs
         {
             throw new NotImplementedException();
         }
+
+
+        public IEnumerable<ContactData> GetContactsByPatientIds(List<string> patientIds)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
