@@ -31,8 +31,8 @@ define(['services/session', 'services/datacontext', 'viewmodels/patients/index',
 		
 		var careMembers = ko.computed(function(){
 			var members = [];
-			if (selectedPatient() && selectedPatient().careTeam()) {
-                members = selectedPatient().careTeam().members();
+			if (selectedPatient() && selectedPatient().contactCard() && selectedPatient().contactCard().careTeam() ) {
+                members = selectedPatient().contactCard().careTeam().members();
             }
 			return members;
 		}).extend({ throttle: 50 });
@@ -123,12 +123,11 @@ define(['services/session', 'services/datacontext', 'viewmodels/patients/index',
 		}
 		
 		function saveOverride () {
-			if( !selectedPatient().careTeamId() ){
+			if( !selectedPatient().contactCard().careTeam() ){
 				//team has not yet been created:
 				newCareTeam( datacontext.createEntity('CareTeam', 
 						{ 	id: -1, 
 							contactId: selectedPatient().contactId(),
-							patientId: selectedPatient().id(),
 							createdById: session.currentUser().userId()
 						}) );
 				newCareTeam().members = ko.observableArray();
@@ -138,13 +137,10 @@ define(['services/session', 'services/datacontext', 'viewmodels/patients/index',
 			else{
 				//add/save one member to an existing team
 				//	note: the new member should already be here inside members:				
-				return datacontext.saveCareTeam( selectedPatient().careTeam() ).then( saveTeamCompleted );
+				return datacontext.saveCareTeam( selectedPatient().contactCard().careTeam() ).then( saveTeamCompleted );
 			}
 							
-			function saveTeamCompleted( team ){
-				if( team ){					
-					selectedPatient().careTeam(team);					
-				}
+			function saveTeamCompleted( team ){				
 			};			            
         };
 		
@@ -230,7 +226,7 @@ define(['services/session', 'services/datacontext', 'viewmodels/patients/index',
 		}
 		
 		function addCareMember(){
-			var teamId = selectedPatient()? ( selectedPatient().careTeamId()? selectedPatient().careTeamId(): null ) : null;
+			var teamId = selectedPatient()? selectedPatient().contactCard()? ( selectedPatient().contactCard().careTeam()? selectedPatient().contactCard().careTeam().id(): null ) : null : null;
 			newCareMember( datacontext.createEntity('CareMember', 
 						{ 	id: --nextId, 
 							contactId: null,	//no contact yet

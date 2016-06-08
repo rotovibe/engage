@@ -35,7 +35,7 @@ define(['models/base', 'services/datacontext', 'services/session', 'viewmodels/s
             self.selectedPatient = settings.selectedPatient;
             // Get a list of all of the care team
             self.careMembers = ko.computed( function(){
-				var team = self.selectedPatient.careTeam();
+				var team = self.selectedPatient.contactCard() ? self.selectedPatient.contactCard().careTeam() : null;
 				var members = team ? team.members() : [];
 				// var members = ko.utils.arrayFilter( allMembers, function(member){
 					// return !member.isNew() && member.contactId() && member.contact() && member.core() && member.statusId() == 1;
@@ -47,7 +47,7 @@ define(['models/base', 'services/datacontext', 'services/session', 'viewmodels/s
             self.isOpen = ko.observable(true);
 			
 			self.primaryCareManager = ko.computed( function(){
-				var team = self.selectedPatient.careTeam();
+				var team = self.selectedPatient.contactCard() ? self.selectedPatient.contactCard().careTeam() : null;
 				if( team ){
 					return team.primaryCareManagers().length > 0 ? team.primaryCareManagers()[0] : null;
 				}
@@ -55,7 +55,7 @@ define(['models/base', 'services/datacontext', 'services/session', 'viewmodels/s
 			});
 			
 			self.primaryCarePhysician = ko.computed( function(){
-				var team = self.selectedPatient.careTeam();
+				var team = self.selectedPatient.contactCard() ? self.selectedPatient.contactCard().careTeam() : null;
 				if( team ){
 					return team.primaryCarePhysicians().length > 0 ? team.primaryCarePhysicians()[0] : null;
 				}
@@ -130,7 +130,7 @@ define(['models/base', 'services/datacontext', 'services/session', 'viewmodels/s
                         return caremanager.id() === session.currentUser().userId();
                     });
                     // Grab the first primary listed care member
-					var members = self.selectedPatient.careTeam() ? self.selectedPatient.careTeam().members() : [];
+					var members = self.selectedPatient.contactCard() ? self.selectedPatient.contactCard().careTeam() ? self.selectedPatient.contactCard().careTeam().members() : [] : [];
                     var thisCareMember = ko.utils.arrayFirst(members, function (ctMember) {
                         return ctMember.primary();
                     });
@@ -139,7 +139,7 @@ define(['models/base', 'services/datacontext', 'services/session', 'viewmodels/s
             };
             self.cancelOverride = function () {
                 datacontext.cancelEntityChanges(self.selectedPatient);
-				var members = self.selectedPatient.careTeam() ? self.selectedPatient.careTeam().members() : [];
+				var members = self.selectedPatient.contactCard() ? self.selectedPatient.contactCard().careTeam() ? self.selectedPatient.contactCard().careTeam().members() : [] : [];
                 ko.utils.arrayForEach(members, function (cm) {
                     datacontext.cancelEntityChanges(cm);
                 });
@@ -189,14 +189,14 @@ define(['models/base', 'services/datacontext', 'services/session', 'viewmodels/s
 			var self = this;
 			var pcmRoleId = teamIndex.pcmContactSubType().id();
 			var selectedPatient = self.selectedPatient;
-			var teamId = selectedPatient.careTeamId();
+			var teamId = selectedPatient.contactCard()? selectedPatient.contactCard().careTeam() ? selectedPatient.contactCard().careTeam().id() : null : null;
             var userCareManager = datacontext.getUserCareManager();
 			var userContactId = userCareManager.id();	//the caremanager id is actually a contact id (get care managers call returns them as contacts)
 			var careTeam;
 			
 			function saveTeamCompleted( team ){
 				if( team ){					
-					self.selectedPatient.careTeam(team);
+					//self.selectedPatient.careTeam(team);
 					self.isSaving(false);
 				}
 			};
@@ -216,7 +216,7 @@ define(['models/base', 'services/datacontext', 'services/session', 'viewmodels/s
 					//reassign the existing user pcm member as active core pcm:
 					userCareMember.core( true );
 					userCareMember.statusId( 1 );
-					datacontext.saveCareTeam( self.selectedPatient.careTeam() ).then( saveTeamCompleted );
+					datacontext.saveCareTeam( self.selectedPatient.contactCard().careTeam() ).then( saveTeamCompleted );
 				}	
 				else{
 					//create a new pcm user member
@@ -238,7 +238,6 @@ define(['models/base', 'services/datacontext', 'services/session', 'viewmodels/s
 						careTeam = datacontext.createEntity('CareTeam', 
 								{ 	id: -1, 
 									contactId: self.selectedPatient.contactId(),
-									patientId: self.selectedPatient.id(),
 									createdById: session.currentUser().userId()
 								});
 						careTeam.members = ko.observableArray();
@@ -247,7 +246,7 @@ define(['models/base', 'services/datacontext', 'services/session', 'viewmodels/s
 					else{
 						//add/save one member to an existing team
 						//	note: the new member should already be here inside careTeam().members:
-						careTeam = self.selectedPatient.careTeam();										
+						careTeam = self.selectedPatient.contactCard().careTeam();										
 					}
 					return datacontext.saveCareTeam( careTeam ).then( saveTeamCompleted );
 				}
@@ -262,7 +261,6 @@ define(['models/base', 'services/datacontext', 'services/session', 'viewmodels/s
             
 			function saveTeamCompleted( team ){
 				if( team ){					
-					self.selectedPatient.careTeam(team);
 					self.isSaving(false);
 				}
 			};
@@ -283,7 +281,7 @@ define(['models/base', 'services/datacontext', 'services/session', 'viewmodels/s
 					pcm.core( false ); //retire the current pcm
 					userCareMember.core( true );
 					userCareMember.statusId( 1 );
-					datacontext.saveCareTeam( self.selectedPatient.careTeam() ).then( saveTeamCompleted );
+					datacontext.saveCareTeam( self.selectedPatient.contactCard().careTeam() ).then( saveTeamCompleted );
 				}
             }
         };

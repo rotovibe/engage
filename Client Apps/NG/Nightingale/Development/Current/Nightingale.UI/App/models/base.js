@@ -183,8 +183,7 @@ define(['services/validatorfactory', 'services/customvalidators', 'services/form
 					fullSSN: { dataType: "String" },
 					gender: { dataType: "String" },
 					id: { dataType: "String", isPartOfKey: true },
-					contactId: { dataType: "String" },
-					careTeamId:  { dataType: "String" },
+					contactId: { dataType: "String" },					
 					lastFourSSN: { dataType: "String" },
 					lastName: { dataType: "String" },
 					maritalStatusId: { dataType: "String" },
@@ -248,10 +247,6 @@ define(['services/validatorfactory', 'services/customvalidators', 'services/form
 					medications: {
 						entityTypeName: "PatientMedication", isScalar: false,
 						associationName: "Patient_Medications"
-					},					
-					careTeam: {
-						entityTypeName: "CareTeam", isScalar: true,
-						associationName: "Patient_CareTeam", foreignKeyNames: ["careTeamId"]
 					},
 					contactCard: {
 						entityTypeName: "ContactCard", isScalar: true,
@@ -429,17 +424,12 @@ define(['services/validatorfactory', 'services/customvalidators', 'services/form
 				dataProperties: {
 					id: { dataType: "String", isPartOfKey: true },
 					contactId: { dataType: "String" },
-					patientId:  { dataType: "String" },
 					createdById: { dataType: "String" },
 					createdOn: { dataType: "DateTime" },
 					updatedById: { dataType: "String" },
 					updatedOn: { dataType: "DateTime" } 
 				},
 				navigationProperties: {
-					patient: {
-				        entityTypeName: "Patient", isScalar: true,
-				        associationName: "Patient_CareTeam", foreignKeyNames: ["patientId"]
-				    },
 					patientContact: {
 						entityTypeName: "ContactCard", isScalar: true,
 						associationName: "CareTeam_Patient_ContactCard", foreignKeyNames: ["contactId"]

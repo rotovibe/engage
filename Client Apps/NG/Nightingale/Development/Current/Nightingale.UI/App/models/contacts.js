@@ -86,6 +86,10 @@ define(['services/session', 'services/validatorfactory', 'services/customvalidat
 						entityTypeName: "CareManager", isScalar: true,
 						associationName: "ContactCard_UpdatedBy", foreignKeyNames: ["updatedById"]
 					},
+					careTeam: {
+						entityTypeName: "CareTeam", isScalar: true,
+						associationName: "CareTeam_Patient_ContactCard"
+					}
 		        }
 		    });
 

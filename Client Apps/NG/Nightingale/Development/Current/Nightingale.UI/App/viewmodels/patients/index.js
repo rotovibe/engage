@@ -506,11 +506,7 @@
             }
         }
 
-		function careTeamReturned( team ){
-			if( team && team.id() ){
-				selectedPatient().careTeamId( team.id() );
-				selectedPatient().entityAspect.acceptChanges();
-			}
+		function careTeamReturned( team ){			
 		}
 		/**
 		*	after all patient related calls are completed, mark the patient as loaded (they are synched with Q.all ).

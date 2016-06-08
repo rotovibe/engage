@@ -1487,12 +1487,12 @@
 			if( !careMember.careTeamId() ){
 				throw new Error('saveCareTeamMember the member must have a careTeamId set');
 			}
-			if( !careMember.careTeam().patient().contactId() ){
-				throw new Error('saveCareTeamMember the member must have a careTeamId set');
+			if( !careMember.careTeam().contactId() ){
+				throw new Error('saveCareTeamMember the member must have a careTeam().contactId() set');
 			}
 			careMember.checkAppend(); //notes			
 			var serializedCareMember = entitySerializer.serializeCareTeamMember( careMember, manager );
-			return careMembersService.saveCareTeamMember( manager, serializedCareMember, careMember.careTeamId(), careMember.careTeam().patient().contactId() ).then(saveCompleted);
+			return careMembersService.saveCareTeamMember( manager, serializedCareMember, careMember.careTeamId(), careMember.careTeam().contactId() ).then(saveCompleted);
 
 			function saveCompleted(data) {				
 				if ( data && data.Id && careMember.id() < 0 ) {
