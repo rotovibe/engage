@@ -389,7 +389,51 @@ define(['services/session', 'services/validatorfactory', 'services/customvalidat
 			
 		    function contactCardInitializer(contactCard) {				
 				contactCard.isNew = ko.observable(false);				
-		        contactCard.activeTab = ko.observable('General');				
+		        contactCard.activeTab = ko.observable('General');
+				
+				//record original value of complex types for cancel:
+				contactCard.originalContactSubTypes = ko.observableArray();
+				var originalSubTypes = contactCard.originalContactSubTypes();				
+				if( contactCard.contactSubTypes().length > 0){
+					ko.utils.arrayPushAll(originalSubTypes, contactCard.contactSubTypes());					
+				}
+				contactCard.originalPreferredTimesOfDayIds = ko.observableArray();
+				var originalPreferredTimesOfDayIds = contactCard.originalPreferredTimesOfDayIds()
+				if( contactCard.preferredTimesOfDayIds().length > 0){
+					ko.utils.arrayPushAll(originalPreferredTimesOfDayIds, contactCard.preferredTimesOfDayIds());					
+				}
+				contactCard.originalPreferredDaysOfWeekIds = ko.observableArray();
+				var originalPreferredDaysOfWeekIds = contactCard.originalPreferredDaysOfWeekIds()
+				if( contactCard.preferredDaysOfWeekIds().length > 0){
+					ko.utils.arrayPushAll(originalPreferredDaysOfWeekIds, contactCard.preferredDaysOfWeekIds());					
+				}
+				contactCard.originalLanguages = ko.observableArray();
+				var originalLanguages = contactCard.originalLanguages()
+				if( contactCard.languages().length > 0){
+					ko.utils.arrayPushAll(originalLanguages, contactCard.languages());					
+				}				
+				contactCard.originalModes = ko.observableArray();
+				var originalModes = contactCard.originalModes()
+				if( contactCard.modes().length > 0){
+					ko.utils.arrayPushAll(originalModes, contactCard.modes());					
+				}
+				contactCard.originalEmails = ko.observableArray();
+				var originalEmails = contactCard.originalEmails()
+				if( contactCard.emails().length > 0){
+					ko.utils.arrayPushAll(originalEmails, contactCard.emails());					
+				}
+				contactCard.originalPhones = ko.observableArray();
+				var originalPhones = contactCard.originalPhones()
+				if( contactCard.phones().length > 0){
+					ko.utils.arrayPushAll(originalPhones, contactCard.phones());					
+				}
+				contactCard.originalAddresses = ko.observableArray();
+				var originalAddresses = contactCard.originalAddresses()
+				if( contactCard.addresses().length > 0){
+					ko.utils.arrayPushAll(originalAddresses, contactCard.addresses());					
+				}
+				//end complex types
+				
 		        contactCard.prefCommMethods = ko.computed(function () {
 		            checkDataContext();
 		            var commModeString = '';
@@ -1048,7 +1092,7 @@ define(['services/session', 'services/validatorfactory', 'services/customvalidat
 		        contactCard.saveChanges = function () {
 		            checkDataContext();
 		            // Go save the entity, pass in which parameters should be different
-		            return datacontext.saveContactCard(contactCard);
+		            return datacontext.saveContactCard(contactCard);					
 		        }
 		        // Method on the modal to cancel changes to the patient
 		        contactCard.cancelChanges = function () {

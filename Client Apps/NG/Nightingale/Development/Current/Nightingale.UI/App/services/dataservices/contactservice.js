@@ -70,22 +70,50 @@
             }
         }
 
+		//assign values into complex type collection arrays
+		function copyArray(source, dest){
+			dest.removeAll();
+			var copy = dest();				
+			if( source().length > 0){
+				ko.utils.arrayPushAll(copy, source());					
+			}
+		}
+		
         function cancelAllChangesToContactCard(contactCard) {
             checkDataContext();
-            // TODO : Cancel all changes to all levels of a contact card
+            //Cancel all changes to all levels of a contact card			
 			if( contactCard.entityAspect.entityState.isAddedModifiedOrDeleted() ){
-				contactCard.entityAspect.rejectChanges();	
-			}
-			
-            if( contactCard.id() > 0 ){
-				contactCard.entityAspect.setDetached();
-				if( contactCard.patient ){
-					var patientId = contactCard.patient().id();            
-				
-					// Go get a list of contact cards for the currently selected patient
-					datacontext.getEntityList(null, contactCardEndPoint().EntityType, contactCardEndPoint().ResourcePath + patientId + '/Contact', null, null, true);
+				contactCard.entityAspect.rejectChanges();
+
+				if( !contactCard.isNew() ){
+					//revert to the original complex type collections as rejectChanges wont do complex type rollback:
+					
+					// contactCard.contactSubTypes.removeAll();
+					// var subTypes = contactCard.contactSubTypes();				
+					// if( contactCard.originalContactSubTypes().length > 0){
+						// ko.utils.arrayPushAll(subTypes, contactCard.originalContactSubTypes());					
+					// }
+					copyArray( contactCard.originalContactSubTypes, contactCard.contactSubTypes );
+					copyArray( contactCard.originalPreferredTimesOfDayIds, contactCard.preferredTimesOfDayIds );
+					copyArray( contactCard.originalPreferredDaysOfWeekIds, contactCard.preferredDaysOfWeekIds );
+					copyArray( contactCard.originalLanguages, contactCard.languages );
+					copyArray( contactCard.originalModes, contactCard.modes );
+					copyArray( contactCard.originalEmails, contactCard.emails );
+					copyArray( contactCard.originalPhones, contactCard.phones );
+					copyArray( contactCard.originalAddresses, contactCard.addresses );
+					//clear the entityAspect.entityState back to Unchanged state - to hide the complex type correction (original values):
+					contactCard.entityAspect.setUnchanged();
 				}
 			}
+			
+			//this is not needed anymore:
+            // if( !contactCard.isNew() && contactCard.patientId() ){								
+				// //contactCard.entityAspect.setDetached();				
+				// var patientId = contactCard.patientId();            
+			
+				// // Go get a list of contact cards for the currently selected patient
+				// datacontext.getEntityList(contactCard, contactCardEndPoint().EntityType, contactCardEndPoint().ResourcePath + patientId + '/Contact', null, null, true);			
+			// }
         }
 
 		function getLocalContacts( manager, contactEntity, params ){

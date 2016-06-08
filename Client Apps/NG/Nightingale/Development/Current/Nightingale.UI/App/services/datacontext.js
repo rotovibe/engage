@@ -1037,17 +1037,28 @@
 			});
 			return contactType;
 		}
-
+		
+		//assign values into complex type collection arrays
+		function copyArray(source, dest){
+			dest.removeAll();
+			var copy = dest();				
+			if( source().length > 0){
+				ko.utils.arrayPushAll(copy, source());					
+			}
+		}
+		
 		// Save changes to a single contact card
 		function saveContactCard(contactCard) {
 			// Display a message while saving
-			var message = queryStarted('Contact card', true, 'Saving');
+			var message = queryStarted('Contact', true, 'Saving');
 			var isInsert = contactCard.isNew();
 			var serializedContactCard;
 			//setTimeout(function () {
 				serializedContactCard = entitySerializer.serializeContactCard(contactCard, manager);
 			//}, 50);
 
+			
+			
 			function saveCompleted (data) {
 				// If data was returned and has a property called success that is true,
 				if (data) {
@@ -1125,7 +1136,23 @@
 							}
 						});
 					}
-
+					//record the complex types as original values: 
+					// contactCard.originalContactSubTypes.removeAll();
+					// var originalSubTypes = contactCard.originalContactSubTypes();				
+					// if( contactCard.contactSubTypes().length > 0){
+						// ko.utils.arrayPushAll(originalSubTypes, contactCard.contactSubTypes());					
+					// }
+					copyArray( contactCard.contactSubTypes, contactCard.originalContactSubTypes );
+					copyArray( contactCard.preferredTimesOfDayIds, contactCard.originalPreferredTimesOfDayIds );
+					copyArray( contactCard.preferredDaysOfWeekIds, contactCard.originalPreferredDaysOfWeekIds );
+					copyArray( contactCard.languages, contactCard.originalLanguages );
+					copyArray( contactCard.modes, contactCard.originalModes );
+					copyArray( contactCard.emails, contactCard.originalEmails );
+					copyArray( contactCard.phones, contactCard.originalPhones );
+					copyArray( contactCard.addresses, contactCard.originalAddresses );
+					
+					// end complex types
+					
 					// Save all of the levels of everything related to a contact card
 					contactCard.entityAspect.acceptChanges();
 
