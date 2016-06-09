@@ -29,10 +29,19 @@ define(['services/session', 'services/datacontext', 'viewmodels/patients/index',
 			return contactType.name() == 'Primary Care Physician';	//note name instead of role since theres a typo in the db...
 		}));
 		
+		var careTeam = ko.computed(function(){
+			var team = null;
+			if( selectedPatient() && selectedPatient().contactCard() && selectedPatient().contactCard().careTeam && selectedPatient().contactCard().careTeam() ) {
+				team = selectedPatient().contactCard().careTeam();
+			}			
+			return team;
+		}).extend({ throttle: 50 });
+		
 		var careMembers = ko.computed(function(){
 			var members = [];
-			if (selectedPatient() && selectedPatient().contactCard() && selectedPatient().contactCard().careTeam() ) {
-                members = selectedPatient().contactCard().careTeam().members();
+			var team = careTeam();
+			if ( team ) {
+                members = team.members();
             }
 			return members;
 		}).extend({ throttle: 50 });
@@ -123,11 +132,11 @@ define(['services/session', 'services/datacontext', 'viewmodels/patients/index',
 		}
 		
 		function saveOverride () {
-			if( !selectedPatient().contactCard().careTeam() ){
+			if( !careTeam() ){
 				//team has not yet been created:
 				newCareTeam( datacontext.createEntity('CareTeam', 
 						{ 	id: -1, 
-							contactId: selectedPatient().contactId(),
+							contactId: selectedPatient().contactCard().id(),
 							createdById: session.currentUser().userId()
 						}) );
 				newCareTeam().members = ko.observableArray();
@@ -137,7 +146,7 @@ define(['services/session', 'services/datacontext', 'viewmodels/patients/index',
 			else{
 				//add/save one member to an existing team
 				//	note: the new member should already be here inside members:				
-				return datacontext.saveCareTeam( selectedPatient().contactCard().careTeam() ).then( saveTeamCompleted );
+				return datacontext.saveCareTeam( careTeam() ).then( saveTeamCompleted );
 			}
 							
 			function saveTeamCompleted( team ){				
@@ -226,7 +235,7 @@ define(['services/session', 'services/datacontext', 'viewmodels/patients/index',
 		}
 		
 		function addCareMember(){
-			var teamId = selectedPatient()? selectedPatient().contactCard()? ( selectedPatient().contactCard().careTeam()? selectedPatient().contactCard().careTeam().id(): null ) : null : null;
+			var teamId = careTeam()? careTeam().id() : null;
 			newCareMember( datacontext.createEntity('CareMember', 
 						{ 	id: --nextId, 
 							contactId: null,	//no contact yet

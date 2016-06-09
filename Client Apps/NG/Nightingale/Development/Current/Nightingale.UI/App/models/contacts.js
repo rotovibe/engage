@@ -881,7 +881,7 @@ define(['services/session', 'services/validatorfactory', 'services/customvalidat
 						});
 						summary += subTypesText;
 					}
-					if( contactCard.preferredPhone() ){
+					if( contactCard.preferredPhone() && contactCard.preferredPhone().number() ){
 						var phoneNumber = contactCard.preferredPhone().number();
 						phoneNumber = phoneNumber.replace( /\D/g, '');
 						formattedPhone = formatter.formatSeparators( phoneNumber, 'XXX-XXX-XXXX', '-');
@@ -890,7 +890,7 @@ define(['services/session', 'services/validatorfactory', 'services/customvalidat
 						}
 						summary += formattedPhone;
 					}					
-					if( contactCard.preferredAddress() ){
+					if( contactCard.preferredAddress() && contactCard.preferredAddress().cityState() ){
 						if( summary.length ){
 							summary += ', ';
 						}

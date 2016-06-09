@@ -50,12 +50,12 @@
 					<span class="pad-left" data-bind="text: distanceUnit"></span>
 				</div>
 			</div>
-			<div data-bind="if: notes">
+			<div data-bind="visible: notes">
 				<div class="row pad-top">
 					<strong class="span3">Notes:</strong>
 				</div>
 				<div class="row pad-top">
-					<textarea readonly="readonly" class="display-only span12" data-bind="text: notes, autoHeight: notes, attr: { 'title': notes }"></textarea>
+					<pre class="pad-left span12" data-bind="text: notes, attr: { 'title': notes }"></pre>
 				</div>					
 			</div>
 			<div class="row" data-bind="visible: createdOn">

@@ -32,10 +32,16 @@ define(['models/base', 'services/datacontext', 'services/session', 'viewmodels/s
         ctor.prototype.activate = function (settings) {
             var self = this;
             // Get the selected patient that was passed in
-            self.selectedPatient = settings.selectedPatient;
-            // Get a list of all of the care team
+            self.selectedPatient = settings.selectedPatient;            
+			
+			self.careTeam = ko.computed( function(){
+				var team = self.selectedPatient.contactCard() ? self.selectedPatient.contactCard().careTeam ? self.selectedPatient.contactCard().careTeam() : null : null;
+				return team;
+			}).extend({ throttle: 50 });
+			
+			// Get a list of all of the care team
             self.careMembers = ko.computed( function(){
-				var team = self.selectedPatient.contactCard() ? self.selectedPatient.contactCard().careTeam() : null;
+				var team = self.careTeam();
 				var members = team ? team.members() : [];
 				// var members = ko.utils.arrayFilter( allMembers, function(member){
 					// return !member.isNew() && member.contactId() && member.contact() && member.core() && member.statusId() == 1;
@@ -47,7 +53,7 @@ define(['models/base', 'services/datacontext', 'services/session', 'viewmodels/s
             self.isOpen = ko.observable(true);
 			
 			self.primaryCareManager = ko.computed( function(){
-				var team = self.selectedPatient.contactCard() ? self.selectedPatient.contactCard().careTeam() : null;
+				var team = self.careTeam();
 				if( team ){
 					return team.primaryCareManagers().length > 0 ? team.primaryCareManagers()[0] : null;
 				}
@@ -55,7 +61,7 @@ define(['models/base', 'services/datacontext', 'services/session', 'viewmodels/s
 			});
 			
 			self.primaryCarePhysician = ko.computed( function(){
-				var team = self.selectedPatient.contactCard() ? self.selectedPatient.contactCard().careTeam() : null;
+				var team = self.careTeam()
 				if( team ){
 					return team.primaryCarePhysicians().length > 0 ? team.primaryCarePhysicians()[0] : null;
 				}
