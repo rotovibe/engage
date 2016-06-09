@@ -162,18 +162,21 @@ namespace Phytel.API.DataDomain.Contact
                     // find contact
                     ContactData mContact = (ContactData)repo.FindByID(request.ContactId);
 
-                    if (mContact.RecentsList == null)
+                    if (mContact != null)
                     {
-                        mContact.RecentsList = new List<string>();
-                    }
+                        if (mContact.RecentsList == null)
+                        {
+                            mContact.RecentsList = new List<string>();
+                        }
 
-                    // update recent list
-                    MruList mruList = new MruList { Limit = limit, RecentList = mContact.RecentsList };
-                    mruList.AddPatient(patientId);
+                        // update recent list
+                        MruList mruList = new MruList {Limit = limit, RecentList = mContact.RecentsList};
+                        mruList.AddPatient(patientId);
 
-                    if (repo.UpdateRecentList(request, mruList.RecentList))
-                    {
-                        response.SuccessData = true;
+                        if (repo.UpdateRecentList(request, mruList.RecentList))
+                        {
+                            response.SuccessData = true;
+                        }
                     }
                 }
                 return response;
