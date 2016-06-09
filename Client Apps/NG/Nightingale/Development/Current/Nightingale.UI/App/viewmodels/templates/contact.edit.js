@@ -306,8 +306,10 @@ define([ 'services/datacontext', 'services/local.collections', 'viewmodels/home/
 					self.saveFunction();
 				}
 				else{
-					self.contactCard().saveChanges();
+					self.contactCard().saveChanges();					
 				}				
+				self.contactCard().isDuplicate(false);
+				self.contactCard().isDuplicateTested(true);
 				self.showing(false);
 			}
 			self.contactCard().clearDirty();
