@@ -149,23 +149,22 @@
 						<input type="text" data-bind="value: distance, numericDecimal: distance, valueUpdate: 'afterkeydown', 
 							attr:{maxlength: 10, min: 0}" </input>
 					</div>
-					<div class="span1 pad-left">
-						<span class="grey">Miles</span>
-						<div class="radio" data-bind="hoverToggle: 'hover'">
-							<span data-bind="css: { 'checked': distanceUnit()==='mi' }" class="">
-								<input type="radio" data-bind="clickRadio: distanceUnit, setValue: 'mi'">
-							</span>
-						</div>
+					
+					<div class="span1 radio" data-bind="hoverToggle: 'hover'">
+						<span data-bind="css: { 'checked': distanceUnit()==='mi' }" class="">
+							<input type="radio" data-bind="clickRadio: distanceUnit, setValue: 'mi'">
+						</span>
 					</div>
-					<div class="span1 pad-left">
-						<span class="grey">Kilometers</span>
-						<div class="radio" data-bind="hoverToggle: 'hover'">
-							<span data-bind="css: { 'checked': distanceUnit()==='km' }" class="">
-								<input type="radio" data-bind="clickRadio: distanceUnit, setValue: 'km'">
-							</span>
-						</div>						
-					</div>										
-					<div class="span1 align-right grey">Frequency</div>
+					<span class="span1 grey">Miles</span>
+															
+					<div class="span1 radio" data-bind="hoverToggle: 'hover'">
+						<span data-bind="css: { 'checked': distanceUnit()==='km' }" class="">
+							<input type="radio" data-bind="clickRadio: distanceUnit, setValue: 'km'">
+						</span>
+					</div>
+					<span class="span1 grey">Kilometers</span>
+					
+					<div class="span2 align-right grey">Frequency</div>
 					<div class="span2" data-bind="chsnsingle: { options: $parent.frequencies, value: frequencyId, text: 'name', idValue: 'id', isCancel: true, caption: 'None' }"></div>					
 				</div>
 				<div class="pad-top"></div>				
