@@ -216,7 +216,7 @@ define(['models/base', 'services/datacontext', 'services/session', 'viewmodels/s
 				var userCareMember = ko.utils.arrayFirst( self.careMembers(), function (member) {
 					//find if the the current user is a member in this team, and its not the assigned(active core) pcm, and its role is PCM:
 					return member.contactId() == session.currentUser().userId() && member.roleId() == pcmRoleId 
-							&& ( !member.core() || !member.statusId() == 1 );
+							&& ( !member.core() || member.statusId() != 1 );
 				});
 				if( userCareMember ){					
 					//reassign the existing user pcm member as active core pcm:
@@ -259,38 +259,7 @@ define(['models/base', 'services/datacontext', 'services/session', 'viewmodels/s
             } else{
 				console.log('assignToMe blocked since it is currently saving');
 			}
-        };
-        
-        //TODO: remove / change to new care member / care team/ member endpoints and contact types:
-        ctor.prototype.reassignToMe = function () {
-            var self = this;
-            
-			function saveTeamCompleted( team ){
-				if( team ){					
-					self.isSaving(false);
-				}
-			};
-			
-            if (!self.isSaving()) {
-				self.isSaving(true);
-				
-				var pcm = self.primaryCareManager();
-				var isPatientLoaded = self.selectedPatient.isLoaded();
-				
-				if ( self.careMembers().length > 0 && isPatientLoaded && pcm ) {					
-					var userCareMember = ko.utils.arrayFirst( self.careMembers(), function (member) {
-						//find if the the current user is a member in this team, and its not the assigned(active core) pcm, and its role is PCM:
-					    return member.contactId() == session.currentUser().userId() && member.id() != pcm.id() 
-							&& member.contactId() != pcm.contactId()
-							&& member.roleId() == pcm.roleId();
-					});
-					pcm.core( false ); //retire the current pcm
-					userCareMember.core( true );
-					userCareMember.statusId( 1 );
-					datacontext.saveCareTeam( self.selectedPatient.contactCard().careTeam() ).then( saveTeamCompleted );
-				}
-            }
-        };
+        };        
 
         //TODO: remove/ change to new care member / care team/ member endpoints and contact types:
         ctor.prototype.saveCareTeam = function (caremanagerid) {
