@@ -131,7 +131,7 @@ define(['services/session', 'services/validatorfactory', 'services/customvalidat
 		        navigationProperties: {
 		            patient: {
 		                entityTypeName: "Patient", isScalar: true,
-		                associationName: "Patient_ContactCard", foreignKeyNames: ["patientId"]
+		                associationName: "Patient_ContactSearch", foreignKeyNames: ["patientId"]
 		            },
 		            timeZone: {
 		                entityTypeName: "TimeZone", isScalar: true,
@@ -198,7 +198,7 @@ define(['services/session', 'services/validatorfactory', 'services/customvalidat
 		        navigationProperties: {
 		            patient: {
 		                entityTypeName: "Patient", isScalar: true,
-		                associationName: "Patient_ContactCard", foreignKeyNames: ["patientId"]
+		                associationName: "Patient_ContactCarememberSearch", foreignKeyNames: ["patientId"]
 		            },
 		            timeZone: {
 		                entityTypeName: "TimeZone", isScalar: true,

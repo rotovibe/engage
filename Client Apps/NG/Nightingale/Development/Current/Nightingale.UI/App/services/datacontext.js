@@ -896,7 +896,8 @@
 					}
 					patient.entityAspect.acceptChanges();
 					updateTodoPatient(patient);
-					updateContact(patient, 'ContactCard');  //update all cached patient contacts and home/contacts/search results
+					updateContact(patient, 'ContactCard');  	//update all cached patient contacts and home/contacts/search results					
+					updateContact(patient, 'ContactSearch');	//update all cached contact search results
 					updateContact(patient, 'ContactCarememberSearch');  //update all cached care member contact search results
 					queryCompleted(message);
 					return true;
@@ -1071,21 +1072,18 @@
 					else{
 						contactCard.updatedById( session.currentUser().userId() );
 						contactCard.updatedOn( new Date() );
-						if(contactCard.patientId()){
-							var contactPatient = ko.observable();							
-							checkForEntityLocally(contactPatient, contactCard.patientId(), 'Patient');										
-							if (contactPatient()) {
-								//the contact related patient exist locally. 
-								//sync the overlapping properties:
-								contactPatient().firstName(contactCard.firstName());
-								contactPatient().lastName(contactCard.lastName());
-								contactPatient().middleName(contactCard.middleName());
-								contactPatient().suffix(contactCard.suffix());								
-								contactPatient().gender(contactCard.gender());
-								contactPatient().preferredName(contactCard.preferredName());
-								contactPatient().deceasedId(contactCard.deceasedId());
-								contactPatient().entityAspect.acceptChanges();
-							}
+						if(contactCard.patient()){
+							var contactPatient = contactCard.patient();								
+							//sync the overlapping properties:
+							contactPatient.firstName(contactCard.firstName());
+							contactPatient.lastName(contactCard.lastName());
+							contactPatient.middleName(contactCard.middleName());
+							contactPatient.suffix(contactCard.suffix());								
+							contactPatient.gender(contactCard.gender());
+							contactPatient.preferredName(contactCard.preferredName());
+							contactPatient.deceasedId(contactCard.deceasedId());
+							contactPatient.entityAspect.acceptChanges();
+						
 						}						
 					}
 				
