@@ -605,7 +605,7 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
                 AuditHelper.LogDataAudit(this.UserId,
                     MongoCollectionName.CareTeam.ToString(),
                     contactCareTeam.Id.ToString(),
-                    DataAuditType.Update,
+                    DataAuditType.Delete,
                     request.ContractNumber);
             }
         }
