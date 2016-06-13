@@ -237,9 +237,10 @@ namespace NightingaleImport
 
                             #region Communication
                             //timezone
-                            TimeZoneData tZone = new TimeZoneData();
+                            TimeZoneData tZone = null;
                             if (string.IsNullOrEmpty(lvi.SubItems[colTimeZ].Text) == false)
                             {
+                                tZone = new TimeZoneData();
                                 foreach (TimeZoneData t in zonesLookUp)
                                 {
                                     string[] zones = t.Name.Split(" ".ToCharArray());
@@ -248,10 +249,6 @@ namespace NightingaleImport
                                         tZone.Id = t.Id;
                                     }
                                 }
-                            }
-                            else
-                            {
-                                tZone.Id = zoneDefault.Id;
                             }
 
                             List<CommModeData> modes = new List<CommModeData>();
@@ -514,7 +511,7 @@ namespace NightingaleImport
                                 #endregion
                                 DataSource = EngageSystemProperty,
                                 Modes = modes,
-                                TimeZoneId = tZone.Id,
+                                TimeZoneId = tZone == null ? null : tZone.Id,
                                 Phones = phones,
                                 Emails = emails,
                                 Addresses = addresses
@@ -548,6 +545,8 @@ namespace NightingaleImport
                                         ContactId = contactByUserIdResponse.Contact.Id,
                                         RoleId = PCMRoleIdProperty,
                                         Core = true,
+                                        DataSource = "Engage",
+                                        DistanceUnit = "mi",
                                         StatusId = (int)CareTeamMemberStatus.Active,
                                     };
                                     List<CareTeamMemberData> memberList = new List<CareTeamMemberData>();
