@@ -66,9 +66,8 @@
     <Reference Include="Phytel.API.DataDomain.Cohort.DTO">
       <HintPath>References\Phytel.API.DataDomain.Cohort.DTO.dll</HintPath>
     </Reference>
-    <Reference Include="Phytel.API.DataDomain.Contact, Version=1.4.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Services\API\DataDomain\Phytel.API.DataDomain.Contact\Development\Current\Contact\bin\Debug\Phytel.API.DataDomain.Contact.dll</HintPath>
+    <Reference Include="Phytel.API.DataDomain.Contact">
+      <HintPath>References\Phytel.API.DataDomain.Contact.dll</HintPath>
     </Reference>
     <Reference Include="Phytel.API.DataDomain.Contact.DTO, Version=1.4.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
