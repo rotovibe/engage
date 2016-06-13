@@ -350,6 +350,38 @@ namespace Phytel.API.DataDomain.LookUp
                 }
             }
             catch { }
+            try
+            {
+                if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(CareTeamFrequency)) == false)
+                {
+                    MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<CareTeamFrequency>();
+                }
+            }
+            catch { }
+            try
+            {
+                if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(MedicationReview)) == false)
+                {
+                    MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<MedicationReview>();
+                }
+            }
+            catch { }
+            try
+            {
+                if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(DurationUnit)) == false)
+                {
+                    MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<DurationUnit>();
+                }
+            }
+            catch { }
+            try
+            {
+                if (MongoDB.Bson.Serialization.BsonClassMap.IsClassMapRegistered(typeof(RefusalReason)) == false)
+                {
+                    MongoDB.Bson.Serialization.BsonClassMap.RegisterClassMap<RefusalReason>();
+                }
+            }
+            catch { } 
             #endregion
 
             // Get the redis IP address from config file.
