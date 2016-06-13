@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data.Odbc;
 using System.Linq;
 using AutoMapper;
 using MongoDB.Bson;
@@ -180,6 +181,40 @@ namespace DataDomain.Allergy.Repo
                     else
                     {
                         uv.Add(MB.Update.Set(MEPatientAllergy.SourceIdProperty, BsonNull.Value));
+                    }
+
+                    if (pt.DataSource != null)
+                    {
+                        uv.Add(MB.Update.Set(MEPatientAllergy.DataSourceProperty, pt.DataSource)); 
+                    }
+                    else
+                    {
+                        uv.Add(MB.Update.Set(MEPatientAllergy.DataSourceProperty, BsonNull.Value));  
+                    }
+
+                    if (pt.ExternalRecordId != null)
+                    {
+                        uv.Add(MB.Update.Set(MEPatientAllergy.ExternalRecordIdProperty, pt.ExternalRecordId));
+                    }
+                    else
+                    {
+                        uv.Add(MB.Update.Set(MEPatientAllergy.ExternalRecordIdProperty, BsonNull.Value));    
+                    }
+                    if (!string.IsNullOrEmpty(pt.CodingSystemId))
+                    {
+                        uv.Add(MB.Update.Set(MEPatientAllergy.CodingSystemProperty, ObjectId.Parse(pt.CodingSystemId)));
+                    }
+                    else
+                    {
+                        uv.Add(MB.Update.Set(MEPatientAllergy.CodingSystemProperty, BsonNull.Value));
+                    }
+                    if (!string.IsNullOrEmpty(pt.Code))
+                    {
+                        uv.Add(MB.Update.Set(MEPatientAllergy.CodeProperty, pt.Code));
+                    }
+                    else
+                    {
+                        uv.Add(MB.Update.Set(MEPatientAllergy.CodeProperty, BsonNull.Value));
                     }
                     if (pt.Notes != null) uv.Add(MB.Update.Set(MEPatientAllergy.NotesProperty, pt.Notes));
                     if (pt.SystemName != null) uv.Add(MB.Update.Set(MEPatientAllergy.SystemProperty, pt.SystemName));
