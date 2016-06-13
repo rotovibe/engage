@@ -25,5 +25,7 @@ namespace Phytel.API.DataDomain.PatientObservation.DTO
         public int DisplayId { get; set; }
         public bool DeleteFlag { get; set; }
         public DateTime? LastUpdatedOn { get; set; }
+        public string ExternalRecordId { get; set; }
+        public string DataSource { get; set; }
     }
 }
