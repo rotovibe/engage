@@ -1,0 +1,28 @@
+﻿<div class="panel-wrapper">
+    <div class="row">
+        <!-- ko foreach: columns -->
+        <div class="grey hover-parent" data-bind="css: cssClass">
+            <span data-bind="text: displayName"></span>
+            <!-- ko if: $parent.canSort && canSort -->
+            <i class="pull-right filter-toggle pad-right " data-bind="click: $parent.toggleSort, css: ($parent.selectedSortColumn() === sortProperty ? 'fa fa-caret-up' : ($parent.selectedSortColumn() === sortProperty + ' desc' ? 'fa fa-caret-down' : ''))"></i>
+            <!-- /ko -->
+            <!-- ko if: ($parent.canSort  && canSort && ($parent.selectedSortColumn() !== sortProperty && $parent.selectedSortColumn() !== sortProperty + ' desc'))  -->
+            <i class="pull-right hover-show fa fa-caret-up filter-toggle pad-right" data-bind="click: $parent.toggleSort"></i>
+            <!-- /ko -->
+        </div>
+        <!-- /ko  -->
+    </div>
+    <div data-bind="foreach: computedMedications">
+        <div class="row divider filter-toggle" data-bind="foreach: $parent.columns, css: { 'active': $parent.activeMedication() === $data }">
+            <div data-bind="compose: { model: $parent, view: path }, css: cssClass"></div>
+        </div>
+        <div class="row pad allergydtl muted toggle" data-bind="visible: isExpanded">
+            <div class="row pad-top">
+                <strong>Groupings go here</strong>
+            </div>
+        </div>
+    </div>
+    <div class="row" data-bind="visible: computedMedications().length === 0">
+        <em>No data meets your filter criteria</em>
+    </div>
+</div>

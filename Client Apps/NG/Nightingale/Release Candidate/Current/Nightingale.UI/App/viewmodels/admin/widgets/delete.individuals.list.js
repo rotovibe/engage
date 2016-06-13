@@ -174,7 +174,8 @@ define(['config.services', 'services/session', 'services/datacontext', 'models/b
             // TODO : Add Skip and Take to the endpoint and pass it down as params
             // TODO : Make sure the service is checking locally first before going out to the server to get these patients
             datacontext.getEntityList(patientsList, currentCohortsPatientsEndPoint().EntityType, 
-						currentCohortsPatientsEndPoint().ResourcePath, null, selectedCohort().iD(), true, parameters).then( calculateSkipTake );
+						currentCohortsPatientsEndPoint().ResourcePath, null, selectedCohort().iD(), 
+						true, parameters, null, (!!'SkipMerge')).then( calculateSkipTake );
         }
 		
 		function calculateSkipTake() {

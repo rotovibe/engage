@@ -41,7 +41,7 @@
                 }
             });
             self.checkForMatch = function () {
-                return self.assignedToDisplay() === (self.intervention.assignedTo() ? self.intervention.assignedTo().preferredName() : '');                
+                return self.assignedToDisplay() === (self.intervention.assignedTo() ? self.intervention.assignedTo().preferredName() : '');
             };
             self.removeAssignment = function () {
                 self.intervention.assignedTo(null);
@@ -85,7 +85,10 @@
 
                         var filterVal = url.toLowerCase();
                         var result = theseCareManagers.filter(function (item) {
-                            return !!~item.preferredName().toLowerCase().indexOf(filterVal);
+                            if (item && item.firstLastOrPreferredName) {
+                                return !!~item.firstLastOrPreferredName().toLowerCase().indexOf(filterVal);
+                            }
+                            return false;
                         });
                         deferred.resolveWith(result);
                         return deferred.promise();
@@ -99,17 +102,17 @@
 			*	this is needed when the date is valid but range is wrong.
 			*	@method setInvalidDueDate
 			*/
-			self.setInvalidDueDate = ko.computed( function(){				
-				return ( self.intervention && self.intervention.validationErrorsArray().indexOf('dueDate') !== -1);  
+			self.setInvalidDueDate = ko.computed( function(){
+				return ( self.intervention && self.intervention.validationErrorsArray().indexOf('dueDate') !== -1);
 			});
 			/**
 			*	computed. to allow forcing the datetimepicker control to set the start date as invalid.
 			*	this is needed when the date is valid but range is wrong.
 			*	@method setInvalidStartDate
 			*/
-			self.setInvalidStartDate = ko.computed( function(){				
-				return ( self.intervention && self.intervention.validationErrorsArray().indexOf('StartDate') !== -1);  
-			});			
+			self.setInvalidStartDate = ko.computed( function(){
+				return ( self.intervention && self.intervention.validationErrorsArray().indexOf('StartDate') !== -1);
+			});
 
         };
 

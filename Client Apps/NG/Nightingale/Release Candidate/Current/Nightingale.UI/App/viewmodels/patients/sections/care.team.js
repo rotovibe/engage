@@ -2,11 +2,29 @@
 *	manages the care team patient section on the left bar.
 *	@module care.team
 */
-define(['models/base', 'services/datacontext', 'services/session', 'viewmodels/shell/shell'],
-    function (modelConfig, datacontext, session, shell) {
+define(['models/base', 'services/datacontext', 'services/session', 'viewmodels/shell/shell', 'viewmodels/patients/team/index'],
+    function (modelConfig, datacontext, session, shell, teamIndex) {		
 
-        var alphabeticalSort = function (l, r) { return (l.preferredName() == r.preferredName()) ? (l.preferredName() > r.preferredName() ? 1 : -1) : (l.preferredName() > r.preferredName() ? 1 : -1) };
+        // var alphabeticalSort = function (l, r) {
+			// if( l.contact() && !r.contact() ){
+				// return 1;
+			// }
+			// if( !l.contact() && r.contact() ) return -1;
+			// if( !l.contact() && !r.contact() ) return 0;
+			// return (l.contact().lastName() == r.contact().lastName()) ? (l.contact().lastName() > r.contact().lastName() ? 1 : -1) : (l.contact().lastName() > r.contact().lastName() ? 1 : -1) 
+		// };
 
+		var activeMembersSort = function (l, r) { 			
+			if( l.core() && ! r.core() ) return -1;
+			if( !l.core() && r.core() )	return 1;
+			if( l.core() == r.core() ){
+				var leftRole = l.computedRoleName() ? l.computedRoleName().toLowerCase() : '';
+				var rightRole = r.computedRoleName() ? r.computedRoleName().toLowerCase() : '';
+				return leftRole == rightRole ? 0 : (leftRole > rightRole ? 1 : -1);
+			}
+			return 0;
+		};
+		
         var ctor = function () {
 			var self = this;			
         };
@@ -14,66 +32,99 @@ define(['models/base', 'services/datacontext', 'services/session', 'viewmodels/s
         ctor.prototype.activate = function (settings) {
             var self = this;
             // Get the selected patient that was passed in
-            self.selectedPatient = settings.selectedPatient;
-            // Get a list of all of the care team
-            self.careMembers = self.selectedPatient.careMembers;
+            self.selectedPatient = settings.selectedPatient;            
+			
+			self.careTeam = ko.computed( function(){
+				var team = self.selectedPatient.contactCard() ? self.selectedPatient.contactCard().careTeam ? self.selectedPatient.contactCard().careTeam() : null : null;
+				return team;
+			}).extend({ throttle: 50 });
+			
+			// Get a list of all of the care team
+            self.careMembers = ko.computed( function(){
+				var team = self.careTeam();
+				var members = team ? team.members() : [];
+				// var members = ko.utils.arrayFilter( allMembers, function(member){
+					// return !member.isNew() && member.contactId() && member.contact() && member.core() && member.statusId() == 1;
+				// });
+				return members;
+			}).extend({ throttle: 50 });
+			
             // The view state of the section (open or not)
-            self.isOpen = ko.observable(true);			
+            self.isOpen = ko.observable(true);
+			
+			self.primaryCareManager = ko.computed( function(){
+				var team = self.careTeam();
+				if( team ){
+					return team.primaryCareManagers().length > 0 ? team.primaryCareManagers()[0] : null;
+				}
+				return null;
+			});
+			
+			self.primaryCarePhysician = ko.computed( function(){
+				var team = self.careTeam()
+				if( team ){
+					return team.primaryCarePhysicians().length > 0 ? team.primaryCarePhysicians()[0] : null;
+				}
+				return null;
+			});
+			
             // Create a list of primary care team members to display in the widget
             self.primaryCareTeam = ko.computed(function () {
-				var careMembers = self.careMembers();	//listen to changes in assigned care members (assignedToMe returns result)
-                // Create an empty array to fill with problems				
+				var careMembers = self.careMembers();	//listen to changes in assigned care members (assignedToMe returns result)                
                 var thisCareTeam = [];
-                // Sort the team
-                var searchCareTeam = careMembers.sort(alphabeticalSort);
+                var pcp = self.primaryCarePhysician();
+				var pcm = self.primaryCareManager();
+				
                 // Create a filtered list of care teams,
-                ko.utils.arrayForEach(searchCareTeam, function (careMember) {
+                ko.utils.arrayForEach(careMembers, function (careMember) {
                     // If they are a member of the primary care team,
-                    if (careMember.primary()) {
-                        // Add them to the team
-                        thisCareTeam.push(careMember);
+                    if (careMember.core() && !careMember.isNew() && careMember.statusId() == 1) {
+						//exclude pcp and pcm:
+						if( !( pcp && careMember.id() == pcp.id() || ( pcm && careMember.id() == pcm.id() ) ) ){
+							thisCareTeam.push(careMember);
+						}
                     }
                 });
+				thisCareTeam = thisCareTeam.sort(activeMembersSort);
                 // Return the team
                 return thisCareTeam;
-            });
+            }).extend({ throttle: 50 });
+			
 			self.isSaving = ko.observable(false);
 			self.canAssignToMe = ko.computed( function(){
-				var zerolength = self.primaryCareTeam().length === 0;
 				var isPatientLoaded = self.selectedPatient.isLoaded();
 				var isSaving = self.isSaving();
-				return zerolength && isPatientLoaded && !isSaving;
+				var careMembers = self.careMembers();
+				var pcm = self.primaryCareManager();
+				if( !pcm ){
+					var thisUserCareMember = ko.utils.arrayFirst( careMembers, function (member) {
+						//find if the current user is in the team with pcm role:
+					    return member.contactId() === session.currentUser().userId()
+								&& member.roleId() == teamIndex.pcmContactSubType().id();
+					});
+				}
+				return isPatientLoaded && !isSaving && !thisUserCareMember;
 			}).extend({ throttle: 50 });
 			
 			self.canReassignToMe = ko.computed( function () {
-				var primaryCareTeam = self.primaryCareTeam();
+				var careMembers = self.careMembers();
+				var pcm = self.primaryCareManager();
 				var isPatientLoaded = self.selectedPatient.isLoaded();
 				var isSaving = self.isSaving();
-				if ( primaryCareTeam.length > 0 && isPatientLoaded ) {
-					// var thisMatchedCareManager = ko.utils.arrayFirst( primaryCareTeam, function (caremanager) {
-					    // return caremanager.contactId() === session.currentUser().userId();
+				if ( careMembers.length > 0 && isPatientLoaded && pcm && !isSaving ) {
+					//the PCM is assigned and its not the current user
+					return pcm.contactId() != session.currentUser().userId();
+					// var PCMCareManager = ko.utils.arrayFirst( careMembers, function (member) {
+						// //find if the the current user is a member in this team, and its not the assigned(active core) pcm, and its role is PCM:
+					    // return member.contactId() == session.currentUser().userId() && member.id() != pcm.id() 
+							// && member.contactId() != pcm.contactId()
+							// && member.roleId() == pcm.roleId();
 					// });
-					return ( primaryCareTeam.length > 0 && ( primaryCareTeam[0].contactId() !== session.currentUser().userId() ) && !isSaving );
+					// return ( PCMCareManager && !isSaving );
 				}
 				return false;
 			}).extend({ throttle: 50 });
 		
-            // Create a list of secondary care team members
-            self.secondaryCareTeam = ko.computed(function () {
-                // Create an empty array to fill with problems
-                var thisCareTeam = [];
-                // Sort them
-                var searchCareTeam = self.careMembers().sort(alphabeticalSort);
-                // Create a filtered list of care teams,
-                ko.utils.arrayForEach(searchCareTeam, function (careMember) {
-                    // If they are not part of the primary care team,
-                    if (!careMember.primary()) {
-                        // Make them part of the secondary team
-                        thisCareTeam.push(careMember);
-                    }
-                });
-                return thisCareTeam;
-            });
             self.saveType = ko.observable();
             self.saveOverride = function () { 
                 // Get the current primary care manager
@@ -85,15 +136,17 @@ define(['models/base', 'services/datacontext', 'services/session', 'viewmodels/s
                         return caremanager.id() === session.currentUser().userId();
                     });
                     // Grab the first primary listed care member
-                    var thisCareMember = ko.utils.arrayFirst(self.selectedPatient.careMembers(), function (ctMember) {
+					var members = self.selectedPatient.contactCard() ? self.selectedPatient.contactCard().careTeam() ? self.selectedPatient.contactCard().careTeam().members() : [] : [];
+                    var thisCareMember = ko.utils.arrayFirst(members, function (ctMember) {
                         return ctMember.primary();
                     });
-                    datacontext.saveCareMember(thisCareMember, self.saveType());
+                    datacontext.saveCareMemberOld(thisCareMember, self.saveType());
                 }
             };
             self.cancelOverride = function () {
                 datacontext.cancelEntityChanges(self.selectedPatient);
-                ko.utils.arrayForEach(self.selectedPatient.careMembers(), function (cm) {
+				var members = self.selectedPatient.contactCard() ? self.selectedPatient.contactCard().careTeam() ? self.selectedPatient.contactCard().careTeam().members() : [] : [];
+                ko.utils.arrayForEach(members, function (cm) {
                     datacontext.cancelEntityChanges(cm);
                 });
             };
@@ -133,50 +186,82 @@ define(['models/base', 'services/datacontext', 'services/session', 'viewmodels/s
             self.activationData = { selectedPatient: self.selectedPatient, canSave: self.canSave, saveType: self.saveType };
         }
 
+		ctor.prototype.addCareMember = function(){
+			teamIndex.addCareMember();
+		};
+		
 		ctor.prototype.assignToMe = function () {
+			//assign the current user as a PCM role:
 			var self = this;
-            // Get the care manager type
-            var careMemberType = ko.utils.arrayFirst(datacontext.enums.careMemberTypes(), function (cmType) {
-                return cmType.name() === 'Care Manager';
-            });			
-            if (!self.isSaving() && careMemberType) {				
-				self.isSaving(true);
-                var thisMatchedCareManager = ko.utils.arrayFirst(datacontext.enums.careManagers(), function (caremanager) {
-                    return caremanager.id() === session.currentUser().userId();
-                });											
-                var thisCareMember = datacontext.createEntity('CareMember', { id: -1, patientId: self.selectedPatient.id(), preferredName: thisMatchedCareManager.preferredName(), typeId: careMemberType.id(), gender: 'n', primary: true, contactId: session.currentUser().userId() });
-				function saveCareManagerCompleted() {
+			var pcmRoleId = teamIndex.pcmContactSubType().id();
+			var selectedPatient = self.selectedPatient;
+			var teamId = selectedPatient.contactCard()? selectedPatient.contactCard().careTeam() ? selectedPatient.contactCard().careTeam().id() : null : null;
+            var userCareManager = datacontext.getUserCareManager();
+			var userContactId = userCareManager.id();	//the caremanager id is actually a contact id (get care managers call returns them as contacts)
+			var careTeam;
+			
+			function saveTeamCompleted( team ){
+				if( team ){					
+					//self.selectedPatient.careTeam(team);
+					self.isSaving(false);
 				}
-                return datacontext.saveCareMember(thisCareMember, 'Insert').then( saveCareManagerCompleted );
+			};
+			
+            if (!self.isSaving() && pcmRoleId) {
+				self.isSaving(true);
+				var pcm = self.primaryCareManager();
+				if( pcm ){
+					pcm.core( false ); //retire the current pcm if it is assigned
+				}				
+				var userCareMember = ko.utils.arrayFirst( self.careMembers(), function (member) {
+					//find if the the current user is a member in this team, and its not the assigned(active core) pcm, and its role is PCM:
+					return member.contactId() == session.currentUser().userId() && member.roleId() == pcmRoleId 
+							&& ( !member.core() || member.statusId() != 1 );
+				});
+				if( userCareMember ){					
+					//reassign the existing user pcm member as active core pcm:
+					userCareMember.core( true );
+					userCareMember.statusId( 1 );
+					datacontext.saveCareTeam( self.selectedPatient.contactCard().careTeam() ).then( saveTeamCompleted );
+				}	
+				else{
+					//create a new pcm user member
+					var newCareMember = datacontext.createEntity('CareMember', 
+							{ 	id: -1, 
+								contactId: userContactId,
+								roleId: pcmRoleId,
+								careTeamId: teamId,
+								distanceUnit: 'mi',
+								statusId: 1,		//active 
+								core: true,
+								dataSource: 'Engage',
+								createdById: session.currentUser().userId()							
+							});
+					newCareMember.isNew(true);
+                
+					if( !teamId ){
+						//team has not yet been created:
+						careTeam = datacontext.createEntity('CareTeam', 
+								{ 	id: -1, 
+									contactId: self.selectedPatient.contactId(),
+									createdById: session.currentUser().userId()
+								});
+						careTeam.members = ko.observableArray();
+						careTeam.members.push( newCareMember );					
+					}
+					else{
+						//add/save one member to an existing team
+						//	note: the new member should already be here inside careTeam().members:
+						careTeam = self.selectedPatient.contactCard().careTeam();										
+					}
+					return datacontext.saveCareTeam( careTeam ).then( saveTeamCompleted );
+				}
             } else{
 				console.log('assignToMe blocked since it is currently saving');
 			}
-        };
-        
-        ctor.prototype.reassignToMe = function () {
-            var self = this;
-            // Get the care manager type
-            var careMemberType = ko.utils.arrayFirst(datacontext.enums.careMemberTypes(), function (cmType) {
-                return cmType.name() === 'Care Manager';
-            });
-            if (!self.isSaving() && careMemberType) {
-				self.isSaving(true);
-                var thisMatchedCareManager = ko.utils.arrayFirst(datacontext.enums.careManagers(), function (caremanager) {
-                    return caremanager.id() === session.currentUser().userId();
-                });
-                // Grab the first primary listed care member
-                var thisCareMember = ko.utils.arrayFirst(self.selectedPatient.careMembers(), function (ctMember) {
-                    return ctMember.primary();
-                });
-                thisCareMember.preferredName(thisMatchedCareManager.preferredName());
-                thisCareMember.gender('n');
-                thisCareMember.contactId(thisMatchedCareManager.id());
-				function saveCareManagerCompleted() {					
-				}
-                datacontext.saveCareMember(thisCareMember, 'Update').then( saveCareManagerCompleted );
-            }
-        };
+        };        
 
+        //TODO: remove/ change to new care member / care team/ member endpoints and contact types:
         ctor.prototype.saveCareTeam = function (caremanagerid) {
             var careManagerId = caremanagerid ? caremanagerid : session.currentUser().userId();
             // Get the care manager type
@@ -188,15 +273,16 @@ define(['models/base', 'services/datacontext', 'services/session', 'viewmodels/s
                     return caremanager.id() === careManagerId;
                 });
                 var thisCareMember = datacontext.createEntity('CareMember', { id: -1, patientId: self.selectedPatient.id(), preferredName: thisMatchedCareManager.preferredName(), typeId: careMemberType.id(), gender: 'n', primary: true, contactId: careManagerId });
-                datacontext.saveCareMember(thisCareMember, 'Insert');
+                datacontext.saveCareMemberOld(thisCareMember, 'Insert');
             }
         }
 
-        ctor.prototype.editCareTeam = function () {
-            var self = this;
-            self.editModalShowing(true);
-            shell.currentModal(self.modal);
-        }
+        //TODO: remove this functionality
+        // ctor.prototype.editCareTeam = function () {			
+            // // var self = this;
+            // // self.editModalShowing(true);
+            // // shell.currentModal(self.modal);
+        // }
 
         ctor.prototype.attached = function () {
         };
@@ -207,7 +293,8 @@ define(['models/base', 'services/datacontext', 'services/session', 'viewmodels/s
 			self.primaryCareTeam.dispose();
 			self.canAssignToMe.dispose();
 			self.canReassignToMe.dispose();
-			self.secondaryCareTeam.dispose();									
+			self.primaryCarePhysician.dispose();
+			self.primaryCareManager.dispose();
 			
 			//dispose subscriptions:
             // ko.utils.arrayForEach(subscriptionTokens, function (token) {

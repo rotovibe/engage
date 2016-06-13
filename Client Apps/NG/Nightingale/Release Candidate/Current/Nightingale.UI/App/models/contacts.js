@@ -4,8 +4,8 @@
 *	Register all of the user related models in the entity manager (initialize function) and provide other non-entity models
 *	@module contactCard
 */
-define(['services/session', 'services/validatorfactory', 'services/customvalidators'],
-	function (session, validatorFactory, customValidators) {		
+define(['services/session', 'services/validatorfactory', 'services/customvalidators', 'services/formatter'],
+	function (session, validatorFactory, customValidators, formatter) {		
 
 	    var datacontext;
 		var DT = breeze.DataType;
@@ -28,6 +28,14 @@ define(['services/session', 'services/validatorfactory', 'services/customvalidat
 		        dataProperties: {
 		            id: { dataType: "String", isPartOfKey: true },
 		            patientId: { dataType: "String" },
+					isPatient: { dataType: "Boolean" },
+					userId:  { dataType: "String" },
+					isUser: { dataType: "Boolean" },
+					firstName: { dataType: "String" },
+					middleName: { dataType: "String" },
+					lastName: { dataType: "String" },
+					preferredName: { dataType: "String" },
+					gender: { dataType: "String", defaultValue: 'N' },
 		            timeZoneId: { dataType: "String" },
 		            preferredTimesOfDayIds: { complexTypeName: "Identifier:#Nightingale", isScalar: false },
 		            preferredDaysOfWeekIds: { complexTypeName: "Identifier:#Nightingale", isScalar: false },
@@ -35,7 +43,19 @@ define(['services/session', 'services/validatorfactory', 'services/customvalidat
 		            modes: { complexTypeName: "ContactMode:#Nightingale", isScalar: false },
 		            emails: { complexTypeName: "Email:#Nightingale", isScalar: false },
 		            phones: { complexTypeName: "Phone:#Nightingale", isScalar: false },
-		            addresses: { complexTypeName: "Address:#Nightingale", isScalar: false }
+		            addresses: { complexTypeName: "Address:#Nightingale", isScalar: false },
+					contactTypeId:  { dataType: "String" },
+					contactSubTypes: { complexTypeName: "ContactSubType:#Nightingale", isScalar: false },
+					externalRecordId: { dataType: "String" },
+					dataSource:  { dataType: "String", defaultValue: 'Engage' },
+					statusId: { dataType: "Int64", defaultValue: 1 },
+					deceasedId: { dataType: "Int64", defaultValue: 2 },
+					prefix: { dataType: "String" },
+					suffix: { dataType: "String" },
+					createdOn: { dataType: "DateTime" },
+					updatedOn: { dataType: "DateTime" },
+					createdById: { dataType: "String" },
+					updatedById: { dataType: "String" }
 		        },
 		        navigationProperties: {
 		            patient: {
@@ -45,10 +65,168 @@ define(['services/session', 'services/validatorfactory', 'services/customvalidat
 		            timeZone: {
 		                entityTypeName: "TimeZone", isScalar: true,
 		                associationName: "TimeZone_ContactCards", foreignKeyNames: ["timeZoneId"]
-		            }
+		            },					
+					contactType: {
+						entityTypeName: "ContactTypeLookup", isScalar: true,
+						associationName: "ContactTypeLookup_ContactCard", foreignKeyNames: ["contactTypeId"]
+					},
+					contactStatus: {
+						entityTypeName: "ContactStatus", isScalar: true,
+						associationName: "Contact_ContactStatus", foreignKeyNames: ["statusId"]
+					},
+					deceased: {
+						entityTypeName: "Deceased", isScalar: true,
+						associationName: "Contact_Deceased", foreignKeyNames: ["deceasedId"]
+					},
+					createdBy: {
+						entityTypeName: "CareManager", isScalar: true,
+						associationName: "ContactCard_CreatedBy", foreignKeyNames: ["createdById"]
+					},
+					updatedBy: {
+						entityTypeName: "CareManager", isScalar: true,
+						associationName: "ContactCard_UpdatedBy", foreignKeyNames: ["updatedById"]
+					},
+					careTeam: {
+						entityTypeName: "CareTeam", isScalar: true,
+						associationName: "CareTeam_Patient_ContactCard"
+					}
 		        }
 		    });
 
+			metadataStore.addEntityType({
+		        shortName: "ContactSearch",
+		        namespace: "Nightingale",
+		        dataProperties: {
+		            id: { dataType: "String", isPartOfKey: true },
+		            patientId: { dataType: "String" },
+					isPatient: { dataType: "Boolean" },
+					userId:  { dataType: "String" },
+					isUser: { dataType: "Boolean" },
+					firstName: { dataType: "String" },
+					middleName: { dataType: "String" },
+					lastName: { dataType: "String" },
+					preferredName: { dataType: "String" },
+					gender: { dataType: "String", defaultValue: 'N' },
+		            timeZoneId: { dataType: "String" },
+		            preferredTimesOfDayIds: { complexTypeName: "Identifier:#Nightingale", isScalar: false },
+		            preferredDaysOfWeekIds: { complexTypeName: "Identifier:#Nightingale", isScalar: false },
+		            languages: { complexTypeName: "ContactLanguage:#Nightingale", isScalar: false },
+		            modes: { complexTypeName: "ContactMode:#Nightingale", isScalar: false },
+		            emails: { complexTypeName: "Email:#Nightingale", isScalar: false },
+		            phones: { complexTypeName: "Phone:#Nightingale", isScalar: false },
+		            addresses: { complexTypeName: "Address:#Nightingale", isScalar: false },
+					contactTypeId:  { dataType: "String" },
+					contactSubTypes: { complexTypeName: "ContactSubType:#Nightingale", isScalar: false },
+					externalRecordId: { dataType: "String" },
+					dataSource:  { dataType: "String", defaultValue: 'Engage' },
+					statusId: { dataType: "Int64", defaultValue: 1 },
+					deceasedId: { dataType: "Int64", defaultValue: 2 },
+					prefix: { dataType: "String" },
+					suffix: { dataType: "String" },
+					createdOn: { dataType: "DateTime" },
+					updatedOn: { dataType: "DateTime" },
+					createdById: { dataType: "String" },
+					updatedById: { dataType: "String" }
+		        },
+		        navigationProperties: {
+		            patient: {
+		                entityTypeName: "Patient", isScalar: true,
+		                associationName: "Patient_ContactSearch", foreignKeyNames: ["patientId"]
+		            },
+		            timeZone: {
+		                entityTypeName: "TimeZone", isScalar: true,
+		                associationName: "TimeZone_ContactCards", foreignKeyNames: ["timeZoneId"]
+		            },					
+					contactType: {
+						entityTypeName: "ContactTypeLookup", isScalar: true,
+						associationName: "ContactTypeLookup_ContactCard", foreignKeyNames: ["contactTypeId"]
+					},
+					contactStatus: {
+						entityTypeName: "ContactStatus", isScalar: true,
+						associationName: "Contact_ContactStatus", foreignKeyNames: ["statusId"]
+					},
+					deceased: {
+						entityTypeName: "Deceased", isScalar: true,
+						associationName: "Contact_Deceased", foreignKeyNames: ["deceasedId"]
+					},
+					createdBy: {
+						entityTypeName: "CareManager", isScalar: true,
+						associationName: "ContactCard_CreatedBy", foreignKeyNames: ["createdById"]
+					},
+					updatedBy: {
+						entityTypeName: "CareManager", isScalar: true,
+						associationName: "ContactCard_UpdatedBy", foreignKeyNames: ["updatedById"]
+					},
+		        }
+		    });
+
+			metadataStore.addEntityType({
+		        shortName: "ContactCarememberSearch",
+		        namespace: "Nightingale",
+		        dataProperties: {
+		            id: { dataType: "String", isPartOfKey: true },
+		            patientId: { dataType: "String" },
+					isPatient: { dataType: "Boolean" },
+					userId:  { dataType: "String" },
+					isUser: { dataType: "Boolean" },
+					firstName: { dataType: "String" },
+					middleName: { dataType: "String" },
+					lastName: { dataType: "String" },
+					preferredName: { dataType: "String" },
+					gender: { dataType: "String", defaultValue: 'N' },
+		            timeZoneId: { dataType: "String" },
+		            preferredTimesOfDayIds: { complexTypeName: "Identifier:#Nightingale", isScalar: false },
+		            preferredDaysOfWeekIds: { complexTypeName: "Identifier:#Nightingale", isScalar: false },
+		            languages: { complexTypeName: "ContactLanguage:#Nightingale", isScalar: false },
+		            modes: { complexTypeName: "ContactMode:#Nightingale", isScalar: false },
+		            emails: { complexTypeName: "Email:#Nightingale", isScalar: false },
+		            phones: { complexTypeName: "Phone:#Nightingale", isScalar: false },
+		            addresses: { complexTypeName: "Address:#Nightingale", isScalar: false },
+					contactTypeId:  { dataType: "String" },
+					contactSubTypes: { complexTypeName: "ContactSubType:#Nightingale", isScalar: false },
+					externalRecordId: { dataType: "String" },
+					dataSource:  { dataType: "String", defaultValue: 'Engage' },
+					statusId: { dataType: "Int64", defaultValue: 1 },
+					deceasedId: { dataType: "Int64", defaultValue: 2 },
+					prefix: { dataType: "String" },
+					suffix: { dataType: "String" },
+					createdOn: { dataType: "DateTime" },
+					updatedOn: { dataType: "DateTime" },
+					createdById: { dataType: "String" },
+					updatedById: { dataType: "String" }
+		        },
+		        navigationProperties: {
+		            patient: {
+		                entityTypeName: "Patient", isScalar: true,
+		                associationName: "Patient_ContactCarememberSearch", foreignKeyNames: ["patientId"]
+		            },
+		            timeZone: {
+		                entityTypeName: "TimeZone", isScalar: true,
+		                associationName: "TimeZone_ContactCards", foreignKeyNames: ["timeZoneId"]
+		            },					
+					contactType: {
+						entityTypeName: "ContactTypeLookup", isScalar: true,
+						associationName: "ContactTypeLookup_ContactCard", foreignKeyNames: ["contactTypeId"]
+					},
+					contactStatus: {
+						entityTypeName: "ContactStatus", isScalar: true,
+						associationName: "Contact_ContactStatus", foreignKeyNames: ["statusId"]
+					},
+					deceased: {
+						entityTypeName: "Deceased", isScalar: true,
+						associationName: "Contact_Deceased", foreignKeyNames: ["deceasedId"]
+					},
+					createdBy: {
+						entityTypeName: "CareManager", isScalar: true,
+						associationName: "ContactCard_CreatedBy", foreignKeyNames: ["createdById"]
+					},
+					updatedBy: {
+						entityTypeName: "CareManager", isScalar: true,
+						associationName: "ContactCard_UpdatedBy", foreignKeyNames: ["updatedById"]
+					},
+		        }
+		    });
+			
 		    // Phone complex type
 		    metadataStore.addEntityType({
 		        shortName: "Phone",
@@ -122,8 +300,36 @@ define(['services/session', 'services/validatorfactory', 'services/customvalidat
 		        }
 		    });
 
+			metadataStore.addEntityType({
+		        shortName: "ContactTypeLookup",
+		        namespace: "Nightingale",
+		        dataProperties: {
+		            id: { dataType: "String", isPartOfKey: true },
+					parentId: { dataType: "String" },
+		            name: { dataType: "String" },
+					role: { dataType: "String" },
+					group: { dataType: "String" }
+		        }
+		    });
+			
+			metadataStore.addEntityType({
+		        shortName: "ContactSubType",
+		        namespace: "Nightingale",
+		        isComplexType: true,
+		        dataProperties: {
+		            id: { dataType: "String"  },//, isPartOfKey: true
+					subTypeId:  { dataType: "String" },
+		            specialtyId: { dataType: "String" },
+		            subSpecialtyIds:  { complexTypeName: "Identifier:#Nightingale", isScalar: false }
+		        }
+		    });
+
 		    metadataStore.registerEntityTypeCtor(
 				'ContactCard', null, contactCardInitializer);
+			metadataStore.registerEntityTypeCtor(
+				'ContactSearch', null, contactCardInitializer);					
+			metadataStore.registerEntityTypeCtor(
+				'ContactCarememberSearch', null, contactCardInitializer);
 		    metadataStore.registerEntityTypeCtor(
 				'ContactLanguage', null, contactLanguageInitializer);
 		    metadataStore.registerEntityTypeCtor(
@@ -134,9 +340,104 @@ define(['services/session', 'services/validatorfactory', 'services/customvalidat
 				'Phone', null, phoneInitializer);
 		    metadataStore.registerEntityTypeCtor(
 				'Email', null, emailInitializer);
-
-		    function contactCardInitializer(contactCard) {
-		        contactCard.activeTab = ko.observable('general');
+			metadataStore.registerEntityTypeCtor(
+				'ContactSubType', null, contactSubTypeInitializer);
+			
+			function contactSubTypeInitializer(contactSubType) {
+				contactSubType.isNew = ko.observable(false);
+				contactSubType.subTypeName = ko.computed( function() {
+					checkDataContext();
+					var name = null;
+					var subTypeId = contactSubType.subTypeId();
+					if( subTypeId ){
+						var subType = datacontext.getContactTypeLookupById( subTypeId );
+						if( subType && subType.length ){
+							name = subType[0].name();
+						}
+					}
+					return name;
+				}).extend({ throttle: 50 });
+				contactSubType.specialtyName = ko.computed( function() {
+					checkDataContext();
+					var name = null;
+					var specialtyId = contactSubType.specialtyId();
+					if( specialtyId ){
+						var specialty = datacontext.getContactTypeLookupById( specialtyId );
+						if( specialty && specialty.length ){
+							name = specialty[0].name();
+						}
+					}
+					return name;
+				}).extend({ throttle: 50 });
+				contactSubType.subSpecialtyString = ko.computed(function(){
+					checkDataContext();
+					var name = null;
+					var subSpecialtyIds = contactSubType.subSpecialtyIds();
+					if( subSpecialtyIds.length ){
+						ko.utils.arrayForEach( subSpecialtyIds, function(sub){
+							var contactType = datacontext.getContactTypeLookupById( sub.id() );
+							if( contactType && contactType.length > 0 ){
+								if( name && name.length ){
+									name += ', ';
+								}
+								else{
+									name = '';
+								}
+								name += contactType[0].name();
+							}
+						});
+					}
+					return name;
+				}).extend({ throttle: 50 });
+			}
+			
+		    function contactCardInitializer(contactCard) {				
+				contactCard.isNew = ko.observable(false);				
+		        contactCard.activeTab = ko.observable('General');
+				
+				//record original value of complex types for cancel:
+				contactCard.originalContactSubTypes = ko.observableArray();
+				var originalSubTypes = contactCard.originalContactSubTypes();				
+				if( contactCard.contactSubTypes().length > 0){
+					ko.utils.arrayPushAll(originalSubTypes, contactCard.contactSubTypes());					
+				}
+				contactCard.originalPreferredTimesOfDayIds = ko.observableArray();
+				var originalPreferredTimesOfDayIds = contactCard.originalPreferredTimesOfDayIds()
+				if( contactCard.preferredTimesOfDayIds().length > 0){
+					ko.utils.arrayPushAll(originalPreferredTimesOfDayIds, contactCard.preferredTimesOfDayIds());					
+				}
+				contactCard.originalPreferredDaysOfWeekIds = ko.observableArray();
+				var originalPreferredDaysOfWeekIds = contactCard.originalPreferredDaysOfWeekIds()
+				if( contactCard.preferredDaysOfWeekIds().length > 0){
+					ko.utils.arrayPushAll(originalPreferredDaysOfWeekIds, contactCard.preferredDaysOfWeekIds());					
+				}
+				contactCard.originalLanguages = ko.observableArray();
+				var originalLanguages = contactCard.originalLanguages()
+				if( contactCard.languages().length > 0){
+					ko.utils.arrayPushAll(originalLanguages, contactCard.languages());					
+				}				
+				contactCard.originalModes = ko.observableArray();
+				var originalModes = contactCard.originalModes()
+				if( contactCard.modes().length > 0){
+					ko.utils.arrayPushAll(originalModes, contactCard.modes());					
+				}
+				contactCard.originalEmails = ko.observableArray();
+				var originalEmails = contactCard.originalEmails()
+				if( contactCard.emails().length > 0){
+					ko.utils.arrayPushAll(originalEmails, contactCard.emails());					
+				}
+				contactCard.originalPhones = ko.observableArray();
+				var originalPhones = contactCard.originalPhones()
+				if( contactCard.phones().length > 0){
+					ko.utils.arrayPushAll(originalPhones, contactCard.phones());					
+				}
+				contactCard.originalAddresses = ko.observableArray();
+				var originalAddresses = contactCard.originalAddresses()
+				if( contactCard.addresses().length > 0){
+					ko.utils.arrayPushAll(originalAddresses, contactCard.addresses());					
+				}
+				//end complex types
+				
 		        contactCard.prefCommMethods = ko.computed(function () {
 		            checkDataContext();
 		            var commModeString = '';
@@ -463,6 +764,141 @@ define(['services/session', 'services/validatorfactory', 'services/customvalidat
 		            }
 		        }).extend({ throttle: 50 });
 
+				contactCard.fullName = ko.computed( function(){
+					var fullName = '';
+					var prefix = contactCard.prefix();
+					var suffix = contactCard.suffix();
+					var firstName = contactCard.firstName();
+					var lastName = contactCard.lastName();
+					var middleName = contactCard.middleName();
+					
+					if( prefix ){
+						fullName += prefix + ' ' ;
+					}
+					if( firstName ){						
+						fullName += firstName + ' ';
+					}
+					if( middleName ){						
+						fullName += middleName + ' ';
+					}
+					if( lastName ){						
+						fullName += lastName + ' ';
+					}					
+					if( suffix ){						
+						fullName += suffix;
+					}
+					fullName = fullName.trim();
+					return fullName;
+				}).extend({ throttle: 50 });
+				
+				contactCard.genderModel = ko.computed({
+					read: function () {
+						checkDataContext();
+						var thisGender;
+						var gender = contactCard.gender()? contactCard.gender().toLowerCase() : '';
+						if (gender === 'm' || gender === 'male') {
+							contactCard.gender('M');
+							thisGender = ko.utils.arrayFirst(datacontext.enums.genders(), function (item) {
+								return 'm' === item.Id;
+							});
+						}
+						else if (gender === 'f' || gender === 'female') {
+							contactCard.gender('F');
+							thisGender = ko.utils.arrayFirst(datacontext.enums.genders(), function (item) {
+								return 'f' === item.Id;
+							});
+						}
+						else {
+							contactCard.gender('N');
+							thisGender = ko.utils.arrayFirst(datacontext.enums.genders(), function (item) {
+								return 'n' === item.Id;
+							});
+						}
+						return thisGender;
+					},
+					write: function (newValue) {
+						contactCard.gender(ko.unwrap(newValue).Id.toUpperCase());
+					}
+				}).extend({ throttle: 50 });
+				
+				contactCard.firstLastOrPreferredName = ko.computed( function(){
+					var preferred = contactCard.preferredName();
+					var firstName = contactCard.firstName();
+					if( !firstName ) {
+						firstName = '';
+					}
+					var lastName = contactCard.lastName();
+					if( !lastName ) {
+						lastName = '';
+					}
+					return preferred? preferred : (firstName + ' ' + lastName);
+				}).extend({throttle: 100});
+				
+				function getDetailedSubTypeText(subType){
+					//subtype, specialty and sub specialty
+					var subTypeText = '';							
+					subTypeText += subType.subTypeName();
+					if( subType.specialtyId() ){
+						subTypeText += ' - ' + subType.specialtyName();								
+						if(subType.subSpecialtyString()){
+							subTypeText += ' (' + subType.subSpecialtyString() + ')';
+						}								
+					}
+					return subTypeText;
+				}
+				
+				contactCard.detailedSubTypes = ko.computed( function(){
+					var subTypeStrings = [];
+					if( contactCard.contactSubTypes && contactCard.contactSubTypes().length ){						
+						
+						ko.utils.arrayForEach( contactCard.contactSubTypes(), function( subType ){
+							var subTypeText = getDetailedSubTypeText(subType);							
+							subTypeStrings.push( subTypeText );
+						});
+						
+					}
+					return subTypeStrings;
+				}).extend({ throttle: 50 });
+				
+				function getSubTypeSummaryText(subType){
+					//subtype and specialty text only
+					var text = subType.subTypeName();
+					if( subType.specialtyId() ){
+						text += ' - ' + subType.specialtyName();
+					}
+					return text;
+				}
+				
+				contactCard.contactSummary = ko.computed( function(){
+					var summary = '';					
+					if( contactCard.contactSubTypes && contactCard.contactSubTypes().length ){						
+						var subTypesText = '';
+						ko.utils.arrayForEach( contactCard.contactSubTypes(), function( subType ){
+							if( subTypesText.length ) {
+								subTypesText += ', ';
+							}
+							subTypesText += getSubTypeSummaryText(subType);
+						});
+						summary += subTypesText;
+					}
+					if( contactCard.preferredPhone() && contactCard.preferredPhone().number() ){
+						var phoneNumber = contactCard.preferredPhone().number();
+						phoneNumber = phoneNumber.replace( /\D/g, '');
+						formattedPhone = formatter.formatSeparators( phoneNumber, 'XXX-XXX-XXXX', '-');
+						if( summary.length ){
+							summary += ', ';
+						}
+						summary += formattedPhone;
+					}					
+					if( contactCard.preferredAddress() && contactCard.preferredAddress().cityState() ){
+						if( summary.length ){
+							summary += ', ';
+						}
+						summary += contactCard.preferredAddress().cityState();
+					}
+					return summary;
+				}).extend({ throttle: 50 });
+				
 		        contactCard.preferredLanguage = ko.computed({
 		            read: function () {
 		                // Go through each of the languages
@@ -549,19 +985,65 @@ define(['services/session', 'services/validatorfactory', 'services/customvalidat
 		            return returnValue;
 		        });
 				
+				if( contactCard.isPatient() && contactCard.patient() ){
+					//sync dup properties from patient: (TBD - this may not be necessary later on)
+					if( !contactCard.firstName() ){
+						contactCard.firstName( contactCard.patient().firstName() );
+					}
+					if( !contactCard.lastName() ){
+						contactCard.lastName( contactCard.patient().lastName() );
+					}
+				}
+				
 				//validation:				
 				contactCard.phoneValidationErrors = ko.observableArray([]);								
+								
+				contactCard.profileValidationErrors = ko.observableArray([]);
+				contactCard.profileValidationErrorsArray = ko.computed(function () {
+			        var thisArray = [];
+			        ko.utils.arrayForEach(contactCard.profileValidationErrors(), function (error) {
+			            thisArray.push(error.PropName);
+			        });
+			        return thisArray;
+			    });
+				
+				contactCard.isDirty = ko.observable(false);
+                contactCard.clearDirty = function(){
+                    contactCard.isDirty(false);
+                };
+                contactCard.watchDirty = function () {
+                    var propToken = contactCard.entityAspect.propertyChanged.subscribe(function (newValue) {
+                        contactCard.isDirty(true);
+                        propToken.dispose();
+                    });
+                    var subTypesToken = contactCard.contactSubTypes.subscribe(function (newValue) {
+                        contactCard.isDirty(true);
+                        subTypesToken.dispose();
+                    });
+                };
 				
 				/**
-				*	computed. tracks for any validation errors on all tabs of the contact card.
-				*	@method isValid 
+				*	validate the profile tab part of a contact card
+				*	@method hasProfileErrors
 				*/
-				contactCard.isValid = ko.computed(function(){
-										
-					//TODO: combine logic with other tabs errors										
-					return !hasPhoneErrors();											
-				});
-				
+				function hasProfileErrors(){
+					var profileErrors = [];
+					var errorsFound = false;
+					var firstName = contactCard.firstName();
+					var lastName = contactCard.lastName();
+					//var hasChanges = contactCard.isDirty();
+					var isPatient = contactCard.isPatient();
+					if( !firstName || !firstName.trim().length ){
+							profileErrors.push({ PropName: 'firstName', Message: "'First Name' is required"});							
+							errorsFound = true;
+					}
+					if( !lastName || !lastName.trim().length ){
+							profileErrors.push({ PropName: 'lastName', Message: "'Last Name' is required"});
+							errorsFound = true;
+					}
+					contactCard.profileValidationErrors(profileErrors);
+					return errorsFound;
+				}
 				/**
 				*	validates all phones in the contact card phones collection.					
 				*	@method hasPhoneErrors
@@ -587,17 +1069,34 @@ define(['services/session', 'services/validatorfactory', 'services/customvalidat
 			            thisArray.push(error.PropName + error.Value);
 			        });
 			        return thisArray;
-			    });
+			    }).extend({ throttle: 50 });
+				
+				contactCard.isDuplicate = ko.observable(false);
+				contactCard.isDuplicateTested = ko.observable(true);
+				
+				/**
+				*	computed. tracks for any validation errors on all tabs of the contact card.
+				*	@method isValid 
+				*/
+				contactCard.isValid = ko.computed(function(){															
+					var profileErrors = hasProfileErrors();
+					var phoneErrors = hasPhoneErrors();					
+					return !phoneErrors && !profileErrors;
+				}).extend({ throttle: 50 });							
+					
+				contactCard.isEditable = ko.computed( function(){
+					return contactCard.dataSource() == 'Engage';
+				}).extend({ throttle: 50 });
 				
 		        // Can the contact card save?  Fake validation goes here
 		        contactCard.canSave = ko.computed(function () {
 		            return contactCard.isValid();
-		        });
+		        }).extend({ throttle: 50 });
 		        // Method to save changes to the patient
 		        contactCard.saveChanges = function () {
 		            checkDataContext();
 		            // Go save the entity, pass in which parameters should be different
-		            datacontext.saveContactCard(contactCard);
+		            return datacontext.saveContactCard(contactCard);					
 		        }
 		        // Method on the modal to cancel changes to the patient
 		        contactCard.cancelChanges = function () {
@@ -726,6 +1225,11 @@ define(['services/session', 'services/validatorfactory', 'services/customvalidat
 		            }
 		            return null;
 		        });
+				address.cityState = ko.computed( function(){
+					var city = address.city() || '';
+		            var state = address.state() ? address.state().code() : '';		            
+		            return city + ', ' + state;
+				});
 		        address.cityStateZip = ko.computed(function () {
 		            var city = address.city() || '';
 		            var state = address.state() ? address.state().code() : '';

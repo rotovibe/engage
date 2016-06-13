@@ -14,7 +14,7 @@ define([], new breeze.JsonResultsAdapter({
     extractResults: function (data) {
         var results = data.results;
         if (!results) throw new Error("Unable to resolve 'results' property");
-        return results && (results.Problems || results.PatientProblem || results.PatientProblems || results.Patient || results.Cohorts || results.Patients || results.Program || results.Programs || results.PlanElems || results.Languages || results.States || results.Reason || results.CommModes || results.TimesOfDays || results.TimeZones || results.CommTypes || results.Contact || results.Contacts || results.LookUps || results.LookUpDetails || results.Goals || results.Goal || results.Note || results.Notes || results.PatientNote || results.Utilization || results.Library || results.CareMembers || results.Observations || results.Observation ||results.PatientObservations || results.PatientObservation || results.Action || results.Actions || results.Attributes || results.Objectives || results.ToDo || results.ToDos || results.PatientDetails || results.Intervention || results.Interventions || results.Task || results.Tasks || results.Systems || results.PatientSystems || results.Allergy || results.Allergies || results.PatientAllergy || results.PatientAllergies || results.PatientMedSupp || results.PatientMedSupps || results.PatientMedFrequencies);
+        return results && (results.Problems || results.PatientProblem || results.PatientProblems || results.Patient || results.Cohorts || results.Patients || results.Program || results.Programs || results.PlanElems || results.Languages || results.States || results.Reason || results.CommModes || results.TimesOfDays || results.TimeZones || results.CommTypes || results.Contact || results.Contacts || results.LookUps || results.LookUpDetails || results.Goals || results.Goal || results.Note || results.Notes || results.PatientNote || results.Utilization || results.Library || results.CareMembers || results.CareTeam || results.CareTeamMember || results.Observations || results.Observation ||results.PatientObservations || results.PatientObservation || results.Action || results.Actions || results.Attributes || results.Objectives || results.ToDo || results.ToDos || results.PatientDetails || results.Intervention || results.Interventions || results.Task || results.Tasks || results.Systems || results.PatientSystems || results.Allergy || results.Allergies || results.PatientAllergy || results.PatientAllergies || results.PatientMedSupp || results.PatientMedSupps || results.PatientMedFrequencies || results.ContactTypeLookUps);
     },
 
     visitNode: function (node, mappingContext, nodeContext) {
@@ -71,6 +71,24 @@ define([], new breeze.JsonResultsAdapter({
             });
             return { entityType: "CommunicationType" }
         }
+		if(node.ContactSubTypes) {
+			var subTypes = []
+			$.each(node.ContactSubTypes, function(index, sub){
+				var theseIds = [];
+				if( sub.SubSpecialtyIds ){
+					$.each(sub.SubSpecialtyIds, function (index, item) {
+						// if the item is not null
+						if (item) {
+							theseIds.push({ Id: item });
+						}
+					});
+				}
+				sub.SubSpecialtyIds = theseIds; 
+				//TBD - may need to rewrite the node.ContactSubTypes (1,2)
+				//1. subTypes.push(sub);	
+			});
+			//2. node.ContactSubTypes = subTypes;
+		}
         if (mappingContext.query.fromEntityType && mappingContext.query.fromEntityType.shortName === 'Note') {
             // If you were mapping to a note, we need to map the program ids
             if (node.ProgramIds) {
@@ -169,6 +187,39 @@ define([], new breeze.JsonResultsAdapter({
                 return { entityType: "Task" };
             }
         }
+		
+		if ((mappingContext.query.fromEntityType && mappingContext.query.fromEntityType.shortName === 'CareTeam') 
+			|| (nodeContext.propertyName && nodeContext.propertyName === 'careTeam') 
+			|| (nodeContext.propertyName && nodeContext.propertyName === 'members') ) {
+					
+			//help breeze identify the entities in the associated relations CareTeam_CareMembers (both ways)
+			//( this is also done in goals for the sub entities Barriers and Interventions )
+			if (nodeContext.nodeType === 'root' || (nodeContext.propertyName && nodeContext.propertyName === 'careTeam')) {
+				if( node.Members && node.Id ){
+					$.each(node.Members, function(index, member) {
+						member.CareTeamId = node.Id;	//populate the team id
+						if( !member.RoleId && member.CustomRoleName ){
+							member.RoleId = -1;	//custom role (customeRoleName)
+						}
+					});
+				}
+				return { entityType: "CareTeam" };
+			}
+			if (nodeContext.navigationProperty) {
+                if (nodeContext.navigationProperty.name === 'members') {
+					//node.CareTeamId is now set to point to the team id
+					return { entityType: "CareMember" };
+                }
+                //fix mapping to resolve navigation entities we need under caremember
+				if (nodeContext.navigationProperty.name === 'contact') {					
+					return { entityType: "ContactCard" };
+				}
+				if (nodeContext.navigationProperty.name === 'roleType') {					
+					return { entityType: "ContactTypeLookup" };
+				}
+			}
+		}				
+		
         if ((mappingContext.query.fromEntityType && mappingContext.query.fromEntityType.shortName === 'Goal') || (nodeContext.propertyName && nodeContext.propertyName === 'goals')) {
             if (nodeContext.nodeType === 'root' || (nodeContext.propertyName && nodeContext.propertyName === 'goals')) {
                 if (node.FocusAreaIds) {

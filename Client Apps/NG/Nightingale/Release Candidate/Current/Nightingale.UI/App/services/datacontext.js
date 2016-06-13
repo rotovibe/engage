@@ -16,7 +16,7 @@
  */
  define(['services/session', 'services/jsonResultsAdapter', 'models/base', 'config.services', 'services/dataservices/getentityservice', 'models/programs', 'models/lookups', 'models/contacts', 'models/goals', 'models/notes', 'models/observations', 'models/allergies', 'models/medications', 'services/dataservices/programsservice', 'services/entityfinder', 'services/usercontext', 'services/dataservices/contactservice', 'services/entityserializer', 'services/dataservices/lookupsservice', 'services/dataservices/goalsservice', 'services/dataservices/notesservice', 'services/dataservices/observationsservice', 'services/dataservices/caremembersservice', 'services/dataservices/patientsservice', 'services/dataservices/allergiesservice', 'services/dataservices/medicationsservice', 'services/local.collections', 'services/dateHelper'],
  	function (session, jsonResultsAdapter, modelConfig, servicesConfig, getEntityService, stepModelConfig, lookupModelConfig, contactModelConfig, goalModelConfig, notesModelConfig, observationsModelConfig, allergyModelConfig, medicationModelConfig, programsService, entityFinder, usercontext, contactService, entitySerializer, lookupsService, goalsService, notesService, observationsService, careMembersService, patientsService, allergiesService, medicationsService, localCollections, dateHelper) {
-	
+
 		// Object to use for the loading messages
 		function loadingMessage(message, showing) {
 			var self = this;
@@ -117,16 +117,16 @@
 		// Pass in an end-point and an entity type to get data from that end-point
 		// and create an entity in the manager of that type.
 		var getEntityById = function (entityObservable, id, entityType, endpoint, forceRemote) {
-				// If it is a patient, call it an individual in the message
-				entityTypeName = (entityType && entityType === 'Patient') ? 'Individual' : entityType
-				var message = queryStarted(entityTypeName, forceRemote);
-				return getEntityService.getEntityById(manager, message, entityObservable, id, entityType, endpoint, forceRemote)
-				.then(queryCompleted);
-			};
+			// If it is a patient, call it an individual in the message
+			entityTypeName = (entityType && entityType === 'Patient') ? 'Individual' : entityType
+			var message = queryStarted(entityTypeName, forceRemote);
+			return getEntityService.getEntityById(manager, message, entityObservable, id, entityType, endpoint, forceRemote)
+			.then(queryCompleted);
+		};
 
 		// Check to see if we have this entity locally yet
 		var checkForEntityLocally = function (entityObservable, id, entityType) {
-			var query = breeze.EntityQuery.from(entityType + 's')
+			var query = breeze.EntityQuery.from(entityType)// + 's'
 			.where('id', '==', id)
 			.toType(entityType);
 			var p = manager.executeQueryLocally(query);
@@ -192,7 +192,7 @@
 		manager.hasChangesChanged.subscribe(function (eventArgs) {
 			hasChanges(eventArgs.hasChanges);
 		});
-		
+
 		function getSettingsParam( key ){
 			var user = session.currentUser();
 			var settings = user && session.currentUser().settings? session.currentUser().settings(): null;
@@ -202,7 +202,7 @@
 			}
 			return result;
 		}
-		
+
 		var datacontext = {
 			manager: manager,
 			loadingMessages: loadingMessages,
@@ -217,6 +217,8 @@
 			getUserByUserToken: getUserByUserToken,
 			getSystemCareManager: getSystemCareManager,
 			getUsercareManagerName: getUsercareManagerName,
+			getUserCareManager: getUserCareManager,
+			getUserFullName: getUserFullName,
 			logOutUserByToken: logOutUserByToken,
 			createUserFromSessionUser: createUserFromSessionUser,
 			getEventsByUserId: getEventsByUserId,
@@ -243,11 +245,19 @@
 			saveNote: saveNote,
 			deleteNote: deleteNote,
 			getNote: getNote,
-			saveCareMember: saveCareMember,
+			saveCareMember: saveCareMemberOld,	//old - will be deprecated
+			saveCareTeamMember: saveCareTeamMember,
+			deleteCareTeamMember: deleteCareTeamMember,
+			saveCareTeam: saveCareTeam,
+			getCareTeam: getCareTeam,
 			enums: localCollections.enums,
 			alerts: localCollections.alerts,
+			getContactTypes: getContactTypes,
+			getContactTypeLookupById: getContactTypeLookupById,
 			saveContactCard: saveContactCard,
 			cancelAllChangesToContactCard: cancelAllChangesToContactCard,
+			getContacts: getContacts,
+			getLocalContacts: getLocalContacts,
 			cancelEntityChanges: cancelEntityChanges,
 			getAllChanges: getAllChanges,
 			searchForEntities: searchForEntities,
@@ -293,8 +303,8 @@
 			saveAllergies: saveAllergies,
 			getPatientAllergies: getPatientAllergies,
 			deletePatientAllergy: deletePatientAllergy,
-			getPatientAllergiesQuery: getPatientAllergiesQuery,					
-			getSettingsParam: getSettingsParam, 
+			getPatientAllergiesQuery: getPatientAllergiesQuery,
+			getSettingsParam: getSettingsParam,
 			singleSort: singleSort
 		};
 
@@ -327,7 +337,8 @@
 				getAllergyLookups(),
 				getAllCareManagers(),
 				getRecentIndividuals(),
-				loadUpMocks()
+				loadUpMocks(),
+				getContactTypesTree(),
 				]).then(processLookpus);
 			return promise;
 		}
@@ -339,6 +350,15 @@
 			}
 		}
 
+		function getContactTypesTree(){
+			if (session.currentUser() && session.currentUser().contracts().length !== 0) {
+				var endPoint = new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'ContactTypeLookups', 'ContactTypeLookup');
+				return getEntityList( localCollections.contactTypesTree, endPoint.EntityType, endPoint.ResourcePath, null, null, true)
+				.then( function(){
+					var stop = 0;
+				});
+			}
+		}
 		// Get a list of problems lookups
 		function getProblemsLookup() {
 			if (session.currentUser() && session.currentUser().contracts().length !== 0) {
@@ -476,6 +496,9 @@
 				lookupsService.getLookup(manager, 'FreqHowOften', datacontext.enums.freqHowOftens, true);
 				lookupsService.getLookup(manager, 'Frequency', datacontext.enums.frequency, true);
 				lookupsService.getLookup(manager, 'FreqWhen', datacontext.enums.freqWhens, true);
+                lookupsService.getLookup(manager, 'DurationUnit', datacontext.enums.durationUnits, true);
+                lookupsService.getNoteLookup(manager, 'RefusalReason', datacontext.enums.refusalReasons, true);
+                lookupsService.getNoteLookup(manager, 'MedicationReview', datacontext.enums.medicationReviews, true);
 			}
 		}
 		/**
@@ -581,10 +604,12 @@
 			observationsLoaded = true;
 		}
 
-		// Get a list of goal lookups
+		// Get a list of care member lookups
 		function getCareMemberTypeLookups() {
 			if (session.currentUser()) {
+				lookupsService.getLookup(manager, 'CareTeamFrequency', localCollections.enums.careMemberFrequency, true);
 				return lookupsService.getLookup(manager, 'CareMemberType', localCollections.enums.careMemberTypes, true);
+				
 			}
 		}
 
@@ -690,6 +715,7 @@
 			datacontext.getEntityList(datacontext.enums.medicationStatuses, 'MedicationStatus', 'fakeEndPoint', null, null, false);
 			datacontext.getEntityList(datacontext.enums.medicationCategories, 'MedicationCategory', 'fakeEndPoint', null, null, false);
 			datacontext.getEntityList(datacontext.enums.deceasedStatuses, 'Deceased', 'fakeEndPoint', null, null, false);
+			datacontext.getEntityList(datacontext.enums.careMemberStatuses, 'CareMemberStatus', 'fakeEndPoint', null, null, false);
 		}
 
 		// Configure the Breeze entity manager to always pass an api key
@@ -806,7 +832,7 @@
 
 		function deleteIndividual (entity) {
 			var message = queryStarted('Individual', true, 'Deleting');
-			
+
 			function saveCompleted(data) {
 				// Remove the person from cache completely
 				//entity.entityAspect.setDetached();
@@ -827,7 +853,7 @@
 				removeLoadingMessage(message);
 				throw new Error('Delete failed');
 			}
-			
+
 			patientsService.deleteIndividual(manager, entity).then(saveCompleted).fail(saveFailed);
 		}
 
@@ -851,7 +877,7 @@
 
 			var serializedIndividual;
 			serializedIndividual = entitySerializer.serializeIndividual(patient, manager);
-			
+
 			function saveCompleted(data) {
 				// If there is an outcome returned and it equals zero,
 				if (data.httpResponse.data.Outcome && data.httpResponse.data.Outcome.Result == 0) {
@@ -870,6 +896,9 @@
 					}
 					patient.entityAspect.acceptChanges();
 					updateTodoPatient(patient);
+					updateContact(patient, 'ContactCard');  	//update all cached patient contacts and home/contacts/search results					
+					updateContact(patient, 'ContactSearch');	//update all cached contact search results
+					updateContact(patient, 'ContactCarememberSearch');  //update all cached care member contact search results
 					queryCompleted(message);
 					return true;
 				}
@@ -886,7 +915,7 @@
 				console.log(error);
 				removeLoadingMessage(message);
 			}
-			
+
 			return patientsService.saveIndividual(manager, serializedIndividual, insert).then(saveCompleted).fail(saveFailed);
 		}
 
@@ -991,19 +1020,73 @@
 			return programsService.savePlanElemAttrs(manager, planElem, programId, patientId).then(queryCompleted(message));
 		}
 
+		function getContactTypes( group, isRoot){
+			var types = [];
+			ko.utils.arrayForEach(localCollections.contactTypesTree(), function(node){
+				if( ( group && ( node.group() == group )) || !group ) {
+					if( ( isRoot && !node.parentId() ) || ( isRoot == false && node.parentId() ) || !isRoot ){
+						types.push(node);
+					}
+				}
+			});
+			return types;
+		}
+
+		function getContactTypeLookupById( id ){
+			var contactType = ko.utils.arrayFilter( localCollections.contactTypesTree(), function(node){
+				return node.id() == id;
+			});
+			return contactType;
+		}
+		
+		//assign values into complex type collection arrays
+		function copyArray(source, dest){
+			dest.removeAll();
+			var copy = dest();				
+			if( source().length > 0){
+				ko.utils.arrayPushAll(copy, source());					
+			}
+		}
+		
 		// Save changes to a single contact card
 		function saveContactCard(contactCard) {
 			// Display a message while saving
-			var message = queryStarted('Contact card', true, 'Saving');
-
+			var message = queryStarted('Contact', true, 'Saving');
+			var isInsert = contactCard.isNew();
 			var serializedContactCard;
-			setTimeout(function () {
+			//setTimeout(function () {
 				serializedContactCard = entitySerializer.serializeContactCard(contactCard, manager);
-			}, 50);
+			//}, 50);
+
+			
 			
 			function saveCompleted (data) {
 				// If data was returned and has a property called success that is true,
 				if (data) {
+					if( isInsert && data.Id ){
+						contactCard.id( data.Id );
+						contactCard.isNew(false);
+						contactCard.createdById( session.currentUser().userId() );//data.CreatedById is not returned
+						contactCard.createdOn( new Date() ); //data.CreatedOn is not returned
+					}
+					else{
+						contactCard.updatedById( session.currentUser().userId() );
+						contactCard.updatedOn( new Date() );
+						if(contactCard.patient()){
+							var contactPatient = contactCard.patient();								
+							//sync the overlapping properties:
+							contactPatient.firstName(contactCard.firstName());
+							contactPatient.lastName(contactCard.lastName());
+							contactPatient.middleName(contactCard.middleName());
+							contactPatient.suffix(contactCard.suffix());								
+							contactPatient.gender(contactCard.gender());
+							contactPatient.preferredName(contactCard.preferredName());
+							contactPatient.deceasedId(contactCard.deceasedId());
+							contactPatient.entityAspect.acceptChanges();
+						
+						}						
+					}
+				
 					// Go through the data, find any entities that need to have their Id's cleaned up
 					var updatedPhones = data.UpdatedPhone;
 					var updatedEmails = data.UpdatedEmail;
@@ -1051,7 +1134,23 @@
 							}
 						});
 					}
-
+					//record the complex types as original values: 
+					// contactCard.originalContactSubTypes.removeAll();
+					// var originalSubTypes = contactCard.originalContactSubTypes();				
+					// if( contactCard.contactSubTypes().length > 0){
+						// ko.utils.arrayPushAll(originalSubTypes, contactCard.contactSubTypes());					
+					// }
+					copyArray( contactCard.contactSubTypes, contactCard.originalContactSubTypes );
+					copyArray( contactCard.preferredTimesOfDayIds, contactCard.originalPreferredTimesOfDayIds );
+					copyArray( contactCard.preferredDaysOfWeekIds, contactCard.originalPreferredDaysOfWeekIds );
+					copyArray( contactCard.languages, contactCard.originalLanguages );
+					copyArray( contactCard.modes, contactCard.originalModes );
+					copyArray( contactCard.emails, contactCard.originalEmails );
+					copyArray( contactCard.phones, contactCard.originalPhones );
+					copyArray( contactCard.addresses, contactCard.originalAddresses );
+					
+					// end complex types
+					
 					// Save all of the levels of everything related to a contact card
 					contactCard.entityAspect.acceptChanges();
 
@@ -1059,11 +1158,30 @@
 					queryCompleted(message);
 				}
 			}
-			setTimeout(function () {
-				return contactService.saveContactCard(manager, serializedContactCard).then(saveCompleted);
-			}, 50);
+			//setTimeout(function () {
+				return contactService.saveContactCard(manager, serializedContactCard, isInsert).then(saveCompleted);
+			//}, 50);
+		}
 
+		function getLocalContactById( contactEntity, id ){
+			var param = new modelConfig.Parameter('id', id, '==');
+			return getLocalContacts( contactEntity, param );
+		}
+		
+		function getLocalContacts( contactEntity, params ){
+			return contactService.getLocalContacts( manager, contactEntity, params );
+		}
+
+		function getContacts( observable, params, observableTotalCount, entityName ){
+			var message = queryStarted('Contacts', true, 'Loading');
+						
+			function contactsReturned(contacts) {
+				// Finally, clear out the message
+				queryCompleted(message);
+				return contacts;				
+			}
 			
+			return contactService.getContacts(manager, observable, params, observableTotalCount, entityName).then(contactsReturned);
 		}
 
 		// Save changes to a single contact card
@@ -1072,18 +1190,15 @@
 			var message = queryStarted('Goal', true, 'Saving');
 
 			goal.checkAppend();
-			
-			// Save all of the levels of everything related to a contact card
+
 			goal.entityAspect.acceptChanges();
 			var serializedGoal;
 			setTimeout(function () {
 				serializedGoal = entitySerializer.serializeGoal(goal, manager);
 			}, 50);
-			
+
 			function saveCompleted(data) {
-				// If data was returned and has a property called success that is true,
 				goal.isNew(false);
-				// Save all of the levels of everything related to a contact card
 				goal.entityAspect.acceptChanges();
 				// Accept the changes to everything related to a goal
 				ko.utils.arrayForEach(goal.tasks(), function (task) {
@@ -1099,7 +1214,7 @@
 				// Finally, clear out the message
 				queryCompleted(message);
 			}
-			
+
 			setTimeout(function () {
 				return goalsService.saveGoal(manager, serializedGoal).then(saveCompleted);
 			}, 50);
@@ -1111,7 +1226,7 @@
 				var message = queryStarted('Intervention', true, 'Saving');
 
 				intervention.checkAppend();
-				
+
 				// Save intervention changes so new ones returned are accepted
 				intervention.entityAspect.acceptChanges();
 				var serializedIntervention;
@@ -1135,7 +1250,7 @@
 			// Display a message while saving
 			var message = queryStarted('Task', true, 'Saving');
 			task.checkAppend();
-			
+
 			// Get the patient id from the goal
 			var patientId = task.goal().patientId();
 			// Save all of the levels of everything related to a contact card
@@ -1152,17 +1267,17 @@
 				//task.entityAspect.acceptChanges();
 				// Finally, clear out the message
 				queryCompleted(message);
-			}			
+			}
 			return goalsService.saveTask(manager, serializedTask, patientId).then(saveCompleted);
 		}
-						
+
 
 		// Save a type of barrier
 		function saveBarrier(barrier) {
 			// Display a message while saving
 			var message = queryStarted('Barrier', true, 'Saving');
 			barrier.checkAppend();
-			
+
 			// Get the patient id from the goal
 			var patientId = barrier.goal().patientId();
 
@@ -1170,7 +1285,7 @@
 			barrier.entityAspect.acceptChanges();
 			var serializedBarrier;
 			serializedBarrier = entitySerializer.serializeBarrier(barrier, manager);
-			
+
 			function saveCompleted(data) {
 				// Save all of the levels of everything related to a contact card
 				barrier.entityAspect.acceptChanges();
@@ -1199,7 +1314,7 @@
 		}
 
 		// Save changes to a single contact card
-		function saveNote(note) {										
+		function saveNote(note) {
 			// Display a message while saving
 			var message = queryStarted('Note', true, 'Saving');
 			var isInsert = false;
@@ -1236,7 +1351,7 @@
 				queryCompleted(message);
 				return true;
 			}
-			
+
 			if( note.id() < 1 ){
 				isInsert = true;
 				note.createdById(session.currentUser().userId());
@@ -1260,7 +1375,7 @@
 					break;
 				}
 			}
-			
+
 
 			function syncUpdateProps( returnedNote ){
 				// Update (PatientNote endpoint)
@@ -1273,7 +1388,7 @@
 				}
 			}
 		}
-
+		
 		// Save changes to a single contact card
 		function deleteNote(note) {
 			function deleteCompleted(data) {
@@ -1283,10 +1398,10 @@
 				// Finally, clear out the message
 				queryCompleted(message);
 			}
-			
+
 			// Display a message while saving
 			var message = queryStarted('Note', true, 'Deleting');
-			return notesService.deleteNote(manager, note).then(deleteCompleted);					
+			return notesService.deleteNote(manager, note).then(deleteCompleted);
 		}
 		/**
 		*	get note by id. initialy intended to load the full object of utilization type note.
@@ -1304,13 +1419,126 @@
 			}
 		}
 
+		function getCareTeam( observable, patientContactId ){
+			var message = queryStarted('CareTeam', true, 'Loading');			
+			return careMembersService.getCareTeam( manager, observable, patientContactId ).then( careTeamReturned );			
+
+			function careTeamReturned(team) {
+				// Finally, clear out the message
+				queryCompleted(message);
+				return team;
+			}
+		}
+		
+		function saveCareTeam( careTeam ){
+			var message = queryStarted('CareTeam', true, 'Saving');
+			ko.utils.arrayForEach( careTeam.members(), function( member ){
+				member.checkAppend(); //notes
+				if( member.entityAspect.entityState.isAddedModifiedOrDeleted() ){
+					member.entityAspect.acceptChanges();
+				}
+			});
+			if( careTeam.entityAspect.entityState.isAddedModifiedOrDeleted() ){
+				careTeam.entityAspect.acceptChanges();
+			}
+			var serializedCareTeam = entitySerializer.serializeCareTeam(careTeam, manager);
+			return careMembersService.saveCareTeam(manager, serializedCareTeam).then(saveCompleted);			
+			
+			function saveCompleted(data) {
+				
+			    //cleanup the cache from the new ents that are not needed anymore:
+			    //since the returned entity/ies are in breeze already (toType)
+				var arrayRemove = [];
+				if( careTeam && careTeam.members().length > 0 ){
+					ko.utils.arrayForEach( careTeam.members(), function(member){
+						if( member.id() < 0 ){							
+							arrayRemove.push(member);							
+						}
+					});
+				}				
+				if (careTeam && careTeam.id() < 0) {					
+					arrayRemove.push(careTeam);
+				}								
+				ko.utils.arrayForEach( arrayRemove, function(ent){
+					manager.detachEntity(ent);
+				});										
+				
+				if( data.CareTeam && data.CareTeam.Id ){
+					//take the care team from breeze as the entity created with the result returned (all props including members and ids are updated)
+					// note: the members contact object is also expected to be returned by the api. 
+					//	this is needed in order to have the contact nav entity as a ContactCard entity and not ContactSearch entity.
+					var query = breeze.EntityQuery
+					.from('CareTeam')
+					.toType('CareTeam')
+					.where('id', '==', data.CareTeam.Id)
+					.take(1);
+					
+					careTeam = manager.executeQueryLocally(query);
+					queryCompleted(message);
+					return careTeam[0];
+				}												
+			}
+		}
+		
+		function saveCareTeamMember( careMember ){			
+			var message = queryStarted('CareMember', true, 'Saving');
+			if( !careMember.careTeamId() ){
+				throw new Error('saveCareTeamMember the member must have a careTeamId set');
+			}
+			if( !careMember.careTeam().contactId() ){
+				throw new Error('saveCareTeamMember the member must have a careTeam().contactId() set');
+			}
+			careMember.checkAppend(); //notes			
+			var serializedCareMember = entitySerializer.serializeCareTeamMember( careMember, manager );
+			return careMembersService.saveCareTeamMember( manager, serializedCareMember, careMember.careTeamId(), careMember.careTeam().contactId() ).then(saveCompleted);
+
+			function saveCompleted(data) {				
+				if ( data && data.Id && careMember.id() < 0 ) {
+					careMember.id(data.Id);
+					careMember.createdOn( new Date() );
+					careMember.createdById( session.currentUser().userId() );
+					//the care member contact is a 'ContactSearch' entity. we need to make sure it exists in 'ContactCard' entity cache:
+					var contact = getLocalContactById( careMember.contactId(), 'ContactCard' );
+					if( !contact ){
+						//copy that entity to ContactCard cache so it wont get deleted (by the search clearing its cache)
+						createEntity('ContactCard', careMember.contact() );
+						
+					}
+					
+					var contacts = datacontext.getLocalContacts('ContactSearch');
+				}
+				else{
+					careMember.updatedOn( new Date() );
+					careMember.updatedById( session.currentUser().userId() );
+				}
+				careMember.entityAspect.acceptChanges();				
+				queryCompleted(message);
+				return true;
+			}
+		}
+				
+		function deleteCareTeamMember( careMember ){
+			function deleteCompleted(data) {
+				careMember.entityAspect.rejectChanges();				
+				manager.detachEntity(careMember);
+				
+				queryCompleted(message);
+			}
+
+			var message = queryStarted('CareMember', true, 'Deleting');
+			return careMembersService.deleteCareTeamMember(manager, careMember).then(deleteCompleted);
+		}
+		
+		//this func will be deprecated:
 		// Save changes to a single contact card
-		function saveCareMember(careMember, saveType) {
+		function saveCareMemberOld(careMember, saveType) {
 			// Display a message while saving
 			var message = queryStarted('CareMember', true, 'Saving');
 
+			careMember.checkAppend(); //notes
+			
 			var serializedCareMember = entitySerializer.serializeCareMember(careMember, manager);
-			return careMembersService.saveCareMember(manager, serializedCareMember, saveType).then(saveCompleted);
+			return careMembersService.saveCareMemberOld(manager, serializedCareMember, saveType).then(saveCompleted);
 
 			function saveCompleted(data) {
 				// If data was returned and has a property called success that is true,
@@ -1356,7 +1584,7 @@
 			});
 			if (serializedObservations.length > 0) {
 				observationsSaving(true);
-					
+
 				function saveCompleted(data) {
 					observationsSaving(false);
 					queryCompleted(message);
@@ -1443,7 +1671,7 @@
 				thisPatient.patientSystems.valueHasMutated();
 				return true;
 			}
-		}				
+		}
 
 		// Get a patients full SSN for display only
 		function getFullSSN(patientId) {
@@ -1517,57 +1745,58 @@
 		function getToDos (observable, params, observableTotalCount) {
 			var message = queryStarted('ToDos', true, 'Loading');
 			todosSaving(true);
-			return notesService.getToDos(manager, observable, params, observableTotalCount).then(todosReturned);
-
+			
 			function todosReturned(todos) {
 				// Finally, clear out the message
 				queryCompleted(message);
-				//TODO: manage the size of the localCollections.todo 
+				//TODO: manage the size of the localCollections.todo
 				// Make sure each of the todos are in the collection locally
 				ko.utils.arrayForEach(todos, function (todo) {
-					if (localCollections.todos.indexOf(todo) === -1) {
+					if (todo.entityAspect && localCollections.todos.indexOf(todo) === -1) {
 						// Add it in
 						localCollections.todos.push(todo);
 					}
 				});
 				todosSaving(false);
 			}
+			
+			return notesService.getToDos(manager, observable, params, observableTotalCount).then(todosReturned);
 		}
-		
+
 		/**
 		*	clear all the todos from the cache
 		*	@method clearToDos
 		*/
 		function clearToDos(){
 			ko.utils.arrayForEach( localCollections.todos, function( todo ) {
-				manager.detachEntity(todo);		
-			}); 	
+				manager.detachEntity(todo);
+			});
 		}
-		
+
 		function getToDosQuery (params, orderstring, take) {
 			return notesService.getToDosQuery(manager, params, orderstring, take);
 		}
-		
+
 		function getToDosRemoteOpenAssignedToMe( observable, skip, take, sort, observableTotalCount ){
-			var params = { 
-						StatusIds: [1,3], 
-						AssignedToId: session.currentUser().userId(), 
+			var params = {
+						StatusIds: [1,3],
+						AssignedToId: session.currentUser().userId(),
 						Skip: skip,
 						Take: take,
 						Sort: sort
-			};						
-			return getToDos(observable, params, observableTotalCount);			
+			};
+			return getToDos(observable, params, observableTotalCount);
 		}
-		
+
 		function getLocalTodos( params, orderString ){
 			var theseTodos = getToDosQuery( params, orderString );
 			// Filter out the new todos
 			theseTodos = ko.utils.arrayFilter(theseTodos, function (todo) {
 				return !todo.isNew();
-			});				
+			});
 			return theseTodos;
 		}
-		
+
 		function getInterventions (observable, params) {
 			var message = queryStarted('Interventions', true, 'Loading');
 			interventionsSaving(true);
@@ -1613,7 +1842,7 @@
 		function getTasksQuery (params, orderstring) {
 			return goalsService.getTasksQuery(manager, params, orderstring);
 		}
-		
+
 		// Save changes to a single contact card
 		function saveToDo(todo, action) {
 			// Display a message while saving
@@ -1624,22 +1853,22 @@
 			return notesService.saveToDo(manager, serializedTodo, action).then(saveCompleted);
 
 			function saveCompleted(data) {
-				
+
 				// If it is a new todo,
 				if (todo && todo.id() < 0) {
 					// Remove it so the replacement gets set
 					manager.detachEntity(todo);
 				}
 				if (localCollections.todos.indexOf(data) < 0) {
-					localCollections.todos.push(data);					
-				}								
+					localCollections.todos.push(data);
+				}
 				// Finally, clear out the message
 				queryCompleted(message);
 				todosSaving(false);
 				return data;
 			}
-		}		
-		
+		}
+
 		function getSystemCareManager(){
 			var SystemCareManager = ko.utils.arrayFirst(datacontext.enums.careManagers(), function (caremanager) {
 				return (caremanager.userId()=== '' && caremanager.firstName() === 'System' && caremanager.preferredName() === 'System');
@@ -1653,21 +1882,26 @@
 			});
 			return thisMatchedCareManager.preferredName();
 		}
-		
+
 		function getUserCareManager(){
 			var thisMatchedCareManager = ko.utils.arrayFirst(datacontext.enums.careManagers(), function (caremanager) {
+				//note: the caremanager id is actually a contact id (get care managers call returns them as contacts)
 				return caremanager.id() === session.currentUser().userId();
 			});
 			return thisMatchedCareManager;
 		}
 
+		function getUserFullName(){
+			return session.currentUser().firstName() + ' ' + session.currentUser().lastName();
+		}
+		
 		function getCalendarEvents( theseTodos ){
 			//convert todos to calendar events:
 			var userEvents = [];
 			var careManagerName = getUsercareManagerName();
-			ko.utils.arrayForEach(theseTodos, function (todo) {				
+			ko.utils.arrayForEach(theseTodos, function (todo) {
 				if( todo.isEvent() ){
-					var event = todo.getAsNewEvent(); //fullcalendar event - plain object					
+					var event = todo.getAsNewEvent(); //fullcalendar event - plain object
 					userEvents.push(event);
 				}
 			});
@@ -1691,7 +1925,7 @@
 				syncEventFromTodo(todo);
 			});
 
-			function syncEventFromTodo(todo){				
+			function syncEventFromTodo(todo){
 				if( todo.isEvent() ){
 					//the todo should be represented by a calendar event:
 					if(!updateCalendarEventFromTodo(todo)){
@@ -1709,54 +1943,72 @@
 			}
 
 			function updateCalendarEventFromTodo(todo){
-				var existingEvent = getEventById(todo.id());				
+				var existingEvent = getEventById(todo.id());
 				if(existingEvent){
-					existingEvent = todo.updateExistingEvent( existingEvent );					
+					existingEvent = todo.updateExistingEvent( existingEvent );
 					return true;
 				}
 				return false;
 			}
 		}
 
-				// Update a todo patient's information
-				function updateTodoPatient(patient) {
-					var thisTodoPatient = ko.observable();
-						// Check to see if there is a matching todo patient dto
-						checkForEntityLocally(thisTodoPatient, patient.id(), 'ToDoPatient');
-						// If a matching todo patient was found,
-						if (thisTodoPatient()) {
-								// Update all of the properties
-								thisTodoPatient().firstName(patient.firstName());
-								thisTodoPatient().lastName(patient.lastName());
-								thisTodoPatient().middleName(patient.middleName());
-								thisTodoPatient().suffix(patient.suffix());
-								thisTodoPatient().preferredName(patient.preferredName());
-							}
-						}
+		//update a patient contact
+		function updateContact(patient, contactEntity){
+			var contact = ko.observable();							
+			checkForEntityLocally(contact, patient.contactId(), contactEntity);
+			if (contact()) {
+				//the patient related contact exist locally. 
+				//sync the overlapping properties:
+				contact().firstName(patient.firstName());
+				contact().lastName(patient.lastName());
+				contact().middleName(patient.middleName());
+				contact().suffix(patient.suffix());								
+				contact().gender(patient.gender());
+				contact().preferredName(patient.preferredName());
+				contact().deceasedId(patient.deceasedId());
+				contact().entityAspect.acceptChanges();				
+			}
+		}
+		
+		// Update a todo patient's information
+		function updateTodoPatient(patient) {
+			var thisTodoPatient = ko.observable();
+			// Check to see if there is a matching todo patient dto
+			checkForEntityLocally(thisTodoPatient, patient.id(), 'ToDoPatient');
+			// If a matching todo patient was found,
+			if (thisTodoPatient()) {
+				// Update all of the properties
+				thisTodoPatient().firstName(patient.firstName());
+				thisTodoPatient().lastName(patient.lastName());
+				thisTodoPatient().middleName(patient.middleName());
+				thisTodoPatient().suffix(patient.suffix());
+				thisTodoPatient().preferredName(patient.preferredName());
+			}
+		}
 
-				// Remove an entity from cache
-				function detachEntity(entity) {
-					manager.detachEntity(entity);
-				}
+		// Remove an entity from cache
+		function detachEntity(entity) {
+			manager.detachEntity(entity);
+		}
 
-				function initializeNewPatientMedication(patient, name) {
-						// Create a fake medications length
-						var medId = (patient.medications().length + 1) * -1;
-						// Get the default source
-						var defaultSource = ko.utils.arrayFirst(datacontext.enums.allergySources(), function (src) {
-							return src.isDefault();
-						});
-						// Get the default type to associate
-						var defaultType = ko.utils.arrayFirst(datacontext.enums.medSuppTypes(), function (type) {
-							return type.name() === 'Prescribed';
-						});
-						var patMed = createEntity('PatientMedication', { id: medId, patientId: patient.id(), categoryId: 1, statusId: 1, sourceId: defaultSource.id(), type: defaultType });
-						patMed.isNew(true);
-						patMed.isEditing(true);
-						patMed.name(name);
-						patMed.isCreateNewMedication(true);
-						return patMed;
-					}
+		function initializeNewPatientMedication(patient, name) {
+			// Create a fake medications length
+			var medId = (patient.medications().length + 1) * -1;
+			// Get the default source
+			var defaultSource = ko.utils.arrayFirst(datacontext.enums.allergySources(), function (src) {
+				return src.isDefault();
+			});
+			// Get the default type to associate
+			var defaultType = ko.utils.arrayFirst(datacontext.enums.medSuppTypes(), function (type) {
+				return type.name() === 'Prescribed';
+			});
+			var patMed = createEntity('PatientMedication', { id: medId, patientId: patient.id(), categoryId: 1, statusId: 1, sourceId: defaultSource.id(), type: defaultType });
+			patMed.isNew(true);
+			patMed.isEditing(true);
+			patMed.name(name);
+			patMed.isCreateNewMedication(true);
+			return patMed;
+		}
 
 		/**
 		*			read medication frequencies from 'Frequency' lookup merged with patient specific medication frequencies ('PatientMedFrequency' - as in back end).
@@ -2030,4 +2282,4 @@
 			return manager.executeQueryLocally(query);
 		}
 
-}); 
+});

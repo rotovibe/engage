@@ -1,0 +1,111 @@
+<section data-type="flex">
+    <div>
+        <div class="column open">
+            <div class="widget-wrapper">
+                <div class="widget open" data-bind="columnSizer: true">
+                    <div class="content">
+                        <div class="content-fill">
+                            <div class="wrapper">
+                                <div class="content">
+                                    <div class="header">
+                                        <div class="table-cell">
+                                            <header class="ellipsis">
+                                                <h1>Concierge Services</h1>
+                                            </header>
+                                        </div>
+                                    </div>
+                                    <div class="table-row">
+                                        <div class="table-cell">
+                                            <div class="body">
+                                                <div class="content">
+                                                    <div class="content">
+                                                        <div class="row pad-top">
+                                                            <section class="accordion open">
+                                                                <div class="row accordion-toggle open">
+                                                                    <div class="span11">
+                                                                        <h3>Manage Individuals</h3>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="accordion-content">
+                                                                    <div class="row pad-top">
+                                                                        <div class="span3 align-left">
+                                                                            <span>Create New Individual</span>
+                                                                        </div>
+                                                                        <div class="span9">
+                                                                            <a data-bind="click: createIndividual" class="btn color small">Create</a>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row pad-top divider">
+                                                                        <div class="span3 align-left">
+                                                                            <span>Bulk Upload</span>
+                                                                        </div>
+                                                                        <div class="span9">
+                                                                            <a class="btn small color disabled" href="#">Upload</a>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row pad-top divider">
+                                                                        <div class="span3 align-left">
+                                                                            <span>Delete Individual</span>
+                                                                        </div>
+                                                                        <div class="span9">
+                                                                            <a class="btn small" data-bind="click: deleteIndividual">Delete</a>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </section>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- ko if: activeSecondColumn -->
+            <div class="column open">
+                <div class="widget-wrapper">
+                <!-- ko compose: activeSecondColumn -->
+                <!-- /ko -->
+                </div>
+            </div>
+        <!-- /ko -->
+        <!-- ko ifnot: activeSecondColumn -->
+            <div class="column open">
+                <div class="widget-wrapper">
+                    <div class="widget open" data-bind="columnSizer: true">
+                        <div class="content">
+                            <div class="content-fill">
+                                <div class="wrapper">
+                                    <div class="content">
+                                        <div class="header">
+                                            <div class="table-cell">
+                                                <header class="ellipsis">
+                                                </header>
+                                            </div>
+                                        </div>
+                                        <div class="table-row">
+                                            <div class="table-cell">
+                                                <div class="body">
+                                                    <div class="content">
+                                                        <div class="content">
+                                                            <p><em>Select option to the left...</em></p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <!-- /ko -->
+    </div>
+</section>

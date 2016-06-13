@@ -5,8 +5,8 @@
 *		CareMember, PatientSystem, Alert, System	
 *	@module base
 */
-define(['services/validatorfactory', 'services/customvalidators', 'services/formatter'],
-	function (validatorFactory, customValidators, formatter) {
+define(['services/validatorfactory', 'services/customvalidators', 'services/formatter', 'services/session'],
+	function (validatorFactory, customValidators, formatter, session) {
 
 		var datacontext;
 		var systemCareManager;
@@ -55,53 +55,55 @@ define(['services/validatorfactory', 'services/customvalidators', 'services/form
 		        });
 		    }
 			self.Entity = modalSettings.entity;
+			self.customButtons = modalSettings.customButtons ? modalSettings.customButtons : [];
 			self.TemplatePath = ko.observable(modalSettings.templatePath);
 			self.classOverride = ko.observable(modalSettings.classOverride? modalSettings.classOverride : null);
 			self.Showing = modalSettings.showing ? modalSettings.showing : false;
-					// Method on the modal to save the currently mapped properties
-					self.saveChanges = function () {
-							// If a save override was passed in,
-							if (modalSettings.saveOverride) {
-									// Use that to save.
-									modalSettings.saveOverride();
-									self.Showing(false);
-								} else {
-									// If not, use the entities default ave
-							// Check if a datacontext exists
-							checkDataContext();
-							var thisEntity = ko.unwrap(self.Entity);
-							thisEntity.saveChanges();
-							// Close the modal when the save is complete
-							self.Showing(false);
-						}
-					};
-					self.cancelChanges = function () {
-					// If a cancel override function was passed in,
-					if (modalSettings.cancelOverride) {
-							// Use it
-							var confirmed = modalSettings.cancelOverride();
-							if( confirmed === undefined || confirmed === true ){
-								self.Showing(false);
-							}
-						} else {
-									// If not, use the entities default
-									var thisEntity = ko.unwrap(self.Entity);
-									thisEntity.cancelChanges();
-									self.Showing(false);
-								}
-							};
+			// Method on the modal to save the currently mapped properties
+			self.saveChanges = function () {
+				
+				// If a save override was passed in,
+				if (modalSettings.saveOverride) {
+					// Use that to save.
+					modalSettings.saveOverride();
+					self.Showing(false);
+				} else {
+					// If not, use the entities default ave
+					// Check if a datacontext exists
+					checkDataContext();
+					var thisEntity = ko.unwrap(self.Entity);
+					thisEntity.saveChanges();
+					// Close the modal when the save is complete
+					self.Showing(false);
+				}
+			};
+			self.cancelChanges = function () {
+				// If a cancel override function was passed in,
+				if (modalSettings.cancelOverride) {
+					// Use it
+					var confirmed = modalSettings.cancelOverride();
+					if( confirmed === undefined || confirmed === true ){
+						self.Showing(false);
+					}
+				} else {
+					// If not, use the entities default
+					var thisEntity = ko.unwrap(self.Entity);
+					thisEntity.cancelChanges();
+					self.Showing(false);
+				}
+			};
 			// Placeholder delete method
 			self.delete = function () {
-					// If a cancel override function was passed in,
-					if (modalSettings.deleteOverride) {
-							// Use it
-							modalSettings.deleteOverride();
-							self.Showing(false);
-						} else {
-							self.Showing(false);
-						}
-					};
-					self.deleteText = ko.observable('Delete');
+				// If a cancel override function was passed in,
+				if (modalSettings.deleteOverride) {
+					// Use it
+					modalSettings.deleteOverride();
+					self.Showing(false);
+				} else {
+					self.Showing(false);
+				}
+			};
+			self.deleteText = ko.observable('Delete');
 			// Controls whether the modal shows save or delete buttons
 			self.canDelete = ko.observable(false);
 		}
@@ -181,6 +183,7 @@ define(['services/validatorfactory', 'services/customvalidators', 'services/form
 					fullSSN: { dataType: "String" },
 					gender: { dataType: "String" },
 					id: { dataType: "String", isPartOfKey: true },
+					contactId: { dataType: "String" },					
 					lastFourSSN: { dataType: "String" },
 					lastName: { dataType: "String" },
 					maritalStatusId: { dataType: "String" },
@@ -194,7 +197,7 @@ define(['services/validatorfactory', 'services/customvalidators', 'services/form
 					statusDataSource: { dataType: "String" },
 					suffix: { dataType: "String" },
 					dataSource: {dataType: "String" },
-					twitterHandle: { dataType: "String" },
+					twitterHandle: { dataType: "String" }
 				},
 				navigationProperties: {
 					provider: {
@@ -244,10 +247,6 @@ define(['services/validatorfactory', 'services/customvalidators', 'services/form
 					medications: {
 						entityTypeName: "PatientMedication", isScalar: false,
 						associationName: "Patient_Medications"
-					},
-					careMembers: {
-						entityTypeName: "CareMember", isScalar: false,
-						associationName: "Patient_CareMembers"
 					},
 					contactCard: {
 						entityTypeName: "ContactCard", isScalar: true,
@@ -419,33 +418,92 @@ define(['services/validatorfactory', 'services/customvalidators', 'services/form
 				}
 			});
 
-
+			metadataStore.addEntityType({
+				shortName: "CareTeam",
+				namespace: "Nightingale",
+				dataProperties: {
+					id: { dataType: "String", isPartOfKey: true },
+					contactId: { dataType: "String" },
+					createdById: { dataType: "String" },
+					createdOn: { dataType: "DateTime" },
+					updatedById: { dataType: "String" },
+					updatedOn: { dataType: "DateTime" } 
+				},
+				navigationProperties: {
+					patientContact: {
+						entityTypeName: "ContactCard", isScalar: true,
+						associationName: "CareTeam_Patient_ContactCard", foreignKeyNames: ["contactId"]
+					},
+					members: { 
+						entityTypeName: "CareMember", isScalar: false,
+						associationName: "CareTeam_CareMembers"
+					}
+				}
+			});
+			
 			// Care Member complex type
 			metadataStore.addEntityType({
 				shortName: "CareMember",
 				namespace: "Nightingale",
 				dataProperties: {
 					id: { dataType: "String", isPartOfKey: true },
-					gender: { dataType: "String" },
-					preferredName: { dataType: "String" },
-					patientId: { dataType: "String" },
+					gender: { dataType: "String" },	//TODO: remove and use contact
+					preferredName: { dataType: "String" },					
+					careTeamId: { dataType: "String" },
 					contactId: { dataType: "String" },
 					typeId: { dataType: "String" },
-					primary: { dataType: "Boolean" }
+					primary: { dataType: "Boolean" },
+					roleId: { dataType: "String"},
+					customRoleName: { dataType: "String"},
+					startDate: { dataType: "DateTime" }, 
+					endDate: { dataType: "DateTime" },
+					core: { dataType: "Boolean" },
+					notes:  { dataType: "String" },
+					newNotes: { dataType: "String" },
+					frequencyId: { dataType: "String" },
+					distance: { dataType: "String" },
+					distanceUnit: {dataType: "String"},
+					externalRecordId: { dataType: "String" },
+					dataSource: { dataType: "String" },
+					statusId: { dataType: "Int64", defaultValue: 1 },
+					createdById: { dataType: "String" },
+					createdOn: { dataType: "DateTime" },
+					updatedById: { dataType: "String" },
+					updatedOn: { dataType: "DateTime" }
 				},
-				navigationProperties: {
-					patient: {
-						entityTypeName: "Patient", isScalar: true,
-						associationName: "Patient_CareMembers", foreignKeyNames: ["patientId"]
+				navigationProperties: {				    
+					careTeam: {
+						entityTypeName: "CareTeam", isScalar: true,
+						associationName: "CareTeam_CareMembers", foreignKeyNames: ["careTeamId"]
 					},
-					careManager: {
+					contact:{
+						entityTypeName: "ContactCard", isScalar: true,
+				        associationName: "CareMember_ContactCard", foreignKeyNames: ["contactId"]
+					},
+				    type: {
+				        entityTypeName: "CareMemberType", isScalar: true,
+				        associationName: "CareMember_Type", foreignKeyNames: ["typeId"]
+				    },
+					status: {
+						entityTypeName: "CareMemberStatus", isScalar: true,
+						associationName: "CareMember_CareMemberStatus", foreignKeyNames: ["statusId"]
+					},
+					frequency: {
+						entityTypeName: "CareTeamFrequency", isScalar: true,
+						associationName: "CareMember_CareTeamFrequency", foreignKeyNames: ["frequencyId"]						
+					},
+					roleType: {
+						entityTypeName: "ContactTypeLookup", isScalar: true,
+						associationName: "ContactTypeLookup_ContactCard", foreignKeyNames: ["roleId"]
+					},
+					createdBy: {
 						entityTypeName: "CareManager", isScalar: true,
-						associationName: "CareManager_CareMembers", foreignKeyNames: ["contactId"]
+						associationName: "PatientSystem_CreatedBy", foreignKeyNames: ["createdById"]
 					},
-					type: {
-						entityTypeName: "CareMemberType", isScalar: true,
-						associationName: "CareMember_Type", foreignKeyNames: ["typeId"]
-					},
+					updatedBy: {
+						entityTypeName: "CareManager", isScalar: true,
+						associationName: "PatientSystem_UpdatedBy", foreignKeyNames: ["updatedById"]
+					}
 				}
 			});
 
@@ -535,6 +593,8 @@ define(['services/validatorfactory', 'services/customvalidators', 'services/form
 				'Alert', null, alertInitializer);
 			metadataStore.registerEntityTypeCtor(
 				'CareMember', null, careMemberInitializer);
+			metadataStore.registerEntityTypeCtor(
+				'CareTeam', null, careTeamInitializer);	
 			metadataStore.registerEntityTypeCtor(
 				'PatientSystem', null, patientSystemInitializer);
 
@@ -774,38 +834,128 @@ define(['services/validatorfactory', 'services/customvalidators', 'services/form
 				});
 			}
 
-			function careMemberInitializer(careTeam) {
-				careTeam.genderModel = ko.computed({
-					read: function () {
-						checkDataContext();
-						var thisGender;
-						var gender = careTeam.gender() ? careTeam.gender().toLowerCase() : '';
-						if (gender === 'm' || gender === 'male') {
-							careTeam.gender('M');
-							thisGender = ko.utils.arrayFirst(datacontext.enums.genders(), function (item) {
-								return 'm' === item.Id;
-							});
-						}
-						else if (gender === 'f' || gender === 'female') {
-							careTeam.gender('F');
-							thisGender = ko.utils.arrayFirst(datacontext.enums.genders(), function (item) {
-								return 'f' === item.Id;
-							});
-						}
-						else {
-							careTeam.gender('N');
-							thisGender = ko.utils.arrayFirst(datacontext.enums.genders(), function (item) {
-								return 'n' === item.Id;
-							});
-						}
-						return thisGender;
-					},
-					write: function (newValue) {
-						careTeam.gender(ko.unwrap(newValue).Id.toUpperCase());
-					}
+			function careMemberInitializer(member) {
+				member.isNew = ko.observable(false);
+				member.validationErrors = ko.observableArray();
+				member.careTeamValidationErrors = ko.observableArray();
+				member.validationErrorsArray = ko.computed(function () {
+					var thisArray = [];
+					ko.utils.arrayForEach(member.validationErrors(), function (error) {
+						thisArray.push(error.PropName);
+					});
+					return thisArray;
 				});
+				
+				member.checkAppend = function () {
+                    formatter.appendNewDetails( member.newNotes, member.notes, datacontext.getUserFullName() );
+                };
+				
+				member.startDateErrors = ko.observableArray([]);
+				member.endDateErrors = ko.observableArray([]);
+				member.setInvalidStartDate = ko.computed( function(){
+					var validationErrorsArray = member.validationErrorsArray();
+					return (validationErrorsArray && validationErrorsArray.indexOf('startDate') !== -1);  
+				});
+				member.setInvalidEndDate = ko.computed( function(){
+					var validationErrorsArray = member.validationErrorsArray();
+					return (validationErrorsArray && validationErrorsArray.indexOf('endDate') !== -1);  
+				});
+				
+				if( member.customRoleName() && !member.roleId() ){
+					member.roleId(-1);	//Other Role (customRoleName)
+				}
+				
+				member.isEditable = ko.computed( function(){
+					return member.dataSource() == 'Engage';
+				});
+				member.computedRoleName = ko.computed( function(){
+					var name = '';
+					var roleId = member.roleId();
+					var roleType = member.roleType();
+					var customRoleName = member.customRoleName();
+					if( roleId == -1 ){
+						name = customRoleName;
+					}
+					else if( roleId && roleType ){
+						name = roleType.role();
+					}
+					return name;
+				}).extend({ throttle: 100 });
+				
+				member.isValid = ko.computed( function(){
+					var errors = [];					
+					var contactId = member.contactId();					
+					var roleId = member.roleId();
+					var customRoleName = member.customRoleName();
+					var careTeamValidationErrors = member.careTeamValidationErrors();
+					if( careTeamValidationErrors.length ){
+						ko.utils.arrayForEach( careTeamValidationErrors, function(error){
+							errors.push({ PropName: error.PropName, Message: error.Message });
+						});
+					}					
+					if( !contactId ){
+						errors.push({ PropName: 'contact', Message: 'A contact is required' });
+					}
+					if( !roleId ){
+						errors.push({ PropName: 'role', Message: 'Role is required' });
+					}
+					else if( roleId == -1 && !customRoleName ){
+						errors.push({ PropName: 'customRoleName', Message: 'Other Role is required' });
+					}
+					var startDate = member.startDate();
+					var endDate = member.endDate();
+					var startDateErrors = member.startDateErrors();
+					var endDateErrors = member.endDateErrors();
+					if( startDateErrors.length > 0 ){
+						//datetimepicker validation errors: 
+						ko.utils.arrayForEach( startDateErrors, function(error){
+							errors.push({ PropName: 'startDate', Message: 'Start Date ' + error.Message});							
+						});						
+					}
+					if( endDateErrors.length > 0 ){						
+						ko.utils.arrayForEach( endDateErrors, function(error){
+							errors.push({ PropName: 'endDate', Message: 'End Date ' + error.Message});
+						});
+					}					
+					if( startDateErrors.length == 0 && endDateErrors.length == 0 && startDate && endDate ){
+						//startDate - endDate range: both dates exist and valid:
+						if( moment(startDate).isAfter( moment( endDate ) ) ){
+							errors.push({ PropName: 'endDate', Message: 'End Date must be on or after: ' + moment( startDate ).format("MM/DD/YYYY") });
+							errors.push({ PropName: 'startDate', Message: 'Start Date must be on or before: ' + moment( endDate ).format("MM/DD/YYYY") });
+						}
+					}				
+					member.validationErrors( errors );										
+					return (errors.length === 0);
+				});								
 			}
 
+			function careTeamInitializer(careTeam){
+				var primaryCareManagerRoleName = 'Primary Care Manager';
+				var primaryCarePhysicianRoleName = 'Primary Care Physician';
+				
+				careTeam.primaryCarePhysicians = ko.computed( function(){
+					var teamMembers = careTeam.members()? careTeam.members() : [];
+					var activeStatusId = 1;
+					var pcp = ko.utils.arrayFilter( teamMembers, function(m){
+						if( m.statusId() == activeStatusId && m.roleId() && m.roleType() && m.core() ){
+							return !m.customRoleName() && ( m.roleType().role() == primaryCarePhysicianRoleName ); //if true - this is a core active pcp that is already assigned.
+						}
+					});
+					return pcp;
+				}).extend({throttle: 50});
+				
+				careTeam.primaryCareManagers = ko.computed( function(){
+					var teamMembers = careTeam.members()? careTeam.members() : [];
+					var activeStatusId = 1;
+					var pcm = ko.utils.arrayFilter( teamMembers, function(m){
+						if( m.statusId() == activeStatusId && m.roleId() && m.roleType() && m.core() ){
+							return !m.customRoleName() && ( m.roleType().role() == primaryCareManagerRoleName );
+						}						
+					});
+					return pcm;
+				}).extend({throttle: 50});
+			}
+			
 			function patientProblemInitializer(problem) {
 				if (!problem.level || !problem.level()) {
 					problem.level('1');
@@ -832,8 +982,8 @@ define(['services/validatorfactory', 'services/customvalidators', 'services/form
 					thisToken.dispose();
 				});
 			}
-		}
-
+		}		
+		
 		function checkDataContext() {
 			if (!datacontext) {
 				datacontext = require('services/datacontext');

@@ -1,9 +1,9 @@
 /*!	@license
 	Licensed Materials - Property of IBM
-	PID : 5725Z49
-	Copyright © IBM Corporation 2013, 2016
+	PID : 5725-Z49
+	Copyright IBM Corp. 2013, 2016
 	US Government Users Restricted Rights- Use, duplication or disclosure restricted by GSA ADP Schedule Contract with IBM Corp.
-*/
+*/  
 @charset "UTF-8";
 @import url("//fast.fonts.net/lt/1.css?apiType=css&c=c6e27545-a2f5-42c6-971c-7040b4abc747&fontids=674411,694021,694018,694024,694027,694033");
 html, body, div, span, applet, object, iframe,
@@ -2514,7 +2514,7 @@ body:after {
 }
 
 .rule {
-  border-top: 1px solid #7191a1;
+  border-top: 1px solid #004266;
 }
 .rule:first-child {
   border-top: none;
@@ -2664,7 +2664,7 @@ body:after {
 @media screen and (-webkit-min-device-pixel-ratio: 0) {
   @font-face {
     font-family: "fontcustom";
-    src: url('../../Fonts/fontcustom/fontcustomv1.svg#fontcustom') format("svg");
+    src: url("//az571236.vo.msecnd.net/fontcustom/fontcustomv1.svg#fontcustom") format("svg");
   }
 }
 [data-icon]:before {
@@ -3040,7 +3040,7 @@ em, .empty-message, .italic {
 }
 
 strong, .bold {
-  color: #7191a1;
+  color: #8B9398;
   font-weight: 700;
 }
 
@@ -3137,11 +3137,11 @@ header[role=navigation] a:hover {
 }
 
 .blue {
-  color: #7191a1;
+  color: #004266;
 }
 
 .blue-dark {
-  color: #416c81;
+  color: #004266;
 }
 
 .blue-darker {
@@ -3165,7 +3165,7 @@ header[role=navigation] a:hover {
 @media screen and (-webkit-min-device-pixel-ratio: 0) {
   @font-face {
     font-family: "fontcustom";
-    src: url('../../Fonts/fontcustom/fontcustomv1.svg#fontcustom') format("svg");
+    src: url("//az571236.vo.msecnd.net/fontcustom/fontcustomv1.svg#fontcustom") format("svg");
   }
 }
 [data-icon]:before {
@@ -3576,13 +3576,13 @@ input.datepicker:before,
   background: transparent;
 }
 .accordion .filter-toggle.icon.icon:hover i[class*="icon"], .accordion .filter-toggle.icon.icon:hover i[class*="fa"], .accordion .filter-toggle.icon.icon:focus i[class*="icon"], .accordion .filter-toggle.icon.icon:focus i[class*="fa"] {
-  color: #7191a1;
+  color: #004266;
 }
 .accordion .filter-toggle.icon.icon.active {
   background: transparent;
 }
 .accordion .filter-toggle.icon.icon.active i[class*="icon"], .accordion .filter-toggle.icon.icon.active i[class*="fa"] {
-  color: #416c81;
+  color: #004266;
 }
 .accordion .accordion-toggle {
   position: relative;
@@ -3857,7 +3857,7 @@ input.datepicker input[type="text"] {
   -webkit-user-select: none;
   -moz-user-select: none;
   user-select: none;
-  color: #416c81;
+  color: #004266;
   cursor: pointer;
   padding: 2px 5px;
   margin: 5px 0;
@@ -3867,7 +3867,7 @@ input.datepicker input[type="text"] {
   color: #777777;
 }
 #ui-datepicker-div .ui-datepicker-header a:hover:not(.ui-state-disabled), #ui-datepicker-div .ui-datepicker-header a:active:not(.ui-state-disabled) {
-  background: #416c81;
+  background: #004266;
   color: white;
 }
 #ui-datepicker-div .ui-datepicker-calendar {
@@ -3922,7 +3922,7 @@ input.datepicker input[type="text"] {
   background: #e0f5ff;
 }
 #ui-datepicker-div .ui-datepicker-calendar td a:hover {
-  background: #416c81;
+  background: #004266;
   color: white;
   text-decoration: none;
 }
@@ -4176,15 +4176,15 @@ button:disabled:hover, button:disabled:active, button.disabled:hover, button.dis
   border-color: #777777;
 }
 button.color, button[type="submit"], a.btn.color, a.btn[type="submit"], input[type="submit"].color, input[type="submit"][type="submit"], input[type="reset"].color, input[type="reset"][type="submit"] {
-  background: #7191a1;
-  border-color: #7191a1;
+  background: #004266;
+  border-color: #004266;
   color: white;
 }
 button.color:hover, button[type="submit"]:hover, a.btn.color:hover, a.btn[type="submit"]:hover, input[type="submit"].color:hover, input[type="submit"][type="submit"]:hover, input[type="reset"].color:hover, input[type="reset"][type="submit"]:hover {
   border-color: #072735;
 }
 button.color:active, button.color:focus, button[type="submit"]:active, button[type="submit"]:focus, a.btn.color:active, a.btn.color:focus, a.btn[type="submit"]:active, a.btn[type="submit"]:focus, input[type="submit"].color:active, input[type="submit"].color:focus, input[type="submit"][type="submit"]:active, input[type="submit"][type="submit"]:focus, input[type="reset"].color:active, input[type="reset"].color:focus, input[type="reset"][type="submit"]:active, input[type="reset"][type="submit"]:focus {
-  background: #416c81;
+  background: #004266;
 }
 button.color:disabled, button.color.disabled, button[type="submit"]:disabled, button[type="submit"].disabled, a.btn.color:disabled, a.btn.color.disabled, a.btn[type="submit"]:disabled, a.btn[type="submit"].disabled, input[type="submit"].color:disabled, input[type="submit"].color.disabled, input[type="submit"][type="submit"]:disabled, input[type="submit"][type="submit"].disabled, input[type="reset"].color:disabled, input[type="reset"].color.disabled, input[type="reset"][type="submit"]:disabled, input[type="reset"][type="submit"].disabled {
   background: #777777;
@@ -4859,7 +4859,7 @@ header[role=banner] {
   padding-left: 10px;
   margin-right: -10px;
   padding-right: 10px;
-  background: #416c81;
+  background: #004266;
   height: 50px;
   position: relative;
   text-align: justify;
@@ -5057,7 +5057,7 @@ header[role=navigation] nav.tabs .active {
 header[role=navigation] nav.tabs .active:before {
   content: "";
   border: 8px solid transparent;
-  border-top-color: #7191a1;
+  border-top-color: #004266;
   position: absolute;
   left: 50%;
   top: 100%;
@@ -5217,10 +5217,10 @@ i[class*="icon-"].blue, i[class*="fa-"].blue {
   color: #072735;
 }
 i[class*="icon-"].lighterblue, i[class*="fa-"].lighterblue {
-  color: #416c81;
+  color: #004266;
 }
 i[class*="icon-"].green, i[class*="fa-"].green {
-  color: #a9d19c;
+  color: #8cc36f;
 }
 i[class*="icon-"].red, i[class*="fa-"].red {
   color: #871409;
@@ -5452,6 +5452,8 @@ nav.pagination span a {
 }
 
 main[role=application] {
+  height: auto !important;
+  margin-bottom: 50px;
   overflow: hidden;
 }
 main[role=application] > div {
@@ -6011,6 +6013,21 @@ main[role=application] section.open .controls .toggle[data-type=remove][data-met
   opacity: 1;
 }
 
+footer.copyright {
+  background-color: #e6e6e6;
+  bottom: 0px;
+  margin-left: -10px;
+  height: 50px;
+  position: absolute;
+  width: 100%;
+}
+footer.copyright .container {
+  color: #777777;
+  float: right;
+  padding: 10px 15px;
+  width: 100%;
+}
+
 .popover .popover-content {
   display: none;
 }
@@ -6099,7 +6116,7 @@ main[role=application] section.open .controls .toggle[data-type=remove][data-met
   z-index: 1;
 }
 .progress-bar .progress {
-  background: #a9d19c;
+  background: #8cc36f;
   height: 100%;
 }
 .progress-bar .progress-label {
@@ -6346,17 +6363,17 @@ nav.tabs a, nav.tabs span {
   border: none;
   border-bottom: 5px solid transparent;
   border-top: 5px solid transparent;
-  color: #416c81;
+  color: #004266;
   cursor: pointer;
   line-height: 38px;
   margin-right: 5px;
   padding: 0 5px;
 }
 nav.tabs a.active, nav.tabs span.active {
-  border-bottom-color: #7191a1;
+  border-bottom-color: #004266;
 }
 nav.tabs a.active, nav.tabs a:hover, nav.tabs span.active, nav.tabs span:hover {
-  color: #072735;
+  color: #00b2ef;
 }
 
 header nav.tabs {
@@ -6476,7 +6493,7 @@ header .toggle.remove, .header .toggle.remove, .filters .toggle.remove {
   background-color: #e0f5ff;
 }
 .filter-toggle.dirty {
-  background-color: #416c81;
+  background-color: #004266;
   opacity: 0.80;
   filter: alpha(opacity=1);
   -moz-opacity: 0.80;
@@ -6541,14 +6558,14 @@ section:not(.slider) .btn.active.toggle[data-method="slider"][data-type="remove"
 .widget > .content > .arrow-runner {
   width: 20px;
   height: 100%;
-  border-right: 4px solid #7191a1;
+  border-right: 4px solid #004266;
   overflow: hidden;
   position: absolute;
   left: -20px;
 }
 .widget > .content > .arrow-runner .arrow {
   border: 10px solid transparent;
-  border-right-color: #7191a1;
+  border-right-color: #004266;
   position: absolute;
   right: 0;
   top: 50%;
@@ -7014,7 +7031,6 @@ div.button.disabled span, div.button.disabled.active span {
   color: #222222;
   height: 20px;
   list-style: none;
-  line-height: 20px;
   padding: 0 10px;
 }
 .chosen-container .chosen-results li.active-result {
@@ -8311,8 +8327,7 @@ a.disabled {
 
 #modal nav.tabs {
   float: left;
-  margin-left: 10px;
-  margin-top: -10px;
+  padding-right: 0px;
   font-size: 14px;
 }
 #modal nav.tabs li {
@@ -8343,6 +8358,7 @@ a.disabled {
 #modal nav.tabs a {
   text-decoration: none !important;
   vertical-align: middle;
+  padding-left: 0px;
 }
 #modal nav.tabs img {
   vertical-align: middle;

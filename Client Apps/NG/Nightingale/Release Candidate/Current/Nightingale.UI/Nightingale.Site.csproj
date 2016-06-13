@@ -161,17 +161,15 @@
     <Content Include="App\services\report.context.js" />
     <Content Include="App\services\usercontext.js" />
     <Content Include="App\services\validatorfactory.js" />
+    <Content Include="App\viewmodels\home\contacts\contact.details.js" />
+    <Content Include="App\viewmodels\home\contacts\index.js" />
     <Content Include="App\viewmodels\home\todos\index.js" />
-    <Content Include="App\viewmodels\insight\reports\index.js" />
-    <Content Include="App\viewmodels\insight\index.js" />
-    <Content Include="App\viewmodels\insight\widgets\active.report.js" />
-    <Content Include="App\viewmodels\insight\widgets\reports.list.js" />
-    <Content Include="App\viewmodels\admin\reports\entity.template.js" />
-    <Content Include="App\viewmodels\admin\reports\query.builder.js" />
     <Content Include="App\viewmodels\patients\medications\index.js" />
     <Content Include="App\viewmodels\patients\notes\index.js" />
+    <Content Include="App\viewmodels\patients\sections\allergy.details.js" />
     <Content Include="App\viewmodels\patients\sections\clinicalBackground.js" />
     <Content Include="App\viewmodels\patients\sections\dropdown.w.addnew.js" />
+    <Content Include="App\viewmodels\patients\sections\medication.details.js" />
     <Content Include="App\viewmodels\patients\sections\medication.edit.js" />
     <Content Include="App\viewmodels\patients\sections\medications.search.js" />
     <Content Include="App\viewmodels\patients\sections\allergies.search.js" />
@@ -180,14 +178,22 @@
     <Content Include="App\viewmodels\patients\sections\allergies.edit.js" />
     <Content Include="App\viewmodels\patients\sections\status.js" />
     <Content Include="App\viewmodels\patients\sections\system.ids.js" />
+    <Content Include="App\viewmodels\patients\team\careMember.details.js" />
+    <Content Include="App\viewmodels\patients\team\index.js" />
     <Content Include="App\viewmodels\patients\widgets\action.details.js" />
+    <Content Include="App\viewmodels\patients\widgets\careMembers.js" />
     <Content Include="App\viewmodels\patients\widgets\medications.js" />
+    <Content Include="App\viewmodels\patients\widgets\medication.groups.js" />
     <Content Include="App\viewmodels\patients\widgets\allergies.js" />
     <Content Include="App\viewmodels\patients\widgets\module.details.js" />
     <Content Include="App\viewmodels\patients\widgets\program.details.js" />
+    <Content Include="App\viewmodels\templates\careMember.edit.js" />
+    <Content Include="App\viewmodels\templates\careMembers.panel.js" />
+    <Content Include="App\viewmodels\templates\contact.edit.js" />
     <Content Include="App\viewmodels\templates\datetimepicker.js" />
     <Content Include="App\viewmodels\templates\event.details.js" />
     <Content Include="App\viewmodels\templates\medications.panel.js" />
+    <Content Include="App\viewmodels\templates\medication.groups.panel.js" />
     <Content Include="App\viewmodels\templates\note.general.edit.js" />
     <Content Include="App\viewmodels\templates\note.touchpoint.edit.js" />
     <Content Include="App\viewmodels\templates\note.utilization.edit.js" />
@@ -197,22 +203,35 @@
     <Content Include="App\viewmodels\templates\intervention.panel.js" />
     <Content Include="App\viewmodels\templates\allergies.panel.js" />
     <Content Include="App\viewmodels\templates\allergy.edit.js" />
+    <Content Include="App\views\home\contacts\contact.details.html" />
+    <Content Include="App\views\home\contacts\index.html" />
     <Content Include="App\views\patients\medications\index.html" />
     <Content Include="App\views\patients\notes\index.html" />
+    <Content Include="App\views\patients\sections\allergy.details.html" />
     <Content Include="App\views\patients\sections\clinicalBackground.html" />
     <Content Include="App\views\patients\sections\dropdown.w.addnew.html" />
     <Content Include="App\views\patients\sections\allergies.edit.html" />
+    <Content Include="App\views\patients\sections\medication.details.html" />
     <Content Include="App\views\patients\sections\medication.edit.html" />
     <Content Include="App\views\patients\sections\medications.search.html" />
     <Content Include="App\views\patients\sections\allergies.search.html" />
     <Content Include="App\views\patients\sections\medications.html" />
     <Content Include="App\views\patients\sections\status.html" />
     <Content Include="App\views\patients\sections\system.ids.html" />
+    <Content Include="App\views\patients\team\careMember.details.html" />
+    <Content Include="App\views\patients\team\index.html" />
     <Content Include="App\views\patients\widgets\allergies.html" />
+    <Content Include="App\views\patients\widgets\careMembers.html" />
     <Content Include="App\views\patients\widgets\medications.html" />
+    <Content Include="App\views\patients\widgets\medication.groups.html" />
     <Content Include="App\views\shell\footer.html" />
     <Content Include="App\views\shell\quickadd\utilization.note.html" />
+    <Content Include="App\views\templates\careMember.edit.html" />
+    <Content Include="App\views\templates\careMembers.panel.html" />
     <Content Include="App\views\templates\clinicalBackground.html" />
+    <Content Include="App\views\templates\contact.edit.html" />
+    <Content Include="App\views\templates\contact.tabs.html" />
+    <Content Include="App\views\templates\contactSearchResults.panel.html" />
     <Content Include="App\views\templates\datetimepicker.html" />
     <Content Include="App\views\templates\event.details.html" />
     <Content Include="App\views\templates\intervention.duedate.html" />
@@ -221,9 +240,11 @@
     <Content Include="App\views\templates\medication.strength.html" />
     <Content Include="App\views\templates\medication.reason.html" />
     <Content Include="App\views\templates\medication.startdate.html" />
+    <Content Include="App\views\templates\medication.sortdate.html" />
     <Content Include="App\views\templates\medication.status.html" />
     <Content Include="App\views\templates\medication.type.html" />
     <Content Include="App\views\templates\medications.panel.html" />
+    <Content Include="App\views\templates\medication.groups.panel.html" />
     <Content Include="App\views\templates\allergy.expand.html" />
     <Content Include="App\views\templates\allergy.severity.html" />
     <Content Include="App\views\templates\note.general.details.html" />
@@ -292,12 +313,6 @@
     <Content Include="App\viewmodels\templates\goal.edit.js" />
     <Content Include="App\viewmodels\templates\todo.panel.js" />
     <Content Include="App\views\home\todos\index.html" />
-    <Content Include="App\views\insight\reports\index.html" />
-    <Content Include="App\views\insight\index.html" />
-    <Content Include="App\views\insight\widgets\active.report.html" />
-    <Content Include="App\views\insight\widgets\reports.list.html" />
-    <Content Include="App\views\admin\reports\entity.template.html" />
-    <Content Include="App\views\admin\reports\query.builder.html" />
     <Content Include="App\views\patients\sections\data.list.html" />
     <Content Include="App\views\patients\sections\problems.list.html" />
     <Content Include="App\views\patients\sections\programs.html" />
@@ -358,11 +373,6 @@
     <Content Include="Scripts\knockout-3.2.0.min.js" />
     <Content Include="App\viewmodels\admin\concierge\index.js" />
     <Content Include="App\viewmodels\admin\index.js" />
-    <Content Include="App\viewmodels\admin\reports\index.js" />
-    <Content Include="App\viewmodels\admin\reports\dynamic.report.js" />
-    <Content Include="App\viewmodels\admin\reports\matching.patients.js" />
-    <Content Include="App\viewmodels\admin\reports\matching.actions.js" />
-    <Content Include="App\viewmodels\admin\reports\matching.programs.js" />
     <Content Include="App\viewmodels\admin\widgets\delete.individuals.list.js" />
     <Content Include="App\viewmodels\patients\data\index.js" />
     <Content Include="App\viewmodels\patients\goals\index.js" />
@@ -388,13 +398,8 @@
     <Content Include="App\viewmodels\templates\focusproblems.js" />
     <Content Include="App\viewmodels\templates\clinical.dataentry.js" />
     <Content Include="App\viewmodels\templates\observation.bloodpressure.add.js" />
-    <Content Include="App\views\admin\reports\dynamic.report.html" />
-    <Content Include="App\views\admin\reports\index.html" />
     <Content Include="App\views\admin\concierge\index.html" />
     <Content Include="App\views\admin\index.html" />
-    <Content Include="App\views\admin\reports\matching.patients.html" />
-    <Content Include="App\views\admin\reports\matching.actions.html" />
-    <Content Include="App\views\admin\reports\matching.programs.html" />
     <Content Include="App\views\admin\widgets\delete.individuals.list.html" />
     <Content Include="App\views\patients\data\index.html" />
     <Content Include="App\views\patients\goals\index.html" />
@@ -416,18 +421,6 @@
     <Content Include="App\views\patients\tabs\program.objectives.html" />
     <Content Include="App\views\patients\tabs\action.steps.html" />
     <Content Include="App\views\patients\widgets\goals.html" />
-    <Content Include="App\views\programdesigner\customattributes\datepicker.edit.html" />
-    <Content Include="App\views\programdesigner\customattributes\datetimepicker.edit.html" />
-    <Content Include="App\views\programdesigner\customattributes\datetimepicker.html" />
-    <Content Include="App\views\programdesigner\customattributes\datepicker.html" />
-    <Content Include="App\views\programdesigner\customattributes\input.edit.html" />
-    <Content Include="App\views\programdesigner\customattributes\input.html" />
-    <Content Include="App\views\programdesigner\customattributes\multiselect.edit.html" />
-    <Content Include="App\views\programdesigner\customattributes\multiselect.html" />
-    <Content Include="App\views\programdesigner\customattributes\singleselect.edit.html" />
-    <Content Include="App\views\programdesigner\customattributes\singleselect.html" />
-    <Content Include="App\views\programdesigner\questiontypes\modal.html" />
-    <Content Include="App\views\programdesigner\questiontypes\textarea.html" />
     <Content Include="App\views\templates\patient.delete.html" />
     <Content Include="App\views\templates\program.edit.html" />
     <Content Include="App\views\templates\module.edit.html" />
@@ -472,7 +465,6 @@
     <Content Include="App\viewmodels\authenticate.js" />
     <Content Include="App\viewmodels\home\index.js" />
     <Content Include="App\viewmodels\home\myhome\myhome.js" />
-    <Content Include="App\viewmodels\home\population\index.js" />
     <Content Include="App\viewmodels\patients\careplan\index.js" />
     <Content Include="App\viewmodels\patients\history\index.js" />
     <Content Include="App\viewmodels\patients\index.js" />
@@ -480,26 +472,18 @@
     <Content Include="App\viewmodels\patients\sections\demographics.js" />
     <Content Include="App\viewmodels\patients\sections\focus.areas.js" />
     <Content Include="App\viewmodels\patients\sections\programs.js" />
-    <Content Include="App\viewmodels\populations\index.js" />
-    <Content Include="App\viewmodels\programdesigner\widgets\modulewidget.js" />
-    <Content Include="App\viewmodels\programdesigner\widgets\programwidget.js" />
     <Content Include="App\viewmodels\shell\quickadd\assign.js" />
     <Content Include="App\viewmodels\shell\quickadd\quickaddpopover.js" />
     <Content Include="App\viewmodels\shell\shell.js" />
     <Content Include="App\viewmodels\shell\sidebar.js" />
-    <Content Include="App\viewmodels\programdesigner\designer\index.js" />
-    <Content Include="App\viewmodels\venn\patient.venn.js" />
     <Content Include="App\views\columns\fullcolumn.html" />
     <Content Include="App\views\home\index.html" />
-    <Content Include="App\views\home\population\index.html" />
     <Content Include="App\views\patients\sections\communications.html" />
     <Content Include="App\views\patients\sections\demographics.html" />
     <Content Include="App\views\patients\widgets\careplan.html" />
     <Content Include="App\views\patients\widgets\patients.details.html" />
     <Content Include="App\views\patients\widgets\patients.list.flyout.html" />
     <Content Include="App\views\patients\sections\focus.areas.html" />
-    <Content Include="App\views\programdesigner\designer\index.html" />
-    <Content Include="App\viewmodels\programdesigner\index.js" />
     <Content Include="App\views\authenticate.html" />
     <Content Include="App\views\home\myhome\myhome.html" />
     <Content Include="App\views\patients\careplan\index.html" />
@@ -507,18 +491,6 @@
     <Content Include="App\views\patients\index.html" />
     <Content Include="App\views\patients\overview\index.html" />
     <Content Include="App\views\columns\flexcolumn.html" />
-    <Content Include="App\views\populations\index.html" />
-    <Content Include="App\views\programdesigner\questiontypes\datetimepicker.html" />
-    <Content Include="App\views\programdesigner\questiontypes\singleselect.html" />
-    <Content Include="App\views\programdesigner\questiontypes\timepicker.html" />
-    <Content Include="App\views\programdesigner\questiontypes\textbox.html" />
-    <Content Include="App\views\programdesigner\questiontypes\questioneditor.html" />
-    <Content Include="App\views\programdesigner\questiontypes\button.html" />
-    <Content Include="App\views\programdesigner\questiontypes\label.html" />
-    <Content Include="App\views\programdesigner\questiontypes\datepicker.html" />
-    <Content Include="App\views\programdesigner\questiontypes\checkbox.html" />
-    <Content Include="App\views\programdesigner\questiontypes\radio.html" />
-    <Content Include="App\views\programdesigner\widgets\modulewidget.html" />
     <Content Include="App\views\shell\alerttypes\error.html" />
     <Content Include="App\views\shell\alerttypes\info.html" />
     <Content Include="App\views\shell\alerttypes\warning.html" />
@@ -531,16 +503,42 @@
     <Content Include="App\views\shell\shell.html" />
     <Content Include="App\views\shell\sidebar.html" />
     <Content Include="App\views\shell\subnav.html" />
-    <Content Include="App\views\programdesigner\index.html" />
-    <Content Include="App\views\programdesigner\widgets\programwidget.html" />
     <Content Include="App\views\templates\patient.html" />
     <Content Include="App\views\widgets\controls.html" />
     <Content Include="App\widgets\singleselect\view.html" />
     <Content Include="App\widgets\singleselect\viewmodel.js" />
-    <Content Include="Content\font-awesome\font-awesome-ie7.css" />
-    <Content Include="Content\font-awesome\font-awesome-ie7.min.css" />
-    <Content Include="Content\font-awesome\font-awesome.css" />
-    <Content Include="Content\font-awesome\font-awesome.min.css" />
+
+    <Content Include="App\views\programdesigner\customattributes\datepicker.edit.html" />
+    <Content Include="App\views\programdesigner\customattributes\datetimepicker.edit.html" />
+    <Content Include="App\views\programdesigner\customattributes\datetimepicker.html" />
+    <Content Include="App\views\programdesigner\customattributes\datepicker.html" />
+    <Content Include="App\views\programdesigner\customattributes\input.edit.html" />
+    <Content Include="App\views\programdesigner\customattributes\input.html" />
+    <Content Include="App\views\programdesigner\customattributes\multiselect.edit.html" />
+    <Content Include="App\views\programdesigner\customattributes\multiselect.html" />
+    <Content Include="App\views\programdesigner\customattributes\singleselect.edit.html" />
+    <Content Include="App\views\programdesigner\customattributes\singleselect.html" />
+    <Content Include="App\views\programdesigner\questiontypes\modal.html" />
+    <Content Include="App\views\programdesigner\questiontypes\textarea.html" />
+    <Content Include="App\viewmodels\programdesigner\widgets\modulewidget.js" />
+    <Content Include="App\viewmodels\programdesigner\widgets\programwidget.js" />
+    <Content Include="App\viewmodels\programdesigner\designer\index.js" />
+    <Content Include="App\views\programdesigner\designer\index.html" />
+    <Content Include="App\viewmodels\programdesigner\index.js" />
+    <Content Include="App\views\programdesigner\questiontypes\datetimepicker.html" />
+    <Content Include="App\views\programdesigner\questiontypes\singleselect.html" />
+    <Content Include="App\views\programdesigner\questiontypes\timepicker.html" />
+    <Content Include="App\views\programdesigner\questiontypes\textbox.html" />
+    <Content Include="App\views\programdesigner\questiontypes\questioneditor.html" />
+    <Content Include="App\views\programdesigner\questiontypes\button.html" />
+    <Content Include="App\views\programdesigner\questiontypes\label.html" />
+    <Content Include="App\views\programdesigner\questiontypes\datepicker.html" />
+    <Content Include="App\views\programdesigner\questiontypes\checkbox.html" />
+    <Content Include="App\views\programdesigner\questiontypes\radio.html" />
+    <Content Include="App\views\programdesigner\widgets\modulewidget.html" />
+    <Content Include="App\views\programdesigner\index.html" />
+    <Content Include="App\views\programdesigner\widgets\programwidget.html" />
+
     <Content Include="Content\images\assign_patient.png" />
     <Content Include="Content\images\notes_call.png" />
     <Content Include="Content\images\notes_metrics.png" />
@@ -564,10 +562,6 @@
     <Content Include="Content\images\twitter_grey_large.png" />
     <Content Include="Content\images\twitter_grey_small.png" />
     <Content Include="Content\images\twitter_lightblue.png" />
-    <Content Include="Content\nightingale\application.css" />
-    <Content Include="Content\nightingale\controls.css" />
-    <Content Include="Content\nightingale\fonts\fontcustom.svg" />
-    <Content Include="Content\font-awesome\font\fontawesome-webfont.svg" />
     <Content Include="Content\ie10mobile.css" />
     <Content Include="Content\images\address_blue_large.png" />
     <Content Include="Content\images\address_blue_small.png" />
@@ -616,16 +610,6 @@
     <Content Include="Content\images\indicator_right_large.png" />
     <Content Include="Content\images\indicator_right_small.png" />
     <Content Include="Content\images\indicator_top_tab.png" />
-    <Content Include="Content\images\login\feature-image-numbers1.jpg" />
-    <Content Include="Content\images\login\login_1-A.png" />
-    <Content Include="Content\images\login\login_opaque_1-A.png" />
-    <Content Include="Content\images\login\new-wp.png" />
-    <Content Include="Content\images\login\panel_blog.png" />
-    <Content Include="Content\images\login\panel_twitter.png" />
-    <Content Include="Content\images\login\panel_webinar.png" />
-    <Content Include="Content\images\login\panel_whitepaper.png" />
-    <Content Include="Content\images\login\pcpcc_webinar.png" />
-    <Content Include="Content\images\login\twitter_light_blue.png" />
     <Content Include="Content\images\main_menu_toggle.png" />
     <Content Include="Content\images\menu_arrow_blue.png" />
     <Content Include="Content\images\menu_arrow_grey.png" />
@@ -672,8 +656,6 @@
     <Content Include="Content\images\view_table_blue.png" />
     <Content Include="Content\images\view_table_grey.png" />
     <Content Include="Content\images\warning_yellow.png" />
-    <Content Include="Content\nightingale\helveticaneue.new.css" />
-    <Content Include="Content\nightingale\overrides.css" />
     <Content Include="Content\normalize.css" />
     <Content Include="Content\images\priority_empty.png" />
     <Content Include="Global.asax" />
@@ -681,10 +663,6 @@
     <Content Include="Sandbox\index.js" />
     <Content Include="Scripts\accordion.js" />
     <Content Include="Scripts\almond-custom.js" />
-    <Content Include="Content\font-awesome\font\fontawesome-webfont.woff" />
-    <Content Include="Content\font-awesome\font\fontawesome-webfont.ttf" />
-    <Content Include="Content\font-awesome\font\fontawesome-webfont.eot" />
-    <Content Include="Content\font-awesome\font\FontAwesome.otf" />
     <Content Include="App\services\branding.min.js.map">
       <DependentUpon>branding.js</DependentUpon>
     </Content>
@@ -705,9 +683,6 @@
       <DependentUpon>index.js</DependentUpon>
     </Content>
     <Content Include="App\viewmodels\patients\index.min.js.map">
-      <DependentUpon>index.js</DependentUpon>
-    </Content>
-    <Content Include="App\viewmodels\populations\index.min.js.map">
       <DependentUpon>index.js</DependentUpon>
     </Content>
     <Content Include="App\config.app.min.js.map">
@@ -735,9 +710,6 @@
       <DependentUpon>bindings.js</DependentUpon>
     </Content>
     <Content Include="App\models\base.js" />
-    <Content Include="App\viewmodels\programdesigner\index.min.js.map">
-      <DependentUpon>index.js</DependentUpon>
-    </Content>
     <Content Include="App\viewmodels\shell\quickadd\widgetone - Copy.min.js.map">
       <DependentUpon>quickaddpopover.js</DependentUpon>
     </Content>
@@ -755,13 +727,6 @@
     </Content>
     <Content Include="App\viewmodels\templates\observation.add.js" />
     <Content Include="App\views\templates\clinical.dataentry.html" />
-    <Content Include="Content\nightingale\fonts\fontcustomBACKUP.eot" />
-    <Content Include="Content\nightingale\fonts\fontcustomBACKUP.woff" />
-    <Content Include="Content\nightingale\fonts\fontcustomBACKUP.ttf" />
-    <Content Include="Content\nightingale\fonts\fontcustomnope.eot" />
-    <Content Include="Content\nightingale\fonts\fontcustomnope.woff" />
-    <Content Include="Content\nightingale\fonts\fontcustom.ttf" />
-    <Content Include="Content\nightingale\fontcustom.css" />
     <Content Include="App\views\patients\tabs\program.details.html" />
     <Content Include="App\viewmodels\admin\index.min.js.map">
       <DependentUpon>index.js</DependentUpon>
@@ -772,24 +737,9 @@
     <Content Include="App\viewmodels\admin\widgets\index.min.js.map">
       <DependentUpon>delete.individuals.list.js</DependentUpon>
     </Content>
-    <Content Include="App\viewmodels\admin\reports\index.min.js.map">
-      <DependentUpon>index.js</DependentUpon>
-    </Content>
     <Content Include="Content\dev.scss" />
     <Content Include="Content\CSS\dev.css.map">
       <DependentUpon>dev.css</DependentUpon>
-    </Content>
-    <Content Include="App\viewmodels\insight\reports\index.min.js.map">
-      <DependentUpon>index.js</DependentUpon>
-    </Content>
-    <Content Include="App\viewmodels\insight\index.min.js.map">
-      <DependentUpon>index.js</DependentUpon>
-    </Content>
-    <Content Include="App\viewmodels\insight\widgets\index.min.js.map">
-      <DependentUpon>reports.list.js</DependentUpon>
-    </Content>
-    <Content Include="App\viewmodels\insight\widgets\index.min.js - Copy.map">
-      <DependentUpon>active.report.js</DependentUpon>
     </Content>
     <Content Include="App\viewmodels\patients\sections\problems.list.js" />
     <Content Include="App\viewmodels\patients\medications\index.min.js.map">
@@ -805,7 +755,6 @@
     <None Include="Scripts\breeze.intellisense.js" />
     <Content Include="Scripts\breeze.ajaxpost.js" />
     <Content Include="Scripts\breeze.ajaxpost3.js" />
-    <Content Include="Scripts\backup\breeze.debug.js" />
     <Content Include="Scripts\breeze.min.js" />
     <Content Include="Scripts\chosen\abstract-chosen.js">
       <DependentUpon>abstract-chosen.coffee</DependentUpon>
@@ -815,22 +764,6 @@
     </Content>
     <Content Include="Scripts\chosen\chosen.jquerybackup.js" />
     <Content Include="Scripts\chosen\chosen.jquery.min.js" />
-    <Content Include="Scripts\durandal-backup\activator.js" />
-    <Content Include="Scripts\durandal-backup\app.js" />
-    <Content Include="Scripts\durandal-backup\binder.js" />
-    <Content Include="Scripts\durandal-backup\composition.js" />
-    <Content Include="Scripts\durandal-backup\events.js" />
-    <Content Include="Scripts\durandal-backup\plugins\dialog.js" />
-    <Content Include="Scripts\durandal-backup\plugins\history.js" />
-    <Content Include="Scripts\durandal-backup\plugins\http.js" />
-    <Content Include="Scripts\durandal-backup\plugins\observable.js" />
-    <Content Include="Scripts\durandal-backup\plugins\router.js" />
-    <Content Include="Scripts\durandal-backup\plugins\serializer.js" />
-    <Content Include="Scripts\durandal-backup\plugins\widget.js" />
-    <Content Include="Scripts\durandal-backup\system.js" />
-    <Content Include="Scripts\durandal-backup\transitions\entrance.js" />
-    <Content Include="Scripts\durandal-backup\viewEngine.js" />
-    <Content Include="Scripts\durandal-backup\viewLocator.js" />
     <Content Include="Scripts\es5-sham.min.js" />
     <Content Include="Scripts\es5-shim.min.js" />
     <Content Include="Scripts\fullcalendar.js" />
@@ -843,8 +776,6 @@
     <None Include="Scripts\jquery\jquery-1.10.2.min.map" />
     <Content Include="Scripts\jquery\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery\jquery-1.10.2.min.js" />
-    <Content Include="Scripts\backup\knockout-3.0.0.debug.js" />
-    <Content Include="Scripts\backup\knockout-3.0.0.js" />
     <Content Include="Scripts\modernzr.js" />
     <Content Include="Scripts\moment-with-langs.js" />
     <Content Include="Scripts\moment-with-langs.min.js" />
@@ -935,7 +866,7 @@
     <PreBuildEvent>
     </PreBuildEvent>
   </PropertyGroup>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>

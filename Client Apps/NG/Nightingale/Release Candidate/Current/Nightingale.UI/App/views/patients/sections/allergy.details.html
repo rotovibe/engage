@@ -1,0 +1,125 @@
+<div class="widget open" data-bind="css: { 'fullscreen': isFullScreen() }, columnSizer: {triggers: allergy}">
+  <div class="content" data-bind="with: allergy">
+    <div class="content-fill">
+      <div class="wrapper">
+        <div class="content">
+          <div class="header">
+            <div class="table-cell">
+              <header>
+                <h1 class="ellipsis"><span data-bind="text: (allergyName().length > 18 ? allergyName().substring(0, 18) + '...' : allergyName()), attr: { 'title': allergyName }"></span></h1>
+                <div class="controls">
+                  <div class="toggle fullscreen" data-bind="click: $parent.toggleFullScreen, clickBubble: false">
+                  </div>
+                </div>
+                <div class="options">
+                  <a class="edit_allergy icon-outset" href="#" data-bind="click: $parent.edit"><i class="icon-edit"></i></a>
+                  <a class="delete_allergy" href="#" data-bind="click: $parent.delete"><i class="icon-cancel"></i></a>
+                </div>
+              </header>
+            </div>
+          </div>
+          <div class="table-row">
+            <div class="table-cell">
+              <div class="body">
+                <div class="content">
+                  <div class="accordion open">
+                    <div class="span12 details">
+                      <div class="status">
+
+                        <div class="row pad-bottom">
+                          <div class="span6 grey">
+                            Type
+                          </div>
+                          <div class="span6" data-bind="text: typeString">
+                          </div>
+                        </div>
+                        <div class="row pad-bottom" data-bind="if: status">
+                          <div class="span6 grey">
+                            Status
+                          </div>
+                          <div class="span6" data-bind="text: status().name">
+                          </div>
+                        </div>
+                        <div class="row pad-bottom" data-bind="visible: reactionString() !== '-'">
+                          <div class="span6 grey">
+                            Reaction
+                          </div>
+                          <div class="span6" data-bind="text: reactionString">
+                          </div>
+                        </div>
+                        <div class="row pad-bottom" data-bind="if: severity">
+                          <div class="span6 grey">
+                            Severity
+                          </div>
+                          <div class="span6" data-bind="text: severity().name">
+                          </div>
+                        </div>
+                        <div class="row pad-bottom" data-bind="if: source">
+                          <div class="span6 grey">
+                            Source
+                          </div>
+                          <div class="span6" data-bind="text: source().name">
+                          </div>
+                        </div>
+                        <div class="row pad-bottom" data-bind="visible: startDate">
+                          <div class="span6 grey">
+                            Start Date
+                          </div>
+                          <div class="span6" data-bind="DateOrDash: startDate">
+                          </div>
+                        </div>
+                        <div class="row pad-bottom" data-bind="visible: endDate">
+                          <div class="span6 grey">
+                            End Date
+                          </div>
+                          <div class="span6" data-bind="DateOrDash: endDate">
+                          </div>
+                        </div>
+                        <div class="row pad-bottom" data-bind="visible: createdOn">
+                          <div class="span6 grey">
+                            Created
+                          </div>
+                          <div class="span6" data-bind="Date: createdOn">
+                          </div>
+                        </div>
+                        <div class="row pad-bottom" data-bind="visible: updatedOn">
+                          <div class="span6 grey">
+                            Updated
+                          </div>
+                          <div class="span6" data-bind="Date: updatedOn">
+                          </div>
+                        </div>
+                        <div class="row pad-bottom" data-bind="visible: notes">
+                          <div class="span6 grey">
+                            Notes
+                          </div>
+                            <!-- ko ifnot: $parent.isNotesExpanded -->
+                                <div class="span12" data-bind="visible: notes">
+                                    <textarea data-bind="text: notes, attr: { 'title': notes }" readonly="readonly" class="display-only no-scroll" rows="5"></textarea>
+                                    <a class="grey" data-bind="clickToggle: $parent.isNotesExpanded" href="#">...</a>
+                                </div>
+                                <!-- /ko -->
+                                <!-- ko if: $parent.isNotesExpanded -->
+                                <textarea data-bind="text: notes, autoHeight: notes, attr: { 'title': notes }" readonly="readonly" class="display-only span12" ></textarea>
+                            <!-- /ko -->
+                          </div>
+                        </div>
+                        <div class="row pad-bottom" data-bind="visible: systemName">
+                          <div class="span6 grey">
+                            System
+                          </div>
+                          <div class="span6" data-bind="text: systemName">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

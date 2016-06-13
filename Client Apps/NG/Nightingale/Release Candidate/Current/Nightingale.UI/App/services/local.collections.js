@@ -36,6 +36,18 @@
 	]);
 	enums.maritalStatuses = ko.observableArray();
 	enums.deceasedStatuses = ko.observableArray();
+
+	enums.contactStatuses = ko.observableArray([
+		new modelConfig.SomeType('1', 'Active'),
+		new modelConfig.SomeType('2', 'Inactive'),
+		new modelConfig.SomeType('3', 'Archived')
+	]);
+	enums.careMemberStatuses = ko.observableArray();
+	enums.contactLookUpGroupType = ko.observableArray([
+		new modelConfig.SomeType('0', 'Unknown'),
+		new modelConfig.SomeType('1', 'ContactType'),
+		new modelConfig.SomeType('2', 'CareTeam')
+	]);
   enums.phoneTypes = ko.observableArray();
   enums.emailTypes = ko.observableArray();
   enums.addressTypes = ko.observableArray();
@@ -57,6 +69,7 @@
   enums.interventionStatuses = ko.observableArray();
   enums.careManagers = ko.observableArray();
   enums.careMemberTypes = ko.observableArray();
+  enums.careMemberFrequency = ko.observableArray();
   enums.observationTypes = ko.observableArray();
   enums.observationStates = ko.observableArray();
   enums.observationDisplays = ko.observableArray();
@@ -85,11 +98,15 @@
 	enums.frequency = ko.observableArray();	//a new lookup to replace freqHowOftens and freqWhens (ENG 969)
   enums.medSuppTypes = ko.observableArray();
   enums.freqWhens = ko.observableArray();
+  enums.durationUnits = ko.observableArray();
+  enums.refusalReasons = ko.observableArray();
+  enums.medicationReviews = ko.observableArray();
 
     //
     //   ToDos are shared between a bunch of views so we keep a collection here as well
     var todos = ko.observableArray();
 
+	var contacts = ko.observableArray();
     //
     //   Interventions are shared between a bunch of views so we keep a collection here as well
     var interventions = ko.observableArray();
@@ -103,14 +120,19 @@
     var events = ko.observableArray();
 
     var alerts = ko.observableArray();
-	
+
+	var contactTypesTree = ko.observableArray();
+	var contactTypes = ko.observableArray();
     var localcollections = {
         enums: enums,
         todos: todos,
+		contacts: contacts,
         tasks: tasks,
         interventions: interventions,
         events: events,
         alerts: alerts,
+		contactTypesTree: contactTypesTree,
+		contactTypes: contactTypes,
         refreshToDos: refreshToDos,
         refreshInterventions: refreshInterventions
     }
@@ -133,4 +155,4 @@
     }
 
 
-}); 
+});

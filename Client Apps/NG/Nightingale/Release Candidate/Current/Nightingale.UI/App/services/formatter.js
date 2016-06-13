@@ -19,6 +19,25 @@ define([],
 		}
 		
 		/**
+		*	@param newDetails {String} observable
+		*	@param details {String} observable
+		*	@method appendNewDetails
+		*/
+		formatter.appendNewDetails = function( newDetails, details, userName ){
+            if( newDetails() ){
+                var append = '';
+                if( details() && details().length ){
+                    append = '\n';
+                }
+                append += moment().format('MM-DD-YYYY h:mm A') + ' ';
+                append += (' ' + userName);
+                append += (' - ' + newDetails());
+                details(details() ? details() + append : append);
+                newDetails('');
+            }
+        }
+		
+		/**
 		*	
 		*	@method formatSeparators
 		*	@param inp the input {string} can contain any characters, including the separator.

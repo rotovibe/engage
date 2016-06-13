@@ -1,134 +1,167 @@
-﻿<div class="span3 accordion open" data-bind="with: computedGoal">
-    <header class="rule">
-        <div class="span12">
-            <div class="large grey muted line pad-horizontal">
-                Goal Details
-                <a class="accordion-toggle pull-left open pad-right filters" data-bind="css: { 'open': isExpanded }, clickToggle: isExpanded">
-                    <i class="icon-angle-double-down toggle"></i>
-                </a>
-            </div>
-        </div>
-    </header>
-    <div class="span12 details">
-        <div class="status">
-            <div class="rule"></div>
-            <div class="row pad-icon-left rule">
-                <div class="span6 grey">
-                    Start Date
-                </div>
-                <div class="span6" data-bind="DateOrDash: startDate">
-                </div>
-            </div>
-            <div class="row pad-icon-left">
-                <div class="span6 grey">
-                    Target Value
-                </div>
-                <div class="span6" data-bind="text: targetValue() ? targetValue() : '-'">
-                </div>
-            </div>
-            <div class="row pad-icon-left">
-                <div class="span6 grey">
-                    Target Date
-                </div>
-                <div class="span6" data-bind="DateOrDash: targetDate">
-                </div>
-            </div>
-            <div class="row pad-icon-left">
-                <div class="span6 grey">
-                    Type
-                </div>
-                <div class="span6">
-                    <span data-bind="with: type">
-                        <span data-bind="text: name"></span>
-                    </span>                    
-                    <span data-bind="if: !type()">-</span>
-                </div>
-            </div>
-        </div>
-        <!-- ko if: isExpanded -->
-        <div class="accordion-content pad pad-icon-left muted">
-            <div class="row pad-bottom">
-                <div class="span6 grey">
-                    Focus Area(s)
-                </div>
-                <div class="span6" data-bind="text: focusAreaString, attr: { 'title': focusAreaString }">
-                </div>
-            </div>
-            <div class="row pad-bottom">
-                <div class="span6 grey">
-                    Program(s)
-                </div>
-                <div class="span6" data-bind="text: programString">
-                </div>
-            </div>
-            <div class="row pad-bottom">
-                <div class="span6 grey">
-                    Source
-                </div>
-                <div class="span6">
-                    <span data-bind="with: source">
-                        <span data-bind="text: name"></span>
-                    </span>                    
-                    <span data-bind="if: !source()">-</span>
-                </div>
-            </div>
-            <div class="row pad-bottom">
-                <div class="span6 grey">
-                    End Date
-                </div>
-                <div class="span6" data-bind="DateOrDash: endDate">
-                </div>
-            </div>
-						
-            <div data-bind="foreach: customAttributes().sort($parent.alphabeticalOrderSort)">
-                <div data-bind="compose: displayPath">
-                </div>
-            </div>
-			<div class="row pad-bottom filter-toggle" data-bind="click: $parent.toggleGoalDetailsExpanded">
-				<div class="span6 grey">
-                    Details
-				</div>
-				<span class="span6" data-bind="visible: (!$parent.hasDetails()), text: '-'"></span>                  				
-            </div>
-			<div class="row pad-bottom" data-bind="visible: details">
-				<!-- ko ifnot: $parent.isGoalDetailsExpanded -->
-					<textarea class="span12 display-only no-scroll muted" style="height: 6.5em;" rows="5" data-bind="text: details, attr:{ 'title': details }, visible: details" readonly="readonly"></textarea>
-					<a class="grey" data-bind="click: $parent.toggleGoalDetailsExpanded, visible: details" href="#">...</a>
-				<!-- /ko -->
-				<!-- ko if: $parent.isGoalDetailsExpanded -->
-					<textarea class="span12 display-only muted" data-bind="text: details, autoHeight: details, attr:{ 'title': details }" readonly="readonly"></textarea>
-				<!-- /ko -->
-			</div>
-            <div class="row">
-                <div class="pull-left">
-                    <a class="edit_goal icon-outset" href="#" data-bind="click: $parent.edit"><i class="icon-edit"></i>Edit</a>
-                </div>
-                <div class="pull-right">
-                    <a class="delete_goal" href="#" data-bind="click: $parent.delete"><i class="icon-cancel"></i>Delete</a>
-                </div>
-            </div>
-        </div>
-        <!-- /ko -->
-    </div>
-    <div class="span12 transparent">-</div>
-    <div class="">
-        <div class="span12">
-            <div class="large grey muted line pad-horizontal pad-icon-left">
-                Barriers
-                <a class="accordion-toggle pull-right" data-bind="click: $parent.addBarrier">
-                    <i class="icon-plus"></i>
-                </a>
-            </div>
-        </div>
-        <!-- ko foreach: barriers -->
-            <!-- ko compose: { model: 'viewmodels/patients/sections/barrier.details', activationData: { barrier: $data  } } -->
-            <!-- /ko -->
-        <!-- /ko -->
-        <div class="span12" data-bind="visible: barriers().length === 0">
-            <div class="status line">
-                <div class="name pad-icon-left">
-                    <div class="line-reset">
-                        <em class="grey">No barriers.</em>
+﻿<div class="widget open" data-bind="css: { 'fullscreen': isFullScreen() }, columnSizer: {triggers: goal}">
+    <div class="content" data-bind="with: goal">
+        <div class="content-fill">
+            <div class="wrapper">
+                <div class="content">
+                    <div class="header">
+                        <div class="table-cell">
+                            <header>
+                                <h1 class="ellipsis"><span data-bind="text: (name().length > 18 ? name().substring(0, 18) + '...' : name()), attr: { 'title': name }"></span></h1>
+                                <div class="controls">
+                                    <div class="toggle fullscreen" data-bind="click: $parent.toggleFullScreen, clickBubble: false">
+                                    </div>
+                                </div>
+                                <div class="options">
+                                    <a class="edit_goal icon-outset" href="#" data-bind="click: $parent.edit"><i class="icon-edit"></i></a>
+                                    <a class="delete_goal" href="#" data-bind="click: $parent.delete"><i class="icon-cancel"></i></a>
+                                </div>
+                            </header>
+                        </div>
+                    </div>
+                    <div class="table-row">
+                        <div class="table-cell">
+                            <div class="body">
+                                <div class="content">
+                                    <div class="accordion open">
+                                        <div class="span12 details">
+                                            <div class="status">
+                                                <div class="row pad-bottom rule" data-bind="visible: startDate">
+                                                    <div class="span6 grey">
+                                                        Start Date
+                                                    </div>
+                                                    <div class="span6" data-bind="Date: startDate">
+                                                    </div>
+                                                </div>
+                                                <div class="row pad-bottom" data-bind="with: status">
+                                                    <div class="span6 grey">
+                                                        Status
+                                                    </div>
+                                                    <div class="span6" data-bind="text: name">
+                                                    </div>
+                                                </div>
+                                                <div class="row pad-bottom" data-bind="visible: targetValue">
+                                                    <div class="span6 grey">
+                                                        Target Value
+                                                    </div>
+                                                    <div class="span6" data-bind="text: targetValue">
+                                                    </div>
+                                                </div>
+                                                <div class="row pad-bottom" data-bind="visible: targetDate">
+                                                    <div class="span6 grey">
+                                                        Target Date
+                                                    </div>
+                                                    <div class="span6" data-bind="Date: targetDate">
+                                                    </div>
+                                                </div>
+                                                <div class="row pad-bottom" data-bind="visible: type">
+                                                    <div class="span6 grey">
+                                                        Type
+                                                    </div>
+                                                    <div class="span6">
+                                                        <span data-bind="with: type">
+                                                            <span data-bind="text: name"></span>
+                                                        </span>
+                                                        <span data-bind="if: !type()">-</span>
+                                                    </div>
+                                                </div>
+                                                <div class="row pad-bottom" data-bind="visible: focusAreaString() !== '-'">
+                                                    <div class="span6 grey">
+                                                        Focus Area(s)
+                                                    </div>
+                                                    <div class="span6" data-bind="text: focusAreaString, attr: { 'title': focusAreaString }">
+                                                    </div>
+                                                </div>
+                                                <div class="row pad-bottom" data-bind="visible: programString">
+                                                    <div class="span6 grey">
+                                                        Program(s)
+                                                    </div>
+                                                    <div class="span6" data-bind="text: programString">
+                                                    </div>
+                                                </div>
+                                                <div class="row pad-bottom" data-bind="visible: source">
+                                                    <div class="span6 grey">
+                                                        Source
+                                                    </div>
+                                                    <div class="span6">
+                                                        <span data-bind="with: source">
+                                                            <span data-bind="text: name"></span>
+                                                        </span>
+                                                        <span data-bind="if: !source()">-</span>
+                                                    </div>
+                                                </div>
+                                                <div class="row pad-bottom" data-bind="visible: endDate">
+                                                    <div class="span6 grey">
+                                                        End Date
+                                                    </div>
+                                                    <div class="span6" data-bind="DateOrDash: endDate">
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="row pad-bottom">
+                                                    <div class="span6 grey">
+                                                        # of related tasks
+                                                    </div>
+                                                    <div class="span6" data-bind="text: tasks().length">
+                                                    </div>
+                                                </div>
+
+                                                <div class="row pad-bottom">
+                                                    <div class="span6 grey">
+                                                        # of related interventions
+                                                    </div>
+                                                    <div class="span6" data-bind="text: interventions().length">
+                                                    </div>
+                                                </div>
+
+                                                <div data-bind="foreach: customAttributes().sort($parent.alphabeticalOrderSort)">
+                                                    <div data-bind="compose: displayPath">
+                                                    </div>
+                                                </div>
+                                                <div class="row pad-bottom filter-toggle" data-bind="click: $parent.toggleGoalDetailsExpanded, visible: details">
+                                                    <div class="span6 grey">
+                                                        Details
+                                                    </div>
+                                                </div>
+                                                <div class="row pad-bottom" data-bind="visible: details">
+                                                    <!-- ko ifnot: $parent.isGoalDetailsExpanded -->
+                                                    <textarea class="span12 display-only no-scroll muted" style="height: 6.5em;" rows="5" data-bind="text: details, attr:{ 'title': details }, visible: details" readonly="readonly"></textarea>
+                                                    <a class="grey" data-bind="click: $parent.toggleGoalDetailsExpanded, visible: details" href="#">...</a>
+                                                    <!-- /ko -->
+                                                    <!-- ko if: $parent.isGoalDetailsExpanded -->
+                                                    <textarea class="span12 display-only muted" data-bind="text: details, autoHeight: details, attr:{ 'title': details }" readonly="readonly"></textarea>
+                                                    <!-- /ko -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="span12 transparent">-</div>
+                                        <div class="">
+                                            <div class="span12">
+                                                <div class="large grey muted line pad-horizontal pad-icon-left">
+                                                    Barriers
+                                                    <a class="accordion-toggle pull-right" data-bind="click: $parent.addBarrier">
+                                                        <i class="icon-plus"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            <!-- ko foreach: barriers -->
+                                            <!-- ko compose: { model: 'viewmodels/patients/sections/barrier.details', activationData: { barrier: $data  } } -->
+                                            <!-- /ko -->
+                                            <!-- /ko -->
+                                            <div class="span12" data-bind="visible: barriers().length === 0">
+                                                <div class="status line">
+                                                    <div class="name pad-icon-left">
+                                                        <div class="line-reset">
+                                                            <em class="grey">No barriers.</em>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

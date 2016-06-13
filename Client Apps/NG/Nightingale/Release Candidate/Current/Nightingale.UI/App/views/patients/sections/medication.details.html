@@ -1,0 +1,184 @@
+<div class="widget open" data-bind="css: { 'fullscreen': isFullScreen() }, columnSizer: {triggers: medication}">
+  <div class="content" data-bind="with: medication">
+    <div class="content-fill">
+      <div class="wrapper">
+        <div class="content">
+          <div class="header">
+            <div class="table-cell">
+              <header>
+                <h1 class="ellipsis"><span data-bind="text: (name().length > 18 ? name().substring(0, 18) + '...' : name()), attr: { 'title': name }"></span></h1>
+                <div class="controls">
+                  <div class="toggle fullscreen" data-bind="click: $parent.toggleFullScreen, clickBubble: false">
+                  </div>
+                </div>
+                <div class="options">
+                  <a class="edit_medication icon-outset" href="#" data-bind="click: $parent.edit, css: { 'disabled': dataSource() !== 'Engage' }"><i class="icon-edit"></i></a>
+                  <a class="delete_medication" href="#" data-bind="click: $parent.delete, css: { 'disabled': dataSource() !== 'Engage' }"><i class="icon-cancel"></i></a>
+                </div>
+              </header>
+            </div>
+          </div>
+          <div class="table-row">
+            <div class="table-cell">
+              <div class="body">
+                <div class="content">
+                  <div class="accordion open">
+                    <div class="span12 details">
+                      <div class="status">
+                        <div class="row pad-bottom" data-bind="with: status">
+                          <div class="span6 grey">
+                            Status
+                          </div>
+                          <div class="span6" data-bind="text: name">
+                          </div>
+                        </div>
+                        <div class="row pad-bottom" data-bind="with: refusalReason">
+                          <div class="span6 grey">
+                            Refusal Reason
+                          </div>
+                          <div class="span6" data-bind="text: name">
+                          </div>
+                        </div>
+                        <div class="row pad-bottom" data-bind="visible: otherRefusalReason">
+                          <div class="span6 grey">
+                            Refusal Other
+                          </div>
+                          <div class="span6" data-bind="text: otherRefusalReason">
+                          </div>
+                        </div>
+                        <div class="row pad-bottom" data-bind="visible: computedSigCode() !== '-'">
+                          <div class="span10" data-bind="text: computedSigCode">
+                          </div>
+                        </div>
+                        <div class="row pad-bottom" data-bind="visible: (startDate() || endDate())">
+                          <div class="span6 grey">
+                            Dates
+                          </div>
+                          <div class="span6">
+                            <span data-bind="DateOrNothing: startDate"></span> -
+                            <!-- ko if: endDate -->
+                              <span data-bind="Date: endDate"></span>
+                            <!-- /ko -->
+                            <!-- ko ifnot: endDate -->
+                              current
+                            <!-- /ko -->
+                          </div>
+                        </div>
+                        <div class="row pad-bottom" data-bind="visible: computedDuration">
+                          <div class="span6 grey">
+                            Duration
+                          </div>
+                          <div class="span3" data-bind="text: computedDuration">
+                          </div>
+                        </div>
+                        <div class="row pad-bottom" data-bind="visible: otherDuration">
+                          <div class="span6 grey">
+                            Duration Other
+                          </div>
+                          <div class="span6" data-bind="text: otherDuration">
+                          </div>
+                        </div>
+                        <div class="row pad-bottom" data-bind="if: review">
+                          <div class="span6 grey">
+                            Review
+                          </div>
+                          <div class="span6" data-bind="text: review().name">
+                          </div>
+                        </div>
+                        <div class="row pad-bottom" data-bind="visible: computedPrescribedBy">
+                          <div class="span6 grey">
+                            Prescribed By
+                          </div>
+                          <div class="span6" data-bind="text: computedPrescribedBy">
+                          </div>
+                        </div>
+                        <div class="row pad-bottom" data-bind="visible: computedOrderedBy">
+                          <div class="span6 grey">
+                            Ordered By
+                          </div>
+                          <div class="span6" data-bind="text: computedOrderedBy">
+                          </div>
+                        </div>
+                        <div class="row pad-bottom" data-bind="visible: computedRxInfo">
+                          <div class="span6 grey">
+                            Rx Info
+                          </div>
+                          <div class="span6" data-bind="text: computedRxInfo">
+                          </div>
+                        </div>
+                        <div class="row pad-bottom" data-bind="visible: pharmacy">
+                          <div class="span6 grey">
+                            Pharmacy
+                          </div>
+                          <div class="span6" data-bind="text: pharmacy">
+                          </div>
+                        </div>
+                        <div class="row pad-bottom" data-bind="visible: reason">
+                          <div class="span6 grey">
+                            Reason
+                          </div>
+                          <div class="span6" data-bind="text: reason">
+                          </div>
+                        </div>
+                        <div class="row pad-bottom" data-bind="visible: notes">
+                          <div class="span6 grey">
+                            Notes
+                          </div>
+                            <!-- ko ifnot: $parent.isNotesExpanded -->
+                                <div class="span12" data-bind="visible: notes">
+                                    <textarea data-bind="text: notes, attr: { 'title': notes }" readonly="readonly" class="display-only no-scroll" rows="5"></textarea>
+                                    <a class="grey" data-bind="clickToggle: $parent.isNotesExpanded" href="#">...</a>
+                                </div>
+                                <!-- /ko -->
+                                <!-- ko if: $parent.isNotesExpanded -->
+                                <textarea data-bind="text: notes, autoHeight: notes, attr: { 'title': notes }" readonly="readonly" class="display-only span12" ></textarea>
+                            <!-- /ko -->
+                          </div>
+                        </div>
+                        <div class="row pad-bottom" data-bind="visible: source">
+                          <div class="span6 grey">
+                            Source
+                          </div>
+                          <div class="span6" data-bind="text: source().name">
+                          </div>
+                        </div>
+                        <div class="row pad-bottom" data-bind="visible: createdOn">
+                          <div class="span6 grey">
+                            Created
+                          </div>
+                          <div class="span6" data-bind="Date: createdOn">
+                          </div>
+                        </div>
+                        <div class="row pad-bottom" data-bind="visible: updatedOn">
+                          <div class="span6 grey">
+                            Updated
+                          </div>
+                          <div class="span6" data-bind="Date: updatedOn">
+                          </div>
+                        </div>
+                        <div class="row pad-bottom" data-bind="visible: dataSource">
+                          <div class="span6 grey">
+                            Data Source
+                          </div>
+                          <div class="span6" data-bind="text: dataSource">
+                          </div>
+                        </div>
+                        <div class="row pad-bottom" data-bind="visible: originalDataSource">
+                          <div class="span6 grey">
+                            Original Data Source
+                          </div>
+                          <div class="span6" data-bind="text: originalDataSource">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

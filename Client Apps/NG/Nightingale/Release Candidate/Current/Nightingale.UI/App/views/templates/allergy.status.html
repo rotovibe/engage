@@ -1,0 +1,8 @@
+﻿<div class="ellipsis" data-bind="with: status">
+    <span class="pull-left filters" data-bind="if: id() === '1'">
+    	<a href="#" data-bind="click: $parent.inactivate"><i class="icon-checkbox-on blue toggle" title="Deactivate"></i></a>
+    </span>
+    <div class="pull-left filters" data-bind="if: id() === '2'">
+		<a href="#" data-bind="click: $parent.activatePatientAllergy"><i class="icon-checkbox-off blue toggle" title="Activate"></i></a>
+    </div>
+</div>

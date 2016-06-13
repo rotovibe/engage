@@ -1,0 +1,80 @@
+<section data-type="flex">
+	<div>	
+		<div class="column" data-bind="css: { 'open': leftColumnOpen() }">
+			<!-- ko with: careTeamColumn -->
+			<!-- ko if: $parent.isComposed -->
+			<div class="widget-wrapper" data-bind="foreach: widgets">
+				<!-- ko compose: { model: path, activationData: activationData } -->
+                <!-- /ko -->
+			</div>
+			<!-- /ko -->
+			<!-- /ko -->
+		</div>
+		<div class="column" data-bind="css: { 'open': !leftColumnOpen() }">
+			<div class="widget-wrapper">
+				<div class="widget open" data-bind="css: { 'fullscreen': fullScreenWidget() === 'careMemberDetails' }, columnSizer: true">
+					<div class="content">
+						<div class="content-fill">
+							<div class="wrapper">
+								<div class="content">
+									<div class="header">
+										<div class="table-cell">
+											<header>
+												<h1>Details<span data-bind="text: selectedCareMemberName"></h1>
+												<div class="controls">
+													<!-- ko with: selectedCareMember -->
+													<div class="toggle" data-bind="click: $parent.editCareMemberContact, clickBubble: false, visible: (contact() && contact().isEditable())" style="margin-right: 4px;" title="Edit contact information">
+														<a href="#">
+															<i class="icon-edit"></i>
+														</a>
+													</div>
+													<div class="toggle single-arrow-left" data-method="open" data-target="column" data-type="left" data-bind="click: $parent.toggleOpenColumn, enable: !$parent.leftColumnOpen(), clickBubble: false">
+													</div>
+													<div class="toggle double-arrow-right" data-method="open" data-target="column" data-type="right" data-bind="click: $parent.toggleOpenColumn, enable: $parent.leftColumnOpen(), clickBubble: false">
+													</div>
+													<!-- /ko -->
+													<!-- ko if: showDeleteButton -->
+													<!-- <div class="toggle">
+														<a href="#" data-bind="click: deleteContact, clickBubble: false">
+															<i class="icon-cancel red"></i>
+														</a>
+													</div> -->
+													<!-- /ko -->																											
+													<div class="toggle fullscreen" data-method="fullscreen" data-target="widget" data-type="both" data-bind="click: function () { $parent.toggleFullScreen('careMemberDetails') }, clickBubble: false">
+													</div>
+												</div>
+											</header>											
+										</div>
+									</div>
+									<div class="table-row">
+										<div class="table-cell">
+											<div class="body">
+												<div class="content" >
+													<!-- ko compose: { model: 'viewmodels/patients/team/careMember.details', activationData:{ member: selectedCareMember } } -->
+													<!-- /ko -->
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>					
+				</div>	
+			</div>
+		</div>
+	</div>
+	<!--
+		<div class="table-row">
+			<div class="table-cell">
+				<div class="body">
+					<div class="content">
+						<div class="body">
+							<em class="grey">No individual selected.</em>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	 -->
+</section>

@@ -60,9 +60,7 @@
 
                 var params = [];
                 params.push(new modelConfig.Parameter('patientId', selectedpatient.id(), '=='));
-                if (selectedallergystatuses.length === 1) {
-                    params.push(new modelConfig.Parameter('statusId', selectedallergystatuses[0].id(), '=='));
-                }
+
                 var patientId = self.selectedPatient().id();
                 finalallergies = datacontext.getPatientAllergiesQuery(params, orderProp);
                 // If allergy types were selected,
@@ -86,6 +84,18 @@
                         });
                     });
                     finalallergies = theseAllergies;
+                }
+                if (selectedallergystatuses.length !== 0) {
+                    finalallergies = finalallergies.filter(function (allergy) {
+                        var statusIdFilters = [];
+                        ko.utils.arrayForEach(selectedallergystatuses, function (status) {
+                            // params.push(new modelConfig.Parameter('statusId', status.id(), '=='));
+                            statusIdFilters.push(status.id());
+                        });
+                        if (statusIdFilters.indexOf(allergy.statusId()) !== -1) {
+                            return true;
+                        }
+                    });
                 }
                 return finalallergies;
             });
@@ -114,7 +124,7 @@
             self.filtersOpen = ko.observable(false);
             self.toggleHeaderOpen = function  (sender, widgetOpen) {
                 if (widgetOpen()) {
-                    sender(!sender());    
+                    sender(!sender());
                 }
             }
             self.toggleFullScreen = function (sender) {
@@ -137,7 +147,7 @@
                 dataIndex.addData();
                 // dataIndex.activeDataType(dataIndex.allergiesType);
                 // dataIndex.modalEntity().activeDataType(dataIndex.allergiesType);
-                
+
                 function doSomething(task) {
                     // Show the modal
                     //self.editAllergy(task, 'Add Task');
@@ -200,14 +210,7 @@
 
         return ctor;
 
-        // function editEntity(msg, entity, path, saveoverride, canceloverride) {
-        //     var modal = new modelConfig.modal(msg, entity, path, modalShowing, saveoverride, canceloverride);
-        //     modalShowing(true);
-        //     shell.currentModal(modal);
-        // }
-
         function save(goal) {
-            // TODO : Call the save goal method
             datacontext.saveGoal(goal);
         }
 
@@ -222,10 +225,6 @@
         function saveGoal(entity) {
             datacontext.saveGoal(entity);
         }
-
-        // function saveBarrier (entity) {
-        //     datacontext.saveBarrier(entity);
-        // }
 
         function cancel(item) {
             item.entityAspect.rejectChanges();
