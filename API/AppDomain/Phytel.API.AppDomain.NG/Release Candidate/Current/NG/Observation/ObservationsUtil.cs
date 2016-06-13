@@ -33,7 +33,9 @@ namespace Phytel.API.AppDomain.NG
                             Units = o.Units,
                             Values = GetValues(o.Values),
                             StateId = o.StateId,
-                            DisplayId = o.DisplayId
+                            DisplayId = o.DisplayId,
+                            DataSource = o.DataSource,
+                            ExternalRecordId = o.ExternalRecordId
                         });
                     });
                 }
@@ -133,7 +135,9 @@ namespace Phytel.API.AppDomain.NG
                     Units = po.Units,
                     DisplayId = po.DisplayId,
                     StateId = po.StateId,
-                    DeleteFlag = po.DeleteFlag
+                    DeleteFlag = po.DeleteFlag,
+                    DataSource = po.DataSource,
+                    ExternalRecordId = po.ExternalRecordId
                 };
 
                 // Populate Values for Labs and Vitals
@@ -228,7 +232,9 @@ namespace Phytel.API.AppDomain.NG
                     Values = GetValues(o.Values),
                     StartDate = o.StartDate,
                     DisplayId = o.DisplayId,
-                    StateId = o.StateId
+                    StateId = o.StateId,
+                    DataSource = o.DataSource,
+                    ExternalRecordId = o.ExternalRecordId
                 };
                 return result;
             }
@@ -256,6 +262,8 @@ namespace Phytel.API.AppDomain.NG
                     StateId = o.StateId,
                     Source = o.Source,
                     DeleteFlag  = o.DeleteFlag,
+                    DataSource = o.DataSource,
+                    ExternalRecordId = o.ExternalRecordId
                 };
                 return result;
             }
@@ -306,7 +314,9 @@ namespace Phytel.API.AppDomain.NG
                         Name = po.Name,
                         Standard = po.Standard,
                         TypeId = po.TypeId,
-                        DeleteFlag = po.DeleteFlag
+                        DeleteFlag = po.DeleteFlag,
+                        DataSource = po.DataSource,
+                        ExternalRecordId = po.ExternalRecordId
                     };
                 }
             }

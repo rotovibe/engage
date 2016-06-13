@@ -8,11 +8,15 @@ using ServiceStack.ServiceHost;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Policy;
 using System.Web;
 using Phytel.API.AppDomain.NG.DTO.Context;
 using Phytel.API.AppDomain.NG.DTO.Note.Context;
 using Phytel.API.AppDomain.NG.Notes;
 using ServiceStack.Common.Web;
+using ServiceStack.FluentValidation;
+using ServiceStack.FluentValidation.Results;
+using ServiceStack.Text;
 
 namespace Phytel.API.AppDomain.NG.Service
 {
@@ -161,7 +165,7 @@ namespace Phytel.API.AppDomain.NG.Service
         public PostDeletePatientResponse Post(PostDeletePatientRequest request)
         {
             PostDeletePatientResponse response = new PostDeletePatientResponse();
-            NGManager ngm = new NGManager();
+            //NGManager ngm = new NGManager();
             ValidateTokenResponse result = null;
 
             try
@@ -171,7 +175,7 @@ namespace Phytel.API.AppDomain.NG.Service
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
-                    response = ngm.DeletePatient(request);
+                    response = NGManager.DeletePatient(request);
                 }
                 else
                     throw new UnauthorizedAccessException();
@@ -305,7 +309,7 @@ namespace Phytel.API.AppDomain.NG.Service
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
-                    response = NGManager.PutPatientDetailsUpdate(request);
+                    response = NGManager.UpsertPatient(request);
                 }
                 else
                     throw new UnauthorizedAccessException();
@@ -671,7 +675,7 @@ namespace Phytel.API.AppDomain.NG.Service
         public PostRemovePatientProgramResponse Post(PostRemovePatientProgramRequest request)
         {
             PostRemovePatientProgramResponse response = new PostRemovePatientProgramResponse();
-            NGManager ngm = new NGManager();
+            //NGManager ngm = new NGManager();
             ValidateTokenResponse result = null;
 
             try
@@ -681,7 +685,7 @@ namespace Phytel.API.AppDomain.NG.Service
                 if (result.UserId.Trim() != string.Empty)
                 {
                     request.UserId = result.UserId;
-                    response = ngm.RemovePatientProgram(request);
+                    response = NGManager.RemovePatientProgram(request);
                 }
                 else
                    throw new UnauthorizedAccessException();
@@ -708,9 +712,9 @@ namespace Phytel.API.AppDomain.NG.Service
         }
 
         #region Contact
-        public GetContactResponse Get(GetContactRequest request)
+        public GetContactByPatientIdResponse Get(GetContactByPatientIdRequest request)
         {
-            GetContactResponse response = new GetContactResponse();
+            GetContactByPatientIdResponse response = new GetContactByPatientIdResponse();
             ValidateTokenResponse result = null;
 
             try
@@ -739,72 +743,8 @@ namespace Phytel.API.AppDomain.NG.Service
             
             return response; 
         }
-
-        public GetAllCareManagersResponse Get(GetAllCareManagersRequest request)
-        {
-            GetAllCareManagersResponse response = new GetAllCareManagersResponse();
-            ValidateTokenResponse result = null;
-
-            try
-            {
-                request.Token = base.Request.Headers["Token"] as string;
-                result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
-                if (result.UserId.Trim() != string.Empty)
-                {
-                    request.UserId = result.UserId;
-                    response.Contacts = NGManager.GetCareManagers(request);
-                    response.Version = request.Version;
-                }
-                else
-                    throw new UnauthorizedAccessException();
-            }
-            catch (Exception ex)
-            {
-                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
-                if ((ex is WebServiceException) == false)
-                    NGManager.LogException(ex);
-            }
-            finally
-            {
-                if (result != null)
-                    AuditHelper.LogAuditData(request, result.SQLUserId, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
-            }
-            
-            return response; 
-        }
-
-        public PutUpdateContactResponse Post(PutUpdateContactRequest request)
-        {
-            PutUpdateContactResponse response = new PutUpdateContactResponse();
-            ValidateTokenResponse result = null;
-
-            try
-            {
-                request.Token = base.Request.Headers["Token"] as string;
-                result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
-                if (result.UserId.Trim() != string.Empty)
-                {
-                    request.UserId = result.UserId;
-                    response = NGManager.PutUpdateContact(request);
-                }
-                else
-                    throw new UnauthorizedAccessException();
-            }
-            catch (Exception ex)
-            {
-                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
-                if ((ex is WebServiceException) == false)
-                    NGManager.LogException(ex);
-            }
-            finally
-            {
-                if (result != null)
-                    AuditHelper.LogAuditData(request, result.SQLUserId, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
-            }
-            
-            return response; 
-        }
-
+       
+       
         public GetRecentPatientsResponse Get(GetRecentPatientsRequest request)
         {
             GetRecentPatientsResponse response = new GetRecentPatientsResponse();
@@ -844,6 +784,121 @@ namespace Phytel.API.AppDomain.NG.Service
             }
             return response;
         }
+
+
+
+        public SearchContactsResponse Post(SearchContactsRequest request)
+        {
+            if(request == null)
+                throw new ArgumentNullException("request");
+
+            if (request.ContactTypeIds.IsNullOrEmpty() && request.ContactStatuses.IsNullOrEmpty())
+                throw new ValidationException(
+                    new List<ValidationFailure>
+                {
+                    new ValidationFailure("ContactTypeIds or ContactStatuses","Must provide ContactTypeIds or ContactStatuses","Contacts.Search"),
+                    
+                });
+
+
+            var response = new SearchContactsResponse();
+            ValidateTokenResponse result = null;
+
+            try
+            {
+                request.Token = base.Request.Headers["Token"] as string;
+                result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                if (result.UserId.Trim() != string.Empty)
+                {
+                    request.UserId = result.UserId;
+                    var dataResponse = NGManager.SearchContacts(request);
+                    response.Contacts = dataResponse.Contacts;
+                    response.TotalCount = dataResponse.TotalCount;
+                }
+                else
+                    throw new UnauthorizedAccessException();
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                if ((ex is WebServiceException) == false)
+                    NGManager.LogException(ex);
+            }
+            finally
+            {
+
+                if (result != null)
+                    AuditHelper.LogAuditData(request, result.SQLUserId, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
+            }
+            return response;
+        }
+
+        public UpdateContactResponse Put(DTO.UpdateContactRequest request)
+        {
+            UpdateContactResponse response = new UpdateContactResponse();
+            ValidateTokenResponse result = null;
+
+            try
+            {
+                request.Token = base.Request.Headers["Token"] as string;
+                result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                if (result.UserId.Trim() != string.Empty)
+                {
+                    request.UserId = result.UserId;
+                    response = NGManager.PutUpdateContact(request);
+                }
+                else
+                    throw new UnauthorizedAccessException();
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                if ((ex is WebServiceException) == false)
+                    NGManager.LogException(ex);
+            }
+            finally
+            {
+                if (result != null)
+                    AuditHelper.LogAuditData(request, result.SQLUserId, null, System.Web.HttpContext.Current.Request,
+                        request.GetType().Name);
+            }
+
+            return response;
+        }
+
+        public InsertContactResponse Post(InsertContactRequest request)
+        {
+            InsertContactResponse response = new InsertContactResponse();
+
+            ValidateTokenResponse result = null;
+
+            try
+            {
+                request.Token = base.Request.Headers["Token"] as string;
+                result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                if (result.UserId.Trim() != string.Empty)
+                {
+                    request.UserId = result.UserId;
+                    response = NGManager.InsertContact(request);
+                }
+                else
+                    throw new UnauthorizedAccessException();
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                if ((ex is WebServiceException) == false)
+                    NGManager.LogException(ex);
+            }
+            finally
+            {
+                if (result != null)
+                    AuditHelper.LogAuditData(request, result.SQLUserId, null, System.Web.HttpContext.Current.Request,
+                        request.GetType().Name);
+            }
+            return response;
+        }
+
         #endregion
 
         #region LookUps ContactRelated
@@ -1040,6 +1095,42 @@ namespace Phytel.API.AppDomain.NG.Service
         }
 
         #endregion
+
+        #region ContactTypeLookUp
+       
+        public GetContactTypeLookupResponse Get(GetContactTypeLookupRequest request)
+        {
+            GetContactTypeLookupResponse response = new GetContactTypeLookupResponse();
+            ValidateTokenResponse result = null;
+
+            try
+            {
+                request.Token = base.Request.Headers["Token"] as string;
+                result = Security.IsUserValidated(request.Version, request.Token, request.ContractNumber);
+                if (result.UserId.Trim() != string.Empty)
+                {
+                    request.UserId = result.UserId;
+                    response = NGManager.GetContactTypeLookup(request);
+                }
+                else
+                    throw new UnauthorizedAccessException();
+            }
+            catch (Exception ex)
+            {
+                CommonFormatter.FormatExceptionResponse(response, base.Response, ex);
+                if ((ex is WebServiceException) == false)
+                    NGManager.LogException(ex);
+            }
+            finally
+            {
+                if (result != null)
+                    AuditHelper.LogAuditData(request, result.SQLUserId, null, System.Web.HttpContext.Current.Request, request.GetType().Name);
+            }
+
+            return response;
+        }
+
+        #endregion 
 
         #region LookUps refactored
         public GetLookUpsResponse Get(GetLookUpsRequest request)
@@ -1326,6 +1417,5 @@ namespace Phytel.API.AppDomain.NG.Service
             return response;
         }
         #endregion
-
     }
 }

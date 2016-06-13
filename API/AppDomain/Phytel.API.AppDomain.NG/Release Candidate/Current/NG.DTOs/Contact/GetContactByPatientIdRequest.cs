@@ -5,7 +5,7 @@ using System.Runtime.Serialization;
 namespace Phytel.API.AppDomain.NG.DTO
 {
     [Route("/{Version}/{ContractNumber}/Patient/{PatientID}/Contact", "GET")]
-    public class GetContactRequest : IAppDomainRequest
+    public class GetContactByPatientIdRequest : IAppDomainRequest
     {
         [ApiMember(Name = "PatientID", Description = "Patient ID of the patient to get it's contact details.", ParameterType = "path", DataType = "string", IsRequired = true)]
         public string PatientID { get; set; }
@@ -22,6 +22,6 @@ namespace Phytel.API.AppDomain.NG.DTO
         [ApiMember(Name = "Token", Description = "Request Token", ParameterType = "QueryString", DataType = "string", IsRequired = true)]
         public string Token { get; set; }
 
-        public GetContactRequest() { }
+        public GetContactByPatientIdRequest() { }
     }
 }

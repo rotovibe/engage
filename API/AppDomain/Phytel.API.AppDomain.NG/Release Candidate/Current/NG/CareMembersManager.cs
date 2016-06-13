@@ -272,7 +272,7 @@ namespace Phytel.API.AppDomain.NG
             List<ContactData> contactsData = new List<ContactData>();
             if(contactIds.Count > 0)
             {
-                SearchContactsDataResponse contactDataResponse = null;
+                GetContactsByContactIdsDataResponse contactDataResponse = null;
                 IRestClient client = new JsonServiceClient();
                 string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Contact",
                                                         DDContactServiceUrl,
@@ -281,7 +281,7 @@ namespace Phytel.API.AppDomain.NG
                                                         contractNumber), userId);
 
                 //[Route("/{Context}/{Version}/{ContractNumber}/Contact", "POST")]
-                contactDataResponse = client.Post<SearchContactsDataResponse>(url, new SearchContactsDataRequest
+                contactDataResponse = client.Post<GetContactsByContactIdsDataResponse>(url, new GetContactsByContactIdsDataRequest()
                                                         {
                                                             ContactIds = contactIds,
                                                             Context = "NG",

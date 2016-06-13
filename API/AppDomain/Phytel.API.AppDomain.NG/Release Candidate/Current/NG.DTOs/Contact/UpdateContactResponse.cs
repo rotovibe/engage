@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Phytel.API.AppDomain.NG.DTO
 {
-    public class PutUpdateContactResponse : IDomainResponse
+    public class UpdateContactResponse : IDomainResponse
     {
         public List<CleanupId> UpdatedPhone { get; set; }
         public List<CleanupId> UpdatedEmail { get; set; }

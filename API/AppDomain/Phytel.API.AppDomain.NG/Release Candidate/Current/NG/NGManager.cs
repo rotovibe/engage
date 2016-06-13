@@ -16,15 +16,28 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
+using System.Runtime.Remoting.Messaging;
 using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Web.Hosting;
 using AutoMapper;
+using MongoDB.Bson;
+using Phytel.API.AppDomain.NG.Command;
+using Phytel.API.Common.Extensions;
+using Phytel.API.DataDomain.Contact.DTO.CareTeam;
 using DD = Phytel.API.DataDomain.Program.DTO;
 using Phytel.API.DataDomain.PatientGoal.DTO;
 using Phytel.API.DataDomain.PatientSystem.DTO;
 using Phytel.API.DataDomain.PatientObservation.DTO;
 using Phytel.API.DataDomain.Program.DTO;
+using Phytel.API.DataDomain.Contact.DTO.ContactTypeLookUp;
+using ServiceStack.Common;
+using ServiceStack.Common.Utils;
+using ServiceStack.FluentValidation;
+using ServiceStack.FluentValidation.Results;
+using ServiceStack.Text;
+using ServiceStack.Validation;
 
 namespace Phytel.API.AppDomain.NG
 {
@@ -33,9 +46,11 @@ namespace Phytel.API.AppDomain.NG
         #region dependencies
         public IPlanElementUtils PlanElementUtils { get; set; }
         public IEndpointUtils EndpointUtils { get; set; }
+        public IContactEndpointUtil ContactEndpointUtil { get; set; }
         #endregion
 
         #region Endpoint addresses
+       
         protected static readonly string DDPatientServiceURL = ConfigurationManager.AppSettings["DDPatientServiceUrl"];
         protected static readonly string DDPatientProblemServiceUrl = ConfigurationManager.AppSettings["DDPatientProblemServiceUrl"];
         protected static readonly string DDLookupServiceUrl = ConfigurationManager.AppSettings["DDLookupServiceUrl"];
@@ -48,6 +63,9 @@ namespace Phytel.API.AppDomain.NG
         protected static readonly string DDPatientObservationsServiceUrl = ConfigurationManager.AppSettings["DDPatientObservationUrl"];
         protected static readonly string DDPatientGoalsServiceUrl = ConfigurationManager.AppSettings["DDPatientGoalUrl"];
         protected static readonly string DDSchedulingUrl = ConfigurationManager.AppSettings["DDSchedulingUrl"];
+
+        protected static readonly string DDContactTypeLookupServiceURL = ConfigurationManager.AppSettings["DDContactTypeLookupServiceURL"];
+
         #endregion
 
         public void LogException(Exception ex)
@@ -90,8 +108,8 @@ namespace Phytel.API.AppDomain.NG
                     //                                                                response.Patient.DisplayPatientSystemId), request.UserId);
                     //    sysResponse = client.Get<Phytel.API.DataDomain.PatientSystem.DTO.GetPatientSystemDataResponse>(patientSystemUrl);
                     //}
-                    
-                    pResponse.Patient = new NG.DTO.Patient
+
+                    var patient = new NG.DTO.Patient
                     {
                         Id = response.Patient.Id,
                         FirstName = response.Patient.FirstName,
@@ -107,13 +125,30 @@ namespace Phytel.API.AppDomain.NG
                         ClinicalBackground = response.Patient.ClinicalBackground,
                         LastFourSSN = response.Patient.LastFourSSN,
                         DataSource = response.Patient.DataSource,
-                        ReasonId  = response.Patient.ReasonId,
+                        ReasonId = response.Patient.ReasonId,
                         StatusId = response.Patient.StatusId,
                         StatusDataSource = response.Patient.StatusDataSource,
                         MaritalStatusId = response.Patient.MaritalStatusId,
                         Protected = response.Patient.Protected,
-                        DeceasedId = response.Patient.DeceasedId
+                        DeceasedId = response.Patient.DeceasedId,
+                        Prefix = response.Patient.Prefix
                     };
+
+                    var contact =
+                        GetContactByPatientId(new GetContactByPatientIdRequest
+                        {
+                            ContractNumber = request.ContractNumber,
+                            PatientID = request.PatientID,
+                            UserId = request.UserId,
+                            Version = request.Version
+                        });
+
+                    if (contact != null)
+                    {
+                        patient.ContactId = contact.Id;
+                    }
+
+                    pResponse.Patient = patient;
 
                     // Commented this part out, as there is a separate endpoint to get patient systems ids.
                     //if (sysResponse != null && sysResponse.PatientSystemData != null)
@@ -182,7 +217,7 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        public PutPatientDetailsUpdateResponse PutPatientDetailsUpdate(PutPatientDetailsUpdateRequest request)
+        public PutPatientDetailsUpdateResponse UpsertPatient(PutPatientDetailsUpdateRequest request)
         {
             try
             {
@@ -217,8 +252,10 @@ namespace Phytel.API.AppDomain.NG
                         StatusDataSource = request.Patient.StatusDataSource,
                         MaritalStatusId = request.Patient.MaritalStatusId,
                         Protected = request.Patient.Protected,
-                        DeceasedId = request.Patient.DeceasedId
+                        DeceasedId = request.Patient.DeceasedId,
+                        Prefix = request.Patient.Prefix
                     };
+                    CleanPatientNames(data);
                     PutUpdatePatientDataResponse dataDomainResponse =
                         client.Put<PutUpdatePatientDataResponse>(url, new PutUpdatePatientDataRequest
                         {
@@ -233,9 +270,34 @@ namespace Phytel.API.AppDomain.NG
                     if (dataDomainResponse != null)
                     {
                         response.Id = dataDomainResponse.Id;
-                        if (dataDomainResponse.Outcome != null)
+                        if (dataDomainResponse.Outcome == null)
                         {
-                            response.Outcome = new DTO.Outcome { Result = dataDomainResponse.Outcome.Result, Reason = dataDomainResponse.Outcome.Reason};
+                            // Proceed with syncing contacts only if there is no duplicate patient 
+                            var contact = GetContactByPatientId(new GetContactByPatientIdRequest
+                            {
+                                ContractNumber = request.ContractNumber,
+                                UserId = request.UserId,
+                                PatientID = request.Patient.Id,
+                                Version = 1.0
+                            });
+                            if (contact != null)
+                            {
+                                //Sync Contact 
+                                SyncContactByPatientData(contact.Id, data, request.Version, request.ContractNumber,
+                                    request.UserId);
+                            }
+                            else
+                            {
+                                InsertContactByPatient(request.Patient, request.ContractNumber, request.UserId, request.Version);
+                            }
+                        }
+                        else
+                        {
+                            response.Outcome = new DTO.Outcome
+                            {
+                                Result = dataDomainResponse.Outcome.Result,
+                                Reason = dataDomainResponse.Outcome.Reason
+                            };
                         }
                     }
                 }
@@ -243,10 +305,11 @@ namespace Phytel.API.AppDomain.NG
             }
             catch (WebServiceException wse)
             {
-                throw new WebServiceException("AD:PutPatientDetailsUpdate()::" + wse.Message, wse.InnerException);
+                throw new WebServiceException("AD:UpsertPatient()::" + wse.Message, wse.InnerException);
             }
         }
 
+       
         public PutPatientFlaggedUpdateResponse PutPatientFlaggedUpdate(PutPatientFlaggedUpdateRequest request)
         {
             try
@@ -314,11 +377,24 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
+       
         public PostDeletePatientResponse DeletePatient(PostDeletePatientRequest request)
         {
             PostDeletePatientResponse response = new PostDeletePatientResponse();
             try
             {
+                var contact = GetContactByPatientId(new GetContactByPatientIdRequest
+                {
+                    ContractNumber = request.ContractNumber,
+                    PatientID = request.Id,
+                    UserId = request.UserId,
+                    Version = request.Version
+                });
+                if (contact == null)
+                    throw new ApplicationException("The patient contact card was not found");
+
+                
+
                 IRestClient client = new JsonServiceClient();
                 INGUnitOfWork uow = new NGUnitOfWork();
 
@@ -331,11 +407,16 @@ namespace Phytel.API.AppDomain.NG
                 INGCommand deleteCPVCommand = new CohortPatientViewCommand(request, client);
                 uow.Execute(deleteCPVCommand);
 
-                INGCommand deleteContactCommand = new ContactCommand(request, client);
-                uow.Execute(deleteContactCommand);
 
-                INGCommand deleteCareMemberCommand = new CareMembersCommand(request, client);
-                uow.Execute(deleteCareMemberCommand);
+                //Commenting the Delete Command as a Contact should not be deleted. 
+                //INGCommand deleteContactCommand = new ContactCommand(request, client);
+                //uow.Execute(deleteContactCommand);
+
+                //INGCommand deleteCareMemberCommand = new CareMembersCommand(request, client);
+                //uow.Execute(deleteCareMemberCommand);
+
+                INGCommand deleteCareTeamCommand = new CareTeamCommand(request,ContactEndpointUtil,contact.Id);
+                uow.Execute(deleteCareTeamCommand);
 
                 INGCommand deletePatientNoteCommand = new PatientNotesCommand(request, client);
                 uow.Execute(deletePatientNoteCommand);
@@ -364,6 +445,15 @@ namespace Phytel.API.AppDomain.NG
                 INGCommand deletePatientProgramCommand = new PatientProgramsCommand(request, client);
                 uow.Execute(deletePatientProgramCommand);
 
+
+                
+
+                if (contact != null)
+                {
+                    var contactId = contact.Id;
+                    var dereferencePatientInContactCommand = new DereferencePatientInContactCommand(contactId,request, ContactEndpointUtil);
+                    uow.Execute(dereferencePatientInContactCommand);
+                }
                 return response;
             }
             catch (WebServiceException ex)
@@ -427,6 +517,17 @@ namespace Phytel.API.AppDomain.NG
                 // Route("/{Context}/{Version}/{ContractNumber}/CohortPatients/{CohortID}", "GET")]
                 GetCohortPatientsDataResponse qResponse = client.Get<GetCohortPatientsDataResponse>(url);
 
+
+                
+                var patientIds = qResponse.CohortPatients.Select(r => r.Id).ToList();
+                List<PatientCareTeamInfo> patientsInfo = new List<PatientCareTeamInfo>();
+                if (!patientIds.IsNullOrEmpty())
+                {
+                     patientsInfo = ContactEndpointUtil.GetPatientsCareTeamInfoResponse(patientIds, request.Version,
+                        request.ContractNumber, request.UserId);
+
+                }
+
                 //take qResponse Patient details and map them to "Patient" in the GetCohortPatientsResponse
                 qResponse.CohortPatients.ForEach(x => pResponse.Patients.Add(new CohortPatient
                 {
@@ -437,7 +538,8 @@ namespace Phytel.API.AppDomain.NG
                     LastName = x.LastName,
                     MiddleName = x.MiddleName,
                     PreferredName = x.PreferredName,
-                    Suffix = x.Suffix
+                    Suffix = x.Suffix,
+                    CareTeamId = patientsInfo.FirstOrDefault(p => p.PatientId == x.Id) == null ? null : patientsInfo.FirstOrDefault(p => p.PatientId == x.Id).CareTeamId
                 }));
 
                 if (qResponse.Status != null)
@@ -1252,7 +1354,8 @@ namespace Phytel.API.AppDomain.NG
         #endregion
 
         #region Contact
-        public Contact GetContactByPatientId(GetContactRequest request)
+        
+        public Contact GetContactByPatientId(GetContactByPatientIdRequest request)
         {
             Contact contact = null;
             try
@@ -1270,108 +1373,16 @@ namespace Phytel.API.AppDomain.NG
                     dataDomainResponse =
                         client.Get<GetContactByPatientIdDataResponse>(url);
 
-                if (dataDomainResponse != null)
+                if (dataDomainResponse != null && dataDomainResponse.Contact != null)
                 {
-                    if (dataDomainResponse.Contact == null)
-                    {
-                        // Insert a new contact for that patient
-                        contact = insertContactForPatient("NG", request.Version, request.ContractNumber, request.PatientID, request.UserId);
-                    }
-                    else
-                    {
-                        ContactData cd = dataDomainResponse.Contact;
-                        contact = new Contact
-                        {
-                            Id = cd.Id,
-                            PatientId = cd.PatientId,
-                            UserId = cd.UserId,
-                            FirstName = cd.FirstName,
-                            MiddleName = cd.MiddleName,
-                            LastName = cd.LastName,
-                            PreferredName = cd.PreferredName,
-                            Gender = cd.Gender,
-                            TimeZoneId = cd.TimeZoneId,
-                            WeekDays = cd.WeekDays,
-                            TimesOfDaysId = cd.TimesOfDaysId
-                        };
+                    var mappedData = Mapper.Map<Contact>(dataDomainResponse.Contact);
+                    if (!string.IsNullOrEmpty(mappedData.PatientId))
+                        mappedData.IsPatient = true;
 
-                        //Modes
-                        List<CommModeData> commModeData = cd.Modes;
-                        if (commModeData != null && commModeData.Count > 0)
-                        {
-                            List<CommMode> modes = new List<CommMode>();
-                            foreach (CommModeData cm in commModeData)
-                            {
-                                CommMode commMode = new CommMode { LookUpModeId = cm.ModeId, OptOut = cm.OptOut, Preferred = cm.Preferred };
-                                modes.Add(commMode);
-                            }
-                            contact.Modes = modes;
-                        }
-
-                        //Phones
-                        List<PhoneData> phoneData = cd.Phones;
-                        if (phoneData != null && phoneData.Count > 0)
-                        {
-                            List<Phone> phones = new List<Phone>();
-                            foreach (PhoneData ph in phoneData)
-                            {
-                                Phone phone = new Phone
-                                {
-                                    Id = ph.Id,
-                                    TypeId = ph.TypeId,
-                                    Number = ph.Number,
-                                    ExtNumber = ph.ExtNumber,
-                                    IsText = ph.IsText,
-                                    PhonePreferred = ph.PhonePreferred,
-                                    TextPreferred = ph.TextPreferred,
-                                    OptOut = ph.OptOut,
-                                    DataSource = ph.DataSource,
-                                    ExternalRecordId = ph.ExternalRecordId
-                                };
-                                phones.Add(phone);
-                            }
-                            contact.Phones = phones;
-                        }
-
-                        //Emails
-                        List<EmailData> emailData = cd.Emails;
-                        if (emailData != null && emailData.Count > 0)
-                        {
-                            List<Email> emails = new List<Email>();
-                            foreach (EmailData e in emailData)
-                            {
-                                Email email = new Email { Id = e.Id, Text = e.Text, TypeId = e.TypeId, Preferred = e.Preferred, OptOut = e.OptOut, DataSource = e.DataSource,ExternalRecordId = e.ExternalRecordId};
-                                emails.Add(email);
-                            }
-                            contact.Emails = emails;
-                        }
-
-                        //Address
-                        List<AddressData> addressData = cd.Addresses;
-                        if (addressData != null && addressData.Count > 0)
-                        {
-                            List<Address> addresses = new List<Address>();
-                            foreach (AddressData a in addressData)
-                            {
-                                Address address = new Address { Id = a.Id, Line1 = a.Line1, Line2 = a.Line2, Line3 = a.Line3, City = a.City, StateId = a.StateId, PostalCode = a.PostalCode, TypeId = a.TypeId, Preferred = a.Preferred, OptOut = a.OptOut ,DataSource = a.DataSource,ExternalRecordId = a.ExternalRecordId};
-                                addresses.Add(address);
-                            }
-                            contact.Addresses = addresses;
-                        }
-
-                        //Language
-                        List<Phytel.API.DataDomain.Contact.DTO.LanguageData> languageData = cd.Languages;
-                        if (languageData != null && languageData.Count > 0)
-                        {
-                            List<Language> languages = new List<Language>();
-                            foreach (Phytel.API.DataDomain.Contact.DTO.LanguageData l in languageData)
-                            {
-                                Language language = new Language { LookUpLanguageId = l.LookUpLanguageId, Preferred = l.Preferred };
-                                languages.Add(language);
-                            }
-                            contact.Languages = languages;
-                        }
-                    }
+                    if (!string.IsNullOrEmpty(mappedData.UserId))
+                        mappedData.IsUser = true;
+                        
+                    contact = mappedData;
                 }
             }
             catch (WebServiceException wse)
@@ -1381,82 +1392,28 @@ namespace Phytel.API.AppDomain.NG
             return contact;
         }
 
-        public PutUpdateContactResponse PutUpdateContact(PutUpdateContactRequest request)
+        public UpdateContactResponse PutUpdateContact(DTO.UpdateContactRequest request)
         {
             try
             {
-                List<CommModeData> modesData = null;
-                if (request.Contact.Modes != null)
-                {
-                    List<CommMode> modes = request.Contact.Modes;
-                    modesData = new List<CommModeData>();
-                    foreach (CommMode m in modes)
-                    {
-                        CommModeData cd = new CommModeData { ModeId = m.LookUpModeId, OptOut = m.OptOut, Preferred  = m.Preferred};
-                        modesData.Add(cd);
-                    }
-                }
+                if (request == null)
+                    throw new ArgumentNullException("request");
+                CheckForRequiredFields(request.Contact);
+                CleanContactNames(request.Contact);
+                ContactData cData = Mapper.Map<ContactData>(request.Contact);
+                UpdateContactResponse response = new UpdateContactResponse();
 
-                var phonesData = (request.Contact.Phones != null) ? GetPhonesData(request.Contact.Phones) : null;
-
-                List<EmailData> emailsData = null;
-                if (request.Contact.Emails != null)
-                {
-                    List<Email> emails = request.Contact.Emails;
-                    emailsData = new List<EmailData>();
-                    foreach (Email e in emails)
-                    {
-                        EmailData d = new EmailData {  Id = e.Id, Text = e.Text, TypeId = e.TypeId, OptOut = e.OptOut, Preferred =  e.Preferred, DataSource = e.DataSource, ExternalRecordId = e.ExternalRecordId};
-                        emailsData.Add(d);
-                    }
-                }
-
-                List<AddressData> addressesData = null;
-                if (request.Contact.Addresses != null)
-                {
-                    List<Address> addresses = request.Contact.Addresses;
-                    addressesData = new List<AddressData>();
-                    foreach (Address a in addresses)
-                    {
-                        AddressData d = new AddressData { Id = a.Id, Line1 = a.Line1, Line2 = a.Line2, Line3 = a.Line3, City = a.City, StateId = a.StateId, PostalCode = a.PostalCode, OptOut = a.OptOut, Preferred = a.Preferred, TypeId =  a.TypeId, DataSource = a.DataSource,ExternalRecordId = a.ExternalRecordId};
-                        addressesData.Add(d);
-                    }
-                }
-
-                List<Phytel.API.DataDomain.Contact.DTO.LanguageData> languagesData = null;
-                if (request.Contact.Languages != null)
-                {
-                    List<Language> langs = request.Contact.Languages;
-                    languagesData = new List<Phytel.API.DataDomain.Contact.DTO.LanguageData>();
-                    foreach (Language l in langs)
-                    {
-                        Phytel.API.DataDomain.Contact.DTO.LanguageData d = new Phytel.API.DataDomain.Contact.DTO.LanguageData {  LookUpLanguageId  = l.LookUpLanguageId, Preferred  = l.Preferred};
-                        languagesData.Add(d);
-                    }
-                }
-
-
-                PutUpdateContactResponse response = new PutUpdateContactResponse();
-                // [Route("/{Context}/{Version}/{ContractNumber}/Patient/Contact", "PUT")]
+                //[Route("/{Context}/{Version}/{ContractNumber}/Contacts/{Id}", "PUT")]
                 IRestClient client = new JsonServiceClient();
-                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/patient/contact",
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Contacts/{4}",
                                                                                 DDContactServiceUrl,
                                                                                 "NG",
                                                                                 request.Version,
-                                                                                request.ContractNumber), request.UserId);
-                ContactData cData = new ContactData {
-                    Id = request.Contact.Id,
-                    Modes = modesData,
-                    Phones = phonesData,
-                    Emails = emailsData,
-                    Addresses = addressesData,
-                    WeekDays = request.Contact.WeekDays,
-                    TimesOfDaysId = request.Contact.TimesOfDaysId,
-                    Languages = languagesData,
-                    TimeZoneId = request.Contact.TimeZoneId,
-                };
-                PutUpdateContactDataResponse dataDomainResponse =
-                    client.Put<PutUpdateContactDataResponse>(url, new PutUpdateContactDataRequest
+                                                                                request.ContractNumber,
+                                                                                request.Id), request.UserId);
+               
+                UpdateContactDataResponse dataDomainResponse =
+                    client.Put<UpdateContactDataResponse>(url, new UpdateContactDataRequest
                                                                                 {
                                                                                    ContactData = cData,
                                                                                    Context = "NG",
@@ -1505,6 +1462,13 @@ namespace Phytel.API.AppDomain.NG
                 {
                     response.Status = dataDomainResponse.Status;
                 }
+
+                //Sync Patient 
+                if (!string.IsNullOrEmpty(request.Contact.PatientId))
+                {
+                    SyncPatientByContactData(cData,request.Version, request.ContractNumber, request.UserId);
+                }
+
                 return response;
             }
             catch (WebServiceException wse)
@@ -1512,6 +1476,114 @@ namespace Phytel.API.AppDomain.NG
                 throw new WebServiceException("AD:PutUpdateContact()::" + wse.Message, wse.InnerException);
             }
         }
+
+
+        public InsertContactResponse InsertContact(InsertContactRequest request)
+        {
+            InsertContactResponse insertContactResponse = new InsertContactResponse();
+            try
+            {
+                if(request == null)
+                    throw new ArgumentNullException("request");
+                CheckForRequiredFields(request.Contact);
+                CleanContactNames(request.Contact);
+                var contactData = Mapper.Map<ContactData>(request.Contact);
+
+
+                //Check if Request has a timeZone. ENG-1991 (Remove the Default TimeZone)
+                //if (string.IsNullOrEmpty(contactData.TimeZoneId))
+                //{
+                //    string defaultTimeZone = null;
+                //    var tzDataRequest = new GetTimeZoneDataRequest { ContractNumber = request.ContractNumber, Version = request.Version, Context = "NG", UserId = request.UserId };
+                //    var tz = getDefaultTimeZone(tzDataRequest);
+                //    if (tz != null)
+                //    {
+                //        defaultTimeZone = tz.Id;
+                //    }
+
+                //    contactData.TimeZoneId = defaultTimeZone;
+                //}
+
+                //Check for modes.
+                if (contactData.Modes.IsNullOrEmpty())
+                {
+                    var commModesData = new List<CommModeData>();
+                    var commRequest = new GetAllCommModesRequest { ContractNumber = request.ContractNumber, UserId = request.UserId, Version = request.Version };
+                    List<IdNamePair> modesLookUp = GetAllCommModes(commRequest);
+
+                    if (modesLookUp != null && modesLookUp.Count > 0)
+                    {
+                        foreach (var l in modesLookUp)
+                        {
+                           
+                            commModesData.Add(new CommModeData { ModeId = l.Id, OptOut = false, Preferred = false });
+                        }
+                    }
+
+                    contactData.Modes = commModesData;
+                }
+
+                if (contactData.StatusId == 0)
+                    contactData.StatusId = (int)DataDomain.Contact.DTO.Status.Active;
+
+                if (string.IsNullOrEmpty(contactData.Gender))
+                    contactData.Gender = "N";
+
+                if (contactData.DeceasedId == 0)
+                    contactData.DeceasedId = (int) DataDomain.Contact.DTO.Deceased.No;
+
+
+                InsertContactDataRequest ddRequest = new InsertContactDataRequest()
+                {
+                    ContactData = contactData,
+                    UserId = request.UserId,
+                    ContractNumber = request.ContractNumber,
+                    Context = "NG",
+                    Version = request.Version
+                };
+                IRestClient client = new JsonServiceClient();
+                //[Route("/{Context}/{Version}/{ContractNumber}/Contacts", "POST")]
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Contacts",
+                    DDContactServiceUrl,
+                    "NG",
+                    request.Version,
+                    request.ContractNumber
+                    ), request.UserId);
+
+                InsertContactDataResponse dataDomainResponse = client.Post<InsertContactDataResponse>(url, ddRequest);
+
+                if (dataDomainResponse != null)
+                {
+                    insertContactResponse.Version = dataDomainResponse.Version;
+                    insertContactResponse.Id = dataDomainResponse.Id;
+                    insertContactResponse.Status = dataDomainResponse.Status;
+                }
+            }
+            catch (WebServiceException wse)
+            {
+                throw new WebServiceException("AD:InsertContact()::" + wse.Message, wse.InnerException);
+            }
+            return insertContactResponse;
+        }
+
+        private void CheckForRequiredFields(Contact c)
+        {
+            if (c != null)
+            {
+                if (string.IsNullOrEmpty(c.ContactTypeId))
+                    throw new Exception("The Contact Type Id cannot be null.");
+                else
+                {
+                    if (string.Compare(c.ContactTypeId, Constants.PersonContactTypeId, true) == 0 && (string.IsNullOrEmpty(c.FirstName) || string.IsNullOrEmpty(c.LastName)))
+                        throw new Exception("A contact of Person type cannot have empty First and Last name.");
+                }
+            }
+            else
+            {
+                throw new ArgumentNullException("Contact");    
+            }
+        }
+
 
         public List<PhoneData> GetPhonesData(List<Phone> phonelist)
         {
@@ -1528,47 +1600,7 @@ namespace Phytel.API.AppDomain.NG
             }
         }
 
-        public List<Contact> GetCareManagers(GetAllCareManagersRequest request)
-        {
-            List<Contact> contactList = null;
-            try
-            {
-                IRestClient client = new JsonServiceClient();
-                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Contact/CareManagers",
-                                                       DDContactServiceUrl,
-                                                       "NG",
-                                                       request.Version,
-                                                       request.ContractNumber), request.UserId);
-
-                //[Route("/{Context}/{Version}/{ContractNumber}/Contact/CareManagers", "GET")]
-                GetAllCareManagersDataResponse dataDomainResponse;
-                dataDomainResponse =
-                    client.Get<GetAllCareManagersDataResponse>(url);
-
-                if (dataDomainResponse != null && dataDomainResponse.Contacts != null)
-                {
-                    contactList = new List<Contact>();
-                    List<ContactData> contactDataList = dataDomainResponse.Contacts;
-                    foreach(ContactData cd in contactDataList)
-                    {
-                        contactList.Add(new Contact 
-                        {   
-                            Id = cd.Id,
-                            UserId = cd.UserId,
-                            PreferredName = cd.PreferredName,
-                            FirstName = cd.FirstName,
-                            LastName = cd.LastName
-                        });
-                    }
-                }
-            }
-            catch (WebServiceException wse)
-            {
-                throw new WebServiceException("AD:GetCareManagers()::" + wse.Message, wse.InnerException);
-            }
-            return contactList;
-        }
-
+      
         public GetRecentPatientsResponse GetRecentPatients(GetRecentPatientsRequest request)
         {
             GetRecentPatientsResponse response = null;
@@ -1643,9 +1675,142 @@ namespace Phytel.API.AppDomain.NG
             }
             return response;
         }
+
+        
+
+        public SearchContactsResponse SearchContacts(SearchContactsRequest request)
+        {
+            var response = new SearchContactsResponse();
+           
+            if(request == null)
+                throw new ArgumentNullException("request");
+
+            if (request.ContactTypeIds.IsNullOrEmpty() && request.ContactStatuses.IsNullOrEmpty())
+                throw new Exception("Please provide atleast ContactTypeIds or ContactStatuses to filter");
+
+            try
+            {
+                var normalizedTake = NormalizeTake(request.Take);
+                var normalizeSkip = NormalizeSkip(request.Skip);
+                var contactTypeIds =  request.ContactTypeIds;// == null ? new List<string>()  : BuildContactTypeIds(request.ContactTypes);
+                var contactStatuses = request.ContactStatuses ==null ? null: request.ContactStatuses.Select(s => (DataDomain.Contact.DTO.Status)s).ToList();
+                var contactSubTypeIds = request.ContactSubTypeIds;
+
+                IRestClient client = new JsonServiceClient();
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/SearchContacts",
+                                                                                DDContactServiceUrl,
+                                                                                "NG",
+                                                                                request.Version,
+                                                                                request.ContractNumber), request.UserId);
+
+                var dataDomainResponse =
+                    client.Post<DataDomain.Contact.DTO.SearchContactsDataResponse>(url, new SearchContactsDataRequest
+                    {
+                        Take = normalizedTake,
+                        Skip = normalizeSkip,
+                        ContactSubTypeIds = contactSubTypeIds,
+                        ContactTypeIds = contactTypeIds,
+                        ContactStatuses = contactStatuses,
+                        FirstName =  request.FirstName,
+                        LastName = request.LastName,
+                        FilterType = (DataDomain.Contact.DTO.FilterType)request.FilterType
+                    } as object);
+
+
+                if (dataDomainResponse != null)
+                {
+
+                    response.TotalCount = dataDomainResponse.TotalCount;
+
+                    if (!dataDomainResponse.Contacts.IsNullOrEmpty())
+                    {
+                        response.Contacts = dataDomainResponse.Contacts.Select(Mapper.Map<Contact>).ToList();
+                    }
+                    
+                   
+                }
+
+            }
+            catch (WebServiceException wse)
+            {
+                throw new WebServiceException("AD:SearchContacts()::" + wse.Message, wse.InnerException);
+            }
+            return response;
+
+        }
+
         #endregion
 
+        #region ContactTypeLookUp
+
+        public NG.DTO.GetContactTypeLookupResponse GetContactTypeLookup(NG.DTO.GetContactTypeLookupRequest request)
+        {
+            NG.DTO.GetContactTypeLookupResponse ctResponse = new NG.DTO.GetContactTypeLookupResponse();
+
+            try
+            {
+                //Execute call(s) to ContactTypeLookup Data Domain
+                IRestClient client = new JsonServiceClient();
+                
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/ContactTypeLookUps?grouptype={4}&flattendata=true",
+                                                                                           DDContactServiceUrl,
+                                                                                           "NG",
+                                                                                           request.Version,
+                                                                                           request.ContractNumber,
+                                                                                           request.GroupType), request.UserId);
+
+                GetContactTypeLookUpDataResponse response = client.Get<GetContactTypeLookUpDataResponse>(url);
+
+                if (response != null && response.ContactTypeLookUps != null)
+                {
+                   
+                    var mapData = response.ContactTypeLookUps.Select(Mapper.Map<ContactTypeLookUp>).ToList();
+
+                    ctResponse.ContactTypeLookUps = mapData;
+                }
+                return ctResponse;
+            }
+            catch (WebServiceException wse)
+            {
+                throw new WebServiceException("AD:GetContactTypeLookup()::" + wse.Message, wse.InnerException);
+            }
+        }
+
+
+
+        #endregion ContactTypeLookUp
+
         #region Private methods
+        private void CleanPatientNames(PatientData p)
+        {
+            if (p != null)
+            {
+                if (!string.IsNullOrEmpty(p.FirstName))
+                    p.FirstName = p.FirstName.Trim();
+                if (!string.IsNullOrEmpty(p.LastName))
+                    p.LastName = p.LastName.Trim();
+                if (!string.IsNullOrEmpty(p.PreferredName))
+                    p.PreferredName = p.PreferredName.Trim();
+                if (!string.IsNullOrEmpty(p.MiddleName))
+                    p.MiddleName = p.MiddleName.Trim();
+            }
+        }
+
+        private void CleanContactNames(Contact c)
+        {
+            if (c != null)
+            {
+                if (!string.IsNullOrEmpty(c.FirstName))
+                    c.FirstName = c.FirstName.Trim();
+                if (!string.IsNullOrEmpty(c.LastName))
+                    c.LastName = c.LastName.Trim();
+                if (!string.IsNullOrEmpty(c.PreferredName))
+                    c.PreferredName = c.PreferredName.Trim();
+                if (!string.IsNullOrEmpty(c.MiddleName))
+                    c.MiddleName = c.MiddleName.Trim();
+            }
+        }
+
         private List<Module> getModuleInfo(DD.GetProgramDetailsSummaryResponse resp, IAppDomainRequest request)
         {
             try
@@ -1922,7 +2087,151 @@ namespace Phytel.API.AppDomain.NG
             }
             return response;
         }
+       
+        private int NormalizeTake(int? take)
+        {
+            var normalizedValue = 100;
 
+            if (take > 0)
+                normalizedValue = take.Value;
+
+            return normalizedValue;
+
+        }
+
+        private int NormalizeSkip(int skip)
+        {
+            var normalizedSkip = 0;
+
+            if (skip > 0)
+                 normalizedSkip = skip;
+
+            return normalizedSkip;
+
+        }
+
+        private void SyncContactByPatientData(string contactId,PatientData data, double version, string contractNumber, string userId)
+        {
+            if (data == null)
+                return;
+
+
+            IRestClient client = new JsonServiceClient();
+            var url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Contacts/{4}/Sync",
+                                                                            DDContactServiceUrl,
+                                                                            "NG",
+                                                                            version,
+                                                                            contractNumber,contactId), userId);
+
+            var mappedRequest = Mapper.Map<DataDomain.Contact.DTO.SyncContactInfoData>(data);
+
+            var dataDomainResponse =
+                client.Put<DataDomain.Contact.DTO.SyncContactInfoDataResponse>(url, new SyncContactInfoDataRequest
+                {
+                    ContactInfo =  mappedRequest
+
+                } as object);
+
+        }
+
+        private void SyncPatientByContactData(ContactData data, double version, string contractNumber, string userId)
+        {
+            if (data == null)
+                return;
+
+
+            IRestClient client = new JsonServiceClient();
+            string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patients/{4}/Sync",
+                                                                            DDPatientServiceURL,
+                                                                            "NG",
+                                                                            version,
+                                                                            contractNumber, data.PatientId), userId);
+
+            var mappedRequest = Mapper.Map<DataDomain.Patient.DTO.SyncPatientInfoData>(data);
+
+            var dataDomainResponse =
+                client.Put<DataDomain.Patient.DTO.SyncPatientInfoData>(url, new SyncPatientInfoDataRequest
+                {
+                    PatientInfo = mappedRequest
+
+                } as object);
+
+
+
+
+        }
+
+        private void InsertContactByPatient(Patient patient,string contractNumber, string userId, double version)
+        {
+            // Get the default TimeZone that is set in TimeZone LookUp table. ENG-1991 (Remove the Default TimeZone)
+            //string defaultTimeZone = null;
+            //GetTimeZoneDataRequest tzDataRequest = new GetTimeZoneDataRequest { ContractNumber = contractNumber, Version = version, Context = "NG", UserId = userId };
+            //TimeZonesLookUp tz = getDefaultTimeZone(tzDataRequest);
+            //if (tz != null)
+            //{
+            //    defaultTimeZone = tz.Id;
+            //}
+
+            //Get all the available comm modes in the lookup.
+            //List<CommModeData> commModeData = new List<CommModeData>();
+            List<CommMode> commModes = new List<CommMode>();
+            GetAllCommModesRequest commRequest = new GetAllCommModesRequest { ContractNumber = contractNumber, UserId = userId, Version = version };
+            List<IdNamePair> modesLookUp = GetAllCommModes(commRequest);
+            if (modesLookUp != null && modesLookUp.Count > 0)
+            {
+                foreach (IdNamePair l in modesLookUp)
+                {
+                   // commModeData.Add(new CommModeData { ModeId = l.Id, OptOut = false, Preferred = false });
+                    commModes.Add(new CommMode { LookUpModeId = l.Id, OptOut = false, Preferred = false });
+                }
+            }
+
+            //Insert Contact
+            var insertContactRequest = new InsertContactRequest
+            {
+                Contact = new Contact
+                {
+                    FirstName = patient.FirstName,
+                    LastName = patient.LastName,
+                    MiddleName = patient.MiddleName,
+                    PreferredName = patient.PreferredName,
+                    Suffix = patient.Suffix,
+                    PatientId = patient.Id,
+                    DeceasedId = patient.DeceasedId,
+                    Prefix = patient.Prefix,
+                    Gender = patient.Gender,
+                    StatusId = patient.StatusId,
+                    ContactTypeId = Constants.PersonContactTypeId,
+                    DataSource = patient.DataSource,
+                    //TimeZoneId = defaultTimeZone,
+                    Modes = commModes
+
+                },
+                ContractNumber = contractNumber,
+                UserId = userId,
+                Version = version
+            };
+
+            InsertContact(insertContactRequest);
+        }
+
+        #endregion
+
+        #region Obsolete
+
+        /// <summary>
+        /// DEPRECATED - SHOULD NOT BE USED AFTER CONTACTS REFACTORING
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="version"></param>
+        /// <param name="contractNumber"></param>
+        /// <param name="patientId"></param>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        /// 
+        /// 
+        /// 
+        [Obsolete("Use InsertContactByPatient")]
         private Contact insertContactForPatient(string context, double version, string contractNumber, string patientId, string userId)
         {
 
@@ -1952,27 +2261,24 @@ namespace Phytel.API.AppDomain.NG
                     }
                 }
 
-                // [Route("/{Context}/{Version}/{ContractNumber}/Patient/Contact/{PatientId}", "PUT")]
+                //[Route("/{Context}/{Version}/{ContractNumber}/Contacts", "POST")]
                 IRestClient client = new JsonServiceClient();
-                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/patient/contact/{4}",
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Contacts",
                                                                                 DDContactServiceUrl,
                                                                                 context,
                                                                                 version,
-                                                                                contractNumber,
-                                                                                patientId), userId);
+                                                                                contractNumber), userId);
 
-                ContactData contactData = new ContactData { TimeZoneId = defaultTimeZone, Modes = commModeData, PatientId = patientId };
-                PutContactDataResponse dataDomainResponse =
-                    client.Put<PutContactDataResponse>(url, new PutContactDataRequest
-                                                            {
-                                                                PatientId = patientId,
-                                                                ContactData = contactData,
-                                                                Context = context,
-                                                                ContractNumber = contractNumber,
-                                                                Version = version,
-                                                                UserId = userId
-
-                                                            } as object);
+                ContactData contactData = new ContactData { TimeZoneId = defaultTimeZone, Modes = commModeData, PatientId = patientId, ContactTypeId = Constants.PersonContactTypeId };
+                InsertContactDataResponse dataDomainResponse =
+                    client.Post<InsertContactDataResponse>(url, new InsertContactDataRequest
+                    {
+                        ContactData = contactData,
+                        Context = context,
+                        ContractNumber = contractNumber,
+                        Version = version,
+                        UserId = userId
+                    } as object);
 
                 if (dataDomainResponse != null && !string.IsNullOrEmpty(dataDomainResponse.Id))
                 {
@@ -1989,6 +2295,8 @@ namespace Phytel.API.AppDomain.NG
             }
             return newContact;
         }
+
+
         #endregion
     }
 }

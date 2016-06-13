@@ -32,5 +32,7 @@ namespace Phytel.API.AppDomain.NG.DTO
         public string MaritalStatusId { get; set; }
         public bool Protected { get; set; }
         public int DeceasedId { get; set; }
+        public string Prefix { get; set; }
+        public string ContactId { get; set; }
     }
 }

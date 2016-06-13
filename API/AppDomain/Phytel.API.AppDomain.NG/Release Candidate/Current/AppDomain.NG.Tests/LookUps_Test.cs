@@ -89,7 +89,7 @@ namespace Phytel.API.AppDomain.NG.Test
         public void GetCareManagers()
         {
             // Arrange
-            NGManager ngManager = new NGManager();
+            ContactManager ngManager = new ContactManager();
             GetAllCareManagersRequest request = new GetAllCareManagersRequest
             {
                 ContractNumber = _contractNumber,
@@ -97,7 +97,7 @@ namespace Phytel.API.AppDomain.NG.Test
                 Version = _version,
             };
             // Act
-            List<Contact> response = ngManager.GetCareManagers(request);
+            List<DTO.Contact> response = ngManager.GetCareManagers(request);
 
             //Assert
             Assert.IsTrue(response.Count > 0);

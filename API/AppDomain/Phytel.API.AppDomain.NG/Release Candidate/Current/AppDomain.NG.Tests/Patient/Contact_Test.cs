@@ -104,7 +104,7 @@ namespace Phytel.API.AppDomain.NG.Test.Patient
                 Insert = true
             };
 
-            PutPatientDetailsUpdateResponse response = ngm.PutPatientDetailsUpdate(request);
+            PutPatientDetailsUpdateResponse response = ngm.UpsertPatient(request);
             Assert.IsNotNull(response);
         }
     }

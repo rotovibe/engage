@@ -7,6 +7,7 @@ using Phytel.API.Interface;
 using Phytel.API.Common.CustomObject;
 using Phytel.API.DataDomain.LookUp.DTO;
 using System.Linq;
+using System.Text;
 
 namespace Phytel.API.AppDomain.NG.Medication
 {
@@ -189,6 +190,12 @@ namespace Phytel.API.AppDomain.NG.Medication
                         request.PatientMedSupp.NDCs = EndpointUtil.GetMedicationNDCs(request);
                     } 
                     #endregion
+
+                    string sigCode = CalculateSigCode( request );
+                    if (!string.IsNullOrEmpty(sigCode))
+                    {
+                        request.PatientMedSupp.SigCode = sigCode;
+                    }   
                     PatientMedSuppData data = EndpointUtil.SavePatientMedSupp(request);
                     if (data != null)
                     {
@@ -200,6 +207,126 @@ namespace Phytel.API.AppDomain.NG.Medication
             catch (Exception ex) { throw ex; }
         }
 
+        public string CalculateSigCode(PostPatientMedSuppRequest request)            
+        {
+            DateTime? startDate =  request.PatientMedSupp.StartDate;
+            DateTime? endDate = request.PatientMedSupp.EndDate;
+            string quantity = request.PatientMedSupp.FreqQuantity;
+            string strength =        request.PatientMedSupp.Strength;   
+            string form =            request.PatientMedSupp.Form;
+            string route =           request.PatientMedSupp.Route;
+            string frequencyId =     request.PatientMedSupp.FrequencyId;
+            string patientId =       request.PatientMedSupp.PatientId;
+            string contractNumber =  request.ContractNumber;
+            string token =       request.Token;
+            string userId =      request.UserId;
+            double version = request.Version;
+
+            string sigCode = "";
+            string dateRange = "";
+            if (startDate != null && endDate != null)
+            {
+                startDate = (DateTime)startDate.Value.ToUniversalTime();
+                endDate = (DateTime)endDate.Value.ToUniversalTime();                                
+                TimeSpan ts = endDate.Value - startDate.Value;
+                int days = (int)Math.Round(ts.TotalDays);   // daylight savings adjustments: just round it
+                if (days > 0)
+                {
+                    dateRange = "for " + days.ToString() + (days == 1 ? " day" : " days");
+                }
+            }
+            if (quantity == null) quantity = "";
+            quantity = quantity.Trim();
+            if (strength == null) strength = "";
+            strength = strength.Trim();
+            if (form == null) form = "";
+            form = form.Trim();
+            if (route == null) route = "";
+            route = route.Trim();
+
+            if (string.IsNullOrEmpty(quantity.Trim()) && string.IsNullOrEmpty(strength.Trim()) && string.IsNullOrEmpty(form.Trim())
+                    && string.IsNullOrEmpty(route.Trim()) && string.IsNullOrEmpty(frequencyId) && string.IsNullOrEmpty(dateRange))
+            {
+                sigCode = "-";
+            }
+            else
+            {
+                string howOften = "";
+                if (!string.IsNullOrEmpty(frequencyId))
+                {
+                    //get the frequency name (how often) from frequencyId:
+                   
+
+                    NGManager ngManager = new NGManager();
+                    GetLookUpsRequest getLookupsRequest = new GetLookUpsRequest
+                    {
+                        ContractNumber = contractNumber,
+                        Token = token,
+                        TypeName = "Frequency",
+                        UserId = userId,
+                        Version = version
+                    };
+                    List<IdNamePair> frequencies = ngManager.GetLookUps(getLookupsRequest);
+                    
+                    //GetLookUpDetailsRequest lookupRequest = new GetLookUpDetailsRequest
+                    //{
+                    //    ContractNumber = contractNumber,
+                    //    Token = token,
+                    //    TypeName = "Frequency",
+                    //    UserId = userId,
+                    //    Version = version
+                    //};
+                    //List<LookUpDetails> lookups = ngManager.GetLookUpDetails(lookupRequest); //this has error in the implementation code!
+                    if (frequencies != null && frequencies.Count() > 0)
+                    {
+                        IdNamePair aLookup = frequencies.Where(l => l.Id.Equals(frequencyId)).FirstOrDefault();
+                        if (aLookup != null)
+                        {
+                            howOften = aLookup.Name;
+                        }
+                        else
+                        {
+                            GetPatientMedFrequenciesRequest freqRequest = new GetPatientMedFrequenciesRequest();
+                            freqRequest.PatientId = request.PatientMedSupp.PatientId;
+                            freqRequest.ContractNumber = contractNumber;
+                            freqRequest.UserId = userId;
+                            freqRequest.Token = token;
+                            freqRequest.Version = version;
+                            List<PatientMedFrequency> patientFrequencies = GetPatientMedFrequencies(freqRequest);
+                            if (frequencies != null && (frequencies.Count() > 0))
+                            {
+                                PatientMedFrequency theFrequency = patientFrequencies.Where(f => f.Id.Equals(frequencyId)).FirstOrDefault();
+                                if (theFrequency != null)
+                                {
+                                    howOften = theFrequency.Name;
+                                    howOften = howOften.Trim();
+                                }
+                            }
+                        }
+                    }                    
+                }
+                sigCode = AddSigSubCode(sigCode, quantity);
+                sigCode = AddSigSubCode(sigCode, strength);
+                sigCode = AddSigSubCode(sigCode, form);
+                sigCode = AddSigSubCode(sigCode, route);
+                sigCode = AddSigSubCode(sigCode, howOften);
+                sigCode = AddSigSubCode(sigCode, dateRange);                
+            }
+            return sigCode;
+        }
+
+        private string AddSigSubCode(string sigCode, string subCode)
+        {            
+            if (subCode.Length > 0)
+            {
+                if (sigCode.Length > 0)
+                {
+                    sigCode += " ";
+                }
+                sigCode = sigCode + subCode;
+            }
+            return sigCode;
+        }
 
         public void DeleteMedicationMap(PutDeleteMedMapRequest request)
         {

@@ -77,6 +77,10 @@
     <Reference Include="MongoDB.Driver">
       <HintPath>..\..\..\..\..\packages\mongocsharpdriver.1.9.2\lib\net35\MongoDB.Driver.dll</HintPath>
     </Reference>
+    <Reference Include="Moq, Version=4.2.1510.2205, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\Moq.4.2.1510.2205\lib\net40\Moq.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Phytel.Mongo">
       <HintPath>..\References\Phytel.Mongo.dll</HintPath>
     </Reference>
@@ -127,7 +131,9 @@
     </When>
     <Otherwise>
       <ItemGroup>
-        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework" />
+        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework">
+          <Private>False</Private>
+        </Reference>
       </ItemGroup>
     </Otherwise>
   </Choose>
@@ -135,7 +141,16 @@
     <Compile Include="Allergy\Data_Allergy_Test.cs" />
     <Compile Include="Allergy\Data_PatientAllergy_Test.cs" />
     <Compile Include="AppDomainRequest.cs" />
+    <Compile Include="AutoMapperConfigurationTests.cs" />
     <Compile Include="CareMember_Tests.cs" />
+    <Compile Include="ContactTypeLookupManager_Tests.cs" />
+    <Compile Include="Contact\CareTeam\AssignedToMeCohortRuleTests.cs" />
+    <Compile Include="Contact\CareTeam\AssignedToMePCMCohortRuleTests.cs" />
+    <Compile Include="Contact\CareTeam\CareTeamCommandTest.cs" />
+    <Compile Include="Contact\CareTeam\UnassignedPCMCohortRuleTests.cs" />
+    <Compile Include="Contact\CareTeam\CohortsRulesProcessorTests.cs" />
+    <Compile Include="Contact\ContactManagerTests.cs" />
+    <Compile Include="DereferencePatientFromContactCommandTests.cs" />
     <Compile Include="Factories\NGManagerFactory.cs" />
     <Compile Include="Factories\SampleFactory.cs" />
     <Compile Include="Factories\SecurityManagerFactory.cs" />
@@ -143,6 +158,7 @@
     <Compile Include="Medication\Data_MedicationMap_Test.cs" />
     <Compile Include="Medication\Data_PatientMedication_Test.cs" />
     <Compile Include="MongoDB\Repository\MongoPatientGoalRepositoryTests.cs" />
+    <Compile Include="NGManager_SearchContactsTests.cs" />
     <Compile Include="NGService_Tests.cs" />
     <Compile Include="NGUtils_Test.cs" />
     <Compile Include="Notes\NotesManagerTests.cs" />

@@ -1,5 +1,6 @@
 ﻿using Phytel.API.AppDomain.NG.DTO;
 using Phytel.API.AppDomain.NG.Programs;
+using Phytel.API.DataDomain.Contact.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -73,7 +74,7 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
             throw new NotImplementedException();
         }
 
-        public DTO.Contact GetContactByPatientId(DTO.GetContactRequest request)
+        public DTO.Contact GetContactByPatientId(DTO.GetContactByPatientIdRequest request)
         {
             throw new NotImplementedException();
         }
@@ -169,7 +170,7 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
             throw new NotImplementedException();
         }
 
-        public DTO.PutPatientDetailsUpdateResponse PutPatientDetailsUpdate(DTO.PutPatientDetailsUpdateRequest request)
+        public DTO.PutPatientDetailsUpdateResponse UpsertPatient(DTO.PutPatientDetailsUpdateRequest request)
         {
             throw new NotImplementedException();
         }
@@ -179,7 +180,7 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
             throw new NotImplementedException();
         }
 
-        public DTO.PutUpdateContactResponse PutUpdateContact(DTO.PutUpdateContactRequest request)
+        public DTO.UpdateContactResponse PutUpdateContact(DTO.UpdateContactRequest request)
         {
             throw new NotImplementedException();
         }
@@ -200,6 +201,16 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
             return response;
         }
 
+
+        public InsertContactResponse InsertContact(InsertContactRequest request)
+        {
+            InsertContactResponse response = new InsertContactResponse()
+            {
+                Id = "56ea228e64e91cf53bbfca66",
+                Version = 1.0
+            };
+            return response;
+        }
 
         public void LogException(Exception ex)
         {
@@ -261,6 +272,79 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
         }
 
         public InsertPatientSystemsResponse SavePatientSystem(InsertPatientSystemsRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+        public GetContactTypeLookupResponse GetContactTypeLookup(GetContactTypeLookupRequest request)
+        {
+            var res = new GetContactTypeLookupResponse();
+
+            if (request.GroupType==0)
+            {
+                var fakeLookups = new List<ContactTypeLookUp>()
+                {
+                    new ContactTypeLookUp
+                    {
+                        Id = "56ea0c2c64e91cf53bbfca5f",
+                        Name = "Doctor",
+                        Role = "Doctor(M.D)",
+                        CreatedOn = DateTime.UtcNow,
+                        Group = (int) ContactLookUpGroupType.ContactType,
+                        
+                        
+                    },
+                    new ContactTypeLookUp
+                    {
+                        Id = "56f310910894eccd367b980e",
+                        Name = "Addiction Medicine",
+                        Role = "Addiction Medicine",
+                        CreatedOn = DateTime.UtcNow,
+                        Group = (int) ContactLookUpGroupType.CareTeam,
+                       
+                    }
+                };
+                res.ContactTypeLookUps = fakeLookups;
+            }
+            else
+            {
+                var fakeLookups = new List<ContactTypeLookUp>()
+                {
+                    new ContactTypeLookUp
+                    {
+                        Id = "56ea0c2c64e91cf53bbfca5f",
+                        Name = "Doctor",
+                        Role = "Doctor(M.D)",
+                        CreatedOn = DateTime.UtcNow,
+                        Group = request.GroupType,
+                        
+                    }
+                };
+                res.ContactTypeLookUps = fakeLookups;
+            }
+                       
+            return res;
+        }
+
+
+        public DTO.Contact GetContactByContactId(GetContactByContactIdRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public SearchContactsResponse SearchContacts(SearchContactsRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public SaveCareTeamResponse SaveCareTeam(SaveCareTeamRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+        public UpdateCareTeamMemberResponse UpdateCareTeamMember(UpdateCareTeamMemberRequest request)
         {
             throw new NotImplementedException();
         }
