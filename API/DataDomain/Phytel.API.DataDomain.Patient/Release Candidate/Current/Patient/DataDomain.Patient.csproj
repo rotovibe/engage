@@ -71,6 +71,12 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\packages\mongocsharpdriver.1.9.2\lib\net35\MongoDB.Driver.dll</HintPath>
     </Reference>
+    <Reference Include="Phytel.API.DataDomain.Cohort.DTO">
+      <HintPath>..\..\..\..\Phytel.API.DataDomain.Cohort\Release Candidate\Current\Cohort.DTO\bin\Debug\Phytel.API.DataDomain.Cohort.DTO.dll</HintPath>
+    </Reference>
+    <Reference Include="Phytel.API.DataDomain.LookUp.DTO">
+      <HintPath>..\..\..\..\Phytel.API.DataDomain.LookUp\Release Candidate\Current\LookUp.DTO\bin\Debug\Phytel.API.DataDomain.LookUp.DTO.dll</HintPath>
+    </Reference>
     <Reference Include="Phytel.Mongo, Version=1.1.0.0, Culture=neutral, PublicKeyToken=2125ac4128f3087b, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\References\Phytel.Mongo.dll</HintPath>
@@ -153,17 +159,9 @@
       <Project>{abe948fb-247e-4955-b3ab-b7c93e10a542}</Project>
       <Name>Phytel.API.Interface</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\Phytel.API.DataDomain.Cohort\Release Candidate\Current\Cohort.DTO\DataDomain.Cohort.DTO.csproj">
-      <Project>{d4489296-17a3-4172-8fdf-db6c0a7ae748}</Project>
-      <Name>DataDomain.Cohort.DTO</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\..\Phytel.API.DataDomain.Contact\Release Candidate\Current\Contact.DTO\DataDomain.Contact.DTO.csproj">
       <Project>{0b6e0ed8-abe5-4a1d-8e10-0ac54f06d9c4}</Project>
       <Name>DataDomain.Contact.DTO</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\Phytel.API.DataDomain.LookUp\Release Candidate\Current\LookUp.DTO\DataDomain.LookUp.DTO.csproj">
-      <Project>{4885fe36-03db-47b7-be7e-33260943a9dc}</Project>
-      <Name>DataDomain.LookUp.DTO</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\..\Phytel.API.DataDomain.PatientSystem\Release Candidate\Current\PatientSystem.DTO\DataDomain.PatientSystem.DTO.csproj">
       <Project>{6033a8ea-a3ef-4182-bfdd-4a9826ecf871}</Project>
@@ -176,6 +174,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

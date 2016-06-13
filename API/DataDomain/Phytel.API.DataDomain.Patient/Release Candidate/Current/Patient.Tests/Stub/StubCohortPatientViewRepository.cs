@@ -135,5 +135,35 @@ namespace Phytel.API.DataDomain.Patient.Test.Stub
                 throw new NotImplementedException();
             }
         }
+
+
+        public bool SyncContact(DTO.SyncPatientInfoDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public bool SyncPatient(DTO.SyncPatientInfoDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public bool AddPCMToPatientCohortView(DTO.AddPCMToCohortPatientViewDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public bool RemovePCMFromCohortPatientView(DTO.RemovePCMFromCohortPatientViewDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public bool AddContactsToCohortPatientView(DTO.AssignContactsToCohortPatientViewDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

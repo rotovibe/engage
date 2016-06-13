@@ -13,6 +13,8 @@ using System.Collections.Generic;
 using System.Linq;
 using MB = MongoDB.Driver.Builders;
 using System.Configuration;
+using ServiceStack.Common;
+using ServiceStack.DataAnnotations;
 
 namespace Phytel.API.DataDomain.Patient
 {
@@ -108,6 +110,7 @@ namespace Phytel.API.DataDomain.Patient
                             PatientID = ObjectId.Parse(cpvData.PatientID),
                             LastName = cpvData.LastName,
                             DeleteFlag = false,
+                            AssignedToContactIds = cpvData.AssignedToContactIds
                         };
                         if (cpvData.SearchFields != null && cpvData.SearchFields.Count > 0)
                         {
@@ -197,11 +200,17 @@ namespace Phytel.API.DataDomain.Patient
                     if (!String.IsNullOrEmpty(cpvd.PatientID)) uv.Add(MB.Update.Set(MECohortPatientView.PatientIDProperty, ObjectId.Parse(cpvd.PatientID)));
                     uv.Add(MB.Update.Set(MECohortPatientView.UpdatedByProperty, ObjectId.Parse(this.UserId)));
                     uv.Add(MB.Update.Set(MECohortPatientView.LastUpdatedOnProperty, DateTime.UtcNow ));
+                   // uv.Add(MB.Update.Set(MECohortPatientView.AssignedToProperty, p.CohortPatientView.AssignedToContactIds.Select(c => BsonValue.Create(c))));
                     
                     if (p.CohortPatientView != null) { uv.Add(MB.Update.SetWrapped<List<SearchField>>(MECohortPatientView.SearchFieldsProperty, sfds)); }
 
                     IMongoUpdate update = MB.Update.Combine(uv);
                     ctx.CohortPatientViews.Collection.Update(q, update);
+                    AuditHelper.LogDataAudit(this.UserId,
+                        MongoCollectionName.CohortPatientView.ToString(),
+                        p.CohortPatientView.Id.ToString(),
+                        Common.DataAuditType.Update,
+                        p.ContractNumber);
                 }
                 resp.CohortPatientViewId = p.CohortPatientView.Id;
                 return resp;
@@ -438,7 +447,8 @@ namespace Phytel.API.DataDomain.Patient
                         {
                             Id = meCPV.Id.ToString(),
                             LastName = meCPV.LastName,
-                            PatientID = meCPV.PatientID.ToString()
+                            PatientID = meCPV.PatientID.ToString(),
+                            AssignedToContactIds = meCPV.AssignedToContactIds
                         };
                     }
                 }
@@ -534,6 +544,163 @@ namespace Phytel.API.DataDomain.Patient
         public PutPatientSystemIdDataResponse UpdatePatientSystem(PutPatientSystemIdDataRequest request)
         {
             throw new NotImplementedException();
+        }
+
+
+        public bool SyncPatient(SyncPatientInfoDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool AddPCMToPatientCohortView(AddPCMToCohortPatientViewDataRequest request)
+        {
+            try
+            {
+                using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
+                {
+                    var q = MB.Query<MECohortPatientView>.EQ(b => b.PatientID, ObjectId.Parse(request.Id));
+
+                    var cohort = ctx.CohortPatientViews.Collection.FindOne(q);
+
+                    if (cohort != null)
+                    {
+                        var fields = cohort.SearchFields;
+                        var PcmField = fields.FirstOrDefault(f => f.FieldName == Constants.PCM);
+
+                        if (PcmField == null)
+                        {
+                            var searchField = new SearchField
+                            {
+                                FieldName = Constants.PCM,
+                                Value = request.ContactIdToAdd,
+                                Active = true
+                            };
+                            if (!request.ActiveCorePcmIsUser)
+                            {
+                                searchField.Value = string.Empty;
+                                searchField.Active = false;
+                            }
+                            fields.Add(searchField);
+
+                        }
+                        else
+                        {                            
+                            PcmField.Value = request.ContactIdToAdd;
+                            PcmField.Active = true;
+                            if (!request.ActiveCorePcmIsUser)
+                            {
+                                PcmField.Value = string.Empty;
+                                PcmField.Active = false;
+                            }
+
+                        }
+
+                        ctx.CohortPatientViews.Collection.Save(cohort);
+
+                        cohort.LastUpdatedOn = DateTime.UtcNow;
+                        cohort.UpdatedBy = ObjectId.Parse(request.UserId);
+                    }
+
+                    AuditHelper.LogDataAudit(this.UserId,
+                                            MongoCollectionName.CohortPatientView.ToString(),
+                                            request.Id.ToString(),
+                                            Common.DataAuditType.Update,
+                                            request.ContractNumber);
+
+                    return true;
+                }
+            }
+            catch (Exception) { throw; }
+        }
+
+        public bool RemovePCMFromCohortPatientView(RemovePCMFromCohortPatientViewDataRequest request)
+        {
+            try
+            {
+                using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
+                {
+                    var q = MB.Query<MECohortPatientView>.EQ(b => b.PatientID, ObjectId.Parse(request.Id));
+
+                    var cohort = ctx.CohortPatientViews.Collection.FindOne(q);
+
+                    if (cohort != null)
+                    {
+                        var fields = cohort.SearchFields;
+                        var PcmField = fields.FirstOrDefault(f => f.FieldName == Constants.PCM);
+
+                        if (PcmField != null)
+                        
+                        {
+                            PcmField.Value = null;
+                            PcmField.Active = true;
+                            ctx.CohortPatientViews.Collection.Save(cohort);
+
+                            AuditHelper.LogDataAudit(this.UserId,
+                                           MongoCollectionName.CohortPatientView.ToString(),
+                                           request.Id.ToString(),
+                                           Common.DataAuditType.Update,
+                                           request.ContractNumber);
+
+                        }
+
+                        AuditHelper.LogDataAudit(this.UserId,
+                                      MongoCollectionName.CohortPatientView.ToString(),
+                                      request.Id.ToString(),
+                                      Common.DataAuditType.Update,
+                                      request.ContractNumber);
+
+                        cohort.LastUpdatedOn = DateTime.UtcNow;
+                        cohort.UpdatedBy = ObjectId.Parse(request.UserId);
+
+                     
+
+                    }
+
+                   
+
+                    return true;
+                }
+            }
+            catch (Exception) { throw; }
+        }
+
+        public bool AddContactsToCohortPatientView(AssignContactsToCohortPatientViewDataRequest request)
+        {
+            try
+            {
+                using (var ctx = new PatientMongoContext(_dbName))
+                {
+                    var q = MB.Query<MECohortPatientView>.EQ(b => b.PatientID, ObjectId.Parse(request.Id));
+
+                    var cohort = ctx.CohortPatientViews.Collection.FindOne(q);
+
+                    if (cohort != null)
+                    {
+                      var contactsToAssign = new List<string>();
+
+                        if (request.ContactIdsToAssign != null)
+                            contactsToAssign = request.ContactIdsToAssign;
+
+                        cohort.AssignedToContactIds = contactsToAssign;
+                        cohort.LastUpdatedOn = DateTime.UtcNow;
+                        cohort.UpdatedBy = ObjectId.Parse(request.UserId);
+
+                        //Update the Cohort.
+                        ctx.CohortPatientViews.Collection.Save(cohort);
+
+                        AuditHelper.LogDataAudit(this.UserId,
+                                       MongoCollectionName.CohortPatientView.ToString(),
+                                       request.Id.ToString(),
+                                       Common.DataAuditType.Update,
+                                       request.ContractNumber);
+                    }
+
+
+
+                    return true;
+                }
+            }
+            catch (Exception) { throw; }
         }
     }
 }

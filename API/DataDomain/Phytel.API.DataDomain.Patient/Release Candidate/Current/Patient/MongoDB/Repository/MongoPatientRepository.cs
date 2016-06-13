@@ -99,7 +99,8 @@ namespace Phytel.API.DataDomain.Patient
                             Protected = pd.Protected,
                             Deceased = (Deceased)pd.DeceasedId,
                             LastUpdatedOn = pd.LastUpdatedOn,
-                            ExternalRecordId = pd.ExternalRecordId
+                            ExternalRecordId = pd.ExternalRecordId,
+                            Prefix = pd.Prefix
                         };
                         if(!string.IsNullOrEmpty(pd.ReasonId))
                         {
@@ -200,6 +201,7 @@ namespace Phytel.API.DataDomain.Patient
                             LastFourSSN = pd.LastFourSSN,
                             LastUpdatedOn = pd.LastUpdatedOn,
                             ExternalRecordId = pd.ExternalRecordId,
+                            Prefix = pd.Prefix
                         };
                         if (!string.IsNullOrEmpty(pd.ReasonId))
                         {
@@ -316,7 +318,8 @@ namespace Phytel.API.DataDomain.Patient
                         Protected = mePatient.Protected,
                         DeceasedId = (int)mePatient.Deceased,
                         StatusId = (int)mePatient.Status,
-                        ExternalRecordId = mePatient.ExternalRecordId
+                        ExternalRecordId = mePatient.ExternalRecordId,
+                        Prefix = mePatient.Prefix
                     };
                     if (!string.IsNullOrEmpty(userId))
                     {
@@ -468,7 +471,8 @@ namespace Phytel.API.DataDomain.Patient
                                 MaritalStatusId = meP.MaritalStatusId == null ? null : meP.MaritalStatusId.ToString(),
                                 Protected = meP.Protected,
                                 DeceasedId = (int)meP.Deceased,
-                                ExternalRecordId = meP.ExternalRecordId
+                                ExternalRecordId = meP.ExternalRecordId,
+                                Prefix = meP.Prefix
                             };
                             pList.Add(data);
                         }
@@ -637,6 +641,14 @@ namespace Phytel.API.DataDomain.Patient
                             updt.Set(MEPatient.SuffixProperty, request.PatientData.Suffix);
                     }
 
+                    if (request.PatientData.Prefix != null)
+                    {
+                        if (request.PatientData.Prefix == "\"\"" || (request.PatientData.Prefix == "\'\'"))
+                            updt.Set(MEPatient.PrefixProperty, string.Empty);
+                        else
+                            updt.Set(MEPatient.PrefixProperty, Helper.TrimAndLimit(request.PatientData.Prefix, 20));
+                    }
+
                     if (request.PatientData.DataSource != null)
                     {
                         if (request.PatientData.DataSource == "\"\"" || (request.PatientData.DataSource == "\'\'"))
@@ -768,6 +780,12 @@ namespace Phytel.API.DataDomain.Patient
                         cPV.SearchFields.ForEach(s => UpdateProperty(request, s));
                         List<SearchField> sfs = cPV.SearchFields.ToList<SearchField>();
                         ctx.CohortPatientViews.Collection.Update(findQ, MB.Update.SetWrapped<List<SearchField>>(MECohortPatientView.SearchFieldsProperty, sfs).Set(MECohortPatientView.LastNameProperty, request.PatientData.LastName));
+
+                        AuditHelper.LogDataAudit(this.UserId,
+                                                MongoCollectionName.CohortPatientView.ToString(),
+                                                cPV.Id.ToString(),
+                                                DataAuditType.Update,
+                                                request.ContractNumber);
                     }
                 }
 
@@ -999,6 +1017,134 @@ namespace Phytel.API.DataDomain.Patient
             {
                 throw;
             }
+        }
+
+
+        public bool SyncPatient(SyncPatientInfoDataRequest request)
+        {
+            var response = new SyncPatientInfoDataResponse();
+            try
+            {
+                using (var ctx = new PatientMongoContext(_dbName))
+                {
+                    var data = request.PatientInfo;
+                    var queries = new List<IMongoQuery>
+                    {
+                        MB.Query.EQ(MEPatient.IdProperty, ObjectId.Parse(request.PatientId)),
+                        MB.Query.EQ(MEPatient.DeleteFlagProperty, false)
+                    };
+
+                    var query = MB.Query.And(queries);
+                    var mc = ctx.Patients.Collection.Find(query).FirstOrDefault();
+                    if (mc != null)
+                    {
+                        var uv = new List<MB.UpdateBuilder>();
+                        if(string.IsNullOrEmpty(data.FirstName))
+                            uv.Add(MB.Update.Set(MEPatient.FirstNameProperty, BsonNull.Value));
+                        else
+                            uv.Add(MB.Update.Set(MEPatient.FirstNameProperty, data.FirstName));
+                        if(string.IsNullOrEmpty(data.LastName))
+                            uv.Add(MB.Update.Set(MEPatient.LastNameProperty, BsonNull.Value));
+                        else 
+                            uv.Add(MB.Update.Set(MEPatient.LastNameProperty, data.LastName));
+                        if(string.IsNullOrEmpty(data.MiddleName))
+                            uv.Add(MB.Update.Set(MEPatient.MiddleNameProperty, BsonNull.Value));
+                        else 
+                            uv.Add(MB.Update.Set(MEPatient.MiddleNameProperty, data.MiddleName));
+                        if(string.IsNullOrEmpty(data.PreferredName))
+                            uv.Add(MB.Update.Set(MEPatient.PreferredNameProperty, BsonNull.Value));
+                        else 
+                            uv.Add(MB.Update.Set(MEPatient.PreferredNameProperty, data.PreferredName));
+                        if(string.IsNullOrEmpty(data.Gender))
+                            uv.Add(MB.Update.Set(MEPatient.GenderProperty, BsonNull.Value));
+                        else 
+                            uv.Add(MB.Update.Set(MEPatient.GenderProperty, data.Gender));
+                        if(string.IsNullOrEmpty(data.Suffix))
+                            uv.Add(MB.Update.Set(MEPatient.SuffixProperty, BsonNull.Value));
+                        else 
+                            uv.Add(MB.Update.Set(MEPatient.SuffixProperty, data.Suffix));
+                        if(string.IsNullOrEmpty(data.Prefix))
+                            uv.Add(MB.Update.Set(MEPatient.PrefixProperty, BsonNull.Value));
+                        else 
+                            uv.Add(MB.Update.Set(MEPatient.PrefixProperty, data.Prefix));
+                        uv.Add(MB.Update.Set(MEPatient.DeceasedProperty, data.DeceasedId));
+                        //uv.Add(MB.Update.Set(MEPatient.StatusProperty, data.StatusId));
+                        uv.Add(MB.Update.Set(MEPatient.LastUpdatedOnProperty, DateTime.UtcNow));
+                        uv.Add(MB.Update.Set(MEPatient.UpdatedByProperty, ObjectId.Parse(this.UserId)));
+
+
+                        var update = MB.Update.Combine(uv);
+
+                        ctx.Patients.Collection.Update(query, update);
+
+                        AuditHelper.LogDataAudit(this.UserId,
+                                                MongoCollectionName.Patient.ToString(),
+                                                request.PatientId,
+                                                DataAuditType.Update,
+                                                request.ContractNumber);
+
+                        response.IsSuccessful = true;
+
+                        // save to cohortuser collection
+                        var findQ = MB.Query<MECohortPatientView>.EQ(b => b.PatientID, ObjectId.Parse(request.PatientId));
+                        var cPV = ctx.CohortPatientViews.Collection.Find(findQ).FirstOrDefault();
+
+                        var putUpdaterequest = new PutUpdatePatientDataRequest
+                        {
+                            ContractNumber = request.ContractNumber,
+                            Context = request.Context,
+                            PatientData = new PatientData
+                            {
+                                FirstName = request.PatientInfo.FirstName,
+                                LastName = request.PatientInfo.LastName,
+                                MiddleName = request.PatientInfo.MiddleName,
+                                PreferredName = request.PatientInfo.PreferredName,
+                                Gender = request.PatientInfo.Gender,
+                                Suffix = request.PatientInfo.Suffix,
+                                Prefix = request.PatientInfo.Prefix,
+                                Id = request.PatientId,
+                                //StatusId = request.PatientInfo.StatusId,
+                                DeceasedId = request.PatientInfo.DeceasedId
+                            }
+                        };
+
+                        cPV.SearchFields.ForEach(s => UpdateProperty(putUpdaterequest, s));
+                        var sfs = cPV.SearchFields.ToList<SearchField>();
+                        ctx.CohortPatientViews.Collection.Update(findQ, MB.Update.SetWrapped<List<SearchField>>(MECohortPatientView.SearchFieldsProperty, sfs).Set(MECohortPatientView.LastNameProperty, request.PatientInfo.LastName));
+
+                        AuditHelper.LogDataAudit(this.UserId,
+                                                MongoCollectionName.CohortPatientView.ToString(),
+                                                cPV.Id.ToString(),
+                                                DataAuditType.Update,
+                                                request.ContractNumber);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                response.IsSuccessful = false;
+                throw ex;
+            }
+
+            return response.IsSuccessful;
+        }
+
+
+        public bool AddPCMToPatientCohortView(AddPCMToCohortPatientViewDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public bool RemovePCMFromCohortPatientView(RemovePCMFromCohortPatientViewDataRequest request)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public bool AddContactsToCohortPatientView(AssignContactsToCohortPatientViewDataRequest request)
+        {
+            throw new NotImplementedException();
         }
     }
 }
