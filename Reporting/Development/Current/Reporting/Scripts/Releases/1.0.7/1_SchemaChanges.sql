@@ -141,6 +141,7 @@ CREATE TABLE [dbo].[RPT_Flat_Assigned_PCM](
 	[FirstName] [varchar](100) NULL,
 	[LastName] [varchar](100) NULL,
 	[PreferredName] [varchar](100) NULL,
+	[PrimaryCareManagerMongoID] [varchar](50) NULL, 
  CONSTRAINT [PK_RPT_Flat_Assigned_PCM] PRIMARY KEY CLUSTERED 
 (
 	[MongoPatientId] ASC
