@@ -61,8 +61,9 @@ namespace Phytel.API.DataDomain.Contact.ContactTypeLookUp
                 }
 
                 var query = Query.And(queries);
+                var sortBy = new SortByBuilder<MEContactTypeLookup>().Ascending(c => c.Name);
                 var lookUps = ctx.ContactTypeLookUps.Collection.Find(query);
-                dataResponse = lookUps.ToList();
+                dataResponse = lookUps.SetSortOrder(sortBy).ToList();
             }
 
             return dataResponse;
