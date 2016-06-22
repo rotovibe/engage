@@ -288,8 +288,7 @@ BEGIN
 		[MongoCareTeamId],
 		[FirstName],
 		[LastName],
-		[PreferredName],
-		[PrimaryCareManagerMongoID]
+		[PreferredName]
 	)
 	SELECT 
 		(SELECT c.MongoPatientId FROM RPT_Contact c WHERE MongoId = CT.MongoContactIdForPatient) AS MongoPatientId,		
@@ -297,8 +296,7 @@ BEGIN
 		CT.MongoCareTeamId as MongoCareTeamId,
 		C.FirstName,
 		C.LastName,
-		Case When C.PreferredName is Null Then C.FirstName Else C.PreferredName End as PreferredName,
-		CT.MongoCareMemberId as PrimaryCareManagerMongoID
+		Case When C.PreferredName is Null Then C.FirstName Else C.PreferredName End as PreferredName
 	FROM RPT_CareTeam CT 
 		LEFT JOIN RPT_Contact C
 			ON C.MongoId  =  CT.MongoContactIdForCareMember
@@ -361,7 +359,7 @@ Begin
 		,pb.Name
 		,pb.Details
 		,bcl.Name as Category
-		,f.PrimaryCareManagerMongoID AS 'PrimaryCareManagerMongoId'
+		,f.MongoPCMContactId AS 'PrimaryCareManagerMongoId'
 		,Case When f.PreferredName is Null Then f.FirstName Else f.PreferredName End AS 'PrimaryCareManagerPreferredName'
 		--,u.MongoId AS 'PrimaryCareManagerMongoId'
 		--,u.PreferredName AS 'PrimaryCareManagerPreferredName'
@@ -1218,7 +1216,7 @@ Begin
 			, 2
 			, '') as FocusAreas
 		,pg.[Type] as [Type]
-		,f.PrimaryCareManagerMongoID AS 'PrimaryCareManagerMongoId'
+		,f.MongoPCMContactId AS 'PrimaryCareManagerMongoId'
 		,Case When f.PreferredName is Null Then f.FirstName Else f.PreferredName End AS 'PrimaryCareManagerPreferredName'
 	From RPT_PatientGoal as pg with (nolock) 
 		LEFT OUTER JOIN RPT_SourceLookUp as pgl with (nolock) on pg.Source = pgl.MongoId
@@ -1305,7 +1303,7 @@ Begin
 		,icl.Name as CategoryName
 		,pi.TemplateId		
 		,u1.PreferredName as AssignedTo
-		,f.PrimaryCareManagerMongoID AS 'PrimaryCareManagerMongoId'
+		,f.MongoPCMContactId AS 'PrimaryCareManagerMongoId'
 		,Case When f.PreferredName is Null Then f.FirstName Else f.PreferredName End AS 'PrimaryCareManagerPreferredName'
 		,STUFF(
 				(Select
@@ -1377,7 +1375,7 @@ BEGIN
 		obs.EndDate,
 		obs.NumericValue,
 		obs.NonNumericValue
-		,f.PrimaryCareManagerMongoID AS 'PrimaryCareManagerMongoId'
+		,f.MongoPCMContactId AS 'PrimaryCareManagerMongoId'
 		,f.FirstName AS 'PrimaryCareManagerFirstName'
 		,f.LastName AS 'PrimaryCareManagerLastName'
 		,Case When f.PreferredName is Null Then f.FirstName Else f.PreferredName End AS 'PrimaryCareManagerPreferredName'
@@ -1679,7 +1677,7 @@ Begin
 		,pt.[Description]
 		,pt.Details
 		,pt.TemplateId
-		,f.PrimaryCareManagerMongoID AS 'PrimaryCareManagerMongoId'
+		,f.MongoPCMContactId AS 'PrimaryCareManagerMongoId'
 		,Case When f.PreferredName is Null Then f.FirstName Else f.PreferredName End AS 'PrimaryCareManagerPreferredName'
 		,STUFF(
 				(Select
