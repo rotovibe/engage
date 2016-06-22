@@ -104,6 +104,18 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
                                     newmember.RecordCreatedOn = m.RecordCreatedOn;
                                 }
                             }
+
+                            var addingMembers = contactCareTeam.MeCareTeamMembers.Except(oldMembers);
+
+                            foreach (var member in addingMembers)
+                            {
+                                if (member.RecordCreatedBy == ObjectId.Empty)
+                                    member.RecordCreatedBy = ObjectId.Parse(this.UserId);
+
+                                if (member.RecordCreatedOn == DateTime.MinValue || member.RecordCreatedOn == null)
+                                    member.RecordCreatedOn = DateTime.UtcNow;
+                            }
+
                             ctx.CareTeam.Collection.Save(contactCareTeam);
                             //response = contactCareTeam.Id.ToString();
 
@@ -481,7 +493,13 @@ namespace Phytel.API.DataDomain.Contact.CareTeam
                 }
                 else
                 {
-                    //it is an update                   
+                    //it is an update 
+                    if (meMember.RecordCreatedOn == DateTime.MinValue)
+                        meMember.RecordCreatedOn = DateTime.UtcNow;
+
+                    if (meMember.RecordCreatedBy == ObjectId.Empty)
+                        meMember.RecordCreatedBy = ObjectId.Parse(this.UserId);
+
                     meMember.UpdatedBy = ObjectId.Parse(userId);
                     meMember.LastUpdatedOn = DateTime.UtcNow;
                 }
