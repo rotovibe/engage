@@ -287,7 +287,7 @@ define(['services/session', 'services/datacontext', 'viewmodels/patients/index',
 		}
 		
 		function deleteCompleted(){
-			//selectedCareMember(null);
+			selectedCareMember(null);
 		}
 		
 		function activate(){
