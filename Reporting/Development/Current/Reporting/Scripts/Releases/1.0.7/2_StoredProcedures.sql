@@ -1908,7 +1908,7 @@ AS
 		, f.PreferredName as Assigned_PCM
 	, pt.LSSN
 		,(select top 1 [value] from rpt_patientsystem with (nolock)  where mongopatientid = pt.MongoId and [primary] = 'True' and [Delete] = 'False' and TTLDate is null ORDER BY RecordCreatedOn DESC) AS [PrimaryId]
-		,(select rs.displaylabel from rpt_system rs with (nolock)  where rs.[DeleteFlag] = 'False' and rs.TTLDate is null and rs.MongoId in (select top 1 [SysId] from rpt_patientsystem with (nolock)  where mongopatientid = pt.MongoId and [primary] = 'True' and [Delete] = 'False' ORDER BY RecordCreatedOn DESC)) AS [PrimaryIdSystem]
+		,(select top 1 rs.displaylabel from rpt_system rs with (nolock)  where rs.[DeleteFlag] = 'False' and rs.TTLDate is null and rs.MongoId in (select top 1 [SysId] from rpt_patientsystem with (nolock)  where mongopatientid = pt.MongoId and [primary] = 'True' and [Delete] = 'False' ORDER BY RecordCreatedOn DESC)) AS [PrimaryIdSystem]
 		,(select top 1 [value] from RPT_PatientSystem with (nolock)  where [Delete] = 'False' and TTLDate is null and  MongoRecordCreatedBy = '5368ff2ad4332316288f3e3e' and SysId = '559d8453d433232ca04b3131' and MongoPatientId = pt.MongoId) AS [EngageId]					
 	FROM 
 		RPT_Patient pt with (nolock) 
