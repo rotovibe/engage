@@ -296,7 +296,7 @@ BEGIN
 		CT.MongoCareTeamId as MongoCareTeamId,
 		C.FirstName,
 		C.LastName,
-		Case When C.PreferredName is Null Then C.FirstName Else C.PreferredName End as PreferredName
+		Case When (C.PreferredName is Null or Len(C.PreferredName)=0) Then C.FirstName Else C.PreferredName End as PreferredName
 	FROM RPT_CareTeam CT 
 		LEFT JOIN RPT_Contact C
 			ON C.MongoId  =  CT.MongoContactIdForCareMember
