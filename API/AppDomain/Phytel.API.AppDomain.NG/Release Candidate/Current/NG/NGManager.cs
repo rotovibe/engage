@@ -695,7 +695,41 @@ namespace Phytel.API.AppDomain.NG
                 PostPatientToProgramsResponse response = new PostPatientToProgramsResponse();
 
                 // get PCMId from service call.
-                string primaryCM = EndpointUtils.GetPrimaryCareManagerForPatient(request);
+                string primaryCM = null; //EndpointUtils.GetPrimaryCareManagerForPatient(request);
+                
+
+                var contact = GetContactByPatientId(new GetContactByPatientIdRequest
+                {
+                    ContractNumber = request.ContractNumber,
+                    PatientID =  request.PatientId,
+                    UserId = request.UserId,
+                    Token =  request.Token,
+                    Version = request.Version
+                });
+
+                if(contact== null)
+                    throw new ApplicationException(string.Format("No contact exists with PatientId: {0}",request.PatientId));
+
+                var careTeamData = ContactEndpointUtil.GetCareTeam(new GetCareTeamRequest
+                {
+                    ContractNumber = request.ContractNumber,
+                    ContactId = contact.Id,
+                    Token = request.Token,
+                    UserId = request.UserId,
+                    Version = request.Version
+                });
+
+                if (careTeamData != null)
+                {
+                    var mappedCareTeam = Mapper.Map<CareTeam>(careTeamData);
+
+                    var pcm = GetCareTeamActiveCorePCM(mappedCareTeam);
+
+                    if (pcm != null)
+                    {
+                        primaryCM = pcm.ContactId;
+                    }
+                }
 
                 DD.PutProgramToPatientResponse dataDomainResponse = EndpointUtils.AssignPatientToProgram(request, primaryCM);
 
@@ -2213,6 +2247,22 @@ namespace Phytel.API.AppDomain.NG
             };
 
             InsertContact(insertContactRequest);
+        }
+
+        public Member GetCareTeamActiveCorePCM(CareTeam team)
+        {
+            Member res = null;
+
+            if (team.Members.IsNullOrEmpty())
+                return res;
+
+            res = team.Members.FirstOrDefault(c =>
+                    c.StatusId == (int)CareTeamMemberStatus.Active && c.Core == true &&
+                    c.RoleId == Constants.PCMRoleId);
+
+
+            return res;
+
         }
 
         #endregion
