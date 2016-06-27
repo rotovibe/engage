@@ -556,7 +556,12 @@ BEGIN
 		Disenroll_Reason_Other,
 		did_not_enroll_date,
 		did_not_enroll_reason,
-		did_not_enroll_reason_other		
+		did_not_enroll_reason_other,
+		DischargeDate,
+		DischargeFacility,
+		DischargeDiagnosis,
+		Fall_screening_results,
+		Depression_screening_results		
 	)
 --DECLARE @ProgramSourceId varchar(50);
 --SET @ProgramSourceId = '5453f570bdd4dfcef5000330'; 	
@@ -615,6 +620,19 @@ BEGIN
 		,(select Reason FROM dbo.fn_RPT_DidNotEnrollReason(pt.PatientId,ppt.PatientProgramId,@ProgramSourceId, '5453c6c7bdd4dfc94e000012', '542560c3890e942ba2000004')) as [Did_Not_Enroll_Reason] --
 		,(select CASE WHEN LEN(Value) > 0 THEN Value ELSE NULL END 
 			from fn_RPT_GetValue(pt.PatientId, ppt.PatientProgramId, @ProgramSourceId, '5453c6c7bdd4dfc94e000012', '5425611d890e942ba1000001') )as [Did_Not_Enroll_Reason_Other] --
+		,DischargeDate = (select CASE WHEN LEN(Value) > 0 THEN Value ELSE NULL END 
+			from fn_RPT_GetValue(pt.PatientId, ppt.PatientProgramId, @ProgramSourceId, '5453cf73bdd4dfc95100001e', '541a7f5fac80d3319e000003') )
+		
+		,DischargeFacility= (select CASE WHEN LEN(Value) > 0 THEN Value ELSE NULL END 
+			from fn_RPT_GetText_SingleSelect(pt.PatientId, ppt.PatientProgramId, @ProgramSourceId, '5453cf73bdd4dfc95100001e', '541a7f21ac80d3319e000002') )
+		,DischargeDiagnosis = (select CASE WHEN LEN(Value) > 0 THEN Value ELSE NULL END 
+			from fn_RPT_GetText_SingleSelect(pt.PatientId, ppt.PatientProgramId, @ProgramSourceId, '5453cf73bdd4dfc95100001e', '541a7fecac80d3319e000004') )
+		,Fall_screening_results = (select CASE WHEN Value ='Yes' THEN 'Positive' ELSE 'Negative' END 
+			from fn_RPT_GetText_SingleSelect(pt.PatientId, ppt.PatientProgramId, @ProgramSourceId, '542a1b9c890e947441000051', '54265ff6890e942ba100009f') )
+		,Depression_screening_results  = (select CASE WHEN Value >= 3 THEN 'Positive' ELSE 'Negative' END 
+			from fn_RPT_GetText_SingleSelect(pt.PatientId, ppt.PatientProgramId, @ProgramSourceId, '542a1b38890e947441000031', '54265fc0890e942ba100009d') )
+	
+		
 	FROM
 		RPT_Patient as pt with (nolock) 	
 		LEFT OUTER JOIN RPT_Flat_Assigned_PCM f with(nolock) on pt.MongoID=f.MongoPatientID
@@ -724,7 +742,14 @@ BEGIN
 		COPD,
 		Diabetes,
 		Asthma,
-		Comorbid_Disease		
+		Comorbid_Disease,	
+		HeartFailureHighRiskCriteria,
+		COPDHighRiskCriteria,
+		DiabetesHighRiskCriteria,
+		AsthmaHighRiskCriteria,
+		HighRiskDisease,
+		DateofLastFluShot,
+		DateofLastPneumonia				
 	)
 --DECLARE @ProgramSourceId varchar(50);
 --SET @ProgramSourceId = '5465e772bdd4dfb6d80004f7'; 	
@@ -808,7 +833,19 @@ BEGIN
 				).value('.', 'varchar(max)')
 			, 1
 			, 2
-			, '') as CoMorbid_Disease
+			, '') as CoMorbid_Disease,	
+			
+		HeartFailureHighRiskCriteria=Null,
+		COPDHighRiskCriteria=Null,
+		DiabetesHighRiskCriteria=Null,
+		AsthmaHighRiskCriteria=Null,
+		HighRiskDisease=Null,
+		DateofLastFluShot=(select CASE WHEN LEN(Value) > 0 THEN Value ELSE NULL END 
+			from fn_RPT_GetValue(pt.PatientId, ppt.PatientProgramId, @ProgramSourceId,'54526b56ac80d37bc2000451', '544faf0aac80d37bc00002a3')) 
+,
+		DateofLastPneumonia		=(select CASE WHEN LEN(Value) > 0 THEN Value ELSE NULL END 
+			from fn_RPT_GetValue(pt.PatientId, ppt.PatientProgramId, @ProgramSourceId,'54526b56ac80d37bc2000451', '544faf72ac80d37bc20002f8')) 
+
 	FROM
 		RPT_Patient as pt with (nolock) 	
 		LEFT OUTER JOIN RPT_Flat_Assigned_PCM f with(nolock) on pt.MongoID=f.MongoPatientID
@@ -871,7 +908,14 @@ INSERT INTO [RPT_Engage_Enrollment_Info]
 		COPD,
 		Diabetes,
 		Asthma,
-		Comorbid_Disease
+		Comorbid_Disease,	
+		HeartFailureHighRiskCriteria,
+		COPDHighRiskCriteria,
+		DiabetesHighRiskCriteria,
+		AsthmaHighRiskCriteria,
+		HighRiskDisease,
+		DateofLastFluShot,
+		DateofLastPneumonia
 	)
 --DECLARE @ProgramSourceId varchar(50);
 --SET @ProgramSourceId = '54b69910ac80d33c2c000032'; 	
@@ -955,7 +999,19 @@ INSERT INTO [RPT_Engage_Enrollment_Info]
 				).value('.', 'varchar(max)')
 			, 1
 			, 2
-			, '') as CoMorbid_Disease
+			, '') as CoMorbid_Disease,	
+			
+		HeartFailureHighRiskCriteria=Null,
+		COPDHighRiskCriteria=Null,
+		DiabetesHighRiskCriteria=Null,
+		AsthmaHighRiskCriteria=Null,
+		HighRiskDisease=Null,
+		DateofLastFluShot=(select CASE WHEN LEN(Value) > 0 THEN Value ELSE NULL END 
+			from fn_RPT_GetValue(pt.PatientId, ppt.PatientProgramId, @ProgramSourceId,'54526b56ac80d37bc2000451', '544faf0aac80d37bc00002a3')) 
+,
+		DateofLastPneumonia		=(select CASE WHEN LEN(Value) > 0 THEN Value ELSE NULL END 
+			from fn_RPT_GetValue(pt.PatientId, ppt.PatientProgramId, @ProgramSourceId,'54526b56ac80d37bc2000451', '544faf72ac80d37bc20002f8')) 
+
 	FROM
 		RPT_Patient as pt with (nolock) 	
 		LEFT OUTER JOIN RPT_Flat_Assigned_PCM f with(nolock) on pt.MongoID=f.MongoPatientID
@@ -1018,7 +1074,14 @@ INSERT INTO [RPT_Engage_Enrollment_Info]
 		COPD,
 		Diabetes,
 		Asthma,
-		Comorbid_Disease		
+		Comorbid_Disease,	
+		HeartFailureHighRiskCriteria,
+		COPDHighRiskCriteria,
+		DiabetesHighRiskCriteria,
+		AsthmaHighRiskCriteria,
+		HighRiskDisease,
+		DateofLastFluShot,
+		DateofLastPneumonia		
 	)
 --DECLARE @ProgramSourceId varchar(50);
 --SET @ProgramSourceId = '55ca3880ac80d35b8e00053e'; 	
@@ -1105,7 +1168,24 @@ INSERT INTO [RPT_Engage_Enrollment_Info]
 				).value('.', 'varchar(max)')
 			, 1
 			, 2
-			, '') as CoMorbid_Disease	
+			, '') as CoMorbid_Disease		
+,		HeartFailureHighRiskCriteria=(select CASE WHEN LEN(Value) > 0 THEN Value ELSE NULL END 
+			from fn_RPT_GetText_SingleSelect(pt.PatientId, ppt.PatientProgramId, @ProgramSourceId,'55c248aaac80d31c4a000709', '55ad0994ac80d308d20004b8')) 
+,		COPDHighRiskCriteria=(select CASE WHEN LEN(Value) > 0 THEN Value ELSE NULL END 
+			from fn_RPT_GetText_SingleSelect(pt.PatientId, ppt.PatientProgramId, @ProgramSourceId,'55c248aaac80d31c4a000709', '55ad3d26ac80d308d000067b')) 
+,		DiabetesHighRiskCriteria=(select CASE WHEN LEN(Value) > 0 THEN Value ELSE NULL END 
+			from fn_RPT_GetText_SingleSelect(pt.PatientId, ppt.PatientProgramId, @ProgramSourceId,'55c248aaac80d31c4a000709', '55ad40efac80d308d0000698')) 
+,		AsthmaHighRiskCriteria=(select CASE WHEN LEN(Value) > 0 THEN Value ELSE NULL END 
+			from fn_RPT_GetText_SingleSelect(pt.PatientId, ppt.PatientProgramId, @ProgramSourceId,'55c248aaac80d31c4a000709', '55ad4351ac80d308d00006af')) 
+,
+		
+		HighRiskDisease=Null,
+		DateofLastFluShot=(select CASE WHEN LEN(Value) > 0 THEN Value ELSE NULL END 
+			from fn_RPT_GetValue(pt.PatientId, ppt.PatientProgramId, @ProgramSourceId,'55ae6e9dac80d31f10000075', '544faf0aac80d37bc00002a3')) 
+,
+		DateofLastPneumonia		=(select CASE WHEN LEN(Value) > 0 THEN Value ELSE NULL END 
+			from fn_RPT_GetValue(pt.PatientId, ppt.PatientProgramId, @ProgramSourceId,'55ae6e9dac80d31f10000075', '544faf72ac80d37bc20002f8'))
+
 	FROM
 		RPT_Patient as pt with (nolock) 	
 		LEFT OUTER JOIN RPT_Flat_Assigned_PCM f with(nolock) on pt.MongoID=f.MongoPatientID
@@ -1118,6 +1198,16 @@ INSERT INTO [RPT_Engage_Enrollment_Info]
 		pt.[Delete] = 'False' 	
 		AND ppt.SourceId = @ProgramSourceId
 		AND ppt.[Delete] = 'False'
+
+		update [RPT_Engage_Enrollment_Info] 
+Set HighRiskDisease = Case   When HeartFailureHighRiskCriteria = 'Meets high risk criteria (Any unplanned hospitalization in past 12 months)' Then 'Heart Failure'
+							 When COPDHighRiskCriteria = 'Meets high risk criteria (COPD-related hospitalization in past 12 months)' Then 'COPD'
+							 When DiabetesHighRiskCriteria = 'Meets high risk criteria (Any unplanned hospitalization or diabetes-related ER visit in past 12 months)' Then 'Diabetes'
+							 When AsthmaHighRiskCriteria='Meets high risk criteria (Any asthma-related hospitalization or asthma-related ER visit in past 12 months)' Then 'Asthma'
+							 Else Null 
+							 End
+
+from [RPT_Engage_Enrollment_Info] 
 
 END
 
