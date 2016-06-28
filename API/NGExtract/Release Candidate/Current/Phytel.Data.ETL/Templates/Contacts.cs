@@ -372,154 +372,134 @@ namespace Phytel.Data.ETL.Templates
                 }
 
                 Parallel.ForEach(contacts, contact =>
-                //foreach (MEContact contact in contacts.Where(t => !t.DeleteFlag))
                 {
-                    if (contact.PatientId != null) // && !contact.DeleteFlag)
+                    try
                     {
-                        try
+                        econtacts.Add(
+                            new EContact
+                            {
+                                MongoPatientId = contact.PatientId.ToString(),
+                                MongoId = contact.Id.ToString(),
+                                ResourceId = contact.ResourceId,
+                                FirstName = contact.FirstName,
+                                MiddleName = contact.MiddleName,
+                                LastName = contact.LastName,
+                                PreferredName = contact.PreferredName,
+                                Gender = contact.Gender,
+                                Version = Convert.ToInt32(contact.Version),
+                                MongoUpdatedBy = contact.UpdatedBy.ToString(),
+                                LastUpdatedOn = contact.LastUpdatedOn,
+                                MongoRecordCreatedBy = contact.RecordCreatedBy.ToString(),
+                                RecordCreatedOn = contact.RecordCreatedOn,
+                                Delete = contact.DeleteFlag.ToString(),
+                                MongoTimeZone = contact.TimeZoneId.ToString(),
+                                TTLDate = contact.TTLDate
+                            }
+                            );
+
+                        if (contact.Addresses != null)
                         {
-                            econtacts.Add(
-                                new EContact
-                                {
-                                    MongoPatientId = contact.PatientId.ToString(),
-                                    MongoId = contact.Id.ToString(),
-                                    ResourceId = contact.ResourceId,
-                                    FirstName = contact.FirstName,
-                                    MiddleName = contact.MiddleName,
-                                    LastName = contact.LastName,
-                                    PreferredName = contact.PreferredName,
-                                    Gender = contact.Gender,
+                            foreach (var address in contact.Addresses)
+                            {
+                                eAddresses.Add(
+                                    new EAddress
+                                    {
+                                            MongoId = (string.IsNullOrEmpty(address.Id.ToString()) ? string.Empty : address.Id.ToString()),
+                                            MongoCommTypeId = (string.IsNullOrEmpty(address.TypeId.ToString()) ? string.Empty : address.TypeId.ToString()),
+                                        Line1 = (string.IsNullOrEmpty(address.Line1) ? string.Empty : address.Line1),
+                                        Line2 = (string.IsNullOrEmpty(address.Line2) ? string.Empty : address.Line2),
+                                        Line3 = (string.IsNullOrEmpty(address.Line3) ? string.Empty : address.Line3),
+                                        City = (string.IsNullOrEmpty(address.City) ? string.Empty : address.City),
+                                            MongoStateId = (string.IsNullOrEmpty(address.StateId.ToString()) ? string.Empty : address.StateId.ToString()),
+                                        PostalCode = (string.IsNullOrEmpty(address.PostalCode) ? string.Empty : address.PostalCode),
+                                            Preferred =  (string.IsNullOrEmpty(address.Preferred.ToString()) ? string.Empty : address.Preferred.ToString()), 
+                                            OptOut =  (string.IsNullOrEmpty(address.OptOut.ToString()) ? string.Empty : address.OptOut.ToString()),
+                                            Delete = (string.IsNullOrEmpty(address.DeleteFlag.ToString()) ? string.Empty : address.DeleteFlag.ToString()),
+                                            MongoContactId = (string.IsNullOrEmpty(contact.Id.ToString()) ? string.Empty : contact.Id.ToString()),
+                                            Version = Convert.ToInt32(contact.Version),
+                                            MongoUpdatedBy = (string.IsNullOrEmpty(contact.UpdatedBy.ToString()) ? string.Empty : contact.UpdatedBy.ToString()),
+                                            LastUpdatedOn =  contact.LastUpdatedOn, 
+                                            MongoRecordCreatedBy = (string.IsNullOrEmpty(contact.RecordCreatedBy.ToString()) ? string.Empty : contact.RecordCreatedBy.ToString()), 
+                                            RecordCreatedOn = contact.RecordCreatedOn, 
+                                            TTLDate = contact.TTLDate
+                                    }
+                                    );
+                            }
+                        }
+
+
+                        if (contact.Emails != null)
+                        {
+                            foreach (var email in contact.Emails)
+                            {
+                                eEmails.Add(new EEmail{
+                                    MongoId = (string.IsNullOrEmpty(email.Id.ToString()) ? string.Empty : email.Id.ToString()),
+                                    MongoCommTypeId = (string.IsNullOrEmpty(email.TypeId.ToString()) ? string.Empty : email.TypeId.ToString()), 
+                                    Text = (string.IsNullOrEmpty(email.Text) ? string.Empty : email.Text),
+                                        Preferred = (string.IsNullOrEmpty(email.Preferred.ToString()) ? string.Empty : email.Preferred.ToString()),
+                                    OptOut = (string.IsNullOrEmpty(email.OptOut.ToString()) ? string.Empty : email.OptOut.ToString()), 
+                                    Delete = (string.IsNullOrEmpty(email.DeleteFlag.ToString()) ? string.Empty : email.DeleteFlag.ToString()),
+                                    MongoContactId = (string.IsNullOrEmpty(contact.Id.ToString()) ? string.Empty : contact.Id.ToString()),
                                     Version = Convert.ToInt32(contact.Version),
-                                    MongoUpdatedBy = contact.UpdatedBy.ToString(),
+                                    MongoUpdatedBy = (string.IsNullOrEmpty(contact.UpdatedBy.ToString()) ? string.Empty : contact.UpdatedBy.ToString()),
                                     LastUpdatedOn = contact.LastUpdatedOn,
-                                    MongoRecordCreatedBy = contact.RecordCreatedBy.ToString(),
+                                    MongoRecordCreatedBy = (string.IsNullOrEmpty(contact.RecordCreatedBy.ToString()) ? string.Empty : contact.RecordCreatedBy.ToString()),
                                     RecordCreatedOn = contact.RecordCreatedOn,
-                                    Delete = contact.DeleteFlag.ToString(),
-                                    MongoTimeZone = contact.TimeZoneId.ToString(),
+                                    TTLDate = contact.TTLDate 
+                                });
+                            }
+                        }
+
+                        if (contact.Languages != null)
+                        {
+                            foreach (var lang in contact.Languages)
+                            {
+                                eLanguage.Add(new ELanguage{
+                                        MongoLanguageLookUpId = (string.IsNullOrEmpty(lang.LookUpLanguageId.ToString()) ? string.Empty : lang.LookUpLanguageId.ToString()),
+                                    Preferred = (string.IsNullOrEmpty(lang.Preferred.ToString()) ? string.Empty : lang.Preferred.ToString()),
+                                    MongoContactId = (string.IsNullOrEmpty(contact.Id.ToString()) ? string.Empty : contact.Id.ToString()),
+                                        Version = Convert.ToInt32(contact.Version),
+                                    MongoUpdatedBy = (string.IsNullOrEmpty(contact.UpdatedBy.ToString()) ? string.Empty : contact.UpdatedBy.ToString()),
+                                    LastUpdatedOn = contact.LastUpdatedOn,
+                                        MongoRecordCreatedBy = (string.IsNullOrEmpty(contact.RecordCreatedBy.ToString()) ? string.Empty : contact.RecordCreatedBy.ToString()),
+                                    RecordCreatedOn = contact.RecordCreatedOn,
                                     TTLDate = contact.TTLDate
-                                }
-                                );
-
-                            if (contact.Addresses != null)
-                            {
-                                foreach (var address in contact.Addresses)
-                                {
-                                    eAddresses.Add(
-                                        new EAddress
-                                        {
-                                             MongoId = (string.IsNullOrEmpty(address.Id.ToString()) ? string.Empty : address.Id.ToString()),
-                                             MongoCommTypeId = (string.IsNullOrEmpty(address.TypeId.ToString()) ? string.Empty : address.TypeId.ToString()),
-                                            Line1 = (string.IsNullOrEmpty(address.Line1) ? string.Empty : address.Line1),
-                                            Line2 = (string.IsNullOrEmpty(address.Line2) ? string.Empty : address.Line2),
-                                            Line3 = (string.IsNullOrEmpty(address.Line3) ? string.Empty : address.Line3),
-                                            City = (string.IsNullOrEmpty(address.City) ? string.Empty : address.City),
-                                             MongoStateId = (string.IsNullOrEmpty(address.StateId.ToString()) ? string.Empty : address.StateId.ToString()),
-                                            PostalCode = (string.IsNullOrEmpty(address.PostalCode) ? string.Empty : address.PostalCode),
-                                             Preferred =  (string.IsNullOrEmpty(address.Preferred.ToString()) ? string.Empty : address.Preferred.ToString()), 
-                                             OptOut =  (string.IsNullOrEmpty(address.OptOut.ToString()) ? string.Empty : address.OptOut.ToString()),
-                                             Delete = (string.IsNullOrEmpty(address.DeleteFlag.ToString()) ? string.Empty : address.DeleteFlag.ToString()),
-                                             MongoContactId = (string.IsNullOrEmpty(contact.Id.ToString()) ? string.Empty : contact.Id.ToString()),
-                                             Version = Convert.ToInt32(contact.Version),
-                                             MongoUpdatedBy = (string.IsNullOrEmpty(contact.UpdatedBy.ToString()) ? string.Empty : contact.UpdatedBy.ToString()),
-                                             LastUpdatedOn =  contact.LastUpdatedOn, 
-                                             MongoRecordCreatedBy = (string.IsNullOrEmpty(contact.RecordCreatedBy.ToString()) ? string.Empty : contact.RecordCreatedBy.ToString()), 
-                                             RecordCreatedOn = contact.RecordCreatedOn, 
-                                             TTLDate = contact.TTLDate
-                                        }
-                                        );
-                                }
+                                });
                             }
+                        }
 
-
-                            if (contact.Emails != null)
+                        if (contact.Modes != null)
+                        {
+                            foreach (var mode in contact.Modes)
                             {
-                                foreach (var email in contact.Emails)
-                                {
-                                    eEmails.Add(new EEmail{
-                                        MongoId = (string.IsNullOrEmpty(email.Id.ToString()) ? string.Empty : email.Id.ToString()),
-                                        MongoCommTypeId = (string.IsNullOrEmpty(email.TypeId.ToString()) ? string.Empty : email.TypeId.ToString()), 
-                                        Text = (string.IsNullOrEmpty(email.Text) ? string.Empty : email.Text),
-                                            Preferred = (string.IsNullOrEmpty(email.Preferred.ToString()) ? string.Empty : email.Preferred.ToString()),
-                                        OptOut = (string.IsNullOrEmpty(email.OptOut.ToString()) ? string.Empty : email.OptOut.ToString()), 
-                                        Delete = (string.IsNullOrEmpty(email.DeleteFlag.ToString()) ? string.Empty : email.DeleteFlag.ToString()),
-                                        MongoContactId = (string.IsNullOrEmpty(contact.Id.ToString()) ? string.Empty : contact.Id.ToString()),
+                                eMode.Add(new EMode{
+                                        MongoCommModeId = (string.IsNullOrEmpty(mode.ModeId.ToString()) ? string.Empty : mode.ModeId.ToString()),
+                                    Preferred = (string.IsNullOrEmpty(mode.Preferred.ToString()) ? string.Empty : mode.Preferred.ToString()),
+                                    OptOut = (string.IsNullOrEmpty(mode.OptOut.ToString()) ? string.Empty : mode.OptOut.ToString()),
+                                    MongoContactId = (string.IsNullOrEmpty(contact.Id.ToString()) ? string.Empty : contact.Id.ToString()),
                                         Version = Convert.ToInt32(contact.Version),
-                                        MongoUpdatedBy = (string.IsNullOrEmpty(contact.UpdatedBy.ToString()) ? string.Empty : contact.UpdatedBy.ToString()),
-                                        LastUpdatedOn = contact.LastUpdatedOn,
-                                        MongoRecordCreatedBy = (string.IsNullOrEmpty(contact.RecordCreatedBy.ToString()) ? string.Empty : contact.RecordCreatedBy.ToString()),
-                                        RecordCreatedOn = contact.RecordCreatedOn,
-                                        TTLDate = contact.TTLDate 
+                                    MongoUpdatedBy = (string.IsNullOrEmpty(contact.UpdatedBy.ToString()) ? string.Empty : contact.UpdatedBy.ToString()),
+                                    LastUpdatedOn = contact.LastUpdatedOn,
+                                    MongoRecordCreatedBy =  (string.IsNullOrEmpty(contact.RecordCreatedBy.ToString()) ? string.Empty : contact.RecordCreatedBy.ToString()),
+                                    RecordCreatedOn = contact.RecordCreatedOn,
+                                    TTLDate = contact.TTLDate
                                     });
-                                }
                             }
+                        }
 
-                            if (contact.Languages != null)
+                        if (contact.Phones != null)
+                        {
+                            foreach (Phone phone in contact.Phones)
                             {
-                                foreach (var lang in contact.Languages)
-                                {
-                                    eLanguage.Add(new ELanguage{
-                                         MongoLanguageLookUpId = (string.IsNullOrEmpty(lang.LookUpLanguageId.ToString()) ? string.Empty : lang.LookUpLanguageId.ToString()),
-                                        Preferred = (string.IsNullOrEmpty(lang.Preferred.ToString()) ? string.Empty : lang.Preferred.ToString()),
-                                        MongoContactId = (string.IsNullOrEmpty(contact.Id.ToString()) ? string.Empty : contact.Id.ToString()),
-                                         Version = Convert.ToInt32(contact.Version),
-                                        MongoUpdatedBy = (string.IsNullOrEmpty(contact.UpdatedBy.ToString()) ? string.Empty : contact.UpdatedBy.ToString()),
-                                        LastUpdatedOn = contact.LastUpdatedOn,
-                                         MongoRecordCreatedBy = (string.IsNullOrEmpty(contact.RecordCreatedBy.ToString()) ? string.Empty : contact.RecordCreatedBy.ToString()),
-                                        RecordCreatedOn = contact.RecordCreatedOn,
-                                        TTLDate = contact.TTLDate
-                                    });
-                                }
-                            }
-
-                            if (contact.Modes != null)
-                            {
-                                foreach (var mode in contact.Modes)
-                                {
-                                    eMode.Add(new EMode{
-                                         MongoCommModeId = (string.IsNullOrEmpty(mode.ModeId.ToString()) ? string.Empty : mode.ModeId.ToString()),
-                                        Preferred = (string.IsNullOrEmpty(mode.Preferred.ToString()) ? string.Empty : mode.Preferred.ToString()),
-                                        OptOut = (string.IsNullOrEmpty(mode.OptOut.ToString()) ? string.Empty : mode.OptOut.ToString()),
-                                        MongoContactId = (string.IsNullOrEmpty(contact.Id.ToString()) ? string.Empty : contact.Id.ToString()),
-                                         Version = Convert.ToInt32(contact.Version),
-                                        MongoUpdatedBy = (string.IsNullOrEmpty(contact.UpdatedBy.ToString()) ? string.Empty : contact.UpdatedBy.ToString()),
-                                        LastUpdatedOn = contact.LastUpdatedOn,
-                                        MongoRecordCreatedBy =  (string.IsNullOrEmpty(contact.RecordCreatedBy.ToString()) ? string.Empty : contact.RecordCreatedBy.ToString()),
-                                        RecordCreatedOn = contact.RecordCreatedOn,
-                                        TTLDate = contact.TTLDate
-                                        });
-                                }
-                            }
-
-                            if (contact.Phones != null)
-                            {
-                                foreach (Phone phone in contact.Phones)
-                                {
-                                    ePhone.Add(new EPhone{
-                                        MongoId = (string.IsNullOrEmpty(phone.Id.ToString()) ? string.Empty : phone.Id.ToString()),
-                                        MongoCommTypeId = (string.IsNullOrEmpty(phone.TypeId.ToString()) ? string.Empty : phone.TypeId.ToString()), 
-                                        Number = (string.IsNullOrEmpty(phone.Number.ToString()) ? string.Empty : phone.Number.ToString()),
-                                        IsText = (string.IsNullOrEmpty(phone.IsText.ToString()) ? string.Empty : phone.IsText.ToString()),
-                                        PhonePreferred = (string.IsNullOrEmpty(phone.PreferredPhone.ToString()) ? string.Empty : phone.PreferredPhone.ToString()),
-                                        TextPreferred = (string.IsNullOrEmpty(phone.PreferredText.ToString()) ? string.Empty : phone.PreferredText.ToString()), 
-                                        OptOut = (string.IsNullOrEmpty(phone.OptOut.ToString()) ? string.Empty : phone.OptOut.ToString()),
-                                        Delete = (string.IsNullOrEmpty(phone.DeleteFlag.ToString()) ? string.Empty : phone.DeleteFlag.ToString()),
-                                        MongoContactId = (string.IsNullOrEmpty(contact.Id.ToString()) ? string.Empty : contact.Id.ToString()),
-                                        Version = Convert.ToInt32(contact.Version),
-                                        MongoUpdatedBy = (string.IsNullOrEmpty(contact.UpdatedBy.ToString()) ? string.Empty : contact.UpdatedBy.ToString()),
-                                        LastUpdatedOn = contact.LastUpdatedOn,
-                                        MongoRecordCreatedBy = (string.IsNullOrEmpty(contact.RecordCreatedBy.ToString()) ? string.Empty : contact.RecordCreatedBy.ToString()),
-                                        RecordCreatedOn = contact.RecordCreatedOn,
-                                        TTLDate = contact.TTLDate
-                                    });
-                                }
-                            }
-
-                            if (contact.TimesOfDays != null)
-                            {
-                                foreach (var tod in contact.TimesOfDays)
-                                {
-                                    eTimeOfDays.Add(new ETimeOfDay{
-                                    MongoTimeOfDayId = (string.IsNullOrEmpty(tod.ToString()) ? string.Empty : tod.ToString()),
+                                ePhone.Add(new EPhone{
+                                    MongoId = (string.IsNullOrEmpty(phone.Id.ToString()) ? string.Empty : phone.Id.ToString()),
+                                    MongoCommTypeId = (string.IsNullOrEmpty(phone.TypeId.ToString()) ? string.Empty : phone.TypeId.ToString()), 
+                                    Number = (string.IsNullOrEmpty(phone.Number.ToString()) ? string.Empty : phone.Number.ToString()),
+                                    IsText = (string.IsNullOrEmpty(phone.IsText.ToString()) ? string.Empty : phone.IsText.ToString()),
+                                    PhonePreferred = (string.IsNullOrEmpty(phone.PreferredPhone.ToString()) ? string.Empty : phone.PreferredPhone.ToString()),
+                                    TextPreferred = (string.IsNullOrEmpty(phone.PreferredText.ToString()) ? string.Empty : phone.PreferredText.ToString()), 
+                                    OptOut = (string.IsNullOrEmpty(phone.OptOut.ToString()) ? string.Empty : phone.OptOut.ToString()),
+                                    Delete = (string.IsNullOrEmpty(phone.DeleteFlag.ToString()) ? string.Empty : phone.DeleteFlag.ToString()),
                                     MongoContactId = (string.IsNullOrEmpty(contact.Id.ToString()) ? string.Empty : contact.Id.ToString()),
                                     Version = Convert.ToInt32(contact.Version),
                                     MongoUpdatedBy = (string.IsNullOrEmpty(contact.UpdatedBy.ToString()) ? string.Empty : contact.UpdatedBy.ToString()),
@@ -527,51 +507,67 @@ namespace Phytel.Data.ETL.Templates
                                     MongoRecordCreatedBy = (string.IsNullOrEmpty(contact.RecordCreatedBy.ToString()) ? string.Empty : contact.RecordCreatedBy.ToString()),
                                     RecordCreatedOn = contact.RecordCreatedOn,
                                     TTLDate = contact.TTLDate
-                                    });
-                                }
-                            }
-
-                            if (contact.WeekDays != null)
-                            {
-                                foreach (var wd in contact.WeekDays)
-                                {
-                                    eWeekDays.Add(new EWeekDay{
-                                        WeekDay =  wd,
-                                        MongoContactId = (string.IsNullOrEmpty(contact.Id.ToString()) ? string.Empty : contact.Id.ToString()),
-                                        Version = Convert.ToInt32(contact.Version),
-                                        MongoUpdatedBy = (string.IsNullOrEmpty(contact.UpdatedBy.ToString()) ? string.Empty : contact.UpdatedBy.ToString()), 
-                                        LastUpdatedOn =  contact.LastUpdatedOn,
-                                        MongoRecordCreatedBy = (string.IsNullOrEmpty(contact.RecordCreatedBy.ToString()) ? string.Empty : contact.RecordCreatedBy.ToString()),
-                                        RecordCreatedOn = contact.RecordCreatedOn,
-                                        TTLDate = contact.TTLDate
-                                    });
-                                }
-                            }
-
-                            if (contact.RecentList != null)
-                            {
-                                foreach (ObjectId rec in contact.RecentList)
-                                {
-                                    eRecentList.Add(new ERecentList {
-                                        MongoId =  rec.ToString(), 
-                                        MongoContactId = (string.IsNullOrEmpty(contact.Id.ToString()) ? string.Empty : contact.Id.ToString()),
-                                        Version = Convert.ToInt32(contact.Version),
-                                        MongoUpdatedBy = (string.IsNullOrEmpty(contact.UpdatedBy.ToString()) ? string.Empty : contact.UpdatedBy.ToString()),
-                                        LastUpdatedOn = contact.LastUpdatedOn,
-                                        MongoRecordCreatedBy = (string.IsNullOrEmpty(contact.RecordCreatedBy.ToString()) ? string.Empty : contact.RecordCreatedBy.ToString()),
-                                        RecordCreatedOn =  contact.RecordCreatedOn
-                                    });
-                                }
+                                });
                             }
                         }
-                        catch (Exception ex)
+
+                        if (contact.TimesOfDays != null)
                         {
-                            OnDocColEvent(new ETLEventArgs
+                            foreach (var tod in contact.TimesOfDays)
                             {
-                                Message = "[" + Contract + "] " + ex.Message + ": " + ex.StackTrace,
-                                IsError = true
-                            });
+                                eTimeOfDays.Add(new ETimeOfDay{
+                                MongoTimeOfDayId = (string.IsNullOrEmpty(tod.ToString()) ? string.Empty : tod.ToString()),
+                                MongoContactId = (string.IsNullOrEmpty(contact.Id.ToString()) ? string.Empty : contact.Id.ToString()),
+                                Version = Convert.ToInt32(contact.Version),
+                                MongoUpdatedBy = (string.IsNullOrEmpty(contact.UpdatedBy.ToString()) ? string.Empty : contact.UpdatedBy.ToString()),
+                                LastUpdatedOn = contact.LastUpdatedOn,
+                                MongoRecordCreatedBy = (string.IsNullOrEmpty(contact.RecordCreatedBy.ToString()) ? string.Empty : contact.RecordCreatedBy.ToString()),
+                                RecordCreatedOn = contact.RecordCreatedOn,
+                                TTLDate = contact.TTLDate
+                                });
+                            }
                         }
+
+                        if (contact.WeekDays != null)
+                        {
+                            foreach (var wd in contact.WeekDays)
+                            {
+                                eWeekDays.Add(new EWeekDay{
+                                    WeekDay =  wd,
+                                    MongoContactId = (string.IsNullOrEmpty(contact.Id.ToString()) ? string.Empty : contact.Id.ToString()),
+                                    Version = Convert.ToInt32(contact.Version),
+                                    MongoUpdatedBy = (string.IsNullOrEmpty(contact.UpdatedBy.ToString()) ? string.Empty : contact.UpdatedBy.ToString()), 
+                                    LastUpdatedOn =  contact.LastUpdatedOn,
+                                    MongoRecordCreatedBy = (string.IsNullOrEmpty(contact.RecordCreatedBy.ToString()) ? string.Empty : contact.RecordCreatedBy.ToString()),
+                                    RecordCreatedOn = contact.RecordCreatedOn,
+                                    TTLDate = contact.TTLDate
+                                });
+                            }
+                        }
+
+                        if (contact.RecentList != null)
+                        {
+                            foreach (ObjectId rec in contact.RecentList)
+                            {
+                                eRecentList.Add(new ERecentList {
+                                    MongoId =  rec.ToString(), 
+                                    MongoContactId = (string.IsNullOrEmpty(contact.Id.ToString()) ? string.Empty : contact.Id.ToString()),
+                                    Version = Convert.ToInt32(contact.Version),
+                                    MongoUpdatedBy = (string.IsNullOrEmpty(contact.UpdatedBy.ToString()) ? string.Empty : contact.UpdatedBy.ToString()),
+                                    LastUpdatedOn = contact.LastUpdatedOn,
+                                    MongoRecordCreatedBy = (string.IsNullOrEmpty(contact.RecordCreatedBy.ToString()) ? string.Empty : contact.RecordCreatedBy.ToString()),
+                                    RecordCreatedOn =  contact.RecordCreatedOn
+                                });
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        OnDocColEvent(new ETLEventArgs
+                        {
+                            Message = "[" + Contract + "] " + ex.Message + ": " + ex.StackTrace,
+                            IsError = true
+                        });
                     }
                 });
 
