@@ -71,12 +71,27 @@ namespace DataDomain.Medication.Repo
                         EndDate = data.EndDate == null ? (DateTime?)null : data.EndDate,
                         Reason = data.Reason,
                         Notes = data.Notes,
+                        SigCode = data.SigCode,
                         PrescribedBy = data.PrescribedBy,
                         SystemName = data.SystemName,
-                        DeleteFlag = false
+                        DeleteFlag = false,
+                        DataSource = data.DataSource,
+                        ExternalRecordId = data.ExternalRecordId,
+                        OriginalDataSource = data.OriginalDataSource,
+                        Duration = data.Duration,
+                        DurationUnitId = string.IsNullOrEmpty(data.DurationUnitId) ? (ObjectId?)null : ObjectId.Parse(data.DurationUnitId),
+                        OtherDuration = data.OtherDuration,
+                        ReviewId = string.IsNullOrEmpty(data.ReviewId) ? (ObjectId?)null : ObjectId.Parse(data.ReviewId),
+                        RefusalReasonId = string.IsNullOrEmpty(data.RefusalReasonId) ? (ObjectId?)null : ObjectId.Parse(data.RefusalReasonId),
+                        OtherRefusalReason = data.OtherRefusalReason,
+                        OrderedBy = data.OrderedBy,
+                        OrderedDate = data.OrderedDate,
+                        PrescribedDate = data.PrescribedDate,
+                        RxNumber = Helper.TrimAndLimit(data.RxNumber, 50),
+                        RxDate = data.RxDate,
+                        Pharmacy = Helper.TrimAndLimit(data.Pharmacy, 500)
                     };
-
-                    ctx.PatientMedSupps.Collection.Insert(mePMS);
+                   ctx.PatientMedSupps.Collection.Insert(mePMS);
 
                     AuditHelper.LogDataAudit(this.UserId,
                                             MongoCollectionName.PatientMedSupp.ToString(),
@@ -284,6 +299,14 @@ namespace DataDomain.Medication.Repo
                     {
                         uv.Add(MB.Update.Set(MEPatientMedSupp.ReasonProperty, BsonNull.Value));
                     }
+                    if (!string.IsNullOrEmpty(data.SigCode))
+                    {
+                        uv.Add(MB.Update.Set(MEPatientMedSupp.SigProperty, data.SigCode));
+                    }
+                    else
+                    {
+                        uv.Add(MB.Update.Set(MEPatientMedSupp.SigProperty, BsonNull.Value));
+                    }
                     if (!string.IsNullOrEmpty(data.Notes))
                     {
                         uv.Add(MB.Update.Set(MEPatientMedSupp.NotesProperty, data.Notes));
@@ -300,6 +323,74 @@ namespace DataDomain.Medication.Repo
                     {
                         uv.Add(MB.Update.Set(MEPatientMedSupp.PrescribedByProperty, BsonNull.Value));
                     }
+
+                    if (!string.IsNullOrEmpty(data.DataSource))
+                    {
+                        uv.Add(MB.Update.Set(MEPatientMedSupp.DataSourceProperty, data.DataSource));
+                    }
+                    else
+                    {
+                        uv.Add(MB.Update.Set(MEPatientMedSupp.DataSourceProperty, BsonNull.Value));
+                    }
+
+                    if (!string.IsNullOrEmpty(data.ExternalRecordId))
+                    {
+                        uv.Add(MB.Update.Set(MEPatientMedSupp.ExternalRecordIdProperty, data.ExternalRecordId));
+                    }
+                    else
+                    {
+                        uv.Add(MB.Update.Set(MEPatientMedSupp.ExternalRecordIdProperty, BsonNull.Value));
+                    }
+
+                    if (string.IsNullOrEmpty(data.OriginalDataSource))
+                        uv.Add(MB.Update.Set(MEPatientMedSupp.OriginalDataSourceProperty, BsonNull.Value));
+                    else
+                        uv.Add(MB.Update.Set(MEPatientMedSupp.OriginalDataSourceProperty, data.OriginalDataSource));
+                    uv.Add(MB.Update.Set(MEPatientMedSupp.DurationProperty, data.Duration));
+                    if (string.IsNullOrEmpty(data.DurationUnitId))
+                        uv.Add(MB.Update.Set(MEPatientMedSupp.DurationUnitProperty, BsonNull.Value));
+                    else
+                        uv.Add(MB.Update.Set(MEPatientMedSupp.DurationUnitProperty, ObjectId.Parse(data.DurationUnitId)));
+                    if (string.IsNullOrEmpty(data.OtherDuration))
+                        uv.Add(MB.Update.Set(MEPatientMedSupp.OtherDurationProperty, BsonNull.Value));
+                    else
+                        uv.Add(MB.Update.Set(MEPatientMedSupp.OtherDurationProperty, data.OtherDuration));
+                    if (string.IsNullOrEmpty(data.ReviewId))
+                        uv.Add(MB.Update.Set(MEPatientMedSupp.ReviewProperty, BsonNull.Value));
+                    else
+                        uv.Add(MB.Update.Set(MEPatientMedSupp.ReviewProperty, ObjectId.Parse(data.ReviewId)));
+                    if (string.IsNullOrEmpty(data.RefusalReasonId))
+                        uv.Add(MB.Update.Set(MEPatientMedSupp.RefusalReasonProperty, BsonNull.Value));
+                    else
+                        uv.Add(MB.Update.Set(MEPatientMedSupp.RefusalReasonProperty, ObjectId.Parse(data.RefusalReasonId)));
+                    if (string.IsNullOrEmpty(data.OtherRefusalReason))
+                        uv.Add(MB.Update.Set(MEPatientMedSupp.OtherRefusalReasonProperty, BsonNull.Value));
+                    else
+                        uv.Add(MB.Update.Set(MEPatientMedSupp.OtherRefusalReasonProperty, data.OtherRefusalReason));
+                    if (string.IsNullOrEmpty(data.OrderedBy))
+                        uv.Add(MB.Update.Set(MEPatientMedSupp.OrderedByProperty, BsonNull.Value));
+                    else
+                        uv.Add(MB.Update.Set(MEPatientMedSupp.OrderedByProperty, data.OrderedBy));
+                    if (data.OrderedDate == null)
+                        uv.Add(MB.Update.Set(MEPatientMedSupp.OrderedDateProperty, BsonNull.Value));
+                    else
+                        uv.Add(MB.Update.Set(MEPatientMedSupp.OrderedDateProperty, data.OrderedDate));
+                    if (data.PrescribedDate == null)
+                        uv.Add(MB.Update.Set(MEPatientMedSupp.PrescribedDateProperty, BsonNull.Value));
+                    else
+                        uv.Add(MB.Update.Set(MEPatientMedSupp.PrescribedDateProperty, data.PrescribedDate));
+                    if (data.RxDate == null)
+                        uv.Add(MB.Update.Set(MEPatientMedSupp.RxDateProperty, BsonNull.Value));
+                    else
+                        uv.Add(MB.Update.Set(MEPatientMedSupp.RxDateProperty, data.RxDate));
+                    if (string.IsNullOrEmpty(data.Pharmacy))
+                        uv.Add(MB.Update.Set(MEPatientMedSupp.PharmacyProperty, BsonNull.Value));
+                    else
+                        uv.Add(MB.Update.Set(MEPatientMedSupp.PharmacyProperty, Helper.TrimAndLimit(data.Pharmacy, 500)));
+                    if (string.IsNullOrEmpty(data.RxNumber))
+                        uv.Add(MB.Update.Set(MEPatientMedSupp.RxNumberProperty, BsonNull.Value));
+                    else
+                        uv.Add(MB.Update.Set(MEPatientMedSupp.RxNumberProperty, Helper.TrimAndLimit(data.RxNumber, 50)));
                     uv.Add(MB.Update.Set(MEPatientMedSupp.SystemProperty, data.SystemName));
                     uv.Add(MB.Update.Set(MEPatientMedSupp.DeleteFlagProperty, data.DeleteFlag));
                     DataAuditType type;
