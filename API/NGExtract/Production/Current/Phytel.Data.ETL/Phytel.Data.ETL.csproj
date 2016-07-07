@@ -80,12 +80,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BulkCopy\ECareTeam.cs" />
     <Compile Include="BulkCopy\EPatient.cs" />
+    <Compile Include="BulkCopy\ECareTeamFrequency.cs" />
     <Compile Include="BulkCopy\EPatientNoteType.cs" />
     <Compile Include="BulkCopy\EPatientMedicationFrequency.cs" />
     <Compile Include="BulkCopy\EMedicationFrequency.cs" />
     <Compile Include="BulkCopy\EMedicationMap.cs" />
     <Compile Include="BulkCopy\EPatientSystem.cs" />
+    <Compile Include="BulkCopy\EContactTypeLookUp.cs" />
     <Compile Include="BulkCopy\EPatientUtilization.cs" />
     <Compile Include="BulkCopy\EPatientUtilizationProgram.cs" />
     <Compile Include="BulkCopy\EPharmClass.cs" />
@@ -119,7 +122,10 @@
     <Compile Include="SavePatientProgram.cs" />
     <Compile Include="SpawnElementHash.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Templates\CareTeamFrequency.cs" />
     <Compile Include="Templates\Contacts.cs" />
+    <Compile Include="Templates\CareTeam.cs" />
+    <Compile Include="Templates\ContactTypeLookUp.cs" />
     <Compile Include="Templates\DocumentCollection.cs" />
     <Compile Include="Templates\PatientInfo.cs" />
     <Compile Include="Templates\PatientUtilization.cs" />

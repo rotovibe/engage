@@ -64,6 +64,8 @@ namespace Phytel.Data.ETL
         private User Users;
         private Medications Meds;
         private MedicationMap MedMap;
+        private ContactTypeLookUp contactTypeLookUp;
+        private CareTeam careTeam;
         private Templates.System System;
         private Templates.PatientUtilization PatientUtilization;
 
@@ -121,6 +123,12 @@ namespace Phytel.Data.ETL
             MedMap = new MedicationMap { Contract = _contract, ConnectionString = connString };
             MedMap.DocColEvent += Collections_DocColEvent;
 
+            contactTypeLookUp = new ContactTypeLookUp { Contract = _contract, ConnectionString = connString };
+            contactTypeLookUp.DocColEvent += Collections_DocColEvent;
+
+            careTeam = new CareTeam { Contract = _contract, ConnectionString = connString };
+            careTeam.DocColEvent += Collections_DocColEvent;
+
             System = new Templates.System { Contract = _contract, ConnectionString = connString };
             System.DocColEvent += Collections_DocColEvent;
 
@@ -148,9 +156,12 @@ namespace Phytel.Data.ETL
                 PatientNote.Export();
                 PatientUtilization.Export();
                 LoadPatientObservations(_contract);
-                Contact.Export();
 
-                LoadCareMembers(_contract);
+                Contact.Export();
+                contactTypeLookUp.Export();
+                careTeam.Export();
+
+                //LoadCareMembers(_contract); // Commenting this out as it is replaced by CareTeam
                 LoadPatientUsers(_contract);
 
                 LoadPatientGoals(_contract);
@@ -707,6 +718,53 @@ namespace Phytel.Data.ETL
                 {
                     throw;
                 }
+                try
+                {
+                    if (BsonClassMap.IsClassMapRegistered(typeof(MedicationReview)) == false)
+                    {
+                        BsonClassMap.RegisterClassMap<MedicationReview>();
+                    }
+                }
+                catch
+                {
+                    throw;
+                }
+
+                try
+                {
+                    if (BsonClassMap.IsClassMapRegistered(typeof(Phytel.API.DataDomain.LookUp.DTO.CareTeamFrequency)) == false)
+                    {
+                        BsonClassMap.RegisterClassMap<Phytel.API.DataDomain.LookUp.DTO.CareTeamFrequency>();
+                    }
+                }
+                catch
+                {
+                    throw;
+                }
+
+
+                try
+                {
+                    if (BsonClassMap.IsClassMapRegistered(typeof(Phytel.API.DataDomain.LookUp.DTO.DurationUnit)) == false)
+                    {
+                        BsonClassMap.RegisterClassMap<Phytel.API.DataDomain.LookUp.DTO.DurationUnit>();
+                    }
+                }
+                catch
+                {
+                    throw;
+                }
+                try
+                {
+                    if (BsonClassMap.IsClassMapRegistered(typeof(Phytel.API.DataDomain.LookUp.DTO.RefusalReason)) == false)
+                    {
+                        BsonClassMap.RegisterClassMap<Phytel.API.DataDomain.LookUp.DTO.RefusalReason>();
+                    }
+                }
+                catch
+                {
+                    throw;
+                }
 
                 #endregion
             }
@@ -716,55 +774,56 @@ namespace Phytel.Data.ETL
             }
         }
 
-        private void LoadCareMembers(string ctr)
-        {
-            try
-            {
-                OnEtlEvent(new ETLEventArgs { Message = "[" + _contract + "] Loading care members.", IsError = false });
+        /// Deprecated - CareMembers is replaced by CareTeam now.
+        //private void LoadCareMembers(string ctr)
+        //{
+        //    try
+        //    {
+        //        OnEtlEvent(new ETLEventArgs { Message = "[" + _contract + "] Loading care members.", IsError = false });
 
-                ConcurrentBag<MECareMember> members;
-                using (CareMemberMongoContext cmctx = new CareMemberMongoContext(ctr))
-                {
-                    members = new ConcurrentBag<MECareMember>(cmctx.CareMembers.Collection.FindAllAs<MECareMember>().ToList());
-                }
+        //        ConcurrentBag<MECareMember> members;
+        //        using (CareMemberMongoContext cmctx = new CareMemberMongoContext(ctr))
+        //        {
+        //            members = new ConcurrentBag<MECareMember>(cmctx.CareMembers.Collection.FindAllAs<MECareMember>().ToList());
+        //        }
 
-                Parallel.ForEach(members, mem =>
-                //foreach (MECareMember mem in members)//.Where(t => !t.DeleteFlag))
-                {
-                    try
-                    {
-                        ParameterCollection parms = new ParameterCollection();
-                        parms.Add(new Parameter("@MongoID", (string.IsNullOrEmpty(mem.Id.ToString()) ? string.Empty : mem.Id.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                        parms.Add(new Parameter("@PatientMongoId", (string.IsNullOrEmpty(mem.PatientId.ToString()) ? string.Empty : mem.PatientId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                        parms.Add(new Parameter("@ContactMongoId", (string.IsNullOrEmpty(mem.ContactId.ToString()) ? string.Empty : mem.ContactId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                        parms.Add(new Parameter("@TypeMongoId", (string.IsNullOrEmpty(mem.TypeId.ToString()) ? string.Empty : mem.TypeId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                        parms.Add(new Parameter("@Primary", (string.IsNullOrEmpty(mem.Primary.ToString()) ? string.Empty : mem.Primary.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                        parms.Add(new Parameter("@UpdatedBy", (string.IsNullOrEmpty(mem.UpdatedBy.ToString()) ? string.Empty : mem.UpdatedBy.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                        parms.Add(new Parameter("@LastUpdatedOn", mem.LastUpdatedOn ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
-                        parms.Add(new Parameter("@RecordCreatedBy", (string.IsNullOrEmpty(mem.RecordCreatedBy.ToString()) ? string.Empty : mem.RecordCreatedBy.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                        parms.Add(new Parameter("@RecordCreatedOn", mem.RecordCreatedOn, SqlDbType.DateTime, ParameterDirection.Input, 50));
-                        parms.Add(new Parameter("@Version", mem.Version, SqlDbType.Float, ParameterDirection.Input, 8));
-                        parms.Add(new Parameter("@Delete", (string.IsNullOrEmpty(mem.DeleteFlag.ToString()) ? string.Empty : mem.DeleteFlag.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
-                        parms.Add(new Parameter("@TimeToLive", mem.TTLDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+        //        Parallel.ForEach(members, mem =>
+        //        //foreach (MECareMember mem in members)//.Where(t => !t.DeleteFlag))
+        //        {
+        //            try
+        //            {
+        //                ParameterCollection parms = new ParameterCollection();
+        //                parms.Add(new Parameter("@MongoID", (string.IsNullOrEmpty(mem.Id.ToString()) ? string.Empty : mem.Id.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
+        //                parms.Add(new Parameter("@PatientMongoId", (string.IsNullOrEmpty(mem.PatientId.ToString()) ? string.Empty : mem.PatientId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
+        //                parms.Add(new Parameter("@ContactMongoId", (string.IsNullOrEmpty(mem.ContactId.ToString()) ? string.Empty : mem.ContactId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
+        //                parms.Add(new Parameter("@TypeMongoId", (string.IsNullOrEmpty(mem.TypeId.ToString()) ? string.Empty : mem.TypeId.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
+        //                parms.Add(new Parameter("@Primary", (string.IsNullOrEmpty(mem.Primary.ToString()) ? string.Empty : mem.Primary.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
+        //                parms.Add(new Parameter("@UpdatedBy", (string.IsNullOrEmpty(mem.UpdatedBy.ToString()) ? string.Empty : mem.UpdatedBy.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
+        //                parms.Add(new Parameter("@LastUpdatedOn", mem.LastUpdatedOn ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
+        //                parms.Add(new Parameter("@RecordCreatedBy", (string.IsNullOrEmpty(mem.RecordCreatedBy.ToString()) ? string.Empty : mem.RecordCreatedBy.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
+        //                parms.Add(new Parameter("@RecordCreatedOn", mem.RecordCreatedOn, SqlDbType.DateTime, ParameterDirection.Input, 50));
+        //                parms.Add(new Parameter("@Version", mem.Version, SqlDbType.Float, ParameterDirection.Input, 8));
+        //                parms.Add(new Parameter("@Delete", (string.IsNullOrEmpty(mem.DeleteFlag.ToString()) ? string.Empty : mem.DeleteFlag.ToString()), SqlDbType.VarChar, ParameterDirection.Input, 50));
+        //                parms.Add(new Parameter("@TimeToLive", mem.TTLDate ?? (object)DBNull.Value, SqlDbType.DateTime, ParameterDirection.Input, 50));
 
-                        if (mem.ExtraElements != null)
-                            parms.Add(new Parameter("@ExtraElements", mem.ExtraElements.ToString(), SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
-                        else
-                            parms.Add(new Parameter("@ExtraElements", string.Empty, SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
+        //                if (mem.ExtraElements != null)
+        //                    parms.Add(new Parameter("@ExtraElements", mem.ExtraElements.ToString(), SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
+        //                else
+        //                    parms.Add(new Parameter("@ExtraElements", string.Empty, SqlDbType.VarChar, ParameterDirection.Input, int.MaxValue));
 
-                        SQLDataService.Instance.ExecuteScalar(_contract, true, "REPORT", "spPhy_RPT_SaveCareMember", parms);
-                    }
-                    catch (Exception ex)
-                    {
-                        OnEtlEvent(new ETLEventArgs { Message = "[" + _contract + "] " + ex.Message + ": " + ex.StackTrace, IsError = true });
-                    }
-                });
-            }
-            catch (Exception ex)
-            {
-                OnEtlEvent(new ETLEventArgs { Message = "[" + _contract + "] LoadCareMembers():Error" });
-            }
-        }
+        //                SQLDataService.Instance.ExecuteScalar(_contract, true, "REPORT", "spPhy_RPT_SaveCareMember", parms);
+        //            }
+        //            catch (Exception ex)
+        //            {
+        //                OnEtlEvent(new ETLEventArgs { Message = "[" + _contract + "] " + ex.Message + ": " + ex.StackTrace, IsError = true });
+        //            }
+        //        });
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        OnEtlEvent(new ETLEventArgs { Message = "[" + _contract + "] LoadCareMembers():Error" });
+        //    }
+        //}
 
         private void LoadGoalAttributes(string ctr)
         {
@@ -967,6 +1026,12 @@ namespace Phytel.Data.ETL
                             case LookUpType.UtilizationSource:
                                 LoadLookUp(lookup, "spPhy_RPT_SaveUtilizationSourceLookUp");
                                 break;
+                            case LookUpType.CareTeamFrequency:
+                                {
+                                    var careTeamFrequency = new Templates.CareTeamFrequency { Contract = ctr, LookUp = lookup, ConnectionString = connString };
+                                    careTeamFrequency.Export();
+                                    break;
+                                }
                             default:
                                 break;
                         }
@@ -1819,7 +1884,7 @@ namespace Phytel.Data.ETL
                         bcc.ColumnMappings.Add("NonNumericValue", "NonNumericValue");
                         bcc.ColumnMappings.Add("Source", "Source");
                         bcc.ColumnMappings.Add("State", "State");
-                      //  bcc.ColumnMappings.Add("Type", "Type");
+                        //  bcc.ColumnMappings.Add("Type", "Type");
                         bcc.ColumnMappings.Add("Units", "Units");
                         bcc.ColumnMappings.Add("AdministeredBy", "AdministeredBy");
                         bcc.ColumnMappings.Add("MongoUpdatedBy", "MongoUpdatedBy");
