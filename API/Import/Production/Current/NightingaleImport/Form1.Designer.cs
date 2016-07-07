@@ -42,7 +42,7 @@
             this.colGender = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colDOB = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colSystemID = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.colSystemName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colBackground = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colTimeZone = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colPhone1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colPhone1Preferred = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -83,7 +83,8 @@
             this.label3 = new System.Windows.Forms.Label();
             this.txtSQLConn = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
-            this.colProgramName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colSystemName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colPrimarySystem = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.SuspendLayout();
             // 
             // openFileDialog1
@@ -152,7 +153,7 @@
             this.colGender,
             this.colDOB,
             this.colSystemID,
-            this.colSystemName,
+            this.colBackground,
             this.colTimeZone,
             this.colPhone1,
             this.colPhone1Preferred,
@@ -183,7 +184,8 @@
             this.colAddress2Preferred,
             this.colAddress2Type,
             this.colCareManagerUserID,
-            this.colProgramName});
+            this.colSystemName,
+            this.colPrimarySystem});
             this.listView1.FullRowSelect = true;
             this.listView1.Location = new System.Drawing.Point(33, 67);
             this.listView1.Name = "listView1";
@@ -235,8 +237,8 @@
             // 
             // colSystemName
             // 
-            this.colSystemName.Text = "System Name";
-            this.colSystemName.Width = 81;
+            this.colBackground.Text = "Background";
+            this.colBackground.Width = 81;
             // 
             // colTimeZone
             // 
@@ -464,7 +466,10 @@
             // 
             // colProgramName
             // 
-            this.colProgramName.Text = "Program Name";
+            this.colSystemName.Text = "System Name";
+            // 
+            // 
+            this.colPrimarySystem.Text = "Primary System";
             // 
             // Form1
             // 
@@ -512,7 +517,7 @@
         private System.Windows.Forms.ColumnHeader colDOB;
         private System.Windows.Forms.CheckBox chkSelectAll;
         private System.Windows.Forms.ColumnHeader colSystemID;
-        private System.Windows.Forms.ColumnHeader colSystemName;
+        private System.Windows.Forms.ColumnHeader colBackground;
         private System.Windows.Forms.ColumnHeader colPhone1;
         private System.Windows.Forms.ColumnHeader colPhone1Preferred;
         private System.Windows.Forms.ColumnHeader colPhone1Type;
@@ -552,7 +557,8 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox txtSQLConn;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.ColumnHeader colProgramName;
+        private System.Windows.Forms.ColumnHeader colSystemName;
+        private System.Windows.Forms.ColumnHeader colPrimarySystem;
     }
 }
 

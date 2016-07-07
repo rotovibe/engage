@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("NightingaleImport")]
+[assembly: AssemblyTitle("NGDataImport")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("IBM Corp.")]
@@ -25,7 +25,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("76a1b26c-e6a9-4a13-bbf6-37c9bfa78254")]
+[assembly: Guid("0e124a46-80b5-4b6c-8b1d-83d81f5f0091")]
 
 // Version information for an assembly consists of the following four values:
 //

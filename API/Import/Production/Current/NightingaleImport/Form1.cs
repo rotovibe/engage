@@ -1,11 +1,4 @@
-﻿using Phytel.API.Common.CustomObject;
-using Phytel.API.DataDomain.CareMember.DTO;
-using Phytel.API.DataDomain.Contact.DTO;
-using Phytel.API.DataDomain.LookUp.DTO;
-using Phytel.API.DataDomain.Patient.DTO;
-using Phytel.API.DataDomain.PatientSystem.DTO;
-using Phytel.API.DataDomain.Program.DTO;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration;
@@ -15,9 +8,19 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Runtime.Remoting.Contexts;
 using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Windows.Forms;
+using Phytel.API.Common.CustomObject;
+using Phytel.API.DataDomain.CareMember.DTO;
+using Phytel.API.DataDomain.Contact.DTO;
+using Phytel.API.DataDomain.LookUp.DTO;
+using Phytel.API.DataDomain.Patient.DTO;
+using Phytel.API.DataDomain.PatientSystem.DTO;
+using Microsoft.VisualBasic.FileIO;
+using NGDataImport;
+using Phytel.API.DataDomain.Contact.DTO.CareTeam;
 
 namespace NightingaleImport
 {
@@ -32,8 +35,8 @@ namespace NightingaleImport
         static int colPrefN = 4;
         static int colGen = 5;
         static int colDB = 6;
-        static int colSID = 7;
-        static int colSysN = 8;
+        static int colSysID = 7;
+        static int colBkgrnd = 8;
         static int colTimeZ = 9;
         static int colPh1 = 10;
         static int colPh1Pref = 11;
@@ -64,7 +67,8 @@ namespace NightingaleImport
         static int colAdd2Pref = 36;
         static int colAdd2Type = 37;
         static int colCMan = 38;
-        static int colPrNm = 39;
+        static int colSysNm = 39;
+        static int colSysPrim = 40;
         
         private List<IdNamePair> modesLookUp = new List<IdNamePair>();
         private List<CommTypeData> typesLookUp = new List<CommTypeData>();
@@ -72,16 +76,21 @@ namespace NightingaleImport
         private List<TimeZoneData> zonesLookUp = new List<TimeZoneData>();
         private TimeZoneData zoneDefault = new TimeZoneData();
         private List<IdNamePair> careMemberLookUp = new List<IdNamePair>();
+        private List<SystemData> systemsData = new List<SystemData>();
 
         private double version = double.Parse(ConfigurationManager.AppSettings.Get("version"));
         private string context = ConfigurationManager.AppSettings.Get("context");
 
+        public const string EngageSystemProperty = "Engage";
+        public const string DataSourceProperty = "Import";
+        public const string PCMRoleIdProperty = "56f169f8078e10eb86038514";
         string _headerUserId = "000000000000000000000000";
 
         public Form1()
         {
             InitializeComponent();
             this.listView1.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.listView1_ColumnClick);
+
         }
 
         public void button1_Click(object sender, EventArgs e)
@@ -104,429 +113,473 @@ namespace NightingaleImport
         {
             try
             {
+                Importer import = new Importer(txtURL.Text, context, version, txtContract.Text, _headerUserId);
                 Guid sqlUserId = getUserId(txtContactID.Text);
                 if (sqlUserId != Guid.Empty)
                 {
-                    GetContactByUserIdDataResponse contactUserResp = getContactByUserIdServiceCall(sqlUserId.ToString());
+                    GetContactByUserIdDataResponse contactUserResp = import.GetContactByUserId(sqlUserId.ToString());
 
-                    _headerUserId = contactUserResp.Contact.ContactId;
+                    _headerUserId = contactUserResp.Contact.Id;
                     if (string.IsNullOrEmpty(_headerUserId))
                         throw new Exception("Invalid 'Admin User'");
-
+                    import.HeaderUserId = _headerUserId;
+                    
                     Dictionary<string, string> dictionarySucceed = new Dictionary<string, string>();
                     Dictionary<string, string> dictionaryFail = new Dictionary<string, string>();
 
                     LoadLookUps();
-
-                    //"Care Manager
-                    string contactTypeId = careMemberLookUp.Where(x => x.Name == "Care Manager").FirstOrDefault().Id;
+                    LoadSystems();
 
                     foreach (ListViewItem lvi in listView1.CheckedItems)
                     {
 
+                        PatientData pdata = new PatientData
+                        {
+                            #region Sync up properties in Contact
+                            FirstName = lvi.SubItems[colFirstN].Text.Trim(),
+                            LastName = lvi.SubItems[colLastN].Text.Trim(),
+                            MiddleName = (String.IsNullOrEmpty(lvi.SubItems[colMiddleN].Text)) ? null : lvi.SubItems[colMiddleN].Text.Trim(),
+                            PreferredName = (String.IsNullOrEmpty(lvi.SubItems[colPrefN].Text)) ? null : lvi.SubItems[colPrefN].Text.Trim(),
+                            Gender = lvi.SubItems[colGen].Text.Trim(),
+                            Suffix = (String.IsNullOrEmpty(lvi.SubItems[colSuff].Text)) ? null : lvi.SubItems[colSuff].Text.Trim(),
+                            StatusId = (int)Phytel.API.DataDomain.Patient.DTO.Status.Active, 
+                            #endregion
+                            DOB = lvi.SubItems[colDB].Text.Trim(),
+                            DataSource = EngageSystemProperty,
+                            StatusDataSource = EngageSystemProperty,
+                            Background = (String.IsNullOrEmpty(lvi.SubItems[colBkgrnd].Text)) ? null : lvi.SubItems[colBkgrnd].Text.Trim(),
+
+                        };
                         PutPatientDataRequest patientRequest = new PutPatientDataRequest
                         {
-                            FirstName = lvi.SubItems[colFirstN].Text,
-                            LastName = lvi.SubItems[colLastN].Text,
-                            MiddleName = lvi.SubItems[colMiddleN].Text,
-                            Suffix = lvi.SubItems[colSuff].Text,
-                            PreferredName = lvi.SubItems[colPrefN].Text,
-                            Gender = lvi.SubItems[colGen].Text,
-                            DOB = lvi.SubItems[colDB].Text,
+                            Patient = pdata,
                             Context = context,
                             ContractNumber = txtContract.Text,
                             Version = version
                         };
 
-                        lblStatus.Text = string.Format("Importing '{0} {1}'...", patientRequest.FirstName, patientRequest.LastName);
+                        lblStatus.Text = string.Format("Importing '{0} {1}'...", pdata.FirstName, pdata.LastName);
                         lblStatus.Refresh();
 
-                        PutPatientDataResponse responsePatient = putPatientServiceCall(patientRequest);
+                        PutPatientDataResponse responsePatient = import.InsertPatient(patientRequest);
                         if (responsePatient.Id == null)
                         {
-                            throw new Exception("Patient import request failed.");
-                        }
-
-                        //PatientSystem
-                        PutPatientSystemDataRequest patSysRequest = new PutPatientSystemDataRequest
-                        {
-                            PatientID = responsePatient.Id,
-                            SystemID = lvi.SubItems[colSID].Text,
-                            SystemName = lvi.SubItems[colSysN].Text,
-                            DisplayLabel = "ID",
-                            Version = responsePatient.Version,
-                            Context = patientRequest.Context,
-                            ContractNumber = patientRequest.ContractNumber
-                        };
-                        if (patSysRequest.SystemID != null && patSysRequest.SystemName != null)
-                        {
-                            PutPatientSystemDataResponse responsePatientPS = putPatientSystemServiceCall(patSysRequest);
-                            if (responsePatientPS.PatientSystemId == null)
-                            {
-                                throw new Exception("Patient System import request failed.");
-                            }
-                            //Update Patient with DisplayPatientSystemId
-                            PutUpdatePatientDataRequest updatePatientRequest = new PutUpdatePatientDataRequest
-                            {
-                                Id = responsePatient.Id.ToString(),
-                                FirstName = patientRequest.FirstName,
-                                LastName = patientRequest.LastName,
-                                DisplayPatientSystemId = responsePatientPS.PatientSystemId.ToString(),
-                                Priority = 0,
-                                Context = patientRequest.Context,
-                                ContractNumber = patientRequest.ContractNumber,
-                                Version = patientRequest.Version
-                            };
-
-                            PutUpdatePatientDataResponse updateResponsePatient = putUpdatePatientServiceCall(updatePatientRequest, responsePatient.Id.ToString());
-                            if (updatePatientRequest.Id == null)
-                            {
-                                throw new Exception("Patient was not successfully updated with Patient System ID");
-                            }
-                        }
-
-                        //Contact
-
-                        //timezone
-                        TimeZoneData tZone = new TimeZoneData();
-                        if (string.IsNullOrEmpty(lvi.SubItems[colTimeZ].Text) == false)
-                        {
-                            foreach (TimeZoneData t in zonesLookUp)
-                            {
-                                string[] zones = t.Name.Split(" ".ToCharArray());
-                                if (lvi.SubItems[colTimeZ].Text == zones[0])
-                                {
-                                    tZone.Id = t.Id;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            tZone.Id = zoneDefault.Id;
-                        }
-
-                        List<CommModeData> modes = new List<CommModeData>();
-                        List<PhoneData> phones = new List<PhoneData>();
-                        List<AddressData> addresses = new List<AddressData>();
-                        List<EmailData> emails = new List<EmailData>();
-
-                        //modes
-                        if (modesLookUp != null && modesLookUp.Count > 0)
-                        {
-                            foreach (IdNamePair l in modesLookUp)
-                            {
-                                modes.Add(new CommModeData { ModeId = l.Id, OptOut = false, Preferred = false });
-                            }
-                        }
-
-
-                        //phones
-                        if (string.IsNullOrEmpty(lvi.SubItems[colPh1].Text) == false)
-                        {
-                            PhoneData phone1 = new PhoneData
-                            {
-                                Number = Convert.ToInt64(lvi.SubItems[colPh1].Text.Replace("-", string.Empty)),
-                                OptOut = false
-                            };
-
-                            if (lvi.SubItems[colPh1Pref].Text == "True")
-                            {
-                                phone1.PhonePreferred = true;
-                            }
-                            else
-                                phone1.PhonePreferred = false;
-
-                            if (string.IsNullOrEmpty(lvi.SubItems[colPh1Type].Text) == false)
-                            {
-                                foreach (CommTypeData c in typesLookUp)
-                                {
-                                    if (lvi.SubItems[colPh1Type].Text == c.Name)
-                                    {
-                                        phone1.TypeId = c.Id;
-                                    }
-                                }
-                            }
-                            else
-                                phone1.TypeId = typesLookUp[0].Id;
-
-                            phones.Add(phone1);
-                        }
-
-                        if (string.IsNullOrEmpty(lvi.SubItems[colPh2].Text) == false)
-                        {
-                            PhoneData phone2 = new PhoneData
-                            {
-                                Number = Convert.ToInt64(lvi.SubItems[colPh2].Text.Replace("-", string.Empty)),
-                                OptOut = false
-                            };
-
-                            if (lvi.SubItems[colPh2Pref].Text == "True")
-                            {
-                                phone2.PhonePreferred = true;
-                            }
-                            else
-                                phone2.PhonePreferred = false;
-
-                            if (string.IsNullOrEmpty(lvi.SubItems[colPh2Type].Text) == false)
-                            {
-                                foreach (CommTypeData c in typesLookUp)
-                                {
-                                    if (lvi.SubItems[colPh2Type].Text == c.Name)
-                                    {
-                                        phone2.TypeId = c.Id;
-                                    }
-                                }
-                            }
-                            else
-                                phone2.TypeId = typesLookUp[0].Id;
-
-                            phones.Add(phone2);
-                        }
-
-                        //emails
-                        if (string.IsNullOrEmpty(lvi.SubItems[colEm1].Text) == false)
-                        {
-                            EmailData email1 = new EmailData
-                            {
-                                Text = lvi.SubItems[colEm1].Text,
-                                OptOut = false,
-                            };
-
-                            if (lvi.SubItems[colEm1Pref].Text == "True")
-                            {
-                                email1.Preferred = true;
-                            }
-                            else
-                                email1.Preferred = false;
-
-                            if (string.IsNullOrEmpty(lvi.SubItems[colEm1Type].Text) == false)
-                            {
-                                foreach (CommTypeData c in typesLookUp)
-                                {
-                                    if (lvi.SubItems[colEm1Type].Text == c.Name)
-                                    {
-                                        email1.TypeId = c.Id;
-                                    }
-                                }
-                            }
-                            else
-                                email1.TypeId = typesLookUp[0].Id;
-
-                            emails.Add(email1);
-                        }
-
-                        if (string.IsNullOrEmpty(lvi.SubItems[colEm2].Text) == false)
-                        {
-                            EmailData email2 = new EmailData
-                            {
-                                Text = lvi.SubItems[colEm2].Text,
-                                OptOut = false,
-                            };
-
-                            if (lvi.SubItems[colEm2Pref].Text == "True")
-                            {
-                                email2.Preferred = true;
-                            }
-                            else
-                                email2.Preferred = false;
-
-                            if (string.IsNullOrEmpty(lvi.SubItems[colEm2Type].Text) == false)
-                            {
-                                foreach (CommTypeData c in typesLookUp)
-                                {
-                                    if (lvi.SubItems[colEm2Type].Text == c.Name)
-                                    {
-                                        email2.TypeId = c.Id;
-                                    }
-                                }
-                            }
-                            else
-                                email2.TypeId = typesLookUp[0].Id;
-
-                            emails.Add(email2);
-                        }
-
-                        //addresses
-                        if ((string.IsNullOrEmpty(lvi.SubItems[colAdd1L1].Text) == false)
-                            || (string.IsNullOrEmpty(lvi.SubItems[colAdd1L2].Text) == false)
-                            || (string.IsNullOrEmpty(lvi.SubItems[colAdd1L3].Text) == false)
-                            || (string.IsNullOrEmpty(lvi.SubItems[colAdd1City].Text) == false)
-                            || (string.IsNullOrEmpty(lvi.SubItems[colAdd1St].Text) == false)
-                            || (string.IsNullOrEmpty(lvi.SubItems[colAdd1Zip].Text) == false))
-                        {
-                            AddressData add1 = new AddressData
-                            {
-                                Line1 = lvi.SubItems[colAdd1L1].Text,
-                                Line2 = lvi.SubItems[colAdd1L2].Text,
-                                Line3 = lvi.SubItems[colAdd1L3].Text,
-                                City = lvi.SubItems[colAdd1City].Text,
-                                PostalCode = lvi.SubItems[colAdd1Zip].Text,
-                                OptOut = false
-                            };
-
-                            if (lvi.SubItems[colAdd1Pref].Text == "True")
-                            {
-                                add1.Preferred = true;
-                            }
-                            else
-                                add1.Preferred = false;
-
-                            foreach (StateData st in statesLookUp)
-                            {
-                                if ((st.Name == lvi.SubItems[colAdd1St].Text)
-                                    || (st.Code == lvi.SubItems[colAdd1St].Text))
-                                {
-                                    add1.StateId = st.Id;
-                                }
-                            }
-
-                            if (string.IsNullOrEmpty(lvi.SubItems[colAdd1Type].Text) == false)
-                            {
-                                foreach (CommTypeData c in typesLookUp)
-                                {
-                                    if (lvi.SubItems[colAdd1Type].Text == c.Name)
-                                    {
-                                        add1.TypeId = c.Id;
-                                    }
-                                }
-                            }
-                            else
-                                add1.TypeId = typesLookUp[0].Id;
-
-                            addresses.Add(add1);
-                        }
-
-                        if ((string.IsNullOrEmpty(lvi.SubItems[colAdd2L1].Text) == false)
-                            || (string.IsNullOrEmpty(lvi.SubItems[colAdd2L2].Text) == false)
-                            || (string.IsNullOrEmpty(lvi.SubItems[colAdd2L3].Text) == false)
-                            || (string.IsNullOrEmpty(lvi.SubItems[colAdd2City].Text) == false)
-                            || (string.IsNullOrEmpty(lvi.SubItems[colAdd2St].Text) == false)
-                            || (string.IsNullOrEmpty(lvi.SubItems[colAdd2Zip].Text) == false))
-                        {
-                            AddressData add2 = new AddressData
-                            {
-                                Line1 = lvi.SubItems[colAdd2L1].Text,
-                                Line2 = lvi.SubItems[colAdd2L2].Text,
-                                Line3 = lvi.SubItems[colAdd2L3].Text,
-                                City = lvi.SubItems[colAdd2City].Text,
-                                PostalCode = lvi.SubItems[colAdd2Zip].Text,
-                                OptOut = false
-                            };
-
-                            if (lvi.SubItems[colAdd2Pref].Text == "True")
-                            {
-                                add2.Preferred = true;
-                            }
-                            else
-                                add2.Preferred = false;
-
-                            foreach (StateData st in statesLookUp)
-                            {
-                                if ((st.Name == lvi.SubItems[colAdd2St].Text)
-                                    || (st.Code == lvi.SubItems[colAdd2St].Text))
-                                {
-                                    add2.StateId = st.Id;
-                                }
-                            }
-
-                            if (string.IsNullOrEmpty(lvi.SubItems[colAdd2Type].Text) == false)
-                            {
-                                foreach (CommTypeData c in typesLookUp)
-                                {
-                                    if (lvi.SubItems[colAdd2Type].Text == c.Name)
-                                    {
-                                        add2.TypeId = c.Id;
-                                    }
-                                }
-                            }
-                            else
-                                add2.TypeId = typesLookUp[0].Id;
-
-                            addresses.Add(add2);
-                        }
-
-                        //Contact
-                        PutContactDataRequest contactRequest = new PutContactDataRequest
-                        {
-                            PatientId = responsePatient.Id,
-                            Modes = modes,
-                            TimeZoneId = tZone.Id,
-                            Phones = phones,
-                            Emails = emails,
-                            Addresses = addresses,
-                            Version = patientRequest.Version,
-                            Context = patientRequest.Context,
-                            ContractNumber = patientRequest.ContractNumber
-                        };
-
-                        PutContactDataResponse responseContact = putContactServiceCall(contactRequest, responsePatient.Id.ToString());
-                        if (responseContact.ContactId == null)
-                        {
-                            throw new Exception("Contact card import request failed.");
-                        }
-
-                        if (string.IsNullOrEmpty(lvi.SubItems[colCMan].Text) == false)
-                        {
-                            Guid userIdResponse = getUserId(lvi.SubItems[colCMan].Text);
-                            if (userIdResponse != Guid.Empty)
-                            {
-                                GetContactByUserIdDataResponse contactByUserIdResponse = getContactByUserIdServiceCall(userIdResponse.ToString());
-
-                                CareMemberData careMember = new CareMemberData
-                                {
-                                    PatientId = responsePatient.Id.ToString(),
-                                    ContactId = contactByUserIdResponse.Contact.ContactId,
-                                    TypeId = contactTypeId,
-                                    Primary = true,
-                                };
-
-                                PutCareMemberDataRequest careMemberRequest = new PutCareMemberDataRequest
-                                {
-                                    PatientId = responsePatient.Id.ToString(),
-                                    CareMember = careMember
-                                };
-                                PutCareMemberDataResponse responseCareMember = putCareMemberServiceCall(careMemberRequest, responsePatient.Id.ToString());
-                                if (responseCareMember.Id == null)
-                                {
-                                    throw new Exception("Care Member import request failed.");
-                                }
-                                UpdateCohortPatientView(responsePatient.Id.ToString(), contactByUserIdResponse.Contact.ContactId);
-                            }
-                        }
-
-                        //Program
-                        string patientId = responsePatient.Id.ToString();
-                        if (string.IsNullOrEmpty(lvi.SubItems[colPrNm].Text) == false)
-                        {
-                            GetProgramByNameResponse programResponse = getProgramServiceCall(sqlUserId.ToString(), lvi.SubItems[colPrNm].Text);
-                            
-
-                            if (string.IsNullOrEmpty(programResponse.Program.ProgramID) == false)
-                            {
-                                PutProgramToPatientRequest programRequest = new PutProgramToPatientRequest
-                                {
-                                    UserId = sqlUserId.ToString(),
-                                    ContractProgramId = programResponse.Program.ProgramID,
-                                    PatientId = patientId
-                                };
-                                PutProgramToPatientResponse responseProgram = putProgramToPatientServiceCall(programRequest, patientId);
-                            }
-                        }
-
-                        if (responsePatient.Id != null && responsePatient.Status == null)
-                        {
-                            dictionarySucceed.Add(patientRequest.FirstName + " " + patientRequest.LastName, responsePatient.Id);
-                            int n = listView1.CheckedItems.IndexOf(lvi);
-                            listView1.CheckedItems[n].Remove();
-                        }
-                        else
-                        {
-                            dictionaryFail.Add(patientRequest.FirstName + " " + patientRequest.LastName, responsePatient.Status.ToString());
+                            dictionaryFail.Add(pdata.FirstName + " " + pdata.LastName, string.Format("Message: {0} StackTrace: {1}", responsePatient.Status.Message, responsePatient.Status.StackTrace));
                             int n = listView1.CheckedItems.IndexOf(lvi);
                             listView1.CheckedItems[n].BackColor = Color.Red;
                             listView1.CheckedItems[n].Checked = false;
                         }
+                        else
+                        {
+                            #region Insert the patient system record provided in the import file.
+                            if (!String.IsNullOrEmpty(lvi.SubItems[colSysID].Text) && !String.IsNullOrEmpty(lvi.SubItems[colSysNm].Text))
+                            {
+                                var system = systemsData.Where(s => s.Name.ToLower() == lvi.SubItems[colSysNm].Text.Trim().ToLower()).FirstOrDefault();
+                                if(system != null)
+                                {
+                                    PatientSystemData psData = new PatientSystemData 
+                                    { 
+                                        PatientId = responsePatient.Id, 
+                                        Primary = (String.IsNullOrEmpty(lvi.SubItems[colSysPrim].Text)) ? false : Boolean.Parse(lvi.SubItems[colSysPrim].Text.Trim()),
+                                        StatusId = (int)Phytel.API.DataDomain.PatientSystem.DTO.Status.Active,
+                                        SystemId = system.Id,
+                                        DataSource = DataSourceProperty,
+                                        Value = (String.IsNullOrEmpty(lvi.SubItems[colSysID].Text)) ? null : lvi.SubItems[colSysID].Text.Trim(),
+                                    };
+                                    InsertPatientSystemDataRequest psRequest = new InsertPatientSystemDataRequest
+                                    {
+                                        PatientId = responsePatient.Id,
+                                        IsEngageSystem = false,
+                                        PatientSystemsData = psData,
+                                        Version = responsePatient.Version,
+                                        Context = patientRequest.Context,
+                                        ContractNumber = patientRequest.ContractNumber
+                                    };
+                                    InsertPatientSystemDataResponse responsePatientPS = import.InsertPatientSystem(psRequest);
+                                    if (responsePatientPS.PatientSystemData == null)
+                                    {
+                                        throw new Exception("Failed to import the PatientSystem Id provided in the file.");
+                                    }
+                                    else
+                                    {
+                                        // If imported patientsystem's primary is set to true, override the EngagePatientSystem's primary field.
+                                        if (psData.Primary)
+                                        {
+                                            GetPatientSystemDataResponse engagePatientSystemResponse = import.GetPatientSystem(new GetPatientSystemDataRequest 
+                                            { 
+                                                Context = context,
+                                                ContractNumber = txtContract.Text,
+                                                Version = version,
+                                                Id = responsePatient.EngagePatientSystemId
+                                            });
+                                            if (engagePatientSystemResponse != null && engagePatientSystemResponse.PatientSystemData != null)
+                                            {
+                                                engagePatientSystemResponse.PatientSystemData.Primary = false;
+                                                UpdatePatientSystemDataRequest updatePDRequest = new UpdatePatientSystemDataRequest 
+                                                {
+                                                    Context = context,
+                                                    ContractNumber = txtContract.Text,
+                                                    Version = version,
+                                                    Id = engagePatientSystemResponse.PatientSystemData.Id,
+                                                    PatientId = engagePatientSystemResponse.PatientSystemData.PatientId,
+                                                    PatientSystemsData = engagePatientSystemResponse.PatientSystemData
+                                                };
+                                                import.UpdatePatientSystem(updatePDRequest);
+                                            }
+                                        }
+                                    }
 
+                                }
+                            }
+                            #endregion
+
+                            #region Insert Contact record.
+
+                            #region Communication
+                            //timezone
+                            TimeZoneData tZone = null;
+                            if (string.IsNullOrEmpty(lvi.SubItems[colTimeZ].Text) == false)
+                            {
+                                tZone = new TimeZoneData();
+                                foreach (TimeZoneData t in zonesLookUp)
+                                {
+                                    string[] zones = t.Name.Split(" ".ToCharArray());
+                                    if (lvi.SubItems[colTimeZ].Text.Trim() == zones[0])
+                                    {
+                                        tZone.Id = t.Id;
+                                    }
+                                }
+                            }
+
+                            List<CommModeData> modes = new List<CommModeData>();
+                            List<PhoneData> phones = new List<PhoneData>();
+                            List<AddressData> addresses = new List<AddressData>();
+                            List<EmailData> emails = new List<EmailData>();
+
+                            //modes
+                            if (modesLookUp != null && modesLookUp.Count > 0)
+                            {
+                                foreach (IdNamePair l in modesLookUp)
+                                {
+                                    modes.Add(new CommModeData { ModeId = l.Id, OptOut = false, Preferred = false });
+                                }
+                            }
+
+
+                            //phones
+                            if (string.IsNullOrEmpty(lvi.SubItems[colPh1].Text) == false)
+                            {
+                                PhoneData phone1 = new PhoneData
+                                {
+                                    Number = Convert.ToInt64(lvi.SubItems[colPh1].Text.Replace("-", string.Empty)),
+                                    OptOut = false,
+                                    DataSource = DataSourceProperty
+                                };
+
+                                if (String.Compare(lvi.SubItems[colPh1Pref].Text.Trim(), "true", true) == 0)
+                                {
+                                    phone1.PhonePreferred = true;
+                                }
+                                else
+                                    phone1.PhonePreferred = false;
+
+                                if (string.IsNullOrEmpty(lvi.SubItems[colPh1Type].Text) == false)
+                                {
+                                    foreach (CommTypeData c in typesLookUp)
+                                    {
+                                        if (String.Compare(lvi.SubItems[colPh1Type].Text.Trim(), c.Name, true) == 0)
+                                        {
+                                            phone1.TypeId = c.Id;
+                                        }
+                                    }
+                                }
+                                else
+                                    phone1.TypeId = typesLookUp[0].Id;
+
+                                phones.Add(phone1);
+                            }
+
+                            if (string.IsNullOrEmpty(lvi.SubItems[colPh2].Text) == false)
+                            {
+                                PhoneData phone2 = new PhoneData
+                                {
+                                    Number = Convert.ToInt64(lvi.SubItems[colPh2].Text.Replace("-", string.Empty)),
+                                    OptOut = false,
+                                    DataSource = DataSourceProperty
+                                };
+
+                                if (String.Compare(lvi.SubItems[colPh2Pref].Text.Trim(), "true", true) == 0)
+                                {
+                                    phone2.PhonePreferred = true;
+                                }
+                                else
+                                    phone2.PhonePreferred = false;
+
+                                if (string.IsNullOrEmpty(lvi.SubItems[colPh2Type].Text) == false)
+                                {
+                                    foreach (CommTypeData c in typesLookUp)
+                                    {
+                                        if (String.Compare(lvi.SubItems[colPh2Type].Text.Trim(), c.Name, true) == 0)
+                                        {
+                                            phone2.TypeId = c.Id;
+                                        }
+                                    }
+                                }
+                                else
+                                    phone2.TypeId = typesLookUp[0].Id;
+
+                                phones.Add(phone2);
+                            }
+
+                            //emails
+                            if (string.IsNullOrEmpty(lvi.SubItems[colEm1].Text) == false)
+                            {
+                                EmailData email1 = new EmailData
+                                {
+                                    Text = lvi.SubItems[colEm1].Text.Trim(),
+                                    OptOut = false,
+                                };
+
+                                if (String.Compare(lvi.SubItems[colEm1Pref].Text.Trim(), "true", true) == 0)
+                                {
+                                    email1.Preferred = true;
+                                }
+                                else
+                                    email1.Preferred = false;
+
+                                if (string.IsNullOrEmpty(lvi.SubItems[colEm1Type].Text) == false)
+                                {
+                                    foreach (CommTypeData c in typesLookUp)
+                                    {
+                                        if (String.Compare(lvi.SubItems[colEm1Type].Text.Trim(), c.Name, true) == 0)
+                                        {
+                                            email1.TypeId = c.Id;
+                                        }
+                                    }
+                                }
+                                else
+                                    email1.TypeId = typesLookUp[0].Id;
+
+                                emails.Add(email1);
+                            }
+
+                            if (string.IsNullOrEmpty(lvi.SubItems[colEm2].Text) == false)
+                            {
+                                EmailData email2 = new EmailData
+                                {
+                                    Text = lvi.SubItems[colEm2].Text.Trim(),
+                                    OptOut = false,
+                                };
+
+                                if (String.Compare(lvi.SubItems[colEm2Pref].Text.Trim(), "true", true) == 0)
+                                {
+                                    email2.Preferred = true;
+                                }
+                                else
+                                    email2.Preferred = false;
+
+                                if (string.IsNullOrEmpty(lvi.SubItems[colEm2Type].Text) == false)
+                                {
+                                    foreach (CommTypeData c in typesLookUp)
+                                    {
+                                        if (String.Compare(lvi.SubItems[colEm2Type].Text.Trim(), c.Name, true) == 0)
+                                        {
+                                            email2.TypeId = c.Id;
+                                        }
+                                    }
+                                }
+                                else
+                                    email2.TypeId = typesLookUp[0].Id;
+
+                                emails.Add(email2);
+                            }
+
+                            //addresses
+                            if ((string.IsNullOrEmpty(lvi.SubItems[colAdd1L1].Text) == false)
+                                || (string.IsNullOrEmpty(lvi.SubItems[colAdd1L2].Text) == false)
+                                || (string.IsNullOrEmpty(lvi.SubItems[colAdd1L3].Text) == false)
+                                || (string.IsNullOrEmpty(lvi.SubItems[colAdd1City].Text) == false)
+                                || (string.IsNullOrEmpty(lvi.SubItems[colAdd1St].Text) == false)
+                                || (string.IsNullOrEmpty(lvi.SubItems[colAdd1Zip].Text) == false))
+                            {
+                                AddressData add1 = new AddressData
+                                {
+                                    Line1 = (string.IsNullOrEmpty(lvi.SubItems[colAdd1L1].Text)) ? null : lvi.SubItems[colAdd1L1].Text.Trim(),
+                                    Line2 = (string.IsNullOrEmpty(lvi.SubItems[colAdd1L2].Text)) ? null : lvi.SubItems[colAdd1L2].Text.Trim(),
+                                    Line3 = (string.IsNullOrEmpty(lvi.SubItems[colAdd1L3].Text)) ? null : lvi.SubItems[colAdd1L3].Text.Trim(),
+                                    City = (string.IsNullOrEmpty(lvi.SubItems[colAdd1City].Text)) ? null : lvi.SubItems[colAdd1City].Text.Trim(),
+                                    PostalCode = (string.IsNullOrEmpty(lvi.SubItems[colAdd1Zip].Text)) ? null : lvi.SubItems[colAdd1Zip].Text.Trim(),
+                                    OptOut = false
+                                };
+
+                                if (String.Compare(lvi.SubItems[colAdd1Pref].Text.Trim(), "true", true) == 0)
+                                {
+                                    add1.Preferred = true;
+                                }
+                                else
+                                    add1.Preferred = false;
+
+                                string stateTrim = (string.IsNullOrEmpty(lvi.SubItems[colAdd1St].Text)) ? null : lvi.SubItems[colAdd1St].Text.Trim();
+                                foreach (StateData st in statesLookUp)
+                                {
+                                    if ((st.Name == stateTrim)
+                                        || (st.Code == stateTrim))
+                                    {
+                                        add1.StateId = st.Id;
+                                    }
+                                }
+
+                                if (string.IsNullOrEmpty(lvi.SubItems[colAdd1Type].Text) == false)
+                                {
+                                    foreach (CommTypeData c in typesLookUp)
+                                    {
+                                        if (String.Compare(lvi.SubItems[colAdd1Type].Text.Trim(), c.Name, true) == 0)
+                                        {
+                                            add1.TypeId = c.Id;
+                                        }
+                                    }
+                                }
+                                else
+                                    add1.TypeId = typesLookUp[0].Id;
+
+                                addresses.Add(add1);
+                            }
+
+                            if ((string.IsNullOrEmpty(lvi.SubItems[colAdd2L1].Text) == false)
+                                || (string.IsNullOrEmpty(lvi.SubItems[colAdd2L2].Text) == false)
+                                || (string.IsNullOrEmpty(lvi.SubItems[colAdd2L3].Text) == false)
+                                || (string.IsNullOrEmpty(lvi.SubItems[colAdd2City].Text) == false)
+                                || (string.IsNullOrEmpty(lvi.SubItems[colAdd2St].Text) == false)
+                                || (string.IsNullOrEmpty(lvi.SubItems[colAdd2Zip].Text) == false))
+                            {
+                                AddressData add2 = new AddressData
+                                {
+                                    Line1 = (string.IsNullOrEmpty(lvi.SubItems[colAdd2L1].Text)) ? null : lvi.SubItems[colAdd2L1].Text.Trim(),
+                                    Line2 = (string.IsNullOrEmpty(lvi.SubItems[colAdd2L2].Text)) ? null : lvi.SubItems[colAdd2L2].Text.Trim(),
+                                    Line3 = (string.IsNullOrEmpty(lvi.SubItems[colAdd2L3].Text)) ? null : lvi.SubItems[colAdd2L3].Text.Trim(),
+                                    City = (string.IsNullOrEmpty(lvi.SubItems[colAdd2City].Text)) ? null : lvi.SubItems[colAdd2City].Text.Trim(),
+                                    PostalCode = (string.IsNullOrEmpty(lvi.SubItems[colAdd2Zip].Text)) ? null : lvi.SubItems[colAdd2Zip].Text.Trim(),
+                                    OptOut = false
+                                };
+
+                                if (String.Compare(lvi.SubItems[colAdd2Pref].Text.Trim(), "true", true) == 0)
+                                {
+                                    add2.Preferred = true;
+                                }
+                                else
+                                    add2.Preferred = false;
+
+                                string stateTrim = (string.IsNullOrEmpty(lvi.SubItems[colAdd2St].Text)) ? null : lvi.SubItems[colAdd2St].Text.Trim();
+                                foreach (StateData st in statesLookUp)
+                                {
+                                    if ((st.Name == stateTrim)
+                                        || (st.Code == stateTrim))
+                                    {
+                                        add2.StateId = st.Id;
+                                    }
+                                }
+
+                                if (string.IsNullOrEmpty(lvi.SubItems[colAdd2Type].Text) == false)
+                                {
+                                    foreach (CommTypeData c in typesLookUp)
+                                    {
+                                        if (String.Compare(lvi.SubItems[colAdd2Type].Text.Trim(), c.Name, true) == 0)
+                                        {
+                                            add2.TypeId = c.Id;
+                                        }
+                                    }
+                                }
+                                else
+                                    add2.TypeId = typesLookUp[0].Id;
+
+                                addresses.Add(add2);
+                            } 
+                            #endregion
+
+                            //Contact
+                            ContactData data = new ContactData {
+                                PatientId = responsePatient.Id,
+                                ContactTypeId = Phytel.API.DataDomain.Contact.DTO.Constants.PersonContactTypeId,
+                                #region Sync up properties in Contact
+                                FirstName = pdata.FirstName,
+                                LastName = pdata.LastName,
+                                MiddleName = pdata.MiddleName,
+                                PreferredName = pdata.PreferredName,
+                                Gender = pdata.Gender,
+                                Suffix = pdata.Suffix,
+                                StatusId = pdata.StatusId,
+                                #endregion
+                                DataSource = EngageSystemProperty,
+                                Modes = modes,
+                                TimeZoneId = tZone == null ? null : tZone.Id,
+                                Phones = phones,
+                                Emails = emails,
+                                Addresses = addresses
+                            };
+                            InsertContactDataRequest contactRequest = new InsertContactDataRequest
+                            {
+                                ContactData = data,
+                                Version = patientRequest.Version,
+                                Context = patientRequest.Context,
+                                ContractNumber = patientRequest.ContractNumber
+                            };
+
+                            InsertContactDataResponse responseContact = import.InsertContactForAPatient(contactRequest, responsePatient.Id.ToString());
+                            if (responseContact.Id == null)
+                            {
+                                throw new Exception("Contact card import request failed.");
+                            }
+
+                            #endregion
+
+                            #region CareMember
+                            if (string.IsNullOrEmpty(lvi.SubItems[colCMan].Text) == false)
+                            {
+                                Guid userIdResponse = getUserId(lvi.SubItems[colCMan].Text);
+                                if (userIdResponse != Guid.Empty)
+                                {
+                                    GetContactByUserIdDataResponse contactByUserIdResponse = import.GetContactByUserId(userIdResponse.ToString());
+
+                                    CareTeamMemberData member = new CareTeamMemberData
+                                    {
+                                        ContactId = contactByUserIdResponse.Contact.Id,
+                                        RoleId = PCMRoleIdProperty,
+                                        Core = true,
+                                        DataSource = "Engage",
+                                        DistanceUnit = "mi",
+                                        StatusId = (int)CareTeamMemberStatus.Active,
+                                    };
+                                    List<CareTeamMemberData> memberList = new List<CareTeamMemberData>();
+                                    memberList.Add(member);
+
+                                    CareTeamData careTeamData = new CareTeamData
+                                    {
+                                          ContactId = responseContact.Id,
+                                          Members = memberList
+                                    };
+                                    SaveCareTeamDataRequest saveCareTeamDataRequest = new SaveCareTeamDataRequest
+                                    {
+                                        CareTeamData = careTeamData,
+                                        ContactId = responseContact.Id,
+                                    };
+                                    SaveCareTeamDataResponse saveCareTeamDataResponse = import.InsertCareTeam(saveCareTeamDataRequest);
+                                    if (saveCareTeamDataResponse == null)
+                                    {
+                                        throw new Exception("Care Team import request failed.");
+                                    }
+                                    import.UpdateCohortPatientView(responsePatient.Id.ToString(), contactByUserIdResponse.Contact.Id);
+                                }
+                            }
+
+                            #endregion
+
+                            if (responsePatient.Id != null && responsePatient.Status == null)
+                            {
+                                dictionarySucceed.Add(pdata.FirstName + " " + pdata.LastName, responsePatient.Id);
+                                int n = listView1.CheckedItems.IndexOf(lvi);
+                                listView1.CheckedItems[n].Remove();
+                            }
+                        }
                     }
 
                     string listSucceed = string.Empty;
@@ -553,6 +606,7 @@ namespace NightingaleImport
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
+
             }
         }
 
@@ -795,6 +849,48 @@ namespace NightingaleImport
 
         }
 
+        private void LoadSystems()
+        {
+            //[Route("/{Context}/{Version}/{ContractNumber}/System", "GET")]
+            Uri patientsystemDDUri = new Uri(string.Format("{0}/PatientSystem/{1}/{2}/{3}/System?UserId={4}",
+                                                    txtURL.Text,
+                                                    context,
+                                                    version,
+                                                    txtContract.Text,
+                                                    _headerUserId));
+            HttpClient client = GetHttpClient(patientsystemDDUri);
+
+            GetSystemsDataRequest systemDataRequest = new GetSystemsDataRequest
+            {
+                Version = version,
+                Context = context,
+                ContractNumber = txtContract.Text
+            };
+
+            DataContractJsonSerializer modesJsonSer = new DataContractJsonSerializer(typeof(GetSystemsDataRequest));
+            MemoryStream ms = new MemoryStream();
+            modesJsonSer.WriteObject(ms, systemDataRequest);
+            ms.Position = 0;
+
+            //use a Stream reader to construct the StringContent (Json) 
+            StreamReader modesSr = new StreamReader(ms);
+            StringContent modesContent = new StringContent(modesSr.ReadToEnd(), System.Text.Encoding.UTF8, "application/json");
+
+            //Post the data 
+            var response = client.GetStringAsync(patientsystemDDUri);
+            var responseContent = response.Result;
+
+            string modesResponseString = responseContent;
+            GetSystemsDataResponse getSystemsDataResponse = null;
+
+            using (var memStream = new MemoryStream(Encoding.Unicode.GetBytes(modesResponseString)))
+            {
+                var modesSerializer = new DataContractJsonSerializer(typeof(GetSystemsDataResponse));
+                getSystemsDataResponse = (GetSystemsDataResponse)modesSerializer.ReadObject(memStream);
+            }
+            systemsData = getSystemsDataResponse.SystemsData;
+        }
+
         private void button1_VisibleChanged_1(object sender, EventArgs e)
         {
             button1.Text = "Import";
@@ -819,25 +915,28 @@ namespace NightingaleImport
                 {
                     filename = openFileDialog1.FileName;
                     textBox1.Text = filename;
-                    string[] attributes;
-                    string[] filelines = File.ReadAllLines(filename);
-                    foreach (string line in filelines)
+                    using (TextFieldParser parser = new TextFieldParser(filename))
                     {
-                        attributes = line.Split(",".ToCharArray());
-                        ListViewItem lvi = new ListViewItem(attributes[colFirstN].Trim());
-                        for (int i = 1; i < attributes.Count(); i++)
+                        parser.TextFieldType = FieldType.Delimited;
+                        parser.SetDelimiters(",");
+                        while (!parser.EndOfData)
                         {
-                            lvi.SubItems.Add(attributes[i].Trim());
-                        }
-                        //Check for required fields
-                        if (lvi.SubItems[colFirstN].Text == "" || lvi.SubItems[colLastN].Text == ""
-                            || lvi.SubItems[colGen].Text == "" || lvi.SubItems[colDB].Text == "")
-                        {
-                            throw new Exception("Required Patient data not found. Check patient: " + line);
-                        }
-                        else
-                        {
-                            listView1.Items.Add(lvi);
+                            string[] line = parser.ReadFields();
+                            ListViewItem lvi = new ListViewItem(line[colFirstN].Trim());
+                            for (int i = 1; i < line.Count(); i++)
+                            {
+                                lvi.SubItems.Add(line[i].Trim());
+                            }
+                            //Check for required fields
+                            if (lvi.SubItems[colFirstN].Text == "" || lvi.SubItems[colLastN].Text == ""
+                                || lvi.SubItems[colGen].Text == "" || lvi.SubItems[colDB].Text == "")
+                            {
+                                throw new Exception("Required Patient data not found. Check patient: " + String.Join(",", line));
+                            }
+                            else
+                            {
+                                listView1.Items.Add(lvi);
+                            }
                         }
                     }
                 }
@@ -914,356 +1013,465 @@ namespace NightingaleImport
             }
         }
 
-        private PutPatientDataResponse putPatientServiceCall(PutPatientDataRequest putPatientRequest)
-        {
-            //Patient
-            Uri theUri = new Uri(string.Format("{0}/Patient/{1}/{2}/{3}/patient?UserId={4}",
-                                                 txtURL.Text,
-                                                 context,
-                                                 version,
-                                                 txtContract.Text,
-                                                 _headerUserId));
+        #region putPatientServiceCall
+        //private PutPatientDataResponse putPatientServiceCall(PutPatientDataRequest putPatientRequest)
+        //{
+        //    try
+        //    {
+        //        //Patient
+        //        Uri theUri = new Uri(string.Format("{0}/Patient/{1}/{2}/{3}/Patient/Insert?UserId={4}",
+        //                                             txtURL.Text,
+        //                                             context,
+        //                                             version,
+        //                                             txtContract.Text,
+        //                                             _headerUserId));
 
-            HttpClient client = GetHttpClient(theUri);
+        //        HttpClient client = GetHttpClient(theUri);
 
-            DataContractJsonSerializer jsonSer = new DataContractJsonSerializer(typeof(PutPatientDataRequest));
+        //        DataContractJsonSerializer jsonSer = new DataContractJsonSerializer(typeof(PutPatientDataRequest));
 
-            // use the serializer to write the object to a MemoryStream 
-            MemoryStream ms = new MemoryStream();
-            jsonSer.WriteObject(ms, putPatientRequest);
-            ms.Position = 0;
-
-
-            //use a Stream reader to construct the StringContent (Json) 
-            StreamReader sr = new StreamReader(ms);
-
-            StringContent theContent = new StringContent(sr.ReadToEnd(), System.Text.Encoding.UTF8, "application/json");
-
-            //Post the data 
-            var response = client.PutAsync(theUri, theContent);
-            var responseContent = response.Result.Content;
-
-            string responseString = responseContent.ReadAsStringAsync().Result;
-            PutPatientDataResponse responsePatient = null;
-
-            using (var msResponse = new MemoryStream(Encoding.Unicode.GetBytes(responseString)))
-            {
-                var serializer = new DataContractJsonSerializer(typeof(PutPatientDataResponse));
-                responsePatient = (PutPatientDataResponse)serializer.ReadObject(msResponse);
-            }
-
-            return responsePatient;
-        }
-
-        private PutPatientSystemDataResponse putPatientSystemServiceCall(PutPatientSystemDataRequest putPatSysRequest)
-        {
-            //PatientSystem
-            Uri theUriPS = new Uri(string.Format("{0}/PatientSystem/{1}/{2}/{3}/patientsystem?UserId={4}",
-                                                   txtURL.Text,
-                                                   context,
-                                                   version,
-                                                   txtContract.Text,
-                                                   _headerUserId));
-            HttpClient clientPS = GetHttpClient(theUriPS);
-
-            DataContractJsonSerializer jsonSerPS = new DataContractJsonSerializer(typeof(PutPatientSystemDataRequest));
-
-            // use the serializer to write the object to a MemoryStream 
-            MemoryStream msPS = new MemoryStream();
-            jsonSerPS.WriteObject(msPS, putPatSysRequest);
-            msPS.Position = 0;
+        //        // use the serializer to write the object to a MemoryStream 
+        //        MemoryStream ms = new MemoryStream();
+        //        jsonSer.WriteObject(ms, putPatientRequest);
+        //        ms.Position = 0;
 
 
-            //use a Stream reader to construct the StringContent (Json) 
-            StreamReader srPS = new StreamReader(msPS);
+        //        //use a Stream reader to construct the StringContent (Json) 
+        //        StreamReader sr = new StreamReader(ms);
 
-            StringContent theContentPS = new StringContent(srPS.ReadToEnd(), System.Text.Encoding.UTF8, "application/json");
+        //        StringContent theContent = new StringContent(sr.ReadToEnd(), System.Text.Encoding.UTF8, "application/json");
 
-            //Post the data 
-            var responsePS = clientPS.PutAsync(theUriPS, theContentPS);
-            var responseContentPS = responsePS.Result.Content;
+        //        //Post the data 
+        //        var response = client.PutAsync(theUri, theContent);
+        //        var responseContent = response.Result.Content;
 
-            string responseStringPS = responseContentPS.ReadAsStringAsync().Result;
-            PutPatientSystemDataResponse responsePatientPS = null;
+        //        string responseString = responseContent.ReadAsStringAsync().Result;
+        //        PutPatientDataResponse responsePatient = null;
 
-            using (var msResponsePS = new MemoryStream(Encoding.Unicode.GetBytes(responseStringPS)))
-            {
-                var serializerPS = new DataContractJsonSerializer(typeof(PutPatientSystemDataResponse));
-                responsePatientPS = (PutPatientSystemDataResponse)serializerPS.ReadObject(msResponsePS);
-            }
+        //        using (var msResponse = new MemoryStream(Encoding.Unicode.GetBytes(responseString)))
+        //        {
+        //            var serializer = new DataContractJsonSerializer(typeof(PutPatientDataResponse));
+        //            responsePatient = (PutPatientDataResponse)serializer.ReadObject(msResponse);
+        //        }
 
-            return responsePatientPS;
-        }
+        //        return responsePatient;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw ex;
+        //    }
+        //}
+        #endregion
 
-        private PutUpdatePatientDataResponse putUpdatePatientServiceCall(PutUpdatePatientDataRequest putUpdatePatient, string patientId)
-        {
-            Uri updateUri = new Uri(string.Format("{0}/Patient/{1}/{2}/{3}/patient/{4}?UserId={5}",
-                                                        txtURL.Text,
-                                                        context,
-                                                        version,
-                                                        txtContract.Text,
-                                                        patientId,
-                                                        _headerUserId));
-            HttpClient updateClient = GetHttpClient(updateUri);
+        #region insertPatientSystem
+        //private InsertPatientSystemDataResponse insertPatientSystem(InsertPatientSystemDataRequest request)
+        //{
+        //    //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/PatientSystem", "POST")]
+        //    Uri theUriPS = new Uri(string.Format("{0}/PatientSystem/{1}/{2}/{3}/Patient/{4}/PatientSystem?UserId={5}",
+        //                                           txtURL.Text,
+        //                                           context,
+        //                                           version,
+        //                                           txtContract.Text,
+        //                                           request.PatientId,
+        //                                           _headerUserId));
+        //    HttpClient clientPS = GetHttpClient(theUriPS);
 
-            PutUpdatePatientDataResponse updateResponsePatient = null;
+        //    DataContractJsonSerializer jsonSerPS = new DataContractJsonSerializer(typeof(InsertPatientSystemDataRequest));
 
-            DataContractJsonSerializer updateJsonSer = new DataContractJsonSerializer(typeof(PutUpdatePatientDataRequest));
-
-            // use the serializer to write the object to a MemoryStream 
-            MemoryStream updateMs = new MemoryStream();
-            updateJsonSer.WriteObject(updateMs, putUpdatePatient);
-            updateMs.Position = 0;
-
-
-            //use a Stream reader to construct the StringContent (Json) 
-            StreamReader updateSr = new StreamReader(updateMs);
-
-            StringContent updateContent = new StringContent(updateSr.ReadToEnd(), System.Text.Encoding.UTF8, "application/json");
-
-            //Post the data 
-            var updateResponse = updateClient.PutAsync(updateUri, updateContent);
-            var updateResponseContent = updateResponse.Result.Content;
-
-            string updateResponseString = updateResponseContent.ReadAsStringAsync().Result;
+        //    // use the serializer to write the object to a MemoryStream 
+        //    MemoryStream msPS = new MemoryStream();
+        //    jsonSerPS.WriteObject(msPS, request);
+        //    msPS.Position = 0;
 
 
-            using (var updateMsResponse = new MemoryStream(Encoding.Unicode.GetBytes(updateResponseString)))
-            {
-                var updateSerializer = new DataContractJsonSerializer(typeof(PutUpdatePatientDataResponse));
-                updateResponsePatient = (PutUpdatePatientDataResponse)updateSerializer.ReadObject(updateMsResponse);
-            }
+        //    //use a Stream reader to construct the StringContent (Json) 
+        //    StreamReader srPS = new StreamReader(msPS);
 
-            return updateResponsePatient;
-        }
-        
-        private PutContactDataResponse putContactServiceCall(PutContactDataRequest putContactRequest, string patientId)
-        {
-            Uri contactUri = new Uri(string.Format("{0}/Contact/{1}/{2}/{3}/patient/contact/{4}?UserId={5}",
-                                            txtURL.Text,
-                                            context,
-                                            version,
-                                            txtContract.Text,
-                                            patientId,
-                                            _headerUserId));
-            HttpClient contactClient = GetHttpClient(contactUri);
+        //    StringContent theContentPS = new StringContent(srPS.ReadToEnd(), System.Text.Encoding.UTF8, "application/json");
 
-            DataContractJsonSerializer contactJsonSer = new DataContractJsonSerializer(typeof(PutContactDataRequest));
-            MemoryStream contactMs = new MemoryStream();
-            contactJsonSer.WriteObject(contactMs, putContactRequest);
-            contactMs.Position = 0;
+        //    //Post the data 
+        //    var responsePS = clientPS.PostAsync(theUriPS, theContentPS);
+        //    var responseContentPS = responsePS.Result.Content;
 
-            //use a Stream reader to construct the StringContent (Json) 
-            StreamReader contactSr = new StreamReader(contactMs);
-            StringContent contactContent = new StringContent(contactSr.ReadToEnd(), System.Text.Encoding.UTF8, "application/json");
+        //    string responseStringPS = responseContentPS.ReadAsStringAsync().Result;
+        //    InsertPatientSystemDataResponse responsePatientPS = null;
 
-            //Post the data 
-            var contactResponse = contactClient.PutAsync(contactUri, contactContent);
-            var contactResponseContent = contactResponse.Result.Content;
+        //    using (var msResponsePS = new MemoryStream(Encoding.Unicode.GetBytes(responseStringPS)))
+        //    {
+        //        var serializerPS = new DataContractJsonSerializer(typeof(InsertPatientSystemDataResponse));
+        //        responsePatientPS = (InsertPatientSystemDataResponse)serializerPS.ReadObject(msResponsePS);
+        //    }
 
-            string contactResponseString = contactResponseContent.ReadAsStringAsync().Result;
-            PutContactDataResponse responseContact = null;
+        //    return responsePatientPS;
+        //}
+        #endregion
 
-            using (var contactMsResponse = new MemoryStream(Encoding.Unicode.GetBytes(contactResponseString)))
-            {
-                var contactSerializer = new DataContractJsonSerializer(typeof(PutContactDataResponse));
-                responseContact = (PutContactDataResponse)contactSerializer.ReadObject(contactMsResponse);
-            }
+        #region getPatientSystem
+        //private GetPatientSystemDataResponse getPatientSystem(GetPatientSystemDataRequest request)
+        //{
+        //    //[Route("/{Context}/{Version}/{ContractNumber}/PatientSystem/{Id}", "GET")]
+        //    Uri theUriPS = new Uri(string.Format("{0}/PatientSystem/{1}/{2}/{3}/PatientSystem/{4}?UserId={5}",
+        //                                           txtURL.Text,
+        //                                           context,
+        //                                           version,
+        //                                           txtContract.Text,
+        //                                           request.Id,
+        //                                           _headerUserId));
+        //    HttpClient client = GetHttpClient(theUriPS);
 
-            return responseContact;
-        }
+        //    DataContractJsonSerializer modesJsonSer = new DataContractJsonSerializer(typeof(GetPatientSystemDataRequest));
+        //    MemoryStream ms = new MemoryStream();
+        //    modesJsonSer.WriteObject(ms, request);
+        //    ms.Position = 0;
 
-        private PutCareMemberDataResponse putCareMemberServiceCall(PutCareMemberDataRequest putCareMemberRequest, string patientId)
-        {
-            //Patient
-            Uri careMemberUri = new Uri(string.Format("{0}/CareMember/{1}/{2}/{3}/Patient/{4}/CareMember/Insert?UserId={5}",
-                                                 txtURL.Text,
-                                                 context,
-                                                 version,
-                                                 txtContract.Text,
-                                                 patientId,
-                                                 _headerUserId));
-            HttpClient client = GetHttpClient(careMemberUri);
+        //    //use a Stream reader to construct the StringContent (Json) 
+        //    StreamReader modesSr = new StreamReader(ms);
+        //    StringContent modesContent = new StringContent(modesSr.ReadToEnd(), System.Text.Encoding.UTF8, "application/json");
+
+        //    //Post the data 
+        //    var response = client.GetStringAsync(theUriPS);
+        //    var responseContent = response.Result;
+
+        //    string modesResponseString = responseContent;
+        //    GetPatientSystemDataResponse getPatientSystemDataResponse = null;
+
+        //    using (var memStream = new MemoryStream(Encoding.Unicode.GetBytes(modesResponseString)))
+        //    {
+        //        var modesSerializer = new DataContractJsonSerializer(typeof(GetPatientSystemDataResponse));
+        //        getPatientSystemDataResponse = (GetPatientSystemDataResponse)modesSerializer.ReadObject(memStream);
+        //    }
+        //    return getPatientSystemDataResponse;
+        //}
+        #endregion
+
+        #region updatedPatientSystem
+        //private UpdatePatientSystemDataResponse updatePatientSystem(UpdatePatientSystemDataRequest request)
+        //{
+        //    //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/PatientSystem/{Id}", "PUT")]
+        //    Uri updateUri = new Uri(string.Format("{0}/PatientSystem/{1}/{2}/{3}/Patient/{4}/PatientSystem/{5}?UserId={6}",
+        //                                                txtURL.Text,
+        //                                                context,
+        //                                                version,
+        //                                                txtContract.Text,
+        //                                                request.PatientId,
+        //                                                request.Id,
+        //                                                _headerUserId));
+        //    HttpClient updateClient = GetHttpClient(updateUri);
+
+        //    UpdatePatientSystemDataResponse response = null;
+
+        //    DataContractJsonSerializer updateJsonSer = new DataContractJsonSerializer(typeof(UpdatePatientSystemDataRequest));
+
+        //    // use the serializer to write the object to a MemoryStream 
+        //    MemoryStream updateMs = new MemoryStream();
+        //    updateJsonSer.WriteObject(updateMs, request);
+        //    updateMs.Position = 0;
+
+
+        //    //use a Stream reader to construct the StringContent (Json) 
+        //    StreamReader updateSr = new StreamReader(updateMs);
+
+        //    StringContent updateContent = new StringContent(updateSr.ReadToEnd(), System.Text.Encoding.UTF8, "application/json");
+
+        //    //Post the data 
+        //    var updateResponse = updateClient.PutAsync(updateUri, updateContent);
+        //    var updateResponseContent = updateResponse.Result.Content;
+
+        //    string updateResponseString = updateResponseContent.ReadAsStringAsync().Result;
+
+
+        //    using (var updateMsResponse = new MemoryStream(Encoding.Unicode.GetBytes(updateResponseString)))
+        //    {
+        //        var updateSerializer = new DataContractJsonSerializer(typeof(UpdatePatientSystemDataResponse));
+        //        response = (UpdatePatientSystemDataResponse)updateSerializer.ReadObject(updateMsResponse);
+        //    }
+
+        //    return response;
+        //}
+        #endregion
+
+        #region putUpdatePatientServiceCall
+        //private PutUpdatePatientDataResponse putUpdatePatientServiceCall(PutUpdatePatientDataRequest putUpdatePatient, string patientId)
+        //{
+        //    Uri updateUri = new Uri(string.Format("{0}/Patient/{1}/{2}/{3}/patient?UserId={4}",
+        //                                                txtURL.Text,
+        //                                                context,
+        //                                                version,
+        //                                                txtContract.Text,
+        //                                                _headerUserId));
+        //    HttpClient updateClient = GetHttpClient(updateUri);
+
+        //    PutUpdatePatientDataResponse updateResponsePatient = null;
+
+        //    DataContractJsonSerializer updateJsonSer = new DataContractJsonSerializer(typeof(PutUpdatePatientDataRequest));
+
+        //    // use the serializer to write the object to a MemoryStream 
+        //    MemoryStream updateMs = new MemoryStream();
+        //    updateJsonSer.WriteObject(updateMs, putUpdatePatient);
+        //    updateMs.Position = 0;
+
+
+        //    //use a Stream reader to construct the StringContent (Json) 
+        //    StreamReader updateSr = new StreamReader(updateMs);
+
+        //    StringContent updateContent = new StringContent(updateSr.ReadToEnd(), System.Text.Encoding.UTF8, "application/json");
+
+        //    //Post the data 
+        //    var updateResponse = updateClient.PutAsync(updateUri, updateContent);
+        //    var updateResponseContent = updateResponse.Result.Content;
+
+        //    string updateResponseString = updateResponseContent.ReadAsStringAsync().Result;
+
+
+        //    using (var updateMsResponse = new MemoryStream(Encoding.Unicode.GetBytes(updateResponseString)))
+        //    {
+        //        var updateSerializer = new DataContractJsonSerializer(typeof(PutUpdatePatientDataResponse));
+        //        updateResponsePatient = (PutUpdatePatientDataResponse)updateSerializer.ReadObject(updateMsResponse);
+        //    }
+
+        //    return updateResponsePatient;
+        //}
+        #endregion
+
+        #region putContactServiceCall
+        //private PutContactDataResponse putContactServiceCall(PutContactDataRequest putContactRequest, string patientId)
+        //{
+        //    Uri contactUri = new Uri(string.Format("{0}/Contact/{1}/{2}/{3}/patient/contact/{4}?UserId={5}",
+        //                                    txtURL.Text,
+        //                                    context,
+        //                                    version,
+        //                                    txtContract.Text,
+        //                                    patientId,
+        //                                    _headerUserId));
+        //    HttpClient contactClient = GetHttpClient(contactUri);
+
+        //    DataContractJsonSerializer contactJsonSer = new DataContractJsonSerializer(typeof(PutContactDataRequest));
+        //    MemoryStream contactMs = new MemoryStream();
+        //    contactJsonSer.WriteObject(contactMs, putContactRequest);
+        //    contactMs.Position = 0;
+
+        //    //use a Stream reader to construct the StringContent (Json) 
+        //    StreamReader contactSr = new StreamReader(contactMs);
+        //    StringContent contactContent = new StringContent(contactSr.ReadToEnd(), System.Text.Encoding.UTF8, "application/json");
+
+        //    //Post the data 
+        //    var contactResponse = contactClient.PutAsync(contactUri, contactContent);
+        //    var contactResponseContent = contactResponse.Result.Content;
+
+        //    string contactResponseString = contactResponseContent.ReadAsStringAsync().Result;
+        //    PutContactDataResponse responseContact = null;
+
+        //    using (var contactMsResponse = new MemoryStream(Encoding.Unicode.GetBytes(contactResponseString)))
+        //    {
+        //        var contactSerializer = new DataContractJsonSerializer(typeof(PutContactDataResponse));
+        //        responseContact = (PutContactDataResponse)contactSerializer.ReadObject(contactMsResponse);
+        //    }
+
+        //    return responseContact;
+        //}
+        #endregion
+
+        #region putCareMemberServiceCall
+        //private PutCareMemberDataResponse putCareMemberServiceCall(PutCareMemberDataRequest putCareMemberRequest, string patientId)
+        //{
+        //    //Patient
+        //    Uri careMemberUri = new Uri(string.Format("{0}/CareMember/{1}/{2}/{3}/Patient/{4}/CareMember/Insert?UserId={5}",
+        //                                         txtURL.Text,
+        //                                         context,
+        //                                         version,
+        //                                         txtContract.Text,
+        //                                         patientId,
+        //                                         _headerUserId));
+        //    HttpClient client = GetHttpClient(careMemberUri);
             
-            DataContractJsonSerializer jsonSer = new DataContractJsonSerializer(typeof(PutCareMemberDataRequest));
+        //    DataContractJsonSerializer jsonSer = new DataContractJsonSerializer(typeof(PutCareMemberDataRequest));
 
-            // use the serializer to write the object to a MemoryStream 
-            MemoryStream ms = new MemoryStream();
-            jsonSer.WriteObject(ms, putCareMemberRequest);
-            ms.Position = 0;
+        //    // use the serializer to write the object to a MemoryStream 
+        //    MemoryStream ms = new MemoryStream();
+        //    jsonSer.WriteObject(ms, putCareMemberRequest);
+        //    ms.Position = 0;
 
 
-            //use a Stream reader to construct the StringContent (Json) 
-            StreamReader sr = new StreamReader(ms);
+        //    //use a Stream reader to construct the StringContent (Json) 
+        //    StreamReader sr = new StreamReader(ms);
 
-            StringContent theContent = new StringContent(sr.ReadToEnd(), System.Text.Encoding.UTF8, "application/json");
+        //    StringContent theContent = new StringContent(sr.ReadToEnd(), System.Text.Encoding.UTF8, "application/json");
 
-            //Post the data 
-            var response = client.PutAsync(careMemberUri, theContent);
-            var responseContent = response.Result.Content;
+        //    //Post the data 
+        //    var response = client.PutAsync(careMemberUri, theContent);
+        //    var responseContent = response.Result.Content;
 
-            string responseString = responseContent.ReadAsStringAsync().Result;
-            PutCareMemberDataResponse responseCareMember = null;
+        //    string responseString = responseContent.ReadAsStringAsync().Result;
+        //    PutCareMemberDataResponse responseCareMember = null;
 
-            using (var msResponse = new MemoryStream(Encoding.Unicode.GetBytes(responseString)))
-            {
-                var serializer = new DataContractJsonSerializer(typeof(PutCareMemberDataResponse));
-                responseCareMember = (PutCareMemberDataResponse)serializer.ReadObject(msResponse);
-            }
+        //    using (var msResponse = new MemoryStream(Encoding.Unicode.GetBytes(responseString)))
+        //    {
+        //        var serializer = new DataContractJsonSerializer(typeof(PutCareMemberDataResponse));
+        //        responseCareMember = (PutCareMemberDataResponse)serializer.ReadObject(msResponse);
+        //    }
 
-            return responseCareMember;
-        }
+        //    return responseCareMember;
+        //}
+        #endregion
 
-        private GetContactByUserIdDataResponse getContactByUserIdServiceCall(string userId)
-        {
-            Uri getContactUri = new Uri(string.Format("{0}/Contact/{1}/{2}/{3}/Contact/User/{4}?UserId={5}",
-                                                    txtURL.Text,
-                                                    context,
-                                                    version,
-                                                    txtContract.Text,
-                                                    userId,
-                                                    _headerUserId));
-            HttpClient getContactClient = GetHttpClient(getContactUri);
+        #region getContractByUserId
+        //private GetContactByUserIdDataResponse getContactByUserIdServiceCall(string userId)
+        //{
+        //    Uri getContactUri = new Uri(string.Format("{0}/Contact/{1}/{2}/{3}/Contact/User/{4}?UserId={5}",
+        //                                            txtURL.Text,
+        //                                            context,
+        //                                            version,
+        //                                            txtContract.Text,
+        //                                            userId,
+        //                                            _headerUserId));
+        //    HttpClient getContactClient = GetHttpClient(getContactUri);
 
-            GetContactByUserIdDataRequest getContactRequest = new GetContactByUserIdDataRequest
-            {
-                SQLUserId = userId,
-                Context = context,
-                Version = version,
-                ContractNumber = txtContract.Text
-            };
+        //    GetContactByUserIdDataRequest getContactRequest = new GetContactByUserIdDataRequest
+        //    {
+        //        SQLUserId = userId,
+        //        Context = context,
+        //        Version = version,
+        //        ContractNumber = txtContract.Text
+        //    };
 
-            DataContractJsonSerializer getContactJsonSer = new DataContractJsonSerializer(typeof(GetContactByUserIdDataRequest));
-            MemoryStream getContactMs = new MemoryStream();
-            getContactJsonSer.WriteObject(getContactMs, getContactRequest);
-            getContactMs.Position = 0;
+        //    DataContractJsonSerializer getContactJsonSer = new DataContractJsonSerializer(typeof(GetContactByUserIdDataRequest));
+        //    MemoryStream getContactMs = new MemoryStream();
+        //    getContactJsonSer.WriteObject(getContactMs, getContactRequest);
+        //    getContactMs.Position = 0;
 
-            //use a Stream reader to construct the StringContent (Json) 
-            StreamReader getContactSr = new StreamReader(getContactMs);
-            StringContent getContactContent = new StringContent(getContactSr.ReadToEnd(), System.Text.Encoding.UTF8, "application/json");
+        //    //use a Stream reader to construct the StringContent (Json) 
+        //    StreamReader getContactSr = new StreamReader(getContactMs);
+        //    StringContent getContactContent = new StringContent(getContactSr.ReadToEnd(), System.Text.Encoding.UTF8, "application/json");
 
-            //Post the data 
-            var getContactResponse = getContactClient.GetStringAsync(getContactUri);
-            var getContactResponseContent = getContactResponse.Result;
+        //    //Post the data 
+        //    var getContactResponse = getContactClient.GetStringAsync(getContactUri);
+        //    var getContactResponseContent = getContactResponse.Result;
 
-            string getContactResponseString = getContactResponseContent;
-            GetContactByUserIdDataResponse responseContact = null;
+        //    string getContactResponseString = getContactResponseContent;
+        //    GetContactByUserIdDataResponse responseContact = null;
 
-            using (var getContactMsResponse = new MemoryStream(Encoding.Unicode.GetBytes(getContactResponseString)))
-            {
-                var getContactSerializer = new DataContractJsonSerializer(typeof(GetContactByUserIdDataResponse));
-                responseContact = (GetContactByUserIdDataResponse)getContactSerializer.ReadObject(getContactMsResponse);
-            }
-            return responseContact;
-        }
+        //    using (var getContactMsResponse = new MemoryStream(Encoding.Unicode.GetBytes(getContactResponseString)))
+        //    {
+        //        var getContactSerializer = new DataContractJsonSerializer(typeof(GetContactByUserIdDataResponse));
+        //        responseContact = (GetContactByUserIdDataResponse)getContactSerializer.ReadObject(getContactMsResponse);
+        //    }
+        //    return responseContact;
+        //}
+        #endregion
 
-        private void UpdateCohortPatientView(string patientId, string careMemberContactId)
-        {
-            GetCohortPatientViewResponse getResponse = getCohortPatientViewServiceCall(patientId);
+        #region UpdatedCohortPatientView
+        //private void UpdateCohortPatientView(string patientId, string careMemberContactId)
+        //{
+        //    GetCohortPatientViewResponse getResponse = getCohortPatientViewServiceCall(patientId);
 
-            if (getResponse != null && getResponse.CohortPatientView != null)
-            {
-                CohortPatientViewData cpvd = getResponse.CohortPatientView;
-                // check to see if primary care manager's contactId exists in the searchfield
-                if (!cpvd.SearchFields.Exists(sf => sf.FieldName == Constants.PCM))
-                {
-                    cpvd.SearchFields.Add(new SearchFieldData
-                    {
-                        Value = careMemberContactId,
-                        Active = true,
-                        FieldName = Constants.PCM
-                    });
-                }
-                else
-                {
-                    cpvd.SearchFields.ForEach(sf =>
-                    {
-                        if (sf.FieldName == Constants.PCM)
-                        {
-                            sf.Value = careMemberContactId;
-                            sf.Active = true;
-                        }
-                    });
-                }
+        //    if (getResponse != null && getResponse.CohortPatientView != null)
+        //    {
+        //        CohortPatientViewData cpvd = getResponse.CohortPatientView;
+        //        // check to see if primary care manager's contactId exists in the searchfield
+        //        if (!cpvd.SearchFields.Exists(sf => sf.FieldName == "PCM"))
+        //        {
+        //            cpvd.SearchFields.Add(new SearchFieldData
+        //            {
+        //                Value = careMemberContactId,
+        //                Active = true,
+        //                FieldName = "PCM"
+        //            });
+        //        }
+        //        else
+        //        {
+        //            cpvd.SearchFields.ForEach(sf =>
+        //            {
+        //                if (sf.FieldName == "PCM")
+        //                {
+        //                    sf.Value = careMemberContactId;
+        //                    sf.Active = true;
+        //                }
+        //            });
+        //        }
 
-                PutUpdateCohortPatientViewRequest request = new PutUpdateCohortPatientViewRequest
-                    {
-                        CohortPatientView = cpvd,
-                        ContractNumber = txtContract.Text,
-                        PatientID = patientId
-                    };
+        //        PutUpdateCohortPatientViewRequest request = new PutUpdateCohortPatientViewRequest
+        //            {
+        //                CohortPatientView = cpvd,
+        //                ContractNumber = txtContract.Text,
+        //                PatientID = patientId
+        //            };
 
-                PutUpdateCohortPatientViewResponse response = putCohortPatientViewServiceCall(request, patientId);
-                if (string.IsNullOrEmpty(response.CohortPatientViewId))
-                    throw new Exception("Unable to update Cohort Patient View");
-            }
-        }
+        //        PutUpdateCohortPatientViewResponse response = putCohortPatientViewServiceCall(request, patientId);
+        //        if (string.IsNullOrEmpty(response.CohortPatientViewId))
+        //            throw new Exception("Unable to update Cohort Patient View");
+        //    }
+        //}
+        #endregion
 
-        private GetCohortPatientViewResponse getCohortPatientViewServiceCall(string patientId)
-        {
-            Uri getCohortUri = new Uri(string.Format("{0}/Patient/{1}/{2}/{3}/patient/{4}/cohortpatientview?UserId={5}",
-                                                        txtURL.Text,
-                                                        context,
-                                                        version,
-                                                        txtContract.Text,
-                                                        patientId,
-                                                        _headerUserId));
+        #region getCohortPatientView
+        //private GetCohortPatientViewResponse getCohortPatientViewServiceCall(string patientId)
+        //{
+        //    Uri getCohortUri = new Uri(string.Format("{0}/Patient/{1}/{2}/{3}/patient/{4}/cohortpatientview?UserId={5}",
+        //                                                txtURL.Text,
+        //                                                context,
+        //                                                version,
+        //                                                txtContract.Text,
+        //                                                patientId,
+        //                                                _headerUserId));
 
-            HttpClient getCohortClient = GetHttpClient(getCohortUri);
+        //    HttpClient getCohortClient = GetHttpClient(getCohortUri);
 
-            var getCohortResponse = getCohortClient.GetStringAsync(getCohortUri);
-            var getCohortResponseContent = getCohortResponse.Result;
+        //    var getCohortResponse = getCohortClient.GetStringAsync(getCohortUri);
+        //    var getCohortResponseContent = getCohortResponse.Result;
 
-            string getCohortResponseString = getCohortResponseContent;
-            GetCohortPatientViewResponse responseContact = null;
+        //    string getCohortResponseString = getCohortResponseContent;
+        //    GetCohortPatientViewResponse responseContact = null;
 
-            using (var getCohortMsResponse = new MemoryStream(Encoding.Unicode.GetBytes(getCohortResponseString)))
-            {
-                var getContactSerializer = new DataContractJsonSerializer(typeof(GetCohortPatientViewResponse));
-                responseContact = (GetCohortPatientViewResponse)getContactSerializer.ReadObject(getCohortMsResponse);
-            }
+        //    using (var getCohortMsResponse = new MemoryStream(Encoding.Unicode.GetBytes(getCohortResponseString)))
+        //    {
+        //        var getContactSerializer = new DataContractJsonSerializer(typeof(GetCohortPatientViewResponse));
+        //        responseContact = (GetCohortPatientViewResponse)getContactSerializer.ReadObject(getCohortMsResponse);
+        //    }
 
-            return responseContact;
-        }
+        //    return responseContact;
+        //}
+        #endregion
 
-        private PutUpdateCohortPatientViewResponse putCohortPatientViewServiceCall(PutUpdateCohortPatientViewRequest request, string patientId)
-        {
-            Uri cohortPatientUri = new Uri(string.Format("{0}/Patient/{1}/{2}/{3}/patient/{4}/cohortpatientview/update?UserId={5}",
-                                                 txtURL.Text,
-                                                 context,
-                                                 version,
-                                                 txtContract.Text,
-                                                 patientId,
-                                                 _headerUserId));
-            HttpClient client = GetHttpClient(cohortPatientUri);
+        #region putCohortPatientView
+        //private PutUpdateCohortPatientViewResponse putCohortPatientViewServiceCall(PutUpdateCohortPatientViewRequest request, string patientId)
+        //{
+        //    Uri cohortPatientUri = new Uri(string.Format("{0}/Patient/{1}/{2}/{3}/patient/{4}/cohortpatientview/update?UserId={5}",
+        //                                         txtURL.Text,
+        //                                         context,
+        //                                         version,
+        //                                         txtContract.Text,
+        //                                         patientId,
+        //                                         _headerUserId));
+        //    HttpClient client = GetHttpClient(cohortPatientUri);
 
-            DataContractJsonSerializer jsonSer = new DataContractJsonSerializer(typeof(PutUpdateCohortPatientViewRequest));
+        //    DataContractJsonSerializer jsonSer = new DataContractJsonSerializer(typeof(PutUpdateCohortPatientViewRequest));
 
-            // use the serializer to write the object to a MemoryStream 
-            MemoryStream ms = new MemoryStream();
-            jsonSer.WriteObject(ms, request);
-            ms.Position = 0;
+        //    // use the serializer to write the object to a MemoryStream 
+        //    MemoryStream ms = new MemoryStream();
+        //    jsonSer.WriteObject(ms, request);
+        //    ms.Position = 0;
 
-            //use a Stream reader to construct the StringContent (Json) 
-            StreamReader sr = new StreamReader(ms);
+        //    //use a Stream reader to construct the StringContent (Json) 
+        //    StreamReader sr = new StreamReader(ms);
 
-            StringContent theContent = new StringContent(sr.ReadToEnd(), System.Text.Encoding.UTF8, "application/json");
+        //    StringContent theContent = new StringContent(sr.ReadToEnd(), System.Text.Encoding.UTF8, "application/json");
 
-            //Post the data 
-            var response = client.PutAsync(cohortPatientUri, theContent);
-            var responseContent = response.Result.Content;
+        //    //Post the data 
+        //    var response = client.PutAsync(cohortPatientUri, theContent);
+        //    var responseContent = response.Result.Content;
 
-            string responseString = responseContent.ReadAsStringAsync().Result;
-            PutUpdateCohortPatientViewResponse responseCohortPatientView = null;
+        //    string responseString = responseContent.ReadAsStringAsync().Result;
+        //    PutUpdateCohortPatientViewResponse responseCohortPatientView = null;
 
-            using (var msResponse = new MemoryStream(Encoding.Unicode.GetBytes(responseString)))
-            {
-                var serializer = new DataContractJsonSerializer(typeof(PutUpdateCohortPatientViewResponse));
-                responseCohortPatientView = (PutUpdateCohortPatientViewResponse)serializer.ReadObject(msResponse);
-            }
+        //    using (var msResponse = new MemoryStream(Encoding.Unicode.GetBytes(responseString)))
+        //    {
+        //        var serializer = new DataContractJsonSerializer(typeof(PutUpdateCohortPatientViewResponse));
+        //        responseCohortPatientView = (PutUpdateCohortPatientViewResponse)serializer.ReadObject(msResponse);
+        //    }
 
-            return responseCohortPatientView;
-        }
+        //    return responseCohortPatientView;
+        //}
+        #endregion
 
         private HttpClient GetHttpClient(Uri uri)
         {
