@@ -272,7 +272,7 @@ namespace Phytel.API.DataAudit
                         //if there's an error from the new thread, handle it here, so we don't black the main thread
                         string aseAPIURL = ConfigurationManager.AppSettings.Get("ASEAPI");
                         int procID = int.Parse(ConfigurationManager.AppSettings.Get("ASEProcessID"));
-                        Log.LogError(aseAPIURL, procID, newthreadex, LogErrorCode.Error, LogErrorSeverity.Medium);
+                        //Log.LogError(aseAPIURL, procID, newthreadex, LogErrorCode.Error, LogErrorSeverity.Medium);
                     }
 
                 }).Start();
@@ -317,7 +317,7 @@ namespace Phytel.API.DataAudit
                         //if there's an error from the new thread, handle it here, so we don't black the main thread
                         string aseAPIURL = ConfigurationManager.AppSettings.Get("ASEAPI");
                         int procID = int.Parse(ConfigurationManager.AppSettings.Get("ASEProcessID"));
-                        Log.LogError(aseAPIURL, procID, newthreadex, LogErrorCode.Error, LogErrorSeverity.Medium);
+                       // Log.LogError(aseAPIURL, procID, newthreadex, LogErrorCode.Error, LogErrorSeverity.Medium);
                     }
 
                 }).Start();

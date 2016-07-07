@@ -16,7 +16,7 @@ using Phytel.Services;
 
 namespace Phytel.API.DataAudit
 {
-    public class AuditHelpers : Phytel.API.Common.Audit.IAuditHelpers
+    public class AuditHelpers : IAuditHelpers
     {
         /// <summary>
         /// Gets an auditdata record for the current context
