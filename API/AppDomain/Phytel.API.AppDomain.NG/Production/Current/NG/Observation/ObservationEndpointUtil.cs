@@ -276,7 +276,9 @@ namespace Phytel.API.AppDomain.NG.Observation
                                 EndDate = r.EndDate,
                                 Source = r.Source,
                                 Standard = r.Standard,
-                                TypeId = r.TypeId
+                                TypeId = r.TypeId,
+                                DataSource = r.DataSource,
+                                ExternalRecordId = r.ExternalRecordId
                             });
                     });
                 }

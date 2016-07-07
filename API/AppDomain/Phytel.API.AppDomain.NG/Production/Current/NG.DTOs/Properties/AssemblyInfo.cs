@@ -1,3 +1,8 @@
+//IBM Confidential
+//OCO Source Materials
+//PID:5725Z49
+//� Copyright IBM Corp. 2013, 2016
+//The source code for this program is not published or otherwise divested of its trade secrets, irrespective of what has been deposited with the U.S. Copyright Office
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -8,9 +13,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("Phytel.API.AppDomain.NG.DTO")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Phytel Inc.")]
-[assembly: AssemblyProduct("Phytel.API.AppDomain.NG.DTO")]
-[assembly: AssemblyCopyright("Copyright © Phytel Inc. 2013")]
+[assembly: AssemblyCompany("IBM Corp.")]
+[assembly: AssemblyProduct("PID:5725Z49")]
+[assembly: AssemblyCopyright("Copyright � IBM Corporation 2013, 2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -32,5 +37,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.3.2.0")]
-[assembly: AssemblyFileVersion("1.3.2.0")]
+[assembly: AssemblyVersion("1.5.0.0")]
+[assembly: AssemblyFileVersion("1.5.0.0")]

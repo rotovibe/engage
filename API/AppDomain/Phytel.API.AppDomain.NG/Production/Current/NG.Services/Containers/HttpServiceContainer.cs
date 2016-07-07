@@ -36,7 +36,7 @@ namespace Phytel.API.AppDomain.NG.Service.Containers
             container.RegisterAutoWiredAs<PlanElementUtils, IPlanElementUtils>().ReusedWithin(ReuseScope.Request);
             container.RegisterAutoWiredAs<UtilizationManager, IUtilizationManager>().ReusedWithin(ReuseScope.Request);
             container.RegisterAutoWiredAs<NotesManager, INotesManager>().ReusedWithin(ReuseScope.Request);
-            container.RegisterAutoWiredAs<NGManager, INGManager>().ReusedWithin(ReuseScope.Request);
+            
             container.RegisterAutoWiredAs<AuditUtil, IAuditUtil>().ReusedWithin(ReuseScope.Request);
             container.RegisterAutoWiredAs<ObservationEndpointUtil, IObservationEndpointUtil>().ReusedWithin(ReuseScope.Request);
             container.RegisterAutoWiredAs<ObservationsManager, IObservationsManager>().ReusedWithin(ReuseScope.Request);
@@ -48,7 +48,22 @@ namespace Phytel.API.AppDomain.NG.Service.Containers
             container.RegisterAutoWiredAs<GoalsEndpointUtils, IGoalsEndpointUtils>().ReusedWithin(ReuseScope.Request);
             container.RegisterAutoWiredAs<PatientSystemEndpointUtil, IPatientSystemEndpointUtil>().ReusedWithin(ReuseScope.Request);
             container.RegisterAutoWiredAs<PatientSystemManager, IPatientSystemManager>().ReusedWithin(ReuseScope.Request);
+            container.RegisterAutoWiredAs<ContactEndpointUtil, IContactEndpointUtil>().ReusedWithin(ReuseScope.Request);
+            container.RegisterAutoWiredAs<EngageCareMemberCohortRuleFactory, ICareMemberCohortRuleFactory>().ReusedWithin(ReuseScope.Request);
+            container.RegisterAutoWiredAs<CohortRoleUtils, ICohortRuleUtil>().ReusedWithin(ReuseScope.Request);
+            
+
+            RegisterInstances(container);
+
             return container;
+        }
+
+        private static void RegisterInstances(Funq.Container container)
+        {
+            container.RegisterAutoWiredAs<ASEExceptionLogger, ILogger>();
+            container.RegisterAutoWiredAs<ContactManager, IContactManager>();
+            container.RegisterAutoWiredAs<CohortRulesProcessor, ICohortRulesProcessor>();
+            container.RegisterAutoWiredAs<NGManager, INGManager>();
         }
     }
 }
