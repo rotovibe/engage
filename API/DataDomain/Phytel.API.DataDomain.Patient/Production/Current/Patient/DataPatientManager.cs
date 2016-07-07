@@ -640,5 +640,75 @@ namespace Phytel.API.DataDomain.Patient
             }
             return ids;
         }
+
+
+        public SyncPatientInfoDataResponse SyncPatient(SyncPatientInfoDataRequest request)
+        {
+            var response = new SyncPatientInfoDataResponse();
+            try
+            {
+                var repo = Factory.GetRepository(request, RepositoryType.Patient);
+                var isSuccessful = repo.SyncPatient(request);
+
+               response.IsSuccessful = isSuccessful;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return response;
+        }
+
+        public AddPCMToCohortPatientViewDataResponse AddPcmToCohortPatientView(AddPCMToCohortPatientViewDataRequest request)
+        {
+            var response = new AddPCMToCohortPatientViewDataResponse();
+            try
+            {
+                var repo = Factory.GetRepository(request, RepositoryType.CohortPatientView);
+                var isSuccessful = repo.AddPCMToPatientCohortView(request);
+
+                response.IsSuccessful = isSuccessful;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return response;
+            
+        }
+
+        public RemovePCMFromCohortPatientViewDataResponse RemovePcmFromCohortPatientView(RemovePCMFromCohortPatientViewDataRequest request)
+        {
+            var response = new RemovePCMFromCohortPatientViewDataResponse();
+            try
+            {
+                var repo = Factory.GetRepository(request, RepositoryType.CohortPatientView);
+                var isSuccessful = repo.RemovePCMFromCohortPatientView(request);
+
+                response.IsSuccessful = isSuccessful;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return response;
+        }
+
+        public AssignContactsToCohortPatientViewDataResponse AssignContactsToCohortPatientView(AssignContactsToCohortPatientViewDataRequest request)
+        {
+            var response = new AssignContactsToCohortPatientViewDataResponse();
+            try
+            {
+                var repo = Factory.GetRepository(request, RepositoryType.CohortPatientView);
+                var isSuccessful = repo.AddContactsToCohortPatientView(request);
+
+                response.IsSuccessful = isSuccessful;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            return response;
+        }
     }
 }   

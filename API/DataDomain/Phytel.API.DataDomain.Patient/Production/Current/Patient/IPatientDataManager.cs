@@ -26,5 +26,14 @@ namespace Phytel.API.DataDomain.Patient
         PutInitializePatientDataResponse InitializePatient(PutInitializePatientDataRequest request);
         List<PatientData> GetAllPatients(GetAllPatientsDataRequest request);
         InsertBatchPatientsDataResponse InsertBatchPatients(InsertBatchPatientsDataRequest request);
+        SyncPatientInfoDataResponse SyncPatient(SyncPatientInfoDataRequest request);
+
+        #region Cohort Patient View
+
+        AddPCMToCohortPatientViewDataResponse AddPcmToCohortPatientView(AddPCMToCohortPatientViewDataRequest request);
+        RemovePCMFromCohortPatientViewDataResponse RemovePcmFromCohortPatientView(RemovePCMFromCohortPatientViewDataRequest request);
+        AssignContactsToCohortPatientViewDataResponse AssignContactsToCohortPatientView(AssignContactsToCohortPatientViewDataRequest request);
+
+        #endregion
     }
 }

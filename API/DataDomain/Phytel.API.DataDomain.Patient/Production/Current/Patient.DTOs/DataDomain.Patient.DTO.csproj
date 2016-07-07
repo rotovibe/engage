@@ -99,6 +99,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddPCMToCohortPatientViewDataRequest.cs" />
+    <Compile Include="AddPCMToCohortPatientViewDataResponse.cs" />
+    <Compile Include="AssignContactsToCohortPatientViewDataRequest.cs" />
+    <Compile Include="AssignContactsToCohortPatientViewDataResponse.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="GetAllPatientsDataRequest.cs" />
     <Compile Include="GetAllPatientsDataResponse.cs" />
@@ -108,6 +112,11 @@
     <Compile Include="InsertBatchPatientsDataResponse.cs" />
     <Compile Include="PutPatientSystemIdDataRequest.cs" />
     <Compile Include="PutPatientSystemIdDataResponse.cs" />
+    <Compile Include="RemovePCMFromCohortPatientViewDataRequest.cs" />
+    <Compile Include="RemovePCMFromCohortPatientViewDataResponse.cs" />
+    <Compile Include="SyncPatientInfoData.cs" />
+    <Compile Include="SyncPatientInfoDataRequest.cs" />
+    <Compile Include="SyncPatientInfoDataResponse.cs" />
     <Compile Include="UndoDeleteCohortPatientViewDataRequest.cs" />
     <Compile Include="UndoDeleteCohortPatientViewDataResponse.cs" />
     <Compile Include="UndoDeletePatientUsersDataRequest.cs" />
