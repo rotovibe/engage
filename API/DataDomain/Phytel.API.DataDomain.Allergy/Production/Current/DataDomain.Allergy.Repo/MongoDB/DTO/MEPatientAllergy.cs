@@ -9,7 +9,7 @@ namespace Phytel.API.DataDomain.Allergy.DTO
 {
     [BsonIgnoreExtraElements(false)]
     [MongoIndex(Keys = new string[] { TTLDateProperty }, TimeToLive = 0)]
-    public class MEPatientAllergy : IMongoEntity<ObjectId>, IMEEntity
+    public class MEPatientAllergy : IMongoEntity<ObjectId>, IMEEntity,IMEDataSource
     {
         public MEPatientAllergy(string userId)
         {
@@ -72,6 +72,26 @@ namespace Phytel.API.DataDomain.Allergy.DTO
         [BsonElement(SystemProperty)]
         [BsonIgnoreIfNull(true)]
         public string SystemName { get; set; }
+
+        public const string DataSourceProperty = "dsrc";
+        [BsonElement(DataSourceProperty)]
+        [BsonIgnoreIfNull(true)]
+        public string DataSource { get; set; }
+
+        public const string ExternalRecordIdProperty = "extrid";
+        [BsonElement(ExternalRecordIdProperty)]
+        [BsonIgnoreIfNull(true)]
+        public string ExternalRecordId { get; set; }
+
+        public const string CodingSystemProperty = "csid";
+        [BsonElement(CodingSystemProperty)]
+        [BsonIgnoreIfNull(true)]
+        public ObjectId? CodingSystemId { get; set; }
+
+        public const string CodeProperty = "csc";
+        [BsonElement(CodeProperty)]
+        [BsonIgnoreIfNull(true)]
+        public string Code { get; set; }
 
         #region Base elements
         public const string VersionProperty = "v";
