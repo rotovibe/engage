@@ -108,6 +108,10 @@
     <Compile Include="MongoDB\DTO\Allergy\Reaction.cs" />
     <Compile Include="MongoDB\DTO\Allergy\Severity.cs" />
     <Compile Include="MongoDB\DTO\CodingSystem.cs" />
+    <Compile Include="MongoDB\DTO\Contact\CareTeamFrequency.cs" />
+    <Compile Include="MongoDB\DTO\MedSupp\RefusalReason.cs" />
+    <Compile Include="MongoDB\DTO\MedSupp\DurationUnit.cs" />
+    <Compile Include="MongoDB\DTO\MedSupp\MedicationReview.cs" />
     <Compile Include="MongoDB\DTO\MedSupp\Frequency.cs" />
     <Compile Include="MongoDB\DTO\MedSupp\MedSuppType.cs" />
     <Compile Include="MongoDB\DTO\MedSupp\FreqHowOften.cs" />
