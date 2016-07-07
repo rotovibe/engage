@@ -1,5 +1,5 @@
-﻿define(['services/session', 'services/datacontext', 'config.services', 'viewmodels/shell/shell', 'models/base', 'viewmodels/patients/index'],
-    function (session, datacontext, servicesConfig, shell, modelConfig, patientsIndex) {
+﻿define(['services/session', 'services/datacontext', 'config.services', 'viewmodels/shell/shell', 'models/base', 'viewmodels/patients/index', 'viewmodels/patients/medications/index'],
+    function (session, datacontext, servicesConfig, shell, modelConfig, patientsIndex, medicationsIndex) {
 
         var ctor = function () {
     		var self = this;
@@ -12,7 +12,7 @@
 	            // Secondary sort property
 	            var o1 = l.name();
 	            var o2 = r.name();
-	            
+
 	            if (p1 != p2) {
 	                if (p1 < p2) return 1;
 	                if (p1 > p2) return -1;
@@ -47,7 +47,7 @@
             new Column('updatedon', 'Date','span2 ellipsis', 'updatedOn'),
             new Column('updatedon-small', 'Date', 'span1 ellipsis', 'updatedOn')
     	];
-        
+
         var patientEndPoint = ko.computed(function () {
             if(!session.currentUser()) {
                 return false;
@@ -62,7 +62,7 @@
             }
             return new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'Patient', 'Program');
         });
-    	
+
         ctor.prototype.activate = function (data) {
     		var self = this;
     		self.allergies = data.allergies;
@@ -70,14 +70,15 @@
             self.selectedSortColumn = data.selectedSortColumn;
             self.toggleSort = data.toggleSort;
             self.canSort = data.canSort ? data.canSort : false;
+            self.activeAllergy = medicationsIndex.activeAllergy;
             self.saveOverride = function () {
                 // Edit Existing Allergy: Save it if its valid. if not - cancel any chages (silently !)
 				if ( self.modalEntity().allergy().isValid() ){
-					datacontext.saveAllergies([self.modalEntity().allergy()], 'Update').then(saveCompleted);	
+					datacontext.saveAllergies([self.modalEntity().allergy()], 'Update').then(saveCompleted);
 				} else{
 					self.cancelOverride()
 				}
-                
+
                 function saveCompleted() {
                     self.modalEntity().allergy().isNew(false);
                     self.modalEntity().allergy().isUserCreated(false);
@@ -92,12 +93,12 @@
 			var modalSettings = {
 				title: 'Edit Allergy',
 				showSelectedPatientInTitle: true,
-				entity: self.modalEntity, 
-				templatePath: 'viewmodels/templates/allergy.edit', 
-				showing: self.modalShowing, 
-				saveOverride: self.saveOverride, 
-				cancelOverride: self.cancelOverride, 
-				deleteOverride: null, 
+				entity: self.modalEntity,
+				templatePath: 'viewmodels/templates/allergy.edit',
+				showing: self.modalShowing,
+				saveOverride: self.saveOverride,
+				cancelOverride: self.cancelOverride,
+				deleteOverride: null,
 				classOverride: 'modal-lg'
 			}
             self.modal = new modelConfig.modal(modalSettings);
@@ -117,6 +118,9 @@
                 }
     			return tempcols;
     		});
+            self.setActiveAllergy = function (allergy) {
+                medicationsIndex.setActiveAllergy(allergy);
+            };
     		self.editAllergy = function (allergy) {
                 // Set the allergy
                 self.modalEntity().allergy(allergy);
@@ -133,10 +137,15 @@
     						self.editAllergy(td);
     					}
     				}
+                    if (!td.setActiveAllergy) {
+                        td.setActiveAllergy = function () {
+                            self.setActiveAllergy(td);
+                        }
+                    }
                     // If there is no isExpanded property
                     if (!td.isExpanded) {
                         td.isExpanded = ko.observable(false);
-                    }                    
+                    }
     			});
                 return self.allergies();
     		});
@@ -160,7 +169,7 @@
             if (name.substr(name.length - 5, 5) === 'small') {
                 self.path = 'views/templates/allergy.' + name.substr(0, name.length - 6) + '.html';
             } else {
-                self.path = 'views/templates/allergy.' + name + '.html';                
+                self.path = 'views/templates/allergy.' + name + '.html';
             }
     		self.cssClass = cssclass;
             self.sortProperty = sortprop;

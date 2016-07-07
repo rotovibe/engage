@@ -1,5 +1,5 @@
-﻿define(['models/base', 'services/datacontext', 'viewmodels/shell/shell'],
-    function (modelConfig, datacontext, shell) {
+﻿define(['models/base', 'services/datacontext', 'viewmodels/shell/shell', 'viewmodels/home/contacts/index'],
+    function (modelConfig, datacontext, shell, contactsIndex) {
         
         var ctor = function () {
 
@@ -93,34 +93,16 @@
                 return communications;
             }).extend({ throttle: 25 });
             // The modal to display for editing
-			var modalSettings = {
-				title: 'Edit Communication Preferences',
-				showSelectedPatientInTitle: true,
-				entity: self.contactCard, 
-				templatePath: 'templates/contactcard.html', 
-				showing: self.communicationModalShowing				
-			}
-            self.modal = new modelConfig.modal(modalSettings);
+
             self.isOpen = ko.observable(true);
             // Why do we need this on the contactCard and in this view model?
             // TODO: I deleted it from the model but I think we can reduce either this one
             // or the communicationModalShowing one.
             self.isEditing = ko.observable(false);
-            self.toggleEditing = function () {
-                if (self.isEditing()) {
-                    self.communicationModalShowing(false);
-                }
-                else {
-                    shell.currentModal(self.modal);
-                    self.communicationModalShowing(true);
-                    var editingToken = self.communicationModalShowing.subscribe(function () {
-                        self.isEditing(false);
-                        editingToken.dispose();
-                    });
-                }
-                self.isEditing(!self.isEditing());
-                self.isOpen(true);
-            };
+			self.editContact = function(){
+			    contactsIndex.editPatientContact(self.contactCard());				
+			}
+
 			self.isValid = ko.observable(true);
         };
                 

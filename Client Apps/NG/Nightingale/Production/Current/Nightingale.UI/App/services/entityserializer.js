@@ -172,7 +172,11 @@
 				// When the serialization started
 				var startTime = new Date().getTime();
 
-
+				var entityName = 'ContactCard';
+				if( contactCard.entityAspect.entity.entityType.name.startsWith('ContactSearch') ){
+					entityName = 'ContactSearch';
+				}
+				
 				// Create an object to hold the unwrapped JSON
 				var thisContactCard = {};
 
@@ -184,6 +188,7 @@
 				thisContactCard.Languages = [];
 				thisContactCard.TimesOfDaysId = [];
 				thisContactCard.WeekDays = [];
+				thisContactCard.ContactSubTypes = [];
 
 				// Get the values of the properties of the action
 				//var unwrappedContactCard = ko.toJS(contactCard);
@@ -191,8 +196,10 @@
 				var contactCardQuery = breeze.EntityQuery
 						.from('fakePath')
 						.where('id', '==', contactCard.id())
-						.toType('ContactCard')
-						.select('id, patientId, timeZoneId');
+						.toType( entityName )
+						.select('id, patientId, timeZoneId, isPatient, userId, isUser, firstName, middleName, lastName, preferredName,'
+							+ ' gender, contactTypeId, externalRecordId, dataSource, statusId, deceasedId, prefix, suffix, createdOn, updatedOn,'
+							+ ' createdById, updatedById');
 				var results = manager.executeQueryLocally(contactCardQuery);
 				var unwrappedContactCard = results[0];
 
@@ -210,6 +217,25 @@
 				thisContactCard.PatientId = unwrappedContactCard.patientId;
 				thisContactCard.Id = unwrappedContactCard.id;
 				thisContactCard.TimeZoneId = unwrappedContactCard.timeZoneId;
+				thisContactCard.IsPatient		 = unwrappedContactCard.isPatient;
+				thisContactCard.UserId           = unwrappedContactCard.userId;
+				thisContactCard.IsUser           = unwrappedContactCard.isUser;
+				thisContactCard.FirstName        = unwrappedContactCard.firstName;
+				thisContactCard.MiddleName       = unwrappedContactCard.middleName;
+				thisContactCard.LastName         = unwrappedContactCard.lastName;
+				thisContactCard.PreferredName    = unwrappedContactCard.preferredName;
+				thisContactCard.Gender           = unwrappedContactCard.gender;
+				thisContactCard.ContactTypeId    = unwrappedContactCard.contactTypeId;
+				thisContactCard.ExternalRecordId = unwrappedContactCard.externalRecordId;
+				thisContactCard.DataSource       = unwrappedContactCard.dataSource;
+				thisContactCard.StatusId         = unwrappedContactCard.statusId;
+				thisContactCard.DeceasedId       = unwrappedContactCard.deceasedId;
+				thisContactCard.Prefix           = unwrappedContactCard.prefix;
+				thisContactCard.Suffix           = unwrappedContactCard.suffix;
+				thisContactCard.CreatedOn        = unwrappedContactCard.createdOn;
+				thisContactCard.UpdatedOn        = unwrappedContactCard.updatedOn;
+				thisContactCard.CreatedById      = unwrappedContactCard.createdById;
+				thisContactCard.UpdatedById      = unwrappedContactCard.updatedById;
 
 				ko.utils.arrayForEach(contactCard.modes.peek(), function (mode) {
 						var newMode = {};
@@ -262,6 +288,18 @@
 						newLanguage.LookUpLanguageId = language.lookUpLanguageId.peek();
 						newLanguage.Preferred = language.preferred.peek();
 						thisContactCard.Languages.push(newLanguage);
+				});
+
+				ko.utils.arrayForEach(contactCard.contactSubTypes.peek(), function (sub) {
+					var subType = {};
+					subType.Id = sub.id() ? sub.id() : null;
+					subType.SubTypeId = sub.subTypeId();
+					subType.SpecialtyId = sub.specialtyId() ? sub.specialtyId() : null;
+					subType.SubSpecialtyIds = [];
+					ko.utils.arrayForEach(sub.subSpecialtyIds.peek(), function (sid) {
+						subType.SubSpecialtyIds.push(sid.id.peek());
+					});
+					thisContactCard.ContactSubTypes.push(subType);
 				});
 
 				var totalTime = new Date().getTime() - startTime;
@@ -685,6 +723,69 @@
 				return thisToDo;
 		}
 
+		function serializeCareTeam(careTeam, manager){
+			// Create an object to hold the unwrapped JSON
+			var thisCareTeam = {};
+			var careTeamQuery = breeze.EntityQuery
+						.from('fakePath')
+						.where('id', '==', careTeam.id())
+						.toType('CareTeam')
+						.select('id, contactId');
+			var results = manager.executeQueryLocally(careTeamQuery);
+			var unwrappedCareTeam = results[0];
+
+			thisCareTeam.Id = unwrappedCareTeam.id < 1 ? null : unwrappedCareTeam.id;
+			thisCareTeam.ContactId = unwrappedCareTeam.contactId;
+			thisCareTeam.members = [];
+			ko.utils.arrayForEach( careTeam.members(), function( member ){
+				var thisCareMember = serializeCareTeamMember( member, manager );
+				thisCareTeam.members.push( thisCareMember )
+			});
+			return thisCareTeam;
+		}
+
+		function serializeCareTeamMember( careMember, manager ){
+				var thisCareMember = {};
+				var careMemberQuery = breeze.EntityQuery
+						.from('fakePath')
+						.where('id', '==', careMember.id())
+						.toType('CareMember')
+						.select('id, contactId, careTeamId, roleId, customRoleName, startDate, endDate, core, notes, frequencyId, distance,'
+								+ 'distanceUnit, externalRecordId, dataSource, statusId, updatedOn, createdOn, updatedById, createdById');
+
+				var results = manager.executeQueryLocally(careMemberQuery);
+				var unwrappedCareMember = results[0];
+
+				thisCareMember.Id 				= unwrappedCareMember.id < 1 ? null : unwrappedCareMember.id;
+				thisCareMember.ContactId		= unwrappedCareMember.contactId;
+				if( unwrappedCareMember.roleId == -1 ){	//Other Role - customRoleName
+					thisCareMember.RoleId = null;
+					thisCareMember.CustomRoleName   = unwrappedCareMember.customRoleName;
+				}
+				else{
+					thisCareMember.RoleId = unwrappedCareMember.roleId;
+					thisCareMember.CustomRoleName   = null;
+				}
+				thisCareMember.StartDate        = unwrappedCareMember.startDate;
+				thisCareMember.EndDate          = unwrappedCareMember.endDate;
+				thisCareMember.Core             = unwrappedCareMember.core;
+				thisCareMember.Notes            = unwrappedCareMember.notes;
+				thisCareMember.FrequencyId      = unwrappedCareMember.frequencyId;
+				thisCareMember.Distance         = unwrappedCareMember.distance;
+				thisCareMember.DistanceUnit     = unwrappedCareMember.distanceUnit;
+				thisCareMember.ExternalRecordId = unwrappedCareMember.externalRecordId;
+				thisCareMember.DataSource       = unwrappedCareMember.dataSource;
+				thisCareMember.StatusId         = unwrappedCareMember.statusId;
+				thisCareMember.UpdatedOn        = unwrappedCareMember.updatedOn;
+				thisCareMember.CreatedOn        = unwrappedCareMember.createdOn;
+				thisCareMember.UpdatedById      = unwrappedCareMember.updatedById;
+				thisCareMember.CreatedById      = unwrappedCareMember.createdById;
+				thisCareMember.CareTeamId 		= unwrappedCareMember.careTeamId ? unwrappedCareMember.careTeamId : null;
+
+				return thisCareMember;
+		}
+
+		//this will be deprecated:
 		// Serialize a care member to save it
 		function serializeCareMember(careMember, manager) {
 				// When the serialization started
@@ -826,28 +927,32 @@
 			// Create a query to
 			// Get the unwrapped values of the properties of the allergy
 			var allergyQuery = breeze.EntityQuery
-					.from('fakePath')
-					.where('id', '==', allergy.id())
-					.toType('PatientAllergy')
-					.select('id, allergyName, startDate, endDate, patientId, statusId, deleteFlag, severityId, allergyId, sourceId, notes, systemName');
+				.from('fakePath')
+				.where('id', '==', allergy.id())
+				.toType('PatientAllergy')
+				.select('id, allergyName, startDate, endDate, patientId, statusId, deleteFlag, severityId, allergyId, sourceId, notes, systemName, code, codingSystemId, dataSource, externalRecordId');
 			var results = manager.executeQueryLocally(allergyQuery);
-			var unwrappedObservation = results[0];
+			var unwrappedAllergy = results[0];
 
 			// Copy actions properties
-			thisAllergy.Id = unwrappedObservation.id;
-			thisAllergy.AllergyName = unwrappedObservation.allergyName;
-			var startMoment = moment(unwrappedObservation.startDate);
+			thisAllergy.Id = unwrappedAllergy.id;
+			thisAllergy.AllergyName = unwrappedAllergy.allergyName;
+			var startMoment = moment(unwrappedAllergy.startDate);
 			thisAllergy.StartDate = startMoment.isValid()? startMoment.toISOString() : null;
-			var endMoment = moment(unwrappedObservation.endDate);
+			var endMoment = moment(unwrappedAllergy.endDate);
 			thisAllergy.EndDate = endMoment.isValid()? endMoment.toISOString() : null;
-			thisAllergy.PatientId = unwrappedObservation.patientId;
-			thisAllergy.AllergyId = unwrappedObservation.allergyId;
-			thisAllergy.StatusId = unwrappedObservation.statusId;
-			thisAllergy.SourceId = unwrappedObservation.sourceId;
-			thisAllergy.DeleteFlag = unwrappedObservation.deleteFlag;
-			thisAllergy.SeverityId = unwrappedObservation.severityId;
-			thisAllergy.Notes = unwrappedObservation.notes;
-			thisAllergy.SystemName = unwrappedObservation.systemName;
+			thisAllergy.PatientId = unwrappedAllergy.patientId;
+			thisAllergy.AllergyId = unwrappedAllergy.allergyId;
+			thisAllergy.StatusId = unwrappedAllergy.statusId;
+			thisAllergy.SourceId = unwrappedAllergy.sourceId;
+			thisAllergy.DeleteFlag = unwrappedAllergy.deleteFlag;
+			thisAllergy.SeverityId = unwrappedAllergy.severityId;
+            thisAllergy.Notes = unwrappedAllergy.notes;
+            thisAllergy.SystemName = unwrappedAllergy.systemName;
+            thisAllergy.Code = unwrappedAllergy.code;
+            thisAllergy.CodingSystemId = unwrappedAllergy.codingSystemId;
+            thisAllergy.DataSource = unwrappedAllergy.dataSource;
+            thisAllergy.ExternalRecordId = unwrappedAllergy.externalRecordId;
 
 			// If it is a brand new allergy set an isNewAllergy property
 			if (allergy.isUserCreated()) {
@@ -883,7 +988,7 @@
 						.from('fakePath')
 						.where('id', '==', medication.id())
 						.toType('PatientMedication')
-						.select('id, name, startDate, endDate, patientId, statusId, deleteFlag, sourceId, notes, systemName, dosage, strength, route, form, freqQuantity, freqHowOftenId, frequencyId, freqWhenId, customFrequency, categoryId, prescribedBy, typeId, sigCode, reason, familyId, isCreateNewMedication');
+						.select('id, name, startDate, endDate, patientId, statusId, deleteFlag, sourceId, notes, systemName, dosage, strength, route, form, freqQuantity, freqHowOftenId, frequencyId, freqWhenId, customFrequency, categoryId, prescribedBy, typeId, sigCode, reason, familyId, isCreateNewMedication, dataSource, duration, durationUnitId, otherDuration, reviewId, refusalReasonId, otherRefusalReason, orderedBy, orderedDate, prescribedDate, rxNumber, rxDate, pharmacy, originalDataSource, externalRecordId');
 				var results = manager.executeQueryLocally(medicationQuery);
 				var unwrappedObservation = results[0];
 
@@ -915,6 +1020,21 @@
 				thisMedication.Reason = unwrappedObservation.reason;
 				thisMedication.FamilyId = unwrappedObservation.familyId; //a new medicationMap record id
 				thisMedication.RecalculateNDC = medication.recalculateNDC();
+                thisMedication.OriginalDataSource = unwrappedObservation.originalDataSource;
+                thisMedication.Duration = parseInt(unwrappedObservation.duration);
+                thisMedication.DurationUnitId = unwrappedObservation.durationUnitId;
+                thisMedication.OtherDuration = unwrappedObservation.otherDuration;
+                thisMedication.ReviewId = unwrappedObservation.reviewId;
+                thisMedication.RefusalReasonId = unwrappedObservation.refusalReasonId;
+                thisMedication.OtherRefusalReason = unwrappedObservation.otherRefusalReason;
+                thisMedication.OrderedBy = unwrappedObservation.orderedBy;
+                thisMedication.OrderedDate = unwrappedObservation.orderedDate;
+                thisMedication.PrescribedDate = unwrappedObservation.prescribedDate;
+                thisMedication.RxNumber = unwrappedObservation.rxNumber;
+                thisMedication.RxDate = unwrappedObservation.rxDate;
+                thisMedication.Pharmacy = unwrappedObservation.pharmacy;
+                thisMedication.DataSource = unwrappedObservation.dataSource;
+                thisMedication.ExternalRecordId = unwrappedObservation.externalRecordId;
 
 				thisMedication.NDCs = [];
 				ko.utils.arrayForEach(medication.nDCs.peek(), function (value) {
@@ -942,6 +1062,8 @@
 				serializeNote: serializeNote,
 				serializeToDo: serializeToDo,
 				serializeCareMember: serializeCareMember,
+				serializeCareTeam: serializeCareTeam,
+				serializeCareTeamMember: serializeCareTeamMember,
 				serializeIndividual: serializeIndividual,
 				serializePatientSystem: serializePatientSystem,
 				serializePatientAllergy: serializePatientAllergy,
@@ -950,4 +1072,4 @@
 
 		return entitySerializer;
 
-}); 
+});

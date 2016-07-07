@@ -15,8 +15,7 @@
 				self.existingDetailsOpen(!self.existingDetailsOpen());
 			};
             self.barrier = self.settings.entity;
-            // Decides whether we can change status or not
-            self.isNew = self.barrier.goal().isNew;            
+            self.isNew = self.barrier.goal().isNew;
             self.barrierStatuses = datacontext.enums.barrierStatuses;
             self.barrierCategories = datacontext.enums.barrierCategories;
             self.canSave = self.settings.canSave ? self.settings.canSave : true;

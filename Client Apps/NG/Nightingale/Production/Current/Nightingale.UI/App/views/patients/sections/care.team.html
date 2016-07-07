@@ -1,11 +1,83 @@
 ﻿<section class="accordion hoverable open">
     <div class="row line accordion-toggle">
-        <strong class="ellipsis" data-bind="clickToggle: isOpen">Care Team</strong>
-        <a class="edit hover-toggle" href="#" data-bind="click: editCareTeam">Edit</a>
+        <strong class="ellipsis" data-bind="clickToggle: isOpen">Care Team</strong>			<!-- this needs to chage -->
+        <!-- <a class="edit hover-toggle" href="#" data-bind="click: editCareTeam">Edit</a> -->
     </div>
     <div class="accordion-content columns" data-bind="visible: isOpen">
         <ul class="dotted column">
-            <!-- ko if: canAssignToMe -->
+            
+            <li class="row center pad top">
+                <div class="span2">
+                    <img alt="Care team image" class="profile-pic" src="/NightingaleUI/Content/images/patient_neutral_small.png" data-phyautomation="gender">
+                </div>
+                <div class="span10">
+                    <button data-bind="click: addCareMember" class="btn color small">Assign</button>
+                    <br>
+                    <small class="grey">Care Team Member</small>
+                    <br>
+                </div>
+            </li>
+			<li class="row center pad top">
+				<div data-bind="with: primaryCareManager">
+					<div class="span2" data-bind="with: contact">
+						<img alt="Care team image" class="profile-pic" data-bind="attr: { src: genderModel().SmallImgSrc }" data-phyautomation="gender">
+					</div>
+					<div class="span10">
+						<div data-bind="with: contact">
+							<strong data-bind="text: fullName, attr: { 'title': fullName }"></strong>
+						</div>
+						<small class="grey" data-bind="attr: { 'title': computedRoleName }">
+							<span data-bind="text: computedRoleName"></span>
+						</small>
+						<br>
+					</div>
+				</div>
+				<div data-bind="if: !primaryCareManager()">
+					<div class="span2">
+						<img alt="Care team image" class="profile-pic" src="/NightingaleUI/Content/images/patient_neutral_small.png" data-phyautomation="gender">
+					</div>
+					<div class="span10">						
+						<button data-bind="click: assignToMe" class="btn color small">Assign to me</button>
+						<br>
+						<small class="grey">
+							<span>Primary Care Manager</span>
+						</small>
+						<br>
+					</div>
+				</div>
+			</li>
+			<li class="row center pad top">
+				<div data-bind="with: primaryCarePhysician">
+					<div class="span2" data-bind="with: contact">
+						<img alt="Care team image" class="profile-pic" data-bind="attr: { src: genderModel().SmallImgSrc }" data-phyautomation="gender">
+					</div>
+					<div class="span10">
+						<div data-bind="with: contact">
+							<strong data-bind="text: fullName, attr: { 'title': fullName }"></strong>
+						</div>
+						<small class="grey" data-bind="attr: { 'title': computedRoleName }">
+							<span data-bind="text: computedRoleName"></span>
+						</small>
+						<br>
+					</div>
+				</div>
+				<div data-bind="if: !primaryCarePhysician()">
+					<div class="span2">
+						<img alt="Care team image" class="profile-pic" src="/NightingaleUI/Content/images/patient_neutral_small.png" data-phyautomation="gender">
+					</div>
+					<div class="span10">
+						<strong>Unassigned</strong><br>
+						<small class="grey">
+							<span>Primary Care Physician</span>
+						</small>
+						<br>
+					</div>
+				</div>
+			</li>
+            
+        </ul>
+        <ul class="dotted column">
+            <!-- ko if: canReassignToMe -->
             <li class="row center pad top">
                 <div class="span2">
                     <img alt="Care team image" class="profile-pic" src="/NightingaleUI/Content/images/patient_neutral_small.png" data-phyautomation="gender">
@@ -18,49 +90,22 @@
                 </div>
             </li>
             <!-- /ko -->
-            <!-- ko foreach: primaryCareTeam -->
+			<!-- ko foreach: primaryCareTeam -->
             <li class="row center pad top">
-                <div class="span2">
+                <div class="span2" data-bind="with: contact">
                     <img alt="Care team image" class="profile-pic" data-bind="attr: { src: genderModel().SmallImgSrc }" data-phyautomation="gender">
                 </div>
                 <div class="span10">
-                    <strong data-bind="text: preferredName, attr: { 'title': preferredName }"></strong>
-                    <br>
-                    <small class="grey" data-bind="with: type, attr: { 'title': ('Primary ' + type().name()) }">
-                        <span data-bind="text: ('Primary ' + name())"></span>
+					<div data-bind="with: contact">
+						<strong data-bind="text: fullName, attr: { 'title': fullName }"></strong>
+					</div>
+                    <small class="grey" data-bind="attr: { 'title': computedRoleName }">
+                        <span data-bind="text: computedRoleName"></span>
                     </small>
                     <br>
                 </div>
             </li>
-            <!-- /ko -->
-        </ul>
-        <ul class="dotted column">
-            <!-- ko if: canReassignToMe -->
-            <li class="row center pad top">
-                <div class="span2">
-                    <img alt="Care team image" class="profile-pic" src="/NightingaleUI/Content/images/patient_neutral_small.png" data-phyautomation="gender">
-                </div>
-                <div class="span10">
-                    <button data-bind="click: reassignToMe" class="btn color small">Assign to me</button>
-                    <br>
-                    <small class="grey">Primary Care Manager</small>
-                    <br>
-                </div>
-            </li>
-            <!-- /ko -->
-            <!-- ko foreach: secondaryCareTeam -->
-            <li class="row center pad top">
-                <div class="span2">
-                    <img alt="Care team image" class="profile-pic" data-bind="attr: { src: genderModel().SmallImgSrc }" data-phyautomation="gender">
-                </div>
-                <div class="span10">
-                    <strong data-bind="text: preferredName, attr: { 'title': preferredName }"></strong>
-                    <br>
-                    <small class="grey" data-bind="attr: { 'title': type().name() }" data-bind="text: type().name()"></small>
-                    <br>
-                </div>
-            </li>
-            <!-- /ko -->
+            <!-- /ko -->            
         </ul>
     </div>
 </section>

@@ -1,38 +1,132 @@
 ﻿  <div class="body">
-    <div class="row">
-        <nav class="tabs">
-            <ul>
-                <li data-bind="css: { 'active': activeTab() === 'general' }, setActiveTab: 'general'">
-                    <img alt="Phone blue small" src="/NightingaleUI/Content/images/settings_blue.png" />
-                    <a role="menuitem">General</a>
-                </li>
-                <li data-bind="css: { 'active': activeTab() === 'phones' }, setActiveTab: 'phones'">
-                    <i class="icon-phone blue"></i>
-                    <a role="menuitem" data-bind="style: {color: phoneValidationErrors().length > 0 ? 'red' : 'black'}">Phone</a>
-                </li>
-                <li data-bind="css: { 'active': activeTab() === 'texts' }, setActiveTab: 'texts'">
-                    <i class="icon-sms blue"></i>
-                    <a role="menuitem">Text</a>
-                </li>
-                <li data-bind="css: { 'active': activeTab() === 'emails' }, setActiveTab: 'emails'">
-                    <i class="icon-email blue"></i>
-                    <a role="menuitem">Email</a>
-                </li>
-                <li data-bind="css: { 'active': activeTab() === 'addresses' }, setActiveTab: 'addresses'">
-                    <i class="icon-address blue"></i>
-                    <a role="menuitem">Address</a>
-                </li>
-                <li data-bind="css: { 'active': activeTab() === 'languages' }, setActiveTab: 'languages'">
-                    <img alt="Language blue small" src="/NightingaleUI/Content/images/nav_population.png" />
-                    <a role="menuitem">Language</a>
-                </li>
-            </ul>
-        </nav>
-    </div>
+	<div class="row pad-bottom pad-left" data-bind="visible: $parent.contactTypesShowing">
+		<!--todo: put the dropdown with options. options feeds from contact types request where GroupType=1 and should show "person" as an option -->
+		<h5 class="span2 grey">Contact Type</h5>
+		<div class="span4" data-bind="chsnsingle:{ options: $parent.contactTypes, value: contactTypeId, idValue: 'id', text: 'name', label: 'contactTypes'}"></div>
+	</div>
+	<!-- ko compose: 'templates/contact.tabs.html' -->
+	<!-- /ko -->    
     <div class="row pad top">
         <h2 class="span12" data-bind="text: $parent.fullName, attr: { title: $parent.fullName }"></h2>
     </div>
-    <div class="row" data-bind="visible: activeTab() === 'general'">
+	
+	<div class="row" data-bind="visible: activeTab() === 'Profile'">        
+		<div class="row validation-summary" data-bind="if: profileValidationErrors().length > 0">            
+			<ul data-bind="foreach: profileValidationErrors">
+				<li class="validation-errors">
+					<h5 data-bind="text: Message"></h5>
+				</li>
+			</ul>
+		</div>
+		<div class="row" data-bind="visible: isDuplicate">
+			<span class="errorheader" style="margin-top: 10px; border: 1px solid; background: #fbcbc7; color: #871409; display: block; font-size: 11px; padding: 5px;">
+			<a href="#">
+				<i class="icon-warning red"></i>
+			</a>A contact already exists with the same name. Do you want to continue and create? <button class="btn small color" data-bind="click: $parent.forceSave">Proceed and Create</button></span>
+		</div>
+		<div class="row">
+			<label class="span2">
+				<span>Prefix</span>
+				<input class="span1" type="text" maxlength="20" data-bind="value: prefix, valueUpdate: 'afterkeydown'" placeholder="prefix" />
+			</label>
+			<label class="span5">
+				<span>First Name</span>
+				<input type="text" maxlength="100" data-bind="value: firstName, valueUpdate: 'afterkeydown', css: { invalid: (profileValidationErrorsArray().indexOf('firstName') !== -1) }" placeholder="first name" />
+			</label>
+			<label class="span5">
+				<span>Preferred Name</span>
+				<input type="text" maxlength="100" data-bind="value: preferredName, valueUpdate: 'afterkeydown'" placeholder="preferred name" />
+			</label>				
+		</div>			
+		<div class="row">
+			<label class="span3">
+				<span>Middle Name</span>
+				<input type="text" maxlength="100" data-bind="value: middleName, valueUpdate: 'afterkeydown'" placeholder="middle name" />
+			</label>
+			<label class="span7">
+				<span>Last Name</span>
+				<input type="text" maxlength="100" data-bind="value: lastName, valueUpdate: 'afterkeydown', css: { invalid: (profileValidationErrorsArray().indexOf('lastName') !== -1) }" placeholder="last name" />
+			</label>
+			<label class="span2">
+				<span>Suffix</span>
+				<input type="text" maxlength="20" data-bind="value: suffix, valueUpdate: 'afterkeydown'" placeholder="suffix" />
+			</label>
+		</div>
+		<div class="row">				
+			<label class="span4">
+				<span>Gender</span>
+				<div data-bind="chsnsingle: { options:  $parent.genders, value: gender, text: 'Description', idValue: 'Gender' }"></div>
+			</label>					
+			<label class="span4">					
+				<span>Deceased</span>
+				<div data-bind="chsnsingle: { options:  $parent.deceasedStatuses, value:  deceasedId, text: 'name', idValue: 'id' }"></div>
+			</label>
+			<label class="span4">					
+				<span>Status</span>
+				<div data-bind="chsnsingle: { options: $parent.contactStatuses, value: statusId, text: 'name', idValue: 'id' }"></div>
+			</label>
+		</div>
+		
+		<div class="row divider pad-top pad-bottom bold">Type Details</div>
+		<div class="row validation-summary" data-bind="if: $parent.isDuplicateSubType()">            
+			<ul>
+				<li class="validation-errors">
+					<h5>Type already exist</h5>
+				</li>
+			</ul>
+		</div>
+		<label class="span4">
+			<span >Type</span>
+			<div data-bind="chsnsingle: { options: $parent.contactSubTypes, value: $parent.selectedSubType, text: 'name', idValue: 'id', isCancel: true, caption: 'None' }, 
+						css: { invalid: $parent.isDuplicateSubType() }"></div>					
+		</label>
+		<label class="span4">
+			<span>Specialty</span>
+			<div data-bind="chsnsingle: { options: $parent.contactSpecialties, value: $parent.selectedSpecialty, text: 'name', idValue: 'id', isCancel: true, caption: 'None' }, 
+						css: { invalid:  $parent.showInvalidSpecialty() }"></div>
+		</label>
+		<label class="span4">
+			<span>Sub-Specialties</span>				
+			<div data-bind="multiselect: { options: $parent.contactSubSpecialties, values: $parent.selectedSubSpecialties, text: 'name', idValue: 'id', label: 'contactsubspecialties' },
+						css: { invalid: $parent.showInvalidSubSpecialties() }"></div>
+		</label>				
+		
+		<div class="row pad-top">
+			<button class="span2 btn small color pull-right" data-bind="click: $parent.addContactSubType, enable: $parent.canAddContactSubType">
+				<i class="icon-plus"></i>
+				<span class="pad-left">Add</span>
+			</button>
+		</div>
+		<!-- list the lines of ( type /specialty /subspecialty ) here -->
+		<!-- ko foreach: contactSubTypes -->
+			<div class="row pad-top divider">
+				<span class="span4" data-bind="text: subTypeName()"/>
+				<span class="span4" data-bind="text: specialtyName()"/>
+				<span class="span3" data-bind="text: subSpecialtyString()"/>
+				<div class="pull-right filters">
+					<a href="#" data-bind="click: $parents[1].removeContactSubType"><i class="icon-cancel red toggle" title="Delete"></i></a>
+				</div>
+			</div>
+		<!-- /ko -->
+		<div data-bind="visible: !isNew()">
+			<div class="row pad-top divider">
+				<span class="grey">Created On: 	</span>
+				<span class="pad-left" data-bind="DateTime: createdOn"></span> by <span data-bind="text: createdBy()? createdBy().preferredName : ''"></span>
+			</div>
+			<div class="row pad-top" data-bind="if: updatedOn">
+				<span class="grey">Updated On:  </span>
+				<span class="pad-left" data-bind="DateTime: updatedOn"></span> by <span data-bind="text: updatedBy()? updatedBy().preferredName : ''"></span>
+			</div>
+			<div class="row pad-top" data-bind="if: dataSource">
+				<span class="grey" >System:  </span>
+				<span class="pad-left" data-bind="text: dataSource"></span>
+			</div>
+		</div>
+		<div class="line"></div>
+		<div class="line"></div>
+	</div>
+	
+    <div class="row" data-bind="visible: activeTab() === 'General'">
         <div class="span12">
             <div class="row">
                 <div class="span12">
@@ -103,9 +197,9 @@
                     </ul>
 					<div class="pad-top">
 						<h4>Time Zone</h4>
-						<div class="span6 pad-top">
-							<select class="row" data-bind="options: $root.timeZones, value: timeZoneId, optionsValue: 'id', optionsText: 'name'"></select>
-							<!-- <div class="row" data-bind="chsnsingle: { options: $root.timeZones, value: timeZoneId, idValue: 'id', text: 'name' }"></div> -->
+						<div class="span6 pad-top">							
+							<div class="row" data-bind="chsnsingle:{ options: $root.timeZones, value: timeZoneId, idValue: 'id', text: 'name', isCancel: true }"></div>							
+							
 						</div>						
 					</div>
                     
@@ -113,7 +207,7 @@
             </div>
         </div>
     </div>
-    <div class="row" data-bind="visible: activeTab() === 'texts'">
+    <div class="row" data-bind="visible: activeTab() === 'Text'">
         <ul class="list-items">
             <li class="row">
                 <strong class="span2">Preferred?</strong>
@@ -148,7 +242,7 @@
             <!-- /ko -->
         </ul>
     </div>
-    <div class="row" data-bind="visible: activeTab() === 'phones'">
+    <div class="row" data-bind="visible: activeTab() === 'Phone'">
 		<div class="row validation-summary" data-bind="if: phoneValidationErrors().length > 0">            
 			<ul data-bind="foreach: phoneValidationErrors">
 				<li class="validation-errors">
@@ -222,7 +316,7 @@
             <!-- /ko -->
         </ul>
     </div>
-    <div class="row" data-bind="visible: activeTab() === 'emails'">
+    <div class="row" data-bind="visible: activeTab() === 'Email'">
         <ul class="list-items">
             <li class="row">
                 <strong class="span2">Preferred?</strong>
@@ -277,7 +371,7 @@
             <!-- /ko -->
         </ul>
     </div>
-    <div class="row" data-bind="visible: activeTab() === 'addresses'">
+    <div class="row" data-bind="visible: activeTab() === 'Address'">
         <ul class="list-items">
             <li class="row">
                 <strong class="span2">Preferred?</strong>
@@ -332,7 +426,7 @@
             <!-- /ko -->
         </ul>
     </div>
-    <div class="row" data-bind="visible: activeTab() === 'languages'">
+    <div class="row" data-bind="visible: activeTab() === 'Language'">
 		<div class="row validation-summary" data-bind="if: languageValidationErrors().length > 0">            
 			<ul data-bind="foreach: languageValidationErrors">
 				<li class="validation-errors">

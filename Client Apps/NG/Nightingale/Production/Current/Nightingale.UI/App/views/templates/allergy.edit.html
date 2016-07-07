@@ -26,7 +26,7 @@
         	<div data-bind="chsnsingle: { options: $parent.severities, value: severity, text: 'name', label: 'action-status', caption: 'Choose...' }"></div>
         </div>
     </div>
-    <div class="row pad-top">
+    <div class="row pad-top" data-bind="if: source">
         <div class="span2 align-right grey">
             Source:
         </div>
@@ -41,11 +41,11 @@
         <div class="span3 pad-left">
 			<!-- ko compose: { model: 'viewmodels/templates/datetimepicker', activationData:
 				{
-					observableDateTime: startDate, dateErrors: startDateErrors, showInvalid: setInvalidStartDate, 
+					observableDateTime: startDate, dateErrors: startDateErrors, showInvalid: setInvalidStartDate,
 					maxDate: 'today', datepickerOptions:{ maxDate: '+0' }, datepickerDynamicOptions: {}, dateName: 'startDate'
 				}
 			} -->
-			<!-- /ko -->		
+			<!-- /ko -->
         </div>
         <div class="span2 align-right grey">
             End Date:
@@ -53,11 +53,11 @@
         <div class="span3 pad-left">
 				<!-- ko compose: { model: 'viewmodels/templates/datetimepicker', activationData:
 					{
-						observableDateTime: endDate, dateErrors: endDateErrors, showInvalid: setInvalidEndDate, 
+						observableDateTime: endDate, dateErrors: endDateErrors, showInvalid: setInvalidEndDate,
 						maxDate: 'today', datepickerOptions:{maxDate: '+0'}, datepickerDynamicOptions: {minDate: startDate}, dateName: 'endDate'
 					}
 				} -->
-				<!-- /ko -->		
+				<!-- /ko -->
         </div>
     </div>
     <div class="row pad-top"></div>

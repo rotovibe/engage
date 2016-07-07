@@ -1,67 +1,113 @@
-﻿<div class="row rule">
-    <div class="span12 details" data-bind="with: task">
-        <div class="status line rule">
-            <div class="pull-left">
-                <i data-bind="css: status().iconClass"></i>
-            </div>
-            <div class="name pad-icon-left accordion-toggle" data-bind="click: $parent.editTask">
-                <div class="line-reset" data-bind="with: status">
-                    <span data-bind="text: $parent.description, css: textClass">
-                    </span>
+﻿<div class="widget open" data-bind="css: { 'fullscreen': isFullScreen() }, columnSizer: {triggers: task}">
+    <div class="content" data-bind="with: task">
+        <div class="content-fill">
+            <div class="wrapper">
+                <div class="content">
+                    <div class="header">
+                        <div class="table-cell">
+                            <header>
+                                <h1 class="ellipsis"><span data-bind="text: (description().length > 18 ? description().substring(0, 18) + '...' : description()), attr: { 'title': description }"></span></h1>
+                                <div class="controls">
+                                    <div class="toggle fullscreen" data-bind="click: $parent.toggleFullScreen, clickBubble: false">
+                                    </div>
+                                </div>
+                                <div class="options">
+                                    <a class="edit_task icon-outset" href="#" data-bind="click: $parent.editTask"><i class="icon-edit"></i></a>
+                                    <a class="delete_task" href="#" data-bind="click: $parent.deleteTask"><i class="icon-cancel"></i></a>
+                                </div>
+                            </header>
+                        </div>
+                    </div>
+                    <div class="table-row">
+                        <div class="table-cell">
+                            <div class="body">
+                                <div class="content">
+                                    <div class="row rule">
+                                        <div class="span12 details">
+                                            <div class="accordion-content pad">
+                                                <div class="row pad-bottom" data-bind="visible: startDate">
+                                                    <div class="span6 grey">
+                                                        Start Date
+                                                    </div>
+                                                    <div class="span6" data-bind="DateOrDash: startDate">
+                                                    </div>
+                                                </div>
+                                                <div class="row pad-bottom" data-bind="visible: closedDate">
+                                                    <div class="span6 grey">
+                                                        Closed Date
+                                                    </div>
+                                                    <div class="span6" data-bind="Date: closedDate">
+                                                    </div>
+                                                </div>
+                                                <div class="row pad-bottom" data-bind="with: status">
+                                                    <div class="span6 grey">
+                                                        Status
+                                                    </div>
+                                                    <div class="span6" data-bind="text: name">
+                                                    </div>
+                                                </div>
+                                                <div class="row pad-bottom" data-bind="visible: targetValue">
+                                                    <div class="span6 grey">
+                                                        Target Value
+                                                    </div>
+                                                    <div class="span6" data-bind="text: targetValue() ? targetValue() : '-'">
+                                                    </div>
+                                                </div>
+                                                <div class="row pad-bottom" data-bind="visible: targetDate">
+                                                    <div class="span6 grey">
+                                                        Target Date
+                                                    </div>
+                                                    <div class="span6" data-bind="DateOrDash: targetDate">
+                                                    </div>
+                                                </div>
+                                                <div class="row pad-bottom filter-toggle" data-bind="click: $parent.toggleDetailsExpanded, visible: details">
+                                                    <div class="span6 grey">
+                                                        Details
+                                                    </div>
+                                                </div>
+                                                <div class="row pad-bottom" data-bind="visible: details">
+                                                    <!-- ko ifnot: $parent.isDetailsExpanded -->
+                                                    <textarea class="span12 display-only no-scroll muted" style="height: 6.5em;" rows="5" data-bind="text: details, attr:{ 'title': details }, visible: details" readonly="readonly"></textarea>
+                                                    <a class="grey" data-bind="click: $parent.toggleDetailsExpanded, visible: details" href="#">...</a>
+                                                    <!-- /ko -->
+                                                    <!-- ko if: $parent.isDetailsExpanded -->
+                                                    <textarea class="span12 display-only muted" data-bind="text: details, autoHeight: details, attr:{ 'title': details }" readonly="readonly"></textarea>
+                                                    <!-- /ko -->
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="span12 transparent">-</div>
+                                        <div class="">
+                                            <div class="span12">
+                                                <div class="large grey muted line pad-horizontal pad-icon-left">
+                                                    Barriers
+                                                    <a class="filter-toggle pull-right" data-bind="click: $parent.addBarrier">
+                                                        <i class="icon-plus"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            <!-- ko foreach: relatedBarriers -->
+                                            <!-- ko compose: { model: 'viewmodels/patients/sections/barrier.details', activationData: { barrier: $data  } } -->
+                                            <!-- /ko -->
+                                            <!-- /ko -->
+                                            <div class="span12" data-bind="visible: relatedBarriers().length === 0">
+                                                <div class="status line">
+                                                    <div class="name pad-icon-left">
+                                                        <div class="line-reset">
+                                                            <em class="grey">No barriers.</em>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-        <!-- ko if: $parent.isExpanded -->
-        <div class="accordion-content muted pad pad-icon-left">
-            <div class="row pad-bottom">
-                <div class="span6 grey">
-                    Start Date
-                </div>
-                <div class="span6" data-bind="DateOrDash: startDate">
-                </div>
-            </div>
-            <div class="row pad-bottom">
-                <div class="span6 grey">
-                    Target Value
-                </div>
-                <div class="span6" data-bind="text: targetValue() ? targetValue() : '-'">
-                </div>
-            </div>
-            <div class="row pad-bottom">
-                <div class="span6 grey">
-                    Target Date
-                </div>
-                <div class="span6" data-bind="DateOrDash: targetDate">
-                </div>
-            </div>
-            <div data-bind="foreach: customAttributes().sort($parent.alphabeticalOrderSort)">            
-                <div data-bind="compose: displayPath">
-                </div>
-            </div>
-			<div class="row pad-bottom filter-toggle" data-bind="click: $parent.toggleDetailsExpanded">
-				<div class="span6 grey">
-                    Details
-				</div>
-				<span class="span6" data-bind="visible: (!$parent.hasDetails()), text: '-'"></span>                  				
-            </div>
-			<div class="row pad-bottom" data-bind="visible: details">
-				<!-- ko ifnot: $parent.isDetailsExpanded -->
-					<textarea class="span12 display-only no-scroll muted" style="height: 6.5em;" rows="5" data-bind="text: details, attr:{ 'title': details }, visible: details" readonly="readonly"></textarea>
-					<a class="grey" data-bind="click: $parent.toggleDetailsExpanded, visible: details" href="#">...</a>
-				<!-- /ko -->
-				<!-- ko if: $parent.isDetailsExpanded -->
-					<textarea class="span12 display-only muted" data-bind="text: details, autoHeight: details, attr:{ 'title': details }" readonly="readonly"></textarea>
-				<!-- /ko -->
-			</div>
-            <div class="row">
-                <div class="pull-left">
-                    <a class="edit_task icon-outset" href="#" data-bind="click: $parent.editTask"><i class="icon-edit"></i>Edit</a>
-                </div>
-                <div class="pull-right">
-                    <a class="delete_task" href="#" data-bind="click: $parent.deleteTask"><i class="icon-cancel"></i>Delete</a>
-                </div>
-            </div>
-        </div>
-        <!-- /ko -->
     </div>
 </div>

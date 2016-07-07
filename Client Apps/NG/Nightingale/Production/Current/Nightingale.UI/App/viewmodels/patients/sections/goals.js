@@ -13,19 +13,20 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
             var self = this;
             self.token.dispose();
             self.computedGoals.dispose();
-        }
-        
+        };
+
         ctor.prototype.activate = function (settings) {
             var self = this;
+            self.activeGoal = settings.activeGoal;
+            self.activeTask = settings.activeTask;
+            self.activeIntervention = settings.activeIntervention;
             self.goalsSortTwo = function (l, r) {
-                // Primary sort property
                 var p1 = l.status().order();
                 var p2 = r.status().order();
 
-                // Secondary sort property
                 var o1 = l.name().toLowerCase();
                 var o2 = r.name().toLowerCase();
-                
+
                 if (p1 != p2) {
                     if (p1 < p2) return -1;
                     if (p1 > p2) return 1;
@@ -50,21 +51,15 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
                         return !thisGoal.isNew() && self.statusIds.indexOf(thisGoal.statusId()) !== -1;
                     });
                     ko.utils.arrayForEach(theseGoals, function (goal) {
-                        // If this is the first time we see this goal,
                         if (!goal.isExpanded) {
                             goal.isExpanded = ko.observable(false);
-                            //goal.isSubExpanded = ko.observable(false);
                             goal.isOpen = ko.observable(false);
-                            // If it's not a new goal,
                         }
                         if (!goal.isNew()) {
-                            // Go get it's data and extend it
                             getGoalDetails(goal);
                         }
                     });
-                    // If there are goals
                     if (theseGoals.length > 0) {
-                        // Sort the goals
                         theseGoals = theseGoals.sort(self.sortOverride);
                     }
                     return theseGoals;
@@ -80,7 +75,6 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
                 self.addEntity('Task', goal, startDate).then(doSomething);
 
                 function doSomething(task) {
-                    // Show the modal
                     self.editTask(task, 'Add Task');
                 }
             };
@@ -89,21 +83,21 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
                 self.addEntity('Intervention', goal, startDate, session.currentUser().userId()).then(doSomething);
 
                 function doSomething(intervention) {
-					intervention.isNew(true);
-					intervention.watchDirty();
-                    // Show the modal
+                    intervention.isNew(true);
+                    intervention.watchDirty();
                     self.editIntervention(intervention, 'Add Intervention');
                 }
             };
             self.editIntervention = function (intervention, msg) {
                 var thisGoal = intervention.goal();
-                // Edit this intervention
                 var modalEntity = ko.observable(new ModalEntity(intervention, 'description'));
                 var saveOverride = function () {
                     saveIntervention(intervention);
+                    thisGoal.isOpen(false);
+                    thisGoal.isOpen(true);
                 };
                 var cancelOverride = function () {
-                    cancel(intervention);
+                    datacontext.cancelEntityChanges(intervention);
                     getGoalDetails(thisGoal);
                 };
                 msg = msg ? msg : 'Edit Intervention';
@@ -111,10 +105,11 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
             };
             self.editTask = function (task, msg) {
                 var thisGoal = task.goal();
-                // Edit this task
                 var modalEntity = ko.observable(new ModalEntity(task, 'description'));
                 var saveOverride = function () {
                     saveTask(task);
+                    thisGoal.isOpen(false);
+                    thisGoal.isOpen(true);
                 };
                 var cancelOverride = function () {
                     datacontext.cancelEntityChanges(task);
@@ -132,6 +127,24 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
             }
         };
 
+        ctor.prototype.setActiveGoal = function (goal) {
+            this.activeGoal(goal);
+            this.activeTask(null);
+            this.activeIntervention(null);
+        };
+
+        ctor.prototype.setActiveTask = function (task) {
+            this.activeTask(task);
+            this.activeGoal(null);
+            this.activeIntervention(null);
+        };
+
+        ctor.prototype.setActiveIntervention = function (intervention) {
+            this.activeIntervention(intervention);
+            this.activeGoal(null);
+            this.activeTask(null);
+        };
+
         ctor.prototype.addEntity = function (type, goal, startDate, assignedToId) {
             var self = this;
             var thisPatientId = self.selectedPatient().id();
@@ -139,9 +152,8 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
             return datacontext.initializeEntity(null, type, thisPatientId, thisGoalId).then(entityReturned);
 
             function entityReturned(data) {
-                var thisId = data.httpResponse.data.Id; // note inconsistent back end: a task would return the id returned in data.httpResponse.data.Task.Id but intervention in data.httpResponse.data.Id
+                var thisId = data.httpResponse.data.Id;
                 if (thisId) {
-					//intervention
                     var params = {};
                     params.id = thisId;
                     params.patientGoalId = thisGoalId;
@@ -155,7 +167,7 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
                     var thisEntity = datacontext.createEntity(type, params);
                     return thisEntity;
                 }
-                else {	//task
+                else {
                     var thisTask = data.results[0];
                     thisTask.startDate(new Date(moment().format('MM/DD/YYYY')));
                     thisTask.statusId(1);
@@ -168,17 +180,17 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
         return ctor;
 
         function editEntity (msg, entity, path, saveoverride, canceloverride) {
-			var modalSettings = {
-				title: msg,
-				showSelectedPatientInTitle: true,
-				entity: entity, 
-				templatePath: path, 
-				showing: modalShowing, 
-				saveOverride: saveoverride, 
-				cancelOverride: canceloverride, 
-				deleteOverride: null, 
-				classOverride: null
-			}
+            var modalSettings = {
+              title: msg,
+              showSelectedPatientInTitle: true,
+              entity: entity,
+              templatePath: path,
+              showing: modalShowing,
+              saveOverride: saveoverride,
+              cancelOverride: canceloverride,
+              deleteOverride: null,
+              classOverride: null
+            };
             var modal = new modelConfig.modal(modalSettings);
             modalShowing(true);
             shell.currentModal(modal);
@@ -189,7 +201,7 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
         }
 
         function saveIntervention (entity) {
-			entity.isNew(false);
+            entity.isNew(false);
             datacontext.saveIntervention(entity);
         }
 
@@ -207,21 +219,16 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
 
         function getGoalDetails (goal) {
             goalsIndex.getGoalDetails(goal);
-        };
+        }
 
         function ModalEntity(entity, reqpropname) {
             var self = this;
             self.entity = entity;
-            // Object containing parameters to pass to the modal
             self.activationData = { entity: self.entity };
-            // Create a computed property to subscribe to all of
-            // the patients' observations and make sure they are
-            // valid
             self.canSave = ko.computed(function () {
                 var result = self.entity.isValid();
-                // The active goal needs a property passed in from reqpropname
                 return result;
             });
         }
 
-    });;
+    });

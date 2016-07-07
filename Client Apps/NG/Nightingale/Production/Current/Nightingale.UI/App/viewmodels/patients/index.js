@@ -11,7 +11,7 @@
 
 		var noResultsMessage =  'No records meet your search criteria';
 		var subscriptionTokens = [];
-		
+
        // var isComposed = ko.observable(false);
 
         // Track whether the user can leave the patients pages and whether they are
@@ -58,7 +58,7 @@
         var patientSystemEndPoint = ko.computed(function () {
             if (!session.currentUser()) {
                 return false;
-            }           
+            }
             return new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'Patient', 'PatientSystem');
         });
 
@@ -79,7 +79,7 @@
         });
 
         //#endregion
-        
+
         var contactCardEndPoint = ko.computed(function () {
             if (!session.currentUser()) {
                 return false;
@@ -93,7 +93,7 @@
             }
             return new servicesConfig.createEndPoint('1.0', session.currentUser().contracts()[0].number(), 'Patient', 'Goal');
         });
-		
+
         var noteEndPoint = ko.computed(function () {
             if (!session.currentUser()) {
                 return false;
@@ -136,7 +136,7 @@
         var hasChanges = ko.computed(datacontext.hasChanges);
 
         //#endregion
-        
+
         //#region Reveal the object and properties
 
         var patientsRoute = ko.utils.arrayFirst(navigation.navRoutes(), function (route) {
@@ -178,7 +178,7 @@
         }, null, 'beforeChange');
 
 		subscriptionTokens.push( routerInstructionToken );
-		
+
         var vm = {
             patientsListFlyoutOpen: patientsListFlyoutOpen,
             patientDataColumnOpen: patientDataColumnOpen,
@@ -259,13 +259,13 @@
                 }
             });
 			subscriptionTokens.push( throttledFilterToken );
-			
+
             // Set the max patient count to the value of settings.TotalPatientCount, if it exists
             if (session.currentUser().settings()) {
 				var totalPatientCount = datacontext.getSettingsParam('TotalPatientCount');
 				if( totalPatientCount ){
 					maxPatientCount( parseInt( totalPatientCount ) );
-				}                
+				}
             }
             // Set initialized true so we don't accidentally re-initialize the view model
             initialized = true;
@@ -285,15 +285,17 @@
                 // Add a filter parameter onto parameters
                 parameters.SearchFilter = searchValue;
             } else { parameters.SearchFilter = null; }
-			
+
 			showNoResultsMessage(false);
             // TODO : Add Skip and Take to the endpoint and pass it down as params
             // TODO : Make sure the service is checking locally first before going out to the server to get these patients
-            datacontext.getEntityList(patientsList, currentCohortsPatientsEndPoint().EntityType, currentCohortsPatientsEndPoint().ResourcePath, null, selectedCohort().iD(), true, parameters).then(calculateSkipTake);
+            datacontext.getEntityList(patientsList, currentCohortsPatientsEndPoint().EntityType, 
+						currentCohortsPatientsEndPoint().ResourcePath, null, selectedCohort().iD(), 
+						true, parameters, null, (!!'SkipMerge')).then(calculateSkipTake);
         }
 
         function calculateSkipTake() {
-            var totalRecordsShowing = patientsList().length;			
+            var totalRecordsShowing = patientsList().length;
 			if( totalRecordsShowing == 0 ){
 				showNoResultsMessage(true);
 			}
@@ -313,7 +315,7 @@
         //#endregion
 
         //#region External Functions
-        
+
         function checkForAnyChanges(patient) {
             // Variable to check for changes to actions on this patient
             var actionsHaveChanges = false;
@@ -381,7 +383,7 @@
 										notesHaveChanges = true;
 									}
 								}
-							}                            
+							}
                         }
                     });
                 }
@@ -427,7 +429,7 @@
 		function clearCohortFilter(){
 			cohortFilter(null);
 		}
-		
+
         function choosePatient(patient) {
             // Check if there are changes to this patient's actions before proceeding
             // And if override parameter is set to true ignore checking for changes
@@ -439,20 +441,20 @@
             }
             var patientId;
 			patientsListFlyoutOpen(false);
-            // If there is a current patient and it is equal to the patient you are trying to set to current			
+            // If there is a current patient and it is equal to the patient you are trying to set to current
             if ( selectedPatient() && selectedPatient() === patient ) {
                 // Then do nothing (this is because we don't want to do anything if
                 // We have already selected our patient.
 				if(datacontext){
 					getPatientsToDos();	//always reload since we clean the todos cache in other views when resorting or filtering
-				}	
-            } else if (datacontext) {					
+				}
+            } else if (datacontext) {
                 if (patient.id) {
                     // Else go choose a new patient
                     patientId = ko.unwrap(patient.id);
                 } else {
                     patientId = patient;
-                }				
+                }
 
 				var allPatientPromises = [];
 					// Go select a patient by their Id.
@@ -463,12 +465,13 @@
 					allPatientPromises.push( datacontext.getEntityList(null, ObservationsEndPoint().EntityType, ObservationsEndPoint().ResourcePath + patientId + '/Observations/Current', null, null, true));
 					// Go get a list of notes for the currently selected patient
 					allPatientPromises.push( datacontext.getEntityList(null, noteEndPoint().EntityType, noteEndPoint().ResourcePath + patientId + '/Notes/100', null, null, true));
-					// Go get a list of care members for the currently selected patient
-					allPatientPromises.push( datacontext.getEntityList(null, careMemberEndPoint().EntityType, careMemberEndPoint().ResourcePath + patientId + '/CareMembers', null, null, true));
- 
-				Q.all( allPatientPromises ).then( patientReturned ); 				
+
+                    //note: this is the old call and will be deprecated:
+					//allPatientPromises.push( datacontext.getEntityList(null, careMemberEndPoint().EntityType, careMemberEndPoint().ResourcePath + patientId + '/CareMembers', null, null, true));
+
+				Q.all( allPatientPromises ).then( patientReturned );
             }
-			
+
             function patientReturned() {
 				var allPatientPromises = [];
                 // If we don't have the patients' programs yet,
@@ -496,25 +499,30 @@
                 // Go get a list of medications for the currently selected patient
                 allPatientPromises.push( getPatientMedications() );
 				allPatientPromises.push( getPatientFrequencies() );
-				
+
+				//get the care team (new api)
+				allPatientPromises.push( datacontext.getCareTeam( null, selectedPatient().contactId() ).then( careTeamReturned ) );
 				Q.all( allPatientPromises ).then( patientFullyLoaded );
-				                
+
                 router.navigate('#patients/' + patientId, false);
             }
         }
+
+		function careTeamReturned( team ){			
+		}
 		/**
 		*	after all patient related calls are completed, mark the patient as loaded (they are synched with Q.all ).
 		*	@method patientFullyLoaded
 		*/
-		function patientFullyLoaded(){					
-			selectedPatient().isLoaded(true);			
+		function patientFullyLoaded(){
+			selectedPatient().isLoaded(true);
 		}
 
         function getPatientsToDos() {
             // Calculated thirty days ago
             var thirtyDaysAgo = new Date(new Date().setDate(new Date().getDate()-30));
             thirtyDaysAgo = moment(thirtyDaysAgo).format();
-			
+
 			var todosPromises = [];
             // Get all open todos
             todosPromises.push( datacontext.getToDos(null, { StatusIds: [1,3], PatientId: selectedPatient().id() }) );
@@ -539,15 +547,15 @@
         function getPatientsAllergies() {
             // Get all open allergies
             var patientId = selectedPatient().id();
-            return datacontext.getPatientAllergies(null, { StatusIds: [1,2] }, patientId);
+            return datacontext.getPatientAllergies(null, { StatusIds: [1,2,3,4,5,6,7] }, patientId);
         }
 
         function getPatientMedications() {
             // Get all open medications
             var patientId = selectedPatient().id();
-            return datacontext.getPatientMedications(null, { StatusIds: [1,2], CategoryIds: [1,2] }, patientId);
+            return datacontext.getPatientMedications(null, { StatusIds: [1,2,3,4,5,6,7], CategoryIds: [1,2] }, patientId);
         }
-		
+
 		function getPatientFrequencies() {
             // Get all patient specific medication frequencies
             var patientId = selectedPatient().id();
@@ -555,11 +563,11 @@
 			if(!selectedPatient().gotMedicationFrequencies){
 				//remotely load this patient's custom medication frequencies:
 				freqPromise = datacontext.getPatientFrequencies(null, patientId, true);
-				selectedPatient().gotMedicationFrequencies = ko.observable(true);				
+				selectedPatient().gotMedicationFrequencies = ko.observable(true);
 			}
 			return freqPromise;
         }
-		
+
         function togglePatientsColumn() {
             patientDataColumnOpen(!patientDataColumnOpen());
         }
@@ -646,14 +654,14 @@
                     calculateSkipTake();
                 });
         }
-        
+
         //#endregion
 
 		function detached(){
 			// remarked ! disposing computeds on this module causes many unpredictable problems.
-			// console.log('patients/index detached.');          
+			// console.log('patients/index detached.');
 			// ko.utils.arrayForEach(subscriptionTokens, function (token) {
                 // token.dispose();
-            // });			
+            // });
 		}
     });

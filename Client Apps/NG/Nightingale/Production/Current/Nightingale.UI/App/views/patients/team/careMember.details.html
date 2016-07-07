@@ -1,0 +1,177 @@
+<div>
+	<em class="grey" data-bind="visible: !careMember()">No care member selected</em>
+	<nav class="tabs" data-bind="visible: careMember">
+		<!-- ko foreach: detailsTabs -->
+			<span data-bind="css: {'active': $parent.activeDetailsTab() == name}, 
+							click: function(){ $parent.setActiveDetailsTab( name ) }, clickBubble: false">
+				<!-- ko if: imgAlt -->
+					<img data-bind="attr:{ alt: imgAlt, src: imgSource }" style="vertical-align: middle;"/>
+				<!-- /ko -->
+				<!-- ko if: cssClass -->
+					<i data-bind="attr:{ class: cssClass }"></i>
+				<!-- /ko -->
+				<a role="menuitem" data-bind="text: name"></a>
+			</span>
+		<!-- /ko -->
+	</nav>
+
+	<div class="content" data-bind="with: careMember">
+		<div class="row" data-bind="visible: $parent.activeDetailsTab() === 'Relationship'">
+			<div class="row pad-top">
+				<strong class="span3 pad-right">Role:</strong>
+				<div class="span9" data-bind="text: computedRoleName"></div>
+			</div>
+			<div class="row pad-top" data-bind="with: status">
+				<strong class="span3 pad-right">Status:</strong>
+				<div class="span9" data-bind="text: name()"></div>
+			</div>
+			<div class="row" data-bind="visible: startDate">
+				<div class="pad-top"></div>
+				<strong class="span3 pad-right">Start Date:</strong>
+				<div class="span9" data-bind="Date: startDate"></div>
+			</div>
+			<div class="row" data-bind="visible: endDate">
+				<div class="pad-top"></div>
+				<strong class="span3 pad-right">End Date:</strong>
+				<div class="span9" data-bind="Date: endDate"></div>
+			</div>			
+			<div data-bind="with: frequency">
+				<div class="row">
+					<div class="pad-top"></div>
+					<strong class="span3 pad-right">Frequency:</strong>
+					<div class="span9" data-bind="text: name"></div>
+				</div>
+			</div>
+			<div class="row" data-bind="visible: distance">
+				<div class="pad-top"></div>
+				<strong class="span3 pad-right">Distance:</strong>
+				<div class="span9">
+					<span data-bind="text: distance"></span>
+					<span class="pad-left" data-bind="text: distanceUnit"></span>
+				</div>
+			</div>
+			<div data-bind="visible: notes">
+				<div class="row pad-top">
+					<strong class="span3">Notes:</strong>
+				</div>
+				<div class="row pad-top">
+					<pre class="pad-left span12" data-bind="text: notes, attr: { 'title': notes }"></pre>
+				</div>					
+			</div>
+			<div class="row" data-bind="visible: createdOn">
+				<div class="pad-top"></div>
+				<strong class="span3 pad-right">Created:</strong>
+				<span data-bind="DateTime: createdOn"></span> by <span data-bind="text: (createdBy()? createdBy().firstLastOrPreferredName : '')"></span>
+			</div>
+			<div class="row" data-bind="visible: updatedOn">
+				<div class="pad-top"></div>
+				<strong class="span3 pad-right">Updated:</strong>
+				<div class="span9">
+					<span data-bind="DateTime: updatedOn"></span> by <span data-bind="text: (updatedBy()? updatedBy().firstLastOrPreferredName : '')"></span>
+				</div>
+			</div>
+			<div class="row" data-bind="visible: dataSource">
+				<div class="pad-top"></div>
+				<strong class="span3 pad-right">System:</strong>
+				<div class="span9" data-bind="text: dataSource"></div>
+			</div>
+		</div>
+		<div class="row" data-bind="visible: $parent.activeDetailsTab() === 'Profile'">
+			<div data-bind="with: contact">
+				<div class="row pad-top" data-bind="visible: fullName">					
+					<span data-bind="text: fullName"></span>
+				</div>
+				<div class="row" data-bind="visible: preferredName">
+					<div class="pad-top"></div>
+					<strong class="span3 pad-right">Preferred Name:</strong>
+					<div class="span9" data-bind="text: preferredName"></div>
+				</div>
+				<div data-bind="with: deceased">					
+					<div class="row pad-top" data-bind="visible: (name() == 'Yes')">
+						<strong class="span3 pad-right">Deceased:</strong>
+						<div class="span9">Yes</div>
+					</div>
+				</div>
+				<div class="pad-left">				
+					<ul class="row grey pad-left" style="list-style-type: disc;" data-bind="visible: (detailedSubTypes().length > 0)">
+						<!-- ko foreach: detailedSubTypes -->
+							<li class="pad-top" data-bind="text: $data"></li>
+						<!-- /ko -->
+					</ul>				
+				</div>	
+				<div class="row" data-bind="visible: (gender() && gender() !== 'N')">
+					<div class="pad-top"></div>
+					<strong class="span3 pad-right">Gender:</strong>
+					<div class="span9" data-bind="text: gender"></div>
+				</div>
+				<div class="row" data-bind="with: contactStatus">
+					<div class="pad-top"></div>
+					<strong class="span3 pad-right">Status:</strong>
+					<div class="span9" data-bind="text: name"></div>
+				</div>
+				<div class="row" data-bind="visible: createdOn">
+					<div class="pad-top"></div>
+					<strong class="span3 pad-right">Created:</strong>
+					<div class="span9">
+						<span data-bind="DateTime: createdOn"></span> by <span data-bind="text: (createdBy()? createdBy().firstLastOrPreferredName : '')"></span>
+					</div>
+				</div>
+				<div class="row" data-bind="visible: updatedOn">
+					<div class="pad-top"></div>
+					<strong class="span3 pad-right">Updated:</strong>
+					<div class="span9">
+						<span data-bind="DateTime: updatedOn"></span> by <span data-bind="text: (updatedBy()? updatedBy().firstLastOrPreferredName : '')"></span>
+					</div>
+				</div>
+				<div class="row" data-bind="visible: dataSource">
+					<div class="pad-top"></div>
+					<strong class="span3 pad-right">System:</strong>
+					<div class="span9" data-bind="text: dataSource"></div>
+				</div>
+			</div>								
+		</div>
+		<div class="row" data-bind="visible: $parent.activeDetailsTab() === 'Comm'">
+			<div data-bind="with: contact">
+				<!-- ko foreach: $parents[1].primaryCommunications -->
+				<div class="row pad-top" data-bind="compose: template">
+				</div>
+				<!-- /ko -->
+				<div class="row pad-top">
+					<strong class="span3 grey">Mode:</strong>
+					<div class="span9">
+						<em class="row grey" data-bind="visible: !prefCommMethods()">Unknown</em>
+						<span class="row" data-bind="visible: prefCommMethods, text: prefCommMethods, attr: { 'title': prefCommMethods }"></span>
+					</div>
+				</div>
+				<div class="row pad-top">
+					<strong class="span3 grey">Days:</strong>
+					<div class="span9">
+						<em class="row grey" data-bind="visible: !preferredDaysOfWeek()">Unknown</em>
+						<span class="row" data-bind="visible: preferredDaysOfWeek, text: preferredDaysOfWeek, attr: { 'title': preferredDaysOfWeek }"></span>
+					</div>
+				</div>
+				<div class="row pad-top">
+					<strong class="span3 grey">Time:</strong>
+					<div class="span9">
+						<em class="row grey" data-bind="visible: !preferredTimesOfDay()">Unknown</em>
+						<span class="row" data-bind="visible: preferredTimesOfDay, text: preferredTimesOfDay, attr: { 'title': preferredTimesOfDay }"></span>
+					</div>
+				</div>
+				<div class="row" data-bind="with: timeZone">
+					<div class="pad-top"></div>
+					<strong class="span3 grey">Time Zone:</strong>
+					<div class="span9" data-bind="text: name, attr: { 'title': name }"></div>
+				</div>
+				<div class="row pad-top">
+					<strong class="span3 grey">Language:</strong>
+					<div class="span9">
+						<em class="row grey" data-bind="visible: !preferredLanguage()">Unknown</em>
+						<!-- ko with: preferredLanguage -->
+						<span class="row" data-bind="text: name, attr: { 'title': name }"></span>
+						<!-- /ko -->
+					</div>
+				</div>
+			</div>								
+		</div>
+	</div>
+</div>

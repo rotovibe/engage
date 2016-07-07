@@ -26,7 +26,7 @@
                                                 <i class="icon-filter_clear pointer blue toggle" data-bind="click: resetFilters" title="Clear Filter"></i>
                                                 <span>&nbsp</span>
                                             </div>
-                                        </div>                                        
+                                        </div>
                                     </div>
                                 </section>
                             </div>
@@ -37,21 +37,21 @@
                             <header>
                                 <h1 data-bind="text: widget.name"></h1>
                                 <div class="controls">
-									<div class="toggle" data-bind="visible: allowAdd">
-										<i class="pointer icon-plus" data-bind="click: addMedication, clickBubble: false" title="Add"></i>
-									</div>
+                                    <div class="toggle" data-bind="visible: allowAdd">
+                                        <i class="pointer icon-plus" data-bind="click: addMedication, clickBubble: false" title="Add"></i>
+                                    </div>
                                     <i class="pointer fa fa-filter pad-horizontal" data-bind="click: function () { filtersHeaderOpen(!filtersHeaderOpen()); }, clickBubble: false, css: ((selectedMedicationTypes().length > 0) ? 'red' : (filtersHeaderOpen() ? 'lighterblue': 'lightestblue'))">
                                     </i>
-									<div class="toggle gray" data-bind="click: refreshView, clickBubble: false" title="Refresh Data">
-										<i class="fa fa-lg fa-refresh filter-toggle" data-bind="css: { 'fa-spin': medicationSaving }"></i>
-									</div>
+                                    <div class="toggle gray" data-bind="click: refreshView, clickBubble: false" title="Refresh Data">
+                                        <i class="fa fa-lg fa-refresh filter-toggle" data-bind="css: { 'fa-spin': medicationSaving }"></i>
+                                    </div>
                                     <div class="toggle single-arrow-left" data-method="open" data-target="column" data-type="remove" data-bind="click: toggleOpenColumn, enable: widget.column.isOpen(), clickBubble: false">
                                     </div>
                                     <div class="toggle double-arrow-right" data-method="open" data-target="column" data-type="add" data-bind="click: toggleOpenColumn, enable: !widget.column.isOpen(), clickBubble: false">
                                     </div>
                                     <div class="toggle fullscreen" data-method="fullscreen" data-target="widget" data-type="both" data-bind="clickToggle: isFullScreen, clickBubble: false">
                                     </div>
-                                </div>                                
+                                </div>
                             </header>
                         </div>
                     </div>

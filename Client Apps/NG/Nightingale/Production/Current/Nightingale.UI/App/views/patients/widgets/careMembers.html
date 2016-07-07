@@ -1,0 +1,53 @@
+<div class="widget" data-bind="css: { 'open': isOpen, 'fullscreen': isFullScreen() }, columnSizer: { triggers: {a: careMembers(), b: isOpen()} }">
+	<div class="content">
+		<div class="content-fill">
+			<div class="wrapper">
+				<div class="content">
+					<div class="header pointer" data-bind="click: toggleWidgetOpen">
+						<div class="table-cell">
+							<header class="ellipsis">
+								<h1 data-bind="text: widget.name"></h1>
+								<div class="controls">														
+									<div class="toggle" data-bind="visible: (widget.allowAdd && selectedPatient())">
+										<i class="pointer icon-plus" data-bind="click: addCareMember, clickBubble: false" title="Add"></i>
+									</div>
+									<div class="toggle single-arrow-left" data-method="open" data-target="column" data-type="remove" data-bind="click: toggleOpenColumn, enable: leftColumnOpen(), clickBubble: false">
+									</div>
+									<div class="toggle double-arrow-right" data-method="open" data-target="column" data-type="add" data-bind="click: toggleOpenColumn, enable: !leftColumnOpen(), clickBubble: false">
+									</div>
+									<div class="toggle fullscreen" data-method="fullscreen" data-target="widget" data-type="both" data-bind="click: function () { toggleFullScreen('careMembersPanel') }, clickBubble: false">
+									</div>
+								</div>
+							</header>
+						</div>
+					</div>
+					<div class="table-row" data-bind="visible: selectedPatient()">
+						<div class="table-cell">
+							<div class="body">
+								<div class="content">
+									<div class="row" data-bind="visible: careMembers().length === 0">
+										<em class="grey">No care team members</em>
+									</div>
+									<div data-bind="compose: { model: 'viewmodels/templates/careMembers.panel', activationData: { careMembers: myCareMembers } }">
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					
+					<div class="table-row" data-bind="visible: !selectedPatient()">
+						<div class="table-cell">
+							<div class="body">
+								<div class="content">
+									<div class="body">
+										<em class="grey">No individual selected.</em>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>					
+</div>
