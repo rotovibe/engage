@@ -118,7 +118,9 @@ namespace Phytel.API.DataDomain.PatientObservation
                             Values = GetValueList(mePO.NumericValue, mePO.NonNumericValue),
                             LastUpdatedOn = mePO.LastUpdatedOn,
                             DisplayId = (int)mePO.Display,
-                            DeleteFlag = mePO.DeleteFlag
+                            DeleteFlag = mePO.DeleteFlag,
+                            DataSource = mePO.DataSource,
+                            ExternalRecordId = mePO.ExternalRecordId
                         };
                     }
                 }
@@ -290,6 +292,24 @@ namespace Phytel.API.DataDomain.PatientObservation
                     if (pord.StateId != 0) uv.Add(MB.Update.Set(MEPatientObservation.ObservationStateProperty, pord.StateId));
                     if (pord.Source != null) uv.Add(MB.Update.Set(MEPatientObservation.SourceProperty, pord.Source));
 
+                    if (pord.DataSource != null)
+                    {
+                        uv.Add(MB.Update.Set(MEPatientObservation.DataSourceProperty, pord.DataSource));
+                    }
+                    else
+                    {
+                        uv.Add(MB.Update.Set(MEPatientObservation.DataSourceProperty, BsonNull.Value));
+                    }
+
+                    if (pord.ExternalRecordId != null)
+                    {
+                        uv.Add(MB.Update.Set(MEPatientObservation.ExternalRecordIdProperty, pord.ExternalRecordId));
+                    }
+                    else
+                    {
+                        uv.Add(MB.Update.Set(MEPatientObservation.ExternalRecordIdProperty, BsonNull.Value));
+                    }
+
                     IMongoUpdate update = MB.Update.Combine(uv);
                     ctx.PatientObservations.Collection.Update(q, update);
                     AuditHelper.LogDataAudit(this.UserId, 
@@ -444,7 +464,9 @@ namespace Phytel.API.DataDomain.PatientObservation
                                 Units = b.Units,
                                 Values = GetValueList(b.NumericValue, b.NonNumericValue),
                                 LastUpdatedOn = b.LastUpdatedOn,
-                                DisplayId = (int)b.Display
+                                DisplayId = (int)b.Display,
+                                DataSource = b.DataSource,
+                                ExternalRecordId = b.ExternalRecordId
                             };
                             poDataList.Add(poData);
                         }
@@ -491,7 +513,9 @@ namespace Phytel.API.DataDomain.PatientObservation
                                 PatientId = request.PatientId,
                                 StartDate = mePO.StartDate,
                                 EndDate = mePO.EndDate,
-                                Source = mePO.Source
+                                Source = mePO.Source,
+                                DataSource = mePO.DataSource,
+                                ExternalRecordId = mePO.ExternalRecordId
                             };
                             observationDataL.Add(data);
                         }
@@ -558,7 +582,9 @@ namespace Phytel.API.DataDomain.PatientObservation
                             Source = meObservation.Source != null ? meObservation.Source : null,
                             StartDate = meObservation.StartDate,
                             EndDate = meObservation.EndDate,
-                            Units = meObservation.Units != null ? meObservation.Units : null
+                            Units = meObservation.Units != null ? meObservation.Units : null,
+                            DataSource = meObservation.DataSource,
+                            ExternalRecordId = meObservation.ExternalRecordId
                         };
                     }
                 }
