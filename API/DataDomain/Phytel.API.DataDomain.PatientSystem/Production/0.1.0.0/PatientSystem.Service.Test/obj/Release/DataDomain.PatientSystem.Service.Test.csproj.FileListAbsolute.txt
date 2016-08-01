@@ -1,5 +1,0 @@
-C:\Builds\1\PhytelCode\API Patient System Data Domain (RC)\bin\Phytel.API.DataDomain.PatientSystem.Services.Test.dll.config
-C:\Builds\1\PhytelCode\API Patient System Data Domain (RC)\bin\Phytel.API.DataDomain.PatientSystem.Services.Test.dll
-C:\Builds\1\PhytelCode\API Patient System Data Domain (RC)\bin\Phytel.API.DataDomain.PatientSystem.Services.Test.pdb
-C:\Builds\1\PhytelCode\API Patient System Data Domain (RC)\src\Services\API\DataDomain\Phytel.API.DataDomain.PatientSystem\Release Candidate\Current\PatientSystem.Service.Test\obj\Release\Phytel.API.DataDomain.PatientSystem.Services.Test.dll
-C:\Builds\1\PhytelCode\API Patient System Data Domain (RC)\src\Services\API\DataDomain\Phytel.API.DataDomain.PatientSystem\Release Candidate\Current\PatientSystem.Service.Test\obj\Release\Phytel.API.DataDomain.PatientSystem.Services.Test.pdb

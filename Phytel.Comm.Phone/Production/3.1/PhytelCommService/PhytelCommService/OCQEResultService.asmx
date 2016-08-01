@@ -1,1 +1,0 @@
-﻿<%@ WebService Language="C#" CodeBehind="OCQEResultService.asmx.cs" Class="PhytelCommService.OCQEResultService" %>

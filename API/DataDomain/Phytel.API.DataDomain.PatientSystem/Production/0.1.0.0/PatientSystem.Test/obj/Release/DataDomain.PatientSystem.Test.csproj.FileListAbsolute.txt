@@ -1,6 +1,0 @@
-C:\Builds\1\PhytelCode\API Patient System Data Domain (RC)\bin\Phytel.API.DataDomain.PatientSystem.Test.dll.config
-C:\Builds\1\PhytelCode\API Patient System Data Domain (RC)\bin\Phytel.API.DataDomain.PatientSystem.Test.dll
-C:\Builds\1\PhytelCode\API Patient System Data Domain (RC)\bin\Phytel.API.DataDomain.PatientSystem.Test.pdb
-C:\Builds\1\PhytelCode\API Patient System Data Domain (RC)\src\Services\API\DataDomain\Phytel.API.DataDomain.PatientSystem\Release Candidate\Current\PatientSystem.Test\obj\Release\DataDomain.PatientSystem.Test.csprojResolveAssemblyReference.cache
-C:\Builds\1\PhytelCode\API Patient System Data Domain (RC)\src\Services\API\DataDomain\Phytel.API.DataDomain.PatientSystem\Release Candidate\Current\PatientSystem.Test\obj\Release\Phytel.API.DataDomain.PatientSystem.Test.dll
-C:\Builds\1\PhytelCode\API Patient System Data Domain (RC)\src\Services\API\DataDomain\Phytel.API.DataDomain.PatientSystem\Release Candidate\Current\PatientSystem.Test\obj\Release\Phytel.API.DataDomain.PatientSystem.Test.pdb
