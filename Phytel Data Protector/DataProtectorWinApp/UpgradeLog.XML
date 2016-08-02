@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type='text/xsl' href='_UpgradeReport_Files/UpgradeReport.xslt'?><UpgradeLog>
-<Properties><Property Name="Solution" Value="DataProtectorWinApp">
-</Property><Property Name="Solution File" Value="C:\Projects\TFS\Development\Phytel.Net\Shared\Phytel Data Protector\DataProtectorWinApp\DataProtectorWinApp.sln">
-</Property><Property Name="Date" Value="Tuesday, November 10, 2009">
-</Property><Property Name="Time" Value="15:31:17 PM">
-</Property></Properties><Event ErrorLevel="0" Project="DataProtectorWinApp" Source="DataProtectorWinApp.csproj" Description="Project converted successfully">
-</Event><Event ErrorLevel="3" Project="DataProtectorWinApp" Source="DataProtectorWinApp.csproj" Description="Converted">
-</Event><Event ErrorLevel="0" Project="DataProtectorWinApp" Source="DataProtectorWinApp.csproj" Description="Scan complete: Upgrade not required for project files.">
-</Event></UpgradeLog>
