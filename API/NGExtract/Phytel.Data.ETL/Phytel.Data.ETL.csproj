@@ -1,0 +1,297 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{6F7E797F-C4C5-4F6E-A7CE-230E05D375F8}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Phytel.Data.ETL</RootNamespace>
+    <AssemblyName>Phytel.Data.ETL</AssemblyName>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Model|AnyCPU'">
+    <OutputPath>bin\Model\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="FastMember">
+      <HintPath>..\..\..\..\packages\FastMember.1.0.0.11\lib\net40\FastMember.dll</HintPath>
+    </Reference>
+    <Reference Include="MongoDB.Bson, Version=1.9.2.235, Culture=neutral, PublicKeyToken=f686731cfb9cc103, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\mongocsharpdriver.1.9.2\lib\net35\MongoDB.Bson.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MongoDB.Driver, Version=1.9.2.235, Culture=neutral, PublicKeyToken=f686731cfb9cc103, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\mongocsharpdriver.1.9.2\lib\net35\MongoDB.Driver.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Phytel.Services.Mongo, Version=1.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\packages\Phytel.Services.Mongo.1.3.2.04\lib\net451\Phytel.Services.Mongo.dll</HintPath>
+    </Reference>
+    <Reference Include="Phytel.Services.Security, Version=1.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\packages\Phytel.Services.Security.1.3.0.06\lib\net451\Phytel.Services.Security.dll</HintPath>
+    </Reference>
+    <Reference Include="Phytel.Services.SQLServer, Version=1.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\packages\Phytel.Services.SQLServer.1.3.0.09\lib\net451\Phytel.Services.SQLServer.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BulkCopy\ECareTeam.cs" />
+    <Compile Include="BulkCopy\EPatient.cs" />
+    <Compile Include="BulkCopy\ECareTeamFrequency.cs" />
+    <Compile Include="BulkCopy\EPatientNoteType.cs" />
+    <Compile Include="BulkCopy\EPatientMedicationFrequency.cs" />
+    <Compile Include="BulkCopy\EMedicationFrequency.cs" />
+    <Compile Include="BulkCopy\EMedicationMap.cs" />
+    <Compile Include="BulkCopy\EPatientSystem.cs" />
+    <Compile Include="BulkCopy\EContactTypeLookUp.cs" />
+    <Compile Include="BulkCopy\EPatientUtilization.cs" />
+    <Compile Include="BulkCopy\EPatientUtilizationProgram.cs" />
+    <Compile Include="BulkCopy\EPharmClass.cs" />
+    <Compile Include="BulkCopy\EMedication.cs" />
+    <Compile Include="BulkCopy\ERecentUserList.cs" />
+    <Compile Include="BulkCopy\ERecentList.cs" />
+    <Compile Include="BulkCopy\ESystem.cs" />
+    <Compile Include="BulkCopy\EWeekDay.cs" />
+    <Compile Include="BulkCopy\ETimeOfDay.cs" />
+    <Compile Include="BulkCopy\EPhone.cs" />
+    <Compile Include="BulkCopy\EMode.cs" />
+    <Compile Include="BulkCopy\ELanguage.cs" />
+    <Compile Include="BulkCopy\EEmail.cs" />
+    <Compile Include="BulkCopy\EAddress.cs" />
+    <Compile Include="BulkCopy\EContact.cs" />
+    <Compile Include="BulkCopy\EToDoProgram.cs" />
+    <Compile Include="BulkCopy\EProgramAttribute.cs" />
+    <Compile Include="BulkCopy\EStep.cs" />
+    <Compile Include="BulkCopy\EAction.cs" />
+    <Compile Include="BulkCopy\EObservationResponse.cs" />
+    <Compile Include="BulkCopy\EModule.cs" />
+    <Compile Include="BulkCopy\EProgram.cs" />
+    <Compile Include="BulkCopy\EPatientNoteProgram.cs" />
+    <Compile Include="BulkCopy\EStepResponse.cs" />
+    <Compile Include="BulkCopy\ReadPatientNoteProgramSeries.cs" />
+    <Compile Include="BulkCopy\ReadObservationsSeries.cs" />
+    <Compile Include="BulkCopy\ReadPlanElementsSeries.cs" />
+    <Compile Include="BulkCopy\ReadSeries.cs" />
+    <Compile Include="ETLEventArgs.cs" />
+    <Compile Include="ETLProcessor.cs" />
+    <Compile Include="SavePatientProgram.cs" />
+    <Compile Include="SpawnElementHash.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Templates\CareTeamFrequency.cs" />
+    <Compile Include="Templates\Contacts.cs" />
+    <Compile Include="Templates\CareTeam.cs" />
+    <Compile Include="Templates\ContactTypeLookUp.cs" />
+    <Compile Include="Templates\DocumentCollection.cs" />
+    <Compile Include="Templates\PatientInfo.cs" />
+    <Compile Include="Templates\PatientUtilization.cs" />
+    <Compile Include="Templates\System.cs" />
+    <Compile Include="Templates\PatientNoteType.cs" />
+    <Compile Include="Templates\PatientMedicationFrequency.cs" />
+    <Compile Include="Templates\PatientMedSupp.cs" />
+    <Compile Include="Templates\MedicationMap.cs" />
+    <Compile Include="Templates\Medications.cs" />
+    <Compile Include="Templates\User.cs" />
+    <Compile Include="Templates\ToDo.cs" />
+    <Compile Include="Templates\PatientNotes.cs" />
+    <Compile Include="Utils.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\DataDomain\Phytel.API.DataDomain.Action\Development\Current\Action.DTO\DataDomain.Action.DTO.csproj">
+      <Project>{1c2c63a1-4246-4ec9-bad1-c00e9ecd85f6}</Project>
+      <Name>DataDomain.Action.DTO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\DataDomain\Phytel.API.DataDomain.Action\Development\Current\Action\DataDomain.Action.csproj">
+      <Project>{f1a478d1-dca1-4be6-ae83-e0acdd4fdffd}</Project>
+      <Name>DataDomain.Action</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\DataDomain\Phytel.API.DataDomain.Allergy\Development\Current\Allergy.DTO\DataDomain.Allergy.DTO.csproj">
+      <Project>{404ff84f-c52a-45b1-9966-2f79b52ee03d}</Project>
+      <Name>DataDomain.Allergy.DTO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\DataDomain\Phytel.API.DataDomain.Allergy\Development\Current\DataDomain.Allergy.Repo\DataDomain.Allergy.Repo.csproj">
+      <Project>{3102572c-54bf-4004-8453-077790779157}</Project>
+      <Name>DataDomain.Allergy.Repo</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\DataDomain\Phytel.API.DataDomain.CareMember\Development\Current\CareMember.DTO\DataDomain.CareMember.DTO.csproj">
+      <Project>{b65577e7-60a6-4553-b1b9-38d6074ac560}</Project>
+      <Name>DataDomain.CareMember.DTO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\DataDomain\Phytel.API.DataDomain.CareMember\Development\Current\CareMember\DataDomain.CareMember.csproj">
+      <Project>{e77dec80-3a95-43a8-9438-1af394e8a9da}</Project>
+      <Name>DataDomain.CareMember</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\DataDomain\Phytel.API.DataDomain.Cohort\Development\Current\Cohort.DTO\DataDomain.Cohort.DTO.csproj">
+      <Project>{d4489296-17a3-4172-8fdf-db6c0a7ae748}</Project>
+      <Name>DataDomain.Cohort.DTO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\DataDomain\Phytel.API.DataDomain.Cohort\Development\Current\Cohort\DataDomain.Cohort.csproj">
+      <Project>{229026b1-c3e5-4d2b-8d2b-61d00e8a52cc}</Project>
+      <Name>DataDomain.Cohort</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\DataDomain\Phytel.API.DataDomain.Contact\Development\Current\Contact.DTO\DataDomain.Contact.DTO.csproj">
+      <Project>{0b6e0ed8-abe5-4a1d-8e10-0ac54f06d9c4}</Project>
+      <Name>DataDomain.Contact.DTO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\DataDomain\Phytel.API.DataDomain.Contact\Development\Current\Contact\DataDomain.Contact.csproj">
+      <Project>{16143ea0-7971-4959-8b3b-eac8584279c2}</Project>
+      <Name>DataDomain.Contact</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\DataDomain\Phytel.API.DataDomain.LookUp\Development\Current\LookUp.DTO\DataDomain.LookUp.DTO.csproj">
+      <Project>{4885fe36-03db-47b7-be7e-33260943a9dc}</Project>
+      <Name>DataDomain.LookUp.DTO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\DataDomain\Phytel.API.DataDomain.LookUp\Development\Current\LookUp\DataDomain.LookUp.csproj">
+      <Project>{f0a3623a-6d1d-46de-a00e-794ebc856eb5}</Project>
+      <Name>DataDomain.LookUp</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\DataDomain\Phytel.API.DataDomain.Medication\Development\Current\DataDomain.Medication.Repo\DataDomain.Medication.Repo.csproj">
+      <Project>{60c6a9f6-d668-4053-8997-8cfe661628dd}</Project>
+      <Name>DataDomain.Medication.Repo</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\DataDomain\Phytel.API.DataDomain.Medication\Development\Current\Medication.DTO\DataDomain.Medication.DTO.csproj">
+      <Project>{006555ba-c927-4ce0-bc5a-7a6a7053d0d5}</Project>
+      <Name>DataDomain.Medication.DTO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\DataDomain\Phytel.API.DataDomain.Module\Development\Current\Module.DTO\DataDomain.Module.DTO.csproj">
+      <Project>{6862b598-6967-430d-803a-bbe00fe98050}</Project>
+      <Name>DataDomain.Module.DTO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\DataDomain\Phytel.API.DataDomain.Module\Development\Current\Module\DataDomain.Module.csproj">
+      <Project>{c007c9ba-a710-44d3-be86-328eabcdfc15}</Project>
+      <Name>DataDomain.Module</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\DataDomain\Phytel.API.DataDomain.PatientGoal\Development\Current\PatientGoal.DTO\DataDomain.PatientGoal.DTO.csproj">
+      <Project>{92488af4-963e-4098-8ba8-23d6952bd952}</Project>
+      <Name>DataDomain.PatientGoal.DTO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\DataDomain\Phytel.API.DataDomain.PatientGoal\Development\Current\PatientGoal\DataDomain.PatientGoal.csproj">
+      <Project>{73fa0644-f0b9-45ad-a52a-0930b66c6c10}</Project>
+      <Name>DataDomain.PatientGoal</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\DataDomain\Phytel.API.DataDomain.PatientNote\Development\Current\DataDomain.PatientNote.Repo\DataDomain.PatientNote.Repo.csproj">
+      <Project>{bd61e655-5658-49c8-96d8-26822162d008}</Project>
+      <Name>DataDomain.PatientNote.Repo</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\DataDomain\Phytel.API.DataDomain.PatientNote\Development\Current\PatientNote.DTO\DataDomain.PatientNote.DTO.csproj">
+      <Project>{99f4ec29-b099-424e-9757-223e67029001}</Project>
+      <Name>DataDomain.PatientNote.DTO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\DataDomain\Phytel.API.DataDomain.PatientObservation\Development\Current\PatientObservation.DTO\DataDomain.PatientObservation.DTO.csproj">
+      <Project>{06d69e2b-a395-459c-b4d0-fc750018bdd8}</Project>
+      <Name>DataDomain.PatientObservation.DTO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\DataDomain\Phytel.API.DataDomain.PatientObservation\Development\Current\PatientObservation\DataDomain.PatientObservation.csproj">
+      <Project>{aa8c9e02-7343-4e90-803a-73c8a8dd7499}</Project>
+      <Name>DataDomain.PatientObservation</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\DataDomain\Phytel.API.DataDomain.PatientSystem\Development\Current\PatientSystem.DTO\DataDomain.PatientSystem.DTO.csproj">
+      <Project>{6033a8ea-a3ef-4182-bfdd-4a9826ecf871}</Project>
+      <Name>DataDomain.PatientSystem.DTO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\DataDomain\Phytel.API.DataDomain.PatientSystem\Development\Current\PatientSystem.Repo\DataDomain.PatientSystem.Repo.csproj">
+      <Project>{64428b06-18e5-4307-ba78-fb0d238816d8}</Project>
+      <Name>DataDomain.PatientSystem.Repo</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\DataDomain\Phytel.API.DataDomain.PatientSystem\Development\Current\PatientSystem\DataDomain.PatientSystem.csproj">
+      <Project>{bf2f1262-d5cc-41f0-bcfc-7ccdce479795}</Project>
+      <Name>DataDomain.PatientSystem</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\DataDomain\Phytel.API.DataDomain.Patient\Development\Current\Patient.DTOs\DataDomain.Patient.DTO.csproj">
+      <Project>{1b3148a8-fb57-4461-91bc-f1cd38a013b6}</Project>
+      <Name>DataDomain.Patient.DTO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\DataDomain\Phytel.API.DataDomain.Patient\Development\Current\Patient\DataDomain.Patient.csproj">
+      <Project>{1536cd0a-6308-4daf-8618-35bba0816997}</Project>
+      <Name>DataDomain.Patient</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\DataDomain\Phytel.API.DataDomain.Program\Development\Current\Program.DTO\DataDomain.Program.DTO.csproj">
+      <Project>{4e9f9dbf-e01b-4226-9e4f-246149ebbb3f}</Project>
+      <Name>DataDomain.Program.DTO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\DataDomain\Phytel.API.DataDomain.Program\Development\Current\Program\DataDomain.Program.csproj">
+      <Project>{34271552-e2e1-428f-b612-7186e01b6c54}</Project>
+      <Name>DataDomain.Program</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\DataDomain\Phytel.API.DataDomain.Scheduling\Development\Current\Scheduling.DTO\DataDomain.Scheduling.DTO.csproj">
+      <Project>{1e303326-eec9-42a8-ba50-880ab7ad99b2}</Project>
+      <Name>DataDomain.Scheduling.DTO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\DataDomain\Phytel.API.DataDomain.Scheduling\Development\Current\Scheduling\DataDomain.Scheduling.csproj">
+      <Project>{4fd3a994-db24-41d6-bd34-4ea5aad8d62b}</Project>
+      <Name>DataDomain.Scheduling</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\DataDomain\Phytel.API.DataDomain.Step\Development\Current\Step.DTO\DataDomain.Step.DTO.csproj">
+      <Project>{71e4bd1e-0fdf-4b80-8322-4c38b8bb671c}</Project>
+      <Name>DataDomain.Step.DTO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\DataDomain\Phytel.API.DataDomain.Step\Development\Current\Step\DataDomain.Step.csproj">
+      <Project>{79dcbeef-250b-4d28-8d1d-ee76a3e2491f}</Project>
+      <Name>DataDomain.Step</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\Interfaces\Development\Current\Phytel.API.Interface\Phytel.API.Interface.csproj">
+      <Project>{abe948fb-247e-4955-b3ab-b7c93e10a542}</Project>
+      <Name>Phytel.API.Interface</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

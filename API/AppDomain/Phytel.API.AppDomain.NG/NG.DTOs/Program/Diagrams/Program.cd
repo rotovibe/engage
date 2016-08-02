@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Phytel.API.AppDomain.NG.DTO.Program">
+    <Position X="5" Y="6.25" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>KAAGAACEAQAgAAABAADAIQQwAAAAAIAAAAIACEBAAAQ=</HashCode>
+      <FileName>Program\Program.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Phytel.API.AppDomain.NG.DTO.ProgramAttribute">
+    <Position X="2.75" Y="6.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>CAACAAAkAAgAIAIJIACABAAAAEAAAgAACQAAAAAAQAA=</HashCode>
+      <FileName>Program\ProgramAttribute.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Phytel.API.AppDomain.NG.DTO.Response">
+    <Position X="14" Y="7" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAECAAAAAAEAAAAAAAAIAAQAAAEEAAABAAAgCAAAAAI=</HashCode>
+      <FileName>Program\Response.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Phytel.API.AppDomain.NG.DTO.Step">
+    <Position X="11.75" Y="6.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>BAAiCQAEAABgAEAAAAAAAABAAAgAAAgUAAAACAAAAAA=</HashCode>
+      <FileName>Program\Step.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Phytel.API.AppDomain.NG.DTO.Module">
+    <Position X="7.75" Y="6.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACEIAAgAAAAAAAAAAQAAAAAAAAIAAAACAAAAAA=</HashCode>
+      <FileName>Program\Module.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Phytel.API.AppDomain.NG.DTO.Actions">
+    <Position X="9.75" Y="6.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAABAACEAAAgAAAAAAAAAAQAAAAAAAAAAAAACAAAAAA=</HashCode>
+      <FileName>Program\Action.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Phytel.API.AppDomain.NG.DTO.PlanElement">
+    <Position X="9.25" Y="0.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AgECAAAAAQAAIoIAEAgAAABAAEAAggABAKAAAAAAAAA=</HashCode>
+      <FileName>Program\PlanElement.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

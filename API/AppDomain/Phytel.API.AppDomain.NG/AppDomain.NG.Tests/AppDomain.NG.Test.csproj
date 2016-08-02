@@ -1,0 +1,341 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{1FCB66F1-56D2-430B-85A7-0D1C26A30FA8}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Phytel.API.AppDomain.NG.Test</RootNamespace>
+    <AssemblyName>Phytel.API.AppDomain.NG.Test</AssemblyName>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+    <ReferencePath>$(ProgramFiles)\Common Files\microsoft shared\VSTT\$(VisualStudioVersion)\UITestExtensionPackages</ReferencePath>
+    <IsCodedUITest>False</IsCodedUITest>
+    <TestProjectType>UnitTest</TestProjectType>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\..\..\..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Test|AnyCPU'">
+    <OutputPath>bin\Test\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Model|AnyCPU'">
+    <OutputPath>bin\Model\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AutoMapper, Version=3.2.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\packages\AutoMapper.3.2.1\lib\net40\AutoMapper.dll</HintPath>
+    </Reference>
+    <Reference Include="AutoMapper.Net4">
+      <HintPath>..\..\..\..\..\packages\AutoMapper.3.2.1\lib\net40\AutoMapper.Net4.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Lucene.Net, Version=3.0.3.0, Culture=neutral, PublicKeyToken=85089178b9ac3181, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\packages\Lucene.Net.3.0.3\lib\NET40\Lucene.Net.dll</HintPath>
+    </Reference>
+    <Reference Include="MongoDB.Bson">
+      <HintPath>..\..\..\..\..\packages\mongocsharpdriver.1.9.2\lib\net35\MongoDB.Bson.dll</HintPath>
+    </Reference>
+    <Reference Include="MongoDB.Driver">
+      <HintPath>..\..\..\..\..\packages\mongocsharpdriver.1.9.2\lib\net35\MongoDB.Driver.dll</HintPath>
+    </Reference>
+    <Reference Include="Moq, Version=4.2.1510.2205, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\..\packages\Moq.4.2.1510.2205\lib\net40\Moq.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Phytel.Mongo">
+      <HintPath>..\References\Phytel.Mongo.dll</HintPath>
+    </Reference>
+    <Reference Include="Phytel.Services.Mongo">
+      <HintPath>..\..\..\..\..\packages\Phytel.Services.Mongo.1.3.2.04\lib\net451\Phytel.Services.Mongo.dll</HintPath>
+    </Reference>
+    <Reference Include="Phytel.Services.Security">
+      <HintPath>..\..\..\..\..\packages\Phytel.Services.Security.1.3.0.06\lib\net451\Phytel.Services.Security.dll</HintPath>
+    </Reference>
+    <Reference Include="Phytel.Services.SQLServer">
+      <HintPath>..\..\..\..\..\packages\Phytel.Services.SQLServer.1.3.0.09\lib\net451\Phytel.Services.SQLServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ServiceStack">
+      <HintPath>..\..\..\..\..\packages\ServiceStack.3.9.70\lib\net35\ServiceStack.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack.Common">
+      <HintPath>..\..\..\..\..\packages\ServiceStack.Common.3.9.71\lib\net35\ServiceStack.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack.Interfaces">
+      <HintPath>..\..\..\..\..\packages\ServiceStack.Common.3.9.71\lib\net35\ServiceStack.Interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack.OrmLite">
+      <HintPath>..\..\..\..\..\packages\ServiceStack.OrmLite.SqlServer.3.9.70\lib\net35\ServiceStack.OrmLite.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack.OrmLite.SqlServer">
+      <HintPath>..\..\..\..\..\packages\ServiceStack.OrmLite.SqlServer.3.9.70\lib\net35\ServiceStack.OrmLite.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack.Redis">
+      <HintPath>..\..\..\..\..\packages\ServiceStack.Redis.3.9.70\lib\net35\ServiceStack.Redis.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack.ServiceInterface">
+      <HintPath>..\..\..\..\..\packages\ServiceStack.3.9.70\lib\net35\ServiceStack.ServiceInterface.dll</HintPath>
+    </Reference>
+    <Reference Include="ServiceStack.Text">
+      <HintPath>..\..\..\..\..\packages\ServiceStack.Text.3.9.70\lib\net35\ServiceStack.Text.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Web" />
+  </ItemGroup>
+  <Choose>
+    <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
+      <ItemGroup>
+        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+      </ItemGroup>
+    </When>
+    <Otherwise>
+      <ItemGroup>
+        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework">
+          <Private>False</Private>
+        </Reference>
+      </ItemGroup>
+    </Otherwise>
+  </Choose>
+  <ItemGroup>
+    <Compile Include="Allergy\Data_Allergy_Test.cs" />
+    <Compile Include="Allergy\Data_PatientAllergy_Test.cs" />
+    <Compile Include="AppDomainRequest.cs" />
+    <Compile Include="AutoMapperConfigurationTests.cs" />
+    <Compile Include="CareMember_Tests.cs" />
+    <Compile Include="ContactTypeLookupManager_Tests.cs" />
+    <Compile Include="Contact\CareTeam\AssignedToMeCohortRuleTests.cs" />
+    <Compile Include="Contact\CareTeam\AssignedToMePCMCohortRuleTests.cs" />
+    <Compile Include="Contact\CareTeam\CareTeamCommandTest.cs" />
+    <Compile Include="Contact\CareTeam\UnassignedPCMCohortRuleTests.cs" />
+    <Compile Include="Contact\CareTeam\CohortsRulesProcessorTests.cs" />
+    <Compile Include="Contact\ContactManagerTests.cs" />
+    <Compile Include="DereferencePatientFromContactCommandTests.cs" />
+    <Compile Include="Factories\NGManagerFactory.cs" />
+    <Compile Include="Factories\SampleFactory.cs" />
+    <Compile Include="Factories\SecurityManagerFactory.cs" />
+    <Compile Include="Medication\Data_PatientMedFrequency_Test.cs" />
+    <Compile Include="Medication\Data_MedicationMap_Test.cs" />
+    <Compile Include="Medication\Data_PatientMedication_Test.cs" />
+    <Compile Include="MongoDB\Repository\MongoPatientGoalRepositoryTests.cs" />
+    <Compile Include="NGManager_SearchContactsTests.cs" />
+    <Compile Include="NGService_Tests.cs" />
+    <Compile Include="NGUtils_Test.cs" />
+    <Compile Include="Notes\NotesManagerTests.cs" />
+    <Compile Include="Notes\Visitors\TakeModifierTests.cs" />
+    <Compile Include="Note_Tests.cs" />
+    <Compile Include="Goal_Tests.cs" />
+    <Compile Include="LookUps_Test.cs" />
+    <Compile Include="NGManager_Test.cs" />
+    <Compile Include="ObservationTest.cs" />
+    <Compile Include="PatientGoalDataManagerTests.cs" />
+    <Compile Include="PatientObservationTest.cs" />
+    <Compile Include="PatientSystemServiceTests.cs" />
+    <Compile Include="PatientSystem\PatientSystemManagerTests.cs" />
+    <Compile Include="PatientSystem\PatientSystem_Test.cs" />
+    <Compile Include="PatientSystem\System_Test.cs" />
+    <Compile Include="Patient\Contact_Test.cs" />
+    <Compile Include="PlanCOR\ActionPlanProcessorTests.cs" />
+    <Compile Include="PlanCOR\ModulePlanProcessor_Tests.cs" />
+    <Compile Include="PlanCOR\StepPlanProcessor_Tests.cs" />
+    <Compile Include="PlanElementUtil_Tests.cs" />
+    <Compile Include="PlanManager_Tests.cs" />
+    <Compile Include="Programs\ElementActivation\ElementActivationStrategyTests.cs" />
+    <Compile Include="Programs\ElementActivation\GoalActivationRuleTests.cs" />
+    <Compile Include="Programs\ElementActivation\ToDoActivationRuleTests.cs" />
+    <Compile Include="Programs\EndpointUtilsTests.cs" />
+    <Compile Include="Programs\EndpointUtils_Tests.cs" />
+    <Compile Include="Programs\PlanElemStrategy\PlanElementActivationStrategyTests.cs" />
+    <Compile Include="Programs\PlanElemStrategy\SetModulePropertiesForRepeat_Test.cs" />
+    <Compile Include="Programs\PlanManagerTests.cs" />
+    <Compile Include="Programs\PlanManager_Test.cs" />
+    <Compile Include="Programs\ProgramTest.cs" />
+    <Compile Include="Programs\Specifications\IsInitialActionSpecificationTests.cs" />
+    <Compile Include="Programs\Specifications\IsModuleCompletedSpecification_Test.cs" />
+    <Compile Include="Programs\Specifications\RemoveSelectedResponseSpecification_Test.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Search\Data_Search_Test.cs" />
+    <Compile Include="Search\LuceneStrategy\BaseLuceneStrategyTests.cs" />
+    <Compile Include="Search\SearchManagerTests.cs" />
+    <Compile Include="Stubs\StubAppHostBase.cs" />
+    <Compile Include="Stubs\StubAuditUtil.cs" />
+    <Compile Include="Stubs\StubCommonFormatterUtil.cs" />
+    <Compile Include="Stubs\StubEndpointUtils.cs" />
+    <Compile Include="Stubs\StubGoalsEndpointUtils.cs" />
+    <Compile Include="Stubs\StubJsonRestClient.cs" />
+    <Compile Include="Stubs\StubNGManager.cs" />
+    <Compile Include="Stubs\StubElementActivationStrategy.cs" />
+    <Compile Include="Stubs\StubNotesManager.cs" />
+    <Compile Include="Stubs\StubPatientSystemEndpointUtil.cs" />
+    <Compile Include="Stubs\StubPlanElementEndpointUtils.cs" />
+    <Compile Include="Stubs\StubPlanElementUtils.cs" />
+    <Compile Include="Stubs\StubSecurityManager.cs" />
+    <Compile Include="Scheduling\SchedulingTest.cs" />
+    <Compile Include="Stubs\StubProblemActivationRule.cs" />
+    <Compile Include="Stubs\StubStepPlanProcessor.cs" />
+    <Compile Include="Stubs\StubToDoActivationRule.cs" />
+    <Compile Include="Stubs\StubUtilsManager.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\Common\Phytel.API.Common\Development\Current\Phytel.API.Common.csproj">
+      <Project>{25cf3c3f-221f-4a49-b5ef-a8a5fcf9a5ba}</Project>
+      <Name>Phytel.API.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\Common\Phytel.API.DataAudit\Development\Current\Phytel.API.DataAudit.csproj">
+      <Project>{ae842695-4dd4-4403-9be4-8473bca09580}</Project>
+      <Name>Phytel.API.DataAudit</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.CareMember\Development\Current\CareMember.DTO\DataDomain.CareMember.DTO.csproj">
+      <Project>{b65577e7-60a6-4553-b1b9-38d6074ac560}</Project>
+      <Name>DataDomain.CareMember.DTO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.Contact\Development\Current\Contact.DTO\DataDomain.Contact.DTO.csproj">
+      <Project>{0B6E0ED8-ABE5-4A1D-8E10-0AC54F06D9C4}</Project>
+      <Name>DataDomain.Contact.DTO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.PatientGoal\Development\Current\PatientGoal.DTO\DataDomain.PatientGoal.DTO.csproj">
+      <Project>{92488AF4-963E-4098-8BA8-23D6952BD952}</Project>
+      <Name>DataDomain.PatientGoal.DTO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.PatientGoal\Development\Current\PatientGoal.Test\DataDomain.PatientGoal.Test.csproj">
+      <Project>{BE7CFA5D-9FBE-413B-B8A6-832F6A5BBB05}</Project>
+      <Name>DataDomain.PatientGoal.Test</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.PatientGoal\Development\Current\PatientGoal\DataDomain.PatientGoal.csproj">
+      <Project>{73FA0644-F0B9-45AD-A52A-0930B66C6C10}</Project>
+      <Name>DataDomain.PatientGoal</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.PatientObservation\Development\Current\PatientObservation.DTO\DataDomain.PatientObservation.DTO.csproj">
+      <Project>{06d69e2b-a395-459c-b4d0-fc750018bdd8}</Project>
+      <Name>DataDomain.PatientObservation.DTO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.PatientSystem\Development\Current\PatientSystem.DTO\DataDomain.PatientSystem.DTO.csproj">
+      <Project>{6033a8ea-a3ef-4182-bfdd-4a9826ecf871}</Project>
+      <Name>DataDomain.PatientSystem.DTO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.Patient\Development\Current\Patient.DTOs\DataDomain.Patient.DTO.csproj">
+      <Project>{1b3148a8-fb57-4461-91bc-f1cd38a013b6}</Project>
+      <Name>DataDomain.Patient.DTO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.Program\Development\Current\Program.DTO\DataDomain.Program.DTO.csproj">
+      <Project>{4e9f9dbf-e01b-4226-9e4f-246149ebbb3f}</Project>
+      <Name>DataDomain.Program.DTO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.Scheduling\Development\Current\Scheduling.DTO\DataDomain.Scheduling.DTO.csproj">
+      <Project>{1e303326-eec9-42a8-ba50-880ab7ad99b2}</Project>
+      <Name>DataDomain.Scheduling.DTO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.Search\Development\Current\DataDomain.Search.Repo\DataDomain.Search.Repo.csproj">
+      <Project>{F7D7B682-C23F-4C36-B76D-6F375B61CD42}</Project>
+      <Name>DataDomain.Search.Repo</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.Search\Development\Current\Search.DTO\DataDomain.Search.DTO.csproj">
+      <Project>{066fbea2-6d40-47f2-9f36-16365fa17dd2}</Project>
+      <Name>DataDomain.Search.DTO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.Search\Development\Current\Search.Service\DataDomain.Search.Service.csproj">
+      <Project>{6699907a-159f-4d9d-a5b9-258b453017b1}</Project>
+      <Name>DataDomain.Search.Service</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.Search\Development\Current\Search\DataDomain.Search.csproj">
+      <Project>{d3d050cd-99ac-42dc-94ed-0a49b9b4ccdd}</Project>
+      <Name>DataDomain.Search</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\Interfaces\Development\Current\Phytel.API.Interface\Phytel.API.Interface.csproj">
+      <Project>{abe948fb-247e-4955-b3ab-b7c93e10a542}</Project>
+      <Name>Phytel.API.Interface</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\Phytel.API.AppDomain.Security\Development\Current\Security.DTOs\AppDomain.Security.DTO.csproj">
+      <Project>{5d9c233b-e53d-4be1-b578-1aa9722de1cf}</Project>
+      <Name>AppDomain.Security.DTO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NG.DTOs\AppDomain.NG.DTO.csproj">
+      <Project>{E9957107-8F2A-4946-834E-629D4235B9B3}</Project>
+      <Name>AppDomain.NG.DTO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NG.Services\AppDomain.NG.Service.csproj">
+      <Project>{10A4CF5C-5B03-4069-9A7F-5BD0627EF148}</Project>
+      <Name>AppDomain.NG.Service</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NG\AppDomain.NG.csproj">
+      <Project>{E368DA81-D304-4556-B1C4-D4774C0DEFD2}</Project>
+      <Name>AppDomain.NG</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Fakes\" />
+  </ItemGroup>
+  <Choose>
+    <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
+      <ItemGroup>
+        <Reference Include="Microsoft.VisualStudio.QualityTools.CodedUITestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+          <Private>False</Private>
+        </Reference>
+        <Reference Include="Microsoft.VisualStudio.TestTools.UITest.Common, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+          <Private>False</Private>
+        </Reference>
+        <Reference Include="Microsoft.VisualStudio.TestTools.UITest.Extension, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+          <Private>False</Private>
+        </Reference>
+        <Reference Include="Microsoft.VisualStudio.TestTools.UITesting, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+          <Private>False</Private>
+        </Reference>
+      </ItemGroup>
+    </When>
+  </Choose>
+  <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Import Project="..\..\..\..\..\packages\AutoMapper.3.2.1\tools\AutoMapper.targets" Condition="Exists('..\..\..\..\..\packages\AutoMapper.3.2.1\tools\AutoMapper.targets')" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
