@@ -1,9 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<siteMap xmlns="http://schemas.microsoft.com/AspNet/SiteMap-File-1.0" >
-    <siteMapNode url="~/Default.aspx" title="Home" description="Population Management System - Home">
-      <!--<siteMapNode url="~/Appointments.aspx" title="Appointments" description="Population Management System - Appointments" />
-      <siteMapNode url="~/Outreach.aspx" title="Outreach" description="Population Management System - Outreach" />
-      <siteMapNode url="~/Reports.aspx" title="Reports" description="Population Management System - Reports" />
-      <siteMapNode url="~/Admin.aspx" title="Admin" description="Population Management System - Admin" roles="Admin" />-->
-    </siteMapNode>
-</siteMap>

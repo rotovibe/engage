@@ -1,8 +1,0 @@
-﻿<div class="ellipsis">
-	<span data-bind="if: patientId() && patientDetails()">
-	    <a data-bind="text: patientDetails().fullLastName() +', ' + patientDetails().fullFirstName(), attr: { href: '#patients/' + patientId(), title: patientDetails().fullLastName() +', ' + patientDetails().fullFirstName() }"></a>
-	</span>
-	<!-- ko ifnot: patientId -->
-		<span>-</span>
-	<!-- /ko -->
-</div>
