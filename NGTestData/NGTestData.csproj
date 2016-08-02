@@ -1,0 +1,174 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{6F1A3E2C-0991-427B-94A7-BA8DEDD90C88}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>NGTestData</RootNamespace>
+    <AssemblyName>NGTestData</AssemblyName>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ASEContext">
+      <HintPath>References\ASEContext.dll</HintPath>
+    </Reference>
+    <Reference Include="ASECore">
+      <HintPath>References\ASECore.dll</HintPath>
+    </Reference>
+    <Reference Include="ASEData">
+      <HintPath>References\ASEData.dll</HintPath>
+    </Reference>
+    <Reference Include="MongoDB.Bson, Version=1.9.2.235, Culture=neutral, PublicKeyToken=f686731cfb9cc103, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Services\API\DataDomain\Phytel.API.DataDomain.Contact\Development\Current\Contact.DTO\bin\Debug\MongoDB.Bson.dll</HintPath>
+    </Reference>
+    <Reference Include="MongoDB.Driver, Version=1.9.2.235, Culture=neutral, PublicKeyToken=f686731cfb9cc103, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Services\API\DataDomain\Phytel.API.DataDomain.Contact\Development\Current\Contact.DTO\bin\Debug\MongoDB.Driver.dll</HintPath>
+    </Reference>
+    <Reference Include="Phytel.API.Common">
+      <HintPath>References\Phytel.API.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Phytel.API.DataAudit">
+      <HintPath>References\Phytel.API.DataAudit.dll</HintPath>
+    </Reference>
+    <Reference Include="Phytel.API.DataDomain.Cohort">
+      <HintPath>References\Phytel.API.DataDomain.Cohort.dll</HintPath>
+    </Reference>
+    <Reference Include="Phytel.API.DataDomain.Cohort.DTO">
+      <HintPath>References\Phytel.API.DataDomain.Cohort.DTO.dll</HintPath>
+    </Reference>
+    <Reference Include="Phytel.API.DataDomain.Contact">
+      <HintPath>References\Phytel.API.DataDomain.Contact.dll</HintPath>
+    </Reference>
+    <Reference Include="Phytel.API.DataDomain.Contact.DTO, Version=1.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Services\API\DataDomain\Phytel.API.DataDomain.Contact\Development\Current\Contact.DTO\bin\Debug\Phytel.API.DataDomain.Contact.DTO.dll</HintPath>
+    </Reference>
+    <Reference Include="Phytel.API.DataDomain.LookUp">
+      <HintPath>References\Phytel.API.DataDomain.LookUp.dll</HintPath>
+    </Reference>
+    <Reference Include="Phytel.API.DataDomain.LookUp.DTO">
+      <HintPath>References\Phytel.API.DataDomain.LookUp.DTO.dll</HintPath>
+    </Reference>
+    <Reference Include="Phytel.API.DataDomain.Patient">
+      <HintPath>References\Phytel.API.DataDomain.Patient.dll</HintPath>
+    </Reference>
+    <Reference Include="Phytel.API.DataDomain.Patient.DTO">
+      <HintPath>References\Phytel.API.DataDomain.Patient.DTO.dll</HintPath>
+    </Reference>
+    <Reference Include="Phytel.API.DataDomain.PatientProblem">
+      <HintPath>References\Phytel.API.DataDomain.PatientProblem.dll</HintPath>
+    </Reference>
+    <Reference Include="Phytel.API.DataDomain.PatientProblem.DTO">
+      <HintPath>References\Phytel.API.DataDomain.PatientProblem.DTO.dll</HintPath>
+    </Reference>
+    <Reference Include="Phytel.API.DataDomain.PatientSystem, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>References\Phytel.API.DataDomain.PatientSystem.dll</HintPath>
+    </Reference>
+    <Reference Include="Phytel.API.DataDomain.PatientSystem.DTO, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>References\Phytel.API.DataDomain.PatientSystem.DTO.dll</HintPath>
+    </Reference>
+    <Reference Include="Phytel.API.DataDomain.PatientSystem.Repo">
+      <HintPath>References\Phytel.API.DataDomain.PatientSystem.Repo.dll</HintPath>
+    </Reference>
+    <Reference Include="Phytel.API.Interface">
+      <HintPath>References\Phytel.API.Interface.dll</HintPath>
+    </Reference>
+    <Reference Include="Phytel.Mongo">
+      <HintPath>References\Phytel.Mongo.dll</HintPath>
+    </Reference>
+    <Reference Include="Phytel.Services.Mongo">
+      <HintPath>References\Phytel.Services.Mongo.dll</HintPath>
+    </Reference>
+    <Reference Include="PhytelServices">
+      <HintPath>References\PhytelServices.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Form1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form1.Designer.cs">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Form1.resx">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
