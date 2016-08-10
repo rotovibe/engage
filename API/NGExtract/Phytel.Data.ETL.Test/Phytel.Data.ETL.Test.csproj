@@ -40,10 +40,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ASECore">
-      <HintPath>..\..\..\..\packages\ASEAPI\ASECore.dll</HintPath>
+      <HintPath>..\..\packages\ASEAPI\ASECore.dll</HintPath>
     </Reference>
     <Reference Include="Phytel.API.DataDomain.ASE.DTO">
-      <HintPath>..\..\..\..\packages\ASEAPI\Phytel.API.DataDomain.ASE.DTO.dll</HintPath>
+      <HintPath>..\..\packages\ASEAPI\Phytel.API.DataDomain.ASE.DTO.dll</HintPath>
     </Reference>
     <Reference Include="System" />
   </ItemGroup>

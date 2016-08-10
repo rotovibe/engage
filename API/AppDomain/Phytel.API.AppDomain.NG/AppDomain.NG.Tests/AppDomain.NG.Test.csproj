@@ -61,62 +61,62 @@
   <ItemGroup>
     <Reference Include="AutoMapper, Version=3.2.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\packages\AutoMapper.3.2.1\lib\net40\AutoMapper.dll</HintPath>
+      <HintPath>..\..\..\packages\AutoMapper.3.2.1\lib\net40\AutoMapper.dll</HintPath>
     </Reference>
     <Reference Include="AutoMapper.Net4">
-      <HintPath>..\..\..\..\..\packages\AutoMapper.3.2.1\lib\net40\AutoMapper.Net4.dll</HintPath>
+      <HintPath>..\..\..\packages\AutoMapper.3.2.1\lib\net40\AutoMapper.Net4.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Lucene.Net, Version=3.0.3.0, Culture=neutral, PublicKeyToken=85089178b9ac3181, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\packages\Lucene.Net.3.0.3\lib\NET40\Lucene.Net.dll</HintPath>
+      <HintPath>..\..\..\packages\Lucene.Net.3.0.3\lib\NET40\Lucene.Net.dll</HintPath>
     </Reference>
     <Reference Include="MongoDB.Bson">
-      <HintPath>..\..\..\..\..\packages\mongocsharpdriver.1.9.2\lib\net35\MongoDB.Bson.dll</HintPath>
+      <HintPath>..\..\..\packages\mongocsharpdriver.1.9.2\lib\net35\MongoDB.Bson.dll</HintPath>
     </Reference>
     <Reference Include="MongoDB.Driver">
-      <HintPath>..\..\..\..\..\packages\mongocsharpdriver.1.9.2\lib\net35\MongoDB.Driver.dll</HintPath>
+      <HintPath>..\..\..\packages\mongocsharpdriver.1.9.2\lib\net35\MongoDB.Driver.dll</HintPath>
     </Reference>
     <Reference Include="Moq, Version=4.2.1510.2205, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\Moq.4.2.1510.2205\lib\net40\Moq.dll</HintPath>
+      <HintPath>..\..\..\packages\Moq.4.2.1510.2205\lib\net40\Moq.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Phytel.Mongo">
       <HintPath>..\References\Phytel.Mongo.dll</HintPath>
     </Reference>
     <Reference Include="Phytel.Services.Mongo">
-      <HintPath>..\..\..\..\..\packages\Phytel.Services.Mongo.1.3.2.04\lib\net451\Phytel.Services.Mongo.dll</HintPath>
+      <HintPath>..\..\..\packages\Phytel.Services.Mongo.1.3.2.04\lib\net451\Phytel.Services.Mongo.dll</HintPath>
     </Reference>
     <Reference Include="Phytel.Services.Security">
-      <HintPath>..\..\..\..\..\packages\Phytel.Services.Security.1.3.0.06\lib\net451\Phytel.Services.Security.dll</HintPath>
+      <HintPath>..\..\..\packages\Phytel.Services.Security.1.3.0.06\lib\net451\Phytel.Services.Security.dll</HintPath>
     </Reference>
     <Reference Include="Phytel.Services.SQLServer">
-      <HintPath>..\..\..\..\..\packages\Phytel.Services.SQLServer.1.3.0.09\lib\net451\Phytel.Services.SQLServer.dll</HintPath>
+      <HintPath>..\..\..\packages\Phytel.Services.SQLServer.1.3.0.09\lib\net451\Phytel.Services.SQLServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="ServiceStack">
-      <HintPath>..\..\..\..\..\packages\ServiceStack.3.9.70\lib\net35\ServiceStack.dll</HintPath>
+      <HintPath>..\..\..\packages\ServiceStack.3.9.70\lib\net35\ServiceStack.dll</HintPath>
     </Reference>
     <Reference Include="ServiceStack.Common">
-      <HintPath>..\..\..\..\..\packages\ServiceStack.Common.3.9.71\lib\net35\ServiceStack.Common.dll</HintPath>
+      <HintPath>..\..\..\packages\ServiceStack.Common.3.9.71\lib\net35\ServiceStack.Common.dll</HintPath>
     </Reference>
     <Reference Include="ServiceStack.Interfaces">
-      <HintPath>..\..\..\..\..\packages\ServiceStack.Common.3.9.71\lib\net35\ServiceStack.Interfaces.dll</HintPath>
+      <HintPath>..\..\..\packages\ServiceStack.Common.3.9.71\lib\net35\ServiceStack.Interfaces.dll</HintPath>
     </Reference>
     <Reference Include="ServiceStack.OrmLite">
-      <HintPath>..\..\..\..\..\packages\ServiceStack.OrmLite.SqlServer.3.9.70\lib\net35\ServiceStack.OrmLite.dll</HintPath>
+      <HintPath>..\..\..\packages\ServiceStack.OrmLite.SqlServer.3.9.70\lib\net35\ServiceStack.OrmLite.dll</HintPath>
     </Reference>
     <Reference Include="ServiceStack.OrmLite.SqlServer">
-      <HintPath>..\..\..\..\..\packages\ServiceStack.OrmLite.SqlServer.3.9.70\lib\net35\ServiceStack.OrmLite.SqlServer.dll</HintPath>
+      <HintPath>..\..\..\packages\ServiceStack.OrmLite.SqlServer.3.9.70\lib\net35\ServiceStack.OrmLite.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="ServiceStack.Redis">
-      <HintPath>..\..\..\..\..\packages\ServiceStack.Redis.3.9.70\lib\net35\ServiceStack.Redis.dll</HintPath>
+      <HintPath>..\..\..\packages\ServiceStack.Redis.3.9.70\lib\net35\ServiceStack.Redis.dll</HintPath>
     </Reference>
     <Reference Include="ServiceStack.ServiceInterface">
-      <HintPath>..\..\..\..\..\packages\ServiceStack.3.9.70\lib\net35\ServiceStack.ServiceInterface.dll</HintPath>
+      <HintPath>..\..\..\packages\ServiceStack.3.9.70\lib\net35\ServiceStack.ServiceInterface.dll</HintPath>
     </Reference>
     <Reference Include="ServiceStack.Text">
-      <HintPath>..\..\..\..\..\packages\ServiceStack.Text.3.9.70\lib\net35\ServiceStack.Text.dll</HintPath>
+      <HintPath>..\..\..\packages\ServiceStack.Text.3.9.70\lib\net35\ServiceStack.Text.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
@@ -217,75 +217,75 @@
     <Compile Include="Stubs\StubUtilsManager.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\Common\Phytel.API.Common\Development\Current\Phytel.API.Common.csproj">
+    <ProjectReference Include="..\..\..\Common\Phytel.API.Common\Phytel.API.Common.csproj">
       <Project>{25cf3c3f-221f-4a49-b5ef-a8a5fcf9a5ba}</Project>
       <Name>Phytel.API.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\Common\Phytel.API.DataAudit\Development\Current\Phytel.API.DataAudit.csproj">
+    <ProjectReference Include="..\..\..\Common\Phytel.API.DataAudit\Phytel.API.DataAudit.csproj">
       <Project>{ae842695-4dd4-4403-9be4-8473bca09580}</Project>
       <Name>Phytel.API.DataAudit</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.CareMember\Development\Current\CareMember.DTO\DataDomain.CareMember.DTO.csproj">
+    <ProjectReference Include="..\..\..\DataDomain\Phytel.API.DataDomain.CareMember\CareMember.DTO\DataDomain.CareMember.DTO.csproj">
       <Project>{b65577e7-60a6-4553-b1b9-38d6074ac560}</Project>
       <Name>DataDomain.CareMember.DTO</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.Contact\Development\Current\Contact.DTO\DataDomain.Contact.DTO.csproj">
+    <ProjectReference Include="..\..\..\DataDomain\Phytel.API.DataDomain.Contact\Contact.DTO\DataDomain.Contact.DTO.csproj">
       <Project>{0B6E0ED8-ABE5-4A1D-8E10-0AC54F06D9C4}</Project>
       <Name>DataDomain.Contact.DTO</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.PatientGoal\Development\Current\PatientGoal.DTO\DataDomain.PatientGoal.DTO.csproj">
+    <ProjectReference Include="..\..\..\DataDomain\Phytel.API.DataDomain.PatientGoal\PatientGoal.DTO\DataDomain.PatientGoal.DTO.csproj">
       <Project>{92488AF4-963E-4098-8BA8-23D6952BD952}</Project>
       <Name>DataDomain.PatientGoal.DTO</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.PatientGoal\Development\Current\PatientGoal.Test\DataDomain.PatientGoal.Test.csproj">
+    <ProjectReference Include="..\..\..\DataDomain\Phytel.API.DataDomain.PatientGoal\PatientGoal.Test\DataDomain.PatientGoal.Test.csproj">
       <Project>{BE7CFA5D-9FBE-413B-B8A6-832F6A5BBB05}</Project>
       <Name>DataDomain.PatientGoal.Test</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.PatientGoal\Development\Current\PatientGoal\DataDomain.PatientGoal.csproj">
+    <ProjectReference Include="..\..\..\DataDomain\Phytel.API.DataDomain.PatientGoal\PatientGoal\DataDomain.PatientGoal.csproj">
       <Project>{73FA0644-F0B9-45AD-A52A-0930B66C6C10}</Project>
       <Name>DataDomain.PatientGoal</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.PatientObservation\Development\Current\PatientObservation.DTO\DataDomain.PatientObservation.DTO.csproj">
+    <ProjectReference Include="..\..\..\DataDomain\Phytel.API.DataDomain.PatientObservation\PatientObservation.DTO\DataDomain.PatientObservation.DTO.csproj">
       <Project>{06d69e2b-a395-459c-b4d0-fc750018bdd8}</Project>
       <Name>DataDomain.PatientObservation.DTO</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.PatientSystem\Development\Current\PatientSystem.DTO\DataDomain.PatientSystem.DTO.csproj">
+    <ProjectReference Include="..\..\..\DataDomain\Phytel.API.DataDomain.PatientSystem\PatientSystem.DTO\DataDomain.PatientSystem.DTO.csproj">
       <Project>{6033a8ea-a3ef-4182-bfdd-4a9826ecf871}</Project>
       <Name>DataDomain.PatientSystem.DTO</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.Patient\Development\Current\Patient.DTOs\DataDomain.Patient.DTO.csproj">
+    <ProjectReference Include="..\..\..\DataDomain\Phytel.API.DataDomain.Patient\Patient.DTOs\DataDomain.Patient.DTO.csproj">
       <Project>{1b3148a8-fb57-4461-91bc-f1cd38a013b6}</Project>
       <Name>DataDomain.Patient.DTO</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.Program\Development\Current\Program.DTO\DataDomain.Program.DTO.csproj">
+    <ProjectReference Include="..\..\..\DataDomain\Phytel.API.DataDomain.Program\Program.DTO\DataDomain.Program.DTO.csproj">
       <Project>{4e9f9dbf-e01b-4226-9e4f-246149ebbb3f}</Project>
       <Name>DataDomain.Program.DTO</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.Scheduling\Development\Current\Scheduling.DTO\DataDomain.Scheduling.DTO.csproj">
+    <ProjectReference Include="..\..\..\DataDomain\Phytel.API.DataDomain.Scheduling\Scheduling.DTO\DataDomain.Scheduling.DTO.csproj">
       <Project>{1e303326-eec9-42a8-ba50-880ab7ad99b2}</Project>
       <Name>DataDomain.Scheduling.DTO</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.Search\Development\Current\DataDomain.Search.Repo\DataDomain.Search.Repo.csproj">
+    <ProjectReference Include="..\..\..\DataDomain\Phytel.API.DataDomain.Search\DataDomain.Search.Repo\DataDomain.Search.Repo.csproj">
       <Project>{F7D7B682-C23F-4C36-B76D-6F375B61CD42}</Project>
       <Name>DataDomain.Search.Repo</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.Search\Development\Current\Search.DTO\DataDomain.Search.DTO.csproj">
+    <ProjectReference Include="..\..\..\DataDomain\Phytel.API.DataDomain.Search\Search.DTO\DataDomain.Search.DTO.csproj">
       <Project>{066fbea2-6d40-47f2-9f36-16365fa17dd2}</Project>
       <Name>DataDomain.Search.DTO</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.Search\Development\Current\Search.Service\DataDomain.Search.Service.csproj">
+    <ProjectReference Include="..\..\..\DataDomain\Phytel.API.DataDomain.Search\Search.Service\DataDomain.Search.Service.csproj">
       <Project>{6699907a-159f-4d9d-a5b9-258b453017b1}</Project>
       <Name>DataDomain.Search.Service</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\DataDomain\Phytel.API.DataDomain.Search\Development\Current\Search\DataDomain.Search.csproj">
+    <ProjectReference Include="..\..\..\DataDomain\Phytel.API.DataDomain.Search\Search\DataDomain.Search.csproj">
       <Project>{d3d050cd-99ac-42dc-94ed-0a49b9b4ccdd}</Project>
       <Name>DataDomain.Search</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\Interfaces\Development\Current\Phytel.API.Interface\Phytel.API.Interface.csproj">
+    <ProjectReference Include="..\..\..\Interfaces\Phytel.API.Interface\Phytel.API.Interface.csproj">
       <Project>{abe948fb-247e-4955-b3ab-b7c93e10a542}</Project>
       <Name>Phytel.API.Interface</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\Phytel.API.AppDomain.Security\Development\Current\Security.DTOs\AppDomain.Security.DTO.csproj">
+    <ProjectReference Include="..\..\Phytel.API.AppDomain.Security\Security.DTOs\AppDomain.Security.DTO.csproj">
       <Project>{5d9c233b-e53d-4be1-b578-1aa9722de1cf}</Project>
       <Name>AppDomain.Security.DTO</Name>
     </ProjectReference>
@@ -330,7 +330,7 @@
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
-  <Import Project="..\..\..\..\..\packages\AutoMapper.3.2.1\tools\AutoMapper.targets" Condition="Exists('..\..\..\..\..\packages\AutoMapper.3.2.1\tools\AutoMapper.targets')" />
+  <Import Project="..\..\..\packages\AutoMapper.3.2.1\tools\AutoMapper.targets" Condition="Exists('..\..\..\..\..\packages\AutoMapper.3.2.1\tools\AutoMapper.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

@@ -25,6 +25,7 @@
     <SccProvider>SAK</SccProvider>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\..\..\..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -50,7 +51,7 @@
       <HintPath>..\..\..\..\..\packages\ServiceStack.3.9.70\lib\net35\ServiceStack.dll</HintPath>
     </Reference>
     <Reference Include="ServiceStack.Api.Swagger, Version=3.9.70.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\..\packages\ServiceStack.Api.Swagger.3.9.70\lib\net35\ServiceStack.Api.Swagger.dll</HintPath>
+      <HintPath>..\..\..\packages\ServiceStack.Api.Swagger.3.9.70\lib\net35\ServiceStack.Api.Swagger.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="ServiceStack.Common, Version=3.9.71.0, Culture=neutral, processorArchitecture=MSIL">
@@ -150,11 +151,11 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\Common\Phytel.API.Common\Development\Current\Phytel.API.Common.csproj">
+    <ProjectReference Include="..\..\..\Common\Phytel.API.Common\Phytel.API.Common.csproj">
       <Project>{25cf3c3f-221f-4a49-b5ef-a8a5fcf9a5ba}</Project>
       <Name>Phytel.API.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\Interfaces\Development\Current\Phytel.API.Interface\Phytel.API.Interface.csproj">
+    <ProjectReference Include="..\..\..\Interfaces\Phytel.API.Interface\Phytel.API.Interface.csproj">
       <Project>{abe948fb-247e-4955-b3ab-b7c93e10a542}</Project>
       <Name>Phytel.API.Interface</Name>
     </ProjectReference>
