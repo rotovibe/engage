@@ -662,15 +662,15 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\Atmosphere.Core\Development\Current\Atmosphere.Core.Business\Atmosphere.Core.Business.csproj">
+    <ProjectReference Include="..\..\Atmosphere.Core\Atmosphere.Core.Business\Atmosphere.Core.Business.csproj">
       <Project>{58bcc2ff-5fe1-43b8-9316-bcd9a785cfea}</Project>
       <Name>Atmosphere.Core.Business</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\Atmosphere.Core\Development\Current\Atmosphere.Core.Data\Atmosphere.Core.Data.csproj">
+    <ProjectReference Include="..\..\Atmosphere.Core\Atmosphere.Core.Data\Atmosphere.Core.Data.csproj">
       <Project>{35b5f4cd-7702-49f6-b2f1-80180fbc1504}</Project>
       <Name>Atmosphere.Core.Data</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\Atmosphere.Core\Development\Current\Atmosphere.Core\Atmosphere.Core.csproj">
+    <ProjectReference Include="..\..\Atmosphere.Core\Atmosphere.Core\Atmosphere.Core.csproj">
       <Project>{68618585-96eb-497e-87fa-bfbc3e33de2f}</Project>
       <Name>Atmosphere.Core</Name>
     </ProjectReference>

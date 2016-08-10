@@ -5,36 +5,15 @@ VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Atmosphere.Site", "Atmosphere.Site\Atmosphere.Site.csproj", "{EF9A14CF-F397-451E-A1CD-D275D74D1C04}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Atmosphere.Core", "..\..\..\Atmosphere.Core\Development\Current\Atmosphere.Core\Atmosphere.Core.csproj", "{68618585-96EB-497E-87FA-BFBC3E33DE2F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Atmosphere.Core", "..\Atmosphere.Core\Atmosphere.Core\Atmosphere.Core.csproj", "{68618585-96EB-497E-87FA-BFBC3E33DE2F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Atmosphere.Core.Business", "..\..\..\Atmosphere.Core\Development\Current\Atmosphere.Core.Business\Atmosphere.Core.Business.csproj", "{58BCC2FF-5FE1-43B8-9316-BCD9A785CFEA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Atmosphere.Core.Business", "..\Atmosphere.Core\Atmosphere.Core.Business\Atmosphere.Core.Business.csproj", "{58BCC2FF-5FE1-43B8-9316-BCD9A785CFEA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Atmosphere.Core.Data", "..\..\..\Atmosphere.Core\Development\Current\Atmosphere.Core.Data\Atmosphere.Core.Data.csproj", "{35B5F4CD-7702-49F6-B2F1-80180FBC1504}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Atmosphere.Core.Data", "..\Atmosphere.Core\Atmosphere.Core.Data\Atmosphere.Core.Data.csproj", "{35B5F4CD-7702-49F6-B2F1-80180FBC1504}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.ASEProcessor", "..\..\..\ASEProcessor\Development\Current\Phytel.ASEProcessor.csproj", "{443EBC11-9C16-4F02-985E-F0FCA2FFCB25}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Phytel.ASEProcessor", "..\ASEProcessor\Phytel.ASEProcessor.csproj", "{443EBC11-9C16-4F02-985E-F0FCA2FFCB25}"
 EndProject
 Global
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 6
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = http://hillstfs2013:8080/tfs/phytel
-		SccLocalPath0 = .
-		SccProjectUniqueName1 = Atmosphere.Site\\Atmosphere.Site.csproj
-		SccProjectName1 = Atmosphere.Site
-		SccLocalPath1 = Atmosphere.Site
-		SccProjectUniqueName2 = ..\\..\\..\\Atmosphere.Core\\Development\\Current\\Atmosphere.Core\\Atmosphere.Core.csproj
-		SccProjectName2 = ../../../Atmosphere.Core/Development/Current/Atmosphere.Core
-		SccLocalPath2 = ..\\..\\..\\Atmosphere.Core\\Development\\Current\\Atmosphere.Core
-		SccProjectUniqueName3 = ..\\..\\..\\Atmosphere.Core\\Development\\Current\\Atmosphere.Core.Business\\Atmosphere.Core.Business.csproj
-		SccProjectName3 = ../../../Atmosphere.Core/Development/Current/Atmosphere.Core.Business
-		SccLocalPath3 = ..\\..\\..\\Atmosphere.Core\\Development\\Current\\Atmosphere.Core.Business
-		SccProjectUniqueName4 = ..\\..\\..\\Atmosphere.Core\\Development\\Current\\Atmosphere.Core.Data\\Atmosphere.Core.Data.csproj
-		SccProjectName4 = ../../../Atmosphere.Core/Development/Current/Atmosphere.Core.Data
-		SccLocalPath4 = ..\\..\\..\\Atmosphere.Core\\Development\\Current\\Atmosphere.Core.Data
-		SccProjectUniqueName5 = ..\\..\\..\\ASEProcessor\\Development\\Current\\Phytel.ASEProcessor.csproj
-		SccProjectName5 = ../../../ASEProcessor/Development/Current
-		SccLocalPath5 = ..\\..\\..\\ASEProcessor\\Development\\Current
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Model|Any CPU = Model|Any CPU
