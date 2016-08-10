@@ -25,6 +25,7 @@
     <SccProvider>SAK</SccProvider>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\..\..\..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -115,11 +116,11 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\Common\Phytel.API.Common\Development\Current\Phytel.API.Common.csproj">
+    <ProjectReference Include="..\..\..\Common\Phytel.API.Common\Phytel.API.Common.csproj">
       <Project>{25cf3c3f-221f-4a49-b5ef-a8a5fcf9a5ba}</Project>
       <Name>Phytel.API.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\Interfaces\Development\Current\Phytel.API.Interface\Phytel.API.Interface.csproj">
+    <ProjectReference Include="..\..\..\Interfaces\Phytel.API.Interface\Phytel.API.Interface.csproj">
       <Project>{abe948fb-247e-4955-b3ab-b7c93e10a542}</Project>
       <Name>Phytel.API.Interface</Name>
     </ProjectReference>

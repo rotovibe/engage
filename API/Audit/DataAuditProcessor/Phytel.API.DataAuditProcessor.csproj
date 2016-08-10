@@ -81,7 +81,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\Common\Phytel.API.DataAudit\Development\Current\Phytel.API.DataAudit.csproj">
+    <ProjectReference Include="..\..\Common\Phytel.API.DataAudit\Phytel.API.DataAudit.csproj">
       <Project>{ae842695-4dd4-4403-9be4-8473bca09580}</Project>
       <Name>Phytel.API.DataAudit</Name>
     </ProjectReference>

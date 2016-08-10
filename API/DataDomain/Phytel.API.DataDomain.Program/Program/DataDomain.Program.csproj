@@ -46,35 +46,35 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="MongoDB.Bson">
-      <HintPath>..\..\..\..\..\packages\mongocsharpdriver.1.9.2\lib\net35\MongoDB.Bson.dll</HintPath>
+      <HintPath>..\..\..\packages\mongocsharpdriver.1.9.2\lib\net35\MongoDB.Bson.dll</HintPath>
     </Reference>
     <Reference Include="MongoDB.Driver">
-      <HintPath>..\..\..\..\..\packages\mongocsharpdriver.1.9.2\lib\net35\MongoDB.Driver.dll</HintPath>
+      <HintPath>..\..\..\packages\mongocsharpdriver.1.9.2\lib\net35\MongoDB.Driver.dll</HintPath>
     </Reference>
     <Reference Include="Phytel.Mongo">
       <HintPath>..\References\Phytel.Mongo.dll</HintPath>
     </Reference>
     <Reference Include="Phytel.Services.Mongo">
-      <HintPath>..\..\..\..\..\packages\Phytel.Services.Mongo.1.3.2.04\lib\net451\Phytel.Services.Mongo.dll</HintPath>
+      <HintPath>..\..\..\packages\Phytel.Services.Mongo.1.3.2.04\lib\net451\Phytel.Services.Mongo.dll</HintPath>
     </Reference>
     <Reference Include="Phytel.Services.Security">
-      <HintPath>..\..\..\..\..\packages\Phytel.Services.Security.1.3.0.06\lib\net451\Phytel.Services.Security.dll</HintPath>
+      <HintPath>..\..\..\packages\Phytel.Services.Security.1.3.0.06\lib\net451\Phytel.Services.Security.dll</HintPath>
     </Reference>
     <Reference Include="Phytel.Services.SQLServer">
-      <HintPath>..\..\..\..\..\packages\Phytel.Services.SQLServer.1.3.0.09\lib\net451\Phytel.Services.SQLServer.dll</HintPath>
+      <HintPath>..\..\..\packages\Phytel.Services.SQLServer.1.3.0.09\lib\net451\Phytel.Services.SQLServer.dll</HintPath>
     </Reference>
     <Reference Include="PhytelServices">
       <HintPath>..\References\PhytelServices.dll</HintPath>
     </Reference>
     <Reference Include="ServiceStack.Common">
-      <HintPath>..\..\..\..\..\packages\ServiceStack.Common.3.9.70\lib\net35\ServiceStack.Common.dll</HintPath>
+      <HintPath>..\..\..\packages\ServiceStack.Common.3.9.71\lib\net35\ServiceStack.Common.dll</HintPath>
     </Reference>
     <Reference Include="ServiceStack.Interfaces, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\packages\ServiceStack.Common.3.9.70\lib\net35\ServiceStack.Interfaces.dll</HintPath>
+      <HintPath>..\..\..\packages\ServiceStack.Common.3.9.71\lib\net35\ServiceStack.Interfaces.dll</HintPath>
     </Reference>
     <Reference Include="ServiceStack.Text">
-      <HintPath>..\..\..\..\..\packages\ServiceStack.Text.3.9.70\lib\net35\ServiceStack.Text.dll</HintPath>
+      <HintPath>..\..\..\packages\ServiceStack.Text.3.9.71\lib\net35\ServiceStack.Text.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
@@ -131,19 +131,19 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\Common\Phytel.API.Common\Development\Current\Phytel.API.Common.csproj">
+    <ProjectReference Include="..\..\..\Common\Phytel.API.Common\Phytel.API.Common.csproj">
       <Project>{25cf3c3f-221f-4a49-b5ef-a8a5fcf9a5ba}</Project>
       <Name>Phytel.API.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\Interfaces\Development\Current\Phytel.API.Interface\Phytel.API.Interface.csproj">
+    <ProjectReference Include="..\..\..\Interfaces\Phytel.API.Interface\Phytel.API.Interface.csproj">
       <Project>{abe948fb-247e-4955-b3ab-b7c93e10a542}</Project>
       <Name>Phytel.API.Interface</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\Phytel.API.DataDomain.CareMember\Development\Current\CareMember.DTO\DataDomain.CareMember.DTO.csproj">
+    <ProjectReference Include="..\..\Phytel.API.DataDomain.CareMember\CareMember.DTO\DataDomain.CareMember.DTO.csproj">
       <Project>{b65577e7-60a6-4553-b1b9-38d6074ac560}</Project>
       <Name>DataDomain.CareMember.DTO</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\Phytel.API.DataDomain.Patient\Development\Current\Patient.DTOs\DataDomain.Patient.DTO.csproj">
+    <ProjectReference Include="..\..\Phytel.API.DataDomain.Patient\Patient.DTOs\DataDomain.Patient.DTO.csproj">
       <Project>{1b3148a8-fb57-4461-91bc-f1cd38a013b6}</Project>
       <Name>DataDomain.Patient.DTO</Name>
     </ProjectReference>
