@@ -47,3 +47,6 @@ _ReSharper*/
 
 # node
 node_modules/
+
+# sass
+.sass-cache/
