@@ -32,7 +32,9 @@ var gulp             = require('gulp'),
 	rm 			 	 = require('gulp-rimraf'),
 	sequence 		 = require('run-sequence'),
 	gutil 			 = require('gulp-util'),
-	path             = require('path');
+	path             = require('path'),
+	jshint			 = require('gulp-jshint'),
+	jscs 			 = require('gulp-jscs');
 
 //the title and icon that will be used for the Grunt notifications
 var notifyInfo = {
@@ -53,11 +55,18 @@ var plumberErrorHandler = { errorHandler: notify.onError({
 // build js tasks:
 
 gulp.task('buildjs', function(d){	
-	sequence('cleanjs', 'movex', 'cleanx', 'durandal', ['copyrightJs'], 'moveback', 'cleanback' );	
+	sequence('cleanjs', 'movex', 'cleanx', 'lint', 'durandal', ['copyrightJs'], 'moveback', 'cleanback' );	
 });
 
 gulp.task('cleanjs', function() {
     return gulp.src('App/main-built*.*').pipe(rm());
+});
+
+gulp.task('lint', function(){
+    return gulp.src('App/**/*.js')
+        .pipe(jshint())
+        .pipe(jshint.reporter('jshint-stylish', {verbose: true}))
+        .pipe(jscs());
 });
 
 //durandal
