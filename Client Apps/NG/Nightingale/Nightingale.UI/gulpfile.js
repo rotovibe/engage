@@ -63,10 +63,11 @@ gulp.task('cleanjs', function() {
 });
 
 gulp.task('lint', function(){
-    return gulp.src('App/**/*.js')
-        .pipe(jshint())
+    return gulp.src(['App/**/*.js', '!App/main-built*.*'])
+        .pipe(jshint())  // enforce jshint
         .pipe(jshint.reporter('jshint-stylish', {verbose: true}))
-        .pipe(jscs());
+        .pipe(jscs())  // enforce style guide
+		.pipe(jscs.reporter());
 });
 
 //durandal
