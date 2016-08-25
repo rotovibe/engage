@@ -289,6 +289,7 @@ define(['services/formatter', 'services/dateHelper'],
 			init: function(element, valueAccessor){
 				var observableNumber = valueAccessor();
 				blockNonNumeric(element);
+				blockExtraDecimal(element);
 				$(element).on('keydown paste change', function(e){
 					var key = e.which || e.keyCode;
 					if( e.type == 'paste' ){
@@ -299,9 +300,16 @@ define(['services/formatter', 'services/dateHelper'],
 					var position = element.selectionStart;
 					var type = e.type;
 					setTimeout( function(){
-						var number = $(element).val();
-						var newNumber = number;
-						if( isNaN(+number) || ( number.match(/\D/) && !number.match(/\./) ) ){	//dont remove if its the decimal point "."
+					    var number = $(element).val();
+					    var newNumber = number;					    
+					    if (number == ".") {
+					        newNumber = "0.";
+					        if (observableNumber) {
+					            $(element).val(newNumber);
+					            observableNumber(newNumber);
+					        }
+					    }					    
+						else if( isNaN(+number) || ( number.match(/\D/) && !number.match(/\./) ) ){	//dont remove if its the decimal point "."
 							//clean out non numeric	chars:
 							newNumber = number.replace(/\D/,'');
 							if( observableNumber ){
@@ -1370,6 +1378,15 @@ define(['services/formatter', 'services/dateHelper'],
 					e.preventDefault();
 				}
 			});
+		}
+
+		function blockExtraDecimal(element) {
+		    $(element).off('keypress.extraDecimal').on('keypress.extraDecimal', function (e) {
+		        var key = e.which || e.keyCode;
+		        if (key == 46 && $(element).val().indexOf(".") > -1){
+		            e.preventDefault();
+		        }
+		    });
 		}
 
         function checkDataContext() {
