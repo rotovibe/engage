@@ -764,18 +764,17 @@ namespace Phytel.API.AppDomain.NG
             if (!string.IsNullOrEmpty(preferred))
             {
                 res = preferred;
-                if (!preferred.ToLower().Contains(lastName.ToLower()) || lastName.IsEmpty())
+                if (!preferred.ToLower().Contains(lastName.ToLower()))
                 {
                     res = preferred + " " + lastName;
                 }
-
             }
             else
             {
                 res = firstName + " " + lastName;
             }
-            contact.PreferredName = res;
+            contact.PreferredName = res.Trim();
         }
-        
+
     }
 }
