@@ -52,7 +52,7 @@ namespace Phytel.API.AppDomain.NG.Tests
         [TestClass()]
         public class Contact_Test
         {
-                     
+
             [TestMethod]
             [ExpectedException(typeof(ArgumentNullException))]
             public void NGUtil_SetContactPreferredName_NullContactCard_Should_Throw()
@@ -103,7 +103,28 @@ namespace Phytel.API.AppDomain.NG.Tests
                 //Assert
                 Assert.IsTrue(preferrednamelastname == contact.PreferredName);
             }
-        
+
+            [TestMethod]
+            public void NGUtil_SetContactPreferredName_NotEmptyPreferredName_Should_Set_PreferredName_To_PreferredName_WhenLastNameEmpty()
+            {
+                //Arrange
+                var contact =
+                    new DTO.Contact
+                    {
+                        Id = "cid",
+                        FirstName = "System",
+                        LastName = "",
+                        PreferredName = "System"
+                    };
+
+
+                //Act
+                NGUtils.SetContactPreferredName(contact);
+
+                //Assert
+                Assert.IsTrue("System" == contact.PreferredName);
+            }
+
             [TestMethod]
             public void NGUtil_SetContactPreferredName_NotEmptyPreferredName_And_PreferredNameContainsLastName_Should_Set_PreferredName_To_PreferredName()
             {
@@ -112,7 +133,7 @@ namespace Phytel.API.AppDomain.NG.Tests
                     new DTO.Contact
                     {
                         Id = "cid",
-                        FirstName = "firstname",
+                        FirstName = "System",
                         LastName = "lastname",
                         PreferredName = "preferredname" + " lastname"
                     };
@@ -127,6 +148,11 @@ namespace Phytel.API.AppDomain.NG.Tests
             }
         }
         #endregion
+
+
+
+
+
 
     }
 }
