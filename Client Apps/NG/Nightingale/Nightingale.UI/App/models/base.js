@@ -847,7 +847,7 @@ define(['services/validatorfactory', 'services/customvalidators', 'services/form
 				});
 				
 				member.checkAppend = function () {
-                    formatter.appendNewDetails( member.newNotes, member.notes, datacontext.getUserFullName() );
+                    formatter.appendNewDetails( member.newNotes, member.notes, datacontext.getUsercareManagerName() );
                 };
 				
 				member.startDateErrors = ko.observableArray([]);
