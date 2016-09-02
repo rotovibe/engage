@@ -799,8 +799,9 @@ define(['services/session'],
                 if( details() && details().length ){
                     append = '\n';
                 }
+                checkDataContext();
                 append += moment().format('MM-DD-YYYY h:mm A') + ' ';
-                append += (' ' + session.currentUser().firstName() + ' ' + session.currentUser().lastName());
+                append += (' ' + datacontext.getUsercareManagerName());
                 append += (' - ' + newDetails());
                 details(details() ? details() + append : append);
                 newDetails('');
