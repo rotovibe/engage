@@ -19,7 +19,7 @@ namespace Phytel.API.AppDomain.NG.DTO
         public List<string> FocusAreaIds { get; set; }
         public string Name { get; set; }
         public int StatusId { get; set; }
-
+        public string TemplateId { get; set; }
         public List<ChildView> Barriers { get; set; }
         public List<ChildView> Tasks { get; set; }
         public List<ChildView> Interventions { get; set; }
