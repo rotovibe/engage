@@ -18,7 +18,7 @@ namespace Phytel.API.DataDomain.PatientGoal.DTO
         public List<string> FocusAreaIds { get; set; }
         public string Name { get; set; }
         public int StatusId { get; set; }
-
+        public string TemplateId { get; set; }
         public List<ChildViewData> BarriersData { get; set; }
         public List<ChildViewData> TasksData { get; set; }
         public List<ChildViewData> InterventionsData { get; set; }

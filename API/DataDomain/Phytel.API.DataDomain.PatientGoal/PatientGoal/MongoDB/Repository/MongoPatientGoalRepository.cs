@@ -126,6 +126,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                         {
                             Id = mePG.Id.ToString(),
                             PatientId = mePG.PatientId.ToString(),
+                            TemplateId = mePG.TemplateId.ToString(),
                             FocusAreaIds = Helper.ConvertToStringList(mePG.FocusAreaIds),
                             Name = mePG.Name,
                             SourceId = (mePG.SourceId == null) ? null : mePG.SourceId.ToString(),
@@ -164,6 +165,7 @@ namespace Phytel.API.DataDomain.PatientGoal
                         goalData = new PatientGoalData
                         {
                             Id = mePG.Id.ToString(),
+                            TemplateId = mePG.TemplateId.ToString(),
                             PatientId = mePG.PatientId.ToString(),
                             FocusAreaIds = Helper.ConvertToStringList(mePG.FocusAreaIds),
                             Name = mePG.Name,
@@ -345,7 +347,8 @@ namespace Phytel.API.DataDomain.PatientGoal
                                 PatientId = b.PatientId.ToString(),
                                 FocusAreaIds = Helper.ConvertToStringList(b.FocusAreaIds),
                                 Name = b.Name,
-                                StatusId = ((int)b.Status)
+                                StatusId = ((int)b.Status),
+                                TemplateId = b.TemplateId.ToString()
                             };
                             goalsViewDataList.Add(goalViewData);
                         }
