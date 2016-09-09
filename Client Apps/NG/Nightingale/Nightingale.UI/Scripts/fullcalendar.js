@@ -444,7 +444,7 @@ function Calendar(element, options, eventSources) {
 		}
 
 		ignoreWindowResize++;
-		currentView.setHeight(9999999999);
+		currentView.setHeight(suggestedViewHeight);
 		currentView.setWidth(content.width());
 		ignoreWindowResize--;
 
@@ -2978,7 +2978,7 @@ function AgendaView(element, calendar, viewName) {
 		}
 		
 		slotScroller =
-			$("<div style='position:absolute;width:100%;overflow-x:hidden;overflow-y:hidden'/>")
+			$("<div style='position:absolute;width:100%;overflow-x:hidden;overflow-y:auto'/>")
 				.appendTo(slotLayer);
 				
 		slotContainer =
