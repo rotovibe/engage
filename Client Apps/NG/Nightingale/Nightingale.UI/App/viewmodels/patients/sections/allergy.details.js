@@ -23,7 +23,7 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
       }
       self.isNotesExpanded = ko.observable(false);
       self.delete = function () {
-        var result = confirm('You are about to delete a medication.  Press OK to continue, or cancel to return without deleting.');
+        var result = confirm('You are about to delete an allergy.  Press OK to continue, or cancel to return without deleting.');
         if (result === true) {
           datacontext.deletePatientAllergy(self.allergy());
           self.settings.activeAllergy(null);
