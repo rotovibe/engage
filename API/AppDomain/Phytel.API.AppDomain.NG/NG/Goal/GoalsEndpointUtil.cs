@@ -7,6 +7,7 @@ using ServiceStack.ServiceClient.Web;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Web.UI.WebControls;
 using AD = Phytel.API.AppDomain.NG.DTO;
 
 namespace Phytel.API.AppDomain.NG
@@ -181,6 +182,7 @@ namespace Phytel.API.AppDomain.NG
                         gv.FocusAreaIds = gdv.FocusAreaIds;
                         gv.Name = gdv.Name;
                         gv.StatusId = gdv.StatusId;
+                        gv.TemplateId = gdv.TemplateId;
                         gv.Barriers = GoalsUtil.GetChildView(gdv.BarriersData);
                         gv.Tasks = GoalsUtil.GetChildView(gdv.TasksData); ;
                         gv.Interventions = GoalsUtil.GetChildView(gdv.InterventionsData);
