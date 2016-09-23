@@ -563,8 +563,8 @@ define(['services/session', 'services/datacontext', 'config.services', 'models/b
                         interventionsProcessing(false);
                     }                 
                 }
-            }
-            myInterventions(theseInterventions);
+            }            
+            myInterventions(theseInterventions);           
             return theseInterventions;
             
         }).extend({throttle:50});
@@ -732,11 +732,9 @@ define(['services/session', 'services/datacontext', 'config.services', 'models/b
                 initializeViewModel();
                 initialized = true;
             }
-            //else {
-                //nm: no need to reload the view if user has switched back to the todos page.
-                //also user can click on refresh icon to refresh the results if needed
-                //refreshView();
-			//}
+            else {                
+                refreshView();
+			}
             return true;
         }
 
