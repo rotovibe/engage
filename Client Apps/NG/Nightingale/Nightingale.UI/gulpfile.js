@@ -32,7 +32,9 @@ var gulp             = require('gulp'),
 	rm 			 	 = require('gulp-rimraf'),
 	sequence 		 = require('run-sequence'),
 	gutil 			 = require('gulp-util'),
-	path             = require('path');
+	path             = require('path'),
+	jshint			 = require('gulp-jshint'),
+	jscs 			 = require('gulp-jscs');
 
 //the title and icon that will be used for the Grunt notifications
 var notifyInfo = {
@@ -53,17 +55,25 @@ var plumberErrorHandler = { errorHandler: notify.onError({
 // build js tasks:
 
 gulp.task('buildjs', function(d){	
-	sequence('cleanjs', 'movex', 'cleanx', 'durandal', ['copyrightJs'] );	
+	sequence('cleanjs', 'movex', 'cleanx', 'lint', 'durandal', ['copyrightJs'], 'moveback', 'cleanback' );	
 });
 
 gulp.task('cleanjs', function() {
     return gulp.src('App/main-built*.*').pipe(rm());
 });
 
+gulp.task('lint', function(){
+    return gulp.src(['App/**/*.js', '!App/main-built*.*'])
+        .pipe(jshint())  // enforce jshint
+        .pipe(jshint.reporter('jshint-stylish', {verbose: true}))
+        .pipe(jscs())  // enforce style guide
+		.pipe(jscs.reporter());
+});
+
 //durandal
 gulp.task('durandal', function() {	
 	
-	//this task is producing main-built.js but the js does not work!! it also has jasmin content that should be excluded
+	//this task is producing main-built.js but the js will not work if we do not exclude / move the test folder out!!
 	var isDev = process.argv.indexOf("--dev") == -1 ? false : true;
     return durandal({
             baseDir: 'App',   //same as default, so not really required.
@@ -71,20 +81,7 @@ gulp.task('durandal', function() {
             output: 'main-built.js', //default is main.js
             almond: true,
             minify: !isDev,
-			verbose: false,
-			
-				//'!./test/**'
-				//TBD: the App/test/ folder needs to be excluded. this part needs to be validated. meanwhile - delete the App/test/ folder before building js!! 
-		/*	moduleFilter: 
-				function(moduleName){
-					
-					if( moduleName.indexOf('test/') !== -1 ){
-						gutil.log('filtered out: moduleFilter: moduleName=' + moduleName );
-						return false;
-					}
-					else return true;
-				}*/
-			
+			verbose: false			
         })
         .pipe(gulp.dest('App'));	
 });
@@ -110,6 +107,15 @@ gulp.task('cleanx', function(){
 	return gulp.src(['App/test/**/*']).pipe(rm());
 });
 
+gulp.task('moveback', function(){
+	//copy the test folder back:	
+	return gulp.src(['./App_temp_test/**/*'])
+	.pipe(gulp.dest('App/test/'));
+});
+
+gulp.task('cleanback', function(){
+	return gulp.src(['./App_temp_test/**/*']).pipe(rm());
+});
 ////////////////////
 
 

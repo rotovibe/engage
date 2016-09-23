@@ -6,6 +6,7 @@ using Phytel.API.AppDomain.NG.DTO;
 using Phytel.API.DataDomain.Contact.DTO;
 using Phytel.API.DataDomain.Contact.DTO.CareTeam;
 using Phytel.API.DataDomain.Patient.DTO;
+using ServiceStack.Common;
 using ServiceStack.Common.Web;
 using ServiceStack.Service;
 using ServiceStack.ServiceClient.Web;
@@ -106,16 +107,18 @@ namespace Phytel.API.AppDomain.NG
                     List<ContactData> contactDataList = dataDomainResponse.Contacts;
                     foreach (ContactData cd in contactDataList)
                     {
-                        contactList.Add(new Contact
+                        var contact = new Contact
                         {
                             Id = cd.Id,
                             UserId = cd.UserId,
                             PreferredName = cd.PreferredName,
                             FirstName = cd.FirstName,
                             LastName = cd.LastName,
-                            IsUser = !string.IsNullOrEmpty(cd.UserId) || cd.FirstName=="System",
+                            IsUser = !string.IsNullOrEmpty(cd.UserId) || cd.FirstName == "System",
                             IsPatient = !string.IsNullOrEmpty(cd.PatientId)
-                        });
+                        };
+                        NGUtils.SetContactPreferredName(contact);
+                        contactList.Add(contact);
                     }
                 }
             }

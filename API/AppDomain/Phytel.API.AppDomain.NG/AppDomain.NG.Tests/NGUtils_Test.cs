@@ -46,5 +46,113 @@ namespace Phytel.API.AppDomain.NG.Tests
                 Assert.AreEqual(guid.ToString(), ((ActionsDetail) nList[0]).AssignTo);
             }
         }
+
+        #region Contact Card
+
+        [TestClass()]
+        public class Contact_Test
+        {
+
+            [TestMethod]
+            [ExpectedException(typeof(ArgumentNullException))]
+            public void NGUtil_SetContactPreferredName_NullContactCard_Should_Throw()
+            {
+                NGUtils.SetContactPreferredName(null);
+            }
+
+            [TestMethod]
+            public void NGUtil_SetContactPreferredName_EmptyPreferredName_Should_Set_PreferredName_To_FirstNamePlusLastName()
+            {
+                //Arrange            
+                var contact =
+                    new DTO.Contact
+                    {
+                        Id = "cid",
+                        FirstName = "firstname",
+                        LastName = "lastname",
+                        PreferredName = string.Empty
+                    };
+
+                var firstlastname = contact.FirstName + " " + contact.LastName;
+
+                //Act
+                NGUtils.SetContactPreferredName(contact);
+
+                //Assert
+                Assert.IsTrue(firstlastname == contact.PreferredName);
+            }
+
+            [TestMethod]
+            public void NGUtil_SetContactPreferredName_NotEmptyPreferredName_Should_Set_PreferredName_To_PreferredNamePlusLastName()
+            {
+                //Arrange
+                var contact =
+                    new DTO.Contact
+                    {
+                        Id = "cid",
+                        FirstName = "firstname",
+                        LastName = "lastname",
+                        PreferredName = "preferredname"
+                    };
+
+                var preferrednamelastname = contact.PreferredName + " " + contact.LastName;
+
+                //Act
+                NGUtils.SetContactPreferredName(contact);
+
+                //Assert
+                Assert.IsTrue(preferrednamelastname == contact.PreferredName);
+            }
+
+            [TestMethod]
+            public void NGUtil_SetContactPreferredName_NotEmptyPreferredName_Should_Set_PreferredName_To_PreferredName_WhenLastNameEmpty()
+            {
+                //Arrange
+                var contact =
+                    new DTO.Contact
+                    {
+                        Id = "cid",
+                        FirstName = "System",
+                        LastName = "",
+                        PreferredName = "System"
+                    };
+
+
+                //Act
+                NGUtils.SetContactPreferredName(contact);
+
+                //Assert
+                Assert.IsTrue("System" == contact.PreferredName);
+            }
+
+            [TestMethod]
+            public void NGUtil_SetContactPreferredName_NotEmptyPreferredName_And_PreferredNameContainsLastName_Should_Set_PreferredName_To_PreferredName()
+            {
+                //Arrange
+                var contact =
+                    new DTO.Contact
+                    {
+                        Id = "cid",
+                        FirstName = "System",
+                        LastName = "lastname",
+                        PreferredName = "preferredname" + " lastname"
+                    };
+
+                var preferrednamelastname = contact.PreferredName;
+
+                //Act
+                NGUtils.SetContactPreferredName(contact);
+
+                //Assert
+                Assert.IsTrue(preferrednamelastname == contact.PreferredName);
+            }
+        }
+        #endregion
+
+
+
+
+
+
     }
 }

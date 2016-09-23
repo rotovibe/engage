@@ -8,6 +8,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Phytel.API.DataDomain.Contact.DTO;
+using ServiceStack.Common.Extensions;
 
 namespace Phytel.API.AppDomain.NG
 {
@@ -742,5 +744,37 @@ namespace Phytel.API.AppDomain.NG
             var mlist = list.ConvertAll(c => new DTO.Goal.Option { Display = c.Value,  Value = c.Key}).ToList();
             return mlist;
         }
+
+        public static void SetContactPreferredName(Contact contact)
+        {
+            var res = string.Empty;
+            if (contact == null) throw new ArgumentNullException("The contact card is null");
+
+            var preferred = contact.PreferredName;
+            var firstName = contact.FirstName;
+            if (string.IsNullOrEmpty(firstName))
+            {
+                firstName = "";
+            }
+            var lastName = contact.LastName;
+            if (string.IsNullOrEmpty(lastName))
+            {
+                lastName = "";
+            }
+            if (!string.IsNullOrEmpty(preferred))
+            {
+                res = preferred;
+                if (!preferred.ToLower().Contains(lastName.ToLower()))
+                {
+                    res = preferred + " " + lastName;
+                }
+            }
+            else
+            {
+                res = firstName + " " + lastName;
+            }
+            contact.PreferredName = res.Trim();
+        }
+
     }
 }

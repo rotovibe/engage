@@ -287,7 +287,7 @@ define(['services/session', 'services/dateHelper'],
 					note.checkAppend = function () {
 						// Append the new content
 						var append = '\n' + moment().format('MM-DD-YYYY h:mm A') + ' ';
-						append += (' ' + session.currentUser().firstName() + ' ' + session.currentUser().lastName());
+						append += (' ' +  getUsercareManagerName());
 						append += (' - ' + note.newContent());
 						note.text(note.text() ? note.text() + append : append);
 						note.newContent('');
