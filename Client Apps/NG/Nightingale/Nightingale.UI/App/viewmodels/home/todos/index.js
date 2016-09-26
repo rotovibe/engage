@@ -24,7 +24,7 @@ define(['services/session', 'services/datacontext', 'config.services', 'models/b
 		var todosTake = ko.observable(maxTodosCount()); //set the take for any server query ( one and first page design, without load more )
         var todosTotalCount = ko.observable(0);
 		var todosProcessing = ko.observable(false);
-        var interventionsProcessing = ko.observable(false);
+        //var interventionsProcessing = ko.observable(false);
 		var viewChanged = ko.observable(false);
 		var categoryChanged = ko.observable(false);
 		var priorityChanged = ko.observable(false);
@@ -538,39 +538,25 @@ define(['services/session', 'services/datacontext', 'config.services', 'models/b
 		}).extend({ throttle: 50 });
 				
         // My interventions
-        var myInterventions = ko.observableArray([]);
+		var myInterventions = ko.observableArray([]);
+		var hasAllInterventionsFromServerLoaded = false;
         var myInterventionsUpdater = ko.computed(function () {
-            var theseInterventions = [];            
-            //Subscribe to localcollection todos
-            var allInterventions = localCollections.interventions();
+            //subscribing to the following 2 observables as we want this computed function executed every time they change.
             var selectedview = selectedView();
-            //var categoryFilterChanged = categoryChanged();
-            var params = [];
-            var orderString = '';
-            var processing = interventionsProcessing();
-            var viewchanged = viewChanged ? viewChanged() : false;
-            if(!processing){
-                if (selectedview && selectedview.type() === 'interventions') {
-                    if(viewchanged){                       
-                        viewChanged(false);
-                        interventionsProcessing(true);
-                        //clearInterventionsCacheAndLoad();
-                        loadMoreInterventions();
-                        theseInterventions = [];
-                    }
-                    else{                        
-                        theseInterventions = getLocalInterventions();
-                        interventionsProcessing(false);
-                    }                 
-                }
-            }            
-            myInterventions(theseInterventions);           
-            return theseInterventions;
+            var categoryFilterChanged = categoryChanged();
             
+            if (selectedview && selectedview.type() === 'interventions') {                
+                if (!hasAllInterventionsFromServerLoaded) {                    
+                    loadAllInterventionsFromServer();
+                }
+                else{                    
+                    getLocalInterventions();                    
+                }                 
+            }            
         }).extend({throttle:50});
 
         function getLocalInterventions(){
-            var theseInterventions = [];
+            var theseInterventions = [];            
 			var params = [];
 			var orderString = '';
 			// Add these parameters to the query
@@ -590,8 +576,7 @@ define(['services/session', 'services/datacontext', 'config.services', 'models/b
 			orderString = orderString + ', category.name, description';
 			// Go get the intervention			
 			theseInterventions = datacontext.getInterventionsQuery(params, orderString);
-
-			return theseInterventions;
+			myInterventions(theseInterventions);			
         }
 
         var myToDosChart = ko.computed(function () {
@@ -851,15 +836,14 @@ define(['services/session', 'services/datacontext', 'config.services', 'models/b
 		}
         
 		function refreshInterventions() {
-		    interventionsProcessing(true);
-		    //clearInterventionsCacheAndLoad(); can be used when implementing paging
-		    loadMoreInterventions();
+		    loadAllInterventionsFromServer();
 		}
+
         //can be used when implementing paging because we need to clear old page data and push new data
         function clearInterventionsCacheAndLoad(){            
 			//assign empty array so interventions wount be referenced from ko data binding of the views that had them showing.			
 			myInterventions([]);
-			interventionsProcessing(true);
+			//interventionsProcessing(true);
 			var interventions = datacontext.getInterventionsQuery([], null);
 			//empty the collection. the interventions should be cleaned out by garbage collector.
 			localCollections.interventions([]);				
@@ -874,38 +858,27 @@ define(['services/session', 'services/datacontext', 'config.services', 'models/b
 						}
 					});					
 				}
-				loadMoreInterventions();	//load first block with the new sort
+				loadAllInterventionsFromServer();	//load first block with the new sort
 			}, 50);
         }
 
-        function loadMoreInterventions(){	
-			var params = [];
-			ko.utils.arrayForEach(selectedView().parameters, function (param) {
-				params.push(param);
-			});
-			// If there are filters,
-			if (activeFilters().length > 0) {
-				// Add them as parameters
-				ko.utils.arrayForEach(activeFilters(), function (param) {
-					params.push(param);
-				});
-			}            
-			params.Sort = backendSort() ? backendSort() : selectedView().backendSort;
+        //6. changed name of the function from loadMoreInterventions
+        function loadAllInterventionsFromServer(){	
+            var params = [];
 			datacontext.getInterventions( null, params).then( interventionsReturned );
 		}
 
-        function interventionsReturned(){			
-			interventionsProcessing(false);
+        function interventionsReturned() {
+            hasAllInterventionsFromServerLoaded = true;           
+            getLocalInterventions();            
 		}
 		
         // Force refresh from the server
         function refreshView() {
-			
 			if( selectedView() && selectedView().type() == 'todos' ){
 				refreshTodos();
 			}
-			else{
-			    //interventions                
+			else{			    
 			    refreshInterventions();
 			}			            
         }
