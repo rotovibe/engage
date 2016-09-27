@@ -213,9 +213,7 @@ namespace Phytel.API.AppDomain.NG
                     "NG",
                     request.Version,
                     request.ContractNumber), request.UserId);
-
-                Stopwatch sw1 = new Stopwatch();
-                sw1.Start();
+               
                 GetPatientInterventionsDataResponse ddResponse =
                     client.Post<GetPatientInterventionsDataResponse>(url, new GetPatientInterventionsDataRequest
                     {
@@ -229,11 +227,7 @@ namespace Phytel.API.AppDomain.NG
                         StatusIds = request.StatusIds
 
                     } as object);
-                sw1.Stop();
-                var e1 = sw1.Elapsed;
-
-                Stopwatch sw2 = new Stopwatch();
-                sw2.Start();
+                
                 if (ddResponse != null && ddResponse.InterventionsData != null)
                 {
                     interventions = new List<PatientIntervention>();
@@ -250,9 +244,7 @@ namespace Phytel.API.AppDomain.NG
                         i.PatientId = n.PatientId;
                         interventions.Add(i);
                     }
-                }
-                sw2.Stop();
-                var e2 = sw2.Elapsed;
+                }               
             }
             catch
             {
