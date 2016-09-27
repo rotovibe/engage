@@ -7,7 +7,10 @@ using ServiceStack.ServiceClient.Web;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Diagnostics;
+using System.Linq;
 using System.Web.UI.WebControls;
+using Lucene.Net.Support;
 using AD = Phytel.API.AppDomain.NG.DTO;
 
 namespace Phytel.API.AppDomain.NG
@@ -210,7 +213,7 @@ namespace Phytel.API.AppDomain.NG
                     "NG",
                     request.Version,
                     request.ContractNumber), request.UserId);
-
+               
                 GetPatientInterventionsDataResponse ddResponse =
                     client.Post<GetPatientInterventionsDataResponse>(url, new GetPatientInterventionsDataRequest
                     {
@@ -224,20 +227,24 @@ namespace Phytel.API.AppDomain.NG
                         StatusIds = request.StatusIds
 
                     } as object);
-
+                
                 if (ddResponse != null && ddResponse.InterventionsData != null)
                 {
                     interventions = new List<PatientIntervention>();
                     List<PatientInterventionData> dataList = ddResponse.InterventionsData;
+                    var patientIds = dataList.Select(x => x.PatientId).ToList();
+                    var patientsDetails = GetPatientsDetails(request.Version, request.ContractNumber, request.UserId, client, patientIds);
+
                     foreach (PatientInterventionData n in dataList)
                     {
                         PatientIntervention i = GoalsUtil.ConvertToIntervention(n);
                         // Call Patient DD to get patient details. 
-                        i.PatientDetails = GetPatientDetails(request.Version, request.ContractNumber, request.UserId, client, n.PatientId);
+                        i.PatientDetails = patientsDetails.FirstOrDefault(x => x.Id == n.PatientId);
+                            //GetPatientDetails(request.Version, request.ContractNumber, request.UserId, client, n.PatientId);
                         i.PatientId = n.PatientId;
                         interventions.Add(i);
                     }
-                }
+                }               
             }
             catch
             {
@@ -872,6 +879,37 @@ namespace Phytel.API.AppDomain.NG
                 }
             }
             return patient;
+        }
+        public static List<PatientDetails> GetPatientsDetails(double version, string contractNumber, string userId, IRestClient client, List<string> patientIds)
+        {
+            List<PatientDetails> patients = new List<PatientDetails>();
+            if (patientIds!=null)
+            {
+                string patientUrl = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/patients/Ids",
+                                                                                    DDPatientServiceURL,
+                                                                                    "NG",
+                                                                                    version,
+                                                                                    contractNumber
+                                                                                    ), userId);
+                GetPatientsDataRequest request = new GetPatientsDataRequest()
+                {
+                  ContractNumber = contractNumber,
+                  Context = "NG",
+                  Version = version,
+                  UserId = userId,
+                   PatientIds = patientIds
+                };
+                GetPatientsDataResponse response = client.Post<GetPatientsDataResponse>(patientUrl,request);
+
+                if (response != null && response.Patients != null)
+                {
+                    patients.AddRange(response.Patients.Select(patient => new PatientDetails
+                    {
+                        Id = patient.Key, FirstName = patient.Value.FirstName, LastName = patient.Value.LastName, MiddleName = patient.Value.MiddleName, PreferredName = patient.Value.PreferredName, Suffix = patient.Value.Suffix
+                    }));
+                }
+            }
+            return patients;
         }
         #endregion
     }
