@@ -373,10 +373,10 @@
 									var defaultVisitType = ko.utils.arrayFirst( datacontext.enums.visitTypes(), function (visitType) {
 										return visitType.isDefault();
 									});
-									if( note.visitType() && !defaultVisitType ){
+									if( note.visitType()){
+                                        if (!defaultVisitType || (defaultVisitType.name()!=note.visitType().name()))     
 										notesHaveChanges = true;
-									}
-									break;
+									}									
 								}
 								default:{
 									if( note.text() ){
