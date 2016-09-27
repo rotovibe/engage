@@ -32,6 +32,17 @@ namespace Phytel.API.AppDomain.NG.DTO
         [ApiMember(Name = "Token", Description = "Request Token", ParameterType = "QueryString", DataType = "string", IsRequired = true)]
         public string Token { get; set; }
 
+        [ApiMember(Name = "InterventionFilterType", Description = "Indicates the filter for Interventions", ParameterType = "property", DataType = "InterventionFilterType", IsRequired = false)]
+        [ApiAllowableValues("InterventionFilterType", typeof(DTO.InterventionFilterType))]
+        public InterventionFilterType InterventionFilterType { get; set; }
         public GetInterventionsRequest() { }
+    }
+
+    public enum InterventionFilterType
+    {
+        AssignedToOthers = 1,
+        ClosedByOthers = 2,
+        MyClosedList = 3,
+        MyOpenList = 4
     }
 }
