@@ -235,17 +235,14 @@ namespace Phytel.API.AppDomain.NG
                     {
                          filteredInterventions =  GetFilteredInterventions(ddResponse.InterventionsData,request);
                     }
-                    interventions = new List<PatientIntervention>();
-                    //List<PatientInterventionData> dataList = ddResponse.InterventionsData;
+                    interventions = new List<PatientIntervention>();                    
                     var patientIds = filteredInterventions.Select(x => x.PatientId).ToList();
                     var patientsDetails = GetPatientsDetails(request.Version, request.ContractNumber, request.UserId, client, patientIds);
 
                     foreach (PatientInterventionData n in filteredInterventions)
                     {
-                        PatientIntervention i = GoalsUtil.ConvertToIntervention(n);
-                        // Call Patient DD to get patient details. 
+                        PatientIntervention i = GoalsUtil.ConvertToIntervention(n);                        
                         i.PatientDetails = patientsDetails.FirstOrDefault(x => x.Id == n.PatientId);
-                            //GetPatientDetails(request.Version, request.ContractNumber, request.UserId, client, n.PatientId);
                         i.PatientId = n.PatientId;
                         interventions.Add(i);
                     }
@@ -258,27 +255,32 @@ namespace Phytel.API.AppDomain.NG
             return interventions;
         }
 
-        private static List<PatientInterventionData> GetFilteredInterventions(List<PatientInterventionData> interventionsData, GetInterventionsRequest request)
+        public static List<PatientInterventionData> GetFilteredInterventions(List<PatientInterventionData> interventionsData, GetInterventionsRequest request)
         {
+            if(interventionsData == null || request == null)
+            {
+                throw new ArgumentNullException();
+            }
+
             var res = new List<PatientInterventionData>();
             switch (request.InterventionFilterType)
             {
                 case InterventionFilterType.AssignedToOthers:
                     res = interventionsData.Where(
-                       x => x.CreatedById == request.UserId && x.AssignedToId != request.UserId && x.StatusId == 1).ToList();
+                       x => x.CreatedById == request.UserId && x.AssignedToId != request.UserId && x.StatusId == (int)InterventionStatus.Open).ToList();
                     break;
                 case InterventionFilterType.ClosedByOthers:
                     res = interventionsData.Where(
-                        x => x.CreatedById == request.UserId && x.AssignedToId != request.UserId && x.StatusId != 1).ToList();
+                        x => x.CreatedById == request.UserId && x.AssignedToId != request.UserId && x.StatusId != (int)InterventionStatus.Open).ToList();
                     break;
                 case InterventionFilterType.MyClosedList:
                     res = interventionsData.Where(
-                       x => x.CreatedById == request.UserId && x.AssignedToId == request.UserId && x.StatusId != 1).ToList();
+                       x => x.AssignedToId == request.UserId && x.StatusId != (int)InterventionStatus.Open).ToList();
                     break;
                 case InterventionFilterType.MyOpenList:               
                 default:
                     res = interventionsData.Where(
-                        x => x.CreatedById == request.UserId && x.AssignedToId == request.UserId && x.StatusId == 1).ToList();
+                        x => x.AssignedToId == request.UserId && x.StatusId == (int)InterventionStatus.Open).ToList();
                     break;
             }
             return res;

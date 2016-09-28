@@ -39,7 +39,10 @@ define(['services/session', 'services/datacontext', 'config.services', 'models/b
                     new modelConfig.Parameter('statusId', '1', '==')
                 ],
                 ['duedate','description','category','patient','goal'],
-                'dueDate desc, startDate desc'
+                'dueDate desc, startDate desc',
+                null,
+                null,
+                1
             ),
             new View(	//1
                 'interventions',
@@ -50,7 +53,10 @@ define(['services/session', 'services/datacontext', 'config.services', 'models/b
                     new modelConfig.Parameter('statusId', '1', '!=')
                 ],
                 ['status-small','closeddate','description-small','category','patient','goal'],
-                'closedDate desc'
+                'closedDate desc',
+                null,
+                null,
+                2
             ),
             new View(	//2
                 'interventions',
@@ -60,8 +66,10 @@ define(['services/session', 'services/datacontext', 'config.services', 'models/b
                     new modelConfig.Parameter('statusId', '1', '!=')
                 ],
                 ['status-small','closeddate','description-small','category','patient','goal'],                 
-                'closedDate desc'
-               
+                'closedDate desc',
+                null,
+                null,
+                3               
             ),
             new View(	//3
                 'interventions',
@@ -71,7 +79,10 @@ define(['services/session', 'services/datacontext', 'config.services', 'models/b
                     new modelConfig.Parameter('statusId', '1', '==')
                 ],
                 ['duedate','description','category','patient','goal'],
-                'dueDate desc, startDate desc'
+                'dueDate desc, startDate desc',
+                null,
+                null,
+                4
             ),
             new View(	//4
                 'todos',
@@ -539,19 +550,22 @@ define(['services/session', 'services/datacontext', 'config.services', 'models/b
 				
         // My interventions
 		var myInterventions = ko.observableArray([]);
-		var hasAllInterventionsFromServerLoaded = false;
-        var myInterventionsUpdater = ko.computed(function () {
-            //subscribing to the following 2 observables as we want this computed function executed every time they change.
+        var myInterventionsUpdater = ko.computed(function () {            
             var selectedview = selectedView();
             var categoryFilterChanged = categoryChanged();
             
             if (selectedview && selectedview.type() === 'interventions') {                
-                if (!hasAllInterventionsFromServerLoaded) {                    
-                    loadAllInterventionsFromServer();
+                if (viewChanged()) {
+                    viewChanged(false);
+                    loadInterventionsFromServer();
                 }
-                else{                    
-                    getLocalInterventions();                    
-                }                 
+                else if (categoryFilterChanged) {
+                    categoryChanged(false);
+                    getLocalInterventions();
+                }
+                else if (selectedSortColumn()) {
+                    getLocalInterventions();
+                }
             }            
         }).extend({throttle:50});
 
@@ -836,7 +850,7 @@ define(['services/session', 'services/datacontext', 'config.services', 'models/b
 		}
         
 		function refreshInterventions() {
-		    loadAllInterventionsFromServer();
+		    loadInterventionsFromServer();
 		}
 
         //can be used when implementing paging because we need to clear old page data and push new data
@@ -858,18 +872,31 @@ define(['services/session', 'services/datacontext', 'config.services', 'models/b
 						}
 					});					
 				}
-				loadAllInterventionsFromServer();	//load first block with the new sort
+				loadInterventionsFromServer();	//load first block with the new sort
 			}, 50);
         }
-
-        //6. changed name of the function from loadMoreInterventions
-        function loadAllInterventionsFromServer(){	
-            var params = [];
+        
+        function loadInterventionsFromServer(){	
+            var params = {};//server side filtering object
+            params.InterventionFilterType = selectedView().interventionFilterType;
+            if (params.InterventionFilterType == 1)  {
+                params.CreatedById = session.currentUser().userId();
+                params.StatusIds = [1];
+            }
+            else if(params.InterventionFilterType == 2){
+                params.CreatedById = session.currentUser().userId();
+            }
+            else if (params.InterventionFilterType == 3) {
+                params.AssignedToId = session.currentUser().userId();                
+            }
+            else if (params.InterventionFilterType == 4) {
+                params.AssignedToId = session.currentUser().userId();
+                params.StatusIds = [1];
+            }
 			datacontext.getInterventions( null, params).then( interventionsReturned );
 		}
 
-        function interventionsReturned() {
-            hasAllInterventionsFromServerLoaded = true;           
+        function interventionsReturned() {            
             getLocalInterventions();            
 		}
 		
@@ -884,15 +911,18 @@ define(['services/session', 'services/datacontext', 'config.services', 'models/b
         }
 
         // A view to select
-        function View(type, name, params, cols, prisort, remoteParams, backendSort) {
+        function View(type, name, params, cols, prisort, remoteParams, backendSort, interventionFilterType) {
             var self = this;
             self.type = ko.observable(type);
             self.name = ko.observable(name);
+            //following fields are used for filtering on client side
             self.parameters = params;
             self.columns = ko.observableArray(cols);
             self.primarySort = prisort ? prisort : 'dueDate desc';
 			self.remoteParams = remoteParams;
 			self.backendSort = backendSort ? backendSort : '-DueDate';
+            //following fields are used for filtering on server side
+			self.interventionFilterType = interventionFilterType;
         }
         
         // Summary object
