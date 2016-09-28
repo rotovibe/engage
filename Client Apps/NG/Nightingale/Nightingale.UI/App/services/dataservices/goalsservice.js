@@ -270,15 +270,6 @@
             // If there is no manager, we can't query using breeze
             if (!manager) { throw new Error("[manager] cannot be a null parameter"); }
 
-            // Create a parameters object and assign a dynamic string query onto it, if those were passed in
-            var parameters = {};
-            if (params) {
-                parameters = params;
-            } else {
-                var parameters = {
-                };
-            }
-
             // Create a payload from the JS object
             var payload = {};
 
@@ -287,6 +278,7 @@
             payload.CreatedById = params.CreatedById;
             payload.FromDate = params.FromDate;
             payload.StatusIds = params.StatusIds;
+            payload.InterventionFilterType = params.InterventionFilterType
             payload = JSON.stringify(payload);
 
             // Query to post the results
