@@ -20,12 +20,8 @@
                     // And set the new sub route
                     navigation.setSubRoute(thisSubRoute);
                 } else {
-                    // Get the event
-                    var thisEvent = datacontext.getEventById(event.id);
-                    // Show the event details modal
-                    eventModalEntity().event(thisEvent);
-                    shell.currentModal(eventModal);
-                    eventModalShowing(true);
+                    //the "Open To-Do List" grid's title column has the functionality built in to edit this event. 
+                    $("a[edit_todoid = '" + event.id + "']").click();
                 }
             };
         }
