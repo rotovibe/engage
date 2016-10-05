@@ -27,5 +27,9 @@ namespace Phytel.API.AppDomain.NG.DTO
         /// Assigned patient id to the program
         /// </summary>
         public string PatientId { get; set; }
+
+        public DateTime? StateUpdatedOn { get; set; }
+
+        public DateTime? AssignDate { get; set; }
     }
 }
