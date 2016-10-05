@@ -17,5 +17,7 @@ namespace Phytel.API.DataDomain.Program.DTO
         public int ProgramState { get; set; }
         public string PatientId { get; set; }
         public DateTime? AttrEndDate { get; set; }
+        public DateTime? StateUpdatedOnDate { get; set; }
+        public DateTime? AssignedOnDate { get; set; }
     }
 }

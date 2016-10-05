@@ -894,7 +894,9 @@ namespace Phytel.API.AppDomain.NG
                             Status = p.Status,
                             ElementState = p.ElementState,
                             AttrEndDate = p.AttrEndDate,
-                            ProgramSourceId = p.ProgramSourceId
+                            ProgramSourceId = p.ProgramSourceId,
+                            StateUpdatedOn = p.StateUpdatedOnDate,
+                            AssignDate = p.AssignedOnDate
                         }));
 
                         result.Programs = adPs;

@@ -232,8 +232,19 @@
 				if (self.selectedPatient()) {
 					var thesePrograms = self.selectedPatient().programs.slice(0).sort(self.alphabeticalNameSort);
 					ko.utils.arrayForEach(thesePrograms, function (program) {
-						if (program.elementState() !== 6 && program.elementState() !== 1 && program.elementState() !== 5) {
-							computedPrograms.push(program);
+					    if (program.elementState() !== 1) {
+					        if (program.elementState() != 5 && program.elementState() != 6) {
+					            computedPrograms.push(program);
+					        }
+					        //5 or 6 within last 30 days
+					        else {
+					            var today = moment(new Date());
+					            var stateUpdatedDate = moment(program.stateUpdatedOn());
+					            if (today.diff(stateUpdatedDate, 'days') <= 30) {
+					                program.name(program.name() + " - " + moment(program.assignDate()).format('MM/DD/YYYY'));
+					                computedPrograms.push(program);
+					            }
+					        }
 						}
 					});
 				}
