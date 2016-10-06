@@ -452,7 +452,7 @@
                 <ul class="list-items">
                     <li class="row">
                         <strong class="span2">Preferred?</strong>
-                        <strong class="span10">Language</strong>
+                        <strong class="span3">Language</strong>                        
                     </li>
                     <li class="row">
                         <div class="span2">
@@ -473,8 +473,13 @@
                                 </span>
                             </div>
                         </div>
-                        <div class="span10">
+                        <div class="span3">
                             <strong data-bind="text: name, attr: { title: name }"></strong>
+                        </div>
+                        <div class="span4">
+                            <div class="row">
+                                <a href="#" data-bind="click: $parent.removeLanguage"><i class="icon-cancel red"></i></a>
+                            </div>
                         </div>
                     </li>
                     <!-- /ko -->
