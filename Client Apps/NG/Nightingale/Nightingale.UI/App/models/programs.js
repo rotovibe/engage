@@ -451,6 +451,8 @@ define(['config.services', 'services/session', 'services/entityserializer', 'ser
 					}
 					return name;
 				});
+
+				program.notesDisplayName = ko.observable();
 		    };
 
 		    function moduleInitializer(module) {
