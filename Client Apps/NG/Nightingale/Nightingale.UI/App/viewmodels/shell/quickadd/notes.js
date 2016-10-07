@@ -227,7 +227,9 @@
 				    self.createNewNote();
 				}
 				
-				//self.isShowing(false);
+				if (!self.newNote().isDirty() && !self.newTouchPoint().isDirty() && !self.newUtilization().isDirty()) {
+				    self.isShowing(false);
+				}
 			};
 
 			self.availablePrograms = ko.computed(function () {
