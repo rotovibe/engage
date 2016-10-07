@@ -207,11 +207,9 @@
 			});
 			self.isShowing = self.settings.data.isShowing;
 			self.cancel = function () {
-				if( self.newNote() ){
-					self.newNote().entityAspect.rejectChanges();
-					self.createNewNote();
-				}
-				if( self.newTouchPoint() ){
+			    var typename = self.selectedNoteType().name().toLowerCase();
+				
+				if (typename == 'touchpoint' && self.newTouchPoint()) {
 					self.newTouchPoint().entityAspect.rejectChanges();
 					// If there is a new touch point subscription,
 					if (self.newTouchPointToken) {
@@ -220,11 +218,18 @@
 					}
 					self.createNewTouchPoint();
 				}
-				if( self.newUtilization() ){
+				else if(typename == 'utilization' && self.newUtilization() ){
 					self.newUtilization().entityAspect.rejectChanges();
 					self.createNewUtilization();
 				}
-				self.isShowing(false);
+				else if (self.newNote()) {
+				    self.newNote().entityAspect.rejectChanges();
+				    self.createNewNote();
+				}
+				
+				if (!self.newNote().isDirty() && !self.newTouchPoint().isDirty() && !self.newUtilization().isDirty()) {
+				    self.isShowing(false);
+				}
 			};
 
 			self.availablePrograms = ko.computed(function () {
