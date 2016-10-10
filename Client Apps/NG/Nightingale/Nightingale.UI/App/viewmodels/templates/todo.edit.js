@@ -82,7 +82,7 @@ define(['services/datacontext', 'services/local.collections'],
                 if (self.todo().patientId() && self.todo().patient()) {
                     var thesePrograms = self.todo().patient().programs.slice(0).sort(self.alphabeticalNameSort);
                     ko.utils.arrayForEach(thesePrograms, function (program) {
-                        if (program.elementState() !== 6 && program.elementState() !== 1 && program.elementState() !== 5) {
+                        if (program.elementState() !== 1) {
                             computedPrograms.push(program);
                         }
                     });
