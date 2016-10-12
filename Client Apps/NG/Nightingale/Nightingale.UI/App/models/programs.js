@@ -451,10 +451,10 @@ define(['config.services', 'services/session', 'services/entityserializer', 'ser
 					}
 					return name;
 				});
-
+                /*
 				program.notesDisplayName = ko.observable();
-
-				program.editName = ko.computed(function () {				    
+                */
+				program.nameByElementState = ko.computed(function () {				    
 				    if (program.elementState() != 5 && program.elementState() != 6) {				            
 				        return program.name();
 				    }
