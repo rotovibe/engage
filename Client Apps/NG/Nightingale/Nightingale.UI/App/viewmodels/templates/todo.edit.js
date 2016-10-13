@@ -82,8 +82,18 @@ define(['services/datacontext', 'services/local.collections'],
                 if (self.todo().patientId() && self.todo().patient()) {
                     var thesePrograms = self.todo().patient().programs.slice(0).sort(self.alphabeticalNameSort);
                     ko.utils.arrayForEach(thesePrograms, function (program) {
-                        if (program.elementState() !== 6 && program.elementState() !== 1 && program.elementState() !== 5) {
-                            computedPrograms.push(program);
+                        if (program.elementState() !== 1) {
+                            if (program.elementState() != 5 && program.elementState() != 6) {
+                                computedPrograms.push(program);
+                            }
+                                //5 or 6 within last 30 days
+                            else {
+                                var today = moment(new Date());
+                                var stateUpdatedDate = moment(program.stateUpdatedOn());
+                                if (today.diff(stateUpdatedDate, 'days') <= 30) {
+                                    computedPrograms.push(program);
+                                }
+                            }
                         }
                     });
                 }
