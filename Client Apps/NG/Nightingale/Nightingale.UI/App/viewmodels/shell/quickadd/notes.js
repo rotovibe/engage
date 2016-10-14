@@ -234,28 +234,7 @@
 			    self.closePopupIfNoMoreChanges();
 			}
 
-			self.cancel = function () {
-                /*
-			    var typename = self.selectedNoteType().name().toLowerCase();
-				
-				if (typename == 'touchpoint' && self.newTouchPoint()) {
-					self.newTouchPoint().entityAspect.rejectChanges();
-					// If there is a new touch point subscription,
-					if (self.newTouchPointToken) {
-						// Dispose of it
-						self.newTouchPointToken.dispose();
-					}
-					self.createNewTouchPoint();
-				}
-				else if (typename == 'utilization' && self.newUtilization()) {
-					self.newUtilization().entityAspect.rejectChanges();
-					self.createNewUtilization();
-				}
-				else if (self.newNote()) {
-				    self.newNote().entityAspect.rejectChanges();
-				    self.createNewNote();
-				}
-                */
+			self.cancel = function () {                
 			    self.cancelNote();
 			    self.cancelTouchPoint();
 			    self.cancelUtilization();
