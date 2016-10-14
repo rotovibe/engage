@@ -206,7 +206,36 @@
 				return self.thisTouchPointId() - 100;
 			});
 			self.isShowing = self.settings.data.isShowing;
+
+			self.cancelTouchPoint = function () {
+			    if (self.newTouchPoint()) {
+			        self.newTouchPoint().entityAspect.rejectChanges();
+			        if (self.newTouchPointToken) {
+			            self.newTouchPointToken.dispose();
+			        }
+			        self.createNewTouchPoint();			        
+			    }
+			    self.closePopupIfNoMoreChanges();
+			}
+
+			self.cancelUtilization = function () {
+			    if (self.newUtilization()) {
+			        self.newUtilization().entityAspect.rejectChanges();
+			        self.createNewUtilization();
+			    }
+			    self.closePopupIfNoMoreChanges();
+			}
+
+			self.cancelNote = function () {
+			    if (self.newNote()) {
+			        self.newNote().entityAspect.rejectChanges();
+			        self.createNewNote();
+			    }
+			    self.closePopupIfNoMoreChanges();
+			}
+
 			self.cancel = function () {
+                /*
 			    var typename = self.selectedNoteType().name().toLowerCase();
 				
 				if (typename == 'touchpoint' && self.newTouchPoint()) {
@@ -218,7 +247,7 @@
 					}
 					self.createNewTouchPoint();
 				}
-				else if(typename == 'utilization' && self.newUtilization() ){
+				else if (typename == 'utilization' && self.newUtilization()) {
 					self.newUtilization().entityAspect.rejectChanges();
 					self.createNewUtilization();
 				}
@@ -226,11 +255,17 @@
 				    self.newNote().entityAspect.rejectChanges();
 				    self.createNewNote();
 				}
-				
-				if (!self.newNote().isDirty() && !self.newTouchPoint().isDirty() && !self.newUtilization().isDirty()) {
-				    self.isShowing(false);
-				}
+                */
+			    self.cancelNote();
+			    self.cancelTouchPoint();
+			    self.cancelUtilization();
 			};
+
+			self.closePopupIfNoMoreChanges = function(){
+			    if (!self.newNote().isDirty() && !self.newTouchPoint().isDirty() && !self.newUtilization().isDirty()) {
+			        self.isShowing(false);
+			    }
+			}
 
 			self.availablePrograms = ko.computed(function () {
 				var computedPrograms = [];
