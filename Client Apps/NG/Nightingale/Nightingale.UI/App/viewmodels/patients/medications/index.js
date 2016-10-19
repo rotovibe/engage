@@ -262,6 +262,7 @@
 
     function editAllergy(allergy, msg) {
         var modalEntity = ko.observable(new AllergyModalEntity(allergy));
+        var reactionIdsBeforeEdit = allergy.reactionIds().slice(0);
         var saveOverride = function () {
             datacontext.saveAllergies([modalEntity().allergy()], 'Update').then(saveCompleted);
 
@@ -272,7 +273,8 @@
             }
         };
         var cancelOverride = function () {
-            var allergyCancel = modalEntity().allergy();
+            var allergyCancel = modalEntity().allergy(); 
+             allergyCancel.recalcReactionString(reactionIdsBeforeEdit);          
             allergyCancel.entityAspect.rejectChanges();
         };
         msg = msg ? msg : 'Edit Allergy';
