@@ -976,7 +976,8 @@ namespace Phytel.API.AppDomain.NG
                     TypeId = Constants.GeneralNoteTypeId,
                     CreatedById = request.UserId,
                     CreatedOn = DateTime.UtcNow,
-                    PatientId = request.PatientId
+                    PatientId = request.PatientId,
+                    DataSource = request.DataSource
                 };
                 InsertPatientNoteDataResponse noteDDResponse = client.Post<InsertPatientNoteDataResponse>(url, new InsertPatientNoteDataRequest
                 {
