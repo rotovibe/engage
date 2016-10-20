@@ -227,6 +227,7 @@ namespace DataDomain.Medication.Repo
             {
                 using (MedicationMongoContext ctx = new MedicationMongoContext(ContractDBName))
                 {
+                    // find a match on name, route,form, strength, and unit.
                     List<IMongoQuery> query1 = new List<IMongoQuery>();
                     query1.Add(Query.EQ(MEMedication.DeleteFlagProperty, false));
                     if (!string.IsNullOrEmpty(dataRequest.Name))
@@ -236,6 +237,10 @@ namespace DataDomain.Medication.Repo
                     if (!string.IsNullOrEmpty(dataRequest.Strength))
                     {
                         query1.Add(Query.EQ(MEMedication.StrengthProperty, dataRequest.Strength));
+                    }
+                    if (!string.IsNullOrEmpty(dataRequest.Unit))
+                    {
+                        query1.Add(Query.EQ(MEMedication.UnitProperty, dataRequest.Unit));
                     }
                     if (!string.IsNullOrEmpty(dataRequest.Route))
                     {
@@ -249,7 +254,7 @@ namespace DataDomain.Medication.Repo
                     list = ctx.Medications.Collection.Find(mQuery1).SetFields(MEMedication.NDCProperty).ToList();
                     if (list.Count ==  0)
                     {
-                        // find a match on name, route and form.
+                        // find a match on name, route,form, and strength.
                         List<IMongoQuery> query2 = new List<IMongoQuery>();
                         query2.Add(Query.EQ(MEMedication.DeleteFlagProperty, false));
                         if (!string.IsNullOrEmpty(dataRequest.Name))
@@ -260,20 +265,29 @@ namespace DataDomain.Medication.Repo
                         {
                             query2.Add(Query.EQ(MEMedication.FormProperty, dataRequest.Form));
                         }
+                        if (!string.IsNullOrEmpty(dataRequest.Strength))
+                        {
+                            query2.Add(Query.EQ(MEMedication.StrengthProperty, dataRequest.Strength));
+                        }
                         if (!string.IsNullOrEmpty(dataRequest.Route))
                         {
                             query2.Add(Query.EQ(MEMedication.RouteProperty, dataRequest.Route));
                         }
                         IMongoQuery mQuery2 = Query.And(query2);
                         list = ctx.Medications.Collection.Find(mQuery2).SetFields(MEMedication.NDCProperty).ToList();
+
                         if (list.Count == 0)
                         {
-                            // find a match on name and route.
+                            // find a match on name, route and form.
                             List<IMongoQuery> query3 = new List<IMongoQuery>();
                             query3.Add(Query.EQ(MEMedication.DeleteFlagProperty, false));
                             if (!string.IsNullOrEmpty(dataRequest.Name))
                             {
                                 query3.Add(Query.EQ(MEMedication.FullNameProperty, dataRequest.Name));
+                            }
+                            if (!string.IsNullOrEmpty(dataRequest.Form))
+                            {
+                                query3.Add(Query.EQ(MEMedication.FormProperty, dataRequest.Form));
                             }
                             if (!string.IsNullOrEmpty(dataRequest.Route))
                             {
@@ -283,15 +297,37 @@ namespace DataDomain.Medication.Repo
                             list = ctx.Medications.Collection.Find(mQuery3).SetFields(MEMedication.NDCProperty).ToList();
                             if (list.Count == 0)
                             {
-                                // find a match on name.
+                                // find a match on name and route.
                                 List<IMongoQuery> query4 = new List<IMongoQuery>();
-                                query4.Add(Query.EQ(MEMedication.DeleteFlagProperty, false));
+                                query3.Add(Query.EQ(MEMedication.DeleteFlagProperty, false));
                                 if (!string.IsNullOrEmpty(dataRequest.Name))
                                 {
-                                    query4.Add(Query.EQ(MEMedication.FullNameProperty, dataRequest.Name));
+                                    query3.Add(Query.EQ(MEMedication.FullNameProperty, dataRequest.Name));
+                                }
+                                if (!string.IsNullOrEmpty(dataRequest.Route))
+                                {
+                                    query3.Add(Query.EQ(MEMedication.RouteProperty, dataRequest.Route));
                                 }
                                 IMongoQuery mQuery4 = Query.And(query4);
-                                list = ctx.Medications.Collection.Find(mQuery4).SetFields(MEMedication.NDCProperty).ToList();
+                                list =
+                                    ctx.Medications.Collection.Find(mQuery4)
+                                        .SetFields(MEMedication.NDCProperty)
+                                        .ToList();
+                                if (list.Count == 0)
+                                {
+                                    // find a match on name.
+                                    List<IMongoQuery> query5 = new List<IMongoQuery>();
+                                    query4.Add(Query.EQ(MEMedication.DeleteFlagProperty, false));
+                                    if (!string.IsNullOrEmpty(dataRequest.Name))
+                                    {
+                                        query4.Add(Query.EQ(MEMedication.FullNameProperty, dataRequest.Name));
+                                    }
+                                    IMongoQuery mQuery5 = Query.And(query4);
+                                    list =
+                                        ctx.Medications.Collection.Find(mQuery5)
+                                            .SetFields(MEMedication.NDCProperty)
+                                            .ToList();
+                                }
                             }
                         }
                     }
