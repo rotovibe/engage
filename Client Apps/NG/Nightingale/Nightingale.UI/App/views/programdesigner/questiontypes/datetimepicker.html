@@ -14,7 +14,7 @@
 			<input data-bind="timepicker: value, valueUpdate: blur, disable: (!$parent.computedResponse() && !$parent.activeStep() || $parents[1].completed() || !value())" type="time">
 		<!-- /ko -->
 		<!-- ko ifnot: Modernizr.inputtypes.time -->
-			<input id="value" data-bind="jqtimepicker: value, disable: (!$parent.computedResponse() && !$parent.activeStep() || $parents[1].completed() || !value())" type="text">
+			<input id="value" data-bind="jqtimepicker:{observableDateTime:value}, disable: (!$parent.computedResponse() && !$parent.activeStep() || $parents[1].completed() || !value())" type="text">
 		<!-- /ko -->
     </div>
     <!-- /ko -->

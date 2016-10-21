@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Linq;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
+using MongoDB.Bson.Serialization.Serializers;
 using MongoDB.Driver;
 using MongoDB.Driver.Builders;
 using Phytel.API.Common;
@@ -436,8 +437,14 @@ namespace Phytel.API.DataDomain.PatientGoal
                     IMongoQuery mQuery = Query.And(queries);
                     List<MEPatientIntervention> meInterventions = null;
                     meInterventions = ctx.PatientInterventions.Collection.Find(mQuery).ToList();
+                  
                     if (meInterventions != null && meInterventions.Count > 0)
                     {
+                        //We get the Patient Goals for the found interventions
+                        List<MEPatientGoal> mePatientGoals = null;                                           
+                        mQuery = Query.In(MEPatientGoal.IdProperty, meInterventions.Select(x => BsonValue.Create(x.PatientGoalId)).ToList());
+                        mePatientGoals = ctx.PatientGoals.Collection.Find(mQuery).ToList();
+
                         list = new List<PatientInterventionData>();
                         foreach (MEPatientIntervention b in meInterventions)
                         {
@@ -458,7 +465,8 @@ namespace Phytel.API.DataDomain.PatientGoal
                                 DeleteFlag = b.DeleteFlag,
                                 Details = b.Details
                             };
-                            var mePG = ctx.PatientGoals.Collection.Find(Query.EQ(MEPatientGoal.IdProperty, ObjectId.Parse(interventionData.PatientGoalId))).SetFields(MEPatientGoal.PatientIdProperty, MEPatientGoal.NameProperty).FirstOrDefault();
+                            //var mePG = ctx.PatientGoals.Collection.Find(Query.EQ(MEPatientGoal.IdProperty, ObjectId.Parse(interventionData.PatientGoalId))).SetFields(MEPatientGoal.PatientIdProperty, MEPatientGoal.NameProperty).FirstOrDefault();
+                            var mePG = mePatientGoals.FirstOrDefault(x => x.Id == b.PatientGoalId);
                             if (mePG != null)
                             {
                                 interventionData.PatientId = mePG.PatientId.ToString();

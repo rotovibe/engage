@@ -24,7 +24,8 @@ define(['services/session', 'services/datacontext', 'config.services', 'models/b
 		var todosTake = ko.observable(maxTodosCount()); //set the take for any server query ( one and first page design, without load more )
         var todosTotalCount = ko.observable(0);
 		var todosProcessing = ko.observable(false);
-		var todoViewChanged = ko.observable(false);
+        //var interventionsProcessing = ko.observable(false);
+		var viewChanged = ko.observable(false);
 		var categoryChanged = ko.observable(false);
 		var priorityChanged = ko.observable(false);
         // Which views (filters) are available
@@ -38,7 +39,10 @@ define(['services/session', 'services/datacontext', 'config.services', 'models/b
                     new modelConfig.Parameter('statusId', '1', '==')
                 ],
                 ['duedate','description','category','patient','goal'],
-                'dueDate desc, startDate desc'
+                'dueDate desc, startDate desc',
+                null,
+                null,
+                1
             ),
             new View(	//1
                 'interventions',
@@ -49,7 +53,10 @@ define(['services/session', 'services/datacontext', 'config.services', 'models/b
                     new modelConfig.Parameter('statusId', '1', '!=')
                 ],
                 ['status-small','closeddate','description-small','category','patient','goal'],
-                'closedDate desc'
+                'closedDate desc',
+                null,
+                null,
+                2
             ),
             new View(	//2
                 'interventions',
@@ -58,8 +65,11 @@ define(['services/session', 'services/datacontext', 'config.services', 'models/b
                     new modelConfig.Parameter('assignedToId', session.currentUser().userId(), '=='),
                     new modelConfig.Parameter('statusId', '1', '!=')
                 ],
-                ['status-small','closeddate','description-small','category','patient','goal'],
-                'closedDate desc'
+                ['status-small','closeddate','description-small','category','patient','goal'],                 
+                'closedDate desc',
+                null,
+                null,
+                3               
             ),
             new View(	//3
                 'interventions',
@@ -69,7 +79,10 @@ define(['services/session', 'services/datacontext', 'config.services', 'models/b
                     new modelConfig.Parameter('statusId', '1', '==')
                 ],
                 ['duedate','description','category','patient','goal'],
-                'dueDate desc, startDate desc'
+                'dueDate desc, startDate desc',
+                null,
+                null,
+                4
             ),
             new View(	//4
                 'todos',
@@ -256,7 +269,7 @@ define(['services/session', 'services/datacontext', 'config.services', 'models/b
                 selectedPriorities([]);				
             }
 			if(lastSelectedView() && lastSelectedView().name() !== selectedView().name()){
-				todoViewChanged(true);
+				viewChanged(true);
 			}
 			lastSelectedView(newValue);
         });
@@ -457,12 +470,12 @@ define(['services/session', 'services/datacontext', 'config.services', 'models/b
 			var categoryFilterChanged = categoryChanged();
 			var priorityFilterChanged = priorityChanged();
 			var lastselectedview = lastSelectedView();
-            var todoviewchanged = todoViewChanged ? todoViewChanged() : false;
+            var viewchanged = viewChanged ? viewChanged() : false;
 			var bSort = backendSort() ? backendSort() : selectedView().backendSort;           
 			var processing = todosProcessing();
 			if( !processing ){
 				if (selectedview && selectedview.type() === 'todos') {				
-					if( ( bSort !== lastSort() && bSort !== null ) || categoryFilterChanged || priorityFilterChanged || todoviewchanged){						
+					if( ( bSort !== lastSort() && bSort !== null ) || categoryFilterChanged || priorityFilterChanged || viewchanged){						
 						lastSort( bSort ); 
 						if( categoryFilterChanged ){
 							categoryChanged(false);
@@ -470,8 +483,8 @@ define(['services/session', 'services/datacontext', 'config.services', 'models/b
 						if( priorityFilterChanged ){
 							priorityChanged(false);
 						}
-						if( todoviewchanged ){
-							todoViewChanged(false);
+						if( viewchanged ){
+							viewChanged(false);
 						}
 						maxToToDosLoaded(false);						
 						clearTodosCacheAndLoad();
@@ -536,34 +549,49 @@ define(['services/session', 'services/datacontext', 'config.services', 'models/b
 		}).extend({ throttle: 50 });
 				
         // My interventions
-        var myInterventions = ko.computed(function () {
-            var theseInterventions = [];
-            //Subscribe to localcollection todos
-            var allInterventions = localCollections.interventions();
-            var selectedview = selectedView();			
-            var params = [];
-            var orderString = '';
-            if (selectedview && selectedview.type() === 'interventions') {
-                // Add these parameters to the query
-                ko.utils.arrayForEach(selectedview.parameters, function (param) {
-                    params.push(param);
-                });
-                // If there are filters,
-                if (activeFilters().length > 0) {
-                    // Add them as parameters
-                    ko.utils.arrayForEach(activeFilters(), function (param) {
-                        params.push(param);
-                    });
+		var myInterventions = ko.observableArray([]);
+        var myInterventionsUpdater = ko.computed(function () {            
+            var selectedview = selectedView();
+            var categoryFilterChanged = categoryChanged();
+            
+            if (selectedview && selectedview.type() === 'interventions') {                
+                if (viewChanged()) {
+                    viewChanged(false);
+                    loadInterventionsFromServer();
                 }
-                // Either sort by the selected sort or the default
-                orderString = selectedSortColumn() ? selectedSortColumn() : selectedview.primarySort;
-                // Add the second and third orders to the string
-                var finalOrderString = orderString + ', category.name, description';
-                // Go get the todos
-                theseInterventions = datacontext.getInterventionsQuery(params, orderString);
-            }
-            return theseInterventions;
-        });
+                else if (categoryFilterChanged) {
+                    categoryChanged(false);
+                    getLocalInterventions();
+                }
+                else if (selectedSortColumn()) {
+                    getLocalInterventions();
+                }
+            }            
+        }).extend({throttle:50});
+
+        function getLocalInterventions(){
+            var theseInterventions = [];            
+			var params = [];
+			var orderString = '';
+			// Add these parameters to the query
+			ko.utils.arrayForEach(selectedView().parameters, function (param) {
+				params.push(param);
+			});
+			// If there are filters,
+			if (activeFilters().length > 0) {
+				// Add them as parameters
+				ko.utils.arrayForEach(activeFilters(), function (param) {
+					params.push(param);
+				});
+			}
+			// Either sort by the selected sort or the default
+			orderString = selectedSortColumn() ? selectedSortColumn() : selectedView().primarySort;
+			// Add the second and third orders to the string
+			orderString = orderString + ', category.name, description';
+			// Go get the intervention			
+			theseInterventions = datacontext.getInterventionsQuery(params, orderString);
+			myInterventions(theseInterventions);			
+        }
 
         var myToDosChart = ko.computed(function () {
             var subscribers = myToDos();
@@ -703,8 +731,8 @@ define(['services/session', 'services/datacontext', 'config.services', 'models/b
                 initializeViewModel();
                 initialized = true;
             }
-			else{
-				refreshTodos();
+            else {                
+                refreshView();
 			}
             return true;
         }
@@ -722,7 +750,6 @@ define(['services/session', 'services/datacontext', 'config.services', 'models/b
 			refreshView();
             initialized = true;
             return true;
-
         };
 
         // Toggle which column is open
@@ -818,36 +845,84 @@ define(['services/session', 'services/datacontext', 'config.services', 'models/b
 		}
 		
 		function refreshTodos() {
-			maxToToDosLoaded(false);
-			todosProcessing(true);			
+			maxToToDosLoaded(false);					
 			clearTodosCacheAndLoad();
 		}
+        
+		function refreshInterventions() {
+		    loadInterventionsFromServer();
+		}
+
+        //can be used when implementing paging because we need to clear old page data and push new data
+        function clearInterventionsCacheAndLoad(){            
+			//assign empty array so interventions wount be referenced from ko data binding of the views that had them showing.			
+			myInterventions([]);
+			//interventionsProcessing(true);
+			var interventions = datacontext.getInterventionsQuery([], null);
+			//empty the collection. the interventions should be cleaned out by garbage collector.
+			localCollections.interventions([]);				
+			setTimeout( function(){
+				//short delay to allow the ko data binding to release references to these todos, before removing them: 
+				if( interventions && interventions.length > 0 ){										
+					ko.utils.arrayForEach( interventions, function(intervention){
+						if( intervention ){
+							//remove from breeze cache:
+							intervention.entityAspect.setDeleted();
+							intervention.entityAspect.acceptChanges();															
+						}
+					});					
+				}
+				loadInterventionsFromServer();	//load first block with the new sort
+			}, 50);
+        }
+        
+        function loadInterventionsFromServer(){	
+            var params = {};//server side filtering object
+            params.InterventionFilterType = selectedView().interventionFilterType;
+            if (params.InterventionFilterType == 1)  {
+                params.CreatedById = session.currentUser().userId();
+                params.StatusIds = [1];
+            }
+            else if(params.InterventionFilterType == 2){
+                params.CreatedById = session.currentUser().userId();
+            }
+            else if (params.InterventionFilterType == 3) {
+                params.AssignedToId = session.currentUser().userId();                
+            }
+            else if (params.InterventionFilterType == 4) {
+                params.AssignedToId = session.currentUser().userId();
+                params.StatusIds = [1];
+            }
+			datacontext.getInterventions( null, params).then( interventionsReturned );
+		}
+
+        function interventionsReturned() {            
+            getLocalInterventions();            
+		}
 		
-        // Force refresh todos from the server
+        // Force refresh from the server
         function refreshView() {
-			
 			if( selectedView() && selectedView().type() == 'todos' ){
 				refreshTodos();
 			}
-			else{
-				//interventions
-				datacontext.getInterventions(null, { StatusIds: [1], AssignedToId: session.currentUser().userId() });
-				datacontext.getInterventions(null, { StatusIds: [1], CreatedById: session.currentUser().userId() });
-				datacontext.getInterventions(null, { StatusIds: [2,3], AssignedToId: session.currentUser().userId() });
-				datacontext.getInterventions(null, { StatusIds: [2,3], CreatedById: session.currentUser().userId() });
+			else{			    
+			    refreshInterventions();
 			}			            
         }
 
         // A view to select
-        function View(type, name, params, cols, prisort, remoteParams, backendSort) {
+        function View(type, name, params, cols, prisort, remoteParams, backendSort, interventionFilterType) {
             var self = this;
             self.type = ko.observable(type);
             self.name = ko.observable(name);
+            //following fields are used for filtering on client side
             self.parameters = params;
             self.columns = ko.observableArray(cols);
             self.primarySort = prisort ? prisort : 'dueDate desc';
 			self.remoteParams = remoteParams;
 			self.backendSort = backendSort ? backendSort : '-DueDate';
+            //following fields are used for filtering on server side
+			self.interventionFilterType = interventionFilterType;
         }
         
         // Summary object
@@ -858,7 +933,6 @@ define(['services/session', 'services/datacontext', 'config.services', 'models/b
             self.secondaryProperty = secprop;
         }
 		
-		function detached(){
-			
+		function detached(){			
 		}		
     });

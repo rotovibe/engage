@@ -7,6 +7,10 @@ using ServiceStack.ServiceClient.Web;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Diagnostics;
+using System.Linq;
+using System.Web.UI.WebControls;
+using Lucene.Net.Support;
 using AD = Phytel.API.AppDomain.NG.DTO;
 
 namespace Phytel.API.AppDomain.NG
@@ -181,6 +185,7 @@ namespace Phytel.API.AppDomain.NG
                         gv.FocusAreaIds = gdv.FocusAreaIds;
                         gv.Name = gdv.Name;
                         gv.StatusId = gdv.StatusId;
+                        gv.TemplateId = gdv.TemplateId;
                         gv.Barriers = GoalsUtil.GetChildView(gdv.BarriersData);
                         gv.Tasks = GoalsUtil.GetChildView(gdv.TasksData); ;
                         gv.Interventions = GoalsUtil.GetChildView(gdv.InterventionsData);
@@ -208,7 +213,7 @@ namespace Phytel.API.AppDomain.NG
                     "NG",
                     request.Version,
                     request.ContractNumber), request.UserId);
-
+               
                 GetPatientInterventionsDataResponse ddResponse =
                     client.Post<GetPatientInterventionsDataResponse>(url, new GetPatientInterventionsDataRequest
                     {
@@ -222,26 +227,63 @@ namespace Phytel.API.AppDomain.NG
                         StatusIds = request.StatusIds
 
                     } as object);
-
+                
                 if (ddResponse != null && ddResponse.InterventionsData != null)
                 {
-                    interventions = new List<PatientIntervention>();
-                    List<PatientInterventionData> dataList = ddResponse.InterventionsData;
-                    foreach (PatientInterventionData n in dataList)
+                    var filteredInterventions = ddResponse.InterventionsData;
+                    if (request.InterventionFilterType != 0)
                     {
-                        PatientIntervention i = GoalsUtil.ConvertToIntervention(n);
-                        // Call Patient DD to get patient details. 
-                        i.PatientDetails = GetPatientDetails(request.Version, request.ContractNumber, request.UserId, client, n.PatientId);
+                         filteredInterventions =  GetFilteredInterventions(ddResponse.InterventionsData,request);
+                    }
+                    interventions = new List<PatientIntervention>();                    
+                    var patientIds = filteredInterventions.Select(x => x.PatientId).ToList();
+                    var patientsDetails = GetPatientsDetails(request.Version, request.ContractNumber, request.UserId, client, patientIds);
+
+                    foreach (PatientInterventionData n in filteredInterventions)
+                    {
+                        PatientIntervention i = GoalsUtil.ConvertToIntervention(n);                        
+                        i.PatientDetails = patientsDetails.FirstOrDefault(x => x.Id == n.PatientId);
                         i.PatientId = n.PatientId;
                         interventions.Add(i);
                     }
-                }
+                }               
             }
             catch
             {
                 throw;
             }
             return interventions;
+        }
+
+        public static List<PatientInterventionData> GetFilteredInterventions(List<PatientInterventionData> interventionsData, GetInterventionsRequest request)
+        {
+            if(interventionsData == null || request == null)
+            {
+                throw new ArgumentNullException();
+            }
+
+            var res = new List<PatientInterventionData>();
+            switch (request.InterventionFilterType)
+            {
+                case InterventionFilterType.AssignedToOthers:
+                    res = interventionsData.Where(
+                       x => x.CreatedById == request.UserId && x.AssignedToId != request.UserId && x.StatusId == (int)InterventionStatus.Open).ToList();
+                    break;
+                case InterventionFilterType.ClosedByOthers:
+                    res = interventionsData.Where(
+                        x => x.CreatedById == request.UserId && x.AssignedToId != request.UserId && x.StatusId != (int)InterventionStatus.Open).ToList();
+                    break;
+                case InterventionFilterType.MyClosedList:
+                    res = interventionsData.Where(
+                       x => x.AssignedToId == request.UserId && x.StatusId != (int)InterventionStatus.Open).ToList();
+                    break;
+                case InterventionFilterType.MyOpenList:               
+                default:
+                    res = interventionsData.Where(
+                        x => x.AssignedToId == request.UserId && x.StatusId == (int)InterventionStatus.Open).ToList();
+                    break;
+            }
+            return res;
         }
 
         private static DateTime? GetDateSortValue(DateTime? DueDate)
@@ -256,22 +298,12 @@ namespace Phytel.API.AppDomain.NG
             {
                 //[Route("/{Context}/{Version}/{ContractNumber}/Goal/Tasks", "POST")]
                 IRestClient client = new JsonServiceClient();
-                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Goal/Tasks",
-                    DDPatientGoalsServiceUrl,
-                    "NG",
-                    request.Version,
-                    request.ContractNumber), request.UserId);
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Goal/Tasks", DDPatientGoalsServiceUrl, "NG", request.Version, request.ContractNumber), request.UserId);
 
-                GetPatientTasksDataResponse ddResponse =
-                    client.Post<GetPatientTasksDataResponse>(url, new GetPatientTasksDataRequest
-                    {
-                        Context = "NG",
-                        ContractNumber = request.ContractNumber,
-                        Version = request.Version,
-                        UserId = request.UserId,
-                        StatusIds = request.StatusIds,
-                        PatientId = request.PatientId
-                    } as object);
+                GetPatientTasksDataResponse ddResponse = client.Post<GetPatientTasksDataResponse>(url, new GetPatientTasksDataRequest
+                {
+                    Context = "NG", ContractNumber = request.ContractNumber, Version = request.Version, UserId = request.UserId, StatusIds = request.StatusIds, PatientId = request.PatientId
+                } as object);
 
                 if (ddResponse != null && ddResponse.TasksData != null)
                 {
@@ -292,6 +324,7 @@ namespace Phytel.API.AppDomain.NG
             }
             return tasks;
         }
+
         #endregion
 
         #region Internal Methods
@@ -304,16 +337,9 @@ namespace Phytel.API.AppDomain.NG
 
                 IRestClient client = new JsonServiceClient();
 
-                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Goal/{5}/Delete/",
-                    DDPatientGoalsServiceUrl,
-                    "NG",
-                    request.Version,
-                    request.ContractNumber,
-                    request.PatientId,
-                    request.PatientGoalId), request.UserId);
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Goal/{5}/Delete/", DDPatientGoalsServiceUrl, "NG", request.Version, request.ContractNumber, request.PatientId, request.PatientGoalId), request.UserId);
 
-                DeletePatientGoalDataResponse response = client.Delete<DeletePatientGoalDataResponse>(
-                    url);
+                DeletePatientGoalDataResponse response = client.Delete<DeletePatientGoalDataResponse>(url);
 
                 if (response != null)
                 {
@@ -336,17 +362,9 @@ namespace Phytel.API.AppDomain.NG
 
                 IRestClient client = new JsonServiceClient();
 
-                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Goal/{5}/Barrier/{6}/Delete/",
-                    DDPatientGoalsServiceUrl,
-                    "NG",
-                    request.Version,
-                    request.ContractNumber,
-                    request.PatientId,
-                    request.PatientGoalId,
-                   id), request.UserId);
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Goal/{5}/Barrier/{6}/Delete/", DDPatientGoalsServiceUrl, "NG", request.Version, request.ContractNumber, request.PatientId, request.PatientGoalId, id), request.UserId);
 
-                DeleteBarrierDataResponse response = client.Delete<DeleteBarrierDataResponse>(
-                    url);
+                DeleteBarrierDataResponse response = client.Delete<DeleteBarrierDataResponse>(url);
 
                 if (response != null)
                 {
@@ -369,17 +387,9 @@ namespace Phytel.API.AppDomain.NG
 
                 IRestClient client = new JsonServiceClient();
 
-                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Goal/{5}/Task/{6}/Delete/",
-                    DDPatientGoalsServiceUrl,
-                    "NG",
-                    request.Version,
-                    request.ContractNumber,
-                    request.PatientId,
-                    request.PatientGoalId,
-                    id), request.UserId);
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Goal/{5}/Task/{6}/Delete/", DDPatientGoalsServiceUrl, "NG", request.Version, request.ContractNumber, request.PatientId, request.PatientGoalId, id), request.UserId);
 
-                DeleteTaskDataResponse response = client.Delete<DeleteTaskDataResponse>(
-                    url);
+                DeleteTaskDataResponse response = client.Delete<DeleteTaskDataResponse>(url);
 
                 if (response != null)
                 {
@@ -402,17 +412,9 @@ namespace Phytel.API.AppDomain.NG
 
                 IRestClient client = new JsonServiceClient();
 
-                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Goal/{5}/Intervention/{6}/Delete/",
-                    DDPatientGoalsServiceUrl,
-                    "NG",
-                    request.Version,
-                    request.ContractNumber,
-                    request.PatientId,
-                    request.PatientGoalId,
-                    id), request.UserId);
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Goal/{5}/Intervention/{6}/Delete/", DDPatientGoalsServiceUrl, "NG", request.Version, request.ContractNumber, request.PatientId, request.PatientGoalId, id), request.UserId);
 
-                DeleteInterventionDataResponse response = client.Delete<DeleteInterventionDataResponse>(
-                    url);
+                DeleteInterventionDataResponse response = client.Delete<DeleteInterventionDataResponse>(url);
 
                 if (response != null)
                 {
@@ -434,15 +436,9 @@ namespace Phytel.API.AppDomain.NG
             {
                 IRestClient client = new JsonServiceClient();
 
-                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Attributes/{4}",
-                    DDPatientGoalsServiceUrl,
-                    "NG",
-                    request.Version,
-                    request.ContractNumber,
-                    typeId), request.UserId);
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Attributes/{4}", DDPatientGoalsServiceUrl, "NG", request.Version, request.ContractNumber, typeId), request.UserId);
 
-                GetCustomAttributesDataResponse response = client.Get<GetCustomAttributesDataResponse>(
-                    url);
+                GetCustomAttributesDataResponse response = client.Get<GetCustomAttributesDataResponse>(url);
 
                 if (response != null && response.CustomAttributes != null)
                 {
@@ -450,12 +446,7 @@ namespace Phytel.API.AppDomain.NG
                     {
                         attrList.Add(new CustomAttribute
                         {
-                            Id = ca.Id,
-                            Name = ca.Name,
-                            ControlType = ca.ControlType,
-                            Order = ca.Order,
-                            Options = GoalsUtil.ConvertToOptionList(ca.Options),
-                            Required = ca.Required
+                            Id = ca.Id, Name = ca.Name, ControlType = ca.ControlType, Order = ca.Order, Options = GoalsUtil.ConvertToOptionList(ca.Options), Required = ca.Required
                         });
                     });
                 }
@@ -477,17 +468,9 @@ namespace Phytel.API.AppDomain.NG
 
                 IRestClient client = new JsonServiceClient();
 
-                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Goal/{5}/Intervention/{6}/Update",
-                    DDPatientGoalsServiceUrl,
-                    "NG",
-                    request.Version,
-                    request.ContractNumber,
-                    request.PatientId,
-                    request.Goal.Id,
-                    pi.Id), request.UserId);
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Goal/{5}/Intervention/{6}/Update", DDPatientGoalsServiceUrl, "NG", request.Version, request.ContractNumber, request.PatientId, request.Goal.Id, pi.Id), request.UserId);
 
-                PutUpdateInterventionResponse response = client.Put<PutUpdateInterventionResponse>(
-                    url, new PutUpdateInterventionRequest { Intervention = pi, UserId = request.UserId, InterventionIdsList = interventionsIds } as object);
+                PutUpdateInterventionResponse response = client.Put<PutUpdateInterventionResponse>(url, new PutUpdateInterventionRequest {Intervention = pi, UserId = request.UserId, InterventionIdsList = interventionsIds} as object);
 
                 if (response != null)
                 {
@@ -512,17 +495,9 @@ namespace Phytel.API.AppDomain.NG
 
                 IRestClient client = new JsonServiceClient();
 
-                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Goal/{5}/Barrier/{6}/Update",
-                    DDPatientGoalsServiceUrl,
-                    "NG",
-                    request.Version,
-                    request.ContractNumber,
-                    request.PatientId,
-                    request.Goal.Id,
-                   bd.Id), request.UserId);
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Goal/{5}/Barrier/{6}/Update", DDPatientGoalsServiceUrl, "NG", request.Version, request.ContractNumber, request.PatientId, request.Goal.Id, bd.Id), request.UserId);
 
-                PutUpdateBarrierResponse response = client.Put<PutUpdateBarrierResponse>(
-                    url, new PutUpdateBarrierRequest { UserId = request.UserId, Barrier = bd, BarrierIdsList = barrierIds } as object);
+                PutUpdateBarrierResponse response = client.Put<PutUpdateBarrierResponse>(url, new PutUpdateBarrierRequest {UserId = request.UserId, Barrier = bd, BarrierIdsList = barrierIds} as object);
 
                 if (response != null)
                 {
@@ -547,17 +522,9 @@ namespace Phytel.API.AppDomain.NG
 
                 IRestClient client = new JsonServiceClient();
 
-                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Goal/{5}/Task/{6}/Update",
-                    DDPatientGoalsServiceUrl,
-                    "NG",
-                    request.Version,
-                    request.ContractNumber,
-                    request.PatientId,
-                    request.Goal.Id,
-                    td.Id), request.UserId);
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Goal/{5}/Task/{6}/Update", DDPatientGoalsServiceUrl, "NG", request.Version, request.ContractNumber, request.PatientId, request.Goal.Id, td.Id), request.UserId);
 
-                PutUpdateTaskResponse response = client.Put<PutUpdateTaskResponse>(
-                    url, new PutUpdateTaskRequest { Task = td, TaskIdsList = taskIds, UserId = request.UserId } as object);
+                PutUpdateTaskResponse response = client.Put<PutUpdateTaskResponse>(url, new PutUpdateTaskRequest {Task = td, TaskIdsList = taskIds, UserId = request.UserId} as object);
 
                 if (response != null)
                 {
@@ -580,17 +547,9 @@ namespace Phytel.API.AppDomain.NG
 
                 IRestClient client = new JsonServiceClient();
 
-                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Goal/{5}/Intervention/Initialize",
-                    DDPatientGoalsServiceUrl,
-                    "NG",
-                    request.Version,
-                    request.ContractNumber,
-                    request.PatientId,
-                    request.PatientGoalId), request.UserId);
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Goal/{5}/Intervention/Initialize", DDPatientGoalsServiceUrl, "NG", request.Version, request.ContractNumber, request.PatientId, request.PatientGoalId), request.UserId);
 
-                PutInitializeInterventionResponse response = client.Put<PutInitializeInterventionResponse>(
-                    url,
-                    new PutInitializeInterventionRequest() as object);
+                PutInitializeInterventionResponse response = client.Put<PutInitializeInterventionResponse>(url, new PutInitializeInterventionRequest() as object);
 
                 if (response != null)
                 {
@@ -618,16 +577,9 @@ namespace Phytel.API.AppDomain.NG
 
                 IRestClient client = new JsonServiceClient();
 
-                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Goal/{5}/Update",
-                    DDPatientGoalsServiceUrl,
-                    "NG",
-                    request.Version,
-                    request.ContractNumber,
-                    request.PatientId,
-                    request.Goal.Id), request.UserId);
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Goal/{5}/Update", DDPatientGoalsServiceUrl, "NG", request.Version, request.ContractNumber, request.PatientId, request.Goal.Id), request.UserId);
 
-                PutUpdateGoalDataResponse response = client.Put<PutUpdateGoalDataResponse>(
-                    url, new PutUpdateGoalDataRequest { Goal = convertToPatientGoalData(request.Goal), UserId = request.UserId } as object);
+                PutUpdateGoalDataResponse response = client.Put<PutUpdateGoalDataResponse>(url, new PutUpdateGoalDataRequest {Goal = convertToPatientGoalData(request.Goal), UserId = request.UserId} as object);
 
                 if (response != null && response.GoalData != null)
                 {
@@ -655,17 +607,9 @@ namespace Phytel.API.AppDomain.NG
 
                 IRestClient client = new JsonServiceClient();
 
-                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Goal/{5}/Intervention/{6}/Update",
-                    DDPatientGoalsServiceUrl,
-                    "NG",
-                    request.Version,
-                    request.ContractNumber,
-                    request.PatientId,
-                    request.PatientGoalId,
-                    request.Id), request.UserId);
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Goal/{5}/Intervention/{6}/Update", DDPatientGoalsServiceUrl, "NG", request.Version, request.ContractNumber, request.PatientId, request.PatientGoalId, request.Id), request.UserId);
 
-                PutUpdateInterventionResponse response = client.Put<PutUpdateInterventionResponse>(
-                    url, new PutUpdateInterventionRequest { Intervention = GoalsUtil.ConvertToInterventionData(request.Intervention) , UserId = request.UserId} as object);
+                PutUpdateInterventionResponse response = client.Put<PutUpdateInterventionResponse>(url, new PutUpdateInterventionRequest {Intervention = GoalsUtil.ConvertToInterventionData(request.Intervention), UserId = request.UserId} as object);
 
                 if (response != null && response.InterventionData != null)
                 {
@@ -693,17 +637,9 @@ namespace Phytel.API.AppDomain.NG
 
                 IRestClient client = new JsonServiceClient();
 
-                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Goal/{5}/Task/{6}/Update",
-                    DDPatientGoalsServiceUrl,
-                    "NG",
-                    request.Version,
-                    request.ContractNumber,
-                    request.PatientId,
-                    request.PatientGoalId,
-                    request.Id), request.UserId);
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Goal/{5}/Task/{6}/Update", DDPatientGoalsServiceUrl, "NG", request.Version, request.ContractNumber, request.PatientId, request.PatientGoalId, request.Id), request.UserId);
 
-                PutUpdateTaskResponse response = client.Put<PutUpdateTaskResponse>(
-                    url, new PutUpdateTaskRequest { Task = GoalsUtil.ConvertToPatientTaskData(request.Task), UserId = request.UserId } as object);
+                PutUpdateTaskResponse response = client.Put<PutUpdateTaskResponse>(url, new PutUpdateTaskRequest {Task = GoalsUtil.ConvertToPatientTaskData(request.Task), UserId = request.UserId} as object);
 
                 if (response != null && response.TaskData != null)
                 {
@@ -730,17 +666,9 @@ namespace Phytel.API.AppDomain.NG
 
                 IRestClient client = new JsonServiceClient();
 
-                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Goal/{5}/Barrier/{6}/Update",
-                    DDPatientGoalsServiceUrl,
-                    "NG",
-                    request.Version,
-                    request.ContractNumber,
-                    request.PatientId,
-                    request.PatientGoalId,
-                    request.Id), request.UserId);
+                string url = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/Patient/{4}/Goal/{5}/Barrier/{6}/Update", DDPatientGoalsServiceUrl, "NG", request.Version, request.ContractNumber, request.PatientId, request.PatientGoalId, request.Id), request.UserId);
 
-                PutUpdateBarrierResponse response = client.Put<PutUpdateBarrierResponse>(
-                    url, new PutUpdateBarrierRequest { Barrier = GoalsUtil.ConvertToPatientBarrierData(request.Barrier), UserId = request.UserId } as object);
+                PutUpdateBarrierResponse response = client.Put<PutUpdateBarrierResponse>(url, new PutUpdateBarrierRequest {Barrier = GoalsUtil.ConvertToPatientBarrierData(request.Barrier), UserId = request.UserId} as object);
 
                 if (response != null && response.BarrierData != null)
                 {
@@ -757,25 +685,12 @@ namespace Phytel.API.AppDomain.NG
         #endregion
 
         #region Private Methods
+
         private static PatientGoalData convertToPatientGoalData(PatientGoal pg)
         {
             PatientGoalData pgd = new PatientGoalData
             {
-                Id = pg.Id,
-                CustomAttributes = GetPatientGoalAttributes(pg.CustomAttributes),
-                EndDate = pg.EndDate,
-                FocusAreaIds = pg.FocusAreaIds,
-                Name = pg.Name,
-                PatientId = pg.PatientId,
-                ProgramIds = pg.ProgramIds,
-                SourceId = pg.SourceId,
-                StartDate = pg.StartDate,
-                StatusId = pg.StatusId,
-                TargetDate = pg.TargetDate,
-                TargetValue = pg.TargetValue,
-                TypeId = pg.TypeId,
-                TemplateId = pg.TemplateId,
-                Details = pg.Details
+                Id = pg.Id, CustomAttributes = GetPatientGoalAttributes(pg.CustomAttributes), EndDate = pg.EndDate, FocusAreaIds = pg.FocusAreaIds, Name = pg.Name, PatientId = pg.PatientId, ProgramIds = pg.ProgramIds, SourceId = pg.SourceId, StartDate = pg.StartDate, StatusId = pg.StatusId, TargetDate = pg.TargetDate, TargetValue = pg.TargetValue, TypeId = pg.TypeId, TemplateId = pg.TemplateId, Details = pg.Details
             };
             return pgd;
         }
@@ -789,8 +704,7 @@ namespace Phytel.API.AppDomain.NG
                 {
                     ad.Add(new CustomAttributeData
                     {
-                        Values = a.Values,
-                        Id = a.Id
+                        Values = a.Values, Id = a.Id
                     });
                 });
             }
@@ -803,10 +717,7 @@ namespace Phytel.API.AppDomain.NG
 
             if (list != null && list.Count > 0)
             {
-                list.ForEach(t =>
-                {
-                    taskIds.Add(t.Id);
-                });
+                list.ForEach(t => { taskIds.Add(t.Id); });
             }
 
             return taskIds;
@@ -818,10 +729,7 @@ namespace Phytel.API.AppDomain.NG
 
             if (list != null && list.Count > 0)
             {
-                list.ForEach(t =>
-                {
-                    taskIds.Add(t.Id);
-                });
+                list.ForEach(t => { taskIds.Add(t.Id); });
             }
 
             return taskIds;
@@ -833,10 +741,7 @@ namespace Phytel.API.AppDomain.NG
 
             if (list != null && list.Count > 0)
             {
-                list.ForEach(t =>
-                {
-                    barrierIds.Add(t.Id);
-                });
+                list.ForEach(t => { barrierIds.Add(t.Id); });
             }
 
             return barrierIds;
@@ -847,12 +752,7 @@ namespace Phytel.API.AppDomain.NG
             PatientDetails patient = null;
             if (!string.IsNullOrEmpty(patientId))
             {
-                string patientUrl = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/patient/{4}",
-                                                                                    DDPatientServiceURL,
-                                                                                    "NG",
-                                                                                    version,
-                                                                                    contractNumber,
-                                                                                    patientId), userId);
+                string patientUrl = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/patient/{4}", DDPatientServiceURL, "NG", version, contractNumber, patientId), userId);
 
                 GetPatientDataResponse response = client.Get<GetPatientDataResponse>(patientUrl);
 
@@ -860,17 +760,36 @@ namespace Phytel.API.AppDomain.NG
                 {
                     patient = new PatientDetails
                     {
-                        Id = response.Patient.Id,
-                        FirstName = response.Patient.FirstName,
-                        LastName = response.Patient.LastName,
-                        MiddleName = response.Patient.MiddleName,
-                        PreferredName = response.Patient.PreferredName,
-                        Suffix = response.Patient.Suffix
+                        Id = response.Patient.Id, FirstName = response.Patient.FirstName, LastName = response.Patient.LastName, MiddleName = response.Patient.MiddleName, PreferredName = response.Patient.PreferredName, Suffix = response.Patient.Suffix
                     };
                 }
             }
             return patient;
         }
+
+        public static List<PatientDetails> GetPatientsDetails(double version, string contractNumber, string userId, IRestClient client, List<string> patientIds)
+        {
+            List<PatientDetails> patients = new List<PatientDetails>();
+            if (patientIds != null)
+            {
+                string patientUrl = Common.Helper.BuildURL(string.Format("{0}/{1}/{2}/{3}/patients/Ids", DDPatientServiceURL, "NG", version, contractNumber), userId);
+                GetPatientsDataRequest request = new GetPatientsDataRequest()
+                {
+                    ContractNumber = contractNumber, Context = "NG", Version = version, UserId = userId, PatientIds = patientIds
+                };
+                GetPatientsDataResponse response = client.Post<GetPatientsDataResponse>(patientUrl, request);
+
+                if (response != null && response.Patients != null)
+                {
+                    patients.AddRange(response.Patients.Select(patient => new PatientDetails
+                    {
+                        Id = patient.Key, FirstName = patient.Value.FirstName, LastName = patient.Value.LastName, MiddleName = patient.Value.MiddleName, PreferredName = patient.Value.PreferredName, Suffix = patient.Value.Suffix
+                    }));
+                }
+            }
+            return patients;
+        }
+
         #endregion
     }
 }

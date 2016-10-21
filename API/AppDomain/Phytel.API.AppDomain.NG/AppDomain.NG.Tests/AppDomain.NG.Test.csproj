@@ -154,6 +154,7 @@
     <Compile Include="Factories\NGManagerFactory.cs" />
     <Compile Include="Factories\SampleFactory.cs" />
     <Compile Include="Factories\SecurityManagerFactory.cs" />
+    <Compile Include="GoalsEndPointUtil_Test.cs" />
     <Compile Include="Medication\Data_PatientMedFrequency_Test.cs" />
     <Compile Include="Medication\Data_MedicationMap_Test.cs" />
     <Compile Include="Medication\Data_PatientMedication_Test.cs" />
