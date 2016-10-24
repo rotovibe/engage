@@ -18,6 +18,9 @@ namespace Phytel.API.DataDomain.Medication.DTO
         [ApiMember(Name = "Strength", Description = "Strength of the medication.", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string Strength { get; set; }
 
+        [ApiMember(Name = "Unit", Description = "Unit of the medication.", ParameterType = "property", DataType = "string", IsRequired = true)]
+        public string Unit { get; set; }
+
         [ApiMember(Name = "UserId", Description = "UserId of the logged in user", ParameterType = "property", DataType = "string", IsRequired = true)]
         public string UserId { get; set; }
 

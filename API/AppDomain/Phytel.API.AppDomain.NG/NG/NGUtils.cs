@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Phytel.API.DataDomain.Contact.DTO;
 using ServiceStack.Common.Extensions;
+using ServiceStack.ServiceInterface.ServiceModel;
 
 namespace Phytel.API.AppDomain.NG
 {
@@ -776,5 +777,34 @@ namespace Phytel.API.AppDomain.NG
             contact.PreferredName = res.Trim();
         }
 
+        public static void GetMedStrengthAndUnit(string strengthAndUnit, out string strength, out string unit)
+        {
+            strength = string.Empty;
+            unit = string.Empty;
+           
+            if (!string.IsNullOrEmpty(strengthAndUnit))
+            {
+                string[] combined = strengthAndUnit.Split(';');
+                if (combined.Length > 0)
+                {
+                    List<string> strList = new List<string>();
+                    List<string> unitList = new List<string>();
+                    foreach (string s in combined)
+                    {
+                        string[] str = s.Trim().Split(new char[] {' '}, StringSplitOptions.RemoveEmptyEntries);
+                        if (str.Length > 0)
+                        {
+                            strList.Add(str[0]);
+                        }
+                        if (str.Length > 1)
+                        {
+                            unitList.Add(str[1]);
+                        }
+                    };
+                    strength = string.Join("; ", strList);
+                    unit = string.Join("; ", unitList);
+                }
+            }
+        }
     }
 }
