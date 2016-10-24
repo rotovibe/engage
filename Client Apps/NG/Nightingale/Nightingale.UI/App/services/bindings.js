@@ -1035,7 +1035,7 @@ define(['services/formatter', 'services/dateHelper'],
                     events: ko.utils.unwrapObservable(viewModel.events),
                     header: viewModel.header,
                     editable: viewModel.editable,
-                    contentHeight: 999999,
+                    height:1600,
                     eventClick: viewModel.eventClick
                 });
                 $(element).fullCalendar('gotoDate', ko.utils.unwrapObservable(viewModel.viewDate));
