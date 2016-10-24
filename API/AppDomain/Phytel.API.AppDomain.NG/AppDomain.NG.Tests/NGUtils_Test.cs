@@ -8,6 +8,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Phytel.API.AppDomain.NG.DTO;
 using MongoDB.Bson;
 using Phytel.API.DataDomain.Program.DTO;
+using ServiceStack.Common;
+
 namespace Phytel.API.AppDomain.NG.Tests
 {
     [TestClass()]
@@ -149,7 +151,44 @@ namespace Phytel.API.AppDomain.NG.Tests
         }
         #endregion
 
+        [TestClass()]
+        public class Medication_Test
+        {
+            [TestMethod]
+            public void GetMedStrengthAndUnit_When_Both_Strength_And_Unit_Are_Present_Success()
+            {
+                //Arrange
+                string strength = string.Empty;
+                string unit = string.Empty;
 
+                string strengthAndUnit = 
+                    "6 [hp_C]/33.3mL; 6 [hp_C]/33.3mL; 6 [hp_X]/33.3mL; 6 [hp_X]/33.3mL; 6 [hp_X]/33.3mL";
+
+                //Act
+                NGUtils.GetMedStrengthAndUnit(strengthAndUnit,out strength,out unit);
+
+                //Assert
+                Assert.IsTrue(strength=="6; 6; 6; 6; 6" && unit == "[hp_C]/33.3mL; [hp_C]/33.3mL; [hp_X]/33.3mL; [hp_X]/33.3mL; [hp_X]/33.3mL");
+                
+            }
+
+            [TestMethod]
+            public void GetMedStrengthAndUnit_When_Both_Strength_And_Unit_AreNot_Present_Success()
+            {
+                //Arrange
+                string strength = string.Empty;
+                string unit = string.Empty;
+
+                string strengthAndUnit = string.Empty;                    
+
+                //Act
+                NGUtils.GetMedStrengthAndUnit(strengthAndUnit, out strength, out unit);
+
+                //Assert
+                Assert.IsTrue(strength.IsEmpty() && unit.IsEmpty());
+
+            }
+        }
 
 
 
