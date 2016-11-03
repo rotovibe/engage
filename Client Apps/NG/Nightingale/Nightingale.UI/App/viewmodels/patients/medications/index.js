@@ -236,13 +236,13 @@
 
     function editMedication(medication, msg) {
         var modalEntity = ko.observable(new MedicationModalEntity(medication));
-        var otherRefusalReasonBeforeEdit = medication.otherRefusalReason(); 
+         medication.editMedicationCancelled(false);
         var saveOverride = function () {
             datacontext.saveMedication(modalEntity().medication());
         };
         var cancelOverride = function () {
             var medicationCancel = modalEntity().medication();
-            medicationCancel.recalcOtherRefusalReasonString(otherRefusalReasonBeforeEdit); 
+             medicationCancel.editMedicationCancelled(true);            
             medicationCancel.entityAspect.rejectChanges();
         };
         msg = msg ? msg : 'Edit Medication';

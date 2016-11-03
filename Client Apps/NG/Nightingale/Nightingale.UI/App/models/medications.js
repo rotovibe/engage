@@ -310,17 +310,7 @@ define(['services/session', 'services/dateHelper'],
                     return thisArray;
                 });
                 medication.editMedicationCancelled = ko.observable(false);
-                medication.recalcOtherRefusalReasonString = function(oldOtherRefusalReason) {
-                    if (oldOtherRefusalReason){
-                        medication.editMedicationCancelled(true);
-					    medication.otherRefusalReason(oldOtherRefusalReason);
-                    }
-                    else{
-                        medication.editMedicationCancelled(false);
-                    }        		
-        		};
-
-                
+               
             }
 
             metadataStore.addEntityType({
