@@ -172,7 +172,7 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
             return thismed().refusalReason().name() === 'Other';
           } else {
             if (thismed()) {
-              thismed().otherRefusalReason(null);
+              if (!thismed().editMedicationCancelled() ) thismed().otherRefusalReason(null);
             }
             return false;
           }
@@ -186,8 +186,10 @@ define(['models/base', 'config.services', 'services/datacontext', 'services/sess
             var statusName = thismed().status().name();
             var result = (statusName === 'Refused' || statusName === 'Not Done Medical');
             if (!result) {
-              thismed().otherRefusalReason(null);
-              thismed().refusalReasonId(null);
+              if (!thismed().editMedicationCancelled() ){
+                 thismed().otherRefusalReason(null);
+                 thismed().refusalReasonId(null);
+              }
             }
             return result;
           } else {

@@ -309,7 +309,8 @@ define(['services/session', 'services/dateHelper'],
                     });
                     return thisArray;
                 });
-
+                medication.editMedicationCancelled = ko.observable(false);
+               
             }
 
             metadataStore.addEntityType({
