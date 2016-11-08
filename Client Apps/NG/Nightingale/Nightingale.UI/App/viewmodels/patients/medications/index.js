@@ -266,6 +266,11 @@
         var modalEntity = ko.observable(new AllergyModalEntity(allergy));
         var reactionIdsBeforeEdit = allergy.reactionIds().slice(0);
         var saveOverride = function () {
+            if (!modalEntity().allergy().isValid()) {               
+                var keepModalOpen = true;
+                return keepModalOpen;
+            }
+
             datacontext.saveAllergies([modalEntity().allergy()], 'Update').then(saveCompleted);
 
             function saveCompleted() {
