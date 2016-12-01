@@ -451,6 +451,19 @@ define(['config.services', 'services/session', 'services/entityserializer', 'ser
 					}
 					return name;
 				});
+               
+				program.nameByElementState = ko.computed(function () {				    
+				    if (program.elementState() != 5 && program.elementState() != 6) {				            
+				        return program.name();
+				    }
+				    //5 or 6
+				    else {
+				        var today = moment(new Date());
+				        var stateUpdatedDate = moment(program.stateUpdatedOn());				            
+				        return (program.name() + " - " + moment(program.assignDate())
+                            .format('MM/DD/YYYY'));				            			            
+				    }
+				});
 		    };
 
 		    function moduleInitializer(module) {

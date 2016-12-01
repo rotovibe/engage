@@ -206,34 +206,63 @@
 				return self.thisTouchPointId() - 100;
 			});
 			self.isShowing = self.settings.data.isShowing;
-			self.cancel = function () {
-				if( self.newNote() ){
-					self.newNote().entityAspect.rejectChanges();
-					self.createNewNote();
-				}
-				if( self.newTouchPoint() ){
-					self.newTouchPoint().entityAspect.rejectChanges();
-					// If there is a new touch point subscription,
-					if (self.newTouchPointToken) {
-						// Dispose of it
-						self.newTouchPointToken.dispose();
-					}
-					self.createNewTouchPoint();
-				}
-				if( self.newUtilization() ){
-					self.newUtilization().entityAspect.rejectChanges();
-					self.createNewUtilization();
-				}
-				self.isShowing(false);
+
+			self.cancelTouchPoint = function () {
+			    if (self.newTouchPoint()) {
+			        self.newTouchPoint().entityAspect.rejectChanges();
+			        if (self.newTouchPointToken) {
+			            self.newTouchPointToken.dispose();
+			        }
+			        self.createNewTouchPoint();			        
+			    }
+			    self.closePopupIfNoMoreChanges();
+			}
+
+			self.cancelUtilization = function () {
+			    if (self.newUtilization()) {
+			        self.newUtilization().entityAspect.rejectChanges();
+			        self.createNewUtilization();
+			    }
+			    self.closePopupIfNoMoreChanges();
+			}
+
+			self.cancelNote = function () {
+			    if (self.newNote()) {
+			        self.newNote().entityAspect.rejectChanges();
+			        self.createNewNote();
+			    }
+			    self.closePopupIfNoMoreChanges();
+			}
+
+			self.cancel = function () {                
+			    self.cancelNote();
+			    self.cancelTouchPoint();
+			    self.cancelUtilization();
 			};
+
+			self.closePopupIfNoMoreChanges = function(){
+			    if (!self.newNote().isDirty() && !self.newTouchPoint().isDirty() && !self.newUtilization().isDirty()) {
+			        self.isShowing(false);
+			    }
+			}
 
 			self.availablePrograms = ko.computed(function () {
 				var computedPrograms = [];
 				if (self.selectedPatient()) {
 					var thesePrograms = self.selectedPatient().programs.slice(0).sort(self.alphabeticalNameSort);
 					ko.utils.arrayForEach(thesePrograms, function (program) {
-						if (program.elementState() !== 6 && program.elementState() !== 1 && program.elementState() !== 5) {
-							computedPrograms.push(program);
+					    if (program.elementState() !== 1) {
+					        if (program.elementState() != 5 && program.elementState() != 6) {
+					            computedPrograms.push(program);					            
+					        }
+					        //5 or 6 within last 30 days
+					        else {
+					            var today = moment(new Date());
+					            var stateUpdatedDate = moment(program.stateUpdatedOn());
+					            if (today.diff(stateUpdatedDate, 'days') <= 30) {					                
+					                computedPrograms.push(program);
+					            }
+					        }
 						}
 					});
 				}

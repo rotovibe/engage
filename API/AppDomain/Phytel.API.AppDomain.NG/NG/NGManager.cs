@@ -894,7 +894,9 @@ namespace Phytel.API.AppDomain.NG
                             Status = p.Status,
                             ElementState = p.ElementState,
                             AttrEndDate = p.AttrEndDate,
-                            ProgramSourceId = p.ProgramSourceId
+                            ProgramSourceId = p.ProgramSourceId,
+                            StateUpdatedOn = p.StateUpdatedOnDate,
+                            AssignDate = p.AssignedOnDate
                         }));
 
                         result.Programs = adPs;
@@ -974,7 +976,8 @@ namespace Phytel.API.AppDomain.NG
                     TypeId = Constants.GeneralNoteTypeId,
                     CreatedById = request.UserId,
                     CreatedOn = DateTime.UtcNow,
-                    PatientId = request.PatientId
+                    PatientId = request.PatientId,
+                    DataSource = request.DataSource
                 };
                 InsertPatientNoteDataResponse noteDDResponse = client.Post<InsertPatientNoteDataResponse>(url, new InsertPatientNoteDataRequest
                 {

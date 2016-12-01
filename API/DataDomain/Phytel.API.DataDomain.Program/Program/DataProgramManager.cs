@@ -424,7 +424,9 @@ namespace Phytel.API.DataDomain.Program
                         ShortName = pd.ShortName,
                         Status = (int)pd.Status,
                         ElementState = (int)pd.State,
-                        AttrEndDate = pd.AttributeEndDate
+                        AttrEndDate = pd.AttributeEndDate,
+                        StateUpdatedOnDate = pd.StateUpdatedOn,
+                        AssignedOnDate = pd.AssignedOn
                             })
                         );
                         response.programs = lpi;

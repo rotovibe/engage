@@ -31,24 +31,8 @@ namespace Phytel.API.AppDomain.NG.Medication
                                     request.ContractNumber), request.UserId);
 
                 string strength = null;
-                List<string> strList = null;
-                if (!string.IsNullOrEmpty(request.PatientMedSupp.Strength))
-                {
-                    string[] combined = request.PatientMedSupp.Strength.Split(';');
-                    if (combined.Length > 0)
-                    {
-                        strList = new List<string>();
-                        foreach (string s in combined)
-                        {
-                            string[] str = s.Trim().Split(' ');
-                            if (str.Length > 0)
-                            {
-                                strList.Add(str[0]);
-                            }
-                        };
-                        strength = string.Join("; ", strList);
-                    }
-                }
+                string unit = null;
+                NGUtils.GetMedStrengthAndUnit(request.PatientMedSupp.Strength,out strength,out unit);
 
                 GetMedicationNDCsDataResponse dataDomainResponse = client.Post<GetMedicationNDCsDataResponse>(url, new GetMedicationNDCsDataRequest
                 {
@@ -58,6 +42,7 @@ namespace Phytel.API.AppDomain.NG.Medication
                     Version = request.Version,
                     Name = request.PatientMedSupp.Name,
                     Strength = strength,
+                    Unit = unit,
                     Form = request.PatientMedSupp.Form,
                     Route = request.PatientMedSupp.Route
                 } as object);

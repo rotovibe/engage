@@ -83,7 +83,7 @@
 		<div class="span2 align-right grey">Program(s):
 		</div>
 		<div class="span4 pad-left" data-bind="visible: patientId()">
-            <div data-bind="multiselect: { options: $parent.availablePrograms, values: programIds, idValue: 'id', text: 'name', label: 'programs', stringValue: programString, disable: $parent.noPatient }">
+            <div data-bind="multiselect: { options: $parent.availablePrograms, values: programIds, idValue: 'id', text: 'nameByElementState', label: 'programs', stringValue: programString, disable: $parent.noPatient }">
             </div>
 		</div>
 		<div class="span3 pad-left" data-bind="visible: !patientId()">

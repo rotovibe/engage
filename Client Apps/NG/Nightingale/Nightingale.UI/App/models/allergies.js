@@ -75,7 +75,7 @@ define(['services/session', 'services/dateHelper'],
 				'PatientAllergy', null, patientAllergyInitializer);
 
 		    function patientAllergyInitializer(allergy) {
-                allergy.isNew = ko.observable(false);
+                allergy.isNew = ko.observable(false);				
                 allergy.isUserCreated = ko.observable(false);
                 allergy.typeString = ko.computed(function () {
 		            checkDataContext();
@@ -174,9 +174,12 @@ define(['services/session', 'services/dateHelper'],
 					var result = (allergy.entityAspect.entityState.isModified() || allergy.isNew()) && allergy.sourceId();
 					return result;
 				}
+				
+				var updateReactions = ko.observable();
                 allergy.reactionString = ko.computed(function () {
 		            checkDataContext();
 		            var thisString = '';
+					
 		            ko.utils.arrayForEach(allergy.reactionIds(), function (allg) {
 		                var thisReacion = ko.utils.arrayFirst(datacontext.enums.reactions(), function (faEnum) {
 		                    return faEnum.id() === allg.id();
@@ -195,6 +198,13 @@ define(['services/session', 'services/dateHelper'],
 		            }
 		            return thisString;
 		        });
+
+				allergy.recalcReactionString = function(oldReactionIds) {
+					allergy.reactionIds.removeAll();	
+					for (i=0;i<oldReactionIds.length;i++){
+						allergy.reactionIds.push(oldReactionIds[i]);
+					}          		
+        		};
 		        // Inactivate this allergy
 				allergy.setStatus = function(statusId, doneBannerMessage){
 					checkDataContext();
