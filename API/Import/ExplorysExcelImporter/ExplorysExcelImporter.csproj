@@ -38,7 +38,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Phytel.Impersonator">
-      <HintPath>..\..\..\..\..\..\Shared\ReferenceBin\Phytel.Impersonator.dll</HintPath>
+      <HintPath>..\..\packages\Phytel.Service\Phytel.Impersonator.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
