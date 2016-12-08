@@ -3,8 +3,8 @@
 *	@module todo.edit 
 *	@class todo.edit
 */
-define(['services/datacontext', 'services/local.collections'],
-    function (datacontext, localCollections) {
+define(['services/datacontext', 'services/local.collections','services/navigation', 'plugins/router'],
+    function (datacontext, localCollections, navigation, router) {
 		
 		var subscriptionTokens= [];
         var alphabeticalSort = function (l, r) { return (l.preferredName() == r.preferredName()) ? (l.preferredName() > r.preferredName() ? 1 : -1) : (l.preferredName() > r.preferredName() ? 1 : -1) };
@@ -20,8 +20,9 @@ define(['services/datacontext', 'services/local.collections'],
 
         ctor.prototype.activate = function (settings) {
             var self = this;
-            self.settings = settings;
-            self.todo = self.settings.todo;		
+            self.settings = settings;           
+            self.todo = self.settings.todo;	
+             self.event = self.settings.event;	
             self.canSave = self.settings.canSave;
             self.showing = self.settings.showing;
             self.careManagers = datacontext.enums.careManagers;
@@ -40,6 +41,43 @@ define(['services/datacontext', 'services/local.collections'],
             self.hasErrors = ko.computed(function () {
                 return self.errors().length > 0;
             });
+            
+            self.btnMsg = ko.computed(function () {
+                var thisValue = 'Go to Individual';
+                // // If it is an intervention,
+                // if (self.event && self.event() && self.event().type().name() === 'Intervention') {
+                    // thisValue = '';
+                // } else {
+                    // thisValue = 'Go to Individual';
+                // } 
+                return thisValue;
+            });
+            self.gotoSource = function () {
+                // If it is an intervention,
+                if (self.event && self.event() && self.event().type().name() === 'Intervention') {
+                    self.showing(false);
+                    router.navigate('#patients/' + self.event().patientId());
+                    // // Make sure we go to the patient's overview page
+                    navigation.indexOverride(0);
+                   
+                } else {
+                    self.showing(false);
+                    // Else it is a todo so navigate to the patient anyway
+                    router.navigate('#patients/' + self.event().patientId());
+                    // // Make sure we go to the patient's overview page
+                    navigation.indexOverride(0);
+                    
+                }
+            };	
+            self.hasPatient = ko.computed(function () {
+                if (!self.event) return false;
+                return !!self.event().patientId();
+            });		
+
+
+
+
+
             // Function to delete the todo
             self.deleteToDo = function () {
                 // Prompt the user to confirm deletion

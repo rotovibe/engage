@@ -120,9 +120,14 @@
 		<div class="span3 pad-left" data-bind="DateOrDash: updatedOn">
 		</div>
 	</div>
-	<div class="row pad-top" data-bind="visible: !isNew()">
-		<button data-bind="click: $parent.deleteToDo">
-			<i class="icon-cancel"></i> Delete
-		</button>
-	</div>
+	<div class="row pad-top">
+		<div class="span3 align-left">
+			<button class="btn color" data-bind="text: $parent.btnMsg, click: $parent.gotoSource, visible: $parent.hasPatient"></button>
+		</div>
+		<div class="span4 align-left">
+			<button data-bind="click: $parent.deleteToDo">
+				<i class="icon-cancel"></i> Delete
+			</button>
+		</div>
+	</div>	
 </div>
