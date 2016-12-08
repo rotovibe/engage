@@ -149,7 +149,8 @@ define(['services/session', 'services/datacontext', 'viewmodels/patients/index',
 				return datacontext.saveCareTeam( careTeam() ).then( saveTeamCompleted );
 			}
 							
-			function saveTeamCompleted( team ){				
+			function saveTeamCompleted( team ){		
+				modalShowing(false);		
 			};			            
         };
 		
