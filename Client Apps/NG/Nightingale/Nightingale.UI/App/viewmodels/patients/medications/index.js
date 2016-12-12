@@ -236,11 +236,13 @@
 
     function editMedication(medication, msg) {
         var modalEntity = ko.observable(new MedicationModalEntity(medication));
+         medication.editMedicationCancelled(false);
         var saveOverride = function () {
             datacontext.saveMedication(modalEntity().medication());
         };
         var cancelOverride = function () {
             var medicationCancel = modalEntity().medication();
+             medicationCancel.editMedicationCancelled(true);            
             medicationCancel.entityAspect.rejectChanges();
         };
         msg = msg ? msg : 'Edit Medication';
@@ -264,6 +266,11 @@
         var modalEntity = ko.observable(new AllergyModalEntity(allergy));
         var reactionIdsBeforeEdit = allergy.reactionIds().slice(0);
         var saveOverride = function () {
+            if (!modalEntity().allergy().isValid()) {               
+                var keepModalOpen = true;
+                return keepModalOpen;
+            }
+
             datacontext.saveAllergies([modalEntity().allergy()], 'Update').then(saveCompleted);
 
             function saveCompleted() {

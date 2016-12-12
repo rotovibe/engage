@@ -39,11 +39,11 @@
                           <div class="span6" data-bind="text: name">
                           </div>
                         </div>
-                        <div class="row pad-bottom" data-bind="visible: otherRefusalReason">
+                        <div class="row pad-bottom" data-bind="visible: otherRefusalReason()">
                           <div class="span6 grey">
                             Refusal Other
                           </div>
-                          <div class="span6" data-bind="text: otherRefusalReason">
+                          <div class="span6" data-bind="text: otherRefusalReason()">
                           </div>
                         </div>
                         <div class="row pad-bottom" data-bind="visible: computedSigCode() !== '-'">

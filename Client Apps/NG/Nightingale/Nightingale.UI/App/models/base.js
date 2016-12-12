@@ -61,12 +61,9 @@ define(['services/validatorfactory', 'services/customvalidators', 'services/form
 			self.Showing = modalSettings.showing ? modalSettings.showing : false;
 			// Method on the modal to save the currently mapped properties
 			self.saveChanges = function () {
-				
-				// If a save override was passed in,
-				if (modalSettings.saveOverride) {
-					// Use that to save.
-					modalSettings.saveOverride();
-					self.Showing(false);
+				if (modalSettings.saveOverride) {					
+				    var keepModalOpen = modalSettings.saveOverride();				    
+				    self.Showing(keepModalOpen);
 				} else {
 					// If not, use the entities default ave
 					// Check if a datacontext exists
