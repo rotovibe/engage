@@ -18,8 +18,8 @@ namespace NightingaleImport
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            var contractNumber = Configurations.contractNumber;
-            var enhancedFeauresContracts = Configurations.enhancedFeauresContracts;
+            var contractNumber = ImportToolConfigurations.contractNumber;
+            var enhancedFeauresContracts = ImportToolConfigurations.enhancedFeauresContracts;
             if (enhancedFeauresContracts.Contains(contractNumber))
             {
                 Application.Run(new FormPatientsImport());
