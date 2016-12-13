@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Configuration;
 using System.Windows.Forms;
+using NightingaleImport.Configuration;
 
 namespace NightingaleImport
 {
@@ -16,7 +18,17 @@ namespace NightingaleImport
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+            var contractNumber = Configurations.contractNumber;
+            var enhancedFeauresContracts = Configurations.enhancedFeauresContracts;
+            if (enhancedFeauresContracts.Contains(contractNumber))
+            {
+                Application.Run(new FormPatientsImport());
+            }
+            else
+            {
+                Application.Run(new Form1());
+            }
+       
         }
     }
 }
