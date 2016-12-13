@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace NightingaleImport.Configuration
 {
-    public class Configurations
+    public class ImportToolConfigurations
     {
         public static double version
         {

@@ -79,9 +79,9 @@ namespace NightingaleImport
         private List<IdNamePair> careMemberLookUp = new List<IdNamePair>();
         private List<SystemData> systemsData = new List<SystemData>();
 
-        private readonly double version = Configurations.version;
-        private readonly string context = Configurations.context;
-        private readonly string contractNumber = Configurations.contractNumber;
+        private readonly double version = ImportToolConfigurations.version;
+        private readonly string context = ImportToolConfigurations.context;
+        private readonly string contractNumber = ImportToolConfigurations.contractNumber;
 
         public const string EngageSystemProperty = "Engage";
         public const string DataSourceProperty = "Import";
