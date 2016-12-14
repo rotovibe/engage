@@ -70,6 +70,7 @@ namespace NightingaleImport
         static int colCMan = 38;
         static int colSysNm = 39;
         static int colSysPrim = 40;
+        private static int colActivateDeactivate = 41;
         
         private List<IdNamePair> modesLookUp = new List<IdNamePair>();
         private List<CommTypeData> typesLookUp = new List<CommTypeData>();
@@ -87,7 +88,7 @@ namespace NightingaleImport
         public const string DataSourceProperty = "Import";
         public const string PCMRoleIdProperty = "56f169f8078e10eb86038514";
         string _headerUserId = "000000000000000000000000";
-
+        Dictionary<string,PatientData> patientDictionary  = new Dictionary<string, PatientData>();
         public FormPatientsImport()
         {
             InitializeComponent();
@@ -938,7 +939,14 @@ namespace NightingaleImport
                             }
                             else
                             {
+                                var patientDictKey = string.Format("{0}{1}{2}", lvi.SubItems[colFirstN].Text,
+                                    lvi.SubItems[colLastN].Text, lvi.SubItems[colDB].Text);
+                                if (patientDictionary.ContainsKey(patientDictKey))
+                                {
+                                    throw new Exception("The following Patient data is duplicated. Only one operation is allowed per patient. Check patient: " + String.Join(",", line));
+                                }
                                 listView1.Items.Add(lvi);
+                                patientDictionary.Add(patientDictKey,null);
                             }
                         }
                     }

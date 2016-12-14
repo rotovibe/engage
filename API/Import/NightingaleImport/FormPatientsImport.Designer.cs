@@ -73,6 +73,8 @@
             this.colAddress2Preferred = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colAddress2Type = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colCareManagerUserID = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colSystemName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colPrimarySystem = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chkSelectAll = new System.Windows.Forms.CheckBox();
             this.label1 = new System.Windows.Forms.Label();
             this.txtContactID = new System.Windows.Forms.TextBox();
@@ -83,8 +85,7 @@
             this.label3 = new System.Windows.Forms.Label();
             this.txtSQLConn = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
-            this.colSystemName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.colPrimarySystem = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnActivateDeactivate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.SuspendLayout();
             // 
             // openFileDialog1
@@ -117,7 +118,7 @@
             // button1
             // 
             this.button1.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.button1.Location = new System.Drawing.Point(308, 344);
+            this.button1.Location = new System.Drawing.Point(315, 344);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 4;
@@ -129,7 +130,7 @@
             // button2
             // 
             this.button2.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.button2.Location = new System.Drawing.Point(388, 344);
+            this.button2.Location = new System.Drawing.Point(395, 344);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 5;
@@ -185,11 +186,12 @@
             this.colAddress2Type,
             this.colCareManagerUserID,
             this.colSystemName,
-            this.colPrimarySystem});
+            this.colPrimarySystem,
+            this.columnActivateDeactivate});
             this.listView1.FullRowSelect = true;
             this.listView1.Location = new System.Drawing.Point(33, 67);
             this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(785, 270);
+            this.listView1.Size = new System.Drawing.Size(799, 270);
             this.listView1.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.listView1.TabIndex = 6;
             this.listView1.UseCompatibleStateImageBehavior = false;
@@ -235,7 +237,7 @@
             // 
             this.colSystemID.Text = "System ID";
             // 
-            // colSystemName
+            // colBackground
             // 
             this.colBackground.Text = "Background";
             this.colBackground.Width = 81;
@@ -360,6 +362,14 @@
             // 
             this.colCareManagerUserID.Text = "Care Manager User ID";
             // 
+            // colSystemName
+            // 
+            this.colSystemName.Text = "System Name";
+            // 
+            // colPrimarySystem
+            // 
+            this.colPrimarySystem.Text = "Primary System";
+            // 
             // chkSelectAll
             // 
             this.chkSelectAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
@@ -376,7 +386,7 @@
             // 
             this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(519, 345);
+            this.label1.Location = new System.Drawing.Point(533, 345);
             this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(127, 13);
@@ -386,8 +396,8 @@
             // txtContactID
             // 
             this.txtContactID.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtContactID.Location = new System.Drawing.Point(654, 343);
-            this.txtContactID.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtContactID.Location = new System.Drawing.Point(668, 343);
+            this.txtContactID.Margin = new System.Windows.Forms.Padding(2);
             this.txtContactID.Name = "txtContactID";
             this.txtContactID.Size = new System.Drawing.Size(164, 20);
             this.txtContactID.TabIndex = 9;
@@ -397,7 +407,7 @@
             // 
             this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(519, 367);
+            this.label2.Location = new System.Drawing.Point(533, 367);
             this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(64, 13);
@@ -418,8 +428,8 @@
             // txtURL
             // 
             this.txtURL.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtURL.Location = new System.Drawing.Point(586, 365);
-            this.txtURL.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtURL.Location = new System.Drawing.Point(600, 365);
+            this.txtURL.Margin = new System.Windows.Forms.Padding(2);
             this.txtURL.Name = "txtURL";
             this.txtURL.Size = new System.Drawing.Size(232, 20);
             this.txtURL.TabIndex = 13;
@@ -427,8 +437,8 @@
             // txtContract
             // 
             this.txtContract.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtContract.Location = new System.Drawing.Point(586, 388);
-            this.txtContract.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtContract.Location = new System.Drawing.Point(600, 388);
+            this.txtContract.Margin = new System.Windows.Forms.Padding(2);
             this.txtContract.Name = "txtContract";
             this.txtContract.Size = new System.Drawing.Size(232, 20);
             this.txtContract.TabIndex = 15;
@@ -437,7 +447,7 @@
             // 
             this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(519, 390);
+            this.label3.Location = new System.Drawing.Point(533, 390);
             this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(50, 13);
@@ -447,8 +457,8 @@
             // txtSQLConn
             // 
             this.txtSQLConn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtSQLConn.Location = new System.Drawing.Point(358, 410);
-            this.txtSQLConn.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtSQLConn.Location = new System.Drawing.Point(372, 410);
+            this.txtSQLConn.Margin = new System.Windows.Forms.Padding(2);
             this.txtSQLConn.Name = "txtSQLConn";
             this.txtSQLConn.Size = new System.Drawing.Size(458, 20);
             this.txtSQLConn.TabIndex = 17;
@@ -457,25 +467,22 @@
             // 
             this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(240, 413);
+            this.label4.Location = new System.Drawing.Point(254, 413);
             this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(114, 13);
             this.label4.TabIndex = 16;
             this.label4.Text = "SQL User Conn String:";
             // 
-            // colProgramName
+            // columnActivateDeactivate
             // 
-            this.colSystemName.Text = "System Name";
+            this.columnActivateDeactivate.Text = "Activate/Inactivate";
             // 
-            // 
-            this.colPrimarySystem.Text = "Primary System";
-            // 
-            // Form1
+            // FormPatientsImport
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(825, 438);
+            this.ClientSize = new System.Drawing.Size(839, 438);
             this.Controls.Add(this.txtSQLConn);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.txtContract);
@@ -491,7 +498,7 @@
             this.Controls.Add(this.button1);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.Browse);
-            this.Name = "Form1";
+            this.Name = "FormPatientsImport";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Nightingale Import Utility";
             this.Load += new System.EventHandler(this.FormPatientsImport_Load);
@@ -559,6 +566,7 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.ColumnHeader colSystemName;
         private System.Windows.Forms.ColumnHeader colPrimarySystem;
+        private System.Windows.Forms.ColumnHeader columnActivateDeactivate;
     }
 }
 
