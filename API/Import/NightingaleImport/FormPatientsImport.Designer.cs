@@ -75,17 +75,17 @@
             this.colCareManagerUserID = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colSystemName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colPrimarySystem = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnActivateDeactivate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chkSelectAll = new System.Windows.Forms.CheckBox();
             this.label1 = new System.Windows.Forms.Label();
             this.txtContactID = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.lblStatus = new System.Windows.Forms.Label();
             this.txtURL = new System.Windows.Forms.TextBox();
-            this.txtContract = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.txtSQLConn = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
-            this.columnActivateDeactivate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.comboBoxContractList = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // openFileDialog1
@@ -97,6 +97,7 @@
             // 
             // Browse
             // 
+            this.Browse.Enabled = false;
             this.Browse.Location = new System.Drawing.Point(426, 12);
             this.Browse.Name = "Browse";
             this.Browse.Size = new System.Drawing.Size(75, 23);
@@ -118,7 +119,8 @@
             // button1
             // 
             this.button1.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.button1.Location = new System.Drawing.Point(315, 344);
+            this.button1.Enabled = false;
+            this.button1.Location = new System.Drawing.Point(316, 361);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 4;
@@ -130,7 +132,7 @@
             // button2
             // 
             this.button2.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.button2.Location = new System.Drawing.Point(395, 344);
+            this.button2.Location = new System.Drawing.Point(396, 361);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 5;
@@ -191,7 +193,7 @@
             this.listView1.FullRowSelect = true;
             this.listView1.Location = new System.Drawing.Point(33, 67);
             this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(799, 270);
+            this.listView1.Size = new System.Drawing.Size(800, 287);
             this.listView1.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.listView1.TabIndex = 6;
             this.listView1.UseCompatibleStateImageBehavior = false;
@@ -370,11 +372,15 @@
             // 
             this.colPrimarySystem.Text = "Primary System";
             // 
+            // columnActivateDeactivate
+            // 
+            this.columnActivateDeactivate.Text = "Activate/Inactivate";
+            // 
             // chkSelectAll
             // 
             this.chkSelectAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.chkSelectAll.AutoSize = true;
-            this.chkSelectAll.Location = new System.Drawing.Point(33, 344);
+            this.chkSelectAll.Location = new System.Drawing.Point(33, 361);
             this.chkSelectAll.Name = "chkSelectAll";
             this.chkSelectAll.Size = new System.Drawing.Size(70, 17);
             this.chkSelectAll.TabIndex = 7;
@@ -386,7 +392,7 @@
             // 
             this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(533, 345);
+            this.label1.Location = new System.Drawing.Point(534, 362);
             this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(127, 13);
@@ -396,7 +402,7 @@
             // txtContactID
             // 
             this.txtContactID.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtContactID.Location = new System.Drawing.Point(668, 343);
+            this.txtContactID.Location = new System.Drawing.Point(669, 360);
             this.txtContactID.Margin = new System.Windows.Forms.Padding(2);
             this.txtContactID.Name = "txtContactID";
             this.txtContactID.Size = new System.Drawing.Size(164, 20);
@@ -407,7 +413,7 @@
             // 
             this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(533, 367);
+            this.label2.Location = new System.Drawing.Point(534, 384);
             this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(64, 13);
@@ -418,7 +424,7 @@
             // 
             this.lblStatus.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblStatus.AutoSize = true;
-            this.lblStatus.Location = new System.Drawing.Point(35, 43);
+            this.lblStatus.Location = new System.Drawing.Point(35, 60);
             this.lblStatus.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblStatus.Name = "lblStatus";
             this.lblStatus.Size = new System.Drawing.Size(65, 13);
@@ -428,26 +434,17 @@
             // txtURL
             // 
             this.txtURL.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtURL.Location = new System.Drawing.Point(600, 365);
+            this.txtURL.Location = new System.Drawing.Point(601, 382);
             this.txtURL.Margin = new System.Windows.Forms.Padding(2);
             this.txtURL.Name = "txtURL";
             this.txtURL.Size = new System.Drawing.Size(232, 20);
             this.txtURL.TabIndex = 13;
             // 
-            // txtContract
-            // 
-            this.txtContract.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtContract.Location = new System.Drawing.Point(600, 388);
-            this.txtContract.Margin = new System.Windows.Forms.Padding(2);
-            this.txtContract.Name = "txtContract";
-            this.txtContract.Size = new System.Drawing.Size(232, 20);
-            this.txtContract.TabIndex = 15;
-            // 
             // label3
             // 
             this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(533, 390);
+            this.label3.Location = new System.Drawing.Point(534, 407);
             this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(50, 13);
@@ -457,7 +454,7 @@
             // txtSQLConn
             // 
             this.txtSQLConn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtSQLConn.Location = new System.Drawing.Point(372, 410);
+            this.txtSQLConn.Location = new System.Drawing.Point(373, 428);
             this.txtSQLConn.Margin = new System.Windows.Forms.Padding(2);
             this.txtSQLConn.Name = "txtSQLConn";
             this.txtSQLConn.Size = new System.Drawing.Size(458, 20);
@@ -467,25 +464,30 @@
             // 
             this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(254, 413);
+            this.label4.Location = new System.Drawing.Point(255, 431);
             this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(114, 13);
             this.label4.TabIndex = 16;
             this.label4.Text = "SQL User Conn String:";
             // 
-            // columnActivateDeactivate
+            // comboBoxContractList
             // 
-            this.columnActivateDeactivate.Text = "Activate/Inactivate";
+            this.comboBoxContractList.FormattingEnabled = true;
+            this.comboBoxContractList.Location = new System.Drawing.Point(600, 404);
+            this.comboBoxContractList.Name = "comboBoxContractList";
+            this.comboBoxContractList.Size = new System.Drawing.Size(232, 21);
+            this.comboBoxContractList.TabIndex = 18;
+            this.comboBoxContractList.SelectionChangeCommitted += new System.EventHandler(this.comboBoxContractList_SelectionChangeCommitted);
             // 
             // FormPatientsImport
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(839, 438);
+            this.ClientSize = new System.Drawing.Size(840, 455);
+            this.Controls.Add(this.comboBoxContractList);
             this.Controls.Add(this.txtSQLConn);
             this.Controls.Add(this.label4);
-            this.Controls.Add(this.txtContract);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.txtURL);
             this.Controls.Add(this.lblStatus);
@@ -560,13 +562,13 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label lblStatus;
         private System.Windows.Forms.TextBox txtURL;
-        private System.Windows.Forms.TextBox txtContract;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox txtSQLConn;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.ColumnHeader colSystemName;
         private System.Windows.Forms.ColumnHeader colPrimarySystem;
         private System.Windows.Forms.ColumnHeader columnActivateDeactivate;
+        private System.Windows.Forms.ComboBox comboBoxContractList;
     }
 }
 
