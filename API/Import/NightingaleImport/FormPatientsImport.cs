@@ -89,7 +89,7 @@ namespace NightingaleImport
         public const string DataSourceProperty = "Import";
         public const string PCMRoleIdProperty = "56f169f8078e10eb86038514";
         string _headerUserId = "000000000000000000000000";
-        Dictionary<string,PatientData> patientDictionary  = new Dictionary<string, PatientData>();
+        Dictionary<string,ImportData> patientDictionary  = new Dictionary<string, ImportData>();
         public FormPatientsImport()
         {
             InitializeComponent();
