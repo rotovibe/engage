@@ -234,5 +234,10 @@ namespace Phytel.API.DataDomain.Patient.Test.Stub
         {
             throw new NotImplementedException();
         }
+
+        public GetPatientDataResponse GetPatientDataByNameDOB(GetPatientDataByNameDOBRequest request)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

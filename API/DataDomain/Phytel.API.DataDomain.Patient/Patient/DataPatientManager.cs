@@ -104,6 +104,17 @@ namespace Phytel.API.DataDomain.Patient
             }
         }
 
+        public GetPatientDataResponse GetPatientDataByNameDOB(GetPatientDataByNameDOBRequest request)
+        {           
+            GetPatientDataResponse result = new GetPatientDataResponse();
+
+            IPatientRepository repo = Factory.GetRepository(request, RepositoryType.Patient);
+           
+            result.Patient = repo.FindByNameDOB(request.FirstName, request.LastName, Convert.ToDateTime(request.DOB).ToString("MM/dd/yyyy")) as DTO.PatientData;
+
+            return result;
+        }
+
         public GetPatientSSNDataResponse GetPatientSSN(GetPatientSSNDataRequest request)
         {
             try
@@ -709,6 +720,6 @@ namespace Phytel.API.DataDomain.Patient
                 throw ex;
             }
             return response;
-        }
+        }        
     }
 }   

@@ -394,6 +394,42 @@ namespace NGDataImport
             return getPatientSystemDataResponse;
         }
 
+        public GetPatientDataResponse GetPatientData(GetPatientDataByNameDOBRequest request)
+        {
+            //[Route("/{Context}/{Version}/{ContractNumber}/Patient/PatientData", "GET")]
+            Uri theUriPS = new Uri(string.Format("{0}/Patient/{1}/{2}/{3}/Patient/PatientData?UserId={4}&FirstName={5}&LastName={6}&DOB={7}",
+                                                   Url,
+                                                   Context,
+                                                   Version,
+                                                   ContractNumber,                                                   
+                                                   HeaderUserId,
+                                                   request.FirstName, request.LastName, request.DOB));
+            HttpClient client = GetHttpClient(theUriPS);
+
+            DataContractJsonSerializer modesJsonSer = new DataContractJsonSerializer(typeof(GetPatientDataByNameDOBRequest));
+            MemoryStream ms = new MemoryStream();
+            modesJsonSer.WriteObject(ms, request);
+            ms.Position = 0;
+
+            //use a Stream reader to construct the StringContent (Json) 
+            StreamReader modesSr = new StreamReader(ms);
+            StringContent modesContent = new StringContent(modesSr.ReadToEnd(), System.Text.Encoding.UTF8, "application/json");
+
+            //Post the data 
+            var response = client.GetStringAsync(theUriPS);
+            var responseContent = response.Result;
+
+            string modesResponseString = responseContent;
+            GetPatientDataResponse getPatientDataResponse = null;
+
+            using (var memStream = new MemoryStream(Encoding.Unicode.GetBytes(modesResponseString)))
+            {
+                var modesSerializer = new DataContractJsonSerializer(typeof(GetPatientDataResponse));
+                getPatientDataResponse = (GetPatientDataResponse)modesSerializer.ReadObject(memStream);
+            }
+            return getPatientDataResponse;
+        }
+
         public UpdatePatientSystemDataResponse UpdatePatientSystem(UpdatePatientSystemDataRequest request)
         {
             //[Route("/{Context}/{Version}/{ContractNumber}/Patient/{PatientId}/PatientSystem/{Id}", "PUT")]
