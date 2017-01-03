@@ -19,13 +19,21 @@ namespace NightingaleImport.Configuration
             get { return ConfigurationManager.AppSettings.Get("context"); }
         }
 
-        public static string contractNumber
+        public static string contractNumber { get; set; }
+        public static List<string> contracts
         {
-            get { return ConfigurationManager.AppSettings.Get("contractNumber"); }
+            get
+            {
+                var c = ConfigurationManager.AppSettings.Get("ContractsList");
+                var res =c.Split(',').ToList();
+                res.Add(" ");
+                return res.OrderBy(q=>q).ToList();
+            }
         }
-        public static string enhancedFeauresContracts
+
+        public static string enhancedFeaturesContracts
         {
-            get { return ConfigurationManager.AppSettings.Get("EnhancedFeauresContracts"); }
+            get { return ConfigurationManager.AppSettings.Get("EnhancedFeaturesContract"); }
         }
     }
 }

@@ -165,5 +165,10 @@ namespace Phytel.API.DataDomain.Patient.Test.Stub
         {
             throw new NotImplementedException();
         }
+
+        public object FindByNameDOB(string firstName, string lastName, string dob)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

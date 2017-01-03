@@ -283,6 +283,51 @@ namespace Phytel.API.DataDomain.Patient
             return patientData;
         }
 
+        public object FindByNameDOB(string firstName, string lastName, string dob)
+        {
+            PatientData patientData = null;
+            using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
+            {
+                IMongoQuery query = Query.And(
+                                Query.EQ(MEPatient.FirstNameProperty, firstName),
+                                Query.EQ(MEPatient.LastNameProperty, lastName),
+                                Query.EQ(MEPatient.DOBProperty, dob),
+                                Query.EQ(MEPatient.DeleteFlagProperty, false),
+                                Query.EQ(MEPatient.TTLDateProperty, BsonNull.Value));
+
+                var mePatient = ctx.Patients.Collection.Find(query).FirstOrDefault();
+                if (mePatient != null)
+                {
+                    patientData = new PatientData
+                    {
+                        Id = mePatient.Id.ToString(),
+                        DOB = CommonFormatter.FormatDateOfBirth(mePatient.DOB),
+                        FirstName = mePatient.FirstName,
+                        Gender = mePatient.Gender,
+                        LastName = mePatient.LastName,
+                        PreferredName = mePatient.PreferredName,
+                        MiddleName = mePatient.MiddleName,
+                        Suffix = mePatient.Suffix,
+                        PriorityData = (int)mePatient.Priority,
+                        DisplayPatientSystemId = mePatient.DisplayPatientSystemId.ToString(),
+                        Background = mePatient.Background,
+                        ClinicalBackground = mePatient.ClinicalBackground,
+                        LastFourSSN = mePatient.LastFourSSN,
+                        DataSource = formatSystem(mePatient.DataSource),
+                        StatusDataSource = mePatient.StatusDataSource,
+                        ReasonId = mePatient.ReasonId == null ? null : mePatient.ReasonId.ToString(),
+                        MaritalStatusId = mePatient.MaritalStatusId == null ? null : mePatient.MaritalStatusId.ToString(),
+                        Protected = mePatient.Protected,
+                        DeceasedId = (int)mePatient.Deceased,
+                        StatusId = (int)mePatient.Status,
+                        ExternalRecordId = mePatient.ExternalRecordId,
+                        Prefix = mePatient.Prefix
+                    };                    
+                }
+            }
+            return patientData;
+        }
+
         public object FindByID(string entityId, string userId)
         {
             PatientData patientData = null;

@@ -17,6 +17,7 @@ namespace Phytel.API.DataDomain.Patient
         PutPatientFlaggedResponse UpdateFlagged(PutPatientFlaggedRequest request);
         PutPatientSystemIdDataResponse UpdatePatientSystem(PutPatientSystemIdDataRequest request);
         object FindByID(string patientId, string userId);
+        object FindByNameDOB(string firstName, string lastName, string dob);
         object Update(PutUpdatePatientDataRequest request);
         object GetSSN(string patientId);
         List<PatientUserData> FindPatientUsersByPatientId(string patientId);

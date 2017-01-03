@@ -252,5 +252,10 @@ namespace Phytel.API.DataDomain.Patient
         {
             throw new NotImplementedException();
         }
+
+        public object FindByNameDOB(string firstName, string lastName, string dob)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

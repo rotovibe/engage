@@ -8,6 +8,7 @@ namespace Phytel.API.DataDomain.Patient
         GetCohortPatientsDataResponse GetCohortPatients(GetCohortPatientsDataRequest request);
         GetCohortPatientViewResponse GetCohortPatientView(GetCohortPatientViewRequest request);
         GetPatientDataResponse GetPatientByID(GetPatientDataRequest request);
+        GetPatientDataResponse GetPatientDataByNameDOB(GetPatientDataByNameDOBRequest request);
         GetPatientsDataResponse GetPatients(GetPatientsDataRequest request);
         GetPatientSSNDataResponse GetPatientSSN(GetPatientSSNDataRequest request);
         PutCohortPatientViewDataResponse InsertCohortPatientView(PutCohortPatientViewDataRequest request);

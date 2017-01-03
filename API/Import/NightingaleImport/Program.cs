@@ -17,18 +17,8 @@ namespace NightingaleImport
         static void Main()
         {
             Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            var contractNumber = ImportToolConfigurations.contractNumber;
-            var enhancedFeauresContracts = ImportToolConfigurations.enhancedFeauresContracts;
-            if (enhancedFeauresContracts.Contains(contractNumber))
-            {
-                Application.Run(new FormPatientsImport());
-            }
-            else
-            {
-                Application.Run(new Form1());
-            }
-       
+            Application.SetCompatibleTextRenderingDefault(false);                        
+            Application.Run(new FormPatientsImport());                   
         }
     }
 }
