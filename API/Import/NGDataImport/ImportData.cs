@@ -7,7 +7,7 @@ using Phytel.API.DataDomain.Patient.DTO;
 
 namespace NGDataImport
 {
-    enum ImportOperation
+    public enum ImportOperation
     {
         INSERT = 1,
         UPDATE = 2
@@ -15,7 +15,7 @@ namespace NGDataImport
 
     public class ImportData
     {
-        private ImportOperation importOperation { get; set; }
+        public ImportOperation importOperation { get; set; }
         public PatientData patientData { get; set; }        
         public bool failed { get; set; }
         public string failedMessage { get; set; }

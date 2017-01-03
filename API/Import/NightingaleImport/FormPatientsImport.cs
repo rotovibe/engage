@@ -139,7 +139,8 @@ namespace NightingaleImport
 
                     foreach (ListViewItem lvi in listView1.CheckedItems)
                     {
-
+                        var patientDictKey = string.Format("{0}{1}{2}", lvi.SubItems[colFirstN].Text,
+                                    lvi.SubItems[colLastN].Text, lvi.SubItems[colDB].Text);
                         PatientData pdata = new PatientData
                         {
                             #region Sync up properties in Contact
@@ -612,6 +613,9 @@ namespace NightingaleImport
 
                                 if (responsePatient.Id != null && responsePatient.Status == null)
                                 {
+                                    patientDictionary[patientDictKey].patientData = pdata;
+                                    patientDictionary[patientDictKey].failed = false;
+                                    patientDictionary[patientDictKey].importOperation = ImportOperation.INSERT;
                                     dictionarySucceed.Add(pdata.FirstName + " " + pdata.LastName, responsePatient.Id);
                                     int n = listView1.CheckedItems.IndexOf(lvi);
                                     listView1.CheckedItems[n].Remove();
@@ -621,21 +625,34 @@ namespace NightingaleImport
                         }
                         else //update
                         {
+
                             #region
-                            PutUpdatePatientDataRequest updatePatientRequest = new PutUpdatePatientDataRequest
-                            {
-                                PatientData = pdata,
-                                Context = context,
-                                ContractNumber = contractNumber,
-                                Version = version,
-                                Insert = false
-                            };
+                            
                             try
                             {
+                                if (!ImportToolConfigurations.enhancedFeaturesContracts.Contains(contractNumber))
+                                {
+                                    throw new Exception("This contract is not configured for updates.");
+                                }
+                                PutUpdatePatientDataRequest updatePatientRequest = new PutUpdatePatientDataRequest
+                                {
+                                    PatientData = pdata,
+                                    Context = context,
+                                    ContractNumber = contractNumber,
+                                    Version = version,
+                                    Insert = false
+                                };
                                 PutUpdatePatientDataResponse updatePatientResponse = import.UpsertPatient(updatePatientRequest, null);
+                                patientDictionary[patientDictKey].patientData = pdata;
+                                patientDictionary[patientDictKey].failed = false;
+                                patientDictionary[patientDictKey].importOperation = ImportOperation.UPDATE;
                             }
                             catch(Exception ex)
                             {
+                                patientDictionary[patientDictKey].patientData = pdata;
+                                patientDictionary[patientDictKey].failed = true;
+                                patientDictionary[patientDictKey].failedMessage = ex.Message;
+                                patientDictionary[patientDictKey].importOperation = ImportOperation.UPDATE;
                                 dictionaryFail.Add(pdata.FirstName + " " + pdata.LastName, string.Format("Update Failed. Message: {0} StackTrace: {1}", ex.Message, ex.StackTrace));
                                 int n = listView1.CheckedItems.IndexOf(lvi);
                                 listView1.CheckedItems[n].BackColor = Color.Red;
@@ -956,7 +973,7 @@ namespace NightingaleImport
 
         private void button1_VisibleChanged_1(object sender, EventArgs e)
         {
-            button1.Text = "Import";
+            btnImport.Text = "Import";
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -994,8 +1011,7 @@ namespace NightingaleImport
                             if (lvi.SubItems[colFirstN].Text == "" || lvi.SubItems[colLastN].Text == ""
                                 || lvi.SubItems[colGen].Text == "" || lvi.SubItems[colDB].Text == "")
                             {
-                                lvi.BackColor = Color.Red;
-                                //throw new Exception("Required Patient data not found. Check patient: " + String.Join(",", line));
+                                lvi.BackColor = Color.Red;                               
                             }
                             else
                             {
@@ -1004,9 +1020,7 @@ namespace NightingaleImport
                                 if (patientDictionary.ContainsKey(patientDictKey))
                                 {
                                     lvi.BackColor = Color.Red;
-                                    lvi.ToolTipText = "The following Patient data is duplicated. Only one operation is allowed per patient. Check patient: " + String.Join(",", line);
-                                   
-                                    //throw new Exception("The following Patient data is duplicated. Only one operation is allowed per patient. Check patient: " + String.Join(",", line));
+                                    lvi.ToolTipText = "The following Patient data is duplicated. Only one operation is allowed per patient. Check patient: " + String.Join(",", line);                                   
                                 }
                                 else
                                 {
@@ -1017,6 +1031,7 @@ namespace NightingaleImport
                         }
                     }
                 }
+                btnImport.Enabled = patientDictionary.Count > 0;
             }
             catch (Exception ex)
             {
@@ -1024,7 +1039,7 @@ namespace NightingaleImport
             }
             finally
             {
-                chkSelectAll.Text = string.Format("Select All ({0} Patients)", listView1.Items.Count);
+                chkSelectAll.Text = string.Format("Select All ({0} Patients)", patientDictionary.Count);
                 lblStatus.Text = "Select Individuals to Import...";
             }
         }
@@ -1056,8 +1071,7 @@ namespace NightingaleImport
         }
 
         private void chkSelectAll_CheckedChanged(object sender, EventArgs e)
-        {
-            //NM: 1. make sure we don't select the duplicate or marked with red listitem
+        {            
             if (chkSelectAll.Checked)
             {
                 for (int i = 0; i < listView1.Items.Count; i++)
@@ -1585,6 +1599,15 @@ namespace NightingaleImport
             Browse.Enabled = !contractNumber.Trim().IsNullOrEmpty();
             this.Text = string.Format("{0}: Nightingale Import Utility", contractNumber);
 
+        }
+
+        private void listView1_ItemCheck(object sender, ItemCheckEventArgs e)
+        {
+            ListView lv = sender as ListView;
+            if (lv.Items[e.Index].BackColor== Color.Red)
+            {
+                e.NewValue = CheckState.Unchecked;
+            }
         }
     }
 }

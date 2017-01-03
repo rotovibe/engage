@@ -31,7 +31,7 @@ namespace NightingaleImport.Configuration
             }
         }
 
-        public string enhancedFeaturesContracts
+        public static string enhancedFeaturesContracts
         {
             get { return ConfigurationManager.AppSettings.Get("EnhancedFeaturesContract"); }
         }
