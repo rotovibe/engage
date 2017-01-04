@@ -33,7 +33,7 @@ namespace NightingaleImport.Configuration
 
         public static string enhancedFeaturesContracts
         {
-            get { return ConfigurationManager.AppSettings.Get("EnhancedFeaturesContract"); }
+            get { return ConfigurationManager.AppSettings.Get("EnhancedFeaturesContracts"); }
         }
     }
 }

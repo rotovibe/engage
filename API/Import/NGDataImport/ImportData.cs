@@ -10,7 +10,8 @@ namespace NGDataImport
     public enum ImportOperation
     {
         INSERT = 1,
-        UPDATE = 2
+        UPDATE = 2,
+        LOOKUP_PATIENT = 3
     }
 
     public class ImportData
