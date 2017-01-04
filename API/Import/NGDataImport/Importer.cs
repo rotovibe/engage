@@ -570,13 +570,13 @@ namespace NGDataImport
             MemoryStream contactMs = new MemoryStream();
             contactJsonSer.WriteObject(contactMs, putUpdateContactRequest);
             contactMs.Position = 0;
-
+           
             //use a Stream reader to construct the StringContent (Json) 
             StreamReader contactSr = new StreamReader(contactMs);
             StringContent contactContent = new StringContent(contactSr.ReadToEnd(), System.Text.Encoding.UTF8, "application/json");
-
+            //contactMs.Dispose();
             //Post the data 
-            var contactResponse = contactClient.PostAsync(contactUri, contactContent);
+            var contactResponse = contactClient.PutAsync(contactUri, contactContent);
             var contactResponseContent = contactResponse.Result.Content;
 
             string contactResponseString = contactResponseContent.ReadAsStringAsync().Result;
@@ -584,7 +584,7 @@ namespace NGDataImport
 
             using (var contactMsResponse = new MemoryStream(Encoding.Unicode.GetBytes(contactResponseString)))
             {
-                var contactSerializer = new DataContractJsonSerializer(typeof(InsertContactDataResponse));
+                var contactSerializer = new DataContractJsonSerializer(typeof(UpdateContactDataResponse));
                 responseContact = (UpdateContactDataResponse)contactSerializer.ReadObject(contactMsResponse);
             }
 

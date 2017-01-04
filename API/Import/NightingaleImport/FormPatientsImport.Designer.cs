@@ -87,6 +87,7 @@
             this.comboBoxContractList = new System.Windows.Forms.ComboBox();
             this.lblStatus = new System.Windows.Forms.Label();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
+            this.btnViewReport = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // openFileDialog1
@@ -489,11 +490,23 @@
             this.progressBar1.TabIndex = 20;
             this.progressBar1.Visible = false;
             // 
+            // btnViewReport
+            // 
+            this.btnViewReport.Enabled = false;
+            this.btnViewReport.Location = new System.Drawing.Point(316, 476);
+            this.btnViewReport.Name = "btnViewReport";
+            this.btnViewReport.Size = new System.Drawing.Size(75, 23);
+            this.btnViewReport.TabIndex = 21;
+            this.btnViewReport.Text = "View Report";
+            this.btnViewReport.UseVisualStyleBackColor = true;
+            this.btnViewReport.Click += new System.EventHandler(this.btnViewReport_Click);
+            // 
             // FormPatientsImport
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(840, 540);
+            this.Controls.Add(this.btnViewReport);
             this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.lblStatus);
             this.Controls.Add(this.comboBoxContractList);
@@ -580,6 +593,7 @@
         private System.Windows.Forms.ComboBox comboBoxContractList;
         private System.Windows.Forms.Label lblStatus;
         private System.Windows.Forms.ProgressBar progressBar1;
+        private System.Windows.Forms.Button btnViewReport;
     }
 }
 

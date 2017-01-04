@@ -120,33 +120,72 @@ namespace NightingaleImport
         {
             try
             {
+                btnViewReport.Enabled = false;
                 progressBar1.Visible = true;
-                progressBar1.Maximum = patientDictionary.Count;
+                progressBar1.Maximum = listView1.CheckedItems.Count;
                 progressBar1.Value = 0;
                 Importer import = new Importer(txtURL.Text, context, version, contractNumber, _headerUserId);
+               
                 Guid sqlUserId = getUserId(txtContactID.Text);
                 if (sqlUserId != Guid.Empty)
                 {
+                  
+
                     GetContactByUserIdDataResponse contactUserResp = import.GetContactByUserId(sqlUserId.ToString());
+
+                    if (contactUserResp.Contact==null)
+                    {
+                        throw new Exception("Invalid 'Admin User'");
+                    }
 
                     _headerUserId = contactUserResp.Contact.Id;
                     if (string.IsNullOrEmpty(_headerUserId))
                         throw new Exception("Invalid 'Admin User'");
                     import.HeaderUserId = _headerUserId;
-                    
+
                     //Dictionary<string, string> dictionarySucceed = new Dictionary<string, string>();
                     //Dictionary<string, string> dictionaryFail = new Dictionary<string, string>();
-
+                    
                     LoadLookUps();
+                    
                     LoadSystems();
-
+                   
                     foreach (ListViewItem lvi in listView1.CheckedItems)
                     {
                         var patientDictKey = string.Format("{0}{1}{2}", lvi.SubItems[colFirstN].Text,
                                     lvi.SubItems[colLastN].Text, lvi.SubItems[colDB].Text);
+
                         PatientData pdata = GetPatientData(lvi);
 
                         patientDictionary[patientDictKey].patientData = pdata;
+
+                        GetContactByUserIdDataResponse contactByUserIdResponse = null;
+                        if (!string.IsNullOrEmpty(lvi.SubItems[colCMan].Text))
+                        {
+                            Guid userIdResponse = getUserId(lvi.SubItems[colCMan].Text);
+
+                            if (userIdResponse == Guid.Empty)
+                            {
+                                SetPatientDictionaryFailed(patientDictKey, string.Format(
+                                    "Unable to locate the UserId: {0}", lvi.SubItems[colCMan].Text));
+                                SetListViewItemFailed(lvi);
+                                patientDictionary[patientDictKey].importOperation = ImportOperation.LOOKUP_USER_CONTACT;
+                                progressBar1.Increment(1);
+                                continue;
+                            }
+                            contactByUserIdResponse = import.GetContactByUserId(userIdResponse.ToString());
+                            if (contactByUserIdResponse.Contact == null)
+                            {
+                                SetPatientDictionaryFailed(patientDictKey, string.Format(
+                                    "Unable to locate contact for the UserId: {0}, rid: {1}", lvi.SubItems[colCMan].Text,
+                                    userIdResponse.ToString()));
+                                SetListViewItemFailed(lvi);
+                                patientDictionary[patientDictKey].importOperation = ImportOperation.LOOKUP_USER_CONTACT;
+                                progressBar1.Increment(1);
+                                continue;
+                            }
+                        }
+                      
                         GetPatientDataResponse existingPatientResponse = null;
                         try
                         {
@@ -158,6 +197,7 @@ namespace NightingaleImport
                                 "Exception trying to locate patient. Message: {0}, Stack Trace: {1}", ex.Message, ex.StackTrace));
                             SetListViewItemFailed(lvi);
                             patientDictionary[patientDictKey].importOperation = ImportOperation.LOOKUP_PATIENT;
+                            progressBar1.Increment(1);
                             continue;
                         }
                       
@@ -278,47 +318,43 @@ namespace NightingaleImport
                                 #endregion
 
                                 #region CareMember
-                                if (string.IsNullOrEmpty(lvi.SubItems[colCMan].Text) == false)
+
+                                if (contactByUserIdResponse != null)
                                 {
-                                    Guid userIdResponse = getUserId(lvi.SubItems[colCMan].Text);
-                                    if (userIdResponse != Guid.Empty)
+                                    CareTeamMemberData member = new CareTeamMemberData
                                     {
-                                        GetContactByUserIdDataResponse contactByUserIdResponse = import.GetContactByUserId(userIdResponse.ToString());
+                                        ContactId = contactByUserIdResponse.Contact.Id,
+                                        RoleId = PCMRoleIdProperty,
+                                        Core = true,
+                                        DataSource = "Engage",
+                                        DistanceUnit = "mi",
+                                        StatusId = (int) CareTeamMemberStatus.Active,
+                                    };
+                                    List<CareTeamMemberData> memberList = new List<CareTeamMemberData>();
+                                    memberList.Add(member);
 
-                                        CareTeamMemberData member = new CareTeamMemberData
-                                        {
-                                            ContactId = contactByUserIdResponse.Contact.Id,
-                                            RoleId = PCMRoleIdProperty,
-                                            Core = true,
-                                            DataSource = "Engage",
-                                            DistanceUnit = "mi",
-                                            StatusId = (int)CareTeamMemberStatus.Active,
-                                        };
-                                        List<CareTeamMemberData> memberList = new List<CareTeamMemberData>();
-                                        memberList.Add(member);
-
-                                        CareTeamData careTeamData = new CareTeamData
-                                        {
-                                            ContactId = responseContact.Id,
-                                            Members = memberList
-                                        };
-                                        SaveCareTeamDataRequest saveCareTeamDataRequest = new SaveCareTeamDataRequest
-                                        {
-                                            CareTeamData = careTeamData,
-                                            ContactId = responseContact.Id,
-                                        };
-                                        SaveCareTeamDataResponse saveCareTeamDataResponse = import.InsertCareTeam(saveCareTeamDataRequest);
-                                        if (saveCareTeamDataResponse == null)
-                                        {
-                                            SetPatientDictionaryFailed(patientDictKey, "Care Team import request failed.");
-                                            SetListViewItemFailed(lvi);
-                                        }
-                                        import.UpdateCohortPatientView(responsePatient.Id.ToString(), contactByUserIdResponse.Contact.Id);
+                                    CareTeamData careTeamData = new CareTeamData
+                                    {
+                                        ContactId = responseContact.Id,
+                                        Members = memberList
+                                    };
+                                    SaveCareTeamDataRequest saveCareTeamDataRequest = new SaveCareTeamDataRequest
+                                    {
+                                        CareTeamData = careTeamData,
+                                        ContactId = responseContact.Id,
+                                    };
+                                    SaveCareTeamDataResponse saveCareTeamDataResponse =
+                                        import.InsertCareTeam(saveCareTeamDataRequest);
+                                    if (saveCareTeamDataResponse == null)
+                                    {
+                                        SetPatientDictionaryFailed(patientDictKey, "Care Team import request failed.");
+                                        SetListViewItemFailed(lvi);
                                     }
-                                }
+                                    import.UpdateCohortPatientView(responsePatient.Id.ToString(),
+                                        contactByUserIdResponse.Contact.Id);
 
-                                #endregion
-                                
+                                }
+                                #endregion                                
                             }
                             #endregion
                         }
@@ -328,11 +364,24 @@ namespace NightingaleImport
                             #region UDPATE
                             patientDictionary[patientDictKey].importOperation = ImportOperation.UPDATE;
                             try
-                            {
+                            {                               
                                 if (!ImportToolConfigurations.enhancedFeaturesContracts.Contains(contractNumber))
                                 {
                                     throw new Exception("This contract is not configured for updates.");
                                 }
+
+                                bool individualStatus = false;
+                                bool validIndividualStatusValue = false;
+                                int statusBackup = pdata.StatusId;
+                                if (!string.IsNullOrEmpty(lvi.SubItems[colActivateDeactivate].Text))
+                                {
+                                    validIndividualStatusValue = bool.TryParse(lvi.SubItems[colActivateDeactivate].Text, out individualStatus);
+                                }
+                                if (validIndividualStatusValue)
+                                {
+                                    pdata.StatusId = individualStatus ? (int)Phytel.API.DataDomain.Patient.DTO.Status.Active : (int)Phytel.API.DataDomain.Patient.DTO.Status.Inactive;
+                                }
+
                                 PutUpdatePatientDataRequest updatePatientRequest = new PutUpdatePatientDataRequest
                                 {
                                     PatientData = pdata, Context = context, ContractNumber = contractNumber,
@@ -345,11 +394,14 @@ namespace NightingaleImport
                                 {
                                     SetPatientDictionaryFailed(patientDictKey, "Failed to update patient.");
                                     SetListViewItemFailed(lvi);
+                                    progressBar1.Increment(1);
                                     continue;
+
                                 }
 
                                 #region UPDATE CONTACT
-                                //Contact
+                                //Contact   
+                                pdata.StatusId = statusBackup;                            
                                 ContactData data = GetContactData(lvi, pdata);
                                 data.PatientId = existingPatientResponse.Patient.Id;
                                
@@ -360,6 +412,7 @@ namespace NightingaleImport
                                     SetPatientDictionaryFailed(patientDictKey, string.Format("Update Failed. Message: {0} StackTrace: {1}",
                                         existingContactResponse.Status.Message, existingContactResponse.Status.StackTrace));
                                     SetListViewItemFailed(lvi);
+                                    progressBar1.Increment(1);
                                     continue;
                                 }
 
@@ -395,34 +448,19 @@ namespace NightingaleImport
                         }
                         progressBar1.Increment(1);
                     }
-                    /*
-                    string listSucceed = string.Empty;
+                   
+                    btnViewReport.Enabled = true;
 
-                    if (dictionarySucceed.Count < 10)
-                    {
-                        foreach (var pairSucceed in dictionarySucceed)
-                        {
-                            listSucceed += pairSucceed + "\n";
-                        }
-                    }
-                    string listFail = null;
-                    foreach (var pairFail in dictionaryFail)
-                    {
-                        listFail += pairFail + "\n";
-                    }
-
-                    MessageBox.Show(dictionarySucceed.Count() + " patient file(s) successfully imported:\n" + listSucceed + "\n"
-                                        + dictionaryFail.Count() + " patient file(s) failed to import: \n" + listFail);
-                    */
                 }
                 else
                     MessageBox.Show("Invalid 'Admin User Name'!");
             }
             catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
+            {                                          
+                MessageBox.Show(string.Format("Message:{0}, StackTrace:{1}", ex.Message,ex.StackTrace));
 
             }
+
         }
 
         private void SetPatientDictionaryFailed(string dictionaryKey, string failedMessage)
@@ -1680,6 +1718,14 @@ namespace NightingaleImport
             {
                 e.NewValue = CheckState.Unchecked;
             }
+        }
+
+        private void btnViewReport_Click(object sender, EventArgs e)
+        {          
+            FormImportReport frmImportReport = new FormImportReport(patientDictionary);
+            
+            frmImportReport.Show();
+
         }
     }
 }
