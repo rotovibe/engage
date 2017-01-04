@@ -373,7 +373,7 @@ namespace NightingaleImport
                                 bool individualStatus = false;
                                 bool validIndividualStatusValue = false;
                                 int statusBackup = pdata.StatusId;
-                                if (!string.IsNullOrEmpty(lvi.SubItems[colActivateDeactivate].Text))
+                                if (lvi.SubItems.Count>41 && !string.IsNullOrEmpty(lvi.SubItems[colActivateDeactivate].Text))
                                 {
                                     validIndividualStatusValue = bool.TryParse(lvi.SubItems[colActivateDeactivate].Text, out individualStatus);
                                 }
@@ -381,7 +381,11 @@ namespace NightingaleImport
                                 {
                                     pdata.StatusId = individualStatus ? (int)Phytel.API.DataDomain.Patient.DTO.Status.Active : (int)Phytel.API.DataDomain.Patient.DTO.Status.Inactive;
                                 }
-
+                                else
+                                {
+                                    pdata.StatusId = existingPatientResponse.Patient.StatusId;
+                                }
+                                                               
                                 PutUpdatePatientDataRequest updatePatientRequest = new PutUpdatePatientDataRequest
                                 {
                                     PatientData = pdata, Context = context, ContractNumber = contractNumber,
