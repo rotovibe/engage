@@ -128,8 +128,7 @@ namespace NightingaleImport
                
                 Guid sqlUserId = getUserId(txtContactID.Text);
                 if (sqlUserId != Guid.Empty)
-                {
-                  
+                {                  
 
                     GetContactByUserIdDataResponse contactUserResp = import.GetContactByUserId(sqlUserId.ToString());
 

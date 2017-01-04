@@ -291,6 +291,8 @@ namespace NightingaleImport {
             
             private global::System.Data.DataColumn columnDOB;
             
+            private global::System.Data.DataColumn columnOperationType;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public ImportResultDataTable() {
@@ -374,6 +376,14 @@ namespace NightingaleImport {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn OperationTypeColumn {
+                get {
+                    return this.columnOperationType;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -409,7 +419,7 @@ namespace NightingaleImport {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public ImportResultRow AddImportResultRow(string pid, bool Failed, string FailedMessage, string FirstName, string LastName, string DOB) {
+            public ImportResultRow AddImportResultRow(string pid, bool Failed, string FailedMessage, string FirstName, string LastName, string DOB, string OperationType) {
                 ImportResultRow rowImportResultRow = ((ImportResultRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         pid,
@@ -417,7 +427,8 @@ namespace NightingaleImport {
                         FailedMessage,
                         FirstName,
                         LastName,
-                        DOB};
+                        DOB,
+                        OperationType};
                 rowImportResultRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowImportResultRow);
                 return rowImportResultRow;
@@ -453,6 +464,7 @@ namespace NightingaleImport {
                 this.columnFirstName = base.Columns["FirstName"];
                 this.columnLastName = base.Columns["LastName"];
                 this.columnDOB = base.Columns["DOB"];
+                this.columnOperationType = base.Columns["OperationType"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -470,6 +482,8 @@ namespace NightingaleImport {
                 base.Columns.Add(this.columnLastName);
                 this.columnDOB = new global::System.Data.DataColumn("DOB", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnDOB);
+                this.columnOperationType = new global::System.Data.DataColumn("OperationType", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnOperationType);
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
                                 this.columnpid}, true));
                 this.columnpid.AllowDBNull = false;
@@ -707,6 +721,22 @@ namespace NightingaleImport {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string OperationType {
+                get {
+                    try {
+                        return ((string)(this[this.tableImportResult.OperationTypeColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'OperationType\' in table \'ImportResult\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableImportResult.OperationTypeColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public bool IsFailedNull() {
                 return this.IsNull(this.tableImportResult.FailedColumn);
             }
@@ -763,6 +793,18 @@ namespace NightingaleImport {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public void SetDOBNull() {
                 this[this.tableImportResult.DOBColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsOperationTypeNull() {
+                return this.IsNull(this.tableImportResult.OperationTypeColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetOperationTypeNull() {
+                this[this.tableImportResult.OperationTypeColumn] = global::System.Convert.DBNull;
             }
         }
         

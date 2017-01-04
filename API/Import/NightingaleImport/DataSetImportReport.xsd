@@ -12,7 +12,7 @@
   <xs:element name="DataSetImportReport" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="DataSetImportReport" msprop:Generator_UserDSName="DataSetImportReport">
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:element name="ImportResult" msprop:Generator_TableClassName="ImportResultDataTable" msprop:Generator_TableVarName="tableImportResult" msprop:Generator_TablePropName="ImportResult" msprop:Generator_RowDeletingName="ImportResultRowDeleting" msprop:Generator_RowChangingName="ImportResultRowChanging" msprop:Generator_RowEvHandlerName="ImportResultRowChangeEventHandler" msprop:Generator_RowDeletedName="ImportResultRowDeleted" msprop:Generator_UserTableName="ImportResult" msprop:Generator_RowChangedName="ImportResultRowChanged" msprop:Generator_RowEvArgName="ImportResultRowChangeEvent" msprop:Generator_RowClassName="ImportResultRow">
+        <xs:element name="ImportResult" msprop:Generator_TableClassName="ImportResultDataTable" msprop:Generator_TableVarName="tableImportResult" msprop:Generator_RowChangedName="ImportResultRowChanged" msprop:Generator_TablePropName="ImportResult" msprop:Generator_RowDeletingName="ImportResultRowDeleting" msprop:Generator_RowChangingName="ImportResultRowChanging" msprop:Generator_RowEvHandlerName="ImportResultRowChangeEventHandler" msprop:Generator_RowDeletedName="ImportResultRowDeleted" msprop:Generator_RowClassName="ImportResultRow" msprop:Generator_UserTableName="ImportResult" msprop:Generator_RowEvArgName="ImportResultRowChangeEvent">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="pid" msprop:Generator_ColumnVarNameInTable="columnpid" msprop:Generator_ColumnPropNameInRow="pid" msprop:Generator_ColumnPropNameInTable="pidColumn" msprop:Generator_UserColumnName="pid" type="xs:string" />
@@ -21,6 +21,7 @@
               <xs:element name="FirstName" msprop:Generator_ColumnVarNameInTable="columnFirstName" msprop:Generator_ColumnPropNameInRow="FirstName" msprop:Generator_ColumnPropNameInTable="FirstNameColumn" msprop:Generator_UserColumnName="FirstName" type="xs:string" minOccurs="0" />
               <xs:element name="LastName" msprop:Generator_ColumnVarNameInTable="columnLastName" msprop:Generator_ColumnPropNameInRow="LastName" msprop:Generator_ColumnPropNameInTable="LastNameColumn" msprop:Generator_UserColumnName="LastName" type="xs:string" minOccurs="0" />
               <xs:element name="DOB" msprop:Generator_ColumnVarNameInTable="columnDOB" msprop:Generator_ColumnPropNameInRow="DOB" msprop:Generator_ColumnPropNameInTable="DOBColumn" msprop:Generator_UserColumnName="DOB" type="xs:string" minOccurs="0" />
+              <xs:element name="OperationType" msprop:Generator_ColumnVarNameInTable="columnOperationType" msprop:Generator_ColumnPropNameInRow="OperationType" msprop:Generator_ColumnPropNameInTable="OperationTypeColumn" msprop:Generator_UserColumnName="OperationType" type="xs:string" minOccurs="0" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>

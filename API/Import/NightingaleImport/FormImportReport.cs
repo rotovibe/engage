@@ -17,7 +17,12 @@ namespace NightingaleImport
     public partial class FormImportReport : Form
     {
         private Dictionary<string, ImportData> currentData;
-        //private DataSetImportReport dsImport = new DataSetImportReport();
+        private int insertPassed = 0;
+        private int insertFailed = 0;
+        private int updatePassed = 0;
+        private int updateFailed = 0;
+        private int total = 0;
+
         public FormImportReport(Dictionary<string,ImportData> data )
         {
             InitializeComponent();
@@ -32,22 +37,57 @@ namespace NightingaleImport
             {
                 if (currentData[key].patientData!=null)
                 {                                    
-                    ImportResultRow dr = this.dataSetImportReport.ImportResult.NewImportResultRow();                
+                    ImportResultRow dr = this.dataSetImportReport.ImportResult.NewImportResultRow();
+                    var currentValue = currentData[key];
                     dr.pid = key;
-                    dr.DOB = currentData[key].patientData.DOB;
-                    dr.FirstName = currentData[key].patientData.FirstName;
-                    dr.LastName = currentData[key].patientData.LastName;
-                    dr.Failed  = currentData[key].failed;
-                    dr.FailedMessage = currentData[key].failedMessage;
+                    dr.DOB = currentValue.patientData.DOB;
+                    dr.FirstName = currentValue.patientData.FirstName;
+                    dr.LastName = currentValue.patientData.LastName;
+                    dr.Failed  = currentValue.failed;
+                    dr.FailedMessage = currentValue.failedMessage;
+                    dr.OperationType = currentValue.importOperation.ToString();
                     this.dataSetImportReport.ImportResult.Rows.Add(dr);
+                    setCounts(dr);
                 }
             }
             
         }
 
+        private void setCounts(ImportResultRow dr)
+        {
+            total++;
+            switch (dr.OperationType)
+            {
+                case "INSERT":
+                {
+                    if (dr.Failed)
+                        insertFailed++;
+                    else
+                        insertPassed++;
+                    break;
+                }
+                case "UPDATE":
+                {
+                    if (dr.Failed)
+                        updateFailed++;
+                    else
+                        updatePassed++;
+                    break;
+                       
+                }
+                default:
+                    break;
+            }
+        }
+
         private void FormImportReport_Load(object sender, EventArgs e)
         {
-            this.dataGridView1.DataSource = this.dataSetImportReport.ImportResult;            
+            this.dataGridView1.DataSource = this.dataSetImportReport.ImportResult;
+            //lblTotalValue.Text = total.ToString();
+            lblInsertPassedValue.Text = insertPassed.ToString();
+            lblInsertFailedValue.Text = insertFailed.ToString();
+            lblUpdatePassedValue.Text = updatePassed.ToString();
+            lblUpdatedFailedValue.Text = updateFailed.ToString();
         }
     }
 }
