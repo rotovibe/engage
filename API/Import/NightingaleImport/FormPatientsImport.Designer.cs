@@ -89,6 +89,9 @@
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.btnViewReport = new System.Windows.Forms.Button();
             this.lblProgressValue = new System.Windows.Forms.Label();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom )));
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // openFileDialog1
@@ -123,7 +126,7 @@
             // 
             this.btnImport.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.btnImport.Enabled = false;
-            this.btnImport.Location = new System.Drawing.Point(316, 446);
+            this.btnImport.Location = new System.Drawing.Point(52, 10);
             this.btnImport.Name = "btnImport";
             this.btnImport.Size = new System.Drawing.Size(75, 23);
             this.btnImport.TabIndex = 4;
@@ -135,7 +138,7 @@
             // button2
             // 
             this.button2.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.button2.Location = new System.Drawing.Point(396, 446);
+            this.button2.Location = new System.Drawing.Point(214, 10);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 5;
@@ -493,8 +496,9 @@
             // 
             // btnViewReport
             // 
+            this.btnViewReport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnViewReport.Enabled = false;
-            this.btnViewReport.Location = new System.Drawing.Point(316, 476);
+            this.btnViewReport.Location = new System.Drawing.Point(133, 10);
             this.btnViewReport.Name = "btnViewReport";
             this.btnViewReport.Size = new System.Drawing.Size(75, 23);
             this.btnViewReport.TabIndex = 21;
@@ -512,13 +516,23 @@
             this.lblProgressValue.Text = "0/0";
             this.lblProgressValue.Visible = false;
             // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.btnImport);
+            this.panel1.Controls.Add(this.button2);
+            this.panel1.Controls.Add(this.btnViewReport);
+            this.panel1.Location = new System.Drawing.Point(168, 447);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(341, 58);
+            this.panel1.TabIndex = 23;
+            // 
             // FormPatientsImport
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(840, 540);
+            this.Controls.Add(this.panel1);
             this.Controls.Add(this.lblProgressValue);
-            this.Controls.Add(this.btnViewReport);
             this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.lblStatus);
             this.Controls.Add(this.comboBoxContractList);
@@ -531,14 +545,13 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.chkSelectAll);
             this.Controls.Add(this.listView1);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.btnImport);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.Browse);
             this.Name = "FormPatientsImport";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Nightingale Import Utility";
             this.Load += new System.EventHandler(this.FormPatientsImport_Load);
+            this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -607,6 +620,7 @@
         private System.Windows.Forms.ProgressBar progressBar1;
         private System.Windows.Forms.Button btnViewReport;
         private System.Windows.Forms.Label lblProgressValue;
+        private System.Windows.Forms.Panel panel1;
     }
 }
 
