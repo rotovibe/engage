@@ -83,7 +83,7 @@ namespace NightingaleImport
         private void FormImportReport_Load(object sender, EventArgs e)
         {
             this.dataGridView1.DataSource = this.dataSetImportReport.ImportResult;
-            //lblTotalValue.Text = total.ToString();
+            lblTotalValue.Text = total.ToString();
             lblInsertPassedValue.Text = insertPassed.ToString();
             lblInsertFailedValue.Text = insertFailed.ToString();
             lblUpdatePassedValue.Text = updatePassed.ToString();

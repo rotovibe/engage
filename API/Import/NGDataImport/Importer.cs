@@ -68,6 +68,7 @@ namespace NGDataImport
             //use a Stream reader to construct the StringContent (Json) 
             StreamReader zoneSr = new StreamReader(zoneMs);
             StringContent zoneContent = new StringContent(zoneSr.ReadToEnd(), System.Text.Encoding.UTF8, "application/json");
+            zoneMs.Dispose();
 
             //Post the data 
             var zoneResponse = zoneClient.GetStringAsync(zoneUri);
@@ -109,6 +110,7 @@ namespace NGDataImport
             //use a Stream reader to construct the StringContent (Json) 
             StreamReader modesSr = new StreamReader(modesMs);
             StringContent modesContent = new StringContent(modesSr.ReadToEnd(), System.Text.Encoding.UTF8, "application/json");
+            modesMs.Dispose();
 
             //Post the data 
             var modesResponse = modesClient.GetStringAsync(modesUri);
@@ -150,6 +152,7 @@ namespace NGDataImport
             //use a Stream reader to construct the StringContent (Json) 
             StreamReader typesSr = new StreamReader(typesMs);
             StringContent typesContent = new StringContent(typesSr.ReadToEnd(), System.Text.Encoding.UTF8, "application/json");
+            typesMs.Dispose();
 
             //Post the data 
             var typesResponse = typesClient.GetStringAsync(typesUri);
@@ -200,6 +203,8 @@ namespace NGDataImport
             //use a Stream reader to construct the StringContent (Json) 
             StreamReader statesSr = new StreamReader(statesMs);
             StringContent statesContent = new StringContent(statesSr.ReadToEnd(), System.Text.Encoding.UTF8, "application/json");
+
+            statesMs.Dispose();
 
             //Post the data 
             var statesResponse = statesClient.GetStringAsync(statesUri);
@@ -252,6 +257,7 @@ namespace NGDataImport
             //use a Stream reader to construct the StringContent (Json) 
             StreamReader typesSr = new StreamReader(typesMs);
             StringContent typesContent = new StringContent(typesSr.ReadToEnd(), System.Text.Encoding.UTF8, "application/json");
+            typesMs.Dispose();
 
             //Post the data 
             var typesResponse = typesClient.GetStringAsync(typesUri);
@@ -295,6 +301,7 @@ namespace NGDataImport
                 StreamReader sr = new StreamReader(ms);
 
                 StringContent theContent = new StringContent(sr.ReadToEnd(), System.Text.Encoding.UTF8, "application/json");
+                ms.Dispose();
 
                 //Post the data 
                 var response = client.PutAsync(theUri, theContent);
@@ -341,6 +348,7 @@ namespace NGDataImport
             StreamReader srPS = new StreamReader(msPS);
 
             StringContent theContentPS = new StringContent(srPS.ReadToEnd(), System.Text.Encoding.UTF8, "application/json");
+            msPS.Dispose();
 
             //Post the data 
             var responsePS = clientPS.PostAsync(theUriPS, theContentPS);
@@ -378,6 +386,7 @@ namespace NGDataImport
             //use a Stream reader to construct the StringContent (Json) 
             StreamReader modesSr = new StreamReader(ms);
             StringContent modesContent = new StringContent(modesSr.ReadToEnd(), System.Text.Encoding.UTF8, "application/json");
+            ms.Dispose();
 
             //Post the data 
             var response = client.GetStringAsync(theUriPS);
@@ -458,6 +467,7 @@ namespace NGDataImport
             StreamReader updateSr = new StreamReader(updateMs);
 
             StringContent updateContent = new StringContent(updateSr.ReadToEnd(), System.Text.Encoding.UTF8, "application/json");
+            updateMs.Dispose();
 
             //Post the data 
             var updateResponse = updateClient.PutAsync(updateUri, updateContent);
@@ -499,6 +509,7 @@ namespace NGDataImport
             StreamReader updateSr = new StreamReader(updateMs);
 
             StringContent updateContent = new StringContent(updateSr.ReadToEnd(), System.Text.Encoding.UTF8, "application/json");
+            updateMs.Dispose();
 
             //Post the data 
             var updateResponse = updateClient.PutAsync(updateUri, updateContent);
@@ -536,6 +547,7 @@ namespace NGDataImport
             //use a Stream reader to construct the StringContent (Json) 
             StreamReader contactSr = new StreamReader(contactMs);
             StringContent contactContent = new StringContent(contactSr.ReadToEnd(), System.Text.Encoding.UTF8, "application/json");
+            contactMs.Dispose();
 
             //Post the data 
             var contactResponse = contactClient.PostAsync(contactUri, contactContent);
@@ -574,7 +586,8 @@ namespace NGDataImport
             //use a Stream reader to construct the StringContent (Json) 
             StreamReader contactSr = new StreamReader(contactMs);
             StringContent contactContent = new StringContent(contactSr.ReadToEnd(), System.Text.Encoding.UTF8, "application/json");
-            //contactMs.Dispose();
+            contactMs.Dispose();
+
             //Post the data 
             var contactResponse = contactClient.PutAsync(contactUri, contactContent);
             var contactResponseContent = contactResponse.Result.Content;
@@ -613,6 +626,7 @@ namespace NGDataImport
             StreamReader sr = new StreamReader(ms);
 
             StringContent theContent = new StringContent(sr.ReadToEnd(), System.Text.Encoding.UTF8, "application/json");
+            ms.Dispose();
 
             //Post the data 
             var response = client.PostAsync(contactUri, theContent);
@@ -657,6 +671,7 @@ namespace NGDataImport
             //use a Stream reader to construct the StringContent (Json) 
             StreamReader getContactSr = new StreamReader(getContactMs);
             StringContent getContactContent = new StringContent(getContactSr.ReadToEnd(), System.Text.Encoding.UTF8, "application/json");
+            getContactMs.Dispose();
 
             //Post the data 
             var getContactResponse = getContactClient.GetStringAsync(getContactUri);
@@ -703,6 +718,7 @@ namespace NGDataImport
             //use a Stream reader to construct the StringContent (Json) 
             StreamReader getContactSr = new StreamReader(getContactMs);
             StringContent getContactContent = new StringContent(getContactSr.ReadToEnd(), System.Text.Encoding.UTF8, "application/json");
+            getContactMs.Dispose();
 
             //Post the data 
             var getContactResponse = getContactClient.GetStringAsync(getContactUri);
@@ -810,6 +826,7 @@ namespace NGDataImport
             StreamReader sr = new StreamReader(ms);
 
             StringContent theContent = new StringContent(sr.ReadToEnd(), System.Text.Encoding.UTF8, "application/json");
+            ms.Dispose();
 
             //Post the data 
             var response = client.PutAsync(cohortPatientUri, theContent);

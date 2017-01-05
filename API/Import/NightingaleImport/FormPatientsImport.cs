@@ -121,6 +121,7 @@ namespace NightingaleImport
             try
             {
                 btnViewReport.Enabled = false;
+                lblProgressValue.Visible = true;
                 progressBar1.Visible = true;
                 progressBar1.Maximum = listView1.CheckedItems.Count;
                 progressBar1.Value = 0;
@@ -151,6 +152,8 @@ namespace NightingaleImport
                    
                     foreach (ListViewItem lvi in listView1.CheckedItems)
                     {
+                        lblProgressValue.Text = string.Format("{0}/{1}", progressBar1.Value + 1, progressBar1.Maximum);
+                        lblProgressValue.Refresh();
                         var patientDictKey = string.Format("{0}{1}{2}", lvi.SubItems[colFirstN].Text,
                                     lvi.SubItems[colLastN].Text, lvi.SubItems[colDB].Text);
 
@@ -463,6 +466,7 @@ namespace NightingaleImport
                 MessageBox.Show(string.Format("Message:{0}, StackTrace:{1}", ex.Message,ex.StackTrace));
 
             }
+            chkSelectAll.Text = string.Format("Select All ({0} Patients)", patientDictionary.Values.Count(id => id.patientData == null));
 
         }
 
@@ -574,6 +578,7 @@ namespace NightingaleImport
                         if (String.Compare(lvi.SubItems[colPh1Type].Text.Trim(), c.Name, true) == 0)
                         {
                             phone1.TypeId = c.Id;
+                            break;
                         }
                     }
                 }
@@ -606,6 +611,7 @@ namespace NightingaleImport
                         if (String.Compare(lvi.SubItems[colPh2Type].Text.Trim(), c.Name, true) == 0)
                         {
                             phone2.TypeId = c.Id;
+                            break;
                         }
                     }
                 }
@@ -638,6 +644,7 @@ namespace NightingaleImport
                         if (String.Compare(lvi.SubItems[colEm1Type].Text.Trim(), c.Name, true) == 0)
                         {
                             email1.TypeId = c.Id;
+                            break;
                         }
                     }
                 }
@@ -669,6 +676,7 @@ namespace NightingaleImport
                         if (String.Compare(lvi.SubItems[colEm2Type].Text.Trim(), c.Name, true) == 0)
                         {
                             email2.TypeId = c.Id;
+                            break;
                         }
                     }
                 }
@@ -710,6 +718,7 @@ namespace NightingaleImport
                         || (st.Code == stateTrim))
                     {
                         add1.StateId = st.Id;
+                        break;
                     }
                 }
 
@@ -720,6 +729,7 @@ namespace NightingaleImport
                         if (String.Compare(lvi.SubItems[colAdd1Type].Text.Trim(), c.Name, true) == 0)
                         {
                             add1.TypeId = c.Id;
+                            break;
                         }
                     }
                 }
@@ -760,6 +770,7 @@ namespace NightingaleImport
                         || (st.Code == stateTrim))
                     {
                         add2.StateId = st.Id;
+                        break;
                     }
                 }
 
@@ -770,6 +781,7 @@ namespace NightingaleImport
                         if (String.Compare(lvi.SubItems[colAdd2Type].Text.Trim(), c.Name, true) == 0)
                         {
                             add2.TypeId = c.Id;
+                            break;
                         }
                     }
                 }
@@ -907,6 +919,8 @@ namespace NightingaleImport
             //use a Stream reader to construct the StringContent (Json) 
             StreamReader statesSr = new StreamReader(statesMs);
             StringContent statesContent = new StringContent(statesSr.ReadToEnd(), System.Text.Encoding.UTF8, "application/json");
+            statesMs.Dispose();
+            statesSr.Dispose();
 
             //Post the data 
             var statesResponse = statesClient.GetStringAsync(statesUri);
@@ -985,6 +999,8 @@ namespace NightingaleImport
             //use a Stream reader to construct the StringContent (Json) 
             StreamReader zoneSr = new StreamReader(zoneMs);
             StringContent zoneContent = new StringContent(zoneSr.ReadToEnd(), System.Text.Encoding.UTF8, "application/json");
+            zoneMs.Dispose();
+            zoneSr.Dispose();
 
             //Post the data 
             var zoneResponse = zoneClient.GetStringAsync(zoneUri);
@@ -1025,6 +1041,8 @@ namespace NightingaleImport
             //use a Stream reader to construct the StringContent (Json) 
             StreamReader careMemberSr = new StreamReader(careMemberMs);
             StringContent careMemberContent = new StringContent(careMemberSr.ReadToEnd(), System.Text.Encoding.UTF8, "application/json");
+            careMemberMs.Dispose();
+            careMemberSr.Dispose();
 
             //Post the data 
             var careMemberResponse = careMemberClient.GetStringAsync(careMemberUri);
@@ -1068,7 +1086,9 @@ namespace NightingaleImport
             //use a Stream reader to construct the StringContent (Json) 
             StreamReader modesSr = new StreamReader(ms);
             StringContent modesContent = new StringContent(modesSr.ReadToEnd(), System.Text.Encoding.UTF8, "application/json");
-
+            ms.Dispose();
+            modesSr.Dispose();
+      
             //Post the data 
             var response = client.GetStringAsync(patientsystemDDUri);
             var responseContent = response.Result;
@@ -1104,6 +1124,7 @@ namespace NightingaleImport
         {
             try
             {
+                progressBar1.Value = 0;
                 if (openFileDialog1.CheckFileExists)
                 {
                     filename = openFileDialog1.FileName;

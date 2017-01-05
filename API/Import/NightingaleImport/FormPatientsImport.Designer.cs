@@ -88,6 +88,7 @@
             this.lblStatus = new System.Windows.Forms.Label();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.btnViewReport = new System.Windows.Forms.Button();
+            this.lblProgressValue = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // openFileDialog1
@@ -484,7 +485,7 @@
             // 
             // progressBar1
             // 
-            this.progressBar1.Location = new System.Drawing.Point(35, 45);
+            this.progressBar1.Location = new System.Drawing.Point(28, 41);
             this.progressBar1.Name = "progressBar1";
             this.progressBar1.Size = new System.Drawing.Size(463, 23);
             this.progressBar1.TabIndex = 20;
@@ -501,11 +502,22 @@
             this.btnViewReport.UseVisualStyleBackColor = true;
             this.btnViewReport.Click += new System.EventHandler(this.btnViewReport_Click);
             // 
+            // lblProgressValue
+            // 
+            this.lblProgressValue.AutoSize = true;
+            this.lblProgressValue.Location = new System.Drawing.Point(497, 46);
+            this.lblProgressValue.Name = "lblProgressValue";
+            this.lblProgressValue.Size = new System.Drawing.Size(24, 13);
+            this.lblProgressValue.TabIndex = 22;
+            this.lblProgressValue.Text = "0/0";
+            this.lblProgressValue.Visible = false;
+            // 
             // FormPatientsImport
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(840, 540);
+            this.Controls.Add(this.lblProgressValue);
             this.Controls.Add(this.btnViewReport);
             this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.lblStatus);
@@ -594,6 +606,7 @@
         private System.Windows.Forms.Label lblStatus;
         private System.Windows.Forms.ProgressBar progressBar1;
         private System.Windows.Forms.Button btnViewReport;
+        private System.Windows.Forms.Label lblProgressValue;
     }
 }
 
