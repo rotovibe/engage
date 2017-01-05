@@ -110,7 +110,7 @@ namespace Phytel.API.DataDomain.Patient
 
             IPatientRepository repo = Factory.GetRepository(request, RepositoryType.Patient);
            
-            result.Patient = repo.FindByNameDOB(request.FirstName, request.LastName, Convert.ToDateTime(request.DOB).ToString("MM/dd/yyyy")) as DTO.PatientData;
+            result.Patient = repo.FindByNameDOB(request.FirstName, request.LastName, request.DOB) as DTO.PatientData;
 
             return result;
         }
