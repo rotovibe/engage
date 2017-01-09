@@ -1,21 +1,16 @@
-﻿//IBM Confidential
-//OCO Source Materials
-//PID:5725Z49
-//© Copyright IBM Corp. 2013, 2016
-//The source code for this program is not published or otherwise divested of its trade secrets, irrespective of what has been deposited with the U.S. Copyright Office
-using System.Reflection;
+﻿using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Nightingale.Site")]
+[assembly: AssemblyTitle("NGDataImport.Test")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("IBM Corp.")]
-[assembly: AssemblyProduct("PID:5725Z49")]
-[assembly: AssemblyCopyright("Copyright © IBM Corporation 2013, 2016")]
+[assembly: AssemblyCompany("IBM")]
+[assembly: AssemblyProduct("NGDataImport.Test")]
+[assembly: AssemblyCopyright("Copyright © IBM 2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -25,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("76fb137c-e782-43e2-bb4b-672b1b4552f6")]
+[assembly: Guid("8a188666-51e7-4a78-985d-a0bd2c911dd4")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -34,7 +29,8 @@ using System.Runtime.InteropServices;
 //      Build Number
 //      Revision
 //
-// You can specify all the values or you can default the Revision and Build Numbers 
+// You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
-[assembly: AssemblyVersion("1.5.0.5")]
-[assembly: AssemblyFileVersion("1.5.0.5")]
+// [assembly: AssemblyVersion("1.0.*")]
+[assembly: AssemblyVersion("1.0.0.0")]
+[assembly: AssemblyFileVersion("1.0.0.0")]

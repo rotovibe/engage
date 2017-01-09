@@ -33,6 +33,27 @@ namespace Phytel.API.DataDomain.Patient.Service
             return response;
         }
 
+        public GetPatientDataResponse Get(GetPatientDataByNameDOBRequest request)
+        {
+            GetPatientDataResponse response = new GetPatientDataResponse();
+            try
+            {
+                if (string.IsNullOrEmpty(request.UserId))
+                    throw new UnauthorizedAccessException("PatientDD:Get()::Unauthorized Access");
+
+                response = PatientManager.GetPatientDataByNameDOB(request);
+                response.Version = request.Version;
+            }
+            catch (Exception ex)
+            {
+                CommonFormatterUtil.FormatExceptionResponse(response, base.Response, ex);
+
+                string aseProcessID = ConfigurationManager.AppSettings.Get("ASEProcessID") ?? "0";
+                Helpers.LogException(int.Parse(aseProcessID), ex);
+            }
+            return response;
+        }
+
         public GetPatientSSNDataResponse Get(GetPatientSSNDataRequest request)
         {
             GetPatientSSNDataResponse response = new GetPatientSSNDataResponse();

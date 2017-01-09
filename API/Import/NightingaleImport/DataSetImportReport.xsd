@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="DataSetImportReport" targetNamespace="http://tempuri.org/DataSetImportReport.xsd" xmlns:mstns="http://tempuri.org/DataSetImportReport.xsd" xmlns="http://tempuri.org/DataSetImportReport.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections />
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="DataSetImportReport" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="DataSetImportReport" msprop:Generator_UserDSName="DataSetImportReport">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="ImportResult" msprop:Generator_TableClassName="ImportResultDataTable" msprop:Generator_TableVarName="tableImportResult" msprop:Generator_RowChangedName="ImportResultRowChanged" msprop:Generator_TablePropName="ImportResult" msprop:Generator_RowDeletingName="ImportResultRowDeleting" msprop:Generator_RowChangingName="ImportResultRowChanging" msprop:Generator_RowEvHandlerName="ImportResultRowChangeEventHandler" msprop:Generator_RowDeletedName="ImportResultRowDeleted" msprop:Generator_RowClassName="ImportResultRow" msprop:Generator_UserTableName="ImportResult" msprop:Generator_RowEvArgName="ImportResultRowChangeEvent">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="pid" msprop:Generator_ColumnVarNameInTable="columnpid" msprop:Generator_ColumnPropNameInRow="pid" msprop:Generator_ColumnPropNameInTable="pidColumn" msprop:Generator_UserColumnName="pid" type="xs:string" />
+              <xs:element name="Failed" msprop:Generator_ColumnVarNameInTable="columnFailed" msprop:Generator_ColumnPropNameInRow="Failed" msprop:Generator_ColumnPropNameInTable="FailedColumn" msprop:Generator_UserColumnName="Failed" type="xs:boolean" minOccurs="0" />
+              <xs:element name="FailedMessage" msprop:Generator_ColumnVarNameInTable="columnFailedMessage" msprop:Generator_ColumnPropNameInRow="FailedMessage" msprop:Generator_ColumnPropNameInTable="FailedMessageColumn" msprop:Generator_UserColumnName="FailedMessage" type="xs:string" minOccurs="0" />
+              <xs:element name="FirstName" msprop:Generator_ColumnVarNameInTable="columnFirstName" msprop:Generator_ColumnPropNameInRow="FirstName" msprop:Generator_ColumnPropNameInTable="FirstNameColumn" msprop:Generator_UserColumnName="FirstName" type="xs:string" minOccurs="0" />
+              <xs:element name="LastName" msprop:Generator_ColumnVarNameInTable="columnLastName" msprop:Generator_ColumnPropNameInRow="LastName" msprop:Generator_ColumnPropNameInTable="LastNameColumn" msprop:Generator_UserColumnName="LastName" type="xs:string" minOccurs="0" />
+              <xs:element name="DOB" msprop:Generator_ColumnVarNameInTable="columnDOB" msprop:Generator_ColumnPropNameInRow="DOB" msprop:Generator_ColumnPropNameInTable="DOBColumn" msprop:Generator_UserColumnName="DOB" type="xs:string" minOccurs="0" />
+              <xs:element name="OperationType" msprop:Generator_ColumnVarNameInTable="columnOperationType" msprop:Generator_ColumnPropNameInRow="OperationType" msprop:Generator_ColumnPropNameInTable="OperationTypeColumn" msprop:Generator_UserColumnName="OperationType" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+    <xs:unique name="Constraint1" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:ImportResult" />
+      <xs:field xpath="mstns:pid" />
+    </xs:unique>
+  </xs:element>
+</xs:schema>

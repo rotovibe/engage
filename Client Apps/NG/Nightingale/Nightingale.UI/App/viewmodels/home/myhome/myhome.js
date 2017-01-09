@@ -20,8 +20,27 @@
                     // And set the new sub route
                     navigation.setSubRoute(thisSubRoute);
                 } else {
-                    //the "Open To-Do List" grid's title column has the functionality built in to edit this event. 
-                    $("a[edit_todoid = '" + event.id + "']").click();
+                        var thisEvent = datacontext.getEventById(event.id);
+                        var thisToDo = ko.utils.arrayFirst(myToDos(), function (td) {
+                            return td.id() === event.id;
+                        });
+                        if (thisToDo && thisEvent){   
+                            var editModalSettings = {
+                                title: "Edit To Do - " + thisEvent.patientName(),
+                                entity: editModalEntity, 
+                                templatePath: 'viewmodels/templates/todo.edit', 
+                                showing: editModalShowing, 
+                                saveOverride: editSaveOverride,  
+                                cancelOverride: editCancelOverride, 
+                                deleteOverride: null, 
+                                classOverride: null
+                            }
+                            var editModal = new modelConfig.modal(editModalSettings);                        
+                            editModalEntity().todo(thisToDo);
+                            editModalEntity().event(thisEvent);
+                            shell.currentModal(editModal);
+                            editModalShowing(true);                            
+                        }                        
                 }
             };
         }
@@ -83,9 +102,23 @@
 				todo.clearDirty();
             }
         };
+        function editSaveOverride () {
+            datacontext.saveToDo(editModalEntity().todo(), 'Update').then(saveCompleted);
+
+            function saveCompleted(todo) {
+                // todo.isNew(false);
+                // localCollections.todos.push(newTodo());
+				var dummy = myToDos().length;
+				todo.clearDirty();
+            }
+        };
         function cancelOverride () {
             datacontext.cancelEntityChanges(modalEntity().todo());
 			modalEntity().todo().clearDirty();
+        };
+        function editCancelOverride () {
+            datacontext.cancelEntityChanges(editModalEntity().todo());
+			editModalEntity().todo().clearDirty();
         };
 		var modalSettings = {
 			title: 'Create To Do',
@@ -98,6 +131,13 @@
 			classOverride: null
 		}
         var modal = new modelConfig.modal(modalSettings);
+
+
+         // Edit ToDo modal
+        var editModalShowing = ko.observable(false);
+        var editModalEntity = ko.observable(new EditModalEntity(editModalShowing));
+        
+		
 
         function Event() {
             var self = this;
@@ -596,6 +636,33 @@
             // Object containing parameters to pass to the modal
             self.activationData = { todo: self.todo, canSave: self.canSave, showing: modalShowing  };
         }
+
+        function EditModalEntity(modalShowing) {
+            var self = this;
+            self.todo = ko.observable();
+             self.event = ko.observable();
+            self.canSaveObservable = ko.observable(true);
+            self.canSave = ko.computed({
+                read: function () {
+                    var todook = false;
+                    if (self.todo()) {                        
+						todook = self.todo().isValid();
+                    }
+                    if (self.event()) {                       
+                        // var todotitle = !!self.todo().title();
+                        // var todostatus = !!self.todo().status();
+                        // todook = todotitle && todostatus;
+                    }
+                    return todook && self.canSaveObservable();
+                },
+                write: function (newValue) {
+                    self.canSaveObservable(newValue);
+                }
+            });
+            // Object containing parameters to pass to the modal
+            self.activationData = { todo: self.todo,event:self.event, canSave: self.canSave, showing: modalShowing  };
+        }
+
 
         function EventModalEntity(modalShowing) {
             var self = this;

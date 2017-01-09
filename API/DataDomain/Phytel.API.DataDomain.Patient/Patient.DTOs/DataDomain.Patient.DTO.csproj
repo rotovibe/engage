@@ -106,6 +106,7 @@
     <Compile Include="Enums.cs" />
     <Compile Include="GetAllPatientsDataRequest.cs" />
     <Compile Include="GetAllPatientsDataResponse.cs" />
+    <Compile Include="GetPatientDataByNameDOBRequest.cs" />
     <Compile Include="PutInitializePatientDataRequest.cs" />
     <Compile Include="PutInitializePatientDataResponse.cs" />
     <Compile Include="InsertBatchPatientsDataRequest.cs" />
