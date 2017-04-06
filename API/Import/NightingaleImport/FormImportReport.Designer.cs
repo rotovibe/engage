@@ -1,4 +1,6 @@
-﻿namespace NightingaleImport
+﻿using System.Reflection.Emit;
+
+namespace NightingaleImport
 {
     partial class FormImportReport
     {
@@ -30,13 +32,6 @@
         {
             this.components = new System.ComponentModel.Container();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.firstNameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.lastNameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dOBDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.failedDataGridViewCheckBoxColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.OperationType = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.failedMessageDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.pidDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.importResultBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.dataSetImportReport = new NightingaleImport.DataSetImportReport();
             this.label1 = new System.Windows.Forms.Label();
@@ -49,6 +44,16 @@
             this.label7 = new System.Windows.Forms.Label();
             this.lblUpdatedFailedValue = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
+            this.lblUpdatedSkippedValue = new System.Windows.Forms.Label();
+            this.lblUpdatedSkipped = new System.Windows.Forms.Label();
+            this.firstNameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.lastNameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dOBDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.failedDataGridViewCheckBoxColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.dataGridViewCheckBoxColumn1 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.OperationType = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.failedMessageDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.pidDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.importResultBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataSetImportReport)).BeginInit();
@@ -66,17 +71,137 @@
             this.lastNameDataGridViewTextBoxColumn,
             this.dOBDataGridViewTextBoxColumn,
             this.failedDataGridViewCheckBoxColumn,
+            this.dataGridViewCheckBoxColumn1,
             this.OperationType,
             this.failedMessageDataGridViewTextBoxColumn,
             this.pidDataGridViewTextBoxColumn});
             this.dataGridView1.DataSource = this.importResultBindingSource;
             this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.dataGridView1.Location = new System.Drawing.Point(0, 44);
+            this.dataGridView1.Location = new System.Drawing.Point(0, 54);
+            this.dataGridView1.Margin = new System.Windows.Forms.Padding(4);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
             this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridView1.Size = new System.Drawing.Size(991, 460);
+            this.dataGridView1.Size = new System.Drawing.Size(1321, 566);
             this.dataGridView1.TabIndex = 1;
+            // 
+            // importResultBindingSource
+            // 
+            this.importResultBindingSource.DataMember = "ImportResult";
+            this.importResultBindingSource.DataSource = this.dataSetImportReport;
+            // 
+            // dataSetImportReport
+            // 
+            this.dataSetImportReport.DataSetName = "DataSetImportReport";
+            this.dataSetImportReport.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(28, 14);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(44, 17);
+            this.label1.TabIndex = 2;
+            this.label1.Text = "Total:";
+            // 
+            // lblTotalValue
+            // 
+            this.lblTotalValue.AutoSize = true;
+            this.lblTotalValue.Location = new System.Drawing.Point(77, 14);
+            this.lblTotalValue.Name = "lblTotalValue";
+            this.lblTotalValue.Size = new System.Drawing.Size(16, 17);
+            this.lblTotalValue.TabIndex = 3;
+            this.lblTotalValue.Text = "0";
+            // 
+            // lblInsertPassedValue
+            // 
+            this.lblInsertPassedValue.AutoSize = true;
+            this.lblInsertPassedValue.Location = new System.Drawing.Point(225, 14);
+            this.lblInsertPassedValue.Name = "lblInsertPassedValue";
+            this.lblInsertPassedValue.Size = new System.Drawing.Size(16, 17);
+            this.lblInsertPassedValue.TabIndex = 5;
+            this.lblInsertPassedValue.Text = "0";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(125, 14);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(98, 17);
+            this.label3.TabIndex = 4;
+            this.label3.Text = "Insert Passed:";
+            // 
+            // lblInsertFailedValue
+            // 
+            this.lblInsertFailedValue.AutoSize = true;
+            this.lblInsertFailedValue.Location = new System.Drawing.Point(376, 14);
+            this.lblInsertFailedValue.Name = "lblInsertFailedValue";
+            this.lblInsertFailedValue.Size = new System.Drawing.Size(16, 17);
+            this.lblInsertFailedValue.TabIndex = 7;
+            this.lblInsertFailedValue.Text = "0";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(281, 14);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(89, 17);
+            this.label5.TabIndex = 6;
+            this.label5.Text = "Insert Failed:";
+            // 
+            // lblUpdatePassedValue
+            // 
+            this.lblUpdatePassedValue.AutoSize = true;
+            this.lblUpdatePassedValue.Location = new System.Drawing.Point(559, 14);
+            this.lblUpdatePassedValue.Name = "lblUpdatePassedValue";
+            this.lblUpdatePassedValue.Size = new System.Drawing.Size(16, 17);
+            this.lblUpdatePassedValue.TabIndex = 9;
+            this.lblUpdatePassedValue.Text = "0";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(444, 14);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(109, 17);
+            this.label7.TabIndex = 8;
+            this.label7.Text = "Update Passed:";
+            // 
+            // lblUpdatedFailedValue
+            // 
+            this.lblUpdatedFailedValue.AutoSize = true;
+            this.lblUpdatedFailedValue.Location = new System.Drawing.Point(707, 14);
+            this.lblUpdatedFailedValue.Name = "lblUpdatedFailedValue";
+            this.lblUpdatedFailedValue.Size = new System.Drawing.Size(16, 17);
+            this.lblUpdatedFailedValue.TabIndex = 11;
+            this.lblUpdatedFailedValue.Text = "0";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(601, 14);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(100, 17);
+            this.label9.TabIndex = 10;
+            this.label9.Text = "Update Failed:";
+            // 
+            // lblUpdatedSkippedValue
+            // 
+            this.lblUpdatedSkippedValue.AutoSize = true;
+            this.lblUpdatedSkippedValue.Location = new System.Drawing.Point(839, 14);
+            this.lblUpdatedSkippedValue.Name = "lblUpdatedSkippedValue";
+            this.lblUpdatedSkippedValue.Size = new System.Drawing.Size(16, 17);
+            this.lblUpdatedSkippedValue.TabIndex = 13;
+            this.lblUpdatedSkippedValue.Text = "0";
+            // 
+            // lblUpdatedSkipped
+            // 
+            this.lblUpdatedSkipped.AutoSize = true;
+            this.lblUpdatedSkipped.Location = new System.Drawing.Point(747, 14);
+            this.lblUpdatedSkipped.Name = "lblUpdatedSkipped";
+            this.lblUpdatedSkipped.Size = new System.Drawing.Size(63, 17);
+            this.lblUpdatedSkipped.TabIndex = 12;
+            this.lblUpdatedSkipped.Text = "Skipped:";
             // 
             // firstNameDataGridViewTextBoxColumn
             // 
@@ -109,6 +234,13 @@
             this.failedDataGridViewCheckBoxColumn.Name = "failedDataGridViewCheckBoxColumn";
             this.failedDataGridViewCheckBoxColumn.ReadOnly = true;
             // 
+            // dataGridViewCheckBoxColumn1
+            // 
+            this.dataGridViewCheckBoxColumn1.DataPropertyName = "Skipped";
+            this.dataGridViewCheckBoxColumn1.HeaderText = "Skipped";
+            this.dataGridViewCheckBoxColumn1.Name = "dataGridViewCheckBoxColumn1";
+            this.dataGridViewCheckBoxColumn1.ReadOnly = true;
+            // 
             // OperationType
             // 
             this.OperationType.DataPropertyName = "OperationType";
@@ -124,6 +256,7 @@
             this.failedMessageDataGridViewTextBoxColumn.Name = "failedMessageDataGridViewTextBoxColumn";
             this.failedMessageDataGridViewTextBoxColumn.ReadOnly = true;
             this.failedMessageDataGridViewTextBoxColumn.Width = 500;
+            
             // 
             // pidDataGridViewTextBoxColumn
             // 
@@ -133,121 +266,13 @@
             this.pidDataGridViewTextBoxColumn.ReadOnly = true;
             this.pidDataGridViewTextBoxColumn.Visible = false;
             // 
-            // importResultBindingSource
-            // 
-            this.importResultBindingSource.DataMember = "ImportResult";
-            this.importResultBindingSource.DataSource = this.dataSetImportReport;
-            // 
-            // dataSetImportReport
-            // 
-            this.dataSetImportReport.DataSetName = "DataSetImportReport";
-            this.dataSetImportReport.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(21, 11);
-            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(34, 13);
-            this.label1.TabIndex = 2;
-            this.label1.Text = "Total:";
-            // 
-            // lblTotalValue
-            // 
-            this.lblTotalValue.AutoSize = true;
-            this.lblTotalValue.Location = new System.Drawing.Point(58, 11);
-            this.lblTotalValue.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblTotalValue.Name = "lblTotalValue";
-            this.lblTotalValue.Size = new System.Drawing.Size(13, 13);
-            this.lblTotalValue.TabIndex = 3;
-            this.lblTotalValue.Text = "0";
-            // 
-            // lblInsertPassedValue
-            // 
-            this.lblInsertPassedValue.AutoSize = true;
-            this.lblInsertPassedValue.Location = new System.Drawing.Point(169, 11);
-            this.lblInsertPassedValue.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblInsertPassedValue.Name = "lblInsertPassedValue";
-            this.lblInsertPassedValue.Size = new System.Drawing.Size(13, 13);
-            this.lblInsertPassedValue.TabIndex = 5;
-            this.lblInsertPassedValue.Text = "0";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(94, 11);
-            this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(74, 13);
-            this.label3.TabIndex = 4;
-            this.label3.Text = "Insert Passed:";
-            // 
-            // lblInsertFailedValue
-            // 
-            this.lblInsertFailedValue.AutoSize = true;
-            this.lblInsertFailedValue.Location = new System.Drawing.Point(282, 11);
-            this.lblInsertFailedValue.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblInsertFailedValue.Name = "lblInsertFailedValue";
-            this.lblInsertFailedValue.Size = new System.Drawing.Size(13, 13);
-            this.lblInsertFailedValue.TabIndex = 7;
-            this.lblInsertFailedValue.Text = "0";
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(211, 11);
-            this.label5.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(67, 13);
-            this.label5.TabIndex = 6;
-            this.label5.Text = "Insert Failed:";
-            // 
-            // lblUpdatePassedValue
-            // 
-            this.lblUpdatePassedValue.AutoSize = true;
-            this.lblUpdatePassedValue.Location = new System.Drawing.Point(419, 11);
-            this.lblUpdatePassedValue.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblUpdatePassedValue.Name = "lblUpdatePassedValue";
-            this.lblUpdatePassedValue.Size = new System.Drawing.Size(13, 13);
-            this.lblUpdatePassedValue.TabIndex = 9;
-            this.lblUpdatePassedValue.Text = "0";
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(333, 11);
-            this.label7.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(83, 13);
-            this.label7.TabIndex = 8;
-            this.label7.Text = "Update Passed:";
-            // 
-            // lblUpdatedFailedValue
-            // 
-            this.lblUpdatedFailedValue.AutoSize = true;
-            this.lblUpdatedFailedValue.Location = new System.Drawing.Point(530, 11);
-            this.lblUpdatedFailedValue.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblUpdatedFailedValue.Name = "lblUpdatedFailedValue";
-            this.lblUpdatedFailedValue.Size = new System.Drawing.Size(13, 13);
-            this.lblUpdatedFailedValue.TabIndex = 11;
-            this.lblUpdatedFailedValue.Text = "0";
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(451, 11);
-            this.label9.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(76, 13);
-            this.label9.TabIndex = 10;
-            this.label9.Text = "Update Failed:";
-            // 
             // FormImportReport
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(991, 504);
+            this.ClientSize = new System.Drawing.Size(1321, 620);
+            this.Controls.Add(this.lblUpdatedSkippedValue);
+            this.Controls.Add(this.lblUpdatedSkipped);
             this.Controls.Add(this.lblUpdatedFailedValue);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.lblUpdatePassedValue);
@@ -259,6 +284,7 @@
             this.Controls.Add(this.lblTotalValue);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.dataGridView1);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "FormImportReport";
             this.Text = "Import Report";
             this.Load += new System.EventHandler(this.FormImportReport_Load);
@@ -284,10 +310,13 @@
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label lblUpdatedFailedValue;
         private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Label lblUpdatedSkippedValue;
+        private System.Windows.Forms.Label lblUpdatedSkipped;
         private System.Windows.Forms.DataGridViewTextBoxColumn firstNameDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn lastNameDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn dOBDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewCheckBoxColumn failedDataGridViewCheckBoxColumn;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn dataGridViewCheckBoxColumn1;
         private System.Windows.Forms.DataGridViewTextBoxColumn OperationType;
         private System.Windows.Forms.DataGridViewTextBoxColumn failedMessageDataGridViewTextBoxColumn;
         private System.Windows.Forms.DataGridViewTextBoxColumn pidDataGridViewTextBoxColumn;

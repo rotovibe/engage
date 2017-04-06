@@ -13,6 +13,7 @@ using Phytel.Services;
 using MB = MongoDB.Driver.Builders;
 using MongoDB.Bson.Serialization;
 using System.Net;
+using System.Text.RegularExpressions;
 
 namespace Phytel.API.DataDomain.Patient
 {
@@ -286,16 +287,23 @@ namespace Phytel.API.DataDomain.Patient
         public object FindByNameDOB(string firstName, string lastName, string dob)
         {
             PatientData patientData = null;
-            using (PatientMongoContext ctx = new PatientMongoContext(_dbName))
+            using (PatientMongoContext context = new PatientMongoContext(_dbName))
             {
-                IMongoQuery query = Query.And(
-                                Query.EQ(MEPatient.FirstNameProperty, firstName),
-                                Query.EQ(MEPatient.LastNameProperty, lastName),
-                                Query.EQ(MEPatient.DOBProperty, dob),
-                                Query.EQ(MEPatient.DeleteFlagProperty, false),
-                                Query.EQ(MEPatient.TTLDateProperty, BsonNull.Value));
+                MEPatient mePatient = null;
+                string searchQuery = string.Empty;
+                searchQuery = string.Format("{0} : /^{1}$/i, {2} : /^{3}$/i, {4} : '{5}', {6} : false, {7} : null",
+                    MEPatient.FirstNameProperty,firstName,
+                    MEPatient.LastNameProperty, lastName,
+                    MEPatient.DOBProperty, dob,
+                    MEPatient.DeleteFlagProperty,
+                    MEPatient.TTLDateProperty);
 
-                var mePatient = ctx.Patients.Collection.Find(query).FirstOrDefault();
+                var jsonQuery = "{ ";
+                jsonQuery += searchQuery;
+                jsonQuery += " }";
+                QueryDocument query = new QueryDocument(BsonSerializer.Deserialize<BsonDocument>(jsonQuery));
+                mePatient = context.Patients.Collection.FindOneAs<MEPatient>(query);
+
                 if (mePatient != null)
                 {
                     patientData = new PatientData
