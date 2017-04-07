@@ -35,6 +35,20 @@ namespace Phytel.Data.ETL
             return list;
         }
 
+        public static IEnumerable<List<T>> GetMongoCollectionBatch<T>(MongoCollection<T> mongoList, int skip)
+        {
+            var count = mongoList.Count();
+            var interval = skip;
+            for (var i = 0; i <= count; i = i + interval)
+            {
+                yield return mongoList.FindAllAs<T>()
+                    .Skip(i)
+                    .Take(interval)
+                    .ToList();
+            }
+            yield break;
+        }
+
         internal static Dictionary<string, int> GetStepIdList(string contract)
         {
             try

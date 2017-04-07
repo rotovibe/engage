@@ -2874,106 +2874,233 @@ namespace Phytel.Data.ETL
             }
         }
 
+
         private void LoadPatientProgramResponses(string ctr)
         {
             try
             {
-                OnEtlEvent(new ETLEventArgs { Message = "[" + _contract + "] Loading program responses.", IsError = false });
-
-                List<MEPatientProgramResponse> responses;
-                using (ProgramMongoContext pmctx = new ProgramMongoContext(ctr))
+                OnEtlEvent(new ETLEventArgs
                 {
-                    responses = Utils.GetMongoCollectionList(pmctx.PatientProgramResponses.Collection, 50000);
-                }
+                    Message = "[" + _contract + "] Loading program responses.",
+                    IsError = false
+                });
 
-                // get stepidlist
-                var stepIdList = Utils.GetStepIdList(_contract);
-                var rSeries = new ReadPlanElementsSeries(_contract).ReadEStepResponseSeries(responses);
-
-                using (var bcc = new SqlBulkCopy(connString, SqlBulkCopyOptions.Default))
-                using (var objRdr = ObjectReader.Create(rSeries))
+                //List<MEPatientProgramResponse> responses;
+                using (var pmctx = new ProgramMongoContext(ctr))
                 {
-                    try
+                    var batchCounter = 0;
+                    foreach (var batch in Utils.GetMongoCollectionBatch(pmctx.PatientProgramResponses.Collection, 100000))
                     {
-                        bcc.BulkCopyTimeout = 580;
-                        bcc.ColumnMappings.Add("MongoStepId", "MongoStepId");
-                        bcc.ColumnMappings.Add("StepId", "StepId");
-                        bcc.ColumnMappings.Add("MongoNextStepId", "MongoNextStepId");
-                        bcc.ColumnMappings.Add("NextStepId", "NextStepId");
-                        bcc.ColumnMappings.Add("MongoId", "MongoId");
-                        bcc.ColumnMappings.Add("MongoActionId", "MongoActionId");
-                        bcc.ColumnMappings.Add("Order", "Order");
-                        bcc.ColumnMappings.Add("Text", "Text");
-                        bcc.ColumnMappings.Add("Value", "Value");
-                        bcc.ColumnMappings.Add("Nominal", "Nominal");
-                        bcc.ColumnMappings.Add("Required", "Required");
-                        bcc.ColumnMappings.Add("Selected", "Selected");
-                        bcc.ColumnMappings.Add("Version", "Version");
-                        bcc.ColumnMappings.Add("MongoRecordCreatedBy", "MongoRecordCreatedBy");
-                        bcc.ColumnMappings.Add("RecordCreatedBy", "RecordCreatedBy");
-                        bcc.ColumnMappings.Add("RecordCreatedOn", "RecordCreatedOn");
-                        bcc.ColumnMappings.Add("Delete", "Delete");
-                        bcc.ColumnMappings.Add("MongoStepSourceId", "MongoStepSourceId");
-                        bcc.ColumnMappings.Add("StepSourceId", "StepSourceId");
-                        bcc.ColumnMappings.Add("ActionId", "ActionId");
-                        bcc.ColumnMappings.Add("MongoUpdatedBy", "MongoUpdatedBy");
-                        bcc.ColumnMappings.Add("UpdatedBy", "UpdatedBy");
-                        bcc.ColumnMappings.Add("LastUpdatedOn", "LastUpdatedOn");
-                        bcc.ColumnMappings.Add("TTLDate", "TTLDate");
-                        bcc.DestinationTableName = "RPT_PatientProgramResponse";
-                        bcc.WriteToServer(objRdr);
-                    }
-
-                    catch (Exception ex)
-                    {
-                        if (ex.Message.Contains("Received an invalid column length from the bcp client for colid"))
+                        batchCounter += batch.Count;
+                        LoadPatientProgramResponse(batch);
+                        try
                         {
-                            string pattern = @"\d+";
-                            Match match = Regex.Match(ex.Message.ToString(), pattern);
-                            var index = Convert.ToInt32(match.Value) - 1;
-
-                            FieldInfo fi = typeof(SqlBulkCopy).GetField("_sortedColumnMappings",
-                                BindingFlags.NonPublic | BindingFlags.Instance);
-                            var sortedColumns = fi.GetValue(bcc);
-                            var items =
-                                (Object[])
-                                    sortedColumns.GetType()
-                                        .GetField("_items", BindingFlags.NonPublic | BindingFlags.Instance)
-                                        .GetValue(sortedColumns);
-
-                            FieldInfo itemdata = items[index].GetType()
-                                .GetField("_metadata", BindingFlags.NonPublic | BindingFlags.Instance);
-                            var metadata = itemdata.GetValue(items[index]);
-
-                            var column =
-                                metadata.GetType()
-                                    .GetField("column",
-                                        BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
-                                    .GetValue(metadata);
-                            var length =
-                                metadata.GetType()
-                                    .GetField("length",
-                                        BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
-                                    .GetValue(metadata);
-
                             OnEtlEvent(new ETLEventArgs
                             {
                                 Message =
-                                    "[" + _contract + "] LoadPatientProgramResponses():SqlBulkCopy process failure: " + ex.Message +
-                                    String.Format("Column: {0} contains data with a length greater than: {1}", column,
-                                        length) + " : " +
-                                    ex.InnerException,
-                                IsError = true
+                                    "[" + _contract + "] Loading PatientProgramResponses in batch = " +
+                                    batchCounter.ToString(),
+                                IsError = false
                             });
+                        }
+                        catch
+                        {
                         }
                     }
                 }
             }
             catch (Exception ex)
             {
-                throw ex; //SimpleLog.Log(new ArgumentException("LoadPatientProgramResponse()", ex));
+                OnEtlEvent(new ETLEventArgs { Message = "[" + _contract + "] " + ex.Message + ": " + ex.StackTrace, IsError = true });
             }
         }
+
+        private void LoadPatientProgramResponse(List<MEPatientProgramResponse> responses)
+        {
+            // get stepidlist
+            var stepIdList = Utils.GetStepIdList(_contract);
+            var rSeries = new ReadPlanElementsSeries(_contract).ReadEStepResponseSeries(responses);
+
+            using (var bcc = new SqlBulkCopy(connString, SqlBulkCopyOptions.Default))
+            using (var objRdr = ObjectReader.Create(rSeries))
+            {
+                try
+                {
+                    bcc.BulkCopyTimeout = 580;
+                    bcc.ColumnMappings.Add("MongoStepId", "MongoStepId");
+                    bcc.ColumnMappings.Add("StepId", "StepId");
+                    bcc.ColumnMappings.Add("MongoNextStepId", "MongoNextStepId");
+                    bcc.ColumnMappings.Add("NextStepId", "NextStepId");
+                    bcc.ColumnMappings.Add("MongoId", "MongoId");
+                    bcc.ColumnMappings.Add("MongoActionId", "MongoActionId");
+                    bcc.ColumnMappings.Add("Order", "Order");
+                    bcc.ColumnMappings.Add("Text", "Text");
+                    bcc.ColumnMappings.Add("Value", "Value");
+                    bcc.ColumnMappings.Add("Nominal", "Nominal");
+                    bcc.ColumnMappings.Add("Required", "Required");
+                    bcc.ColumnMappings.Add("Selected", "Selected");
+                    bcc.ColumnMappings.Add("Version", "Version");
+                    bcc.ColumnMappings.Add("MongoRecordCreatedBy", "MongoRecordCreatedBy");
+                    bcc.ColumnMappings.Add("RecordCreatedBy", "RecordCreatedBy");
+                    bcc.ColumnMappings.Add("RecordCreatedOn", "RecordCreatedOn");
+                    bcc.ColumnMappings.Add("Delete", "Delete");
+                    bcc.ColumnMappings.Add("MongoStepSourceId", "MongoStepSourceId");
+                    bcc.ColumnMappings.Add("StepSourceId", "StepSourceId");
+                    bcc.ColumnMappings.Add("ActionId", "ActionId");
+                    bcc.ColumnMappings.Add("MongoUpdatedBy", "MongoUpdatedBy");
+                    bcc.ColumnMappings.Add("UpdatedBy", "UpdatedBy");
+                    bcc.ColumnMappings.Add("LastUpdatedOn", "LastUpdatedOn");
+                    bcc.ColumnMappings.Add("TTLDate", "TTLDate");
+                    bcc.DestinationTableName = "RPT_PatientProgramResponse";
+                    bcc.WriteToServer(objRdr);
+                }
+
+                catch (Exception ex)
+                {
+                    if (ex.Message.Contains("Received an invalid column length from the bcp client for colid"))
+                    {
+                        string pattern = @"\d+";
+                        Match match = Regex.Match(ex.Message.ToString(), pattern);
+                        var index = Convert.ToInt32(match.Value) - 1;
+
+                        FieldInfo fi = typeof(SqlBulkCopy).GetField("_sortedColumnMappings",
+                            BindingFlags.NonPublic | BindingFlags.Instance);
+                        var sortedColumns = fi.GetValue(bcc);
+                        var items =
+                            (Object[])
+                                sortedColumns.GetType()
+                                    .GetField("_items", BindingFlags.NonPublic | BindingFlags.Instance)
+                                    .GetValue(sortedColumns);
+
+                        FieldInfo itemdata = items[index].GetType()
+                            .GetField("_metadata", BindingFlags.NonPublic | BindingFlags.Instance);
+                        var metadata = itemdata.GetValue(items[index]);
+
+                        var column =
+                            metadata.GetType()
+                                .GetField("column",
+                                    BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+                                .GetValue(metadata);
+                        var length =
+                            metadata.GetType()
+                                .GetField("length",
+                                    BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+                                .GetValue(metadata);
+
+                        OnEtlEvent(new ETLEventArgs
+                        {
+                            Message =
+                                "[" + _contract + "] LoadPatientProgramResponses():SqlBulkCopy process failure: " + ex.Message +
+                                String.Format("Column: {0} contains data with a length greater than: {1}", column,
+                                    length) + " : " +
+                                ex.InnerException,
+                            IsError = true
+                        });
+                    }
+                }
+            }
+        }
+
+        //private void LoadPatientProgramResponses(string ctr)
+        //{
+        //    try
+        //    {
+        //        OnEtlEvent(new ETLEventArgs { Message = "[" + _contract + "] Loading program responses.", IsError = false });
+
+        //        List<MEPatientProgramResponse> responses;
+        //        using (ProgramMongoContext pmctx = new ProgramMongoContext(ctr))
+        //        {
+        //            responses = Utils.GetMongoCollectionList(pmctx.PatientProgramResponses.Collection, 50000);
+        //        }
+
+        //        // get stepidlist
+        //        var stepIdList = Utils.GetStepIdList(_contract);
+        //        var rSeries = new ReadPlanElementsSeries(_contract).ReadEStepResponseSeries(responses);
+
+        //        using (var bcc = new SqlBulkCopy(connString, SqlBulkCopyOptions.Default))
+        //        using (var objRdr = ObjectReader.Create(rSeries))
+        //        {
+        //            try
+        //            {
+        //                bcc.BulkCopyTimeout = 580;
+        //                bcc.ColumnMappings.Add("MongoStepId", "MongoStepId");
+        //                bcc.ColumnMappings.Add("StepId", "StepId");
+        //                bcc.ColumnMappings.Add("MongoNextStepId", "MongoNextStepId");
+        //                bcc.ColumnMappings.Add("NextStepId", "NextStepId");
+        //                bcc.ColumnMappings.Add("MongoId", "MongoId");
+        //                bcc.ColumnMappings.Add("MongoActionId", "MongoActionId");
+        //                bcc.ColumnMappings.Add("Order", "Order");
+        //                bcc.ColumnMappings.Add("Text", "Text");
+        //                bcc.ColumnMappings.Add("Value", "Value");
+        //                bcc.ColumnMappings.Add("Nominal", "Nominal");
+        //                bcc.ColumnMappings.Add("Required", "Required");
+        //                bcc.ColumnMappings.Add("Selected", "Selected");
+        //                bcc.ColumnMappings.Add("Version", "Version");
+        //                bcc.ColumnMappings.Add("MongoRecordCreatedBy", "MongoRecordCreatedBy");
+        //                bcc.ColumnMappings.Add("RecordCreatedBy", "RecordCreatedBy");
+        //                bcc.ColumnMappings.Add("RecordCreatedOn", "RecordCreatedOn");
+        //                bcc.ColumnMappings.Add("Delete", "Delete");
+        //                bcc.ColumnMappings.Add("MongoStepSourceId", "MongoStepSourceId");
+        //                bcc.ColumnMappings.Add("StepSourceId", "StepSourceId");
+        //                bcc.ColumnMappings.Add("ActionId", "ActionId");
+        //                bcc.ColumnMappings.Add("MongoUpdatedBy", "MongoUpdatedBy");
+        //                bcc.ColumnMappings.Add("UpdatedBy", "UpdatedBy");
+        //                bcc.ColumnMappings.Add("LastUpdatedOn", "LastUpdatedOn");
+        //                bcc.ColumnMappings.Add("TTLDate", "TTLDate");
+        //                bcc.DestinationTableName = "RPT_PatientProgramResponse";
+        //                bcc.WriteToServer(objRdr);
+        //            }
+
+        //            catch (Exception ex)
+        //            {
+        //                if (ex.Message.Contains("Received an invalid column length from the bcp client for colid"))
+        //                {
+        //                    string pattern = @"\d+";
+        //                    Match match = Regex.Match(ex.Message.ToString(), pattern);
+        //                    var index = Convert.ToInt32(match.Value) - 1;
+
+        //                    FieldInfo fi = typeof(SqlBulkCopy).GetField("_sortedColumnMappings",
+        //                        BindingFlags.NonPublic | BindingFlags.Instance);
+        //                    var sortedColumns = fi.GetValue(bcc);
+        //                    var items =
+        //                        (Object[])
+        //                            sortedColumns.GetType()
+        //                                .GetField("_items", BindingFlags.NonPublic | BindingFlags.Instance)
+        //                                .GetValue(sortedColumns);
+
+        //                    FieldInfo itemdata = items[index].GetType()
+        //                        .GetField("_metadata", BindingFlags.NonPublic | BindingFlags.Instance);
+        //                    var metadata = itemdata.GetValue(items[index]);
+
+        //                    var column =
+        //                        metadata.GetType()
+        //                            .GetField("column",
+        //                                BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+        //                            .GetValue(metadata);
+        //                    var length =
+        //                        metadata.GetType()
+        //                            .GetField("length",
+        //                                BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+        //                            .GetValue(metadata);
+
+        //                    OnEtlEvent(new ETLEventArgs
+        //                    {
+        //                        Message =
+        //                            "[" + _contract + "] LoadPatientProgramResponses():SqlBulkCopy process failure: " + ex.Message +
+        //                            String.Format("Column: {0} contains data with a length greater than: {1}", column,
+        //                                length) + " : " +
+        //                            ex.InnerException,
+        //                        IsError = true
+        //                    });
+        //                }
+        //            }
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw ex; //SimpleLog.Log(new ArgumentException("LoadPatientProgramResponse()", ex));
+        //    }
+        //}
 
         public void RegisterSpawnElement(List<SpawnElement> list, string planElementId, int sqlPlanElementId)
         {
