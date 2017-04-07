@@ -284,7 +284,11 @@ namespace NightingaleImport {
             private global::System.Data.DataColumn columnFailed;
             
             private global::System.Data.DataColumn columnFailedMessage;
-            
+
+            private global::System.Data.DataColumn columnSkipped;
+
+            private global::System.Data.DataColumn columnSkippedMessage;
+
             private global::System.Data.DataColumn columnFirstName;
             
             private global::System.Data.DataColumn columnLastName;
@@ -341,7 +345,17 @@ namespace NightingaleImport {
                     return this.columnFailed;
                 }
             }
-            
+
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn SkippedColumn
+            {
+                get
+                {
+                    return this.columnSkipped;
+                }
+            }
+
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public global::System.Data.DataColumn FailedMessageColumn {
@@ -349,7 +363,16 @@ namespace NightingaleImport {
                     return this.columnFailedMessage;
                 }
             }
-            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn SkippedMessageColumn
+            {
+                get
+                {
+                    return this.columnSkippedMessage;
+                }
+            }
+
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public global::System.Data.DataColumn FirstNameColumn {
@@ -419,12 +442,14 @@ namespace NightingaleImport {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public ImportResultRow AddImportResultRow(string pid, bool Failed, string FailedMessage, string FirstName, string LastName, string DOB, string OperationType) {
+            public ImportResultRow AddImportResultRow(string pid, bool Failed, bool Skipped, string FailedMessage, string SkippedMessage, string FirstName, string LastName, string DOB, string OperationType) {
                 ImportResultRow rowImportResultRow = ((ImportResultRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         pid,
                         Failed,
+                        Skipped,
                         FailedMessage,
+                        SkippedMessage,
                         FirstName,
                         LastName,
                         DOB,
@@ -461,6 +486,8 @@ namespace NightingaleImport {
                 this.columnpid = base.Columns["pid"];
                 this.columnFailed = base.Columns["Failed"];
                 this.columnFailedMessage = base.Columns["FailedMessage"];
+                //this.columnSkipped = base.Columns["Skipped"];
+                //this.columnSkippedMessage = base.Columns["SkippedMessage"];
                 this.columnFirstName = base.Columns["FirstName"];
                 this.columnLastName = base.Columns["LastName"];
                 this.columnDOB = base.Columns["DOB"];
@@ -476,6 +503,10 @@ namespace NightingaleImport {
                 base.Columns.Add(this.columnFailed);
                 this.columnFailedMessage = new global::System.Data.DataColumn("FailedMessage", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnFailedMessage);
+                this.columnSkipped = new global::System.Data.DataColumn("Skipped", typeof(bool), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnSkipped);
+                this.columnSkippedMessage = new global::System.Data.DataColumn("SkippedMessage", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnSkippedMessage);
                 this.columnFirstName = new global::System.Data.DataColumn("FirstName", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnFirstName);
                 this.columnLastName = new global::System.Data.DataColumn("LastName", typeof(string), null, global::System.Data.MappingType.Element);
@@ -670,7 +701,49 @@ namespace NightingaleImport {
                     this[this.tableImportResult.FailedMessageColumn] = value;
                 }
             }
-            
+
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool Skipped
+            {
+                get
+                {
+                    try
+                    {
+                        return ((bool)(this[this.tableImportResult.SkippedColumn]));
+                    }
+                    catch (global::System.InvalidCastException e)
+                    {
+                        throw new global::System.Data.StrongTypingException("The value for column \'Skipped\' in table \'ImportResult\' is DBNull.", e);
+                    }
+                }
+                set
+                {
+                    this[this.tableImportResult.SkippedColumn] = value;
+                }
+            }
+
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string SkippedMessage
+            {
+                get
+                {
+                    try
+                    {
+                        return ((string)(this[this.tableImportResult.SkippedMessageColumn]));
+                    }
+                    catch (global::System.InvalidCastException e)
+                    {
+                        throw new global::System.Data.StrongTypingException("The value for column \'SkippedMessage\' in table \'ImportResult\' is DBNull.", e);
+                    }
+                }
+                set
+                {
+                    this[this.tableImportResult.SkippedMessageColumn] = value;
+                }
+            }
+
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public string FirstName {

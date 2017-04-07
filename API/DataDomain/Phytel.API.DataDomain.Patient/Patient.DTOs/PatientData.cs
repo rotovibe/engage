@@ -36,5 +36,42 @@ namespace Phytel.API.DataDomain.Patient.DTO
         public string EngagePatientSystemValue { get; set; }
         public string UpdatedByProperty {get; set; }
         public string Prefix { get; set; }
+
+        //Addded for Patient Import Tool
+        public string CMan { get; set; }
+        public string sysName { get; set; }
+        public string SysPri { get; set; }
+        public string ActivateDeactivate { get; set; }
+        public string SysId { get; set; }
+        public string TimeZ { get; set; }
+        public string Ph1 { get; set; }
+        public string Ph1Pref { get; set; }
+        public string Ph1Type { get; set; }
+        public string Ph2 { get; set; }
+        public string Ph2Pref { get; set; }
+        public string Ph2Type { get; set; }
+        public string Em1 { get; set; }
+        public string Em1Pref { get; set; }
+        public string Em1Type { get; set; }
+        public string Em2  { get; set; }
+        public string Em2Pref { get; set; }
+        public string Em2Type { get; set; }
+        public string Add1L1 { get; set; }
+        public string Add1L2 { get; set; }
+        public string Add1L3 { get; set; }
+        public string Add1City { get; set; }
+        public string Add1St { get; set; }
+        public string Add1Zip { get; set; }
+        public string Add1Pref { get; set; }
+        public string Add1Type { get; set; }
+        public string Add2L1 { get; set; }
+        public string Add2L2 { get; set; }
+        public string Add2L3 { get; set; }
+        public string Add2City { get; set; }
+        public string Add2St { get; set; }
+        public string Add2Zip { get; set; }
+        public string Add2Pref { get; set; }
+        public string Add2Type { get; set; }
+
     }
 }

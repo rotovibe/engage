@@ -90,7 +90,8 @@
             this.btnViewReport = new System.Windows.Forms.Button();
             this.lblProgressValue = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom )));
+            this.lblTotalValue = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -104,9 +105,10 @@
             // Browse
             // 
             this.Browse.Enabled = false;
-            this.Browse.Location = new System.Drawing.Point(423, 12);
+            this.Browse.Location = new System.Drawing.Point(564, 15);
+            this.Browse.Margin = new System.Windows.Forms.Padding(4);
             this.Browse.Name = "Browse";
-            this.Browse.Size = new System.Drawing.Size(75, 23);
+            this.Browse.Size = new System.Drawing.Size(100, 28);
             this.Browse.TabIndex = 1;
             this.Browse.Text = "Browse";
             this.Browse.UseVisualStyleBackColor = true;
@@ -115,10 +117,11 @@
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(30, 15);
+            this.textBox1.Location = new System.Drawing.Point(40, 18);
+            this.textBox1.Margin = new System.Windows.Forms.Padding(4);
             this.textBox1.Name = "textBox1";
             this.textBox1.ReadOnly = true;
-            this.textBox1.Size = new System.Drawing.Size(393, 20);
+            this.textBox1.Size = new System.Drawing.Size(523, 22);
             this.textBox1.TabIndex = 2;
             this.textBox1.VisibleChanged += new System.EventHandler(this.textBox1_VisibleChanged);
             // 
@@ -126,9 +129,10 @@
             // 
             this.btnImport.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.btnImport.Enabled = false;
-            this.btnImport.Location = new System.Drawing.Point(52, 10);
+            this.btnImport.Location = new System.Drawing.Point(69, 12);
+            this.btnImport.Margin = new System.Windows.Forms.Padding(4);
             this.btnImport.Name = "btnImport";
-            this.btnImport.Size = new System.Drawing.Size(75, 23);
+            this.btnImport.Size = new System.Drawing.Size(100, 28);
             this.btnImport.TabIndex = 4;
             this.btnImport.Text = "Import";
             this.btnImport.UseVisualStyleBackColor = true;
@@ -138,9 +142,10 @@
             // button2
             // 
             this.button2.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.button2.Location = new System.Drawing.Point(214, 10);
+            this.button2.Location = new System.Drawing.Point(285, 12);
+            this.button2.Margin = new System.Windows.Forms.Padding(4);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
+            this.button2.Size = new System.Drawing.Size(100, 28);
             this.button2.TabIndex = 5;
             this.button2.Text = "Cancel";
             this.button2.UseVisualStyleBackColor = true;
@@ -152,7 +157,7 @@
             this.listView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.listView1.CheckBoxes = true;
+            this.listView1.CheckBoxes = false;
             this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.colFirstName,
             this.colLastName,
@@ -197,10 +202,10 @@
             this.colPrimarySystem,
             this.columnActivateDeactivate});
             this.listView1.FullRowSelect = true;
-            this.listView1.Location = new System.Drawing.Point(33, 93);
+            this.listView1.Location = new System.Drawing.Point(44, 114);
+            this.listView1.Margin = new System.Windows.Forms.Padding(4);
             this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(800, 346);
-            this.listView1.Sorting = System.Windows.Forms.SortOrder.Ascending;
+            this.listView1.Size = new System.Drawing.Size(1065, 425);
             this.listView1.TabIndex = 6;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
@@ -387,9 +392,10 @@
             // 
             this.chkSelectAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.chkSelectAll.AutoSize = true;
-            this.chkSelectAll.Location = new System.Drawing.Point(33, 446);
+            this.chkSelectAll.Location = new System.Drawing.Point(44, 549);
+            this.chkSelectAll.Margin = new System.Windows.Forms.Padding(4);
             this.chkSelectAll.Name = "chkSelectAll";
-            this.chkSelectAll.Size = new System.Drawing.Size(70, 17);
+            this.chkSelectAll.Size = new System.Drawing.Size(88, 21);
             this.chkSelectAll.TabIndex = 7;
             this.chkSelectAll.Text = "Select All";
             this.chkSelectAll.UseVisualStyleBackColor = true;
@@ -399,71 +405,67 @@
             // 
             this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(534, 447);
-            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label1.Location = new System.Drawing.Point(712, 550);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(127, 13);
+            this.label1.Size = new System.Drawing.Size(169, 17);
             this.label1.TabIndex = 8;
             this.label1.Text = "Import Admin User Name:";
             // 
             // txtContactID
             // 
             this.txtContactID.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtContactID.Location = new System.Drawing.Point(669, 445);
-            this.txtContactID.Margin = new System.Windows.Forms.Padding(2);
+            this.txtContactID.Location = new System.Drawing.Point(892, 548);
+            this.txtContactID.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txtContactID.Name = "txtContactID";
-            this.txtContactID.Size = new System.Drawing.Size(164, 20);
+            this.txtContactID.Size = new System.Drawing.Size(217, 22);
             this.txtContactID.TabIndex = 9;
-            this.txtContactID.Text = "inhealthadmin";
+            this.txtContactID.Text = "AdventistAdmin";
             // 
             // label2
             // 
             this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(534, 469);
-            this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label2.Location = new System.Drawing.Point(712, 577);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(64, 13);
+            this.label2.Size = new System.Drawing.Size(83, 17);
             this.label2.TabIndex = 10;
             this.label2.Text = "Import URL:";
             // 
             // txtURL
             // 
             this.txtURL.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtURL.Location = new System.Drawing.Point(601, 467);
-            this.txtURL.Margin = new System.Windows.Forms.Padding(2);
+            this.txtURL.Location = new System.Drawing.Point(801, 575);
+            this.txtURL.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txtURL.Name = "txtURL";
-            this.txtURL.Size = new System.Drawing.Size(232, 20);
+            this.txtURL.Size = new System.Drawing.Size(308, 22);
             this.txtURL.TabIndex = 13;
             // 
             // label3
             // 
             this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(534, 492);
-            this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label3.Location = new System.Drawing.Point(712, 606);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(50, 13);
+            this.label3.Size = new System.Drawing.Size(65, 17);
             this.label3.TabIndex = 14;
             this.label3.Text = "Contract:";
             // 
             // txtSQLConn
             // 
             this.txtSQLConn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtSQLConn.Location = new System.Drawing.Point(373, 513);
-            this.txtSQLConn.Margin = new System.Windows.Forms.Padding(2);
+            this.txtSQLConn.Location = new System.Drawing.Point(497, 631);
+            this.txtSQLConn.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txtSQLConn.Name = "txtSQLConn";
-            this.txtSQLConn.Size = new System.Drawing.Size(458, 20);
+            this.txtSQLConn.Size = new System.Drawing.Size(609, 22);
             this.txtSQLConn.TabIndex = 17;
             // 
             // label4
             // 
             this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(255, 516);
-            this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label4.Location = new System.Drawing.Point(340, 635);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(114, 13);
+            this.label4.Size = new System.Drawing.Size(152, 17);
             this.label4.TabIndex = 16;
             this.label4.Text = "SQL User Conn String:";
             // 
@@ -471,36 +473,40 @@
             // 
             this.comboBoxContractList.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.comboBoxContractList.FormattingEnabled = true;
-            this.comboBoxContractList.Location = new System.Drawing.Point(600, 489);
+            this.comboBoxContractList.Location = new System.Drawing.Point(800, 602);
+            this.comboBoxContractList.Margin = new System.Windows.Forms.Padding(4);
             this.comboBoxContractList.Name = "comboBoxContractList";
-            this.comboBoxContractList.Size = new System.Drawing.Size(232, 21);
+            this.comboBoxContractList.Size = new System.Drawing.Size(308, 24);
             this.comboBoxContractList.TabIndex = 18;
             this.comboBoxContractList.SelectionChangeCommitted += new System.EventHandler(this.comboBoxContractList_SelectionChangeCommitted);
             // 
             // lblStatus
             // 
             this.lblStatus.AutoSize = true;
-            this.lblStatus.Location = new System.Drawing.Point(32, 77);
+            this.lblStatus.Location = new System.Drawing.Point(43, 95);
+            this.lblStatus.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblStatus.Name = "lblStatus";
-            this.lblStatus.Size = new System.Drawing.Size(71, 13);
+            this.lblStatus.Size = new System.Drawing.Size(93, 17);
             this.lblStatus.TabIndex = 19;
             this.lblStatus.Text = "Select File ....";
             // 
             // progressBar1
             // 
-            this.progressBar1.Location = new System.Drawing.Point(28, 41);
+            this.progressBar1.Location = new System.Drawing.Point(37, 50);
+            this.progressBar1.Margin = new System.Windows.Forms.Padding(4);
             this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(463, 23);
+            this.progressBar1.Size = new System.Drawing.Size(617, 28);
             this.progressBar1.TabIndex = 20;
-            this.progressBar1.Visible = false;
+            this.progressBar1.Visible = true;
             // 
             // btnViewReport
             // 
             this.btnViewReport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnViewReport.Enabled = false;
-            this.btnViewReport.Location = new System.Drawing.Point(133, 10);
+            this.btnViewReport.Location = new System.Drawing.Point(177, 12);
+            this.btnViewReport.Margin = new System.Windows.Forms.Padding(4);
             this.btnViewReport.Name = "btnViewReport";
-            this.btnViewReport.Size = new System.Drawing.Size(75, 23);
+            this.btnViewReport.Size = new System.Drawing.Size(100, 28);
             this.btnViewReport.TabIndex = 21;
             this.btnViewReport.Text = "View Report";
             this.btnViewReport.UseVisualStyleBackColor = true;
@@ -509,28 +515,51 @@
             // lblProgressValue
             // 
             this.lblProgressValue.AutoSize = true;
-            this.lblProgressValue.Location = new System.Drawing.Point(497, 46);
+            this.lblProgressValue.Location = new System.Drawing.Point(663, 57);
+            this.lblProgressValue.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblProgressValue.Name = "lblProgressValue";
-            this.lblProgressValue.Size = new System.Drawing.Size(24, 13);
+            this.lblProgressValue.Size = new System.Drawing.Size(28, 17);
             this.lblProgressValue.TabIndex = 22;
             this.lblProgressValue.Text = "0/0";
-            this.lblProgressValue.Visible = false;
+            this.lblProgressValue.Visible = true;
             // 
             // panel1
             // 
+            this.panel1.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.panel1.Controls.Add(this.btnImport);
             this.panel1.Controls.Add(this.button2);
             this.panel1.Controls.Add(this.btnViewReport);
-            this.panel1.Location = new System.Drawing.Point(168, 447);
+            this.panel1.Location = new System.Drawing.Point(224, 550);
+            this.panel1.Margin = new System.Windows.Forms.Padding(4);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(341, 58);
+            this.panel1.Size = new System.Drawing.Size(455, 71);
             this.panel1.TabIndex = 23;
+            // 
+            // lblTotalValue
+            // 
+            this.lblTotalValue.AutoSize = true;
+            this.lblTotalValue.Location = new System.Drawing.Point(90, 631);
+            this.lblTotalValue.Name = "lblTotalValue";
+            this.lblTotalValue.Size = new System.Drawing.Size(16, 17);
+            this.lblTotalValue.TabIndex = 25;
+            this.lblTotalValue.Text = "0";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(41, 631);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(44, 17);
+            this.label5.TabIndex = 24;
+            this.label5.Text = "Total:";
             // 
             // FormPatientsImport
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(840, 540);
+            this.ClientSize = new System.Drawing.Size(1120, 665);
+            this.Controls.Add(this.lblTotalValue);
+            this.Controls.Add(this.label5);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.lblProgressValue);
             this.Controls.Add(this.progressBar1);
@@ -547,6 +576,7 @@
             this.Controls.Add(this.listView1);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.Browse);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "FormPatientsImport";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Nightingale Import Utility";
@@ -621,6 +651,8 @@
         private System.Windows.Forms.Button btnViewReport;
         private System.Windows.Forms.Label lblProgressValue;
         private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Label lblTotalValue;
+        private System.Windows.Forms.Label label5;
     }
 }
 

@@ -3,14 +3,18 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Runtime.Remoting.Contexts;
 using System.Runtime.Serialization.Json;
 using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Phytel.API.Common.CustomObject;
 using Phytel.API.DataDomain.CareMember.DTO;
@@ -72,7 +76,7 @@ namespace NightingaleImport
         static int colSysNm = 39;
         static int colSysPrim = 40;
         private static int colActivateDeactivate = 41;
-        
+
         private List<IdNamePair> modesLookUp = new List<IdNamePair>();
         private List<CommTypeData> typesLookUp = new List<CommTypeData>();
         private List<StateData> statesLookUp = new List<StateData>();
@@ -80,6 +84,9 @@ namespace NightingaleImport
         private TimeZoneData zoneDefault = new TimeZoneData();
         private List<IdNamePair> careMemberLookUp = new List<IdNamePair>();
         private List<SystemData> systemsData = new List<SystemData>();
+        private ImportFile _importFile;
+        private List<ImportData> listOfPatientData;
+        public string elapsedTime { get; set; }
 
         private readonly double version = ImportToolConfigurations.version;
         private readonly string context = ImportToolConfigurations.context;
@@ -89,25 +96,137 @@ namespace NightingaleImport
         public const string DataSourceProperty = "Import";
         public const string PCMRoleIdProperty = "56f169f8078e10eb86038514";
         string _headerUserId = "000000000000000000000000";
-        Dictionary<string,ImportData> patientDictionary  = new Dictionary<string, ImportData>();
+        private string _newdateofbirth;
+        private int counter = 0;
+
+        private int _numberofrows = 0;
+        private int _numberofcolumns = 0;
+        private string[,] _csv_values;
+        private string _firstname;
+        private string _lastname;
+        private string _dob;
+
+        public int NumberOfRows
+        {
+            get { return _numberofrows; }
+            set { _numberofrows = value; }
+        }
+        public int NumberOfColumns
+        {
+            get { return _numberofcolumns; }
+            set { _numberofcolumns = value; }
+        }
+        public string[,] Csv_Values
+        {
+            get { return _csv_values; }
+            set { _csv_values = value; }
+        }
+        public string Firstname
+        {
+            get { return _firstname; }
+            set { _firstname = value; }
+        }
+        public string Lastname
+        {
+            get { return _lastname; }
+            set { _lastname = value; }
+        }
+        public string DOB
+        {
+            get { return _dob; }
+            set { _dob = value; }
+        }
+        public string TextBoxURL
+        {
+            get { return txtURL.Text; }
+            set { txtURL.Text = value; }
+        }
+        public string ContractNumber
+        {
+            get { return contractNumber; }
+            set { contractNumber = value; }
+        }
+        public string TextBoxFileName
+        {
+            get { return textBox1.Text; }
+            set { textBox1.Text = value; }
+        }
+
+        private int _skippedlvi;
+        public int SkippedLvi
+        {
+            get { return _skippedlvi; }
+            set { _skippedlvi = value; }
+        }
+
+        public ListView PatientListView
+        {
+            get { return listView1; }
+            set { listView1 = value; }
+        }
+
+        public Button ImportButton
+        {
+            get { return btnImport; }
+            set { btnImport = value; }
+        }
+        public string NewDateofBirth
+        {
+            get
+            {
+                DateTime newDOB;
+                if (DateTime.TryParse(_newdateofbirth, out newDOB))
+                {
+                    _newdateofbirth = newDOB.ToString("MM/dd/yyyy");
+                }
+                else
+                {
+                    _newdateofbirth = string.Empty;
+                }
+                return _newdateofbirth;
+            }
+            set
+            {
+                DateTime newDob;
+                if (DateTime.TryParse(value, out newDob))
+                {
+                    _newdateofbirth = newDob.ToString("MM/dd/yyyy");
+                }
+                else
+                {
+                    _newdateofbirth = string.Empty;
+                }
+            }
+        }
+        public Dictionary<string, string> ListView1List { get; set; }
+        public List<string> ListView2List { get; set; }
+        Dictionary<string, ImportData> patientDictionary = new Dictionary<string, ImportData>(StringComparer.InvariantCultureIgnoreCase);
+        List<ImportData> allImportData = new List<ImportData>();
+
         public FormPatientsImport()
         {
             InitializeComponent();
             this.listView1.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.listView1_ColumnClick);
             comboBoxContractList.DataSource = ImportToolConfigurations.contracts;
             comboBoxContractList.SelectedText = " ";
-
-
         }
 
         public void button1_Click(object sender, EventArgs e)
         {
             openFileDialog1.ShowDialog();
+            chkSelectAllAlways();
         }
 
         private void button1_VisibleChanged(object sender, EventArgs e)
         {
             Browse.Text = "Browse";
+        }
+
+        private void progressBarUpdate()
+        {
+            progressBar1.Increment(1);
+            lblProgressValue.Refresh();
+            lblProgressValue.Text = string.Format("{0}/{1}", progressBar1.Value, NumberOfRows);
         }
 
         private void textBox1_VisibleChanged(object sender, EventArgs e)
@@ -121,19 +240,17 @@ namespace NightingaleImport
             try
             {
                 btnViewReport.Enabled = false;
-                lblProgressValue.Visible = true;
-                progressBar1.Visible = true;
-                progressBar1.Maximum = listView1.CheckedItems.Count;
-                progressBar1.Value = 0;
+                btnImport.Enabled = false;
+
                 Importer import = new Importer(txtURL.Text, context, version, contractNumber, _headerUserId);
-               
+                _importFile = new ImportFile(this);
                 Guid sqlUserId = getUserId(txtContactID.Text);
                 if (sqlUserId != Guid.Empty)
-                {                  
+                {
 
                     GetContactByUserIdDataResponse contactUserResp = import.GetContactByUserId(sqlUserId.ToString());
 
-                    if (contactUserResp.Contact==null)
+                    if (contactUserResp.Contact == null)
                     {
                         throw new Exception("Invalid 'Admin User'");
                     }
@@ -143,331 +260,348 @@ namespace NightingaleImport
                         throw new Exception("Invalid 'Admin User'");
                     import.HeaderUserId = _headerUserId;
 
-                    //Dictionary<string, string> dictionarySucceed = new Dictionary<string, string>();
-                    //Dictionary<string, string> dictionaryFail = new Dictionary<string, string>();
-                    
-                    LoadLookUps();
-                    
-                    LoadSystems();
-                   
-                    foreach (ListViewItem lvi in listView1.CheckedItems)
+                    Task.Factory.StartNew(() => { LoadLookUps(); });
+                    Task.Factory.StartNew(() => { LoadSystems(); });
+
+                    #region foreach
+                    int num_rows = listOfPatientData.Count;
+                    Stopwatch stopWatch = new Stopwatch();
+                    stopWatch.Start();
+
+                    foreach (var datarow in listOfPatientData)
                     {
-                        lblProgressValue.Text = string.Format("{0}/{1}", progressBar1.Value + 1, progressBar1.Maximum);
-                        lblProgressValue.Refresh();
-                        var patientDictKey = string.Format("{0}{1}{2}", lvi.SubItems[colFirstN].Text,
-                                    lvi.SubItems[colLastN].Text, lvi.SubItems[colDB].Text);
-
-                        PatientData pdata = GetPatientData(lvi);
-
-                        patientDictionary[patientDictKey].patientData = pdata;
-
-                        GetContactByUserIdDataResponse contactByUserIdResponse = null;
-                        if (!string.IsNullOrEmpty(lvi.SubItems[colCMan].Text))
-                        {
-                            Guid userIdResponse = getUserId(lvi.SubItems[colCMan].Text);
-
-                            if (userIdResponse == Guid.Empty)
-                            {
-                                SetPatientDictionaryFailed(patientDictKey, string.Format(
-                                    "Unable to locate the UserId: {0}", lvi.SubItems[colCMan].Text));
-                                SetListViewItemFailed(lvi);
-                                patientDictionary[patientDictKey].importOperation = ImportOperation.LOOKUP_USER_CONTACT;
-                                progressBar1.Increment(1);
-                                continue;
-                            }
-                            contactByUserIdResponse = import.GetContactByUserId(userIdResponse.ToString());
-                            if (contactByUserIdResponse.Contact == null)
-                            {
-                                SetPatientDictionaryFailed(patientDictKey, string.Format(
-                                    "Unable to locate contact for the UserId: {0}, rid: {1}", lvi.SubItems[colCMan].Text,
-                                    userIdResponse.ToString()));
-                                SetListViewItemFailed(lvi);
-                                patientDictionary[patientDictKey].importOperation = ImportOperation.LOOKUP_USER_CONTACT;
-                                progressBar1.Increment(1);
-                                continue;
-                            }
-                        }
-                      
-                        GetPatientDataResponse existingPatientResponse = null;
                         try
                         {
-                            existingPatientResponse = GetExistingPatientData(pdata, import);
-                        }
-                        catch(Exception ex)
-                        {
-                            SetPatientDictionaryFailed(patientDictKey, string.Format(
-                                "Exception trying to locate patient. Message: {0}, Stack Trace: {1}", ex.Message, ex.StackTrace));
-                            SetListViewItemFailed(lvi);
-                            patientDictionary[patientDictKey].importOperation = ImportOperation.LOOKUP_PATIENT;
-                            progressBar1.Increment(1);
-                            continue;
-                        }
-                      
-
-                        if (existingPatientResponse.Patient == null) //Insert
-                        {
-                            #region INSERT
-                            patientDictionary[patientDictKey].importOperation = ImportOperation.INSERT;
-
-                            PutPatientDataRequest patientRequest = new PutPatientDataRequest
+                            GetContactByUserIdDataResponse contactByUserIdResponse = null;
+                            if (!string.IsNullOrEmpty(datarow.patientData.CMan))
                             {
-                                Patient = pdata,
-                                Context = context,
-                                ContractNumber = contractNumber,
-                                Version = version
-                            };
+                                Guid userIdResponse = getUserId(datarow.patientData.CMan);
 
-                            lblStatus.Text = string.Format("Importing '{0} {1}'...", pdata.FirstName, pdata.LastName);
-                            lblStatus.Refresh();
-
-                            PutPatientDataResponse responsePatient =  import.InsertPatient(patientRequest);
-
-                            if (responsePatient.Id == null)
-                            {
-                                SetPatientDictionaryFailed(patientDictKey, 
-                                    string.Format("Insert failed. Message: {0} StackTrace: {1}",
-                                        responsePatient.Status.Message, responsePatient.Status.StackTrace));
-                                
-                                SetListViewItemFailed(lvi);
-                            }
-                            else
-                            {
-                                #region Insert the patient system record provided in the import file.
-                                if (!String.IsNullOrEmpty(lvi.SubItems[colSysID].Text) && !String.IsNullOrEmpty(lvi.SubItems[colSysNm].Text))
+                                if (userIdResponse == Guid.Empty)
                                 {
-                                    var system = systemsData.Where(s => s.Name.ToLower() == lvi.SubItems[colSysNm].Text.Trim().ToLower()).FirstOrDefault();
-                                    if (system != null)
+                                    datarow.importOperation = ImportOperation.LOOKUP_USER_CONTACT;
+                                    datarow.failedMessage = string.Format("Unable to locate the UserId : {0}", datarow.patientData.CMan);
+                                    continue;
+                                }
+                                contactByUserIdResponse = import.GetContactByUserId(userIdResponse.ToString());
+                                if (contactByUserIdResponse.Contact == null)
+                                {
+                                    datarow.importOperation = ImportOperation.LOOKUP_USER_CONTACT;
+                                    datarow.failedMessage = string.Format("Unable to locate contact for the UserId: {0}, rid: {1}", datarow.patientData.CMan, userIdResponse.ToString());
+                                    continue;
+                                }
+                            }
+                            GetPatientDataResponse existingPatientResponse = null;
+                            try
+                            {
+                                existingPatientResponse = GetExistingPatientData(datarow.patientData, import);
+                            }
+                            catch (Exception ex)
+                            {
+                                datarow.importOperation = ImportOperation.SKIPPED;
+                                datarow.skipped = true;
+                                datarow.failedMessage = string.Format("Exception trying to locate patient. Message: {0}", ex.Message);
+                                progressBarUpdate();
+                                continue;
+                            }
+
+                            if (datarow.importOperation == ImportOperation.SKIPPED) continue;
+
+                            #region insert/update
+                            if (existingPatientResponse.Patient == null)
+                            {
+                                #region INSERT
+
+                                datarow.importOperation = ImportOperation.INSERT;
+                                progressBarUpdate();
+                                try
+                                {
+                                    PutPatientDataRequest patientRequest = new PutPatientDataRequest
                                     {
-                                        PatientSystemData psData = new PatientSystemData
+                                        Patient = datarow.patientData,
+                                        Context = context,
+                                        ContractNumber = contractNumber,
+                                        Version = version
+                                    };
+                                    PutPatientDataResponse responsePatient = import.InsertPatient(patientRequest);
+
+                                    if (responsePatient.Id == null)
+                                    {
+                                        datarow.failed = true;
+                                        datarow.failedMessage = string.Format("Insert failed.");
+                                        continue;
+                                    }
+                                    else
+                                    {
+                                        #region Insert the patient system record provided in the import file.
+
+                                        if (!String.IsNullOrEmpty(datarow.patientData.SysId) &&
+                                            !String.IsNullOrEmpty(datarow.patientData.sysName))
                                         {
-                                            PatientId = responsePatient.Id,
-                                            Primary = (String.IsNullOrEmpty(lvi.SubItems[colSysPrim].Text)) ? false : Boolean.Parse(lvi.SubItems[colSysPrim].Text.Trim()),
-                                            StatusId = (int)Phytel.API.DataDomain.PatientSystem.DTO.Status.Active,
-                                            SystemId = system.Id,
-                                            DataSource = DataSourceProperty,
-                                            Value = (String.IsNullOrEmpty(lvi.SubItems[colSysID].Text)) ? null : lvi.SubItems[colSysID].Text.Trim(),
-                                        };
-                                        InsertPatientSystemDataRequest psRequest = new InsertPatientSystemDataRequest
-                                        {
-                                            PatientId = responsePatient.Id,
-                                            IsEngageSystem = false,
-                                            PatientSystemsData = psData,
-                                            Version = responsePatient.Version,
-                                            Context = patientRequest.Context,
-                                            ContractNumber = patientRequest.ContractNumber
-                                        };
-                                        InsertPatientSystemDataResponse responsePatientPS = import.InsertPatientSystem(psRequest);
-                                        if (responsePatientPS.PatientSystemData == null)
-                                        {
-                                            SetPatientDictionaryFailed(patientDictKey, "Failed to import the PatientSystem Id provided in the file.");
-                                            SetListViewItemFailed(lvi);
-                                            
-                                        }
-                                        else
-                                        {
-                                            // If imported patientsystem's primary is set to true, override the EngagePatientSystem's primary field.
-                                            if (psData.Primary)
+                                            var system =
+                                                systemsData.Where(
+                                                        s => s.Name.ToLower() == datarow.patientData.sysName.Trim().ToLower())
+                                                    .FirstOrDefault();
+                                            if (system != null)
                                             {
-                                                GetPatientSystemDataResponse engagePatientSystemResponse = import.GetPatientSystem(new GetPatientSystemDataRequest
+                                                PatientSystemData psData = new PatientSystemData
                                                 {
-                                                    Context = context,
-                                                    ContractNumber = contractNumber,
-                                                    Version = version,
-                                                    Id = responsePatient.EngagePatientSystemId
-                                                });
-                                                if (engagePatientSystemResponse != null && engagePatientSystemResponse.PatientSystemData != null)
+                                                    PatientId = responsePatient.Id,
+                                                    Primary =
+                                                        (String.IsNullOrEmpty(datarow.patientData.SysPri))
+                                                            ? false
+                                                            : Boolean.Parse(datarow.patientData.SysPri.Trim()),
+                                                    StatusId = (int)Phytel.API.DataDomain.PatientSystem.DTO.Status.Active,
+                                                    SystemId = system.Id,
+                                                    DataSource = DataSourceProperty,
+                                                    Value =
+                                                        (String.IsNullOrEmpty(datarow.patientData.SysId))
+                                                            ? null
+                                                            : datarow.patientData.SysId.Trim(),
+                                                };
+                                                InsertPatientSystemDataRequest psRequest = new InsertPatientSystemDataRequest
                                                 {
-                                                    engagePatientSystemResponse.PatientSystemData.Primary = false;
-                                                    UpdatePatientSystemDataRequest updatePDRequest = new UpdatePatientSystemDataRequest
-                                                    {
-                                                        Context = context,
-                                                        ContractNumber = contractNumber,
-                                                        Version = version,
-                                                        Id = engagePatientSystemResponse.PatientSystemData.Id,
-                                                        PatientId = engagePatientSystemResponse.PatientSystemData.PatientId,
-                                                        PatientSystemsData = engagePatientSystemResponse.PatientSystemData
-                                                    };
-                                                    import.UpdatePatientSystem(updatePDRequest);
+                                                    PatientId = responsePatient.Id,
+                                                    IsEngageSystem = false,
+                                                    PatientSystemsData = psData,
+                                                    Version = responsePatient.Version,
+                                                    Context = patientRequest.Context,
+                                                    ContractNumber = patientRequest.ContractNumber
+                                                };
+                                                InsertPatientSystemDataResponse responsePatientPS =
+                                                    import.InsertPatientSystem(psRequest);
+                                                if (responsePatientPS.PatientSystemData == null)
+                                                {
+                                                    datarow.failed = true;
+                                                    datarow.failedMessage = "Failed to import the PatientSystem Id provided in the file.";
+                                                    continue;
                                                 }
+                                                else
+                                                {
+                                                    // If imported patientsystem's primary is set to true, override the EngagePatientSystem's primary field.
+                                                    if (psData.Primary)
+                                                    {
+                                                        GetPatientSystemDataResponse engagePatientSystemResponse =
+                                                            import.GetPatientSystem(new GetPatientSystemDataRequest
+                                                            {
+                                                                Context = context,
+                                                                ContractNumber = contractNumber,
+                                                                Version = version,
+                                                                Id = responsePatient.EngagePatientSystemId
+                                                            });
+                                                        if (engagePatientSystemResponse != null &&
+                                                            engagePatientSystemResponse.PatientSystemData != null)
+                                                        {
+                                                            engagePatientSystemResponse.PatientSystemData.Primary = false;
+                                                            UpdatePatientSystemDataRequest updatePDRequest = new UpdatePatientSystemDataRequest
+                                                            {
+                                                                Context = context,
+                                                                ContractNumber = contractNumber,
+                                                                Version = version,
+                                                                Id = engagePatientSystemResponse.PatientSystemData.Id,
+                                                                PatientId =
+                                                                    engagePatientSystemResponse.PatientSystemData.PatientId,
+                                                                PatientSystemsData =
+                                                                    engagePatientSystemResponse.PatientSystemData
+                                                            };
+                                                            import.UpdatePatientSystem(updatePDRequest);
+                                                        }
+                                                    }
+                                                }
+
                                             }
                                         }
 
+                                        #endregion
+
+                                        #region Insert Contact record.
+
+                                        //Contact
+                                        ContactData data = GetContactData(datarow);
+                                        data.PatientId = responsePatient.Id;
+
+                                        InsertContactDataRequest contactRequest = new InsertContactDataRequest
+                                        {
+                                            ContactData = data,
+                                            Version = patientRequest.Version,
+                                            Context = patientRequest.Context,
+                                            ContractNumber = patientRequest.ContractNumber
+                                        };
+
+                                        InsertContactDataResponse responseContact =
+                                            import.InsertContactForAPatient(contactRequest, responsePatient.Id.ToString());
+                                        if (responseContact.Id == null)
+                                        {
+                                            datarow.failed = true;
+                                            datarow.failedMessage = "Contact card import request failed.";
+                                            continue;
+                                        }
+
+                                        #endregion
+
+                                        #region CareMember
+
+                                        if (contactByUserIdResponse != null)
+                                        {
+                                            CareTeamMemberData member = new CareTeamMemberData
+                                            {
+                                                ContactId = contactByUserIdResponse.Contact.Id,
+                                                RoleId = PCMRoleIdProperty,
+                                                Core = true,
+                                                DataSource = "Engage",
+                                                DistanceUnit = "mi",
+                                                StatusId = (int)CareTeamMemberStatus.Active,
+                                            };
+                                            List<CareTeamMemberData> memberList = new List<CareTeamMemberData>();
+                                            memberList.Add(member);
+
+                                            CareTeamData careTeamData = new CareTeamData
+                                            {
+                                                ContactId = responseContact.Id,
+                                                Members = memberList
+                                            };
+                                            SaveCareTeamDataRequest saveCareTeamDataRequest = new SaveCareTeamDataRequest
+                                            {
+                                                CareTeamData = careTeamData,
+                                                ContactId = responseContact.Id,
+                                            };
+                                            SaveCareTeamDataResponse saveCareTeamDataResponse =
+                                                import.InsertCareTeam(saveCareTeamDataRequest);
+                                            if (saveCareTeamDataResponse == null)
+                                            {
+                                                datarow.failed = true;
+                                                datarow.failedMessage = "Care Team import request failed.";
+                                                continue;
+                                            }
+                                            import.UpdateCohortPatientView(responsePatient.Id.ToString(),
+                                                contactByUserIdResponse.Contact.Id);
+
+                                        }
+
+                                        #endregion
                                     }
                                 }
-                                #endregion
-
-                                #region Insert Contact record.
-
-                                //Contact
-                                ContactData data = GetContactData(lvi, pdata);
-                                data.PatientId = responsePatient.Id;
-                                
-                                InsertContactDataRequest contactRequest = new InsertContactDataRequest
+                                catch (Exception ex)
                                 {
-                                    ContactData = data,
-                                    Version = patientRequest.Version,
-                                    Context = patientRequest.Context,
-                                    ContractNumber = patientRequest.ContractNumber
-                                };
-
-                                InsertContactDataResponse responseContact = import.InsertContactForAPatient(contactRequest, responsePatient.Id.ToString());
-                                if (responseContact.Id == null)
-                                {
-                                    SetPatientDictionaryFailed(patientDictKey, "Contact card import request failed.");
-                                    SetListViewItemFailed(lvi);
-                                }
-
-                                #endregion
-
-                                #region CareMember
-
-                                if (contactByUserIdResponse != null)
-                                {
-                                    CareTeamMemberData member = new CareTeamMemberData
-                                    {
-                                        ContactId = contactByUserIdResponse.Contact.Id,
-                                        RoleId = PCMRoleIdProperty,
-                                        Core = true,
-                                        DataSource = "Engage",
-                                        DistanceUnit = "mi",
-                                        StatusId = (int) CareTeamMemberStatus.Active,
-                                    };
-                                    List<CareTeamMemberData> memberList = new List<CareTeamMemberData>();
-                                    memberList.Add(member);
-
-                                    CareTeamData careTeamData = new CareTeamData
-                                    {
-                                        ContactId = responseContact.Id,
-                                        Members = memberList
-                                    };
-                                    SaveCareTeamDataRequest saveCareTeamDataRequest = new SaveCareTeamDataRequest
-                                    {
-                                        CareTeamData = careTeamData,
-                                        ContactId = responseContact.Id,
-                                    };
-                                    SaveCareTeamDataResponse saveCareTeamDataResponse =
-                                        import.InsertCareTeam(saveCareTeamDataRequest);
-                                    if (saveCareTeamDataResponse == null)
-                                    {
-                                        SetPatientDictionaryFailed(patientDictKey, "Care Team import request failed.");
-                                        SetListViewItemFailed(lvi);
-                                    }
-                                    import.UpdateCohortPatientView(responsePatient.Id.ToString(),
-                                        contactByUserIdResponse.Contact.Id);
-
-                                }
-                                #endregion                                
-                            }
-                            #endregion
-                        }
-                        else //update
-                        {
-
-                            #region UDPATE
-                            patientDictionary[patientDictKey].importOperation = ImportOperation.UPDATE;
-                            try
-                            {                               
-                                if (!ImportToolConfigurations.enhancedFeaturesContracts.Contains(contractNumber))
-                                {
-                                    throw new Exception("This contract is not configured for updates.");
-                                }
-
-                                bool individualStatus = false;
-                                bool validIndividualStatusValue = false;
-                                int statusBackup = pdata.StatusId;
-                                if (lvi.SubItems.Count>41 && !string.IsNullOrEmpty(lvi.SubItems[colActivateDeactivate].Text))
-                                {
-                                    validIndividualStatusValue = bool.TryParse(lvi.SubItems[colActivateDeactivate].Text, out individualStatus);
-                                }
-                                if (validIndividualStatusValue)
-                                {
-                                    pdata.StatusId = individualStatus ? (int)Phytel.API.DataDomain.Patient.DTO.Status.Active : (int)Phytel.API.DataDomain.Patient.DTO.Status.Inactive;
-                                }
-                                else
-                                {
-                                    pdata.StatusId = existingPatientResponse.Patient.StatusId;
-                                }
-                                                               
-                                PutUpdatePatientDataRequest updatePatientRequest = new PutUpdatePatientDataRequest
-                                {
-                                    PatientData = pdata, Context = context, ContractNumber = contractNumber,
-                                    Version = version, Insert = false
-                                };
-                                updatePatientRequest.PatientData.Id = existingPatientResponse.Patient.Id;
-                                PutUpdatePatientDataResponse updatePatientResponse = import.UpsertPatient(updatePatientRequest, null);
-                                
-                                if(string.IsNullOrEmpty(updatePatientResponse.Id))
-                                {
-                                    SetPatientDictionaryFailed(patientDictKey, "Failed to update patient.");
-                                    SetListViewItemFailed(lvi);
-                                    progressBar1.Increment(1);
-                                    continue;
-
-                                }
-
-                                #region UPDATE CONTACT
-                                //Contact   
-                                pdata.StatusId = statusBackup;                            
-                                ContactData data = GetContactData(lvi, pdata);
-                                data.PatientId = existingPatientResponse.Patient.Id;
-                               
-                                GetContactByPatientIdDataResponse existingContactResponse = import.GetContactByPatientId(existingPatientResponse.Patient.Id);
-
-                                if (existingContactResponse.Contact == null)
-                                {
-                                    SetPatientDictionaryFailed(patientDictKey, string.Format("Update Failed. Message: {0} StackTrace: {1}",
-                                        existingContactResponse.Status.Message, existingContactResponse.Status.StackTrace));
-                                    SetListViewItemFailed(lvi);
-                                    progressBar1.Increment(1);
+                                    datarow.failed = true;
+                                    datarow.failedMessage = string.Format("Insert Failed - {0}", ex);
                                     continue;
                                 }
-
-                                data.Id = existingContactResponse.Contact.Id;
-                                UpdateContactDataRequest updateContactRequest = new UpdateContactDataRequest()
-                                {
-                                   ContactData = data,
-                                    Context = context,
-                                    ContractNumber = contractNumber,
-                                    Version = version                                   
-                                };
-                                var updateContactResponse = import.UpdateContactForAPatient(updateContactRequest, data.PatientId);
-                                if (updateContactResponse.SuccessData == false)
-                                {
-                                    SetPatientDictionaryFailed(patientDictKey, string.Format("Update Failed. Message: {0} StackTrace: {1}",
-                                        updateContactResponse.Status.Message, updateContactResponse.Status.StackTrace));
-                                    SetListViewItemFailed(lvi);
-                                }
-
                                 #endregion
                             }
-                            catch(Exception ex)
+                            else
                             {
-                                SetPatientDictionaryFailed(patientDictKey, string.Format("Update Failed. Message: {0} StackTrace: {1}", ex.Message, ex.StackTrace));
-                                SetListViewItemFailed(lvi);                                
+                                #region UPDATE
+                                datarow.importOperation = ImportOperation.UPDATE;
+                                progressBarUpdate();
+                                try
+                                {
+                                    if (!ImportToolConfigurations.enhancedFeaturesContracts.Contains(contractNumber))
+                                    {
+                                        throw new Exception("This contract is not configured for updates.");
+                                    }
+
+                                    bool individualStatus = false;
+                                    bool validIndividualStatusValue = false;
+                                    int statusBackup = datarow.patientData.StatusId;
+                                    if (!string.IsNullOrEmpty(datarow.patientData.ActivateDeactivate))
+                                    {
+                                        validIndividualStatusValue = bool.TryParse(datarow.patientData.ActivateDeactivate, out individualStatus);
+                                    }
+                                    if (validIndividualStatusValue)
+                                    {
+                                        datarow.patientData.StatusId = individualStatus ? (int)Phytel.API.DataDomain.Patient.DTO.Status.Active : (int)Phytel.API.DataDomain.Patient.DTO.Status.Inactive;
+                                    }
+                                    else
+                                    {
+                                        datarow.patientData.StatusId = existingPatientResponse.Patient.StatusId;
+                                    }
+
+                                    PutUpdatePatientDataRequest updatePatientRequest = new PutUpdatePatientDataRequest
+                                    {
+                                        PatientData = datarow.patientData,
+                                        Context = context,
+                                        ContractNumber = contractNumber,
+                                        Version = version,
+                                        Insert = false
+                                    };
+                                    updatePatientRequest.PatientData.Id = existingPatientResponse.Patient.Id;
+                                    PutUpdatePatientDataResponse updatePatientResponse = import.UpsertPatient(updatePatientRequest, null);
+
+                                    if (string.IsNullOrEmpty(updatePatientResponse.Id))
+                                    {
+                                        datarow.failed = true;
+                                        datarow.failedMessage = ("Failed to update patient.");
+                                        continue;
+                                    }
+
+                                    #region UPDATE CONTACT
+                                    //Contact   
+                                    GetContactByPatientIdDataResponse existingContactResponse = import.GetContactByPatientId(existingPatientResponse.Patient.Id);
+
+                                    if (existingContactResponse.Contact == null)
+                                    {
+                                        datarow.failed = true;
+                                        datarow.failedMessage = ("Update Failed. Cannot get contact by patient ID");
+                                        continue;
+                                    }
+                                    ContactData data = GetContactData(datarow);
+                                    data.PatientId = existingPatientResponse.Patient.Id;
+                                    data.Id = existingContactResponse.Contact.Id;
+                                    UpdateContactDataRequest updateContactRequest = new UpdateContactDataRequest()
+                                    {
+                                        ContactData = data,
+                                        Context = context,
+                                        ContractNumber = contractNumber,
+                                        Version = version,
+                                        Id = data.Id,
+                                        UserId = data.UserId
+                                    };
+                                    var updateContactResponse = import.UpdateContactForAPatient(updateContactRequest, data.PatientId);
+                                    if (updateContactResponse.SuccessData == false)
+                                    {
+                                        datarow.failed = true;
+                                        datarow.failedMessage = ("Update Failed. Cannot update contact for patient");
+                                        continue;
+                                    }
+                                    #endregion
+                                }
+                                catch (Exception ex)
+                                {
+                                    datarow.failed = true;
+                                    datarow.failedMessage = ("Update Failed.");
+                                    continue;
+                                }
+                                #endregion
+                                #endregion
                             }
                             #endregion
                         }
-                        if (!patientDictionary[patientDictKey].failed)
+                        catch (Exception ex)
                         {
-                            int n = listView1.CheckedItems.IndexOf(lvi);
-                            listView1.CheckedItems[n].Remove();
+                            datarow.skipped = true;
+                            datarow.skippedMessage = string.Format("Row Skipped due to error : {0}", ex);
                         }
-                        progressBar1.Increment(1);
                     }
-                   
-                    btnViewReport.Enabled = true;
+                    stopWatch.Stop();
+                    TimeSpan ts = stopWatch.Elapsed;
+                    elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",
+                        ts.Hours, ts.Minutes, ts.Seconds,
+                        ts.Milliseconds / 10);
 
+                    btnViewReport.Enabled = true;
+                    btnImport.Enabled = false;
+                    btnImport.Text = elapsedTime;
+                    Browse.Enabled = false;
                 }
                 else
                     MessageBox.Show("Invalid 'Admin User Name'!");
             }
             catch (Exception ex)
-            {                                          
-                MessageBox.Show(string.Format("Message:{0}, StackTrace:{1}", ex.Message,ex.StackTrace));
-
+            {
+                MessageBox.Show(string.Format("Message:{0}, StackTrace:{1}", ex.Message, ex.StackTrace));
             }
-            chkSelectAll.Text = string.Format("Select All ({0} Patients)", patientDictionary.Values.Count(id => id.patientData == null));
-
+            chkSelectAll.Visible = false;
         }
 
         private void SetPatientDictionaryFailed(string dictionaryKey, string failedMessage)
@@ -477,7 +611,22 @@ namespace NightingaleImport
 
         }
 
-        private void SetListViewItemFailed(ListViewItem lvi)
+        private void SetPatientDictionarySkipped(string dictionaryKey, string skippedMessage)
+        {
+            patientDictionary[dictionaryKey].skipped = true;
+            patientDictionary[dictionaryKey].failedMessage = skippedMessage;
+            patientDictionary[dictionaryKey].rowSkipped++;
+        }
+
+        public void SetListViewItemSkipped(ListViewItem lvi)
+        {
+            int n = listView1.CheckedItems.IndexOf(lvi);
+            PatientListView.CheckedItems[n].BackColor = Color.Red;
+            PatientListView.CheckedItems[n].Checked = false;
+            _skippedlvi++;
+        }
+
+       public void SetListViewItemFailed(ListViewItem lvi)
         {
             int n = listView1.CheckedItems.IndexOf(lvi);
             listView1.CheckedItems[n].BackColor = Color.Red;
@@ -512,13 +661,330 @@ namespace NightingaleImport
                 Suffix = (String.IsNullOrEmpty(lvi.SubItems[colSuff].Text)) ? null : lvi.SubItems[colSuff].Text.Trim(),
                 StatusId = (int)Phytel.API.DataDomain.Patient.DTO.Status.Active,
                 #endregion
-                DOB = lvi.SubItems[colDB].Text.Trim(),
+                DOB = NewDateofBirth.Trim(),
                 DataSource = EngageSystemProperty,
                 StatusDataSource = EngageSystemProperty,
                 Background = (String.IsNullOrEmpty(lvi.SubItems[colBkgrnd].Text)) ? null : lvi.SubItems[colBkgrnd].Text.Trim(),
 
             };
             return pdata;
+        }
+
+        private PatientData GetPatientData2(string[,] val, int row)
+        {
+            PatientData pdata = new PatientData
+            {
+                #region Sync up properties in Contact
+                FirstName = val[row, colFirstN].Trim(),
+                LastName = val[row, colLastN].Trim(),
+                MiddleName = (String.IsNullOrEmpty(val[row, colMiddleN])) ? null : val[row, colMiddleN].Trim(),
+                PreferredName = (String.IsNullOrEmpty(val[row, colPrefN])) ? null : val[row, colPrefN].Trim(),
+                Gender = val[row, colGen].Trim(),
+                Suffix = (String.IsNullOrEmpty(val[row, colSuff])) ? null : val[row, colSuff].Trim(),
+                StatusId = (int)Phytel.API.DataDomain.Patient.DTO.Status.Active,
+                #endregion
+                DOB = NewDateofBirth.Trim(),
+                DataSource = EngageSystemProperty,
+                StatusDataSource = EngageSystemProperty,
+                Background = (String.IsNullOrEmpty(val[row, colBkgrnd])) ? null : val[row, colBkgrnd].Trim(),
+
+            };
+            return pdata;
+        }
+
+        private ContactData GetContactData(ImportData importdata)
+        {
+            #region Communication
+            //timezone
+            TimeZoneData tZone = null;
+            if (string.IsNullOrEmpty(importdata.patientData.TimeZ) == false)
+            {
+                tZone = new TimeZoneData();
+                foreach (TimeZoneData t in zonesLookUp)
+                {
+                    string[] zones = t.Name.Split(" ".ToCharArray());
+                    if (importdata.patientData.TimeZ.Trim() == zones[0])
+                    {
+                        tZone.Id = t.Id;
+                    }
+                }
+            }
+
+            List<CommModeData> modes = new List<CommModeData>();
+            List<PhoneData> phones = new List<PhoneData>();
+            List<AddressData> addresses = new List<AddressData>();
+            List<EmailData> emails = new List<EmailData>();
+
+            //modes
+            if (modesLookUp != null && modesLookUp.Count > 0)
+            {
+                foreach (IdNamePair l in modesLookUp)
+                {
+                    modes.Add(new CommModeData { ModeId = l.Id, OptOut = false, Preferred = false });
+                }
+            }
+
+
+            //phones
+            if (string.IsNullOrEmpty(importdata.patientData.Ph1) == false)
+            {
+                PhoneData phone1 = new PhoneData
+                {
+                    Number = Convert.ToInt64(importdata.patientData.Ph1.Replace("-", string.Empty)),
+                    OptOut = false,
+                    DataSource = DataSourceProperty
+                };
+
+                if (String.Compare(importdata.patientData.Ph1Pref.Trim(), "true", true) == 0)
+                {
+                    phone1.PhonePreferred = true;
+                }
+                else
+                    phone1.PhonePreferred = false;
+
+                if (string.IsNullOrEmpty(importdata.patientData.Ph1Type) == false)
+                {
+                    foreach (CommTypeData c in typesLookUp)
+                    {
+                        if (String.Compare(importdata.patientData.Ph1Type.Trim(), c.Name, true) == 0)
+                        {
+                            phone1.TypeId = c.Id;
+                            break;
+                        }
+                    }
+                }
+                else
+                    phone1.TypeId = typesLookUp[0].Id;
+
+                phones.Add(phone1);
+            }
+
+            if (string.IsNullOrEmpty(importdata.patientData.Ph2) == false)
+            {
+                PhoneData phone2 = new PhoneData
+                {
+                    Number = Convert.ToInt64(importdata.patientData.Ph2.Replace("-", string.Empty)),
+                    OptOut = false,
+                    DataSource = DataSourceProperty
+                };
+
+                if (String.Compare(importdata.patientData.Ph2Pref.Trim(), "true", true) == 0)
+                {
+                    phone2.PhonePreferred = true;
+                }
+                else
+                    phone2.PhonePreferred = false;
+
+                if (string.IsNullOrEmpty(importdata.patientData.Ph2Type) == false)
+                {
+                    foreach (CommTypeData c in typesLookUp)
+                    {
+                        if (String.Compare(importdata.patientData.Ph2Type.Trim(), c.Name, true) == 0)
+                        {
+                            phone2.TypeId = c.Id;
+                            break;
+                        }
+                    }
+                }
+                else
+                    phone2.TypeId = typesLookUp[0].Id;
+
+                phones.Add(phone2);
+            }
+
+            //emails
+            if (string.IsNullOrEmpty(importdata.patientData.Em1) == false)
+            {
+                EmailData email1 = new EmailData
+                {
+                    Text = importdata.patientData.Em1.Trim(),
+                    OptOut = false,
+                };
+
+                if (String.Compare(importdata.patientData.Em1Pref.Trim(), "true", true) == 0)
+                {
+                    email1.Preferred = true;
+                }
+                else
+                    email1.Preferred = false;
+
+                if (string.IsNullOrEmpty(importdata.patientData.Em1Pref) == false)
+                {
+                    foreach (CommTypeData c in typesLookUp)
+                    {
+                        if (String.Compare(importdata.patientData.Em1Type.Trim(), c.Name, true) == 0)
+                        {
+                            email1.TypeId = c.Id;
+                            break;
+                        }
+                    }
+                }
+                else
+                    email1.TypeId = typesLookUp[0].Id;
+
+                emails.Add(email1);
+            }
+
+            if (string.IsNullOrEmpty(importdata.patientData.Em2) == false)
+            {
+                EmailData email2 = new EmailData
+                {
+                    Text = importdata.patientData.Em2.Trim(),
+                    OptOut = false,
+                };
+
+                if (String.Compare(importdata.patientData.Em2Pref.Trim(), "true", true) == 0)
+                {
+                    email2.Preferred = true;
+                }
+                else
+                    email2.Preferred = false;
+
+                if (string.IsNullOrEmpty(importdata.patientData.Em2Type) == false)
+                {
+                    foreach (CommTypeData c in typesLookUp)
+                    {
+                        if (String.Compare(importdata.patientData.Em2Type.Trim(), c.Name, true) == 0)
+                        {
+                            email2.TypeId = c.Id;
+                            break;
+                        }
+                    }
+                }
+                else
+                    email2.TypeId = typesLookUp[0].Id;
+
+                emails.Add(email2);
+            }
+
+            //addresses
+            if ((string.IsNullOrEmpty(importdata.patientData.Add1L1) == false)
+                || (string.IsNullOrEmpty(importdata.patientData.Add1L2) == false)
+                || (string.IsNullOrEmpty(importdata.patientData.Add1L3) == false)
+                || (string.IsNullOrEmpty(importdata.patientData.Add1City) == false)
+                || (string.IsNullOrEmpty(importdata.patientData.Add1St) == false)
+                || (string.IsNullOrEmpty(importdata.patientData.Add1Zip) == false))
+            {
+                AddressData add1 = new AddressData
+                {
+                    Line1 = (string.IsNullOrEmpty(importdata.patientData.Add1L1)) ? null : importdata.patientData.Add1L1.Trim(),
+                    Line2 = (string.IsNullOrEmpty(importdata.patientData.Add1L2)) ? null : importdata.patientData.Add1L2.Trim(),
+                    Line3 = (string.IsNullOrEmpty(importdata.patientData.Add1L3)) ? null : importdata.patientData.Add1L3.Trim(),
+                    City = (string.IsNullOrEmpty(importdata.patientData.Add1City)) ? null : importdata.patientData.Add1City.Trim(),
+                    PostalCode = (string.IsNullOrEmpty(importdata.patientData.Add1Zip)) ? null : importdata.patientData.Add1Zip.Trim(),
+                    OptOut = false
+                };
+
+                if (String.Compare(importdata.patientData.Add1Pref.Trim(), "true", true) == 0)
+                {
+                    add1.Preferred = true;
+                }
+                else
+                    add1.Preferred = false;
+
+                string stateTrim = (string.IsNullOrEmpty(importdata.patientData.Add1St)) ? null : importdata.patientData.Add1St.Trim();
+                foreach (StateData st in statesLookUp)
+                {
+                    if ((st.Name == stateTrim)
+                        || (st.Code == stateTrim))
+                    {
+                        add1.StateId = st.Id;
+                        break;
+                    }
+                }
+
+                if (string.IsNullOrEmpty(importdata.patientData.Add1Type) == false)
+                {
+                    foreach (CommTypeData c in typesLookUp)
+                    {
+                        if (String.Compare(importdata.patientData.Add1Type.Trim(), c.Name, true) == 0)
+                        {
+                            add1.TypeId = c.Id;
+                            break;
+                        }
+                    }
+                }
+                else
+                    add1.TypeId = typesLookUp[0].Id;
+
+                addresses.Add(add1);
+            }
+
+            if ((string.IsNullOrEmpty(importdata.patientData.Add2L1) == false)
+                || (string.IsNullOrEmpty(importdata.patientData.Add2L2) == false)
+                || (string.IsNullOrEmpty(importdata.patientData.Add2L3) == false)
+                || (string.IsNullOrEmpty(importdata.patientData.Add2City) == false)
+                || (string.IsNullOrEmpty(importdata.patientData.Add2St) == false)
+                || (string.IsNullOrEmpty(importdata.patientData.Add2Zip) == false))
+            {
+                AddressData add2 = new AddressData
+                {
+                    Line1 = (string.IsNullOrEmpty(importdata.patientData.Add2L1)) ? null : importdata.patientData.Add2L1.Trim(),
+                    Line2 = (string.IsNullOrEmpty(importdata.patientData.Add2L2)) ? null : importdata.patientData.Add2L2.Trim(),
+                    Line3 = (string.IsNullOrEmpty(importdata.patientData.Add2L3)) ? null : importdata.patientData.Add2L3.Trim(),
+                    City = (string.IsNullOrEmpty(importdata.patientData.Add2City)) ? null : importdata.patientData.Add2City.Trim(),
+                    PostalCode = (string.IsNullOrEmpty(importdata.patientData.Add2Zip)) ? null : importdata.patientData.Add2Zip.Trim(),
+                    OptOut = false
+                };
+
+                if (String.Compare(importdata.patientData.Add2Pref.Trim(), "true", true) == 0)
+                {
+                    add2.Preferred = true;
+                }
+                else
+                    add2.Preferred = false;
+
+                string stateTrim = (string.IsNullOrEmpty(importdata.patientData.Add2St)) ? null : importdata.patientData.Add2St.Trim();
+                foreach (StateData st in statesLookUp)
+                {
+                    if ((st.Name == stateTrim)
+                        || (st.Code == stateTrim))
+                    {
+                        add2.StateId = st.Id;
+                        break;
+                    }
+                }
+
+                if (string.IsNullOrEmpty(importdata.patientData.Add2Type) == false)
+                {
+                    foreach (CommTypeData c in typesLookUp)
+                    {
+                        if (String.Compare(importdata.patientData.Add2Type.Trim(), c.Name, true) == 0)
+                        {
+                            add2.TypeId = c.Id;
+                            break;
+                        }
+                    }
+                }
+                else
+                    add2.TypeId = typesLookUp[0].Id;
+
+                addresses.Add(add2);
+            }
+            #endregion
+
+            //Contact
+            ContactData data = new ContactData
+            {
+                //PatientId = responsePatient.Id,
+                ContactTypeId = Phytel.API.DataDomain.Contact.DTO.Constants.PersonContactTypeId,
+                #region Sync up properties in Contact
+                FirstName = importdata.patientData.FirstName,
+                LastName = importdata.patientData.LastName,
+                MiddleName = importdata.patientData.MiddleName,
+                PreferredName = importdata.patientData.PreferredName,
+                Gender = importdata.patientData.Gender,
+                Suffix = importdata.patientData.Suffix,
+                StatusId = importdata.patientData.StatusId,
+                #endregion
+                DataSource = EngageSystemProperty,
+                Modes = modes,
+                TimeZoneId = tZone == null ? null : tZone.Id,
+                Phones = phones,
+                Emails = emails,
+                Addresses = addresses
+            };
+            return data;
         }
 
         private ContactData GetContactData(ListViewItem lvi, PatientData pdata)
@@ -1088,7 +1554,7 @@ namespace NightingaleImport
             StringContent modesContent = new StringContent(modesSr.ReadToEnd(), System.Text.Encoding.UTF8, "application/json");
             ms.Dispose();
             modesSr.Dispose();
-      
+
             //Post the data 
             var response = client.GetStringAsync(patientsystemDDUri);
             var responseContent = response.Result;
@@ -1120,52 +1586,115 @@ namespace NightingaleImport
             button2.Text = "Close";
         }
 
+
+        private string[,] LoadCsv(string filename)
+        {
+            string _file = System.IO.File.ReadAllText(filename);
+            _file = _file.Replace('\n', '\r');
+            string[] lines = _file.Split(new char[] { '\r' }, StringSplitOptions.RemoveEmptyEntries);
+            int row_length = lines.Length;
+            int col_length = lines[0].Split(',').Length;
+            string[,] csvValues = new string[row_length, col_length];
+            for (int row = 0; row < row_length; row++)
+            {
+                string[] csvLine = lines[row].Split(',');
+                for (int col = 0; col < col_length; col++)
+                {
+                    csvValues[row, col] = csvLine[col];
+                }
+            }
+            return csvValues;
+        }
+
         private void openFileDialog1_FileOk(object sender, CancelEventArgs e)
         {
+            lblStatus.Visible = false;
+            chkSelectAll.Visible = false;
+            filename = openFileDialog1.FileName;
+            textBox1.Text = filename;
+            int counter = 0;
+            _csv_values = LoadCsv(filename);
+            _numberofrows = File.ReadAllLines(filename).Length;
             try
             {
+                lblProgressValue.Visible = true;
+                progressBar1.Visible = true;
+                progressBar1.Maximum = _numberofrows;
                 progressBar1.Value = 0;
+
                 if (openFileDialog1.CheckFileExists)
                 {
                     filename = openFileDialog1.FileName;
                     textBox1.Text = filename;
-                    using (TextFieldParser parser = new TextFieldParser(filename))
+                    listOfPatientData = File.ReadAllLines(filename)
+                                          .Select(v => ImportData.FromCsv(v))
+                                          .ToList();
+                    try
                     {
-                        parser.TextFieldType = FieldType.Delimited;
-                        parser.SetDelimiters(",");
-                        while (!parser.EndOfData)
+                        foreach (
+                        var listdata in
+                        listOfPatientData.Where(x =>x.patientData!=null && (string.IsNullOrEmpty(x.patientData.FirstName) ||string.IsNullOrEmpty(x.patientData.LastName) ||string.IsNullOrEmpty(x.patientData.DOB) ||(x.patientData.FirstName.ToLower() == "firstname") ||(x.patientData.LastName.ToLower() == "lastname")))
+                    )
                         {
-                            string[] line = parser.ReadFields();
-                            ListViewItem lvi = new ListViewItem(line[colFirstN].Trim());
-                            for (int i = 1; i < line.Count(); i++)
+                            listdata.importOperation = ImportOperation.SKIPPED;
+                            listdata.skipped = true;
+                            listdata.failedMessage = "Row skipped because of invalid firstname or lastname or dob";
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
+                    counter = listOfPatientData.Count(x => x.importOperation == ImportOperation.SKIPPED);
+                    lblProgressValue.Text = string.Format("{0}/{1}", counter, progressBar1.Maximum);
+                    lblProgressValue.Refresh();
+                    progressBar1.Increment(counter);
+                }
+                
+                var numofrows = _csv_values.GetLength(0);
+                var numofcols = _csv_values.GetLength(1);
+                listView1.Items.Clear();
+                #region display 10 rows in Listview
+                if (numofrows > 10)
+                {
+                    for (int row = 0; row < 10; row++)
+                    {
+                        ListViewItem new_item = new ListViewItem();
+                        for (int column = 0; column < numofcols; column++)
+                        {
+                            if (column == 0)
                             {
-                                lvi.SubItems.Add(line[i].Trim());
-                            }                            
-                            //Check for required fields
-                            if (lvi.SubItems[colFirstN].Text == "" || lvi.SubItems[colLastN].Text == ""
-                                || lvi.SubItems[colGen].Text == "" || lvi.SubItems[colDB].Text == "")
-                            {
-                                lvi.BackColor = Color.Red;                               
+                                new_item.Text = _csv_values[row, 0]; //First item is not a "subitem".
                             }
                             else
                             {
-                                var patientDictKey = string.Format("{0}{1}{2}", lvi.SubItems[colFirstN].Text,
-                                    lvi.SubItems[colLastN].Text, lvi.SubItems[colDB].Text);
-                                if (patientDictionary.ContainsKey(patientDictKey))
-                                {
-                                    lvi.BackColor = Color.Red;
-                                    lvi.ToolTipText = "The following Patient data is duplicated. Only one operation is allowed per patient. Check patient: " + String.Join(",", line);                                   
-                                }
-                                else
-                                {
-                                    patientDictionary.Add(patientDictKey, new ImportData());
-                                }                                                                                                  
+                                new_item.SubItems.Add(_csv_values[row, column]);
                             }
-                            listView1.Items.Add(lvi);
                         }
+                        listView1.Items.Add(new_item);
                     }
                 }
-                btnImport.Enabled = patientDictionary.Count > 0;
+                else
+                {
+                    for (int row = 0; row < numofrows; row++)
+                    {
+                        ListViewItem new_item = new ListViewItem();
+                        for (int column = 0; column < numofcols; column++)
+                        {
+                            if (column == 0)
+                            {
+                                new_item.Text = _csv_values[row, 0];
+                            }
+                            else
+                            {
+                                new_item.SubItems.Add(_csv_values[row, column]);
+                            }
+                        }
+                        listView1.Items.Add(new_item);
+                    }
+                }
+                #endregion
+                btnImport.Enabled = numofrows > 0;
             }
             catch (Exception ex)
             {
@@ -1173,8 +1702,7 @@ namespace NightingaleImport
             }
             finally
             {
-                chkSelectAll.Text = string.Format("Select All ({0} Patients)", patientDictionary.Count);
-                lblStatus.Text = "Select Individuals to Import...";
+                lblTotalValue.Text = counter + " / " + _numberofrows + " will be skipped.";
             }
         }
 
@@ -1205,12 +1733,12 @@ namespace NightingaleImport
         }
 
         private void chkSelectAll_CheckedChanged(object sender, EventArgs e)
-        {            
+        {
             if (chkSelectAll.Checked)
             {
                 for (int i = 0; i < listView1.Items.Count; i++)
                 {
-                    if(listView1.Items[i].BackColor != Color.Red)
+                    if (listView1.Items[i].BackColor != Color.Red)
                         listView1.Items[i].Checked = true;
                 }
             }
@@ -1222,6 +1750,17 @@ namespace NightingaleImport
                 }
             }
 
+        }
+
+        private void chkSelectAllAlways()
+        {
+
+            for (int i = 0; i < listView1.Items.Count; i++)
+            {
+                if (listView1.Items[i].BackColor != Color.Red)
+                    listView1.Items[i].Checked = true;
+            }
+            chkSelectAll.Checked = true;
         }
 
         private Guid getUserId(string userName)
@@ -1515,7 +2054,7 @@ namespace NightingaleImport
         //                                         patientId,
         //                                         _headerUserId));
         //    HttpClient client = GetHttpClient(careMemberUri);
-            
+
         //    DataContractJsonSerializer jsonSer = new DataContractJsonSerializer(typeof(PutCareMemberDataRequest));
 
         //    // use the serializer to write the object to a MemoryStream 
@@ -1721,10 +2260,11 @@ namespace NightingaleImport
         }
 
         private void FormPatientsImport_Load(object sender, EventArgs e)
-        {            
+        {
             txtURL.Text = ConfigurationManager.AppSettings.Get("DataDomainURL");
             txtSQLConn.Text = Phytel.Services.SQLDataService.Instance.GetConnectionString(ConfigurationManager.AppSettings.Get("PhytelServicesConnName"), false);
-           
+            lblStatus.Visible = false;
+            chkSelectAll.Visible = false;
         }
 
         private void comboBoxContractList_SelectionChangeCommitted(object sender, EventArgs e)
@@ -1738,18 +2278,19 @@ namespace NightingaleImport
         private void listView1_ItemCheck(object sender, ItemCheckEventArgs e)
         {
             ListView lv = sender as ListView;
-            if (lv.Items[e.Index].BackColor== Color.Red)
+            if (lv.Items[e.Index].BackColor == Color.Red)
             {
                 e.NewValue = CheckState.Unchecked;
             }
         }
 
         private void btnViewReport_Click(object sender, EventArgs e)
-        {          
-            FormImportReport frmImportReport = new FormImportReport(patientDictionary);
-            
+        {
+            FormImportReport frmImportReport = new FormImportReport(listOfPatientData);
+
             frmImportReport.Show();
 
         }
+
     }
 }
