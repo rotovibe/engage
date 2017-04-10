@@ -16,7 +16,7 @@ namespace Phytel.Data.ETLASEProcess.Tests
         public void ExecuteTest()
         {
             var etl = new ETLProcess();
-            var body = "<Contract>InHealthEngage001</Contract>";
+            var body = "<Contract>InHealth001</Contract>";
             var message = new QueueMessage {Body = body};
             etl.Execute(message);
         }
