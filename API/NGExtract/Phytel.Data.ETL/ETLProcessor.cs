@@ -2881,11 +2881,15 @@ namespace Phytel.Data.ETL
             {
                 OnEtlEvent(new ETLEventArgs
                 {
-                    Message = "[" + _contract + "] Loading program responses.",
+                    Message = "[" + _contract + "] Disabling indexes in PatientProgramResponses table.",
                     IsError = false
                 });
 
-                //List<MEPatientProgramResponse> responses;
+                ParameterCollection p1 = new ParameterCollection();
+                p1.Add(new Parameter("@tableName", "RPT_PatientProgramResponse", SqlDbType.VarChar, ParameterDirection.Input, 128));
+                p1.Add(new Parameter("@indexOption", 0, SqlDbType.Bit, ParameterDirection.Input, 1));
+                SQLDataService.Instance.ExecuteProcedure(_contract, true, "REPORT", "spPhy_RPT_ToggleTableIndexes", p1);
+
                 using (var pmctx = new ProgramMongoContext(ctr))
                 {
                     var batchCounter = 0;
@@ -2908,6 +2912,15 @@ namespace Phytel.Data.ETL
                         }
                     }
                 }
+                OnEtlEvent(new ETLEventArgs
+                {
+                    Message = "[" + _contract + "] Rebuilding indexes in PatientProgramResponses table.",
+                    IsError = false
+                });
+                ParameterCollection p2 = new ParameterCollection();
+                p2.Add(new Parameter("@tableName", "RPT_PatientProgramResponse", SqlDbType.VarChar, ParameterDirection.Input, 128));
+                p2.Add(new Parameter("@indexOption", 1, SqlDbType.Bit, ParameterDirection.Input, 1));
+                SQLDataService.Instance.ExecuteProcedure(_contract, true, "REPORT", "spPhy_RPT_ToggleTableIndexes", p2);
             }
             catch (Exception ex)
             {
