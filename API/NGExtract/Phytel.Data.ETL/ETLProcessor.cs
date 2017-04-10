@@ -2893,7 +2893,7 @@ namespace Phytel.Data.ETL
                 using (var pmctx = new ProgramMongoContext(ctr))
                 {
                     var batchCounter = 0;
-                    foreach (var batch in Utils.GetMongoCollectionBatch(pmctx.PatientProgramResponses.Collection, 100000))
+                    foreach (var batch in Utils.GetMongoCollectionBatch(pmctx.PatientProgramResponses.Collection, 500000))
                     {
                         batchCounter += batch.Count;
                         LoadPatientProgramResponse(batch);
