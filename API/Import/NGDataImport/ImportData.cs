@@ -91,7 +91,7 @@ namespace NGDataImport
                 idata.patientData.Add1L1 = values[22];
                 idata.patientData.Add1L2 = values[23];
                 idata.patientData.Add1L3 = values[24];
-                idata.patientData.Add1City = values[24];
+                idata.patientData.Add1City = values[25];
                 idata.patientData.Add1St = values[26];
                 idata.patientData.Add1Zip = values[27];
                 idata.patientData.Add1Pref = values[28];
