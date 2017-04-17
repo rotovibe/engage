@@ -291,6 +291,8 @@ namespace NightingaleImport
                                     continue;
                                 }
                             }
+
+                            _newdateofbirth = datarow.patientData.DOB;
                             GetPatientDataResponse existingPatientResponse = null;
                             try
                             {
@@ -314,11 +316,12 @@ namespace NightingaleImport
 
                                 datarow.importOperation = ImportOperation.INSERT;
                                 progressBarUpdate();
+                                PatientData pData = GetImportPatientData(datarow);
                                 try
                                 {
                                     PutPatientDataRequest patientRequest = new PutPatientDataRequest
                                     {
-                                        Patient = datarow.patientData,
+                                        Patient = pData,
                                         Context = context,
                                         ContractNumber = contractNumber,
                                         Version = version
@@ -670,24 +673,23 @@ namespace NightingaleImport
             return pdata;
         }
 
-        private PatientData GetPatientData2(string[,] val, int row)
+        private PatientData GetImportPatientData(ImportData importdata)
         {
             PatientData pdata = new PatientData
             {
                 #region Sync up properties in Contact
-                FirstName = val[row, colFirstN].Trim(),
-                LastName = val[row, colLastN].Trim(),
-                MiddleName = (String.IsNullOrEmpty(val[row, colMiddleN])) ? null : val[row, colMiddleN].Trim(),
-                PreferredName = (String.IsNullOrEmpty(val[row, colPrefN])) ? null : val[row, colPrefN].Trim(),
-                Gender = val[row, colGen].Trim(),
-                Suffix = (String.IsNullOrEmpty(val[row, colSuff])) ? null : val[row, colSuff].Trim(),
+                FirstName = importdata.patientData.FirstName,
+                LastName = importdata.patientData.LastName,
+                MiddleName = (String.IsNullOrEmpty(importdata.patientData.MiddleName)) ? null : importdata.patientData.MiddleName.Trim(),
+                PreferredName = (String.IsNullOrEmpty(importdata.patientData.PreferredName)) ? null : importdata.patientData.PreferredName.Trim(),
+                Gender = importdata.patientData.Gender.Trim(),
+                Suffix = (String.IsNullOrEmpty(importdata.patientData.Suffix)) ? null : importdata.patientData.Suffix.Trim(),
                 StatusId = (int)Phytel.API.DataDomain.Patient.DTO.Status.Active,
                 #endregion
                 DOB = NewDateofBirth.Trim(),
                 DataSource = EngageSystemProperty,
                 StatusDataSource = EngageSystemProperty,
-                Background = (String.IsNullOrEmpty(val[row, colBkgrnd])) ? null : val[row, colBkgrnd].Trim(),
-
+                Background = (String.IsNullOrEmpty(importdata.patientData.Background)) ? null : importdata.patientData.Background.Trim()
             };
             return pdata;
         }
