@@ -102,6 +102,19 @@ namespace NightingaleImport
                             skippedRow++;
                         break;
                     }
+                case "LOOKUP_USER_CONTACT":
+                    {
+                        if (dr.Skipped)
+                            skippedRow++;
+                        break;
+                    }
+                case "LOOKUP_PATIENT":
+                    {
+                        if (dr.Skipped)
+                            skippedRow++;
+                        break;
+                    }
+
                 default:
                     break;
             }

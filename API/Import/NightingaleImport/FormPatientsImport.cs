@@ -281,13 +281,17 @@ namespace NightingaleImport
                                 {
                                     datarow.importOperation = ImportOperation.LOOKUP_USER_CONTACT;
                                     datarow.failedMessage = string.Format("Unable to locate the UserId : {0}", datarow.patientData.CMan);
+                                    datarow.skipped = true;
+                                    progressBarUpdate();
                                     continue;
                                 }
                                 contactByUserIdResponse = import.GetContactByUserId(userIdResponse.ToString());
                                 if (contactByUserIdResponse.Contact == null)
                                 {
                                     datarow.importOperation = ImportOperation.LOOKUP_USER_CONTACT;
+                                    datarow.skipped = true;
                                     datarow.failedMessage = string.Format("Unable to locate contact for the UserId: {0}, rid: {1}", datarow.patientData.CMan, userIdResponse.ToString());
+                                    progressBarUpdate();
                                     continue;
                                 }
                             }
@@ -300,7 +304,7 @@ namespace NightingaleImport
                             }
                             catch (Exception ex)
                             {
-                                datarow.importOperation = ImportOperation.SKIPPED;
+                                datarow.importOperation = ImportOperation.LOOKUP_PATIENT;
                                 datarow.skipped = true;
                                 datarow.failedMessage = string.Format("Exception trying to locate patient. Message: {0}", ex.Message);
                                 progressBarUpdate();
