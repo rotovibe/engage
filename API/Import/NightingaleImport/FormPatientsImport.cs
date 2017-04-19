@@ -330,6 +330,7 @@ namespace NightingaleImport
                                         ContractNumber = contractNumber,
                                         Version = version
                                     };
+                                    datarow.patientData.StatusId = pData.StatusId;
                                     PutPatientDataResponse responsePatient = import.InsertPatient(patientRequest);
 
                                     if (responsePatient.Id == null)
