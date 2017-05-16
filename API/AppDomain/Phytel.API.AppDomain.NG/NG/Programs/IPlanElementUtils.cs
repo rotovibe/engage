@@ -56,5 +56,7 @@ namespace Phytel.API.AppDomain.NG
         PatientTask InsertPatientTask(PlanElementEventArg arg, PatientGoal pGoal, Task taskTemplate);
 
         DateTime? HandleDueDate(int p);
+       
+        bool GetCompletionStatus<T>(List<T> list);
     }
 }

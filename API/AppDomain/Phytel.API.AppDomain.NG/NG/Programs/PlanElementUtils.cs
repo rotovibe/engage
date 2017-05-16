@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using MongoDB.Bson;
 using Phytel.API.AppDomain.NG.Programs.ProgramAttributes;
+using Phytel.API.AppDomain.NG.Programs.Specifications;
 using ServiceStack.Common.Extensions;
 using DD = Phytel.API.DataDomain.Program.DTO;
 using Phytel.API.AppDomain.NG.Specifications;
@@ -62,7 +63,27 @@ namespace Phytel.API.AppDomain.NG
                 throw new Exception("AD:PlanElementUtil:SetCompletionStatus()::" + ex.Message, ex.InnerException);
             }
         }
-
+        public bool GetCompletionStatus<T>(List<T> list)
+        {
+            try
+            {
+                bool result = false;
+                int totalCount = list.Count;
+                int completed = list.FindAll(new Completed<T>().IsSatisfiedBy).Count();
+                int notEnabled = list.FindAll(new NotEnabled<T>().IsSatisfiedBy).Count();
+               
+               
+                if (completed + notEnabled == totalCount)
+                {
+                    result = true;
+                }
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("AD:PlanElementUtil:SetCompletionStatus()::" + ex.Message, ex.InnerException);
+            }
+        }
         public T FindElementById<T>(List<T> list, string id)
         {
             try

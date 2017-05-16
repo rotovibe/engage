@@ -1047,5 +1047,10 @@ namespace Phytel.API.AppDomain.NG.Test.Stubs
                 throw new Exception("AD:PlanElementUtils():HandleDueDate()::" + ex.Message, ex.InnerException);
             }
         }
+
+        public bool GetCompletionStatus<T>(List<T> list)
+        {
+            return true;
+        }
     }
 }
