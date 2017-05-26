@@ -524,16 +524,17 @@ namespace NightingaleImport
                                     {
                                         datarow.patientData.StatusId = existingPatientResponse.Patient.StatusId;
                                     }
-
+                                    var patientDataUpdated = GetUpdatedPatientData(existingPatientResponse.Patient,
+                                        datarow.patientData);
                                     PutUpdatePatientDataRequest updatePatientRequest = new PutUpdatePatientDataRequest
                                     {
-                                        PatientData = datarow.patientData,
+                                        PatientData = patientDataUpdated,
                                         Context = context,
                                         ContractNumber = contractNumber,
                                         Version = version,
                                         Insert = false
                                     };
-                                    updatePatientRequest.PatientData.Id = existingPatientResponse.Patient.Id;
+                                    //updatePatientRequest.PatientData.Id = existingPatientResponse.Patient.Id;
                                     PutUpdatePatientDataResponse updatePatientResponse = import.UpsertPatient(updatePatientRequest, null);
 
                                     if (string.IsNullOrEmpty(updatePatientResponse.Id))
@@ -634,7 +635,7 @@ namespace NightingaleImport
             _skippedlvi++;
         }
 
-       public void SetListViewItemFailed(ListViewItem lvi)
+        public void SetListViewItemFailed(ListViewItem lvi)
         {
             int n = listView1.CheckedItems.IndexOf(lvi);
             listView1.CheckedItems[n].BackColor = Color.Red;
@@ -654,6 +655,58 @@ namespace NightingaleImport
             };
             GetPatientDataResponse patientDataResponse = import.GetPatientData(patientDataRequest);
             return patientDataResponse;
+        }
+
+
+        private PatientData GetUpdatedPatientData(PatientData existingpdata, PatientData patientDataFromCsv)
+        {
+            var res = existingpdata;
+
+            //We are not changing the FN,LAN, and DOB as they are part of the primary key
+            res.MiddleName = string.IsNullOrWhiteSpace(patientDataFromCsv.MiddleName) ? res.MiddleName : patientDataFromCsv.MiddleName;
+            res.Suffix = string.IsNullOrWhiteSpace(patientDataFromCsv.Suffix) ? res.MiddleName : patientDataFromCsv.Suffix;
+            res.PreferredName = string.IsNullOrWhiteSpace(patientDataFromCsv.PreferredName) ? res.MiddleName : patientDataFromCsv.PreferredName;
+            res.Gender = string.IsNullOrWhiteSpace(patientDataFromCsv.Gender) ? res.MiddleName : patientDataFromCsv.Gender;
+            res.StatusId = patientDataFromCsv.StatusId;
+            res.Version = patientDataFromCsv.Version;
+
+            //Addded for Patient Import Tool
+            res.CMan = patientDataFromCsv.CMan;
+            res.sysName = patientDataFromCsv.sysName;
+            res.SysPri = patientDataFromCsv.SysPri;
+            res.ActivateDeactivate = patientDataFromCsv.ActivateDeactivate;
+            res.SysId = patientDataFromCsv.SysId;
+            res.TimeZ = patientDataFromCsv.TimeZ;
+            res.Ph1 = patientDataFromCsv.Ph1;
+            res.Ph1Pref = patientDataFromCsv.Ph1Pref;
+            res.Ph1Type = patientDataFromCsv.Ph1Type;
+            res.Ph2 = patientDataFromCsv.Ph2;
+            res.Ph2Pref = patientDataFromCsv.Ph2Pref;
+            res.Ph2Type = patientDataFromCsv.Ph2Type;
+            res.Em1 = patientDataFromCsv.Em1;
+            res.Em1Pref = patientDataFromCsv.Em1Pref;
+            res.Em1Type = patientDataFromCsv.Em1Type;
+            res.Em2 = patientDataFromCsv.Em2;
+            res.Em2Pref = patientDataFromCsv.Em2Pref;
+            res.Em2Type = patientDataFromCsv.Em2Type;
+            res.Add1L1 = patientDataFromCsv.Add1L1;
+            res.Add1L2 = patientDataFromCsv.Add1L2;
+            res.Add1L3 = patientDataFromCsv.Add1L3;
+            res.Add1City = patientDataFromCsv.Add1City;
+            res.Add1St = patientDataFromCsv.Add1St;
+            res.Add1Zip = patientDataFromCsv.Add1Zip;
+            res.Add1Pref = patientDataFromCsv.Add1Pref;
+            res.Add1Type = patientDataFromCsv.Add1Type;
+            res.Add2L1 = patientDataFromCsv.Add2L1;
+            res.Add2L2 = patientDataFromCsv.Add2L2;
+            res.Add2L3 = patientDataFromCsv.Add2L3;
+            res.Add2City = patientDataFromCsv.Add2City;
+            res.Add2St = patientDataFromCsv.Add2St;
+            res.Add2Zip = patientDataFromCsv.Add2Zip;
+            res.Add2Pref = patientDataFromCsv.Add2Pref;
+            res.Add2Type = patientDataFromCsv.Add2Type;
+
+            return res;
         }
 
         private PatientData GetPatientData(ListViewItem lvi)
@@ -1640,7 +1693,7 @@ namespace NightingaleImport
                     {
                         foreach (
                         var listdata in
-                        listOfPatientData.Where(x =>x.patientData!=null && (string.IsNullOrEmpty(x.patientData.FirstName) ||string.IsNullOrEmpty(x.patientData.LastName) ||string.IsNullOrEmpty(x.patientData.DOB) ||(x.patientData.FirstName.ToLower() == "firstname") ||(x.patientData.LastName.ToLower() == "lastname")))
+                        listOfPatientData.Where(x => x.patientData != null && (string.IsNullOrEmpty(x.patientData.FirstName) || string.IsNullOrEmpty(x.patientData.LastName) || string.IsNullOrEmpty(x.patientData.DOB) || (x.patientData.FirstName.ToLower() == "firstname") || (x.patientData.LastName.ToLower() == "lastname")))
                     )
                         {
                             listdata.importOperation = ImportOperation.SKIPPED;
@@ -1657,7 +1710,7 @@ namespace NightingaleImport
                     lblProgressValue.Refresh();
                     progressBar1.Increment(counter);
                 }
-                
+
                 var numofrows = _csv_values.GetLength(0);
                 var numofcols = _csv_values.GetLength(1);
                 listView1.Items.Clear();
