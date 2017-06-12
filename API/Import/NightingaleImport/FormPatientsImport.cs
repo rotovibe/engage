@@ -260,8 +260,8 @@ namespace NightingaleImport
                         throw new Exception("Invalid 'Admin User'");
                     import.HeaderUserId = _headerUserId;
 
-                    Task.Factory.StartNew(() => { LoadLookUps(); });
-                    Task.Factory.StartNew(() => { LoadSystems(); });
+                    LoadLookUps();
+                    LoadSystems();
 
                     #region foreach
                     int num_rows = listOfPatientData.Count;
@@ -508,7 +508,6 @@ namespace NightingaleImport
                                     {
                                         throw new Exception("This contract is not configured for updates.");
                                     }
-
                                     bool individualStatus = false;
                                     bool validIndividualStatusValue = false;
                                     int statusBackup = datarow.patientData.StatusId;
@@ -518,7 +517,15 @@ namespace NightingaleImport
                                     }
                                     if (validIndividualStatusValue)
                                     {
-                                        datarow.patientData.StatusId = individualStatus ? (int)Phytel.API.DataDomain.Patient.DTO.Status.Active : (int)Phytel.API.DataDomain.Patient.DTO.Status.Inactive;
+                                        if (individualStatus)
+                                        {
+                                            datarow.patientData.StatusId = (int)Phytel.API.DataDomain.Patient.DTO.Status.Active;
+                                            existingPatientResponse.Patient.ReasonId = null;
+                                        }
+                                        else
+                                        {
+                                            datarow.patientData.StatusId = (int)Phytel.API.DataDomain.Patient.DTO.Status.Inactive;
+                                        }
                                     }
                                     else
                                     {
@@ -554,7 +561,8 @@ namespace NightingaleImport
                                         datarow.failedMessage = ("Update Failed. Cannot get contact by patient ID");
                                         continue;
                                     }
-                                    ContactData data = GetUpdateContactData(datarow, existingContactResponse);                                    
+                                    datarow.patientData = patientDataUpdated;
+                                    ContactData data = GetUpdateContactData(datarow, existingContactResponse);
                                     data.PatientId = existingPatientResponse.Patient.Id;
                                     data.Id = existingContactResponse.Contact.Id;
                                     UpdateContactDataRequest updateContactRequest = new UpdateContactDataRequest()
@@ -664,9 +672,9 @@ namespace NightingaleImport
 
             //We are not changing the FN,LAN, and DOB as they are part of the primary key
             res.MiddleName = string.IsNullOrWhiteSpace(patientDataFromCsv.MiddleName) ? res.MiddleName : patientDataFromCsv.MiddleName;
-            res.Suffix = string.IsNullOrWhiteSpace(patientDataFromCsv.Suffix) ? res.MiddleName : patientDataFromCsv.Suffix;
-            res.PreferredName = string.IsNullOrWhiteSpace(patientDataFromCsv.PreferredName) ? res.MiddleName : patientDataFromCsv.PreferredName;
-            res.Gender = string.IsNullOrWhiteSpace(patientDataFromCsv.Gender) ? res.MiddleName : patientDataFromCsv.Gender;
+            res.Suffix = string.IsNullOrWhiteSpace(patientDataFromCsv.Suffix) ? res.Suffix : patientDataFromCsv.Suffix;
+            res.PreferredName = string.IsNullOrWhiteSpace(patientDataFromCsv.PreferredName) ? res.PreferredName : patientDataFromCsv.PreferredName;
+            res.Gender = string.IsNullOrWhiteSpace(patientDataFromCsv.Gender) ? res.Gender : patientDataFromCsv.Gender;
             res.StatusId = patientDataFromCsv.StatusId;
             res.Version = patientDataFromCsv.Version;
 
@@ -1404,7 +1412,10 @@ namespace NightingaleImport
                 TimeZoneId = tZone == null ? null : tZone.Id,
                 Phones = phones,
                 Emails = emails,
-                Addresses = addresses
+                Addresses = addresses,
+                ExternalRecordId = existingContactResponse.Contact.ExternalRecordId,
+                DeceasedId = existingContactResponse.Contact.DeceasedId,
+                Prefix = existingContactResponse.Contact.Prefix
             };
             return data;
         }
