@@ -320,6 +320,12 @@ namespace NightingaleImport
 
                                 datarow.importOperation = ImportOperation.INSERT;
                                 progressBarUpdate();
+                                if (!IsAddressValid(datarow))
+                                {
+                                    datarow.failed = true;
+                                    datarow.failedMessage = "Invalid State Name";
+                                    continue;
+                                }
                                 PatientData pData = GetImportPatientData(datarow);
                                 try
                                 {
@@ -508,6 +514,12 @@ namespace NightingaleImport
                                     {
                                         throw new Exception("This contract is not configured for updates.");
                                     }
+                                    if (!IsAddressValid(datarow))
+                                    {
+                                        datarow.failed = true;
+                                        datarow.failedMessage = "Invalid State Name";
+                                        continue;
+                                    }
                                     bool individualStatus = false;
                                     bool validIndividualStatusValue = false;
                                     int statusBackup = datarow.patientData.StatusId;
@@ -619,6 +631,60 @@ namespace NightingaleImport
                 MessageBox.Show(string.Format("Message:{0}, StackTrace:{1}", ex.Message, ex.StackTrace));
             }
             chkSelectAll.Visible = false;
+        }
+
+        private bool IsAddressValid(ImportData data)
+        {
+            bool validState = false;
+            if ((string.IsNullOrWhiteSpace(data.patientData.Add1L1))
+               && (string.IsNullOrWhiteSpace(data.patientData.Add1L2))
+               && (string.IsNullOrWhiteSpace(data.patientData.Add1L3))
+               && (string.IsNullOrWhiteSpace(data.patientData.Add1City))
+               && (string.IsNullOrWhiteSpace(data.patientData.Add1St))
+               && (string.IsNullOrWhiteSpace(data.patientData.Add1Zip)))
+            {
+                validState = true;
+            }
+            else
+            {
+                var stateName = (string.IsNullOrWhiteSpace(data.patientData.Add1St)) ? null : data.patientData.Add1St.ToLower().Trim();
+                if (!string.IsNullOrWhiteSpace(stateName))
+                {
+                    foreach (StateData st in statesLookUp)
+                    {
+                        if ((st.Name.ToLower() == stateName)
+                            || (st.Code.ToLower() == stateName))
+                        {
+                            validState = true;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            if ((!string.IsNullOrWhiteSpace(data.patientData.Add2L1))
+                || (!string.IsNullOrWhiteSpace(data.patientData.Add2L2))
+                || (!string.IsNullOrWhiteSpace(data.patientData.Add2L3))
+                || (!string.IsNullOrWhiteSpace(data.patientData.Add2City))
+                || (!string.IsNullOrWhiteSpace(data.patientData.Add2St))
+                || (!string.IsNullOrWhiteSpace(data.patientData.Add2Zip)))
+            {
+                validState = false;
+                var stateName = (string.IsNullOrWhiteSpace(data.patientData.Add2St)) ? null : data.patientData.Add2St.ToLower().Trim();
+                if (!string.IsNullOrWhiteSpace(stateName))
+                {
+                    foreach (StateData st in statesLookUp)
+                    {
+                        if ((st.Name.ToLower() == stateName)
+                            || (st.Code.ToLower() == stateName))
+                        {
+                            validState = true;
+                            break;
+                        }
+                    }
+                }
+            }
+            return validState;
         }
 
         private void SetPatientDictionaryFailed(string dictionaryKey, string failedMessage)
@@ -950,11 +1016,11 @@ namespace NightingaleImport
                 else
                     add1.Preferred = false;
 
-                string stateTrim = (string.IsNullOrEmpty(importdata.patientData.Add1St)) ? null : importdata.patientData.Add1St.Trim();
+                string stateTrim = (string.IsNullOrEmpty(importdata.patientData.Add1St)) ? null : importdata.patientData.Add1St.ToLower().Trim();
                 foreach (StateData st in statesLookUp)
                 {
-                    if ((st.Name == stateTrim)
-                        || (st.Code == stateTrim))
+                    if ((st.Name.ToLower() == stateTrim)
+                        || (st.Code.ToLower() == stateTrim))
                     {
                         add1.StateId = st.Id;
                         break;
@@ -1002,11 +1068,11 @@ namespace NightingaleImport
                 else
                     add2.Preferred = false;
 
-                string stateTrim = (string.IsNullOrEmpty(importdata.patientData.Add2St)) ? null : importdata.patientData.Add2St.Trim();
+                string stateTrim = (string.IsNullOrEmpty(importdata.patientData.Add2St)) ? null : importdata.patientData.Add2St.ToLower().Trim();
                 foreach (StateData st in statesLookUp)
                 {
-                    if ((st.Name == stateTrim)
-                        || (st.Code == stateTrim))
+                    if ((st.Name.ToLower() == stateTrim)
+                        || (st.Code.ToLower() == stateTrim))
                     {
                         add2.StateId = st.Id;
                         break;
@@ -1298,11 +1364,11 @@ namespace NightingaleImport
                 else
                     add1.Preferred = false;
 
-                string stateTrim = (string.IsNullOrEmpty(importdata.patientData.Add1St)) ? null : importdata.patientData.Add1St.Trim();
+                string stateTrim = (string.IsNullOrEmpty(importdata.patientData.Add1St)) ? null : importdata.patientData.Add1St.ToLower().Trim();
                 foreach (StateData st in statesLookUp)
                 {
-                    if ((st.Name == stateTrim)
-                        || (st.Code == stateTrim))
+                    if ((st.Name.ToLower() == stateTrim)
+                        || (st.Code.ToLower() == stateTrim))
                     {
                         add1.StateId = st.Id;
                         break;
@@ -1356,11 +1422,11 @@ namespace NightingaleImport
                 else
                     add2.Preferred = false;
 
-                string stateTrim = (string.IsNullOrEmpty(importdata.patientData.Add2St)) ? null : importdata.patientData.Add2St.Trim();
+                string stateTrim = (string.IsNullOrEmpty(importdata.patientData.Add2St)) ? null : importdata.patientData.Add2St.ToLower().Trim();
                 foreach (StateData st in statesLookUp)
                 {
-                    if ((st.Name == stateTrim)
-                        || (st.Code == stateTrim))
+                    if ((st.Name.ToLower() == stateTrim)
+                        || (st.Code.ToLower() == stateTrim))
                     {
                         add2.StateId = st.Id;
                         break;
