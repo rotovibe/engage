@@ -40,7 +40,7 @@
 			});
             self.selectedAction.subscribe(function (newValue) {
                 if (newValue && newValue.text() === 'Repeat') {
-                    if (self.activeAction().completed() && self.activeAction().module().program().elementStateModel().name() === 'In Progress' && !datacontext.programsSaving()) {
+                    if (self.activeAction().completed()  && !datacontext.programsSaving()) {
                         datacontext.repeatAction(self.activeAction()).then(repeatCompleted);
                         self.selectedAction(null);
                     } else {
