@@ -26,7 +26,7 @@ namespace Phytel.API.AppDomain.NG.PlanCOR
 
                     if (module.Actions != null)
                     {
-                        module.Completed = PEUtils.SetCompletionStatus(module.Actions);
+                        module.Completed = PEUtils.GetCompletionStatus(module.Actions);
                         if (module.Completed)
                         {
                             module.CompletedBy = e.UserId;

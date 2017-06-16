@@ -230,6 +230,7 @@
     <Compile Include="Programs\ProgramAttributes\IProgramAttributeStrategy.cs" />
     <Compile Include="Programs\ProgramAttributes\ProgramAttributeRule.cs" />
     <Compile Include="Programs\ProgramAttributes\ProgramAttributeStrategy.cs" />
+    <Compile Include="Programs\Specifications\NotEnabledSpecification.cs" />
     <Compile Include="SchedulingManager.cs" />
     <Compile Include="CareMembersManager.cs" />
     <Compile Include="Command\CareMembersCommand.cs" />
