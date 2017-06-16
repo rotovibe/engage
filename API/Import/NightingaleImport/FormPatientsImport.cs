@@ -295,7 +295,14 @@ namespace NightingaleImport
                                     continue;
                                 }
                             }
-
+                            if (!IsAddressValid(datarow))
+                            {
+                                datarow.importOperation = ImportOperation.SKIPPED;
+                                datarow.skipped = true;
+                                datarow.failedMessage = "Invalid State Name";
+                                progressBarUpdate();
+                                continue;
+                            }
                             _newdateofbirth = datarow.patientData.DOB;
                             GetPatientDataResponse existingPatientResponse = null;
                             try
@@ -320,12 +327,6 @@ namespace NightingaleImport
 
                                 datarow.importOperation = ImportOperation.INSERT;
                                 progressBarUpdate();
-                                if (!IsAddressValid(datarow))
-                                {
-                                    datarow.failed = true;
-                                    datarow.failedMessage = "Invalid State Name";
-                                    continue;
-                                }
                                 PatientData pData = GetImportPatientData(datarow);
                                 try
                                 {
@@ -514,12 +515,6 @@ namespace NightingaleImport
                                     {
                                         throw new Exception("This contract is not configured for updates.");
                                     }
-                                    if (!IsAddressValid(datarow))
-                                    {
-                                        datarow.failed = true;
-                                        datarow.failedMessage = "Invalid State Name";
-                                        continue;
-                                    }
                                     bool individualStatus = false;
                                     bool validIndividualStatusValue = false;
                                     int statusBackup = datarow.patientData.StatusId;
@@ -648,19 +643,14 @@ namespace NightingaleImport
             else
             {
                 var stateName = (string.IsNullOrWhiteSpace(data.patientData.Add1St)) ? null : data.patientData.Add1St.ToLower().Trim();
-                if (!string.IsNullOrWhiteSpace(stateName))
+                if (!string.IsNullOrWhiteSpace(stateName) )
                 {
-                    foreach (StateData st in statesLookUp)
-                    {
-                        if ((st.Name.ToLower() == stateName)
-                            || (st.Code.ToLower() == stateName))
-                        {
-                            validState = true;
-                            break;
-                        }
-                    }
+                    
+                    validState =IsValidState(stateName);
                 }
             }
+
+            if (!validState) return false;
 
             if ((!string.IsNullOrWhiteSpace(data.patientData.Add2L1))
                 || (!string.IsNullOrWhiteSpace(data.patientData.Add2L2))
@@ -673,18 +663,25 @@ namespace NightingaleImport
                 var stateName = (string.IsNullOrWhiteSpace(data.patientData.Add2St)) ? null : data.patientData.Add2St.ToLower().Trim();
                 if (!string.IsNullOrWhiteSpace(stateName))
                 {
-                    foreach (StateData st in statesLookUp)
-                    {
-                        if ((st.Name.ToLower() == stateName)
-                            || (st.Code.ToLower() == stateName))
-                        {
-                            validState = true;
-                            break;
-                        }
-                    }
+                    validState = IsValidState(stateName);
                 }
             }
             return validState;
+        }
+        
+        private bool IsValidState(string stateName)
+        {
+            bool valid = false;
+            foreach (StateData st in statesLookUp)
+            {
+                if ((st.Name.ToLower() == stateName)
+                    || (st.Code.ToLower() == stateName))
+                {
+                    valid = true;
+                    break;
+                }
+            }
+            return valid;
         }
 
         private void SetPatientDictionaryFailed(string dictionaryKey, string failedMessage)
