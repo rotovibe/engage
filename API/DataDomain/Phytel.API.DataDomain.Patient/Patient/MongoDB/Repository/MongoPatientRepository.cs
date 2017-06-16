@@ -732,7 +732,7 @@ namespace Phytel.API.DataDomain.Patient
                             updt.Set(MEPatient.DOBProperty, request.PatientData.DOB);
                     }
 
-                    if (request.PatientData.DisplayPatientSystemId != null)
+                    if (!String.IsNullOrWhiteSpace(request.PatientData.DisplayPatientSystemId))
                     {
                         if (ObjectId.Parse(request.PatientData.DisplayPatientSystemId) != null)
                             updt.Set(MEPatient.DisplayPatientSystemIdProperty, ObjectId.Parse(request.PatientData.DisplayPatientSystemId));

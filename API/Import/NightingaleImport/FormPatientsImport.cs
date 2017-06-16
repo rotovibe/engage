@@ -260,8 +260,8 @@ namespace NightingaleImport
                         throw new Exception("Invalid 'Admin User'");
                     import.HeaderUserId = _headerUserId;
 
-                    Task.Factory.StartNew(() => { LoadLookUps(); });
-                    Task.Factory.StartNew(() => { LoadSystems(); });
+                    LoadLookUps();
+                    LoadSystems();
 
                     #region foreach
                     int num_rows = listOfPatientData.Count;
@@ -508,7 +508,6 @@ namespace NightingaleImport
                                     {
                                         throw new Exception("This contract is not configured for updates.");
                                     }
-
                                     bool individualStatus = false;
                                     bool validIndividualStatusValue = false;
                                     int statusBackup = datarow.patientData.StatusId;
@@ -518,22 +517,31 @@ namespace NightingaleImport
                                     }
                                     if (validIndividualStatusValue)
                                     {
-                                        datarow.patientData.StatusId = individualStatus ? (int)Phytel.API.DataDomain.Patient.DTO.Status.Active : (int)Phytel.API.DataDomain.Patient.DTO.Status.Inactive;
+                                        if (individualStatus)
+                                        {
+                                            datarow.patientData.StatusId = (int)Phytel.API.DataDomain.Patient.DTO.Status.Active;
+                                            existingPatientResponse.Patient.ReasonId = null;
+                                        }
+                                        else
+                                        {
+                                            datarow.patientData.StatusId = (int)Phytel.API.DataDomain.Patient.DTO.Status.Inactive;
+                                        }
                                     }
                                     else
                                     {
                                         datarow.patientData.StatusId = existingPatientResponse.Patient.StatusId;
                                     }
-
+                                    var patientDataUpdated = GetUpdatedPatientData(existingPatientResponse.Patient,
+                                        datarow.patientData);
                                     PutUpdatePatientDataRequest updatePatientRequest = new PutUpdatePatientDataRequest
                                     {
-                                        PatientData = datarow.patientData,
+                                        PatientData = patientDataUpdated,
                                         Context = context,
                                         ContractNumber = contractNumber,
                                         Version = version,
                                         Insert = false
                                     };
-                                    updatePatientRequest.PatientData.Id = existingPatientResponse.Patient.Id;
+                                    //updatePatientRequest.PatientData.Id = existingPatientResponse.Patient.Id;
                                     PutUpdatePatientDataResponse updatePatientResponse = import.UpsertPatient(updatePatientRequest, null);
 
                                     if (string.IsNullOrEmpty(updatePatientResponse.Id))
@@ -553,7 +561,8 @@ namespace NightingaleImport
                                         datarow.failedMessage = ("Update Failed. Cannot get contact by patient ID");
                                         continue;
                                     }
-                                    ContactData data = GetContactData(datarow);
+                                    datarow.patientData = patientDataUpdated;
+                                    ContactData data = GetUpdateContactData(datarow, existingContactResponse);
                                     data.PatientId = existingPatientResponse.Patient.Id;
                                     data.Id = existingContactResponse.Contact.Id;
                                     UpdateContactDataRequest updateContactRequest = new UpdateContactDataRequest()
@@ -634,7 +643,7 @@ namespace NightingaleImport
             _skippedlvi++;
         }
 
-       public void SetListViewItemFailed(ListViewItem lvi)
+        public void SetListViewItemFailed(ListViewItem lvi)
         {
             int n = listView1.CheckedItems.IndexOf(lvi);
             listView1.CheckedItems[n].BackColor = Color.Red;
@@ -654,6 +663,58 @@ namespace NightingaleImport
             };
             GetPatientDataResponse patientDataResponse = import.GetPatientData(patientDataRequest);
             return patientDataResponse;
+        }
+
+
+        private PatientData GetUpdatedPatientData(PatientData existingpdata, PatientData patientDataFromCsv)
+        {
+            var res = existingpdata;
+
+            //We are not changing the FN,LAN, and DOB as they are part of the primary key
+            res.MiddleName = string.IsNullOrWhiteSpace(patientDataFromCsv.MiddleName) ? res.MiddleName : patientDataFromCsv.MiddleName;
+            res.Suffix = string.IsNullOrWhiteSpace(patientDataFromCsv.Suffix) ? res.Suffix : patientDataFromCsv.Suffix;
+            res.PreferredName = string.IsNullOrWhiteSpace(patientDataFromCsv.PreferredName) ? res.PreferredName : patientDataFromCsv.PreferredName;
+            res.Gender = string.IsNullOrWhiteSpace(patientDataFromCsv.Gender) ? res.Gender : patientDataFromCsv.Gender;
+            res.StatusId = patientDataFromCsv.StatusId;
+            res.Version = patientDataFromCsv.Version;
+
+            //Addded for Patient Import Tool
+            res.CMan = patientDataFromCsv.CMan;
+            res.sysName = patientDataFromCsv.sysName;
+            res.SysPri = patientDataFromCsv.SysPri;
+            res.ActivateDeactivate = patientDataFromCsv.ActivateDeactivate;
+            res.SysId = patientDataFromCsv.SysId;
+            res.TimeZ = patientDataFromCsv.TimeZ;
+            res.Ph1 = patientDataFromCsv.Ph1;
+            res.Ph1Pref = patientDataFromCsv.Ph1Pref;
+            res.Ph1Type = patientDataFromCsv.Ph1Type;
+            res.Ph2 = patientDataFromCsv.Ph2;
+            res.Ph2Pref = patientDataFromCsv.Ph2Pref;
+            res.Ph2Type = patientDataFromCsv.Ph2Type;
+            res.Em1 = patientDataFromCsv.Em1;
+            res.Em1Pref = patientDataFromCsv.Em1Pref;
+            res.Em1Type = patientDataFromCsv.Em1Type;
+            res.Em2 = patientDataFromCsv.Em2;
+            res.Em2Pref = patientDataFromCsv.Em2Pref;
+            res.Em2Type = patientDataFromCsv.Em2Type;
+            res.Add1L1 = patientDataFromCsv.Add1L1;
+            res.Add1L2 = patientDataFromCsv.Add1L2;
+            res.Add1L3 = patientDataFromCsv.Add1L3;
+            res.Add1City = patientDataFromCsv.Add1City;
+            res.Add1St = patientDataFromCsv.Add1St;
+            res.Add1Zip = patientDataFromCsv.Add1Zip;
+            res.Add1Pref = patientDataFromCsv.Add1Pref;
+            res.Add1Type = patientDataFromCsv.Add1Type;
+            res.Add2L1 = patientDataFromCsv.Add2L1;
+            res.Add2L2 = patientDataFromCsv.Add2L2;
+            res.Add2L3 = patientDataFromCsv.Add2L3;
+            res.Add2City = patientDataFromCsv.Add2City;
+            res.Add2St = patientDataFromCsv.Add2St;
+            res.Add2Zip = patientDataFromCsv.Add2Zip;
+            res.Add2Pref = patientDataFromCsv.Add2Pref;
+            res.Add2Type = patientDataFromCsv.Add2Type;
+
+            return res;
         }
 
         private PatientData GetPatientData(ListViewItem lvi)
@@ -990,6 +1051,371 @@ namespace NightingaleImport
                 Phones = phones,
                 Emails = emails,
                 Addresses = addresses
+            };
+            return data;
+        }
+
+        private ContactData GetUpdateContactData(ImportData importdata, GetContactByPatientIdDataResponse existingContactResponse)
+        {
+            #region Communication
+
+            List<AddressData> listOfAddresses = existingContactResponse.Contact.Addresses;
+            AddressData address1 = null;
+            AddressData address2 = null;
+
+            List<EmailData> listOfEmails = existingContactResponse.Contact.Emails;
+            EmailData eml1 = null;
+            EmailData eml2 = null;
+
+            List<PhoneData> listOfPhones = existingContactResponse.Contact.Phones;
+            PhoneData phn1 = null;
+            PhoneData phn2 = null;
+
+            //timezone
+            TimeZoneData tZone = null;
+            if (string.IsNullOrEmpty(importdata.patientData.TimeZ) == false)
+            {
+                tZone = new TimeZoneData();
+                foreach (TimeZoneData t in zonesLookUp)
+                {
+                    string[] zones = t.Name.Split(" ".ToCharArray());
+                    if (importdata.patientData.TimeZ.Trim() == zones[0])
+                    {
+                        tZone.Id = t.Id;
+                    }
+                }
+            }
+            else
+            {
+                if (!string.IsNullOrEmpty(existingContactResponse.Contact.TimeZoneId))
+                {
+                    tZone = new TimeZoneData();
+                    tZone.Id = existingContactResponse.Contact.TimeZoneId.Trim();
+                }
+
+            }
+
+            List<CommModeData> modes = new List<CommModeData>();
+            List<PhoneData> phones = new List<PhoneData>();
+            List<AddressData> addresses = new List<AddressData>();
+            List<EmailData> emails = new List<EmailData>();
+
+            //modes
+            if (modesLookUp != null && modesLookUp.Count > 0)
+            {
+                foreach (IdNamePair l in modesLookUp)
+                {
+                    modes.Add(new CommModeData { ModeId = l.Id, OptOut = false, Preferred = false });
+                }
+            }
+
+
+            //phones
+            if (string.IsNullOrEmpty(importdata.patientData.Ph1) == false)
+            {
+                PhoneData phone1 = new PhoneData
+                {
+                    Number = Convert.ToInt64(importdata.patientData.Ph1.Replace("-", string.Empty)),
+                    OptOut = false,
+                    DataSource = DataSourceProperty
+                };
+
+                if (String.Compare(importdata.patientData.Ph1Pref.Trim(), "true", true) == 0)
+                {
+                    phone1.PhonePreferred = true;
+                }
+                else
+                    phone1.PhonePreferred = false;
+
+                if (string.IsNullOrEmpty(importdata.patientData.Ph1Type) == false)
+                {
+                    foreach (CommTypeData c in typesLookUp)
+                    {
+                        if (String.Compare(importdata.patientData.Ph1Type.Trim(), c.Name, true) == 0)
+                        {
+                            phone1.TypeId = c.Id;
+                            break;
+                        }
+                    }
+                }
+                else
+                    phone1.TypeId = typesLookUp[0].Id;
+
+                phones.Add(phone1);
+            }
+            else
+            {
+                if (listOfPhones.Count > 0 && listOfPhones[0] != null)
+                {
+                    phn1 = listOfPhones[0];
+                    phones.Add(phn1);
+                }
+            }
+
+            if (string.IsNullOrEmpty(importdata.patientData.Ph2) == false)
+            {
+                PhoneData phone2 = new PhoneData
+                {
+                    Number = Convert.ToInt64(importdata.patientData.Ph2.Replace("-", string.Empty)),
+                    OptOut = false,
+                    DataSource = DataSourceProperty
+                };
+
+                if (String.Compare(importdata.patientData.Ph2Pref.Trim(), "true", true) == 0)
+                {
+                    phone2.PhonePreferred = true;
+                }
+                else
+                    phone2.PhonePreferred = false;
+
+                if (string.IsNullOrEmpty(importdata.patientData.Ph2Type) == false)
+                {
+                    foreach (CommTypeData c in typesLookUp)
+                    {
+                        if (String.Compare(importdata.patientData.Ph2Type.Trim(), c.Name, true) == 0)
+                        {
+                            phone2.TypeId = c.Id;
+                            break;
+                        }
+                    }
+                }
+                else
+                    phone2.TypeId = typesLookUp[0].Id;
+
+                phones.Add(phone2);
+            }
+            else
+            {
+                if (listOfPhones.Count > 1 && listOfPhones[1] != null)
+                {
+                    phn2 = listOfPhones[1];
+                    phones.Add(phn2);
+                }
+            }
+
+            //emails
+            if (string.IsNullOrEmpty(importdata.patientData.Em1) == false)
+            {
+                EmailData email1 = new EmailData
+                {
+                    Text = importdata.patientData.Em1.Trim(),
+                    OptOut = false,
+                };
+
+                if (String.Compare(importdata.patientData.Em1Pref.Trim(), "true", true) == 0)
+                {
+                    email1.Preferred = true;
+                }
+                else
+                    email1.Preferred = false;
+
+                if (string.IsNullOrEmpty(importdata.patientData.Em1Pref) == false)
+                {
+                    foreach (CommTypeData c in typesLookUp)
+                    {
+                        if (String.Compare(importdata.patientData.Em1Type.Trim(), c.Name, true) == 0)
+                        {
+                            email1.TypeId = c.Id;
+                            break;
+                        }
+                    }
+                }
+                else
+                    email1.TypeId = typesLookUp[0].Id;
+
+                emails.Add(email1);
+            }
+            else
+            {
+                if (listOfEmails.Count > 0 && listOfEmails[0] != null)
+                {
+                    eml1 = listOfEmails[0];
+                    emails.Add(eml1);
+                }
+
+            }
+
+            if (string.IsNullOrEmpty(importdata.patientData.Em2) == false)
+            {
+                EmailData email2 = new EmailData
+                {
+                    Text = importdata.patientData.Em2.Trim(),
+                    OptOut = false,
+                };
+
+                if (String.Compare(importdata.patientData.Em2Pref.Trim(), "true", true) == 0)
+                {
+                    email2.Preferred = true;
+                }
+                else
+                    email2.Preferred = false;
+
+                if (string.IsNullOrEmpty(importdata.patientData.Em2Type) == false)
+                {
+                    foreach (CommTypeData c in typesLookUp)
+                    {
+                        if (String.Compare(importdata.patientData.Em2Type.Trim(), c.Name, true) == 0)
+                        {
+                            email2.TypeId = c.Id;
+                            break;
+                        }
+                    }
+                }
+                else
+                    email2.TypeId = typesLookUp[0].Id;
+
+                emails.Add(email2);
+            }
+            else
+            {
+                if (listOfEmails.Count > 1 && listOfEmails[1] != null)
+                {
+                    eml2 = listOfEmails[1];
+                    emails.Add(eml2);
+                }
+            }
+
+            //addresses
+            if ((string.IsNullOrEmpty(importdata.patientData.Add1L1) == false)
+                && (string.IsNullOrEmpty(importdata.patientData.Add1City) == false)
+                && (string.IsNullOrEmpty(importdata.patientData.Add1St) == false)
+                && (string.IsNullOrEmpty(importdata.patientData.Add1Zip) == false))
+            {
+                AddressData add1 = new AddressData
+                {
+                    Line1 = (string.IsNullOrEmpty(importdata.patientData.Add1L1)) ? null : importdata.patientData.Add1L1.Trim(),
+                    Line2 = (string.IsNullOrEmpty(importdata.patientData.Add1L2)) ? null : importdata.patientData.Add1L2.Trim(),
+                    Line3 = (string.IsNullOrEmpty(importdata.patientData.Add1L3)) ? null : importdata.patientData.Add1L3.Trim(),
+                    City = (string.IsNullOrEmpty(importdata.patientData.Add1City)) ? null : importdata.patientData.Add1City.Trim(),
+                    PostalCode = (string.IsNullOrEmpty(importdata.patientData.Add1Zip)) ? null : importdata.patientData.Add1Zip.Trim(),
+                    OptOut = false
+                };
+
+                if (String.Compare(importdata.patientData.Add1Pref.Trim(), "true", true) == 0)
+                {
+                    add1.Preferred = true;
+                }
+                else
+                    add1.Preferred = false;
+
+                string stateTrim = (string.IsNullOrEmpty(importdata.patientData.Add1St)) ? null : importdata.patientData.Add1St.Trim();
+                foreach (StateData st in statesLookUp)
+                {
+                    if ((st.Name == stateTrim)
+                        || (st.Code == stateTrim))
+                    {
+                        add1.StateId = st.Id;
+                        break;
+                    }
+                }
+
+                if (string.IsNullOrEmpty(importdata.patientData.Add1Type) == false)
+                {
+                    foreach (CommTypeData c in typesLookUp)
+                    {
+                        if (String.Compare(importdata.patientData.Add1Type.Trim(), c.Name, true) == 0)
+                        {
+                            add1.TypeId = c.Id;
+                            break;
+                        }
+                    }
+                }
+                else
+                    add1.TypeId = typesLookUp[0].Id;
+
+                addresses.Add(add1);
+            }
+            else
+            {
+                if (listOfAddresses.Count > 0 && listOfAddresses[0] != null)
+                {
+                    address1 = listOfAddresses[0];
+                    addresses.Add(address1);
+                }
+            }
+
+            if ((string.IsNullOrEmpty(importdata.patientData.Add2L1) == false)
+                && (string.IsNullOrEmpty(importdata.patientData.Add2City) == false)
+                && (string.IsNullOrEmpty(importdata.patientData.Add2St) == false)
+                && (string.IsNullOrEmpty(importdata.patientData.Add2Zip) == false))
+            {
+                AddressData add2 = new AddressData
+                {
+                    Line1 = (string.IsNullOrEmpty(importdata.patientData.Add2L1)) ? null : importdata.patientData.Add2L1.Trim(),
+                    Line2 = (string.IsNullOrEmpty(importdata.patientData.Add2L2)) ? null : importdata.patientData.Add2L2.Trim(),
+                    Line3 = (string.IsNullOrEmpty(importdata.patientData.Add2L3)) ? null : importdata.patientData.Add2L3.Trim(),
+                    City = (string.IsNullOrEmpty(importdata.patientData.Add2City)) ? null : importdata.patientData.Add2City.Trim(),
+                    PostalCode = (string.IsNullOrEmpty(importdata.patientData.Add2Zip)) ? null : importdata.patientData.Add2Zip.Trim(),
+                    OptOut = false
+                };
+
+                if (String.Compare(importdata.patientData.Add2Pref.Trim(), "true", true) == 0)
+                {
+                    add2.Preferred = true;
+                }
+                else
+                    add2.Preferred = false;
+
+                string stateTrim = (string.IsNullOrEmpty(importdata.patientData.Add2St)) ? null : importdata.patientData.Add2St.Trim();
+                foreach (StateData st in statesLookUp)
+                {
+                    if ((st.Name == stateTrim)
+                        || (st.Code == stateTrim))
+                    {
+                        add2.StateId = st.Id;
+                        break;
+                    }
+                }
+
+                if (string.IsNullOrEmpty(importdata.patientData.Add2Type) == false)
+                {
+                    foreach (CommTypeData c in typesLookUp)
+                    {
+                        if (String.Compare(importdata.patientData.Add2Type.Trim(), c.Name, true) == 0)
+                        {
+                            add2.TypeId = c.Id;
+                            break;
+                        }
+                    }
+                }
+                else
+                    add2.TypeId = typesLookUp[0].Id;
+
+                addresses.Add(add2);
+            }
+            else
+            {
+                if (listOfAddresses.Count > 1 && listOfAddresses[1] != null)
+                {
+                    address2 = listOfAddresses[1];
+                    addresses.Add(address2);
+                }
+            }
+            #endregion
+
+            //Contact
+            ContactData data = new ContactData
+            {
+                //PatientId = responsePatient.Id,
+                ContactTypeId = Phytel.API.DataDomain.Contact.DTO.Constants.PersonContactTypeId,
+                #region Sync up properties in Contact
+                FirstName = importdata.patientData.FirstName,
+                LastName = importdata.patientData.LastName,
+                MiddleName = importdata.patientData.MiddleName,
+                PreferredName = importdata.patientData.PreferredName,
+                Gender = importdata.patientData.Gender,
+                Suffix = importdata.patientData.Suffix,
+                StatusId = importdata.patientData.StatusId,
+                #endregion
+                DataSource = EngageSystemProperty,
+                Modes = modes,
+                TimeZoneId = tZone == null ? null : tZone.Id,
+                Phones = phones,
+                Emails = emails,
+                Addresses = addresses,
+                ExternalRecordId = existingContactResponse.Contact.ExternalRecordId,
+                DeceasedId = existingContactResponse.Contact.DeceasedId,
+                Prefix = existingContactResponse.Contact.Prefix
             };
             return data;
         }
@@ -1640,7 +2066,7 @@ namespace NightingaleImport
                     {
                         foreach (
                         var listdata in
-                        listOfPatientData.Where(x =>x.patientData!=null && (string.IsNullOrEmpty(x.patientData.FirstName) ||string.IsNullOrEmpty(x.patientData.LastName) ||string.IsNullOrEmpty(x.patientData.DOB) ||(x.patientData.FirstName.ToLower() == "firstname") ||(x.patientData.LastName.ToLower() == "lastname")))
+                        listOfPatientData.Where(x => x.patientData != null && (string.IsNullOrEmpty(x.patientData.FirstName) || string.IsNullOrEmpty(x.patientData.LastName) || string.IsNullOrEmpty(x.patientData.DOB) || (x.patientData.FirstName.ToLower() == "firstname") || (x.patientData.LastName.ToLower() == "lastname")))
                     )
                         {
                             listdata.importOperation = ImportOperation.SKIPPED;
@@ -1657,7 +2083,7 @@ namespace NightingaleImport
                     lblProgressValue.Refresh();
                     progressBar1.Increment(counter);
                 }
-                
+
                 var numofrows = _csv_values.GetLength(0);
                 var numofcols = _csv_values.GetLength(1);
                 listView1.Items.Clear();
